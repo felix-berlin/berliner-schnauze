@@ -15,7 +15,7 @@ const thema = allThemen.find((t) => t.slug === themaSlug);
 if (!thema) return Astro.rewrite('/404');
 
 const words = allWords.filter((word) =>
-  word.berlinerischThemen?.nodes.some((t) => t.slug === themaSlug),
+  word.themen.some((t) => t.slug === themaSlug),
 );
 
 const seoProps = seoData({
@@ -63,7 +63,7 @@ const itemListJson = () =>
       words.map((word) => (
         <li class='c-thema-word-list__item'>
           <a class='c-thema-word-list__link' href={routeToWord(word.slug)}>
-            {word.wordProperties.berlinerisch}
+            {word.berlinerisch}
           </a>
         </li>
       ))

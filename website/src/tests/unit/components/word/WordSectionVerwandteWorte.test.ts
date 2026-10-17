@@ -3,12 +3,8 @@ import { describe, expect, it, beforeAll } from "vitest";
 
 import { createAstroRender } from "../../helpers";
 
-const makeRelatedWords = (words: { berlinerisch: string; slug: string }[] = []) => ({
-  nodes: words.map(({ berlinerisch, slug }) => ({
-    slug,
-    wordProperties: { berlinerisch },
-  })),
-});
+const makeRelatedWords = (words: { berlinerisch: string; slug: string }[] = []) =>
+  words.map(({ berlinerisch, slug }, id) => ({ berlinerisch, id, slug }));
 
 describe("WordSectionVerwandteWorte.astro", () => {
   let render: (props: Record<string, unknown>) => Promise<string>;
@@ -19,12 +15,7 @@ describe("WordSectionVerwandteWorte.astro", () => {
     render = await createAstroRender(WordSectionVerwandteWorte);
   }, 30_000);
 
-  it("renders nothing when relatedWords is null", async () => {
-    const result = await render({ currentWord: "Schnauze", relatedWords: null });
-    expect(result).not.toContain("Verwandte Worte");
-  });
-
-  it("renders nothing when relatedWords nodes are empty", async () => {
+  it("renders nothing without related words", async () => {
     const result = await render({
       currentWord: "Schnauze",
       relatedWords: makeRelatedWords(),

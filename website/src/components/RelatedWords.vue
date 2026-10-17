@@ -13,9 +13,9 @@
         <a
           :href="routeToWord(word.slug)"
           class="c-related-words__word"
-          :title="`Erfahre mehr über ${word.wordProperties.berlinerisch}`"
+          :title="`Erfahre mehr über ${word.berlinerisch}`"
         >
-          {{ word.wordProperties.berlinerisch }}
+          {{ word.berlinerisch }}
         </a>
       </li>
       <slot />

@@ -55,7 +55,7 @@ describe("WordSectionOrthographie.astro", () => {
   });
 
   it("accepts allWords array without throwing", async () => {
-    const allWords = [{ slug: "bahn", wordProperties: { berlinerisch: "Bahn" } }];
+    const allWords = [{ berlinerisch: "Bahn", slug: "bahn" }];
     const result = await render({ allWords, word: "Bahnhof" });
     expect(result).toContain("Orthographie");
   });

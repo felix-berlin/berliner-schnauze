@@ -156,11 +156,10 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
   const upsert = async (collection: keyof typeof byWpId, wpId: number, data: object, context?: Record<string, unknown>) => {
     const id = byWpId[collection].get(wpId);
     const status = (data as { _status?: unknown })._status;
-    const draft = asDraft(collection, wpId, status);
+    // `draft` only for collections with drafts (strictDraftTypes); the union of slugs is too wide to type the call.
+    const options = { collection, context, data, depth: 0, ...(collection === "words" || collection === "posts" ? { draft: asDraft(collection, wpId, status) } : {}) };
     const doc = (
-      id == null
-        ? await payload.create({ collection, data: data as never, depth: 0, context, draft })
-        : await payload.update({ collection, id, data: data as never, depth: 0, context, draft })
+      id == null ? await payload.create(options as never) : await payload.update({ ...options, id } as never)
     ) as unknown as Record<string, unknown> & { id: number };
     byWpId[collection].set(wpId, doc.id);
     if (collection === "words" || collection === "posts") {

@@ -1,20 +1,24 @@
 import type { APIRoute } from "astro";
 
 import { fetchAllWords } from "@services/api.ts";
+import { type SiteWord, translationTexts } from "@services/payload/words.ts";
 import { setPageCache } from "@utils/cacheHeaders.ts";
-import { wpDateMs } from "@utils/wpDate.ts";
+import { wpDate, wpDateMs } from "@utils/wpDate.ts";
 import { deriveWordFields } from "payload-app/word-derived";
-
-import type { Word } from "@/types/cms.ts";
 
 export type OramaSearchIndex = ReturnType<typeof makeOramaSearchIndex>;
 
-/** Assembles the slim public entry from stored fields: nothing here may carry definitions, examples or sources. */
-export function makeOramaSearchIndex(node: Word) {
-  const { translations } = node;
-  const { berlinerisch } = node.wordProperties;
+/** Epoch ms at the second precision WordPress dates had: the public index stays as it was. */
+const timestamp = (iso: string | null | undefined): number => wpDateMs(wpDate(iso)) || 0;
+
+/**
+ * Assembles the slim public entry from stored fields: nothing here may carry definitions, examples or sources.
+ * Its shape is public (cached by the service worker on visitors' devices): it keeps the WPGraphQL names.
+ */
+export function makeOramaSearchIndex(word: SiteWord) {
+  const { berlinerisch } = word;
   // Stored on save in Payload; computed only for a word that was never saved through the hook.
-  const derived = node.derived ?? deriveWordFields(berlinerisch);
+  const derived = word.derived ?? deriveWordFields(berlinerisch);
 
   const wordTypes = [
     ...new Set(
@@ -24,38 +28,32 @@ export function makeOramaSearchIndex(node: Word) {
     ),
   ];
 
-  const themen = (node.berlinerischThemen?.nodes ?? [])
-    .map((n) => n.slug)
-    .filter((s): s is string => typeof s === "string");
-
   return {
-    berlinerWordId: node.berlinerWordId,
+    berlinerWordId: word.berlinerWordId,
     berlinerischWordTypes: wordTypes,
-    dateTs: wpDateMs(node.dateGmt) || 0,
-    modifiedTs: wpDateMs(node.modifiedGmt) || 0,
-    slug: node.slug,
-    themen,
+    dateTs: timestamp(word.publishedAt),
+    modifiedTs: timestamp(word.contentModifiedAt),
+    slug: word.slug,
+    themen: word.themen.flatMap((t) => t.slug ?? []),
     wordComponents: derived.wordComponents ?? [],
-    wordGroup: node.wordGroup ?? "",
+    wordGroup: word.derived?.wordGroup ?? "",
     wordProperties: {
-      audioBerlinerisch: !!node.wordProperties.berlinerischAudio,
-      audioExamples:
-        Array.isArray(node.wordProperties.examples) &&
-        node.wordProperties.examples.some((e) => !!e?.exampleAudio?.length),
+      audioBerlinerisch: word.berlinerischAudio.length > 0,
+      audioExamples: word.examples.some((e) => e.exampleAudio.length > 0),
       berlinerisch,
-      berolinismus: !!node.wordProperties.berolinismus,
+      berolinismus: !!word.berolinismus,
       characterLength: derived.characterLength ?? berlinerisch.length,
       consonantsCount: derived.consonantsCount ?? 0,
-      multipleMeanings: !!node.wordProperties.alternativeWords,
+      multipleMeanings: (word.alternativeWords?.length ?? 0) > 0,
       syllablesCount: derived.syllablesCount ?? 0,
-      translations,
+      translations: translationTexts(word),
       vowelsCount: derived.vowelsCount ?? 0,
     },
   };
 }
 
 // index.json and meta.json both need the entries: map (and serialize) each memoized words array once.
-const indexByWords = new WeakMap<Word[], { entries: OramaSearchIndex[]; json: string }>();
+const indexByWords = new WeakMap<SiteWord[], { entries: OramaSearchIndex[]; json: string }>();
 
 const searchIndex = async () => {
   const words = await fetchAllWords();

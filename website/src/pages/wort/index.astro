@@ -4,18 +4,18 @@ import "@styles/components/_word-group.scss";
 import "@styles/plugins/astro-breadcrumbs.scss";
 import Layout from "@layouts/Layout.astro";
 import { fetchAllWords } from "@services/api.ts";
-import type { Word } from "@/types/cms.ts";
+import type { SiteWord } from "@services/payload/words.ts";
 import { routeToWord, seoData, canonicalUrl } from "@utils/helpers.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
 import ChevronRight from "~icons/lucide/chevron-right";
 
-async function getGroupedWords(): Promise<Record<string, Word[]>> {
+async function getGroupedWords(): Promise<Record<string, SiteWord[]>> {
   const allWords = await fetchAllWords();
 
-  const groupedWords: Record<string, Word[]> = {};
+  const groupedWords: Record<string, SiteWord[]> = {};
 
   allWords.forEach((word) => {
-    const group = word.wordGroup;
+    const group = word.derived?.wordGroup;
     if (!group) return;
 
     if (!groupedWords[group]) {
@@ -73,9 +73,9 @@ const schemaJson = () =>
               <a
                 class="c-word-group__link"
                 href={routeToWord(word.slug)}
-                title={`Zur ${word.wordProperties.berlinerisch} Seite`}
+                title={`Zur ${word.berlinerisch} Seite`}
               >
-                {word.wordProperties.berlinerisch}
+                {word.berlinerisch}
               </a>
             </li>
           ))}

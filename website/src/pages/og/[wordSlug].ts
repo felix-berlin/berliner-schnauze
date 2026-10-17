@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 
 import { fetchAllWords } from "@services/api.ts";
+import { translationTexts } from "@services/payload/words.ts";
 import { setPageCache } from "@utils/cacheHeaders.ts";
 import { generateOpenGraphImage } from "astro-og-canvas";
 import { OG_CACHE_DIR } from "astro:env/server";
@@ -13,7 +14,7 @@ export const GET: APIRoute = async ({ params }) => {
   const word = slug ? (await fetchAllWords()).find((w) => w.slug === slug) : undefined;
   if (!word) return notFound();
 
-  const translation = word.translations.join(", ");
+  const translation = translationTexts(word).join(", ");
   const image = await generateOpenGraphImage({
     bgGradient: [
       [43, 51, 59],
@@ -35,7 +36,7 @@ export const GET: APIRoute = async ({ params }) => {
     fonts: ["./src/assets/fonts/Berlin-Bold.woff2"],
     // TODO: add a logo (needs a version with transparent background)
     padding: 72,
-    title: word.wordProperties.berlinerisch || word.slug,
+    title: word.berlinerisch || word.slug,
   });
   return new Response(image, {
     headers: {

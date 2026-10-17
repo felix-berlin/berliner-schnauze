@@ -44,21 +44,20 @@ describe("secondsUntilBerlinMidnight", () => {
 });
 
 describe("toWordOfTheDayResponse", () => {
+  // A SiteWord (Payload doc): ISO dates with milliseconds, translations as rows, repeaters as arrays.
   const word = {
+    alternativeWords: [],
+    article: null,
     berlinerWordId: 10473,
-    dateGmt: "2026-09-16T13:15:30",
-    modifiedGmt: "2026-09-16T13:15:30",
+    berlinerisch: "Schrapen",
+    contentModifiedAt: "2026-09-16T13:15:30.000Z",
+    derived: { wordGroup: "S" },
+    examples: [{ example: "Wir schrapen.", exampleAudio: [], exampleExplanation: "Erklärung" }],
+    learnMore: null,
+    publishedAt: "2026-09-16T13:15:30.000Z",
+    relatedWords: [],
     slug: "schrapen",
-    translations: ["schaben", "tanzen"],
-    wordGroup: "S",
-    wordProperties: {
-      alternativeWords: null,
-      article: null,
-      berlinerisch: "Schrapen",
-      examples: [{ example: "Wir schrapen.", exampleAudio: null, exampleExplanation: "Erklärung" }],
-      learnMore: null,
-      relatedWords: null,
-    },
+    translations: [{ translation: "schaben" }, { translation: "" }, { translation: "tanzen" }],
   };
 
   it("keeps the shape of the old WordPress endpoint", () => {

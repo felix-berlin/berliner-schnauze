@@ -1,7 +1,7 @@
 /** Pure WordPress -> Payload data mapping (no writes). */
 import type { SanitizedConfig } from "payload";
 
-import type { Page, Post, SeoMeta, Theman, Word } from "../payload-types";
+import type { Page, Post, SeoMetaGroup, Theman, Word } from "../payload-types";
 import type { AudioRow, Maybe, WpBlock, WpImage, WpPage, WpPost, WpSeo, WpThema, WpWord } from "./wp";
 
 import { isWpUploadUrl, wpUploadPath } from "../lib/wpUploadPath";
@@ -81,7 +81,7 @@ const robots = (value: Maybe<string>, flag: string) => !!value?.trim().toLowerCa
 /** Yoast set every canonical to the page's own URL on the WordPress host: that is no override, the site uses its own URL. */
 const OLD_CMS_ORIGIN = "https://cms.berliner-schnauze.wtf";
 
-export function mapSeo(seo: Maybe<WpSeo>, refs: ImportRefs): SeoMeta {
+export function mapSeo(seo: Maybe<WpSeo>, refs: ImportRefs): SeoMetaGroup {
   seo ??= {};
   return {
     title: seo.title || null,

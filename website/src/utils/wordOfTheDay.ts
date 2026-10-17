@@ -1,4 +1,5 @@
-import type { Word } from "@/types/cms.ts";
+import { type SiteWord, translationTexts } from "@services/payload/words.ts";
+import { wpDate } from "@utils/wpDate.ts";
 
 const BERLIN = "Europe/Berlin";
 
@@ -54,23 +55,24 @@ export const secondsUntilBerlinMidnight = (date: Date): number => {
 };
 
 /** The shape of the former WordPress endpoint, which the nanostore and its components still read. */
-export const toWordOfTheDayResponse = (word: Word, now: Date) => ({
+export const toWordOfTheDayResponse = (word: SiteWord, now: Date) => ({
   ID: word.berlinerWordId,
-  alternative_words: word.wordProperties.alternativeWords?.length ? true : null,
-  article: word.wordProperties.article,
-  berlinerisch: word.wordProperties.berlinerisch,
-  examples:
-    word.wordProperties.examples?.map((e) => ({
-      example: e.example,
-      example_explanation: e.exampleExplanation,
-    })) ?? null,
+  alternative_words: word.alternativeWords?.length ? true : null,
+  article: word.article ?? null,
+  berlinerisch: word.berlinerisch,
+  examples: word.examples.length
+    ? word.examples.map((e) => ({
+        example: e.example ?? null,
+        example_explanation: e.exampleExplanation ?? null,
+      }))
+    : null,
   expires: secondsUntilBerlinMidnight(now),
-  group: word.wordGroup,
-  learn_more: word.wordProperties.learnMore,
-  post_date: word.dateGmt?.replace("T", " ") ?? null,
-  post_modified: word.modifiedGmt?.replace("T", " ") ?? null,
+  group: word.derived?.wordGroup ?? null,
+  learn_more: word.learnMore ?? null,
+  post_date: wpDate(word.publishedAt)?.replace("T", " ") ?? null,
+  post_modified: wpDate(word.contentModifiedAt)?.replace("T", " ") ?? null,
   post_name: word.slug,
-  related_words: word.wordProperties.relatedWords?.nodes.length ? true : null,
-  translations: word.translations.map((translation) => ({ translation })),
+  related_words: word.relatedWords.length ? true : null,
+  translations: translationTexts(word).map((translation) => ({ translation })),
   word_type: false,
 });

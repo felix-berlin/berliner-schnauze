@@ -5,7 +5,7 @@ import { createAstroRender } from "../../helpers";
 
 vi.mock("@styles/components/_word-sidebar.scss", () => ({}));
 
-const makeWordProps = (overrides: Record<string, unknown> = {}) => ({
+const makeWord = (overrides: Record<string, unknown> = {}) => ({
   article: "die",
   berlinerisch: "Schnauze",
   examples: [{ example: "Det is keen Zufall." }],
@@ -19,7 +19,7 @@ const defaultProps = {
   hasOrthographie: false,
   hasPhonologie: false,
   hasRelatedWords: false,
-  wordProps: makeWordProps(),
+  word: makeWord(),
   wordTags: [],
 };
 
@@ -52,7 +52,7 @@ describe("WordSidebar.astro", () => {
   it("does not render article element when article is absent", async () => {
     const result = await render({
       ...defaultProps,
-      wordProps: makeWordProps({ article: null }),
+      word: makeWord({ article: null }),
     });
     expect(result).not.toContain("c-word-sidebar__word-subtitle");
   });
@@ -72,7 +72,7 @@ describe("WordSidebar.astro", () => {
   it("does not render the Beispiele link when examples are absent", async () => {
     const result = await render({
       ...defaultProps,
-      wordProps: makeWordProps({ examples: null }),
+      word: makeWord({ examples: [] }),
     });
     expect(result).not.toContain('href="#beispiele"');
   });

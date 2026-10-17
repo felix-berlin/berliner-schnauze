@@ -1,21 +1,21 @@
 import { findAnagrams } from "@utils/wordHelper";
 import { describe, it, expect } from "vitest";
 
-import type { BerlinerWord } from "@/types/cms";
+import type { WordRef } from "@utils/wordHelper";
 
-const makeWord = (berlinerisch: string, id: string): BerlinerWord =>
+const makeWord = (berlinerisch: string, id: string): WordRef =>
   ({
+    berlinerisch,
     id,
     slug: berlinerisch.toLowerCase(),
-    wordProperties: { berlinerisch },
-  }) as unknown as BerlinerWord;
+  }) as unknown as WordRef;
 
 describe("findAnagrams", () => {
   it("finds an anagram in the word list", () => {
     const allWords = [makeWord("Bier", "1"), makeWord("Reib", "2"), makeWord("Pinsel", "3")];
     const result = findAnagrams("Bier", allWords);
     expect(result).toHaveLength(1);
-    expect(result[0]?.wordProperties?.berlinerisch).toBe("Reib");
+    expect(result[0]?.berlinerisch).toBe("Reib");
   });
 
   it("excludes the word itself from results", () => {

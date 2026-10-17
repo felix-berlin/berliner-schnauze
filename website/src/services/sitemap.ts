@@ -1,5 +1,5 @@
 import { fetchAllPosts, fetchAllThemen, fetchAllWords } from "@services/api.ts";
-import { wpDateMs } from "@utils/wpDate.ts";
+import { wpDate, wpDateMs } from "@utils/wpDate.ts";
 import { getCollection } from "astro:content";
 
 export type SitemapEntry = { lastmod?: string; loc: string };
@@ -45,7 +45,7 @@ export const buildSitemapEntries = async (site: URL): Promise<SitemapEntry[]> =>
     ...posts.flatMap((p) =>
       p.slug ? [{ lastmod: isoDate(p.modifiedGmt), path: `/magazin/${p.slug}` }] : [],
     ),
-    ...words.map((w) => ({ lastmod: isoDate(w.modifiedGmt), path: `/wort/${w.slug}` })),
+    ...words.map((w) => ({ lastmod: isoDate(wpDate(w.contentModifiedAt)), path: `/wort/${w.slug}` })),
   ];
 
   return entries

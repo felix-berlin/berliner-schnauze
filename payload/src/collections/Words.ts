@@ -9,6 +9,7 @@ const gender: Field = { name: "gender", type: "select", options: ["male", "femal
 const audioRows = (name: string): Field => ({
   name,
   type: "array",
+  interfaceName: "AudioArray",
   fields: [gender, { name: "audio", type: "upload", relationTo: "media" }],
 });
 
@@ -28,6 +29,7 @@ export const Words: CollectionConfig = {
     {
       name: "examples",
       type: "array",
+      interfaceName: "WordExamplesArray",
       fields: [
         { name: "example", type: "text" },
         { name: "exampleExplanation", type: "textarea" },

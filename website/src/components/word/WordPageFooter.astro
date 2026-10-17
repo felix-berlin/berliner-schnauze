@@ -3,22 +3,23 @@ import '@styles/components/_word-page-footer.scss';
 import { formattedDate } from '@utils/helpers';
 
 interface Props {
-  dateGmt?: string | null;
-  modifiedGmt?: string | null;
+  /** ISO dates of the Payload word. */
+  modifiedAt?: string | null;
+  publishedAt?: string | null;
 }
 
-const { dateGmt, modifiedGmt } = Astro.props;
+const { modifiedAt, publishedAt } = Astro.props;
 ---
 
 <footer class='c-single-word__footer'>
-  {dateGmt && (
+  {publishedAt && (
     <p class='c-single-word__created'>
-      Wort erstellt am: <time datetime={dateGmt}>{formattedDate(dateGmt)}</time>
+      Wort erstellt am: <time datetime={publishedAt}>{formattedDate(publishedAt)}</time>
     </p>
   )}
-  {modifiedGmt && (
+  {modifiedAt && (
     <p class='c-single-word__modified'>
-      Bearbeitet am: <time datetime={modifiedGmt}>{formattedDate(modifiedGmt)}</time>
+      Bearbeitet am: <time datetime={modifiedAt}>{formattedDate(modifiedAt)}</time>
     </p>
   )}
 </footer>

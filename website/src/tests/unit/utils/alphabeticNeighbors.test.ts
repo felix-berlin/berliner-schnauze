@@ -1,14 +1,14 @@
 import { alphabeticNeighbors } from "@utils/wordHelper";
 import { describe, it, expect } from "vitest";
 
-import type { BerlinerWord } from "@/types/cms";
+import type { WordRef } from "@utils/wordHelper";
 
-const makeWord = (berlinerisch: string, id: string): BerlinerWord =>
+const makeWord = (berlinerisch: string, id: string): WordRef =>
   ({
+    berlinerisch,
     id,
     slug: berlinerisch.toLowerCase(),
-    wordProperties: { berlinerisch },
-  }) as unknown as BerlinerWord;
+  }) as unknown as WordRef;
 
 describe("alphabeticNeighbors", () => {
   const allWords = [
@@ -22,21 +22,21 @@ describe("alphabeticNeighbors", () => {
   it("returns correct neighbors for a middle word", () => {
     const current = allWords[2]!;
     const { before, after } = alphabeticNeighbors(allWords, current, 2);
-    expect(before.map((w) => w.wordProperties?.berlinerisch)).toEqual(["Berta", "Anton"]);
-    expect(after.map((w) => w.wordProperties?.berlinerisch)).toEqual(["Dora", "Emil"]);
+    expect(before.map((w) => w.berlinerisch)).toEqual(["Berta", "Anton"]);
+    expect(after.map((w) => w.berlinerisch)).toEqual(["Dora", "Emil"]);
   });
 
   it("returns fewer results at the start of the list", () => {
     const current = allWords[0]!;
     const { before, after } = alphabeticNeighbors(allWords, current, 3);
     expect(before).toHaveLength(0);
-    expect(after.map((w) => w.wordProperties?.berlinerisch)).toEqual(["Berta", "Caesar", "Dora"]);
+    expect(after.map((w) => w.berlinerisch)).toEqual(["Berta", "Caesar", "Dora"]);
   });
 
   it("returns fewer results at the end of the list", () => {
     const current = allWords[4]!;
     const { before, after } = alphabeticNeighbors(allWords, current, 3);
-    expect(before.map((w) => w.wordProperties?.berlinerisch)).toEqual(["Dora", "Caesar", "Berta"]);
+    expect(before.map((w) => w.berlinerisch)).toEqual(["Dora", "Caesar", "Berta"]);
     expect(after).toHaveLength(0);
   });
 
@@ -51,7 +51,7 @@ describe("alphabeticNeighbors", () => {
     const umlautWords = [makeWord("Affe", "1"), makeWord("Äpfel", "2"), makeWord("Birne", "3")];
     const current = umlautWords[1]!; // Äpfel
     const { before, after } = alphabeticNeighbors(umlautWords, current, 2);
-    expect(before.map((w) => w.wordProperties?.berlinerisch)).toEqual(["Affe"]);
-    expect(after.map((w) => w.wordProperties?.berlinerisch)).toEqual(["Birne"]);
+    expect(before.map((w) => w.berlinerisch)).toEqual(["Affe"]);
+    expect(after.map((w) => w.berlinerisch)).toEqual(["Birne"]);
   });
 });

@@ -21,8 +21,12 @@ beforeEach(() => {
   vi.clearAllMocks();
   generateOpenGraphImage.mockResolvedValue(PNG);
   fetchAllWords.mockResolvedValue([
-    { slug: "wat", translations: ["was", "etwas"], wordProperties: { berlinerisch: "Wat" } },
-    { slug: "nischt", translations: [], wordProperties: { berlinerisch: "" } },
+    {
+      berlinerisch: "Wat",
+      slug: "wat",
+      translations: [{ translation: "was" }, { translation: "etwas" }],
+    },
+    { berlinerisch: "", slug: "nischt", translations: [] },
   ]);
 });
 

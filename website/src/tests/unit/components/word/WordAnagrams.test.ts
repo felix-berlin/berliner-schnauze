@@ -8,8 +8,8 @@ vi.mock("@utils/helpers", () => ({
 }));
 
 const makeAnagram = (slug: string, berlinerisch: string) => ({
+  berlinerisch,
   slug,
-  wordProperties: { berlinerisch },
 });
 
 describe("WordAnagrams.astro", () => {

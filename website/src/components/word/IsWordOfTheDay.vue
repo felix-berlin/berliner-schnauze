@@ -23,13 +23,11 @@ import { $wordOfTheDay } from "@stores/wordOfTheDay.ts";
 import Crown from "virtual:icons/lucide/crown";
 import { computed } from "vue";
 
-import type { WordProperties } from "@/types/cms";
-
 interface IsWordOfTheDayProps {
   iconSize?: number;
   tooltipPlacement?: "bottom" | "left" | "right" | "top";
   variant?: "badge" | "icon";
-  word: WordProperties["berlinerisch"];
+  word: string;
   wordId: number;
 }
 

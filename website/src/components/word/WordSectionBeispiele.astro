@@ -2,16 +2,16 @@
 import '@styles/components/_section-card.scss';
 import '@styles/components/_word-section-beispiele.scss';
 import WordExamples from '@components/word/WordExamples.astro';
-import type { Maybe, WordPropertiesExamples } from '@/types/cms';
+import type { WordExample } from '@services/payload/words.ts';
 
 interface Props {
-  examples?: Maybe<WordPropertiesExamples>[] | null;
+  examples: WordExample[];
 }
 
 const { examples } = Astro.props;
 ---
 
-{(examples?.length ?? 0) > 0 && (
+{examples.length > 0 && (
   <section class='c-section-card' id='beispiele' aria-labelledby='heading-beispiele'>
     <div class='c-section-card__header'>
       <span class='c-section-card__num'></span>

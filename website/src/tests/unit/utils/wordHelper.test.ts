@@ -11,7 +11,7 @@ import {
 } from "@utils/wordHelper";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { BerlinerWord } from "@/types/cms";
+import type { WordRef } from "@utils/wordHelper.ts";
 
 vi.mock("@services/wikimediaApi.ts", () => ({
   fetchWikimediaAPI: vi.fn(),
@@ -20,8 +20,8 @@ vi.mock("@services/wikimediaApi.ts", () => ({
 import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
 const mockFetch = vi.mocked(fetchWikimediaAPI);
 
-function makeWord(id: string, berlinerisch: string | null = "test"): BerlinerWord {
-  return { id, wordProperties: { berlinerisch } } as unknown as BerlinerWord;
+function makeWord(id: number | string, berlinerisch: string | null = "test"): WordRef {
+  return { berlinerisch, id } as unknown as WordRef;
 }
 
 // ---------------------------------------------------------------------------
@@ -248,7 +248,7 @@ describe("capitalizeFirstLetter", () => {
 
 describe("findAnagrams", () => {
   function makeRef(id: string, berlinerisch: string | null | undefined) {
-    return { id, wordProperties: berlinerisch !== undefined ? { berlinerisch } : undefined };
+    return { berlinerisch, id };
   }
 
   it("returns words whose letters match the target", () => {
@@ -273,7 +273,7 @@ describe("findAnagrams", () => {
 
 describe("alphabeticNeighbors", () => {
   function makeRef(id: string, berlinerisch: string | null | undefined) {
-    return { id, wordProperties: berlinerisch !== undefined ? { berlinerisch } : undefined };
+    return { berlinerisch, id };
   }
 
   const words = [

@@ -4,9 +4,9 @@ import { describe, it, expect } from "vitest";
 
 describe("similarWords", () => {
   const mockWords = [
-    { id: "1", wordProperties: { berlinerisch: "word1" } },
-    { id: "2", wordProperties: { berlinerisch: "word2" } },
-    { id: "3", wordProperties: { berlinerisch: "word3" } },
+    { berlinerisch: "word1", id: 1 },
+    { berlinerisch: "word2", id: 2 },
+    { berlinerisch: "word3", id: 3 },
   ];
 
   it("returns all words without current word", () => {
@@ -19,8 +19,8 @@ describe("similarWords", () => {
     const result = similarWords(mockWords, mockWords[0]);
     expect(result[0].isSimilar).toBe(
       natural.JaroWinklerDistance(
-        mockWords[1].wordProperties.berlinerisch,
-        mockWords[0].wordProperties.berlinerisch,
+        mockWords[1].berlinerisch,
+        mockWords[0].berlinerisch,
         false,
       ),
     );
@@ -44,7 +44,7 @@ describe("similarWords", () => {
       "abcd",
       "abcdefgh",
     ];
-    const words = texts.map((t, i) => ({ id: String(i), wordProperties: { berlinerisch: t } }));
+    const words = texts.map((t, i) => ({ berlinerisch: t, id: String(i) }));
     for (const threshold of [0.81, 0.85, 0.9, 0.95]) {
       for (const current of words) {
         const expected = words
@@ -52,8 +52,8 @@ describe("similarWords", () => {
           .filter(
             (w) =>
               natural.JaroWinklerDistance(
-                w.wordProperties.berlinerisch,
-                current.wordProperties.berlinerisch,
+                w.berlinerisch,
+                current.berlinerisch,
               ) >= threshold,
           );
         expect(similarWords(words, current, threshold).map((r) => r.word)).toEqual(expected);

@@ -5,98 +5,86 @@ vi.mock("astro:env/client", () => ({ SHOW_TEST_DATA: false }));
 const { fetchAllWords } = vi.hoisted(() => ({ fetchAllWords: vi.fn() }));
 vi.mock("@services/api.ts", () => ({ fetchAllWords }));
 
+import type { SiteWord } from "@services/payload/words.ts";
 import type { APIContext } from "astro";
-
-import type { BerlinerWord } from "@/types/cms";
 
 import { GET, getSearchIndexEntries, makeOramaSearchIndex } from "@/pages/api/search/index.json.ts";
 
-function makeWord(overrides: Partial<BerlinerWord> = {}): BerlinerWord {
+/** A SiteWord (see services/payload/words.ts): repeaters and relations are arrays, dates ISO. */
+function makeWord(overrides: Record<string, unknown> = {}): SiteWord {
   return {
+    alternativeWords: [],
+    article: null,
     berlinerWordId: 1,
-    berlinerischThemen: null,
-    berlinerischWordTypes: null,
-    dateGmt: "2025-01-01T00:00:00",
-    id: "1",
-    modifiedGmt: "2025-01-01T00:00:00",
-    seo: null,
+    berlinerisch: "wat",
+    berlinerischAudio: [],
+    berolinismus: false,
+    contentModifiedAt: "2025-01-01T00:00:00.000Z",
+    examples: [],
+    globalId: btoa("post:1"),
+    id: 1,
+    images: [],
+    infoTextHtml: null,
+    learnMore: null,
+    publishedAt: "2025-01-01T00:00:00.000Z",
+    relatedWords: [],
     slug: "wat",
-    title: "Wat",
-    wordGroup: "",
-    wordProperties: {
-      alternativeWords: null,
-      article: null,
-      berlinerisch: "wat",
-      berlinerischAudio: null,
-      berolinismus: false,
-      examples: null,
-      images: null,
-      infoText: null,
-      learnMore: null,
-      relatedWords: null,
-      translations: null,
-      wikimediaFiles: null,
-    },
+    sources: [],
+    themen: [],
+    translations: [],
+    wikimediaFiles: [],
+    wordTypes: [],
     ...overrides,
-  } as unknown as BerlinerWord;
+  } as unknown as SiteWord;
 }
 
+const audio = { audio: { id: 1, url: "https://cms.example/a.mp3" }, gender: "female" };
+
 describe("makeOramaSearchIndex — themen extraction", () => {
-  it("returns empty themen array when berlinerischThemen is null", () => {
-    const result = makeOramaSearchIndex(makeWord({ berlinerischThemen: null }));
-    expect(result.themen).toEqual([]);
+  it("returns an empty themen array for a word without themen", () => {
+    expect(makeOramaSearchIndex(makeWord()).themen).toEqual([]);
   });
 
-  it("extracts slugs and filters out null slugs", () => {
+  it("extracts slugs and filters out missing slugs", () => {
     const result = makeOramaSearchIndex(
       makeWord({
-        berlinerischThemen: {
-          nodes: [
-            { name: "Essen", slug: "essen-trinken" },
-            { name: "Ohne Slug", slug: null },
-          ],
-        },
-      } as unknown as Partial<BerlinerWord>),
+        themen: [
+          { id: 1, name: "Essen", slug: "essen-trinken" },
+          { id: 2, name: "Ohne Slug", slug: null },
+        ],
+      }),
     );
     expect(result.themen).toEqual(["essen-trinken"]);
-  });
-
-  it("does not throw when nodes is null", () => {
-    const result = makeOramaSearchIndex(
-      makeWord({ berlinerischThemen: { nodes: null } } as unknown as Partial<BerlinerWord>),
-    );
-    expect(result.themen).toEqual([]);
   });
 });
 
 describe("makeOramaSearchIndex — word properties", () => {
   it("derives suffix components for compound word search", () => {
-    const result = makeOramaSearchIndex(
-      makeWord({ wordProperties: { berlinerisch: "Bierpinsel" } } as never),
-    );
+    const result = makeOramaSearchIndex(makeWord({ berlinerisch: "Bierpinsel" }));
     expect(result.wordComponents).toContain("pinsel");
     expect(result.wordComponents).toContain("erpinsel");
   });
 
   it("handles an empty headword", () => {
-    const result = makeOramaSearchIndex(
-      makeWord({ wordProperties: { berlinerisch: "" } } as never),
-    );
+    const result = makeOramaSearchIndex(makeWord({ berlinerisch: "" }));
     expect(result.wordProperties.syllablesCount).toBe(0);
     expect(result.wordProperties.characterLength).toBe(0);
     expect(result.wordComponents).toEqual([]);
   });
 
   it("uses 0 timestamps when the dates are missing and parses them otherwise", () => {
-    const missing = makeOramaSearchIndex(makeWord({ dateGmt: null, modifiedGmt: null } as never));
+    const missing = makeOramaSearchIndex(makeWord({ contentModifiedAt: null, publishedAt: null }));
     expect([missing.dateTs, missing.modifiedTs]).toEqual([0, 0]);
-    const present = makeOramaSearchIndex(makeWord({ dateGmt: "2025-01-01T00:00:00" }));
+    const present = makeOramaSearchIndex(makeWord({ publishedAt: "2025-01-01T00:00:00.000Z" }));
     expect(present.dateTs).toBe(Date.parse("2025-01-01T00:00:00Z"));
   });
 
-  it("reads WP-format dates (no zone) as UTC, independent of the server's timezone", () => {
+  it("keeps the second precision WordPress dates had (public index unchanged)", () => {
     const result = makeOramaSearchIndex(
-      makeWord({ dateGmt: "2025-04-09T08:12:37", modifiedGmt: "2026-09-20T17:24:19" } as never),
+      makeWord({
+        contentModifiedAt: "2026-09-20T17:24:19.987Z",
+        publishedAt: "2025-04-09T08:12:37.123Z",
+      }),
     );
     expect(result.dateTs).toBe(Date.UTC(2025, 3, 9, 8, 12, 37));
     expect(result.modifiedTs).toBe(Date.UTC(2026, 8, 20, 17, 24, 19));
@@ -105,14 +93,11 @@ describe("makeOramaSearchIndex — word properties", () => {
   it("flags audio, example audio, alternative words and berolinismus", () => {
     const result = makeOramaSearchIndex(
       makeWord({
-        wordProperties: {
-          alternativeWords: [{ word: "x" }],
-          berlinerisch: "wat",
-          berlinerischAudio: { url: "a.mp3" },
-          berolinismus: true,
-          examples: [{ exampleAudio: [{ url: "e.mp3" }] }],
-        },
-      } as never),
+        alternativeWords: [{ alternativeWord: "x" }],
+        berlinerischAudio: [audio],
+        berolinismus: true,
+        examples: [{ example: "e", exampleAudio: [audio] }],
+      }),
     );
     expect(result.wordProperties).toMatchObject({
       audioBerlinerisch: true,
@@ -122,17 +107,24 @@ describe("makeOramaSearchIndex — word properties", () => {
     });
   });
 
-  it("reports no example audio when examples lack audio", () => {
+  it("reports no audio and no multiple meanings for empty repeaters", () => {
+    const result = makeOramaSearchIndex(makeWord({ examples: [{ exampleAudio: [] }] }));
+    expect(result.wordProperties).toMatchObject({
+      audioBerlinerisch: false,
+      audioExamples: false,
+      multipleMeanings: false,
+    });
+  });
+
+  it("lists the non-empty translations as strings", () => {
     const result = makeOramaSearchIndex(
-      makeWord({
-        wordProperties: { berlinerisch: "wat", examples: [{ exampleAudio: [] }] },
-      } as never),
+      makeWord({ translations: [{ translation: "was" }, { translation: "" }, { translation: null }] }),
     );
-    expect(result.wordProperties.audioExamples).toBe(false);
+    expect(result.wordProperties.translations).toEqual(["was"]);
   });
 
   it("falls back to an empty word group", () => {
-    expect(makeOramaSearchIndex(makeWord({ wordGroup: null } as never)).wordGroup).toBe("");
+    expect(makeOramaSearchIndex(makeWord({ derived: { wordGroup: null } })).wordGroup).toBe("");
   });
 });
 
@@ -148,8 +140,8 @@ describe("makeOramaSearchIndex — stored derived fields", () => {
     wordGroup: "W",
   };
 
-  it("takes counts, components and word types from the stored fields instead of computing them", () => {
-    const result = makeOramaSearchIndex(makeWord({ derived, wordGroup: "W" } as never));
+  it("takes counts, components, word group and word types from the stored fields", () => {
+    const result = makeOramaSearchIndex(makeWord({ derived }));
     expect(result.wordProperties).toMatchObject({
       characterLength: 11,
       consonantsCount: 7,
@@ -157,6 +149,7 @@ describe("makeOramaSearchIndex — stored derived fields", () => {
       vowelsCount: 5,
     });
     expect(result.wordComponents).toEqual(["stored"]);
+    expect(result.wordGroup).toBe("W");
     expect(result.berlinerischWordTypes).toEqual(["Verb", "Präsens"]);
   });
 
@@ -164,13 +157,10 @@ describe("makeOramaSearchIndex — stored derived fields", () => {
     const result = makeOramaSearchIndex(
       makeWord({
         derived,
-        wordProperties: {
-          berlinerisch: "wat",
-          examples: [{ example: "geheim" }],
-          infoText: "<p>geheim</p>",
-          sources: [{ quelle: ["geheim"] }],
-        },
-      } as never),
+        examples: [{ example: "geheim", exampleAudio: [] }],
+        infoTextHtml: "<p>geheim</p>",
+        sources: ["geheim"],
+      }),
     );
     expect(Object.keys(result).sort()).toEqual(
       [

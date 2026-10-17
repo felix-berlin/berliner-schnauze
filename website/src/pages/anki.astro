@@ -3,6 +3,7 @@ import '@styles/components/_button.scss';
 // Polar-Checkout-Link. Solange nicht gesetzt, wird kein Kauf-Button gezeigt.
 import { ANKI_DECK_FULL_CHECKOUT, SITE_URL } from 'astro:env/client';
 import { fetchAllWords } from '@services/api.ts';
+import { translationTexts } from '@services/payload/words.ts';
 import { getPolarFullDeckPrice, getPolarFullDeckPriceAmount } from '@services/polar.ts';
 import { getLiteDeckDownloadUrl } from '@services/githubRelease.ts';
 import { routeToWord, shuffle } from '@utils/helpers.ts';
@@ -49,15 +50,19 @@ const [LITE_URL, allWords, PRICE, PRICE_AMOUNT] = await Promise.all([
 // Gleicher Filter wie `is_publishable()` in scripts/build_anki_decks.py: Titel und mindestens eine
 // Übersetzung (nach dem Entfernen von HTML). Das Deck holt nur PUBLISH-Wörter; mit SHOW_TEST_DATA
 // enthält `allWords` auch Entwürfe, die Zahlen gelten dann nur näherungsweise.
-const deckWords = allWords.filter(
-  (w) =>
-    stripTags(w.wordProperties.berlinerisch || w.title || '').trim() !== '' &&
-    w.translations.some((t) => stripTags(t).trim() !== ''),
-);
+const deckWords = allWords
+  .map((w) => (Object.assign(w, { texts: translationTexts(w) })))
+  .filter(
+    (w) =>
+      stripTags(w.berlinerisch).trim() !== '' && w.texts.some((t) => stripTags(t).trim() !== ''),
+  );
 const TOTAL_WORDS = deckWords.length;
 
 // Gleiche Gruppierung wie `group` in scripts/build_anki_decks.py: WordPress-wordGroup, leer -> Sonstige.
-const wordsPerLetter = Object.groupBy(deckWords, (w) => w.wordGroup?.trim().toUpperCase() || 'Sonstige');
+const wordsPerLetter = Object.groupBy(
+  deckWords,
+  (w) => w.derived?.wordGroup?.trim().toUpperCase() || 'Sonstige',
+);
 const LETTER_COUNTS = Object.fromEntries(
   Object.entries(wordsPerLetter).map(([letter, words]) => [letter, words?.length ?? 0]),
 );
@@ -94,14 +99,14 @@ const fmt = (n: number) => n.toLocaleString('de-DE');
 // Demo-Karten: Wörter mit Übersetzung und Beispielsatz, pro Build zufällig gezogen.
 const DEMO_CARDS = shuffle(
   deckWords.flatMap((w) => {
-    const example = stripTags(w.wordProperties.examples?.[0]?.example ?? '');
-    if (!example || !w.slug || w.translations.length === 0) return [];
+    const example = stripTags(w.examples[0]?.example ?? '');
+    if (!example || w.texts.length === 0) return [];
     return [
       {
         example,
         href: routeToWord(w.slug),
-        meaning: w.translations.slice(0, 2).map(stripTags).join(', '),
-        title: w.wordProperties.berlinerisch,
+        meaning: w.texts.slice(0, 2).map(stripTags).join(', '),
+        title: w.berlinerisch,
       },
     ];
   }),

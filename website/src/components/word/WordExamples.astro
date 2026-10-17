@@ -2,10 +2,10 @@
 import AudioPlayerList from "@components/AudioPlayerList.vue";
 import Quote from "virtual:icons/lucide/quote";
 
-import type { Maybe, WordPropertiesExamples } from "@/types/cms";
+import type { WordExample } from "@services/payload/words.ts";
 
 interface WordExamplesProps {
-  examples?: Maybe<WordPropertiesExamples>[];
+  examples?: WordExample[];
   rootBemClass?: string;
 }
 
@@ -26,7 +26,7 @@ const { examples = [], rootBemClass = "c-word-list" } = Astro.props as WordExamp
           </p>
         )}
 
-        {examples[0]?.exampleAudio && (
+        {(examples[0]?.exampleAudio.length ?? 0) > 0 && (
           <AudioPlayerList audio={examples[0]?.exampleAudio} client:only="vue" isType="example" />
         )}
       </div>
@@ -44,7 +44,7 @@ const { examples = [], rootBemClass = "c-word-list" } = Astro.props as WordExamp
                 {"– " + item.exampleExplanation}
               </div>
             )}
-            {item?.exampleAudio && (
+            {item.exampleAudio.length > 0 && (
               <AudioPlayerList audio={item?.exampleAudio} client:only="vue" isType="example" />
             )}
           </li>

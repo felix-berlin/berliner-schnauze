@@ -8,9 +8,9 @@ vi.mock("@utils/helpers.ts", async (importOriginal) => ({
 }));
 
 const makeWord = (slug: string, berlinerisch: string) => ({
+  berlinerisch,
   id: slug,
   slug,
-  wordProperties: { berlinerisch },
 });
 
 describe("RelatedWords.vue", () => {
@@ -76,9 +76,9 @@ describe("RelatedWords.vue", () => {
 
   it("uses slug as key when id is undefined", () => {
     const wordsWithoutId = [
-      { slug: "allet", wordProperties: { berlinerisch: "Allet" } },
-      { slug: "kiez", wordProperties: { berlinerisch: "Kiez" } },
-      { slug: "schnauze", wordProperties: { berlinerisch: "Schnauze" } },
+      { berlinerisch: "Allet", slug: "allet" },
+      { berlinerisch: "Kiez", slug: "kiez" },
+      { berlinerisch: "Schnauze", slug: "schnauze" },
     ] as ReturnType<typeof makeWord>[];
     const wrapper = mount(RelatedWords, { props: { numberOfWords: 3, words: wordsWithoutId } });
     expect(wrapper.findAll("li")).toHaveLength(3);
@@ -86,9 +86,9 @@ describe("RelatedWords.vue", () => {
 
   it("falls back to empty string key when both id and slug are undefined", () => {
     const wordsWithoutIdOrSlug = [
-      { wordProperties: { berlinerisch: "Allet" } },
-      { wordProperties: { berlinerisch: "Kiez" } },
-      { wordProperties: { berlinerisch: "Schnauze" } },
+      { berlinerisch: "Allet" },
+      { berlinerisch: "Kiez" },
+      { berlinerisch: "Schnauze" },
     ] as unknown as ReturnType<typeof makeWord>[];
     const wrapper = mount(RelatedWords, {
       props: { numberOfWords: 3, words: wordsWithoutIdOrSlug },

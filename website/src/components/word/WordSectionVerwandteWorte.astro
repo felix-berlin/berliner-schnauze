@@ -2,17 +2,15 @@
 import '@styles/components/_section-card.scss';
 import '@styles/components/_word-related-words.scss';
 import { routeToWord } from '@utils/helpers';
-import type { BerlinerWord } from '@/types/cms';
+import type { RelatedWord } from '@services/payload/words.ts';
 
 interface Props {
-  relatedWords: NonNullable<BerlinerWord['wordProperties']>['relatedWords'];
+  relatedWords: RelatedWord[];
   currentWord: string;
 }
 
 const { relatedWords, currentWord } = Astro.props;
-const filteredWords = (relatedWords?.nodes ?? []).filter(
-  (w) => w?.wordProperties?.berlinerisch !== currentWord
-);
+const filteredWords = relatedWords.filter((w) => w.berlinerisch !== currentWord);
 ---
 
 {filteredWords.length > 0 && (
@@ -25,8 +23,8 @@ const filteredWords = (relatedWords?.nodes ?? []).filter(
       <ul class='c-single-word__related-words-list'>
         {filteredWords.map((w) => (
           <li class='c-single-word__related-word'>
-            <a class='c-single-word__related-word-link' href={routeToWord(w?.slug)}>
-              {w?.wordProperties?.berlinerisch}
+            <a class='c-single-word__related-word-link' href={routeToWord(w.slug)}>
+              {w.berlinerisch}
             </a>
           </li>
         ))}

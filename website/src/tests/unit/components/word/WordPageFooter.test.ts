@@ -23,31 +23,31 @@ describe("WordPageFooter.astro", () => {
     expect(result).not.toContain("Bearbeitet am");
   });
 
-  it("renders dateGmt when provided", async () => {
-    const result = await render({ dateGmt: "2024-01-15T12:00:00" });
+  it("renders publishedAt when provided", async () => {
+    const result = await render({ publishedAt: "2024-01-15T12:00:00.000Z" });
     expect(result).toContain("Wort erstellt am");
     expect(result).toContain("c-single-word__created");
-    expect(result).toContain('datetime="2024-01-15T12:00:00"');
+    expect(result).toContain('datetime="2024-01-15T12:00:00.000Z"');
   });
 
-  it("renders modifiedGmt when provided", async () => {
-    const result = await render({ modifiedGmt: "2024-06-20T10:30:00" });
+  it("renders modifiedAt when provided", async () => {
+    const result = await render({ modifiedAt: "2024-06-20T10:30:00.000Z" });
     expect(result).toContain("Bearbeitet am");
     expect(result).toContain("c-single-word__modified");
-    expect(result).toContain('datetime="2024-06-20T10:30:00"');
+    expect(result).toContain('datetime="2024-06-20T10:30:00.000Z"');
   });
 
   it("renders both dates when both are provided", async () => {
     const result = await render({
-      dateGmt: "2024-01-15T12:00:00",
-      modifiedGmt: "2024-06-20T10:30:00",
+      modifiedAt: "2024-06-20T10:30:00.000Z",
+      publishedAt: "2024-01-15T12:00:00.000Z",
     });
     expect(result).toContain("Wort erstellt am");
     expect(result).toContain("Bearbeitet am");
   });
 
-  it("does not render dateGmt element when dateGmt is null", async () => {
-    const result = await render({ dateGmt: null, modifiedGmt: "2024-06-20T10:30:00" });
+  it("does not render publishedAt element when publishedAt is null", async () => {
+    const result = await render({ modifiedAt: "2024-06-20T10:30:00.000Z", publishedAt: null });
     expect(result).not.toContain("Wort erstellt am");
     expect(result).toContain("Bearbeitet am");
   });

@@ -8,8 +8,8 @@ vi.mock("@utils/helpers", () => ({
 }));
 
 const makeWordRef = (slug: string, berlinerisch: string) => ({
+  berlinerisch,
   slug,
-  wordProperties: { berlinerisch },
 });
 
 describe("WordAlphabetNav.astro", () => {

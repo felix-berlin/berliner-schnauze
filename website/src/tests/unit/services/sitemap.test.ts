@@ -29,8 +29,8 @@ const baselineVersions = baseline
 
 beforeEach(() => {
   fetchAllWords.mockResolvedValue([
-    { modifiedGmt: "2026-09-20T17:24:19", slug: "aasen" },
-    { modifiedGmt: null, slug: "wa" },
+    { contentModifiedAt: "2026-09-20T17:24:19.000Z", slug: "aasen" },
+    { contentModifiedAt: null, slug: "wa" },
   ]);
   fetchAllPosts.mockResolvedValue([
     {

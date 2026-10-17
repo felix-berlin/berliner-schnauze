@@ -4,9 +4,9 @@ import { describe, expect, it, beforeAll } from "vitest";
 import { createAstroRender } from "../../helpers";
 
 const makeWordRef = (berlinerisch: string, slug = "test-slug") => ({
+  berlinerisch,
   id: "test-id",
   slug,
-  wordProperties: { berlinerisch },
 });
 
 describe("WordSectionNachbarn.astro", () => {

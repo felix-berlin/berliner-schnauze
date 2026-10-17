@@ -117,11 +117,12 @@ const lexical = (...children: unknown[]) => ({ root: { children, direction: "ltr
 const PNG = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==", "base64");
 
 /** `find` by `where`, then `update` or `create`: the seed can run any number of times. */
-async function upsert<C extends "themen" | "words" | "posts" | "pages">(payload: Payload, collection: C, where: Record<string, unknown>, data: Record<string, unknown>) {
-  const { docs } = await payload.find({ collection, depth: 0, draft: true, limit: 1, where: where as never });
-  return docs[0]
-    ? payload.update({ collection, data: data as never, depth: 0, draft: false, id: docs[0].id })
-    : payload.create({ collection, data: data as never, depth: 0, draft: false });
+async function upsert(payload: Payload, collection: "themen" | "words" | "posts" | "pages", where: Record<string, unknown>, data: Record<string, unknown>): Promise<{ id: number }> {
+  // `draft` only for collections with drafts (strictDraftTypes); the union of slugs is too wide to type the calls.
+  const drafts = collection === "words" || collection === "posts";
+  const { docs } = await payload.find({ collection, depth: 0, limit: 1, where, ...(drafts && { draft: true }) } as never);
+  const options = { collection, data, depth: 0, ...(drafts && { draft: false }) };
+  return (docs[0] ? payload.update({ ...options, id: docs[0].id } as never) : payload.create(options as never)) as Promise<{ id: number }>;
 }
 
 export async function seedE2e(payload: Payload): Promise<void> {

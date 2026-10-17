@@ -3,10 +3,10 @@ import { describe, expect, it, beforeAll } from "vitest";
 
 import { createAstroRender } from "../../helpers";
 
-const makeWordProps = (overrides: Record<string, unknown> = {}) => ({
+const makeWord = (overrides: Record<string, unknown> = {}) => ({
   alternativeWords: [],
-  berlinerisch: "Schnauze",
-  infoText: null,
+  infoTextHtml: null,
+  sources: [],
   translations: [],
   ...overrides,
 });
@@ -21,13 +21,13 @@ describe("WordSectionEtymologie.astro", () => {
   }, 30_000);
 
   it("renders nothing when no content is present", async () => {
-    const result = await render({ wordProps: makeWordProps() });
+    const result = await render({ word: makeWord() });
     expect(result).not.toContain("Etymologie");
   });
 
   it("renders the section when infoText is present", async () => {
     const result = await render({
-      wordProps: makeWordProps({ infoText: "<p>Berliner Ausdruck</p>" }),
+      word: makeWord({ infoTextHtml: "<p>Berliner Ausdruck</p>" }),
     });
     expect(result).toContain("Etymologie");
     expect(result).toContain("c-section-card");
@@ -36,14 +36,14 @@ describe("WordSectionEtymologie.astro", () => {
 
   it("renders infoText HTML content", async () => {
     const result = await render({
-      wordProps: makeWordProps({ infoText: "<p>Berliner Ausdruck</p>" }),
+      word: makeWord({ infoTextHtml: "<p>Berliner Ausdruck</p>" }),
     });
     expect(result).toContain("Berliner Ausdruck");
   });
 
   it("renders section when translations are present", async () => {
     const result = await render({
-      wordProps: makeWordProps({
+      word: makeWord({
         translations: [{ translation: "Mund" }],
       }),
     });
@@ -54,7 +54,7 @@ describe("WordSectionEtymologie.astro", () => {
 
   it("renders section when alternativeWords are present", async () => {
     const result = await render({
-      wordProps: makeWordProps({
+      word: makeWord({
         alternativeWords: [{ alternativeWord: "Fresse" }],
       }),
     });
@@ -65,7 +65,7 @@ describe("WordSectionEtymologie.astro", () => {
 
   it("renders multiple translations", async () => {
     const result = await render({
-      wordProps: makeWordProps({
+      word: makeWord({
         translations: [{ translation: "Mund" }, { translation: "Maul" }],
       }),
     });
@@ -75,20 +75,30 @@ describe("WordSectionEtymologie.astro", () => {
 
   it("renders the section number element", async () => {
     const result = await render({
-      wordProps: makeWordProps({ infoText: "Test" }),
+      word: makeWord({ infoTextHtml: "Test" }),
     });
     expect(result).toContain("c-section-card__num");
   });
 
   it("renders aria-labelledby heading-etymologie", async () => {
     const result = await render({
-      wordProps: makeWordProps({ infoText: "Test" }),
+      word: makeWord({ infoTextHtml: "Test" }),
     });
     expect(result).toContain("heading-etymologie");
   });
 
-  it("renders nothing when wordProps is null", async () => {
-    const result = await render({ wordProps: null });
-    expect(result).not.toContain("Etymologie");
+  it("renders no stray 0 when there are neither translations nor alternatives", async () => {
+    const result = await render({ word: makeWord({ infoTextHtml: "<p>Info</p>" }) });
+    expect(result).toContain("Info");
+    expect(result).not.toMatch(/>\s*0\s*</);
+  });
+
+  it("lists the sources and links a source given as 'Label : url'", async () => {
+    const result = await render({
+      word: makeWord({ sources: ["Meyer", "Berlinisch : https://example.org/b"] }),
+    });
+    expect(result).toContain("Quellen");
+    expect(result).toContain("Meyer");
+    expect(result).toContain('href="https://example.org/b"');
   });
 });

@@ -6,7 +6,7 @@ vi.mock("@components/AudioPlayer.vue", () => ({
 }));
 
 const makeAudio = (gender: "female" | "male") => ({
-  audio: { node: { mediaItemUrl: `https://example.com/${gender}.mp3` } },
+  audio: { id: 1, url: `https://example.com/${gender}.mp3` },
   gender,
 });
 
@@ -35,14 +35,6 @@ describe("AudioPlayerList.vue", () => {
     expect(wrapper.find(".c-audio-list__gender").text()).toBe("♂");
   });
 
-  it("renders no items when audio is null", async () => {
-    const AudioPlayerList = (await import("@components/AudioPlayerList.vue")).default;
-    const wrapper = mount(AudioPlayerList, {
-      props: { audio: null, isType: "berlinerisch" },
-    });
-    expect(wrapper.findAll(".c-audio-list__item")).toHaveLength(0);
-  });
-
   it("renders no items when audio is empty array", async () => {
     const AudioPlayerList = (await import("@components/AudioPlayerList.vue")).default;
     const wrapper = mount(AudioPlayerList, {
@@ -51,12 +43,12 @@ describe("AudioPlayerList.vue", () => {
     expect(wrapper.findAll(".c-audio-list__item")).toHaveLength(0);
   });
 
-  it("passes null to AudioPlayer when mediaItemUrl is null (covers line 12 ?? null branch)", async () => {
+  it("passes the media url to the player", async () => {
     const AudioPlayerList = (await import("@components/AudioPlayerList.vue")).default;
-    const audioWithNullUrl = [{ audio: { node: { mediaItemUrl: null } }, gender: "male" as const }];
     const wrapper = mount(AudioPlayerList, {
-      props: { audio: audioWithNullUrl, isType: "berlinerisch" },
+      props: { audio: [makeAudio("male")], isType: "berlinerisch" },
     });
-    expect(wrapper.find(".c-audio-list__item").exists()).toBe(true);
+    // the mocked player declares no props: `audio` falls through as an attribute
+    expect(wrapper.find(".mock-audio-player").attributes("audio")).toBe("https://example.com/male.mp3");
   });
 });

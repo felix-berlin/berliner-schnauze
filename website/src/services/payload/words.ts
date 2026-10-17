@@ -1,12 +1,15 @@
-import type { Media, Theman, Word as PayloadWord, WordType } from "payload-app";
+import type {
+  AudioArray,
+  Media,
+  Theman,
+  Word as PayloadWord,
+  WordExamplesArray,
+  WordType,
+} from "payload-app";
 
 import { ttl } from "@services/cache.ts";
 import { getPayloadClient, mediaUrl, publicDocs } from "@services/payload.ts";
-import { toSeoData } from "@services/payload/seo.ts";
-import { wpDate } from "@utils/wpDate.ts";
-import { escapeHtml, lexicalToHtml } from "payload-app/lexical-html";
-
-import type { AudioRow, Word, WordImage } from "@/types/cms.ts";
+import { lexicalToHtml } from "payload-app/lexical-html";
 
 const PAGE_SIZE = 1000;
 
@@ -17,105 +20,111 @@ const PAGE_SIZE = 1000;
  */
 const PAYLOAD_ID_OFFSET = 1_000_000;
 
-/** WPGraphQL returned null for an empty repeater and callers test the fields for truthiness. */
-const mapOrNull = <T, R>(items: readonly T[] | null | undefined, f: (item: T) => R): R[] | null =>
-  items?.length ? items.map(f) : null;
+/** A media doc as the site renders it: absolute url, rich-text description as HTML. */
+export type SiteMedia = Pick<Media, "alt" | "caption" | "height" | "id" | "mimeType" | "width"> & {
+  descriptionHtml: string | null;
+  url: string;
+};
 
-const populated = <T extends object>(items: readonly (T | number)[] | null | undefined): T[] =>
-  (items ?? []).filter((item): item is T => typeof item === "object");
+// Generated row types (`interfaceName` in payload/src/collections/Words.ts) with the upload narrowed to SiteMedia.
+export type AudioRow = Omit<NonNullable<AudioArray>[number], "audio"> & { audio: SiteMedia };
+export type WordExample = Omit<NonNullable<WordExamplesArray>[number], "exampleAudio"> & {
+  exampleAudio: AudioRow[];
+};
+export type RelatedWord = Pick<PayloadWord, "berlinerisch" | "id"> & { slug: string };
 
-const audioRows = (rows: PayloadWord["berlinerischAudio"]): AudioRow[] | null =>
-  mapOrNull(rows, (row) => {
-    const url = mediaUrl(row.audio);
-    return { audio: url ? { node: { mediaItemUrl: url } } : null, gender: row.gender ?? null };
+/**
+ * A public word as the pages render it: the Payload doc with its relations populated, repeaters as arrays
+ * (never null), media with absolute urls, and what is computed once per cache window (rich text as HTML,
+ * the ids the old site used).
+ */
+export type SiteWord = Omit<
+  PayloadWord,
+  | "berlinerWordId"
+  | "berlinerischAudio"
+  | "examples"
+  | "images"
+  | "infoText"
+  | "relatedWords"
+  | "slug"
+  | "themen"
+  | "wordTypes"
+> & {
+  berlinerischAudio: AudioRow[];
+  /** DOM id of the word's card and the word-of-the-day id (the WordPress id, or one above PAYLOAD_ID_OFFSET). */
+  berlinerWordId: number;
+  examples: WordExample[];
+  /** The id the word had in WPGraphQL: the JSON-LD identifier of a word page stays as it was. */
+  globalId: string;
+  images: SiteMedia[];
+  infoTextHtml: string | null;
+  relatedWords: RelatedWord[];
+  slug: string;
+  themen: Pick<Theman, "id" | "name" | "slug">[];
+  wordTypes: Pick<WordType, "id" | "name">[];
+};
+
+const populated = <T extends object>(items: readonly (T | number | null)[] | null | undefined): T[] =>
+  (items ?? []).filter((item): item is T => typeof item === "object" && item !== null);
+
+export const toSiteMedia = (media: Media): SiteMedia | null => {
+  const url = mediaUrl(media);
+  return url
+    ? {
+        alt: media.alt,
+        caption: media.caption,
+        descriptionHtml: lexicalToHtml(media.description) || null,
+        height: media.height,
+        id: media.id,
+        mimeType: media.mimeType,
+        url,
+        width: media.width,
+      }
+    : null;
+};
+
+const audioRows = (rows: AudioArray | undefined): AudioRow[] =>
+  (rows ?? []).flatMap(({ audio, ...row }) => {
+    const media = typeof audio === "object" && audio ? toSiteMedia(audio) : null;
+    return media ? [{ ...row, audio: media }] : [];
   });
-
-const toImage = (media: Media): WordImage => ({
-  altText: media.alt ?? null,
-  caption: media.caption ? escapeHtml(media.caption) : null,
-  description: lexicalToHtml(media.description) || null,
-  mediaDetails: { height: media.height ?? null, width: media.width ?? null },
-  sourceUrl: mediaUrl(media) ?? null,
-});
 
 const wordDbId = (doc: Pick<PayloadWord, "berlinerWordId" | "id">): number =>
   doc.berlinerWordId ?? PAYLOAD_ID_OFFSET + doc.id;
 
-/** The id a word had in WPGraphQL ("post:<id>" base64): the JSON-LD identifier of a word page stays as it was. */
-const wordGlobalId = (doc: Pick<PayloadWord, "berlinerWordId" | "id">): string =>
-  btoa(`post:${wordDbId(doc)}`);
-
 /** `doc` must be populated one level deep (relations and media are objects, not ids) and have a slug. */
-export const toWord = (doc: PayloadWord & { slug: string }): Word => ({
+export const toWord = ({
+  berlinerischAudio,
+  examples,
+  images,
+  infoText,
+  relatedWords,
+  themen,
+  wordTypes,
+  ...doc
+}: PayloadWord & { slug: string }): SiteWord => ({
+  ...doc,
   berlinerWordId: wordDbId(doc),
-  berlinerischThemen: {
-    nodes: populated<Theman>(doc.themen).map((t) => ({
-      name: t.name ?? null,
-      slug: t.slug ?? null,
-    })),
-  },
-  berlinerischWordTypes: {
-    nodes: populated<WordType>(doc.wordTypes).map((t) => ({ name: t.name })),
-  },
-  dateGmt: wpDate(doc.publishedAt),
-  derived: doc.derived
-    ? {
-        characterLength: doc.derived.characterLength ?? null,
-        consonantsCount: doc.derived.consonantsCount ?? null,
-        nlpTags: doc.derived.nlpTags ?? null,
-        soundexCode: doc.derived.soundexCode ?? null,
-        syllablesCount: doc.derived.syllablesCount ?? null,
-        vowelsCount: doc.derived.vowelsCount ?? null,
-        wordComponents: doc.derived.wordComponents ?? null,
-        wordGroup: doc.derived.wordGroup ?? null,
-      }
-    : null,
-  id: wordGlobalId(doc),
-  modifiedGmt: wpDate(doc.contentModifiedAt),
-  seo: toSeoData(doc.meta, "article"),
-  slug: doc.slug,
-  title: doc.berlinerisch,
-  translations: (doc.translations ?? []).map((t) => t.translation).filter((t): t is string => !!t),
-  wordGroup: doc.derived?.wordGroup ?? null,
-  wordProperties: {
-    alternativeWords: mapOrNull(doc.alternativeWords, (a) => ({
-      alternativeWord: a.alternativeWord ?? null,
-    })),
-    article: doc.article ?? null,
-    berlinerisch: doc.berlinerisch,
-    berlinerischAudio: audioRows(doc.berlinerischAudio),
-    berolinismus: doc.berolinismus ?? null,
-    examples: mapOrNull(doc.examples, (e) => ({
-      example: e.example ?? null,
-      exampleAudio: audioRows(e.exampleAudio),
-      exampleExplanation: e.exampleExplanation ?? null,
-    })),
-    images: { nodes: populated<Media>(doc.images).map(toImage) },
-    infoText: lexicalToHtml(doc.infoText) || null,
-    learnMore: doc.learnMore ?? null,
-    relatedWords: {
-      // the Local API ignores access control: a never-published word must not leak through a relation
-      nodes: populated<PayloadWord>(doc.relatedWords)
-        .filter((w) => w._status === "published")
-        .map((w) => ({
-          id: wordGlobalId(w),
-          slug: w.slug ?? null,
-          wordProperties: { berlinerisch: w.berlinerisch },
-        })),
-    },
-    sources: doc.sources?.length ? [{ quelle: doc.sources }] : null,
-    translations: mapOrNull(doc.translations, (t) => ({ translation: t.translation ?? null })),
-    wikimediaFiles: mapOrNull(doc.wikimediaFiles, (f) => ({
-      caption: f.caption ?? null,
-      description: f.description ?? null,
-      wikimediaFile: f.wikimediaFile ?? null,
-    })),
-  },
+  berlinerischAudio: audioRows(berlinerischAudio),
+  examples: (examples ?? []).map(({ exampleAudio, ...e }) => (Object.assign(e, { exampleAudio: audioRows(exampleAudio) }))),
+  globalId: btoa(`post:${wordDbId(doc)}`),
+  images: populated<Media>(images).flatMap((m) => toSiteMedia(m) ?? []),
+  infoTextHtml: lexicalToHtml(infoText) || null,
+  // the Local API ignores access control: a never-published word must not leak through a relation
+  relatedWords: populated<PayloadWord>(relatedWords).flatMap((w) =>
+    w._status === "published" && w.slug ? [{ berlinerisch: w.berlinerisch, id: w.id, slug: w.slug }] : [],
+  ),
+  themen: populated<Theman>(themen).map(({ id, name, slug }) => ({ id, name, slug })),
+  wordTypes: populated<WordType>(wordTypes).map(({ id, name }) => ({ id, name })),
 });
 
-const loadAllWords = async (): Promise<Word[]> => {
+/** The translations of a word as plain strings, empty rows dropped. */
+export const translationTexts = (word: Pick<SiteWord, "translations">): string[] =>
+  (word.translations ?? []).flatMap((t) => t.translation || []);
+
+const loadAllWords = async (): Promise<SiteWord[]> => {
   const payload = await getPayloadClient();
-  const words: Word[] = [];
+  const words: SiteWord[] = [];
   for (let page = 1; ; page++) {
     // oxlint-disable-next-line no-await-in-loop -- sequential pages keep the memory and DB load flat
     const result = await payload.find({
@@ -133,19 +142,20 @@ const loadAllWords = async (): Promise<Word[]> => {
       ...publicDocs(),
     });
     for (const doc of result.docs) {
-      if (doc.slug) words.push(toWord({ ...doc, slug: doc.slug }));
+      // A draft (SHOW_TEST_DATA) may lack required fields: strictDraftTypes types them optional.
+      const { berlinerisch, createdAt, slug, updatedAt } = doc;
+      if (slug && berlinerisch && createdAt && updatedAt)
+        words.push(toWord({ ...doc, berlinerisch, createdAt, slug, updatedAt }));
       else
         console.warn(
-          `[fetchAllWords] Word without slug skipped: id ${doc.id}, berlinerisch "${doc.berlinerisch}"`,
+          `[fetchAllWords] Word without slug or headword skipped: id ${doc.id}, berlinerisch "${berlinerisch}"`,
         );
     }
     if (!result.hasNextPage) break;
   }
 
   // German collation here, not the database's: the neighbor sections depend on this order.
-  return words.sort((a, b) =>
-    a.wordProperties.berlinerisch.localeCompare(b.wordProperties.berlinerisch, "de"),
-  );
+  return words.sort((a, b) => a.berlinerisch.localeCompare(b.berlinerisch, "de"));
 };
 
 /** All public words (plus drafts with SHOW_TEST_DATA), memoized for a minute: an admin edit is live without a rebuild. */

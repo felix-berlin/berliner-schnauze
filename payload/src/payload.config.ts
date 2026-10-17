@@ -30,7 +30,11 @@ export default buildConfig({
   plugins: [seo],
   secret: process.env.PAYLOAD_SECRET || "",
   serverURL: process.env.PAYLOAD_SERVER_URL || "",
-  typescript: { outputFile: path.resolve(dirname, "payload-types.ts") },
+  typescript: {
+    outputFile: path.resolve(dirname, "payload-types.ts"),
+    // Becomes the default in v4: with `draft: true`, required fields are typed optional.
+    strictDraftTypes: true,
+  },
   // Dev/tests push the schema; in production nothing is pushed and the committed migrations run on
   // start only where PAYLOAD_RUN_MIGRATIONS=true (the cms container), so no second app migrates concurrently.
   // Every schema change needs `payload migrate:create <name>`.

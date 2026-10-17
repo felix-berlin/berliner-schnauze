@@ -7,6 +7,29 @@
  */
 
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WordExamplesArray".
+ */
+export type WordExamplesArray =
+  | {
+      example?: string | null;
+      exampleExplanation?: string | null;
+      exampleAudio?: AudioArray;
+      id?: string | null;
+    }[]
+  | null;
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AudioArray".
+ */
+export type AudioArray =
+  | {
+      gender?: ('male' | 'female') | null;
+      audio?: (number | null) | Media;
+      id?: string | null;
+    }[]
+  | null;
+/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -111,6 +134,7 @@ export interface Config {
   widgets: {
     collections: CollectionsWidget;
   };
+  strictDraftTypes: true;
   user: User;
   jobs: {
     tasks: unknown;
@@ -223,15 +247,15 @@ export interface Theman {
   description?: string | null;
   wpId?: number | null;
   slug?: string | null;
-  meta?: SeoMeta;
+  meta?: SeoMetaGroup;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "SeoMeta".
+ * via the `definition` "SeoMetaGroup".
  */
-export interface SeoMeta {
+export interface SeoMetaGroup {
   title?: string | null;
   description?: string | null;
   /**
@@ -272,27 +296,8 @@ export interface Word {
         id?: string | null;
       }[]
     | null;
-  examples?:
-    | {
-        example?: string | null;
-        exampleExplanation?: string | null;
-        exampleAudio?:
-          | {
-              gender?: ('male' | 'female') | null;
-              audio?: (number | null) | Media;
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-      }[]
-    | null;
-  berlinerischAudio?:
-    | {
-        gender?: ('male' | 'female') | null;
-        audio?: (number | null) | Media;
-        id?: string | null;
-      }[]
-    | null;
+  examples?: WordExamplesArray;
+  berlinerischAudio?: AudioArray;
   relatedWords?: (number | Word)[] | null;
   wikimediaFiles?:
     | {
@@ -346,7 +351,7 @@ export interface Word {
     wordComponents?: string[] | null;
     soundexCode?: string | null;
   };
-  meta?: SeoMeta;
+  meta?: SeoMetaGroup;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -379,7 +384,7 @@ export interface Post {
   } | null;
   wpId?: number | null;
   slug?: string | null;
-  meta?: SeoMeta;
+  meta?: SeoMetaGroup;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -408,7 +413,7 @@ export interface Page {
   } | null;
   wpId?: number | null;
   slug?: string | null;
-  meta?: SeoMeta;
+  meta?: SeoMetaGroup;
   updatedAt: string;
   createdAt: string;
 }
@@ -574,15 +579,15 @@ export interface ThemenSelect<T extends boolean = true> {
   description?: T;
   wpId?: T;
   slug?: T;
-  meta?: T | SeoMetaSelect<T>;
+  meta?: T | SeoMetaGroupSelect<T>;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "SeoMeta_select".
+ * via the `definition` "SeoMetaGroup_select".
  */
-export interface SeoMetaSelect<T extends boolean = true> {
+export interface SeoMetaGroupSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   image?: T;
@@ -616,27 +621,8 @@ export interface WordsSelect<T extends boolean = true> {
         alternativeWord?: T;
         id?: T;
       };
-  examples?:
-    | T
-    | {
-        example?: T;
-        exampleExplanation?: T;
-        exampleAudio?:
-          | T
-          | {
-              gender?: T;
-              audio?: T;
-              id?: T;
-            };
-        id?: T;
-      };
-  berlinerischAudio?:
-    | T
-    | {
-        gender?: T;
-        audio?: T;
-        id?: T;
-      };
+  examples?: T | WordExamplesArraySelect<T>;
+  berlinerischAudio?: T | AudioArraySelect<T>;
   relatedWords?: T;
   wikimediaFiles?:
     | T
@@ -667,10 +653,29 @@ export interface WordsSelect<T extends boolean = true> {
         wordComponents?: T;
         soundexCode?: T;
       };
-  meta?: T | SeoMetaSelect<T>;
+  meta?: T | SeoMetaGroupSelect<T>;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WordExamplesArray_select".
+ */
+export interface WordExamplesArraySelect<T extends boolean = true> {
+  example?: T;
+  exampleExplanation?: T;
+  exampleAudio?: T | AudioArraySelect<T>;
+  id?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AudioArray_select".
+ */
+export interface AudioArraySelect<T extends boolean = true> {
+  gender?: T;
+  audio?: T;
+  id?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -685,7 +690,7 @@ export interface PostsSelect<T extends boolean = true> {
   content?: T;
   wpId?: T;
   slug?: T;
-  meta?: T | SeoMetaSelect<T>;
+  meta?: T | SeoMetaGroupSelect<T>;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -699,7 +704,7 @@ export interface PagesSelect<T extends boolean = true> {
   content?: T;
   wpId?: T;
   slug?: T;
-  meta?: T | SeoMetaSelect<T>;
+  meta?: T | SeoMetaGroupSelect<T>;
   updatedAt?: T;
   createdAt?: T;
 }

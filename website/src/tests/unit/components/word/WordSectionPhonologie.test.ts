@@ -3,7 +3,7 @@ import { describe, expect, it, beforeAll } from "vitest";
 
 import { createAstroRender } from "../../helpers";
 
-const ref = (slug: string, berlinerisch: string) => ({ slug, wordProperties: { berlinerisch } });
+const ref = (slug: string, berlinerisch: string) => ({ berlinerisch, slug });
 
 describe("WordSectionPhonologie.astro", () => {
   let render: (props: Record<string, unknown>) => Promise<string>;

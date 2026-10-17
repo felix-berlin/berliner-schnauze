@@ -42,8 +42,8 @@ describe("WordDecomposition.astro", () => {
   it("renders linked part when matching word exists in allWords", async () => {
     const allWords = [
       {
+        berlinerisch: "bahn",
         slug: "bahn",
-        wordProperties: { berlinerisch: "bahn" },
       },
     ];
     const result = await render({ allWords, word: "Bahnhof" });
@@ -66,8 +66,8 @@ describe("WordDecomposition.astro", () => {
 
   describe("with a mocked decomposition", () => {
     const word = (slug: string, berlinerisch = slug) => ({
+      berlinerisch,
       slug,
-      wordProperties: { berlinerisch },
     });
 
     it("renders nothing when the word is not a compound", async () => {

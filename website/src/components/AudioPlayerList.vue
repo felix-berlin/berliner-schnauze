@@ -4,13 +4,13 @@
       v-for="(item, index) in audio"
       :key="index"
       v-tooltip="
-        `Höre dir ${isType === 'example' ? 'das Beispiel' : 'das Wort'} mit einer ${item?.gender === 'female' ? 'weiblichen' : 'männlichen'} Stimme an.`
+        `Höre dir ${isType === 'example' ? 'das Beispiel' : 'das Wort'} mit einer ${item.gender === 'female' ? 'weiblichen' : 'männlichen'} Stimme an.`
       "
       class="c-audio-list__item"
     >
-      <span class="c-audio-list__gender">{{ item?.gender === "female" ? "♀" : "♂" }}</span>
+      <span class="c-audio-list__gender">{{ item.gender === "female" ? "♀" : "♂" }}</span>
       <AudioPlayer
-        :audio="item?.audio?.node.mediaItemUrl ?? null"
+        :audio="item.audio.url"
         class="c-audio-list__audio-player"
       />
     </div>
@@ -18,18 +18,12 @@
 </template>
 
 <script setup lang="ts">
+import type { AudioRow } from "@services/payload/words.ts";
+
 import AudioPlayer from "@components/AudioPlayer.vue";
 
-import type {
-  Maybe,
-  WordPropertiesBerlinerischAudio,
-  WordPropertiesExamplesExampleAudio,
-} from "@/types/cms";
-
 type AudioPlayerListProps = {
-  audio:
-    | Maybe<Maybe<WordPropertiesBerlinerischAudio>[]>
-    | Maybe<Maybe<WordPropertiesExamplesExampleAudio>[]>;
+  audio: AudioRow[];
   isType: "berlinerisch" | "example";
 };
 

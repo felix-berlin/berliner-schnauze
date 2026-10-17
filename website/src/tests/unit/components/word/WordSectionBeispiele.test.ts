@@ -17,14 +17,9 @@ describe("WordSectionBeispiele.astro", () => {
     expect(result).not.toContain("Beispiele");
   });
 
-  it("renders nothing when examples is null", async () => {
-    const result = await render({ examples: null });
-    expect(result).not.toContain("Beispiele");
-  });
-
   it("renders the section when examples are present", async () => {
     const result = await render({
-      examples: [{ example: "Det is keen Zufall." }],
+      examples: [{ example: "Det is keen Zufall.", exampleAudio: [] }],
     });
     expect(result).toContain("Beispiele");
     expect(result).toContain('id="beispiele"');
@@ -33,21 +28,21 @@ describe("WordSectionBeispiele.astro", () => {
 
   it("renders the example text", async () => {
     const result = await render({
-      examples: [{ example: "Det is keen Zufall." }],
+      examples: [{ example: "Det is keen Zufall.", exampleAudio: [] }],
     });
     expect(result).toContain("Det is keen Zufall.");
   });
 
   it("renders the section number element", async () => {
     const result = await render({
-      examples: [{ example: "Det is keen Zufall." }],
+      examples: [{ example: "Det is keen Zufall.", exampleAudio: [] }],
     });
     expect(result).toContain("c-section-card__num");
   });
 
   it("renders aria-labelledby heading-beispiele", async () => {
     const result = await render({
-      examples: [{ example: "Det is keen Zufall." }],
+      examples: [{ example: "Det is keen Zufall.", exampleAudio: [] }],
     });
     expect(result).toContain("heading-beispiele");
   });

@@ -97,7 +97,8 @@ const loadPosts = async (): Promise<PostNode[]> => {
     ...publicDocs(),
   });
   return docs.flatMap((post) => {
-    if (!post.slug) return [];
+    // A draft (SHOW_TEST_DATA) may lack its title: strictDraftTypes types it optional.
+    if (!post.slug || !post.title) return [];
     const blocks = toPostBlocks(post.content);
     const seo = toSeoData(post.meta, "article");
     const image = mediaUrl(post.featuredImage);

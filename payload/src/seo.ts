@@ -31,12 +31,12 @@ const yoastFields: Field[] = [
 
 /**
  * `meta` group (title, description, image + the Yoast extras) on every collection with a public page,
- * with length hints, a search preview and "generate" buttons in the admin. Generated type: `SeoMeta`.
+ * with length hints, a search preview and "generate" buttons in the admin. Generated type: `SeoMetaGroup`.
  */
 export const seo = seoPlugin({
   collections: Object.keys(ROUTES),
   uploadsCollection: "media",
-  interfaceName: "SeoMeta",
+  interfaceName: "SeoMetaGroup",
   fields: ({ defaultFields }) => [
     ...defaultFields.map((field) =>
       "name" in field && field.name === "image"

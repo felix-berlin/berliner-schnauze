@@ -15,7 +15,7 @@ const parts = decomposeCompoundWord(word);
 // Only needed to link parts — skip the ~6000-entry lookup for non-compounds.
 // findLast keeps the previous Map semantics (last duplicate wins).
 const findWord = (part: string) =>
-  allWords.findLast((w) => w.wordProperties.berlinerisch.toLowerCase() === part);
+  allWords.findLast((w) => w.berlinerisch.toLowerCase() === part);
 ---
 
 {

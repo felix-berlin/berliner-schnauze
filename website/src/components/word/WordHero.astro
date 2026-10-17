@@ -8,38 +8,37 @@ import WordOptionDropdown from '@components/word/WordOptionDropdown.vue';
 import TooltipPopover from '@components/TooltipPopover.vue';
 import Tag from '~icons/lucide/tag';
 import { routeToWord } from '@utils/helpers';
-import type { Word } from '@/types/cms.ts';
+import type { SiteWord } from '@services/payload/words.ts';
 
 interface Props {
-  word: Word;
-  wordProps: Word['wordProperties'];
+  word: SiteWord;
   wortartLabel: string | undefined;
 }
 
-const { word, wordProps, wortartLabel } = Astro.props;
-const themen = word.berlinerischThemen?.nodes ?? [];
+const { word, wortartLabel } = Astro.props;
+const { themen } = word;
 ---
 
 <header
   class='c-word-hero'
   data-track-content
   data-content-name='Word Hero'
-  data-content-piece={wordProps.berlinerisch}
+  data-content-piece={word.berlinerisch}
   data-content-target={routeToWord(word.slug)}
 >
   <div class='c-word-hero__left'>
     <h1 class='c-word-hero__title'>
-      <dfn>{wordProps.berlinerisch}</dfn>{wordProps.article && (
-        <span class='c-word-hero__word-article'>, {wordProps.article}</span>
+      <dfn>{word.berlinerisch}</dfn>{word.article && (
+        <span class='c-word-hero__word-article'>, {word.article}</span>
       )}
     </h1>
     <div class='c-word-hero__badges'>
       {
-        wordProps.berolinismus && (
+        word.berolinismus && (
           <TooltipPopover client:only='vue'>
             <BadgeTag> Berolinismus </BadgeTag>
             <Fragment slot='tooltip'>
-              {wordProps.berlinerisch} gehört zu den Berlinismen.
+              {word.berlinerisch} gehört zu den Berlinismen.
               <>
                 <br />
                 <br />
@@ -55,13 +54,13 @@ const themen = word.berlinerischThemen?.nodes ?? [];
       <IsWordOfTheDay
         client:only='vue'
         variant='badge'
-        word={wordProps.berlinerisch}
+        word={word.berlinerisch}
         wordId={word.berlinerWordId}
       />
       {
-        wordProps.berlinerischAudio && (
+        word.berlinerischAudio.length > 0 && (
           <AudioPlayerList
-            audio={wordProps.berlinerischAudio}
+            audio={word.berlinerischAudio}
             client:only='vue'
             isType='berlinerisch'
           />
@@ -83,7 +82,7 @@ const themen = word.berlinerischThemen?.nodes ?? [];
   </div>
   <div class='c-word-hero__right'>
     <WordOptionDropdown
-      berlinerisch={wordProps.berlinerisch}
+      berlinerisch={word.berlinerisch}
       client:load
       slug={word.slug}
     />

@@ -9,7 +9,7 @@ import {
   VOWELS,
 } from "payload-app/word-derived";
 
-import type { WordPropertiesWikimediaFiles } from "@/types/cms";
+import type { Word } from "payload-app";
 
 export {
   countLetters,
@@ -18,12 +18,8 @@ export {
   type WordTags,
 } from "payload-app/word-derived";
 
-/** Minimal word shape for cross-word helpers; `Word` from fetchAllWords satisfies it. */
-export type WordRef = {
-  id: string;
-  slug: string;
-  wordProperties: { berlinerisch: string };
-};
+/** Minimal word shape for cross-word helpers; a `SiteWord` from fetchAllWords satisfies it. */
+export type WordRef = { berlinerisch: string; id: number; slug: string };
 
 // all-the-german-words is a ~28 MB JSON array — require it on first use instead of at module
 // load, so importers that never decompose words (e.g. the search index) don't pay for it.
@@ -66,7 +62,7 @@ export const similarSoundingWords = (allWords: WordRef[], currentWord: WordRef):
   if (!index) {
     index = new Map();
     for (const word of allWords) {
-      const { berlinerisch } = word.wordProperties;
+      const { berlinerisch } = word;
       if (!berlinerisch) continue;
       const code = soundexCode(berlinerisch);
       const bucket = index.get(code);
@@ -76,7 +72,7 @@ export const similarSoundingWords = (allWords: WordRef[], currentWord: WordRef):
     soundexIndexCache.set(allWords, index);
   }
 
-  const currentBerlinerisch = currentWord.wordProperties.berlinerisch;
+  const currentBerlinerisch = currentWord.berlinerisch;
   if (!currentBerlinerisch) return [];
   return (index.get(soundexCode(currentBerlinerisch)) ?? []).filter(
     (word) => word.id !== currentWord.id,
@@ -88,7 +84,7 @@ export const similarWords = (
   currentWord: WordRef,
   needsSimilarity?: number,
 ) => {
-  const currentBerlinerisch = currentWord.wordProperties.berlinerisch;
+  const currentBerlinerisch = currentWord.berlinerisch;
   const results: { isSimilar: number; word: WordRef }[] = [];
 
   // Length pre-filter. With m ≤ min(len), Jaro ≤ (2 + r) / 3 where r = min/max length, and
@@ -99,7 +95,7 @@ export const similarWords = (
 
   for (const word of allWords) {
     if (word.id === currentWord.id) continue;
-    const candidate = word.wordProperties.berlinerisch;
+    const candidate = word.berlinerisch;
     if (
       minRatio > 0 &&
       Math.min(candidate.length, currentLength) <
@@ -117,7 +113,7 @@ export const similarWords = (
 };
 
 export const createWikimediaFileList = async (
-  wikimediaFiles: WordPropertiesWikimediaFiles[] | null | undefined,
+  wikimediaFiles: Word["wikimediaFiles"],
 ) => {
   if (!wikimediaFiles?.length) return [];
 
@@ -304,7 +300,7 @@ export const findAnagrams = (word: string, allWords: WordRef[]): WordRef[] => {
   if (!index) {
     index = new Map();
     for (const w of allWords) {
-      const key = sortedChars(w.wordProperties.berlinerisch);
+      const key = sortedChars(w.berlinerisch);
       const bucket = index.get(key);
       if (bucket) bucket.push(w);
       else index.set(key, [w]);
@@ -313,7 +309,7 @@ export const findAnagrams = (word: string, allWords: WordRef[]): WordRef[] => {
   }
   const lower = word.toLowerCase();
   return (index.get(sortedChars(word)) ?? []).filter(
-    (w) => w.wordProperties.berlinerisch.toLowerCase() !== lower,
+    (w) => w.berlinerisch.toLowerCase() !== lower,
   );
 };
 
@@ -332,8 +328,8 @@ export const alphabeticNeighbors = (
   if (!cached) {
     const sorted = [...allWords].sort((a, b) =>
       germanCollator.compare(
-        a.wordProperties.berlinerisch.toLowerCase(),
-        b.wordProperties.berlinerisch.toLowerCase(),
+        a.berlinerisch.toLowerCase(),
+        b.berlinerisch.toLowerCase(),
       ),
     );
     const indexById = new Map<WordRef["id"], number>();
