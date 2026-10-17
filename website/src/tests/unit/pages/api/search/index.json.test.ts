@@ -118,13 +118,29 @@ describe("makeOramaSearchIndex — word properties", () => {
 
   it("lists the non-empty translations as strings", () => {
     const result = makeOramaSearchIndex(
-      makeWord({ translations: [{ translation: "was" }, { translation: "" }, { translation: null }] }),
+      makeWord({
+        translations: [{ translation: "was" }, { translation: "" }, { translation: null }],
+      }),
     );
     expect(result.wordProperties.translations).toEqual(["was"]);
   });
 
-  it("falls back to an empty word group", () => {
-    expect(makeOramaSearchIndex(makeWord({ derived: { wordGroup: null } })).wordGroup).toBe("");
+  it("computes the derived fields, with a warning, when the stored group is unset (Payload: an object of nulls)", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const result = makeOramaSearchIndex(
+      makeWord({ derived: { characterLength: null, wordGroup: null } }),
+    );
+    expect(result.wordGroup).toBe("W");
+    expect(result.wordProperties.characterLength).toBe(3);
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("wat"));
+    warn.mockRestore();
+  });
+
+  it("falls back to an empty word group for a headword without a leading letter", () => {
+    expect(
+      makeOramaSearchIndex(makeWord({ berlinerisch: "1a", derived: { wordGroup: null } }))
+        .wordGroup,
+    ).toBe("");
   });
 });
 

@@ -16,8 +16,13 @@ const timestamp = (iso: string | null | undefined): number => (iso && Date.parse
  */
 export function makeOramaSearchIndex(word: SiteWord) {
   const { berlinerisch } = word;
-  // Stored on save in Payload; computed only for a word that was never saved through the hook.
-  const derived = word.derived ?? deriveWordFields(berlinerisch);
+  // Stored on save in Payload; computed only for a word that was never saved through the hook. Payload returns an
+  // unset group as an object of nulls, so check a field the hook always sets.
+  let derived = word.derived;
+  if (derived?.wordGroup == null) {
+    console.warn(`[search-index] derived fields missing, computed on the fly: ${word.slug}`);
+    derived = deriveWordFields(berlinerisch);
+  }
 
   const wordTypes = [
     ...new Set(
@@ -34,7 +39,7 @@ export function makeOramaSearchIndex(word: SiteWord) {
     slug: word.slug,
     themen: word.themen.flatMap((t) => t.slug ?? []),
     wordComponents: derived.wordComponents ?? [],
-    wordGroup: word.derived?.wordGroup ?? "",
+    wordGroup: derived.wordGroup ?? "",
     wordProperties: {
       audioBerlinerisch: word.berlinerischAudio.length > 0,
       audioExamples: word.examples.some((e) => e.exampleAudio.length > 0),
