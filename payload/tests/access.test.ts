@@ -5,7 +5,7 @@ import { getTestPayload } from "./helpers/payload";
 
 // Task 3 and Task 5 append their collections/globals here.
 const lockedCollections = ["users", "words", "word-types", "themen", "posts", "pages", "suggestions", "redirects"] as const;
-const lockedGlobals = ["navigation", "affiliate", "company"] as const;
+const lockedGlobals = ["navigation", "affiliate", "company", "home", "anki"] as const;
 
 const png = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",

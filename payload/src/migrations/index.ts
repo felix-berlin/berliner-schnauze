@@ -8,6 +8,7 @@ import * as migration_20261017_101928_company_platforms_wallets from './20261017
 import * as migration_20261017_103801_seo_drop_og_twitter from './20261017_103801_seo_drop_og_twitter';
 import * as migration_20261017_104452_schedule_publish_posts from './20261017_104452_schedule_publish_posts';
 import * as migration_20261017_104729_pages_versions from './20261017_104729_pages_versions';
+import * as migration_20261017_105011_content_globals from './20261017_105011_content_globals';
 
 export const migrations = [
   {
@@ -58,6 +59,11 @@ export const migrations = [
   {
     up: migration_20261017_104729_pages_versions.up,
     down: migration_20261017_104729_pages_versions.down,
-    name: '20261017_104729_pages_versions'
+    name: '20261017_104729_pages_versions',
+  },
+  {
+    up: migration_20261017_105011_content_globals.up,
+    down: migration_20261017_105011_content_globals.down,
+    name: '20261017_105011_content_globals'
   },
 ];

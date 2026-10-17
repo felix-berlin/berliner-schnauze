@@ -15,7 +15,9 @@ import { Users } from "./collections/Users";
 import { WordTypes } from "./collections/WordTypes";
 import { Words } from "./collections/Words";
 import { Affiliate } from "./globals/Affiliate";
+import { Anki } from "./globals/Anki";
 import { Company } from "./globals/Company";
+import { Home } from "./globals/Home";
 import { Navigation } from "./globals/Navigation";
 import { migrations } from "./migrations";
 import { redirects } from "./redirects";
@@ -29,7 +31,7 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname) },
   },
   collections: [Users, Media, WordTypes, Themen, Words, Posts, Pages, Suggestions],
-  globals: [Navigation, Affiliate, Company],
+  globals: [Navigation, Affiliate, Company, Home, Anki],
   editor: lexicalEditor(),
   // Without SMTP_URL (dev, tests) Payload writes mails to the console instead of sending them.
   email: process.env.SMTP_URL

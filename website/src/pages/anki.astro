@@ -4,6 +4,7 @@ import '@styles/components/_button.scss';
 import { ANKI_DECK_FULL_CHECKOUT, SITE_URL } from 'astro:env/client';
 import { fetchAllWords } from '@services/api.ts';
 import { translationTexts } from '@services/payload/words.ts';
+import { fetchAnkiContent } from '@services/payload/site.ts';
 import { getPolarFullDeckPrice, getPolarFullDeckPriceAmount } from '@services/polar.ts';
 import { getLiteDeckDownloadUrl } from '@services/githubRelease.ts';
 import { routeToWord, shuffle } from '@utils/helpers.ts';
@@ -116,24 +117,6 @@ const DEMO_CARDS = shuffle(
   }),
 ).slice(0, 6);
 
-const steps = [
-  {
-    num: '01',
-    text: 'Anki zeigt Dir ein Berliner Wort. Du überlegst kurz: Wat heißt ditt nochmal?',
-    title: 'Karte sehen',
-  },
-  {
-    num: '02',
-    text: 'Du drehst die Karte um und siehst Bedeutung und Beispielsatz. Jetzt weißte, ob Du richtig lagst.',
-    title: 'Aufdecken',
-  },
-  {
-    num: '03',
-    text: 'Nochmal, Schwer, Gut oder Einfach. Danach entscheidet Anki, wann die Karte wiederkommt.',
-    title: 'Ehrlich bewerten',
-  },
-];
-
 const intervals = ['Heute', '1 Tag', '3 Tage', '1 Woche', '3 Wochen', '2 Monate'];
 
 const platforms = [
@@ -143,55 +126,10 @@ const platforms = [
   { icons: [Globe], meta: 'Im Browser & Sync', name: 'AnkiWeb' },
 ];
 
-const liteFeatures = [
-  `${fmt(LITE_WORDS)} Wörter — rund 10 % vom Wortschatz`,
-  'Quer durch alle Buchstaben von A bis Z',
-  'Sofort kostenlos laden, ohne Anmeldung',
-  'Perfekter Einstieg, um Anki kennenzulernen',
-];
-
-const fullFeatures = [
-  `Der komplette Wortschatz: ${fmt(TOTAL_WORDS)} Wörter`,
-  'Fügt sich nahtlos in Deine Lite-Version ein',
-  'Lernfortschritt bleibt, keine Dopplungen',
-  'Einmal zahlen, kein Abo — neue Wörter kommen gratis dazu',
-  'Nur für Dich — Weitergabe nicht erlaubt',
-];
-
-const faqs = [
-  {
-    a: "Ja. Anki ist die App, in der Du das Deck lernst. Für Windows, macOS, Linux, Android und im Browser ist sie kostenlos, für iPhone und iPad gibt's AnkiMobile als Kauf-App. Einmal installieren, Deck-Datei (.apkg) öffnen, fertig.",
-    q: 'Brauch ich Anki dafür?',
-  },
-  {
-    a: 'Anki von apps.ankiweb.net herunterladen und installieren. Die heruntergeladene .apkg-Datei doppelklicken — oder in Anki über „Datei → Importieren“ auswählen. Das Deck „Berliner Schnauze“ erscheint in Deiner Deckliste. Draufklicken, „Jetzt lernen“, fertig.',
-    q: 'Wie installiere und importiere ich das Deck?',
-  },
-  {
-    a: 'Einfach die Full-Datei (.apkg) genauso importieren wie vorher die Lite. Anki erkennt die vorhandenen Karten, behält Deinen Lernstand und fügt nur die fehlenden Wörter hinzu. Du musst nichts löschen.',
-    q: 'Wie update ich von Lite auf Full?',
-  },
-  {
-    a: 'Nee. Die Full ist so gebaut, dass sie sich in Dein bestehendes Lite-Deck einfügt. Karten, die Du schon hast, bleiben mit ihrem Lernstand erhalten — es kommen nur die fehlenden dazu, ohne Dopplungen.',
-    q: 'Verliere ich meinen Fortschritt, wenn ich von Lite auf Full wechsle?',
-  },
-  {
-    a: 'Rund 10 % des gesamten Wortschatzes, gleichmäßig über alle Buchstaben verteilt. So kriegst Du einen ehrlichen Eindruck vom ganzen Deck.',
-    q: 'Welche Wörter sind in der Lite?',
-  },
-  {
-    a: 'Der Kauf läuft über Polar. Nach dem Klick auf „Full-Deck kaufen“ wirst Du dorthin weitergeleitet und bekommst das Deck nach der Zahlung zum Download.',
-    q: 'Wie bezahle ich die Full?',
-  },
-  {
-    a: 'Na klar, die Updates sind im einmaligen Kauf mit drin. Ruf einfach den Download-Link aus Deiner Kauf-Mail nochmal auf, lade die aktuelle Datei runter und importier sie in Anki. Neue Wörter kommen dazu, Dein Lernstand bleibt, doppelte Karten gibt’s keine.',
-    q: 'Kriege ich neue Wörter, wenn das Wörterbuch wächst?',
-  },
-  {
-    a: 'Leider nein. Die Full ist nur für Dich — Weitergabe, Weiterverkauf oder Veröffentlichung sind nicht erlaubt. Die Lite darfste dagegen gerne teilen.',
-    q: 'Darf ich die Full an Freunde weitergeben?',
-  },
-];
+const { faqs, fullFeatures, liteFeatures, steps } = await fetchAnkiContent({
+  liteWords: fmt(LITE_WORDS),
+  totalWords: fmt(TOTAL_WORDS),
+});
 ---
 
 <Layout content={page}>

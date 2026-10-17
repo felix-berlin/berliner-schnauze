@@ -130,11 +130,15 @@ export interface Config {
     navigation: Navigation;
     affiliate: Affiliate;
     company: Company;
+    home: Home;
+    anki: Anki;
   };
   globalsSelect: {
     navigation: NavigationSelect<false> | NavigationSelect<true>;
     affiliate: AffiliateSelect<false> | AffiliateSelect<true>;
     company: CompanySelect<false> | CompanySelect<true>;
+    home: HomeSelect<false> | HomeSelect<true>;
+    anki: AnkiSelect<false> | AnkiSelect<true>;
   };
   locale: null;
   widgets: {
@@ -1056,6 +1060,10 @@ export interface Company {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Kurze Versprechen oben auf /spenden, z. B. „Keene Werbung“.
+   */
+  donationHighlights?: string[] | null;
   socialMedia?:
     | {
         label: string;
@@ -1064,6 +1072,80 @@ export interface Company {
          * Link mit rel="me" (z. B. Mastodon-Verifizierung).
          */
         relMe?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home".
+ */
+export interface Home {
+  id: number;
+  /**
+   * Nach dem zweiten Fakt steht die Spiel-Karte, am Ende das Wort des Tages.
+   */
+  facts?:
+    | {
+        headline: string;
+        text: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "anki".
+ */
+export interface Anki {
+  id: number;
+  steps?:
+    | {
+        title: string;
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * {liteWords} und {totalWords} werden durch die aktuellen Wortzahlen ersetzt.
+   */
+  liteFeatures?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * {liteWords} und {totalWords} werden durch die aktuellen Wortzahlen ersetzt.
+   */
+  fullFeatures?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  faqs?:
+    | {
+        question: string;
+        answer: string;
         id?: string | null;
       }[]
     | null;
@@ -1153,12 +1235,64 @@ export interface CompanySelect<T extends boolean = true> {
         chains?: T;
         id?: T;
       };
+  donationHighlights?: T;
   socialMedia?:
     | T
     | {
         label?: T;
         profile?: T;
         relMe?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home_select".
+ */
+export interface HomeSelect<T extends boolean = true> {
+  facts?:
+    | T
+    | {
+        headline?: T;
+        text?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "anki_select".
+ */
+export interface AnkiSelect<T extends boolean = true> {
+  steps?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        id?: T;
+      };
+  liteFeatures?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  fullFeatures?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
         id?: T;
       };
   updatedAt?: T;

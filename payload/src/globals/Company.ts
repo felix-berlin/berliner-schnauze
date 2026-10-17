@@ -25,6 +25,12 @@ export const Company: GlobalConfig = {
       ],
     },
     {
+      name: "donationHighlights",
+      type: "text",
+      hasMany: true,
+      admin: { description: "Kurze Versprechen oben auf /spenden, z. B. „Keene Werbung“." },
+    },
+    {
       name: "socialMedia",
       type: "array",
       fields: [

@@ -58,11 +58,13 @@ describe("fetchMenu", () => {
 describe("fetchFundingData", () => {
   it("passes platforms and wallets through without the row ids", async () => {
     findGlobal.mockResolvedValue({
+      donationHighlights: ["Keene Werbung"],
       platforms: [{ id: "a", link: "https://ko-fi.com/x", name: "Ko-fi" }],
       wallets: [{ address: "0xA", chains: ["Ethereum", "Base"], id: "b" }],
     });
     const { fetchFundingData } = await load();
     expect(await fetchFundingData()).toEqual({
+      highlights: ["Keene Werbung"],
       platforms: [{ link: "https://ko-fi.com/x", name: "Ko-fi" }],
       wallets: [{ address: "0xA", chains: ["Ethereum", "Base"] }],
     });
@@ -71,7 +73,7 @@ describe("fetchFundingData", () => {
   it("returns empty arrays when the global is empty", async () => {
     findGlobal.mockResolvedValue({ platforms: null, wallets: null });
     const { fetchFundingData } = await load();
-    expect(await fetchFundingData()).toEqual({ platforms: [], wallets: [] });
+    expect(await fetchFundingData()).toEqual({ highlights: [], platforms: [], wallets: [] });
   });
 });
 
@@ -88,6 +90,64 @@ describe("fetchSocialMenu", () => {
       { link: "https://m.social/@x", rel: "me", title: "Mastodon" },
       { link: "https://github.com/x", title: "GitHub" },
     ]);
+  });
+});
+
+describe("fetchHomeFacts", () => {
+  const richText = (...paragraphs: string[]) => ({
+    root: {
+      children: paragraphs.map((text) => ({
+        children: [{ detail: 0, format: 0, mode: "normal", style: "", text, type: "text", version: 1 }],
+        direction: "ltr",
+        format: "",
+        indent: 0,
+        type: "paragraph",
+        version: 1,
+      })),
+      direction: "ltr",
+      format: "",
+      indent: 0,
+      type: "root",
+      version: 1,
+    },
+  });
+
+  it("renders a single paragraph without its <p> (the card wraps it), several as they are", async () => {
+    findGlobal.mockResolvedValue({
+      facts: [
+        { headline: "Kurz", text: richText("ma statt mal") },
+        { headline: "Lang", text: richText("eins", "zwei") },
+      ],
+    });
+    const { fetchHomeFacts } = await load();
+    expect(await fetchHomeFacts()).toEqual([
+      { headline: "Kurz", html: "ma statt mal" },
+      { headline: "Lang", html: "<p>eins</p><p>zwei</p>" },
+    ]);
+  });
+});
+
+describe("fetchAnkiContent", () => {
+  it("numbers the steps, fills the word counts and maps the faqs", async () => {
+    findGlobal.mockResolvedValue({
+      faqs: [{ answer: "Ja.", question: "Brauch ich Anki?" }],
+      fullFeatures: [{ text: "Alle {totalWords} Wörter" }],
+      liteFeatures: [{ text: "{liteWords} Wörter" }],
+      steps: [
+        { text: "Wort sehen", title: "Karte" },
+        { text: "Umdrehen", title: "Aufdecken" },
+      ],
+    });
+    const { fetchAnkiContent } = await load();
+    expect(await fetchAnkiContent({ liteWords: "600", totalWords: "5.934" })).toEqual({
+      faqs: [{ a: "Ja.", q: "Brauch ich Anki?" }],
+      fullFeatures: ["Alle 5.934 Wörter"],
+      liteFeatures: ["600 Wörter"],
+      steps: [
+        { num: "01", text: "Wort sehen", title: "Karte" },
+        { num: "02", text: "Umdrehen", title: "Aufdecken" },
+      ],
+    });
   });
 });
 

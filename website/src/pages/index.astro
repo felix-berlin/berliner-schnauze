@@ -10,6 +10,7 @@ import { SITE_URL } from 'astro:env/client';
 import { seoData } from '@utils/helpers';
 import { getImage, Picture } from 'astro:assets';
 import { mediaFileUrl } from '@services/payload.ts';
+import { fetchHomeFacts } from '@services/payload/site.ts';
 import '@styles/components/_facts-grid.scss';
 
 const websiteSchema = JSON.stringify({
@@ -75,32 +76,7 @@ const content = {
   title: 'Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch',
 };
 
-const facts = [
-  {
-    headline: 'Häufig kürzer als Hochdeutsch',
-    text: 'Wir Berliner halten uns kurz, einfache Vokale sprechen wa meist verkürzt aus. Aus "mal" wird z.B. "ma".',
-  },
-  {
-    headline: 'Wie verbreitet ist Berlinisch?',
-    text: "Dialekt sprechen in Berlin bei weitem nicht alle. Laut <a href='https://de.statista.com/statistik/daten/studie/1116703/umfrage/verbreitung-berliner-dialekt/'>dieser Umfrage</a> sprechen bis zu <strong>62%</strong> der Berliner im heimischen Dialekt.",
-  },
-  {
-    headline: 'Ausgetauschte Wortendungen',
-    text: "Wortendungen auf <strong>'-er'</strong> werden von uns konsequent durch <strong>'a'</strong> ausgetauscht: 'seiner' -> 'seina', 'Alter' -> 'Alta'",
-  },
-  {
-    headline: 'Syntaktische Besonderheiten',
-    text: "<a href='https://islk.kuwi.tu-dortmund.de/storages/islk-kuwi/r/Personal_Freywald/Literatur/freywald2017_syntax_berlinisch_korrigiert.pdf'>TU Dortmund</a>",
-  },
-  {
-    headline: 'Viele Bezeichnungen für ein und das Selbe',
-    text: 'Der Berliner Metrolekt wird häufig auch als <strong>Berlinisch</strong>, <strong>Berliner Jargon</strong>, <strong>Berlinerisch</strong> oder <strong>Berliner Mundart</strong> bezeichnet.',
-  },
-  {
-    headline: 'Ist Berlinerisch ein Dialekt?',
-    text: "Sprachwissenschaftlich gesehen ist Berlinerisch <strong>kein Dialekt</strong>, sondern ein <strong><a href='https://www.wikiwand.com/de/Metrolekt'>Metrolekt</a></strong>. Eine in großstädtischen Zentren entstehende Stadtsprache.",
-  },
-];
+const facts = await fetchHomeFacts();
 ---
 
 <Layout content={seoData(content)} contentClasses='o-index'>
@@ -136,13 +112,9 @@ const facts = [
       <h2 class='c-facts-grid__headline'>Fakten zur Berliner Mundart</h2>
     </div>
 
-    <FactCard headline={facts[0].headline} text={facts[0].text} />
-    <FactCard headline={facts[1].headline} text={facts[1].text} />
+    {facts.slice(0, 2).map((fact) => <FactCard headline={fact.headline} text={fact.html} />)}
     <GameCtaCard />
-    <FactCard headline={facts[2].headline} text={facts[2].text} />
-    <!-- <FactCard headline={facts[3].headline} text={facts[3].text} /> -->
-    <FactCard headline={facts[4].headline} text={facts[4].text} />
-    <FactCard headline={facts[5].headline} text={facts[5].text} />
+    {facts.slice(2).map((fact) => <FactCard headline={fact.headline} text={fact.html} />)}
     <WordOfTheDay client:only='vue'>
       <div slot='fallback' class='c-facts-grid__wotd-slot'></div>
     </WordOfTheDay>

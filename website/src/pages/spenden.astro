@@ -11,9 +11,7 @@ import Layout from '@layouts/Layout.astro';
 import CheckIcon from '~icons/lucide/check';
 import { fetchFundingData } from '@services/payload/site.ts';
 
-const { platforms, wallets } = await fetchFundingData();
-
-const reassuranceChips = ['Keene Werbung', 'Keene Tracker', 'Open Source'];
+const { highlights, platforms, wallets } = await fetchFundingData();
 
 type PlatformIcon = typeof HeartIcon;
 
@@ -57,7 +55,7 @@ const page = {
 
     <ul class='c-donation-page__reassurance u-list-reset'>
       {
-        reassuranceChips.map((label) => (
+        highlights.map((label) => (
           <li class='c-donation-page__reassurance-chip'>
             <CheckIcon width='14' height='14' aria-hidden='true' />
             {label}
