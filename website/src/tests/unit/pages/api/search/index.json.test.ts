@@ -78,15 +78,16 @@ describe("makeOramaSearchIndex — word properties", () => {
     expect(present.dateTs).toBe(Date.parse("2025-01-01T00:00:00Z"));
   });
 
-  it("keeps the second precision WordPress dates had (public index unchanged)", () => {
+  it("stores the dates as epoch ms, 0 when missing", () => {
     const result = makeOramaSearchIndex(
       makeWord({
         contentModifiedAt: "2026-09-20T17:24:19.987Z",
         publishedAt: "2025-04-09T08:12:37.123Z",
       }),
     );
-    expect(result.dateTs).toBe(Date.UTC(2025, 3, 9, 8, 12, 37));
-    expect(result.modifiedTs).toBe(Date.UTC(2026, 8, 20, 17, 24, 19));
+    expect(result.dateTs).toBe(Date.UTC(2025, 3, 9, 8, 12, 37, 123));
+    expect(result.modifiedTs).toBe(Date.UTC(2026, 8, 20, 17, 24, 19, 987));
+    expect(makeOramaSearchIndex(makeWord({ publishedAt: null })).dateTs).toBe(0);
   });
 
   it("flags audio, example audio, alternative words and berolinismus", () => {

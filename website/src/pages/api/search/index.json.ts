@@ -3,17 +3,16 @@ import type { APIRoute } from "astro";
 import { fetchAllWords } from "@services/api.ts";
 import { type SiteWord, translationTexts } from "@services/payload/words.ts";
 import { setPageCache } from "@utils/cacheHeaders.ts";
-import { wpDate, wpDateMs } from "@utils/wpDate.ts";
 import { deriveWordFields } from "payload-app/word-derived";
 
 export type OramaSearchIndex = ReturnType<typeof makeOramaSearchIndex>;
 
-/** Epoch ms at the second precision WordPress dates had: the public index stays as it was. */
-const timestamp = (iso: string | null | undefined): number => wpDateMs(wpDate(iso)) || 0;
+/** Epoch ms of an ISO date, 0 when absent or invalid. */
+const timestamp = (iso: string | null | undefined): number => (iso && Date.parse(iso)) || 0;
 
 /**
  * Assembles the slim public entry from stored fields: nothing here may carry definitions, examples or sources.
- * Its shape is public (cached by the service worker on visitors' devices): it keeps the WPGraphQL names.
+ * Its shape is public (cached by the service worker on visitors' devices).
  */
 export function makeOramaSearchIndex(word: SiteWord) {
   const { berlinerisch } = word;

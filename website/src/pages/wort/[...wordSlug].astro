@@ -26,7 +26,6 @@ import { fetchAffiliateData, fetchAllWords } from '@services/api.ts';
 import { fetchWordRefs, toWordRef } from '@services/payload/wordRefs.ts';
 import { metaToSeo } from '@services/payload/seo.ts';
 import { translationTexts } from '@services/payload/words.ts';
-import { wpDate } from '@utils/wpDate.ts';
 import { escapeHtml } from 'payload-app/lexical-html';
 import { seoData, canonicalUrl } from '@utils/helpers.ts';
 import {
@@ -60,9 +59,8 @@ const soundingWordsResult = similarSoundingWords(wordRefs, wordRef);
 
 const { berlinerisch } = word;
 const translations = translationTexts(word);
-// JSON-LD and og:*_time keep the WordPress date format (no milliseconds, no zone).
-const dateCreated = wpDate(word.publishedAt);
-const dateModified = wpDate(word.contentModifiedAt);
+const dateCreated = word.publishedAt ?? null;
+const dateModified = word.contentModifiedAt ?? null;
 
 const wordDescription = (() => {
   if (!translations.length) return undefined;
