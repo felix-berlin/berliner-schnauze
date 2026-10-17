@@ -112,7 +112,11 @@ const WORD_POPULATE = {
 } as const;
 
 /** A stored word as a SiteWord, or undefined when it lacks what a page needs (a draft may). */
-const toSiteWord = (doc: PayloadWord): SiteWord | undefined => {
+/** A word as a draft may be stored: strictDraftTypes types its required fields optional. */
+type StoredWord = Omit<PayloadWord, "berlinerisch" | "createdAt" | "updatedAt"> &
+  Partial<Pick<PayloadWord, "berlinerisch" | "createdAt" | "updatedAt">>;
+
+const toSiteWord = (doc: StoredWord): SiteWord | undefined => {
   // strictDraftTypes types the required fields of a draft optional.
   const { berlinerisch, createdAt, slug, updatedAt } = doc;
   if (slug && berlinerisch && createdAt && updatedAt)

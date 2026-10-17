@@ -75,6 +75,10 @@ const readingTime = (blocks: ArticleBlock[]): number => {
 };
 
 /** A stored post as a SitePost, or undefined when it lacks its slug or title (a draft may). */
+/** A post as a draft may be stored: strictDraftTypes types its required fields optional. */
+type StoredPost = Omit<Post, "createdAt" | "title" | "updatedAt"> &
+  Partial<Pick<Post, "createdAt" | "title" | "updatedAt">>;
+
 const toSitePost = ({
   content,
   contentModifiedAt,
@@ -85,7 +89,7 @@ const toSitePost = ({
   publishedAt,
   slug,
   title,
-}: Post): SitePost | undefined => {
+}: StoredPost): SitePost | undefined => {
   if (!slug || !title) return undefined;
   const blocks = toPostBlocks(content);
   return {

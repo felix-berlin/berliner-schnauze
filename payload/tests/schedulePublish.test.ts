@@ -23,7 +23,7 @@ describe("scheduled publishing of posts", () => {
     expect(post._status).toBe("draft");
 
     await payload.jobs.queue({
-      input: { doc: { relationTo: "posts", value: String(post.id) }, type: "publish" },
+      input: { doc: { relationTo: "posts", value: post.id }, type: "publish" },
       task: "schedulePublish",
       waitUntil: new Date(Date.now() - 1000),
     });
