@@ -43,9 +43,9 @@ describe("IsWordOfTheDay.vue", () => {
       },
       props: {
         iconSize: 24,
+        slug: "kiez",
         tooltipPlacement: "right",
         word: "TestWord",
-        slug: "kiez",
       },
     });
 
@@ -61,9 +61,9 @@ describe("IsWordOfTheDay.vue", () => {
     const wrapper = mount(IsWordOfTheDay, {
       props: {
         iconSize: 24,
+        slug: "andere",
         tooltipPlacement: "right",
         word: "TestWord",
-        slug: "andere",
       },
     });
 
@@ -83,9 +83,9 @@ describe("IsWordOfTheDay.vue", () => {
       },
       props: {
         iconSize: 24,
+        slug: "kiez",
         tooltipPlacement: "bottom",
         word: "TestWord",
-        slug: "kiez",
       },
     });
 
@@ -103,9 +103,9 @@ describe("IsWordOfTheDay.vue", () => {
         components: { Crown },
       },
       props: {
+        slug: "kiez",
         variant: "badge",
         word: "TestWord",
-        slug: "kiez",
       },
     });
 
@@ -120,9 +120,9 @@ describe("IsWordOfTheDay.vue", () => {
   it("does not render badge variant when isWordOfTheDay is false", () => {
     const wrapper = mount(IsWordOfTheDay, {
       props: {
+        slug: "andere",
         variant: "badge",
         word: "TestWord",
-        slug: "andere",
       },
     });
 

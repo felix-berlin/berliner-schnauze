@@ -11,7 +11,10 @@ export const Posts: CollectionConfig = {
   access: authenticatedOnly,
   admin: { useAsTitle: "title", preview: previewUrl("posts") },
   versions: { drafts: { schedulePublish: true } },
-  hooks: { beforeChange: [rememberPublicSlug, touchContentModifiedAt], afterChange: [redirectOldSlug] },
+  hooks: {
+    beforeChange: [rememberPublicSlug, touchContentModifiedAt],
+    afterChange: [redirectOldSlug],
+  },
   fields: [
     { name: "title", type: "text", required: true },
     { name: "excerpt", type: "textarea" },

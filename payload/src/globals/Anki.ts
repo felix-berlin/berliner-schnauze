@@ -6,7 +6,9 @@ const features = (name: string, label: string): ArrayField => ({
   name,
   label,
   type: "array",
-  admin: { description: "{liteWords} und {totalWords} werden durch die aktuellen Wortzahlen ersetzt." },
+  admin: {
+    description: "{liteWords} und {totalWords} werden durch die aktuellen Wortzahlen ersetzt.",
+  },
   fields: [{ name: "text", type: "text", required: true }],
 });
 

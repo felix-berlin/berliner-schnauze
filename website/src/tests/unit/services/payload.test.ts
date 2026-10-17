@@ -40,6 +40,8 @@ describe("mediaUrl", () => {
 
 describe("mediaFileUrl", () => {
   it("builds the absolute file url on the CMS host, encoding the filename", () => {
-    expect(mediaFileUrl("brown bear.png")).toBe("https://cms.example/api/media/file/brown%20bear.png");
+    expect(mediaFileUrl("brown bear.png")).toBe(
+      "https://cms.example/api/media/file/brown%20bear.png",
+    );
   });
 });

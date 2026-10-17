@@ -14,7 +14,11 @@ afterEach(async () => {
 
 const redirectsFrom = async (slug: string) => {
   const payload = await getTestPayload();
-  const { docs } = await payload.find({ collection: "redirects", depth: 0, where: { from: { equals: `/wort/${slug}` } } });
+  const { docs } = await payload.find({
+    collection: "redirects",
+    depth: 0,
+    where: { from: { equals: `/wort/${slug}` } },
+  });
   return docs;
 };
 
@@ -29,19 +33,34 @@ describe("redirect on slug change", () => {
     const payload = await getTestPayload();
     const doc = await word("published");
 
-    await payload.update({ collection: "words", id: doc.id, data: { slug: NEW, _status: "published" } });
+    await payload.update({
+      collection: "words",
+      id: doc.id,
+      data: { slug: NEW, _status: "published" },
+    });
 
     const [redirect] = await redirectsFrom(OLD);
     expect(redirect?.type).toBe("301");
-    expect(redirect?.to).toMatchObject({ type: "reference", reference: { relationTo: "words", value: doc.id } });
+    expect(redirect?.to).toMatchObject({
+      type: "reference",
+      reference: { relationTo: "words", value: doc.id },
+    });
   });
 
   it("drops the redirect of a path that becomes live again", async () => {
     const payload = await getTestPayload();
     const doc = await word("published");
-    await payload.update({ collection: "words", id: doc.id, data: { slug: NEW, _status: "published" } });
+    await payload.update({
+      collection: "words",
+      id: doc.id,
+      data: { slug: NEW, _status: "published" },
+    });
 
-    await payload.update({ collection: "words", id: doc.id, data: { slug: OLD, _status: "published" } });
+    await payload.update({
+      collection: "words",
+      id: doc.id,
+      data: { slug: OLD, _status: "published" },
+    });
 
     expect(await redirectsFrom(OLD)).toHaveLength(0);
     expect(await redirectsFrom(NEW)).toHaveLength(1);
@@ -69,11 +88,18 @@ describe("redirect on slug change", () => {
 
   it("covers collections without drafts (themen)", async () => {
     const payload = await getTestPayload();
-    const thema = await payload.create({ collection: "themen", data: { name: "Umbenannt", slug: OLD, wpId: 990302 } });
+    const thema = await payload.create({
+      collection: "themen",
+      data: { name: "Umbenannt", slug: OLD, wpId: 990302 },
+    });
 
     await payload.update({ collection: "themen", id: thema.id, data: { slug: NEW } });
 
-    const { docs } = await payload.find({ collection: "redirects", depth: 0, where: { from: { equals: `/themen/${OLD}` } } });
+    const { docs } = await payload.find({
+      collection: "redirects",
+      depth: 0,
+      where: { from: { equals: `/themen/${OLD}` } },
+    });
     expect(docs[0]?.to?.reference).toMatchObject({ relationTo: "themen", value: thema.id });
   });
 });

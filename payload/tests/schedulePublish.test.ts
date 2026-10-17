@@ -7,13 +7,19 @@ const SLUG = "schedule-test-artikel";
 afterEach(async () => {
   const payload = await getTestPayload();
   await payload.delete({ collection: "posts", where: { slug: { equals: SLUG } } });
-  await payload.delete({ collection: "payload-jobs", where: { taskSlug: { equals: "schedulePublish" } } });
+  await payload.delete({
+    collection: "payload-jobs",
+    where: { taskSlug: { equals: "schedulePublish" } },
+  });
 });
 
 describe("scheduled publishing of posts", () => {
   it("publishes a draft once its job is due and the queue runs", async () => {
     const payload = await getTestPayload();
-    const post = await payload.create({ collection: "posts", data: { title: "Geplant", slug: SLUG, wpId: 990401 } });
+    const post = await payload.create({
+      collection: "posts",
+      data: { title: "Geplant", slug: SLUG, wpId: 990401 },
+    });
     expect(post._status).toBe("draft");
 
     await payload.jobs.queue({

@@ -36,7 +36,11 @@ export const Company: GlobalConfig = {
       fields: [
         { name: "label", type: "text", required: true },
         { name: "profile", type: "text", required: true },
-        { name: "relMe", type: "checkbox", admin: { description: 'Link mit rel="me" (z. B. Mastodon-Verifizierung).' } },
+        {
+          name: "relMe",
+          type: "checkbox",
+          admin: { description: 'Link mit rel="me" (z. B. Mastodon-Verifizierung).' },
+        },
       ],
     },
   ],

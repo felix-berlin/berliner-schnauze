@@ -9,4 +9,5 @@ export const isRoutedCollection = (slug: string | undefined): slug is RoutedColl
   slug !== undefined && Object.hasOwn(ROUTES, slug);
 
 /** Site path of a doc, e.g. `/wort/kiez`. */
-export const docPath = (collection: RoutedCollection, slug: string): string => `${ROUTES[collection]}/${slug}`;
+export const docPath = (collection: RoutedCollection, slug: string): string =>
+  `${ROUTES[collection]}/${slug}`;

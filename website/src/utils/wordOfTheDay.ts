@@ -54,7 +54,10 @@ export const secondsUntilBerlinMidnight = (date: Date): number => {
 };
 
 /** What the nanostore and its components read; the store refetches a cached word without a slug (older shape). */
-export const toWordOfTheDayResponse = (word: Pick<SiteWord, "berlinerisch" | "slug">, now: Date) => ({
+export const toWordOfTheDayResponse = (
+  word: Pick<SiteWord, "berlinerisch" | "slug">,
+  now: Date,
+) => ({
   berlinerisch: word.berlinerisch,
   expires: secondsUntilBerlinMidnight(now),
   slug: word.slug,

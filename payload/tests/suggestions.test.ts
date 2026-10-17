@@ -36,7 +36,10 @@ describe("suggestions", () => {
 
     await payload.create({ collection: "suggestions", data });
 
-    const { totalDocs } = await payload.count({ collection: "suggestions", where: { berlinerWord: { equals: WORD } } });
+    const { totalDocs } = await payload.count({
+      collection: "suggestions",
+      where: { berlinerWord: { equals: WORD } },
+    });
     expect(totalDocs).toBe(1);
   });
 
@@ -45,7 +48,10 @@ describe("suggestions", () => {
     const payload = await getTestPayload();
     const send = vi.spyOn(payload, "sendEmail").mockResolvedValue(undefined);
 
-    await payload.create({ collection: "suggestions", data: { ...data, example: "", userMail: "", userName: "" } });
+    await payload.create({
+      collection: "suggestions",
+      data: { ...data, example: "", userMail: "", userName: "" },
+    });
 
     expect(send.mock.calls[0]![0]).not.toHaveProperty("replyTo");
   });

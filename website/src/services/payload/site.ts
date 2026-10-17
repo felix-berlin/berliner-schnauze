@@ -78,11 +78,9 @@ export interface SocialMenuItem {
 }
 
 export const fetchSocialMenu = async (): Promise<SocialMenuItem[]> =>
-  ((await company()).socialMedia ?? []).map(({ label, profile, relMe }) => ({
-    link: profile,
-    title: label,
-    ...(relMe ? { rel: "me" } : {}),
-  }));
+  ((await company()).socialMedia ?? []).map(({ label, profile, relMe }) =>
+    relMe ? { link: profile, rel: "me", title: label } : { link: profile, title: label },
+  );
 
 export interface Fact {
   headline: string;

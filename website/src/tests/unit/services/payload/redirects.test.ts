@@ -16,22 +16,41 @@ describe("normalizePath", () => {
 describe("redirectTarget", () => {
   it("follows a referenced doc to its current path", () => {
     expect(
-      redirectTarget({ to: { type: "reference", reference: { relationTo: "words", value: { _status: "published", slug: "neu" } as never } } }),
+      redirectTarget({
+        to: {
+          reference: { relationTo: "words", value: { _status: "published", slug: "neu" } as never },
+          type: "reference",
+        },
+      }),
     ).toBe("/wort/neu");
     expect(
-      redirectTarget({ to: { type: "reference", reference: { relationTo: "pages", value: { slug: "impressum" } as never } } }),
+      redirectTarget({
+        to: {
+          reference: { relationTo: "pages", value: { slug: "impressum" } as never },
+          type: "reference",
+        },
+      }),
     ).toBe("/impressum");
   });
 
   it("drops a redirect to a draft or an unpopulated doc", () => {
     expect(
-      redirectTarget({ to: { type: "reference", reference: { relationTo: "posts", value: { _status: "draft", slug: "x" } as never } } }),
+      redirectTarget({
+        to: {
+          reference: { relationTo: "posts", value: { _status: "draft", slug: "x" } as never },
+          type: "reference",
+        },
+      }),
     ).toBeNull();
-    expect(redirectTarget({ to: { type: "reference", reference: { relationTo: "words", value: 3 } } })).toBeNull();
+    expect(
+      redirectTarget({ to: { reference: { relationTo: "words", value: 3 }, type: "reference" } }),
+    ).toBeNull();
   });
 
   it("uses a custom url as is", () => {
-    expect(redirectTarget({ to: { type: "custom", url: "https://example.com/" } })).toBe("https://example.com/");
+    expect(redirectTarget({ to: { type: "custom", url: "https://example.com/" } })).toBe(
+      "https://example.com/",
+    );
     expect(redirectTarget({ to: { type: "custom", url: "" } })).toBeNull();
   });
 });

@@ -4,10 +4,6 @@ const { getPayload, findGlobal } = vi.hoisted(() => ({ findGlobal: vi.fn(), getP
 vi.mock("payload-app", () => ({ config: Promise.resolve({}), getPayload }));
 vi.mock("astro:env/server", () => ({ PAYLOAD_SERVER_URL: "https://cms.example" }));
 
-const EVM = "0x4A21A332cAc9809dBCAdcD4CeDD43fdF32661eeE";
-const BTC = "bc1qdp6ucj4pcp7w94y4nevktzazpul53pr2jxt040";
-const EVM_CHAINS = ["Ethereum", "Linea", "Base", "BNB Chain", "Sei", "Polygon", "OP", "Arbitrum"];
-
 beforeEach(() => {
   vi.resetModules();
   findGlobal.mockReset();
@@ -97,7 +93,9 @@ describe("fetchHomeFacts", () => {
   const richText = (...paragraphs: string[]) => ({
     root: {
       children: paragraphs.map((text) => ({
-        children: [{ detail: 0, format: 0, mode: "normal", style: "", text, type: "text", version: 1 }],
+        children: [
+          { detail: 0, format: 0, mode: "normal", style: "", text, type: "text", version: 1 },
+        ],
         direction: "ltr",
         format: "",
         indent: 0,

@@ -21,7 +21,10 @@ export const GET: APIRoute = async ({ cookies, url }) => {
   const target = readPreviewToken(process.env.PAYLOAD_SECRET ?? "", token);
   if (!target) return deny();
 
-  const doc = target.collection === "words" ? await fetchDraftWord(target.id) : await fetchDraftPost(target.id);
+  const doc =
+    target.collection === "words"
+      ? await fetchDraftWord(target.id)
+      : await fetchDraftPost(target.id);
   if (!doc) return deny();
 
   cookies.set(PREVIEW_COOKIE, token!, {

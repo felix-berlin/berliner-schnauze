@@ -43,7 +43,11 @@ const loadRedirects = async (): Promise<Map<string, SiteRedirect>> => {
   const map = new Map<string, SiteRedirect>();
   for (const redirect of docs) {
     const location = redirectTarget(redirect);
-    if (location) map.set(normalizePath(redirect.from), { location, status: redirect.type === "302" ? 302 : 301 });
+    if (location)
+      map.set(normalizePath(redirect.from), {
+        location,
+        status: redirect.type === "302" ? 302 : 301,
+      });
   }
   return map;
 };

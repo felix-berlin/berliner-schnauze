@@ -60,7 +60,10 @@ export const Suggestions: CollectionConfig = {
       name: "word",
       type: "relationship",
       relationTo: "words",
-      admin: { position: "sidebar", description: "Das Wort, das aus diesem Vorschlag entstanden ist." },
+      admin: {
+        position: "sidebar",
+        description: "Das Wort, das aus diesem Vorschlag entstanden ist.",
+      },
     },
   ],
 };

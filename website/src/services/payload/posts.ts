@@ -75,7 +75,17 @@ const readingTime = (blocks: ArticleBlock[]): number => {
 };
 
 /** A stored post as a SitePost, or undefined when it lacks its slug or title (a draft may). */
-const toSitePost = ({ content, contentModifiedAt, excerpt, featuredImage, id, meta, publishedAt, slug, title }: Post): SitePost | undefined => {
+const toSitePost = ({
+  content,
+  contentModifiedAt,
+  excerpt,
+  featuredImage,
+  id,
+  meta,
+  publishedAt,
+  slug,
+  title,
+}: Post): SitePost | undefined => {
   if (!slug || !title) return undefined;
   const blocks = toPostBlocks(content);
   return {

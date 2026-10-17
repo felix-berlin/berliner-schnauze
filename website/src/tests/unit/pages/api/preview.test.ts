@@ -9,14 +9,18 @@ vi.mock("@services/payload/posts.ts", () => ({ fetchDraftPost }));
 
 import type { APIContext } from "astro";
 
-import { GET } from "@/pages/api/preview.ts";
 import { previewToken } from "payload-app/preview";
+
+import { GET } from "@/pages/api/preview.ts";
 
 const get = (token?: string) => {
   const set = vi.fn();
   const url = new URL("https://berliner-schnauze.wtf/api/preview");
   if (token) url.searchParams.set("token", token);
-  return { response: GET({ cookies: { set }, url } as unknown as APIContext) as Promise<Response>, set };
+  return {
+    response: GET({ cookies: { set }, url } as unknown as APIContext) as Promise<Response>,
+    set,
+  };
 };
 
 beforeEach(() => {
@@ -35,7 +39,11 @@ describe("GET /api/preview", () => {
     expect(res.headers.get("Location")).toMatch(/^\/wort\/neues-wort\?preview=\d+$/);
     expect(res.headers.get("Cache-Control")).toBe("private, no-store");
     expect(fetchDraftWord).toHaveBeenCalledWith(7);
-    expect(set).toHaveBeenCalledWith("bs_preview", token, expect.objectContaining({ httpOnly: true, path: "/" }));
+    expect(set).toHaveBeenCalledWith(
+      "bs_preview",
+      token,
+      expect.objectContaining({ httpOnly: true, path: "/" }),
+    );
   });
 
   it("routes posts to the magazine", async () => {
@@ -46,7 +54,10 @@ describe("GET /api/preview", () => {
   it.each([
     ["no token", undefined],
     ["a token signed with another secret", previewToken("anders", { collection: "words", id: 7 })],
-    ["an expired token", previewToken("geheim", { collection: "words", id: 7 }, Date.now() - 2 * 3600_000)],
+    [
+      "an expired token",
+      previewToken("geheim", { collection: "words", id: 7 }, Date.now() - 2 * 3600_000),
+    ],
   ])("answers 403 without a cookie for %s", async (_name, token) => {
     const { response, set } = get(token);
     expect((await response).status).toBe(403);
@@ -55,6 +66,8 @@ describe("GET /api/preview", () => {
 
   it("answers 403 when the doc is gone", async () => {
     fetchDraftWord.mockResolvedValue(undefined);
-    expect((await get(previewToken("geheim", { collection: "words", id: 7 })).response).status).toBe(403);
+    expect(
+      (await get(previewToken("geheim", { collection: "words", id: 7 })).response).status,
+    ).toBe(403);
   });
 });

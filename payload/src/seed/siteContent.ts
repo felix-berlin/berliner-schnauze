@@ -5,7 +5,10 @@ import { htmlToLexical } from "../import/html";
 /** What /anki, the home page and /spenden showed while these texts lived in the Astro pages. */
 export const ANKI_CONTENT = {
   steps: [
-    { title: "Karte sehen", text: "Anki zeigt Dir ein Berliner Wort. Du überlegst kurz: Wat heißt ditt nochmal?" },
+    {
+      title: "Karte sehen",
+      text: "Anki zeigt Dir ein Berliner Wort. Du überlegst kurz: Wat heißt ditt nochmal?",
+    },
     {
       title: "Aufdecken",
       text: "Du drehst die Karte um und siehst Bedeutung und Beispielsatz. Jetzt weißte, ob Du richtig lagst.",
@@ -99,7 +102,10 @@ export const HOME_FACTS = [
 export const DONATION_HIGHLIGHTS = ["Keene Werbung", "Keene Tracker", "Open Source"];
 
 /** Fills the anki and home globals and the donation highlights with the texts above. */
-export async function seedSiteContent(payload: Payload, req?: Partial<PayloadRequest>): Promise<void> {
+export async function seedSiteContent(
+  payload: Payload,
+  req?: Partial<PayloadRequest>,
+): Promise<void> {
   const facts = [];
   for (const { headline, html } of HOME_FACTS) {
     // oxlint-disable-next-line no-await-in-loop -- five short facts
@@ -107,5 +113,9 @@ export async function seedSiteContent(payload: Payload, req?: Partial<PayloadReq
   }
   await payload.updateGlobal({ slug: "anki", data: ANKI_CONTENT, req });
   await payload.updateGlobal({ slug: "home", data: { facts }, req });
-  await payload.updateGlobal({ slug: "company", data: { donationHighlights: DONATION_HIGHLIGHTS }, req });
+  await payload.updateGlobal({
+    slug: "company",
+    data: { donationHighlights: DONATION_HIGHLIGHTS },
+    req,
+  });
 }

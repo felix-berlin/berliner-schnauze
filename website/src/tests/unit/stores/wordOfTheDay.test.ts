@@ -90,7 +90,10 @@ describe("wordOfTheDay store", () => {
 
     it("skips fetch when localStorage timestamp is from today (isCachedToday = true)", async () => {
       localStorage.setItem("wordOfTheDay:timestamp", JSON.stringify(Date.now()));
-      localStorage.setItem("wordOfTheDay:word", JSON.stringify({ berlinerisch: "Schnauze", slug: "schnauze" }));
+      localStorage.setItem(
+        "wordOfTheDay:word",
+        JSON.stringify({ berlinerisch: "Schnauze", slug: "schnauze" }),
+      );
       const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
       mockFetch.mockClear();
       const unsub = $wordOfTheDay.subscribe(() => {});

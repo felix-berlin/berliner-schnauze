@@ -12,9 +12,9 @@ describe("IsWordOfTheDay.vue", () => {
     const wrapper = mount(IsWordOfTheDay, {
       props: {
         iconSize: 24,
+        slug: "test",
         tooltipPlacement: "right",
         word: "test",
-        slug: "test",
       },
     });
 
