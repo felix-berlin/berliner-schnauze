@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
-"""Baut die Anki-Decks (Lite + Full) aus den veröffentlichten WordPress-Wörtern.
+"""Baut die Anki-Decks (Lite + Full) aus den veröffentlichten Wörtern des Payload-CMS.
 
 Aufruf (Secrets über Infisical):
     npx infisical run -- .venv-anki/bin/python scripts/build_anki_decks.py
+Braucht PAYLOAD_URL (z. B. https://cms.berliner-schnauze.wtf) und PAYLOAD_API_KEY
+(API-Key eines Payload-Users, im Admin unter Users -> "Enable API Key").
 Ausgabe: dist-anki/*.apkg
 """
 import argparse
-import base64
 import html
 import json
 import os
 import re
 import sys
+import urllib.parse
 import urllib.request
 from collections import defaultdict
 from datetime import date
@@ -166,29 +168,63 @@ def check_decks(full, lite, words):
     assert len(lite.notes) <= len(full.notes) // 10 + len(full_letters), "Lite ist zu groß"
 
 
-QUERY = """query($after:String){berlinerWords(first:100,after:$after,where:{stati:[PUBLISH],orderby:{field:TITLE,order:ASC}}){edges{node{databaseId slug title wordGroup wordProperties{berlinerisch article translations{translation} examples{example exampleExplanation} alternativeWords{alternativeWord}}}} pageInfo{endCursor hasNextPage}}}"""
+PAGE_SIZE = 500
+# Payload ids (1, 2, ...) overlap the WordPress ids the existing cards are keyed on; a word created in
+# Payload after the cutover has no wpId and gets an id from this range instead.
+PAYLOAD_ID_OFFSET = 1_000_000
 
 
-def fetch_words():
-    auth = base64.b64encode(
-        ("%s:%s" % (os.environ["WP_AUTH_USER"], os.environ["WP_AUTH_PASS"])).encode()
-    ).decode()
-    nodes, after = [], None
+def payload_to_node(doc):
+    """Payload word -> the node shape `normalize_word` reads (that function and the deck code stay as they were)."""
+    return {
+        # genanki guids come from this id: it must stay the WordPress id for every word that has one.
+        "databaseId": doc["wpId"] if doc.get("wpId") is not None else PAYLOAD_ID_OFFSET + doc["id"],
+        "slug": doc["slug"],
+        "title": doc.get("berlinerisch"),
+        "wordGroup": (doc.get("derived") or {}).get("wordGroup"),
+        "wordProperties": {
+            "berlinerisch": doc.get("berlinerisch"),
+            "article": doc.get("article"),
+            "translations": doc.get("translations"),
+            "examples": doc.get("examples"),
+            "alternativeWords": doc.get("alternativeWords"),
+        },
+    }
+
+
+def credentials():
+    url, key = os.environ.get("PAYLOAD_URL"), os.environ.get("PAYLOAD_API_KEY")
+    if not url or not key:
+        sys.exit("PAYLOAD_URL und PAYLOAD_API_KEY müssen gesetzt sein (npx infisical run -- ...)")
+    return url, key
+
+
+def fetch_words(base_url, api_key):
+    """All published words from Payload's REST API (needs an API key: the API is closed to anonymous reads)."""
+    nodes, page = [], 1
     while True:
-        req = urllib.request.Request(
-            os.environ["WP_API"],
-            data=json.dumps({"query": QUERY, "variables": {"after": after}}).encode(),
-            headers={"Content-Type": "application/json", "Authorization": "Basic " + auth},
+        query = urllib.parse.urlencode(
+            {
+                "limit": PAGE_SIZE,
+                "depth": 0,
+                "page": page,
+                "sort": "id",
+                "where[_status][equals]": "published",
+            }
         )
+        req = urllib.request.Request(
+            "%s/api/words?%s" % (base_url.rstrip("/"), query),
+            headers={"Authorization": "users API-Key " + api_key, "Accept": "application/json"},
+        )
+        # A 4xx/5xx raises: the build must fail, never produce an empty deck.
         with urllib.request.urlopen(req, timeout=60) as r:
             data = json.load(r)
-        if data.get("errors"):
-            sys.exit("GraphQL-Fehler: %s" % [e["message"][:80] for e in data["errors"]])
-        page = data["data"]["berlinerWords"]
-        nodes += [e["node"] for e in page["edges"]]
-        if not page["pageInfo"]["hasNextPage"]:
+        if "docs" not in data:
+            raise RuntimeError("Unerwartete Payload-Antwort ohne docs: %s" % str(data)[:200])
+        nodes += [payload_to_node(d) for d in data["docs"] if d.get("slug")]
+        if not data.get("hasNextPage"):
             return nodes
-        after = page["pageInfo"]["endCursor"]
+        page = data["nextPage"]
 
 
 def deck_filename(kind, version):
@@ -200,7 +236,7 @@ def main():
     parser.add_argument("--version", default="dev")
     args = parser.parse_args()
 
-    words = [normalize_word(n) for n in fetch_words()]
+    words = [normalize_word(n) for n in fetch_words(*credentials())]
     assert words, "keine Wörter geladen"
     full, lite = build_decks(words, args.version)
     os.makedirs(OUT_DIR, exist_ok=True)

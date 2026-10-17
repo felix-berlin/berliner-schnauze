@@ -1,0 +1,27 @@
+---
+import { Picture } from 'astro:assets';
+import type { CoreImageBlock } from '@/types/cms';
+
+interface Props {
+  block: CoreImageBlock;
+}
+
+const { block } = Astro.props;
+const attrs = block.attributes;
+---
+
+{
+  attrs?.url && (
+    <Picture
+      alt={attrs.alt ?? ''}
+      class='c-magazin-article__image'
+      densities={[1, 2]}
+      fallbackFormat='webp'
+      formats={['avif', 'webp']}
+      height={Number(attrs.height) || 400}
+      loading='lazy'
+      src={attrs.url}
+      width={Number(attrs.width) || 800}
+    />
+  )
+}

@@ -21,6 +21,9 @@ jobs:
   build:
     timeout-minutes: 30
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
     steps:
       - name: Checkout ✅
         uses: actions/checkout@v7
@@ -43,55 +46,25 @@ jobs:
           node-version: lts/*
           cache: pnpm
 
-      - name: Get date
-        id: date
-        run: echo "day=$(date +%F)" >> "$GITHUB_OUTPUT"
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Only used by the E2E build (see useDiskCache in getWords.ts). Keyed by day so
-      # the words are re-fetched at most once per day; saved right after the build
-      # so a failing test run doesn't discard it.
-      - name: Restore words cache
-        id: words-cache
-        uses: actions/cache/restore@v6
-        with:
-          path: node_modules/.cache/berliner-words
-          key: words-${{ github.ref_name == 'main' && 'prod' || 'staging' }}-${{ steps.date.outputs.day }}
-
-      # Built explicitly here (rather than inside webServer.command) so the
-      # build has the full job timeout to finish — Astro fetches and renders
-      # every word page from the live WordPress API, which can take longer
-      # than any reasonable "wait for server" timeout. Playwright then only
-      # has to wait for `astro preview` to start, which is near-instant.
-      #
-      # E2E_WORD_LIMIT caps how many word/OG *pages* are generated (full
-      # site is 6000+ words, ~6.5min). The word data itself is always fetched
-      # in full — list/letter filters and similar-sounding/neighbor sections
-      # depend on it. getWords.ts always builds the specific slugs the specs
-      # navigate to directly, regardless of this limit. Also skips the Sentry/Codecov
-      # source-map upload plugins, which add real time for a build nobody
-      # deploys (see astro.config.mjs's isE2eBuild).
+      # Built explicitly here (rather than inside webServer.command) so the build has the full job timeout.
+      # The build reads no database: pages render on demand, the shards below start the server against a
+      # seeded Postgres. E2E_BUILD only skips the Sentry/Codecov source-map upload plugins, which add real
+      # time for a build nobody deploys (see astro.config.mjs's isE2eBuild).
       - name: Build site
         env:
-          E2E_WORD_LIMIT: "500"
+          E2E_BUILD: "1"
         run: pnpm run build
 
-      - name: Save words cache
-        if: steps.words-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v6
-        with:
-          path: node_modules/.cache/berliner-words
-          key: ${{ steps.words-cache.outputs.cache-primary-key }}
-
-      # dist/ is served by `astro preview` in every shard job. Same public-repo
-      # caveat as the report below: the static site holds no secrets, only public HTML/JS.
+      # dist/ is served by `node server/index.mjs` in every shard job. Same public-repo
+      # caveat as the report below: the build holds no secrets, only public HTML/JS.
       - name: Upload build
         uses: actions/upload-artifact@v7
         with:
           name: dist
-          path: dist
+          path: website/dist
           retention-days: 1
 
   # Builds the production image from the same dist/ the e2e shards use and
@@ -108,10 +81,23 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: dist
-          path: dist
+          path: website/dist
+
+      # The script migrates and seeds a throwaway Postgres with the payload-app package.
+      - name: Setup pnpm 🛠️
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js 🔧
+        uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Docker smoke test 🐳
-        run: scripts/docker-smoke.sh
+        run: website/scripts/docker-smoke.sh
 
   test:
     needs: build
@@ -126,6 +112,21 @@ jobs:
     # as root unless HOME is root's own home.
     env:
       HOME: /root
+    defaults:
+      run:
+        working-directory: website
+    # The server renders from this database; it is migrated and seeded with invented words below.
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_DB: bs_e2e
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd "pg_isready -U postgres -d bs_e2e"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     strategy:
       fail-fast: false
       matrix:
@@ -159,23 +160,33 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: dist
-          path: dist
+          path: website/dist
 
-      # `astro preview` loads astro.config.mjs, which imports this generated stub.
-      - name: Generate supportedBrowsers
-        run: pnpm run supportedBrowsers
+      # Step-level env wins over what the Infisical action exports: the e2e run must never touch a real database.
+      - name: Migrate and seed the database
+        env:
+          DATABASE_URL: postgres://postgres:postgres@postgres:5432/bs_e2e
+          PAYLOAD_SECRET: e2e-secret
+        run: |
+          NODE_ENV=production pnpm --filter payload-app migrate
+          pnpm --filter payload-app seed:e2e
 
       # Started here instead of via Playwright's webServer: in the container the job hung
       # after the last test while Playwright tore the server down. setsid + redirected
       # output detach it from the step so the step can end.
-      - name: Start preview server
+      - name: Start server
+        env:
+          DATABASE_URL: postgres://postgres:postgres@postgres:5432/bs_e2e
+          NODE_ENV: production
+          PAYLOAD_SECRET: e2e-secret
+          PAYLOAD_SERVER_URL: http://localhost:4321
         run: |
-          setsid nohup pnpm run preview > preview.log 2>&1 &
+          setsid nohup node server/index.mjs > server.log 2>&1 &
           for i in $(seq 1 60); do
-            curl -sf http://localhost:4321 > /dev/null && exit 0
+            curl -sf http://localhost:4321/ping > /dev/null && exit 0
             sleep 1
           done
-          cat preview.log
+          cat server.log
           exit 1
 
       - name: Run Playwright tests (shard ${{ matrix.shard }}/4)
@@ -203,5 +214,5 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: playwright-report-${{ matrix.shard }}
-          path: playwright-report.tar.gz.gpg
+          path: website/playwright-report.tar.gz.gpg
           retention-days: 14

@@ -1,0 +1,35 @@
+---
+import Layout from '@layouts/Layout.astro';
+import type { Seo } from '@/types/seo';
+import { getCollection, render } from 'astro:content';
+import { formattedDate } from '@utils/helpers';
+
+const { version } = Astro.params;
+const entry = (await getCollection('changelogs')).find((e) => e.data.version === version);
+if (!entry) return Astro.rewrite('/404');
+const { Content } = await render(entry);
+const { title, description, releaseDate } = entry.data;
+
+const seo: Seo = {
+  opengraphDescription: description,
+  opengraphTitle: title,
+};
+---
+
+<Layout content={{ title, seo }}>
+  <article class='o-container c-user-changelog'>
+    <header class='c-user-changelog__header'>
+      <h1 class='c-user-changelog__title'>{title}</h1>
+      <time class='c-user-changelog__date' datetime={releaseDate}>
+        Veröffentlicht am {formattedDate(releaseDate)}
+      </time>
+    </header>
+    <div class='c-user-changelog__content'>
+      <Content />
+    </div>
+  </article>
+</Layout>
+
+<style lang='scss' is:global>
+  @use '@styles/pages/changelog-detail';
+</style>

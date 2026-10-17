@@ -1,0 +1,90 @@
+---
+import '@styles/components/_word-hero.scss';
+import '@styles/components/_word-themen.scss';
+import AudioPlayerList from '@components/AudioPlayerList.vue';
+import BadgeTag from '@components/BadgeTag.vue';
+import IsWordOfTheDay from '@components/word/IsWordOfTheDay.vue';
+import WordOptionDropdown from '@components/word/WordOptionDropdown.vue';
+import TooltipPopover from '@components/TooltipPopover.vue';
+import Tag from '~icons/lucide/tag';
+import { routeToWord } from '@utils/helpers';
+import type { SiteWord } from '@services/payload/words.ts';
+
+interface Props {
+  word: SiteWord;
+  wortartLabel: string | undefined;
+}
+
+const { word, wortartLabel } = Astro.props;
+const { themen } = word;
+---
+
+<header
+  class='c-word-hero'
+  data-track-content
+  data-content-name='Word Hero'
+  data-content-piece={word.berlinerisch}
+  data-content-target={routeToWord(word.slug)}
+>
+  <div class='c-word-hero__left'>
+    <h1 class='c-word-hero__title'>
+      <dfn>{word.berlinerisch}</dfn>{word.article && (
+        <span class='c-word-hero__word-article'>, {word.article}</span>
+      )}
+    </h1>
+    <div class='c-word-hero__badges'>
+      {
+        word.berolinismus && (
+          <TooltipPopover client:only='vue'>
+            <BadgeTag> Berolinismus </BadgeTag>
+            <Fragment slot='tooltip'>
+              {word.berlinerisch} gehört zu den Berlinismen.
+              <>
+                <br />
+                <br />
+              </>
+              <strong>Berolinismus</strong> sind humorvolle Spitznamen und Eigenheiten, die
+              bestimmte Orte und Gebäude in Berlin charakterisieren und das lokale Flair der Stadt
+              prägen.
+            </Fragment>
+          </TooltipPopover>
+        )
+      }
+      {wortartLabel && <span class='c-word-hero__wortart-badge'>{wortartLabel}</span>}
+      <IsWordOfTheDay
+        client:only='vue'
+        variant='badge'
+        word={word.berlinerisch}
+        wordId={word.berlinerWordId}
+      />
+      {
+        word.berlinerischAudio.length > 0 && (
+          <AudioPlayerList
+            audio={word.berlinerischAudio}
+            client:only='vue'
+            isType='berlinerisch'
+          />
+        )
+      }
+    </div>
+    {
+      themen.length > 0 && (
+        <div class='c-word-themen'>
+          {themen.map((thema) => (
+            <a href={`/themen/${thema.slug}`} class='c-word-themen__badge'>
+              <Tag height='12' width='12' />
+              {thema.name}
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+  <div class='c-word-hero__right'>
+    <WordOptionDropdown
+      berlinerisch={word.berlinerisch}
+      client:load
+      slug={word.slug}
+    />
+  </div>
+</header>

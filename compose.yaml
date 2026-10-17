@@ -1,15 +1,27 @@
 # Local: `pnpm build:local && docker compose up --build`
+# CMS only (no dist/ needed): `docker compose up --build cms postgres`
 # Server: `TAG=3.57.0 docker compose pull && docker compose up -d`
 services:
   web:
     image: ghcr.io/felix-berlin/berliner-schnauze:${TAG:-latest}
-    build: .
+    build: ./website
     restart: unless-stopped
     # Runtime env for on-demand routes: the adapter loads none itself, and
     # astro:env/server validates every required secret on import.
     env_file:
       - path: .env
         required: false
+    # Reads Payload through the Local API (own connection, never migrates: only `cms` does).
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-berliner}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@postgres:5432/${POSTGRES_DB:-berliner_schnauze}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET:?set PAYLOAD_SECRET in .env}
+      PAYLOAD_SERVER_URL: ${PAYLOAD_SERVER_URL:?set PAYLOAD_SERVER_URL in .env}
+      OG_CACHE_DIR: /app/og-cache
+    volumes:
+      - ogcache:/app/og-cache
+    depends_on:
+      postgres:
+        condition: service_healthy
     ports:
       - "${PORT:-4321}:4321"
     healthcheck:
@@ -24,3 +36,64 @@ services:
       start_interval: 2s
       timeout: 5s
       retries: 3
+
+  cms:
+    image: ghcr.io/felix-berlin/berliner-schnauze-cms:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: payload/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # PAYLOAD_SERVER_URL etc. come from .env; migrations run on start.
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      # Pinned: an .env NODE_ENV must not flip prod into schema-push mode. Only cms migrates.
+      NODE_ENV: production
+      PAYLOAD_RUN_MIGRATIONS: "true"
+      DATABASE_URL: postgres://${POSTGRES_USER:-berliner}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@postgres:5432/${POSTGRES_DB:-berliner_schnauze}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET:?set PAYLOAD_SECRET in .env}
+      PAYLOAD_SERVER_URL: ${PAYLOAD_SERVER_URL:?set PAYLOAD_SERVER_URL in .env}
+      MEDIA_DIR: /app/media
+    volumes:
+      - media:/app/media
+    # Localhost only: the reverse proxy fronts cms.berliner-schnauze.wtf.
+    ports:
+      - "127.0.0.1:${CMS_PORT:-3001}:3001"
+    healthcheck:
+      test:
+        - CMD
+        - /nodejs/bin/node
+        - -e
+        - "fetch('http://localhost:3001/api/users/me').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"
+      interval: 30s
+      start_period: 60s
+      start_interval: 2s
+      timeout: 5s
+      retries: 3
+
+  postgres:
+    image: postgres:18
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-berliner_schnauze}
+      POSTGRES_USER: ${POSTGRES_USER:-berliner}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      start_period: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
+  media:
+  ogcache:

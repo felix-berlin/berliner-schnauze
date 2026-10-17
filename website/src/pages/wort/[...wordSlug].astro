@@ -1,0 +1,273 @@
+---
+// Styles
+import '@styles/objects/_word.scss';
+import '@styles/components/_word-page-layout.scss';
+import '@styles/plugins/astro-breadcrumbs.scss';
+
+import RandomWordButton from '@components/RandomWordButton.vue';
+import RelatedWords from '@components/RelatedWords.vue';
+import WordAnagrams from '@components/word/WordAnagrams.astro';
+import WordGalleryCol from '@components/word/WordGalleryCol.astro';
+import WordHero from '@components/word/WordHero.astro';
+import WordLearnMore from '@components/word/WordLearnMore.astro';
+import WordPageFooter from '@components/word/WordPageFooter.astro';
+import WordSectionBeispiele from '@components/word/WordSectionBeispiele.astro';
+import WordSectionEtymologie from '@components/word/WordSectionEtymologie.astro';
+import WordSectionGrammatik from '@components/word/WordSectionGrammatik.astro';
+import WordSectionLinguistik from '@components/word/WordSectionLinguistik.astro';
+import WordSectionNachbarn from '@components/word/WordSectionNachbarn.astro';
+import WordSectionOrthographie from '@components/word/WordSectionOrthographie.astro';
+import WordSectionPhonologie from '@components/word/WordSectionPhonologie.astro';
+import WordSectionVerwandteWorte from '@components/word/WordSectionVerwandteWorte.astro';
+import BookRecommendations from '@components/word/BookRecommendations.astro';
+import WordSidebar from '@components/word/WordSidebar.astro';
+import Layout from '@layouts/Layout.astro';
+import { fetchAffiliateData, fetchAllWords } from '@services/api.ts';
+import { fetchWordRefs, toWordRef } from '@services/payload/wordRefs.ts';
+import { metaToSeo } from '@services/payload/seo.ts';
+import { translationTexts } from '@services/payload/words.ts';
+import { wpDate } from '@utils/wpDate.ts';
+import { escapeHtml } from 'payload-app/lexical-html';
+import { seoData, canonicalUrl } from '@utils/helpers.ts';
+import {
+  alphabeticNeighbors,
+  findAnagrams,
+  getWordType,
+  similarSoundingWords,
+  similarWords,
+  translateNlpTags,
+  type WordTags,
+} from '@utils/wordHelper.ts';
+import { Breadcrumbs } from 'astro-breadcrumbs';
+import ChevronRight from '~icons/lucide/chevron-right';
+
+
+const { wordSlug } = Astro.params;
+const word = (await fetchAllWords()).find((w) => w.slug === wordSlug);
+if (!word) return Astro.rewrite('/404');
+
+const wordRef = toWordRef(word);
+const wordRefs = await fetchWordRefs();
+
+// Derived per request from the memoized refs of all words (~6000, rebuilt once a minute).
+const alphabeticNeighborsResult = alphabeticNeighbors(wordRefs, wordRef);
+const anagramsResult = findAnagrams(word.berlinerisch, wordRefs);
+const similarSpellingResult = similarWords(wordRefs, wordRef, 0.85)
+  .sort((a, b) => b.isSimilar - a.isSimilar)
+  .slice(0, 5)
+  .map((w) => w.word);
+const soundingWordsResult = similarSoundingWords(wordRefs, wordRef);
+
+const { berlinerisch } = word;
+const translations = translationTexts(word);
+// JSON-LD and og:*_time keep the WordPress date format (no milliseconds, no zone).
+const dateCreated = wpDate(word.publishedAt);
+const dateModified = wpDate(word.contentModifiedAt);
+
+const wordDescription = (() => {
+  if (!translations.length) return undefined;
+  const joined = translations.join(', ');
+  const raw = `${berlinerisch} heißt auf Berlinerisch: ${joined}. Mit Etymologie, Aussprache und Beispielsätzen.`;
+  return raw.length > 160 ? raw.slice(0, 157) + '…' : raw;
+})();
+
+const wordPageTitle = `${berlinerisch} auf Berlinerisch — Bedeutung, Beispiel & Herkunft | Berliner Schnauze`;
+
+// Stored on save; computed only for a word that never went through the hook.
+const wordTags =
+  (word.derived?.nlpTags as WordTags[] | null | undefined) ??
+  translateNlpTags(getWordType(berlinerisch));
+
+const hasImages = word.images.length > 0;
+const hasAnagrams = anagramsResult.length > 0;
+const hasOrthographie = berlinerisch.length > 0;
+const hasLinguistik = berlinerisch.length > 0;
+const hasPhonologie = soundingWordsResult.length > 0 || similarSpellingResult.length > 0;
+const hasNeighbors =
+  alphabeticNeighborsResult.before.length > 0 || alphabeticNeighborsResult.after.length > 0;
+const hasRelatedWords = word.relatedWords.length > 0;
+const { books: affiliateBooks, disclaimers: affiliateDisclaimers } = await fetchAffiliateData();
+const wortartLabel: string | undefined =
+  wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined;
+
+const firstImage = word.images[0];
+const firstAudio = word.berlinerischAudio[0];
+const seo = metaToSeo(word.meta, 'article');
+
+const generatedOgImageUrl = new URL(`/og/${wordSlug}.png`, Astro.site).toString();
+
+const ogImage = seo.opengraphImage
+  ? seo.opengraphImage
+  : firstImage
+    ? {
+        alt: firstImage.alt || berlinerisch,
+        height: firstImage.height ? String(firstImage.height) : undefined,
+        sourceUrl: firstImage.url,
+        width: firstImage.width ? String(firstImage.width) : undefined,
+      }
+    : {
+        alt: berlinerisch,
+        height: '630',
+        sourceUrl: generatedOgImageUrl,
+        width: '1200',
+      };
+
+const exampleComments = word.examples
+  .filter((e) => Boolean(e.example))
+  .map((e) => {
+    const comment: { '@type': string; text: string; description?: string } = {
+      '@type': 'Comment',
+      text: e.example as string,
+    };
+    if (e.exampleExplanation) {
+      comment.description = e.exampleExplanation;
+    }
+    return comment;
+  });
+
+const schemaJson = () => {
+  const alternateNames = (word.alternativeWords ?? [])
+    .map((w) => w.alternativeWord)
+    .filter((n): n is string => Boolean(n));
+
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTerm',
+    ...(alternateNames.length > 0 && { alternateName: alternateNames }),
+    ...(exampleComments.length > 0 && { comment: exampleComments }),
+    ...(dateCreated && { dateCreated }),
+    ...(dateModified && { dateModified }),
+    description: wordDescription ?? translations.join('; '),
+    ...(word.article && {
+      disambiguatingDescription: `Berliner Dialektwort, ${word.article}`,
+    }),
+    identifier: word.globalId,
+    publisher: { '@id': `${Astro.site}#organization` },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['.c-word-hero__title', '.c-single-word__translation-item', '.c-single-word__example'],
+    },
+    ...(firstImage && {
+      image: {
+        '@type': 'ImageObject',
+        contentUrl: firstImage.url,
+        url: firstImage.url,
+        ...(firstImage.alt && { name: firstImage.alt }),
+        ...(firstImage.caption && { caption: escapeHtml(firstImage.caption) }),
+        ...(firstImage.width && { width: firstImage.width }),
+        ...(firstImage.height && { height: firstImage.height }),
+      },
+    }),
+    inDefinedTermSet: {
+      '@id': `${canonicalUrl('/wort', Astro.site)}#termset`,
+      '@type': 'DefinedTermSet',
+      description: 'Wörterbuch für den Berliner Dialekt und Berliner Schnauze',
+      inLanguage: 'de-DE',
+      name: 'Berliner Schnauze Wörterbuch',
+      url: canonicalUrl('/wort', Astro.site),
+    },
+    inLanguage: 'de-DE',
+    mainEntityOfPage: canonicalUrl(Astro.url.pathname, Astro.site),
+    name: berlinerisch,
+    sameAs: word.learnMore || undefined,
+    ...(firstAudio && {
+      subjectOf: {
+        '@type': 'AudioObject',
+        contentUrl: firstAudio.audio.url,
+        description: `Berliner Aussprache von „${berlinerisch}"`,
+        encodingFormat: 'audio/mpeg',
+        inLanguage: 'de-DE',
+        name: `Aussprache: ${berlinerisch}`,
+      },
+    }),
+    termCode: word.slug,
+    url: canonicalUrl(Astro.url.pathname, Astro.site),
+  });
+};
+---
+
+<Layout
+  content={seoData({
+    seo: {
+      ...seo,
+      title: wordPageTitle,
+      ...(wordDescription && {
+        opengraphDescription: wordDescription,
+        twitterDescription: wordDescription,
+      }),
+      ...(ogImage && { opengraphImage: ogImage }),
+      ...(dateCreated && { opengraphPublishedTime: dateCreated }),
+      ...(dateModified && { opengraphModifiedTime: dateModified }),
+    },
+    title: berlinerisch,
+  })}
+  contentClasses='o-word'
+>
+  <Fragment slot='head'>
+    <script set:html={schemaJson()} type='application/ld+json' />
+  </Fragment>
+
+  <nav class='c-page-topbar' aria-label='Brotkrümelpfad'>
+    <Breadcrumbs indexText='Start' linkTextFormat='capitalized' truncated={true}>
+      <ChevronRight height='20' slot='separator' width='20' />
+    </Breadcrumbs>
+  </nav>
+
+  <article class='c-word-page'>
+    <WordSidebar
+      hasAnagrams={hasAnagrams}
+      hasLinguistik={hasLinguistik}
+      hasNeighbors={hasNeighbors}
+      hasOrthographie={hasOrthographie}
+      hasPhonologie={hasPhonologie}
+      hasRelatedWords={hasRelatedWords}
+      word={word}
+      wordTags={wordTags}
+    />
+
+    <div class:list={['c-word-main', hasImages && 'c-word-main--with-gallery']}>
+      <WordHero word={word} wortartLabel={wortartLabel} />
+
+      <div class='c-word-main__content'>
+        <WordSectionEtymologie word={word} />
+
+        <WordSectionBeispiele examples={word.examples} />
+
+        <WordSectionOrthographie allWords={wordRefs} word={berlinerisch} />
+
+        <WordSectionLinguistik word={berlinerisch} />
+
+        <WordSectionGrammatik wordTags={wordTags} />
+
+        <WordSectionPhonologie
+          soundingWords={soundingWordsResult}
+          similarSpelling={similarSpellingResult}
+        />
+
+        <WordAnagrams anagrams={anagramsResult} />
+
+        <WordSectionNachbarn neighbors={alphabeticNeighborsResult} />
+
+        <WordSectionVerwandteWorte
+          relatedWords={word.relatedWords}
+          currentWord={berlinerisch}
+        />
+
+        {!hasImages && word.learnMore && <WordLearnMore learnMore={word.learnMore} />}
+
+        <BookRecommendations books={affiliateBooks} disclaimers={affiliateDisclaimers} />
+      </div>
+
+      {hasImages && <WordGalleryCol images={word.images} learnMore={word.learnMore} />}
+    </div>
+  </article>
+
+  <WordPageFooter publishedAt={word.publishedAt} modifiedAt={word.contentModifiedAt} />
+
+  <RelatedWords words={wordRefs} currentWord={berlinerisch}>
+    <li>
+      <RandomWordButton class:list='c-related-words__word is-random' words={wordRefs} />
+    </li>
+  </RelatedWords>
+</Layout>
+

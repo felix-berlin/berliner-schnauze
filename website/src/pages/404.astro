@@ -1,0 +1,13 @@
+---
+import "@styles/objects/_error-page.scss";
+import Layout from "@layouts/Layout.astro";
+
+// Also set when another page rewrites here (unknown slug), so Layout does not mark the error page cacheable.
+Astro.response.status = 404;
+---
+
+<Layout content={{ title: "Seite konnte nicht gefunden werden" }}>
+  <section class="o-error-page">
+    <h1>Blöd jelaufen, die Seite gibts nicht.</h1>
+  </section>
+</Layout>

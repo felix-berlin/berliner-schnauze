@@ -136,7 +136,7 @@ jobs:
       - name: OG image cache
         uses: actions/cache@v6
         with:
-          path: .og-cache
+          path: website/.og-cache
           key: og-images-${{ github.run_id }}
           restore-keys: og-images-
 
@@ -168,7 +168,29 @@ jobs:
       - name: Build and push image 🐳
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: website
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      # CMS image: built from source inside Docker (no dist/, no secrets).
+      - name: CMS image tags
+        id: meta-cms
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/felix-berlin/berliner-schnauze-cms
+          flavor: latest=false
+          tags: |
+            type=semver,pattern={{version}},value=v${{ needs.release.outputs.version }}
+            type=semver,pattern={{major}}.{{minor}},value=v${{ needs.release.outputs.version }}
+            type=raw,value=latest,enable=${{ github.ref_name == 'main' }}
+            type=raw,value=beta,enable=${{ github.ref_name == 'beta' }}
+
+      - name: Build and push CMS image 🐳
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: payload/Dockerfile
+          push: true
+          tags: ${{ steps.meta-cms.outputs.tags }}
+          labels: ${{ steps.meta-cms.outputs.labels }}

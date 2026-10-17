@@ -1,0 +1,12 @@
+---
+import type { CoreQuoteBlock } from '@/types/cms';
+
+interface Props {
+  block: CoreQuoteBlock;
+}
+
+const { block } = Astro.props;
+const value = block.attributes?.value ?? '';
+---
+
+<blockquote class='c-magazin-article__quote' set:html={value} />
