@@ -327,7 +327,9 @@ export default defineConfig({
       base: "/",
       scope: "/",
       includeAssets: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
-      registerType: "autoUpdate",
+      // "prompt", not "autoUpdate": a new worker waits instead of reloading open tabs (suggest-word form, BON).
+      // src/services/pwa.ts switches on the next navigation or when the user accepts the update toast.
+      registerType: "prompt",
       manifest: {
         id: "/",
         name: "Berliner Schnauze",
@@ -416,13 +418,29 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, // 2 MB (Workbox default)
         runtimeCaching: [
           {
-            urlPattern: ({ request }) => request.mode === "navigate",
+            // Page loads, plus the ClientRouter's fetch() of the next page (mode "cors", no destination). Pages
+            // have no file extension; /api/* is matched by the routes below or stays network-only.
+            urlPattern: ({ request, sameOrigin, url }) =>
+              request.mode === "navigate" ||
+              (sameOrigin &&
+                request.destination === "" &&
+                !url.pathname.startsWith("/api/") &&
+                !/\.\w+$/.test(url.pathname)),
             handler: "NetworkFirst",
             options: {
               cacheName: "pages",
               networkTimeoutSeconds: 3,
               expiration: { maxEntries: 50, maxAgeSeconds: 86_400 },
               cacheableResponse: { statuses: [200] },
+              plugins: [
+                {
+                  // Draft previews are sent with "private, no-store"; Workbox ignores Cache-Control on its own.
+                  cacheWillUpdate: async ({ response }) =>
+                    /no-store|private/.test(response.headers.get("Cache-Control") ?? "")
+                      ? null
+                      : response,
+                },
+              ],
             },
           },
           {
