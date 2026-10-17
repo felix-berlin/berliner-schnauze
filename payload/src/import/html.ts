@@ -55,9 +55,20 @@ export async function htmlToLexical(html: string, config: SanitizedConfig, opts:
     opts.onUnmappedImage?.(src);
   }
 
+  // Lexical's DOM import drops `rel`: remember the sponsored (affiliate) urls and set the link field after.
+  const sponsored = new Set(
+    [...doc.querySelectorAll("a[href]")].filter((a) => /\bsponsored\b/i.test(a.getAttribute("rel") ?? "")).map((a) => a.getAttribute("href")),
+  );
   const state = convertHTMLToLexical({ editorConfig: await editorConfig, html: doc.body.innerHTML, JSDOM }) as unknown as RichText;
   normalizeUploads(state.root as LexicalNode);
+  if (sponsored.size) markSponsored(state.root as LexicalNode, sponsored);
   return state;
+}
+
+function markSponsored(node: LexicalNode, urls: Set<string | null>) {
+  const fields = node.fields as { url?: string; sponsored?: boolean } | undefined;
+  if (node.type === "link" && fields && urls.has(fields.url ?? null)) fields.sponsored = true;
+  for (const child of node.children ?? []) markSponsored(child, urls);
 }
 
 /** `<img>` sources (with alt) in an HTML string. */

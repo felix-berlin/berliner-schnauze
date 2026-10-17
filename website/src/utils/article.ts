@@ -13,9 +13,9 @@ export interface ProcessedArticle {
   hasAffiliateLinks: boolean;
 }
 
-// Gutenberg's link UI writes rel="sponsored" (or "… sponsored …") when an
-// editor marks a link as sponsored/affiliate — network-agnostic, survives
-// link format changes, and matches Google's own rel=sponsored guidance.
+// The „Werbelink (Affiliate)“ checkbox of a Payload link renders as rel="sponsored"
+// (payload/src/lib/lexicalHtml.ts; the WordPress import carries Gutenberg's rel over).
+// Network-agnostic and matches Google's own rel=sponsored guidance.
 const SPONSORED_LINK_PATTERN = /\brel="[^"]*\bsponsored\b[^"]*"/i;
 
 // Imported WordPress links are absolute against the old CMS origin, links an editor sets in Payload against
@@ -45,7 +45,7 @@ export const stripTags = (html: string): string => {
 };
 
 /**
- * Build-time slug for heading anchors. German-aware (umlauts → ae/oe/ue, ß → ss)
+ * Slug for heading anchors. German-aware (umlauts → ae/oe/ue, ß → ss)
  * so the fragment ids stay ASCII and readable.
  */
 export const slugify = (value: string): string =>

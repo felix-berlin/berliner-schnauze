@@ -1,6 +1,6 @@
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { LinkFeature, lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "path";
 import nodemailer from "nodemailer";
 import { buildConfig } from "payload";
@@ -32,7 +32,18 @@ export default buildConfig({
   },
   collections: [Users, Media, WordTypes, Themen, Words, Posts, Pages, Suggestions],
   globals: [Navigation, Affiliate, Company, Home, Anki],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures,
+      LinkFeature({
+        fields: ({ defaultFields }) => [
+          ...defaultFields,
+          // Rendered as rel="sponsored": the site labels such links „Anzeige“ and shows the affiliate notice.
+          { name: "sponsored", type: "checkbox", label: "Werbelink (Affiliate)", admin: { description: "Wird als „Anzeige“ gekennzeichnet." } },
+        ],
+      }),
+    ],
+  }),
   // Without SMTP_URL (dev, tests) Payload writes mails to the console instead of sending them.
   email: process.env.SMTP_URL
     ? nodemailerAdapter({

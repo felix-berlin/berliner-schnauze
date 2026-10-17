@@ -76,6 +76,11 @@ describe("htmlToLexical", () => {
     expect(quote.type).toBe("quote");
   });
 
+  it("keeps rel=sponsored as the link's sponsored field (Lexical's import drops rel)", async () => {
+    const state = await htmlToLexical('<p><a href="https://amzn.to/1" rel="sponsored noopener" target="_blank">Buch</a> <a href="https://example.org/">frei</a></p>', payload.config);
+    expect(lexicalNodes(state, "link").map((l) => (l as { fields: { sponsored?: boolean } }).fields.sponsored)).toEqual([true, undefined]);
+  });
+
   it("stores a mapped <img> in infoText as an upload node", async () => {
     const { read, unmapped } = await saveWordWithInfoText(990102, `<p>Text</p><p><img src="${HTML_TEST_IMG}" alt="Bild" /></p>`, refs());
     expectNoPendingUploads(read.infoText);

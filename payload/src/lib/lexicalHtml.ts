@@ -10,11 +10,25 @@ import { docPath, isRoutedCollection } from "./routes";
 export const escapeHtml = (value: string): string =>
   value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 
-/** Site path of an internal link's doc; "#" when the doc is not populated (query depth 0) or has no page. */
+/**
+ * Site path of an internal link's doc; "#" when the doc is not populated (query depth 0), has no page or is not
+ * published (the Local API populates drafts too; a link would leak the draft's slug and 404).
+ */
 const internalDocToHref = ({ linkNode }: { linkNode: { fields: { doc?: { relationTo?: string; value?: unknown } | null } } }): string => {
   const { relationTo, value } = linkNode.fields.doc ?? {};
-  const slug = typeof value === "object" && value ? (value as { slug?: unknown }).slug : undefined;
-  return isRoutedCollection(relationTo) && typeof slug === "string" && slug ? docPath(relationTo, slug) : "#";
+  const doc = typeof value === "object" && value ? (value as { slug?: unknown; _status?: unknown }) : undefined;
+  if (doc?._status !== undefined && doc._status !== "published") return "#";
+  return isRoutedCollection(relationTo) && typeof doc?.slug === "string" && doc.slug ? docPath(relationTo, doc.slug) : "#";
+};
+
+const links = LinkHTMLConverter({ internalDocToHref });
+/** A link with the `sponsored` checkbox (payload.config) gets rel="sponsored", next to the new-tab rel if any. */
+const sponsoredLink: NonNullable<HTMLConverters["link"]> = (args) => {
+  const html = (links.link as (a: typeof args) => string)(args);
+  if (!(args.node.fields as { sponsored?: unknown }).sponsored) return html;
+  return html.includes(' rel="noopener noreferrer"')
+    ? html.replace(' rel="noopener noreferrer"', ' rel="sponsored noopener noreferrer"')
+    : html.replace(/^<a\b/, '<a rel="sponsored"');
 };
 
 export type LexicalHtmlOptions = {
@@ -29,7 +43,8 @@ export function lexicalToHtml(state: unknown, { converters: overrides, mediaBase
   if (!state || typeof state !== "object" || !("root" in state)) return "";
   const converters: HTMLConvertersFunction = ({ defaultConverters }) => ({
     ...defaultConverters,
-    ...LinkHTMLConverter({ internalDocToHref }),
+    ...links,
+    link: sponsoredLink,
     upload: ({ node }) => {
       const media = (node as { value?: unknown }).value as Media | number | undefined;
       if (typeof media !== "object" || !media?.url) return "";

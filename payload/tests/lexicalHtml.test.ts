@@ -17,11 +17,21 @@ describe("lexicalToHtml", () => {
     expect(lexicalToHtml(state(para(link("https://example.org/l", "Lizenz"))), { mediaBase: BASE })).toContain('<a href="https://example.org/l"');
   });
 
+  it("marks a sponsored link rel=sponsored, also next to the new-tab rel", () => {
+    const sponsored = (newTab: boolean) => ({ ...link("https://amzn.to/1", "Buch"), fields: { url: "https://amzn.to/1", linkType: "custom", newTab, sponsored: true } });
+    expect(lexicalToHtml(state(para(sponsored(false))), { mediaBase: BASE })).toBe('<p><a rel="sponsored" href="https://amzn.to/1">Buch</a></p>');
+    expect(lexicalToHtml(state(para(sponsored(true))), { mediaBase: BASE })).toContain('rel="sponsored noopener noreferrer" target="_blank"');
+    expect(lexicalToHtml(state(para(link("https://example.org/l", "Lizenz"))), { mediaBase: BASE })).not.toContain("sponsored");
+  });
+
   it("links an internal link to the populated doc's page", () => {
     const internal = (doc: unknown) => ({ ...link("", "Kiez"), fields: { linkType: "internal", newTab: false, doc } });
     expect(lexicalToHtml(state(para(internal({ relationTo: "words", value: { id: 1, slug: "kiez" } }))), { mediaBase: BASE })).toContain('<a href="/wort/kiez"');
     expect(lexicalToHtml(state(para(internal({ relationTo: "posts", value: { id: 2, slug: "kiezdeutsch" } }))), { mediaBase: BASE })).toContain('href="/magazin/kiezdeutsch"');
     expect(lexicalToHtml(state(para(internal({ relationTo: "words", value: 1 }))), { mediaBase: BASE })).toContain('href="#"');
+    // a draft target would leak its slug and 404
+    expect(lexicalToHtml(state(para(internal({ relationTo: "words", value: { id: 4, slug: "geheim", _status: "draft" } }))), { mediaBase: BASE })).toContain('href="#"');
+    expect(lexicalToHtml(state(para(internal({ relationTo: "words", value: { id: 5, slug: "kiez", _status: "published" } }))), { mediaBase: BASE })).toContain('href="/wort/kiez"');
   });
 
   it("escapes angle brackets and ampersands in text", () => {
