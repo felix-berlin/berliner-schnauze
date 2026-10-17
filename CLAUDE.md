@@ -34,9 +34,9 @@ docker compose up --build    # Serve website/dist/ via server/index.mjs (applies
 website/scripts/docker-smoke.sh   # Build image from dist/, check routes/headers/redirects (runs on every PR; leaves a running postgres up)
                              # Release CI builds + pushes ghcr.io/felix-berlin/berliner-schnauze (release.yml `docker` job)
 
-# Cloudflare Workers (until the Docker move; run after build, in website/)
-pnpm server:preview          # Serve ./dist/client locally via `wrangler dev`
-pnpm deploy                  # `wrangler deploy`
+# Cloudflare Workers: do NOT `pnpm deploy` this stack — dist/client holds no HTML, Workers would serve empty pages.
+# Don't merge into main before step 7 of docs/cutover-checklist.md (or pause Workers Builds first).
+pnpm dlx tsx website/scripts/seo-diff.ts <prod-origin> <new-origin>   # SEO head + status parity of two origins
 
 # CMS (Payload, workspace package payload/)
 pnpm cms:dev                 # Payload admin + API on :3001
@@ -45,6 +45,7 @@ pnpm --filter payload-app import:wp   # Idempotent WordPress -> Payload import
 pnpm cms:migrate:create <name>   # After EVERY schema change; commit it. The cms container runs migrations on start (CI fails on drift)
 pnpm cms:migrate                 # Apply migrations to DATABASE_URL (not for dev DBs filled by schema push)
 docker compose up --build cms postgres   # CMS image (payload/Dockerfile, context = repo root)
+infisical run -- pnpm dlx tsx scripts/publish-drafts.ts --dry-run   # Publish all draft words via REST (PAYLOAD_URL, PAYLOAD_API_KEY)
 
 # Anki decks (Python venv `.venv-anki`, setup in docs/anki/README.md)
 pnpm anki:build              # Build Full + Lite into dist-anki/ (version <package.json version>-dev)
@@ -63,7 +64,7 @@ E2E (Playwright, in `website/`): specs in `src/tests/e2e/`; run with `npx playwr
 
 Secrets are managed via [Infisical](https://infisical.com). Run `npx infisical login` once before local development. The `dev` script automatically injects secrets via `infisical run --`.
 
-For Cloudflare Workers builds, env vars are configured separately in the Workers Builds settings (dashboard).
+Docker/compose reads the root `.env`; the `payload/` CLI and Next read a git-ignored `payload/.env` (see `payload/README.md`).
 
 ## WordPress MCP Access (until WordPress is switched off)
 
@@ -81,7 +82,7 @@ Discover full ability list/schemas: `mcp-adapter-discover-abilities` / `mcp-adap
 
 ## Architecture
 
-**Data flow**: Payload (Local API, in the Astro server process) → adapters in `src/services/payload/` (same shapes as the old WPGraphQL fetchers) → on-demand pages and API routes (`api/search/index.json`, sitemap, OG images, word of the day) → Orama in-browser search → Vue components
+**Data flow**: Payload (Local API, in the Astro server process) → adapters in `src/services/payload/` (generated Payload types narrowed to `SiteWord` etc.) → on-demand pages and API routes (`api/search/index.json`, sitemap, OG images, word of the day) → Orama in-browser search → Vue components
 
 - **Astro** handles routing and rendering on demand (`src/pages/`). Layout sets `Cache-Control` (`setPageCache`: proxy 5 min, errors never), `src/middleware/index.ts` turns a failing render into a 503. Never name a root `src/middleware.ts`: Next.js in `payload/` picks it up. Content is read through `ttl()` memos (`src/services/cache.ts`: stale-while-revalidate, 60 s)
 - **Vue 3** islands handle all interactive UI (`src/components/`) — flat files for standalone components, subdirs for feature groups (`games/`, `word/`, `toast/`, `header/`, `accordion/`, `filter/`, `modals/`, `word-search/`, `magazin/`, `anki/`). Use **VueUse** (`@vueuse/core`) for browser APIs and Vue utilities before writing custom logic
@@ -94,6 +95,10 @@ Discover full ability list/schemas: `mcp-adapter-discover-abilities` / `mcp-adap
 - **View Transitions**: `ClientRouter` is enabled globally in `src/components/BaseHead.astro`. Header and Footer use `transition:persist`. See **Astro scripts + View Transitions** below.
 - **CMS**: `payload/` (pnpm workspace package `payload-app`) is the Payload 3 backend (Next.js admin + REST/GraphQL, Postgres). Compose services `cms` (image `berliner-schnauze-cms`, media volume) and `postgres`; the Astro site reads it through the Local API (`getPayloadClient()` in `src/services/payload.ts`, `payload-app` workspace dependency; its types come from the `types` export condition)
   - Schema: dev and tests push it; production (`NODE_ENV=production`, pinned on `cms`) only runs the committed migrations, and only where `PAYLOAD_RUN_MIGRATIONS=true` (set on `cms` alone). Never point a push-filled DB at the prod container. `import:wp` refuses a non-local DB unless `IMPORT_ALLOW_REMOTE_DB=1` and `NODE_ENV=production`.
+  - Schema change: edit → `pnpm --filter payload-app generate:types` → `pnpm cms:migrate:create <name>`. New collections/globals get `authenticated` access from `src/access.ts` + a Forbidden test in `tests/access.test.ts`.
+  - **Drafts**: the Local API ignores access control — every query on a drafts collection must spread `publicDocs()` (`src/services/payload.ts`), or drafts go public. `SHOW_TEST_DATA` includes them on purpose.
+  - **Derived word fields** (`derived` group) are computed on save by the `beforeChange` hook from `payload/src/lib/wordDerived.ts`, which the site also imports as `payload-app/word-derived` — keep it free of payload/next/config imports. Changing the derivation leaves existing words stale until re-saved (`import:wp` re-saves all).
+  - `payload-app` exports: `.` (types via `src/astro.d.ts`, a hand-kept types-only mirror of `src/index.ts` — update both), `./word-derived`, `./lexical-html`.
   - First admin: in production `PAYLOAD_ALLOW_FIRST_USER=true` gates `POST /api/users`, but Payload's `/api/users/first-register` bypasses it. Cutover: create the first admin before the proxy route goes public.
 - **Global Vue app setup** in `src/pages/_app.ts` — registers the `vTooltip` directive and (dev only) Nanostores devtools
 
@@ -144,7 +149,7 @@ Pattern: `.c-block__element--modifier`. Hyphens separate words within each part 
 
 **VueUse** ([vueuse.org/functions](https://vueuse.org/functions.html)): ALWAYS check VueUse before writing any browser API wrapper or Vue utility manually. It covers event listeners, debounce, scroll, storage, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, intersection observer, resize, geolocation, animations, and much more. Do NOT implement manually what VueUse already provides. Grep `@vueuse/core` for the set already in use.
 
-**PWA**: Built with `@vite-pwa/astro` + Workbox. Service worker registered in `src/services/pwa.ts` via `virtual:pwa-register`. On update: shows browser Notification if permission granted, else silently reloads. On offline-ready: shows toast. Cache Storage access via `src/composable/useCacheStorage.ts`. Cache management UI in `src/components/PwaCacheOverview.vue`. Precache excludes `og/**` and `screenshots/**`; `maximumFileSizeToCacheInBytes` is 2 MB. `navigateFallback: "/"` covers offline navigations to uncached pages. Runtime caching (`astro.config.mjs`): StaleWhileRevalidate for search index/meta, NetworkFirst for word-of-the-day, CacheFirst for `imagor-images` (30 days, 500 entries).
+**PWA**: Built with `@vite-pwa/astro` + Workbox. Service worker registered in `src/services/pwa.ts` via `virtual:pwa-register`. On update: shows browser Notification if permission granted, else silently reloads. On offline-ready: shows toast. Cache Storage access via `src/composable/useCacheStorage.ts`. Cache management UI in `src/components/PwaCacheOverview.vue`. Precache excludes `og/**` and `screenshots/**`; `maximumFileSizeToCacheInBytes` is 2 MB. No `navigateFallback` (the precache holds no HTML; it would answer every page load with the homepage) — visited pages are cached by a NetworkFirst navigation route (`pages`, 3 s timeout). Runtime caching (`astro.config.mjs`): StaleWhileRevalidate for search index/meta, NetworkFirst for word-of-the-day, CacheFirst for `imagor-images` (30 days, 500 entries).
 
 **Fonts**: Loaded via the Astro Fonts API (`fonts` in `astro.config.mjs`, local woff2 in `src/assets/fonts/`) with `display: "fallback"`. Don't switch to `swap` (Berlin's size-adjust re-wraps text on swap → CLS 0.46) or `optional` (cold cache shows the fallback font → CLS 0.65).
 
@@ -232,6 +237,7 @@ pnpm supply-chain policy: freshly published packages (< 24h) trigger a lockfile 
 - `compressHTML: true` is set explicitly — v7 changed default to `'jsx'` which strips spaces between inline elements
 - `build.cssMinify: "esbuild"` kept — LightningCSS 1.32.0 has a deeper tokenizer bug with this project's bundled CSS: fails with `Unexpected token Function("hsl")` and `Unexpected token IDHash(...)` even on plain hex colors. Converting `$danger` from `hsl()` to hex did not help. LightningCSS bug — revisit when upstream fixes it
 - `build.rolldownOptions` replaces deprecated `build.rollupOptions` (Vite 8 moved from Rollup → Rolldown)
+- `patches/@astrojs__node@11.1.8.patch` (pinned in `pnpm-workspace.yaml`): with `build.format: "file"`, serve `a.html` even when an `a/` folder exists. Re-port it on every `@astrojs/node` bump
 - `Uint8Array<ArrayBuffer>` (not plain `Uint8Array`) required for `PushManager.subscribe()` — TS 6 made `Uint8Array` generic
 - `@vueuse/core` emits `INVALID_ANNOTATION` Rolldown warnings about `#__PURE__` comment positions — upstream issue, build still succeeds, ignore
 
