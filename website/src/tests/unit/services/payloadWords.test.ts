@@ -84,11 +84,7 @@ const doc = {
     image: { id: 9, url: "/api/media/file/og.png" },
     nofollow: true,
     noindex: false,
-    ogDescription: "OGD",
-    ogTitle: "OG",
     title: "aasen",
-    twitterDescription: "T",
-    twitterTitle: null,
   },
   publishedAt: "2025-04-09T08:12:37.000Z",
   relatedWords: [
@@ -224,13 +220,11 @@ describe("metaToSeo", () => {
     const { metaToSeo } = await import("@services/payload/seo.ts");
     expect(metaToSeo(doc.meta as never, "article")).toEqual({
       metaDesc: "Meta",
-      opengraphDescription: "OGD",
+      opengraphDescription: "Meta",
       opengraphImage: { sourceUrl: "https://cms.example/api/media/file/og.png" },
       opengraphSiteName: "Berliner Schnauze",
-      opengraphTitle: "OG",
       opengraphType: "article",
       title: "aasen",
-      twitterDescription: "T",
     });
     expect(metaToSeo(null)).toEqual({});
   });

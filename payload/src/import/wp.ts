@@ -24,9 +24,9 @@ export async function wpGraphql<T>(query: string, variables?: Record<string, unk
 }
 
 const POST_TYPE_SEO = `
-  title canonical metaDesc opengraphTitle opengraphDescription
+  title canonical metaDesc opengraphDescription
   opengraphImage { sourceUrl }
-  twitterTitle twitterDescription metaRobotsNofollow metaRobotsNoindex`;
+  metaRobotsNofollow metaRobotsNoindex`;
 
 const MEDIA_ITEM = `audio { node { mediaItemUrl } } gender`;
 
@@ -118,11 +118,8 @@ export type WpSeo = {
   title?: Maybe<string>;
   canonical?: Maybe<string>;
   metaDesc?: Maybe<string>;
-  opengraphTitle?: Maybe<string>;
   opengraphDescription?: Maybe<string>;
   opengraphImage?: Maybe<{ sourceUrl?: Maybe<string> }>;
-  twitterTitle?: Maybe<string>;
-  twitterDescription?: Maybe<string>;
   metaRobotsNofollow?: Maybe<string>;
   metaRobotsNoindex?: Maybe<string>;
 };

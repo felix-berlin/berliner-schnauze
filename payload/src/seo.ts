@@ -10,7 +10,7 @@ const SITE_URL = "https://berliner-schnauze.wtf";
 
 type SeoDoc = Partial<Page & Post & Theman & Word>;
 
-/** Yoast fields the plugin has no counterpart for; imported 1:1 and read by the site. */
+/** What the plugin has no field for: a canonical override and the robots flags (imported from Yoast). */
 const yoastFields: Field[] = [
   {
     name: "canonical",
@@ -20,10 +20,6 @@ const yoastFields: Field[] = [
         "Leer lassen: die Seite verweist auf ihre eigene URL. Nur setzen, wenn eine andere URL (auf https://berliner-schnauze.wtf) die maßgebliche ist.",
     },
   },
-  { name: "ogTitle", type: "text" },
-  { name: "ogDescription", type: "text" },
-  { name: "twitterTitle", type: "text" },
-  { name: "twitterDescription", type: "text" },
   { name: "noindex", type: "checkbox" },
   { name: "nofollow", type: "checkbox" },
 ];

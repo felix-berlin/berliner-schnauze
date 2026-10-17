@@ -270,10 +270,6 @@ export interface SeoMetaGroup {
    * Leer lassen: die Seite verweist auf ihre eigene URL. Nur setzen, wenn eine andere URL (auf https://berliner-schnauze.wtf) die maßgebliche ist.
    */
   canonical?: string | null;
-  ogTitle?: string | null;
-  ogDescription?: string | null;
-  twitterTitle?: string | null;
-  twitterDescription?: string | null;
   noindex?: boolean | null;
   nofollow?: boolean | null;
 }
@@ -656,10 +652,6 @@ export interface SeoMetaGroupSelect<T extends boolean = true> {
   description?: T;
   image?: T;
   canonical?: T;
-  ogTitle?: T;
-  ogDescription?: T;
-  twitterTitle?: T;
-  twitterDescription?: T;
   noindex?: T;
   nofollow?: T;
 }

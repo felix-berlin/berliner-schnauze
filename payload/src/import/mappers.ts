@@ -85,13 +85,10 @@ export function mapSeo(seo: Maybe<WpSeo>, refs: ImportRefs): SeoMetaGroup {
   seo ??= {};
   return {
     title: seo.title || null,
-    description: seo.metaDesc || null,
+    // Without a meta description Yoast generated og:description from the content; the site renders it as both.
+    description: seo.metaDesc || seo.opengraphDescription || null,
     canonical: seo.canonical && !seo.canonical.startsWith(OLD_CMS_ORIGIN) ? seo.canonical : null,
-    ogTitle: seo.opengraphTitle || null,
-    ogDescription: seo.opengraphDescription || null,
     image: mediaId(seo.opengraphImage?.sourceUrl, refs),
-    twitterTitle: seo.twitterTitle || null,
-    twitterDescription: seo.twitterDescription || null,
     noindex: robots(seo.metaRobotsNoindex, "noindex"),
     nofollow: robots(seo.metaRobotsNofollow, "nofollow"),
   };

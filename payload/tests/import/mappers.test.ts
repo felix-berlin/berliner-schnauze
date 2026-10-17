@@ -100,16 +100,17 @@ describe("mapSeo", () => {
     expect(mapSeo({ metaRobotsNoindex: " NoIndex, follow ", metaRobotsNofollow: "noindex, nofollow" }, refs())).toMatchObject({ noindex: true, nofollow: true });
   });
 
+  it("takes Yoast's generated og:description when no meta description is set", () => {
+    expect(mapSeo({ metaDesc: "", opengraphDescription: "Aus dem Inhalt" }, refs()).description).toBe("Aus dem Inhalt");
+    expect(mapSeo({ metaDesc: "Eigene", opengraphDescription: "Aus dem Inhalt" }, refs()).description).toBe("Eigene");
+  });
+
   it("resets every field when WordPress has no SEO block", () => {
     expect(mapSeo(null, refs())).toEqual({
       title: null,
       description: null,
       canonical: null,
-      ogTitle: null,
-      ogDescription: null,
       image: null,
-      twitterTitle: null,
-      twitterDescription: null,
       noindex: false,
       nofollow: false,
     });

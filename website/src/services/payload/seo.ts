@@ -7,7 +7,8 @@ import type { Seo } from "@/types/seo.ts";
 const SITE_NAME = "Berliner Schnauze";
 
 /**
- * SEO plugin `meta` group -> the head props of `BaseHead` (`Seo`); empty values are left out. og:type is
+ * SEO plugin `meta` group -> the head props of `BaseHead` (`Seo`); empty values are left out. The description is
+ * also og:description (BaseHead renders the meta description from it). og:type is
  * "article" for words and posts, pages and themen set their own.
  */
 export const metaToSeo = (meta: SeoMetaGroup | null | undefined, opengraphType?: string): Seo => {
@@ -15,14 +16,10 @@ export const metaToSeo = (meta: SeoMetaGroup | null | undefined, opengraphType?:
   const image = mediaUrl(meta.image);
   return {
     ...(meta.canonical && { canonical: meta.canonical }),
-    ...(meta.description && { metaDesc: meta.description }),
-    ...(meta.ogDescription && { opengraphDescription: meta.ogDescription }),
+    ...(meta.description && { metaDesc: meta.description, opengraphDescription: meta.description }),
     ...(image && { opengraphImage: { sourceUrl: image } }),
     opengraphSiteName: SITE_NAME,
-    ...(meta.ogTitle && { opengraphTitle: meta.ogTitle }),
     ...(opengraphType && { opengraphType }),
     ...(meta.title && { title: meta.title }),
-    ...(meta.twitterDescription && { twitterDescription: meta.twitterDescription }),
-    ...(meta.twitterTitle && { twitterTitle: meta.twitterTitle }),
   };
 };
