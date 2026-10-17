@@ -6,7 +6,6 @@ import { sentryVitePlugin } from "@sentry/vite-plugin";
 import AstroPWA from "@vite-pwa/astro";
 import matomo from "astro-matomo";
 import { defineConfig, envField, fontProviders, svgoOptimizer } from "astro/config";
-import { availableParallelism } from "node:os";
 import { fileURLToPath } from "node:url";
 import { visualizer } from "rollup-plugin-visualizer";
 import Icons from "unplugin-icons/vite";
@@ -282,7 +281,7 @@ export default defineConfig({
         default: false,
       }),
       // Optional PAT to raise the GitHub API's unauthenticated rate limit for the
-      // Lite-deck release lookup at build time. Unset works fine at low build volume.
+      // Lite-deck release lookup (at runtime, memoized for an hour). Unset works fine.
       GITHUB_API_TOKEN: envField.string({
         context: "server",
         access: "secret",
@@ -630,14 +629,5 @@ export default defineConfig({
         },
       },
     },
-  },
-  experimental: {
-    // ~2500+ /wort/ pages plus themen/magazin/changelog/og are rebuilt from
-    // WordPress data every build; incrementalBuild skips regenerating a page
-    // when its module graph and cacheKey are unchanged since the last build.
-    incrementalBuild: true,
-    // Renders static pages in worker threads. Half the cores, like Playwright's
-    // `workers: "50%"`: memory is the limit, not CPU.
-    parallelPrerender: { workers: Math.max(1, Math.floor(availableParallelism() / 2)) },
   },
 });
