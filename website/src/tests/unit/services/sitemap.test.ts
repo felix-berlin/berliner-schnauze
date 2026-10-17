@@ -34,8 +34,8 @@ beforeEach(() => {
   ]);
   fetchAllPosts.mockResolvedValue([
     {
-      date: "2025-05-01T10:00:00",
-      modifiedGmt: "2026-01-02T03:04:05",
+      contentModifiedAt: "2026-01-02T03:04:05.000Z",
+      publishedAt: "2025-05-01T08:00:00.000Z",
       slug: "berlinerische-woerter-herkunft",
     },
   ]);
@@ -61,7 +61,7 @@ describe("buildSitemapEntries", () => {
     expect(entries).toContainEqual({ loc: "https://berliner-schnauze.wtf/wort/wa" });
   });
 
-  it("dates a post by its modified date (UTC), not by the Berlin-local publish date", async () => {
+  it("dates a post by its modified date (UTC), not by its publish date", async () => {
     const entries = await buildSitemapEntries(SITE);
     expect(entries).toContainEqual({
       lastmod: "2026-01-02T03:04:05.000Z",

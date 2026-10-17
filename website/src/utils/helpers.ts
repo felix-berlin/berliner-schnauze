@@ -88,6 +88,8 @@ export const formattedDate = (date?: string, locale = "de-DE") => {
   return dateToFormat.toLocaleString(locale, {
     day: "numeric",
     month: "long",
+    // Payload dates are UTC; show the day it was in Berlin, whatever zone the server runs in.
+    timeZone: "Europe/Berlin",
     year: "numeric",
   });
 };

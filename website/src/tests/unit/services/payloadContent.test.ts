@@ -61,34 +61,21 @@ beforeEach(() => {
 });
 
 describe("toPostBlocks", () => {
-  it("splits rich text into html, image and quote blocks with ascending order", async () => {
+  it("splits rich text at images into html strings and absolute media", async () => {
     const { toPostBlocks } = await import("@services/payload/posts.ts");
     const blocks = toPostBlocks(
       state(para(text("eins")), upload(img), para(text("zwei")), quote(text("Zitat", 1))),
     );
-    expect(blocks.map((b) => [b.name, b.order])).toEqual([
-      ["core/html", 0],
-      ["core/image", 1],
-      ["core/html", 2],
-      ["core/quote", 3],
+    expect(blocks).toEqual([
+      "<p>eins</p>",
+      { ...img, url: "https://cms.example/api/media/file/bild.png" },
+      '<p>zwei</p><blockquote class="c-magazin-article__quote"><p><strong>Zitat</strong></p></blockquote>',
     ]);
-    expect(blocks[0].saveContent).toBe("<p>eins</p>");
-    expect(blocks[1]).toMatchObject({
-      attributes: {
-        alt: "Ein Bild",
-        height: "900",
-        url: "https://cms.example/api/media/file/bild.png",
-        width: "1600",
-      },
-    });
-    expect(blocks[3]).toMatchObject({ attributes: { value: "<p><strong>Zitat</strong></p>" } });
   });
 
   it("keeps consecutive non-image nodes in one html block", async () => {
     const { toPostBlocks } = await import("@services/payload/posts.ts");
-    const blocks = toPostBlocks(state(para(text("a")), para(text("b"))));
-    expect(blocks).toHaveLength(1);
-    expect(blocks[0].saveContent).toBe("<p>a</p><p>b</p>");
+    expect(toPostBlocks(state(para(text("a")), para(text("b"))))).toEqual(["<p>a</p><p>b</p>"]);
   });
 
   it("drops uploads that are not populated images", async () => {
@@ -115,35 +102,27 @@ describe("fetchAllPosts", () => {
     title: "Kiezdeutsch",
   };
 
-  it("maps a post to the shape the magazine pages read", async () => {
+  it("maps a post to the Payload fields the magazine pages read", async () => {
     find.mockResolvedValue({ docs: [post] });
     const { fetchAllPosts } = await import("@services/payload/posts.ts");
     const [node] = await fetchAllPosts();
     expect(node).toMatchObject({
-      // WP `date` is local (Berlin) time: 08:00 UTC is 10:00 in summer
-      date: "2025-05-01T10:00:00",
+      contentModifiedAt: "2026-02-03T04:05:06.000Z",
       excerpt: "Kurz & gut",
-      featuredImage: {
-        node: { altText: "Titel", sourceUrl: "https://cms.example/api/media/file/titel.png" },
-      },
-      modifiedGmt: "2026-02-03T04:05:06",
-      seo: {
-        metaDesc: "Meta",
-        opengraphSiteName: "Berliner Schnauze",
-        opengraphType: "article",
-        readingTime: 3,
-        title: "SEO Titel",
-      },
+      featuredImage: { alt: "Titel", url: "https://cms.example/api/media/file/titel.png" },
+      meta: { description: "Meta", title: "SEO Titel" },
+      publishedAt: "2025-05-01T08:00:00.000Z",
+      readingTime: 3,
       slug: "kiezdeutsch",
       title: "Kiezdeutsch",
     });
     expect(node.blocks).toHaveLength(1);
   });
 
-  it("converts the publish date to Berlin local time, also in winter", async () => {
-    find.mockResolvedValue({ docs: [{ ...post, publishedAt: "2025-01-15T08:00:00.000Z" }] });
+  it("has no featured image when the media is not populated", async () => {
+    find.mockResolvedValue({ docs: [{ ...post, featuredImage: 9 }] });
     const { fetchAllPosts } = await import("@services/payload/posts.ts");
-    expect((await fetchAllPosts())[0].date).toBe("2025-01-15T09:00:00");
+    expect((await fetchAllPosts())[0].featuredImage).toBeNull();
   });
 
   it("asks for published posts, newest first, and does not cache a failure", async () => {

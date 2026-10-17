@@ -1,92 +1,80 @@
-import type { Media } from "payload-app";
+import type { Media, Post } from "payload-app";
 
 import { ttl } from "@services/cache.ts";
 import { getPayloadClient, mediaUrl, publicDocs } from "@services/payload.ts";
-import { toSeoData } from "@services/payload/seo.ts";
-import { berlinParts } from "@utils/wordOfTheDay.ts";
-import { wpDate } from "@utils/wpDate.ts";
-import { lexicalToHtml } from "payload-app/lexical-html";
+import { type DefaultTypedEditorState, lexicalToHtml } from "payload-app/lexical-html";
 
-import type { ArticleBlock, PostNode } from "@/types/cms.ts";
+/** A run of article html, or an image the article renders as a `<Picture>`. */
+export type ArticleBlock = string | Media;
 
-export type { PostNode };
+/** A post as the site renders it: the Payload doc, its rich text as article blocks and the reading time. */
+export type SitePost = Pick<
+  Post,
+  "contentModifiedAt" | "excerpt" | "id" | "meta" | "publishedAt" | "title"
+> & {
+  blocks: ArticleBlock[];
+  featuredImage: Media | null;
+  readingTime: number;
+  slug: string;
+};
 
-type LexicalNode = { children?: LexicalNode[]; type?: string; value?: unknown };
-type LexicalRoot = { root: { children: LexicalNode[] } & Record<string, unknown> };
+/** The media doc with its url made absolute, or null if it is not populated or has no file. */
+const absoluteMedia = (media: Media | number | null | undefined): Media | null => {
+  const url = mediaUrl(media);
+  return url && typeof media === "object" ? { ...media!, url } : null;
+};
 
-const html = (state: LexicalRoot, children: LexicalNode[]) =>
-  lexicalToHtml({ root: { ...state.root, children } });
+type Node = DefaultTypedEditorState["root"]["children"][number];
 
-/**
- * Splits stored rich text back into the blocks the article components render: images and quotes become
- * their own block, everything between them one html block. Inverse of the import's `mapPost`.
- */
+const html = (state: DefaultTypedEditorState, children: Node[]) =>
+  lexicalToHtml(
+    { root: { ...state.root, children } },
+    {
+      converters: {
+        // A Lexical quote holds inline children; the article styles the paragraphs inside the blockquote.
+        quote: ({ node, nodesToHTML }) =>
+          `<blockquote class="c-magazin-article__quote"><p>${nodesToHTML({ nodes: node.children }).join("")}</p></blockquote>`,
+      },
+    },
+  );
+
+/** Splits stored rich text at its images: each image becomes its own block, everything between them one html block. */
 export const toPostBlocks = (content: unknown): ArticleBlock[] => {
-  const state = content as LexicalRoot | null | undefined;
+  const state = content as DefaultTypedEditorState | null | undefined;
   const nodes = state?.root?.children;
   if (!state || !nodes) return [];
 
   const blocks: ArticleBlock[] = [];
-  let run: LexicalNode[] = [];
+  let run: Node[] = [];
   const flush = () => {
-    if (run.length)
-      blocks.push({ name: "core/html", order: blocks.length, saveContent: html(state, run) });
+    if (run.length) blocks.push(html(state, run));
     run = [];
   };
 
   for (const node of nodes) {
-    if (node.type === "upload") {
-      flush();
-      const media = node.value as Media | number | undefined;
-      if (typeof media === "object" && media?.mimeType?.startsWith("image") && media.url) {
-        blocks.push({
-          attributes: {
-            alt: media.alt ?? "",
-            height: String(media.height ?? ""),
-            url: mediaUrl(media)!,
-            width: String(media.width ?? ""),
-          },
-          name: "core/image",
-          order: blocks.length,
-          saveContent: null,
-        });
-      }
-    } else if (node.type === "quote") {
-      flush();
-      // A Lexical quote holds inline children; the article component expects the paragraphs inside the blockquote.
-      const value = html(state, [{ children: node.children, type: "paragraph" }]);
-      blocks.push({
-        attributes: { value },
-        name: "core/quote",
-        order: blocks.length,
-        saveContent: value,
-      });
-    } else {
+    if (node.type !== "upload") {
       run.push(node);
+      continue;
     }
+    flush();
+    const media = absoluteMedia(node.value as Media | number);
+    if (media?.mimeType?.startsWith("image")) blocks.push(media);
   }
   flush();
   return blocks;
-};
-
-/** WP `date` of a post: local time of the site (Berlin), no zone, no milliseconds. */
-const berlinLocalDate = (iso: string | null | undefined): string | null => {
-  if (!iso) return null;
-  const p = berlinParts(new Date(iso));
-  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}`;
 };
 
 const WORDS_PER_MINUTE = 200;
 
 const readingTime = (blocks: ArticleBlock[]): number => {
   const text = blocks
-    .map((b) => b.saveContent ?? "")
+    .filter((b) => typeof b === "string")
     .join(" ")
     .replace(/<[^>]*>/g, " ");
   return Math.max(1, Math.ceil(text.split(/\s+/).filter(Boolean).length / WORDS_PER_MINUTE));
 };
 
-const loadPosts = async (): Promise<PostNode[]> => {
+const loadPosts = async (): Promise<SitePost[]> => {
   const { docs } = await (
     await getPayloadClient()
   ).find({
@@ -96,34 +84,37 @@ const loadPosts = async (): Promise<PostNode[]> => {
     sort: "-publishedAt",
     ...publicDocs(),
   });
-  return docs.flatMap((post) => {
-    // A draft (SHOW_TEST_DATA) may lack its title: strictDraftTypes types it optional.
-    if (!post.slug || !post.title) return [];
-    const blocks = toPostBlocks(post.content);
-    const seo = toSeoData(post.meta, "article");
-    const image = mediaUrl(post.featuredImage);
-    return [
-      {
-        blocks,
-        date: berlinLocalDate(post.publishedAt),
-        excerpt: post.excerpt ?? null,
-        featuredImage: image
-          ? {
-              node: {
-                altText:
-                  typeof post.featuredImage === "object" ? (post.featuredImage?.alt ?? null) : null,
-                sourceUrl: image,
-              },
-            }
-          : null,
-        id: String(post.id),
-        modifiedGmt: wpDate(post.contentModifiedAt),
-        seo: seo && { ...seo, readingTime: readingTime(blocks) },
-        slug: post.slug,
-        title: post.title,
-      },
-    ];
-  });
+  return docs.flatMap(
+    ({
+      content,
+      contentModifiedAt,
+      excerpt,
+      featuredImage,
+      id,
+      meta,
+      publishedAt,
+      slug,
+      title,
+    }) => {
+      // A draft (SHOW_TEST_DATA) may lack its title: strictDraftTypes types it optional.
+      if (!slug || !title) return [];
+      const blocks = toPostBlocks(content);
+      return [
+        {
+          blocks,
+          contentModifiedAt,
+          excerpt,
+          featuredImage: absoluteMedia(featuredImage),
+          id,
+          meta,
+          publishedAt,
+          readingTime: readingTime(blocks),
+          slug,
+          title,
+        },
+      ];
+    },
+  );
 };
 
 export const fetchAllPosts = ttl(60_000, loadPosts);

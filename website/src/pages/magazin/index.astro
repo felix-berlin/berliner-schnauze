@@ -11,7 +11,7 @@ import '@styles/components/_magazin-overview.scss';
 
 const allPosts = await fetchAllPosts();
 const sortedPosts = [...allPosts].sort(
-  (a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime(),
+  (a, b) => new Date(b.publishedAt ?? 0).getTime() - new Date(a.publishedAt ?? 0).getTime(),
 );
 
 const content = {
@@ -55,24 +55,24 @@ const itemListJson = () =>
       {
         sortedPosts.map((post) => (
           <li class='c-magazin-overview__item'>
-            {post.featuredImage?.node?.sourceUrl && (
+            {post.featuredImage?.url && (
               <Picture
-                alt={post.featuredImage.node.altText ?? ''}
+                alt={post.featuredImage.alt ?? ''}
                 class='c-magazin-overview__image'
                 fallbackFormat='webp'
                 formats={['avif', 'webp']}
                 height={200}
                 loading='lazy'
-                src={post.featuredImage.node.sourceUrl}
+                src={post.featuredImage.url}
                 width={320}
               />
             )}
             <a class='c-magazin-overview__link' href={`/magazin/${post.slug}`}>
               {post.title}
             </a>
-            {post.date && (
-              <time class='c-magazin-overview__date' datetime={post.date}>
-                {new Date(post.date).toLocaleDateString('de-DE')}
+            {post.publishedAt && (
+              <time class='c-magazin-overview__date' datetime={post.publishedAt}>
+                {new Date(post.publishedAt).toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' })}
               </time>
             )}
             {post.excerpt && <div class='c-magazin-overview__excerpt' set:html={post.excerpt} />}

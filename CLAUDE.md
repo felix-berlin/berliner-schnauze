@@ -156,7 +156,7 @@ Pattern: `.c-block__element--modifier`. Hyphens separate words within each part 
 
 **Composables**: Live in `src/composable/` (note: singular, but alias is `@composables/*`). Use for encapsulating Vue lifecycle + reactive logic that VueUse does not cover — custom composables are for project-specific logic only; prefer VueUse when it exists.
 
-**Content types**: hand-written in `src/types/cms.ts` (`Word`, `PostNode`, `ThemaNode`, …), produced by the adapters in `src/services/payload/`. Empty repeaters are `null` (callers test them for truthiness); media URLs are absolute via `mediaUrl()`.
+**Content types**: the generated Payload types (`payload-app` exports `payload-types.ts`), narrowed per page in the adapters in `src/services/payload/` (`SiteWord`, `SiteThema`, `SitePage`, `SitePost`). Rich text is typed with `DefaultTypedEditorState` (re-exported by `payload-app/lexical-html`); media URLs are absolute via `mediaUrl()`.
 
 **Astro scripts + View Transitions**: `<script>` in `.astro` files compiles to `<script type="module">` and runs only once — never re-runs after client-side navigation. Wrap any DOM-querying logic in `astro:page-load` so it re-runs on every navigation:
 

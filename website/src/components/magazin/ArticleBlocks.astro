@@ -1,21 +1,16 @@
 ---
-import { isImageBlock, isQuoteBlock } from '@utils/article';
-import type { ArticleBlock } from '@utils/article';
+import type { ArticleBlock } from '@services/payload/posts.ts';
 import ArticleImage from './ArticleImage.astro';
-import ArticleQuote from './ArticleQuote.astro';
 
 interface Props {
   blocks: ArticleBlock[];
 }
 
 const { blocks } = Astro.props;
-const sorted = [...blocks].sort((a, b) => a.order - b.order);
 ---
 
 <div class='c-magazin-article__body'>
-  {sorted.map((block) => {
-    if (isImageBlock(block)) return <ArticleImage block={block} />;
-    if (isQuoteBlock(block)) return <ArticleQuote block={block} />;
-    return <Fragment set:html={block.saveContent ?? ''} />;
-  })}
+  {blocks.map((block) =>
+    typeof block === 'string' ? <Fragment set:html={block} /> : <ArticleImage media={block} />,
+  )}
 </div>

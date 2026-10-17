@@ -43,9 +43,12 @@ export const buildSitemapEntries = async (site: URL): Promise<SitemapEntry[]> =>
     ...changelogs.map((c) => ({ path: `/changelog/${c.data.version}` })),
     ...themen.map((t) => ({ path: `/themen/${t.slug}` })),
     ...posts.flatMap((p) =>
-      p.slug ? [{ lastmod: isoDate(p.modifiedGmt), path: `/magazin/${p.slug}` }] : [],
+      p.slug ? [{ lastmod: isoDate(wpDate(p.contentModifiedAt)), path: `/magazin/${p.slug}` }] : [],
     ),
-    ...words.map((w) => ({ lastmod: isoDate(wpDate(w.contentModifiedAt)), path: `/wort/${w.slug}` })),
+    ...words.map((w) => ({
+      lastmod: isoDate(wpDate(w.contentModifiedAt)),
+      path: `/wort/${w.slug}`,
+    })),
   ];
 
   return entries

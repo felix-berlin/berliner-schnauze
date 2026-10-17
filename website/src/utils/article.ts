@@ -1,18 +1,11 @@
+import type { ArticleBlock } from "@services/payload/posts.ts";
+
 import { PAYLOAD_SERVER_URL } from "astro:env/server";
-
-import type { ArticleBlock, CoreImageBlock, CoreQuoteBlock } from "@/types/cms";
-
-export type { ArticleBlock };
 
 export interface TocEntry {
   id: string;
   text: string;
 }
-
-export const isImageBlock = (block: ArticleBlock): block is CoreImageBlock =>
-  block.name === "core/image";
-export const isQuoteBlock = (block: ArticleBlock): block is CoreQuoteBlock =>
-  block.name === "core/quote";
 
 export interface ProcessedArticle {
   blocks: ArticleBlock[];
@@ -66,7 +59,7 @@ export const slugify = (value: string): string =>
     .replace(/^-+|-+$/g, "");
 
 /**
- * Prepares WordPress article blocks for the reading page:
+ * Prepares the article blocks of a post for the reading page:
  *  - injects unique ids onto <h2> headings and collects a table of contents
  *    (the "Quellen" appendix heading is intentionally kept out of the TOC)
  *  - gives the first footnote reference for each source (`<a href="#quelle-N">`)
@@ -78,12 +71,11 @@ export const slugify = (value: string): string =>
  * exist in the source HTML; this only adds what's missing.
  */
 export const processArticleBlocks = (blocks: ArticleBlock[]): ProcessedArticle => {
-  const sorted = [...blocks].sort((a, b) => a.order - b.order);
   const toc: TocEntry[] = [];
   const slugCounts = new Map<string, number>();
   const seenRefs = new Set<string>();
-  const hasAffiliateLinks = sorted.some(
-    (block) => block.saveContent && SPONSORED_LINK_PATTERN.test(block.saveContent),
+  const hasAffiliateLinks = blocks.some(
+    (block) => typeof block === "string" && SPONSORED_LINK_PATTERN.test(block),
   );
 
   const uniqueSlug = (base: string): string => {
@@ -93,13 +85,11 @@ export const processArticleBlocks = (blocks: ArticleBlock[]): ProcessedArticle =
     return seen === 0 ? key : `${key}-${seen + 1}`;
   };
 
-  const outBlocks = sorted.map((block) => {
-    if (isImageBlock(block) || isQuoteBlock(block)) return block;
+  // Returns new strings: the blocks come from the post cache and are rendered again on every request.
+  const outBlocks = blocks.map((block) => {
+    if (typeof block !== "string" || !block) return block;
 
-    const source = block.saveContent ?? "";
-    if (!source) return block;
-
-    let html = source;
+    let html = block;
 
     // 0. Internal links: rewrite CMS-absolute hrefs to relative paths.
     html = rewriteWpLinks(html);
@@ -145,7 +135,7 @@ export const processArticleBlocks = (blocks: ArticleBlock[]): ProcessedArticle =
       (match) => `${match}<span class="c-magazin-article__sponsored-tag">Anzeige</span>`,
     );
 
-    return Object.assign(block, { saveContent: html });
+    return html;
   });
 
   return { blocks: outBlocks, hasAffiliateLinks, toc };

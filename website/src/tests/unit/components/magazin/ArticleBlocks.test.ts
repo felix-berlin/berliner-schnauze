@@ -11,85 +11,39 @@ describe("ArticleBlocks.astro", () => {
     render = await createAstroRender(ArticleBlocks);
   }, 30_000);
 
-  it("passes a paragraph block through via the saveContent fallback", async () => {
-    const result = await render({
-      blocks: [{ name: "core/paragraph", order: 0, saveContent: "<p>Icke bin Berliner.</p>" }],
-    });
+  const media = {
+    createdAt: "",
+    id: 1,
+    updatedAt: "",
+    url: "https://cms.berliner-schnauze.wtf/wp-content/uploads/baer.jpg",
+  };
+
+  it("renders html blocks as they are", async () => {
+    const result = await render({ blocks: ["<p>Icke bin Berliner.</p>"] });
     expect(result).toContain("<p>Icke bin Berliner.</p>");
   });
 
-  it("passes an unknown/future block type through via the saveContent fallback", async () => {
-    const result = await render({
-      blocks: [
-        { name: "core/some-future-block", order: 0, saveContent: "<div>Future content</div>" },
-      ],
-    });
-    expect(result).toContain("<div>Future content</div>");
+  it("renders the blocks in the order given", async () => {
+    const result = await render({ blocks: ["<p>Erster</p>", media, "<p>Zweiter</p>"] });
+    expect(result.indexOf("Erster")).toBeLessThan(result.indexOf("c-magazin-article__image"));
+    expect(result.indexOf("c-magazin-article__image")).toBeLessThan(result.indexOf("Zweiter"));
   });
 
-  it("renders blocks in ascending order regardless of input order", async () => {
-    const result = await render({
-      blocks: [
-        { name: "core/paragraph", order: 1, saveContent: "<p>Zweiter</p>" },
-        { name: "core/paragraph", order: 0, saveContent: "<p>Erster</p>" },
-      ],
-    });
-    expect(result.indexOf("Erster")).toBeLessThan(result.indexOf("Zweiter"));
-  });
-
-  it("renders a core/quote block using the typed quote value", async () => {
-    const result = await render({
-      blocks: [
-        {
-          attributes: { value: "<p>Icke, icke, icke!</p>" },
-          name: "core/quote",
-          order: 0,
-          saveContent: "<blockquote><p>Icke, icke, icke!</p></blockquote>",
-        },
-      ],
-    });
-    expect(result).toContain("c-magazin-article__quote");
-    expect(result).toContain("Icke, icke, icke!");
-  });
-
-  it("renders nothing for a core/image block without a url", async () => {
-    const result = await render({
-      blocks: [{ attributes: {}, name: "core/image", order: 0, saveContent: "" }],
-    });
+  it("renders nothing for an image without a url", async () => {
+    const result = await render({ blocks: [{ ...media, url: null }] });
     expect(result).not.toContain("c-magazin-article__image");
   });
 
-  it("renders a Picture for a core/image block with a url and explicit dimensions", async () => {
+  it("renders a Picture for an image with its alt text and dimensions", async () => {
     const result = await render({
-      blocks: [
-        {
-          attributes: {
-            alt: "Ein Berliner Bär",
-            height: "300",
-            url: "https://cms.berliner-schnauze.wtf/wp-content/uploads/baer.jpg",
-            width: "600",
-          },
-          name: "core/image",
-          order: 0,
-          saveContent: "",
-        },
-      ],
+      blocks: [{ ...media, alt: "Ein Berliner Bär", height: 300, width: 600 }],
     });
     expect(result).toContain("c-magazin-article__image");
     expect(result).toContain("Ein Berliner Bär");
   });
 
-  it("falls back to default dimensions and empty alt when a core/image block omits them", async () => {
-    const result = await render({
-      blocks: [
-        {
-          attributes: { url: "https://cms.berliner-schnauze.wtf/wp-content/uploads/baer.jpg" },
-          name: "core/image",
-          order: 0,
-          saveContent: "",
-        },
-      ],
-    });
+  it("falls back to default dimensions and empty alt when the media omits them", async () => {
+    const result = await render({ blocks: [media] });
     expect(result).toContain("c-magazin-article__image");
     expect(result).not.toMatch(/alt="[^"]+"/);
   });

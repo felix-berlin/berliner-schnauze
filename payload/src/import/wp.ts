@@ -1,6 +1,6 @@
 /**
- * WPGraphQL access for the importer. Field selections copy src/services/fragments/fragments.ts and
- * src/types/cms.ts (plus `databaseId` and `status`). Nothing here imports the Astro app.
+ * WPGraphQL access for the importer. Field selections copy the queries of the former WPGraphQL site
+ * (plus `databaseId` and `status`). Nothing here imports the Astro app.
  */
 
 /** POST a query to WP_API with Basic Auth. Throws on HTTP and GraphQL errors. */
