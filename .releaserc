@@ -38,7 +38,7 @@
           "package-lock.json",
           "npm-shrinkwrap.json"
         ],
-        "message": "chore(release): publish version ${nextRelease.version}"
+        "message": "chore(release): publish version ${nextRelease.version} [skip ci]"
       }
     ],
     [

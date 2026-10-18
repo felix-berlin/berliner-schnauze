@@ -19,6 +19,10 @@ permissions:
   contents: read
   checks: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   lint:
     name: Run unit tests
@@ -46,11 +50,11 @@ jobs:
       - name: Setup Node.js 🔧
         uses: actions/setup-node@v7
         with:
-          node-version: "lts/*"
+          node-version-file: .nvmrc
           cache: "pnpm"
 
       - name: Install dependencies 🛠️
-        run: pnpm i
+        run: pnpm install --frozen-lockfile
 
       - name: Run Vitest (with coverage report) 🧪
         run: pnpm run test:ci
@@ -127,7 +131,7 @@ jobs:
       - name: Setup Node.js 🔧
         uses: actions/setup-node@v7
         with:
-          node-version: "lts/*"
+          node-version-file: .nvmrc
           cache: "pnpm"
 
       - name: Install dependencies 🛠️

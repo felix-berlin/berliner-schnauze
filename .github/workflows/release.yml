@@ -54,7 +54,7 @@ jobs:
       - name: Setup Node.js 🛠️
         uses: actions/setup-node@v7
         with:
-          node-version: "lts/*"
+          node-version-file: .nvmrc
           cache: pnpm
 
       - name: Install dependencies
@@ -91,8 +91,8 @@ jobs:
           environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
 
   # Separate job, but in this workflow on purpose: it runs on the branch ref
-  # (main/beta), so the OG image cache is shared across releases — a workflow
-  # triggered by the tag/release would get a fresh, empty cache scope per tag.
+  # (main/beta), so the buildx layer cache (type=gha) is shared across releases —
+  # a workflow triggered by the tag/release would get a fresh cache scope per tag.
   docker:
     name: Docker image
     needs: release
@@ -125,21 +125,11 @@ jobs:
       - name: Setup Node.js 🛠️
         uses: actions/setup-node@v7
         with:
-          node-version: 24 # the images run node 24 (dist/ is built here)
+          node-version-file: .nvmrc # the images run this major (dist/ is built here)
           cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      # astro-og-canvas names each PNG by a hash of its options, so cached images
-      # are reused and only new/changed words get rendered. A new key per run
-      # keeps the cache current; restore-keys picks up the latest one.
-      - name: OG image cache
-        uses: actions/cache@v6
-        with:
-          path: website/.og-cache
-          key: og-images-${{ github.run_id }}
-          restore-keys: og-images-
 
       - name: Build site
         run: pnpm run build
@@ -177,6 +167,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,mode=max,scope=web
 
       # CMS image: built from source inside Docker (no dist/, no secrets).
       - name: CMS image tags
@@ -200,3 +192,5 @@ jobs:
           push: true
           tags: ${{ steps.meta-cms.outputs.tags }}
           labels: ${{ steps.meta-cms.outputs.labels }}
+          cache-from: type=gha,scope=cms
+          cache-to: type=gha,mode=max,scope=cms
