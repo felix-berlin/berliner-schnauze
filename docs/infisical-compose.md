@@ -2,7 +2,11 @@
 
 Both application images can fetch runtime secrets from Infisical when their
 containers start. The entrypoint uses Universal Auth to obtain a short-lived
-token, then starts the app through `infisical sm run`. The Infisical CLI is
+token, fetches the secrets with `infisical export` and starts the app with
+them. The container's own environment (compose `environment`, image `ENV`)
+wins over a secret of the same name, so `NODE_ENV`, `DATABASE_URL`,
+`OG_CACHE_DIR`, `MEDIA_DIR` and `PORT` stay as compose pins them. Neither the
+token nor the identity credentials reach the app. The Infisical CLI is
 version-pinned and checksum-verified in each image; credentials are runtime
 environment variables and are not baked into the images.
 The release workflow publishes both images as multi-platform manifests for
@@ -15,9 +19,10 @@ The release workflow publishes both images as multi-platform manifests for
 2. Give each identity read access only to the environment and secrets it needs.
    Create a Universal Auth client secret for each identity.
 3. Add the runtime variables currently used by the application to the selected
-   Infisical environment. In particular, `DATABASE_URL`, `PAYLOAD_SECRET`, and
-   `PAYLOAD_SERVER_URL` are required by the app at runtime. `DATABASE_URL` must
-   use `postgres` as its hostname inside Compose.
+   Infisical environment. In particular, `PAYLOAD_SECRET` and
+   `PAYLOAD_SERVER_URL` are required by the app at runtime. `DATABASE_URL` is
+   built by compose from the `POSTGRES_*` values; one stored in Infisical is
+   ignored inside the containers.
 
 ## Configure Komodo
 
@@ -27,7 +32,7 @@ Set these non-secret Stack environment values:
 INFISICAL_ENABLED=true
 INFISICAL_PROJECT_ID=<Infisical project ID>
 INFISICAL_ENV=prod
-INFISICAL_DOMAIN=https://app.infisical.com
+INFISICAL_DOMAIN=https://infisical.kasimir.dev
 ```
 
 Create these as **secret** variables in Komodo's Settings → Variables:
@@ -46,7 +51,7 @@ Reference them in the Stack's Environment, which Komodo writes to the Compose
 INFISICAL_ENABLED=true
 INFISICAL_PROJECT_ID=<Infisical project ID>
 INFISICAL_ENV=prod
-INFISICAL_DOMAIN=https://app.infisical.com
+INFISICAL_DOMAIN=https://infisical.kasimir.dev
 INFISICAL_WEB_CLIENT_ID=[[WEB_CLIENT_ID]]
 INFISICAL_WEB_CLIENT_SECRET=[[WEB_CLIENT_SECRET]]
 INFISICAL_CMS_CLIENT_ID=[[CMS_CLIENT_ID]]
@@ -57,15 +62,19 @@ POSTGRES_PASSWORD=[[POSTGRES_PASSWORD]]
 POSTGRES_DB=berliner_schnauze
 ```
 
-Create `POSTGRES_PASSWORD` as a separate Komodo secret too. These values must
+Create `POSTGRES_PASSWORD` as a separate Komodo secret too. Use a URL-safe
+password (letters, digits, `-`, `_`, `.`, `~`): compose puts it into
+`DATABASE_URL` as is, so `@ : / ? # %` would break the URL. These values must
 be present in Komodo's Stack Environment because Compose resolves them before
 it starts the containers. `APP_RUNTIME_ENV_FILE=/dev/null` prevents Compose
 from passing the Stack `.env` file (including both client credentials) into
 each app container. The app images receive only the identity assigned to that
 service.
 
-Use `INFISICAL_ENV=dev` for local development. For EU Cloud, use
-`https://eu.infisical.com`; for self-hosted Infisical, use its base URL.
+Use `INFISICAL_ENV=dev` for local development. `INFISICAL_DOMAIN` defaults to
+the self-hosted instance (`https://infisical.kasimir.dev`, as in
+`.infisical.yaml`); the images don't contain `.infisical.yaml`, so the
+entrypoint relies on this variable.
 
 Keep `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB` available to
 Compose: the Postgres container needs them before either application starts.

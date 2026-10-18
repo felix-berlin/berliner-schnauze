@@ -9,9 +9,29 @@ const clientSecret = process.env.INFISICAL_CLIENT_SECRET;
 const projectId = process.env.INFISICAL_PROJECT_ID;
 const environment = process.env.INFISICAL_ENV;
 
-let runtimeEnv = process.env;
-let command = process.execPath;
-let commandArgs = appArgs;
+// The app never sees the Infisical config or credentials.
+const containerEnv = Object.fromEntries(
+  Object.entries(process.env).filter(
+    ([key]) => !key.startsWith("INFISICAL_") && key !== "APP_RUNTIME_ENV_FILE",
+  ),
+);
+let runtimeEnv = containerEnv;
+
+function infisical(args, env = process.env) {
+  // INFISICAL_DOMAIN (self-hosted instance) is read from env.
+  const result = spawnSync("/usr/local/bin/infisical", args, {
+    encoding: "utf8",
+    env,
+    maxBuffer: 16 * 1024 * 1024,
+  });
+  if (result.error) throw result.error;
+  if (result.status !== 0) {
+    throw new Error(
+      `infisical ${args[0]} failed${result.stderr ? `: ${result.stderr.trim()}` : ""}`,
+    );
+  }
+  return result.stdout.trim();
+}
 
 if (infisicalEnabled) {
   if (!clientId || !clientSecret || !projectId || !environment) {
@@ -20,53 +40,31 @@ if (infisicalEnabled) {
     );
   }
 
-  const login = spawnSync(
-    "/usr/local/bin/infisical",
-    [
-      "login",
-      "--method=universal-auth",
-      `--client-id=${clientId}`,
-      `--client-secret=${clientSecret}`,
-      "--plain",
-      "--silent",
-    ],
-    { encoding: "utf8" },
-  );
-  if (login.error) throw login.error;
-  if (login.status !== 0) {
-    throw new Error(
-      `Infisical Universal Auth failed${login.stderr ? `: ${login.stderr.trim()}` : ""}`,
-    );
-  }
-
-  const token = login.stdout.trim();
+  const token = infisical([
+    "login",
+    "--method=universal-auth",
+    `--client-id=${clientId}`,
+    `--client-secret=${clientSecret}`,
+    "--plain",
+    "--silent",
+  ]);
   if (!token) throw new Error("Infisical Universal Auth returned an empty token");
 
-  runtimeEnv = { ...process.env, INFISICAL_TOKEN: token };
-  delete runtimeEnv.INFISICAL_CLIENT_ID;
-  delete runtimeEnv.INFISICAL_CLIENT_SECRET;
-  delete runtimeEnv.INFISICAL_PROJECT_ID;
-  delete runtimeEnv.INFISICAL_ENV;
-  delete runtimeEnv.INFISICAL_ENABLED;
-  delete runtimeEnv.INFISICAL_WEB_CLIENT_ID;
-  delete runtimeEnv.INFISICAL_WEB_CLIENT_SECRET;
-  delete runtimeEnv.INFISICAL_CMS_CLIENT_ID;
-  delete runtimeEnv.INFISICAL_CMS_CLIENT_SECRET;
-  delete runtimeEnv.APP_RUNTIME_ENV_FILE;
-
-  command = "/usr/local/bin/infisical";
-  commandArgs = [
-    "sm",
-    "run",
-    `--projectId=${projectId}`,
-    `--env=${environment}`,
-    "--",
-    process.execPath,
-    ...appArgs,
-  ];
+  const secrets = JSON.parse(
+    infisical(
+      ["export", "--format=json", `--projectId=${projectId}`, `--env=${environment}`, "--silent"],
+      { ...process.env, INFISICAL_TOKEN: token },
+    ),
+  );
+  // The container's own env (compose `environment`, image ENV) wins: `infisical run` would let a secret
+  // override NODE_ENV, DATABASE_URL, OG_CACHE_DIR, … pinned for the container.
+  runtimeEnv = {
+    ...Object.fromEntries(secrets.map(({ key, value }) => [key, value])),
+    ...containerEnv,
+  };
 }
 
-const child = spawn(command, commandArgs, { stdio: "inherit", env: runtimeEnv });
+const child = spawn(process.execPath, appArgs, { env: runtimeEnv, stdio: "inherit" });
 for (const signal of ["SIGTERM", "SIGINT"]) {
   process.on(signal, () => child.kill(signal));
 }

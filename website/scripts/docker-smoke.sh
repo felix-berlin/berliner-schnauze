@@ -11,12 +11,16 @@ fail=0
 
 # Only `web` is under test. Compose interpolates the whole file, so the
 # required vars of `postgres`/`cms` need (dummy) values even when they don't start.
-export POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-smoke}" PAYLOAD_SECRET="${PAYLOAD_SECRET:-smoke}" \
-  PAYLOAD_SERVER_URL="${PAYLOAD_SERVER_URL:-http://localhost:3001}"
+export POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-smoke}"
+# Never fetch real secrets, even when the developer's .env enables Infisical.
+export INFISICAL_ENABLED=false
 
-# The server validates its required runtime secrets on start: give it a dummy one unless a real .env exists.
+# The runtime secrets reach web only through .env (env_file): give it dummy ones unless a real .env exists.
 made_env=0
-if [[ ! -f .env ]]; then printf 'IMAGOR_SECRET=smoke\n' > .env; made_env=1; fi
+if [[ ! -f .env ]]; then
+  printf 'IMAGOR_SECRET=smoke\nPAYLOAD_SECRET=smoke\nPAYLOAD_SERVER_URL=http://localhost:3001\n' > .env
+  made_env=1
+fi
 # A postgres that already runs (the local dev database) stays up: only what this script started goes down.
 pg_was_up=$(docker compose ps -q --status running postgres 2>/dev/null || true)
 cleanup() {
@@ -38,7 +42,8 @@ docker compose exec -T postgres psql -U "${POSTGRES_USER:-berliner}" -d postgres
 export DATABASE_URL="postgres://${POSTGRES_USER:-berliner}:${POSTGRES_PASSWORD}@127.0.0.1:${POSTGRES_PORT:-5432}/${POSTGRES_DB}"
 NODE_ENV=production pnpm --filter payload-app migrate
 pnpm --filter payload-app seed:e2e
-docker compose up -d --build --wait --wait-timeout 60 web
+# --no-deps: web waits for a healthy cms in compose, but only web is under test (seeded above).
+docker compose up -d --build --no-deps --wait --wait-timeout 60 web
 
 check() { # name, actual, expected
   if [[ "$2" == "$3" ]]; then echo "ok   $1"; else echo "FAIL $1: got '$2', want '$3'"; fail=1; fi

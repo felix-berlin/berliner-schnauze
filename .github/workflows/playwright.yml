@@ -43,7 +43,7 @@ jobs:
       - name: Setup Node.js 🔧
         uses: actions/setup-node@v7
         with:
-          node-version: lts/*
+          node-version: 24 # the images run node 24 (dist/ is built here)
           cache: pnpm
 
       - name: Install dependencies
@@ -98,6 +98,10 @@ jobs:
 
       - name: Docker smoke test 🐳
         run: website/scripts/docker-smoke.sh
+
+      # Release builds and pushes this image after tagging: a broken payload/Dockerfile must fail the PR instead.
+      - name: Build CMS image 🐳
+        run: docker build -f payload/Dockerfile .
 
   test:
     needs: build

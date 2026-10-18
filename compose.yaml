@@ -15,15 +15,22 @@ services:
       INFISICAL_ENABLED: ${INFISICAL_ENABLED:-false}
       INFISICAL_PROJECT_ID: ${INFISICAL_PROJECT_ID:-}
       INFISICAL_ENV: ${INFISICAL_ENV:-prod}
-      INFISICAL_DOMAIN: ${INFISICAL_DOMAIN:-https://app.infisical.com}
+      INFISICAL_DOMAIN: ${INFISICAL_DOMAIN:-https://infisical.kasimir.dev}
       INFISICAL_CLIENT_ID: ${INFISICAL_WEB_CLIENT_ID:-}
       INFISICAL_CLIENT_SECRET: ${INFISICAL_WEB_CLIENT_SECRET:-}
+      # Pinned like on cms: a dev NODE_ENV would make the Local API push the schema into this database.
+      NODE_ENV: production
       DATABASE_URL: postgres://${POSTGRES_USER:-berliner}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@postgres:5432/${POSTGRES_DB:-berliner_schnauze}
       OG_CACHE_DIR: /app/og-cache
     volumes:
       - ogcache:/app/og-cache
+    # Reaps zombies and forwards signals (the entrypoint is node).
+    init: true
     depends_on:
       postgres:
+        condition: service_healthy
+      # cms runs the migrations: the site must not query a schema that is not there yet.
+      cms:
         condition: service_healthy
     # Localhost only, like cms: the reverse proxy (Pangolin/Newt) fronts berliner-schnauze.wtf.
     ports:
@@ -47,6 +54,7 @@ services:
       context: .
       dockerfile: payload/Dockerfile
     restart: unless-stopped
+    init: true
     depends_on:
       postgres:
         condition: service_healthy
@@ -59,7 +67,7 @@ services:
       INFISICAL_ENABLED: ${INFISICAL_ENABLED:-false}
       INFISICAL_PROJECT_ID: ${INFISICAL_PROJECT_ID:-}
       INFISICAL_ENV: ${INFISICAL_ENV:-prod}
-      INFISICAL_DOMAIN: ${INFISICAL_DOMAIN:-https://app.infisical.com}
+      INFISICAL_DOMAIN: ${INFISICAL_DOMAIN:-https://infisical.kasimir.dev}
       INFISICAL_CLIENT_ID: ${INFISICAL_CMS_CLIENT_ID:-}
       INFISICAL_CLIENT_SECRET: ${INFISICAL_CMS_CLIENT_SECRET:-}
       # Pinned: an .env NODE_ENV must not flip prod into schema-push mode. Only cms migrates.
@@ -87,7 +95,7 @@ services:
       retries: 3
 
   postgres:
-    image: postgres:18
+    image: postgres:18@sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-berliner_schnauze}
