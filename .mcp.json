@@ -10,8 +10,8 @@
       }
     },
     "playwright-test": {
-      "command": "npx",
-      "args": ["playwright", "run-test-mcp-server"]
+      "command": "pnpm",
+      "args": ["--dir", "website", "exec", "playwright", "run-test-mcp-server"]
     }
   }
 }

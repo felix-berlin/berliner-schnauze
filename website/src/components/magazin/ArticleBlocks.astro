@@ -1,0 +1,16 @@
+---
+import type { ArticleBlock } from '@services/payload/posts.ts';
+import ArticleImage from './ArticleImage.astro';
+
+interface Props {
+  blocks: ArticleBlock[];
+}
+
+const { blocks } = Astro.props;
+---
+
+<div class='c-magazin-article__body'>
+  {blocks.map((block) =>
+    typeof block === 'string' ? <Fragment set:html={block} /> : <ArticleImage media={block} />,
+  )}
+</div>

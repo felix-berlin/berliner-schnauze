@@ -1,0 +1,92 @@
+---
+import '@styles/components/_section-card.scss';
+import '@styles/components/_word-section-etymologie.scss';
+import type { SiteWord } from '@services/payload/words.ts';
+
+interface Props {
+  word: Pick<SiteWord, 'alternativeWords' | 'infoTextHtml' | 'sources' | 'translations'>;
+}
+
+const { word } = Astro.props;
+
+const alternativeWords = (word.alternativeWords ?? [])
+  .map((w) => w.alternativeWord)
+  .join(', ');
+
+// ACF checkbox choices may carry a link as "Label : https://…" — split only
+// on the spaced colon so titles like "Berlinisch: Lexikon" stay intact.
+const sources = (word.sources ?? [])
+  .filter(Boolean)
+  .map((raw) => {
+    const [label, url] = raw.split(' : ');
+    return url?.startsWith('http') ? { label: label ?? raw, url } : { label: raw, url: null };
+  });
+
+const hasContent =
+  Boolean(word.infoTextHtml) ||
+  (word.alternativeWords?.length ?? 0) > 0 ||
+  (word.translations?.length ?? 0) > 0 ||
+  sources.length > 0;
+---
+
+{hasContent && <section class='c-section-card' id='etymologie' aria-labelledby='heading-etymologie'>
+  <div class='c-section-card__header'>
+    <span class='c-section-card__num'></span>
+    <h2 class='c-section-card__title' id='heading-etymologie'>Etymologie</h2>
+  </div>
+  <div class='c-section-card__body'>
+    {
+      ((word.alternativeWords?.length ?? 0) > 0 || (word.translations?.length ?? 0) > 0) && (
+        <dl class='c-single-word__definitions'>
+          {word.translations && word.translations.length > 0 && (
+            <>
+              <dt class='c-single-word__sub-headline'>{word.translations.length === 1 ? 'Bedeutung' : 'Bedeutungen'}</dt>
+              {word.translations.length === 1 ? (
+                <dd class='c-single-word__translation-item'>{word.translations[0]?.translation}</dd>
+              ) : (
+                <dd class='c-single-word__translation-item'>
+                  <ol class='c-single-word__translation-list'>
+                    {word.translations.map((translation) => (
+                      <li>{translation?.translation}</li>
+                    ))}
+                  </ol>
+                </dd>
+              )}
+            </>
+          )}
+          {word.alternativeWords && word.alternativeWords.length > 0 && (
+            <>
+              <dt class='c-single-word__sub-headline'>Selbe Bedeutung wie</dt>
+              <dd class='c-single-word__alternative-word'>{alternativeWords}</dd>
+            </>
+          )}
+        </dl>
+      )
+    }
+    {
+      word.infoTextHtml && (
+        <div class='c-section-card__infotext' set:html={word.infoTextHtml} />
+      )
+    }
+  </div>
+  {
+    sources.length > 0 && (
+      <footer class='c-word-sources'>
+        <span class='c-word-sources__label'>{sources.length === 1 ? 'Quelle' : 'Quellen'}</span>
+        <ul class='c-word-sources__list'>
+          {sources.map((source) => (
+            <li class='c-word-sources__item'>
+              {source.url ? (
+                <a class='c-word-sources__link' href={source.url} rel='noopener'>
+                  {source.label}
+                </a>
+              ) : (
+                source.label
+              )}
+            </li>
+          ))}
+        </ul>
+      </footer>
+    )
+  }
+</section>}

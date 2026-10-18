@@ -3,6 +3,7 @@
   "configurations": [
     {
       "command": "./node_modules/.bin/astro dev",
+      "cwd": "${workspaceFolder}/website",
       "name": "Development server",
       "request": "launch",
       "type": "node-terminal"

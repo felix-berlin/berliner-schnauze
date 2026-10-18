@@ -11,5 +11,5 @@ applyTo: "**/*.vue"
 - Use [VueUse](https://vueuse.org/functions.html) for common composables and utilities.
 - Use [Nanostores](https://github.com/nanostores/nanostores) and [nanostores/vue](https://github.com/nanostores/vue) for state management.
 - Use [SCSS](https://sass-lang.com/documentation/syntax#scss) for styling.
-- Use [urql](https://nearform.com/open-source/urql/docs/) and [@urql/vue](https://nearform.com/open-source/urql/docs/api/vue/) for GraphQL queries and mutations.
+- Use `fetch` against the site's own API routes for server calls.
 - Use arrow functions for methods and computed properties.

@@ -1,0 +1,132 @@
+import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
+import { useStore } from "@nanostores/vue";
+import { mount } from "@vue/test-utils";
+import Crown from "virtual:icons/lucide/crown";
+import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
+
+import { vTooltip } from "@/directives/tooltip";
+
+vi.mock("@nanostores/vue", () => ({
+  useStore: vi.fn(),
+}));
+
+describe("IsWordOfTheDay.vue", () => {
+  let mockStore: { value: { word: { slug: string } } };
+
+  beforeEach(() => {
+    mockStore = {
+      value: {
+        word: {
+          slug: "kiez",
+        },
+      },
+    };
+    vi.mocked(useStore).mockReturnValue(mockStore);
+    HTMLElement.prototype.showPopover = vi.fn();
+    HTMLElement.prototype.hidePopover = vi.fn();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    document.querySelectorAll("[popover]").forEach((el) => el.remove());
+  });
+
+  it("renders correctly when isWordOfTheDay is true", async () => {
+    const wrapper = mount(IsWordOfTheDay, {
+      global: {
+        components: {
+          Crown, // Register Crown component globally
+        },
+        directives: {
+          tooltip: vTooltip,
+        },
+      },
+      props: {
+        iconSize: 24,
+        slug: "kiez",
+        tooltipPlacement: "right",
+        word: "TestWord",
+      },
+    });
+
+    expect(wrapper.find(".c-is-word-of-the-day").exists()).toBe(true);
+    expect(wrapper.findComponent(Crown).exists()).toBe(true);
+    // vTooltip lazily adds the panel to body on first show
+    await wrapper.find("[aria-describedby]").trigger("pointerenter");
+    expect(document.body.querySelector("[popover='manual']")).not.toBeNull();
+    wrapper.unmount();
+  });
+
+  it("does not render when isWordOfTheDay is false", () => {
+    const wrapper = mount(IsWordOfTheDay, {
+      props: {
+        iconSize: 24,
+        slug: "andere",
+        tooltipPlacement: "right",
+        word: "TestWord",
+      },
+    });
+
+    expect(wrapper.find(".c-is-word-of-the-day").exists()).toBe(false);
+    wrapper.unmount();
+  });
+
+  it("renders with correct tooltip content and placement", async () => {
+    const wrapper = mount(IsWordOfTheDay, {
+      global: {
+        components: {
+          Crown, // Register Crown component globally
+        },
+        directives: {
+          tooltip: vTooltip,
+        },
+      },
+      props: {
+        iconSize: 24,
+        slug: "kiez",
+        tooltipPlacement: "bottom",
+        word: "TestWord",
+      },
+    });
+
+    await wrapper.find("[aria-describedby]").trigger("pointerenter");
+    const tooltip = document.body.querySelector("[popover='manual']");
+    expect(tooltip).not.toBeNull();
+    expect(tooltip?.textContent).toContain("TestWord, ist das heutige Wort des Tages");
+    expect(tooltip?.className).toContain("c-tooltip__panel--bottom");
+    wrapper.unmount();
+  });
+
+  it("renders badge variant with crown icon and text when isWordOfTheDay is true", () => {
+    const wrapper = mount(IsWordOfTheDay, {
+      global: {
+        components: { Crown },
+      },
+      props: {
+        slug: "kiez",
+        variant: "badge",
+        word: "TestWord",
+      },
+    });
+
+    const badge = wrapper.find(".c-word-hero__wotd-badge");
+    expect(badge.exists()).toBe(true);
+    expect(badge.text()).toContain("Wort des Tages");
+    expect(wrapper.findComponent(Crown).exists()).toBe(true);
+    expect(wrapper.find(".c-is-word-of-the-day").exists()).toBe(false);
+    wrapper.unmount();
+  });
+
+  it("does not render badge variant when isWordOfTheDay is false", () => {
+    const wrapper = mount(IsWordOfTheDay, {
+      props: {
+        slug: "andere",
+        variant: "badge",
+        word: "TestWord",
+      },
+    });
+
+    expect(wrapper.find(".c-word-hero__wotd-badge").exists()).toBe(false);
+    wrapper.unmount();
+  });
+});

@@ -1,3 +1,7 @@
+packages:
+  - "payload"
+  - "website"
+
 overrides:
   "@vitejs/plugin-vue": "^6.0.7"
 
@@ -110,6 +114,26 @@ minimumReleaseAgeExclude:
   - '@sentry/bundler-plugins@11.8.0'
   - '@sentry/vite-plugin@11.8.0'
   - jsdom@30.1.3
+  - '@astrojs/node@11.1.8'
+  - '@next/env@16.4.2'
+  - '@next/swc-darwin-arm64@16.4.2'
+  - '@next/swc-darwin-x64@16.4.2'
+  - '@next/swc-linux-arm64-gnu@16.4.2'
+  - '@next/swc-linux-arm64-musl@16.4.2'
+  - '@next/swc-linux-x64-gnu@16.4.2'
+  - '@next/swc-linux-x64-musl@16.4.2'
+  - '@next/swc-win32-arm64-msvc@16.4.2'
+  - '@next/swc-win32-x64-msvc@16.4.2'
+  - '@payloadcms/db-postgres@3.91.0'
+  - '@payloadcms/drizzle@3.91.0'
+  - '@payloadcms/graphql@3.91.0'
+  - '@payloadcms/next@3.91.0'
+  - '@payloadcms/richtext-lexical@3.91.0'
+  - '@payloadcms/translations@3.91.0'
+  - '@payloadcms/ui@3.91.0'
+  - next@16.4.2
+  - payload@3.91.0
 
 patchedDependencies:
+  '@astrojs/node@11.1.8': patches/@astrojs__node@11.1.8.patch
   de-compromise: patches/de-compromise.patch

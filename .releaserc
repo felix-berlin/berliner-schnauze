@@ -19,7 +19,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "npm pkg set version=${nextRelease.version}"
+        "prepareCmd": "npm pkg set version=${nextRelease.version} && npm pkg set version=${nextRelease.version} --prefix website"
       }
     ],
     [
@@ -34,6 +34,7 @@
         "assets": [
           "CHANGELOG.md",
           "package.json",
+          "website/package.json",
           "package-lock.json",
           "npm-shrinkwrap.json"
         ],

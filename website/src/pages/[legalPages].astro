@@ -1,0 +1,23 @@
+---
+import "@styles/objects/_legal-pages.scss";
+import Layout from "@layouts/Layout.astro";
+import { fetchPageBySlug } from "@services/payload/pages.ts";
+import { metaToSeo } from "@services/payload/seo.ts";
+
+const LEGAL_PAGES = ["datenschutz", "impressum"];
+
+const { legalPages } = Astro.params;
+if (!legalPages || !LEGAL_PAGES.includes(legalPages)) return Astro.rewrite("/404");
+
+const page = await fetchPageBySlug(legalPages);
+if (!page) return Astro.rewrite("/404");
+
+const pageContent = {
+  seo: { ...metaToSeo(page.meta), opengraphType: "website" },
+  title: page.title,
+};
+---
+
+<Layout content={pageContent}>
+  <article set:html={page.contentHtml} />
+</Layout>

@@ -1,0 +1,26 @@
+---
+import { Picture } from 'astro:assets';
+import type { SiteMedia } from '@services/payload/words.ts';
+
+interface Props {
+  media: SiteMedia;
+}
+
+const { media } = Astro.props;
+---
+
+{
+  media.url && (
+    <Picture
+      alt={media.alt ?? ''}
+      class='c-magazin-article__image'
+      densities={[1, 2]}
+      fallbackFormat='webp'
+      formats={['avif', 'webp']}
+      height={media.height || 400}
+      loading='lazy'
+      src={media.url}
+      width={media.width || 800}
+    />
+  )
+}

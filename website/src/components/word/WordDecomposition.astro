@@ -1,0 +1,40 @@
+---
+import '@styles/components/_word-decomposition.scss';
+import { capitalizeFirstLetter, findWordByHeadword } from '@utils/wordHelper';
+import { routeToWord } from '@utils/helpers';
+import type { WordRef } from '@utils/wordHelper';
+
+interface Props {
+  /** The compound's parts as stored on save (derived.decomposition), empty for a non-compound. */
+  parts: string[];
+  allWords: WordRef[];
+}
+
+const { parts, allWords } = Astro.props;
+
+---
+
+{
+  parts.length >= 2 && (
+    <div>
+      <h3>Wortzerlegung</h3>
+      <div class='c-single-word__word-parts'>
+        {parts.map((part, i) => {
+          const linked = findWordByHeadword(allWords, part);
+          return (
+            <>
+              {i > 0 && <span class='c-single-word__word-parts-plus'>+</span>}
+              {linked ? (
+                <a class='c-single-word__word-part' href={routeToWord(linked.slug)}>
+                  {capitalizeFirstLetter(part)}
+                </a>
+              ) : (
+                <span class='c-single-word__word-part'>{capitalizeFirstLetter(part)}</span>
+              )}
+            </>
+          );
+        })}
+      </div>
+    </div>
+  )
+}

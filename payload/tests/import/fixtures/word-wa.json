@@ -1,0 +1,64 @@
+{
+  "databaseId": 4671,
+  "status": "publish",
+  "slug": "wa",
+  "dateGmt": "2022-01-24T22:38:54",
+  "modifiedGmt": "2026-07-01T19:06:15",
+  "berlinerWordId": 4671,
+  "wordProperties": {
+    "article": null,
+    "berlinerisch": "wa",
+    "berlinerischAudio": null,
+    "learnMore": null,
+    "berolinismus": false,
+    "examples": [
+      {
+        "example": "Is aba warm heute, wa?",
+        "exampleExplanation": null,
+        "exampleAudio": null
+      }
+    ],
+    "translations": [
+      {
+        "translation": "…nicht wahr? wird immer ans Satzende gestellt"
+      }
+    ],
+    "alternativeWords": null,
+    "relatedWords": null,
+    "wikimediaFiles": null,
+    "infoText": null,
+    "sources": null,
+    "images": null
+  },
+  "berlinerischWordTypes": {
+    "nodes": []
+  },
+  "berlinerischThemen": {
+    "nodes": [
+      {
+        "name": "Beziehungen & Soziales",
+        "slug": "beziehungen-soziales"
+      },
+      {
+        "name": "Geld",
+        "slug": "geld"
+      },
+      {
+        "name": "Körper",
+        "slug": "koerper"
+      }
+    ]
+  },
+  "seo": {
+    "title": "wa | Bedeutung, Definition, Beispiel",
+    "canonical": "https://cms.berliner-schnauze.wtf/wort/wa/",
+    "metaDesc": "Das Wort wa kommt aus dem Berlinerischen, erfahre mehr über die Bedeutung und Definition. Beispiele des Berliner Worts helfen dir beim Verständnis.",
+    "opengraphDescription": "Das Wort wa kommt aus dem Berlinerischen, erfahre mehr über die Bedeutung und Definition. Beispiele des Berliner Worts helfen dir beim Verständnis.",
+    "opengraphTitle": "wa | Bedeutung, Definition, Beispiel",
+    "opengraphImage": null,
+    "twitterDescription": "",
+    "twitterTitle": "",
+    "metaRobotsNofollow": "follow",
+    "metaRobotsNoindex": "index"
+  }
+}

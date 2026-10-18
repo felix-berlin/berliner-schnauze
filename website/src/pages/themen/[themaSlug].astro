@@ -1,0 +1,77 @@
+---
+// Styles
+import '@styles/plugins/astro-breadcrumbs.scss';
+import '@styles/components/_thema-detail.scss';
+
+import Layout from '@layouts/Layout.astro';
+import { fetchAllThemen } from '@services/payload/themen.ts';
+import { fetchAllWords } from '@services/payload/words.ts';
+import { metaToSeo } from '@services/payload/seo.ts';
+import { canonicalUrl, routeToWord, seoData } from '@utils/helpers.ts';
+import { Breadcrumbs } from 'astro-breadcrumbs';
+import ChevronRight from '~icons/lucide/chevron-right';
+
+const { themaSlug } = Astro.params;
+const [allThemen, allWords] = await Promise.all([fetchAllThemen(), fetchAllWords()]);
+const thema = allThemen.find((t) => t.slug === themaSlug);
+if (!thema) return Astro.rewrite('/404');
+const seo = metaToSeo(thema.meta);
+
+const words = allWords.filter((word) =>
+  word.themen.some((t) => t.slug === themaSlug),
+);
+
+const seoProps = seoData({
+  seo: {
+    canonical: seo.canonical ?? canonicalUrl(`/themen/${thema.slug}/`, Astro.site),
+    opengraphDescription:
+      seo.opengraphDescription ?? seo.metaDesc ?? thema.description ?? '',
+    ...(seo.opengraphImage && {
+      opengraphImage: { sourceUrl: seo.opengraphImage.sourceUrl },
+    }),
+    opengraphType: 'website',
+    title: seo.title ?? thema.name,
+  },
+  title: thema.name,
+});
+
+const itemListJson = () =>
+  JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: words.map((word, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      url: canonicalUrl(routeToWord(word.slug), Astro.site),
+    })),
+    name: thema.name,
+    numberOfItems: words.length,
+  });
+---
+
+<Layout content={seoProps} contentClasses='o-thema'>
+  <Breadcrumbs indexText='Start' linkTextFormat='capitalized'>
+    <ChevronRight height='20' slot='separator' width='20' />
+  </Breadcrumbs>
+
+  <header class='c-thema-header'>
+    <h1 class='c-thema-header__title'>{thema.name}</h1>
+    {thema.description && <div class='c-thema-header__description' set:html={thema.description} />}
+    <p class='c-thema-header__count'>{words.length} Wörter</p>
+  </header>
+
+  <h2 class='c-thema-word-list__heading'>{words.length} Wörter zu diesem Thema</h2>
+  <ul class='c-thema-word-list'>
+    {
+      words.map((word) => (
+        <li class='c-thema-word-list__item'>
+          <a class='c-thema-word-list__link' href={routeToWord(word.slug)}>
+            {word.berlinerisch}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <script set:html={itemListJson()} type='application/ld+json' />
+</Layout>

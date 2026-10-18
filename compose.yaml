@@ -1,0 +1,118 @@
+# Local: `pnpm build:local && docker compose up --build`
+# CMS only (no dist/ needed): `docker compose up --build cms postgres`
+# Server: `TAG=3.57.0 docker compose pull && docker compose up -d`
+services:
+  web:
+    image: ghcr.io/felix-berlin/berliner-schnauze:${TAG:-latest}
+    build: ./website
+    restart: unless-stopped
+    # Local fallback only. Set APP_RUNTIME_ENV_FILE=/dev/null in Komodo so its
+    # Stack .env (which contains both identities' credentials) is not passed in.
+    env_file:
+      - path: ${APP_RUNTIME_ENV_FILE:-.env}
+        required: false
+    environment:
+      INFISICAL_ENABLED: ${INFISICAL_ENABLED:-false}
+      INFISICAL_PROJECT_ID: ${INFISICAL_PROJECT_ID:-}
+      INFISICAL_ENV: ${INFISICAL_ENV:-prod}
+      INFISICAL_DOMAIN: ${INFISICAL_DOMAIN:-https://infisical.kasimir.dev}
+      INFISICAL_CLIENT_ID: ${INFISICAL_WEB_CLIENT_ID:-}
+      INFISICAL_CLIENT_SECRET: ${INFISICAL_WEB_CLIENT_SECRET:-}
+      # Pinned like on cms: a dev NODE_ENV would make the Local API push the schema into this database.
+      NODE_ENV: production
+      DATABASE_URL: postgres://${POSTGRES_USER:-berliner}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@postgres:5432/${POSTGRES_DB:-berliner_schnauze}
+      OG_CACHE_DIR: /app/og-cache
+    volumes:
+      - ogcache:/app/og-cache
+    # Reaps zombies and forwards signals (the entrypoint is node).
+    init: true
+    depends_on:
+      postgres:
+        condition: service_healthy
+      # cms runs the migrations: the site must not query a schema that is not there yet.
+      cms:
+        condition: service_healthy
+    # Localhost only, like cms: the reverse proxy (Pangolin/Newt) fronts berliner-schnauze.wtf.
+    ports:
+      - "127.0.0.1:${PORT:-4321}:4321"
+    healthcheck:
+      test:
+        - CMD
+        - /nodejs/bin/node
+        - -e
+        - "fetch('http://localhost:4321/ping').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"
+      interval: 30s
+      # Probe every 2 s while starting, so `compose up --wait` returns fast.
+      start_period: 20s
+      start_interval: 2s
+      timeout: 5s
+      retries: 3
+
+  cms:
+    image: ghcr.io/felix-berlin/berliner-schnauze-cms:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: payload/Dockerfile
+    restart: unless-stopped
+    init: true
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # Local fallback only. Set APP_RUNTIME_ENV_FILE=/dev/null in Komodo so its
+    # Stack .env (which contains both identities' credentials) is not passed in.
+    env_file:
+      - path: ${APP_RUNTIME_ENV_FILE:-.env}
+        required: false
+    environment:
+      INFISICAL_ENABLED: ${INFISICAL_ENABLED:-false}
+      INFISICAL_PROJECT_ID: ${INFISICAL_PROJECT_ID:-}
+      INFISICAL_ENV: ${INFISICAL_ENV:-prod}
+      INFISICAL_DOMAIN: ${INFISICAL_DOMAIN:-https://infisical.kasimir.dev}
+      INFISICAL_CLIENT_ID: ${INFISICAL_CMS_CLIENT_ID:-}
+      INFISICAL_CLIENT_SECRET: ${INFISICAL_CMS_CLIENT_SECRET:-}
+      # Pinned: an .env NODE_ENV must not flip prod into schema-push mode. Only cms migrates.
+      NODE_ENV: production
+      PAYLOAD_RUN_MIGRATIONS: "true"
+      # Only cms runs queued jobs (scheduled publishing).
+      PAYLOAD_RUN_JOBS: "true"
+      DATABASE_URL: postgres://${POSTGRES_USER:-berliner}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@postgres:5432/${POSTGRES_DB:-berliner_schnauze}
+      MEDIA_DIR: /app/media
+    volumes:
+      - media:/app/media
+    # Localhost only: the reverse proxy fronts cms.berliner-schnauze.wtf.
+    ports:
+      - "127.0.0.1:${CMS_PORT:-3001}:3001"
+    healthcheck:
+      test:
+        - CMD
+        - /nodejs/bin/node
+        - -e
+        - "fetch('http://localhost:3001/api/users/me').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"
+      interval: 30s
+      start_period: 60s
+      start_interval: 2s
+      timeout: 5s
+      retries: 3
+
+  postgres:
+    image: postgres:18@sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-berliner_schnauze}
+      POSTGRES_USER: ${POSTGRES_USER:-berliner}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      start_period: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
+  media:
+  ogcache:

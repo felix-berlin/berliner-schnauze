@@ -1,0 +1,6 @@
+# Allowlist: the image only needs the build output and the server wrapper.
+*
+!dist/
+!server/
+!package.json
+!src/assets/fonts/Berlin-Bold.woff2

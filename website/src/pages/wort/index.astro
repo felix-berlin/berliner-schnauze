@@ -1,0 +1,86 @@
+---
+import "@styles/objects/_word-index.scss";
+import "@styles/components/_word-group.scss";
+import "@styles/plugins/astro-breadcrumbs.scss";
+import Layout from "@layouts/Layout.astro";
+import { fetchAllWords } from "@services/payload/words.ts";
+import type { SiteWord } from "@services/payload/words.ts";
+import { routeToWord, seoData, canonicalUrl } from "@utils/helpers.ts";
+import { Breadcrumbs } from "astro-breadcrumbs";
+import ChevronRight from "~icons/lucide/chevron-right";
+
+async function getGroupedWords(): Promise<Record<string, SiteWord[]>> {
+  const allWords = await fetchAllWords();
+
+  const groupedWords: Record<string, SiteWord[]> = {};
+
+  allWords.forEach((word) => {
+    const group = word.derived.wordGroup;
+    if (!group) return;
+
+    if (!groupedWords[group]) {
+      groupedWords[group] = [];
+    }
+    groupedWords[group].push(word);
+  });
+
+  return groupedWords;
+}
+
+const groupedWords = await getGroupedWords();
+const sortedGroups = Object.keys(groupedWords).sort();
+
+const content = {
+  seo: {
+    opengraphDescription:
+      "Alle Berliner Worte in der Übersicht. Lerne mehr über: die Berliner Mundart, Berlinisch, den Berliner Jargon, Berlinerisch & Berolinismus.",
+  },
+  title: "Berlinerisch Wort-Index - Berlinerisch zu Hochdeutsch",
+};
+
+const totalWordCount = Object.values(groupedWords).reduce((sum, words) => sum + words.length, 0);
+
+const schemaJson = () =>
+  JSON.stringify({
+    "@context": "https://schema.org",
+    "@id": `${canonicalUrl('/wort', Astro.site)}#termset`,
+    "@type": "DefinedTermSet",
+    description: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch.",
+    name: "Berliner Schnauze Wörterbuch",
+    numberOfItems: totalWordCount,
+    url: canonicalUrl('/wort', Astro.site),
+  });
+---
+
+<Layout content={seoData(content)} contentClasses="o-word-index">
+  <Fragment slot="head">
+    <script set:html={schemaJson()} type="application/ld+json" />
+  </Fragment>
+  <Breadcrumbs indexText="Start">
+    <ChevronRight height="20" slot="separator" width="20" />
+  </Breadcrumbs>
+
+  <h1>Wort-Index</h1>
+  {
+    sortedGroups.map((group) => (
+      <section class="c-word-group">
+        <h2 class="c-word-group__group" title={group}>
+          {group}
+        </h2>
+        <ul class="c-word-group__list">
+          {groupedWords[group].map((word) => (
+            <li>
+              <a
+                class="c-word-group__link"
+                href={routeToWord(word.slug)}
+                title={`Zur ${word.berlinerisch} Seite`}
+              >
+                {word.berlinerisch}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</Layout>

@@ -1,0 +1,112 @@
+---
+import '@styles/objects/_index.scss';
+import FactCard from '@components/FactCard.astro';
+import GameCtaCard from '@components/GameCtaCard.astro';
+import WordSearch from '@components/word-search/WordSearch.astro';
+import WordOfTheDay from '@components/WordOfTheDay.vue';
+import WordSearchLink from '@components/WordSearchLink.vue';
+import Layout from '@layouts/Layout.astro';
+import { SITE_URL } from 'astro:env/client';
+import { seoData } from '@utils/helpers';
+import { Picture } from 'astro:assets';
+import { BROWN_BEAR_ROAR, defaultOgImage } from '@utils/defaultOgImage';
+import { fetchHomeFacts } from '@services/payload/site.ts';
+import '@styles/components/_facts-grid.scss';
+
+const websiteSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  description: 'Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch',
+  inLanguage: 'de-DE',
+  name: 'Berliner Schnauze',
+  potentialAction: {
+    '@type': 'SearchAction',
+    'query-input': 'required name=search_term_string',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${SITE_URL}/wort?q={search_term_string}`,
+    },
+  },
+  url: SITE_URL,
+});
+
+const organizationSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@id': `${SITE_URL}/#organization`,
+  '@type': 'Organization',
+  founder: {
+    '@type': 'Person',
+    name: 'Felix Scholze',
+    url: 'https://webshaped.de/',
+  },
+  logo: {
+    '@type': 'ImageObject',
+    url: `${SITE_URL}/favicons/favicon.svg`,
+  },
+  name: 'Berliner Schnauze',
+  sameAs: [
+    'https://mastodon.social/@berliner_schnauze',
+    'https://www.facebook.com/Berliner.Schnauze030',
+    'https://github.com/felix-berlin/berliner-schnauze',
+  ],
+  url: SITE_URL,
+});
+
+
+const content = {
+  seo: {
+    canonical: SITE_URL,
+    opengraphDescription:
+      'Aktuelles Berlinerisch–Hochdeutsch Wörterbuch. Lerne mehr über die Berliner Mundart, Berlinisch, den Berliner Jargon & Berolinismus.',
+    opengraphImage: await defaultOgImage('Berliner Schnauze – Berlinerisch Wörterbuch'),
+    opengraphType: 'website',
+  },
+  title: 'Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch',
+};
+
+const facts = await fetchHomeFacts();
+---
+
+<Layout content={seoData(content)} contentClasses='o-index'>
+  <Fragment slot='head'>
+    <script set:html={websiteSchema} type='application/ld+json' />
+    <script set:html={organizationSchema} type='application/ld+json' />
+  </Fragment>
+  <header class='o-index__header'>
+    <h1 class='o-index__headline'>
+      Na Keule,<br /> keen'n Dunst vom Berlinern?
+    </h1>
+
+    <div class='o-index__image-wrap'>
+      <Picture
+        alt='Ein Bär der brüllt'
+        class='o-index__image'
+        fallbackFormat='webp'
+        formats={['avif', 'webp']}
+        layout='constrained'
+        priority={true}
+        width={BROWN_BEAR_ROAR.width}
+        height={BROWN_BEAR_ROAR.height}
+        sizes='(min-width: 900px) 900px, (min-width: 768px) 50vw, (min-width: 568px) 85vw, 64vw'
+        src={BROWN_BEAR_ROAR.src}
+      />
+    </div>
+  </header>
+
+  <WordSearchLink client:load />
+
+  <section class='c-facts-grid'>
+    <div class='c-facts-grid__headline-wrap'>
+      <h2 class='c-facts-grid__headline'>Fakten zur Berliner Mundart</h2>
+    </div>
+
+    {facts.slice(0, 2).map((fact) => <FactCard headline={fact.headline} text={fact.html} />)}
+    <GameCtaCard />
+    {facts.slice(2).map((fact) => <FactCard headline={fact.headline} text={fact.html} />)}
+    <WordOfTheDay client:only='vue'>
+      <div slot='fallback' class='c-facts-grid__wotd-slot'></div>
+    </WordOfTheDay>
+  </section>
+
+  <WordSearch />
+</Layout>
