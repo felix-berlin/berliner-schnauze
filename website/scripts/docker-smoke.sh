@@ -12,13 +12,15 @@ fail=0
 # Only `web` is under test. Compose interpolates the whole file, so the
 # required vars of `postgres`/`cms` need (dummy) values even when they don't start.
 export POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-smoke}"
+# Host-side `payload migrate`/`seed:e2e` below need these too (CI has no payload/.env).
+export PAYLOAD_SECRET="${PAYLOAD_SECRET:-smoke}" PAYLOAD_SERVER_URL="${PAYLOAD_SERVER_URL:-http://localhost:3001}"
 # Never fetch real secrets, even when the developer's .env enables Infisical.
 export INFISICAL_ENABLED=false
 
 # The runtime secrets reach web only through .env (env_file): give it dummy ones unless a real .env exists.
 made_env=0
 if [[ ! -f .env ]]; then
-  printf 'IMAGOR_SECRET=smoke\nPAYLOAD_SECRET=smoke\nPAYLOAD_SERVER_URL=http://localhost:3001\n' > .env
+  printf 'IMAGOR_SECRET=smoke\nPAYLOAD_SECRET=%s\nPAYLOAD_SERVER_URL=%s\n' "$PAYLOAD_SECRET" "$PAYLOAD_SERVER_URL" > .env
   made_env=1
 fi
 # A postgres that already runs (the local dev database) stays up: only what this script started goes down.
