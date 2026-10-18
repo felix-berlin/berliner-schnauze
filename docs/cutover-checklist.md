@@ -27,10 +27,60 @@ Background: `docs/superpowers/specs/2026-10-16-payload-migration-design.md`. Set
 
 ## 1. Secrets and env
 
-- [ ] Infisical (`prod` and `staging`): runtime application variables including `DATABASE_URL` (hostname `postgres` inside Compose), `PAYLOAD_SECRET`, `PAYLOAD_SERVER_URL` (`https://cms.berliner-schnauze.wtf`), `IMAGOR_SECRET`, `TURNSTILE_SECRET_KEY`, `SMTP_URL`, `SUGGEST_MAIL_TO` (web and cms: the cms mails password resets too), `SITE_URL` (cms: target of the admin's preview links), `PAYLOAD_URL`, and `PAYLOAD_API_KEY`. `PAYLOAD_RUN_JOBS` is pinned on `cms` in `compose.yaml`.
-- [ ] Komodo: set `INFISICAL_ENABLED=true`, the project ID/environment/domain, and separate secret Universal Auth credentials for the `web` and `cms` machine identities. Keep `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB` available to Compose because the Postgres service needs them before the applications start. See [Infisical with Docker Compose](./infisical-compose.md).
-- [ ] The server's `.env` (read by Compose `env_file`) is only a local runtime fallback when Infisical is disabled. Once Infisical is enabled, remove application runtime secrets from that file; `IMAGOR_HOST`, `SITE_URL` and the other public vars are inlined at build time (CI build with the `prod` Infisical env).
-- [ ] GitHub secrets for the Anki release: `PAYLOAD_URL`, `PAYLOAD_API_KEY` (the workflow reads Infisical `prod`).
+Env vars live in three places. Rule of thumb: what Compose needs _before_ the containers start goes to Komodo, what the
+apps read at runtime goes to Infisical, what CI needs goes to GitHub. Details of the Infisical wiring:
+[Infisical with Docker Compose](./infisical-compose.md).
+
+### 1a. Komodo Stack environment (Compose, not Infisical)
+
+- [ ] Create the secrets in Komodo (Settings → Variables): `WEB_CLIENT_ID`, `WEB_CLIENT_SECRET`, `CMS_CLIENT_ID`, `CMS_CLIENT_SECRET`, `POSTGRES_PASSWORD`.
+- [ ] Stack environment (see the full block in `docs/infisical-compose.md`):
+
+| Variable                              | Value                                                                               |
+| ------------------------------------- | ----------------------------------------------------------------------------------- |
+| `INFISICAL_ENABLED`                   | `true`                                                                              |
+| `INFISICAL_PROJECT_ID`                | project ID                                                                          |
+| `INFISICAL_ENV`                       | `prod`                                                                              |
+| `INFISICAL_DOMAIN`                    | `https://infisical.kasimir.dev` (default)                                           |
+| `INFISICAL_WEB_CLIENT_ID` / `_SECRET` | `[[WEB_CLIENT_ID]]` / `[[WEB_CLIENT_SECRET]]`                                       |
+| `INFISICAL_CMS_CLIENT_ID` / `_SECRET` | `[[CMS_CLIENT_ID]]` / `[[CMS_CLIENT_SECRET]]`                                       |
+| `APP_RUNTIME_ENV_FILE`                | `/dev/null` (keeps the client secrets out of the apps)                              |
+| `POSTGRES_USER` / `POSTGRES_DB`       | `berliner` / `berliner_schnauze`                                                    |
+| `POSTGRES_PASSWORD`                   | `[[POSTGRES_PASSWORD]]`, URL-safe: letters, digits, `-_.~` (`openssl rand -hex 16`) |
+
+### 1b. Infisical (`prod`, locally `dev`)
+
+Both containers read the same environment; each identity gets read access only. **Do not store** `DATABASE_URL`,
+`NODE_ENV`, `OG_CACHE_DIR`, `MEDIA_DIR`, `PORT` for the containers: Compose pins them and wins over Infisical
+(`DATABASE_URL` is built from `POSTGRES_*`; `PAYLOAD_RUN_MIGRATIONS` / `PAYLOAD_RUN_JOBS` are pinned on `cms` as well).
+
+- [ ] Add these:
+
+| Variable               | Used by                                  | `prod` example                                | `dev` example                                         |
+| ---------------------- | ---------------------------------------- | --------------------------------------------- | ----------------------------------------------------- |
+| `PAYLOAD_SECRET`       | web, cms                                 | `openssl rand -hex 32`, **different per env** | any other string (signs sessions and preview tokens)  |
+| `PAYLOAD_SERVER_URL`   | web, cms                                 | `https://cms.berliner-schnauze.wtf`           | `http://localhost:3001`                               |
+| `SITE_URL`             | cms (+ build)                            | `https://berliner-schnauze.wtf`               | `http://localhost:4321`                               |
+| `IMAGOR_HOST`          | web                                      | your Imagor URL                               | your Imagor URL                                       |
+| `IMAGOR_SECRET`        | web                                      | Imagor signing secret                         | same as Imagor dev                                    |
+| `TURNSTILE_SECRET_KEY` | web                                      | real key (Cloudflare dashboard)               | `1x0000000000000000000000000000000AA` (always passes) |
+| `TURNSTILE_SITE_KEY`   | web (public)                             | real site key                                 | `1x00000000000000000000AA`                            |
+| `SMTP_URL`             | web, cms (cms mails password resets)     | `smtps://user:pw@smtp.example.com:465`        | empty: mails go to the console                        |
+| `SUGGEST_MAIL_TO`      | web, cms                                 | `redaktion@berliner-schnauze.wtf`             | `dev@localhost`                                       |
+| `DATABASE_URL`         | **dev only** (`pnpm dev` has no Compose) | not in Infisical                              | `postgres://USER:PASSWORD@localhost:5432/DBNAME`      |
+
+`DATABASE_URL` format: `postgres://USER:PASSWORD@HOST:PORT/DBNAME`. Host `localhost` for dev; in Compose it is `postgres`,
+built for you. The remaining optional vars (`SENTRY_*`, `WAKAPI_*`, `MATOMO_*`, `POLAR_*`, `ENABLE_ANALYTICS`, …) keep
+their current values; the schema is in `website/astro.config.mjs`.
+
+- [ ] `IMAGOR_HOST`, `SITE_URL` and the other public vars are inlined at build time: the CI build reads the `prod` Infisical env.
+- [ ] The server's `.env` (Compose `env_file`) is only a fallback while Infisical is disabled. With `APP_RUNTIME_ENV_FILE=/dev/null` it is ignored; remove application secrets from it.
+- [ ] A failing Infisical login stops the container instead of starting it without secrets: watch `docker compose logs web cms` on first start.
+
+### 1c. GitHub and local only
+
+- [ ] GitHub secrets for the Anki release and `publish-drafts.ts`: `PAYLOAD_URL` (`https://cms.berliner-schnauze.wtf`), `PAYLOAD_API_KEY` (key of the `anki-bot` user, step 4). Locally `PAYLOAD_URL=http://localhost:3001`.
+- [ ] Local only, in the git-ignored `payload/.env`, never in Infisical: `DATABASE_URL_TEST=postgres://USER:PASSWORD@localhost:5432/bs_test` (a throwaway DB whose name ends in `_test`).
 
 ## 2. Last import and content check
 
