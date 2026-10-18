@@ -6,9 +6,13 @@ import type { Page } from "@playwright/test";
  * "browser outdated" toast that covers the header and intercepts clicks.
  */
 export const dismissToasts = async (page: Page): Promise<void> => {
+  const closeButtons = page.getByRole("button", { name: "Benachrichtigung schließen" });
+  // noWaitAfter: by default Playwright waits after the handler until `.first()` is hidden, which a
+  // toast appearing meanwhile ("offline ready" ~1.5 s after load) never lets happen. Without the wait
+  // the handler simply runs again before the next action. All toasts go in one DOM call.
   await page.addLocatorHandler(
-    page.getByRole("button", { name: "Benachrichtigung schließen" }).first(),
-    (closeButton) => closeButton.dispatchEvent("click"),
-    { times: 20 },
+    closeButtons.first(),
+    () => closeButtons.evaluateAll((buttons) => buttons.forEach((b) => (b as HTMLElement).click())),
+    { noWaitAfter: true, times: 20 },
   );
 };
