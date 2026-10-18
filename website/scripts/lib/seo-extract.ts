@@ -88,10 +88,20 @@ const normalizeMetaUrl = (value: string): string =>
     .replace(...MEDIA_MOVE)
     .replace(...MEDIA_MOVE_ENCODED);
 
+/** Repeats until stable, so a tag split by an inner one (`<scr<b>ipt>`) goes too. */
+const stripTags = (value: string): string => {
+  let prev;
+  do {
+    prev = value;
+    value = value.replace(/<[^>]*>/g, "");
+  } while (value !== prev);
+  return value;
+};
+
 const walk = (value: unknown, parentKey?: string): unknown => {
   if (typeof value === "string") {
     const moved = value.replace(...MEDIA_MOVE);
-    return parentKey === "caption" ? moved.replace(/<[^>]*>/g, "").trim() : moved;
+    return parentKey === "caption" ? stripTags(moved).trim() : moved;
   }
   if (Array.isArray(value)) {
     const items = value.map((v) => walk(v, parentKey));
