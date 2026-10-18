@@ -73,12 +73,13 @@ jobs:
         run: npx semantic-release
 
       # semantic-release's prepareCmd bumps package.json only when it publishes.
+      # yes/no, not true/false: Actions drops an output equal to a masked secret value (an Infisical secret is "true").
       - name: Detect new version
         id: version
         run: |
           version=$(node -p "require('./package.json').version")
           echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "released=$([ "$version" != "$BEFORE_VERSION" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "released=$([ "$version" != "$BEFORE_VERSION" ] && echo yes || echo no)" >> "$GITHUB_OUTPUT"
 
       - name: Create Sentry release
         uses: getsentry/action-release@v3
@@ -95,7 +96,7 @@ jobs:
   docker:
     name: Docker image
     needs: release
-    if: needs.release.outputs.released == 'true'
+    if: needs.release.outputs.released == 'yes'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     permissions:
