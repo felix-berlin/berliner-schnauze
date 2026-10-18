@@ -2,6 +2,81 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.56.2...v4.0.0) (2026-10-18)
+
+
+* fix(pwa)!: wait for the user or the next navigation before updating ([79e9b62](https://github.com/felix-berlin/berliner-schnauze/commit/79e9b621bfd570deba4bbf2406a14ff5191d26e0))
+
+
+### Bug Fixes
+
+* **ci:** start only web in the docker smoke test ([ac63b63](https://github.com/felix-berlin/berliner-schnauze/commit/ac63b63e8473775609b52f1adc71a17174a7015b))
+* **cms:** final review fixes for sw navigation, draft relations, body limit and seed guard ([650ff74](https://github.com/felix-berlin/berliner-schnauze/commit/650ff7430398ef61a4537e4686ff672d3dc60c04))
+* **cms:** harden the wordpress import ([fdef0c8](https://github.com/felix-berlin/berliner-schnauze/commit/fdef0c815c9a0a314c0d566265fe651c34173ef7))
+* **cms:** hide links to unpublished docs and keep sponsored links ([eabeca3](https://github.com/felix-berlin/berliner-schnauze/commit/eabeca3b716a9f6058c6a5753679833a8cf91dcf))
+* **cms:** keep payload package out of root typecheck and stylelint ([1633bf3](https://github.com/felix-berlin/berliner-schnauze/commit/1633bf31bffe6634ede2e4b0e0e86810a1930980))
+* **cms:** load the site content seed lazily in its migration ([0e38125](https://github.com/felix-berlin/berliner-schnauze/commit/0e381257907305f1a3a81a6f916c53bb9ae71e81))
+* **cms:** map wordpress html images to media in the import ([d25d6f2](https://github.com/felix-berlin/berliner-schnauze/commit/d25d6f287ac6b4c04ab670e5a57496a43bebf6f6))
+* **cms:** preserve contentModifiedAt via explicit context flag and add media description ([0d98c2a](https://github.com/felix-berlin/berliner-schnauze/commit/0d98c2acd7a3760c17ac0a699936b27b531524a7))
+* **cms:** render internal rich text links to the linked doc's page ([01e6d75](https://github.com/felix-berlin/berliner-schnauze/commit/01e6d75156bbaa0afd07c8aab4b3bc2ae030569d))
+* **cms:** report references the wp import drops and match the old cms host exactly ([9dbbb13](https://github.com/felix-berlin/berliner-schnauze/commit/9dbbb1358cb7cf013ae58423a3807c2908eaf088))
+* **cms:** require login to list media and gate the first user in production ([297a917](https://github.com/felix-berlin/berliner-schnauze/commit/297a9179d5fded6249f16d3737545df462226f84))
+* **cms:** type the draft-aware converters and the schedule test input ([7ec5079](https://github.com/felix-berlin/berliner-schnauze/commit/7ec5079de363b761b41fb547047794cc17763e13))
+* **cms:** warn when SUGGEST_MAIL_TO is unset ([e76ad95](https://github.com/felix-berlin/berliner-schnauze/commit/e76ad95ddfa2b9fff9fbea4cfb04d5175251d992))
+* **dev:** export the payload secrets for the smoke test's host-side migrate ([7cd1d31](https://github.com/felix-berlin/berliner-schnauze/commit/7cd1d315fe7f525782ed279b1d9b829a02f22682))
+* **dev:** harden the docker images and the infisical entrypoint ([6dfab2b](https://github.com/felix-berlin/berliner-schnauze/commit/6dfab2bb6cd5ae26f286b6371d8ff3da2daab3b8))
+* **dev:** keep ssr deps external in the dev server ([64bf06c](https://github.com/felix-berlin/berliner-schnauze/commit/64bf06c248c9c5223d0f38f143358737b5363ea9))
+* **dev:** log a broken turnstile check and answer 503 instead of a captcha failure ([71c3dc7](https://github.com/felix-berlin/berliner-schnauze/commit/71c3dc7ed92f95ffbc01671b2c678709be7f8ac9))
+* **dev:** move the astro middleware out of src/middleware.ts ([d4a3514](https://github.com/felix-berlin/berliner-schnauze/commit/d4a3514bd71e4148081d8756930564347d948d14))
+* **dev:** strip caption tags until stable in the seo diff ([99801a9](https://github.com/felix-berlin/berliner-schnauze/commit/99801a95eaebd3678827c64cf1379795900c2033))
+* **docker:** avoid silent smoke-test exit on SIGPIPE ([53b1524](https://github.com/felix-berlin/berliner-schnauze/commit/53b15244ff6351b36f171e8fe71b89a6a6d5c3f1))
+* **docker:** patch node adapter for file-format pages next to folders ([6f2af56](https://github.com/felix-berlin/berliner-schnauze/commit/6f2af5637eb4b098a6f8f8049190ed3e80487f6f))
+* **images:** load the bear artwork from payload media through imagor ([4e67161](https://github.com/felix-berlin/berliner-schnauze/commit/4e67161705c0f2589433ce70157ebf66de6749b5))
+* **images:** sign imagor urls only for hosts in image.domains ([6bd0cb3](https://github.com/felix-berlin/berliner-schnauze/commit/6bd0cb30fe75a73871e74aa3d45a348f19d72bee))
+* **search:** compute derived fields when the stored group is unset ([fc1e5c2](https://github.com/felix-berlin/berliner-schnauze/commit/fc1e5c21b376e021ac94a859f874d07b4e862678))
+* **word:** cache og images for a day, not immutable ([ccbaf56](https://github.com/felix-berlin/berliner-schnauze/commit/ccbaf56437be3af623a94828c8005dc3cf6022ed))
+* **word:** render turnstile in the right theme and drop expired tokens ([a6ac352](https://github.com/felix-berlin/berliner-schnauze/commit/a6ac352bbb24f50326b69ff5d740b2accdf42ea5))
+* **word:** share the preview gate, show published related words in a preview ([cc4e1ad](https://github.com/felix-berlin/berliner-schnauze/commit/cc4e1ade0ac0f24d4e6df9697cb73da83d4700b8))
+
+
+### Features
+
+* **cms:** add idempotent wordpress import ([5c1e310](https://github.com/felix-berlin/berliner-schnauze/commit/5c1e3101ec4374d1b3125f9b1bad1cdd82afc82f))
+* **cms:** add initial migration and run it on production start ([9ff5d6b](https://github.com/felix-berlin/berliner-schnauze/commit/9ff5d6bca5630fd13bd624b3ae2e9f45c2f146c5))
+* **cms:** add payload workspace package with postgres ([16001b5](https://github.com/felix-berlin/berliner-schnauze/commit/16001b5b2abf00a27ed6684463d67a70b4b45a15))
+* **cms:** add posts, pages and site globals ([31f0697](https://github.com/felix-berlin/berliner-schnauze/commit/31f0697e94881e0ac03d9f16a0ad1782434d9d3d))
+* **cms:** add seo diff script, cutover checklist and the fixes it found ([c1ce507](https://github.com/felix-berlin/berliner-schnauze/commit/c1ce5070b4ffd22c9d89ad4464eb6602c6aa19c9))
+* **cms:** add words, themen and word types collections ([adfb14b](https://github.com/felix-berlin/berliner-schnauze/commit/adfb14ba6739a369f93c9d9e8c24d90108c8ebe3))
+* **cms:** compute derived word fields on save ([4ce8b03](https://github.com/felix-berlin/berliner-schnauze/commit/4ce8b03c6aa5f363edde226764abf6dc5a95fea6))
+* **cms:** edit the anki, home and donation texts in payload ([0bc2cc4](https://github.com/felix-berlin/berliner-schnauze/commit/0bc2cc48f6e7dfad824dea0794edeb39214e1207))
+* **cms:** import media descriptions as rich text and skip words without headword ([52e1ebb](https://github.com/felix-berlin/berliner-schnauze/commit/52e1ebbd5da4970356b64a628af5982732a9c547))
+* **cms:** keep a version history of pages ([db42f8d](https://github.com/felix-berlin/berliner-schnauze/commit/db42f8d8f0953a3368617ced31204f1db0cc79c0))
+* **cms:** lock api reads behind auth and redirect old media urls ([f86a744](https://github.com/felix-berlin/berliner-schnauze/commit/f86a7445885047d079c2244798b5145d25705637))
+* **cms:** manage redirects in payload and add one on every slug change ([b58398d](https://github.com/felix-berlin/berliner-schnauze/commit/b58398d58f54e505cec7fd4f7e6526ce483dd5cf))
+* **cms:** preview drafts of words and posts from the admin ([46050f0](https://github.com/felix-berlin/berliner-schnauze/commit/46050f0859360856ced21338678584912b71ae6b))
+* **cms:** read payload through the local api in the astro server ([ac47c31](https://github.com/felix-berlin/berliner-schnauze/commit/ac47c31116c902fd7f492f88fd5483d928d2e18c))
+* **cms:** read themen, posts, pages and site globals from payload ([db46cea](https://github.com/felix-berlin/berliner-schnauze/commit/db46cea7c620fd05febe0f9b0e0823f87924a19a))
+* **cms:** read words from payload behind the existing fetchers ([d942832](https://github.com/felix-berlin/berliner-schnauze/commit/d942832cee6e0b65e877c4328ef5e09d4bd8a85a))
+* **cms:** schedule publishing of posts ([b8b7830](https://github.com/felix-berlin/berliner-schnauze/commit/b8b78308487c37c371c6db1caaf43f3a08da2b4f))
+* **cms:** store the wordpress modified date on posts ([d52d956](https://github.com/felix-berlin/berliner-schnauze/commit/d52d95670e7e639baa895a1710091bdec71e52f2))
+* **cms:** store word suggestions in payload and mail them from a hook ([c6130b1](https://github.com/felix-berlin/berliner-schnauze/commit/c6130b14ba07d96c7d731c0060653b560d2cafd6))
+* **cms:** use the payload seo plugin for meta tags ([0f72398](https://github.com/felix-berlin/berliner-schnauze/commit/0f7239847cf59248168205cb44c2979abcf39020))
+* **dev:** load runtime secrets from infisical when the containers start ([4fa0f24](https://github.com/felix-berlin/berliner-schnauze/commit/4fa0f24fcd94847166067afd0ffe34f987a264d3))
+* **dev:** redirect www.berliner-schnauze.wtf to the canonical host ([07ff12b](https://github.com/felix-berlin/berliner-schnauze/commit/07ff12b7f634b03089ec8fd5413c247bfd295b9d))
+* **search:** serve search index, meta and sitemap on demand ([d61b3cb](https://github.com/felix-berlin/berliner-schnauze/commit/d61b3cb8dfb37015746435d9ec08e6418e78e0cf))
+* **word:** render og images and word of the day on demand ([ed412e8](https://github.com/felix-berlin/berliner-schnauze/commit/ed412e8c7428ea6633c3e18da684a6170ae7affe))
+* **word:** render word, themen and magazine pages on demand ([63e620b](https://github.com/felix-berlin/berliner-schnauze/commit/63e620b0477920b70d55e64a82f785acc6a946b4))
+* **word:** verify turnstile and send suggestions server-side ([2efe097](https://github.com/felix-berlin/berliner-schnauze/commit/2efe097138276891ae1334b9d80019b441b5dcea))
+
+
+### BREAKING CHANGES
+
+* the PWA no longer updates itself. A new version is applied only when the
+user accepts the update toast or on the next navigation; open tabs are never reloaded in the
+background.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
 ## [3.56.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.56.1...v3.56.2) (2026-10-16)
 
 
