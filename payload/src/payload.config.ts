@@ -27,6 +27,9 @@ import { seo } from "./seo";
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default buildConfig({
+  // Nothing uses GraphQL (the site reads through the Local API, scripts through REST): disabled, Payload builds no
+  // schema at init, in the cms and in the site's Local API process alike.
+  graphQL: { disable: true },
   admin: {
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },

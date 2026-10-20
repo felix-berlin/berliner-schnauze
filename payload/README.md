@@ -1,6 +1,6 @@
 # payload-app: CMS für Berliner Schnauze
 
-Payload 3 (Admin + REST/GraphQL, Postgres). Die Astro-Seite in `website/` liest ihre Inhalte von hier.
+Payload 3 (Admin + REST, Postgres; GraphQL ist abgeschaltet). Die Astro-Seite in `website/` liest ihre Inhalte von hier.
 
 ## Einrichten von null
 
