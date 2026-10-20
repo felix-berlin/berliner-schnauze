@@ -1,4 +1,4 @@
-import { spawn, spawnSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 
 const appArgs = process.argv.slice(2);
 if (appArgs.length === 0) throw new Error("No application command provided");
@@ -64,14 +64,6 @@ if (infisicalEnabled) {
   };
 }
 
-const child = spawn(process.execPath, appArgs, { env: runtimeEnv, stdio: "inherit" });
-for (const signal of ["SIGTERM", "SIGINT"]) {
-  process.on(signal, () => child.kill(signal));
-}
-child.once("error", (error) => {
-  console.error("Failed to start application:", error);
-  process.exitCode = 1;
-});
-child.once("exit", (code, signal) => {
-  process.exitCode = code ?? (signal ? 1 : 0);
-});
+// Replace this process instead of staying around as the parent: a second idle node costs ~45 MB per container.
+// Signals go straight to the app (compose `init: true` reaps and forwards).
+process.execve(process.execPath, [process.execPath, ...appArgs], runtimeEnv);
