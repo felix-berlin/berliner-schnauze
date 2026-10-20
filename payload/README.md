@@ -1,6 +1,6 @@
 # payload-app: CMS für Berliner Schnauze
 
-Payload 3 (Admin + REST/GraphQL, Postgres). Die Astro-Seite in `website/` liest ihre Inhalte von hier; WordPress dient nur noch als Import-Quelle bis zum Cutover.
+Payload 3 (Admin + REST/GraphQL, Postgres). Die Astro-Seite in `website/` liest ihre Inhalte von hier.
 
 ## Einrichten von null
 
@@ -14,7 +14,6 @@ Payload 3 (Admin + REST/GraphQL, Postgres). Die Astro-Seite in `website/` liest 
 | `PAYLOAD_SECRET` | Signatur für Sessions/Keys | langer Zufallsstring |
 | `PAYLOAD_SERVER_URL` | Basis-URL des Admins | lokal `http://localhost:3001`, Produktion `https://cms.berliner-schnauze.wtf` |
 | `MEDIA_DIR` | Ablage der Uploads | leer lassen (= `payload/media`) |
-| `WP_API`, `WP_AUTH_USER`, `WP_AUTH_PASS` | nur für den Import (liegen schon in Infisical) | – |
 
 `compose.yaml` bricht ab, wenn `POSTGRES_PASSWORD`, `PAYLOAD_SECRET` oder `PAYLOAD_SERVER_URL` fehlen, auch wenn du nur Postgres startest.
 
@@ -34,13 +33,7 @@ pnpm cms:dev          # http://localhost:3001/admin
 
 Beim ersten Aufruf den ersten Admin anlegen. Im Dev-Modus pusht Payload das Schema selbst in die DB.
 
-**4. Inhalte aus WordPress holen** (dauert, lädt alle Medien):
-
-```bash
-npx infisical run -- pnpm --filter payload-app import:wp
-```
-
-Der Report am Ende zeigt `created`/`updated` je Typ; Exit-Code 1 und eine `failures`-Liste, wenn etwas schiefging. Ein zweiter Lauf aktualisiert nur, dupliziert nichts. Vorhandene Medien werden nicht neu geladen. Erwartet: rund 5900 Wörter, höchstens etwa 100 Posts, 2 Seiten.
+**4. Inhalte holen.** Echte Daten: ein Backup der Produktions-DB (Portabase bzw. `pg_dump`) in die lokale DB einspielen, die Medien kommen aus dem Backup des `media`-Volumes nach `payload/media`. Nur erfundene Testwörter (wie in der E2E-CI): `pnpm --filter payload-app seed:e2e`.
 
 **5. Prüfen:**
 
@@ -74,7 +67,7 @@ pnpm cms:dev                    # Terminal 1: Payload-Admin, :3001
 pnpm dev                        # Terminal 2: Astro (website/), :4321
 ```
 
-Seiten rendern auf Anfrage mit etwa 60 s Cache, ein Edit im Admin ist ohne Rebuild sichtbar. Das Schema pusht nur `cms:dev`, Astro nie. Die Payload-DB füllt `import:wp`.
+Seiten rendern auf Anfrage mit etwa 60 s Cache, ein Edit im Admin ist ohne Rebuild sichtbar. Das Schema pusht nur `cms:dev`, Astro nie.
 
 ## Admin-User
 

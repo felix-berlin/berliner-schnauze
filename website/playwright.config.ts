@@ -85,7 +85,7 @@ export default defineConfig({
     // only fires for `pnpm run dev` — not when this command spawns `astro dev` directly.
     //
     // In CI, use a static build + preview instead of dev: `astro dev` compiles
-    // each page on demand AND hits the live WordPress API per request, which
+    // each page on demand AND reads the Payload database per request, which
     // was intermittently exceeding Playwright's 30s navigation timeout under
     // the shared runner's network/CPU variance (net::ERR_ABORTED / timeouts on
     // /wort/<slug> and the homepage). The static build removes both the

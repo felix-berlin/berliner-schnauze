@@ -6,7 +6,7 @@ import { fetchMenu } from '@services/payload/site.ts';
 
 const isIndex = /^\/(index(\.html)?)?$/.test(Astro.url.pathname);
 const mainMenuItems = await fetchMenu('main');
-// ponytail: keyed by path like the icons in MainMenu.vue; move to WP menu CSS classes with them.
+// ponytail: keyed by path like the icons in MainMenu.vue; move to menu fields in Payload with them.
 const headerLinks = mainMenuItems.filter((item) => ['/wort', '/magazin'].includes(item.link));
 ---
 

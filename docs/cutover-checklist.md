@@ -129,8 +129,8 @@ their current values; the schema is in `website/astro.config.mjs`.
 - [ ] Last BackWPup export of WordPress.
 - [x] Remove the WordPress MCP server (`.mcp.json` entry `berlinerSchnauze`, `WP_MCP_*` in `~/.claude/settings.json`, the "WordPress MCP Access" section in `CLAUDE.md`).
 - [x] Remove `wrangler.jsonc` and the `deploy` / `server:preview` scripts: a Cloudflare static deploy cannot serve this site any more. (Done on the branch: a Workers Build of it now fails instead of deploying empty pages.)
-- [ ] Decide about `scripts/scan_schlobinski.py`: its input producer (`fetch-wp-words-for-scan.mjs`) was removed.
-- [ ] Keep the `wpId` / `wpPath` fields: `wpPath` drives the media redirects for good, `wpId` is the id of the Anki cards.
+- [x] Remove the WordPress import (`payload/src/import/`, `import:wp`), `website/scripts/seo-diff.ts` and `scripts/scan_schlobinski.py`; they live on in git history (last commit before removal: `26df38e9`).
+- [x] Keep `wpPath` (it drives the media redirects for good); `wpId` is removed, the Anki cards get new GUIDs.
 
 ## Later
 

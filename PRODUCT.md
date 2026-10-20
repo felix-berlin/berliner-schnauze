@@ -14,7 +14,7 @@ Core job: fast lookup. Search or land on a word page, get the meaning, done — 
 
 ## Product Purpose
 
-Berliner Schnauze is a Berlin-dialect translator and lexicon: WordPress GraphQL backend, static Astro site, Vue islands for interactivity (search, word pages, BON card game, PWA install/cache). Success = someone finds the word they came for in seconds, trusts the etymology/source shown, and optionally shares or plays.
+Berliner Schnauze is a Berlin-dialect translator and lexicon: Payload CMS backend, Astro site rendered on demand, Vue islands for interactivity (search, word pages, BON card game, PWA install/cache). Success = someone finds the word they came for in seconds, trusts the etymology/source shown, and optionally shares or plays.
 
 ## Brand Personality
 

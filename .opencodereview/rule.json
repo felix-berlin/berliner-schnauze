@@ -30,7 +30,7 @@
     },
     {
       "path": "src/**/*.{ts,mjs,js}",
-      "rule": "Project conventions (see CLAUDE.md):\n- Path aliases (`@components/`, `@stores/`, `@utils/`, `@services/`, `@composables/`, `@lib/`, ...), never relative `../` imports.\n- Nanostores: exports use `$` prefix; async computed stores use `computedAsync` from `@nanostores/async`, not the deprecated `computed()` + `task()` pattern. Flag imports from the `@stores/index` barrel unless `wordList.ts` exports are needed.\n- GraphQL: use the `graphql` tag from `@/gql`; `@urql/core` without Vue bindings.\n- Env vars via `astro:env/client` / `astro:env/server`.\n- Imagor URL signing (`src/utils/imagor.ts`) and anything touching secrets (`IMAGOR_SECRET`, `WP_AUTH_REFRESH_TOKEN`) must stay server/build-side; flag any path that could ship them to the client.\n- Native Baseline JS features, no polyfills; prefer VueUse over custom composables.",
+      "rule": "Project conventions (see CLAUDE.md):\n- Path aliases (`@components/`, `@stores/`, `@utils/`, `@services/`, `@composables/`, `@lib/`, ...), never relative `../` imports.\n- Nanostores: exports use `$` prefix; async computed stores use `computedAsync` from `@nanostores/async`, not the deprecated `computed()` + `task()` pattern. Flag imports from the `@stores/index` barrel unless `wordList.ts` exports are needed.\n- Env vars via `astro:env/client` / `astro:env/server`.\n- Imagor URL signing (`src/utils/imagor.ts`) and anything touching secrets (`IMAGOR_SECRET`, `PAYLOAD_SECRET`, `TURNSTILE_SECRET_KEY`) must stay server/build-side; flag any path that could ship them to the client.\n- Native Baseline JS features, no polyfills; prefer VueUse over custom composables.",
       "merge_system_rule": true
     }
   ]

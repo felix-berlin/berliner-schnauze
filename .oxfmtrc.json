@@ -18,7 +18,6 @@
     "coverage",
     "dist",
     "CHANGELOG.md",
-    "schema.graphql",
     "src/gql/*"
   ]
 }
