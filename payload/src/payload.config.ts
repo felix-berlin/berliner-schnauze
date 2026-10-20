@@ -1,6 +1,7 @@
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import { LinkFeature, lexicalEditor } from "@payloadcms/richtext-lexical";
+import os from "os";
 import path from "path";
 import nodemailer from "nodemailer";
 import { buildConfig } from "payload";
@@ -30,6 +31,9 @@ export default buildConfig({
   // Nothing uses GraphQL (the site reads through the Local API, scripts through REST): disabled, Payload builds no
   // schema at init, in the cms and in the site's Local API process alike.
   graphQL: { disable: true },
+  // Uploads go to a temp file instead of RAM (up to 3 × 20 MB per request by default): the cms container is capped
+  // at 512 MB.
+  upload: { useTempFiles: true, tempFileDir: os.tmpdir() },
   admin: {
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
