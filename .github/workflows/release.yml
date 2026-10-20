@@ -27,7 +27,6 @@ jobs:
       pull-requests: write
     outputs:
       released: ${{ steps.version.outputs.released }}
-      version: ${{ steps.version.outputs.version }}
 
     steps:
       - name: Checkout ✅
@@ -85,7 +84,6 @@ jobs:
         id: version
         run: |
           version=$(node -p "require('./package.json').version")
-          echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "released=$([ "$version" != "$BEFORE_VERSION" ] && echo yes || echo no)" >> "$GITHUB_OUTPUT"
 
       # A Sentry outage must not skip the docker job: the version is already published.
@@ -108,18 +106,22 @@ jobs:
     if: ${{ !cancelled() && (github.event_name == 'workflow_dispatch' || needs.release.outputs.released == 'yes') }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    env:
-      VERSION: ${{ inputs.version || needs.release.outputs.version }}
     permissions:
       id-token: write
       contents: read
       packages: write
 
     steps:
-      - name: Checkout release tag ✅
+      # Not the release job's version output: Actions drops a job output that contains a masked secret value
+      # (4.0.4 contains an Infisical secret "0.4"). A push run builds the release commit semantic-release just
+      # pushed to the branch and reads its version; GITHUB_ENV values are only masked in logs, never dropped.
+      - name: Checkout release ✅
         uses: actions/checkout@v7
         with:
-          ref: v${{ env.VERSION }}
+          ref: ${{ inputs.version && format('v{0}', inputs.version) || github.ref_name }}
+
+      - name: Read version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
 
       - name: Fetch secrets from Infisical 🔐
         uses: Infisical/secrets-action@v1.0.18
