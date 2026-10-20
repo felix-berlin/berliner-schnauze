@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.5](https://github.com/felix-berlin/berliner-schnauze/compare/v4.0.4...v4.0.5) (2026-10-20)
+
+
+### Bug Fixes
+
+* **ci:** read the release version in the docker job instead of a job output ([8d63a06](https://github.com/felix-berlin/berliner-schnauze/commit/8d63a062800fa688d49f34d5681aa8cd154e4d4b))
+
 ## [4.0.4](https://github.com/felix-berlin/berliner-schnauze/compare/v4.0.3...v4.0.4) (2026-10-20)
 
 
