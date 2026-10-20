@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.3](https://github.com/felix-berlin/berliner-schnauze/compare/v4.0.2...v4.0.3) (2026-10-20)
+
+
+### Bug Fixes
+
+* **ci:** rebuild release images on demand and survive a sentry outage ([db6d048](https://github.com/felix-berlin/berliner-schnauze/commit/db6d0489f751664418a001f8db105c91d4d7d64c))
+
 ## [4.0.2](https://github.com/felix-berlin/berliner-schnauze/compare/v4.0.1...v4.0.2) (2026-10-20)
 
 
