@@ -26,6 +26,9 @@ services:
       - ogcache:/app/og-cache
     # Reaps zombies and forwards signals (the entrypoint is node).
     init: true
+    # Node sizes its heap and GC by the limit it sees; without one it takes the host's RAM and keeps ~550 MB
+    # (measured: 288 MB after 300 pages with 512m vs 522 MB without, same latency). Leaves room for OG renders.
+    mem_limit: 512m
     depends_on:
       postgres:
         condition: service_healthy
