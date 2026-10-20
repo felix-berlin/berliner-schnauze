@@ -1,6 +1,7 @@
 // Container entrypoint: wraps the @astrojs/node standalone handler to redirect www and to add the security headers
 // to every response, static assets included (plain redirects live in astro.config.mjs `redirects`).
 import { createServer } from "node:http";
+import { constants, createBrotliCompress, createGzip } from "node:zlib";
 
 const CANONICAL_HOST = "berliner-schnauze.wtf";
 
@@ -12,6 +13,64 @@ const SECURITY_HEADERS = {
   "Permissions-Policy": "camera=(), microphone=(), geolocation=(), interest-cohort=()",
   "Referrer-Policy": "strict-origin-when-cross-origin",
   "X-Frame-Options": "DENY",
+};
+
+const COMPRESSIBLE = /^(text\/|application\/(json|javascript|xml|manifest\+json)|image\/svg\+xml)/;
+
+/**
+ * Compresses text responses on the fly: the reverse proxy passes them through raw (the search index is 2.9 MB,
+ * 0.3 MB compressed). Brotli at quality 4 costs a few ms; only full 200s of 1 KB and more.
+ */
+const compress = (req, res) => {
+  const accept = String(req.headers["accept-encoding"] ?? "");
+  const encoding =
+    req.method === "HEAD"
+      ? undefined
+      : /\bbr\b/.test(accept)
+        ? "br"
+        : /\bgzip\b/.test(accept)
+          ? "gzip"
+          : undefined;
+  const { end, write, writeHead } = res;
+  let zip;
+
+  res.writeHead = function (status, ...rest) {
+    const reason = typeof rest[0] === "string" ? rest.shift() : undefined;
+    for (const [key, value] of Object.entries(rest[0] ?? {})) this.setHeader(key, value);
+    if (COMPRESSIBLE.test(String(this.getHeader("Content-Type") ?? ""))) {
+      const vary = this.getHeader("Vary");
+      this.setHeader("Vary", vary ? `${vary}, Accept-Encoding` : "Accept-Encoding");
+      const length = Number(this.getHeader("Content-Length") ?? Infinity);
+      if (encoding && status === 200 && length >= 1024 && !this.hasHeader("Content-Encoding")) {
+        this.setHeader("Content-Encoding", encoding);
+        this.removeHeader("Content-Length");
+        zip =
+          encoding === "br"
+            ? createBrotliCompress({ params: { [constants.BROTLI_PARAM_QUALITY]: 4 } })
+            : createGzip();
+        zip.on("data", (chunk) => write.call(this, chunk));
+        zip.on("drain", () => this.emit("drain"));
+        zip.on("end", () => end.call(this));
+        this.once("close", () => zip.destroy());
+      }
+    }
+    return writeHead.call(this, status, reason);
+  };
+  res.write = function (chunk, ...args) {
+    if (!this.headersSent) this.writeHead(this.statusCode);
+    return zip ? zip.write(chunk, ...args) : write.call(this, chunk, ...args);
+  };
+  res.end = function (chunk, ...args) {
+    if (!this.headersSent) this.writeHead(this.statusCode);
+    if (!zip) return end.call(this, chunk, ...args);
+    const done = [chunk, ...args].find((a) => typeof a === "function");
+    if (done) this.once("finish", done);
+    zip.end(
+      typeof chunk === "function" ? undefined : chunk,
+      typeof args[0] === "string" ? args[0] : undefined,
+    );
+    return this;
+  };
 };
 
 process.env.ASTRO_NODE_AUTOSTART = "disabled";
@@ -41,11 +100,16 @@ const server = createServer((req, res) => {
   } catch {
     req.url = `${req.url.split("?")[0]}?${new URLSearchParams(search)}`;
   }
+  compress(req, res);
   handler(req, res);
 });
 
 const port = Number(process.env.PORT ?? 4321);
-server.listen(port, process.env.HOST ?? "0.0.0.0", () => console.log(`Listening on :${port}`));
+server.listen(port, process.env.HOST ?? "0.0.0.0", () => {
+  console.log(`Listening on :${port}`);
+  // Load the words now (~3 s), not on the first visitor's request after a deploy.
+  fetch(`http://127.0.0.1:${port}/api/search/index.json`).catch(() => {});
+});
 
 // Node as PID 1 ignores SIGTERM by default; without this `docker stop` waits 10 s.
 for (const signal of ["SIGTERM", "SIGINT"])
