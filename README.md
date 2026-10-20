@@ -38,11 +38,4 @@ Berliner Schnauze is a translator for the Berlin dialect. It helps users underst
 
    ```
 
-5. Active codegen watch mode:
-
-   ```bash
-   pnpm gql:generate:watch
-
-   ```
-
-6. Open your browser and navigate to `http://localhost:4321` to see the application in action.
+5. Open your browser and navigate to `http://localhost:4321` to see the application in action.

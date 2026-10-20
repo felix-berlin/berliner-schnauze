@@ -36,12 +36,10 @@ website/scripts/docker-smoke.sh   # Build image from dist/, check routes/headers
 
 # Cloudflare Workers cannot serve this stack (wrangler.jsonc is gone, a Workers Build fails).
 # Don't merge into main before step 7 of docs/cutover-checklist.md (or pause Workers Builds first).
-pnpm dlx tsx website/scripts/seo-diff.ts <prod-origin> <new-origin>   # SEO head + status parity of two origins
 
 # CMS (Payload, workspace package payload/)
 pnpm cms:dev                 # Payload admin + API on :3001
 pnpm cms:test                # Payload tests (needs DATABASE_URL_TEST, a throwaway Postgres DB named *_test)
-pnpm --filter payload-app import:wp   # Idempotent WordPress -> Payload import
 pnpm cms:migrate:create <name>   # After EVERY schema change; commit it. The cms container runs migrations on start (CI fails on drift)
 pnpm cms:migrate                 # Apply migrations to DATABASE_URL (not for dev DBs filled by schema push)
 docker compose up --build cms postgres   # CMS image (payload/Dockerfile, context = repo root)
@@ -80,10 +78,10 @@ Docker/compose reads the root `.env`; the `payload/` CLI and Next read a git-ign
 - **Images** — remote images (CMS/Wikimedia/Amazon) are served through a custom Astro image service backed by Imagor (`src/lib/imagorImageService.ts`, URL signing in `src/utils/imagor.ts`, HMAC-SHA256). Configured via `image.service.entrypoint` in `astro.config.mjs`; local ESM-imported images bypass Imagor and use their original Vite asset URL. No `sharp` dependency — removed in favor of Imagor.
 - **View Transitions**: `ClientRouter` is enabled globally in `src/components/BaseHead.astro`. Header and Footer use `transition:persist`. See **Astro scripts + View Transitions** below.
 - **CMS**: `payload/` (pnpm workspace package `payload-app`) is the Payload 3 backend (Next.js admin + REST/GraphQL, Postgres). Compose services `cms` (image `berliner-schnauze-cms`, media volume) and `postgres`; the Astro site reads it through the Local API (`getPayloadClient()` in `src/services/payload.ts`, `payload-app` workspace dependency; its types come from the `types` export condition)
-  - Schema: dev and tests push it; production (`NODE_ENV=production`, pinned on `cms`) only runs the committed migrations, and only where `PAYLOAD_RUN_MIGRATIONS=true` (set on `cms` alone). Never point a push-filled DB at the prod container. `import:wp` refuses a non-local DB unless `IMPORT_ALLOW_REMOTE_DB=1` and `NODE_ENV=production`.
+  - Schema: dev and tests push it; production (`NODE_ENV=production`, pinned on `cms`) only runs the committed migrations, and only where `PAYLOAD_RUN_MIGRATIONS=true` (set on `cms` alone). Never point a push-filled DB at the prod container.
   - Schema change: edit → `pnpm --filter payload-app generate:types` → `pnpm cms:migrate:create <name>`. New collections/globals get `authenticated` access from `src/access.ts` + a Forbidden test in `tests/access.test.ts`.
   - **Drafts**: the Local API ignores access control unless asked — every site query spreads `siteRead()`, or `siteDocs()` for drafts listings (`src/services/payload.ts`: `overrideAccess: false` + `req.context.siteRead`), and `draftsRead`/`contentRead` (`payload/src/access.ts`) then return published docs only, also in populated relations. REST/GraphQL stay login-only (they cannot set `req.context`). `SHOW_TEST_DATA` includes drafts on purpose (`siteDocs()`).
-  - **Derived word fields** (`derived` group) are computed on save by the `beforeChange` hook from `payload/src/lib/wordDerived.ts`, which the site also imports as `payload-app/word-derived` — keep it free of payload/next/config imports. `derived.decomposition` (compound parts) comes from `payload/src/lib/decompose.ts` instead, CMS only: its 28 MB dictionary never loads in the site. Changing the derivation leaves existing words stale until re-saved (`import:wp` re-saves all).
+  - **Derived word fields** (`derived` group) are computed on save by the `beforeChange` hook from `payload/src/lib/wordDerived.ts`, which the site also imports as `payload-app/word-derived` — keep it free of payload/next/config imports. `derived.decomposition` (compound parts) comes from `payload/src/lib/decompose.ts` instead, CMS only: its 28 MB dictionary never loads in the site. Changing the derivation leaves existing words stale until re-saved (there is no bulk tool; write a `payload run` script that updates every word with `req.context[PRESERVE_CONTENT_MODIFIED_AT] = true` to keep the sitemap lastmod).
   - `payload-app` exports: `.` (types via `src/astro.d.ts`, a hand-kept types-only mirror of `src/index.ts` — update both), `./word-derived`, `./lexical-html`, `./routes` (collection → site path, shared by SEO, redirects and rich-text links), `./preview` (signed preview tokens).
   - **Redirects** (`@payloadcms/plugin-redirects`, `payload/src/redirects.ts`): `src/middleware/index.ts` answers a 404 with a matching redirect (`src/services/payload/redirects.ts`). Changing the slug of a public doc adds a 301 itself (`hooks/redirectOldSlug.ts`).
   - **Draft preview**: the admin's preview button (words, posts) links to `/api/preview` with a token signed by `PAYLOAD_SECRET` (1 h); the site keeps it in an httpOnly cookie and renders the latest draft with `Cache-Control: private, no-store`. Admin and site are on different hosts, so the Payload login cookie is not used. The CMS builds the link from `SITE_URL`.
@@ -166,7 +164,7 @@ Also guard `ResizeObserver` / `getBoundingClientRect` callbacks against transiti
 
 ## Words in dev
 
-The dev server reads words from your local Payload database (fill it with `pnpm --filter payload-app import:wp`, see `payload/README.md`); `ttl()` caches them for 60 s per process. Words render per request, so a similarity/anagram computation over all ~6000 words must stay cheap (the soundex index is built once per cache window).
+The dev server reads words from your local Payload database (fill it from a production backup, or with invented words via `pnpm --filter payload-app seed:e2e`; see `payload/README.md`); `ttl()` caches them for 60 s per process. Words render per request, so a similarity/anagram computation over all ~6000 words must stay cheap (the soundex index is built once per cache window).
 
 ## Environment Variables
 

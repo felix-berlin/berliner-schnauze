@@ -17,7 +17,7 @@ Cards go one way only: Berlinerisch → German. Design details live in
 - **Not included:** `sources`/`quelle` and `infoText`.
 - **Lite only:** the `Hinweis` field shows a short pointer to the Full deck (`https://berliner-schnauze.wtf/anki`).
 
-Both decks use the same note type and the same GUIDs (`genanki.guid_for(id)`, where `id` is the former WordPress id (`wpId`) so existing cards keep their GUIDs; words created in Payload later get `1,000,000 + their Payload id`).
+Both decks use the same note type and the same GUIDs (`genanki.guid_for("payload", id)`, where `id` is the Payload id; the `"payload"` prefix keeps them apart from the WordPress-id GUIDs of decks built before the move, so importing over such a deck adds duplicates instead of turning old cards into different words. Delete an old deck before importing a new one).
 Importing Full after Lite therefore updates the Lite cards instead of duplicating them.
 
 ## Prerequisites
@@ -105,10 +105,11 @@ Check fees and VAT handling on the Polar pricing pages yourself before deciding.
 1. Rebuild (see above). Deck, model and note IDs are fixed, so nothing needs to be renamed.
 2. Publish a release (Lite goes to GitHub, Full to Polar automatically) and upload the new Lite file
    to AnkiWeb again.
-3. Users who re-import get changed cards updated in place. Newly published words are added.
+3. Users who re-import get changed cards updated in place. Newly published words are added. (One exception:
+   the first deck after the move to Payload has new GUIDs, see above; imported over an older deck it adds every card again.)
 
 Do not change `FULL_DECK_ID`, `LITE_DECK_ID`, `MODEL_ID` or the GUID scheme in `scripts/build_anki_decks.py`
-after the first release. Otherwise Anki treats every card as new and users end up with duplicates.
+after the first release (it changed once, with the move to Payload). Otherwise Anki treats every card as new and users end up with duplicates.
 Changing the fields or templates of the note type is fine, but keep the field order.
 
 ## Troubleshooting

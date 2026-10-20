@@ -77,7 +77,7 @@ describe("wordOfTheDay store", () => {
       unsub();
     });
 
-    it("fetches again when today's cached word has the former WordPress shape (no slug)", async () => {
+    it("fetches again when today's cached word has an older shape (no slug)", async () => {
       localStorage.setItem("wordOfTheDay:timestamp", JSON.stringify(Date.now()));
       localStorage.setItem("wordOfTheDay:word", JSON.stringify({ ID: 1, post_name: "schnauze" }));
       const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");

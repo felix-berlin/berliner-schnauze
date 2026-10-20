@@ -36,7 +36,7 @@ test.describe("Filter Sidebar (/)", () => {
   test("Buchstaben-Filter (Alphabet) filtert die Wortliste auf einen Buchstaben", async ({
     page,
   }) => {
-    // Content is a live WordPress dataset — capture the current count instead of a fixed number.
+    // Content depends on the database (seed or dev data) — capture the current count instead of a fixed number.
     const resultCount = page.getByText(/\d+ Ergebnisse/);
     const defaultCount = await resultCount.textContent();
 

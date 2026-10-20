@@ -3,8 +3,6 @@
 /// <reference types="astro/client" />
 /// <reference types="../.astro/astro-env.d.ts" />
 
-declare module "*.gql";
-
 interface TurnstileInstance {
   render(
     selector: string,

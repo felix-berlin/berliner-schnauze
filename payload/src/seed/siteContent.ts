@@ -1,6 +1,6 @@
 import type { Payload, PayloadRequest } from "payload";
 
-import { htmlToLexical } from "../import/html";
+import { htmlToLexical } from "../lib/htmlToLexical";
 
 /** What /anki, the home page and /spenden showed while these texts lived in the Astro pages. */
 export const ANKI_CONTENT = {

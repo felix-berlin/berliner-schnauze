@@ -88,7 +88,7 @@ onMount($wordOfTheDay, () => {
 
   void task(async () => {
     const timestamp = readPersisted("timestamp", 0);
-    // A word cached in the former WordPress shape has no slug: fetch it again.
+    // A word cached in an older shape has no slug: fetch it again.
     const cachedSlug = readPersisted<Word>("word", {}).slug;
     if (timestamp && isCachedToday(timestamp) && cachedSlug) return;
 

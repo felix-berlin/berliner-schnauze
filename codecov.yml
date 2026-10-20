@@ -1,5 +1,5 @@
 # Astro page routes (src/pages/**/*.astro) have no unit-test convention in
-# this repo — they need getStaticPaths/Astro.site/GraphQL-fetch mocking that
+# this repo — they need Astro.site/Payload Local API mocking that
 # no test here currently does. Excluded from coverage instead of flagging
 # every new or touched page route.
 ignore:

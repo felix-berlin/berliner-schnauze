@@ -25,7 +25,7 @@ test.describe("Search Edge Cases (/)", () => {
     await page.goto("/");
 
     const search = page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" });
-    // Content is a live WordPress dataset — capture the current count instead of a fixed number.
+    // Content depends on the database (seed or dev data) — capture the current count instead of a fixed number.
     const resultCount = page.getByText(/\d+ Ergebnisse/);
     const defaultCount = await resultCount.textContent();
 

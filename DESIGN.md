@@ -164,10 +164,10 @@ The palette reads as a hand-labeled dossier: warm orange annotations and a rare 
 
 The global header (`MainHeader.astro`) is a single row: wordmark · header links · dashed divider · search trigger · menu button. The header bar itself stays square.
 
-- **Header links** ("Wort Index", "Magazin", from the WP "Main Menu"): 36px tall, 1px dashed bottom border that turns `currentColor` on hover and on the current section (`aria-current="page"`). Hidden below `md` — they also live in the menu.
+- **Header links** ("Wort Index", "Magazin", from the CMS navigation): 36px tall, 1px dashed bottom border that turns `currentColor` on hover and on the current section (`aria-current="page"`). Hidden below `md` — they also live in the menu.
 - **Header controls** (search trigger, menu button, `.c-header-control`): 36px tall, 4px radius, `c-button` colors, visible text label ("Suche" with a `/` kbd, "Menü"). The search trigger drops Berlin Red on purpose so all controls look alike. Hover or open: dashed border + orange glow.
 - **Main menu dropdown** (`MainMenu.vue`, `.c-main-menu`): 600px, 4px radius, Paper-Lift drop-shadow with arrow. Two columns split by a dashed rule:
-  - _Entdecken_ — every CMS item that has a WP description becomes a card: 34×34 icon tile (3px radius, button colors), bold title, muted description. Hover: dashed border + tinted fill, 3px radius. "Neu" tag: 0.72rem, dashed border, 3px radius.
+  - _Entdecken_ — every CMS item that has a description becomes a card: 34×34 icon tile (3px radius, button colors), bold title, muted description. Hover: dashed border + tinted fill, 3px radius. "Neu" tag: 0.72rem, dashed border, 3px radius.
   - _Mitmachen_ / _App_ — remaining items as compact icon links with a dashed underline on hover, then the Hell / Dunkel / System segment (`ColorModePicker`: fieldset of native radios, 4px radius, inactive options dimmed, active = light orange tint; icon-only here, labelled on /settings).
   - Install bar (only while the PWA isn't installed): dashed top rule, `c-button--primary` CTA with 4px radius.
   - Group labels are sentence case, 0.8rem / 700 / `--color-muted` — not the uppercase Label style.

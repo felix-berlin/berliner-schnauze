@@ -18,7 +18,7 @@ describe("scheduled publishing of posts", () => {
     const payload = await getTestPayload();
     const post = await payload.create({
       collection: "posts",
-      data: { title: "Geplant", slug: SLUG, wpId: 990401 },
+      data: { title: "Geplant", slug: SLUG },
     });
     expect(post._status).toBe("draft");
 
