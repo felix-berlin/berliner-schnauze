@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.1.0...v4.1.1) (2026-10-20)
+
+
+### Performance Improvements
+
+* **cms:** buffer uploads in temp files instead of memory ([5772df7](https://github.com/felix-berlin/berliner-schnauze/commit/5772df7aaed9fc28e21026aecbe71287871165f8))
+* **word:** skip the count queries the change checks never read ([b968b08](https://github.com/felix-berlin/berliner-schnauze/commit/b968b0807805803a559e98583ba48b023b68e852))
+
 # [4.1.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.0.5...v4.1.0) (2026-10-20)
 
 
