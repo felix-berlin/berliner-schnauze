@@ -5,7 +5,15 @@ import { authenticated, mediaRead } from "../access";
 export const Media: CollectionConfig = {
   slug: "media",
   access: { read: mediaRead, create: authenticated, update: authenticated, delete: authenticated },
-  upload: { staticDir: process.env.MEDIA_DIR ?? "media", mimeTypes: ["image/*", "audio/*"] },
+  upload: {
+    staticDir: process.env.MEDIA_DIR ?? "media",
+    mimeTypes: ["image/*", "audio/*"],
+    // Payload sends files without any cache header, so browsers fetched every audio again. A day, not immutable:
+    // a file replaced under the same name shows up by the next day.
+    modifyResponseHeaders: ({ headers }) => {
+      headers.set("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
+    },
+  },
   fields: [
     { name: "alt", type: "text" },
     { name: "caption", type: "text" },

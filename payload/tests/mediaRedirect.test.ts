@@ -1,3 +1,4 @@
+import { handleEndpoints } from "payload";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { wpUploadPath } from "../src/lib/wpUploadPath";
@@ -46,5 +47,17 @@ describe("findMediaRedirect", () => {
   it("returns null for an unknown path", async () => {
     const payload = await getTestPayload();
     expect(await findMediaRedirect(payload, "/wp-content/uploads/nope.jpg")).toBeNull();
+  });
+});
+
+describe("media files", () => {
+  it("are served with a cache header (Payload sends none by default)", async () => {
+    const payload = await getTestPayload();
+    const res = await handleEndpoints({
+      config: payload.config,
+      request: new Request("http://localhost/api/media/file/redirect-kueche.png"),
+    });
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Cache-Control")).toBe("public, max-age=86400, stale-while-revalidate=604800");
   });
 });
