@@ -144,6 +144,16 @@ describe("installApp store", () => {
       unsub();
     });
 
+    it("keeps a beforeinstallprompt event fired before any component subscribed", async () => {
+      const { $installPrompt, $showInstallButton } = await import("@stores/installApp.ts");
+      const event = new Event("beforeinstallprompt");
+      window.dispatchEvent(event);
+      const unsub = $installPrompt.subscribe(() => {});
+      expect($installPrompt.get()).toBe(event);
+      expect($showInstallButton.get()).toBe(true);
+      unsub();
+    });
+
     it("calls trackEvent on appinstalled event", async () => {
       const { $installPrompt } = await import("@stores/installApp.ts");
       const { trackEvent } = await import("@utils/analytics");

@@ -404,9 +404,11 @@ export default defineConfig({
       workbox: {
         globDirectory: "dist/client",
         cleanupOutdatedCaches: true,
-        // No navigate fallback option: with on-demand pages the precache holds no HTML, and Workbox would answer
+        // No navigate fallback: with on-demand pages the precache holds no HTML, and Workbox would answer
         // every page load (not just offline ones) with the homepage. Visited pages are cached by the
-        // NetworkFirst navigation route in runtimeCaching instead.
+        // NetworkFirst navigation route in runtimeCaching instead. Must be null, not omitted: @vite-pwa/astro
+        // then sets "/", and the worker throws non-precached-url before registering the routes below.
+        navigateFallback: null,
         globPatterns: import.meta.env.DEV
           ? []
           : ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],

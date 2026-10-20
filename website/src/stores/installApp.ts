@@ -14,29 +14,24 @@ export const $installPrompt = atom<BeforeInstallPromptEvent | null>(null);
 export const $showInstallButton = atom<boolean>(false);
 export const $isPwaInstalled = atom<boolean>(false);
 
+// Listen at import, not in onMount: beforeinstallprompt fires once per page load, often before the
+// install button's island hydrates (Android). src/services/pwa.ts imports this module in <head>.
+if (typeof window !== "undefined") {
+  window.addEventListener("beforeinstallprompt", (event) => {
+    $installPrompt.set(event as BeforeInstallPromptEvent);
+    $showInstallButton.set(true);
+  });
+  window.addEventListener("appinstalled", () => {
+    trackEvent("App", "Installation completed", "PWA");
+  });
+}
+
 onMount($installPrompt, () => {
   $isPwaInstalled.set(isPwaInstalled());
 
   if ($isPwaInstalled.get()) {
     trackEvent("App", "Already installed", "PWA");
   }
-
-  const handleBeforeInstallPrompt = (event: Event): void => {
-    $installPrompt.set(event as BeforeInstallPromptEvent);
-    $showInstallButton.set(true);
-  };
-
-  const handleAppInstalled = (): void => {
-    trackEvent("App", "Installation completed", "PWA");
-  };
-
-  window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-  window.addEventListener("appinstalled", handleAppInstalled);
-
-  return () => {
-    window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-    window.removeEventListener("appinstalled", handleAppInstalled);
-  };
 });
 
 export const isPwaInstalled = (): boolean =>

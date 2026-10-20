@@ -6,7 +6,8 @@ const config = readFileSync(new URL("../../../../astro.config.mjs", import.meta.
 
 describe("astro.config.mjs", () => {
   it("never makes the service worker answer a page load with the precached homepage", () => {
-    expect(config).not.toMatch(/navigateFallback\s*:/);
+    // Omitted, @vite-pwa/astro sets it to "/" itself.
+    expect(config).toMatch(/navigateFallback\s*:\s*null\b/);
   });
 
   it("caps request bodies: the suggest-word POST is anonymous and parsed before validation", () => {

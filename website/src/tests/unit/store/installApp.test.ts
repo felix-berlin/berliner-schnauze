@@ -60,22 +60,7 @@ describe("disableInAppInstallPrompt", () => {
   });
 });
 
-describe("onMount cleanup", () => {
-  it("removes event listeners after STORE_UNMOUNT_DELAY when last subscriber leaves", async () => {
-    vi.useFakeTimers();
-    const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
-    const { $installPrompt } = await import("@stores/installApp.ts");
-    const unsub = $installPrompt.subscribe(() => {});
-    unsub();
-    vi.advanceTimersByTime(1001);
-    expect(removeEventListenerSpy).toHaveBeenCalledWith(
-      "beforeinstallprompt",
-      expect.any(Function),
-    );
-    expect(removeEventListenerSpy).toHaveBeenCalledWith("appinstalled", expect.any(Function));
-    vi.useRealTimers();
-  });
-
+describe("window events", () => {
   it("beforeinstallprompt event sets $installPrompt and shows install button", async () => {
     const { $installPrompt, $showInstallButton } = await import("@stores/installApp.ts");
     const unsub = $installPrompt.subscribe(() => {});
