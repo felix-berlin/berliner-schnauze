@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 
 import { fetchAllThemen } from "@services/payload/themen.ts";
+import { jsonWithEtag } from "@utils/cacheHeaders.ts";
 
 import { getSearchIndexEntries } from "@/pages/api/search/index.json.ts";
 
@@ -9,7 +10,7 @@ const getMinMax = (arr: number[]) => ({
   min: arr.length ? Math.min(...arr) : 0,
 });
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ request }) => {
   const [entries, allThemen] = await Promise.all([getSearchIndexEntries(), fetchAllThemen()]);
 
   const themen = allThemen.map(({ name, slug }) => ({ name, slug }));
@@ -39,5 +40,5 @@ export const GET: APIRoute = async () => {
     wordTypes,
   };
 
-  return Response.json(meta);
+  return jsonWithEtag(request, JSON.stringify(meta));
 };

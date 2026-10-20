@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 
 import { fetchAllWords, type SiteWord, translationTexts } from "@services/payload/words.ts";
+import { etagOf, jsonWithEtag } from "@utils/cacheHeaders.ts";
 
 export type OramaSearchIndex = ReturnType<typeof makeOramaSearchIndex>;
 
@@ -39,14 +40,18 @@ export function makeOramaSearchIndex(word: SiteWord) {
 }
 
 // index.json and meta.json both need the entries: map (and serialize) each memoized words array once.
-const indexByWords = new WeakMap<SiteWord[], { entries: OramaSearchIndex[]; json: string }>();
+const indexByWords = new WeakMap<
+  SiteWord[],
+  { entries: OramaSearchIndex[]; etag: string; json: string }
+>();
 
 const searchIndex = async () => {
   const words = await fetchAllWords();
   let index = indexByWords.get(words);
   if (!index) {
     const entries = words.map(makeOramaSearchIndex);
-    indexByWords.set(words, (index = { entries, json: JSON.stringify(entries) }));
+    const json = JSON.stringify(entries);
+    indexByWords.set(words, (index = { entries, etag: etagOf(json), json }));
   }
   return index;
 };
@@ -54,5 +59,7 @@ const searchIndex = async () => {
 export const getSearchIndexEntries = async (): Promise<OramaSearchIndex[]> =>
   (await searchIndex()).entries;
 
-export const GET: APIRoute = async () =>
-  new Response((await searchIndex()).json, { headers: { "Content-Type": "application/json" } });
+export const GET: APIRoute = async ({ request }) => {
+  const { etag, json } = await searchIndex();
+  return jsonWithEtag(request, json, etag);
+};

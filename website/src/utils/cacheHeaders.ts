@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+
 type CacheableResponse = { headers: Headers; status?: number };
 
 /**
@@ -17,3 +19,20 @@ export const setPageCache = <R extends CacheableResponse>(
   );
   return response;
 };
+
+/** A weak ETag of a body (weak: the server compresses per client, the bytes differ by encoding). */
+export const etagOf = (body: string): string =>
+  `W/"${createHash("sha1").update(body).digest("base64url")}"`;
+
+/**
+ * A JSON response with an ETag: a client that already has it (If-None-Match) gets an empty 304. The service
+ * worker revalidates the search index on every visit; without this it downloaded the whole index each time.
+ */
+export const jsonWithEtag = (
+  request: Request | undefined,
+  body: string,
+  etag = etagOf(body),
+): Response =>
+  request?.headers.get("If-None-Match") === etag
+    ? new Response(null, { headers: { ETag: etag }, status: 304 })
+    : new Response(body, { headers: { "Content-Type": "application/json", ETag: etag } });
