@@ -135,7 +135,7 @@ class DeckTests(unittest.TestCase):
         full_guids = {n.guid for n in self.full.notes}
         self.assertEqual(len(full_guids), 60)
         self.assertTrue({n.guid for n in self.lite.notes} <= full_guids)
-        self.assertEqual(self.full.notes[0].guid, genanki.guid_for(self.words[0]["id"]))
+        self.assertEqual(self.full.notes[0].guid, genanki.guid_for("payload", self.words[0]["id"]))
 
     def test_hint_only_in_lite(self):
         self.assertTrue(all(n.fields[6] == "" for n in self.full.notes))
@@ -202,7 +202,7 @@ def payload_doc(slug="anmachen", **over):
 
 
 class PayloadTests(unittest.TestCase):
-    def test_payload_word_normalizes_like_the_old_wordpress_node(self):
+    def test_payload_word_normalizes(self):
         w = b.normalize_word(b.payload_to_node(payload_doc()))
         self.assertEqual(w["id"], 7)
         self.assertEqual(w["slug"], "anmachen")

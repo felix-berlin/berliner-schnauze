@@ -134,7 +134,7 @@ def make_note(word, hint_html):
     return genanki.Note(
         model=MODEL,
         fields=note_fields(word, hint_html),
-        guid=genanki.guid_for(word["id"]),
+        guid=genanki.guid_for("payload", word["id"]),
         tags=[word["group"]],
     )
 
@@ -172,9 +172,9 @@ PAGE_SIZE = 500
 
 
 def payload_to_node(doc):
-    """Payload word -> the node shape `normalize_word` reads (that function and the deck code stay as they were)."""
+    """Payload word -> the node shape `normalize_word` reads."""
     return {
-        # genanki guids come from this id.
+        # genanki guids come from this id; changing it re-keys every card.
         "databaseId": doc["id"],
         "slug": doc["slug"],
         "title": doc.get("berlinerisch"),
