@@ -264,13 +264,18 @@ describe("fetchAllWords", () => {
   // The change check (latest updatedAt per collection) answers `probe`; the word pages go to `loadPages`.
   const loadPages = vi.fn();
   let probe: { docs: { updatedAt: string }[]; totalDocs: number };
+  // vi.doMock outlives vi.resetModules: undo the drafts test's SHOW_TEST_DATA.
+  afterEach(() => vi.doMock("astro:env/client", () => ({ SHOW_TEST_DATA: false })));
   beforeEach(() => {
     probe = { docs: [{ updatedAt: "2026-10-01T00:00:00.000Z" }], totalDocs: 1 };
     loadPages.mockReset();
-    find.mockImplementation((args: { sort?: string }) =>
-      args.sort === "-updatedAt" ? Promise.resolve(probe) : loadPages(args),
+    find.mockImplementation((args: { collection: string; sort?: string }) =>
+      args.sort === "-updatedAt"
+        ? Promise.resolve(args.collection === "words" ? probe : unchanged)
+        : loadPages(args),
     );
   });
+  const unchanged = { docs: [{ updatedAt: "2026-09-01T00:00:00.000Z" }], totalDocs: 1 };
 
   it("pages through the local api and asks for published words only", async () => {
     loadPages
@@ -360,13 +365,106 @@ describe("fetchAllWords", () => {
     expect(loadPages).toHaveBeenCalledTimes(2);
     expect(await fetchAllWords()).toBe(first);
 
-    // a word changed: the next refresh reloads
+    // a word changed: the next refresh reloads (just that word)
     probe = { ...probe, docs: [{ updatedAt: "2026-10-02T00:00:00.000Z" }] };
     vi.advanceTimersByTime(61_000);
     await fetchAllWords();
     await vi.runAllTimersAsync();
-    expect(loadPages).toHaveBeenCalledTimes(3);
+    expect(loadPages).toHaveBeenCalledTimes(4);
     expect(await fetchAllWords()).not.toBe(first);
+  });
+
+  describe("after an edit", () => {
+    const w = (id: number, berlinerisch: string, related: unknown[] = []) => ({
+      ...doc,
+      berlinerisch,
+      id,
+      relatedWords: related,
+      slug: berlinerisch,
+    });
+    const refresh = async (fetchAllWords: () => Promise<unknown>) => {
+      vi.advanceTimersByTime(61_000);
+      await fetchAllWords();
+      await vi.runAllTimersAsync();
+      return (await fetchAllWords()) as {
+        berlinerisch: string;
+        relatedWords: { slug: string }[];
+      }[];
+    };
+    const start = async () => {
+      vi.useFakeTimers();
+      probe = { docs: [{ updatedAt: "2026-10-01T00:00:00.000Z" }], totalDocs: 3 };
+      loadPages.mockResolvedValueOnce(
+        page([w(1, "aasen", [w(2, "bulette")]), w(2, "bulette"), w(3, "zille")]),
+      );
+      const { fetchAllWords } = await load();
+      await fetchAllWords();
+      loadPages.mockClear();
+      probe = { ...probe, docs: [{ updatedAt: "2026-10-02T00:00:00.000Z" }] };
+      return fetchAllWords;
+    };
+
+    it("reloads only the changed words and the words listing them as related", async () => {
+      const fetchAllWords = await start();
+      loadPages
+        .mockResolvedValueOnce({ docs: [{ id: 2, updatedAt: "2026-10-02T00:00:00.000Z" }] })
+        .mockResolvedValueOnce({
+          docs: [w(1, "aasen", [w(2, "boulette")]), w(2, "boulette")],
+        });
+      const words = await refresh(fetchAllWords);
+      expect(words.map((x) => x.berlinerisch)).toEqual(["aasen", "boulette", "zille"]);
+      expect(words[0].relatedWords.map((r) => r.slug)).toEqual(["boulette"]);
+      expect(loadPages).toHaveBeenCalledTimes(2);
+      // any status since the last known change, so a word that left the public set is found too
+      expect(loadPages.mock.calls[0][0]).toMatchObject({
+        overrideAccess: true,
+        where: { updatedAt: { greater_than_equal: "2026-10-01T00:00:00.000Z" } },
+      });
+      expect(loadPages.mock.calls[1][0]).toMatchObject({
+        context: { siteRead: "published" },
+        where: { or: [{ id: { in: [2] } }, { relatedWords: { in: [2] } }] },
+      });
+    });
+
+    it("drops a word that is no longer public", async () => {
+      const fetchAllWords = await start();
+      probe = { ...probe, totalDocs: 2 };
+      loadPages.mockResolvedValueOnce({ docs: [{ id: 3 }] }).mockResolvedValueOnce({ docs: [] });
+      expect((await refresh(fetchAllWords)).map((x) => x.berlinerisch)).toEqual([
+        "aasen",
+        "bulette",
+      ]);
+    });
+
+    it("loads everything when the counts do not add up (a deleted word)", async () => {
+      const fetchAllWords = await start();
+      probe = { ...probe, totalDocs: 2 };
+      loadPages
+        .mockResolvedValueOnce({ docs: [] })
+        .mockResolvedValueOnce({ docs: [] })
+        .mockResolvedValueOnce(page([w(1, "aasen"), w(3, "zille")]));
+      expect((await refresh(fetchAllWords)).map((x) => x.berlinerisch)).toEqual(["aasen", "zille"]);
+      expect(loadPages.mock.calls[2][0]).toMatchObject({ page: 1 });
+    });
+
+    it("loads everything when media, themen or word types changed", async () => {
+      const fetchAllWords = await start();
+      find.mockImplementation((args: { collection: string; sort?: string }) =>
+        args.sort === "-updatedAt"
+          ? Promise.resolve(
+              args.collection === "themen"
+                ? { docs: [{ updatedAt: "2026-10-03T00:00:00.000Z" }], totalDocs: 1 }
+                : args.collection === "words"
+                  ? probe
+                  : unchanged,
+            )
+          : loadPages(args),
+      );
+      loadPages.mockResolvedValueOnce(page([w(1, "aasen"), w(2, "bulette"), w(3, "zille")]));
+      await refresh(fetchAllWords);
+      expect(loadPages).toHaveBeenCalledTimes(1);
+      expect(loadPages.mock.calls[0][0]).toMatchObject({ page: 1 });
+    });
   });
 
   it("checks the public word count and the populated collections for changes", async () => {

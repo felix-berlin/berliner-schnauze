@@ -9,6 +9,7 @@ import type {
 
 import { ttl } from "@services/cache.ts";
 import { getPayloadClient, mediaUrl, siteDocs, siteRead } from "@services/payload.ts";
+import { SHOW_TEST_DATA } from "astro:env/client";
 import { lexicalToHtml } from "payload-app/lexical-html";
 import { type DerivedWordFields, deriveWordFields } from "payload-app/word-derived";
 
@@ -174,9 +175,11 @@ const loadAllWords = async (): Promise<SiteWord[]> => {
     if (!result.hasNextPage) break;
   }
 
-  // German collation here, not the database's: the neighbor sections depend on this order.
-  return words.sort((a, b) => a.berlinerisch.localeCompare(b.berlinerisch, "de"));
+  return words.sort(byHeadword);
 };
+
+// German collation here, not the database's: the neighbor sections depend on this order.
+const byHeadword = (a: SiteWord, b: SiteWord) => a.berlinerisch.localeCompare(b.berlinerisch, "de");
 
 /** The latest version of a word, draft included, for the editor's preview (never cached). */
 export const fetchDraftWord = async (id: number): Promise<SiteWord | undefined> => {
@@ -208,31 +211,90 @@ export const fetchDraftWord = async (id: number): Promise<SiteWord | undefined> 
   });
 };
 
+type Fingerprint = { others: string; total: number; wordsAt: string };
+
 /**
  * Cheap fingerprint of what loadAllWords reads: the public word count and the latest change of the words and of
- * every collection populated into them. Unchanged, the full reload (~6000 words) is skipped.
+ * every collection populated into them. Unchanged, the reload is skipped.
  */
-const wordsFingerprint = async (): Promise<string> => {
+const wordsFingerprint = async (): Promise<Fingerprint> => {
   const payload = await getPayloadClient();
   const latest = { depth: 0, limit: 1, select: { updatedAt: true }, sort: "-updatedAt" } as const;
-  const results = await Promise.all([
+  const [words, ...others] = await Promise.all([
     payload.find({ collection: "words", ...latest, ...siteDocs() }),
     ...(["media", "themen", "word-types"] as const).map((collection) =>
       payload.find({ collection, ...latest, ...siteRead() }),
     ),
   ]);
-  return [results[0].totalDocs, ...results.map((r) => r.docs[0]?.updatedAt ?? "")].join("|");
+  return {
+    others: others.map((r) => r.docs[0]?.updatedAt ?? "").join("|"),
+    total: words.totalDocs,
+    wordsAt: words.docs[0]?.updatedAt ?? "",
+  };
 };
 
-let loaded: { fingerprint: string; words: SiteWord[] } | undefined;
+/** More changed words than this, and a full reload is about as cheap. */
+const MAX_PATCH = 200;
+
+/**
+ * The words array with only what changed since `prev` reloaded: the words saved since (in any status: one that left
+ * the public set must go) and the words listing them as related (they show its headword and slug). Undefined when
+ * a full reload is needed: media, themen or word types changed, a word was deleted (the counts do not add up),
+ * too many changes, or the drafts listing (its versions are not in the words table).
+ */
+const patchWords = async (
+  prev: Fingerprint & { words: SiteWord[] },
+  next: Fingerprint,
+): Promise<SiteWord[] | undefined> => {
+  if (SHOW_TEST_DATA || prev.others !== next.others || !prev.wordsAt) return undefined;
+  const payload = await getPayloadClient();
+  const { docs: changed } = await payload.find({
+    collection: "words",
+    depth: 0,
+    limit: MAX_PATCH + 1,
+    overrideAccess: true,
+    select: { updatedAt: true },
+    where: { updatedAt: { greater_than_equal: prev.wordsAt } },
+  });
+  if (changed.length > MAX_PATCH) return undefined;
+  const ids = changed.map((d) => d.id);
+  const { docs } = await payload.find({
+    collection: "words",
+    depth: 1,
+    pagination: false,
+    populate: WORD_POPULATE,
+    where: { or: [{ id: { in: ids } }, { relatedWords: { in: ids } }] },
+    ...siteRead(),
+  });
+  const byId = new Map(prev.words.map((w) => [w.id, w]));
+  for (const id of ids) byId.delete(id);
+  for (const doc of docs) {
+    const word = toSiteWord(doc);
+    if (word) byId.set(word.id, word);
+  }
+  // Words a full load skips (no slug) count in `total` too: the gap between the two must stay the same.
+  if (next.total - byId.size !== prev.total - prev.words.length) return undefined;
+  return [...byId.values()].sort(byHeadword);
+};
+
+let loaded: (Fingerprint & { words: SiteWord[] }) | undefined;
 
 /**
  * All public words (plus drafts with SHOW_TEST_DATA), checked for changes once a minute: an admin edit is live
- * without a rebuild. The same array is returned while nothing changed, so indexes keyed on it stay warm.
+ * without a rebuild. An edit reloads only the words it touches; the same array is returned while nothing changed,
+ * so indexes keyed on it stay warm.
  */
 export const fetchAllWords = ttl(60_000, async (): Promise<SiteWord[]> => {
-  const fingerprint = await wordsFingerprint();
-  if (loaded?.fingerprint !== fingerprint) loaded = { fingerprint, words: await loadAllWords() };
+  const next = await wordsFingerprint();
+  if (
+    !loaded ||
+    loaded.total !== next.total ||
+    loaded.wordsAt !== next.wordsAt ||
+    loaded.others !== next.others
+  ) {
+    const words = (loaded && (await patchWords(loaded, next))) ?? (await loadAllWords());
+    loaded = { ...next, words };
+  }
   return loaded.words;
 });
 
