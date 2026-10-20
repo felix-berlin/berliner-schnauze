@@ -45,7 +45,7 @@
     "astro": "^7.4.1",
     "astro-breadcrumbs": "^3.4.2",
     "astro-matomo": "^1.12.0",
-    "astro-og-canvas": "^0.13.2",
+    "astro-og-canvas": "0.13.2",
     "canvaskit-wasm": "0.42.0",
     "compromise": "^14.19.0",
     "de-compromise": "^0.1.1",

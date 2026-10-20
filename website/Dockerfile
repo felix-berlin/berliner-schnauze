@@ -1,14 +1,17 @@
 # Runtime-only image: `dist/` is built beforehand (CI or `pnpm build:local`),
 # so build secrets never enter a layer. The server bundle has every dep inlined
-# (vite.ssr.noExternal) except what is read from disk at runtime: canvaskit-wasm
-# (its .wasm, OG images). Only that one is installed below.
-# Pure wasm, so it is fetched once on the build platform for every target.
+# (vite.ssr.noExternal) except what runs outside it: astro-og-canvas with canvaskit-wasm
+# (its .wasm), loaded by the OG worker thread (server/og-worker.mjs). Only those are installed below.
+# Pure JS and wasm, so they are fetched once on the build platform for every target.
 FROM --platform=$BUILDPLATFORM node:24-slim@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5 AS og-deps
 # package.json is only read for the (exact, lockfile-matching) version, never installed (it would run the pnpm-only preinstall).
 COPY package.json /meta/package.json
 WORKDIR /deps
+# --legacy-peer-deps: astro-og-canvas's peer `astro` is not needed to render.
 RUN npm install --omit=dev --no-audit --no-fund --no-package-lock --ignore-scripts \
+    --legacy-peer-deps \
     "canvaskit-wasm@$(node -p "require('/meta/package.json').dependencies['canvaskit-wasm']")" \
+    "astro-og-canvas@$(node -p "require('/meta/package.json').dependencies['astro-og-canvas']")" \
  && mkdir og-cache
 
 FROM --platform=$BUILDPLATFORM node:24-slim@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5 AS infisical-cli

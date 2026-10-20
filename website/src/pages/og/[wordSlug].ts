@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 
+import { renderOgImage } from "@services/ogImage.ts";
 import { fetchWordBySlug, translationTexts } from "@services/payload/words.ts";
-import { generateOpenGraphImage } from "astro-og-canvas";
 import { OG_CACHE_DIR } from "astro:env/server";
 
 const notFound = () => new Response(null, { status: 404 });
@@ -13,7 +13,7 @@ export const GET: APIRoute = async ({ params }) => {
   if (!word) return notFound();
 
   const translation = translationTexts(word).join(", ");
-  const image = await generateOpenGraphImage({
+  const image = await renderOgImage({
     bgGradient: [
       [43, 51, 59],
       [30, 37, 43],

@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { generateOpenGraphImage, fetchWordBySlug } = vi.hoisted(() => ({
+const { renderOgImage, fetchWordBySlug } = vi.hoisted(() => ({
   fetchWordBySlug: vi.fn(),
-  generateOpenGraphImage: vi.fn(),
+  renderOgImage: vi.fn(),
 }));
 
-vi.mock("astro-og-canvas", () => ({ generateOpenGraphImage }));
+vi.mock("@services/ogImage.ts", () => ({ renderOgImage }));
 vi.mock("@services/payload/words.ts", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@services/payload/words.ts")>()),
   fetchWordBySlug,
@@ -22,7 +22,7 @@ const call = (wordSlug: string | undefined) =>
 
 beforeEach(() => {
   vi.clearAllMocks();
-  generateOpenGraphImage.mockResolvedValue(PNG);
+  renderOgImage.mockResolvedValue(PNG);
   const words = [
     {
       berlinerisch: "Wat",
@@ -40,14 +40,14 @@ describe("og/[wordSlug] route", () => {
     expect(res.status).toBe(200);
     expect(res.headers.get("Content-Type")).toBe("image/png");
     expect(res.headers.get("Cache-Control")).toBe("public, max-age=86400");
-    expect(generateOpenGraphImage).toHaveBeenCalledWith(
+    expect(renderOgImage).toHaveBeenCalledWith(
       expect.objectContaining({ cacheDir: "/data/og", description: "was, etwas", title: "Wat" }),
     );
   });
 
   it("omits an empty description", async () => {
     await call("nischt.png");
-    const options = generateOpenGraphImage.mock.calls[0][0];
+    const options = renderOgImage.mock.calls[0][0];
     expect(options.title).toBe("Nischt");
     expect(options.description).toBeUndefined();
   });
@@ -58,7 +58,7 @@ describe("og/[wordSlug] route", () => {
       const res = await call(slug);
       expect(res.status).toBe(404);
       expect(res.headers.has("Cache-Control")).toBe(false);
-      expect(generateOpenGraphImage).not.toHaveBeenCalled();
+      expect(renderOgImage).not.toHaveBeenCalled();
     },
   );
 });
