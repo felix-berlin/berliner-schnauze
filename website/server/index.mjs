@@ -107,8 +107,11 @@ const server = createServer((req, res) => {
 const port = Number(process.env.PORT ?? 4321);
 server.listen(port, process.env.HOST ?? "0.0.0.0", () => {
   console.log(`Listening on :${port}`);
-  // Load the words now (~3 s), not on the first visitor's request after a deploy.
-  fetch(`http://127.0.0.1:${port}/api/search/index.json`).catch(() => {});
+  // Load the words (~3 s) and render the homepage once now, not on the first visitors' requests after a deploy.
+  const warm = (path) => fetch(`http://127.0.0.1:${port}${path}`).then((r) => r.arrayBuffer());
+  warm("/api/search/index.json")
+    .then(() => warm("/"))
+    .catch(() => {});
 });
 
 // Node as PID 1 ignores SIGTERM by default; without this `docker stop` waits 10 s.
