@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.4](https://github.com/felix-berlin/berliner-schnauze/compare/v4.0.3...v4.0.4) (2026-10-20)
+
+
+### Bug Fixes
+
+* **anki:** give payload-keyed cards their own guid namespace ([bcbb53e](https://github.com/felix-berlin/berliner-schnauze/commit/bcbb53ecd6dd09ea5e0542aa22bfb055f246f5bc))
+
 ## [4.0.3](https://github.com/felix-berlin/berliner-schnauze/compare/v4.0.2...v4.0.3) (2026-10-20)
 
 
