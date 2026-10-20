@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.2](https://github.com/felix-berlin/berliner-schnauze/compare/v4.1.1...v4.1.2) (2026-10-20)
+
+
+### Performance Improvements
+
+* **word:** page all words by id and skip the count queries ([56bc856](https://github.com/felix-berlin/berliner-schnauze/commit/56bc856d8649399b65b51e854dc5122693d7f55a))
+
 ## [4.1.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.1.0...v4.1.1) (2026-10-20)
 
 
