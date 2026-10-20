@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.0.5...v4.1.0) (2026-10-20)
+
+
+### Features
+
+* **server:** rate limit the expensive routes per client ([2cc2c55](https://github.com/felix-berlin/berliner-schnauze/commit/2cc2c55a4191a684074a0a3f4b5ff2c447a03493))
+
+
+### Performance Improvements
+
+* **cms:** send media files with a cache header ([0d61756](https://github.com/felix-berlin/berliner-schnauze/commit/0d6175644e30be5fef8dc233e11147e63a9578f3))
+* **docker:** give the cms container a 512 MB memory limit ([63becc4](https://github.com/felix-berlin/berliner-schnauze/commit/63becc4cab4748766bca5065690f08c995e487c1))
+* **docker:** give the web container a 512 MB memory limit ([f7326d6](https://github.com/felix-berlin/berliner-schnauze/commit/f7326d61046827e6e86ac496d2fdb0c3f8a5f709))
+* **docker:** replace the entrypoint process with the app instead of spawning it ([c14e14f](https://github.com/felix-berlin/berliner-schnauze/commit/c14e14f9315eb3d1e02851e616aff3b964ec483c))
+* **og:** render og images in a worker thread that exits when idle ([17b00f0](https://github.com/felix-berlin/berliner-schnauze/commit/17b00f073715fa8c257a9e276cfc15dbc45ecbad))
+* **search:** answer an unchanged search index with 304 ([23d743c](https://github.com/felix-berlin/berliner-schnauze/commit/23d743c4b264aaa7e2e999f657224acfa9c0a726))
+* **search:** keep meta.json while the index and themen are unchanged ([e428faf](https://github.com/felix-berlin/berliner-schnauze/commit/e428faf63d538beab19c620e1fd5bccc4fc8adbf))
+* **server:** compress text responses and preload the words on start ([0e56172](https://github.com/felix-berlin/berliner-schnauze/commit/0e56172c4569fec61030502dfab66fa298940fd6))
+* **server:** render the homepage once on start ([f40a9cd](https://github.com/felix-berlin/berliner-schnauze/commit/f40a9cd3d362174099faf2a564903f08ff0ee94e))
+* **server:** serve build assets as max-quality brotli, compressed once ([20fc683](https://github.com/felix-berlin/berliner-schnauze/commit/20fc683ec6b191af80945a21b6eda95fbdd7036e))
+* **word:** reload only the words an edit touched ([2b0047b](https://github.com/felix-berlin/berliner-schnauze/commit/2b0047b05278ec0b7ea58a37fe968060b63c4c84))
+
 ## [4.0.5](https://github.com/felix-berlin/berliner-schnauze/compare/v4.0.4...v4.0.5) (2026-10-20)
 
 
