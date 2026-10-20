@@ -13,11 +13,5 @@
       "unknown"
     ]
   },
-  "ignorePatterns": [
-    "**/*.astro",
-    "coverage",
-    "dist",
-    "CHANGELOG.md",
-    "src/gql/*"
-  ]
+  "ignorePatterns": ["**/*.astro", "coverage", "dist", "CHANGELOG.md"]
 }

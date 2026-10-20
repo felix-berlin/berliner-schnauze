@@ -84,17 +84,14 @@ export default defineConfig({
     // is a gitignored generated stub normally created by the `predev` hook, which
     // only fires for `pnpm run dev` — not when this command spawns `astro dev` directly.
     //
-    // In CI, use a static build + preview instead of dev: `astro dev` compiles
-    // each page on demand AND reads the Payload database per request, which
-    // was intermittently exceeding Playwright's 30s navigation timeout under
-    // the shared runner's network/CPU variance (net::ERR_ABORTED / timeouts on
-    // /wort/<slug> and the homepage). The static build removes both the
-    // per-page compile cost and the live-network dependency during the test
-    // run itself — content is fetched once at build time.
+    // In CI, use a production build instead of dev: `astro dev` compiles each page
+    // on demand, which intermittently exceeded Playwright's 30s navigation timeout
+    // on the shared runner (net::ERR_ABORTED / timeouts on /wort/<slug> and the homepage).
     //
-    // The build and `astro preview` both run as their own CI steps (see playwright.yml):
-    // the build gets the full job timeout, and Playwright never has to tear the server
-    // down (that hung the containerized job). In CI this command is only a fallback.
+    // The build and `node server/index.mjs` (against the seeded Postgres service) run as
+    // their own CI steps (see playwright.yml): the build gets the full job timeout, and
+    // Playwright never has to tear the server down (that hung the containerized job).
+    // In CI this command is only a fallback.
     command: process.env.CI
       ? "pnpm run preview"
       : "pnpm run supportedBrowsers && pnpm exec astro dev",

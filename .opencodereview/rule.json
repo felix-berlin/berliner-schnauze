@@ -1,12 +1,6 @@
 {
   "include": ["src/tests/**"],
-  "exclude": [
-    "src/gql/**",
-    "CHANGELOG.md",
-    "pnpm-lock.yaml",
-    "**/__snapshots__/**",
-    "data/**"
-  ],
+  "exclude": ["CHANGELOG.md", "pnpm-lock.yaml", "**/__snapshots__/**", "data/**"],
   "rules": [
     {
       "path": "src/tests/**",

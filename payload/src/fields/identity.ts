@@ -1,4 +1,4 @@
 import type { Field } from "payload";
 
-/** Public slug, shared by all collections with their own site path. */
+/** Public, unique slug of words, themen, word types, posts and pages. */
 export const identityFields: Field[] = [{ name: "slug", type: "text", unique: true, index: true }];

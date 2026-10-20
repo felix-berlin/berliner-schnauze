@@ -6,14 +6,14 @@ Payload 3 (Admin + REST/GraphQL, Postgres). Die Astro-Seite in `website/` liest 
 
 **1. Env-Variablen anlegen.** Für `pnpm cms:dev`, `cms:test` und `cms:migrate` reicht eine git-ignorierte `payload/.env` (Next und die Payload-CLI laden sie aus `payload/`, die Root-`.env` sieht `payload/` nicht; Infisical-Werte haben Vorrang). Compose liest dagegen die Root-`.env`. Vorlage: `.env.example`:
 
-| Variable | Bedeutung | Lokal |
-| --- | --- | --- |
-| `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` | Compose-Postgres | z. B. `berliner`, selbst gewähltes Passwort, `berliner_schnauze` |
-| `DATABASE_URL` | Verbindung der App | `postgres://<user>:<pw>@127.0.0.1:5432/<db>` |
-| `DATABASE_URL_TEST` | nur Tests, **Name muss auf `_test` enden** | `postgres://<user>:<pw>@127.0.0.1:5432/bs_test` |
-| `PAYLOAD_SECRET` | Signatur für Sessions/Keys | langer Zufallsstring |
-| `PAYLOAD_SERVER_URL` | Basis-URL des Admins | lokal `http://localhost:3001`, Produktion `https://cms.berliner-schnauze.wtf` |
-| `MEDIA_DIR` | Ablage der Uploads | leer lassen (= `payload/media`) |
+| Variable                                            | Bedeutung                                  | Lokal                                                                         |
+| --------------------------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------------- |
+| `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` | Compose-Postgres                           | z. B. `berliner`, selbst gewähltes Passwort, `berliner_schnauze`              |
+| `DATABASE_URL`                                      | Verbindung der App                         | `postgres://<user>:<pw>@127.0.0.1:5432/<db>`                                  |
+| `DATABASE_URL_TEST`                                 | nur Tests, **Name muss auf `_test` enden** | `postgres://<user>:<pw>@127.0.0.1:5432/bs_test`                               |
+| `PAYLOAD_SECRET`                                    | Signatur für Sessions/Keys                 | langer Zufallsstring                                                          |
+| `PAYLOAD_SERVER_URL`                                | Basis-URL des Admins                       | lokal `http://localhost:3001`, Produktion `https://cms.berliner-schnauze.wtf` |
+| `MEDIA_DIR`                                         | Ablage der Uploads                         | leer lassen (= `payload/media`)                                               |
 
 `compose.yaml` bricht ab, wenn `POSTGRES_PASSWORD`, `PAYLOAD_SECRET` oder `PAYLOAD_SERVER_URL` fehlen, auch wenn du nur Postgres startest.
 
@@ -37,8 +37,8 @@ Beim ersten Aufruf den ersten Admin anlegen. Im Dev-Modus pusht Payload das Sche
 
 **5. Prüfen:**
 
-- Im Admin `wa`, `anmachen`, `aasen` ansehen (Übersetzungen, Audio, Bilder, Themen, SEO, Gruppe „derived“).
-- Alter Medien-Link: `curl -sI localhost:3001/wp-content/uploads/na_allet_in_butta.mp3` liefert 301.
+- Im Admin `wa`, `anmachen`, `aasen` ansehen (Übersetzungen, Audio, Bilder, Themen, SEO, Gruppe „derived“; Audio und Bilder nur mit Produktions-Backup).
+- Alter Medien-Link: `curl -sI localhost:3001/wp-content/uploads/na_allet_in_butta.mp3` liefert 301 (mit `seed:e2e`: `/wp-content/uploads/e2e/galerie.png`).
 - Ohne Login gesperrt: `curl -s localhost:3001/api/words` liefert 403.
 
 **6. Tests:**
@@ -71,7 +71,7 @@ Seiten rendern auf Anfrage mit etwa 60 s Cache, ein Edit im Admin ist ohne Rebui
 
 ## Admin-User
 
-- **Lokal:** Solange die DB keinen User hat, zeigt `http://localhost:3001/admin` das Formular „Create first user“. Weitere User (und API-Key-User für Skripte, „Enable API Key“ anhaken) legst du im Admin unter *Users* an. Das gilt pro Datenbank, eine neu aufgesetzte Dev-DB braucht den User erneut.
+- **Lokal:** Solange die DB keinen User hat, zeigt `http://localhost:3001/admin` das Formular „Create first user“. Weitere User (und API-Key-User für Skripte, „Enable API Key“ anhaken) legst du im Admin unter _Users_ an. Das gilt pro Datenbank, eine neu aufgesetzte Dev-DB braucht den User erneut.
 - **Produktion:** Im `cms`-Container sperrt `usersCreate` (`src/access.ts`) `POST /api/users`, außer `PAYLOAD_ALLOW_FIRST_USER=true` ist gesetzt. `/api/users/first-register` umgeht diese Sperre: den ersten Admin anlegen, **bevor** `cms.berliner-schnauze.wtf` öffentlich erreichbar ist, danach `PAYLOAD_ALLOW_FIRST_USER` wieder entfernen.
 
 ## Alltag

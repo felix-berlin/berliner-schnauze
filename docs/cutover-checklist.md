@@ -84,7 +84,7 @@ their current values; the schema is in `website/astro.config.mjs`.
 
 ## 2. Last import and content check
 
-- [ ] `IMPORT_ALLOW_REMOTE_DB=1 NODE_ENV=production DATABASE_URL=<prod> npx infisical run -- pnpm --filter payload-app import:wp` on a machine that can reach the production database. Expected: exit 0, `failures: []`. Known warning: `word-without-berlinerisch` for `baletti-machen-2` (a published word without a headword; it is skipped, fix or delete it in WordPress).
+- [ ] `IMPORT_ALLOW_REMOTE_DB=1 NODE_ENV=production DATABASE_URL=<prod> npx infisical run -- pnpm --filter payload-app import:wp` on a machine that can reach the production database. Expected: exit 0, `failures: []`. Known warning: `word-without-berlinerisch` for `baletti-machen-2` (a published word without a headword; it is skipped, fix or delete it in WordPress). Needs the code of `26df38e9` (removed afterwards) and must run before the migration `20261020_191940_drop_wp_id`: the import matches words by `wpId`.
 - [ ] The two images the frontend hard-codes (`brown-bear-roar.png`, `bear-walking.png`) are in the Payload media list afterwards.
 - [ ] Posts: WordPress has 1 published magazine post, the rest are drafts; check the same in the Payload admin before you publish anything.
 
@@ -110,7 +110,7 @@ their current values; the schema is in `website/astro.config.mjs`.
 ## 6. Dry run against the real stack
 
 - [ ] Start the stack with the production image tags (`docker compose up -d`), without public DNS: `curl --resolve` or a hosts entry.
-- [ ] `pnpm dlx tsx website/scripts/seo-diff.ts https://berliner-schnauze.wtf https://<new stack> website/scripts/seo-urls.txt` → exit 0 (the `known` line for `/` is expected).
+- [ ] `pnpm dlx tsx website/scripts/seo-diff.ts https://berliner-schnauze.wtf https://<new stack> website/scripts/seo-urls.txt` → exit 0 (the `known` line for `/` is expected). Needs the code of `26df38e9` (removed afterwards).
 - [ ] The homepage hero, the footer bear and the og:images of `/`, `/themen` and `/anki` load `brown-bear-roar.png` / `bear-walking.png` from `PAYLOAD_SERVER_URL/api/media/file/` through Imagor (`mediaFileUrl`): check that they show (Imagor must reach the CMS host).
 - [ ] Old media link with a query string and an umlaut: `curl -sI "https://cms.berliner-schnauze.wtf/wp-content/uploads/K%C3%BCche.jpg?ver=2"` → `301`, and the target returns `200`.
 - [ ] Anonymous API is closed: `curl -s -o /dev/null -w '%{http_code}' https://cms.berliner-schnauze.wtf/api/words` → `403`.
