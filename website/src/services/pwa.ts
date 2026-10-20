@@ -1,3 +1,5 @@
+// Registers the beforeinstallprompt listener before any island hydrates.
+import "@stores/installApp";
 import { $toastNotify, createToastNotify } from "@stores/toastNotify";
 import { trackEvent } from "@utils/analytics";
 import { registerSW } from "virtual:pwa-register";
