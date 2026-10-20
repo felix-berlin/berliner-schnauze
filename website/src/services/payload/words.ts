@@ -157,22 +157,26 @@ const toSiteWord = (doc: StoredWord): SiteWord | undefined => {
 const loadAllWords = async (): Promise<SiteWord[]> => {
   const payload = await getPayloadClient();
   const words: SiteWord[] = [];
-  for (let page = 1; ; page++) {
+  // Pages by id (after the last one) without pagination: no count query per page, no growing OFFSET.
+  for (let afterId = 0; ;) {
     // oxlint-disable-next-line no-await-in-loop -- sequential pages keep the memory and DB load flat
-    const result = await payload.find({
+    const { docs } = await payload.find({
       collection: "words",
       depth: 1,
       limit: PAGE_SIZE,
-      page,
+      pagination: false,
       populate: WORD_POPULATE,
       sort: "id",
+      where: { id: { greater_than: afterId } },
       ...siteDocs(),
     });
-    for (const doc of result.docs) {
+    for (const doc of docs) {
       const word = toSiteWord(doc);
       if (word) words.push(word);
     }
-    if (!result.hasNextPage) break;
+    const last = docs.at(-1);
+    if (!last || docs.length < PAGE_SIZE) break;
+    afterId = last.id;
   }
 
   return words.sort(byHeadword);
@@ -201,6 +205,7 @@ export const fetchDraftWord = async (id: number): Promise<SiteWord | undefined> 
         collection: "words",
         depth: 0,
         limit: ids.length,
+        pagination: false,
         where: { id: { in: ids } },
         ...siteRead(),
       })
@@ -223,7 +228,7 @@ const wordsFingerprint = async (): Promise<Fingerprint> => {
   const [words, ...others] = await Promise.all([
     payload.find({ collection: "words", ...latest, ...siteDocs() }),
     ...(["media", "themen", "word-types"] as const).map((collection) =>
-      // Only the words need the count: no count query for the others.
+      // Only the words need totalDocs: no count query for the others.
       payload.find({ collection, ...latest, pagination: false, ...siteRead() }),
     ),
   ]);
