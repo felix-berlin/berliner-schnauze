@@ -4,6 +4,12 @@ on:
     branches:
       - main
       - beta
+  # Rebuild the images of an existing release (e.g. after the docker job was skipped).
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Existing release version, e.g. 4.0.2"
+        required: true
 
 permissions:
   id-token: write
@@ -12,6 +18,7 @@ permissions:
 jobs:
   release:
     name: Release
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -81,7 +88,9 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "released=$([ "$version" != "$BEFORE_VERSION" ] && echo yes || echo no)" >> "$GITHUB_OUTPUT"
 
+      # A Sentry outage must not skip the docker job: the version is already published.
       - name: Create Sentry release
+        continue-on-error: true
         uses: getsentry/action-release@v3
         env:
           SENTRY_AUTH_TOKEN: ${{ env.SENTRY_AUTH_TOKEN }}
@@ -96,9 +105,11 @@ jobs:
   docker:
     name: Docker image
     needs: release
-    if: needs.release.outputs.released == 'yes'
+    if: ${{ !cancelled() && (github.event_name == 'workflow_dispatch' || needs.release.outputs.released == 'yes') }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      VERSION: ${{ inputs.version || needs.release.outputs.version }}
     permissions:
       id-token: write
       contents: read
@@ -108,7 +119,7 @@ jobs:
       - name: Checkout release tag ✅
         uses: actions/checkout@v7
         with:
-          ref: v${{ needs.release.outputs.version }}
+          ref: v${{ env.VERSION }}
 
       - name: Fetch secrets from Infisical 🔐
         uses: Infisical/secrets-action@v1.0.18
@@ -141,8 +152,8 @@ jobs:
           images: ghcr.io/felix-berlin/berliner-schnauze
           flavor: latest=false
           tags: |
-            type=semver,pattern={{version}},value=v${{ needs.release.outputs.version }}
-            type=semver,pattern={{major}}.{{minor}},value=v${{ needs.release.outputs.version }}
+            type=semver,pattern={{version}},value=v${{ env.VERSION }}
+            type=semver,pattern={{major}}.{{minor}},value=v${{ env.VERSION }}
             type=raw,value=latest,enable=${{ github.ref_name == 'main' }}
             type=raw,value=beta,enable=${{ github.ref_name == 'beta' }}
 
@@ -178,8 +189,8 @@ jobs:
           images: ghcr.io/felix-berlin/berliner-schnauze-cms
           flavor: latest=false
           tags: |
-            type=semver,pattern={{version}},value=v${{ needs.release.outputs.version }}
-            type=semver,pattern={{major}}.{{minor}},value=v${{ needs.release.outputs.version }}
+            type=semver,pattern={{version}},value=v${{ env.VERSION }}
+            type=semver,pattern={{major}}.{{minor}},value=v${{ env.VERSION }}
             type=raw,value=latest,enable=${{ github.ref_name == 'main' }}
             type=raw,value=beta,enable=${{ github.ref_name == 'beta' }}
 
