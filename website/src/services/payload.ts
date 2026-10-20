@@ -17,8 +17,8 @@ export const getPayloadClient = (): Promise<Payload> => {
 
 /**
  * Args of every site query: read with access control as the site (`draftsRead`/`contentRead` in payload/src/access.ts),
- * so only published docs come back, also where they are populated into another doc. REST/GraphQL cannot set the
- * context, they stay login-only.
+ * so only published docs come back, also where they are populated into another doc. REST cannot set the context,
+ * it stays login-only.
  */
 export const siteRead = () =>
   ({ context: { siteRead: "published" }, overrideAccess: false }) as const;

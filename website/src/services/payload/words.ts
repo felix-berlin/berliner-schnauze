@@ -223,7 +223,8 @@ const wordsFingerprint = async (): Promise<Fingerprint> => {
   const [words, ...others] = await Promise.all([
     payload.find({ collection: "words", ...latest, ...siteDocs() }),
     ...(["media", "themen", "word-types"] as const).map((collection) =>
-      payload.find({ collection, ...latest, ...siteRead() }),
+      // Only the words need the count: no count query for the others.
+      payload.find({ collection, ...latest, pagination: false, ...siteRead() }),
     ),
   ]);
   return {
@@ -253,6 +254,7 @@ const patchWords = async (
     depth: 0,
     limit: MAX_PATCH + 1,
     overrideAccess: true,
+    pagination: false,
     select: { updatedAt: true },
     where: { updatedAt: { greater_than_equal: prev.wordsAt } },
   });
