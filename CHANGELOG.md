@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.2](https://github.com/felix-berlin/berliner-schnauze/compare/v4.0.1...v4.0.2) (2026-10-20)
+
+
+### Bug Fixes
+
+* **pwa:** enable the install button on android and register all sw routes ([ca3356c](https://github.com/felix-berlin/berliner-schnauze/commit/ca3356c918f4154119f9b82f049d11e0545dc5ad))
+
 ## [4.0.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.0.0...v4.0.1) (2026-10-18)
 
 
