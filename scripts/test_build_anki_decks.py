@@ -204,18 +204,13 @@ def payload_doc(slug="anmachen", **over):
 class PayloadTests(unittest.TestCase):
     def test_payload_word_normalizes_like_the_old_wordpress_node(self):
         w = b.normalize_word(b.payload_to_node(payload_doc()))
-        self.assertEqual(w["id"], b.PAYLOAD_ID_OFFSET + 7)
+        self.assertEqual(w["id"], 7)
         self.assertEqual(w["slug"], "anmachen")
         self.assertEqual(w["title"], "anmachen")
         self.assertEqual(w["group"], "A")
         self.assertEqual(w["translations"], ["anschalten"])
         self.assertEqual(w["examples"], [("Mach ma det Licht an", "Schalte das Licht ein")])
         self.assertEqual(w["alternatives"], ["anknipsen"])
-
-    def test_card_id_cannot_clash_with_a_wordpress_id(self):
-        node = b.payload_to_node(payload_doc(id=42))
-        self.assertEqual(node["databaseId"], b.PAYLOAD_ID_OFFSET + 42)
-        self.assertGreater(b.PAYLOAD_ID_OFFSET, 1_000_000 - 1)
 
     def test_missing_group_falls_back_to_sonstige(self):
         w = b.normalize_word(b.payload_to_node(payload_doc(derived=None)))
@@ -234,7 +229,7 @@ class PayloadTests(unittest.TestCase):
 
         with mock.patch.object(b.urllib.request, "urlopen", fake_urlopen):
             nodes = b.fetch_words("https://cms.example/", "secret-key")
-        self.assertEqual([n["databaseId"] - b.PAYLOAD_ID_OFFSET for n in nodes], [1, 2, 3])
+        self.assertEqual([n["databaseId"] for n in nodes], [1, 2, 3])
         self.assertEqual(len(requests), 2)
         self.assertEqual(requests[0].get_header("Authorization"), "users API-Key secret-key")
         self.assertIn("https://cms.example/api/words?", requests[0].full_url)

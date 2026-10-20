@@ -169,16 +169,13 @@ def check_decks(full, lite, words):
 
 
 PAGE_SIZE = 500
-# Payload ids (1, 2, ...) overlap the WordPress ids the cards of the WordPress-built decks were keyed on: the offset
-# keeps a new guid from turning an old card into a different word (with its review history).
-PAYLOAD_ID_OFFSET = 1_000_000
 
 
 def payload_to_node(doc):
     """Payload word -> the node shape `normalize_word` reads (that function and the deck code stay as they were)."""
     return {
         # genanki guids come from this id.
-        "databaseId": PAYLOAD_ID_OFFSET + doc["id"],
+        "databaseId": doc["id"],
         "slug": doc["slug"],
         "title": doc.get("berlinerisch"),
         "wordGroup": (doc.get("derived") or {}).get("wordGroup"),
