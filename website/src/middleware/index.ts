@@ -1,5 +1,6 @@
 import { fetchRedirects, normalizePath } from "@services/payload/redirects.ts";
 import { setPageCache } from "@utils/cacheHeaders.ts";
+import { clientIp, rateLimited, rateLimitRule } from "@utils/rateLimit.ts";
 import { defineMiddleware } from "astro:middleware";
 
 /** A 404 whose path has a redirect in the CMS (a renamed slug, ...) answers with that redirect instead. */
@@ -21,8 +22,24 @@ const redirectFor404 = async (pathname: string): Promise<Response | undefined> =
 /**
  * Every on-demand response gets its cache policy here, from its final status (a route may set its own header first).
  * A page that fails to render (the database is unreachable, ...) answers 503 so proxies and crawlers retry later.
+ * A client over the limit of an expensive route (`@utils/rateLimit.ts`) gets a 429 before anything renders.
  */
 export const onRequest = defineMiddleware(async (context, next) => {
+  const rule = rateLimitRule(context.url.pathname, context.request.method);
+  const wait = rule
+    ? rateLimited(
+        clientIp(context.request.headers.get("x-forwarded-for"), context.clientAddress),
+        rule,
+      )
+    : 0;
+  if (wait)
+    return setPageCache(
+      new Response("Zu viele Anfragen, versuch's gleich nochmal", {
+        headers: { "Content-Type": "text/plain; charset=utf-8", "Retry-After": String(wait) },
+        status: 429,
+      }),
+    );
+
   let response: Response;
   try {
     response = await next();

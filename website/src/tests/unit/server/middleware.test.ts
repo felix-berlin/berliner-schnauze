@@ -8,11 +8,13 @@ vi.mock("@services/payload/redirects.ts", async (importOriginal) => ({
 
 import { onRequest } from "../../../middleware/index.ts";
 
-const run = (next: () => Promise<Response>, path = "/") =>
-  (onRequest as (ctx: unknown, next: () => Promise<Response>) => Promise<Response>)(
-    { url: new URL(path, "https://berliner-schnauze.wtf") },
+const run = (next: () => Promise<Response>, path = "/", init: RequestInit = {}) => {
+  const url = new URL(path, "https://berliner-schnauze.wtf");
+  return (onRequest as (ctx: unknown, next: () => Promise<Response>) => Promise<Response>)(
+    { clientAddress: "10.0.0.1", request: new Request(url, init), url },
     next,
   );
+};
 const notFound = async () => new Response("weg", { status: 404 });
 
 beforeEach(() => {
@@ -76,5 +78,20 @@ describe("middleware", () => {
     expect(res.headers.get("Cache-Control")).toBe("no-store");
     expect(res.headers.get("Retry-After")).toBe("30");
     error.mockRestore();
+  });
+
+  it("answers 429 once a client is over the limit of an expensive route, before rendering", async () => {
+    const page = vi.fn(async () => new Response("png"));
+    const headers = { "x-forwarded-for": "6.6.6.6, 203.0.113.9" };
+    for (let i = 0; i < 60; i++)
+      expect((await run(page, "/og/a.png", { headers })).status).toBe(200);
+    const res = await run(page, "/og/a.png", { headers });
+    expect(res.status).toBe(429);
+    expect(Number(res.headers.get("Retry-After"))).toBeGreaterThan(0);
+    expect(res.headers.get("Cache-Control")).toBe("no-store");
+    expect(page).toHaveBeenCalledTimes(60);
+    // Keyed on the entry the proxy appended, not the client-supplied first one.
+    const other = { "x-forwarded-for": "6.6.6.6, 203.0.113.10" };
+    expect((await run(page, "/og/a.png", { headers: other })).status).toBe(200);
   });
 });
