@@ -1,7 +1,11 @@
 // Container entrypoint: wraps the @astrojs/node standalone handler to redirect www and to add the security headers
 // to every response, static assets included (plain redirects live in astro.config.mjs `redirects`).
+import { readdirSync } from "node:fs";
+import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
-import { constants, createBrotliCompress, createGzip } from "node:zlib";
+import { extname } from "node:path";
+import { promisify } from "node:util";
+import { brotliCompress, constants, createBrotliCompress, createGzip } from "node:zlib";
 
 const CANONICAL_HOST = "berliner-schnauze.wtf";
 
@@ -73,6 +77,32 @@ const compress = (req, res) => {
   };
 };
 
+const ASSETS_DIR = new URL("../dist/client/_astro/", import.meta.url);
+const ASSET_TYPES = {
+  ".css": "text/css; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".svg": "image/svg+xml",
+};
+// Only names that exist: a request can neither leave the folder nor fill the cache with misses.
+const assetNames = new Set(readdirSync(ASSETS_DIR).filter((name) => ASSET_TYPES[extname(name)]));
+const brAssets = new Map();
+const brotli = promisify(brotliCompress);
+
+/**
+ * Hashed build assets never change: compressed once at Brotli's best quality (12 % smaller than quality 4 on the
+ * fly) and kept, ~0.3 MB for all. Undefined for anything else, which takes the normal way.
+ */
+const brAsset = (pathname) => {
+  const name = pathname.slice("/_astro/".length);
+  if (!assetNames.has(name)) return undefined;
+  if (!brAssets.has(name))
+    brAssets.set(
+      name,
+      readFile(new URL(name, ASSETS_DIR)).then((b) => brotli(b)),
+    );
+  return brAssets.get(name).then((body) => ({ body, type: ASSET_TYPES[extname(name)] }));
+};
+
 process.env.ASTRO_NODE_AUTOSTART = "disabled";
 const { handler } = await import("../dist/server/entry.mjs");
 
@@ -99,6 +129,30 @@ const server = createServer((req, res) => {
     decodeURI(req.url ?? "/");
   } catch {
     req.url = `${req.url.split("?")[0]}?${new URLSearchParams(search)}`;
+  }
+  const asset =
+    req.method === "GET" &&
+    pathname.startsWith("/_astro/") &&
+    /\bbr\b/.test(String(req.headers["accept-encoding"] ?? "")) &&
+    brAsset(pathname);
+  if (asset) {
+    asset.then(
+      ({ body, type }) =>
+        res
+          .writeHead(200, {
+            "Cache-Control": "public, max-age=31536000, immutable",
+            "Content-Encoding": "br",
+            "Content-Length": body.length,
+            "Content-Type": type,
+            Vary: "Accept-Encoding",
+          })
+          .end(body),
+      () => {
+        compress(req, res);
+        handler(req, res);
+      },
+    );
+    return;
   }
   compress(req, res);
   handler(req, res);
