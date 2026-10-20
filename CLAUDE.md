@@ -66,20 +66,6 @@ Secrets are managed via [Infisical](https://infisical.com). Run `npx infisical l
 
 Docker/compose reads the root `.env`; the `payload/` CLI and Next read a git-ignored `payload/.env` (see `payload/README.md`).
 
-## WordPress MCP Access (until WordPress is switched off)
-
-WordPress is only the import source until the cutover; content is edited in the Payload admin. Claude has direct MCP access to the WordPress backend via the `berlinerSchnauze` server (configured in `.mcp.json`, credentials in `~/.claude/settings.json` — see `.env.example` for the template, never commit real credentials).
-
-Available abilities:
-
-- `berliner-schnauze/get-posts` — published/draft blog posts (title, URL, date, excerpt). `post_status` param defaults to `publish`; pass `draft` for drafts.
-- `berliner-schnauze/create-post` — creates a draft post
-- `berliner-schnauze/get-words` — Berlinerisch glossary entries (custom post type)
-- `yoast-seo/get-seo-scores` / `yoast-seo/get-readability-scores` — SEO/readability for recently changed posts
-- `backwpup/list-jobs`, `run-job`, `cancel-job`, `get-backup-history`, `get-backup-logs` — BackWPup backup management. Call `list-jobs` + `get-backup-history` before any risky action (plugin/theme/core updates) to offer a backup first.
-
-Discover full ability list/schemas: `mcp-adapter-discover-abilities` / `mcp-adapter-get-ability-info`.
-
 ## Architecture
 
 **Data flow**: Payload (Local API, in the Astro server process) → adapters in `src/services/payload/` (generated Payload types narrowed to `SiteWord` etc.) → on-demand pages and API routes (`api/search/index.json`, sitemap, OG images, word of the day) → Orama in-browser search → Vue components
