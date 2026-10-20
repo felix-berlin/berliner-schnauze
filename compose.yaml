@@ -58,6 +58,9 @@ services:
       dockerfile: payload/Dockerfile
     restart: unless-stopped
     init: true
+    # Same reason as web: measured 266 MB after admin page loads with 512m, 425 MB without. Logged-in editing was
+    # not measured, hence the headroom.
+    mem_limit: 512m
     depends_on:
       postgres:
         condition: service_healthy
