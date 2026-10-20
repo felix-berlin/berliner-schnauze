@@ -34,6 +34,13 @@ const server = createServer((req, res) => {
     return;
   }
   for (const [key, value] of Object.entries(SECURITY_HEADERS)) res.setHeader(key, value);
+  // @astrojs/node answers 400 when the whole URL fails decodeURI. A malformed query (a mangled share link)
+  // is the page's to handle: re-encode it. A malformed path still gets the 400.
+  try {
+    decodeURI(req.url ?? "/");
+  } catch {
+    req.url = `${req.url.split("?")[0]}?${new URLSearchParams(search)}`;
+  }
   handler(req, res);
 });
 

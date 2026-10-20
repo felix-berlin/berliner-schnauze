@@ -136,5 +136,4 @@ minimumReleaseAgeExclude:
   - '@nanostores/async@0.1.1'
 
 patchedDependencies:
-  '@astrojs/node@11.1.9': patches/@astrojs__node@11.1.9.patch
   de-compromise: patches/de-compromise.patch
