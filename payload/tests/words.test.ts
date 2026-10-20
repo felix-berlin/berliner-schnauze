@@ -11,7 +11,7 @@ const clean = async () => {
 };
 afterEach(clean);
 
-const base = { berlinerisch: "Aasen", slug: SLUG, wpId: 990001 };
+const base = { berlinerisch: "Aasen", slug: SLUG };
 
 describe("words", () => {
   it("defaults to draft", async () => {
@@ -24,7 +24,7 @@ describe("words", () => {
     const payload = await getTestPayload();
     await payload.create({ collection: "words", data: { ...base, _status: "published" } });
     await expect(
-      payload.create({ collection: "words", data: { ...base, wpId: 990002, _status: "published" } }),
+      payload.create({ collection: "words", data: { ...base, _status: "published" } }),
     ).rejects.toThrow(/slug|unique|duplicate/i);
   });
 

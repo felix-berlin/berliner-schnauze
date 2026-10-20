@@ -9,6 +9,7 @@ import * as migration_20261017_103801_seo_drop_og_twitter from './20261017_10380
 import * as migration_20261017_104452_schedule_publish_posts from './20261017_104452_schedule_publish_posts';
 import * as migration_20261017_104729_pages_versions from './20261017_104729_pages_versions';
 import * as migration_20261017_105011_content_globals from './20261017_105011_content_globals';
+import * as migration_20261020_191940_drop_wp_id from './20261020_191940_drop_wp_id';
 
 export const migrations = [
   {
@@ -64,6 +65,11 @@ export const migrations = [
   {
     up: migration_20261017_105011_content_globals.up,
     down: migration_20261017_105011_content_globals.down,
-    name: '20261017_105011_content_globals'
+    name: '20261017_105011_content_globals',
+  },
+  {
+    up: migration_20261020_191940_drop_wp_id.up,
+    down: migration_20261020_191940_drop_wp_id.down,
+    name: '20261020_191940_drop_wp_id'
   },
 ];

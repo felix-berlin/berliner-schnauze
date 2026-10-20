@@ -9,7 +9,7 @@ afterEach(async () => {
   await payload.delete({ collection: "posts", where: { slug: { equals: SLUG } } });
 });
 
-const base = { title: "Hallo", slug: SLUG, wpId: 990101 };
+const base = { title: "Hallo", slug: SLUG };
 
 describe("posts", () => {
   it("defaults to draft", async () => {
@@ -22,7 +22,7 @@ describe("posts", () => {
     const payload = await getTestPayload();
     await payload.create({ collection: "posts", data: { ...base, _status: "published" } });
     await expect(
-      payload.create({ collection: "posts", data: { ...base, wpId: 990102, _status: "published" } }),
+      payload.create({ collection: "posts", data: { ...base, _status: "published" } }),
     ).rejects.toThrow(/slug|unique|duplicate/i);
   });
 

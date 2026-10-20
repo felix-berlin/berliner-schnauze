@@ -25,7 +25,7 @@ const redirectsFrom = async (slug: string) => {
 const word = async (status: "draft" | "published") =>
   (await getTestPayload()).create({
     collection: "words",
-    data: { berlinerisch: "Umbenannt", slug: OLD, wpId: 990301, _status: status },
+    data: { berlinerisch: "Umbenannt", slug: OLD, _status: status },
   });
 
 describe("redirect on slug change", () => {
@@ -90,7 +90,7 @@ describe("redirect on slug change", () => {
     const payload = await getTestPayload();
     const thema = await payload.create({
       collection: "themen",
-      data: { name: "Umbenannt", slug: OLD, wpId: 990302 },
+      data: { name: "Umbenannt", slug: OLD },
     });
 
     await payload.update({ collection: "themen", id: thema.id, data: { slug: NEW } });

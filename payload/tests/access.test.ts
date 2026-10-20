@@ -181,25 +181,25 @@ describe("users.create bootstrap", () => {
 
 describe("site reads (req.context.siteRead, Local API only)", () => {
   const site = (siteRead: "all" | "published") => ({ overrideAccess: false, context: { siteRead } }) as const;
-  const wpIds = [990101, 990102, 990103];
+  const slugs = ["site-read-entwurf", "site-read-kiez", "site-read-schrippe"];
   const ids: Record<string, number> = {};
 
   beforeAll(async () => {
     const payload = await getTestPayload();
-    await payload.delete({ collection: "words", where: { wpId: { in: wpIds } } });
+    await payload.delete({ collection: "words", where: { slug: { in: slugs } } });
     const draft = await payload.create({
       collection: "words",
-      data: { berlinerisch: "Entwurf", slug: "site-read-entwurf", wpId: wpIds[0] },
+      data: { berlinerisch: "Entwurf", slug: slugs[0] },
       draft: true,
     });
     const published = await payload.create({
       collection: "words",
-      data: { _status: "published", berlinerisch: "Kiez", relatedWords: [draft.id], slug: "site-read-kiez", wpId: wpIds[1] },
+      data: { _status: "published", berlinerisch: "Kiez", relatedWords: [draft.id], slug: slugs[1] },
     });
     // published, then edited as a draft: the public read keeps the published version
     const edited = await payload.create({
       collection: "words",
-      data: { _status: "published", berlinerisch: "Schrippe", slug: "site-read-schrippe", wpId: wpIds[2] },
+      data: { _status: "published", berlinerisch: "Schrippe", slug: slugs[2] },
     });
     await payload.update({ collection: "words", id: edited.id, data: { berlinerisch: "Schrippe (neu)" }, draft: true });
     Object.assign(ids, { draft: draft.id, edited: edited.id, published: published.id });
@@ -207,12 +207,12 @@ describe("site reads (req.context.siteRead, Local API only)", () => {
 
   afterAll(async () => {
     const payload = await getTestPayload();
-    await payload.delete({ collection: "words", where: { wpId: { in: wpIds } } });
+    await payload.delete({ collection: "words", where: { slug: { in: slugs } } });
   });
 
   it("published: only published words, in their published version", async () => {
     const payload = await getTestPayload();
-    const { docs } = await payload.find({ collection: "words", where: { wpId: { in: wpIds } }, ...site("published") });
+    const { docs } = await payload.find({ collection: "words", where: { slug: { in: slugs } }, ...site("published") });
     expect(docs.map((d) => d.berlinerisch).sort()).toEqual(["Kiez", "Schrippe"]);
   });
 
@@ -224,7 +224,7 @@ describe("site reads (req.context.siteRead, Local API only)", () => {
 
   it("all (SHOW_TEST_DATA): drafts too", async () => {
     const payload = await getTestPayload();
-    const { docs } = await payload.find({ collection: "words", draft: true, where: { wpId: { in: wpIds } }, ...site("all") });
+    const { docs } = await payload.find({ collection: "words", draft: true, where: { slug: { in: slugs } }, ...site("all") });
     expect(docs.map((d) => d.berlinerisch).sort()).toEqual(["Entwurf", "Kiez", "Schrippe (neu)"]);
   });
 

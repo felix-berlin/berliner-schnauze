@@ -185,10 +185,9 @@ class FakeResponse:
         return False
 
 
-def payload_doc(wp_id=7, slug="anmachen", **over):
+def payload_doc(slug="anmachen", **over):
     doc = {
-        "id": 1,
-        "wpId": wp_id,
+        "id": 7,
         "slug": slug,
         "berlinerisch": "anmachen",
         "article": None,
@@ -205,7 +204,7 @@ def payload_doc(wp_id=7, slug="anmachen", **over):
 class PayloadTests(unittest.TestCase):
     def test_payload_word_normalizes_like_the_old_wordpress_node(self):
         w = b.normalize_word(b.payload_to_node(payload_doc()))
-        self.assertEqual(w["id"], 7)
+        self.assertEqual(w["id"], b.PAYLOAD_ID_OFFSET + 7)
         self.assertEqual(w["slug"], "anmachen")
         self.assertEqual(w["title"], "anmachen")
         self.assertEqual(w["group"], "A")
@@ -213,12 +212,8 @@ class PayloadTests(unittest.TestCase):
         self.assertEqual(w["examples"], [("Mach ma det Licht an", "Schalte das Licht ein")])
         self.assertEqual(w["alternatives"], ["anknipsen"])
 
-    def test_card_guid_stays_the_wordpress_id(self):
-        # Anki updates cards by guid: the ids of the existing deck must not change.
-        self.assertEqual(b.payload_to_node(payload_doc(wp_id=5703))["databaseId"], 5703)
-
-    def test_word_created_in_payload_gets_an_id_that_cannot_clash_with_a_wordpress_id(self):
-        node = b.payload_to_node(payload_doc(wp_id=None, id=42))
+    def test_card_id_cannot_clash_with_a_wordpress_id(self):
+        node = b.payload_to_node(payload_doc(id=42))
         self.assertEqual(node["databaseId"], b.PAYLOAD_ID_OFFSET + 42)
         self.assertGreater(b.PAYLOAD_ID_OFFSET, 1_000_000 - 1)
 
@@ -228,8 +223,8 @@ class PayloadTests(unittest.TestCase):
 
     def test_fetch_words_pages_through_the_api_and_sends_the_api_key(self):
         pages = [
-            {"docs": [payload_doc(1, "a"), payload_doc(2, "b")], "hasNextPage": True, "nextPage": 2},
-            {"docs": [payload_doc(3, "c")], "hasNextPage": False, "nextPage": None},
+            {"docs": [payload_doc("a", id=1), payload_doc("b", id=2)], "hasNextPage": True, "nextPage": 2},
+            {"docs": [payload_doc("c", id=3)], "hasNextPage": False, "nextPage": None},
         ]
         requests = []
 
@@ -239,7 +234,7 @@ class PayloadTests(unittest.TestCase):
 
         with mock.patch.object(b.urllib.request, "urlopen", fake_urlopen):
             nodes = b.fetch_words("https://cms.example/", "secret-key")
-        self.assertEqual([n["databaseId"] for n in nodes], [1, 2, 3])
+        self.assertEqual([n["databaseId"] - b.PAYLOAD_ID_OFFSET for n in nodes], [1, 2, 3])
         self.assertEqual(len(requests), 2)
         self.assertEqual(requests[0].get_header("Authorization"), "users API-Key secret-key")
         self.assertIn("https://cms.example/api/words?", requests[0].full_url)

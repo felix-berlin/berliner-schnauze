@@ -17,7 +17,7 @@ Cards go one way only: Berlinerisch → German. Design details live in
 - **Not included:** `sources`/`quelle` and `infoText`.
 - **Lite only:** the `Hinweis` field shows a short pointer to the Full deck (`https://berliner-schnauze.wtf/anki`).
 
-Both decks use the same note type and the same GUIDs (`genanki.guid_for(id)`, where `id` is the former WordPress id (`wpId`) so existing cards keep their GUIDs; words created in Payload later get `1,000,000 + their Payload id`).
+Both decks use the same note type and the same GUIDs (`genanki.guid_for(id)`, where `id` is `1,000,000 + the Payload id`; the offset keeps the new GUIDs clear of the WordPress ids the earlier decks used, so an old card never turns into a different word).
 Importing Full after Lite therefore updates the Lite cards instead of duplicating them.
 
 ## Prerequisites

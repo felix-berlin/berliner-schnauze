@@ -248,7 +248,6 @@ export interface Media {
 export interface WordType {
   id: number;
   name: string;
-  wpId?: number | null;
   slug?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -261,7 +260,6 @@ export interface Theman {
   id: number;
   name: string;
   description?: string | null;
-  wpId?: number | null;
   slug?: string | null;
   meta?: SeoMetaGroup;
   updatedAt: string;
@@ -292,7 +290,6 @@ export interface SeoMetaGroup {
 export interface Word {
   id: number;
   berlinerisch: string;
-  wpId?: number | null;
   slug?: string | null;
   article?: string | null;
   translations?:
@@ -394,7 +391,6 @@ export interface Post {
     };
     [k: string]: unknown;
   } | null;
-  wpId?: number | null;
   slug?: string | null;
   meta?: SeoMetaGroup;
   updatedAt: string;
@@ -423,7 +419,6 @@ export interface Page {
     };
     [k: string]: unknown;
   } | null;
-  wpId?: number | null;
   slug?: string | null;
   meta?: SeoMetaGroup;
   updatedAt: string;
@@ -730,7 +725,6 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface WordTypesSelect<T extends boolean = true> {
   name?: T;
-  wpId?: T;
   slug?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -742,7 +736,6 @@ export interface WordTypesSelect<T extends boolean = true> {
 export interface ThemenSelect<T extends boolean = true> {
   name?: T;
   description?: T;
-  wpId?: T;
   slug?: T;
   meta?: T | SeoMetaGroupSelect<T>;
   updatedAt?: T;
@@ -766,7 +759,6 @@ export interface SeoMetaGroupSelect<T extends boolean = true> {
  */
 export interface WordsSelect<T extends boolean = true> {
   berlinerisch?: T;
-  wpId?: T;
   slug?: T;
   article?: T;
   translations?:
@@ -849,7 +841,6 @@ export interface PostsSelect<T extends boolean = true> {
   contentModifiedAt?: T;
   featuredImage?: T;
   content?: T;
-  wpId?: T;
   slug?: T;
   meta?: T | SeoMetaGroupSelect<T>;
   updatedAt?: T;
@@ -863,7 +854,6 @@ export interface PostsSelect<T extends boolean = true> {
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
   content?: T;
-  wpId?: T;
   slug?: T;
   meta?: T | SeoMetaGroupSelect<T>;
   updatedAt?: T;
