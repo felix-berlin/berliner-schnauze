@@ -107,11 +107,7 @@ const doc = {
   wordTypes: [{ id: 1, name: "Adjektiv" }],
 };
 
-const page = (docs: unknown[], nextPage: number | null = null) => ({
-  docs,
-  hasNextPage: nextPage !== null,
-  nextPage,
-});
+const page = (docs: unknown[]) => ({ docs });
 
 beforeEach(() => {
   vi.resetModules();
@@ -277,22 +273,26 @@ describe("fetchAllWords", () => {
   });
   const unchanged = { docs: [{ updatedAt: "2026-09-01T00:00:00.000Z" }], totalDocs: 1 };
 
-  it("pages through the local api and asks for published words only", async () => {
+  it("pages through the local api by id and asks for published words only", async () => {
+    // A full page (PAGE_SIZE) asks for the next one, a shorter one is the last.
+    const full = Array.from({ length: 1000 }, (_, i) => ({ ...doc, id: i + 1 }));
     loadPages
-      .mockResolvedValueOnce(page([doc], 2))
-      .mockResolvedValueOnce(page([{ ...doc, berlinerisch: "wa", id: 13, slug: "wa" }]));
+      .mockResolvedValueOnce(page(full))
+      .mockResolvedValueOnce(page([{ ...doc, berlinerisch: "wa", id: 1001, slug: "wa" }]));
     const { fetchAllWords } = await load();
     const words = await fetchAllWords();
-    expect(words.map((w) => w.slug)).toEqual(["aasen", "wa"]);
+    expect(words).toHaveLength(1001);
+    expect(words.at(-1)?.slug).toBe("wa");
     expect(loadPages).toHaveBeenCalledTimes(2);
     expect(loadPages.mock.calls[0][0]).toMatchObject({
       collection: "words",
       context: { siteRead: "published" },
       overrideAccess: false,
-      page: 1,
+      pagination: false,
+      where: { id: { greater_than: 0 } },
     });
     expect(loadPages.mock.calls[0][0].draft).toBeFalsy();
-    expect(loadPages.mock.calls[1][0]).toMatchObject({ page: 2 });
+    expect(loadPages.mock.calls[1][0]).toMatchObject({ where: { id: { greater_than: 1000 } } });
   });
 
   it("sorts by German collation (umlauts with their base letter), independent of the database locale", async () => {
@@ -321,7 +321,7 @@ describe("fetchAllWords", () => {
     await fetchAllWords();
     const args = loadPages.mock.calls[0][0];
     expect(args.draft).toBe(true);
-    expect(args.where).toBeUndefined();
+    expect(args.where).toEqual({ id: { greater_than: 0 } });
   });
 
   it("drops words without a slug, and drafts without a headword, with a warning", async () => {
@@ -444,7 +444,7 @@ describe("fetchAllWords", () => {
         .mockResolvedValueOnce({ docs: [] })
         .mockResolvedValueOnce(page([w(1, "aasen"), w(3, "zille")]));
       expect((await refresh(fetchAllWords)).map((x) => x.berlinerisch)).toEqual(["aasen", "zille"]);
-      expect(loadPages.mock.calls[2][0]).toMatchObject({ page: 1 });
+      expect(loadPages.mock.calls[2][0]).toMatchObject({ where: { id: { greater_than: 0 } } });
     });
 
     it("loads everything when media, themen or word types changed", async () => {
@@ -463,7 +463,7 @@ describe("fetchAllWords", () => {
       loadPages.mockResolvedValueOnce(page([w(1, "aasen"), w(2, "bulette"), w(3, "zille")]));
       await refresh(fetchAllWords);
       expect(loadPages).toHaveBeenCalledTimes(1);
-      expect(loadPages.mock.calls[0][0]).toMatchObject({ page: 1 });
+      expect(loadPages.mock.calls[0][0]).toMatchObject({ where: { id: { greater_than: 0 } } });
     });
   });
 

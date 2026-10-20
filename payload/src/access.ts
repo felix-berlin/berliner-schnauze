@@ -2,12 +2,17 @@ import type { Access, PayloadRequest } from "payload";
 
 export const authenticated: Access = ({ req }) => Boolean(req.user);
 
-/** The default for content: the site reads it through the Local API, the REST/GraphQL API only for logged-in users. */
-export const authenticatedOnly = { read: authenticated, create: authenticated, update: authenticated, delete: authenticated };
+/** The default for content: the site reads it through the Local API, the REST API only for logged-in users. */
+export const authenticatedOnly = {
+  read: authenticated,
+  create: authenticated,
+  update: authenticated,
+  delete: authenticated,
+};
 
 /**
  * `req.context` flag of the site's own Local API reads (`siteRead()` in website/src/services/payload.ts): "published",
- * or "all" with SHOW_TEST_DATA. A REST/GraphQL request starts with an empty context, so it can never set it.
+ * or "all" with SHOW_TEST_DATA. A REST request starts with an empty context, so it can never set it.
  */
 export type SiteRead = "all" | "published";
 const siteRead = (req: PayloadRequest) => req.context?.siteRead as SiteRead | undefined;
@@ -40,7 +45,8 @@ export const mediaRead: Access = ({ req, isReadingStaticFile }) =>
  */
 export const usersCreate: Access = async ({ req }) => {
   if (req.user) return true;
-  if (process.env.NODE_ENV === "production" && process.env.PAYLOAD_ALLOW_FIRST_USER !== "true") return false;
+  if (process.env.NODE_ENV === "production" && process.env.PAYLOAD_ALLOW_FIRST_USER !== "true")
+    return false;
   const { totalDocs } = await req.payload.count({ collection: "users", overrideAccess: true });
   return totalDocs === 0;
 };
