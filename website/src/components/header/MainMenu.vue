@@ -90,9 +90,9 @@ const { menuItems = [] } = defineProps<MainMenuProps>();
 const root = ref<HTMLElement | null>(null);
 useContentTracking(root);
 
-// ponytail: the WP "Main Menu" is flat and only carries label/path/description, so
-// icons, the "App" group and the "Neu" tag are keyed by path here. Move to WP menu
-// CSS classes once editors need to change them without a deploy.
+// ponytail: the "Main Menu" is flat and only carries label/path/description, so
+// icons, the "App" group and the "Neu" tag are keyed by path here. Move to menu
+// fields in Payload once editors need to change them without a deploy.
 const ICONS: Record<string, Component> = {
   "/anki": defineAsyncComponent(() => import("virtual:icons/lucide/layers")),
   "/changelog": defineAsyncComponent(() => import("virtual:icons/lucide/sparkles")),
@@ -115,7 +115,7 @@ const NEW_PATHS = new Set(["/anki"]);
 const InstallApp = defineAsyncComponent(() => import("@components/InstallApp.vue"));
 const DownloadIcon = defineAsyncComponent(() => import("virtual:icons/lucide/download"));
 
-// Items with a WP description are the big "Entdecken" cards; the rest are compact links.
+// Items with a description are the big "Entdecken" cards; the rest are compact links.
 const discoverItems = computed(() => menuItems.filter((item) => item.description));
 const linkGroups = computed(() => {
   const compact = menuItems.filter((item) => !item.description);

@@ -10,6 +10,7 @@ export const Media: CollectionConfig = {
     { name: "alt", type: "text" },
     { name: "caption", type: "text" },
     { name: "description", type: "richText" },
+    // Old /wp-content/uploads path: drives the permanent media 301s (findMediaRedirect), keep it.
     { name: "wpPath", type: "text", unique: true, index: true, admin: { readOnly: true } },
   ],
 };

@@ -1,9 +1,9 @@
 import type { CollectionBeforeChangeHook, Field } from "payload";
 
-/** Set `req.context[PRESERVE_CONTENT_MODIFIED_AT] = true` (importer) to keep a passed contentModifiedAt. */
+/** Set `req.context[PRESERVE_CONTENT_MODIFIED_AT] = true` (bulk re-saves) to keep a passed contentModifiedAt. */
 export const PRESERVE_CONTENT_MODIFIED_AT = "preserveContentModifiedAt";
 
-/** Payload always rewrites updatedAt on update, so WP's modifiedGmt lives here (sitemap lastmod). */
+/** Payload always rewrites updatedAt on update, so the last content change lives here (sitemap lastmod). */
 export const contentModifiedAtField: Field = { name: "contentModifiedAt", type: "date", admin: { readOnly: true } };
 
 export const touchContentModifiedAt: CollectionBeforeChangeHook = ({ data, originalDoc, req }) => {

@@ -14,11 +14,11 @@ export interface ProcessedArticle {
 }
 
 // The „Werbelink (Affiliate)“ checkbox of a Payload link renders as rel="sponsored"
-// (payload/src/lib/lexicalHtml.ts; the WordPress import carries Gutenberg's rel over).
+// (payload/src/lib/lexicalHtml.ts; content imported from WordPress kept Gutenberg's rel).
 // Network-agnostic and matches Google's own rel=sponsored guidance.
 const SPONSORED_LINK_PATTERN = /\brel="[^"]*\bsponsored\b[^"]*"/i;
 
-// Imported WordPress links are absolute against the old CMS origin, links an editor sets in Payload against
+// Links imported from WordPress were absolute against the old CMS origin, links an editor sets in Payload against
 // whatever the admin runs on. Stripping both turns them into root-relative links that resolve against
 // the domain actually serving the page (dev or prod).
 const cmsOrigins = [
@@ -27,7 +27,7 @@ const cmsOrigins = [
     PAYLOAD_SERVER_URL && new URL(PAYLOAD_SERVER_URL).origin,
   ]),
 ].filter((origin): origin is string => !!origin);
-const rewriteWpLinks = (html: string): string =>
+const rewriteCmsLinks = (html: string): string =>
   cmsOrigins.reduce((out, origin) => out.replaceAll(`href="${origin}`, 'href="'), html);
 
 // Reduce heading markup to plain text for TOC labels + slugs. The strip is
@@ -92,7 +92,7 @@ export const processArticleBlocks = (blocks: ArticleBlock[]): ProcessedArticle =
     let html = block;
 
     // 0. Internal links: rewrite CMS-absolute hrefs to relative paths.
-    html = rewriteWpLinks(html);
+    html = rewriteCmsLinks(html);
 
     // 1. Headings: ensure an id and collect the TOC (skip the Quellen appendix).
     html = html.replace(
