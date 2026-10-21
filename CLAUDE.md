@@ -17,7 +17,7 @@ pnpm test:unit               # Run full test suite with coverage
 # in website/: test:unit:watch (watch), test:unit:ui (Vitest UI), test:ci (coverage + JUnit)
 
 # Linting & type checking
-pnpm lint                    # Oxlint (JS/TS/Vue/Astro) + Stylelint (SCSS) — auto-fixes (--fix), modifies files
+pnpm lint                    # Oxlint (website + payload/, root .oxlintrc.json holds typeAware) + Stylelint (SCSS) — auto-fixes (--fix), modifies files
 pnpm typechecking            # astro check + vue-tsc  (slow — run targeted, not after every edit; tsc can't resolve .vue imports)
 
 # Build

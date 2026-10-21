@@ -1,0 +1,56 @@
+{
+  "$schema": "../node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "eslint",
+    "typescript",
+    "import",
+    "oxc",
+    "unicorn",
+    "promise",
+    "react",
+    "nextjs",
+    "vitest"
+  ],
+  "categories": {
+    "correctness": "error",
+    "perf": "error"
+  },
+  "env": {
+    "builtin": true,
+    "node": true
+  },
+  "ignorePatterns": [
+    ".next/",
+    ".vitest/",
+    "node_modules/",
+    "src/payload-types.ts",
+    "src/migrations/",
+    "src/app/(payload)/admin/importMap.js"
+  ],
+  "rules": {
+    "import/no-cycle": [
+      "error",
+      {
+        "maxDepth": 3
+      }
+    ],
+    "typescript/no-explicit-any": "error",
+    "typescript/ban-ts-comment": "error",
+    "typescript/no-floating-promises": "error",
+    "typescript/await-thenable": "error",
+    "typescript/no-misused-spread": "off"
+  },
+  "overrides": [
+    {
+      "files": ["src/seed/**", "tests/**"],
+      "rules": {
+        "no-await-in-loop": "off",
+        "typescript/require-array-sort-compare": "off",
+        "vitest/expect-expect": "off",
+        "vitest/no-standalone-expect": "off",
+        "vitest/no-conditional-expect": "off",
+        "vitest/require-to-throw-message": "off"
+      }
+    }
+  ]
+}

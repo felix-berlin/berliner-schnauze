@@ -40,7 +40,7 @@
     "build": "pnpm --filter website build",
     "build:local": "pnpm --filter website build:local",
     "test:unit": "pnpm --filter website test:unit",
-    "lint": "pnpm --filter website lint",
+    "lint": "pnpm --filter website --filter payload-app lint",
     "typechecking": "pnpm --filter website typechecking",
     "format": "pnpm exec oxfmt .",
     "format:check": "pnpm exec oxfmt --check .",
@@ -58,6 +58,8 @@
     "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^11.0.1",
     "oxfmt": "^0.74.0",
+    "oxlint": "^1.89.0",
+    "oxlint-tsgolint": "^7.0.2004",
     "semantic-release": "^25.0.9"
   },
   "engines": {

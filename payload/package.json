@@ -23,7 +23,8 @@
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
     "migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "test": "vitest run"
+    "test": "vitest run",
+    "lint": "oxlint src tests --type-aware --deny-warnings --fix"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.91.0",
