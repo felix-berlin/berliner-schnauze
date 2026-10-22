@@ -3,7 +3,7 @@
 # (vite.ssr.noExternal) except what runs outside it: astro-og-canvas with canvaskit-wasm
 # (its .wasm), loaded by the OG worker thread (server/og-worker.mjs). Only those are installed below.
 # Pure JS and wasm, so they are fetched once on the build platform for every target.
-FROM --platform=$BUILDPLATFORM node:24-slim@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5 AS og-deps
+FROM --platform=$BUILDPLATFORM node:24-slim@sha256:55fb5f5a527ea2c5c4a95f963e48ef90aa38c7b346054fdc8ee9957a2b55d205 AS og-deps
 # package.json is only read for the (exact, lockfile-matching) version, never installed (it would run the pnpm-only preinstall).
 COPY package.json /meta/package.json
 WORKDIR /deps
@@ -14,7 +14,7 @@ RUN npm install --omit=dev --no-audit --no-fund --no-package-lock --ignore-scrip
     "astro-og-canvas@$(node -p "require('/meta/package.json').dependencies['astro-og-canvas']")" \
  && mkdir og-cache
 
-FROM --platform=$BUILDPLATFORM node:24-slim@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5 AS infisical-cli
+FROM --platform=$BUILDPLATFORM node:24-slim@sha256:55fb5f5a527ea2c5c4a95f963e48ef90aa38c7b346054fdc8ee9957a2b55d205 AS infisical-cli
 ARG TARGETARCH
 ARG INFISICAL_CLI_VERSION=0.44.2
 RUN apt-get update \

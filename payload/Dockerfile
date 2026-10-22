@@ -3,7 +3,7 @@
 # Ignore rules: payload/Dockerfile.dockerignore (website/.dockerignore is the web image's).
 # `next build` needs no database and no secrets; all runtime env (DATABASE_URL,
 # PAYLOAD_SECRET, PAYLOAD_SERVER_URL) comes from compose at start.
-FROM node:24-slim@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5 AS build
+FROM node:24-slim@sha256:55fb5f5a527ea2c5c4a95f963e48ef90aa38c7b346054fdc8ee9957a2b55d205 AS build
 WORKDIR /repo
 # pnpm version pinned by `packageManager` in the root package.json.
 RUN corepack enable
@@ -18,7 +18,7 @@ COPY payload/ payload/
 RUN pnpm --filter payload-app build \
   && mkdir /empty-media
 
-FROM --platform=$BUILDPLATFORM node:24-slim@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5 AS infisical-cli
+FROM --platform=$BUILDPLATFORM node:24-slim@sha256:55fb5f5a527ea2c5c4a95f963e48ef90aa38c7b346054fdc8ee9957a2b55d205 AS infisical-cli
 ARG TARGETARCH
 ARG INFISICAL_CLI_VERSION=0.44.2
 RUN apt-get update \
