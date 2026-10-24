@@ -398,7 +398,7 @@ importers:
         version: 5.4.4
       virtua:
         specifier: ^0.53.5
-        version: 0.53.5(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vue@3.5.44(typescript@6.0.3))
+        version: 0.53.6(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vue@3.5.44(typescript@6.0.3))
       vite-plugin-pwa:
         specifier: ^2.0.0
         version: 2.0.0(@vite-pwa/assets-generator@2.0.0(@types/node@26.6.5))(supports-color@10.2.2)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.104.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))(workbox-build@7.4.1(supports-color@10.2.2))(workbox-window@7.4.1)
@@ -9599,8 +9599,8 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
-  virtua@0.53.5:
-    resolution: {integrity: sha512-hhtrEli6LkMzKXhqhuStnaU5DECVLjxwr/FbrGcnkId2gyKQJ/5E6LE/T2F4OzyghEOsOCl/g+0DyxJUmkah8Q==}
+  virtua@0.53.6:
+    resolution: {integrity: sha512-/vQtSFNDFcp3Yz4klbpe8Z88eQeThSw49cFlgJQdsqh3SUnRlW4jLi6ZYt4YzdwerYGlP6KCgAOXNVO+PmUg7w==}
     peerDependencies:
       '@angular/common': '>=20.0.0'
       '@angular/core': '>=20.0.0'
@@ -19778,7 +19778,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  virtua@0.53.5(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vue@3.5.44(typescript@6.0.3)):
+  virtua@0.53.6(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vue@3.5.44(typescript@6.0.3)):
     optionalDependencies:
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
