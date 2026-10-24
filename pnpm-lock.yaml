@@ -199,7 +199,7 @@ importers:
     devDependencies:
       '@infisical/cli':
         specifier: ^0.44.3
-        version: 0.44.3
+        version: 0.44.9
       '@semantic-release/changelog':
         specifier: ^7.0.0
         version: 7.0.0(semantic-release@25.0.9(supports-color@10.2.2)(typescript@6.0.3))
@@ -429,7 +429,7 @@ importers:
         version: 1.2.100
       '@infisical/cli':
         specifier: ^0.44.3
-        version: 0.44.3
+        version: 0.44.9
       '@nanostores/logger':
         specifier: ^1.1.0
         version: 1.1.0(nanostores@1.5.5)
@@ -2620,8 +2620,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@infisical/cli@0.44.3':
-    resolution: {integrity: sha512-k+K0QBLXyGldGNrOpu3HxQuP5W0IxR8D9e9jncMCPpnPgTGEcA0tUCUM661v5M4tF92A4nu7JHS5FLOz2+CUAw==}
+  '@infisical/cli@0.44.9':
+    resolution: {integrity: sha512-aS9EXeX6ejv14wGQnicahzzLwoxRoQdYdqvPy92FV5dpKKirLZ++fQwZ/RvNAXzFw8Ox/fDA8C2WNEQPU7RNFA==}
     hasBin: true
 
   '@isaacs/cliui@9.0.0':
@@ -12230,7 +12230,7 @@ snapshots:
   '@img/sharp-win32-x64@0.35.5':
     optional: true
 
-  '@infisical/cli@0.44.3':
+  '@infisical/cli@0.44.9':
     dependencies:
       tar: 7.5.22
       yauzl: 3.4.0
