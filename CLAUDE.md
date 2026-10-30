@@ -64,6 +64,15 @@ Secrets are managed via [Infisical](https://infisical.com). Run `npx infisical l
 
 Docker/compose reads the root `.env`; the `payload/` CLI and Next read a git-ignored `payload/.env` (see `payload/README.md`).
 
+## Deployment
+
+Production is not deployed from this repo. The Komodo GitOps repo `felix-berlin/komodo` (local: `../komodo`) holds the compose file (`remote/thrash/berliner-schnauze/compose.yaml`) and the `berliner-schnauze` stack in its `komodo.toml` (server `thrash - Hetzner`). The root `compose.yaml` here is for local use only.
+
+- Release CI pushes `ghcr.io/felix-berlin/berliner-schnauze` and `…-cms`; Komodo pulls them. A change to ports, env vars, volumes, healthchecks or Traefik labels belongs in the komodo repo, not here.
+- Runtime secrets come from Infisical via the stack `environment` in `komodo.toml` (machine identities `web`/`cms`), not from a `.env`.
+- Rolling release: `web` is rolled via `scripts/rollout.sh` (needs a real healthcheck, no `container_name`, no published ports); `cms` is recreated first so migrations run before the new `web` starts.
+- Pull `komodo` before editing it (Komodo commits to `main` itself) and read its `CLAUDE.md` first; every decision goes into its `docs/entscheidungen.md`.
+
 ## Architecture
 
 **Data flow**: Payload (Local API, in the Astro server process) → adapters in `src/services/payload/` (generated Payload types narrowed to `SiteWord` etc.) → on-demand pages and API routes (`api/search/index.json`, sitemap, OG images, word of the day) → Orama in-browser search → Vue components
