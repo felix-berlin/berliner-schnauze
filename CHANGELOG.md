@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.4](https://github.com/felix-berlin/berliner-schnauze/compare/v4.1.3...v4.1.4) (2026-10-30)
+
+
+### Bug Fixes
+
+* **ci:** build the docker image from the release commit, not the branch head ([9880f19](https://github.com/felix-berlin/berliner-schnauze/commit/9880f19a2d13d04d654e881632051bcb8ee67ac0))
+
 ## [4.1.3](https://github.com/felix-berlin/berliner-schnauze/compare/v4.1.2...v4.1.3) (2026-10-30)
 
 
