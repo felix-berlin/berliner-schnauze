@@ -84,6 +84,9 @@ check "X-Frame-Options" "$(header /wort/aasen x-frame-options)" DENY
 asset=$(curl -s "$BASE/" | grep -o '/_astro/[^"]*\.js' | sed -n 1p)
 check "_astro immutable" "$(header "$asset" cache-control)" "public, max-age=31536000, immutable"
 [[ "$(header /_astro/missing.js cache-control)" != *immutable* ]] && echo "ok   _astro 404 not immutable" || { echo "FAIL _astro 404 is immutable"; fail=1; }
+br() { curl -s -D - -o /dev/null -H 'Accept-Encoding: br' "$BASE$1" | tr -d '\r' | grep -i '^content-encoding:' | cut -d' ' -f2- || true; }
+check "_astro precompressed br" "$(br "$asset")" br
+check "search index raw (Traefik compresses)" "$(br /api/search/index.json)" ""
 
 if [[ $fail -ne 0 ]]; then docker compose logs web; exit 1; fi
 echo "Docker smoke test passed"
