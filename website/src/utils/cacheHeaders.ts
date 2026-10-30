@@ -20,7 +20,7 @@ export const setPageCache = <R extends CacheableResponse>(
   return response;
 };
 
-/** A weak ETag of a body (weak: the server compresses per client, the bytes differ by encoding). */
+/** A weak ETag of a body (weak: Traefik compresses per client, the bytes differ by encoding). */
 export const etagOf = (body: string): string =>
   `W/"${createHash("sha1").update(body).digest("base64url")}"`;
 
