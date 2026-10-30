@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.3](https://github.com/felix-berlin/berliner-schnauze/compare/v4.1.2...v4.1.3) (2026-10-30)
+
+
+### Performance Improvements
+
+* **dev:** drop on-the-fly compression from the container entrypoint ([fe770ad](https://github.com/felix-berlin/berliner-schnauze/commit/fe770ad35d4d3fb165c4a0b123cdfef60555967a))
+
 ## [4.1.2](https://github.com/felix-berlin/berliner-schnauze/compare/v4.1.1...v4.1.2) (2026-10-20)
 
 
