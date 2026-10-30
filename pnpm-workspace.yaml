@@ -94,7 +94,7 @@ minimumReleaseAgeExclude:
   - '@csstools/postcss-text-decoration-shorthand@5.0.7'
   - '@csstools/postcss-trigonometric-functions@5.0.9'
   - '@types/node@26.6.4'
-  - '@vue/language-core@3.3.12 || 3.3.13'
+  - '@vue/language-core@3.3.12 || 3.3.13 || 3.3.14'
   - postcss-attribute-case-insensitive@8.0.2
   - postcss-color-functional-notation@8.0.15
   - postcss-custom-properties@15.0.4
@@ -106,7 +106,7 @@ minimumReleaseAgeExclude:
   - postcss-overflow-shorthand@7.0.1
   - postcss-place@11.0.1
   - postcss-preset-env@11.6.0 || 11.6.2
-  - vue-tsc@3.3.12 || 3.3.13
+  - vue-tsc@3.3.12 || 3.3.13 || 3.3.14
   - '@astrojs/internal-helpers@0.13.0'
   - '@astrojs/prism@4.1.0'
   - '@astrojs/telemetry@3.4.0'
