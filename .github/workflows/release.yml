@@ -119,6 +119,13 @@ jobs:
         uses: actions/checkout@v7
         with:
           ref: ${{ inputs.version && format('v{0}', inputs.version) || github.ref_name }}
+          fetch-depth: ${{ inputs.version && 1 || 0 }}
+
+      # Not the branch head: a commit merged after this push (e.g. a fresh Renovate bump) would land in the
+      # image and can fail the release-age gate. The oldest tag containing the pushed commit is its release.
+      - name: Switch to release commit
+        if: github.event_name == 'push'
+        run: git checkout "$(git tag --contains "$GITHUB_SHA" --sort=v:refname --list 'v*' | head -1)"
 
       - name: Read version
         run: echo "VERSION=$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
