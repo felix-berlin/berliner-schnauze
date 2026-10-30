@@ -105,7 +105,7 @@ minimumReleaseAgeExclude:
   - postcss-logical@9.0.2
   - postcss-overflow-shorthand@7.0.1
   - postcss-place@11.0.1
-  - postcss-preset-env@11.6.0
+  - postcss-preset-env@11.6.0 || 11.6.2
   - vue-tsc@3.3.12 || 3.3.13
   - '@astrojs/internal-helpers@0.13.0'
   - '@astrojs/prism@4.1.0'
