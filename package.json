@@ -37,6 +37,8 @@
   "scripts": {
     "preinstall": "pnpx only-allow pnpm",
     "dev": "pnpm --filter website dev",
+    "predev:all": "pnpm --filter website exec infisical run -- true",
+    "dev:all": "pnpm --parallel --filter website --filter payload-app dev",
     "build": "pnpm --filter website build",
     "build:local": "pnpm --filter website build:local",
     "test:unit": "pnpm --filter website test:unit",

@@ -7,6 +7,9 @@ import nodemailer from "nodemailer";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 
+import { CommentReports } from "./collections/CommentReports";
+import { Comments } from "./collections/Comments";
+import { CommentVotes } from "./collections/CommentVotes";
 import { Media } from "./collections/Media";
 import { Pages } from "./collections/Pages";
 import { Posts } from "./collections/Posts";
@@ -39,7 +42,7 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname) },
   },
   // A slug change on a collection with a public page adds a 301 from the old path.
-  collections: [Users, Media, WordTypes, Themen, Words, Posts, Pages, Suggestions].map(withSlugRedirects),
+  collections: [Users, Media, WordTypes, Themen, Words, Posts, Pages, Suggestions, Comments, CommentVotes, CommentReports].map(withSlugRedirects),
   globals: [Navigation, Affiliate, Company, Home, Anki],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
@@ -60,7 +63,13 @@ export default buildConfig({
         defaultFromAddress: "mail@berliner-schnauze.wtf",
         defaultFromName: "Berliner Schnauze",
         skipVerify: true,
-        transport: nodemailer.createTransport(process.env.SMTP_URL),
+        // A hung SMTP server must not pile up sockets (defaults: 2 min connect, 10 min idle).
+        transport: nodemailer.createTransport({
+          connectionTimeout: 10_000,
+          greetingTimeout: 10_000,
+          socketTimeout: 20_000,
+          url: process.env.SMTP_URL,
+        }),
       })
     : undefined,
   plugins: [seo, redirects],

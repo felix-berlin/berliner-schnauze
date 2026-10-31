@@ -31,7 +31,8 @@ $edge: 20px;
   &--top-right,
   &--top-left,
   &--top-center {
-    inset-block-start: $edge;
+    // Below the sticky header, never over it (--site-header-height is kept current by MainHeader.astro).
+    inset-block-start: calc(var(--site-header-height, 60px) + #{$edge});
   }
 
   &--bottom-right,

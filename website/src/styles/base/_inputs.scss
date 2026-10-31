@@ -5,62 +5,106 @@
 $icon-color: #2b333b;
 $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='#{$icon-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>";
 
+// Text fields: Berlin with the body tracking, warm paper fill, solid muted border that
+// turns dashed on hover (the button signature) and solid Currywurst with a ring on focus.
 .c-input,
 .c-textarea,
 .c-select {
-  --spacing-inner: #{vars.$spacer * 0.55};
-  --color-border: var(--blue);
+  --spacing-inner: #{vars.$spacer * 0.6} #{vars.$spacer * 0.75};
+  // Muted text colour: ≥3:1 against the fill in both modes (WCAG 1.4.11).
+  --color-border: var(--color-muted);
   --color-border-hover: var(--red-200);
+  --color-border-active: var(--color-accent-text);
   --size-font: 1rem;
   --box-shadow-focus: 2px color-mix(in srgb, var(--orange-600) 30%, transparent);
   --color-background: color-mix(in srgb, var(--orange-100) 30%, white);
-  --color-background-disabled: var(--grey-200);
+  --color-background-disabled: color-mix(in srgb, var(--color-muted) 12%, white);
   --width-border: 1px;
 
+  font-family: vars.$berlin;
   font-size: var(--size-font);
-  box-shadow: 0 0 0 1px transparent;
+  letter-spacing: 1px;
   background-color: var(--color-background);
   outline: none;
   appearance: none;
+  border-radius: 0;
   color: var(--color, var(--color-body));
   transition: {
-    property: border-color, color, background-color, box-shadow;
+    property: border-color, color, background-color, box-shadow, outline-color;
     duration: 200ms;
   }
 
   &:not(.c-input--range) {
-    border: var(--width-border) solid var(--color-border);
+    border: var(--width-border) var(--style-border, solid) var(--color-border);
   }
 
   &:not(.c-input--file, .c-input--range) {
     padding: var(--spacing-inner);
   }
 
+  // Dark: a recessed well below the card surface; cream text at well over 4.5:1.
   @include butler-mx.dark-mode-class {
-    --color-background: color-mix(in srgb, var(--blue) 70%, white);
-  }
-
-  &:focus-within {
-    box-shadow: 0 0 0 var(--box-shadow-focus);
+    --color-background: var(--new-blue-600);
+    --color-background-disabled: color-mix(in srgb, var(--color-muted) 15%, var(--new-blue-600));
   }
 
   &:disabled {
     --color-background: var(--color-background-disabled);
+    --style-border: dotted;
 
+    color: var(--color-muted);
     cursor: not-allowed;
   }
 
   &::placeholder {
-    color: var(--color-placeholder, color-mix(in srgb, var(--blue) 80%, transparent));
-
-    @include butler-mx.dark-mode-class {
-      --color-placeholder: color-mix(in srgb, var(--yellow-500) 80%, transparent);
-    }
+    // Muted, not body ink: reads as a hint, still ≥4.5:1 on the fill.
+    color: var(--color-placeholder, var(--color-muted));
+    opacity: 1;
   }
 }
 
+// Shared states for the text-like fields only (no checkbox, radio, range, file or colour).
+// :where() keeps them at class + pseudo specificity, so component overrides win.
+.c-textarea,
+.c-input:where(:not(.c-input--checkbox, .c-input--radio, .c-input--range, .c-input--file, .c-input--color)) {
+  @include butler-mx.hover {
+    &:where(:not(:focus, :disabled)) {
+      --style-border: dashed;
+      --color-border: var(--color-border-active);
+    }
+  }
+
+  &:focus-visible {
+    --color-border: var(--color-border-active);
+
+    outline: 2px solid var(--color-border-active);
+    outline-offset: 1px;
+  }
+
+  &:user-invalid,
+  &[aria-invalid="true"] {
+    --color-border: var(--danger);
+    --color-border-active: var(--danger);
+  }
+}
+
+.c-input:where(:not(.c-input--checkbox, .c-input--radio, .c-input--range, .c-input--file, .c-input--color)) {
+  min-block-size: 44px;
+}
+
 .c-textarea {
-  line-height: 1.35;
+  display: block;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.c-label {
+  font-weight: 700;
+}
+
+.c-textarea--error .c-textarea {
+  --color-border: var(--danger);
+  --color-border-active: var(--danger);
 }
 
 .c-input--number,
@@ -118,6 +162,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   --cursor: pointer;
   --spacing-inner: 0;
   --height: 20px;
+  --color-border: var(--blue);
 
   height: var(--height);
   display: inline-block;

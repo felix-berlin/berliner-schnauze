@@ -1,0 +1,87 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-comment-form {
+  display: grid;
+  gap: vars.$spacer * 0.75;
+
+  &__row {
+    display: grid;
+    gap: vars.$spacer * 0.25;
+  }
+
+  &__hint {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+
+  &__under {
+    display: flex;
+    gap: vars.$spacer * 0.5;
+    align-items: baseline;
+  }
+
+  &__error {
+    --color-error-text: color-mix(in srgb, var(--danger) 75%, black);
+
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-error-text);
+
+    @include butler-mx.dark-mode-class {
+      --color-error-text: color-mix(in srgb, var(--danger) 45%, white);
+    }
+  }
+
+  &__counter {
+    margin-inline-start: auto;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+
+    &.is-over {
+      color: var(--danger);
+      font-weight: 700;
+    }
+  }
+
+  &__privacy {
+    --decoration-text: underline dashed from-font;
+
+    margin: 0;
+    text-underline-position: from-font;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.5;
+    align-items: center;
+  }
+
+  &__button {
+    --padding: #{vars.$spacer * 0.5 vars.$spacer};
+
+    min-block-size: 44px;
+  }
+
+  // Shortcut hint only where a hardware keyboard is likely.
+  &__kbd {
+    margin-inline-start: auto;
+    font-size: 0.75rem;
+    color: var(--color-muted);
+
+    &.c-shortcut {
+      display: none;
+
+      @media (hover: hover) and (pointer: fine) {
+        display: inline-flex;
+      }
+    }
+
+    .c-shortcut__key {
+      padding-inline: 0.35em;
+    }
+  }
+}

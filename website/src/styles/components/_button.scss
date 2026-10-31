@@ -32,12 +32,12 @@
     --color-border: var(--control-border);
   }
 
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
+  // Hover: solid → dashed border plus the orange glow (DESIGN.md: the interaction signature).
   @include butler-mx.hover {
+    &:not(:disabled) {
+      --style-border: dashed;
+    }
+
     box-shadow: vars.$hover-glow;
 
     @include butler-mx.dark-mode-class {
@@ -86,6 +86,27 @@
 
     @include butler-mx.hover {
       @include filter-active;
+    }
+  }
+
+  // Disabled: no fill, muted text, dotted border (dashed stays the hover signature). Plain
+  // colours instead of 50 % opacity, so the label stays readable (muted is AA).
+  &:disabled {
+    &,
+    &:hover {
+      --color-background: transparent;
+      --color: var(--color-muted);
+      --color-border: var(--color-muted);
+      --style-border: dotted;
+
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    @include butler-mx.dark-mode-class {
+      --color-background: transparent;
+      --color: var(--color-muted);
+      --color-border: var(--color-muted);
     }
   }
 }

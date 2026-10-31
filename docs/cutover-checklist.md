@@ -93,9 +93,9 @@ their current values; the schema is in `website/astro.config.mjs`.
 - [ ] `berliner-schnauze.wtf` → `web:4321`. It must send `Host`, `X-Forwarded-Host` and `X-Forwarded-Proto: https`. Astro only trusts them for `berliner-schnauze.wtf` (`security.allowedDomains` in `astro.config.mjs`); without them breadcrumb JSON-LD ids say `http://localhost:4321`.
 - [ ] `cms.berliner-schnauze.wtf` → `cms:3001`. `/wp-content/uploads/...` on this host is answered by the CMS with a 301 to the new file (old media links and previews keep working).
 - [ ] The proxy may cache pages: responses carry `Cache-Control: public, max-age=0, s-maxage=300, stale-while-revalidate=86400`; errors are `no-store`. A change in the admin is visible after about a minute (60 s in-process cache) plus the proxy's 5 minutes.
-- [ ] Pangolin (Traefik) is enough as the proxy; it sets `X-Forwarded-Proto: https` and passes `X-Forwarded-Host`. It caches nothing, so `s-maxage` is unused: every request reaches Node, admin changes are live after the 60 s in-process cache.
-- [ ] Pangolin resources ask for a login by default. `berliner-schnauze.wtf`: authentication off. `cms.berliner-schnauze.wtf`: off, or SSO only for the admin with rules that bypass it for `/api/*` (Imagor fetches `/api/media/file/*`, the Anki release and `publish-drafts.ts` use the REST API with an API key) and `/wp-content/*` (old media links). Payload guards the API itself (anonymous → 403).
-- [ ] Newt targets: on the host `127.0.0.1:4321` / `127.0.0.1:3001` (compose binds both ports to localhost only); as a container in the compose network `web:4321` / `cms:3001`.
+- [ ] Traefik is enough as the proxy; it sets `X-Forwarded-Proto: https` and passes `X-Forwarded-Host`. It caches nothing, so `s-maxage` is unused: every request reaches Node, admin changes are live after the 60 s in-process cache.
+- [ ] No auth middleware in Traefik on `berliner-schnauze.wtf`. `cms.berliner-schnauze.wtf`: none, or forward auth only for the admin with rules that bypass it for `/api/*` (Imagor fetches `/api/media/file/*`, the Anki release and `publish-drafts.ts` use the REST API with an API key) and `/wp-content/*` (old media links). Payload guards the API itself (anonymous → 403).
+- [ ] Traefik targets: in the compose network `web:4321` / `cms:3001`; on the host `127.0.0.1:4321` / `127.0.0.1:3001` (compose binds both ports to localhost only).
 
 ## 4. First admin and API users
 
@@ -117,6 +117,8 @@ their current values; the schema is in `website/astro.config.mjs`.
 - [ ] One word page, the homepage, a magazine page and `/spenden` in light and dark mode, desktop and mobile width (`CLAUDE.md`).
 - [ ] Play an audio file on a word page (CSP `media-src`), switch the browser offline after one visit and open a word page you have not visited (service worker fallback).
 - [ ] Suggest-word form: real submission shows up in the admin under Suggestions and arrives at `SUGGEST_MAIL_TO`; check the spam folder (sender `mail@berliner-schnauze.wtf`, SPF).
+- [ ] Comments: post one on a word page (shows at once), one with a link (pending, mail arrives), report one (mail), open a `#kommentar-<id>` link.
+- [ ] The `datenschutz` page has a `#kommentare` heading before the switch (the comment form links there).
 - [ ] Admin preview: the preview button of a draft word opens the draft on the site (not the cached public page).
 
 ## 7. Switch

@@ -2,7 +2,7 @@
   <DropdownPopover
     :name="`word-options-${slug ?? ''}`"
     placement="bottom-end"
-    class="c-options-dropdown c-dropdown--theme-word-options"
+    class="c-options-dropdown c-dropdown--theme-menu"
   >
     <template #default="{ triggerProps }">
       <button
@@ -22,7 +22,7 @@
         v-if="shareIsSupported"
         aria-label="Wort teilen"
         type="button"
-        class="c-options-dropdown__copy-button c-button"
+        class="c-dropdown__item c-options-dropdown__copy-button"
         @click="shareWord(slug ?? '')"
       >
         <Share2 width="18" height="18" class="c-options-dropdown__icon-button" />
@@ -34,7 +34,7 @@
         v-if="clipBoardIsSupported"
         aria-label="Link zum Wort kopieren"
         type="button"
-        class="c-options-dropdown__copy-button c-button"
+        class="c-dropdown__item c-options-dropdown__copy-button"
         @click="copyWordPageUrlToClipboard(slug ?? '')"
       >
         <Link width="18" height="18" class="c-options-dropdown__icon-button" />
@@ -46,7 +46,7 @@
         v-if="clipBoardIsSupported"
         aria-label="Wort kopieren"
         type="button"
-        class="c-options-dropdown__copy-button c-button"
+        class="c-dropdown__item c-options-dropdown__copy-button"
         @click="copyNameToClipboard(berlinerisch ?? '')"
       >
         <Copy width="18" height="18" class="c-options-dropdown__icon-button" />

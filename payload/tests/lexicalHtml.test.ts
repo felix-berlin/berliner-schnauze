@@ -13,6 +13,12 @@ describe("lexicalToHtml", () => {
     expect(lexicalToHtml(state(para(text("a "), text("b", 1))), { mediaBase: BASE })).toBe("<p>a <strong>b</strong></p>");
   });
 
+  it("gives a heading an id slugified from its text", () => {
+    const h = (value: string) => ({ type: "heading", tag: "h2", children: [text(value)], direction: "ltr", format: "", indent: 0, version: 1 });
+    expect(lexicalToHtml(state(h("Kommentare")), { mediaBase: BASE })).toBe('<h2 id="kommentare">Kommentare</h2>');
+    expect(lexicalToHtml(state(h(" Größe & Äpfel! ")), { mediaBase: BASE })).toContain('id="groesse-aepfel"');
+  });
+
   it("renders a link", () => {
     expect(lexicalToHtml(state(para(link("https://example.org/l", "Lizenz"))), { mediaBase: BASE })).toContain('<a href="https://example.org/l"');
   });

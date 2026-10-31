@@ -8,9 +8,10 @@ interface TurnstileInstance {
     selector: string,
     options: {
       callback?: (response: string) => void;
-      "error-callback"?: () => void;
+      "error-callback"?: (code: string) => void;
       "expired-callback"?: () => void;
       sitekey: string;
+      appearance?: "always" | "interaction-only";
       theme?: "auto" | "dark" | "light";
     },
   ): string | undefined;

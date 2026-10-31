@@ -1,0 +1,244 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// 44px tap area around small controls without growing them visually.
+%c-comment-card-hit-area {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: max(100%, 44px);
+    block-size: max(100%, 44px);
+    translate: -50% -50%;
+  }
+}
+
+.c-comment-card {
+  display: grid;
+  gap: vars.$spacer * 0.5;
+  padding: vars.$spacer;
+
+  @include mx.paper-card;
+
+  // Replies sit inside the parent card, indented behind the dashed postcard line.
+  &--reply {
+    padding: vars.$spacer * 0.5 0 vars.$spacer * 0.5 vars.$spacer;
+    background: transparent;
+    border: 0;
+    border-inline-start: 1px dashed var(--c-word-comments-rule, var(--grey-100));
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  // Linked comment: orange wash and outline that fade out; with reduced motion they stay until the class goes.
+  &.is-highlighted {
+    position: relative;
+    outline: 2px solid var(--orange-500);
+    outline-offset: 2px;
+    animation: c-comment-card-outline 3.5s ease-out forwards;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: color-mix(in srgb, var(--orange-500) 25%, transparent);
+      pointer-events: none;
+      animation: c-comment-card-wash 3.5s ease-out forwards;
+    }
+
+    @include butler-mx.dark-mode-class {
+      &::after {
+        background: color-mix(in srgb, var(--orange-500) 35%, transparent);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+
+      &::after {
+        animation: none;
+      }
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.5;
+    align-items: baseline;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+
+  &__permalink {
+    color: inherit;
+    text-decoration: none;
+
+    @include butler-mx.hover {
+      color: var(--color-accent-text);
+      text-decoration: underline dashed;
+      text-underline-offset: 3px;
+    }
+  }
+
+  &__name {
+    color: var(--color-body);
+    font-size: 1rem;
+  }
+
+  &__text {
+    margin: 0;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+  }
+
+  &__placeholder {
+    margin: 0;
+    font-style: italic;
+    color: var(--color-muted);
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+
+  &__vote {
+    display: inline-flex;
+    align-items: center;
+    gap: vars.$spacer * 0.25;
+    padding-inline: vars.$spacer * 0.25;
+    border: 1px dashed var(--c-word-comments-rule, var(--grey-100));
+    border-radius: 4px;
+
+    button {
+      @extend %c-comment-card-hit-area;
+
+      display: inline-flex;
+      padding: vars.$spacer * 0.25;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+
+      &.is-active {
+        color: var(--color-accent-text);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: progress;
+      }
+    }
+  }
+
+  &__score {
+    min-inline-size: 1.5ch;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__link {
+    @extend %c-comment-card-hit-area;
+
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-muted);
+    font: inherit;
+    cursor: pointer;
+    text-decoration: underline dashed;
+    text-underline-offset: 3px;
+
+    @include butler-mx.hover {
+      color: var(--color-accent-text);
+    }
+  }
+
+  &__menu {
+    margin-inline-start: auto;
+  }
+
+  &__menu-button {
+    @extend %c-comment-card-hit-area;
+
+    display: inline-flex;
+    padding: vars.$spacer * 0.25;
+    border: 1px dashed transparent;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--color-muted);
+    cursor: pointer;
+
+    @include butler-mx.hover {
+      border-color: currentcolor;
+      color: var(--color-accent-text);
+    }
+
+    &[aria-expanded="true"] {
+      border-color: currentcolor;
+      color: var(--color-accent-text);
+    }
+  }
+
+
+  // Compact inline report form: label above, field + actions on one row when there is room.
+  &__report {
+    display: grid;
+    gap: vars.$spacer * 0.25;
+  }
+
+  &__report-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__report-input {
+    flex: 1 1 14rem;
+    min-inline-size: 0;
+  }
+
+  &__report-actions {
+    display: flex;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__report-button {
+    --padding: #{vars.$spacer * 0.5 vars.$spacer};
+
+    min-block-size: 44px;
+  }
+
+  &__thanks {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  &__replies {
+    display: grid;
+    gap: vars.$spacer * 0.5;
+    margin-inline-start: vars.$spacer * 0.5;
+  }
+}
+
+
+@keyframes c-comment-card-wash {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes c-comment-card-outline {
+  to {
+    outline-color: transparent;
+  }
+}

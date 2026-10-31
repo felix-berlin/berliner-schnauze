@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
 
+import { dismissToasts } from "./helpers";
+
 // Regression test for a bug where clicking a c-word-sidebar anchor link briefly scrolled
 // to the target section, then jumped back to the top of the page (a full page reload).
 // Root cause: Astro's ClientRouter dispatches a synthetic popstate event with no `state`
@@ -9,6 +11,7 @@ test.describe("Wort-Sidebar-Navigation (c-word-sidebar)", () => {
   test("Klick auf Sidebar-Link scrollt zur Section, ohne die Seite neu zu laden", async ({
     page,
   }) => {
+    await dismissToasts(page);
     await page.goto("/wort/anmachen");
 
     // A marker that only survives if the page is NOT reloaded.

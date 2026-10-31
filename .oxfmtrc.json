@@ -13,5 +13,5 @@
       "unknown"
     ]
   },
-  "ignorePatterns": ["**/*.astro", "coverage", "dist", "CHANGELOG.md"]
+  "ignorePatterns": ["**/*.astro", "coverage", "dist", "CHANGELOG.md", "payload/src/app/(payload)/admin/importMap.js"]
 }

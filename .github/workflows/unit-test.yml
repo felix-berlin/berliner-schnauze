@@ -150,3 +150,49 @@ jobs:
             echo "::error::Schema changed without a migration. Run: pnpm --filter payload-app payload migrate:create <name>"
             exit 1
           fi
+
+  # A deploy applies only the new migrations to a database that already holds rows. cms-test and docker-smoke start
+  # from an empty database, so this job migrates with the base branch's code, seeds, upgrades with the PR and rolls back.
+  migration-upgrade:
+    name: Migration upgrade test
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/bs_upgrade_e2e
+      PAYLOAD_SECRET: ci-dummy-secret
+
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: bs_upgrade_e2e
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d bs_upgrade_e2e"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Checkout ✅
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm 🛠️
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js 🔧
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: "pnpm"
+
+      - name: Install dependencies 🛠️
+        run: pnpm install --frozen-lockfile
+
+      - name: Upgrade from the base branch 🗄️
+        run: scripts/migration-upgrade-test.sh "origin/${{ github.base_ref }}"

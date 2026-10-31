@@ -106,7 +106,7 @@ const FOCUSABLE =
 
 const focusTrigger = (): void => {
   const focusable = triggerEl.value?.querySelector<HTMLElement>(FOCUSABLE);
-  (focusable ?? triggerEl.value)?.focus();
+  (focusable ?? triggerEl.value)?.focus({ preventScroll: true });
 };
 
 const onToggle = (event: ToggleEvent): void => {
@@ -120,11 +120,9 @@ const onToggle = (event: ToggleEvent): void => {
   setTimeout(() => {
     if (!isOpen.value) hasContent.value = false;
   }, 150);
-  // Escape leaves focus on <body>; panel content losing focus also qualifies.
-  // Don't steal focus when the user clicked somewhere else (activeElement already moved).
-  if (document.activeElement === document.body || panel.value?.contains(document.activeElement)) {
-    focusTrigger();
-  }
+  // Only rescue focus stranded in the closed panel. A click outside leaves focus on <body>:
+  // pulling it back to this trigger scrolled the page, so the next click missed its target.
+  if (panel.value?.contains(document.activeElement)) focusTrigger();
 };
 
 const close = (): void => {

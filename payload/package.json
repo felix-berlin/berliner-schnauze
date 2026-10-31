@@ -9,18 +9,21 @@
       "default": "./src/index.ts"
     },
     "./word-derived": "./src/lib/wordDerived.ts",
+    "./comments": "./src/lib/comments.ts",
     "./lexical-html": "./src/lib/lexicalHtml.ts",
     "./routes": "./src/lib/routes.ts",
     "./preview": "./src/lib/preview.ts"
   },
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
-    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev -p 3001",
+    "dev": "infisical run -- cross-env NODE_OPTIONS=--no-deprecation next dev -p 3001",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "seed:e2e": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/e2e.ts",
+    "verify:db": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/verifyDb.ts",
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
+    "migrate:down": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:down",
     "migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "test": "vitest run",

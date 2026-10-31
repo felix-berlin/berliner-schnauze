@@ -1,11 +1,8 @@
 import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
-import { verifyTurnstile } from "@services/turnstile.ts";
+import { captchaGate, reply } from "@utils/apiReply.ts";
 import { suggestWordSchema } from "@utils/suggestWordSchema.ts";
-
-const reply = (body: unknown, status: number) =>
-  Response.json(body, { headers: { "Cache-Control": "no-store" }, status });
 
 /**
  * Validates, then checks the Turnstile token server-side (the browser check alone protects nothing), then stores the
@@ -18,14 +15,8 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
   const suggestion = suggestWordSchema.safeParse(body);
   if (!suggestion.success) return reply({ error: "Ungültige Eingabe" }, 400);
 
-  const token = (body as { turnstileToken?: unknown }).turnstileToken;
-  const captcha = typeof token === "string" ? await verifyTurnstile(token, clientAddress) : "fail";
-  if (captcha === "unavailable")
-    return reply(
-      { error: "Die Captcha-Prüfung ist gerade gestört, bitte versuch es später nochmal." },
-      503,
-    );
-  if (captcha === "fail") return reply({ error: "Captcha nicht bestanden" }, 403);
+  const blocked = await captchaGate(body, clientAddress);
+  if (blocked) return blocked;
 
   try {
     await (await getPayloadClient()).create({ collection: "suggestions", data: suggestion.data });

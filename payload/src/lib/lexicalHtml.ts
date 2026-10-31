@@ -31,6 +31,22 @@ const sponsoredLink: NonNullable<HTMLConverters["link"]> = (args) => {
     : html.replace(/^<a\b/, '<a rel="sponsored"');
 };
 
+/** "Kommentare & Co" -> "kommentare-co" (German umlauts transliterated), usable as an anchor id. */
+export const slugifyHeading = (value: string): string =>
+  value
+    .toLowerCase()
+    .replaceAll("ä", "ae")
+    .replaceAll("ö", "oe")
+    .replaceAll("ü", "ue")
+    .replaceAll("ß", "ss")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+const nodeText = (node: unknown): string => {
+  const { text, children } = node as { text?: unknown; children?: unknown[] };
+  return typeof text === "string" ? text : (children ?? []).map(nodeText).join("");
+};
+
 export type LexicalHtmlOptions = {
   /** Base for media urls; the site is not served from the CMS host. Defaults to PAYLOAD_SERVER_URL. */
   mediaBase?: string;
@@ -45,6 +61,11 @@ export function lexicalToHtml(state: unknown, { converters: overrides, mediaBase
     ...defaultConverters,
     ...links,
     link: sponsoredLink,
+    heading: (args) => {
+      const html = (defaultConverters.heading as (a: typeof args) => string)(args);
+      const id = slugifyHeading(nodeText(args.node));
+      return id ? html.replace(/^<(h[1-6])/, `<$1 id="${id}"`) : html;
+    },
     upload: ({ node }) => {
       const media = (node as { value?: unknown }).value as Media | number | undefined;
       if (typeof media !== "object" || !media?.url) return "";

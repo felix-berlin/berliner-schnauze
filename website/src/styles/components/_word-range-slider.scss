@@ -12,7 +12,11 @@
   }
 
   .c-input--number {
-    width: calc(var(--spacing-inner) * 2 + 3ch);
+    // Single value: the width calc below needs a length, not the field's two-value padding.
+    --spacing-inner: 0.55rem;
+
+    // + 3px for the 1px tracking of three digits
+    width: calc(var(--spacing-inner) * 2 + 3ch + 3px);
     text-align: center;
 
     // Remove number input spinners for Chrome, Safari, Edge, Opera

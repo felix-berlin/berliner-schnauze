@@ -10,6 +10,7 @@ import WordAnagrams from '@components/word/WordAnagrams.astro';
 import WordGalleryCol from '@components/word/WordGalleryCol.astro';
 import WordHero from '@components/word/WordHero.astro';
 import WordLearnMore from '@components/word/WordLearnMore.astro';
+import WordComments from '@components/comments/WordComments.vue';
 import WordPageFooter from '@components/word/WordPageFooter.astro';
 import WordSectionBeispiele from '@components/word/WordSectionBeispiele.astro';
 import WordSectionEtymologie from '@components/word/WordSectionEtymologie.astro';
@@ -260,6 +261,12 @@ const schemaJson = () => {
     </div>
   </article>
 
+  {!draft && (
+    <div id='kommentare'>
+      <WordComments client:visible wordId={word.id} />
+    </div>
+  )}
+
   <WordPageFooter publishedAt={word.publishedAt} modifiedAt={word.contentModifiedAt} />
 
   <RelatedWords words={wordRefs} currentWord={berlinerisch}>
@@ -269,3 +276,10 @@ const schemaJson = () => {
   </RelatedWords>
 </Layout>
 
+<script>
+  // The comments island hydrates only when visible; a comment link brings it into view, it then scrolls to the card.
+  document.addEventListener('astro:page-load', () => {
+    if (/^#kommentar-\d+$/.test(location.hash))
+      document.getElementById('kommentare')?.scrollIntoView();
+  });
+</script>

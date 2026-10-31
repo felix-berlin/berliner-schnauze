@@ -49,6 +49,7 @@
     &.has-error {
       .c-form__input {
         --color-border: var(--danger);
+        --color-border-active: var(--danger);
         --color-background: color-mix(in srgb, var(--danger) 15%, white);
 
         @include butler-mx.dark-mode-class {
