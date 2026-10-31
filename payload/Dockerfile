@@ -6,7 +6,8 @@
 FROM node:26-slim@sha256:e4db4c914bf8ad241bd24804fc25d272d89bad97e68cdc8a1414862790a02c39 AS build
 WORKDIR /repo
 # pnpm version pinned by `packageManager` in the root package.json.
-RUN corepack enable
+# Node 25+ no longer bundles corepack.
+RUN npm install -g corepack && corepack enable
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 # patchedDependencies must exist for a frozen install.
 COPY patches/ patches/
