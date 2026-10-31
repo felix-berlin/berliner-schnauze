@@ -18,6 +18,30 @@ describe("rateLimit", () => {
     expect(rateLimited("a", rule, 1000)).toBe(0);
   });
 
+  it("GET and POST /api/comments count separately", () => {
+    const get = rateLimitRule("/api/comments", "GET")!;
+    const post = rateLimitRule("/api/comments", "POST")!;
+    const client = "t-get-post";
+    for (let i = 0; i < 6; i++) expect(rateLimited(client, get, 0)).toBe(0);
+    expect(rateLimited(client, post, 0)).toBe(0);
+  });
+
+  it("PATCH and DELETE share 10 per 5 min", () => {
+    const patch = rateLimitRule("/api/comments/abc", "PATCH")!;
+    const del = rateLimitRule("/api/comments/abc", "DELETE")!;
+    const client = "t-own";
+    for (let i = 0; i < 5; i++) expect(rateLimited(client, patch, 0)).toBe(0);
+    for (let i = 0; i < 5; i++) expect(rateLimited(client, del, 0)).toBe(0);
+    expect(rateLimited(client, patch, 0)).toBeGreaterThan(0);
+  });
+
+  it("vote limited at 31st per minute", () => {
+    const vote = rateLimitRule("/api/comment-votes", "POST")!;
+    const client = "t-vote";
+    for (let i = 0; i < 30; i++) expect(rateLimited(client, vote, 0)).toBe(0);
+    expect(rateLimited(client, vote, 0)).toBeGreaterThan(0);
+  });
+
   it("takes the last forwarded-for entry, else the socket address", () => {
     expect(clientIp("1.1.1.1, 2.2.2.2 ", "9.9.9.9")).toBe("2.2.2.2");
     expect(clientIp(null, "9.9.9.9")).toBe("9.9.9.9");
