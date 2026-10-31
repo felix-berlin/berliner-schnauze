@@ -82,6 +82,8 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
         const used = await payload.find({
           collection: "comments",
           depth: 0,
+          // pickPseudonym only needs the taken names; a cap keeps the query flat on busy words.
+          limit: 500,
           pagination: false,
           select: { pseudonym: true },
           where: { pseudonym: { exists: true }, word },

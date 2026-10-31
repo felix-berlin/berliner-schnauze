@@ -34,7 +34,7 @@ describe("containsLink", () => {
 });
 describe("hideThreshold", () => {
   it.each([
-    [-5, 2],
+    [-5, 3],
     [0, 3],
     [9, 3],
     [25, 5],

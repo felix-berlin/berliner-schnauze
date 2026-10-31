@@ -31,6 +31,9 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     const again = rateLimitedBy(ip, `comment-report ${commentId}`, 1, 24 * 60 * 60_000);
     // ponytail: a failed create below still burns this IP's 24 h slot; fine for a soft limit.
     if (again > 0) return reply({ reported: true }, 200);
+    // One client can not sweep many comments out of sight with a handful of IPs.
+    if (rateLimitedBy(ip, "comment-report-all", 10, 24 * 60 * 60_000) > 0)
+      return reply({ error: "Jenug jemeldet für heute." }, 429);
 
     try {
       await payload.create({

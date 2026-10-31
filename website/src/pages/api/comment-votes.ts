@@ -21,7 +21,10 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
 
     // The visitor cookie is free to drop, so cap vote changes per IP and comment as well.
     const ip = clientIp(request.headers.get("x-forwarded-for"), clientAddress);
-    if (rateLimitedBy(ip, `comment-vote ${commentId}`, 20, 24 * 60 * 60_000) > 0)
+    if (
+      rateLimitedBy(ip, `comment-vote ${commentId}`, 20, 24 * 60 * 60_000) > 0 ||
+      rateLimitedBy(ip, "comment-vote-all", 300, 24 * 60 * 60_000) > 0
+    )
       return reply({ error: "Jenug jestimmt für heute." }, 429);
 
     const visitor = visitorId(cookies, true) as string;

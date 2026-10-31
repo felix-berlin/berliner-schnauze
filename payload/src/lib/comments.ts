@@ -14,9 +14,9 @@ const DOMAIN = /(?<![a-z0-9.-])[a-z0-9][a-z0-9-]*(?:\.[a-z0-9-]+)*\.[a-z]{2,24}(
 
 export const containsLink = (text: string): boolean => LINK.test(text) || DOMAIN.test(text);
 
-// Capped at 5: votes are cheaper to stuff than reports (no captcha), so they must not shield a comment for good.
+// Never below 3, so two reports alone can not hide a comment. Capped at 5: votes are cheaper to stuff than reports (no captcha), so they must not shield a comment for good.
 export const hideThreshold = (score: number): number =>
-  Math.min(5, Math.max(2, 3 + Math.floor(score / 10)));
+  Math.min(5, Math.max(3, 3 + Math.floor(score / 10)));
 
 export const shouldAutoHide = (c: {
   status: CommentStatus;
