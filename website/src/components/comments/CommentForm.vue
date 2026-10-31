@@ -58,14 +58,24 @@
       >
         Abbrechen
       </button>
-      <span class="c-comment-form__kbd" aria-hidden="true"><kbd>Strg</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <span class="c-shortcut c-comment-form__kbd" aria-hidden="true">
+        <kbd class="c-shortcut__key">{{ modKey }}</kbd>
+        <kbd class="c-shortcut__key">Enter</kbd>
+        <span class="c-shortcut__text">zum Abschicken</span>
+      </span>
     </div>
   </form>
 </template>
 
 <script setup lang="ts">
 import { COMMENT_MAX, NAME_MAX } from "payload-app/comments";
-import { computed, ref, useId, useTemplateRef, watch } from "vue";
+import { computed, onMounted, ref, useId, useTemplateRef, watch } from "vue";
+
+// Set after mount so the server render and hydration agree (both say „Strg“).
+const modKey = ref("Strg");
+onMounted(() => {
+  if (/Mac|iP(hone|ad)/.test(navigator.userAgent)) modKey.value = "⌘";
+});
 
 const {
   cancellable = false,
@@ -126,5 +136,6 @@ const onSubmit = async (): Promise<void> => {
 </script>
 
 <style lang="scss">
+@use "@styles/components/shortcut";
 @use "@styles/components/comment-form";
 </style>

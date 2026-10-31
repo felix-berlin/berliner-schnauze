@@ -68,20 +68,20 @@
 
   // Shortcut hint only where a hardware keyboard is likely.
   &__kbd {
-    display: none;
     margin-inline-start: auto;
     font-size: 0.75rem;
     color: var(--color-muted);
 
-    @media (hover: hover) and (pointer: fine) {
-      display: inline;
+    &.c-shortcut {
+      display: none;
+
+      @media (hover: hover) and (pointer: fine) {
+        display: inline-flex;
+      }
     }
 
-    kbd {
-      padding: 0 0.3em;
-      border: 1px solid currentcolor;
-      border-radius: 2px;
-      font: inherit;
+    .c-shortcut__key {
+      padding-inline: 0.35em;
     }
   }
 }
