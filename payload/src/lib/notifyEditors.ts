@@ -4,6 +4,12 @@ const MAX_PER_HOUR = 30;
 let windowStart = 0;
 let sent = 0;
 
+/** For tests: starts a fresh hourly window. */
+export const resetMailCap = (): void => {
+  windowStart = 0;
+  sent = 0;
+};
+
 /**
  * Mails the editors; a failed mail is logged and never loses the doc that caused it. Not awaited: the hooks run
  * inside the request's DB transaction, which must not wait on SMTP.
