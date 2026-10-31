@@ -3,12 +3,19 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-word-comments {
+  // Dashed rails (replies, vote pill, sort toggle); grey-100 vanishes on the dark card.
+  --c-word-comments-rule: var(--grey-100);
+
   display: grid;
   gap: vars.$spacer * 1.5;
   max-inline-size: 48rem;
   margin-inline: auto;
   padding-block: vars.$spacer * 2;
   border-block-start: 1px dashed var(--new-blue-200);
+
+  @include butler-mx.dark-mode-class {
+    --c-word-comments-rule: color-mix(in srgb, var(--color-body) 50%, transparent);
+  }
 
   &__header {
     display: flex;
@@ -19,9 +26,7 @@
   }
 
   &__title {
-    margin: 0;
-    font-family: vars.$berlin;
-    font-size: 1.25rem;
+    @include mx.paper-card-title;
   }
 
   &__count {
@@ -32,7 +37,7 @@
   // Segmented toggle: the pressed segment is the orange one.
   &__sort {
     display: inline-flex;
-    border: 1px dashed var(--grey-100);
+    border: 1px dashed var(--c-word-comments-rule);
     border-radius: 4px;
     overflow: hidden;
   }
@@ -64,7 +69,7 @@
     padding: vars.$spacer * 1.5;
     text-align: center;
     color: var(--color-muted);
-    border: 1px dashed var(--grey-100);
+    border: 1px dashed var(--c-word-comments-rule);
     border-radius: 4px;
   }
 
@@ -72,10 +77,11 @@
     margin: 0;
     padding: 0;
     list-style: none;
+  }
 
-    > li {
-      padding-block-end: vars.$spacer;
-    }
+  // virtua measures the li without its padding: the gap lives inside it, on this wrapper.
+  &__item {
+    padding-block-end: vars.$spacer;
   }
 
   &__sentinel {

@@ -48,7 +48,7 @@
       as="ul"
       item="li"
     >
-      <CommentCard :key="item.id" :comment="item" />
+      <div :key="item.id" class="c-word-comments__item"><CommentCard :comment="item" /></div>
     </WindowVirtualizer>
 
     <div ref="sentinel" class="c-word-comments__sentinel" aria-hidden="true" />

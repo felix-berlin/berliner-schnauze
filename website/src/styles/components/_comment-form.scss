@@ -21,7 +21,10 @@
   }
 
   &__privacy {
+    --decoration-text: underline dashed from-font;
+
     margin: 0;
+    text-underline-position: from-font;
     font-size: 0.8rem;
     color: var(--color-muted);
   }
