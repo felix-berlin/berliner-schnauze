@@ -8,7 +8,7 @@ export type CommentStatus = "published" | "pending" | "hidden" | "removed" | "de
 // scheme, `www.`, or `label.tld` (label >= 2 chars, letters-only TLD of 2-24): not `z.B.` or `1.5`
 // ponytail: `ende.Dann` (no space after the period) also matches; fine for a spam filter.
 const LINK = /https?:\/\/|www\./i;
-const DOMAIN = /[a-z0-9][a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,24}(?=$|[\s/.,;:!?)"'])/i;
+const DOMAIN = /[a-z0-9][a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,24}(?![a-z0-9-])/i;
 
 export const containsLink = (text: string): boolean => LINK.test(text) || DOMAIN.test(text);
 
