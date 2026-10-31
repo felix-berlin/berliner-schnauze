@@ -98,6 +98,9 @@ export interface Config {
     posts: Post;
     pages: Page;
     suggestions: Suggestion;
+    comments: Comment;
+    'comment-votes': CommentVote;
+    'comment-reports': CommentReport;
     redirects: Redirect;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
@@ -115,6 +118,9 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     suggestions: SuggestionsSelect<false> | SuggestionsSelect<true>;
+    comments: CommentsSelect<false> | CommentsSelect<true>;
+    'comment-votes': CommentVotesSelect<false> | CommentVotesSelect<true>;
+    'comment-reports': CommentReportsSelect<false> | CommentReportsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
@@ -444,6 +450,55 @@ export interface Suggestion {
   createdAt: string;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "comments".
+ */
+export interface Comment {
+  id: number;
+  word: number | Word;
+  parent?: (number | null) | Comment;
+  authorName?: string | null;
+  text: string;
+  status?: ('published' | 'pending' | 'hidden' | 'removed' | 'deleted') | null;
+  removalReason?: string | null;
+  /**
+   * Freigegeben: weitere Meldungen blenden den Kommentar nicht mehr aus.
+   */
+  reviewed?: boolean | null;
+  editKeyHash?: string | null;
+  editedAt?: string | null;
+  upvotes?: number | null;
+  downvotes?: number | null;
+  score?: number | null;
+  reportCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "comment-votes".
+ */
+export interface CommentVote {
+  id: number;
+  comment: number | Comment;
+  visitor: string;
+  value: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "comment-reports".
+ */
+export interface CommentReport {
+  id: number;
+  comment: number | Comment;
+  visitor: string;
+  reason?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Alter Pfad, z. B. /wort/alter-slug → Dokument oder eigene URL.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -624,6 +679,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'suggestions';
         value: number | Suggestion;
+      } | null)
+    | ({
+        relationTo: 'comments';
+        value: number | Comment;
+      } | null)
+    | ({
+        relationTo: 'comment-votes';
+        value: number | CommentVote;
+      } | null)
+    | ({
+        relationTo: 'comment-reports';
+        value: number | CommentReport;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -871,6 +938,49 @@ export interface SuggestionsSelect<T extends boolean = true> {
   userMail?: T;
   status?: T;
   word?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "comments_select".
+ */
+export interface CommentsSelect<T extends boolean = true> {
+  word?: T;
+  parent?: T;
+  authorName?: T;
+  text?: T;
+  status?: T;
+  removalReason?: T;
+  reviewed?: T;
+  editKeyHash?: T;
+  editedAt?: T;
+  upvotes?: T;
+  downvotes?: T;
+  score?: T;
+  reportCount?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "comment-votes_select".
+ */
+export interface CommentVotesSelect<T extends boolean = true> {
+  comment?: T;
+  visitor?: T;
+  value?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "comment-reports_select".
+ */
+export interface CommentReportsSelect<T extends boolean = true> {
+  comment?: T;
+  visitor?: T;
+  reason?: T;
   updatedAt?: T;
   createdAt?: T;
 }
