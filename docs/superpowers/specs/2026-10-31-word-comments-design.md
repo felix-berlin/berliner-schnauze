@@ -30,15 +30,15 @@ Every published word page has a comment section where anonymous visitors can wri
 
 ### Posting
 
-- Form fields: name (optional; shown as „Anonymer Berliner“ when empty) and text (plain text, max **1000 characters**, with a remaining-characters counter). *(1000 is Claude's call; the user agreed to "a limit".)*
+- Form fields: name (optional; when empty the commenter gets a Berlin pseudonym, one per visitor and word, e.g. „Anonyme Schrippe“; placeholders show „Anonymer Berliner“) and text (plain text, **5–1000 characters**, with a remaining-characters counter; the too-short error does not name the number). _(1000 is Claude's call; the user agreed to "a limit".)_
 - Turnstile protects posting. Reuse `TurnStile.vue` and `verifyTurnstile()` (fails closed, like `api/suggest-word.ts`). The widget is configured to appear **only when Cloudflare needs an interaction** (`appearance: "interaction-only"`); when it does appear, a line in the site's voice sits next to it (e.g. „Kurz jucken, ob de 'n echter Berliner bist“). The word "Turnstile" never shows up in UI text.
-- No consent checkbox. Above the submit button: „Mit dem Abschicken wird dein Kommentar öffentlich angezeigt. Was wir dabei speichern, steht in der Datenschutzerklärung.“ linking to `/datenschutz#kommentare`. *(Decided by the user after Claude's assessment; legal wording must be checked by the user — not legal advice.)*
-- A comment is **published immediately**, unless its text contains a link: then it is stored as **pending** and not shown until the editor approves it. Link detection must catch `http(s)://…`, `www.…` and bare domains like `xyz.de` / `foo.com/bar`. The poster sees „Dein Kommentar hat 'nen Link, den kieken wir uns erst an.“
+- No consent checkbox. Above the submit button: „Mit dem Abschicken wird dein Kommentar öffentlich angezeigt. Was wir dabei speichern, steht in der Datenschutzerklärung.“ linking to `/datenschutz#kommentare`. _(Decided by the user after Claude's assessment; legal wording must be checked by the user — not legal advice.)_
+- A comment is **published immediately**, unless its text or name contains a link (also on edit): then it is stored as **pending** and not shown until the editor approves it. Link detection must catch `http(s)://…`, `www.…` and bare domains like `xyz.de` / `foo.com/bar`. The poster sees „Dein Kommentar hat 'nen Link, den kieken wir uns erst an.“
 - After a successful post, the new comment appears at the top of the list immediately, client-side (the page itself is cached for 5 minutes, so comments are not part of the server-rendered HTML; see Loading).
 - **Flood protection** (user's request: nobody should hammer post/vote/report). Per IP, in memory, via new rules in the existing `src/utils/rateLimit.ts` (`clientIp()`, fixed windows). Starting values, tunable in that one list:
   - post: 5 per 10 min (like suggest-word)
   - edit/delete own: 10 per 5 min
-  - vote: 30 per minute
+  - vote: 30 per minute, plus 20 vote changes per IP and comment per day (the visitor cookie is free to drop)
   - report: 10 per hour
   - list (GET): generous, e.g. 120 per minute, only against scrapers
 - Over the limit the route answers 429; the UI shows a toast in the site's voice („Ma langsam, Keule …“) and keeps the visitor's input.
@@ -46,7 +46,7 @@ Every published word page has a comment section where anonymous visitors can wri
 
 ### Threads
 
-- **One reply level.** A top-level comment has replies; replies have no replies of their own. Pressing „Antworten“ on a reply adds a reply to the same top-level comment, pre-filled with `@Name `. *(Claude's recommendation, accepted.)*
+- **One reply level.** A top-level comment has replies; replies have no replies of their own. Pressing „Antworten“ on a reply adds a reply to the same top-level comment, pre-filled with `@Name `. _(Claude's recommendation, accepted.)_
 - Replies are shown indented with the dashed left border, always **chronological**, under their top-level comment.
 
 ### Sorting and loading
@@ -61,7 +61,7 @@ Every published word page has a comment section where anonymous visitors can wri
 ### Votes
 
 - Up/down vote on every comment (top-level and replies), shown as a small pill `▲ 12 ▼` under the text (style from mockup B). The visitor's own vote is highlighted in currywurst orange; clicking it again removes it; clicking the other arrow switches it.
-- **One vote per visitor per comment**, enforced softly: on the first vote/report the server sets an anonymous visitor cookie (random ID, httpOnly, long-lived). The database holds at most one vote per (comment, visitor ID) — unique constraint. Clearing cookies allows voting again; the user accepted this until accounts exist.
+- **One vote per visitor per comment**, enforced softly: on the first post, vote or report the server sets an anonymous visitor cookie (random ID, httpOnly, long-lived). The database holds at most one vote per (comment, visitor ID) — unique constraint. Clearing cookies allows voting again; the user accepted this until accounts exist.
 - Downvotes alone never hide anything.
 
 ### Editing and deleting own comments
@@ -69,16 +69,16 @@ Every published word page has a comment section where anonymous visitors can wri
 - On a successful post the server returns a random **edit key**; the browser keeps it in `localStorage`, the database stores only its hash.
 - For **5 minutes** after posting, the author's own comment shows „Bearbeiten“ and „Löschen“ (same browser only). The server checks key and time window; after that the key is useless.
 - An edited comment shows „(bearbeitet)“. If the edit adds a link, the comment goes to pending like a new one.
-- Self-deleted comment: same display rules as a removed one (below).
+- Self-deleted comment: same display rules as a removed one (below). A self-delete also wipes the text („[gelöscht]“), the name and the pseudonym, and never goes back to the review queue.
 
 ### Reporting and auto-hide
 
-- „Melden“ on every comment, with an optional reason. One report per visitor per comment (same visitor cookie).
+- „Melden“ on every comment except the visitor's own (ids kept in `localStorage` `bs-own-comments`), with an optional reason. One report per visitor per comment (same visitor cookie).
 - Because the cookie alone would let one person hide any comment (clear cookies 2–3 times), reports are additionally protected — decided by the user:
   - **Turnstile on the report route** (interaction-only, like posting). Each report needs a fresh single-use token; `TurnStile.vue` currently renders once on mount with no reset/execute, so it has to support getting a new token per action.
   - **In-memory per-IP dedup**: at most one counted report per IP per comment within 24 h, kept in process memory like `rateLimit.ts` (same `clientIp()`), never persisted. Known limits: one web container only (as the rate limiter), and people behind one IP (office, shared flat, mobile CGNAT) count as one report. A deduped report is answered like a successful one (no feedback to the abuser).
 - Each report mails the editor with a link to the comment in the admin; the admin shows the report count per comment.
-- **Auto-hide** when `reports >= max(2, 3 + floor(score / 10))`. Examples: score −5 → 2 reports, 0–9 → 3, 25 → 5, 50 → 8. The constants 2, 3, 10 live in one place.
+- **Auto-hide** when `reports >= min(5, max(2, 3 + floor(score / 10)))`. Examples: score −5 → 2 reports, 0–9 → 3, 25 and above → 5. The cap keeps stuffed upvotes (cheaper than reports, no captcha) from shielding a comment. The constants live in one place (`payload/src/lib/comments.ts`).
   - An auto-hidden comment shows „Wird geprüft“ in place of its text; the editor gets a mail.
   - When the editor releases it, it is marked **reviewed**: further reports only send a mail and never auto-hide it again.
 
@@ -90,7 +90,7 @@ Every published word page has a comment section where anonymous visitors can wri
 
 ### Notifications (Payload mail, like `Suggestions.ts`)
 
-Mail the editor (`SUGGEST_MAIL_TO`, or a new variable — builder's call) on: every new comment (with „wartet auf Freigabe“ when pending), every report, every auto-hide. Each mail links straight to the comment in the admin. A failed mail never loses the comment/report (same pattern as suggestions).
+Mail the editor (`SUGGEST_MAIL_TO`, via `notifyEditors`) on: every new comment (with „wartet auf Freigabe“ when pending), every report, every auto-hide. Each mail links straight to the comment in the admin. A failed mail never loses the comment/report (same pattern as suggestions); the mail is sent without awaiting it, so a slow SMTP server never holds the request's DB transaction.
 
 ## Payload
 
@@ -98,7 +98,7 @@ Mail the editor (`SUGGEST_MAIL_TO`, or a new variable — builder's call) on: ev
   - status covering at least: published, pending (link), hidden by reports, removed by editor (+ optional reason), deleted by author; plus a `reviewed` flag.
   - score and report counts readable without counting rows on every request (denormalized or computed in SQL — builder's call), because Beste-sorting pages over them.
   - unique (comment, visitor) for votes and for reports.
-  - only the edit-key hash is stored; no IP, no e-mail.
+  - only the edit-key hash is stored; no IP, no e-mail. Besides that a comment row holds `pseudonym` and `authorTag` (first 16 hex chars of sha256(visitor cookie:word id), per word, never public) so a visitor keeps one pseudonym per word.
 - Comments are only accepted for **published** words.
 - Admin access: `authenticated` from `payload/src/access.ts` + a Forbidden test in `tests/access.test.ts` (project rule for new collections). The public site goes through its own API routes using the Local API, never public REST.
 - Schema change ⇒ `generate:types` + `pnpm cms:migrate:create <name>`, committed.
@@ -106,14 +106,15 @@ Mail the editor (`SUGGEST_MAIL_TO`, or a new variable — builder's call) on: ev
 
 ## Site
 
-- Astro API routes under `src/pages/api/` (list, create, edit, delete, vote, report), `Cache-Control: no-store` like `suggest-word.ts`; validation with a zod schema like `suggestWordSchema.ts`.
+- Astro API routes under `src/pages/api/` (list, thread by id for `#kommentar-<id>` links, create, edit, delete, vote, report), `Cache-Control: no-store` like `suggest-word.ts`; validation with a zod schema like `suggestWordSchema.ts`.
 - Vue island on `src/pages/wort/[...wordSlug].astro`, loaded lazily (`client:visible`), BEMIT classes, own SCSS file, VueUse where it fits, Lucide icons, `trackEvent` for post/vote/report.
-- Layout (from the brainstorm mockups, `.superpowers/brainstorm/…/comment-layout-v2.html`): heading with count („Wat sagste dazu?“-style, final copy in the site's voice) and the Beste/Neueste toggle on the right; form below; then comment cards (paper card style); vote pill + „Antworten“ + „Melden“ under each text. Final styling follows `DESIGN.md`; checked in light and dark mode, desktop and mobile.
-- Empty state for words without comments, in the site's voice.
+- Layout (from the brainstorm mockups, `.superpowers/brainstorm/…/comment-layout-v2.html`): heading with count („Wat sagste dazu?“-style, final copy in the site's voice) and the Beste/Neueste toggle on the right; form below; then comment cards (paper card style); vote pill + „Antworten“ under each text, „Melden“, „Link kopieren“, „Bearbeiten“ and „Löschen“ in a „…“ menu. Final styling follows `DESIGN.md`; checked in light and dark mode, desktop and mobile.
+- Empty state for words without comments, in the site's voice; a failed load shows an inline „Nochmal versuchen“.
+- Permalinks: each card has a `#kommentar-<id>` link („Link kopieren“). Opening it loads that thread if it is not on the current page and highlights the card.
 
 ## Privacy policy
 
-The `datenschutz` page (CMS-edited) needs a `#kommentare` section: stored data (name optional, text, time; no IP/e-mail), Cloudflare Turnstile sees the IP, the IP is processed briefly in memory (max. 24 h, never stored) for rate limits and to stop repeated reports, visitor cookie for votes/reports, edit key in the browser for 5 minutes, how to request deletion. **The user writes or checks this text** — Claude may draft it, but it is not legal advice.
+The `datenschutz` page (CMS-edited) needs a `#kommentare` section: stored data (name optional, text, time, the per-word pseudonym and its tag; no IP/e-mail), Cloudflare Turnstile sees the IP, the IP is processed briefly in memory (max. 24 h, never stored) for rate limits and to stop repeated reports, visitor cookie for votes/reports, edit key in the browser for 5 minutes, how to request deletion. **The user writes or checks this text** — Claude may draft it, but it is not legal advice.
 
 ## Left to the builder
 

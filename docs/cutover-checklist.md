@@ -117,6 +117,8 @@ their current values; the schema is in `website/astro.config.mjs`.
 - [ ] One word page, the homepage, a magazine page and `/spenden` in light and dark mode, desktop and mobile width (`CLAUDE.md`).
 - [ ] Play an audio file on a word page (CSP `media-src`), switch the browser offline after one visit and open a word page you have not visited (service worker fallback).
 - [ ] Suggest-word form: real submission shows up in the admin under Suggestions and arrives at `SUGGEST_MAIL_TO`; check the spam folder (sender `mail@berliner-schnauze.wtf`, SPF).
+- [ ] Comments: post one on a word page (shows at once), one with a link (pending, mail arrives), report one (mail), open a `#kommentar-<id>` link.
+- [ ] The `datenschutz` page has a `#kommentare` heading before the switch (the comment form links there).
 - [ ] Admin preview: the preview button of a draft word opens the draft on the site (not the cached public page).
 
 ## 7. Switch

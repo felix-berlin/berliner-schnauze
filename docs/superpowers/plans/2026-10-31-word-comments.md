@@ -1,5 +1,7 @@
 # Word Comments Implementation Plan
 
+> **Historical plan.** Behaviour changed after these steps ran (minimum 5 characters, Berlin pseudonyms with `pseudonym`/`authorTag`, self-delete scrubs text and name, „Melden“ hidden on own comments, permalinks, the „…“ menu, the per-comment vote cap and the capped auto-hide threshold). The spec `docs/superpowers/specs/2026-10-31-word-comments-design.md` and the code are the source of truth.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Anonymous comments (one reply level, votes, reports, 5-minute self-edit) under every published word page, stored and moderated in Payload.
@@ -38,6 +40,7 @@
 ## File Structure
 
 **Payload (`payload/`)**
+
 - `src/lib/comments.ts` — pure rules, no payload/next imports: `containsLink`, `hideThreshold`, `shouldAutoHide`, `COMMENT_MAX`, `NAME_MAX`, `EDIT_WINDOW_MS`, status type. Exported as `payload-app/comments` (site uses the same rules).
 - `src/lib/notifyEditors.ts` — `notifyEditors(req, subject, lines)`: mails `SUGGEST_MAIL_TO`, logs and swallows failures.
 - `src/collections/Comments.ts`, `src/collections/CommentVotes.ts`, `src/collections/CommentReports.ts` — schema + hooks.
@@ -46,6 +49,7 @@
 - Tests: `tests/comments.test.ts`, `tests/commentRules.test.ts`, `tests/access.test.ts`.
 
 **Site (`website/`)**
+
 - `src/utils/rateLimit.ts` — new rules + method in key.
 - `src/utils/commentSchema.ts` — zod schemas for create/edit/vote/report bodies.
 - `src/services/payload/comments.ts` — `listComments`, `toPublicComment`, `PublicComment` type, visitor-cookie helper.
@@ -61,11 +65,13 @@
 ### Task 1: Comment rules (pure functions)
 
 **Files:**
+
 - Create: `payload/src/lib/comments.ts`
 - Modify: `payload/package.json` (add `"./comments": "./src/lib/comments.ts"` to `exports`)
 - Test: `payload/tests/commentRules.test.ts` (no DB needed)
 
 **Interfaces:**
+
 - Produces:
   - `export const COMMENT_MAX = 1000; export const NAME_MAX = 50; export const EDIT_WINDOW_MS = 5 * 60_000;`
   - `export type CommentStatus = "published" | "pending" | "hidden" | "removed" | "deleted";`
@@ -77,17 +83,34 @@
 
 ```ts
 describe("containsLink", () => {
-  it.each(["https://x.de", "http://a.b/c", "guck www.spam.com", "kauf bei xyz.de", "foo.com/bar", "SPAM.DE"])("%s → true", (t) => expect(containsLink(t)).toBe(true));
-  it.each(["Na und?", "Ick bin 1.5 Meter", "z.B. so", "Dit is ne Sache… ja.", "e-mail"])("%s → false", (t) => expect(containsLink(t)).toBe(false));
+  it.each([
+    "https://x.de",
+    "http://a.b/c",
+    "guck www.spam.com",
+    "kauf bei xyz.de",
+    "foo.com/bar",
+    "SPAM.DE",
+  ])("%s → true", (t) => expect(containsLink(t)).toBe(true));
+  it.each(["Na und?", "Ick bin 1.5 Meter", "z.B. so", "Dit is ne Sache… ja.", "e-mail"])(
+    "%s → false",
+    (t) => expect(containsLink(t)).toBe(false),
+  );
 });
 describe("hideThreshold", () => {
-  it.each([[-5, 2], [0, 3], [9, 3], [25, 5], [50, 8]])("score %i → %i", (s, n) => expect(hideThreshold(s)).toBe(n));
+  it.each([
+    [-5, 2],
+    [0, 3],
+    [9, 3],
+    [25, 5],
+    [50, 8],
+  ])("score %i → %i", (s, n) => expect(hideThreshold(s)).toBe(n));
 });
 describe("shouldAutoHide", () => {
   const base = { status: "published" as const, reviewed: false, score: 0, reportCount: 3 };
   it("hides at threshold", () => expect(shouldAutoHide(base)).toBe(true));
   it("not below", () => expect(shouldAutoHide({ ...base, reportCount: 2 })).toBe(false));
-  it("never when reviewed", () => expect(shouldAutoHide({ ...base, reviewed: true, reportCount: 99 })).toBe(false));
+  it("never when reviewed", () =>
+    expect(shouldAutoHide({ ...base, reviewed: true, reportCount: 99 })).toBe(false));
   it("only published", () => expect(shouldAutoHide({ ...base, status: "pending" })).toBe(false));
 });
 ```
@@ -102,12 +125,14 @@ describe("shouldAutoHide", () => {
 ### Task 2: Payload collections, hooks, mails, migration
 
 **Files:**
+
 - Create: `payload/src/lib/notifyEditors.ts`, `payload/src/collections/Comments.ts`, `payload/src/collections/CommentVotes.ts`, `payload/src/collections/CommentReports.ts`, `payload/src/hooks/commentCounts.ts`
 - Modify: `payload/src/payload.config.ts` (append the three collections to `collections`), `payload/tests/access.test.ts` (`lockedCollections` += `"comments", "comment-votes", "comment-reports"`)
 - Generated: `payload/src/payload-types.ts`, `payload/src/migrations/<ts>_word_comments.{ts,json}`, `payload/src/migrations/index.ts`
 - Test: `payload/tests/comments.test.ts`
 
 **Interfaces:**
+
 - Consumes: Task 1 exports.
 - Produces (collection slugs and fields the site uses):
   - `comments`: `word` (rel `words`, required, indexed), `parent` (rel `comments`, optional, indexed), `authorName` (text, max `NAME_MAX`), `text` (textarea, required, max `COMMENT_MAX`), `status` (select `CommentStatus`, default `published`, sidebar), `removalReason` (text, sidebar, shown when `status = removed`), `reviewed` (checkbox, sidebar), `editKeyHash` (text, `admin.hidden: true`), `editedAt` (date), `upvotes`/`downvotes`/`score`/`reportCount` (number, default 0, `admin.readOnly`, `score` indexed). Timestamps on. `admin.useAsTitle: "text"`, `defaultColumns: ["text", "word", "status", "score", "reportCount", "createdAt"]`, `listSearchableFields: ["text", "authorName"]`.
@@ -118,6 +143,7 @@ describe("shouldAutoHide", () => {
   - Admin link format used in mails: `${req.payload.config.serverURL}/admin/collections/comments/${id}`.
 
 Hook behaviour (decided here):
+
 - `comments.beforeValidate`: if `parent` points to a comment that itself has a `parent`, replace with that grandparent; if `parent.word !== word`, reject (`ValidationError`).
 - `comments.beforeChange`, only when `!req.user` (the site): on create, `status = containsLink(text) ? "pending" : "published"`; on update where `text` changed, `editedAt = now` and same link rule.
 - `comments.beforeChange`, when `req.user` and `originalDoc.status === "hidden"` and `data.status === "published"`: `reviewed = true`.
@@ -146,18 +172,20 @@ Hook behaviour (decided here):
 ### Task 3: Rate-limit rules
 
 **Files:**
+
 - Modify: `website/src/utils/rateLimit.ts`
 - Test: `website/src/tests/unit/utils/rateLimit.test.ts` (extend if it exists, else create)
 
 **Interfaces:**
-- Produces: rules (order matters, first match wins):
+
+- Produces: rules (first match wins):
   `{ max: 5, method: "POST", prefix: "/api/comments", windowMs: 10*60_000 }`,
   `{ max: 120, method: "GET", prefix: "/api/comments", windowMs: 60_000 }`,
   `{ max: 10, method: "PATCH", prefix: "/api/comments/", windowMs: 5*60_000 }`,
   `{ max: 10, method: "DELETE", prefix: "/api/comments/", windowMs: 5*60_000 }`,
   `{ max: 30, method: "POST", prefix: "/api/comment-votes", windowMs: 60_000 }`,
   `{ max: 10, method: "POST", prefix: "/api/comment-reports", windowMs: 60*60_000 }`.
-  The `/api/comments/` rules must come **before** the `/api/comments` ones. Add optional `key?: string` to `Rule`; the counter key becomes `` `${rule.key ?? `${rule.method ?? "*"} ${rule.prefix}`} ${client}` ``. The PATCH and DELETE rules both get `key: "comment-own"` so they share one counter.
+  The method filters keep the `/api/comments` and `/api/comments/` rules apart, so their order does not matter. Add optional `key?: string` to `Rule`; the counter key becomes `` `${rule.key ?? `${rule.method ?? "*"} ${rule.prefix}`} ${client}` ``. The PATCH and DELETE rules both get `key: "comment-own"` so they share one counter.
 
 - [ ] **Step 1: Failing tests:** `GET and POST /api/comments count separately` (6 GETs then 1 POST → POST allowed), `PATCH and DELETE share 10 per 5 min` (5 PATCH + 5 DELETE allowed, 11th refused), `vote limited at 31st per minute`.
 - [ ] **Step 2: Run** `(cd website && rtk vitest run src/tests/unit/utils/rateLimit.test.ts)` → FAIL.
@@ -170,10 +198,12 @@ Hook behaviour (decided here):
 ### Task 4: List + create API
 
 **Files:**
+
 - Create: `website/src/utils/commentSchema.ts`, `website/src/services/payload/comments.ts`, `website/src/pages/api/comments/index.ts`
 - Test: `website/src/tests/unit/services/payload/comments.test.ts`, `website/src/tests/unit/pages/api/comments.test.ts` (mock style of `suggest-word.test.ts`)
 
 **Interfaces:**
+
 - Consumes: `payload-app/comments` (Task 1), collections (Task 2), `verifyTurnstile`, `getPayloadClient`, `siteRead`.
 - Produces:
   - `commentCreateSchema = z.object({ wordId: z.number().int().positive(), parentId: z.number().int().positive().optional(), authorName: z.string().trim().max(NAME_MAX).default(""), text: z.string().trim().min(2).max(COMMENT_MAX) })` (+ German messages like `suggestWordSchema`); also `commentEditSchema = { editKey: z.string().min(32), text }`, `voteSchema = { commentId, value: z.union([z.literal(1), z.literal(-1), z.literal(0)]) }`, `reportSchema = { commentId, reason: z.string().trim().max(300).default("") }`.
@@ -195,10 +225,12 @@ Hook behaviour (decided here):
 ### Task 5: Edit + delete own comment
 
 **Files:**
+
 - Create: `website/src/pages/api/comments/[id].ts`
 - Test: `website/src/tests/unit/pages/api/comment-own.test.ts`
 
 **Interfaces:**
+
 - Consumes: `commentEditSchema`, `EDIT_WINDOW_MS`, `toPublicComment` (Task 4).
 - Produces: `PATCH /api/comments/:id` `{ editKey, text }` → `200 { comment, pending }`; `DELETE /api/comments/:id` `{ editKey }` → `200 { deleted: true }` (sets `status: "deleted"`). Any of: unknown id, wrong key, `now - createdAt > EDIT_WINDOW_MS`, status not `published|pending` → **403 with the same body** `{ error: "Dit jeht nich mehr." }`. Compare hashes with `timingSafeEqual`.
 
@@ -211,14 +243,16 @@ Hook behaviour (decided here):
 ### Task 6: Vote + report API
 
 **Files:**
+
 - Create: `website/src/pages/api/comment-votes.ts`, `website/src/pages/api/comment-reports.ts`
 - Test: `website/src/tests/unit/pages/api/comment-votes.test.ts`, `.../comment-reports.test.ts`
 
 **Interfaces:**
+
 - Consumes: `voteSchema`, `reportSchema`, `visitorId`, `verifyTurnstile`, `rateLimited`, `clientIp` (Tasks 3–4).
 - Produces:
   - `POST /api/comment-votes` `{ commentId, value }` → comment must be `published` (else 404); visitor via `visitorId(cookies, true)`; `0` deletes the visitor's vote, `±1` updates or creates it (a unique-violation race → re-read and update); returns `200 { upvotes, downvotes, myVote }` read back after the recount hook.
-  - `POST /api/comment-reports` `{ commentId, reason, turnstileToken }` → Turnstile (503/403); comment must be `published`; per-IP dedup via `rateLimited(ip, { key: \`comment-report ${commentId}\`, max: 1, prefix: "", windowMs: 24*60*60_000 })` — when deduped, or when the visitor already reported (unique violation), answer `200 { reported: true }` without creating; else create and answer the same.
+  - `POST /api/comment-reports` `{ commentId, reason, turnstileToken }` → Turnstile (503/403); comment must be `published`; per-IP dedup via `rateLimited(ip, { key: \`comment-report ${commentId}\`, max: 1, prefix: "", windowMs: 24*60*60_000 })`— when deduped, or when the visitor already reported (unique violation), answer`200 { reported: true }` without creating; else create and answer the same.
 
 - [ ] **Step 1: Failing tests:** votes — `sets cookie on first vote`, `switch +1 → -1 updates the one row`, `0 removes`, `404 on pending/hidden/removed/deleted comment`; reports — `creates once`, `second report from same IP within 24 h answers 200 but does not create`, `same visitor twice answers 200 without throwing`, `403 failed captcha`, `404 on non-published`.
 - [ ] **Step 2: Run → FAIL. Step 3: Implement. Step 4: Run → PASS.**
@@ -229,10 +263,12 @@ Hook behaviour (decided here):
 ### Task 7: TurnStile.vue for repeated actions
 
 **Files:**
+
 - Modify: `website/src/components/TurnStile.vue`
 - Test: `website/src/tests/unit/components/TurnStile.test.ts`
 
 **Interfaces:**
+
 - Produces: new optional prop `appearance?: "always" | "interaction-only"` (default `"always"`, passed to `render`); `defineExpose({ reset })` where `reset()` calls `window.turnstile.reset(widgetId)` with the id `render` returned and emits `token ""`. `SuggestWordForm.vue` keeps working unchanged.
 
 - [ ] **Step 1: Failing tests:** `passes appearance to render`, `reset() resets its own widget id and emits ""`.
@@ -244,15 +280,18 @@ Hook behaviour (decided here):
 ### Task 8: Comment UI
 
 **Files:**
+
 - Create: `website/src/composable/useComments.ts`, `website/src/components/comments/WordComments.vue`, `CommentForm.vue`, `CommentCard.vue`, `website/src/styles/components/_word-comments.scss`, `_comment-form.scss`, `_comment-card.scss`
 - Modify: `website/src/pages/wort/[...wordSlug].astro` — `<WordComments client:visible wordId={word.id} />` right before `<WordPageFooter …>`, not rendered when `draft` is set.
 - Test: `website/src/tests/unit/composable/useComments.test.ts`, `website/src/tests/unit/components/comments/*.test.ts`
 
 **Interfaces:**
+
 - Consumes: API routes (Tasks 4–6), `TurnStile` (Task 7), `PublicComment`, `COMMENT_MAX`, `EDIT_WINDOW_MS`.
 - Produces: `useComments(wordId: number)` → `{ comments: Ref<PublicComment[]>, total, sort: Ref<"best"|"new">, hasMore, loading, loadMore(), post(input, token), edit(id, text), remove(id), vote(id, value), report(id, reason, token), canEdit(id): boolean }`. Edit keys in `useLocalStorage("bs-comment-keys", {} as Record<number, { key: string; createdAt: number }>)`, entries older than `EDIT_WINDOW_MS` pruned on load. Changing `sort` resets to page 1.
 
 UI decisions (mockup `comment-layout-v2.html` in `.superpowers/brainstorm/…`):
+
 - Heading „Wat sagste dazu?“ + `(total)`; right: segmented toggle „Beste / Neueste“ (`aria-pressed`).
 - `CommentForm`: name (optional), textarea with counter `n / 1000`, privacy line „Mit dem Abschicken wird dein Kommentar öffentlich angezeigt. Was wir dabei speichern, steht in der Datenschutzerklärung.“ linking `/datenschutz#kommentare`, submit „Abschicken“. Same component for reply (prefilled `@Name `) and for edit. Pending answer → info toast „Dein Kommentar hat 'nen Link, den kieken wir uns erst an.“ 429 → warning toast „Ma langsam, Keule – versuch's gleich nochmal.“; input kept on any error.
 - One shared `TurnStile` (`appearance="interaction-only"`) in `WordComments`, wrapped with the line „Kurz jucken, ob de 'n echter Berliner bist“ (only visible when the widget renders something); its token is used by the next post or report, then `reset()`.
