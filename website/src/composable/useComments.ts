@@ -2,7 +2,7 @@ import type { PublicComment } from "@utils/commentSchema.ts";
 import type { InjectionKey, Ref } from "vue";
 
 import { createToastNotify } from "@stores/toastNotify.ts";
-import { useLocalStorage, useTimestamp } from "@vueuse/core";
+import { useIntervalFn, useLocalStorage } from "@vueuse/core";
 import { EDIT_WINDOW_MS } from "payload-app/comments";
 import { ref, watch } from "vue";
 
@@ -54,12 +54,13 @@ export const useComments = (wordId: number) => {
   let generation = 0;
 
   const keys = useLocalStorage<Keys>("bs-comment-keys", {});
-  const now = useTimestamp({ interval: 1000 });
+  const tick = ref(0);
+  useIntervalFn(() => tick.value++, 1000);
   const fresh = (k: { createdAt: number }) => Date.now() - k.createdAt < EDIT_WINDOW_MS;
   keys.value = Object.fromEntries(Object.entries(keys.value).filter(([, k]) => fresh(k)));
 
   const canEdit = (id: number): boolean => {
-    void now.value; // re-evaluates every second, so the buttons vanish on their own
+    void tick.value; // re-evaluates every second, so the buttons vanish on their own
     const k = keys.value[id];
     return Boolean(k) && fresh(k!);
   };
