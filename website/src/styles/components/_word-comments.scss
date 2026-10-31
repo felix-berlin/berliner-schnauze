@@ -1,0 +1,84 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-word-comments {
+  display: grid;
+  gap: vars.$spacer * 1.5;
+  max-inline-size: 48rem;
+  margin-inline: auto;
+  padding-block: vars.$spacer * 2;
+  border-block-start: 1px dashed var(--new-blue-200);
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: vars.$berlin;
+    font-size: 1.25rem;
+  }
+
+  &__count {
+    color: var(--color-muted);
+    font-weight: 400;
+  }
+
+  // Segmented toggle: the pressed segment is the orange one.
+  &__sort {
+    display: inline-flex;
+    border: 1px dashed var(--grey-100);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  &__sort-button {
+    padding: vars.$spacer * 0.35 vars.$spacer * 0.9;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+
+    &[aria-pressed="true"] {
+      background: var(--orange-600);
+      color: var(--white-100);
+      font-weight: 700;
+    }
+  }
+
+  &__captcha-text {
+    margin: 0 0 vars.$spacer * 0.5;
+    font-size: 0.9rem;
+    color: var(--color-muted);
+  }
+
+  &__empty {
+    margin: 0;
+    padding: vars.$spacer * 1.5;
+    text-align: center;
+    color: var(--color-muted);
+    border: 1px dashed var(--grey-100);
+    border-radius: 4px;
+  }
+
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    > li {
+      padding-block-end: vars.$spacer;
+    }
+  }
+
+  &__sentinel {
+    block-size: 1px;
+  }
+}

@@ -1,0 +1,33 @@
+@use "@styles/variables" as vars;
+
+.c-comment-form {
+  display: grid;
+  gap: vars.$spacer * 0.75;
+
+  &__row {
+    display: grid;
+    gap: vars.$spacer * 0.25;
+  }
+
+  &__counter {
+    justify-self: end;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+
+    &.is-over {
+      color: var(--danger);
+      font-weight: 700;
+    }
+  }
+
+  &__privacy {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+
+  &__actions {
+    display: flex;
+    gap: vars.$spacer * 0.5;
+  }
+}

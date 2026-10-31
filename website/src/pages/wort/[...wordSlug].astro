@@ -10,6 +10,7 @@ import WordAnagrams from '@components/word/WordAnagrams.astro';
 import WordGalleryCol from '@components/word/WordGalleryCol.astro';
 import WordHero from '@components/word/WordHero.astro';
 import WordLearnMore from '@components/word/WordLearnMore.astro';
+import WordComments from '@components/comments/WordComments.vue';
 import WordPageFooter from '@components/word/WordPageFooter.astro';
 import WordSectionBeispiele from '@components/word/WordSectionBeispiele.astro';
 import WordSectionEtymologie from '@components/word/WordSectionEtymologie.astro';
@@ -259,6 +260,8 @@ const schemaJson = () => {
       {hasImages && <WordGalleryCol images={word.images} learnMore={word.learnMore} />}
     </div>
   </article>
+
+  {!draft && <WordComments client:visible wordId={word.id} />}
 
   <WordPageFooter publishedAt={word.publishedAt} modifiedAt={word.contentModifiedAt} />
 

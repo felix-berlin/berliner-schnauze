@@ -1,0 +1,120 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-comment-card {
+  display: grid;
+  gap: vars.$spacer * 0.5;
+  padding: vars.$spacer;
+
+  @include mx.paper-card;
+
+  // Replies sit inside the parent card, indented behind the dashed postcard line.
+  &--reply {
+    padding: vars.$spacer * 0.5 0 vars.$spacer * 0.5 vars.$spacer;
+    background: transparent;
+    border: 0;
+    border-inline-start: 1px dashed var(--grey-100);
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.5;
+    align-items: baseline;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+
+  &__name {
+    color: var(--color);
+    font-size: 1rem;
+  }
+
+  &__text {
+    margin: 0;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+  }
+
+  &__placeholder {
+    margin: 0;
+    font-style: italic;
+    color: var(--color-muted);
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+
+  &__vote {
+    display: inline-flex;
+    align-items: center;
+    gap: vars.$spacer * 0.25;
+    padding-inline: vars.$spacer * 0.25;
+    border: 1px dashed var(--grey-100);
+    border-radius: 999px;
+
+    button {
+      display: inline-flex;
+      padding: vars.$spacer * 0.25;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+
+      &.is-active {
+        color: var(--orange-600);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: progress;
+      }
+    }
+  }
+
+  &__score {
+    min-inline-size: 1.5ch;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__link {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-muted);
+    font: inherit;
+    cursor: pointer;
+    text-decoration: underline dashed;
+    text-underline-offset: 3px;
+
+    @include butler-mx.hover {
+      color: var(--orange-600);
+    }
+  }
+
+  &__report {
+    display: grid;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__thanks {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  &__replies {
+    display: grid;
+    gap: vars.$spacer * 0.5;
+    margin-inline-start: vars.$spacer * 0.5;
+  }
+}

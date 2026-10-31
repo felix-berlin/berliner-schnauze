@@ -1,0 +1,198 @@
+<template>
+  <article class="c-comment-card" :class="{ 'c-comment-card--reply': comment.parentId }">
+    <header class="c-comment-card__meta">
+      <strong class="c-comment-card__name">{{ comment.authorName }}</strong>
+      <time :datetime="comment.createdAt">{{ relativeTime }}</time>
+      <span v-if="comment.edited && comment.state === 'visible'">(bearbeitet)</span>
+    </header>
+
+    <p v-if="comment.state !== 'visible'" class="c-comment-card__placeholder">
+      {{ placeholder }}
+    </p>
+
+    <template v-else>
+      <CommentForm
+        v-if="mode === 'edit'"
+        cancellable
+        label="Kommentar bearbeiten"
+        :show-name="false"
+        :initial-text="comment.text ?? ''"
+        :submit="submitEdit"
+        @cancel="mode = null"
+      />
+      <p v-else class="c-comment-card__text">{{ comment.text }}</p>
+
+      <div class="c-comment-card__actions">
+        <span class="c-comment-card__vote">
+          <button
+            class="c-comment-card__vote-up"
+            :class="{ 'is-active': comment.myVote === 1 }"
+            type="button"
+            aria-label="Hochwählen"
+            :aria-pressed="comment.myVote === 1"
+            :disabled="pending"
+            @click="vote(1)"
+          >
+            <IconUp aria-hidden="true" />
+          </button>
+          <span class="c-comment-card__score">{{ comment.upvotes - comment.downvotes }}</span>
+          <button
+            class="c-comment-card__vote-down"
+            :class="{ 'is-active': comment.myVote === -1 }"
+            type="button"
+            aria-label="Runterwählen"
+            :aria-pressed="comment.myVote === -1"
+            :disabled="pending"
+            @click="vote(-1)"
+          >
+            <IconDown aria-hidden="true" />
+          </button>
+        </span>
+        <button
+          class="c-comment-card__reply c-comment-card__link"
+          type="button"
+          @click="toggle('reply')"
+        >
+          Antworten
+        </button>
+        <button class="c-comment-card__link" type="button" @click="toggle('report')">Melden</button>
+        <template v-if="ctx.canEdit(comment.id)">
+          <button class="c-comment-card__link" type="button" @click="toggle('edit')">
+            Bearbeiten
+          </button>
+          <button class="c-comment-card__link" type="button" @click="onRemove">Löschen</button>
+        </template>
+      </div>
+
+      <CommentForm
+        v-if="mode === 'reply'"
+        cancellable
+        label="Deine Antwort"
+        :initial-text="`@${comment.authorName} `"
+        :submit="submitReply"
+        @cancel="mode = null"
+      />
+
+      <p v-if="reported" class="c-comment-card__thanks">Danke, wir kieken drüber.</p>
+      <form
+        v-else-if="mode === 'report'"
+        class="c-comment-card__report"
+        @submit.prevent="submitReport"
+      >
+        <label class="c-label" :for="`${uid}-reason`">Wat stimmt nich? (optional)</label>
+        <input :id="`${uid}-reason`" v-model="reason" class="c-input" type="text" maxlength="300" />
+        <button class="c-button" type="submit">Melden</button>
+      </form>
+    </template>
+
+    <div v-if="comment.replies.length" class="c-comment-card__replies">
+      <CommentCard v-for="r in comment.replies" :key="r.id" :comment="r" />
+    </div>
+  </article>
+</template>
+
+<script setup lang="ts">
+import type { PublicComment } from "@utils/commentSchema.ts";
+
+import { commentsKey, type PostResult } from "@composables/useComments.ts";
+import { createToastNotify } from "@stores/toastNotify.ts";
+import { trackEvent } from "@utils/analytics";
+import { computed, defineAsyncComponent, inject, ref, useId } from "vue";
+
+import CommentForm from "./CommentForm.vue";
+
+const IconUp = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-up"));
+const IconDown = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-down"));
+
+const { comment } = defineProps<{ comment: PublicComment }>();
+
+const ctx = inject(commentsKey)!;
+const uid = useId();
+const mode = ref<"edit" | "reply" | "report" | null>(null);
+const reason = ref("");
+const reported = ref(false);
+
+const pending = computed(() => ctx.busy.value.has(comment.id));
+const toggle = (m: "edit" | "reply" | "report"): void => {
+  mode.value = mode.value === m ? null : m;
+};
+
+const placeholder = computed(() =>
+  comment.state === "reviewing"
+    ? "Wird geprüft"
+    : comment.removalReason
+      ? `Kommentar entfernt: ${comment.removalReason}`
+      : "Kommentar entfernt",
+);
+
+const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
+  ["year", 31_536_000],
+  ["month", 2_592_000],
+  ["day", 86_400],
+  ["hour", 3600],
+  ["minute", 60],
+];
+const relativeTime = computed(() => {
+  const seconds = (new Date(comment.createdAt).getTime() - Date.now()) / 1000;
+  const rtf = new Intl.RelativeTimeFormat("de", { numeric: "auto" });
+  const [unit, size] = UNITS.find(([, s]) => Math.abs(seconds) >= s) ?? ["second", 1];
+  return rtf.format(unit === "second" ? 0 : Math.round(seconds / size), unit);
+});
+
+const vote = (value: -1 | 1): void => {
+  void ctx.vote(comment.id, comment.myVote === value ? 0 : value);
+  trackEvent("Comments", "Vote", String(ctx.wordId));
+};
+
+const told = (result: PostResult): boolean => {
+  if (result === "pending")
+    createToastNotify({
+      message: "Dein Kommentar hat 'nen Link, den kieken wir uns erst an.",
+      status: "info",
+    });
+  return result !== "error";
+};
+
+const needToken = (): boolean => {
+  if (ctx.token.value) return true;
+  createToastNotify({ message: "Moment noch, ick prüf dich kurz.", status: "warning" });
+  return false;
+};
+
+const submitReply = async (v: { authorName: string; text: string }): Promise<boolean> => {
+  if (!needToken()) return false;
+  const result = await ctx.post(
+    { ...v, parentId: comment.parentId ?? comment.id },
+    ctx.token.value,
+  );
+  ctx.resetCaptcha();
+  if (!told(result)) return false;
+  trackEvent("Comments", "Reply", String(ctx.wordId));
+  mode.value = null;
+  return true;
+};
+
+const submitEdit = async (v: { text: string }): Promise<boolean> => {
+  const ok = told(await ctx.edit(comment.id, v.text));
+  if (ok) mode.value = null;
+  return ok;
+};
+
+const onRemove = (): void => {
+  void ctx.remove(comment.id);
+};
+
+const submitReport = async (): Promise<void> => {
+  if (!needToken()) return;
+  const ok = await ctx.report(comment.id, reason.value.trim(), ctx.token.value);
+  ctx.resetCaptcha();
+  if (!ok) return;
+  reported.value = true;
+  mode.value = null;
+  trackEvent("Comments", "Report", String(ctx.wordId));
+};
+</script>
+
+<style lang="scss">
+@use "@styles/components/comment-card";
+</style>
