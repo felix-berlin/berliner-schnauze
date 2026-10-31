@@ -81,6 +81,11 @@ const turnstile = useTemplateRef<{ reset: () => void }>("turnstile");
 const ctx: CommentsContext = {
   ...comments,
   resetCaptcha: () => turnstile.value?.reset(),
+  takeToken: () => {
+    if (!token.value)
+      createToastNotify({ message: "Moment noch, ick prüf dich kurz.", status: "warning" });
+    return token.value || null;
+  },
   token,
 };
 provide(commentsKey, ctx);
@@ -90,17 +95,10 @@ const captcha = useTemplateRef<HTMLElement>("captcha");
 const captchaSize = useElementSize(captcha);
 
 const submitNew = async (v: { authorName: string; text: string }): Promise<boolean> => {
-  if (!token.value) {
-    createToastNotify({ message: "Moment noch, ick prüf dich kurz.", status: "warning" });
-    return false;
-  }
-  const result = await comments.post(v, token.value);
+  const t = ctx.takeToken();
+  if (!t) return false;
+  const result = await comments.post(v, t);
   ctx.resetCaptcha();
-  if (result === "pending")
-    createToastNotify({
-      message: "Dein Kommentar hat 'nen Link, den kieken wir uns erst an.",
-      status: "info",
-    });
   if (result !== "error") trackEvent("Comments", "Post", String(wordId));
   return result !== "error";
 };

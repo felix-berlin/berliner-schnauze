@@ -60,6 +60,14 @@ const authorName = ref("");
 const text = ref(initialText);
 const sending = ref(false);
 
+// Announced to screen readers only near or over the limit, not on every keystroke.
+const announce = computed(() =>
+  over.value
+    ? `${text.value.length - COMMENT_MAX} Zeichen zu viel`
+    : text.value.length >= COMMENT_MAX - 50
+      ? `Noch ${COMMENT_MAX - text.value.length} Zeichen`
+      : "",
+);
 const over = computed(() => text.value.length > COMMENT_MAX);
 // The server wants at least 2 characters (commentSchema)
 const ready = computed(() => text.value.trim().length >= 2 && !over.value);

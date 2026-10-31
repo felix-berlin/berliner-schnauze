@@ -33,6 +33,7 @@ const mountCard = (comment: Partial<PublicComment>) => {
     remove: vi.fn(async () => true),
     report: vi.fn(async () => true),
     resetCaptcha: vi.fn(),
+    takeToken: () => "tok",
     token: ref("tok"),
     vote: vi.fn(),
     wordId: 7,

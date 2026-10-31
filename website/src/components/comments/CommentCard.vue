@@ -94,8 +94,7 @@
 <script setup lang="ts">
 import type { PublicComment } from "@utils/commentSchema.ts";
 
-import { commentsKey, type PostResult } from "@composables/useComments.ts";
-import { createToastNotify } from "@stores/toastNotify.ts";
+import { commentsKey } from "@composables/useComments.ts";
 import { trackEvent } from "@utils/analytics";
 import { computed, defineAsyncComponent, inject, ref, useId } from "vue";
 
@@ -139,41 +138,24 @@ const relativeTime = computed(() => {
   return rtf.format(unit === "second" ? 0 : Math.round(seconds / size), unit);
 });
 
-const vote = (value: -1 | 1): void => {
-  void ctx.vote(comment.id, comment.myVote === value ? 0 : value);
-  trackEvent("Comments", "Vote", String(ctx.wordId));
-};
-
-const told = (result: PostResult): boolean => {
-  if (result === "pending")
-    createToastNotify({
-      message: "Dein Kommentar hat 'nen Link, den kieken wir uns erst an.",
-      status: "info",
-    });
-  return result !== "error";
-};
-
-const needToken = (): boolean => {
-  if (ctx.token.value) return true;
-  createToastNotify({ message: "Moment noch, ick prüf dich kurz.", status: "warning" });
-  return false;
+const vote = async (value: -1 | 1): Promise<void> => {
+  if (await ctx.vote(comment.id, comment.myVote === value ? 0 : value))
+    trackEvent("Comments", "Vote", String(ctx.wordId));
 };
 
 const submitReply = async (v: { authorName: string; text: string }): Promise<boolean> => {
-  if (!needToken()) return false;
-  const result = await ctx.post(
-    { ...v, parentId: comment.parentId ?? comment.id },
-    ctx.token.value,
-  );
+  const token = ctx.takeToken();
+  if (!token) return false;
+  const result = await ctx.post({ ...v, parentId: comment.parentId ?? comment.id }, token);
   ctx.resetCaptcha();
-  if (!told(result)) return false;
+  if (result === "error") return false;
   trackEvent("Comments", "Reply", String(ctx.wordId));
   mode.value = null;
   return true;
 };
 
 const submitEdit = async (v: { text: string }): Promise<boolean> => {
-  const ok = told(await ctx.edit(comment.id, v.text));
+  const ok = (await ctx.edit(comment.id, v.text)) !== "error";
   if (ok) mode.value = null;
   return ok;
 };
@@ -183,8 +165,9 @@ const onRemove = (): void => {
 };
 
 const submitReport = async (): Promise<void> => {
-  if (!needToken()) return;
-  const ok = await ctx.report(comment.id, reason.value.trim(), ctx.token.value);
+  const token = ctx.takeToken();
+  if (!token) return;
+  const ok = await ctx.report(comment.id, reason.value.trim(), token);
   ctx.resetCaptcha();
   if (!ok) return;
   reported.value = true;

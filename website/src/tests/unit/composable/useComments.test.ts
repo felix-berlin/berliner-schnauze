@@ -2,6 +2,7 @@ import type { PublicComment } from "@utils/commentSchema.ts";
 
 import { useComments } from "@composables/useComments.ts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { nextTick } from "vue";
 
 vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify: vi.fn() }));
 
@@ -106,5 +107,51 @@ describe("useComments", () => {
     fetchMock.mockReturnValueOnce(answer("Too many", 429));
     const c = useComments(7);
     expect(await c.post({ authorName: "", text: "Hallo" }, "tok")).toBe("error");
+  });
+
+  it("does not duplicate an own post when the next page repeats it", async () => {
+    fetchMock
+      .mockReturnValueOnce(
+        answer({ comment: comment(9), editKey: "k".repeat(43), pending: false }, 201),
+      )
+      .mockReturnValueOnce(
+        answer({ comments: [comment(9), comment(2)], hasMore: false, total: 2 }),
+      );
+    const c = useComments(7);
+    await c.post({ authorName: "", text: "Hallo" }, "tok");
+    await c.loadMore();
+    expect(c.comments.value.map((x) => x.id)).toEqual([9, 2]);
+  });
+
+  it("does not append a stale page after a sort change", async () => {
+    let release!: (v: unknown) => void;
+    fetchMock
+      .mockReturnValueOnce(new Promise((r) => (release = r)))
+      .mockReturnValueOnce(answer({ comments: [comment(5)], hasMore: false, total: 1 }));
+    const c = useComments(7);
+    const first = c.loadMore();
+    c.sort.value = "new";
+    await vi.waitFor(() => expect(c.comments.value.map((x) => x.id)).toEqual([5]));
+    release({
+      json: async () => ({ comments: [comment(1)], hasMore: true, total: 1 }),
+      ok: true,
+      status: 200,
+    });
+    await first;
+    expect(c.comments.value.map((x) => x.id)).toEqual([5]);
+  });
+
+  it("prunes expired edit keys on load", async () => {
+    localStorage.setItem(
+      "bs-comment-keys",
+      JSON.stringify({
+        1: { createdAt: Date.now() - 10 * 60_000, key: "old" },
+        2: { createdAt: Date.now(), key: "new" },
+      }),
+    );
+    const c = useComments(7);
+    expect(c.canEdit(1)).toBe(false);
+    await nextTick();
+    expect(Object.keys(JSON.parse(localStorage.getItem("bs-comment-keys")!))).toEqual(["2"]);
   });
 });

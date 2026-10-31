@@ -42,6 +42,15 @@ const call = async <T>(url: string, init?: RequestInit): Promise<null | T> => {
   }
 };
 
+const told = (pending: boolean): PostResult => {
+  if (pending)
+    createToastNotify({
+      message: "Dein Kommentar hat 'nen Link, den kieken wir uns erst an.",
+      status: "info",
+    });
+  return pending ? "pending" : "ok";
+};
+
 export const useComments = (wordId: number) => {
   const comments = ref<PublicComment[]>([]);
   const total = ref(0);
@@ -55,9 +64,15 @@ export const useComments = (wordId: number) => {
 
   const keys = useLocalStorage<Keys>("bs-comment-keys", {});
   const tick = ref(0);
-  useIntervalFn(() => tick.value++, 1000);
+  const ticker = useIntervalFn(() => tick.value++, 1000, { immediate: false });
   const fresh = (k: { createdAt: number }) => Date.now() - k.createdAt < EDIT_WINDOW_MS;
   keys.value = Object.fromEntries(Object.entries(keys.value).filter(([, k]) => fresh(k)));
+  // Only tick while an edit key can still expire.
+  watch(
+    () => Object.keys(keys.value).length > 0,
+    (any) => (any ? ticker.resume() : ticker.pause()),
+    { immediate: true },
+  );
 
   const canEdit = (id: number): boolean => {
     void tick.value; // re-evaluates every second, so the buttons vanish on their own
@@ -85,7 +100,9 @@ export const useComments = (wordId: number) => {
     if (!data) return;
     page += 1;
     loaded.value = true;
-    comments.value.push(...data.comments);
+    // An own post shifts the offset by one, so a page can repeat a comment already shown.
+    const shown = new Set(comments.value.map((c) => c.id));
+    comments.value.push(...data.comments.filter((c) => !shown.has(c.id)));
     hasMore.value = data.hasMore;
     total.value = data.total;
   };
@@ -115,7 +132,7 @@ export const useComments = (wordId: number) => {
       else if (!input.parentId) comments.value.unshift(data.comment);
       total.value += 1;
     }
-    return data.pending ? "pending" : "ok";
+    return told(data.pending);
   };
 
   const edit = async (id: number, text: string): Promise<PostResult> => {
@@ -127,7 +144,7 @@ export const useComments = (wordId: number) => {
     if (!data || !target) return data ? "ok" : "error";
     if (data.comment) Object.assign(target, { ...data.comment, replies: target.replies });
     else Object.assign(target, { state: "reviewing", text: null });
-    return data.pending ? "pending" : "ok";
+    return told(data.pending);
   };
 
   const remove = async (id: number): Promise<boolean> => {
@@ -142,8 +159,8 @@ export const useComments = (wordId: number) => {
     return true;
   };
 
-  const vote = async (id: number, value: -1 | 0 | 1): Promise<void> => {
-    if (busy.value.has(id)) return;
+  const vote = async (id: number, value: -1 | 0 | 1): Promise<boolean> => {
+    if (busy.value.has(id)) return false;
     busy.value = new Set(busy.value).add(id);
     const data = await call<{ downvotes: number; myVote: -1 | 0 | 1; upvotes: number }>(
       "/api/comment-votes",
@@ -154,6 +171,7 @@ export const useComments = (wordId: number) => {
     busy.value = next;
     const target = find(id);
     if (data && target) Object.assign(target, data);
+    return Boolean(data);
   };
 
   const report = async (id: number, reason: string, turnstileToken: string): Promise<boolean> =>
@@ -186,6 +204,8 @@ export const useComments = (wordId: number) => {
 export type CommentsContext = ReturnType<typeof useComments> & {
   /** Re-issues the shared captcha token after it was spent. */
   resetCaptcha: () => void;
+  /** The current captcha token, or null (with a toast) while the check is still running. */
+  takeToken: () => null | string;
   token: Ref<string>;
 };
 
