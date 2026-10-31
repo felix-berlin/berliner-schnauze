@@ -10,7 +10,10 @@ let wordId: number;
 let otherWordId: number;
 
 const editor = { id: 1, collection: "users", email: "editor@test.local" } as never;
-const mails = () => (process.env.SUGGEST_MAIL_TO = "redaktion@example.com") && vi.spyOn(payload, "sendEmail").mockResolvedValue(undefined);
+const mails = () => {
+  process.env.SUGGEST_MAIL_TO = "redaktion@example.com";
+  return vi.spyOn(payload, "sendEmail").mockResolvedValue(undefined);
+};
 const make = (data: Record<string, unknown> = {}, wId = wordId) =>
   payload.create({ collection: "comments", data: { word: wId, text: "kiek ma", authorName: "Icke", ...data } as never });
 
