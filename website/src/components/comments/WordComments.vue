@@ -1,5 +1,5 @@
 <template>
-  <section class="c-word-comments" aria-labelledby="word-comments-title">
+  <section class="c-word-comments" aria-labelledby="word-comments-title" @click="onLinkClick">
     <header class="c-word-comments__header">
       <h2 id="word-comments-title" class="c-word-comments__title">
         Wat sagste dazu? <span class="c-word-comments__count">({{ ctx.total.value }})</span>
@@ -124,8 +124,8 @@ const list = useTemplateRef<{ scrollToIndex: (i: number, o?: { align: "center" }
 const clearHighlight = useTimeoutFn(() => (comments.highlighted.value = null), 4000, {
   immediate: false,
 });
-const focusHash = async (): Promise<void> => {
-  const id = Number(/^#kommentar-(\d+)$/.exec(location.hash)?.[1]);
+const focusHash = async (hash = location.hash): Promise<void> => {
+  const id = Number(/^#kommentar-(\d+)$/.exec(hash)?.[1]);
   if (!id || !(await comments.openThread(id))) return;
   const index = comments.comments.value.findIndex(
     (c) => c.id === id || c.replies.some((r) => r.id === id),
@@ -141,6 +141,11 @@ const focusHash = async (): Promise<void> => {
   document.getElementById(`kommentar-${id}`)?.scrollIntoView({ block: "center" });
 };
 useEventListener("hashchange", () => void focusHash()); // default target = window, SSR-safe
+// The ClientRouter moves same-page hash links (the timestamps) with pushState: no hashchange fires.
+const onLinkClick = (event: MouseEvent): void => {
+  const href = (event.target as Element).closest("a")?.getAttribute("href");
+  if (href?.startsWith("#kommentar-")) void focusHash(href);
+};
 
 onMounted(() => {
   void comments.loadMore();

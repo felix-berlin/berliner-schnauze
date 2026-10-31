@@ -66,4 +66,30 @@ describe("WordComments", () => {
     wrapper.unmount();
     location.hash = "";
   });
+
+  // The ClientRouter moves same-page hash links with pushState: no hashchange fires.
+  it("highlights a card when its timestamp link is clicked", async () => {
+    const card = { authorName: "Icke", createdAt: new Date().toISOString(), downvotes: 0, edited: false, id: 5, myVote: 0, parentId: null, removalReason: null, replies: [], state: "visible", text: "Hier", upvotes: 0 };
+    fetchMock.mockResolvedValue({
+      json: async () => ({ comments: [card], hasMore: false, total: 1 }),
+      ok: true,
+      status: 200,
+    });
+    Element.prototype.scrollIntoView = vi.fn();
+    const router = (e: Event) => {
+      const a = (e.target as Element).closest("a");
+      if (!a) return;
+      e.preventDefault();
+      history.pushState({}, "", a.getAttribute("href")!);
+    };
+    document.addEventListener("click", router);
+    const wrapper = mount(WordComments, { attachTo: document.body, global: { stubs: { TurnStile: true } }, props: { wordId: 7 } });
+    await vi.waitFor(() => expect(wrapper.find("#kommentar-5").exists()).toBe(true));
+    expect(wrapper.find("#kommentar-5").classes()).not.toContain("is-highlighted");
+    await wrapper.find('a[href="#kommentar-5"]').trigger("click");
+    await vi.waitFor(() => expect(wrapper.find("#kommentar-5").classes()).toContain("is-highlighted"));
+    document.removeEventListener("click", router);
+    wrapper.unmount();
+    location.hash = "";
+  });
 });
