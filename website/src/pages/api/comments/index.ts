@@ -5,7 +5,8 @@ import { hashEditKey, listComments, toPublic, visitorId } from "@services/payloa
 import { verifyTurnstile } from "@services/turnstile.ts";
 import { orNull, reply } from "@utils/apiReply.ts";
 import { commentCreateSchema } from "@utils/commentSchema.ts";
-import { randomBytes } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
+import { pickPseudonym } from "payload-app/comments";
 
 /** Only published words have comments (siteRead hides drafts). */
 const publishedWord = async (wordId: number) =>
@@ -38,7 +39,7 @@ export const GET: APIRoute = async ({ cookies, url }) => {
 };
 
 /** Validates, checks Turnstile, then stores the comment; Payload's hook decides published or pending. */
-export const POST: APIRoute = async ({ clientAddress, request }) => {
+export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
   const body: unknown = await request.json().catch(() => undefined);
   if (typeof body !== "object" || body === null) return reply({ error: "Ungültige Anfrage" }, 400);
 
@@ -68,13 +69,43 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
         return reply({ error: "Ungültige Anfrage" }, 400);
     }
 
+    // Per-word handle: the same visitor keeps one pseudonym within a word, but cannot be linked across words.
+    const authorTag = createHash("sha256")
+      .update(`${visitorId(cookies, true)}:${wordId}`)
+      .digest("hex")
+      .slice(0, 16);
+    let pseudonym: string | undefined;
+    if (!authorName) {
+      const word = { equals: wordId };
+      const mine = await payload.find({
+        collection: "comments",
+        depth: 0,
+        limit: 1,
+        select: { pseudonym: true },
+        where: { authorTag: { equals: authorTag }, pseudonym: { exists: true }, word },
+      });
+      pseudonym = mine.docs[0]?.pseudonym ?? undefined;
+      if (!pseudonym) {
+        const used = await payload.find({
+          collection: "comments",
+          depth: 0,
+          pagination: false,
+          select: { pseudonym: true },
+          where: { pseudonym: { exists: true }, word },
+        });
+        pseudonym = pickPseudonym(authorTag, new Set(used.docs.flatMap((d) => d.pseudonym ?? [])));
+      }
+    }
+
     const editKey = randomBytes(32).toString("base64url");
     const created = await payload.create({
       collection: "comments",
       data: {
         authorName,
+        authorTag,
         editKeyHash: hashEditKey(editKey),
         parent: parentId,
+        pseudonym,
         text,
         word: wordId,
       },

@@ -127,6 +127,55 @@ describe("POST /api/comments", () => {
   });
 });
 
+describe("POST /api/comments pseudonyms", () => {
+  const taken = (docs: unknown[]) => (args: { where: Record<string, unknown> }) =>
+    "authorTag" in args.where ? { docs: [] } : { docs };
+
+  it("gives an anonymous post a pseudonym and stores the tag", async () => {
+    await post(valid);
+    const data = create.mock.calls[0][0].data;
+    expect(data.authorTag).toMatch(/^[0-9a-f]{16}$/);
+    expect(typeof data.pseudonym).toBe("string");
+    expect(data.pseudonym).toMatch(/^Anonym/);
+  });
+
+  it("stores no pseudonym when a name is given", async () => {
+    await post({ ...valid, authorName: "Hans" });
+    const data = create.mock.calls[0][0].data;
+    expect(data.pseudonym).toBeUndefined();
+    expect(data.authorTag).toBeTruthy();
+  });
+
+  it("reuses the pseudonym of the same visitor on the same word", async () => {
+    find.mockImplementation(async (args) =>
+      "authorTag" in args.where ? { docs: [{ pseudonym: "Anonyme Molle" }] } : { docs: [] },
+    );
+    await post(valid);
+    expect(create.mock.calls[0][0].data.pseudonym).toBe("Anonyme Molle");
+  });
+
+  it("toPublic shows the name, else the pseudonym, else the placeholder", async () => {
+    const name = async (extra: Record<string, unknown>) => {
+      create.mockResolvedValue(stored(extra));
+      return (await (await post(valid)).json()).comment.authorName;
+    };
+    expect(await name({ authorName: "Hans", pseudonym: "Anonyme Molle" })).toBe("Hans");
+    expect(await name({ authorName: " ", pseudonym: "Anonyme Molle" })).toBe("Anonyme Molle");
+    expect(await name({})).toBe("Anonymer Berliner");
+    const json = JSON.stringify(await (await post(valid)).json());
+    expect(json).not.toContain("authorTag");
+  });
+
+  it("skips a taken name", async () => {
+    await post(valid);
+    const first = create.mock.calls[0][0].data.pseudonym;
+    create.mockClear();
+    find.mockImplementation(async (args) => taken([{ pseudonym: first }])(args));
+    await post(valid);
+    expect(create.mock.calls[0][0].data.pseudonym).not.toBe(first);
+  });
+});
+
 describe("GET /api/comments", () => {
   it("200 with the list, no-store", async () => {
     const res = await get("?word=5&sort=new&page=1");

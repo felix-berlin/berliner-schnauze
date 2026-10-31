@@ -39,7 +39,7 @@ const handle =
       const { text } = input.data;
       const updated = await own.payload.update({
         collection: "comments",
-        data: text === undefined ? { authorName: null, status: "deleted", text: "[gelöscht]" } : { text },
+        data: text === undefined ? { authorName: null, pseudonym: null, status: "deleted", text: "[gelöscht]" } : { text },
         depth: 0,
         id,
       });

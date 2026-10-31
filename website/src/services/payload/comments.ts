@@ -36,7 +36,7 @@ export const toPublic = (c: Comment, myVote: -1 | 0 | 1 = 0): PublicComment => {
   const state =
     c.status === "published" ? "visible" : c.status === "hidden" ? "reviewing" : "removed";
   return {
-    authorName: state === "visible" ? c.authorName?.trim() || ANONYMOUS : ANONYMOUS,
+    authorName: state === "visible" ? c.authorName?.trim() || c.pseudonym || ANONYMOUS : ANONYMOUS,
     createdAt: c.createdAt,
     downvotes: c.downvotes ?? 0,
     edited: Boolean(c.editedAt),

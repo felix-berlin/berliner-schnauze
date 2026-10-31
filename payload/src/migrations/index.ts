@@ -11,6 +11,7 @@ import * as migration_20261017_104729_pages_versions from './20261017_104729_pag
 import * as migration_20261017_105011_content_globals from './20261017_105011_content_globals';
 import * as migration_20261020_191940_drop_wp_id from './20261020_191940_drop_wp_id';
 import * as migration_20261031_154929_word_comments from './20261031_154929_word_comments';
+import * as migration_20261031_170133_comment_pseudonyms from './20261031_170133_comment_pseudonyms';
 
 export const migrations = [
   {
@@ -76,6 +77,11 @@ export const migrations = [
   {
     up: migration_20261031_154929_word_comments.up,
     down: migration_20261031_154929_word_comments.down,
-    name: '20261031_154929_word_comments'
+    name: '20261031_154929_word_comments',
+  },
+  {
+    up: migration_20261031_170133_comment_pseudonyms.up,
+    down: migration_20261031_170133_comment_pseudonyms.down,
+    name: '20261031_170133_comment_pseudonyms'
   },
 ];

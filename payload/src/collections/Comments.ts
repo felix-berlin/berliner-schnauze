@@ -83,7 +83,7 @@ export const Comments: CollectionConfig = {
   access: authenticatedOnly,
   admin: {
     useAsTitle: "text",
-    defaultColumns: ["text", "authorName", "word", "status", "score", "reportCount", "createdAt"],
+    defaultColumns: ["text", "authorName", "pseudonym", "word", "status", "score", "reportCount", "createdAt"],
     listSearchableFields: ["text", "authorName"],
   },
   hooks: { beforeValidate: [flattenParent], beforeChange: [applyRules], afterChange: [mailEditors], beforeDelete: [deleteDependents] },
@@ -91,6 +91,9 @@ export const Comments: CollectionConfig = {
     { name: "word", type: "relationship", relationTo: "words", required: true, index: true },
     { name: "parent", type: "relationship", relationTo: "comments", index: true },
     { name: "authorName", type: "text", maxLength: NAME_MAX },
+    { name: "pseudonym", type: "text", admin: { readOnly: true, description: "Automatischer Name für anonyme Kommentare (pro Wort)." } },
+    // First 16 hex of sha256(visitor:word): a per-word handle, never shown publicly, no IP.
+    { name: "authorTag", type: "text", index: true, admin: { hidden: true } },
     { name: "text", type: "textarea", required: true, maxLength: COMMENT_MAX },
     {
       name: "status",

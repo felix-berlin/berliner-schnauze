@@ -458,6 +458,11 @@ export interface Comment {
   word: number | Word;
   parent?: (number | null) | Comment;
   authorName?: string | null;
+  /**
+   * Automatischer Name für anonyme Kommentare (pro Wort).
+   */
+  pseudonym?: string | null;
+  authorTag?: string | null;
   text: string;
   status?: ('published' | 'pending' | 'hidden' | 'removed' | 'deleted') | null;
   removalReason?: string | null;
@@ -949,6 +954,8 @@ export interface CommentsSelect<T extends boolean = true> {
   word?: T;
   parent?: T;
   authorName?: T;
+  pseudonym?: T;
+  authorTag?: T;
   text?: T;
   status?: T;
   removalReason?: T;

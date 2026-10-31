@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { containsLink, hideThreshold, shouldAutoHide } from "../src/lib/comments";
+import { containsLink, hideThreshold, PSEUDONYMS, pickPseudonym, shouldAutoHide } from "../src/lib/comments";
 
 describe("containsLink", () => {
   it.each([
@@ -37,4 +37,23 @@ describe("shouldAutoHide", () => {
   it("never when reviewed", () =>
     expect(shouldAutoHide({ ...base, reviewed: true, reportCount: 99 })).toBe(false));
   it("only published", () => expect(shouldAutoHide({ ...base, status: "pending" })).toBe(false));
+});
+
+describe("pickPseudonym", () => {
+  it("is stable for a tag and starts at the tag's index", () => {
+    expect(pickPseudonym("0000000300000000", new Set())).toBe(PSEUDONYMS[3]);
+    expect(pickPseudonym("0000000300000000", new Set())).toBe(PSEUDONYMS[3]);
+  });
+  it("skips taken names and wraps around", () => {
+    const last = PSEUDONYMS.length - 1;
+    const tag = last.toString(16).padStart(8, "0") + "00000000";
+    expect(pickPseudonym(tag, new Set([PSEUDONYMS[last]]))).toBe(PSEUDONYMS[0]);
+  });
+  it("numbers the start name when all are taken", () => {
+    const taken = new Set<string>(PSEUDONYMS);
+    expect(pickPseudonym("0000000000000000", taken)).toBe(`${PSEUDONYMS[0]} 2`);
+    taken.add(`${PSEUDONYMS[0]} 2`);
+    expect(pickPseudonym("0000000000000000", taken)).toBe(`${PSEUDONYMS[0]} 3`);
+  });
+  it("has unique names", () => expect(new Set(PSEUDONYMS).size).toBe(PSEUDONYMS.length));
 });
