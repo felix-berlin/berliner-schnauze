@@ -41,6 +41,7 @@
 
     <WindowVirtualizer
       v-else-if="ctx.comments.value.length"
+      ref="list"
       v-slot="{ item }"
       :data="ctx.comments.value"
       class="c-word-comments__list"
@@ -59,10 +60,15 @@ import TurnStile from "@components/TurnStile.vue";
 import { commentsKey, useComments, type CommentsContext } from "@composables/useComments.ts";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
-import { useElementSize, useIntersectionObserver } from "@vueuse/core";
+import {
+  useElementSize,
+  useEventListener,
+  useIntersectionObserver,
+  useTimeoutFn,
+} from "@vueuse/core";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
 import { WindowVirtualizer } from "virtua/vue";
-import { onMounted, provide, ref, useTemplateRef } from "vue";
+import { nextTick, onMounted, provide, ref, useTemplateRef } from "vue";
 
 import CommentCard from "./CommentCard.vue";
 import CommentForm from "./CommentForm.vue";
@@ -113,7 +119,33 @@ useIntersectionObserver(
   { rootMargin: "400px" },
 );
 
-onMounted(() => void comments.loadMore());
+// #kommentar-<id>: load the thread if needed, scroll to the card, highlight it for a few seconds.
+const list = useTemplateRef<{ scrollToIndex: (i: number, o?: { align: "center" }) => void }>("list");
+const clearHighlight = useTimeoutFn(() => (comments.highlighted.value = null), 4000, {
+  immediate: false,
+});
+const focusHash = async (): Promise<void> => {
+  const id = Number(/^#kommentar-(\d+)$/.exec(location.hash)?.[1]);
+  if (!id || !(await comments.openThread(id))) return;
+  const index = comments.comments.value.findIndex(
+    (c) => c.id === id || c.replies.some((r) => r.id === id),
+  );
+  await nextTick();
+  list.value?.scrollToIndex(index, { align: "center" }); // renders the card if the list skipped it
+  // Restart the highlight (the CSS animation) when the same link is opened again.
+  comments.highlighted.value = null;
+  await nextTick();
+  comments.highlighted.value = id;
+  clearHighlight.start();
+  await new Promise((resolve) => requestAnimationFrame(resolve));
+  document.getElementById(`kommentar-${id}`)?.scrollIntoView({ block: "center" });
+};
+useEventListener(window, "hashchange", () => void focusHash());
+
+onMounted(() => {
+  void comments.loadMore();
+  void focusHash();
+});
 </script>
 
 <style lang="scss">

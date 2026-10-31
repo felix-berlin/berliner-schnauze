@@ -7,6 +7,11 @@ import { describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify: vi.fn() }));
+const { writeText } = vi.hoisted(() => ({ writeText: vi.fn(async () => {}) }));
+vi.mock("@vueuse/core", async (orig) => ({
+  ...(await orig<typeof import("@vueuse/core")>()),
+  useClipboard: () => ({ copy: writeText }),
+}));
 vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));
 
 const base: PublicComment = {
@@ -29,6 +34,7 @@ const mountCard = (comment: Partial<PublicComment>) => {
     busy: ref(new Set<number>()),
     canEdit: () => false,
     edit: vi.fn(async () => "ok"),
+    highlighted: ref<null | number>(null),
     isOwn: (id: number) => id === 99,
     post: vi.fn(async () => "ok"),
     remove: vi.fn(async () => true),
@@ -108,5 +114,27 @@ describe("CommentCard", () => {
     expect(wrapper.text()).toContain("Hallo");
     expect(wrapper.find(".c-comment-card__reply").exists()).toBe(false);
     expect(mountCard({}).wrapper.find(".c-comment-card__reply").exists()).toBe(true);
+  });
+
+  it("has an anchor id, a permalink and a link copy action", async () => {
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    const { wrapper } = mountCard({
+      id: 4,
+      replies: [{ ...base, id: 5, parentId: 4 }],
+    });
+    expect(wrapper.attributes("id")).toBe("kommentar-4");
+    expect(wrapper.find("#kommentar-5").exists()).toBe(true);
+    expect(wrapper.find("a.c-comment-card__permalink").attributes("href")).toBe("#kommentar-4");
+    const copy = wrapper.findAll("button").find((b) => b.text() === "Link kopieren")!;
+    await copy.trigger("click");
+    await vi.waitFor(() => expect(createToastNotify).toHaveBeenCalled());
+    expect(writeText).toHaveBeenCalledWith(`${location.href.split("#")[0]}#kommentar-4`);
+  });
+
+  it("marks the linked comment as highlighted", () => {
+    const { ctx, wrapper } = mountCard({ id: 4 });
+    expect(wrapper.classes()).not.toContain("is-highlighted");
+    ctx.highlighted.value = 4;
+    return wrapper.vm.$nextTick().then(() => expect(wrapper.classes()).toContain("is-highlighted"));
   });
 });

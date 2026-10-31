@@ -1,8 +1,17 @@
 <template>
-  <article class="c-comment-card" :class="{ 'c-comment-card--reply': comment.parentId }">
+  <article
+    :id="`kommentar-${comment.id}`"
+    class="c-comment-card"
+    :class="{
+      'c-comment-card--reply': comment.parentId,
+      'is-highlighted': ctx.highlighted.value === comment.id,
+    }"
+  >
     <header class="c-comment-card__meta">
       <strong class="c-comment-card__name">{{ comment.authorName }}</strong>
-      <time :datetime="comment.createdAt">{{ relativeTime }}</time>
+      <a class="c-comment-card__permalink" :href="`#kommentar-${comment.id}`">
+        <time :datetime="comment.createdAt">{{ relativeTime }}</time>
+      </a>
       <span v-if="comment.edited && comment.state === 'visible'">(bearbeitet)</span>
     </header>
 
@@ -64,6 +73,7 @@
         >
           Melden
         </button>
+        <button class="c-comment-card__link" type="button" @click="copyLink">Link kopieren</button>
         <template v-if="ctx.canEdit(comment.id)">
           <button class="c-comment-card__link" type="button" @click="toggle('edit')">
             Bearbeiten
@@ -108,7 +118,9 @@
 import type { PublicComment } from "@utils/commentSchema.ts";
 
 import { commentsKey } from "@composables/useComments.ts";
+import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
+import { useClipboard } from "@vueuse/core";
 import { computed, defineAsyncComponent, inject, ref, useId } from "vue";
 
 import CommentForm from "./CommentForm.vue";
@@ -156,6 +168,12 @@ const relativeTime = computed(() => {
   const [unit, size] = UNITS.find(([, s]) => Math.abs(seconds) >= s) ?? ["second", 1];
   return rtf.format(unit === "second" ? 0 : Math.round(seconds / size), unit);
 });
+
+const { copy } = useClipboard();
+const copyLink = async (): Promise<void> => {
+  await copy(`${location.href.split("#")[0]}#kommentar-${comment.id}`);
+  createToastNotify({ message: "Link is kopiert.", status: "success" });
+};
 
 const vote = async (value: -1 | 1): Promise<void> => {
   if (await ctx.vote(comment.id, comment.myVote === value ? 0 : value))

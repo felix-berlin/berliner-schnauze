@@ -19,6 +19,38 @@
     box-shadow: none;
   }
 
+  // Linked comment: orange wash and outline that fade out; with reduced motion they stay until the class goes.
+  &.is-highlighted {
+    position: relative;
+    outline: 2px solid var(--orange-500);
+    outline-offset: 2px;
+    animation: c-comment-card-outline 3.5s ease-out forwards;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: color-mix(in srgb, var(--orange-500) 25%, transparent);
+      pointer-events: none;
+      animation: c-comment-card-wash 3.5s ease-out forwards;
+    }
+
+    @include butler-mx.dark-mode-class {
+      &::after {
+        background: color-mix(in srgb, var(--orange-500) 35%, transparent);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+
+      &::after {
+        animation: none;
+      }
+    }
+  }
+
   &__meta {
     display: flex;
     flex-wrap: wrap;
@@ -26,6 +58,17 @@
     align-items: baseline;
     font-size: 0.8rem;
     color: var(--color-muted);
+  }
+
+  &__permalink {
+    color: inherit;
+    text-decoration: none;
+
+    @include butler-mx.hover {
+      color: var(--orange-600);
+      text-decoration: underline dashed;
+      text-underline-offset: 3px;
+    }
   }
 
   &__name {
@@ -116,5 +159,16 @@
     display: grid;
     gap: vars.$spacer * 0.5;
     margin-inline-start: vars.$spacer * 0.5;
+  }
+}
+
+@keyframes c-comment-card-wash {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes c-comment-card-outline {
+  to {
+    outline-color: transparent;
   }
 }

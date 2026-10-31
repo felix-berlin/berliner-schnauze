@@ -156,4 +156,29 @@ describe("useComments", () => {
     await nextTick();
     expect(Object.keys(JSON.parse(localStorage.getItem("bs-comment-keys")!))).toEqual(["2"]);
   });
+
+  it("openThread inserts a linked thread once and loadMore does not repeat it", async () => {
+    fetchMock
+      .mockReturnValueOnce(answer({ comment: comment(5, { replies: [comment(6, { parentId: 5 })] }) }))
+      .mockReturnValueOnce(answer({ comments: [comment(1), comment(5)], hasMore: false, total: 3 }));
+    const c = useComments(7);
+    expect(await c.openThread(6)).toBe(true); // a reply id loads its thread
+    expect(fetchMock.mock.calls[0]![0]).toBe("/api/comments/6");
+    expect(c.comments.value.map((x) => x.id)).toEqual([5]);
+    await c.loadMore();
+    expect(c.comments.value.map((x) => x.id)).toEqual([5, 1]);
+    expect(await c.openThread(6)).toBe(true); // already shown: no request
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("openThread is false with a toast when the comment is gone", async () => {
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    fetchMock.mockReturnValueOnce(answer({ error: "Kommentar nicht gefunden" }, 404));
+    const c = useComments(7);
+    expect(await c.openThread(5)).toBe(false);
+    expect(createToastNotify).toHaveBeenCalledWith(
+      expect.objectContaining({ message: "Den Kommentar jibt's nich mehr." }),
+    );
+    expect(c.comments.value).toHaveLength(0);
+  });
 });

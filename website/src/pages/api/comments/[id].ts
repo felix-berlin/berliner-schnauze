@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
-import { hashEditKey, toPublic } from "@services/payload/comments.ts";
+import { getThread, hashEditKey, toPublic, visitorId } from "@services/payload/comments.ts";
 import { orNull, reply } from "@utils/apiReply.ts";
 import { commentEditSchema } from "@utils/commentSchema.ts";
 import { timingSafeEqual } from "node:crypto";
@@ -55,3 +55,17 @@ const handle =
 
 export const PATCH = handle(commentEditSchema);
 export const DELETE = handle(deleteSchema);
+
+/** The thread a comment belongs to, same shape and visibility as the list; for links to one comment. */
+export const GET: APIRoute = async ({ cookies, params }) => {
+  if (!/^[1-9]\d{0,8}$/.test(params.id ?? "")) return reply({ error: "Ungültige Anfrage" }, 400);
+  try {
+    const comment = await getThread(Number(params.id), visitorId(cookies, false));
+    return comment
+      ? reply({ comment }, 200)
+      : reply({ error: "Kommentar nicht gefunden" }, 404);
+  } catch (error) {
+    console.error("[comments] thread failed:", error);
+    return reply({ error: "Der Kommentar konnte nicht geladen werden." }, 502);
+  }
+};

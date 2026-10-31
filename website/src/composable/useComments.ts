@@ -17,9 +17,17 @@ const json = (body: unknown) => ({
 });
 
 /** Runs a request; null (plus a toast) when it failed. 429 keeps the input, the caller decides what else. */
-const call = async <T>(url: string, init?: RequestInit): Promise<null | T> => {
+const call = async <T>(
+  url: string,
+  init?: RequestInit,
+  notFound?: string,
+): Promise<null | T> => {
   try {
     const res = await fetch(url, init);
+    if (res.status === 404 && notFound) {
+      createToastNotify({ message: notFound, status: "info" });
+      return null;
+    }
     if (res.status === 429) {
       createToastNotify({
         message: "Ma langsam, Keule – versuch's gleich nochmal.",
@@ -59,6 +67,8 @@ export const useComments = (wordId: number) => {
   const loading = ref(false);
   const loaded = ref(false);
   const busy = ref(new Set<number>());
+  /** The comment a link points at; its card shows the highlight. */
+  const highlighted = ref<null | number>(null);
   let page = 0;
   let generation = 0;
 
@@ -109,6 +119,20 @@ export const useComments = (wordId: number) => {
     comments.value.push(...data.comments.filter((c) => !shown.has(c.id)));
     hasMore.value = data.hasMore;
     total.value = data.total;
+  };
+
+  /** Makes sure the thread of a linked comment is in the list; false (plus a toast) when it is gone. */
+  const openThread = async (id: number): Promise<boolean> => {
+    if (find(id)) return true;
+    const data = await call<{ comment: PublicComment }>(
+      `${API}/${id}`,
+      undefined,
+      "Den Kommentar jibt's nich mehr.",
+    );
+    if (!data) return false;
+    // A page that lands later skips it again (loadMore dedupes by id).
+    if (!comments.value.some((c) => c.id === data.comment.id)) comments.value.unshift(data.comment);
+    return true;
   };
 
   watch(sort, () => {
@@ -193,10 +217,12 @@ export const useComments = (wordId: number) => {
     comments,
     edit,
     hasMore,
+    highlighted,
     isOwn,
     loadMore,
     loaded,
     loading,
+    openThread,
     post,
     remove,
     report,

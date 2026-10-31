@@ -3,7 +3,8 @@ import type { AstroCookies } from "astro";
 import type { Comment } from "payload-app";
 import type { CommentStatus } from "payload-app/comments";
 
-import { getPayloadClient } from "@services/payload.ts";
+import { getPayloadClient, siteRead } from "@services/payload.ts";
+import { orNull } from "@utils/apiReply.ts";
 import { createHash } from "node:crypto";
 
 export const PAGE_SIZE = 20;
@@ -73,7 +74,21 @@ export const listComments = async (
     payload.count({ collection: "comments", where: { status: { equals: "published" }, word } }),
   ]);
 
-  const ids = top.docs.map((c) => c.id);
+  return { comments: await buildThreads(top.docs, wordId, visitor), hasMore: top.hasNextPage, total };
+};
+
+/**
+ * Top-level comments with their published replies and the visitor's votes. A placeholder only stays
+ * to hold its visible replies.
+ */
+const buildThreads = async (
+  tops: Comment[],
+  wordId: number,
+  visitor?: string,
+): Promise<PublicComment[]> => {
+  const payload = await getPayloadClient();
+  const word = { equals: wordId };
+  const ids = tops.map((c) => c.id);
   const replies = ids.length
     ? (
         await payload.find({
@@ -102,11 +117,28 @@ export const listComments = async (
   const vote = (id: number) => mine.get(id) ?? 0;
 
   const comments: PublicComment[] = [];
-  for (const c of top.docs) {
+  for (const c of tops) {
     const own = replies.filter((r) => idOf(r.parent) === c.id);
     // A placeholder only stays to hold its visible replies.
     if (c.status !== "published" && !own.length) continue;
     comments.push({ ...toPublic(c, vote(c.id)), replies: own.map((r) => toPublic(r, vote(r.id))) });
   }
-  return { comments, hasMore: top.hasNextPage, total };
+  return comments;
+};
+
+/** One thread by the id of its top-level comment or of one of its replies; null when it must not show. */
+export const getThread = async (id: number, visitor?: string): Promise<null | PublicComment> => {
+  const payload = await getPayloadClient();
+  const found = await orNull(payload.findByID({ collection: "comments", depth: 0, id }));
+  // A reply is only reachable while published; its thread is its parent's.
+  if (!found || (found.parent && found.status !== "published")) return null;
+  const top = found.parent
+    ? await orNull(payload.findByID({ collection: "comments", depth: 0, id: idOf(found.parent)! }))
+    : found;
+  if (!top || top.parent || !LISTED.includes(top.status as CommentStatus)) return null;
+  const wordId = idOf(top.word)!;
+  // siteRead hides drafts: comments of an unpublished word are not there.
+  if (!(await orNull(payload.findByID({ collection: "words", depth: 0, id: wordId, ...siteRead() }))))
+    return null;
+  return (await buildThreads([top], wordId, visitor))[0] ?? null;
 };

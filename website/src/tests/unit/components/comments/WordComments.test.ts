@@ -6,6 +6,15 @@ vi.mock("astro:env/client", () => ({ TURNSTILE_SITE_KEY: "k" }));
 vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify: vi.fn() }));
 vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));
 
+// virtua needs real layout, which jsdom lacks
+vi.mock("virtua/vue", () => ({
+  WindowVirtualizer: {
+    methods: { scrollToIndex: () => {} },
+    props: ["data"],
+    template: '<ul><li v-for="item in data" :key="item.id"><slot :item="item" /></li></ul>',
+  },
+}));
+
 const { fetchMock } = vi.hoisted(() => ({ fetchMock: vi.fn() }));
 vi.stubGlobal("fetch", fetchMock);
 
@@ -35,5 +44,26 @@ describe("WordComments", () => {
     const wrapper = mount(WordComments, { global: { stubs: { TurnStile: true } }, props: { wordId: 7 } });
     await flushPromises();
     expect(wrapper.text()).not.toContain("Noch keen Senf");
+  });
+
+  it("loads the linked thread and highlights its card for a #kommentar hash", async () => {
+    const card = { authorName: "Icke", createdAt: new Date().toISOString(), downvotes: 0, edited: false, id: 42, myVote: 0, parentId: null, removalReason: null, replies: [], state: "visible", text: "Verlinkt", upvotes: 0 };
+    fetchMock.mockImplementation(async (url: string) => ({
+      json: async () =>
+        url.endsWith("/42") ? { comment: card } : { comments: [], hasMore: false, total: 1 },
+      ok: true,
+      status: 200,
+    }));
+    location.hash = "#kommentar-42";
+    const wrapper = mount(WordComments, {
+      global: {
+        stubs: { TurnStile: true },
+      },
+      props: { wordId: 7 },
+    });
+    await vi.waitFor(() => expect(wrapper.find("#kommentar-42.is-highlighted").exists()).toBe(true));
+    expect(wrapper.text()).toContain("Verlinkt");
+    wrapper.unmount();
+    location.hash = "";
   });
 });
