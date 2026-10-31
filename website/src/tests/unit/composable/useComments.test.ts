@@ -101,6 +101,8 @@ describe("useComments", () => {
     expect(c.canEdit(9)).toBe(true);
     vi.advanceTimersByTime(5 * 60_000 + 1000);
     expect(c.canEdit(9)).toBe(false);
+    expect(c.isOwn(9)).toBe(true); // still mine after the edit window
+    expect(c.isOwn(1)).toBe(false);
   });
 
   it("answers 429 with a warning toast and reports the error", async () => {

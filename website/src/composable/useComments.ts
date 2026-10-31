@@ -80,6 +80,10 @@ export const useComments = (wordId: number) => {
     return Boolean(k) && fresh(k!);
   };
 
+  // Own comment ids outlive the edit key, so „Melden“ stays hidden on them.
+  const own = useLocalStorage<number[]>("bs-own-comments", []);
+  const isOwn = (id: number): boolean => own.value.includes(id);
+
   const find = (id: number): PublicComment | undefined => {
     for (const c of comments.value) {
       if (c.id === id) return c;
@@ -127,6 +131,7 @@ export const useComments = (wordId: number) => {
         ...keys.value,
         [data.comment.id]: { createdAt: Date.now(), key: data.editKey },
       };
+      own.value = [data.comment.id, ...own.value].slice(0, 200);
       const parent = input.parentId ? find(input.parentId) : undefined;
       if (parent) parent.replies.push(data.comment);
       else if (!input.parentId) comments.value.unshift(data.comment);
@@ -188,6 +193,7 @@ export const useComments = (wordId: number) => {
     comments,
     edit,
     hasMore,
+    isOwn,
     loadMore,
     loaded,
     loading,

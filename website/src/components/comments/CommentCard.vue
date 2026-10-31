@@ -56,7 +56,14 @@
         >
           Antworten
         </button>
-        <button class="c-comment-card__link" type="button" @click="toggle('report')">Melden</button>
+        <button
+          v-if="!ctx.isOwn(comment.id)"
+          class="c-comment-card__link"
+          type="button"
+          @click="toggle('report')"
+        >
+          Melden
+        </button>
         <template v-if="ctx.canEdit(comment.id)">
           <button class="c-comment-card__link" type="button" @click="toggle('edit')">
             Bearbeiten

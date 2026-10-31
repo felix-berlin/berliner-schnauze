@@ -29,6 +29,7 @@ const mountCard = (comment: Partial<PublicComment>) => {
     busy: ref(new Set<number>()),
     canEdit: () => false,
     edit: vi.fn(async () => "ok"),
+    isOwn: (id: number) => id === 99,
     post: vi.fn(async () => "ok"),
     remove: vi.fn(async () => true),
     report: vi.fn(async () => true),
@@ -48,6 +49,15 @@ const mountCard = (comment: Partial<PublicComment>) => {
 };
 
 describe("CommentCard", () => {
+  it("offers no „Melden“ on the visitor's own comment", () => {
+    const melden = (id: number) =>
+      mountCard({ id })
+        .wrapper.findAll(".c-comment-card__actions button")
+        .some((b) => b.text() === "Melden");
+    expect(melden(99)).toBe(false);
+    expect(melden(1)).toBe(true);
+  });
+
   it("renders text as text (no HTML)", () => {
     const { wrapper } = mountCard({ text: "<b>fett</b><img src=x>" });
     expect(wrapper.find(".c-comment-card__text").text()).toBe("<b>fett</b><img src=x>");
