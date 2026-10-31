@@ -3,21 +3,9 @@ import type { APIRoute } from "astro";
 import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { verifyTurnstile } from "@services/turnstile.ts";
+import { isUniqueViolation, orNull, reply } from "@utils/apiReply.ts";
 import { reportSchema } from "@utils/commentSchema.ts";
 import { clientIp, rateLimited } from "@utils/rateLimit.ts";
-
-const reply = (body: unknown, status: number) =>
-  Response.json(body, { headers: { "Cache-Control": "no-store" }, status });
-
-const orNull = <T>(p: Promise<T>): Promise<T | null> =>
-  p.catch((error: unknown) => {
-    if ((error as { status?: number })?.status === 404) return null;
-    throw error;
-  });
-
-/** Postgres' unique violation reaches us as Payload's ValidationError (the only validation we can trip). */
-const isUniqueViolation = (error: unknown) =>
-  (error as { name?: string })?.name === "ValidationError";
 
 /** Reports are idempotent: a repeat (same IP in 24 h, same visitor) answers like the first, so nothing leaks. */
 export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
@@ -50,6 +38,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
       prefix: "",
       windowMs: 24 * 60 * 60_000,
     });
+    // ponytail: a failed create below still burns this IP's 24 h slot; fine for a soft limit.
     if (again > 0) return reply({ reported: true }, 200);
 
     try {

@@ -2,20 +2,8 @@ import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
+import { isUniqueViolation, orNull, reply } from "@utils/apiReply.ts";
 import { voteSchema } from "@utils/commentSchema.ts";
-
-const reply = (body: unknown, status: number) =>
-  Response.json(body, { headers: { "Cache-Control": "no-store" }, status });
-
-const orNull = <T>(p: Promise<T>): Promise<T | null> =>
-  p.catch((error: unknown) => {
-    if ((error as { status?: number })?.status === 404) return null;
-    throw error;
-  });
-
-/** Postgres' unique violation reaches us as Payload's ValidationError (the only validation we can trip). */
-const isUniqueViolation = (error: unknown) =>
-  (error as { name?: string })?.name === "ValidationError";
 
 /** One vote per visitor and comment; Payload's hooks recount the comment, we only read it back. */
 export const POST: APIRoute = async ({ cookies, request }) => {

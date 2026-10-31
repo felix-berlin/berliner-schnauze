@@ -3,18 +3,9 @@ import type { APIRoute } from "astro";
 import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { hashEditKey, listComments, toPublic, visitorId } from "@services/payload/comments.ts";
 import { verifyTurnstile } from "@services/turnstile.ts";
+import { orNull, reply } from "@utils/apiReply.ts";
 import { commentCreateSchema } from "@utils/commentSchema.ts";
 import { randomBytes } from "node:crypto";
-
-const reply = (body: unknown, status: number) =>
-  Response.json(body, { headers: { "Cache-Control": "no-store" }, status });
-
-/** Payload's NotFound (status 404) means "no such doc"; anything else (DB down ...) must surface. */
-const orNull = <T>(p: Promise<T>): Promise<T | null> =>
-  p.catch((error: unknown) => {
-    if ((error as { status?: number })?.status === 404) return null;
-    throw error;
-  });
 
 /** Only published words have comments (siteRead hides drafts). */
 const publishedWord = async (wordId: number) =>

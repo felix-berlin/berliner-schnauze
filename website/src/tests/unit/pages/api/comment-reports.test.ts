@@ -25,7 +25,8 @@ const post = (body: Record<string, unknown>, ip = "9.9.9.9") =>
       method: "POST",
     }),
   } as unknown as APIContext);
-const uniqueViolation = Object.assign(new Error("invalid"), {
+const uniqueViolation = Object.assign(new Error("The following field is invalid"), {
+  data: { errors: [{ message: "Value must be unique", path: "comment_id, visitor" }] },
   name: "ValidationError",
   status: 400,
 });
@@ -75,6 +76,14 @@ describe("POST /api/comment-reports", () => {
     findByID.mockResolvedValue({ id, status: "hidden" });
     expect((await post({ commentId: id })).status).toBe(404);
     expect(create).not.toHaveBeenCalled();
+  });
+
+  it("generic ValidationError -> 502", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    create.mockRejectedValue(
+      Object.assign(new Error("hook"), { name: "ValidationError", status: 400 }),
+    );
+    expect((await post({ commentId: id })).status).toBe(502);
   });
 
   it("502 on other errors", async () => {

@@ -25,8 +25,7 @@ const post = (body: unknown) =>
     cookies,
     request: new Request(url, { body: JSON.stringify(body), method: "POST" }),
   } as unknown as APIContext);
-const get = (qs: string) =>
-  GET({ cookies, url: new URL(`${url}${qs}`) } as unknown as APIContext);
+const get = (qs: string) => GET({ cookies, url: new URL(`${url}${qs}`) } as unknown as APIContext);
 const stored = (extra: Record<string, unknown> = {}) => ({
   authorName: "",
   createdAt: "2026-01-01T00:00:00.000Z",

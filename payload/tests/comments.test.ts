@@ -83,6 +83,19 @@ describe("comments", () => {
     await expect(payload.create({ collection: "comment-votes", data: { comment: c.id, visitor: "v1", value: -1 } })).rejects.toThrow();
   });
 
+  it("duplicate vote/report throws a ValidationError with the unique field path", async () => {
+    mails();
+    const c = await make();
+    const data = { comment: c.id, visitor: "dup", value: 1 };
+    await payload.create({ collection: "comment-votes", data });
+    await payload.create({ collection: "comment-reports", data: { comment: c.id, visitor: "dup" } });
+    for (const [collection, d] of [["comment-votes", data], ["comment-reports", { comment: c.id, visitor: "dup" }]] as const) {
+      const err = await payload.create({ collection, data: d } as never).catch((e) => e);
+      expect(err.name).toBe("ValidationError");
+      expect(err.data.errors[0].path).toBe("comment_id, visitor");
+    }
+  });
+
   it("auto-hides at threshold", async () => {
     const send = mails();
     const c = await make();

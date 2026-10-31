@@ -2,24 +2,16 @@ import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
 import { hashEditKey, toPublic } from "@services/payload/comments.ts";
+import { orNull, reply } from "@utils/apiReply.ts";
 import { commentEditSchema } from "@utils/commentSchema.ts";
 import { timingSafeEqual } from "node:crypto";
 import { EDIT_WINDOW_MS } from "payload-app/comments";
 import { z } from "zod";
 
-const reply = (body: unknown, status: number) =>
-  Response.json(body, { headers: { "Cache-Control": "no-store" }, status });
-
 /** One body for every refusal, so a probe can't tell unknown id from wrong key or expired window. */
 const forbidden = () => reply({ error: "Dit jeht nich mehr." }, 403);
 
 const deleteSchema = commentEditSchema.pick({ editKey: true });
-
-const orNull = <T>(p: Promise<T>): Promise<T | null> =>
-  p.catch((error: unknown) => {
-    if ((error as { status?: number })?.status === 404) return null;
-    throw error;
-  });
 
 /** The stored comment if `editKey` matches, it is still editable and inside the edit window. */
 const ownComment = async (id: number, editKey: string) => {

@@ -32,6 +32,7 @@ const comment = (extra: Record<string, unknown> = {}) => ({
   ...extra,
 });
 const uniqueViolation = Object.assign(new Error("The following field is invalid"), {
+  data: { errors: [{ message: "Value must be unique", path: "comment_id, visitor" }] },
   name: "ValidationError",
   status: 400,
 });
@@ -71,6 +72,19 @@ describe("POST /api/comment-votes", () => {
     const res = await post({ commentId: 7, value: 0 }, "v-1");
     expect(await res.json()).toEqual({ downvotes: 0, myVote: 0, upvotes: 0 });
     expect(deleteByID.mock.calls[0][0]).toMatchObject({ collection: "comment-votes", id: 3 });
+  });
+
+  it("0 without an existing vote deletes nothing", async () => {
+    const res = await post({ commentId: 7, value: 0 }, "v-1");
+    expect(res.status).toBe(200);
+    expect(deleteByID).not.toHaveBeenCalled();
+  });
+
+  it("unchanged value skips the update", async () => {
+    find.mockResolvedValue({ docs: [{ id: 3, value: 1 }] });
+    await post({ commentId: 7, value: 1 }, "v-1");
+    expect(update).not.toHaveBeenCalled();
+    expect(create).not.toHaveBeenCalled();
   });
 
   it("a unique-violation race re-reads and updates", async () => {
