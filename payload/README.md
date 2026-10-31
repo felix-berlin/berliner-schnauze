@@ -81,7 +81,8 @@ Seiten rendern auf Anfrage mit etwa 60 s Cache, ein Edit im Admin ist ohne Rebui
 1. Collection/Global in `src/` anpassen.
 2. `pnpm --filter payload-app generate:types`
 3. **Immer** `pnpm cms:migrate:create <name>` und die Migration committen. CI schlägt bei Drift fehl. Prüfen, dass Typänderungen (z. B. Text → JSON) ein `USING` haben, sonst scheitert Postgres.
-4. `pnpm cms:migrate` wendet Migrationen auf `DATABASE_URL` an. Die Dev-DB braucht das nicht (sie wird per Push befüllt), der `cms`-Container führt sie beim Start selbst aus. Scheitert der Dev-Push an einer Spaltenänderung, die Spalte in der Dev-DB droppen oder die DB neu aufsetzen.
+4. Vor einem riskanten Deploy: `scripts/migration-dryrun.sh <backup.dump|.sql>` spielt ein Produktions-Backup in einen Wegwerf-Postgres-Container, wendet die offenen Migrationen an und liest jede Collection (`pnpm --filter payload-app verify:db`). In der CI deckt der Job `migration-upgrade` denselben Weg mit den Seed-Daten ab (Stand des Basis-Branches migrieren, mit dem PR aufwärts migrieren, Rollback, wieder vorwärts); lokal: `DATABASE_URL=…/<name>_e2e scripts/migration-upgrade-test.sh origin/main`.
+5. `pnpm cms:migrate` wendet Migrationen auf `DATABASE_URL` an. Die Dev-DB braucht das nicht (sie wird per Push befüllt), der `cms`-Container führt sie beim Start selbst aus. Scheitert der Dev-Push an einer Spaltenänderung, die Spalte in der Dev-DB droppen oder die DB neu aufsetzen.
 
 Neue Collections und Globals bekommen `access: { read/create/update/delete: authenticated }` aus `src/access.ts` und einen `Forbidden`-Test in `tests/access.test.ts`.
 
