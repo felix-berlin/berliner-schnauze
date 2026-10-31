@@ -55,6 +55,11 @@ describe("comments", () => {
     expect((send.mock.calls[0]![0] as { subject: string }).subject).toContain("wartet auf Freigabe");
   });
 
+  it("holds a comment with a link in the name", async () => {
+    mails();
+    expect((await make({ authorName: "casino-bonus.com" })).status).toBe("pending");
+  });
+
   it("re-parents a reply to a reply", async () => {
     mails();
     const a = await make();
