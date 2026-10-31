@@ -15,8 +15,9 @@ describe("containsLink", () => {
     "xyz.de»",
     "xyz.de–",
     "ende.Dann",
+    "x.example.de",
   ])("%s → true", (t) => expect(containsLink(t)).toBe(true));
-  it.each(["Na und?", "Ick bin 1.5 Meter", "z.B. so", "Dit is ne Sache… ja.", "e-mail"])(
+  it.each(["Na und?", "Ick bin 1.5 Meter", "z.B. so", "Dit is ne Sache… ja.", "e-mail", "Wir sind ein e.V. wa"])(
     "%s → false",
     (t) => expect(containsLink(t)).toBe(false),
   );
