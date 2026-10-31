@@ -2,7 +2,7 @@ import type { PublicComment } from "@utils/commentSchema.ts";
 
 import CommentCard from "@components/comments/CommentCard.vue";
 import { commentsKey } from "@composables/useComments.ts";
-import { mount } from "@vue/test-utils";
+import { mount, type VueWrapper } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
@@ -29,10 +29,18 @@ const base: PublicComment = {
   upvotes: 3,
 };
 
-const mountCard = (comment: Partial<PublicComment>) => {
+const openMenu = async (wrapper: VueWrapper) => {
+  wrapper
+    .find(".c-dropdown__panel")
+    .element.dispatchEvent(new ToggleEvent("toggle", { newState: "open" }));
+  await wrapper.vm.$nextTick();
+  return wrapper.findAll(".c-comment-card__menu-item");
+};
+
+const mountCard = (comment: Partial<PublicComment>, canEdit = false) => {
   const ctx = {
     busy: ref(new Set<number>()),
-    canEdit: () => false,
+    canEdit: () => canEdit,
     edit: vi.fn(async () => "ok"),
     highlighted: ref<null | number>(null),
     isOwn: (id: number) => id === 99,
@@ -55,13 +63,25 @@ const mountCard = (comment: Partial<PublicComment>) => {
 };
 
 describe("CommentCard", () => {
-  it("offers no „Melden“ on the visitor's own comment", () => {
-    const melden = (id: number) =>
-      mountCard({ id })
-        .wrapper.findAll(".c-comment-card__actions button")
-        .some((b) => b.text() === "Melden");
-    expect(melden(99)).toBe(false);
-    expect(melden(1)).toBe(true);
+  it("keeps votes and „Antworten“ on the card, the rest behind „…“", async () => {
+    const { wrapper } = mountCard({});
+    expect(wrapper.find(".c-comment-card__vote").exists()).toBe(true);
+    expect(wrapper.find(".c-comment-card__reply").exists()).toBe(true);
+    expect(wrapper.find('[aria-label="Weitere Aktionen"]').exists()).toBe(true);
+    expect(wrapper.findAll(".c-comment-card__menu-item")).toHaveLength(0);
+  });
+
+  it("menu: others' comment = Melden + Link; own comment in edit window = Link + Bearbeiten + Löschen", async () => {
+    const labels = async (id: number, canEdit: boolean) =>
+      (await openMenu(mountCard({ id }, canEdit).wrapper)).map((b) => b.text());
+    expect(await labels(1, false)).toEqual(["Melden", "Link kopieren"]);
+    expect(await labels(99, true)).toEqual(["Link kopieren", "Bearbeiten", "Löschen"]);
+    expect(await labels(99, false)).toEqual(["Link kopieren"]);
+  });
+
+  it("placeholders have no menu", () => {
+    const { wrapper } = mountCard({ state: "removed", text: null });
+    expect(wrapper.find('[aria-label="Weitere Aktionen"]').exists()).toBe(false);
   });
 
   it("renders text as text (no HTML)", () => {
@@ -99,7 +119,7 @@ describe("CommentCard", () => {
     const { ctx, wrapper } = mountCard({});
     let done!: (v: boolean) => void;
     ctx.report.mockReturnValue(new Promise<boolean>((r) => (done = r)));
-    await wrapper.findAll(".c-comment-card__link")[1]!.trigger("click");
+    await (await openMenu(wrapper)).find((b) => b.text() === "Melden")!.trigger("click");
     const form = wrapper.find(".c-comment-card__report");
     await form.trigger("submit");
     await form.trigger("submit");
@@ -125,7 +145,7 @@ describe("CommentCard", () => {
     expect(wrapper.attributes("id")).toBe("kommentar-4");
     expect(wrapper.find("#kommentar-5").exists()).toBe(true);
     expect(wrapper.find("a.c-comment-card__permalink").attributes("href")).toBe("#kommentar-4");
-    const copy = wrapper.findAll("button").find((b) => b.text() === "Link kopieren")!;
+    const copy = (await openMenu(wrapper)).find((b) => b.text() === "Link kopieren")!;
     await copy.trigger("click");
     await vi.waitFor(() => expect(createToastNotify).toHaveBeenCalled());
     expect(writeText).toHaveBeenCalledWith(`${location.href.split("#")[0]}#kommentar-4`);

@@ -65,21 +65,35 @@
         >
           Antworten
         </button>
-        <button
-          v-if="!ctx.isOwn(comment.id)"
-          class="c-comment-card__link"
-          type="button"
-          @click="toggle('report')"
+        <DropdownPopover
+          :name="`comment-${comment.id}`"
+          placement="bottom-end"
+          class="c-comment-card__menu c-dropdown--theme-comment-menu"
         >
-          Melden
-        </button>
-        <button class="c-comment-card__link" type="button" @click="copyLink">Link kopieren</button>
-        <template v-if="ctx.canEdit(comment.id)">
-          <button class="c-comment-card__link" type="button" @click="toggle('edit')">
-            Bearbeiten
-          </button>
-          <button class="c-comment-card__link" type="button" @click="onRemove">Löschen</button>
-        </template>
+          <template #default="{ triggerProps }">
+            <button
+              v-bind="triggerProps"
+              class="c-comment-card__menu-button"
+              type="button"
+              aria-label="Weitere Aktionen"
+            >
+              <IconMore aria-hidden="true" />
+            </button>
+          </template>
+          <template #panel>
+            <button
+              v-for="action in menu"
+              :key="action.label"
+              class="c-comment-card__menu-item"
+              type="button"
+              :popovertarget="`dropdown-comment-${comment.id}`"
+              popovertargetaction="hide"
+              @click="action.run"
+            >
+              {{ action.label }}
+            </button>
+          </template>
+        </DropdownPopover>
       </div>
 
       <CommentForm
@@ -117,6 +131,7 @@
 <script setup lang="ts">
 import type { PublicComment } from "@utils/commentSchema.ts";
 
+import DropdownPopover from "@components/DropdownPopover.vue";
 import { commentsKey } from "@composables/useComments.ts";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
@@ -127,6 +142,7 @@ import CommentForm from "./CommentForm.vue";
 
 const IconUp = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-up"));
 const IconDown = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-down"));
+const IconMore = defineAsyncComponent(() => import("virtual:icons/lucide/ellipsis"));
 
 const { comment, parentVisible = true } = defineProps<{
   comment: PublicComment;
@@ -200,6 +216,18 @@ const submitEdit = async (v: { text: string }): Promise<boolean> => {
 const onRemove = (): void => {
   void ctx.remove(comment.id);
 };
+
+// Secondary actions behind „…“; votes and „Antworten“ stay on the card.
+const menu = computed(() => [
+  ...(ctx.isOwn(comment.id) ? [] : [{ label: "Melden", run: () => toggle("report") }]),
+  { label: "Link kopieren", run: () => void copyLink() },
+  ...(ctx.canEdit(comment.id)
+    ? [
+        { label: "Bearbeiten", run: () => toggle("edit") },
+        { label: "Löschen", run: onRemove },
+      ]
+    : []),
+]);
 
 const submitReport = async (): Promise<void> => {
   if (reporting.value) return;
