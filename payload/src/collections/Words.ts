@@ -1,4 +1,4 @@
-import type { CollectionConfig, Field } from "payload";
+import type { CollectionBeforeDeleteHook, CollectionConfig, Field } from "payload";
 
 import { draftsAccess } from "../access";
 import { contentModifiedAtField, touchContentModifiedAt } from "../fields/contentModified";
@@ -14,12 +14,21 @@ const audioRows = (name: string): Field => ({
   fields: [gender, { name: "audio", type: "upload", relationTo: "media" }],
 });
 
+/** comments.word is required (not-null FK): take the word's comments along. Top-level first, their hook removes the replies. */
+const deleteComments: CollectionBeforeDeleteHook = async ({ id, req }) => {
+  await req.payload.delete({
+    collection: "comments",
+    where: { word: { equals: id }, parent: { exists: false } },
+    req,
+  });
+};
+
 export const Words: CollectionConfig = {
   slug: "words",
   access: draftsAccess,
   admin: { useAsTitle: "berlinerisch", preview: previewUrl("words") },
   versions: { drafts: true },
-  hooks: { beforeChange: [touchContentModifiedAt, setDerivedWordFields] },
+  hooks: { beforeChange: [touchContentModifiedAt, setDerivedWordFields], beforeDelete: [deleteComments] },
   fields: [
     { name: "berlinerisch", type: "text", required: true },
     ...identityFields,

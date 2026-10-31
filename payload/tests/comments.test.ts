@@ -63,7 +63,7 @@ describe("comments", () => {
   it("rejects a parent from another word", async () => {
     mails();
     const a = await make({}, otherWordId);
-    await expect(make({ parent: a.id })).rejects.toThrow();
+    await expect(make({ parent: a.id })).rejects.toMatchObject({ name: "ValidationError", message: expect.stringContaining("parent") });
   });
 
   it("counts votes", async () => {
@@ -122,6 +122,46 @@ describe("comments", () => {
     await payload.create({ collection: "comment-reports", data: { comment: c.id, visitor: "r1" } });
     await payload.delete({ collection: "comments", id: c.id });
     expect((await payload.count({ collection: "comments", where: { id: { in: [c.id, reply.id] } } })).totalDocs).toBe(0);
+    for (const collection of ["comment-votes", "comment-reports"] as const) {
+      expect((await payload.count({ collection, where: { comment: { equals: c.id } } })).totalDocs).toBe(0);
+    }
+  });
+
+  it("a site edit that adds a link is held and mailed once", async () => {
+    const c = await make();
+    const send = mails();
+    const u = await payload.update({ collection: "comments", id: c.id, data: { text: "kiek www.spam.de" } });
+    expect(u.status).toBe("pending");
+    expect(u.editedAt).toBeTruthy();
+    expect(send).toHaveBeenCalledOnce();
+    expect((send.mock.calls[0]![0] as { subject: string }).subject).toContain("wartet auf Freigabe");
+  });
+
+  it("voting sends no mail", async () => {
+    const send = mails();
+    const c = await make();
+    for (const v of ["v1", "v2", "v3"]) await payload.create({ collection: "comment-votes", data: { comment: c.id, visitor: v, value: 1 } });
+    expect(send).toHaveBeenCalledOnce();
+  });
+
+  it("auto-hide sends exactly one hide mail", async () => {
+    const send = mails();
+    const c = await make();
+    for (const v of ["r1", "r2", "r3"]) await payload.create({ collection: "comment-reports", data: { comment: c.id, visitor: v } });
+    const subjects = send.mock.calls.map((x) => (x[0] as { subject: string }).subject);
+    expect(subjects.filter((s) => s.includes("automatisch ausgeblendet"))).toHaveLength(1);
+    expect(subjects.filter((s) => s.includes("gemeldet"))).toHaveLength(3);
+  });
+
+  it("deleting a word removes its comments, replies, votes and reports", async () => {
+    mails();
+    const w = await payload.create({ collection: "words", data: { berlinerisch: "Loeschtest", slug: "comments-test-loesch", _status: "published" } });
+    const c = await make({}, w.id);
+    const r = await make({ parent: c.id }, w.id);
+    await payload.create({ collection: "comment-votes", data: { comment: c.id, visitor: "v1", value: 1 } });
+    await payload.create({ collection: "comment-reports", data: { comment: c.id, visitor: "r1" } });
+    await payload.delete({ collection: "words", id: w.id });
+    expect((await payload.count({ collection: "comments", where: { id: { in: [c.id, r.id] } } })).totalDocs).toBe(0);
     for (const collection of ["comment-votes", "comment-reports"] as const) {
       expect((await payload.count({ collection, where: { comment: { equals: c.id } } })).totalDocs).toBe(0);
     }
