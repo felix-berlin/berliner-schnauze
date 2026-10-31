@@ -50,6 +50,27 @@ describe("TurnStile.vue", () => {
     expect(wrapper.emitted("token")).toEqual([["valid-token"], [""], [""]]);
   });
 
+  it("passes appearance to render, defaulting to always", () => {
+    const render = vi.fn();
+    window.turnstile = { render, reset: vi.fn() };
+    mount(TurnStile, { props: { appearance: "interaction-only", siteKey: "k", wrapperId: "tw" } });
+    expect(render.mock.calls[0][1]).toMatchObject({ appearance: "interaction-only" });
+
+    const defaults = renderOptions();
+    expect(defaults.options).toMatchObject({ appearance: "always" });
+  });
+
+  it('reset() resets its own widget id and emits ""', () => {
+    const render = vi.fn(() => "widget-1");
+    const reset = vi.fn();
+    window.turnstile = { render, reset };
+    const wrapper = mount(TurnStile, { props: { siteKey: "k", wrapperId: "tw" } });
+
+    wrapper.vm.reset();
+    expect(reset).toHaveBeenCalledWith("widget-1");
+    expect(wrapper.emitted("token")).toEqual([[""]]);
+  });
+
   it("emits nothing until Turnstile calls back", () => {
     const { wrapper } = renderOptions();
     expect(wrapper.emitted("token")).toBeUndefined();

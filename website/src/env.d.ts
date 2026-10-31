@@ -11,6 +11,7 @@ interface TurnstileInstance {
       "error-callback"?: () => void;
       "expired-callback"?: () => void;
       sitekey: string;
+      appearance?: "always" | "interaction-only";
       theme?: "auto" | "dark" | "light";
     },
   ): string | undefined;
