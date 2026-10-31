@@ -35,7 +35,7 @@ services:
       # cms runs the migrations: the site must not query a schema that is not there yet.
       cms:
         condition: service_healthy
-    # Localhost only, like cms: the reverse proxy (Pangolin/Newt) fronts berliner-schnauze.wtf.
+    # Localhost only, like cms: the reverse proxy (Traefik) fronts berliner-schnauze.wtf.
     ports:
       - "127.0.0.1:${PORT:-4321}:4321"
     healthcheck:

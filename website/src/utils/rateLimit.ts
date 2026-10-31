@@ -41,9 +41,9 @@ export const rateLimited = (client: string, rule: Rule, now = Date.now()): numbe
 let loggedSource = false;
 
 /**
- * The client's IP: the last X-Forwarded-For entry, the one our reverse proxy (Pangolin/Traefik) appended. The
+ * The client's IP: the last X-Forwarded-For entry, the one our reverse proxy (Traefik) appended. The
  * first entries come from the client and can be anything (Astro's clientAddress takes the first). Without the
- * header, the socket address, which behind a tunnel is the same for everyone.
+ * header, the socket address, which behind the proxy is the same for everyone.
  */
 export const clientIp = (forwardedFor: string | null, socketAddress: string): string => {
   const forwarded = forwardedFor?.split(",").at(-1)?.trim();
