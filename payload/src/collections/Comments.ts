@@ -29,6 +29,8 @@ const flattenParent: CollectionBeforeValidateHook = async ({ data, originalDoc, 
 /** The site's comments are held when they contain a link; an editor's changes are never held. */
 const applyRules: CollectionBeforeChangeHook = ({ data, operation, originalDoc, req }) => {
   if (!req.user) {
+    // A self-delete wipes text and name; it must never land back in the review queue.
+    if (data.status === "deleted") return data;
     const text = data.text ?? originalDoc?.text ?? "";
     const linked = containsLink(text) || containsLink(data.authorName ?? originalDoc?.authorName ?? "");
     if (operation === "create" && data.text !== undefined) {

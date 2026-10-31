@@ -60,6 +60,20 @@ describe("comments", () => {
     expect((await make({ authorName: "casino-bonus.com" })).status).toBe("pending");
   });
 
+  it("keeps a self-deleted comment deleted even with a link in the stored name", async () => {
+    const send = mails();
+    const c = await make({ authorName: "casino-bonus.com" });
+    send.mockClear();
+    const d = await payload.update({
+      collection: "comments",
+      id: c.id,
+      data: { authorName: null, status: "deleted", text: "[gelöscht]" } as never,
+    });
+    expect(d.status).toBe("deleted");
+    expect(d.editedAt ?? null).toBeNull();
+    expect(send).not.toHaveBeenCalled();
+  });
+
   it("re-parents a reply to a reply", async () => {
     mails();
     const a = await make();
