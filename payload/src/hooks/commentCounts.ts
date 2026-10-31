@@ -13,18 +13,26 @@ const idOf = (rel: number | { id: number }): number => (typeof rel === "object" 
  * the counts below see its row. `NO KEY UPDATE`, not `UPDATE`: the vote/report insert already holds a `KEY SHARE`
  * lock on the comment (FK), and `FOR UPDATE` against another transaction's `KEY SHARE` would deadlock.
  */
-const lockComment = async (req: PayloadRequest, commentId: number): Promise<void> => {
+const lockComment = async (
+  req: PayloadRequest,
+  commentId: number,
+): Promise<{ reviewed: boolean | null; status: string | null }> => {
   const db = req.payload.db as unknown as PostgresAdapter;
   const session = req.transactionID ? db.sessions?.[await req.transactionID]?.db : undefined;
-  await (session ?? db.drizzle).execute(
-    sql`select 1 from comments where id = ${commentId} for no key update`,
+  // Reads status/reviewed under the same lock, so no separate findByID is needed.
+  const { rows } = await (session ?? db.drizzle).execute(
+    sql`select status, reviewed from comments where id = ${commentId} for no key update`,
   );
+  return rows[0] as { reviewed: boolean | null; status: string | null };
 };
 
 /** Recounts votes and reports of a comment into its denormalized fields and auto-hides it at the report threshold. */
-export const recountComment = async (req: PayloadRequest, commentId: number): Promise<void> => {
+export const recountComment = async (
+  req: PayloadRequest,
+  commentId: number,
+): Promise<{ reportCount: number }> => {
   const { payload } = req;
-  await lockComment(req, commentId);
+  const comment = await lockComment(req, commentId);
   const count = (collection: "comment-votes" | "comment-reports", where: object) =>
     payload
       .count({ collection, where: { comment: { equals: commentId }, ...where }, req })
@@ -35,9 +43,8 @@ export const recountComment = async (req: PayloadRequest, commentId: number): Pr
     count("comment-reports", {}),
   ]);
   const score = upvotes - downvotes;
-  const comment = await payload.findByID({ collection: "comments", id: commentId, depth: 0, req });
   const hide = shouldAutoHide({
-    status: comment.status ?? "published",
+    status: (comment.status ?? "published") as Parameters<typeof shouldAutoHide>[0]["status"],
     reviewed: comment.reviewed,
     score,
     reportCount,
@@ -62,10 +69,14 @@ export const recountComment = async (req: PayloadRequest, commentId: number): Pr
       commentAdminLink(req, commentId),
     ]);
   }
+  return { reportCount };
 };
 
 export const recountAfterChange: CollectionAfterChangeHook = async ({ doc, req, context }) => {
-  if (!context.skipCommentHooks) await recountComment(req, idOf(doc.comment));
+  if (!context.skipCommentHooks) {
+    // mailReport runs after this hook and reads the count from here instead of re-loading the comment.
+    context.reportCount = (await recountComment(req, idOf(doc.comment))).reportCount;
+  }
   return doc;
 };
 
@@ -74,18 +85,12 @@ export const recountAfterDelete: CollectionAfterDeleteHook = async ({ doc, req, 
   return doc;
 };
 
-export const mailReport: CollectionAfterChangeHook = async ({ doc, operation, req }) => {
+export const mailReport: CollectionAfterChangeHook = async ({ context, doc, operation, req }) => {
   if (operation !== "create") return doc;
   const commentId = idOf(doc.comment);
-  const comment = await req.payload.findByID({
-    collection: "comments",
-    id: commentId,
-    depth: 0,
-    req,
-  });
   notifyEditors(req, "Kommentar gemeldet – Berliner Schnauze", [
     `Grund: ${doc.reason ?? ""}`,
-    `Meldungen insgesamt: ${comment.reportCount}`,
+    `Meldungen insgesamt: ${context.reportCount}`,
     "",
     commentAdminLink(req, commentId),
   ]);

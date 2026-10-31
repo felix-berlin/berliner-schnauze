@@ -20,7 +20,8 @@ const idOf = (rel: unknown): number | undefined =>
 /** Replies are one level deep: a reply to a reply goes to the top-level comment; a parent must belong to the same word. */
 const flattenParent: CollectionBeforeValidateHook = async ({ data, originalDoc, req }) => {
   const parentId = idOf(data?.parent);
-  if (!data || !parentId) return data;
+  // Unchanged parent (text edits, releasing a held comment): already flattened when it was set.
+  if (!data || !parentId || (originalDoc && parentId === idOf(originalDoc.parent))) return data;
   const parent = await req.payload.findByID({
     collection: "comments",
     id: parentId,

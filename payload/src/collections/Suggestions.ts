@@ -1,15 +1,11 @@
 import type { CollectionAfterChangeHook, CollectionConfig } from "payload";
 
 import { authenticatedOnly } from "../access";
+import { notifyEditors } from "../lib/notifyEditors";
 
 /** Mails the editors about a new suggestion; a failed mail is logged, the suggestion stays in the admin. */
-const mailEditors: CollectionAfterChangeHook = async ({ doc, operation, req }) => {
-  const to = process.env.SUGGEST_MAIL_TO;
+const mailEditors: CollectionAfterChangeHook = ({ doc, operation, req }) => {
   if (operation !== "create") return doc;
-  if (!to) {
-    req.payload.logger.warn(`Suggestion ${doc.id}: SUGGEST_MAIL_TO is not set, no editor was mailed`);
-    return doc;
-  }
   const rows: [string, string | null | undefined][] = [
     ["Berliner Wort", doc.berlinerWord],
     ["Übersetzung", doc.translation],
@@ -17,20 +13,16 @@ const mailEditors: CollectionAfterChangeHook = async ({ doc, operation, req }) =
     ["Name", doc.userName],
     ["E-Mail", doc.userMail],
   ];
-  try {
-    await req.payload.sendEmail({
-      ...(doc.userMail ? { replyTo: doc.userMail } : {}),
-      subject: "Wortvorschlag - Berliner Schnauze",
-      text: [
-        "Ein neues Berliner Wort wurde eingereicht:",
-        "",
-        ...rows.map(([label, value]) => `${label}: ${value ?? ""}`),
-      ].join("\n"),
-      to,
-    });
-  } catch (err) {
-    req.payload.logger.error({ err, msg: `Suggestion ${doc.id}: mail not sent` });
-  }
+  notifyEditors(
+    req,
+    "Wortvorschlag - Berliner Schnauze",
+    [
+      "Ein neues Berliner Wort wurde eingereicht:",
+      "",
+      ...rows.map(([label, value]) => `${label}: ${value ?? ""}`),
+    ],
+    doc.userMail ?? undefined,
+  );
   return doc;
 };
 
