@@ -140,7 +140,7 @@ const focusHash = async (): Promise<void> => {
   await new Promise((resolve) => requestAnimationFrame(resolve));
   document.getElementById(`kommentar-${id}`)?.scrollIntoView({ block: "center" });
 };
-useEventListener(window, "hashchange", () => void focusHash());
+useEventListener("hashchange", () => void focusHash()); // default target = window, SSR-safe
 
 onMounted(() => {
   void comments.loadMore();
