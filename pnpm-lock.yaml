@@ -249,7 +249,7 @@ importers:
         version: 16.4.3(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.64.1)(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(sass@1.104.1)
       nodemailer:
         specifier: ^10.1.1
-        version: 10.2.1
+        version: 10.3.1
       payload:
         specifier: 3.92.1
         version: 3.92.1(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3)
@@ -7632,8 +7632,8 @@ packages:
     resolution: {integrity: sha512-5NUN6QCxNFrS9oEA9RPS+d0AP+ooGBzzovY2JhIpDRHacPvOhHjXjUsUMX9qp4nLHZ+5jVgXB2jj/P4arGOE/g==}
     engines: {node: '>=18'}
 
-  nodemailer@10.2.1:
-    resolution: {integrity: sha512-ZrDNsPFoDMwefNs7sJwrYiEJ/CG4ClJWDZv05iNJsEBWa8GRDry1QJHTJxsuTAY9eDDKjX4k+q3SxslXJOao7w==}
+  nodemailer@10.3.1:
+    resolution: {integrity: sha512-uF0AFsJC07Y1vdW7p580DKAnh7rAO+4UPSSB3mDCPNDufoiaOebV6JmrzpxB14OjEEEiBsNdYoM2Y+fN8M7BBA==}
     engines: {node: '>=20.0.0'}
 
   nopt@10.0.1:
@@ -13433,7 +13433,7 @@ snapshots:
 
   '@payloadcms/email-nodemailer@3.92.1(payload@3.92.1(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3))':
     dependencies:
-      nodemailer: 10.2.1
+      nodemailer: 10.3.1
       payload: 3.92.1(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3)
 
   '@payloadcms/graphql@3.92.1(graphql@16.14.2)(payload@3.92.1(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3))(typescript@6.0.3)':
@@ -17679,7 +17679,7 @@ snapshots:
 
   node-releases@2.0.61: {}
 
-  nodemailer@10.2.1: {}
+  nodemailer@10.3.1: {}
 
   nopt@10.0.1:
     dependencies:
