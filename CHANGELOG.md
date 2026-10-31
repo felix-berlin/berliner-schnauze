@@ -2,6 +2,56 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.1.4...v4.2.0) (2026-10-31)
+
+
+### Bug Fixes
+
+* **cms:** restore importMap.js, it was committed by accident ([efb1e93](https://github.com/felix-berlin/berliner-schnauze/commit/efb1e9367a6acfe9fab577fcff1b79e65721304d))
+* **cms:** type verifyDb so the CMS image builds, and keep the formatter off importMap.js ([bbde436](https://github.com/felix-berlin/berliner-schnauze/commit/bbde436ccf0aff2eecc02f6545ceb5759c30e6e6))
+* **dropdown:** don't pull focus back to the trigger after a click outside ([deaa26d](https://github.com/felix-berlin/berliner-schnauze/commit/deaa26dbefe9a133b97ae5495c783a8442011fd3))
+* **toast:** show top toasts below the sticky header ([6ad71d7](https://github.com/felix-berlin/berliner-schnauze/commit/6ad71d7a420246a505812ba8796224cb36f54ae8))
+* **word:** announce comment counter only near the limit ([0125ee3](https://github.com/felix-berlin/berliner-schnauze/commit/0125ee31f40495de9e82729bf9cdc9d655c34d2b))
+* **word:** bound the comment edit key and correct comment notes ([a07cc14](https://github.com/felix-berlin/berliner-schnauze/commit/a07cc14dfc8569e71accdca1babfb40841a72b9a))
+* **word:** cap vote changes per comment and the auto-hide threshold ([663903f](https://github.com/felix-berlin/berliner-schnauze/commit/663903f54602789758a712389cb5d66062f476cc))
+* **word:** count concurrent comment votes and mail editors in the background ([a3b21d0](https://github.com/felix-berlin/berliner-schnauze/commit/a3b21d07006c30650ccba1b82451072dfc425e85))
+* **word:** dedupe paged comments and share toast/token logic ([ff76de7](https://github.com/felix-berlin/berliner-schnauze/commit/ff76de75bba77cf3b1608e83dea45173d0c2dac7))
+* **word:** delete comments with their word and cover mail counts ([f9b0df1](https://github.com/felix-berlin/berliner-schnauze/commit/f9b0df18d929425bcf68221048df93fb9c1ab1cc))
+* **word:** flag domains followed by any non-domain character ([a0f5aa1](https://github.com/felix-berlin/berliner-schnauze/commit/a0f5aa1791cd918960257156fcc5e6ec597442e7))
+* **word:** harden comment reports, votes and editor mails against abuse ([6b13bfd](https://github.com/felix-berlin/berliner-schnauze/commit/6b13bfd1a662bbb2535e3be981078f033656bd3d))
+* **word:** hide report button on the visitor's own comments ([3c7620a](https://github.com/felix-berlin/berliner-schnauze/commit/3c7620aec2e21601ef77869b0dd7ada04ce63644))
+* **word:** highlight a comment when its timestamp link is clicked ([effb535](https://github.com/felix-berlin/berliner-schnauze/commit/effb535055ebed84faf0176ebc90d85ae079dfdf))
+* **word:** hold comments with a link in the name, anchor ids on headings ([4c25acc](https://github.com/felix-berlin/berliner-schnauze/commit/4c25acc62073828006c80b2d0fe741371a240be2))
+* **word:** keep self-deleted comments out of the review queue ([89654af](https://github.com/felix-berlin/berliner-schnauze/commit/89654af758524232b47d6b8d68eea107b97fa913))
+* **word:** keep the comment link check linear ([41f1314](https://github.com/felix-berlin/berliner-schnauze/commit/41f1314807c6bce795af39558ebf6be093668171))
+* **word:** listen for hashchange without touching window during ssr ([f7a24df](https://github.com/felix-berlin/berliner-schnauze/commit/f7a24df255f0dcb1795db30847bc757dbbae1ca0))
+* **word:** lower the comment minimum to 5 characters ([fc999a3](https://github.com/felix-berlin/berliner-schnauze/commit/fc999a33286b2058f7ce694f71dc45a97fa58f31))
+* **word:** match only the real unique violation in comment votes and reports ([5f9da5b](https://github.com/felix-berlin/berliner-schnauze/commit/5f9da5b735f208df617abbdc5a4d56c0cc9b171c))
+* **word:** recover from failed comment loads and captcha errors ([a857d86](https://github.com/felix-berlin/berliner-schnauze/commit/a857d86129e0d077927961cedcbf6df97c7c85e4))
+* **word:** require 10 characters per comment and drop the number from the hint ([d71828c](https://github.com/felix-berlin/berliner-schnauze/commit/d71828c507ebeebf8e06534b98b2dd18e9e1ca6e))
+* **word:** reword the empty comments state ([ecd86bd](https://github.com/felix-berlin/berliner-schnauze/commit/ecd86bddaf62add7aee199e0fa8773c2162e89dd))
+* **word:** stop comment cards overlapping and align the section with the design system ([96fb7f0](https://github.com/felix-berlin/berliner-schnauze/commit/96fb7f0e1d1d1675fced17d162a2845ace8ccf79))
+* **word:** surface db errors and check the word in comment get ([27a94b9](https://github.com/felix-berlin/berliner-schnauze/commit/27a94b9cf43fcd8ebbadc560b2ae5cf2d2618454))
+* **word:** tick comment edit window with useIntervalFn ([e755ca3](https://github.com/felix-berlin/berliner-schnauze/commit/e755ca39049b7a412f0c79f61d378b8fa5389d5f))
+* **word:** type comment status in recount ([efd353c](https://github.com/felix-berlin/berliner-schnauze/commit/efd353c3af604e562d8292acc368587d458c9155))
+* **word:** wipe deleted comments, anonymous placeholders, report double-submit, reply guard ([176e8e9](https://github.com/felix-berlin/berliner-schnauze/commit/176e8e9a090261ae00eae1550e8883e435571efc))
+
+
+### Features
+
+* **word:** add comment collections in payload ([22644e7](https://github.com/felix-berlin/berliner-schnauze/commit/22644e7a192f042d37c4607b7b286290f9976bd9))
+* **word:** add comment list and create api ([2701085](https://github.com/felix-berlin/berliner-schnauze/commit/270108519de13d28a850c4eb096005c6784065eb))
+* **word:** add comment rules ([14a264a](https://github.com/felix-berlin/berliner-schnauze/commit/14a264a2ad82dbeb2e12e92c35e1f52a919f7905))
+* **word:** add comment section to word pages ([718ff82](https://github.com/felix-berlin/berliner-schnauze/commit/718ff820b6952199bd17fa007c56f778dbfee158))
+* **word:** add comment votes and reports api ([624b5be](https://github.com/felix-berlin/berliner-schnauze/commit/624b5be489e3e389ac5cd4ad56645a813f810d2f))
+* **word:** explain refused comment submits and rework the report form ([bef0bc9](https://github.com/felix-berlin/berliner-schnauze/commit/bef0bc9b840c08ec9e691005a428ca9fe9276bf5))
+* **word:** give anonymous commenters berlin pseudonyms ([bfb7847](https://github.com/felix-berlin/berliner-schnauze/commit/bfb7847d3baf51f042f67673914d4989b874e285))
+* **word:** let authors edit or delete comments for 5 minutes ([a6ce524](https://github.com/felix-berlin/berliner-schnauze/commit/a6ce5249d12f4d41784779c4ff8025316e27adea))
+* **word:** let turnstile reset per action ([af70098](https://github.com/felix-berlin/berliner-schnauze/commit/af70098e4188cef250b0f5b803923d71fbd1f22e))
+* **word:** link to single comments and highlight the target ([0f0adc6](https://github.com/felix-berlin/berliner-schnauze/commit/0f0adc602824b740a7dd3b0f3c2bf7319084e7dc))
+* **word:** move secondary comment actions behind a „…“ menu ([91e8fd3](https://github.com/felix-berlin/berliner-schnauze/commit/91e8fd3aadf68e6bd154a9f0c1312ca33272f71d))
+* **word:** rate-limit comment routes ([ef542b3](https://github.com/felix-berlin/berliner-schnauze/commit/ef542b3a389f53431c91d30ddb6dbec685d8b0a2))
+
 ## [4.1.4](https://github.com/felix-berlin/berliner-schnauze/compare/v4.1.3...v4.1.4) (2026-10-30)
 
 
