@@ -7,7 +7,10 @@ import { isUniqueViolation, orNull, reply } from "@utils/apiReply.ts";
 import { reportSchema } from "@utils/commentSchema.ts";
 import { clientIp, rateLimited } from "@utils/rateLimit.ts";
 
-/** Reports are idempotent: a repeat (same IP in 24 h, same visitor) answers like the first, so nothing leaks. */
+/**
+ * Reports are idempotent: a repeat on the same comment (same IP within 24 h, or same visitor cookie) answers like
+ * the first, so nothing leaks.
+ */
 export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
   const body: unknown = await request.json().catch(() => undefined);
   if (typeof body !== "object" || body === null) return reply({ error: "Ungültige Anfrage" }, 400);
@@ -52,7 +55,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     }
     return reply({ reported: true }, 200);
   } catch (error) {
-    console.error("[comments] report failed:", error);
+    console.error(`[comments] report on ${commentId} failed:`, error);
     return reply({ error: "Die Meldung konnte leider nicht gesendet werden." }, 502);
   }
 };

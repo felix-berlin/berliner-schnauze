@@ -15,7 +15,7 @@ export const commentCreateSchema = z.object({
   wordId: id,
 });
 
-export const commentEditSchema = z.object({ editKey: z.string().min(32), text });
+export const commentEditSchema = z.object({ editKey: z.string().min(32).max(64), text });
 
 export const voteSchema = z.object({
   commentId: id,

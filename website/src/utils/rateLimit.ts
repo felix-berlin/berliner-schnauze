@@ -2,7 +2,8 @@ type Rule = { max: number; method?: string; prefix: string; windowMs: number; ke
 
 /**
  * Routes that cost real work per request (canvaskit, Turnstile + mail, token checks), per client.
- * First match wins: the `/api/comments/` rules (single comment) must come before the `/api/comments` ones.
+ * First match wins. The method filters keep list/create (`/api/comments`, GET/POST) apart from own edit/delete
+ * (`/api/comments/`, PATCH/DELETE, one shared counter); a thread link (`GET /api/comments/:id`) counts as a GET.
  */
 const RULES: Rule[] = [
   { max: 5, method: "POST", prefix: "/api/suggest-word", windowMs: 10 * 60_000 },

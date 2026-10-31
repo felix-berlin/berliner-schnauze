@@ -111,7 +111,7 @@ const announce = computed(() =>
       : "",
 );
 const over = computed(() => text.value.length > COMMENT_MAX);
-// Same minimum as the server (commentSchema); the hint does not name the number
+// Same minimum as the server (`COMMENT_MIN`); the error deliberately doesn't name it.
 const ready = computed(() => text.value.trim().length >= COMMENT_MIN && !over.value);
 
 watch(text, () => {

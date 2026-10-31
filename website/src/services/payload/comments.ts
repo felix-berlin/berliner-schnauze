@@ -7,12 +7,15 @@ import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { orNull } from "@utils/apiReply.ts";
 import { createHash } from "node:crypto";
 
+// The comment collections are login-only (`authenticatedOnly`), so `siteRead()` would lock the site out: comment
+// queries here and in the comment API routes keep Payload's default overrideAccess and filter `status` themselves.
+// Keep them at `depth: 0`, so no draft word gets populated through a relation.
 export const PAGE_SIZE = 20;
 export const VISITOR_COOKIE = "bs_visitor";
 const ANONYMOUS = "Anonymer Berliner";
 const LISTED: CommentStatus[] = ["published", "hidden", "removed", "deleted"];
 
-/** The visitor's anonymous id (votes, reports). Created only when `create`; never readable by scripts. */
+/** The visitor's anonymous id (posts, votes, reports). Created only when `create`; never readable by scripts. */
 export const visitorId = (cookies: AstroCookies, create: boolean): string | undefined => {
   const existing = cookies.get(VISITOR_COOKIE)?.value;
   if (existing || !create) return existing;
@@ -32,7 +35,7 @@ export const hashEditKey = (key: string): string => createHash("sha256").update(
 const idOf = (rel: number | { id: number } | null | undefined): number | null =>
   rel == null ? null : typeof rel === "object" ? rel.id : rel;
 
-/** Maps a stored comment to what the browser may see; never carries editKeyHash. */
+/** Maps a stored comment to what the browser may see; never carries editKeyHash or authorTag. */
 export const toPublic = (c: Comment, myVote: -1 | 0 | 1 = 0): PublicComment => {
   const state =
     c.status === "published" ? "visible" : c.status === "hidden" ? "reviewing" : "removed";
@@ -74,13 +77,14 @@ export const listComments = async (
     payload.count({ collection: "comments", where: { status: { equals: "published" }, word } }),
   ]);
 
-  return { comments: await buildThreads(top.docs, wordId, visitor), hasMore: top.hasNextPage, total };
+  return {
+    comments: await buildThreads(top.docs, wordId, visitor),
+    hasMore: top.hasNextPage,
+    total,
+  };
 };
 
-/**
- * Top-level comments with their published replies and the visitor's votes. A placeholder only stays
- * to hold its visible replies.
- */
+/** Top-level comments with their published replies and the visitor's votes. */
 const buildThreads = async (
   tops: Comment[],
   wordId: number,
@@ -138,7 +142,9 @@ export const getThread = async (id: number, visitor?: string): Promise<null | Pu
   if (!top || top.parent || !LISTED.includes(top.status as CommentStatus)) return null;
   const wordId = idOf(top.word)!;
   // siteRead hides drafts: comments of an unpublished word are not there.
-  if (!(await orNull(payload.findByID({ collection: "words", depth: 0, id: wordId, ...siteRead() }))))
+  if (
+    !(await orNull(payload.findByID({ collection: "words", depth: 0, id: wordId, ...siteRead() })))
+  )
     return null;
   return (await buildThreads([top], wordId, visitor))[0] ?? null;
 };
