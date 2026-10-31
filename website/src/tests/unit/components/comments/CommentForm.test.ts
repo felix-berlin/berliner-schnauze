@@ -102,4 +102,25 @@ describe("CommentForm", () => {
       "Berliner Namen",
     );
   });
+
+  it("sends the trimmed name and „Abbrechen“ emits cancel", async () => {
+    const submit = vi.fn(async () => true);
+    const wrapper = mount(CommentForm, { props: { cancellable: true, submit } });
+    await wrapper.find("input").setValue("  Kiez-Kalle ");
+    await wrapper.find("textarea").setValue("Na sowat");
+    await wrapper.find("form").trigger("submit");
+    expect(submit).toHaveBeenCalledWith({ authorName: "Kiez-Kalle", text: "Na sowat" });
+    await wrapper.find("button[type=button]").trigger("click");
+    expect(wrapper.emitted("cancel")).toHaveLength(1);
+  });
+
+  it("shows ⌘ on Apple devices and Strg elsewhere", async () => {
+    expect(mount(CommentForm, { props: { submit: vi.fn() } }).find(".c-shortcut__key").text()).toBe("Strg");
+    const ua = vi.spyOn(navigator, "userAgent", "get").mockReturnValue("Mozilla/5.0 (Macintosh)");
+    const wrapper = mount(CommentForm, { props: { submit: vi.fn() } });
+    await flushPromises();
+    expect(wrapper.find(".c-shortcut__key").text()).toBe("⌘");
+    ua.mockRestore();
+  });
 });
+

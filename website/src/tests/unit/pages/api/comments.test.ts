@@ -204,3 +204,36 @@ describe("GET /api/comments", () => {
     expect(find.mock.calls[0][0]).toMatchObject({ page: 1, sort: ["-score", "-createdAt"] });
   });
 });
+
+describe("POST /api/comments edge cases", () => {
+  it("400 for a body that is not an object, 403 for a missing token", async () => {
+    expect((await post("Hallo")).status).toBe(400);
+    expect((await post({ ...valid, turnstileToken: undefined })).status).toBe(403);
+    expect(verifyTurnstile).not.toHaveBeenCalled();
+  });
+
+  it("accepts a reply to a published parent of the same word, populated or not", async () => {
+    for (const word of [5, { id: 5 }]) {
+      findByID.mockImplementation(async ({ collection }) =>
+        collection === "words" ? { id: 5 } : { id: 3, status: "published", word },
+      );
+      expect((await post({ ...valid, parentId: 3 })).status).toBe(201);
+    }
+  });
+
+  it("ignores taken docs without a pseudonym", async () => {
+    find.mockImplementation(async (args) =>
+      "authorTag" in args.where ? { docs: [] } : { docs: [{ pseudonym: null }] },
+    );
+    expect((await post(valid)).status).toBe(201);
+    expect(create.mock.calls[0][0].data.pseudonym).toMatch(/^Anonym/);
+  });
+});
+
+describe("GET /api/comments failure", () => {
+  it("502 when the database fails", async () => {
+    find.mockRejectedValue(new Error("connection refused"));
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    expect((await get("?word=5")).status).toBe(502);
+  });
+});

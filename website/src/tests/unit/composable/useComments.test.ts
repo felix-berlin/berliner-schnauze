@@ -181,4 +181,120 @@ describe("useComments", () => {
     );
     expect(c.comments.value).toHaveLength(0);
   });
+
+  it("toasts the server error, a generic error and a network failure", async () => {
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    const toast = vi.mocked(createToastNotify);
+    toast.mockClear();
+    fetchMock
+      .mockReturnValueOnce(answer({ error: "Kaputt" }, 400))
+      .mockReturnValueOnce(Promise.resolve({ json: () => Promise.reject(new Error("no json")), ok: false, status: 500 }))
+      .mockReturnValueOnce(Promise.reject(new Error("offline")));
+    const c = useComments(7);
+    expect(await c.report(1, "", "tok")).toBe(false);
+    expect(await c.report(1, "", "tok")).toBe(false);
+    expect(await c.report(1, "", "tok")).toBe(false);
+    expect(toast.mock.calls.map(([t]) => t.message)).toEqual([
+      "Kaputt",
+      "Dit hat leider nich geklappt.",
+      "Dit hat leider nich geklappt.",
+    ]);
+  });
+
+  it("report is true when the server accepts it", async () => {
+    fetchMock.mockReturnValueOnce(answer({ ok: true }, 201));
+    expect(await useComments(7).report(1, "Spam", "tok")).toBe(true);
+    expect(JSON.parse((fetchMock.mock.calls[0]![1] as { body: string }).body)).toEqual({
+      commentId: 1,
+      reason: "Spam",
+      turnstileToken: "tok",
+    });
+  });
+
+  it("loadMore skips while loading or without more pages, and keeps the page on failure", async () => {
+    let release!: (v: unknown) => void;
+    fetchMock.mockReturnValueOnce(new Promise((r) => (release = r)));
+    const c = useComments(7);
+    const first = c.loadMore();
+    await c.loadMore(); // already loading
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    release({ json: async () => ({ error: "x" }), ok: false, status: 500 });
+    await first;
+    expect(c.loaded.value).toBe(false);
+    fetchMock.mockReturnValueOnce(answer({ comments: [], hasMore: false, total: 0 }));
+    await c.loadMore();
+    expect(fetchMock.mock.calls[1]![0]).toContain("page=1"); // the failed page is asked again
+    await c.loadMore(); // no more pages
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("openThread does not add a thread twice when only the reply was missing", async () => {
+    fetchMock.mockReturnValueOnce(answer({ comment: comment(5, { replies: [comment(6, { parentId: 5 })] }) }));
+    const c = useComments(7);
+    c.comments.value = [comment(5)];
+    expect(await c.openThread(6)).toBe(true);
+    expect(c.comments.value.map((x) => x.id)).toEqual([5]);
+  });
+
+  it("post: a reply joins its parent; an unknown parent adds nothing; a failure is an error", async () => {
+    const ok = (id: number) => answer({ comment: comment(id, { parentId: 1 }), editKey: "k".repeat(43), pending: false }, 201);
+    fetchMock.mockReturnValueOnce(ok(8)).mockReturnValueOnce(ok(9)).mockReturnValueOnce(answer({ error: "x" }, 400));
+    const c = useComments(7);
+    c.comments.value = [comment(1)];
+    expect(await c.post({ authorName: "", parentId: 1, text: "Hallo" }, "tok")).toBe("ok");
+    expect(c.comments.value[0]!.replies.map((x) => x.id)).toEqual([8]);
+    expect(await c.post({ authorName: "", parentId: 99, text: "Hallo" }, "tok")).toBe("ok");
+    expect(c.comments.value.map((x) => x.id)).toEqual([1]);
+    expect(c.total.value).toBe(2);
+    expect(await c.post({ authorName: "", text: "Hallo" }, "tok")).toBe("error");
+  });
+
+  it("edit updates the comment, keeps replies, or marks it for review", async () => {
+    const reply = comment(2, { parentId: 1 });
+    fetchMock
+      .mockReturnValueOnce(answer({ comment: comment(1, { edited: true, text: "Neu" }), pending: false }))
+      .mockReturnValueOnce(answer({ pending: true }));
+    const c = useComments(7);
+    c.comments.value = [comment(1, { replies: [reply] })];
+    expect(await c.edit(1, "Neu")).toBe("ok");
+    expect(c.comments.value[0]).toMatchObject({ edited: true, replies: [reply], text: "Neu" });
+    expect(await c.edit(1, "www.x.de")).toBe("pending");
+    expect(c.comments.value[0]).toMatchObject({ state: "reviewing", text: null });
+  });
+
+  it("edit: error on failure, ok when the comment is no longer listed", async () => {
+    fetchMock.mockReturnValueOnce(answer({ error: "x" }, 403)).mockReturnValueOnce(answer({ pending: false }));
+    const c = useComments(7);
+    expect(await c.edit(1, "Neu")).toBe("error");
+    expect(await c.edit(1, "Neu")).toBe("ok");
+  });
+
+  it("remove turns the comment into a placeholder and lowers the count", async () => {
+    fetchMock
+      .mockReturnValueOnce(answer({ deleted: true }))
+      .mockReturnValueOnce(answer({ deleted: true }))
+      .mockReturnValueOnce(answer({ error: "x" }, 403));
+    const c = useComments(7);
+    c.comments.value = [comment(1)];
+    c.total.value = 1;
+    expect(await c.remove(1)).toBe(true);
+    expect(c.comments.value[0]).toMatchObject({ state: "removed", text: null });
+    expect(await c.remove(99)).toBe(true); // not listed: count never drops below 0
+    expect(c.total.value).toBe(0);
+    expect(await c.remove(1)).toBe(false);
+  });
+
+  it("vote ignores a second click while busy and reports a failure", async () => {
+    let release!: (v: unknown) => void;
+    fetchMock.mockReturnValueOnce(new Promise((r) => (release = r))).mockReturnValueOnce(answer({ error: "x" }, 500));
+    const c = useComments(7);
+    c.comments.value = [comment(1)];
+    const first = c.vote(1, 1);
+    expect(await c.vote(1, 1)).toBe(false);
+    release({ json: async () => ({ downvotes: 0, myVote: 1, upvotes: 1 }), ok: true, status: 200 });
+    expect(await first).toBe(true);
+    expect(c.busy.value.has(1)).toBe(false);
+    expect(await c.vote(1, -1)).toBe(false);
+    expect(c.comments.value[0]!.upvotes).toBe(1);
+  });
 });

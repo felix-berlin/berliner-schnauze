@@ -94,3 +94,8 @@ describe("GET /api/comments/[id]", () => {
     expect((await get("9")).status).toBe(502);
   });
 });
+
+describe("GET /api/comments/:id without id", () => {
+  it("400", async () => expect((await get(undefined as unknown as string)).status).toBe(400));
+});
+

@@ -124,3 +124,16 @@ describe("DELETE /api/comments/:id", () => {
     expect(update).not.toHaveBeenCalled();
   });
 });
+
+describe("own comment edge cases", () => {
+  it("400 without an id, 403 when the stored hash is missing", async () => {
+    const noId = await PATCH({
+      params: {},
+      request: new Request("https://x.test/api/comments", { body: JSON.stringify({ editKey: KEY, text: "neu jeschrieben" }), method: "POST" }),
+    } as unknown as APIContext);
+    expect(noId.status).toBe(400);
+    findByID.mockResolvedValue(stored({ editKeyHash: null }));
+    expect((await call(DELETE, { editKey: KEY })).status).toBe(403);
+  });
+});
+
