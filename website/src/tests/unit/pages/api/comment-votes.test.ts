@@ -109,4 +109,17 @@ describe("POST /api/comment-votes", () => {
     expect((await post({ commentId: 7, value: 1 })).status).toBe(502);
     expect((await post({ commentId: 7, value: 5 })).status).toBe(400);
   });
+  it("caps vote changes per IP and comment, even with a fresh cookie each time", async () => {
+    const vote = () =>
+      POST({
+        clientAddress: "10.0.0.1",
+        cookies: { get: () => undefined, set },
+        request: new Request("https://berliner-schnauze.wtf/api/comment-votes", {
+          body: JSON.stringify({ commentId: 99, value: 1 }),
+          method: "POST",
+        }),
+      } as unknown as APIContext);
+    for (let i = 0; i < 20; i++) expect((await vote()).status).toBe(200);
+    expect((await vote()).status).toBe(429);
+  });
 });

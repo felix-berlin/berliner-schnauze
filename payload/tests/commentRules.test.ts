@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { containsLink, hideThreshold, PSEUDONYMS, pickPseudonym, shouldAutoHide } from "../src/lib/comments";
+import {
+  containsLink,
+  hideThreshold,
+  PSEUDONYMS,
+  pickPseudonym,
+  shouldAutoHide,
+} from "../src/lib/comments";
 
 describe("containsLink", () => {
   it.each([
@@ -17,10 +23,14 @@ describe("containsLink", () => {
     "ende.Dann",
     "x.example.de",
   ])("%s → true", (t) => expect(containsLink(t)).toBe(true));
-  it.each(["Na und?", "Ick bin 1.5 Meter", "z.B. so", "Dit is ne Sache… ja.", "e-mail", "Wir sind ein e.V. wa"])(
-    "%s → false",
-    (t) => expect(containsLink(t)).toBe(false),
-  );
+  it.each([
+    "Na und?",
+    "Ick bin 1.5 Meter",
+    "z.B. so",
+    "Dit is ne Sache… ja.",
+    "e-mail",
+    "Wir sind ein e.V. wa",
+  ])("%s → false", (t) => expect(containsLink(t)).toBe(false));
 });
 describe("hideThreshold", () => {
   it.each([
@@ -28,7 +38,7 @@ describe("hideThreshold", () => {
     [0, 3],
     [9, 3],
     [25, 5],
-    [50, 8],
+    [50, 5],
   ])("score %i → %i", (s, n) => expect(hideThreshold(s)).toBe(n));
 });
 describe("shouldAutoHide", () => {

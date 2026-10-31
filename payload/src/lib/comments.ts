@@ -14,7 +14,9 @@ const DOMAIN = /(?<![a-z0-9.-])[a-z0-9][a-z0-9-]*(?:\.[a-z0-9-]+)*\.[a-z]{2,24}(
 
 export const containsLink = (text: string): boolean => LINK.test(text) || DOMAIN.test(text);
 
-export const hideThreshold = (score: number): number => Math.max(2, 3 + Math.floor(score / 10));
+// Capped at 5: votes are cheaper to stuff than reports (no captcha), so they must not shield a comment for good.
+export const hideThreshold = (score: number): number =>
+  Math.min(5, Math.max(2, 3 + Math.floor(score / 10)));
 
 export const shouldAutoHide = (c: {
   status: CommentStatus;
@@ -25,18 +27,66 @@ export const shouldAutoHide = (c: {
 
 // Anonymous commenters get one of these per word (gender agrees with "Anonymer/Anonyme/Anonymes").
 export const PSEUDONYMS = [
-  "Anonymer Spätikiosk", "Anonyme Currywurst", "Anonymes Kindl", "Anonyme Spreewaldgurke", "Anonyme Schrippe",
-  "Anonyme Molle", "Anonyme Bulette", "Anonymer Kiez-Kater", "Anonymer Fernsehturm", "Anonymes Ampelmännchen",
-  "Anonyme Spree", "Anonyme BVG", "Anonyme Ringbahn", "Anonyme Kneipe", "Anonyme Eckkneipe",
-  "Anonymer Hinterhof", "Anonymer Plattenbau", "Anonymer Döner", "Anonymer Pfannkuchen", "Anonyme Weiße mit Schuss",
-  "Anonymer Späti", "Anonyme Berliner Luft", "Anonymer Brandenburger", "Anonymes Brandenburger Tor", "Anonymer Kudamm",
-  "Anonyme Museumsinsel", "Anonymer Alexanderplatz", "Anonyme Weltzeituhr", "Anonymer Tempelhofer", "Anonymes Tempelhofer Feld",
-  "Anonyme U-Bahn", "Anonyme S-Bahn", "Anonyme Straßenbahn", "Anonymer Schienenersatzverkehr", "Anonymer Fahrkartenkontrolleur",
-  "Anonymer Flohmarkt", "Anonymer Mauerpark", "Anonyme Karaoke", "Anonyme Currywurst mit Pommes", "Anonyme Kartoffelsuppe",
-  "Anonymer Eisbein", "Anonyme Buletten-Pfanne", "Anonymes Schultheiss", "Anonymes Berliner Pilsner", "Anonymer Kümmerling",
-  "Anonymer Kiezspaziergang", "Anonyme Balkonien", "Anonymer Berliner Bär", "Anonymer Teddybär", "Anonyme Havel",
-  "Anonymer Müggelsee", "Anonymer Wannsee", "Anonymer Grunewald", "Anonymes Kreuzberg", "Anonymer Prenzlauer Berg",
-  "Anonymer Hauptbahnhof", "Anonymer Flughafen", "Anonymes Schlagloch", "Anonymer Baustellenkran", "Anonymer Kiezkönig",
+  "Anonymer Spätikiosk",
+  "Anonyme Currywurst",
+  "Anonymes Kindl",
+  "Anonyme Spreewaldgurke",
+  "Anonyme Schrippe",
+  "Anonyme Molle",
+  "Anonyme Bulette",
+  "Anonymer Kiez-Kater",
+  "Anonymer Fernsehturm",
+  "Anonymes Ampelmännchen",
+  "Anonyme Spree",
+  "Anonyme BVG",
+  "Anonyme Ringbahn",
+  "Anonyme Kneipe",
+  "Anonyme Eckkneipe",
+  "Anonymer Hinterhof",
+  "Anonymer Plattenbau",
+  "Anonymer Döner",
+  "Anonymer Pfannkuchen",
+  "Anonyme Weiße mit Schuss",
+  "Anonymer Späti",
+  "Anonyme Berliner Luft",
+  "Anonymer Brandenburger",
+  "Anonymes Brandenburger Tor",
+  "Anonymer Kudamm",
+  "Anonyme Museumsinsel",
+  "Anonymer Alexanderplatz",
+  "Anonyme Weltzeituhr",
+  "Anonymer Tempelhofer",
+  "Anonymes Tempelhofer Feld",
+  "Anonyme U-Bahn",
+  "Anonyme S-Bahn",
+  "Anonyme Straßenbahn",
+  "Anonymer Schienenersatzverkehr",
+  "Anonymer Fahrkartenkontrolleur",
+  "Anonymer Flohmarkt",
+  "Anonymer Mauerpark",
+  "Anonymes Karaoke",
+  "Anonyme Currywurst mit Pommes",
+  "Anonyme Kartoffelsuppe",
+  "Anonymes Eisbein",
+  "Anonyme Buletten-Pfanne",
+  "Anonymes Schultheiss",
+  "Anonymes Berliner Pilsner",
+  "Anonymer Kümmerling",
+  "Anonymer Kiezspaziergang",
+  "Anonymes Balkonien",
+  "Anonymer Berliner Bär",
+  "Anonymer Teddybär",
+  "Anonyme Havel",
+  "Anonymer Müggelsee",
+  "Anonymer Wannsee",
+  "Anonymer Grunewald",
+  "Anonymes Kreuzberg",
+  "Anonymer Prenzlauer Berg",
+  "Anonymer Hauptbahnhof",
+  "Anonymer Flughafen",
+  "Anonymes Schlagloch",
+  "Anonymer Baustellenkran",
+  "Anonymer Kiezkönig",
 ] as const;
 
 /** First unused pseudonym, starting at an index derived from the hex `tag`; when all are taken, the start name gets a number. */

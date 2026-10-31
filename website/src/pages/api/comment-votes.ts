@@ -4,9 +4,10 @@ import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { isUniqueViolation, orNull, reply } from "@utils/apiReply.ts";
 import { voteSchema } from "@utils/commentSchema.ts";
+import { clientIp, rateLimited } from "@utils/rateLimit.ts";
 
 /** One vote per visitor and comment; Payload's hooks recount the comment, we only read it back. */
-export const POST: APIRoute = async ({ cookies, request }) => {
+export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
   const input = voteSchema.safeParse(await request.json().catch(() => undefined));
   if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
   const { commentId, value } = input.data;
@@ -17,6 +18,16 @@ export const POST: APIRoute = async ({ cookies, request }) => {
       payload.findByID({ collection: "comments", depth: 0, id: commentId }),
     );
     if (comment?.status !== "published") return reply({ error: "Kommentar nicht gefunden" }, 404);
+
+    // The visitor cookie is free to drop, so cap vote changes per IP and comment as well.
+    const ip = clientIp(request.headers.get("x-forwarded-for"), clientAddress);
+    const wait = rateLimited(ip, {
+      key: `comment-vote ${commentId}`,
+      max: 20,
+      prefix: "",
+      windowMs: 24 * 60 * 60_000,
+    });
+    if (wait > 0) return reply({ error: "Jenug jestimmt für heute." }, 429);
 
     const visitor = visitorId(cookies, true) as string;
     const mine = async () =>
@@ -56,7 +67,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
     const fresh = await payload.findByID({ collection: "comments", depth: 0, id: commentId });
     return reply({ downvotes: fresh.downvotes, myVote: value, upvotes: fresh.upvotes }, 200);
   } catch (error) {
-    console.error("[comments] vote failed:", error);
+    console.error(`[comments] vote on ${commentId} failed:`, error);
     return reply({ error: "Die Stimme konnte leider nicht gezählt werden." }, 502);
   }
 };
