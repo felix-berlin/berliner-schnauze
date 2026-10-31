@@ -15,9 +15,10 @@
     <div class="c-comment-form__row">
       <label class="c-label" :for="`${uid}-text`">{{ label }}</label>
       <textarea :id="`${uid}-text`" v-model="text" class="c-textarea" rows="3" />
-      <span class="c-comment-form__counter" :class="{ 'is-over': over }" aria-live="polite"
+      <span class="c-comment-form__counter" :class="{ 'is-over': over }"
         >{{ text.length }} / {{ COMMENT_MAX }}</span
       >
+      <span class="u-sr-only" role="status">{{ announce }}</span>
     </div>
     <p class="c-comment-form__privacy">
       Mit dem Abschicken wird dein Kommentar öffentlich angezeigt. Was wir dabei speichern, steht in

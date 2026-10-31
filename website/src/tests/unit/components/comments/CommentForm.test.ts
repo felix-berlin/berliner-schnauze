@@ -25,4 +25,16 @@ describe("CommentForm", () => {
     await flushPromises();
     expect((area.element as HTMLTextAreaElement).value).toBe("");
   });
+
+  it("announces the remaining characters only near the limit", async () => {
+    const wrapper = mount(CommentForm, { props: { submit: vi.fn() } });
+    const status = () => wrapper.find("[role=status]").text();
+    expect(wrapper.find(".c-comment-form__counter").attributes("aria-live")).toBeUndefined();
+    await wrapper.find("textarea").setValue("a".repeat(100));
+    expect(status()).toBe("");
+    await wrapper.find("textarea").setValue("a".repeat(960));
+    expect(status()).toBe("Noch 40 Zeichen");
+    await wrapper.find("textarea").setValue("a".repeat(1003));
+    expect(status()).toBe("3 Zeichen zu viel");
+  });
 });
