@@ -30,7 +30,7 @@ describe("WordComments", () => {
       props: { wordId: 7 },
     });
     await flushPromises();
-    expect(wrapper.text()).toContain("Noch keen Senf dazu. Mach den Anfang!");
+    expect(wrapper.text()).toContain("Hier hat noch keener wat jesacht. Fang du doch an!");
     expect(wrapper.text()).toContain("(0)");
     expect(wrapper.find("[aria-pressed=true]").text()).toBe("Beste");
   });
@@ -43,7 +43,7 @@ describe("WordComments", () => {
     });
     const wrapper = mount(WordComments, { global: { stubs: { TurnStile: true } }, props: { wordId: 7 } });
     await flushPromises();
-    expect(wrapper.text()).not.toContain("Noch keen Senf");
+    expect(wrapper.text()).not.toContain("noch keener wat jesacht");
   });
 
   it("loads the linked thread and highlights its card for a #kommentar hash", async () => {

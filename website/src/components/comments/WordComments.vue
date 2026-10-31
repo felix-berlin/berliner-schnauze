@@ -36,7 +36,7 @@
     </div>
 
     <p v-if="ctx.loaded.value && !ctx.comments.value.length && !ctx.hasMore.value" class="c-word-comments__empty">
-      Noch keen Senf dazu. Mach den Anfang!
+      Hier hat noch keener wat jesacht. Fang du doch an!
     </p>
 
     <WindowVirtualizer

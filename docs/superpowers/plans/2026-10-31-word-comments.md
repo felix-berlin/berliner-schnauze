@@ -258,7 +258,7 @@ UI decisions (mockup `comment-layout-v2.html` in `.superpowers/brainstorm/…`):
 - One shared `TurnStile` (`appearance="interaction-only"`) in `WordComments`, wrapped with the line „Kurz jucken, ob de 'n echter Berliner bist“ (only visible when the widget renders something); its token is used by the next post or report, then `reset()`.
 - List: `WindowVirtualizer` from `virtua/vue` over top-level comments; each item a `CommentCard` with its replies. Load the next page when a sentinel after the list intersects (`useIntersectionObserver`) and `hasMore && !loading`. Cards keep their height stable while a reply/edit form opens (virtua re-measures; no fixed `itemSize`).
 - `CommentCard`: name, relative time (`Intl.RelativeTimeFormat("de")`), „(bearbeitet)“, text with `white-space: pre-line` (never `v-html`), vote pill `▲ n ▼` (own vote orange, buttons disabled while pending), „Antworten“, „Melden“ (opens inline reason field + „Melden“ button; then „Danke, wir kieken drüber.“), „Bearbeiten“/„Löschen“ while `canEdit`. Placeholder states show „Kommentar entfernt“ / „Kommentar entfernt: <Grund>“ / „Wird geprüft“ without actions.
-- Empty state: „Noch keen Senf dazu. Mach den Anfang!“
+- Empty state: „Hier hat noch keener wat jesacht. Fang du doch an!“
 - `trackEvent("Comments", "Post" | "Reply" | "Vote" | "Report", String(wordId))`.
 
 - [ ] **Step 1: Failing tests (composable, `fetch` mocked):** `loadMore appends page 2`, `sort change reloads from page 1`, `post stores the edit key and prepends the comment`, `pending post does not prepend`, `vote updates counts and myVote from the response`, `canEdit false after 5 min` (fake timers).
