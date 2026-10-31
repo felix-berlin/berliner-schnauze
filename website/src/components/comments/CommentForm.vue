@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { COMMENT_MAX, NAME_MAX } from "payload-app/comments";
+import { COMMENT_MAX, COMMENT_MIN, NAME_MAX } from "payload-app/comments";
 import { computed, onMounted, ref, useId, useTemplateRef, watch } from "vue";
 
 // Set after mount so the server render and hydration agree (both say „Strg“).
@@ -111,8 +111,8 @@ const announce = computed(() =>
       : "",
 );
 const over = computed(() => text.value.length > COMMENT_MAX);
-// The server wants at least 2 characters (commentSchema)
-const ready = computed(() => text.value.trim().length >= 2 && !over.value);
+// Same minimum as the server (commentSchema); the hint does not name the number
+const ready = computed(() => text.value.trim().length >= COMMENT_MIN && !over.value);
 
 watch(text, () => {
   if (error.value && ready.value) error.value = "";
@@ -123,7 +123,7 @@ const onSubmit = async (): Promise<void> => {
   if (!ready.value) {
     error.value = over.value
       ? `Dit is zu lang: höchstens ${COMMENT_MAX} Zeichen.`
-      : "Schreib erstmal wat (mindestens 2 Zeichen).";
+      : "Bisken mehr musste schon schreiben.";
     area.value?.focus();
     return;
   }

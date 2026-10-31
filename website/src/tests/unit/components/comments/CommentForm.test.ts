@@ -46,10 +46,10 @@ describe("CommentForm", () => {
     await wrapper.find("form").trigger("submit");
     expect(submit).not.toHaveBeenCalled();
     const hint = wrapper.find(".c-comment-form__error");
-    expect(hint.text()).toBe("Schreib erstmal wat (mindestens 2 Zeichen).");
+    expect(hint.text()).toBe("Bisken mehr musste schon schreiben.");
     expect(area.attributes("aria-describedby")).toBe(hint.attributes("id"));
     expect(area.attributes("aria-invalid")).toBe("true");
-    await area.setValue("Na");
+    await area.setValue("Na, ditt stimmt.");
     expect(wrapper.find(".c-comment-form__error").exists()).toBe(false);
     expect(area.attributes("aria-invalid")).toBeUndefined();
   });

@@ -1,4 +1,5 @@
 // Pure comment rules, shared by Payload hooks and the site (`payload-app/comments`): no payload/next/config imports.
+export const COMMENT_MIN = 10;
 export const COMMENT_MAX = 1000;
 export const NAME_MAX = 50;
 export const EDIT_WINDOW_MS = 5 * 60_000;

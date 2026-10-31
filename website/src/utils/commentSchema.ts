@@ -1,11 +1,11 @@
-import { COMMENT_MAX, NAME_MAX } from "payload-app/comments";
+import { COMMENT_MAX, COMMENT_MIN, NAME_MAX } from "payload-app/comments";
 import { z } from "zod";
 
 const id = z.number().int().positive();
 const text = z
   .string()
   .trim()
-  .min(2, "Mehr als een Buchstabe sollte's schon sein.")
+  .min(COMMENT_MIN, "Bisken mehr musste schon schreiben.")
   .max(COMMENT_MAX, "Ditt is ein bisken zu lang.");
 
 export const commentCreateSchema = z.object({
