@@ -210,9 +210,32 @@
     }
   }
 
+  // Compact inline report form: label above, field + actions on one row when there is room.
   &__report {
     display: grid;
+    gap: vars.$spacer * 0.25;
+  }
+
+  &__report-row {
+    display: flex;
+    flex-wrap: wrap;
     gap: vars.$spacer * 0.5;
+  }
+
+  &__report-input {
+    flex: 1 1 14rem;
+    min-inline-size: 0;
+  }
+
+  &__report-actions {
+    display: flex;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__report-button {
+    --padding: #{vars.$spacer * 0.5 vars.$spacer};
+
+    min-block-size: 44px;
   }
 
   &__thanks {

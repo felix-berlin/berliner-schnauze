@@ -9,15 +9,32 @@
         type="text"
         :maxlength="NAME_MAX"
         autocomplete="nickname"
-        placeholder="Anonymer Berliner"
+        placeholder="z. B. Kiez-Kalle"
+        :aria-describedby="`${uid}-name-hint`"
       />
+      <span :id="`${uid}-name-hint`" class="c-comment-form__hint">
+        Leer jelassen? Dann kriegste 'n Berliner Namen, z. B. „Anonyme Schrippe“.
+      </span>
     </div>
     <div class="c-comment-form__row">
       <label class="c-label" :for="`${uid}-text`">{{ label }}</label>
-      <textarea :id="`${uid}-text`" v-model="text" class="c-textarea" rows="3" />
-      <span class="c-comment-form__counter" :class="{ 'is-over': over }"
-        >{{ text.length }} / {{ COMMENT_MAX }}</span
-      >
+      <textarea
+        :id="`${uid}-text`"
+        ref="area"
+        v-model="text"
+        class="c-textarea"
+        rows="3"
+        :aria-invalid="error ? true : undefined"
+        :aria-describedby="error ? `${uid}-error` : undefined"
+        @keydown.enter.ctrl.exact.prevent="onSubmit"
+        @keydown.enter.meta.exact.prevent="onSubmit"
+      />
+      <div class="c-comment-form__under">
+        <span v-if="error" :id="`${uid}-error`" class="c-comment-form__error">{{ error }}</span>
+        <span class="c-comment-form__counter" :class="{ 'is-over': over }"
+          >{{ text.length }} / {{ COMMENT_MAX }}</span
+        >
+      </div>
       <span class="u-sr-only" role="status">{{ announce }}</span>
     </div>
     <p class="c-comment-form__privacy">
@@ -25,19 +42,30 @@
       der <a href="/datenschutz#kommentare">Datenschutzerklärung</a>.
     </p>
     <div class="c-comment-form__actions">
-      <button class="c-button c-button--primary" type="submit" :disabled="!ready || sending">
-        Abschicken
+      <button
+        class="c-button c-button--primary c-comment-form__button"
+        type="submit"
+        :disabled="sending"
+        :aria-busy="sending"
+      >
+        {{ sending ? "Wird jeschickt …" : "Abschicken" }}
       </button>
-      <button v-if="cancellable" class="c-button" type="button" @click="emit('cancel')">
+      <button
+        v-if="cancellable"
+        class="c-button c-comment-form__button"
+        type="button"
+        @click="emit('cancel')"
+      >
         Abbrechen
       </button>
+      <span class="c-comment-form__kbd" aria-hidden="true"><kbd>Strg</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
     </div>
   </form>
 </template>
 
 <script setup lang="ts">
 import { COMMENT_MAX, NAME_MAX } from "payload-app/comments";
-import { computed, ref, useId } from "vue";
+import { computed, ref, useId, useTemplateRef, watch } from "vue";
 
 const {
   cancellable = false,
@@ -60,6 +88,9 @@ const uid = useId();
 const authorName = ref("");
 const text = ref(initialText);
 const sending = ref(false);
+// Shown after a refused submit (button stays enabled, so the reason is never hidden behind it).
+const error = ref("");
+const area = useTemplateRef<HTMLTextAreaElement>("area");
 
 // Announced to screen readers only near or over the limit, not on every keystroke.
 const announce = computed(() =>
@@ -73,8 +104,20 @@ const over = computed(() => text.value.length > COMMENT_MAX);
 // The server wants at least 2 characters (commentSchema)
 const ready = computed(() => text.value.trim().length >= 2 && !over.value);
 
+watch(text, () => {
+  if (error.value && ready.value) error.value = "";
+});
+
 const onSubmit = async (): Promise<void> => {
-  if (!ready.value || sending.value) return;
+  if (sending.value) return;
+  if (!ready.value) {
+    error.value = over.value
+      ? `Dit is zu lang: höchstens ${COMMENT_MAX} Zeichen.`
+      : "Schreib erstmal wat (mindestens 2 Zeichen).";
+    area.value?.focus();
+    return;
+  }
+  error.value = "";
   sending.value = true;
   const ok = await submit({ authorName: authorName.value.trim(), text: text.value.trim() });
   sending.value = false;

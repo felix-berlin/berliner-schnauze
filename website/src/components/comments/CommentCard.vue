@@ -112,8 +112,34 @@
         @submit.prevent="submitReport"
       >
         <label class="c-label" :for="`${uid}-reason`">Wat stimmt nich? (optional)</label>
-        <input :id="`${uid}-reason`" v-model="reason" class="c-input" type="text" maxlength="300" />
-        <button class="c-button" type="submit" :disabled="reporting">Melden</button>
+        <div class="c-comment-card__report-row">
+          <input
+            :id="`${uid}-reason`"
+            v-model="reason"
+            class="c-input c-comment-card__report-input"
+            type="text"
+            maxlength="300"
+            placeholder="z. B. Spam, beleidigend"
+          />
+          <div class="c-comment-card__report-actions">
+            <button
+              class="c-button c-button--primary c-comment-card__report-button"
+              type="submit"
+              :disabled="reporting"
+              :aria-busy="reporting"
+            >
+              {{ reporting ? "Wird jemeldet …" : "Melden" }}
+            </button>
+            <button
+              class="c-button c-comment-card__report-button"
+              type="button"
+              :disabled="reporting"
+              @click="mode = null"
+            >
+              Abbrechen
+            </button>
+          </div>
+        </div>
       </form>
     </template>
 

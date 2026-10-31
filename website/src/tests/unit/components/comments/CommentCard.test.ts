@@ -2,7 +2,7 @@ import type { PublicComment } from "@utils/commentSchema.ts";
 
 import CommentCard from "@components/comments/CommentCard.vue";
 import { commentsKey } from "@composables/useComments.ts";
-import { mount, type VueWrapper } from "@vue/test-utils";
+import { flushPromises, mount, type VueWrapper } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
@@ -125,7 +125,28 @@ describe("CommentCard", () => {
     await form.trigger("submit");
     expect(ctx.report).toHaveBeenCalledTimes(1);
     expect(form.find("button").attributes("disabled")).toBeDefined();
+    expect(form.find("button").attributes("aria-busy")).toBe("true");
+    expect(form.find("button").text()).toBe("Wird jemeldet …");
     done(true);
+  });
+
+  it("report form sends the trimmed reason and „Abbrechen“ closes it", async () => {
+    const { ctx, wrapper } = mountCard({});
+    const openReport = async () =>
+      (await openMenu(wrapper)).find((b) => b.text() === "Melden")!.trigger("click");
+    await openReport();
+    const buttons = () => wrapper.findAll(".c-comment-card__report button").map((b) => b.text());
+    expect(buttons()).toEqual(["Melden", "Abbrechen"]);
+    await wrapper.find(".c-comment-card__report button[type=button]").trigger("click");
+    expect(wrapper.find(".c-comment-card__report").exists()).toBe(false);
+    expect(ctx.report).not.toHaveBeenCalled();
+
+    await openReport();
+    await wrapper.find(".c-comment-card__report input").setValue("  Spam  ");
+    await wrapper.find(".c-comment-card__report").trigger("submit");
+    await flushPromises();
+    expect(ctx.report).toHaveBeenCalledWith(1, "Spam", "tok");
+    expect(wrapper.text()).toContain("Danke, wir kieken drüber.");
   });
 
   it("hides „Antworten“ on a reply under a placeholder", () => {
