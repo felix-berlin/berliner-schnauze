@@ -30,12 +30,16 @@
           wrapper-id="commentsTurnstile"
           appearance="interaction-only"
           :site-key="TURNSTILE_SITE_KEY"
-          @token="token = $event"
+          @token="onToken"
+          @error="captchaFailed = true"
         />
       </div>
     </div>
 
-    <p v-if="ctx.loaded.value && !ctx.comments.value.length && !ctx.hasMore.value" class="c-word-comments__empty">
+    <p
+      v-if="ctx.loaded.value && !ctx.comments.value.length && !ctx.hasMore.value"
+      class="c-word-comments__empty"
+    >
       Hier hat noch keener wat jesacht. Fang du doch an!
     </p>
 
@@ -51,11 +55,24 @@
       <div :key="item.id" class="c-word-comments__item"><CommentCard :comment="item" /></div>
     </WindowVirtualizer>
 
+    <p v-if="ctx.failed.value && !ctx.loading.value" class="c-word-comments__empty" role="alert">
+      Die Kommentare wollten grad nich laden.
+      <button
+        type="button"
+        class="c-button c-button--primary c-word-comments__retry"
+        @click="ctx.loadMore()"
+      >
+        Nochmal versuchen
+      </button>
+    </p>
+
     <div ref="sentinel" class="c-word-comments__sentinel" aria-hidden="true" />
   </section>
 </template>
 
 <script setup lang="ts">
+import CommentCard from "@components/comments/CommentCard.vue";
+import CommentForm from "@components/comments/CommentForm.vue";
 import TurnStile from "@components/TurnStile.vue";
 import { commentsKey, useComments, type CommentsContext } from "@composables/useComments.ts";
 import { createToastNotify } from "@stores/toastNotify.ts";
@@ -70,9 +87,6 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
 import { WindowVirtualizer } from "virtua/vue";
 import { nextTick, onMounted, provide, ref, useTemplateRef } from "vue";
 
-import CommentCard from "./CommentCard.vue";
-import CommentForm from "./CommentForm.vue";
-
 const { wordId } = defineProps<{ wordId: number }>();
 
 const SORTS = [
@@ -83,14 +97,28 @@ const SORTS = [
 const comments = useComments(wordId);
 // A token works once; the widget issues the next one after reset().
 const token = ref("");
+// The check cannot run (script blocked, bad site key): waiting would never help.
+const captchaFailed = ref(false);
+const onToken = (value: string): void => {
+  token.value = value;
+  if (value) captchaFailed.value = false;
+};
 const turnstile = useTemplateRef<{ reset: () => void }>("turnstile");
 const ctx: CommentsContext = {
   ...comments,
   resetCaptcha: () => turnstile.value?.reset(),
   takeToken: () => {
-    if (!token.value)
-      createToastNotify({ message: "Moment noch, ick prüf dich kurz.", status: "warning" });
-    return token.value || null;
+    if (token.value) return token.value;
+    createToastNotify(
+      captchaFailed.value
+        ? {
+            message:
+              "Die Prüfung, ob de 'n Mensch bist, klemmt. Lad die Seite neu oder mach den Blocker kurz aus.",
+            status: "error",
+          }
+        : { message: "Moment noch, ick prüf dich kurz.", status: "warning" },
+    );
+    return null;
   },
   token,
 };
@@ -120,7 +148,9 @@ useIntersectionObserver(
 );
 
 // #kommentar-<id>: load the thread if needed, scroll to the card, highlight it for a few seconds.
-const list = useTemplateRef<{ scrollToIndex: (i: number, o?: { align: "center" }) => void }>("list");
+const list = useTemplateRef<{ scrollToIndex: (i: number, o?: { align: "center" }) => void }>(
+  "list",
+);
 const clearHighlight = useTimeoutFn(() => (comments.highlighted.value = null), 4000, {
   immediate: false,
 });

@@ -2,6 +2,7 @@ import type { PublicComment } from "@utils/commentSchema.ts";
 import type { InjectionKey, Ref } from "vue";
 
 import { createToastNotify } from "@stores/toastNotify.ts";
+import { reportError } from "@utils/reportError.ts";
 import { useIntervalFn, useLocalStorage } from "@vueuse/core";
 import { EDIT_WINDOW_MS } from "payload-app/comments";
 import { ref, watch } from "vue";
@@ -17,11 +18,7 @@ const json = (body: unknown) => ({
 });
 
 /** Runs a request; null (plus a toast) when it failed. 429 keeps the input, the caller decides what else. */
-const call = async <T>(
-  url: string,
-  init?: RequestInit,
-  notFound?: string,
-): Promise<null | T> => {
+const call = async <T>(url: string, init?: RequestInit, notFound?: string): Promise<null | T> => {
   try {
     const res = await fetch(url, init);
     if (res.status === 404 && notFound) {
@@ -35,16 +32,19 @@ const call = async <T>(
       });
       return null;
     }
-    const body = (await res.json().catch(() => ({}))) as T & { error?: string };
-    if (!res.ok) {
+    const body = (await res.json().catch(() => null)) as (T & { error?: string }) | null;
+    // A 2xx without a JSON body is a failure too: the caller would treat `{}` as done.
+    if (!res.ok || !body) {
       createToastNotify({
-        message: body.error || "Dit hat leider nich geklappt.",
+        message: body?.error || "Dit hat leider nich geklappt.",
         status: "error",
       });
       return null;
     }
     return body;
-  } catch {
+  } catch (error) {
+    // fetch() rejects with a TypeError when offline; anything else is a bug worth reporting.
+    if (!(error instanceof TypeError)) reportError(error);
     createToastNotify({ message: "Dit hat leider nich geklappt.", status: "error" });
     return null;
   }
@@ -66,6 +66,8 @@ export const useComments = (wordId: number) => {
   const hasMore = ref(true);
   const loading = ref(false);
   const loaded = ref(false);
+  /** The last page failed to load; the list offers a retry instead of waiting for a scroll that never comes. */
+  const failed = ref(false);
   const busy = ref(new Set<number>());
   /** The comment a link points at; its card shows the highlight. */
   const highlighted = ref<null | number>(null);
@@ -76,7 +78,15 @@ export const useComments = (wordId: number) => {
   const tick = ref(0);
   const ticker = useIntervalFn(() => tick.value++, 1000, { immediate: false });
   const fresh = (k: { createdAt: number }) => Date.now() - k.createdAt < EDIT_WINDOW_MS;
-  keys.value = Object.fromEntries(Object.entries(keys.value).filter(([, k]) => fresh(k)));
+  // localStorage is user-editable: anything malformed counts as no keys rather than breaking the island.
+  const isRecord = (v: unknown): v is Record<string, unknown> =>
+    typeof v === "object" && v !== null && !Array.isArray(v);
+  keys.value = Object.fromEntries(
+    Object.entries(isRecord(keys.value) ? keys.value : {}).filter(
+      ([, k]) =>
+        isRecord(k) && typeof k.createdAt === "number" && fresh(k as { createdAt: number }),
+    ),
+  ) as Keys;
   // Only tick while an edit key can still expire.
   watch(
     () => Object.keys(keys.value).length > 0,
@@ -92,6 +102,7 @@ export const useComments = (wordId: number) => {
 
   // Own comment ids outlive the edit key, so „Melden“ stays hidden on them.
   const own = useLocalStorage<number[]>("bs-own-comments", []);
+  if (!Array.isArray(own.value)) own.value = [];
   const isOwn = (id: number): boolean => own.value.includes(id);
 
   const find = (id: number): PublicComment | undefined => {
@@ -111,6 +122,7 @@ export const useComments = (wordId: number) => {
     );
     if (mine !== generation) return; // sort changed meanwhile; that reload owns `loading`
     loading.value = false;
+    failed.value = !data;
     if (!data) return;
     page += 1;
     loaded.value = true;
@@ -158,7 +170,8 @@ export const useComments = (wordId: number) => {
       own.value = [data.comment.id, ...own.value].slice(0, 200);
       const parent = input.parentId ? find(input.parentId) : undefined;
       if (parent) parent.replies.push(data.comment);
-      else if (!input.parentId) comments.value.unshift(data.comment);
+      else if (input.parentId) void openThread(input.parentId); // parent left the list (sort/page change)
+      else comments.value.unshift(data.comment);
       total.value += 1;
     }
     return told(data.pending);
@@ -216,6 +229,7 @@ export const useComments = (wordId: number) => {
     canEdit,
     comments,
     edit,
+    failed,
     hasMore,
     highlighted,
     isOwn,

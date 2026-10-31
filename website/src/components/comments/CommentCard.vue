@@ -157,14 +157,13 @@
 <script setup lang="ts">
 import type { PublicComment } from "@utils/commentSchema.ts";
 
+import CommentForm from "@components/comments/CommentForm.vue";
 import DropdownPopover from "@components/DropdownPopover.vue";
 import { commentsKey } from "@composables/useComments.ts";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
 import { useClipboard } from "@vueuse/core";
 import { computed, defineAsyncComponent, inject, ref, useId } from "vue";
-
-import CommentForm from "./CommentForm.vue";
 
 const IconUp = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-up"));
 const IconDown = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-down"));

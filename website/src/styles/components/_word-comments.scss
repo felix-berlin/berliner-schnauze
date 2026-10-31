@@ -73,6 +73,10 @@
     border-radius: 4px;
   }
 
+  &__retry {
+    margin-block-start: vars.$spacer * 0.75;
+  }
+
   &__list {
     margin: 0;
     padding: 0;
