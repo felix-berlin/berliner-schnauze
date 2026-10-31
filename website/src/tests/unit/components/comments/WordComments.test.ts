@@ -25,4 +25,15 @@ describe("WordComments", () => {
     expect(wrapper.text()).toContain("(0)");
     expect(wrapper.find("[aria-pressed=true]").text()).toBe("Beste");
   });
+
+  it("no empty state while another page is still to come", async () => {
+    fetchMock.mockResolvedValue({
+      json: async () => ({ comments: [], hasMore: true, total: 3 }),
+      ok: true,
+      status: 200,
+    });
+    const wrapper = mount(WordComments, { global: { stubs: { TurnStile: true } }, props: { wordId: 7 } });
+    await flushPromises();
+    expect(wrapper.text()).not.toContain("Noch keen Senf");
+  });
 });

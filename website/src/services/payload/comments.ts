@@ -36,7 +36,7 @@ export const toPublic = (c: Comment, myVote: -1 | 0 | 1 = 0): PublicComment => {
   const state =
     c.status === "published" ? "visible" : c.status === "hidden" ? "reviewing" : "removed";
   return {
-    authorName: c.authorName?.trim() || ANONYMOUS,
+    authorName: state === "visible" ? c.authorName?.trim() || ANONYMOUS : ANONYMOUS,
     createdAt: c.createdAt,
     downvotes: c.downvotes ?? 0,
     edited: Boolean(c.editedAt),
@@ -86,9 +86,7 @@ export const listComments = async (
       ).docs
     : [];
   // A reply has no thread of its own: removed or hidden ones are never fetched.
-  const visibleReplies = replies;
-
-  const allIds = [...ids, ...visibleReplies.map((r) => r.id)];
+  const allIds = [...ids, ...replies.map((r) => r.id)];
   const votes =
     visitor && allIds.length
       ? (
@@ -105,7 +103,7 @@ export const listComments = async (
 
   const comments: PublicComment[] = [];
   for (const c of top.docs) {
-    const own = visibleReplies.filter((r) => idOf(r.parent) === c.id);
+    const own = replies.filter((r) => idOf(r.parent) === c.id);
     // A placeholder only stays to hold its visible replies.
     if (c.status !== "published" && !own.length) continue;
     comments.push({ ...toPublic(c, vote(c.id)), replies: own.map((r) => toPublic(r, vote(r.id))) });

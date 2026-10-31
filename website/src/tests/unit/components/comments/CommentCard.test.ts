@@ -78,4 +78,25 @@ describe("CommentCard", () => {
     await wrapper.find(".c-comment-card__vote-up").trigger("click");
     expect(ctx.vote).toHaveBeenCalledWith(1, 0);
   });
+
+  it("report submit is disabled while pending and sends once", async () => {
+    const { ctx, wrapper } = mountCard({});
+    let done!: (v: boolean) => void;
+    ctx.report.mockReturnValue(new Promise<boolean>((r) => (done = r)));
+    await wrapper.findAll(".c-comment-card__link")[1]!.trigger("click");
+    const form = wrapper.find(".c-comment-card__report");
+    await form.trigger("submit");
+    await form.trigger("submit");
+    expect(ctx.report).toHaveBeenCalledTimes(1);
+    expect(form.find("button").attributes("disabled")).toBeDefined();
+    done(true);
+  });
+
+  it("hides „Antworten“ on a reply under a placeholder", () => {
+    const placeholder = { ...base, id: 2, replies: [{ ...base, id: 3, parentId: 2 }], state: "removed" as const, text: null };
+    const { wrapper } = mountCard(placeholder);
+    expect(wrapper.text()).toContain("Hallo");
+    expect(wrapper.find(".c-comment-card__reply").exists()).toBe(false);
+    expect(mountCard({}).wrapper.find(".c-comment-card__reply").exists()).toBe(true);
+  });
 });

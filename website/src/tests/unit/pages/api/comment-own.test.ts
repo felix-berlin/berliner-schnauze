@@ -114,7 +114,7 @@ describe("DELETE /api/comments/:id", () => {
     const res = await call(DELETE, { editKey: KEY });
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ deleted: true });
-    expect(update.mock.calls[0][0]).toMatchObject({ data: { status: "deleted" }, id: 9 });
+    expect(update.mock.calls[0][0]).toMatchObject({ data: { authorName: null, status: "deleted", text: "[gelöscht]" }, id: 9 });
   });
 
   it("403 wrong key or after the window", async () => {

@@ -49,6 +49,7 @@
           </button>
         </span>
         <button
+          v-if="canReply"
           class="c-comment-card__reply c-comment-card__link"
           type="button"
           @click="toggle('reply')"
@@ -81,12 +82,17 @@
       >
         <label class="c-label" :for="`${uid}-reason`">Wat stimmt nich? (optional)</label>
         <input :id="`${uid}-reason`" v-model="reason" class="c-input" type="text" maxlength="300" />
-        <button class="c-button" type="submit">Melden</button>
+        <button class="c-button" type="submit" :disabled="reporting">Melden</button>
       </form>
     </template>
 
     <div v-if="comment.replies.length" class="c-comment-card__replies">
-      <CommentCard v-for="r in comment.replies" :key="r.id" :comment="r" />
+      <CommentCard
+        v-for="r in comment.replies"
+        :key="r.id"
+        :comment="r"
+        :parent-visible="comment.state === 'visible'"
+      />
     </div>
   </article>
 </template>
@@ -103,13 +109,19 @@ import CommentForm from "./CommentForm.vue";
 const IconUp = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-up"));
 const IconDown = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-down"));
 
-const { comment } = defineProps<{ comment: PublicComment }>();
+const { comment, parentVisible = true } = defineProps<{
+  comment: PublicComment;
+  /** False for replies under a placeholder: the API refuses a reply to those. */
+  parentVisible?: boolean;
+}>();
 
 const ctx = inject(commentsKey)!;
 const uid = useId();
 const mode = ref<"edit" | "reply" | "report" | null>(null);
 const reason = ref("");
 const reported = ref(false);
+const reporting = ref(false);
+const canReply = computed(() => parentVisible);
 
 const pending = computed(() => ctx.busy.value.has(comment.id));
 const toggle = (m: "edit" | "reply" | "report"): void => {
@@ -165,14 +177,20 @@ const onRemove = (): void => {
 };
 
 const submitReport = async (): Promise<void> => {
+  if (reporting.value) return;
   const token = ctx.takeToken();
   if (!token) return;
-  const ok = await ctx.report(comment.id, reason.value.trim(), token);
-  ctx.resetCaptcha();
-  if (!ok) return;
-  reported.value = true;
-  mode.value = null;
-  trackEvent("Comments", "Report", String(ctx.wordId));
+  reporting.value = true;
+  try {
+    const ok = await ctx.report(comment.id, reason.value.trim(), token);
+    ctx.resetCaptcha();
+    if (!ok) return;
+    reported.value = true;
+    mode.value = null;
+    trackEvent("Comments", "Report", String(ctx.wordId));
+  } finally {
+    reporting.value = false;
+  }
 };
 </script>
 

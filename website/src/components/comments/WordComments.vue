@@ -35,7 +35,7 @@
       </div>
     </div>
 
-    <p v-if="ctx.loaded.value && !ctx.comments.value.length" class="c-word-comments__empty">
+    <p v-if="ctx.loaded.value && !ctx.comments.value.length && !ctx.hasMore.value" class="c-word-comments__empty">
       Noch keen Senf dazu. Mach den Anfang!
     </p>
 

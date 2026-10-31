@@ -85,4 +85,11 @@ describe("listComments", () => {
     await listComments(5, "new", 1);
     expect(find.mock.calls[0][0].sort).toEqual(["-createdAt"]);
   });
+
+  it("placeholders never show the stored name", async () => {
+    setup([c(1, { authorName: "Geheim", status: "removed" })], [c(2, { parent: 1 })]);
+    const [top] = (await listComments(5, "best", 1)).comments;
+    expect(top.authorName).toBe("Anonymer Berliner");
+    expect(top.replies[0]!.authorName).toBe("Det");
+  });
 });
