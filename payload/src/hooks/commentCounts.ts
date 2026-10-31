@@ -17,7 +17,7 @@ export const recountComment = async (req: PayloadRequest, commentId: number): Pr
   ]);
   const score = upvotes - downvotes;
   const comment = await payload.findByID({ collection: "comments", id: commentId, depth: 0, req });
-  const hide = shouldAutoHide({ status: comment.status, reviewed: comment.reviewed, score, reportCount });
+  const hide = shouldAutoHide({ status: comment.status ?? "published", reviewed: comment.reviewed, score, reportCount });
   await payload.update({
     collection: "comments",
     id: commentId,
