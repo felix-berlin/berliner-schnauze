@@ -63,7 +63,13 @@ export default buildConfig({
         defaultFromAddress: "mail@berliner-schnauze.wtf",
         defaultFromName: "Berliner Schnauze",
         skipVerify: true,
-        transport: nodemailer.createTransport(process.env.SMTP_URL),
+        // A hung SMTP server must not pile up sockets (defaults: 2 min connect, 10 min idle).
+        transport: nodemailer.createTransport({
+          connectionTimeout: 10_000,
+          greetingTimeout: 10_000,
+          socketTimeout: 20_000,
+          url: process.env.SMTP_URL,
+        }),
       })
     : undefined,
   plugins: [seo, redirects],

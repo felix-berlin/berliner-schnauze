@@ -98,6 +98,18 @@ describe("comments", () => {
     expect([r.upvotes, r.downvotes, r.score]).toEqual([2, 1, 1]);
   });
 
+  it("counts concurrent votes and reports without losing one (row lock, no deadlock)", async () => {
+    mails();
+    const c = await make();
+    const visitors = Array.from({ length: 8 }, (_, i) => `race-${i}`);
+    await Promise.all([
+      ...visitors.map((visitor) => payload.create({ collection: "comment-votes", data: { comment: c.id, visitor, value: 1 } })),
+      ...visitors.slice(0, 2).map((visitor) => payload.create({ collection: "comment-reports", data: { comment: c.id, visitor } })),
+    ]);
+    const r = await payload.findByID({ collection: "comments", id: c.id });
+    expect([r.upvotes, r.score, r.reportCount]).toEqual([8, 8, 2]);
+  });
+
   it("unique vote per visitor", async () => {
     mails();
     const c = await make();
