@@ -9,6 +9,7 @@
       "default": "./src/index.ts"
     },
     "./word-derived": "./src/lib/wordDerived.ts",
+    "./comments": "./src/lib/comments.ts",
     "./lexical-html": "./src/lib/lexicalHtml.ts",
     "./routes": "./src/lib/routes.ts",
     "./preview": "./src/lib/preview.ts"
