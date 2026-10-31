@@ -77,12 +77,12 @@ export const listComments = async (
           depth: 0,
           pagination: false,
           sort: "createdAt",
-          where: { parent: { in: ids }, status: listed, word },
+          where: { parent: { in: ids }, status: { equals: "published" }, word },
         })
       ).docs
     : [];
-  // A reply has no thread of its own: a removed or hidden one is dropped.
-  const visibleReplies = replies.filter((r) => r.status === "published");
+  // A reply has no thread of its own: removed or hidden ones are never fetched.
+  const visibleReplies = replies;
 
   const allIds = [...ids, ...visibleReplies.map((r) => r.id)];
   const votes =
@@ -96,7 +96,7 @@ export const listComments = async (
           })
         ).docs
       : [];
-  const mine = new Map(votes.map((v) => [idOf(v.comment as number), v.value as -1 | 1]));
+  const mine = new Map(votes.map((v) => [idOf(v.comment), v.value as -1 | 1]));
   const vote = (id: number) => mine.get(id) ?? 0;
 
   const comments: PublicComment[] = [];

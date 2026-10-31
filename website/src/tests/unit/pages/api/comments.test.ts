@@ -69,8 +69,24 @@ describe("POST /api/comments", () => {
   });
 
   it("404 for a draft word", async () => {
-    findByID.mockRejectedValue(new Error("Not Found"));
+    findByID.mockRejectedValue(Object.assign(new Error("Not Found"), { status: 404 }));
     expect((await post(valid)).status).toBe(404);
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it("502 when the database fails while looking up the word", async () => {
+    findByID.mockRejectedValue(new Error("connection refused"));
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    expect((await post(valid)).status).toBe(502);
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it("400 for an unknown parent", async () => {
+    findByID.mockImplementation(async ({ collection }) => {
+      if (collection === "words") return { id: 5 };
+      throw Object.assign(new Error("Not Found"), { status: 404 });
+    });
+    expect((await post({ ...valid, parentId: 3 })).status).toBe(400);
     expect(create).not.toHaveBeenCalled();
   });
 
@@ -128,6 +144,12 @@ describe("GET /api/comments", () => {
       expect(res.headers.get("Cache-Control")).toBe("no-store");
     },
   );
+
+  it("404 for a draft or unknown word", async () => {
+    findByID.mockRejectedValue(Object.assign(new Error("Not Found"), { status: 404 }));
+    expect((await get("?word=5")).status).toBe(404);
+    expect(find).not.toHaveBeenCalled();
+  });
 
   it("defaults to best, page 1", async () => {
     await get("?word=5");

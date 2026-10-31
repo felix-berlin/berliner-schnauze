@@ -10,6 +10,19 @@ import { commentCreateSchema } from "@utils/commentSchema.ts";
 const reply = (body: unknown, status: number) =>
   Response.json(body, { headers: { "Cache-Control": "no-store" }, status });
 
+/** Payload's NotFound (status 404) means "no such doc"; anything else (DB down ...) must surface. */
+const orNull = <T>(p: Promise<T>): Promise<T | null> =>
+  p.catch((error: unknown) => {
+    if ((error as { status?: number })?.status === 404) return null;
+    throw error;
+  });
+
+/** Only published words have comments (siteRead hides drafts). */
+const publishedWord = async (wordId: number) =>
+  orNull(
+    (await getPayloadClient()).findByID({ collection: "words", depth: 0, id: wordId, ...siteRead() }),
+  );
+
 const positiveInt = (v: string | null, fallback?: number) =>
   v === null ? fallback : /^[1-9]\d{0,8}$/.test(v) ? Number(v) : undefined;
 
@@ -21,6 +34,7 @@ export const GET: APIRoute = async ({ cookies, url }) => {
     return reply({ error: "Ungültige Anfrage" }, 400);
 
   try {
+    if (!(await publishedWord(wordId))) return reply({ error: "Wort nicht gefunden" }, 404);
     return reply(await listComments(wordId, sort, page, visitorId(cookies, false)), 200);
   } catch (error) {
     console.error("[comments] listing failed:", error);
@@ -48,16 +62,12 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
   const { authorName, parentId, text, wordId } = input.data;
   try {
     const payload = await getPayloadClient();
-    // Only published words take comments (siteRead hides drafts).
-    const word = await payload
-      .findByID({ collection: "words", depth: 0, id: wordId, ...siteRead() })
-      .catch(() => null);
-    if (!word) return reply({ error: "Wort nicht gefunden" }, 404);
+    if (!(await publishedWord(wordId))) return reply({ error: "Wort nicht gefunden" }, 404);
 
     if (parentId) {
-      const parent = await payload
-        .findByID({ collection: "comments", depth: 0, id: parentId })
-        .catch(() => null);
+      const parent = await orNull(
+        payload.findByID({ collection: "comments", depth: 0, id: parentId }),
+      );
       const parentWord = typeof parent?.word === "object" ? parent.word.id : parent?.word;
       if (!parent || parent.status !== "published" || parentWord !== wordId)
         return reply({ error: "Ungültige Anfrage" }, 400);
