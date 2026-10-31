@@ -1,9 +1,10 @@
+import type { PublicComment } from "@utils/commentSchema.ts";
 import type { AstroCookies } from "astro";
 import type { Comment } from "payload-app";
 import type { CommentStatus } from "payload-app/comments";
 
 import { getPayloadClient } from "@services/payload.ts";
-import type { PublicComment } from "@utils/commentSchema.ts";
+import { createHash } from "node:crypto";
 
 export const PAGE_SIZE = 20;
 export const VISITOR_COOKIE = "bs_visitor";
@@ -25,12 +26,15 @@ export const visitorId = (cookies: AstroCookies, create: boolean): string | unde
   return id;
 };
 
+export const hashEditKey = (key: string): string => createHash("sha256").update(key).digest("hex");
+
 const idOf = (rel: number | { id: number } | null | undefined): number | null =>
   rel == null ? null : typeof rel === "object" ? rel.id : rel;
 
 /** Maps a stored comment to what the browser may see; never carries editKeyHash. */
 export const toPublic = (c: Comment, myVote: -1 | 0 | 1 = 0): PublicComment => {
-  const state = c.status === "published" ? "visible" : c.status === "hidden" ? "reviewing" : "removed";
+  const state =
+    c.status === "published" ? "visible" : c.status === "hidden" ? "reviewing" : "removed";
   return {
     authorName: c.authorName?.trim() || ANONYMOUS,
     createdAt: c.createdAt,

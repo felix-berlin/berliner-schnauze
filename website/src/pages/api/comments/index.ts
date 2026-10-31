@@ -1,11 +1,10 @@
-import { createHash, randomBytes } from "node:crypto";
-
 import type { APIRoute } from "astro";
 
 import { getPayloadClient, siteRead } from "@services/payload.ts";
-import { listComments, toPublic, visitorId } from "@services/payload/comments.ts";
+import { hashEditKey, listComments, toPublic, visitorId } from "@services/payload/comments.ts";
 import { verifyTurnstile } from "@services/turnstile.ts";
 import { commentCreateSchema } from "@utils/commentSchema.ts";
+import { randomBytes } from "node:crypto";
 
 const reply = (body: unknown, status: number) =>
   Response.json(body, { headers: { "Cache-Control": "no-store" }, status });
@@ -20,7 +19,12 @@ const orNull = <T>(p: Promise<T>): Promise<T | null> =>
 /** Only published words have comments (siteRead hides drafts). */
 const publishedWord = async (wordId: number) =>
   orNull(
-    (await getPayloadClient()).findByID({ collection: "words", depth: 0, id: wordId, ...siteRead() }),
+    (await getPayloadClient()).findByID({
+      collection: "words",
+      depth: 0,
+      id: wordId,
+      ...siteRead(),
+    }),
   );
 
 const positiveInt = (v: string | null, fallback?: number) =>
@@ -78,7 +82,7 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
       collection: "comments",
       data: {
         authorName,
-        editKeyHash: createHash("sha256").update(editKey).digest("hex"),
+        editKeyHash: hashEditKey(editKey),
         parent: parentId,
         text,
         word: wordId,
