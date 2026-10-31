@@ -338,6 +338,18 @@ describe("DropdownPopover.vue", () => {
     wrapper.unmount();
   });
 
+  it("onToggle close leaves focus on <body> after a click outside (no scroll jump)", async () => {
+    const wrapper = mountWithTrigger({ attachTo: document.body });
+    const focusSpy = vi.spyOn(wrapper.find("button").element, "focus");
+    openToggle(wrapper);
+    await nextTick();
+    (document.activeElement as HTMLElement | null)?.blur();
+    closeToggle(wrapper);
+    await nextTick();
+    expect(focusSpy).not.toHaveBeenCalled();
+    wrapper.unmount();
+  });
+
   // --- close() fallback (line 190) ---
 
   it("close() focuses triggerEl directly when no focusable descendant inside trigger", () => {
