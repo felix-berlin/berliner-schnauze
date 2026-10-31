@@ -15,6 +15,11 @@ permissions:
   id-token: write
   contents: read
 
+# One release at a time, never cancelled: each push releases its own commit in order.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   release:
     name: Release

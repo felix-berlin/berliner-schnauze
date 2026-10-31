@@ -4,6 +4,8 @@
   "reviewers": ["felix-berlin"],
   "timezone": "Europe/Berlin",
   "schedule": ["on friday and saturday"],
+  "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch"],
