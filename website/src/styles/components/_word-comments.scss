@@ -74,7 +74,8 @@
   }
 
   &__retry {
-    margin-block-start: vars.$spacer * 0.75;
+    display: flex;
+    margin: vars.$spacer * 0.75 auto 0;
   }
 
   &__list {
