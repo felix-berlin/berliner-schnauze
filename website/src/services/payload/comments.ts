@@ -142,9 +142,9 @@ export const getThread = async (id: number, visitor?: string): Promise<null | Pu
   if (!top || top.parent || !LISTED.includes(top.status as CommentStatus)) return null;
   const wordId = idOf(top.word)!;
   // siteRead hides drafts: comments of an unpublished word are not there.
-  if (
-    !(await orNull(payload.findByID({ collection: "words", depth: 0, id: wordId, ...siteRead() })))
-  )
-    return null;
-  return (await buildThreads([top], wordId, visitor))[0] ?? null;
+  const [word, threads] = await Promise.all([
+    orNull(payload.findByID({ collection: "words", depth: 0, id: wordId, ...siteRead() })),
+    buildThreads([top], wordId, visitor),
+  ]);
+  return word ? (threads[0] ?? null) : null;
 };

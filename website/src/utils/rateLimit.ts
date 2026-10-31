@@ -39,6 +39,10 @@ export const rateLimited = (client: string, rule: Rule, now = Date.now()): numbe
   return ++hit.count > rule.max ? Math.ceil((hit.resetAt - now) / 1000) : 0;
 };
 
+/** Per-client cap on an arbitrary key (e.g. one comment), for limits the path-based RULES can't express. */
+export const rateLimitedBy = (client: string, key: string, max: number, windowMs: number) =>
+  rateLimited(client, { key, max, prefix: "", windowMs });
+
 let loggedSource = false;
 
 /**

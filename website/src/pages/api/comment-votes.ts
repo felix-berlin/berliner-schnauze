@@ -4,7 +4,7 @@ import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { isUniqueViolation, orNull, reply } from "@utils/apiReply.ts";
 import { voteSchema } from "@utils/commentSchema.ts";
-import { clientIp, rateLimited } from "@utils/rateLimit.ts";
+import { clientIp, rateLimitedBy } from "@utils/rateLimit.ts";
 
 /** One vote per visitor and comment; Payload's hooks recount the comment, we only read it back. */
 export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
@@ -21,13 +21,8 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
 
     // The visitor cookie is free to drop, so cap vote changes per IP and comment as well.
     const ip = clientIp(request.headers.get("x-forwarded-for"), clientAddress);
-    const wait = rateLimited(ip, {
-      key: `comment-vote ${commentId}`,
-      max: 20,
-      prefix: "",
-      windowMs: 24 * 60 * 60_000,
-    });
-    if (wait > 0) return reply({ error: "Jenug jestimmt für heute." }, 429);
+    if (rateLimitedBy(ip, `comment-vote ${commentId}`, 20, 24 * 60 * 60_000) > 0)
+      return reply({ error: "Jenug jestimmt für heute." }, 429);
 
     const visitor = visitorId(cookies, true) as string;
     const mine = async () =>

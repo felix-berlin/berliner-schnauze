@@ -2,10 +2,9 @@ import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
-import { verifyTurnstile } from "@services/turnstile.ts";
-import { isUniqueViolation, orNull, reply } from "@utils/apiReply.ts";
+import { captchaGate, isUniqueViolation, orNull, reply } from "@utils/apiReply.ts";
 import { reportSchema } from "@utils/commentSchema.ts";
-import { clientIp, rateLimited } from "@utils/rateLimit.ts";
+import { clientIp, rateLimitedBy } from "@utils/rateLimit.ts";
 
 /**
  * Reports are idempotent: a repeat on the same comment (same IP within 24 h, or same visitor cookie) answers like
@@ -17,14 +16,8 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
   const input = reportSchema.safeParse(body);
   if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
 
-  const token = (body as { turnstileToken?: unknown }).turnstileToken;
-  const captcha = typeof token === "string" ? await verifyTurnstile(token, clientAddress) : "fail";
-  if (captcha === "unavailable")
-    return reply(
-      { error: "Die Captcha-Prüfung ist gerade gestört, bitte versuch es später nochmal." },
-      503,
-    );
-  if (captcha === "fail") return reply({ error: "Captcha nicht bestanden" }, 403);
+  const blocked = await captchaGate(body, clientAddress);
+  if (blocked) return blocked;
 
   const { commentId, reason } = input.data;
   try {
@@ -35,12 +28,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     if (comment?.status !== "published") return reply({ error: "Kommentar nicht gefunden" }, 404);
 
     const ip = clientIp(request.headers.get("x-forwarded-for"), clientAddress);
-    const again = rateLimited(ip, {
-      key: `comment-report ${commentId}`,
-      max: 1,
-      prefix: "",
-      windowMs: 24 * 60 * 60_000,
-    });
+    const again = rateLimitedBy(ip, `comment-report ${commentId}`, 1, 24 * 60 * 60_000);
     // ponytail: a failed create below still burns this IP's 24 h slot; fine for a soft limit.
     if (again > 0) return reply({ reported: true }, 200);
 

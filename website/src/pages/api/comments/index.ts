@@ -2,8 +2,7 @@ import type { APIRoute } from "astro";
 
 import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { hashEditKey, listComments, toPublic, visitorId } from "@services/payload/comments.ts";
-import { verifyTurnstile } from "@services/turnstile.ts";
-import { orNull, reply } from "@utils/apiReply.ts";
+import { captchaGate, orNull, positiveInt, reply } from "@utils/apiReply.ts";
 import { commentCreateSchema } from "@utils/commentSchema.ts";
 import { createHash, randomBytes } from "node:crypto";
 import { pickPseudonym } from "payload-app/comments";
@@ -18,9 +17,6 @@ const publishedWord = async (wordId: number) =>
       ...siteRead(),
     }),
   );
-
-const positiveInt = (v: string | null, fallback?: number) =>
-  v === null ? fallback : /^[1-9]\d{0,8}$/.test(v) ? Number(v) : undefined;
 
 export const GET: APIRoute = async ({ cookies, url }) => {
   const wordId = positiveInt(url.searchParams.get("word"));
@@ -46,24 +42,21 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
   const input = commentCreateSchema.safeParse(body);
   if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
 
-  const token = (body as { turnstileToken?: unknown }).turnstileToken;
-  const captcha = typeof token === "string" ? await verifyTurnstile(token, clientAddress) : "fail";
-  if (captcha === "unavailable")
-    return reply(
-      { error: "Die Captcha-Prüfung ist gerade gestört, bitte versuch es später nochmal." },
-      503,
-    );
-  if (captcha === "fail") return reply({ error: "Captcha nicht bestanden" }, 403);
+  const blocked = await captchaGate(body, clientAddress);
+  if (blocked) return blocked;
 
   const { authorName, parentId, text, wordId } = input.data;
   try {
     const payload = await getPayloadClient();
-    if (!(await publishedWord(wordId))) return reply({ error: "Wort nicht gefunden" }, 404);
+    const [word, parent] = await Promise.all([
+      publishedWord(wordId),
+      parentId
+        ? orNull(payload.findByID({ collection: "comments", depth: 0, id: parentId }))
+        : null,
+    ]);
+    if (!word) return reply({ error: "Wort nicht gefunden" }, 404);
 
     if (parentId) {
-      const parent = await orNull(
-        payload.findByID({ collection: "comments", depth: 0, id: parentId }),
-      );
       const parentWord = typeof parent?.word === "object" ? parent.word.id : parent?.word;
       if (!parent || parent.status !== "published" || parentWord !== wordId)
         return reply({ error: "Ungültige Anfrage" }, 400);

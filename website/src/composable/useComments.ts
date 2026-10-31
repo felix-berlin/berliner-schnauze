@@ -95,9 +95,10 @@ export const useComments = (wordId: number) => {
   );
 
   const canEdit = (id: number): boolean => {
-    void tick.value; // re-evaluates every second, so the buttons vanish on their own
     const k = keys.value[id];
-    return Boolean(k) && fresh(k!);
+    if (!k) return false;
+    void tick.value; // re-evaluates every second, so the buttons vanish on their own (own comments only)
+    return fresh(k);
   };
 
   // Own comment ids outlive the edit key, so „Melden“ stays hidden on them.

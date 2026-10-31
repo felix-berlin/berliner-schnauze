@@ -58,7 +58,7 @@
           </button>
         </span>
         <button
-          v-if="canReply"
+          v-if="parentVisible"
           class="c-comment-card__reply c-comment-card__link"
           type="button"
           @click="toggle('reply')"
@@ -181,7 +181,6 @@ const mode = ref<"edit" | "reply" | "report" | null>(null);
 const reason = ref("");
 const reported = ref(false);
 const reporting = ref(false);
-const canReply = computed(() => parentVisible);
 
 const pending = computed(() => ctx.busy.value.has(comment.id));
 const toggle = (m: "edit" | "reply" | "report"): void => {
@@ -203,9 +202,9 @@ const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
   ["hour", 3600],
   ["minute", 60],
 ];
+const rtf = new Intl.RelativeTimeFormat("de", { numeric: "auto" });
 const relativeTime = computed(() => {
   const seconds = (new Date(comment.createdAt).getTime() - Date.now()) / 1000;
-  const rtf = new Intl.RelativeTimeFormat("de", { numeric: "auto" });
   const [unit, size] = UNITS.find(([, s]) => Math.abs(seconds) >= s) ?? ["second", 1];
   return rtf.format(unit === "second" ? 0 : Math.round(seconds / size), unit);
 });

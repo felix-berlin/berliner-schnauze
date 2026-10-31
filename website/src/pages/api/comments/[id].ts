@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
 import { getThread, hashEditKey, toPublic, visitorId } from "@services/payload/comments.ts";
-import { orNull, reply } from "@utils/apiReply.ts";
+import { orNull, positiveInt, reply } from "@utils/apiReply.ts";
 import { commentEditSchema } from "@utils/commentSchema.ts";
 import { timingSafeEqual } from "node:crypto";
 import { EDIT_WINDOW_MS } from "payload-app/comments";
@@ -24,46 +24,58 @@ const ownComment = async (id: number, editKey: string) => {
   return given.length === stored.length && timingSafeEqual(given, stored) ? { c, payload } : null;
 };
 
-const handle =
-  (schema: z.ZodType<{ editKey: string; text?: string }>): APIRoute =>
+/** Shared by PATCH and DELETE: parses the body, checks the edit key, applies `change(input)` and answers. */
+const own =
+  <T extends { editKey: string }>(
+    schema: z.ZodType<T>,
+    change: (input: T) => Record<string, unknown>,
+    answer: (updated: Awaited<ReturnType<typeof applyChange>>) => Response,
+  ): APIRoute =>
   async ({ params, request }) => {
-    const id = Number(params.id);
-    const body: unknown = await request.json().catch(() => undefined);
-    const input = schema.safeParse(body);
-    if (!/^[1-9]\d{0,8}$/.test(params.id ?? "") || !input.success)
-      return reply({ error: "Ungültige Eingabe" }, 400);
-
+    const id = positiveInt(params.id);
+    const input = schema.safeParse(await request.json().catch(() => undefined));
+    if (!id || !input.success) return reply({ error: "Ungültige Eingabe" }, 400);
     try {
-      const own = await ownComment(id, input.data.editKey);
-      if (!own) return forbidden();
-      const { text } = input.data;
-      const updated = await own.payload.update({
-        collection: "comments",
-        data: text === undefined ? { authorName: null, pseudonym: null, status: "deleted", text: "[gelöscht]" } : { text },
-        depth: 0,
-        id,
-      });
-      if (text === undefined) return reply({ deleted: true }, 200);
-      // The hook decides: a link in the new text sends the comment back to review.
-      const pending = updated.status === "pending";
-      return reply(pending ? { pending } : { comment: toPublic(updated), pending }, 200);
+      const found = await ownComment(id, input.data.editKey);
+      if (!found) return forbidden();
+      return answer(await applyChange(found.payload, id, change(input.data)));
     } catch (error) {
       console.error("[comments] own update failed:", error);
       return reply({ error: "Das hat leider nicht geklappt." }, 502);
     }
   };
 
-export const PATCH = handle(commentEditSchema);
-export const DELETE = handle(deleteSchema);
+const applyChange = (
+  payload: Awaited<ReturnType<typeof getPayloadClient>>,
+  id: number,
+  data: Record<string, unknown>,
+) => payload.update({ collection: "comments", data, depth: 0, id });
+
+// The hook decides: a link in the new text sends the comment back to review.
+export const PATCH = own(
+  commentEditSchema,
+  ({ text }) => ({ text }),
+  (updated) =>
+    reply(
+      updated.status === "pending"
+        ? { pending: true }
+        : { comment: toPublic(updated), pending: false },
+      200,
+    ),
+);
+export const DELETE = own(
+  deleteSchema,
+  () => ({ authorName: null, pseudonym: null, status: "deleted", text: "[gelöscht]" }),
+  () => reply({ deleted: true }, 200),
+);
 
 /** The thread a comment belongs to, same shape and visibility as the list; for links to one comment. */
 export const GET: APIRoute = async ({ cookies, params }) => {
-  if (!/^[1-9]\d{0,8}$/.test(params.id ?? "")) return reply({ error: "Ungültige Anfrage" }, 400);
+  const id = positiveInt(params.id);
+  if (!id) return reply({ error: "Ungültige Anfrage" }, 400);
   try {
-    const comment = await getThread(Number(params.id), visitorId(cookies, false));
-    return comment
-      ? reply({ comment }, 200)
-      : reply({ error: "Kommentar nicht gefunden" }, 404);
+    const comment = await getThread(id, visitorId(cookies, false));
+    return comment ? reply({ comment }, 200) : reply({ error: "Kommentar nicht gefunden" }, 404);
   } catch (error) {
     console.error("[comments] thread failed:", error);
     return reply({ error: "Der Kommentar konnte nicht geladen werden." }, 502);
