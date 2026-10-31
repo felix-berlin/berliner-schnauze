@@ -3,7 +3,7 @@
 # Ignore rules: payload/Dockerfile.dockerignore (website/.dockerignore is the web image's).
 # `next build` needs no database and no secrets; all runtime env (DATABASE_URL,
 # PAYLOAD_SECRET, PAYLOAD_SERVER_URL) comes from compose at start.
-FROM node:24-slim@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5 AS build
+FROM node:26-slim@sha256:e4db4c914bf8ad241bd24804fc25d272d89bad97e68cdc8a1414862790a02c39 AS build
 WORKDIR /repo
 # pnpm version pinned by `packageManager` in the root package.json.
 RUN corepack enable
@@ -18,7 +18,7 @@ COPY payload/ payload/
 RUN pnpm --filter payload-app build \
   && mkdir /empty-media
 
-FROM --platform=$BUILDPLATFORM node:24-slim@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5 AS infisical-cli
+FROM --platform=$BUILDPLATFORM node:26-slim@sha256:e4db4c914bf8ad241bd24804fc25d272d89bad97e68cdc8a1414862790a02c39 AS infisical-cli
 ARG TARGETARCH
 ARG INFISICAL_CLI_VERSION=0.44.2
 RUN apt-get update \
@@ -36,7 +36,7 @@ RUN apt-get update \
  && install -D -m 0755 /tmp/infisical /out/infisical \
  && rm -f "/tmp/${archive}" /tmp/infisical
 
-FROM gcr.io/distroless/nodejs24-debian13:nonroot@sha256:59c479c9b8c123e66047315c968aa2d35e31ae5149c856e4110a79c8b3563f0b
+FROM gcr.io/distroless/nodejs26-debian13:nonroot@sha256:a51c5d631b90e1b298e17a88a307b77f0b959b47de942d033acce0c96be3fb83
 WORKDIR /app
 COPY --from=build /repo/payload/.next/standalone/ ./
 COPY --from=build /repo/payload/.next/static/ payload/.next/static/
