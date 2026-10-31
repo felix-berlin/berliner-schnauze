@@ -68,7 +68,7 @@
         <DropdownPopover
           :name="`comment-${comment.id}`"
           placement="bottom-end"
-          class="c-comment-card__menu c-dropdown--theme-comment-menu"
+          class="c-comment-card__menu c-dropdown--theme-menu"
         >
           <template #default="{ triggerProps }">
             <button
@@ -84,7 +84,7 @@
             <button
               v-for="action in menu"
               :key="action.label"
-              class="c-comment-card__menu-item"
+              class="c-dropdown__item c-comment-card__menu-item"
               type="button"
               :popovertarget="`dropdown-comment-${comment.id}`"
               popovertargetaction="hide"

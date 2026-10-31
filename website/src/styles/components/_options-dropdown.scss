@@ -1,17 +1,3 @@
-@use "@styles/variables" as vars;
-
 .c-options-dropdown {
   align-self: flex-start;
-
-  &__copy-button {
-    gap: vars.$spacer * 0.45;
-    display: flex;
-    align-items: center;
-    border: none;
-    background-color: transparent;
-  }
-
-  &__copy-text {
-    font-size: 0.9rem;
-  }
 }

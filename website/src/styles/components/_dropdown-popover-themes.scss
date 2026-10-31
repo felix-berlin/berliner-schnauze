@@ -2,32 +2,46 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-dropdown {
-  // Theme modifier classes
-  &--theme-word-options {
-    .c-dropdown__panel {
-      --padding: #{vars.$spacer * 0.5} #{vars.$spacer * 0.6};
+  // Action menu: 4px radius, button colours, dashed separators (DropdownPopover adds Paper Lift).
+  // Used by the comment „…“ menu and the word options (word page, word index).
+  &--theme-menu .c-dropdown__panel {
+    --color-background: var(--control-bg);
+    --color: var(--control-color);
+    --padding: #{vars.$spacer * 0.25 0};
 
-      display: flex;
-      flex-direction: column;
-      gap: var(--gap, #{vars.$spacer * 0.4});
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 10rem;
+    border-radius: 4px;
 
-      a,
-      .c-button {
-        --color-border: transparent;
-
-        transition: border-color 200ms ease-in-out;
-        border-block-end: 1px dashed var(--color-border, transparent);
-
-        @include butler-mx.hover {
-          --color-border: var(--blue);
-
-          box-shadow: none;
-
-          @include butler-mx.dark-mode-class {
-            --color-border: var(--yellow-500);
-          }
-        }
-      }
+    // Only while open: a bare `display: flex` beat the UA's `display: none` for closed popovers.
+    &:not(:popover-open) {
+      display: none;
     }
+  }
+}
+
+.c-dropdown__item {
+  display: flex;
+  gap: vars.$spacer * 0.45;
+  align-items: center;
+  padding: vars.$spacer * 0.5 vars.$spacer * 0.75;
+  border: 0;
+  border-block-end: 1px dashed var(--control-border);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:last-child {
+    border-block-end: 0;
+  }
+
+  @include butler-mx.hover {
+    color: var(--color-accent-text);
+    text-decoration: underline dashed from-font;
   }
 }

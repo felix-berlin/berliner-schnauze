@@ -189,26 +189,6 @@
     }
   }
 
-  &__menu-item {
-    padding: vars.$spacer * 0.5 vars.$spacer * 0.75;
-    border: 0;
-    border-block-end: 1px dashed var(--control-border);
-    background: transparent;
-    color: inherit;
-    font: inherit;
-    font-size: 0.9rem;
-    text-align: start;
-    cursor: pointer;
-
-    &:last-child {
-      border-block-end: 0;
-    }
-
-    @include butler-mx.hover {
-      color: var(--color-accent-text);
-      text-decoration: underline dashed from-font;
-    }
-  }
 
   // Compact inline report form: label above, field + actions on one row when there is room.
   &__report {
@@ -251,17 +231,6 @@
   }
 }
 
-// Floating panel of the „…“ menu: 4px radius, button colours (DropdownPopover adds Paper Lift).
-.c-dropdown--theme-comment-menu .c-dropdown__panel {
-  --color-background: var(--control-bg);
-  --color: var(--control-color);
-  --padding: #{vars.$spacer * 0.25 0};
-
-  display: flex;
-  flex-direction: column;
-  min-inline-size: 10rem;
-  border-radius: 4px;
-}
 
 @keyframes c-comment-card-wash {
   to {
