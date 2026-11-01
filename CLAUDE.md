@@ -4,7 +4,7 @@
 
 Berliner Schnauze is a Berlin dialect translator web app. Data lives in the Payload CMS (`payload/`, Postgres); the frontend is an Astro site with Vue 3 islands for interactivity. Every page renders on demand (`output: "server"`, Node adapter, Docker image); the build needs no database.
 
-**Layout** (pnpm workspace, like Payload's `examples/astro`): `website/` is the Astro app (package `website`), `payload/` the CMS (package `payload-app`). The root holds only workspace, release (`.releaserc` bumps both `package.json` versions), `compose.yaml`, `docs/`, `data/` and the CMS/Anki scripts in `scripts/`. **App paths in this file (`src/…`, `public/…`, `server/…`, `astro.config.mjs`) are relative to `website/`.** The root scripts below delegate (`pnpm --filter website …`); everything else runs inside `website/`.
+**Layout** (pnpm workspace, like Payload's `examples/astro`): `website/` is the Astro app (package `website`), `payload/` the CMS (package `payload-app`). The root holds only workspace, release (`.releaserc` bumps the root, `website/` and `payload/` `package.json` versions to one product version (also the MCP `serverInfo.version`)), `compose.yaml`, `docs/`, `data/` and the CMS/Anki scripts in `scripts/`. **App paths in this file (`src/…`, `public/…`, `server/…`, `astro.config.mjs`) are relative to `website/`.** The root scripts below delegate (`pnpm --filter website …`); everything else runs inside `website/`.
 
 ## Commands
 
