@@ -26,12 +26,14 @@
     {
       "description": "Only patch updates automerge; minor/major stay PRs for review",
       "matchUpdateTypes": ["patch", "digest", "pin"],
-      "automerge": true
+      "automerge": true,
+      "minimumReleaseAge": "3 days"
     },
     {
       "matchUpdateTypes": ["minor", "major"],
       "automerge": false,
-      "reviewers": ["felix-berlin"]
+      "reviewers": ["felix-berlin"],
+      "minimumReleaseAge": "2 days"
     },
     {
       "groupName": "astro",
@@ -51,11 +53,27 @@
     },
     {
       "groupName": "test tooling",
-      "matchPackageNames": ["vitest", "@vitest/**", "jsdom", "@vue/test-utils", "@playwright/**", "playwright", "playwright-core"]
+      "matchPackageNames": [
+        "vitest",
+        "@vitest/**",
+        "jsdom",
+        "@vue/test-utils",
+        "@playwright/**",
+        "playwright",
+        "playwright-core"
+      ]
     },
     {
       "groupName": "lint and format",
-      "matchPackageNames": ["oxlint", "oxfmt", "oxlint-*", "stylelint", "stylelint-*", "typescript", "vue-tsc"]
+      "matchPackageNames": [
+        "oxlint",
+        "oxfmt",
+        "oxlint-*",
+        "stylelint",
+        "stylelint-*",
+        "typescript",
+        "vue-tsc"
+      ]
     },
     {
       "groupName": "icons",
