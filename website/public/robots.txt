@@ -9,34 +9,35 @@ Disallow: /
 User-agent: GPTBot
 Disallow: /
 
-# Real-time search (not training) — allow for ChatGPT Search answers
+# OpenAI's docs say nothing about training for these two, so we assume it: blocked
 User-agent: OAI-SearchBot
-Allow: /
+Disallow: /
 
 User-agent: ChatGPT-User
-Allow: /
+Disallow: /
 
+# Perplexity states in writing: not used to crawl content for AI foundation models
+# (docs.perplexity.ai/guides/bots). The only AI bots left open, both documented as non-training.
 User-agent: PerplexityBot
 Allow: /
 
-# Real-time retrieval for a user's Perplexity query (distinct from PerplexityBot's indexing)
+# Same page: not used to collect content for training AI foundation models
 User-agent: Perplexity-User
 Allow: /
 
-# Real-time retrieval when a user asks Claude a question (distinct from ClaudeBot's training crawl)
+# Anthropic's docs say nothing about training for these two, so we assume it: blocked
 User-agent: Claude-User
-Allow: /
+Disallow: /
 
-# Indexing for Claude's search/retrieval features (not training)
 User-agent: Claude-SearchBot
-Allow: /
+Disallow: /
 
 # Google AI training opt-out only — does not affect Google Search or AI Overviews,
 # which are grounded on the regular Googlebot-crawled index (not blocked here)
 User-agent: Google-Extended
 Disallow: /
 
-# Training data for Meta's AI/speech-recognition models
+# Meta speech-recognition training crawler (no longer in Meta's docs; kept so it stays blocked)
 User-agent: FacebookBot
 Disallow: /
 
@@ -48,7 +49,7 @@ Disallow: /
 User-agent: ClaudeBot
 Disallow: /
 
-# Anthropic web crawler (separate from ClaudeBot)
+# Legacy Anthropic token, no longer in their docs; kept so it stays blocked
 User-agent: anthropic-ai
 Disallow: /
 
@@ -64,9 +65,14 @@ Disallow: /
 User-agent: Meta-ExternalAgent
 Disallow: /
 
-# Real-time retrieval when a user asks a Meta AI product a question (not training)
+# User-requested link fetches for Meta AI; Meta says it may bypass robots.txt and names
+# "improving agentic AI capabilities" as a purpose, so it is blocked (Anubis returns 403 too)
 User-agent: Meta-ExternalFetcher
-Allow: /
+Disallow: /
+
+# Meta AI search index; Meta's docs say nothing about training, so blocked
+User-agent: Meta-WebIndexer
+Disallow: /
 
 # Allen Institute for AI
 User-agent: AI2Bot
