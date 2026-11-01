@@ -104,12 +104,12 @@ jobs:
         run: website/scripts/docker-smoke.sh
 
       - name: Setup Docker Buildx 🛠️
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
 
       # Release builds and pushes this image after tagging: a broken payload/Dockerfile must fail the PR instead.
       # Reads the release's layer cache (main's scope is visible to PRs); writes none.
       - name: Build CMS image 🐳
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
         with:
           context: .
           file: payload/Dockerfile
