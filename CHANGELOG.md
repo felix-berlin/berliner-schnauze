@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.2.0...v4.2.1) (2026-11-01)
+
+
+### Bug Fixes
+
+* **ci:** drop the age gate for the upgrade test's base install via pnpm config instead of script logic ([18f34c0](https://github.com/felix-berlin/berliner-schnauze/commit/18f34c05e1a7ba43c70d039a49e01c94cd98eb76))
+* **ci:** install corepack in the CMS image, Node 25+ no longer bundles it ([d638f5c](https://github.com/felix-berlin/berliner-schnauze/commit/d638f5c5f905ca3f72926b56c7513e1810f5fe3a))
+* **ci:** patch-only automerge, grouped Renovate updates, weekday night schedule ([9dc9d17](https://github.com/felix-berlin/berliner-schnauze/commit/9dc9d17b359178ff493f068c156ec26c56bb79ad))
+* **ci:** Renovate review fixes, no automerge for actions/docker, react/next with payload ([f5bc452](https://github.com/felix-berlin/berliner-schnauze/commit/f5bc45231520c9c63b2fecb60a789ffbd22bc016))
+* **ci:** repair lockfile that broke the release, hold Renovate back until packages pass pnpm's age gate ([602ce35](https://github.com/felix-berlin/berliner-schnauze/commit/602ce352fa94f65d911f87a498ae78a9d5ec1de3))
+* **ci:** shorter Renovate release age for minor/major updates ([9a360f7](https://github.com/felix-berlin/berliner-schnauze/commit/9a360f77e386f4968191e78f2cc1dc928db5273b))
+* **ci:** skip migration upgrade test when the base lockfile violates the age gate, document Renovate rules ([ec33ff1](https://github.com/felix-berlin/berliner-schnauze/commit/ec33ff192e70d5250cfd2739df6411addda8b9be))
+
 # [4.2.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.1.4...v4.2.0) (2026-10-31)
 
 
