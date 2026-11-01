@@ -195,4 +195,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Upgrade from the base branch 🗄️
+        # The base's lockfile may hold packages younger than pnpm's minimumReleaseAge (e.g. while a PR repairs it).
+        # Only the base install needs this; the checkout itself was installed under the gate above.
+        env:
+          pnpm_config_minimum_release_age: 0
         run: scripts/migration-upgrade-test.sh "origin/${{ github.base_ref }}"

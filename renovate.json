@@ -1,14 +1,123 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":semanticCommitTypeAll(chore)"],
-  "reviewers": ["felix-berlin"],
+  "extends": ["config:best-practices", ":semanticCommitTypeAll(chore)"],
   "timezone": "Europe/Berlin",
-  "schedule": ["on friday and saturday"],
+  "schedule": ["before 6am every weekday"],
+  "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
+  "prConcurrentLimit": 5,
+  "postUpdateOptions": ["pnpmDedupe"],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on the first day of the month"],
+    "automerge": false
+  },
+  "vulnerabilityAlerts": {
+    "minimumReleaseAge": null,
+    "schedule": ["at any time"],
+    "automerge": false
+  },
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchCurrentVersion": "!/^0/",
-      "automerge": true
+      "description": "Only stable (non-0.x) patch updates automerge; minor/major stay PRs for review",
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "minimumReleaseAge": "3 days",
+      "matchCurrentVersion": "!/^0/"
+    },
+    {
+      "matchUpdateTypes": ["minor", "major"],
+      "automerge": false,
+      "reviewers": ["felix-berlin"],
+      "minimumReleaseAge": "2 days"
+    },
+    {
+      "groupName": "astro",
+      "matchPackageNames": ["astro", "@astrojs/**", "astro-*"]
+    },
+    {
+      "groupName": "vue",
+      "matchPackageNames": ["vue", "vue-*", "@vue/**", "@vueuse/**", "nanostores", "@nanostores/**"]
+    },
+    {
+      "groupName": "sentry",
+      "matchPackageNames": ["@sentry/**"]
+    },
+    {
+      "groupName": "test tooling",
+      "matchPackageNames": [
+        "vitest",
+        "@vitest/**",
+        "jsdom",
+        "@vue/test-utils",
+        "@playwright/**",
+        "playwright",
+        "playwright-core"
+      ]
+    },
+    {
+      "groupName": "lint and format",
+      "matchPackageNames": [
+        "oxlint",
+        "oxfmt",
+        "oxlint-*",
+        "stylelint",
+        "stylelint-*",
+        "typescript",
+        "vue-tsc"
+      ]
+    },
+    {
+      "groupName": "icons",
+      "matchPackageNames": ["@iconify-json/**", "@iconify/**", "unplugin-icons"]
+    },
+    {
+      "groupName": "type definitions",
+      "matchPackageNames": ["@types/**"]
+    },
+    {
+      "groupName": "github actions",
+      "matchManagers": ["github-actions"]
+    },
+    {
+      "groupName": "docker base images",
+      "matchDatasources": ["docker"]
+    },
+    {
+      "groupName": "vite and pwa",
+      "matchPackageNames": ["vite", "@vitejs/**", "@vite-pwa/**", "vite-plugin-pwa", "workbox-*"]
+    },
+    {
+      "groupName": "payload",
+      "matchPackageNames": [
+        "payload",
+        "payload-*",
+        "@payloadcms/**",
+        "next",
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom"
+      ]
+    },
+    {
+      "description": "Actions and Docker images reach release/prod: review, never automerge",
+      "matchManagers": ["github-actions", "dockerfile", "docker-compose"],
+      "automerge": false
+    },
+    {
+      "description": "Digest/pin updates often carry no release timestamp; strict filter would hold them forever",
+      "matchUpdateTypes": ["digest", "pin"],
+      "minimumReleaseAge": null,
+      "automerge": false
+    },
+    {
+      "description": "Node major follows the image/CI, bumped by hand",
+      "matchPackageNames": ["node", "gcr.io/distroless/nodejs*"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
-  ]
+  ],
+  "platformAutomerge": false,
+  "separateMinorPatch": true
 }
