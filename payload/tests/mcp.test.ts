@@ -7,7 +7,7 @@ const EMAIL = "mcp@test.local";
 const KEY = "mcp-test-key";
 
 /** POSTs a JSON-RPC call to the plugin's `/api/mcp` handler, as the REST layer would. */
-async function rpc(method: string, authorization?: string, params: object = {}) {
+async function post(method: string, authorization?: string, params: object = {}) {
   const payload = await getTestPayload();
   const endpoint = payload.config.endpoints.find((e) => e.path === "/mcp" && e.method === "post")!;
   const req = await createLocalReq({}, payload);
@@ -18,8 +18,11 @@ async function rpc(method: string, authorization?: string, params: object = {}) 
     ...(authorization ? { Authorization: authorization } : {}),
   });
   Object.assign(req, { body: JSON.stringify({ jsonrpc: "2.0", id: "1", method, params }) });
-  const res = (await endpoint.handler(req)) as Response;
-  const text = await res.text();
+  return (await endpoint.handler(req)) as Response;
+}
+
+async function rpc(method: string, authorization?: string, params: object = {}) {
+  const text = await (await post(method, authorization, params)).text();
   // The transport answers plain JSON or one SSE `data:` line.
   return JSON.parse(text.match(/^data: (.*)$/m)?.[1] ?? text);
 }
@@ -52,11 +55,11 @@ const text = (body: { result: { content: { text: string }[] } }) => body.result.
 
 describe("mcp endpoint", () => {
   it("rejects a request without an API key", async () => {
-    await expect(rpc("tools/list")).rejects.toThrow();
+    await expect(post("tools/list")).rejects.toMatchObject({ status: 401 }); // the REST layer turns it into a 401
   });
 
   it("rejects an unknown API key", async () => {
-    await expect(rpc("tools/list", "Bearer nope")).rejects.toThrow();
+    await expect(post("tools/list", "Bearer nope")).rejects.toMatchObject({ status: 401 });
   });
 
   it("offers find/create/update for words, find/update for suggestions, and nothing else", async () => {
