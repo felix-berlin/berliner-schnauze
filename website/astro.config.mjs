@@ -316,6 +316,9 @@ export default defineConfig({
       debug: import.meta.env.DEV,
       heartBeatTimer: 5,
       disableCookies: true,
+      // After Anubis' challenge document.referrer is its host, not the real source (Matomo >= 4.12). The same host
+      // must also be listed under Websites > Excluded referrers in Matomo.
+      preInitCommands: [["setExcludedReferrers", ["anubis.berliner-schnauze.wtf"]]],
       partytown: false,
       viewTransition: {
         contentElement: "main",
