@@ -35,13 +35,13 @@ jobs:
 
     steps:
       - name: Checkout ✅
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_TOKEN }}
 
       - name: Fetch secrets from Infisical (root) 🔐
-        uses: Infisical/secrets-action@v1.0.18
+        uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
         with:
           method: "oidc"
           identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
@@ -50,7 +50,7 @@ jobs:
           domain: "https://infisical.kasimir.dev"
 
       - name: Fetch secrets from Infisical (/GitHub) 🔐
-        uses: Infisical/secrets-action@v1.0.18
+        uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
         with:
           method: "oidc"
           identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
@@ -60,10 +60,10 @@ jobs:
           secret-path: "/GitHub"
 
       - name: Setup pnpm 🛠️
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
 
       - name: Setup Node.js 🛠️
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version-file: .nvmrc
           cache: pnpm
@@ -94,7 +94,7 @@ jobs:
       # A Sentry outage must not skip the docker job: the version is already published.
       - name: Create Sentry release
         continue-on-error: true
-        uses: getsentry/action-release@v3
+        uses: getsentry/action-release@e6703d0b00208e0b3687ba660d18ab5af7892821 # v3
         env:
           SENTRY_AUTH_TOKEN: ${{ env.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ env.SENTRY_ORG }}
@@ -121,7 +121,7 @@ jobs:
       # (4.0.4 contains an Infisical secret "0.4"). A push run builds the release commit semantic-release just
       # pushed to the branch and reads its version; GITHUB_ENV values are only masked in logs, never dropped.
       - name: Checkout release ✅
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ inputs.version && format('v{0}', inputs.version) || github.ref_name }}
           fetch-depth: ${{ inputs.version && 1 || 0 }}
@@ -136,7 +136,7 @@ jobs:
         run: echo "VERSION=$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
 
       - name: Fetch secrets from Infisical 🔐
-        uses: Infisical/secrets-action@v1.0.18
+        uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
         with:
           method: "oidc"
           identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
@@ -145,10 +145,10 @@ jobs:
           domain: "https://infisical.kasimir.dev"
 
       - name: Setup pnpm 🛠️
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
 
       - name: Setup Node.js 🛠️
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version-file: .nvmrc # the images run this major (dist/ is built here)
           cache: pnpm
