@@ -38,7 +38,7 @@
     "@payloadcms/richtext-lexical": "3.92.1",
     "@payloadcms/ui": "3.92.1",
     "all-the-german-words": "^1.1.0",
-    "cross-env": "^7.0.3",
+    "cross-env": "^10.0.0",
     "de-compromise": "^0.1.1",
     "graphql": "^16.8.1",
     "hyphenation.de": "^0.2.1",
