@@ -108,6 +108,12 @@
     }
   }
 
+  // Automatic guess: dashed outline, the project's "unconfirmed" signature.
+  &__wortart-badge--auto {
+    outline: 1px dashed currentcolor;
+    outline-offset: -3px;
+  }
+
   &__wotd-badge {
     display: inline-flex;
     align-items: center;

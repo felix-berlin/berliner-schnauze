@@ -85,8 +85,11 @@ const hasNeighbors =
   alphabeticNeighborsResult.before.length > 0 || alphabeticNeighborsResult.after.length > 0;
 const hasRelatedWords = word.relatedWords.length > 0;
 const { books: affiliateBooks, disclaimers: affiliateDisclaimers } = await fetchAffiliateData();
+// An editor-set word type wins; otherwise the automatic guess, marked as such in the hero.
+const editorialWortart = word.wordTypes[0]?.name;
 const wortartLabel: string | undefined =
-  wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined;
+  editorialWortart ?? (wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined);
+const wortartAuto = !editorialWortart;
 
 const firstImage = word.images[0];
 const firstAudio = word.berlinerischAudio[0];
@@ -222,7 +225,7 @@ const schemaJson = () => {
     />
 
     <div class:list={['c-word-main', hasImages && 'c-word-main--with-gallery']}>
-      <WordHero word={word} wortartLabel={wortartLabel} />
+      <WordHero word={word} wortartLabel={wortartLabel} wortartAuto={wortartAuto} />
 
       <div class='c-word-main__content'>
         <WordSectionEtymologie word={word} />

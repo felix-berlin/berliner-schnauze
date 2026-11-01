@@ -51,6 +51,13 @@ describe("WordHero.astro", () => {
     expect(result).toContain("c-word-hero__wortart-badge");
   });
 
+  it("marks an automatic word type, but not an editorial one", async () => {
+    const auto = await render({ word: makeWord(), wortartLabel: "Verb", wortartAuto: true });
+    expect(auto).toContain("(automatisch)");
+    const editorial = await render({ word: makeWord(), wortartLabel: "Verb" });
+    expect(editorial).not.toContain("automatisch");
+  });
+
   it("does not render wortartLabel badge when undefined", async () => {
     const result = await render({ word: makeWord(), wortartLabel: undefined });
     expect(result).not.toContain("c-word-hero__wortart-badge");
