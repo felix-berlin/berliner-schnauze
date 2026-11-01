@@ -1,16 +1,83 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":semanticCommitTypeAll(chore)"],
-  "reviewers": ["felix-berlin"],
+  "extends": [
+    "config:best-practices",
+    ":semanticCommitTypeAll(chore)",
+    "group:monorepos",
+    "group:recommended"
+  ],
   "timezone": "Europe/Berlin",
-  "schedule": ["on friday and saturday"],
+  "schedule": ["before 6am every weekday"],
   "minimumReleaseAge": "3 days",
   "internalChecksFilter": "strict",
+  "prConcurrentLimit": 5,
+  "postUpdateOptions": ["pnpmDedupe"],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on the first day of the month"],
+    "automerge": false
+  },
+  "vulnerabilityAlerts": {
+    "minimumReleaseAge": null,
+    "schedule": ["at any time"],
+    "automerge": false
+  },
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchCurrentVersion": "!/^0/",
+      "description": "Only patch updates automerge; minor/major stay PRs for review",
+      "matchUpdateTypes": ["patch", "digest", "pin"],
       "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["minor", "major"],
+      "automerge": false,
+      "reviewers": ["felix-berlin"]
+    },
+    {
+      "groupName": "astro",
+      "matchPackageNames": ["astro", "@astrojs/**", "astro-*"]
+    },
+    {
+      "groupName": "payload",
+      "matchPackageNames": ["payload", "payload-*", "@payloadcms/**"]
+    },
+    {
+      "groupName": "vue",
+      "matchPackageNames": ["vue", "vue-*", "@vue/**", "@vueuse/**", "nanostores", "@nanostores/**"]
+    },
+    {
+      "groupName": "sentry",
+      "matchPackageNames": ["@sentry/**"]
+    },
+    {
+      "groupName": "test tooling",
+      "matchPackageNames": ["vitest", "@vitest/**", "jsdom", "@vue/test-utils", "@playwright/**", "playwright", "playwright-core"]
+    },
+    {
+      "groupName": "lint and format",
+      "matchPackageNames": ["oxlint", "oxfmt", "oxlint-*", "stylelint", "stylelint-*", "typescript", "vue-tsc"]
+    },
+    {
+      "groupName": "icons",
+      "matchPackageNames": ["@iconify-json/**", "@iconify/**", "unplugin-icons"]
+    },
+    {
+      "groupName": "type definitions",
+      "matchPackageNames": ["@types/**"]
+    },
+    {
+      "groupName": "github actions",
+      "matchManagers": ["github-actions"]
+    },
+    {
+      "groupName": "docker base images",
+      "matchDatasources": ["docker"]
+    },
+    {
+      "description": "Node major follows the image/CI, bumped by hand",
+      "matchPackageNames": ["node", "node-slim", "gcr.io/distroless/nodejs*"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ]
 }
