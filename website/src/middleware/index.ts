@@ -52,5 +52,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
       status: 503,
     });
   }
+  // Astro sends pages as bare "text/html"; without a charset, tools that skip the <meta> guess the encoding.
+  if (response.headers.get("Content-Type") === "text/html")
+    response.headers.set("Content-Type", "text/html; charset=utf-8");
   return setPageCache(response);
 });

@@ -53,6 +53,8 @@ export default defineConfig({
   redirects: {
     "/index": { destination: "/", status: 301 },
     "/suggest-word": { destination: "/wort-vorschlagen", status: 301 },
+    // Browsers and crawlers ask for /favicon.ico regardless of the <link rel="icon"> tags.
+    "/favicon.ico": { destination: "/favicons/favicon.ico", status: 301 },
   },
   // The toolbar's fixed-position overlay can intercept Playwright clicks in CI.
   devToolbar: {
