@@ -15,7 +15,7 @@ permissions:
   id-token: write
   contents: read
 
-# One release at a time, never cancelled: each push releases its own commit in order.
+# One release at a time, never cancelled mid-run. Queued pushes collapse into the newest, which releases everything up to it.
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
