@@ -144,6 +144,12 @@ export default defineConfig({
         access: "public",
         optional: true,
       }),
+      // Proves site ownership to IndexNow; the CMS pings with the same key (/indexnow.txt).
+      INDEXNOW_KEY: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
       WAKAPI_API_KEY: envField.string({
         context: "server",
         access: "secret",
