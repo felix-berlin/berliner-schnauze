@@ -15,6 +15,60 @@ export const docPath = (collection: RoutedCollection, slug: string): string =>
 /** Public site origin (CMS side): `SITE_URL`, else production. */
 export const siteUrl = (): string => process.env.SITE_URL || "https://berliner-schnauze.wtf";
 
-/** SEO title of a word page, also what the admin's "generate" button fills in. */
-export const wordSeoTitle = (berlinerisch: string): string =>
-  `${berlinerisch} auf Berlinerisch — Bedeutung, Beispiel & Herkunft | Berliner Schnauze`;
+const DESCRIPTION_MAX = 160;
+const TITLE_MAX = 70;
+
+/** What an entry has, so its SEO title and description only promise that. */
+export type WordSeoFacts = {
+  berlinerisch: string;
+  hasAudio?: boolean;
+  hasEtymology?: boolean;
+  hasExamples?: boolean;
+  translations: string[];
+};
+
+/**
+ * SEO description of a word page, built only from what the entry has: the meanings first, then "Mit Aussprache und
+ * Beispielsätzen" for the parts that exist. Too long: fewer meanings go before the parts. Empty without meanings.
+ * Also what the admin's "generate" button fills in.
+ */
+export const wordSeoDescription = (word: WordSeoFacts): string => {
+  const { berlinerisch, translations } = word;
+  if (!translations.length) return "";
+  const parts = [
+    word.hasEtymology && "Etymologie",
+    word.hasAudio && "Aussprache",
+    word.hasExamples && "Beispielsätzen",
+  ].filter((part): part is string => Boolean(part));
+  const features = parts.length
+    ? ` Mit ${parts.length > 1 ? `${parts.slice(0, -1).join(", ")} und ${parts.at(-1)}` : parts[0]}.`
+    : "";
+  const lead = `${berlinerisch} heißt auf Berlinerisch: `;
+  for (let count = translations.length; count >= 1; count--) {
+    for (const suffix of [features, ""]) {
+      const text = `${lead}${translations.slice(0, count).join(", ")}.${suffix}`;
+      if (text.length <= DESCRIPTION_MAX) return text;
+    }
+  }
+  return `${lead}${translations[0]}`.slice(0, DESCRIPTION_MAX - 1) + "…";
+};
+
+/**
+ * SEO title of a word page, also what the admin's "generate" button fills in. Names only the parts the entry
+ * has ("Bedeutung, Beispiele & Herkunft"); too long: the last parts go first.
+ */
+export const wordSeoTitle = (word: WordSeoFacts): string => {
+  const parts = [
+    word.translations.length > 0 && "Bedeutung",
+    word.hasExamples && "Beispiele",
+    word.hasEtymology && "Herkunft",
+    word.hasAudio && "Aussprache",
+  ].filter((part): part is string => Boolean(part));
+  const build = (shown: string[]) =>
+    `${word.berlinerisch} auf Berlinerisch${shown.length ? ` — ${shown.length > 1 ? `${shown.slice(0, -1).join(", ")} & ${shown.at(-1)}` : shown[0]}` : ""} | Berliner Schnauze`;
+  for (let count = parts.length; count > 0; count--) {
+    const title = build(parts.slice(0, count));
+    if (title.length <= TITLE_MAX) return title;
+  }
+  return build([]);
+};

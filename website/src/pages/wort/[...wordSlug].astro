@@ -37,7 +37,7 @@ import {
   similarWords,
 } from '@utils/wordHelper.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
-import { wordSeoTitle } from 'payload-app/routes';
+import { wordSeoDescription, wordSeoTitle } from 'payload-app/routes';
 import ChevronRight from '~icons/lucide/chevron-right';
 
 
@@ -64,14 +64,15 @@ const translations = translationTexts(word);
 const dateCreated = word.publishedAt ?? null;
 const dateModified = word.contentModifiedAt ?? null;
 
-const wordDescription = (() => {
-  if (!translations.length) return undefined;
-  const joined = translations.join(', ');
-  const raw = `${berlinerisch} heißt auf Berlinerisch: ${joined}. Mit Etymologie, Aussprache und Beispielsätzen.`;
-  return raw.length > 160 ? raw.slice(0, 157) + '…' : raw;
-})();
-
-const wordPageTitle = wordSeoTitle(berlinerisch);
+const wordSeoFacts = {
+  berlinerisch,
+  hasAudio: word.berlinerischAudio.length > 0,
+  hasEtymology: Boolean(word.infoTextHtml),
+  hasExamples: word.examples.some((e) => e.example),
+  translations,
+};
+const wordDescription = wordSeoDescription(wordSeoFacts) || undefined;
+const wordPageTitle = wordSeoTitle(wordSeoFacts);
 
 const wordTags = word.derived.nlpTags;
 
