@@ -208,7 +208,7 @@ const answerProfile = async (key: ProfileStep, value: string | null) => {
       [key]: value,
       ...(key === "origin" && value !== "grewUp" ? { half: null } : {}),
       ...(key === "half" && value ? { origin: "grewUp" } : {}),
-    } as Partial<Record<ProfileStep, Age | Area | Half | Origin | null>>;
+    } as Parameters<typeof sendFeedback>[1];
     trackEvent("Word Feedback", key, value ?? "skip");
     if (await sendFeedback(props.wordId, patch)) {
       $profile.set({ ...$profile.get(), ...patch } as Profile);

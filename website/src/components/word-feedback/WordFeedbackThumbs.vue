@@ -44,7 +44,7 @@ const buttons = [
 ] as const;
 
 const feedback = useStore($feedback);
-const mine = computed(() => feedback.value?.mine.reaction ?? null);
+const mine = computed(() => feedback.value?.mine?.reaction ?? null);
 
 const pending = ref(false);
 
