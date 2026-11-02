@@ -38,10 +38,11 @@ and the editor sees the counts per word in the Payload admin.
 
 ### "Sagste det noch?" card
 
-Steps, shown one at a time; each answer is saved immediately (no submit button). From step 2 on every step has "überspringen". A small progress indicator (dots) shows the position.
+Steps, shown one at a time; each answer is saved immediately (no submit button). From step 2 on every step has "überspringen". A small progress indicator (dots) shows the position; the locality step counts only where it applies.
 
 1. **Sagste det noch?** (required to start the flow): *Sag ick selbst* / *Kenn ick* / *Nie jehört*. After answering, the card shows the result bars for this word (percent per answer + total votes) and moves to step 2.
-2. **Wo wohnste?** Clickable SVG map of Berlin with real outlines: the 12 districts, but Mitte split into *Mitte* (east) and *Wedding/Tiergarten* (west: Moabit, Hansaviertel, Tiergarten, Wedding, Gesundbrunnen) and Friedrichshain-Kreuzberg into *Friedrichshain* (east) and *Kreuzberg* (west). That is 14 areas. Brandenburg is a clickable band around Berlin. Below the map a button *Woanders*.
+2. **Wo wohnste?** Clickable SVG map of Berlin with real outlines: the 12 current Bezirke (areas; since 2001, so Mitte and Friedrichshain-Kreuzberg are whole again, no split along the old wall). Brandenburg is a clickable band around Berlin. Below the map a button *Woanders*.
+   - **2b**, optional and only after one of the 12 areas: **Welcher Kiez?** The localities (Ortsteile) of the chosen area as buttons, plus "überspringen". No second map. Not asked after Brandenburg, *Woanders* or a skipped area.
 3. **Uffjewachsen oder zujezogen?** *Hier uffjewachsen* / *Zujezogen, über 10 Jahre her* / *Zujezogen, unter 10 Jahren*.
    - **3b**, only after *Hier uffjewachsen*: **In welcher Hälfte?** *Ost* / *West* / *Beides / nach der Wende*.
 4. **Wie alt biste?** *unter 20*, *20–29*, *30–39*, *40–49*, *50–59*, *60–69*, *70–79*, *80+*.
@@ -49,7 +50,7 @@ Steps, shown one at a time; each answer is saved immediately (no submit button).
 
 Ost/West is asked (3b), not derived from the residence: residence-East mostly measures gentrification, upbringing is what matters for dialect.
 
-**Remembered profile**: answers to steps 2–4 (incl. 3b) are kept in the browser. On the next word only step 1 is asked; the stored profile is attached to that vote automatically and the card jumps to the Danke state. A skipped step counts as answered "no answer" and is not asked again on later words (the visitor said no once; "Angaben ändern" is the way back). The stored profile is also attached to a like/dislike-only row. A small "Angaben ändern" link restarts steps 2–4. Changing the profile updates only future votes (and the current word's vote), not past ones.
+**Remembered profile**: answers to steps 2–4 (incl. 2b and 3b) are kept in the browser. On the next word only step 1 is asked; the stored profile is attached to that vote automatically and the card jumps to the Danke state. A skipped step counts as answered "no answer" and is not asked again on later words (the visitor said no once; "Angaben ändern" is the way back). The stored profile is also attached to a like/dislike-only row. A small "Angaben ändern" link restarts steps 2–4. Changing the profile updates only future votes (and the current word's vote), not past ones.
 
 Returning to a word already answered shows the result state with the visitor's choice highlighted; they can change their step-1 answer.
 
@@ -68,7 +69,8 @@ New collection `word-feedback` (login-only access via `authenticatedOnly`, like 
 | `visitor` | text, required (the existing visitor cookie id) |
 | `reaction` | select `like` / `dislike`, nullable |
 | `usage` | select `say` / `know` / `never`, nullable |
-| `area` | select: the 14 area keys + `brandenburg` + `elsewhere`, nullable |
+| `area` | select: the 12 Bezirke keys + `brandenburg` + `elsewhere`, nullable |
+| `locality` | select: the 97 locality (Ortsteil) keys, nullable (only together with the area it belongs to) |
 | `origin` | select `grewUp` / `movedOver10` / `movedUnder10`, nullable |
 | `half` | select `east` / `west` / `both`, nullable (only with `origin = grewUp`) |
 | `age` | select of the 8 brackets, nullable |
@@ -84,17 +86,21 @@ Schema change → generate types → migration (expand only: one new table, noth
 Same shape as `website/src/pages/api/comment-votes.ts`: visitor cookie via `visitorId()`, in-memory rate limits per IP (`rateLimitedBy`), no Turnstile (one click must stay one click; that matches the comment votes).
 
 - `GET /api/word-feedback?word=<id>`: the visitor's own row (if any) + public step-1 totals + the comparison numbers for the Danke state.
-- `PATCH /api/word-feedback`: `{ word, ...any subset of the fields }`, upserts the visitor's row (unique-violation race handled like comment votes). Sending `reaction: null` removes the reaction. Validated with a zod schema (enums, `half` only with `origin = grewUp`). Returns the same body as GET.
+- `PATCH /api/word-feedback`: `{ word, ...any subset of the fields }`, upserts the visitor's row (unique-violation race handled like comment votes). Sending `reaction: null` removes the reaction. Validated with a zod schema (enums, `half` only with `origin = grewUp`, `locality` only with the area it belongs to; the server clears a stored locality when the area changes to another one). Returns the same body as GET.
 - Only published words accept feedback.
 
-**Comparison numbers** (Danke state): share of `usage = say` among votes with `half = east`, `half = west`, `origin` in the two "moved" values, and the visitor's own `area`. A group is shown only with at least 10 votes in it (builder's call on the exact threshold), so early results aren't single votes, and no group small enough to identify a person is shown.
+**Comparison numbers** (Danke state): share of `usage = say` among votes with `half = east`, `half = west`, `origin` in the two "moved" values, the visitor's own `area` and, when given, the visitor's own `locality`. A group is shown only with at least 10 votes in it (builder's call on the exact threshold), so early results aren't single votes, and no group small enough to identify a person is shown.
 
 ## Map
 
-- Source: Berlin district and Ortsteil boundaries from the Technologiestiftung open-data bucket (`tsb-opendata…/bezirksgrenzen/bezirksgrenzen.geojson`, `…/ortsteile/lor_ortsteile.geojson`), originally Geoportal Berlin. Check and credit the licence (expected: Datenlizenz Deutschland, zero or attribution).
+- Source: the Bezirke boundaries from the Technologiestiftung open-data bucket (`tsb-opendata…/bezirksgrenzen/bezirksgrenzen.geojson`), originally Geoportal Berlin (Datenlizenz Deutschland - Zero, credited under the map anyway). There is no locality map, so no locality boundaries are needed.
 - A one-off script converts them to simplified SVG paths (Douglas–Peucker, about 10–15 KB for all areas) and commits the result as a static data file or component. The spike scripts and their output live in `.superpowers/brainstorm/335196-1793630504/map-spike/` (`split.py` → `areas.json`, git-ignored) and can be reused. It is not run at build time.
-- Each area is a real focusable control (`role="radio"` group or buttons) with its name as accessible label; labels on the map may be abbreviated (F'hain, X'berg …) but must stay ≥ 11 px and not overlap. Smallest areas (Friedrichshain, Kreuzberg, Mitte) must remain tappable on a 360 px wide phone. If they don't, the builder adds a list fallback below the map.
+- Each area is a real focusable control (`role="radio"` group or buttons) with its name as accessible label; labels on the map show the full area name where it fits and an abbreviation otherwise (L'berg) but must stay ≥ 11 px and not overlap (Friedrichshain-Kreuzberg may spill over its borders). The smallest areas must remain tappable on a 360 px wide phone. If they don't, the builder adds a list fallback below the map.
 - Brandenburg: a band/rounded frame around the city, also a control.
+
+## Decision 2026-11-02: 12 Bezirke + optional locality step
+
+The first version used a hybrid map of 14 areas (Mitte split into Mitte / Wedding-Tiergarten, Friedrichshain-Kreuzberg into Friedrichshain / Kreuzberg). Owner decision before release: the map uses exactly the 12 current Bezirke, and a new optional step 2b asks the locality (the 97 Ortsteile, from de.wikipedia "Verwaltungsgliederung Berlins") as a button list. The east/west tint on the map is gone (Ost/West is step 3b). The unreleased `word_feedback` migration was edited in place.
 
 ## Design
 
