@@ -21,15 +21,18 @@ import type { Area } from "payload-app/word-feedback";
 
 KEYS = {  # Bezirk name -> (key, short)
     "Pankow": ("pankow", "Pankow"), "Lichtenberg": ("lichtenberg", "L'berg"),
-    "Marzahn-Hellersdorf": ("marzahn-hellersdorf", "Marzahn"), "Treptow-Köpenick": ("treptow-koepenick", "Treptow"),
-    "Reinickendorf": ("reinickendorf", "R'dorf"), "Spandau": ("spandau", "Spandau"),
-    "Charlottenburg-Wilmersdorf": ("charlottenburg-wilmersdorf", "Charl."),
-    "Steglitz-Zehlendorf": ("steglitz-zehlendorf", "Steglitz"),
-    "Tempelhof-Schöneberg": ("tempelhof-schoeneberg", "T'hof"), "Neukölln": ("neukoelln", "N'kölln"),
+    "Marzahn-Hellersdorf": ("marzahn-hellersdorf", "Marzahn-|Hellersdorf"), "Treptow-Köpenick": ("treptow-koepenick", "Treptow-Köpenick"),
+    "Reinickendorf": ("reinickendorf", "Reinickendorf"), "Spandau": ("spandau", "Spandau"),
+    "Charlottenburg-Wilmersdorf": ("charlottenburg-wilmersdorf", "Charlottenburg-|Wilmersdorf"),
+    "Steglitz-Zehlendorf": ("steglitz-zehlendorf", "Steglitz-Zehlendorf"),
+    "Tempelhof-Schöneberg": ("tempelhof-schoeneberg", "T'hof"), "Neukölln": ("neukoelln", "Neukölln"),
 }
-# Hand-nudged label centres (viewBox units) where the centroid labels collide in the crowded centre.
-LABELS = {"mitte": (183, 143), "friedrichshain": (228, 166), "kreuzberg": (188, 178), "lichtenberg": (240, 128),
-          "tempelhof-schoeneberg": (172, 222), "neukoelln": (232, 230), "marzahn-hellersdorf": (298, 152)}
+# Hand-placed label centres (viewBox units): inside the district at the 11-unit label size, clear of the crowded centre.
+# "|" in a short label breaks the line; the centre is the middle of the block.
+LABELS = {"mitte": (186, 156), "friedrichshain": (228, 166), "kreuzberg": (188, 172), "lichtenberg": (256, 98),
+          "tempelhof-schoeneberg": (178, 215), "neukoelln": (216, 241), "marzahn-hellersdorf": (293, 144),
+          "wedding-tiergarten": (156, 119), "reinickendorf": (121, 70), "charlottenburg-wilmersdorf": (104, 186),
+          "spandau": (60, 133), "steglitz-zehlendorf": (90, 235), "treptow-koepenick": (311, 240)}
 EAST = {"Pankow", "Lichtenberg", "Marzahn-Hellersdorf", "Treptow-Köpenick"}
 GROUPS = [  # name, key, short, side, Ortsteile
     ("Mitte", "mitte", "Mitte", "east", {"Mitte"}),

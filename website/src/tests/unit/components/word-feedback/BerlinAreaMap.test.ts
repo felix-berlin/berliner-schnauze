@@ -87,4 +87,27 @@ describe("BerlinAreaMap", () => {
     await btn!.trigger("click");
     expect(w.emitted("update:modelValue")![0]).toEqual(["kreuzberg"]);
   });
+
+  it("offers Woanders in the list too, with the same emit contract", async () => {
+    const w = mount(BerlinAreaMap, { props: { modelValue: null } });
+    const items = w.findAll(".c-berlin-area-map__list-item");
+    expect(items).toHaveLength(16);
+    await items.find((b) => b.text() === "Woanders")!.trigger("click");
+    expect(w.emitted("update:modelValue")![0]).toEqual(["elsewhere"]);
+  });
+
+  it("shows the full district names, broken over two lines where they are long", () => {
+    const w = mountMap();
+    const lines = w.findAll("text.c-berlin-area-map__label tspan").map((t) => t.text());
+    expect(lines).toContain("Reinickendorf");
+    expect(lines).toEqual(expect.arrayContaining(["Charlottenburg-", "Wilmersdorf"]));
+    w.unmount();
+  });
+
+  it("starts map first without a measured width", () => {
+    const w = mountMap();
+    expect((w.find(".c-berlin-area-map__map").element as HTMLDetailsElement).open).toBe(true);
+    expect((w.find(".c-berlin-area-map__list").element as HTMLDetailsElement).open).toBe(false);
+    w.unmount();
+  });
 });

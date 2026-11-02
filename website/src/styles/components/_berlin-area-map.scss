@@ -1,13 +1,32 @@
 @use "@styles/mixins" as mx;
 
+// List first by default (narrow); the map takes over from 28.5rem, where its labels reach 11 px.
 .c-berlin-area-map {
+  container-type: inline-size;
+  container-name: area-map;
   display: grid;
   gap: 0.75rem;
   justify-items: center;
 
+  summary {
+    min-block-size: 2.75rem;
+    display: flex;
+    align-items: center;
+    color: var(--color-muted);
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+
+  &__map {
+    inline-size: 100%;
+    order: 1;
+  }
+
   &__svg {
-    width: min(100%, 34rem);
+    display: block;
+    width: 100%;
     height: auto;
+    margin-inline: auto;
   }
 
   &__area {
@@ -45,7 +64,8 @@
 
   &__label {
     fill: var(--color-body);
-    font-size: 15px;
+    display: none;
+    font-size: 11px;
     font-weight: 600;
     text-anchor: middle;
     dominant-baseline: middle;
@@ -67,33 +87,39 @@
     }
   }
 
-  &__elsewhere.is-selected {
-    background: var(--orange-600);
-    color: var(--white-100);
-  }
+  // In the list on narrow screens; the standalone button belongs to the map.
+  &__elsewhere {
+    display: none;
+    min-block-size: 2.75rem;
+    min-inline-size: 9rem;
+    margin: 0.75rem auto 0;
+    padding: 0.4rem 1.5rem;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 0.9375rem;
 
-  &__list {
-    inline-size: min(100%, 34rem);
-    font-size: 0.875rem;
-
-    summary {
-      min-block-size: 2.75rem;
-      display: flex;
-      align-items: center;
-      color: var(--color-muted);
-      cursor: pointer;
+    &.is-selected {
+      background: var(--orange-600);
+      border-color: var(--orange-600);
+      color: var(--white-100);
     }
   }
 
+  &__list {
+    inline-size: 100%;
+    order: 0;
+  }
+
   &__list-items {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.5rem;
   }
 
   &__list-item {
     min-block-size: 2.75rem;
-    padding: 0.3rem 0.8rem;
+    padding: 0.3rem 0.5rem;
+    overflow-wrap: anywhere;
     border: 1px dashed var(--color-muted);
     border-radius: 999px;
     background: transparent;
@@ -110,8 +136,45 @@
   }
 
   &__credit {
+    order: 2;
     margin: 0;
     color: var(--color-muted);
     font-size: 0.6875rem;
+  }
+
+  @container area-map (inline-size >= 28.5rem) {
+    &__map {
+      order: 0;
+
+      summary {
+        display: none;
+      }
+    }
+
+    &__svg {
+      max-inline-size: 40rem;
+    }
+
+    &__label {
+      display: inline;
+    }
+
+    &__elsewhere {
+      display: block;
+    }
+
+    &__list {
+      order: 1;
+      inline-size: min(100%, 40rem);
+    }
+
+    &__list-items {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    &__list-item {
+      padding-inline: 0.8rem;
+    }
   }
 }

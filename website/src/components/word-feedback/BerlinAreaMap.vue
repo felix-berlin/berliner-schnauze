@@ -1,61 +1,80 @@
 <template>
-  <div class="c-berlin-area-map">
-    <svg
-      ref="group"
-      class="c-berlin-area-map__svg"
-      :viewBox="MAP_VIEWBOX"
-      role="radiogroup"
-      aria-label="Wo wohnste?"
+  <div ref="root" class="c-berlin-area-map">
+    <details
+      class="c-berlin-area-map__map"
+      :open="mapOpen"
+      @toggle="mapOpen = ($event.target as HTMLDetailsElement).open"
     >
-      <rect
-        v-bind="radio('brandenburg', 'Brandenburg')"
-        class="c-berlin-area-map__area c-berlin-area-map__area--brandenburg"
-        :class="{ 'is-selected': modelValue === 'brandenburg' }"
-        x="-22"
-        y="-22"
-        :width="MAP_W + 44"
-        :height="MAP_H + 44"
-        rx="40"
-      />
-      <path
-        v-for="a in BERLIN_AREAS"
-        :key="a.key"
-        v-bind="radio(a.key, a.name)"
-        class="c-berlin-area-map__area"
-        :class="[`c-berlin-area-map__area--${a.side}`, { 'is-selected': modelValue === a.key }]"
-        :d="a.d"
-      />
-      <text
-        class="c-berlin-area-map__label c-berlin-area-map__label--brandenburg"
-        :class="{ 'is-selected': modelValue === 'brandenburg' }"
-        x="8"
-        y="-6"
-        aria-hidden="true"
+      <summary>Karte anzeigen</summary>
+      <svg
+        ref="group"
+        class="c-berlin-area-map__svg"
+        :viewBox="MAP_VIEWBOX"
+        role="radiogroup"
+        aria-label="Wo wohnste?"
       >
-        Brandenburg
-      </text>
-      <text
-        v-for="a in BERLIN_AREAS"
-        :key="a.key"
-        class="c-berlin-area-map__label"
-        :class="{ 'is-selected': modelValue === a.key }"
-        :x="a.labelX"
-        :y="a.labelY"
-        aria-hidden="true"
+        <rect
+          v-bind="radio('brandenburg', 'Brandenburg')"
+          class="c-berlin-area-map__area c-berlin-area-map__area--brandenburg"
+          :class="{ 'is-selected': modelValue === 'brandenburg' }"
+          x="-22"
+          y="-22"
+          :width="MAP_W + 44"
+          :height="MAP_H + 44"
+          rx="40"
+        />
+        <path
+          v-for="a in BERLIN_AREAS"
+          :key="a.key"
+          v-bind="radio(a.key, a.name)"
+          class="c-berlin-area-map__area"
+          :class="[`c-berlin-area-map__area--${a.side}`, { 'is-selected': modelValue === a.key }]"
+          :d="a.d"
+        />
+        <text
+          class="c-berlin-area-map__label c-berlin-area-map__label--brandenburg"
+          :class="{ 'is-selected': modelValue === 'brandenburg' }"
+          x="8"
+          y="-6"
+          aria-hidden="true"
+        >
+          Brandenburg
+        </text>
+        <text
+          v-for="a in BERLIN_AREAS"
+          :key="a.key"
+          class="c-berlin-area-map__label"
+          :class="{ 'is-selected': modelValue === a.key }"
+          :x="a.labelX"
+          :y="a.labelY"
+          aria-hidden="true"
+        >
+          <!-- "|" in a short label breaks the line; the block stays centred on labelY. -->
+          <tspan
+            v-for="(line, i) in a.short.split('|')"
+            :key="line"
+            :x="a.labelX"
+            :dy="i === 0 ? `${-(a.short.split('|').length - 1) * 0.575}em` : '1.15em'"
+          >
+            {{ line }}
+          </tspan>
+        </text>
+      </svg>
+      <button
+        type="button"
+        class="c-button c-berlin-area-map__elsewhere"
+        :class="{ 'is-selected': modelValue === 'elsewhere' }"
+        :aria-pressed="modelValue === 'elsewhere'"
+        @click="emit('update:modelValue', 'elsewhere')"
       >
-        {{ a.short }}
-      </text>
-    </svg>
-    <button
-      type="button"
-      class="c-button c-berlin-area-map__elsewhere"
-      :class="{ 'is-selected': modelValue === 'elsewhere' }"
-      :aria-pressed="modelValue === 'elsewhere'"
-      @click="emit('update:modelValue', 'elsewhere')"
+        Woanders
+      </button>
+    </details>
+    <details
+      class="c-berlin-area-map__list"
+      :open="listOpen"
+      @toggle="listOpen = ($event.target as HTMLDetailsElement).open"
     >
-      Woanders
-    </button>
-    <details class="c-berlin-area-map__list">
       <summary>Lieber aus ner Liste wählen</summary>
       <div class="c-berlin-area-map__list-items">
         <button
@@ -80,18 +99,33 @@
 <script setup lang="ts">
 import type { Area } from "payload-app/word-feedback";
 
-import { useTemplateRef } from "vue";
+import { useElementSize } from "@vueuse/core";
+import { computed, ref, useTemplateRef, watch } from "vue";
 
 import { BERLIN_AREAS, MAP_H, MAP_VIEWBOX, MAP_W } from "@/data/berlinAreas";
 
 const props = defineProps<{ modelValue: Area | null }>();
 const emit = defineEmits<{ "update:modelValue": [Area] }>();
 
-// The Kreuzberg shape is ~17 px tall on a phone: the list is the reliable tap target there.
+// The Kreuzberg shape is ~17 px tall on a phone: below NARROW_PX the list is primary and the map secondary.
+// Keep in step with the 28.5rem container query in _berlin-area-map.scss (the smallest width with labels >= 11 px).
+const NARROW_PX = 456;
 const LIST: { key: Area; name: string }[] = [
   ...BERLIN_AREAS,
   { key: "brandenburg", name: "Brandenburg" },
+  { key: "elsewhere", name: "Woanders" },
 ];
+
+const root = useTemplateRef<HTMLElement>("root");
+const { width } = useElementSize(root);
+// Width 0 = not measured yet (SSR, jsdom): map first.
+const narrow = computed(() => width.value > 0 && width.value < NARROW_PX);
+const mapOpen = ref(!narrow.value);
+const listOpen = ref(narrow.value);
+watch(narrow, (n) => {
+  mapOpen.value = !n;
+  listOpen.value = n;
+});
 
 const group = useTemplateRef<SVGElement>("group");
 
