@@ -15,7 +15,7 @@ describe("wordSeoDescription", () => {
     );
     expect(wordSeoDescription({ ...base, hasAudio: true })).toContain("Mit Aussprache.");
     expect(wordSeoDescription({ ...base, hasEtymology: true, hasAudio: true, hasExamples: true })).toContain(
-      "Mit Etymologie, Aussprache und Beispielsätzen.",
+      "Mit Etymologie, Aussprache & Beispielsätzen.",
     );
   });
 

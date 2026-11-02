@@ -23,6 +23,10 @@ export const hasLexicalText = (node: unknown): boolean =>
       : Object.values(node).some(hasLexicalText)
     : false;
 
+/** "a", "a & b", "a, b & c". */
+const joinList = (items: string[]): string =>
+  items.length > 1 ? `${items.slice(0, -1).join(", ")} & ${items.at(-1)}` : (items[0] ?? "");
+
 const DESCRIPTION_MAX = 160;
 const TITLE_MAX = 70;
 
@@ -49,7 +53,7 @@ export const wordSeoDescription = (word: WordSeoFacts): string => {
     word.hasExamples && "Beispielsätzen",
   ].filter((part): part is string => Boolean(part));
   const features = parts.length
-    ? ` Mit ${parts.length > 1 ? `${parts.slice(0, -1).join(", ")} und ${parts.at(-1)}` : parts[0]}.`
+    ? ` Mit ${joinList(parts)}.`
     : "";
   const lead = `${berlinerisch} heißt auf Berlinerisch: `;
   for (let count = translations.length; count >= 1; count--) {
@@ -73,7 +77,7 @@ export const wordSeoTitle = (word: WordSeoFacts): string => {
     word.hasAudio && "Aussprache",
   ].filter((part): part is string => Boolean(part));
   const build = (shown: string[]) =>
-    `${word.berlinerisch} auf Berlinerisch${shown.length ? ` — ${shown.length > 1 ? `${shown.slice(0, -1).join(", ")} & ${shown.at(-1)}` : shown[0]}` : ""} | Berliner Schnauze`;
+    `${word.berlinerisch} auf Berlinerisch${shown.length ? ` — ${joinList(shown)}` : ""} | Berliner Schnauze`;
   for (let count = parts.length; count > 0; count--) {
     const title = build(parts.slice(0, count));
     if (title.length <= TITLE_MAX) return title;
