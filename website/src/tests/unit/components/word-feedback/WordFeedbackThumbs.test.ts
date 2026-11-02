@@ -78,6 +78,17 @@ describe("WordFeedbackThumbs", () => {
     expect(store.sendFeedback).toHaveBeenCalledWith(7, { reaction: "dislike" });
   });
 
+  it("ignores a second click while a request is pending", async () => {
+    let resolve!: (v: boolean) => void;
+    store.sendFeedback.mockReturnValue(new Promise<boolean>((r) => (resolve = r)));
+    const w = await mountIt();
+    await w.findAll("button")[0].trigger("click");
+    expect(w.findAll("button")[0].attributes("disabled")).toBeDefined();
+    await w.findAll("button")[1].trigger("click");
+    expect(store.sendFeedback).toHaveBeenCalledTimes(1);
+    resolve(true);
+  });
+
   it("links to the usage card", async () => {
     const w = await mountIt();
     expect(w.find("a").attributes("href")).toBe("#sagste-det-noch");

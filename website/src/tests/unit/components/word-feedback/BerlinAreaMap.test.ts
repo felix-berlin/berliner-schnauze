@@ -80,4 +80,11 @@ describe("BerlinAreaMap", () => {
     expect(w.find(".c-berlin-area-map__label--brandenburg").classes()).toContain("is-selected");
     w.unmount();
   });
+
+  it("emits the area from the list buttons", async () => {
+    const w = mount(BerlinAreaMap, { props: { modelValue: null } });
+    const btn = w.findAll(".c-berlin-area-map__list-item").find((b) => b.text() === "Kreuzberg");
+    await btn!.trigger("click");
+    expect(w.emitted("update:modelValue")![0]).toEqual(["kreuzberg"]);
+  });
 });

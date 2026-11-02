@@ -72,6 +72,43 @@
     color: var(--white-100);
   }
 
+  &__list {
+    inline-size: min(100%, 34rem);
+    font-size: 0.875rem;
+
+    summary {
+      min-block-size: 2.75rem;
+      display: flex;
+      align-items: center;
+      color: var(--color-muted);
+      cursor: pointer;
+    }
+  }
+
+  &__list-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  &__list-item {
+    min-block-size: 2.75rem;
+    padding: 0.3rem 0.8rem;
+    border: 1px dashed var(--color-muted);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-body);
+    font: inherit;
+    cursor: pointer;
+
+    // White-100 on orange-600 (same pair as the primary button) is 5.6:1 in both modes.
+    &.is-selected {
+      background: var(--orange-600);
+      border-color: var(--orange-600);
+      color: var(--white-100);
+    }
+  }
+
   &__credit {
     margin: 0;
     color: var(--color-muted);

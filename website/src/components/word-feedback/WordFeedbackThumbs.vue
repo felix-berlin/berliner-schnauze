@@ -7,14 +7,13 @@
         :aria-pressed="mine === b.reaction"
         class="c-word-feedback-thumbs__button"
         :class="{ 'is-active': mine === b.reaction }"
+        :disabled="pending"
         type="button"
         @click="vote(b.reaction)"
       >
         <component :is="b.icon" aria-hidden="true" class="c-word-feedback-thumbs__icon" />
         <span>{{ b.label }}</span>
-        <span v-if="feedback" class="c-word-feedback-thumbs__count">{{
-          feedback.totals[b.reaction]
-        }}</span>
+        <span class="c-word-feedback-thumbs__count">{{ feedback?.totals[b.reaction] }}</span>
       </button>
     </div>
     <a class="c-word-feedback-thumbs__hint" href="#sagste-det-noch"
@@ -33,7 +32,7 @@ import {
   sendFeedback,
 } from "@stores/wordFeedback.ts";
 import { trackEvent } from "@utils/analytics";
-import { computed, defineAsyncComponent, onMounted } from "vue";
+import { computed, defineAsyncComponent, onMounted, ref } from "vue";
 
 const props = defineProps<{ wordId: number }>();
 
@@ -47,17 +46,25 @@ const buttons = [
 const feedback = useStore($feedback);
 const mine = computed(() => feedback.value?.mine.reaction ?? null);
 
+const pending = ref(false);
+
 onMounted(() => loadFeedback(props.wordId));
 
 const vote = async (reaction: "dislike" | "like") => {
-  // A failed GET left no state: retry it first, or sendFeedback would not store the answer.
-  if (!feedback.value) await loadFeedback(props.wordId);
-  const active = mine.value === reaction;
-  trackEvent("Word Feedback", "reaction", active ? "none" : reaction);
-  await sendFeedback(
-    props.wordId,
-    active ? { reaction: null } : { reaction, ...parseProfile($profile.get()) },
-  );
+  if (pending.value) return;
+  pending.value = true;
+  try {
+    // A failed GET left no state: retry it first, or sendFeedback would not store the answer.
+    if (!feedback.value) await loadFeedback(props.wordId);
+    const active = mine.value === reaction;
+    trackEvent("Word Feedback", "reaction", active ? "none" : reaction);
+    await sendFeedback(
+      props.wordId,
+      active ? { reaction: null } : { reaction, ...parseProfile($profile.get()) },
+    );
+  } finally {
+    pending.value = false;
+  }
 };
 </script>
 

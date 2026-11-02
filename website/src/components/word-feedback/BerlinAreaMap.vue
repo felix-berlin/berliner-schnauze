@@ -55,6 +55,22 @@
     >
       Woanders
     </button>
+    <details class="c-berlin-area-map__list">
+      <summary>Lieber aus ner Liste wählen</summary>
+      <div class="c-berlin-area-map__list-items">
+        <button
+          v-for="a in LIST"
+          :key="a.key"
+          type="button"
+          class="c-berlin-area-map__list-item"
+          :class="{ 'is-selected': modelValue === a.key }"
+          :aria-pressed="modelValue === a.key"
+          @click="emit('update:modelValue', a.key)"
+        >
+          {{ a.name }}
+        </button>
+      </div>
+    </details>
     <p class="c-berlin-area-map__credit">
       Karte: Geoportal Berlin / ALKIS Berlin Bezirke, Ortsteile
     </p>
@@ -70,6 +86,12 @@ import { BERLIN_AREAS, MAP_H, MAP_VIEWBOX, MAP_W } from "@/data/berlinAreas";
 
 const props = defineProps<{ modelValue: Area | null }>();
 const emit = defineEmits<{ "update:modelValue": [Area] }>();
+
+// The Kreuzberg shape is ~17 px tall on a phone: the list is the reliable tap target there.
+const LIST: { key: Area; name: string }[] = [
+  ...BERLIN_AREAS,
+  { key: "brandenburg", name: "Brandenburg" },
+];
 
 const group = useTemplateRef<SVGElement>("group");
 

@@ -1,0 +1,146 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+
+.c-word-feedback-card {
+  @include mx.paper-card;
+
+  display: grid;
+  gap: vars.$spacer;
+  padding: vars.$spacer * 1.25;
+  margin-block: vars.$spacer * 2;
+
+  &__title {
+    @include mx.paper-card-title;
+
+    margin: 0;
+  }
+
+  &__options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__option {
+    min-block-size: 2.75rem;
+    padding: 0.4rem 1rem;
+    border: 1px dashed var(--color-muted);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-body);
+    font: inherit;
+    font-size: 0.9375rem;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent-text);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      cursor: progress;
+      opacity: 0.6;
+    }
+
+    // White-100 on orange-600 (same pair as the primary button) is 5.6:1 in both modes.
+    &.is-selected {
+      background: var(--orange-600);
+      border: 1px solid var(--orange-600);
+      color: var(--white-100);
+    }
+  }
+
+  &__bars {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  &__bar {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.15rem 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  &__bar-track {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    block-size: 0.5rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-muted) 20%, transparent);
+    overflow: hidden;
+  }
+
+  &__bar-fill {
+    display: block;
+    block-size: 100%;
+    background: var(--orange-600);
+  }
+
+  &__bar-value {
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__step {
+    display: grid;
+    gap: vars.$spacer * 0.75;
+  }
+
+  &__dots {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  &__dot {
+    inline-size: 0.6rem;
+    block-size: 0.6rem;
+    border: 1px solid var(--color-muted);
+    border-radius: 50%;
+
+    &.is-active {
+      background: var(--orange-600);
+      border-color: var(--orange-600);
+    }
+  }
+
+  &__question {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  &__skip {
+    justify-self: start;
+    padding: 0.5rem 0;
+    border: 0;
+    background: none;
+    color: var(--color-muted);
+    font: inherit;
+    font-size: 0.875rem;
+    text-decoration: underline dashed;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent-text);
+      outline-offset: 2px;
+    }
+  }
+
+  &__compare {
+    margin: 0;
+    padding-inline-start: 1.1rem;
+    font-size: 0.9375rem;
+  }
+
+  &__done {
+    display: grid;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__error {
+    margin: 0;
+    color: color-mix(in srgb, var(--danger) 75%, black);
+    font-size: 0.875rem;
+  }
+}

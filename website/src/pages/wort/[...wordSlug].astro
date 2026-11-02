@@ -11,6 +11,7 @@ import WordGalleryCol from '@components/word/WordGalleryCol.astro';
 import WordHero from '@components/word/WordHero.astro';
 import WordLearnMore from '@components/word/WordLearnMore.astro';
 import WordComments from '@components/comments/WordComments.vue';
+import WordFeedbackCard from '@components/word-feedback/WordFeedbackCard.vue';
 import WordPageFooter from '@components/word/WordPageFooter.astro';
 import WordSectionBeispiele from '@components/word/WordSectionBeispiele.astro';
 import WordSectionEtymologie from '@components/word/WordSectionEtymologie.astro';
@@ -231,6 +232,12 @@ const schemaJson = () => {
         <WordSectionEtymologie word={word} />
 
         <WordSectionBeispiele examples={word.examples} />
+
+        {!draft && (
+          <div id='sagste-det-noch'>
+            <WordFeedbackCard client:visible wordId={word.id} />
+          </div>
+        )}
 
         <WordSectionOrthographie
           allWords={wordRefs}
