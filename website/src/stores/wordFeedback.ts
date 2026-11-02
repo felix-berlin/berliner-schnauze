@@ -6,11 +6,15 @@ import { atom } from "nanostores";
 import {
   AGES,
   AREAS,
+  AREA_LOCALITIES,
   HALVES,
   ORIGINS,
+  LOCALITIES,
+  LOCALITY_AREA,
   type Age,
   type Area,
   type Half,
+  type Locality,
   type Origin,
   type Usage,
 } from "payload-app/word-feedback";
@@ -20,13 +24,20 @@ export type Profile = {
   age?: Age | null;
   area?: Area | null;
   half?: Half | null;
+  locality?: Locality | null;
   origin?: Origin | null;
 };
 
 export const $feedback = atom<WordFeedbackState | null>(null);
 export const $feedbackError = atom<boolean>(false);
 
-const FIELDS = { age: AGES, area: AREAS, half: HALVES, origin: ORIGINS } as const;
+const FIELDS = {
+  age: AGES,
+  area: AREAS,
+  half: HALVES,
+  locality: LOCALITIES,
+  origin: ORIGINS,
+} as const;
 
 export const parseProfile = (raw: unknown): Profile => {
   if (typeof raw !== "object" || raw === null) return {};
@@ -36,6 +47,8 @@ export const parseProfile = (raw: unknown): Profile => {
     if (v === null || (typeof v === "string" && (allowed as readonly string[]).includes(v)))
       out[key] = v;
   }
+  // The API rejects a locality outside the area sent with it.
+  if (out.locality && LOCALITY_AREA[out.locality as Locality] !== out.area) delete out.locality;
   // The API rejects a half without origin grewUp; a stale one would fail every vote.
   if (out.half && out.origin !== "grewUp") delete out.half;
   return out as Profile;
@@ -59,8 +72,13 @@ export const $profile = persistentAtom<Profile>(
   },
 );
 
-export const nextStep = (profile: Profile): "age" | "area" | "done" | "half" | "origin" => {
+export const nextStep = (
+  profile: Profile,
+): "age" | "area" | "done" | "half" | "locality" | "origin" => {
   if (!("area" in profile)) return "area";
+  // Asked only for a Berlin borough; brandenburg, elsewhere and a skipped area offer no localities.
+  if (profile.area && profile.area in AREA_LOCALITIES && !("locality" in profile))
+    return "locality";
   if (!("origin" in profile)) return "origin";
   if (profile.origin === "grewUp" && !("half" in profile)) return "half";
   if (!("age" in profile)) return "age";

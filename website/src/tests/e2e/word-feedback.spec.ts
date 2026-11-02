@@ -16,6 +16,8 @@ test.describe("word feedback", () => {
     await card.getByRole("button", { name: "Sag ick selbst" }).click();
     await expect(card.getByText("Wo wohnste?").first()).toBeVisible();
     await card.getByRole("radio", { name: "Friedrichshain-Kreuzberg" }).click();
+    await expect(card.getByText("Welcher Kiez?").first()).toBeVisible();
+    await card.getByRole("button", { exact: true, name: "Kreuzberg" }).click();
     await card.getByRole("button", { name: "Hier uffjewachsen" }).click();
     await card.getByRole("button", { exact: true, name: "West" }).click();
     await card.getByRole("button", { name: "30–39" }).click();
@@ -53,6 +55,7 @@ test.describe("word feedback", () => {
     expect(state.mine).toMatchObject({
       age: "30-39",
       area: "friedrichshain-kreuzberg",
+      locality: "kreuzberg",
       origin: "grewUp",
       usage: "say",
     });

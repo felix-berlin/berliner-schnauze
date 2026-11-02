@@ -15,10 +15,17 @@ vi.mock("@services/payload.ts", async (importOriginal) => ({
 import type { APIContext } from "astro";
 
 import { siteRead } from "@services/payload.ts";
+
 import { GET, PATCH } from "@/pages/api/word-feedback.ts";
 
 const set = vi.fn();
-const ctx = (init: { body?: unknown; cookie?: string; ip?: string; url?: string; method?: string }) =>
+const ctx = (init: {
+  body?: unknown;
+  cookie?: string;
+  ip?: string;
+  url?: string;
+  method?: string;
+}) =>
   ({
     clientAddress: init.ip,
     cookies: { get: () => (init.cookie ? { value: init.cookie } : undefined), set },
@@ -79,6 +86,50 @@ describe("PATCH /api/word-feedback", () => {
     expect((await patch({ half: "east", origin: "grewUp", word: 7 }, "v-1")).status).toBe(200);
   });
 
+  it("a locality needs the area of its area in the same body", async () => {
+    expect((await patch({ locality: "kreuzberg", word: 7 }, "v-1")).status).toBe(400);
+    expect((await patch({ area: "pankow", locality: "kreuzberg", word: 7 }, "v-1")).status).toBe(
+      400,
+    );
+    expect((await patch({ area: null, locality: "kreuzberg", word: 7 }, "v-1")).status).toBe(400);
+    expect((await patch({ locality: "atlantis", word: 7 }, "v-1")).status).toBe(400);
+    const ok = await patch(
+      { area: "friedrichshain-kreuzberg", locality: "kreuzberg", word: 7 },
+      "v-1",
+    );
+    expect(ok.status).toBe(200);
+    expect(create.mock.calls[0][0].data).toMatchObject({
+      area: "friedrichshain-kreuzberg",
+      locality: "kreuzberg",
+    });
+    expect((await ok.json()).mine.locality).toBe("kreuzberg");
+  });
+
+  it("skipping the Locality needs no area", async () => {
+    find.mockResolvedValue({ docs: [{ id: 3, locality: "kreuzberg" }] });
+    expect((await patch({ locality: null, word: 7 }, "v-1")).status).toBe(200);
+    expect(update.mock.calls[0][0].data).toEqual({ locality: null });
+  });
+
+  it.each([null, "pankow", "brandenburg", "elsewhere"])(
+    "area %s clears a stored locality of another area",
+    async (area) => {
+      find.mockResolvedValue({
+        docs: [{ area: "friedrichshain-kreuzberg", id: 3, locality: "kreuzberg" }],
+      });
+      await patch({ area, word: 7 }, "v-1");
+      expect(update.mock.calls[0][0].data).toEqual({ area, locality: null });
+    },
+  );
+
+  it("the same area keeps a stored locality", async () => {
+    find.mockResolvedValue({
+      docs: [{ area: "friedrichshain-kreuzberg", id: 3, locality: "kreuzberg" }],
+    });
+    await patch({ area: "friedrichshain-kreuzberg", word: 7 }, "v-1");
+    expect(update.mock.calls[0][0].data).toEqual({ area: "friedrichshain-kreuzberg" });
+  });
+
   it("null clears a key", async () => {
     find.mockResolvedValue({ docs: [{ id: 3, reaction: "like" }] });
     await patch({ reaction: null, word: 7 }, "v-1");
@@ -116,7 +167,8 @@ describe("PATCH /api/word-feedback", () => {
   });
 
   it("429 on the 31st request per word and IP", async () => {
-    for (let i = 0; i < 30; i++) expect((await patch({ usage: "say", word: 99 }, undefined, "10.0.0.2")).status).toBe(200);
+    for (let i = 0; i < 30; i++)
+      expect((await patch({ usage: "say", word: 99 }, undefined, "10.0.0.2")).status).toBe(200);
     expect((await patch({ usage: "say", word: 99 }, undefined, "10.0.0.2")).status).toBe(429);
   });
 });
@@ -124,7 +176,9 @@ describe("PATCH /api/word-feedback", () => {
 describe("GET /api/word-feedback", () => {
   it("without cookie: mine null, totals counted, no cookie set", async () => {
     count.mockResolvedValue({ totalDocs: 2 });
-    const res = await GET(ctx({ method: "GET", url: "https://berliner-schnauze.wtf/api/word-feedback?word=7" }));
+    const res = await GET(
+      ctx({ method: "GET", url: "https://berliner-schnauze.wtf/api/word-feedback?word=7" }),
+    );
     const body = await res.json();
     expect(body.mine).toBeNull();
     expect(body.totals).toEqual({ dislike: 2, know: 2, like: 2, never: 2, say: 2 });
@@ -132,6 +186,12 @@ describe("GET /api/word-feedback", () => {
   });
 
   it("400 on a bad word", async () => {
-    expect((await GET(ctx({ method: "GET", url: "https://berliner-schnauze.wtf/api/word-feedback?word=x" }))).status).toBe(400);
+    expect(
+      (
+        await GET(
+          ctx({ method: "GET", url: "https://berliner-schnauze.wtf/api/word-feedback?word=x" }),
+        )
+      ).status,
+    ).toBe(400);
   });
 });

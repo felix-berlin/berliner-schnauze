@@ -9,10 +9,15 @@ import {
   type MyFeedback,
   type WordFeedbackState,
 } from "@utils/wordFeedbackSchema.ts";
-import { feedbackCompare, feedbackTotals } from "payload-app/word-feedback";
+import {
+  feedbackCompare,
+  feedbackTotals,
+  LOCALITY_AREA,
+  type Locality,
+} from "payload-app/word-feedback";
 
 const DAY = 24 * 60 * 60_000;
-const KEYS = ["reaction", "usage", "area", "origin", "half", "age"] as const;
+const KEYS = ["reaction", "usage", "area", "locality", "origin", "half", "age"] as const;
 
 const toMine = (doc: Partial<Record<(typeof KEYS)[number], string | null>>) =>
   Object.fromEntries(KEYS.map((k) => [k, doc[k] ?? null])) as MyFeedback;
@@ -33,7 +38,7 @@ const findMine = async (payload: Client, word: number, visitor: string | undefin
 
 const state = async (payload: Client, word: number, mine: MyFeedback | null) => {
   const [compare, totals] = await Promise.all([
-    feedbackCompare(payload, word, mine?.area ?? null),
+    feedbackCompare(payload, word, mine?.area ?? null, mine?.locality ?? null),
     feedbackTotals(payload, word),
   ]);
   return { compare, mine, totals } satisfies WordFeedbackState;
@@ -79,11 +84,23 @@ export const PATCH: APIRoute = async ({ clientAddress, cookies, request }) => {
     ) as Record<string, string | null>;
     if (data.origin !== undefined && data.origin !== "grewUp") data.half = null;
 
-    const change = (id: number) =>
-      payload.update({ collection: "word-feedback", data, depth: 0, id });
+    // A new area drops a stored Locality of another area (also area: null), unless the body sets it.
+    const change = (row: { id: number; locality?: string | null }) =>
+      payload.update({
+        collection: "word-feedback",
+        data:
+          data.area !== undefined &&
+          data.locality === undefined &&
+          row.locality &&
+          LOCALITY_AREA[row.locality as Locality] !== data.area
+            ? { ...data, locality: null }
+            : data,
+        depth: 0,
+        id: row.id,
+      });
     const existing = await findMine(payload, word, visitor);
     let doc;
-    if (existing) doc = await change(existing.id);
+    if (existing) doc = await change(existing);
     else {
       try {
         doc = await payload.create({
@@ -96,7 +113,7 @@ export const PATCH: APIRoute = async ({ clientAddress, cookies, request }) => {
         // Lost a race against our own double click: the row exists now, so update it.
         const raced = await findMine(payload, word, visitor);
         if (!raced) throw error;
-        doc = await change(raced.id);
+        doc = await change(raced);
       }
     }
     return reply(await state(payload, word, toMine(doc)), 200);

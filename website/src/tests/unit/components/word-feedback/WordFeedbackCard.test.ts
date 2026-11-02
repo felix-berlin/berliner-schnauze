@@ -19,7 +19,7 @@ import { $feedback, $profile } from "@stores/wordFeedback.ts";
 
 const state = (over: Record<string, unknown> = {}) =>
   ({
-    compare: { area: null, east: 60, moved: null, west: null },
+    compare: { area: null, east: 60, locality: null, moved: null, west: null },
     mine: { usage: null },
     totals: { dislike: 0, know: 5, like: 0, never: 5, say: 10 },
     ...over,
@@ -115,6 +115,95 @@ describe("WordFeedbackCard", () => {
     expect(store.sendFeedback).toHaveBeenLastCalledWith(7, { area: null });
     expect($profile.get()).toEqual({ area: null });
     expect(w.text()).toContain("Uffjewachsen oder zujezogen?");
+  });
+
+  it("a borough leads to the optional locality step with its localities", async () => {
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    await click(w, "Friedrichshain-Kreuzberg");
+    expect(store.sendFeedback).toHaveBeenLastCalledWith(7, { area: "friedrichshain-kreuzberg" });
+    expect(w.text()).toContain("Welcher Kiez?");
+    expect(w.findAll(".c-word-feedback-card__options--kiez button").map((b) => b.text())).toEqual([
+      "Friedrichshain",
+      "Kreuzberg",
+    ]);
+    expect(w.find('[role="img"]').attributes("aria-label")).toBe("Schritt 3 von 5");
+  });
+
+  it("picking a locality sends it together with its area", async () => {
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    await click(w, "Friedrichshain-Kreuzberg");
+    await click(w, "Kreuzberg");
+    expect(store.sendFeedback).toHaveBeenLastCalledWith(7, {
+      area: "friedrichshain-kreuzberg",
+      locality: "kreuzberg",
+    });
+    expect($profile.get()).toEqual({ area: "friedrichshain-kreuzberg", locality: "kreuzberg" });
+    expect(w.text()).toContain("Uffjewachsen oder zujezogen?");
+  });
+
+  it("skipping the locality sends null without an area", async () => {
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    await click(w, "Pankow");
+    await click(w, "überspringen");
+    expect(store.sendFeedback).toHaveBeenLastCalledWith(7, { locality: null });
+    expect($profile.get()).toEqual({ area: "pankow", locality: null });
+    expect(w.text()).toContain("Uffjewachsen oder zujezogen?");
+  });
+
+  it.each(["Brandenburg", "Woanders"])("%s has no locality step", async (name) => {
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    await click(w, name);
+    expect(w.text()).toContain("Uffjewachsen oder zujezogen?");
+    expect(w.text()).not.toContain("Welcher Kiez?");
+    expect(w.find('[role="img"]').attributes("aria-label")).toBe("Schritt 3 von 4");
+  });
+
+  it("changing the area clears the earlier locality and asks again", async () => {
+    $feedback.set(state({ mine: { locality: "prenzlauer-berg", usage: "say" } }));
+    const w = await mountIt();
+    await click(w, "Angaben ändern");
+    await click(w, "Neukölln");
+    expect(store.sendFeedback).toHaveBeenLastCalledWith(7, { area: "neukoelln", locality: null });
+    // For the profile the new area's locality is "not asked yet", not skipped.
+    expect($profile.get()).toEqual({ area: "neukoelln" });
+    expect(w.text()).toContain("Welcher Kiez?");
+  });
+
+  it("shows the locality comparison row only with data", async () => {
+    $profile.set({ age: null, area: "pankow", half: null, locality: "karow", origin: null });
+    $feedback.set(
+      state({
+        compare: { area: 50, east: null, locality: 70, moved: null, west: null },
+        mine: { area: "pankow", locality: "karow", usage: "say" },
+      }),
+    );
+    const w = await mountIt();
+    expect(w.text()).toContain("in Pankow: 50 % sagen det");
+    expect(w.text()).toContain("in Karow: 70 % sagen det");
+    $feedback.set(
+      state({
+        compare: { area: 50, east: null, locality: null, moved: null, west: null },
+        mine: { area: "pankow", locality: "karow", usage: "say" },
+      }),
+    );
+    await flushPromises();
+    expect(w.text()).not.toContain("in Karow");
+  });
+
+  it("a failed locality send keeps the step and the answer highlighted", async () => {
+    store.sendFeedback.mockResolvedValueOnce(true).mockResolvedValueOnce(false);
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    await click(w, "Pankow");
+    await click(w, "Karow");
+    expect(w.text()).toContain("Welcher Kiez?");
+    expect($profile.get()).toEqual({ area: "pankow" });
+    const b = w.findAll("button").find((x) => x.text() === "Karow")!;
+    expect(b.attributes("aria-pressed")).toBe("true");
   });
 
   it("grew up leads to the half step", async () => {
@@ -304,7 +393,7 @@ describe("WordFeedbackCard", () => {
       fine(true);
       const w = await editing();
       expect(dotButtons(w)).toHaveLength(3);
-      await w.unmount();
+      w.unmount();
       const grew = await editing({ origin: "grewUp" });
       expect(dotButtons(grew).map((b) => b.attributes("aria-label"))).toContain(
         "Schritt 4: In welcher Hälfte?",

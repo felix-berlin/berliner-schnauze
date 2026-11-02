@@ -15,7 +15,7 @@ import {
 } from "@stores/wordFeedback.ts";
 
 const state = {
-  compare: { area: null, east: null, moved: null, west: null },
+  compare: { area: null, east: null, locality: null, moved: null, west: null },
   mine: null,
   totals: { dislike: 0, know: 0, like: 1, never: 0, say: 0 },
 };
@@ -33,6 +33,28 @@ beforeEach(() => {
 describe("parseProfile", () => {
   it("drops unknown keys and values", () => {
     expect(parseProfile({ age: "30-39", area: "atlantis", x: 1 })).toEqual({ age: "30-39" });
+  });
+  it("drops the area keys of the old 14-area map as unknown (not asked yet)", () => {
+    for (const area of ["wedding-tiergarten", "friedrichshain", "kreuzberg"])
+      expect(parseProfile({ age: "30-39", area })).toEqual({ age: "30-39" });
+  });
+  it("keeps a locality only inside its own area", () => {
+    expect(parseProfile({ area: "friedrichshain-kreuzberg", locality: "kreuzberg" })).toEqual({
+      area: "friedrichshain-kreuzberg",
+      locality: "kreuzberg",
+    });
+    expect(parseProfile({ area: "pankow", locality: "kreuzberg" })).toEqual({ area: "pankow" });
+    expect(parseProfile({ locality: "kreuzberg" })).toEqual({});
+    expect(parseProfile({ area: "brandenburg", locality: "kreuzberg" })).toEqual({
+      area: "brandenburg",
+    });
+    expect(parseProfile({ area: "pankow", locality: "atlantis" })).toEqual({ area: "pankow" });
+  });
+  it("accepts a skipped Locality", () => {
+    expect(parseProfile({ area: "pankow", locality: null })).toEqual({
+      area: "pankow",
+      locality: null,
+    });
   });
   it("keeps null as skipped", () => expect(parseProfile({ area: null })).toEqual({ area: null }));
   it("treats malformed input as empty", () => {
@@ -64,7 +86,13 @@ describe("nextStep", () => {
   it.each([
     [{}, "area"],
     [{ area: null }, "origin"],
-    [{ area: "pankow", origin: "grewUp" }, "half"],
+    [{ area: "pankow" }, "locality"],
+    [{ area: "pankow", locality: null }, "origin"],
+    [{ area: "pankow", locality: "prenzlauer-berg" }, "origin"],
+    [{ area: "brandenburg" }, "origin"],
+    [{ area: "elsewhere" }, "origin"],
+    [{ area: "pankow", locality: null, origin: "grewUp" }, "half"],
+    [{ area: "pankow", locality: null, origin: "grewUp" }, "half"],
     [{ area: null, origin: "movedOver10" }, "age"],
     [{ age: null, area: null, origin: null }, "done"],
   ] as const)("%j -> %s", (p, step) => expect(nextStep(p)).toBe(step));
@@ -160,13 +188,11 @@ describe("sendFeedback", () => {
   it("shows the server's message when the daily cap answers 429", async () => {
     vi.stubGlobal(
       "fetch",
-      vi
-        .fn()
-        .mockResolvedValue({
-          json: async () => ({ error: "Jenug jestimmt für heute." }),
-          ok: false,
-          status: 429,
-        }),
+      vi.fn().mockResolvedValue({
+        json: async () => ({ error: "Jenug jestimmt für heute." }),
+        ok: false,
+        status: 429,
+      }),
     );
     expect(await sendFeedback(1, { usage: "say" })).toBe(false);
     expect(toast).toHaveBeenCalledWith(
@@ -219,6 +245,16 @@ describe("answerUsage", () => {
     $profile.set({ half: "east", origin: "grewUp" });
     await answerUsage(5, "know");
     expect(JSON.parse(f.mock.calls[0][1].body)).toMatchObject({ half: "east", origin: "grewUp" });
+  });
+  it("sends the Locality together with its area", async () => {
+    const f = vi.fn().mockResolvedValue(ok());
+    vi.stubGlobal("fetch", f);
+    $profile.set({ area: "pankow", locality: "prenzlauer-berg" });
+    await answerUsage(5, "say");
+    expect(JSON.parse(f.mock.calls[0][1].body)).toMatchObject({
+      area: "pankow",
+      locality: "prenzlauer-berg",
+    });
   });
   it("sends usage with the profile in one PATCH", async () => {
     const f = vi.fn().mockResolvedValue(ok());

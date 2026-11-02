@@ -3,7 +3,14 @@ import type { Payload } from "payload";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
 import { Words } from "../src/collections/Words";
-import { feedbackCompare, feedbackTotals } from "../src/lib/wordFeedback";
+import {
+  AREAS,
+  AREA_LOCALITIES,
+  feedbackCompare,
+  feedbackTotals,
+  LOCALITIES,
+  LOCALITY_AREA,
+} from "../src/lib/wordFeedback";
 import { getTestPayload } from "./helpers/payload";
 
 let payload: Payload;
@@ -61,6 +68,7 @@ describe("word-feedback", () => {
       west: null,
       moved: null,
       area: null,
+      locality: null,
     });
   });
 
@@ -69,7 +77,23 @@ describe("word-feedback", () => {
     await rows(4, { origin: "movedOver10", area: "pankow", usage: "say" });
     await rows(6, { origin: "movedUnder10", area: "pankow", usage: "never" });
     const c = await feedbackCompare(payload, wordId, "pankow");
-    expect(c).toEqual({ east: null, west: null, moved: 40, area: 40 });
+    expect(c).toEqual({ east: null, west: null, moved: 40, area: 40, locality: null });
+  });
+
+  it("compares the visitor's own Locality, hidden below the minimum", async () => {
+    await rows(8, { area: "pankow", locality: "prenzlauer-berg", usage: "say" });
+    await rows(2, { area: "pankow", locality: "prenzlauer-berg", usage: "never" });
+    await rows(9, { area: "pankow", locality: "weissensee", usage: "say" });
+    expect((await feedbackCompare(payload, wordId, "pankow", "prenzlauer-berg")).locality).toBe(80);
+    const small = await feedbackCompare(payload, wordId, "pankow", "weissensee");
+    expect(small).toMatchObject({ area: 89, locality: null });
+    expect((await feedbackCompare(payload, wordId, "pankow")).locality).toBeNull();
+  });
+
+  it("stores the Locality and rejects an unknown one", async () => {
+    const doc = await row({ area: "mitte", locality: "moabit" });
+    expect(doc.locality).toBe("moabit");
+    await expect(row({ locality: "wedding-tiergarten" })).rejects.toThrow();
   });
 
   it("rejects a second row per word and visitor", async () => {
@@ -99,6 +123,23 @@ describe("word-feedback", () => {
       where: { visitor: { equals: "del" } },
     });
     expect(left.totalDocs).toBe(0);
+  });
+});
+
+describe("boroughs and localities data", () => {
+  it("has 12 areas, 97 unique Locality keys, each mapped to an area", () => {
+    expect(Object.keys(AREA_LOCALITIES)).toHaveLength(12);
+    expect(AREAS).toHaveLength(14);
+    expect(LOCALITIES).toHaveLength(97);
+    expect(new Set(LOCALITIES).size).toBe(97);
+    for (const k of LOCALITIES) {
+      expect(k).toMatch(/^[a-z]+(-[a-z]+)*$/);
+      expect(AREAS).toContain(LOCALITY_AREA[k]);
+    }
+    expect(AREAS).not.toContain("kreuzberg");
+    expect(LOCALITY_AREA["maerkisches-viertel"]).toBe("reinickendorf");
+    expect(LOCALITY_AREA["stadtrandsiedlung-malchow"]).toBe("pankow");
+    expect(LOCALITY_AREA.malchow).toBe("lichtenberg");
   });
 });
 

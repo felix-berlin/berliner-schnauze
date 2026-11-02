@@ -80,9 +80,13 @@
           :model-value="(picked.area as Area | null) ?? null"
           @update:model-value="answerProfile('area', $event)"
         />
-        <div v-else class="c-word-feedback-card__options">
+        <div
+          v-else
+          class="c-word-feedback-card__options"
+          :class="{ 'c-word-feedback-card__options--kiez': current === 'locality' }"
+        >
           <button
-            v-for="o in CHOICES[current]"
+            v-for="o in choices"
             :key="o.value"
             :aria-pressed="picked[current] === o.value"
             class="c-word-feedback-card__option"
@@ -123,8 +127,6 @@
 </template>
 
 <script setup lang="ts">
-import type { Age, Area, Half, Origin, Usage } from "payload-app/word-feedback";
-
 import BerlinAreaMap from "@components/word-feedback/BerlinAreaMap.vue";
 import { useStore } from "@nanostores/vue";
 import {
@@ -138,12 +140,23 @@ import {
 } from "@stores/wordFeedback.ts";
 import { trackEvent } from "@utils/analytics";
 import { useMediaQuery } from "@vueuse/core";
+import {
+  AREA_LOCALITIES,
+  LOCALITY_NAMES,
+  type Age,
+  type Area,
+  type BerlinArea,
+  type Half,
+  type Locality,
+  type Origin,
+  type Usage,
+} from "payload-app/word-feedback";
 import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from "vue";
 
 import { BERLIN_AREAS } from "@/data/berlinAreas";
 
-type Step = "age" | "area" | "done" | "half" | "origin" | "usage";
-type ProfileStep = "age" | "area" | "half" | "origin";
+type Step = "age" | "area" | "done" | "half" | "locality" | "origin" | "usage";
+type ProfileStep = "age" | "area" | "half" | "locality" | "origin";
 
 const props = defineProps<{ wordId: number }>();
 
@@ -156,9 +169,14 @@ const QUESTIONS = {
   age: "Wie alt biste?",
   area: "Wo wohnste?",
   half: "In welcher Hälfte?",
+  locality: "Welcher Kiez?",
   origin: "Uffjewachsen oder zujezogen?",
 };
-const CHOICES: Record<Exclude<ProfileStep, "area">, { label: string; value: string }[]> = {
+// The localities come from the chosen area, see `choices`.
+const CHOICES: Record<
+  Exclude<ProfileStep, "area" | "locality">,
+  { label: string; value: string }[]
+> = {
   age: [
     { label: "unter 20", value: "u20" },
     { label: "20–29", value: "20-29" },
@@ -184,6 +202,24 @@ const CHOICES: Record<Exclude<ProfileStep, "area">, { label: string; value: stri
 const feedback = useStore($feedback);
 const profile = useStore($profile);
 
+// The area whose localities are offered; null for Brandenburg, Woanders and a skipped area.
+const localityArea = computed(() => {
+  const a = profile.value.area;
+  return a && a in AREA_LOCALITIES ? (a as BerlinArea) : null;
+});
+const choices = computed(() =>
+  current.value === "locality"
+    ? Object.entries(localityArea.value ? AREA_LOCALITIES[localityArea.value] : {}).map(
+        ([value, label]) => ({
+          label,
+          value,
+        }),
+      )
+    : current.value === "area"
+      ? []
+      : CHOICES[current.value as keyof typeof CHOICES],
+);
+
 // null = not chosen yet: derived from the loaded state, so a revisit starts in "done".
 const step = ref<Step | null>(null);
 const current = computed<Step>(
@@ -201,7 +237,7 @@ const doneBox = useTemplateRef<HTMLElement>("doneBox");
 // Only user-driven step changes move focus (the buttons that held it are gone), never mount/hydration.
 // Enter animation (CSS only, no View Transitions: nothing to coordinate with the focus move below).
 // Only a user-driven step change sets it, so mount and a revisit's first paint stay still.
-const ORDER: Step[] = ["usage", "area", "origin", "half", "age", "done"];
+const ORDER: Step[] = ["usage", "area", "locality", "origin", "half", "age", "done"];
 const enter = ref<string[]>([]);
 watch(step, async (to, from) => {
   enter.value = [
@@ -246,14 +282,21 @@ const answerProfile = async (key: ProfileStep, value: string | null) => {
     if (!(await ready())) return;
     picked.value = { ...picked.value, [key]: value };
     // The API only accepts a half in the same request as origin grewUp.
+    // Likewise a locality only together with its area, and a new area drops the old one.
+    const hadLocality = $profile.get().locality || feedback.value?.mine?.locality;
     const patch = {
       [key]: value,
       ...(key === "origin" && value !== "grewUp" ? { half: null } : {}),
       ...(key === "half" && value ? { origin: "grewUp" } : {}),
+      ...(key === "locality" && value ? { area: $profile.get().area } : {}),
+      ...(key === "area" && hadLocality ? { locality: null } : {}),
     } as Parameters<typeof sendFeedback>[1];
     trackEvent("Word Feedback", key, value ?? "skip");
     if (await sendFeedback(props.wordId, patch)) {
-      $profile.set({ ...$profile.get(), ...patch } as Profile);
+      const next = { ...$profile.get(), ...patch } as Profile;
+      // The sent null only clears the server row; for the profile the new area's locality is "not asked yet".
+      if (key === "area") delete next.locality;
+      $profile.set(next);
       step.value = nextStep($profile.get());
     }
   } finally {
@@ -273,11 +316,14 @@ const reset = () => {
   step.value = "area";
 };
 
-const dots = computed(() =>
-  profile.value.origin === "grewUp" || current.value === "half"
-    ? ["usage", "area", "origin", "half", "age"]
-    : ["usage", "area", "origin", "age"],
-);
+const dots = computed(() => [
+  "usage",
+  "area",
+  ...(localityArea.value || current.value === "locality" ? ["locality"] : []),
+  "origin",
+  ...(profile.value.origin === "grewUp" || current.value === "half" ? ["half"] : []),
+  "age",
+]);
 const dotIndex = computed(() => Math.max(0, dots.value.indexOf(current.value)));
 
 const bars = computed(() => {
@@ -299,6 +345,10 @@ const areaName = computed(() => {
   if (!key || key === "elsewhere") return null;
   return key === "brandenburg" ? "Brandenburg" : BERLIN_AREAS.find((a) => a.key === key)?.name;
 });
+const localityName = computed(() => {
+  const key: Locality | null | undefined = feedback.value?.mine?.locality ?? profile.value.locality;
+  return key ? LOCALITY_NAMES[key] : null;
+});
 
 // Groups below the minimum size come back as null and get no row.
 const rows = computed(() => {
@@ -309,6 +359,7 @@ const rows = computed(() => {
     { label: "West-Berliner", share: c.west },
     { label: "Zujezogene", share: c.moved },
     { label: `in ${areaName.value}`, share: areaName.value ? c.area : null },
+    { label: `in ${localityName.value}`, share: localityName.value ? c.locality : null },
   ].filter((r): r is { label: string; share: number } => r.share !== null);
 });
 </script>

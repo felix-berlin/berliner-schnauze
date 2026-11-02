@@ -18,15 +18,18 @@ import type { Area } from "payload-app/word-feedback";
 
 KEYS = {  # Bezirk name -> (key, label); "|" in a label breaks the line
     "Mitte": ("mitte", "Mitte"), "Friedrichshain-Kreuzberg": ("friedrichshain-kreuzberg", "Friedrichshain-|Kreuzberg"),
-    "Pankow": ("pankow", "Pankow"), "Lichtenberg": ("lichtenberg", "Lichtenberg"),
-    "Marzahn-Hellersdorf": ("marzahn-hellersdorf", "Marzahn-|Hellersdorf"), "Treptow-Köpenick": ("treptow-koepenick", "Treptow-|Köpenick"),
-    "Reinickendorf": ("reinickendorf", "Reinickendorf"), "Spandau": ("spandau", "Spandau"),
+    "Pankow": ("pankow", "Pankow"),
     "Charlottenburg-Wilmersdorf": ("charlottenburg-wilmersdorf", "Charlottenburg-|Wilmersdorf"),
-    "Steglitz-Zehlendorf": ("steglitz-zehlendorf", "Steglitz-|Zehlendorf"),
+    "Spandau": ("spandau", "Spandau"), "Steglitz-Zehlendorf": ("steglitz-zehlendorf", "Steglitz-|Zehlendorf"),
     "Tempelhof-Schöneberg": ("tempelhof-schoeneberg", "Tempelhof-|Schöneberg"), "Neukölln": ("neukoelln", "Neukölln"),
+    "Treptow-Köpenick": ("treptow-koepenick", "Treptow-|Köpenick"),
+    "Marzahn-Hellersdorf": ("marzahn-hellersdorf", "Marzahn-|Hellersdorf"), "Lichtenberg": ("lichtenberg", "L'berg"),
+    "Reinickendorf": ("reinickendorf", "Reinickendorf"),
 }
-# Hand-placed label centres (viewBox units), only where the computed point sits badly. Empty = computed.
-LABELS = {}
+# Hand-placed label centres (viewBox units), only where the computed point sits badly; the Bezirke are
+# crowded around the centre, so Lichtenberg is abbreviated and Friedrichshain-Kreuzberg spills over its borders.
+LABELS = {"spandau": (50, 124), "charlottenburg-wilmersdorf": (113, 176), "tempelhof-schoeneberg": (168, 236),
+          "neukoelln": (228, 241), "friedrichshain-kreuzberg": (206, 174), "lichtenberg": (252, 130)}
 
 
 def dp(pts, eps):
@@ -108,9 +111,8 @@ def place(key, d, lx, ly):
 
 
 areas = []
-for f in bz["features"]:
-    n = f["properties"]["Gemeinde_name"]
-    key, short = KEYS[n]
+for n, (key, short) in KEYS.items():  # KEYS order = AREAS order = order of the list and the keyboard
+    f = next(f for f in bz["features"] if f["properties"]["Gemeinde_name"] == n)
     areas.append((n, key, short, *place(key, *build(rings(f)))))
 assert len(areas) == 12
 

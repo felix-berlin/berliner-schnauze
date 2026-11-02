@@ -31,6 +31,147 @@ export const AGES = [
   "70-79",
   "80plus",
 ] as const;
+/** The 97 localities (Ortsteile) per borough (Bezirk), spelling as on de.wikipedia "Verwaltungsgliederung Berlins": key -> name. */
+export const AREA_LOCALITIES = {
+  mitte: {
+    mitte: "Mitte",
+    moabit: "Moabit",
+    hansaviertel: "Hansaviertel",
+    tiergarten: "Tiergarten",
+    wedding: "Wedding",
+    gesundbrunnen: "Gesundbrunnen",
+  },
+  "friedrichshain-kreuzberg": {
+    friedrichshain: "Friedrichshain",
+    kreuzberg: "Kreuzberg",
+  },
+  pankow: {
+    "prenzlauer-berg": "Prenzlauer Berg",
+    weissensee: "Weißensee",
+    blankenburg: "Blankenburg",
+    heinersdorf: "Heinersdorf",
+    karow: "Karow",
+    "stadtrandsiedlung-malchow": "Stadtrandsiedlung Malchow",
+    pankow: "Pankow",
+    blankenfelde: "Blankenfelde",
+    buch: "Buch",
+    "franzoesisch-buchholz": "Französisch Buchholz",
+    niederschoenhausen: "Niederschönhausen",
+    rosenthal: "Rosenthal",
+    wilhelmsruh: "Wilhelmsruh",
+  },
+  "charlottenburg-wilmersdorf": {
+    charlottenburg: "Charlottenburg",
+    wilmersdorf: "Wilmersdorf",
+    schmargendorf: "Schmargendorf",
+    grunewald: "Grunewald",
+    westend: "Westend",
+    "charlottenburg-nord": "Charlottenburg-Nord",
+    halensee: "Halensee",
+  },
+  spandau: {
+    spandau: "Spandau",
+    haselhorst: "Haselhorst",
+    siemensstadt: "Siemensstadt",
+    staaken: "Staaken",
+    gatow: "Gatow",
+    kladow: "Kladow",
+    hakenfelde: "Hakenfelde",
+    "falkenhagener-feld": "Falkenhagener Feld",
+    wilhelmstadt: "Wilhelmstadt",
+  },
+  "steglitz-zehlendorf": {
+    steglitz: "Steglitz",
+    lichterfelde: "Lichterfelde",
+    lankwitz: "Lankwitz",
+    zehlendorf: "Zehlendorf",
+    dahlem: "Dahlem",
+    nikolassee: "Nikolassee",
+    wannsee: "Wannsee",
+    schlachtensee: "Schlachtensee",
+  },
+  "tempelhof-schoeneberg": {
+    schoeneberg: "Schöneberg",
+    friedenau: "Friedenau",
+    tempelhof: "Tempelhof",
+    mariendorf: "Mariendorf",
+    marienfelde: "Marienfelde",
+    lichtenrade: "Lichtenrade",
+  },
+  neukoelln: {
+    neukoelln: "Neukölln",
+    britz: "Britz",
+    buckow: "Buckow",
+    rudow: "Rudow",
+    gropiusstadt: "Gropiusstadt",
+  },
+  "treptow-koepenick": {
+    "alt-treptow": "Alt-Treptow",
+    plaenterwald: "Plänterwald",
+    baumschulenweg: "Baumschulenweg",
+    johannisthal: "Johannisthal",
+    niederschoeneweide: "Niederschöneweide",
+    altglienicke: "Altglienicke",
+    adlershof: "Adlershof",
+    bohnsdorf: "Bohnsdorf",
+    oberschoeneweide: "Oberschöneweide",
+    koepenick: "Köpenick",
+    friedrichshagen: "Friedrichshagen",
+    rahnsdorf: "Rahnsdorf",
+    gruenau: "Grünau",
+    mueggelheim: "Müggelheim",
+    schmoeckwitz: "Schmöckwitz",
+  },
+  "marzahn-hellersdorf": {
+    marzahn: "Marzahn",
+    biesdorf: "Biesdorf",
+    kaulsdorf: "Kaulsdorf",
+    mahlsdorf: "Mahlsdorf",
+    hellersdorf: "Hellersdorf",
+  },
+  lichtenberg: {
+    friedrichsfelde: "Friedrichsfelde",
+    karlshorst: "Karlshorst",
+    lichtenberg: "Lichtenberg",
+    falkenberg: "Falkenberg",
+    malchow: "Malchow",
+    wartenberg: "Wartenberg",
+    "neu-hohenschoenhausen": "Neu-Hohenschönhausen",
+    "alt-hohenschoenhausen": "Alt-Hohenschönhausen",
+    fennpfuhl: "Fennpfuhl",
+    rummelsburg: "Rummelsburg",
+  },
+  reinickendorf: {
+    reinickendorf: "Reinickendorf",
+    tegel: "Tegel",
+    konradshoehe: "Konradshöhe",
+    heiligensee: "Heiligensee",
+    frohnau: "Frohnau",
+    hermsdorf: "Hermsdorf",
+    waidmannslust: "Waidmannslust",
+    luebars: "Lübars",
+    wittenau: "Wittenau",
+    "maerkisches-viertel": "Märkisches Viertel",
+    borsigwalde: "Borsigwalde",
+  },
+} as const;
+
+export type BerlinArea = keyof typeof AREA_LOCALITIES;
+export type Locality = { [B in BerlinArea]: keyof (typeof AREA_LOCALITIES)[B] }[BerlinArea];
+
+export const LOCALITIES = Object.values(AREA_LOCALITIES).flatMap((o) => Object.keys(o)) as [
+  Locality,
+  ...Locality[],
+];
+export const LOCALITY_NAMES = Object.assign({}, ...Object.values(AREA_LOCALITIES)) as Record<
+  Locality,
+  string
+>;
+/** The area (borough) a locality belongs to. */
+export const LOCALITY_AREA = Object.fromEntries(
+  Object.entries(AREA_LOCALITIES).flatMap(([b, o]) => Object.keys(o).map((k) => [k, b])),
+) as Record<Locality, BerlinArea>;
+
 /** Smallest group whose share is shown. */
 export const MIN_GROUP = 10;
 
@@ -53,6 +194,7 @@ export type FeedbackCompare = {
   west: number | null;
   moved: number | null;
   area: number | null;
+  locality: number | null;
 };
 
 type Counter = Pick<BasePayload, "count">;
@@ -86,12 +228,14 @@ export async function feedbackCompare(
   payload: Counter,
   wordId: number,
   area: Area | null,
+  locality: Locality | null = null,
 ): Promise<FeedbackCompare> {
-  const [east, west, moved, areaShare] = await Promise.all([
+  const [east, west, moved, areaShare, localityShare] = await Promise.all([
     share(payload, wordId, { half: { equals: "east" } }),
     share(payload, wordId, { half: { equals: "west" } }),
     share(payload, wordId, { origin: { in: ["movedOver10", "movedUnder10"] } }),
     area ? share(payload, wordId, { area: { equals: area } }) : null,
+    locality ? share(payload, wordId, { locality: { equals: locality } }) : null,
   ]);
-  return { east, west, moved, area: areaShare };
+  return { east, west, moved, area: areaShare, locality: localityShare };
 }

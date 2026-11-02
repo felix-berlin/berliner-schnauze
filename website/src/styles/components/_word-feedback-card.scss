@@ -21,6 +21,18 @@
     gap: vars.$spacer * 0.5;
   }
 
+  // localities: up to 15 names, some long; two columns on a phone, more where there is room.
+  &__options--kiez {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+
+    .c-word-feedback-card__option {
+      padding-inline: 0.6rem;
+      overflow-wrap: anywhere;
+      border-radius: 1.4rem;
+    }
+  }
+
   &__option {
     min-block-size: 2.75rem;
     padding: 0.4rem 1rem;
