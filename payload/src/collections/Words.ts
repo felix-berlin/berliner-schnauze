@@ -67,6 +67,11 @@ export const Words: CollectionConfig = {
     { name: "publishedAt", type: "date" },
     contentModifiedAtField,
     {
+      name: "feedbackCounts",
+      type: "ui",
+      admin: { position: "sidebar", components: { Field: "@/components/WordFeedbackCounts" } },
+    },
+    {
       name: "derived",
       type: "group",
       admin: { readOnly: true, position: "sidebar", description: "Computed from berlinerisch on save." },

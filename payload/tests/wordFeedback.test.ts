@@ -2,6 +2,7 @@ import type { Payload } from "payload";
 
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
+import { Words } from "../src/collections/Words";
 import { feedbackCompare, feedbackTotals } from "../src/lib/wordFeedback";
 import { getTestPayload } from "./helpers/payload";
 
@@ -66,5 +67,18 @@ describe("word-feedback", () => {
     const err = (await row({ visitor: "same" }).catch((e: unknown) => e)) as Error;
     expect(err.name).toBe("ValidationError");
     expect(err.message).toMatch(/word_id, visitor/);
+  });
+});
+
+describe("word sidebar counts", () => {
+  it("is a ui field and stores nothing on the word", async () => {
+    const f = Words.fields.find((x) => "name" in x && x.name === "feedbackCounts");
+    expect(f?.type).toBe("ui");
+    const versions = () => payload.countVersions({ collection: "words", where: { parent: { equals: wordId } } });
+    const before = (await versions()).totalDocs;
+    await row({ reaction: "like", usage: "say" });
+    expect((await versions()).totalDocs).toBe(before);
+    const word = await payload.findByID({ collection: "words", id: wordId });
+    expect(word).not.toHaveProperty("feedbackCounts");
   });
 });
