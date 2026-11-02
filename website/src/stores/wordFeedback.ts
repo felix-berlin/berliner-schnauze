@@ -97,7 +97,7 @@ export const sendFeedback = async (
     if (!res.ok) throw new Error(String(res.status));
     const state = (await res.json()) as WordFeedbackState;
     // The user may have navigated to another word while the PATCH was in flight.
-    if (loadedFor === null || loadedFor === wordId) $feedback.set(state);
+    if (loadedFor === wordId) $feedback.set(state);
     $feedbackError.set(false);
     return true;
   } catch {
@@ -108,4 +108,4 @@ export const sendFeedback = async (
 };
 
 export const answerUsage = (wordId: number, usage: Usage): Promise<boolean> =>
-  sendFeedback(wordId, { usage, ...$profile.get() });
+  sendFeedback(wordId, { usage, ...parseProfile($profile.get()) });

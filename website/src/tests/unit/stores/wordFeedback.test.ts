@@ -22,6 +22,7 @@ const state = {
 const ok = (body: unknown = state) => ({ json: async () => body, ok: true });
 
 beforeEach(() => {
+  localStorage.clear();
   vi.restoreAllMocks();
   toast.mockClear();
   $feedback.set(null);
@@ -56,7 +57,6 @@ describe("parseProfile", () => {
     localStorage.setItem("bs-word-feedback-profile", stored);
     const fresh = await import("@stores/wordFeedback.ts");
     expect(fresh.$profile.get()).toEqual(expected);
-    localStorage.clear();
   });
 });
 
@@ -129,6 +129,21 @@ describe("sendFeedback", () => {
     expect($feedbackError.get()).toBe(true);
     expect(toast).toHaveBeenCalledTimes(1);
   });
+  it("ignores a response after the next word's GET failed", async () => {
+    let release!: (v: unknown) => void;
+    const f = vi
+      .fn()
+      .mockResolvedValueOnce(ok())
+      .mockReturnValueOnce(new Promise((r) => (release = r)))
+      .mockRejectedValueOnce(new Error("down"));
+    vi.stubGlobal("fetch", f);
+    await loadFeedback(501);
+    const pending = sendFeedback(501, { reaction: "like" });
+    await loadFeedback(502);
+    release(ok());
+    await pending;
+    expect($feedback.get()).toBeNull();
+  });
   it("ignores a response when another word is loaded meanwhile", async () => {
     let release!: (v: unknown) => void;
     const f = vi
@@ -147,6 +162,13 @@ describe("sendFeedback", () => {
 });
 
 describe("answerUsage", () => {
+  it("drops a half without origin grewUp from an in-memory profile", async () => {
+    const f = vi.fn().mockResolvedValue(ok());
+    vi.stubGlobal("fetch", f);
+    $profile.set({ half: "east", origin: "movedOver10" });
+    await answerUsage(5, "say");
+    expect(JSON.parse(f.mock.calls[0][1].body)).not.toHaveProperty("half");
+  });
   it("sends origin grewUp together with half", async () => {
     const f = vi.fn().mockResolvedValue(ok());
     vi.stubGlobal("fetch", f);
