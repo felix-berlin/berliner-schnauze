@@ -15,6 +15,14 @@ export const docPath = (collection: RoutedCollection, slug: string): string =>
 /** Public site origin (CMS side): `SITE_URL`, else production. */
 export const siteUrl = (): string => process.env.SITE_URL || "https://berliner-schnauze.wtf";
 
+/** True when a Lexical state holds any text (an empty editor still has one empty paragraph). */
+export const hasLexicalText = (node: unknown): boolean =>
+  typeof node === "object" && node !== null
+    ? "text" in node && typeof node.text === "string"
+      ? node.text.trim() !== ""
+      : Object.values(node).some(hasLexicalText)
+    : false;
+
 const DESCRIPTION_MAX = 160;
 const TITLE_MAX = 70;
 

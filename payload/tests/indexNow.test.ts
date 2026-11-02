@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { flushIndexNow } from "../src/lib/indexNow";
 import { getTestPayload } from "./helpers/payload";
 
 const A = "indexnow-test-a";
@@ -7,14 +8,19 @@ const B = "indexnow-test-b";
 
 const fetchSpy = vi.fn<typeof fetch>(async () => new Response(null, { status: 200 }));
 // Payload's own telemetry also goes through fetch.
-const calls = () => fetchSpy.mock.calls.filter(([url]) => String(url).includes("indexnow"));
-const pinged = () =>
-  calls().flatMap(([, init]) => (JSON.parse(String(init?.body)) as { urlList: string[] }).urlList.map((u) => new URL(u).pathname));
+const calls = async () => {
+  await flushIndexNow();
+  return fetchSpy.mock.calls.filter(([url]) => String(url).includes("indexnow"));
+};
+const pinged = async () =>
+  (await calls()).flatMap(([, init]) => (JSON.parse(String(init?.body)) as { urlList: string[] }).urlList.map((u) => new URL(u).pathname));
 
-beforeEach(() => {
+beforeEach(async () => {
   process.env.INDEXNOW_KEY = "testkey";
-  fetchSpy.mockClear();
   vi.stubGlobal("fetch", fetchSpy);
+  // Drop pings queued by the previous test's cleanup.
+  await flushIndexNow();
+  fetchSpy.mockClear();
 });
 
 afterEach(async () => {
@@ -31,9 +37,9 @@ const create = async (status: "draft" | "published", slug = A) =>
 describe("IndexNow pings", () => {
   it("pings a published word, not a draft", async () => {
     await create("draft");
-    expect(calls()).toHaveLength(0);
+    expect(await calls()).toHaveLength(0);
     await create("published", B);
-    expect(pinged()).toEqual([`/wort/${B}`]);
+    expect(await pinged()).toEqual([`/wort/${B}`]);
   });
 
   it("pings a changed published word and nothing for a draft save of it", async () => {
@@ -41,9 +47,9 @@ describe("IndexNow pings", () => {
     const word = await create("published");
     fetchSpy.mockClear();
     await payload.update({ collection: "words", id: word.id, data: { berlinerisch: "Ping2", _status: "draft" }, draft: true });
-    expect(calls()).toHaveLength(0);
+    expect(await calls()).toHaveLength(0);
     await payload.update({ collection: "words", id: word.id, data: { berlinerisch: "Ping3", _status: "published" } });
-    expect(pinged()).toEqual([`/wort/${A}`]);
+    expect(await pinged()).toEqual([`/wort/${A}`]);
   });
 
   it("pings the old and the new URL after a slug change", async () => {
@@ -51,7 +57,7 @@ describe("IndexNow pings", () => {
     const word = await create("published");
     fetchSpy.mockClear();
     await payload.update({ collection: "words", id: word.id, data: { slug: B, _status: "published" } });
-    expect(pinged().sort()).toEqual([`/wort/${A}`, `/wort/${B}`].sort());
+    expect((await pinged()).sort()).toEqual([`/wort/${A}`, `/wort/${B}`].sort());
   });
 
   it("pings the URL on unpublish and on delete", async () => {
@@ -59,16 +65,16 @@ describe("IndexNow pings", () => {
     const word = await create("published");
     fetchSpy.mockClear();
     await payload.update({ collection: "words", id: word.id, data: { _status: "draft" } });
-    expect(pinged()).toEqual([`/wort/${A}`]);
+    expect(await pinged()).toEqual([`/wort/${A}`]);
     await payload.update({ collection: "words", id: word.id, data: { _status: "published" } });
     fetchSpy.mockClear();
     await payload.delete({ collection: "words", id: word.id });
-    expect(pinged()).toEqual([`/wort/${A}`]);
+    expect(await pinged()).toEqual([`/wort/${A}`]);
   });
 
   it("does nothing without a key", async () => {
     delete process.env.INDEXNOW_KEY;
     await create("published");
-    expect(calls()).toHaveLength(0);
+    expect(await calls()).toHaveLength(0);
   });
 });

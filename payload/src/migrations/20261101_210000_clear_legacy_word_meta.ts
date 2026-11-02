@@ -7,7 +7,7 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 // Expand/contract: the running (old) web falls back to the generated text for an empty value.
 export async function up({ db }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
-   UPDATE "words" SET "meta_title" = NULL WHERE "meta_title" ~ '\\| Bedeutung, Definition, Beispiel$';
+  UPDATE "words" SET "meta_title" = NULL WHERE "meta_title" ~ '\\| Bedeutung, Definition, Beispiel$';
   UPDATE "words" SET "meta_description" = NULL WHERE "meta_description" ~ '^Das Wort .+ kommt aus dem Berlinerischen';
   UPDATE "_words_v" SET "version_meta_title" = NULL WHERE "version_meta_title" ~ '\\| Bedeutung, Definition, Beispiel$';
   UPDATE "_words_v" SET "version_meta_description" = NULL WHERE "version_meta_description" ~ '^Das Wort .+ kommt aus dem Berlinerischen';`)

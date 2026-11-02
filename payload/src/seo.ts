@@ -6,6 +6,7 @@ import type { Page, Post, Theman, Word } from "./payload-types";
 
 import {
   docPath,
+  hasLexicalText,
   isRoutedCollection,
   ROUTES,
   siteUrl,
@@ -24,14 +25,6 @@ const wordFacts = (berlinerisch: string, d: SeoDoc): WordSeoFacts => ({
   hasExamples: (d.examples ?? []).some((e) => e.example),
   translations: (d.translations ?? []).flatMap((t) => t.translation || []),
 });
-
-/** True when a Lexical state holds any text (an empty editor still has one empty paragraph). */
-const hasLexicalText = (node: unknown): boolean =>
-  typeof node === "object" && node !== null
-    ? "text" in node && typeof node.text === "string"
-      ? node.text.trim() !== ""
-      : Object.values(node).some(hasLexicalText)
-    : false;
 
 /** What the plugin has no field for: a canonical override and the robots flags (imported from Yoast). */
 const yoastFields: Field[] = [

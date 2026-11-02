@@ -9,7 +9,8 @@ import { docPath } from "payload-app/routes";
 const oneLine = (text: string | null | undefined): string => (text ?? "").replace(/\s+/g, " ").trim();
 
 /** llmstxt.org index of the site, built from the CMS so counts and lists never go stale. */
-export const GET: APIRoute = async ({ site }) => {
+export const GET: APIRoute = async ({ site: origin }) => {
+  const site = origin ?? "https://berliner-schnauze.wtf";
   const [words, themen, posts] = await Promise.all([fetchAllWords(), fetchAllThemen(), fetchAllPosts()]);
   const link = (title: string, path: string, note?: string) =>
     `- [${title}](${new URL(path, site)})${note ? `: ${note}` : ""}`;
