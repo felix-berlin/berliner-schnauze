@@ -13,8 +13,8 @@
         :class="{ 'is-selected': modelValue === 'brandenburg' }"
         x="-22"
         y="-22"
-        :width="W + 44"
-        :height="H + 44"
+        :width="MAP_W + 44"
+        :height="MAP_H + 44"
         rx="40"
       />
       <path
@@ -37,6 +37,7 @@
         v-for="a in BERLIN_AREAS"
         :key="a.key"
         class="c-berlin-area-map__label"
+        :class="{ 'is-selected': modelValue === a.key }"
         :x="a.labelX"
         :y="a.labelY"
         aria-hidden="true"
@@ -64,18 +65,17 @@ import type { Area } from "payload-app/word-feedback";
 
 import { useTemplateRef } from "vue";
 
-import { BERLIN_AREAS, MAP_VIEWBOX } from "@/data/berlinAreas";
+import { BERLIN_AREAS, MAP_H, MAP_VIEWBOX, MAP_W } from "@/data/berlinAreas";
 
 const props = defineProps<{ modelValue: Area | null }>();
 const emit = defineEmits<{ "update:modelValue": [Area] }>();
 
-const [, , W, H] = MAP_VIEWBOX.split(" ")
-  .map(Number)
-  .map((n, i) => (i > 1 ? n - 48 : n));
 const group = useTemplateRef<SVGElement>("group");
 
 // Roving tabindex: the checked area, else the first one, is the group's tab stop.
-const stop = (key: Area) => (props.modelValue ?? "brandenburg") === key;
+// "elsewhere" (and null) match no radio, so the stop falls back to Brandenburg.
+const stop = (key: Area) =>
+  (props.modelValue && props.modelValue !== "elsewhere" ? props.modelValue : "brandenburg") === key;
 
 const move = (e: KeyboardEvent, key: Area) => {
   if (e.key === "Enter" || e.key === " ") {
@@ -88,7 +88,8 @@ const move = (e: KeyboardEvent, key: Area) => {
   e.preventDefault();
   const radios = [...(group.value?.querySelectorAll<SVGElement>('[role="radio"]') ?? [])];
   const i = radios.indexOf(e.currentTarget as SVGElement);
-  radios.at((i + step) % radios.length)?.focus();
+  const n = radios.length;
+  radios[(i + step + n) % n]?.focus();
 };
 
 const radio = (key: Area, name: string) => ({

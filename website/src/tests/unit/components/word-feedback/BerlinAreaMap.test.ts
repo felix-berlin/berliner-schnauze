@@ -49,4 +49,29 @@ describe("BerlinAreaMap", () => {
     expect(w.emitted("update:modelValue")![0]).toEqual([radios[i + 1].attributes("data-area")]);
     w.unmount();
   });
+
+  it("wraps ArrowRight from the last radio to the first and ArrowLeft back", async () => {
+    const w = mountMap();
+    const radios = w.findAll('[role="radio"]');
+    const last = radios.length - 1;
+    (radios[last].element as SVGElement).focus();
+    await radios[last].trigger("keydown", { key: "ArrowRight" });
+    expect(document.activeElement).toBe(radios[0].element);
+    await radios[0].trigger("keydown", { key: "ArrowLeft" });
+    expect(document.activeElement).toBe(radios[last].element);
+    w.unmount();
+  });
+
+  it.each([null, "pankow", "elsewhere"])("has exactly one tab stop for modelValue %s", (value) => {
+    const w = mountMap(value);
+    expect(w.findAll('[role="radio"][tabindex="0"]')).toHaveLength(1);
+    w.unmount();
+  });
+
+  it("selects with Space and emits once per key press", async () => {
+    const w = mountMap();
+    await w.find('[aria-label="Spandau"]').trigger("keydown", { key: " " });
+    expect(w.emitted("update:modelValue")).toEqual([["spandau"]]);
+    w.unmount();
+  });
 });

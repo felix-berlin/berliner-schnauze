@@ -9,6 +9,8 @@
 // Geometry simplified (Douglas-Peucker) and projected equirectangular at 52.5 deg N.
 import type { Area } from "payload-app/word-feedback";
 
+export const MAP_W = 400;
+export const MAP_H = 329;
 export const MAP_VIEWBOX = "-24 -24 448 377";
 
 export const BERLIN_AREAS: ReadonlyArray<{

@@ -133,6 +133,7 @@ for name, key, short, side, names in GROUPS:
 assert len(areas) == 14
 
 print(HEADER)
+print(f"export const MAP_W = {W};\nexport const MAP_H = {H};")
 print(f'export const MAP_VIEWBOX = "-24 -24 {W + 48} {H + 48}";\n')
 print("export const BERLIN_AREAS: ReadonlyArray<{")
 print('  key: Exclude<Area, "brandenburg" | "elsewhere">;\n  name: string;\n  short: string;\n  side: "east" | "west";')

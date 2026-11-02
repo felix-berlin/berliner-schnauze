@@ -37,13 +37,12 @@
     }
 
     &.is-selected {
-      fill: var(--orange-500);
+      fill: var(--orange-600);
       stroke: var(--color-body);
       stroke-dasharray: none;
     }
   }
 
-  // Selected areas are orange in both modes, so their labels stay dark (AA on orange-500).
   &__label {
     fill: var(--color-body);
     font-size: 15px;
@@ -56,6 +55,12 @@
     stroke-width: 3px;
     stroke-linejoin: round;
 
+    // White-100 on orange-600 (same pair as the primary button) is 5.6:1 in both modes.
+    &.is-selected {
+      fill: var(--white-100);
+      stroke: var(--orange-600);
+    }
+
     &--brandenburg {
       text-anchor: start;
       fill: var(--color-muted);
@@ -63,8 +68,8 @@
   }
 
   &__elsewhere.is-selected {
-    background: var(--orange-500);
-    color: #000;
+    background: var(--orange-600);
+    color: var(--white-100);
   }
 
   &__credit {
