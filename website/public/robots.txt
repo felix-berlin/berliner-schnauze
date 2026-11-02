@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+# Search yes; answers (ai-input) yes because Googlebot's index feeds AI Overviews and cannot be split off; training no
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 # Used for many other (non-commercial) purposes as well
 User-agent: CCBot
