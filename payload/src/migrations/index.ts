@@ -87,13 +87,13 @@ export const migrations = [
     name: '20261031_170133_comment_pseudonyms',
   },
   {
-    up: migration_20261101_234120_mcp_api_keys.up,
-    down: migration_20261101_234120_mcp_api_keys.down,
-    name: '20261101_234120_mcp_api_keys'
-  },
-  {
     up: migration_20261101_210000_clear_legacy_word_meta.up,
     down: migration_20261101_210000_clear_legacy_word_meta.down,
     name: '20261101_210000_clear_legacy_word_meta',
+  },
+  {
+    up: migration_20261101_234120_mcp_api_keys.up,
+    down: migration_20261101_234120_mcp_api_keys.down,
+    name: '20261101_234120_mcp_api_keys'
   },
 ];
