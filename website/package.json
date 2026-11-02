@@ -64,7 +64,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.11",
+    "@astrojs/check": "0.9.11",
     "@codecov/astro-plugin": "^2.0.1",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify-json/simple-icons": "^1.2.100",
