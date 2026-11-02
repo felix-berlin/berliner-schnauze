@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.4.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.3.0...v4.4.0) (2026-11-02)
+
+
+### Bug Fixes
+
+* **analytics:** exclude the Anubis host as Matomo referrer ([7c3c893](https://github.com/felix-berlin/berliner-schnauze/commit/7c3c893b2a50962485fec4ded887b75d7789e911))
+* **cms:** list the word meta migration before the later MCP one ([cb0cdb8](https://github.com/felix-berlin/berliner-schnauze/commit/cb0cdb8f562e86ccf9901e586c9119d8845dab74))
+* **seo:** batch IndexNow pings, share the etymology check between CMS and site ([cc8cd5f](https://github.com/felix-berlin/berliner-schnauze/commit/cc8cd5fd3932354ebc82000dfdf1aaedb3f6f83e))
+* **seo:** satisfy typecheck and lint, cover llms.txt, indexnow.txt and the charset fix ([6b1c807](https://github.com/felix-berlin/berliner-schnauze/commit/6b1c8077407116ca97df1e986838342ccfae1991))
+
+
+### Features
+
+* **seo:** block AI training and unverified crawlers in robots.txt ([52840cf](https://github.com/felix-berlin/berliner-schnauze/commit/52840cfcf42e0b8b688a8a2eac8cfa61d775bb10))
+* **seo:** build word title and description from what the entry has ([84b9b5e](https://github.com/felix-berlin/berliner-schnauze/commit/84b9b5e3c33d079a7c330f4be6b9c1be211bb265))
+* **seo:** declare Content-Signal search=yes, ai-input=yes, ai-train=no ([300ba1d](https://github.com/felix-berlin/berliner-schnauze/commit/300ba1da68c76a02179649cb7765c60c8ba0d43c))
+* **seo:** ping IndexNow when public content is published, changed or removed ([1375dc6](https://github.com/felix-berlin/berliner-schnauze/commit/1375dc64e8abbb1b31d625ab9b57c09bd73e98fa))
+* **seo:** serve llms.txt dynamically, add security.txt and tdmrep ([81129e3](https://github.com/felix-berlin/berliner-schnauze/commit/81129e36910110be2baa62c4f9673dec98678382))
+* **word:** prefer the editorial word type, mark the automatic one ([19caf98](https://github.com/felix-berlin/berliner-schnauze/commit/19caf988dabe637d83a966be08fef3c649624ca3))
+
 # [4.3.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.2.1...v4.3.0) (2026-11-02)
 
 
