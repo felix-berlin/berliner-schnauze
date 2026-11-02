@@ -27,6 +27,7 @@
       />
       <text
         class="c-berlin-area-map__label c-berlin-area-map__label--brandenburg"
+        :class="{ 'is-selected': modelValue === 'brandenburg' }"
         x="8"
         y="-6"
         aria-hidden="true"

@@ -74,4 +74,10 @@ describe("BerlinAreaMap", () => {
     expect(w.emitted("update:modelValue")).toEqual([["spandau"]]);
     w.unmount();
   });
+
+  it("marks the Brandenburg label selected with the frame", () => {
+    const w = mountMap("brandenburg");
+    expect(w.find(".c-berlin-area-map__label--brandenburg").classes()).toContain("is-selected");
+    w.unmount();
+  });
 });
