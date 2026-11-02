@@ -1,7 +1,8 @@
 import { test, expect } from "@playwright/test";
 
 // Runs against the e2e seed (invented data); the word has no votes beforehand.
-// Not re-runnable against a stateful DB: needs a fresh seed (or a new visitor cookie) per run.
+// Re-runnable: every Playwright context is a new visitor and the like count is checked relative to its start.
+// Limit: the in-memory per-IP cap of 30 PATCHes per word per day (about 4 runs per server process).
 const WORD = "/wort/aasen";
 
 test.describe("word feedback", () => {
