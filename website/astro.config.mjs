@@ -539,6 +539,10 @@ export default defineConfig({
     resolve: {
       alias: {
         "@styles": fileURLToPath(new URL("./src/styles", import.meta.url)),
+        // Production only: dev keeps deps external, where the real plugin loads fine.
+        ...(import.meta.env.DEV
+          ? {}
+          : { "@payloadcms/plugin-mcp": fileURLToPath(new URL("./src/lib/payloadMcpStub.ts", import.meta.url)) }),
       },
     },
 

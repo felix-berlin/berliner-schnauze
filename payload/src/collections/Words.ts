@@ -4,6 +4,7 @@ import { draftsAccess } from "../access";
 import { contentModifiedAtField, touchContentModifiedAt } from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
 import { setDerivedWordFields } from "../hooks/deriveWordFields";
+import { mcpDraftOnly } from "../hooks/mcpDraftOnly";
 import { previewUrl } from "../lib/preview";
 
 const gender: Field = { name: "gender", type: "select", options: ["male", "female"] };
@@ -28,7 +29,7 @@ export const Words: CollectionConfig = {
   access: draftsAccess,
   admin: { useAsTitle: "berlinerisch", preview: previewUrl("words") },
   versions: { drafts: true },
-  hooks: { beforeChange: [touchContentModifiedAt, setDerivedWordFields], beforeDelete: [deleteComments] },
+  hooks: { beforeChange: [mcpDraftOnly, touchContentModifiedAt, setDerivedWordFields], beforeDelete: [deleteComments] },
   fields: [
     { name: "berlinerisch", type: "text", required: true },
     ...identityFields,
