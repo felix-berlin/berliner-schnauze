@@ -20,19 +20,21 @@ const send = async (): Promise<void> => {
   onErrors = [];
   if (!key || urls.length === 0) return;
   const report = (message: string) => reporters.forEach((fn) => fn(message));
-  for (let i = 0; i < urls.length; i += MAX_URLS) {
-    const urlList = urls.slice(i, i + MAX_URLS);
-    await fetch(ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json; charset=utf-8" },
-      body: JSON.stringify({ host: new URL(siteUrl()).host, key, keyLocation: `${siteUrl()}/indexnow.txt`, urlList }),
-      signal: AbortSignal.timeout(5000),
-    })
-      .then((res) => {
-        if (!res.ok) report(`[indexnow] ${res.status} for ${urlList.length} URL(s)`);
+  const chunks = Array.from({ length: Math.ceil(urls.length / MAX_URLS) }, (_, i) => urls.slice(i * MAX_URLS, (i + 1) * MAX_URLS));
+  await Promise.all(
+    chunks.map((urlList) =>
+      fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({ host: new URL(siteUrl()).host, key, keyLocation: `${siteUrl()}/indexnow.txt`, urlList }),
+        signal: AbortSignal.timeout(5000),
       })
-      .catch((error: unknown) => report(`[indexnow] ${error instanceof Error ? error.message : String(error)}`));
-  }
+        .then((res) => {
+          if (!res.ok) report(`[indexnow] ${res.status} for ${urlList.length} URL(s)`);
+        })
+        .catch((error: unknown) => report(`[indexnow] ${error instanceof Error ? error.message : String(error)}`)),
+    ),
+  );
 };
 
 /** Sends what is queued right away (tests, shutdown). */

@@ -52,7 +52,7 @@ describe("WordHero.astro", () => {
   });
 
   it("marks an automatic word type, but not an editorial one", async () => {
-    const auto = await render({ word: makeWord(), wortartLabel: "Verb", wortartAuto: true });
+    const auto = await render({ word: makeWord(), wortartAuto: true, wortartLabel: "Verb" });
     expect(auto).toContain("(automatisch)");
     const editorial = await render({ word: makeWord(), wortartLabel: "Verb" });
     expect(editorial).not.toContain("automatisch");
