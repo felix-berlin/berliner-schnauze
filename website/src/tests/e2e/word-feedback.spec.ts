@@ -30,7 +30,8 @@ test.describe("word feedback", () => {
     await expect(again.getByRole("button", { name: "Angaben ändern" })).toBeVisible();
 
     const like = page.getByRole("button", { name: /Jefällt ma/ });
-    const count = async () => Number((await like.locator(".c-word-feedback-thumbs__count").textContent()) ?? "NaN");
+    const count = async () =>
+      Number((await like.locator(".c-word-feedback-thumbs__count").textContent()) ?? "NaN");
     await expect(like.locator(".c-word-feedback-thumbs__count")).toHaveText(/^\d+$/);
     const before = await count();
     await like.click();

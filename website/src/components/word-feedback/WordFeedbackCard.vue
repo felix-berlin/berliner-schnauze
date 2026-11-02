@@ -32,7 +32,11 @@
     </div>
 
     <div v-if="current !== 'usage' && current !== 'done'" class="c-word-feedback-card__step">
-      <div class="c-word-feedback-card__dots" role="img" :aria-label="`Schritt ${dotIndex + 1} von ${dots.length}`">
+      <div
+        class="c-word-feedback-card__dots"
+        role="img"
+        :aria-label="`Schritt ${dotIndex + 1} von ${dots.length}`"
+      >
         <span
           v-for="(d, i) in dots"
           :key="d"
