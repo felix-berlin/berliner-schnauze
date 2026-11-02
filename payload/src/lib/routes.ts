@@ -41,12 +41,11 @@ export type WordSeoFacts = {
 
 /**
  * SEO description of a word page, built only from what the entry has: the meanings first, then "Mit Aussprache und
- * Beispielsätzen" for the parts that exist. Too long: fewer meanings go before the parts. Empty without meanings.
+ * Beispielsätzen" for the parts that exist. Too long: fewer meanings go before the parts. Without meanings: a plain dictionary line.
  * Also what the admin's "generate" button fills in.
  */
 export const wordSeoDescription = (word: WordSeoFacts): string => {
   const { berlinerisch, translations } = word;
-  if (!translations.length) return "";
   const parts = [
     word.hasEtymology && "Etymologie",
     word.hasAudio && "Aussprache",
@@ -55,6 +54,8 @@ export const wordSeoDescription = (word: WordSeoFacts): string => {
   const features = parts.length
     ? ` Mit ${joinList(parts)}.`
     : "";
+  // An entry without meanings still gets a description (a page without one is worse than a plain one).
+  if (!translations.length) return `${berlinerisch} im Berlinerisch-Wörterbuch der Berliner Schnauze.${features}`;
   const lead = `${berlinerisch} heißt auf Berlinerisch: `;
   for (let count = translations.length; count >= 1; count--) {
     for (const suffix of [features, ""]) {
