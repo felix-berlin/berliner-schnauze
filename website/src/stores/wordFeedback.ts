@@ -69,19 +69,25 @@ export const nextStep = (profile: Profile): "age" | "area" | "done" | "half" | "
 
 const ENDPOINT = "/api/word-feedback";
 let loadedFor: number | null = null;
+let loading: Promise<void> = Promise.resolve();
+// Bumped whenever a PATCH result lands, so a slower GET started before it cannot overwrite it.
+let stateVersion = 0;
 
-export const loadFeedback = async (wordId: number): Promise<void> => {
-  if (loadedFor === wordId) return;
+export const loadFeedback = (wordId: number): Promise<void> => {
+  if (loadedFor === wordId) return loading; // callers share the in-flight request
   loadedFor = wordId;
   $feedback.set(null);
-  try {
-    const res = await fetch(`${ENDPOINT}?word=${wordId}`);
-    if (!res.ok) throw new Error(String(res.status));
-    const state = (await res.json()) as WordFeedbackState;
-    if (loadedFor === wordId) $feedback.set(state);
-  } catch {
-    if (loadedFor === wordId) loadedFor = null; // a failed GET must not block a retry
-  }
+  const startedAt = stateVersion;
+  return (loading = (async () => {
+    try {
+      const res = await fetch(`${ENDPOINT}?word=${wordId}`);
+      if (!res.ok) throw new Error(String(res.status));
+      const state = (await res.json()) as WordFeedbackState;
+      if (loadedFor === wordId && stateVersion === startedAt) $feedback.set(state);
+    } catch {
+      if (loadedFor === wordId) loadedFor = null; // a failed GET must not block a retry
+    }
+  })());
 };
 
 export const sendFeedback = async (
@@ -97,7 +103,10 @@ export const sendFeedback = async (
     if (!res.ok) throw new Error(String(res.status));
     const state = (await res.json()) as WordFeedbackState;
     // The user may have navigated to another word while the PATCH was in flight.
-    if (loadedFor === wordId) $feedback.set(state);
+    if (loadedFor === wordId) {
+      stateVersion++;
+      $feedback.set(state);
+    }
     $feedbackError.set(false);
     return true;
   } catch {

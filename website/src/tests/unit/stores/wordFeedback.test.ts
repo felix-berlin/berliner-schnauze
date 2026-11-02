@@ -95,6 +95,34 @@ describe("loadFeedback", () => {
     await a;
     expect($feedback.get()).toEqual(other);
   });
+  it("shares the in-flight request between concurrent callers", async () => {
+    let release!: (v: unknown) => void;
+    const f = vi.fn().mockReturnValue(new Promise((r) => (release = r)));
+    vi.stubGlobal("fetch", f);
+    const a = loadFeedback(501);
+    let secondDone = false;
+    const b = loadFeedback(501).then(() => (secondDone = true));
+    await Promise.resolve();
+    expect(secondDone).toBe(false);
+    release(ok());
+    await Promise.all([a, b]);
+    expect(f).toHaveBeenCalledTimes(1);
+    expect($feedback.get()).toEqual(state);
+  });
+  it("a PATCH state that lands during the GET is not overwritten by the late GET", async () => {
+    let release!: (v: unknown) => void;
+    const voted = { ...state, mine: { reaction: "like" } };
+    const f = vi
+      .fn()
+      .mockReturnValueOnce(new Promise((r) => (release = r)))
+      .mockResolvedValueOnce(ok(voted));
+    vi.stubGlobal("fetch", f);
+    const load = loadFeedback(601);
+    expect(await sendFeedback(601, { reaction: "like" })).toBe(true);
+    release(ok()); // pre-vote state
+    await load;
+    expect($feedback.get()).toEqual(voted);
+  });
   it("a failed GET does not wedge later loads", async () => {
     const f = vi.fn().mockRejectedValueOnce(new Error("x")).mockResolvedValue(ok());
     vi.stubGlobal("fetch", f);
