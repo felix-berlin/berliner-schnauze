@@ -1,5 +1,4 @@
 import type { APIRoute } from "astro";
-import { feedbackCompare, feedbackTotals } from "payload-app/word-feedback";
 
 import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
@@ -10,6 +9,7 @@ import {
   type MyFeedback,
   type WordFeedbackState,
 } from "@utils/wordFeedbackSchema.ts";
+import { feedbackCompare, feedbackTotals } from "payload-app/word-feedback";
 
 const DAY = 24 * 60 * 60_000;
 const KEYS = ["reaction", "usage", "area", "origin", "half", "age"] as const;
@@ -31,12 +31,13 @@ const findMine = async (payload: Client, word: number, visitor: string | undefin
       ).docs[0]
     : undefined;
 
-const state = async (payload: Client, word: number, mine: MyFeedback | null) =>
-  ({
-    compare: await feedbackCompare(payload, word, mine?.area ?? null),
-    mine,
-    totals: await feedbackTotals(payload, word),
-  }) satisfies WordFeedbackState;
+const state = async (payload: Client, word: number, mine: MyFeedback | null) => {
+  const [compare, totals] = await Promise.all([
+    feedbackCompare(payload, word, mine?.area ?? null),
+    feedbackTotals(payload, word),
+  ]);
+  return { compare, mine, totals } satisfies WordFeedbackState;
+};
 
 export const GET: APIRoute = async ({ cookies, url }) => {
   const word = positiveInt(url.searchParams.get("word"));
