@@ -31,57 +31,61 @@
       </div>
     </div>
 
-    <div v-if="current !== 'usage' && current !== 'done'" class="c-word-feedback-card__step">
-      <div
-        class="c-word-feedback-card__dots"
-        role="img"
-        :aria-label="`Schritt ${dotIndex + 1} von ${dots.length}`"
-      >
-        <span
-          v-for="(d, i) in dots"
-          :key="d"
-          class="c-word-feedback-card__dot"
-          :class="{ 'is-active': i <= dotIndex }"
-        />
-      </div>
-      <h3 class="c-word-feedback-card__question">{{ QUESTIONS[current] }}</h3>
+    <div aria-live="polite">
+      <div v-if="current !== 'usage' && current !== 'done'" class="c-word-feedback-card__step">
+        <div
+          class="c-word-feedback-card__dots"
+          role="img"
+          :aria-label="`Schritt ${dotIndex + 1} von ${dots.length}`"
+        >
+          <span
+            v-for="(d, i) in dots"
+            :key="d"
+            class="c-word-feedback-card__dot"
+            :class="{ 'is-active': i <= dotIndex }"
+          />
+        </div>
+        <h3 ref="question" class="c-word-feedback-card__question" tabindex="-1">
+          {{ QUESTIONS[current] }}
+        </h3>
 
-      <BerlinAreaMap
-        v-if="current === 'area'"
-        :model-value="(picked.area as Area | null) ?? null"
-        @update:model-value="answerProfile('area', $event)"
-      />
-      <div v-else class="c-word-feedback-card__options">
+        <BerlinAreaMap
+          v-if="current === 'area'"
+          :model-value="(picked.area as Area | null) ?? null"
+          @update:model-value="answerProfile('area', $event)"
+        />
+        <div v-else class="c-word-feedback-card__options">
+          <button
+            v-for="o in CHOICES[current]"
+            :key="o.value"
+            :aria-pressed="picked[current] === o.value"
+            class="c-word-feedback-card__option"
+            :class="{ 'is-selected': picked[current] === o.value }"
+            :disabled="pending"
+            type="button"
+            @click="answerProfile(current, o.value)"
+          >
+            {{ o.label }}
+          </button>
+        </div>
         <button
-          v-for="o in CHOICES[current]"
-          :key="o.value"
-          :aria-pressed="picked[current] === o.value"
-          class="c-word-feedback-card__option"
-          :class="{ 'is-selected': picked[current] === o.value }"
+          class="c-word-feedback-card__skip"
           :disabled="pending"
           type="button"
-          @click="answerProfile(current, o.value)"
+          @click="answerProfile(current, null)"
         >
-          {{ o.label }}
+          überspringen
         </button>
       </div>
-      <button
-        class="c-word-feedback-card__skip"
-        :disabled="pending"
-        type="button"
-        @click="answerProfile(current, null)"
-      >
-        überspringen
-      </button>
-    </div>
 
-    <div v-if="current === 'done'" class="c-word-feedback-card__done">
-      <ul v-if="rows.length" class="c-word-feedback-card__compare">
-        <li v-for="r in rows" :key="r.label">{{ r.label }}: {{ r.share }} % sagen det</li>
-      </ul>
-      <button class="c-word-feedback-card__skip" type="button" @click="reset">
-        Angaben ändern
-      </button>
+      <div v-if="current === 'done'" ref="doneBox" class="c-word-feedback-card__done" tabindex="-1">
+        <ul v-if="rows.length" class="c-word-feedback-card__compare">
+          <li v-for="r in rows" :key="r.label">{{ r.label }}: {{ r.share }} % sagen det</li>
+        </ul>
+        <button class="c-word-feedback-card__skip" type="button" @click="reset">
+          Angaben ändern
+        </button>
+      </div>
     </div>
   </section>
 </template>
@@ -100,7 +104,7 @@ import {
   type Profile,
 } from "@stores/wordFeedback.ts";
 import { trackEvent } from "@utils/analytics";
-import { computed, onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from "vue";
 
 import { BERLIN_AREAS } from "@/data/berlinAreas";
 
@@ -158,6 +162,14 @@ const picked = ref<Record<string, string | null>>({});
 const pickedUsage = ref<Usage | null>(null);
 const selected = computed(() => ({ usage: pickedUsage.value ?? feedback.value?.mine?.usage }));
 
+const question = useTemplateRef<HTMLElement>("question");
+const doneBox = useTemplateRef<HTMLElement>("doneBox");
+// Only user-driven step changes move focus (the buttons that held it are gone), never mount/hydration.
+watch(step, async () => {
+  await nextTick();
+  (question.value ?? doneBox.value)?.focus();
+});
+
 onMounted(() => loadFeedback(props.wordId));
 
 // A failed GET left no state: retry it first, or sendFeedback would not store the answer.
@@ -178,6 +190,8 @@ const answerUsageStep = async (usage: Usage) => {
     trackEvent("Word Feedback", "usage", usage);
     const ok = await sendFeedback(props.wordId, { usage });
     if (ok && first) step.value = nextStep($profile.get());
+    // A failed re-vote must not keep showing the unsaved choice as selected.
+    if (!ok && feedback.value?.mine?.usage) pickedUsage.value = null;
   } finally {
     pending.value = false;
   }

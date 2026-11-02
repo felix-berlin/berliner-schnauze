@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 // Runs against the e2e seed (invented data); the word has no votes beforehand.
+// Not re-runnable against a stateful DB: needs a fresh seed (or a new visitor cookie) per run.
 const WORD = "/wort/aasen";
 
 test.describe("word feedback", () => {

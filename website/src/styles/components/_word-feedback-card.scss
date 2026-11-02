@@ -39,7 +39,11 @@
 
     &:disabled {
       cursor: progress;
-      opacity: 0.6;
+
+      // Dimming the selected pill would drop white-on-orange below AA.
+      &:not(.is-selected) {
+        opacity: 0.6;
+      }
     }
 
     // White-100 on orange-600 (same pair as the primary button) is 5.6:1 in both modes.

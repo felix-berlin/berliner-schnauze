@@ -22,7 +22,7 @@ const state = (over: Record<string, unknown> = {}) =>
   }) as never;
 
 const mountIt = async () => {
-  const w = mount(WordFeedbackCard, { props: { wordId: 7 } });
+  const w = mount(WordFeedbackCard, { attachTo: document.body, props: { wordId: 7 } });
   await flushPromises();
   return w;
 };
@@ -35,6 +35,7 @@ const click = async (w: Awaited<ReturnType<typeof mountIt>>, text: string) => {
 
 describe("WordFeedbackCard", () => {
   beforeEach(() => {
+    document.body.innerHTML = "";
     vi.clearAllMocks();
     $feedback.set(state());
     $profile.set({});
@@ -169,5 +170,64 @@ describe("WordFeedbackCard", () => {
     await click(w, "Angaben ändern");
     expect($profile.get()).toEqual({});
     expect(w.text()).toContain("Wo wohnste?");
+  });
+
+  it("moves focus to the new question after an answer, not on mount", async () => {
+    const w = await mountIt();
+    expect(document.activeElement).toBe(document.body);
+    await click(w, "Kenn ick");
+    await flushPromises();
+    expect(document.activeElement?.tagName).toBe("H3");
+    expect(document.activeElement?.textContent).toBe("Wo wohnste?");
+    w.unmount();
+  });
+
+  it("does not take focus when a revisit starts in the done state", async () => {
+    $feedback.set(state({ mine: { usage: "say" } }));
+    const w = await mountIt();
+    expect(document.activeElement).toBe(document.body);
+    w.unmount();
+  });
+
+  it("focuses the done box after the last step", async () => {
+    $profile.set({ area: null, half: null, origin: "movedOver10" });
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    await click(w, "30–39");
+    await flushPromises();
+    expect(document.activeElement?.className).toContain("c-word-feedback-card__done");
+    w.unmount();
+  });
+
+  it("clears a failed usage re-vote back to the saved choice", async () => {
+    $feedback.set(state({ mine: { usage: "say" } }));
+    store.sendFeedback.mockResolvedValue(false);
+    const w = await mountIt();
+    await click(w, "Nie jehört");
+    expect(w.findAll("button")[0].attributes("aria-pressed")).toBe("true");
+    expect(w.findAll("button")[2].attributes("aria-pressed")).toBe("false");
+  });
+
+  it.each([
+    ["area", "überspringen", {}],
+    ["origin", "Hier uffjewachsen", { area: null }],
+    ["age", "30–39", { area: null, half: null, origin: "movedOver10" }],
+  ])("a failed %s answer does not advance or change the profile", async (_k, label, profile) => {
+    $profile.set(profile as never);
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    store.sendFeedback.mockResolvedValue(false);
+    const heading = w.find("h3").text();
+    await click(w, label);
+    expect(w.find("h3").text()).toBe(heading);
+    expect($profile.get()).toEqual(profile);
+  });
+
+  it("uses the singular for one vote", async () => {
+    $feedback.set(state({ totals: { know: 0, never: 0, say: 1 } }));
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    expect(w.text()).toContain("1 Stimme");
+    expect(w.text()).not.toContain("1 Stimmen");
   });
 });
