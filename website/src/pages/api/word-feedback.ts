@@ -76,7 +76,7 @@ export const PATCH: APIRoute = async ({ clientAddress, cookies, request }) => {
     const data: Record<string, string | null> = Object.fromEntries(
       Object.entries(sent).filter(([, v]) => v !== undefined),
     ) as Record<string, string | null>;
-    if (data.origin != null && data.origin !== "grewUp") data.half = null;
+    if (data.origin !== undefined && data.origin !== "grewUp") data.half = null;
 
     const change = (id: number) =>
       payload.update({ collection: "word-feedback", data, depth: 0, id });

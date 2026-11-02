@@ -14,6 +14,7 @@ vi.mock("@services/payload.ts", async (importOriginal) => ({
 
 import type { APIContext } from "astro";
 
+import { siteRead } from "@services/payload.ts";
 import { GET, PATCH } from "@/pages/api/word-feedback.ts";
 
 const set = vi.fn();
@@ -67,6 +68,12 @@ describe("PATCH /api/word-feedback", () => {
     expect(update.mock.calls[0][0].data).toEqual({ half: null, origin: "movedOver10" });
   });
 
+  it("origin null clears half too", async () => {
+    find.mockResolvedValue({ docs: [{ id: 3 }] });
+    await patch({ origin: null, word: 7 }, "v-1");
+    expect(update.mock.calls[0][0].data).toEqual({ half: null, origin: null });
+  });
+
   it("half needs origin grewUp in the body", async () => {
     expect((await patch({ half: "east", word: 7 }, "v-1")).status).toBe(400);
     expect((await patch({ half: "east", origin: "grewUp", word: 7 }, "v-1")).status).toBe(200);
@@ -96,6 +103,10 @@ describe("PATCH /api/word-feedback", () => {
     expect((await patch({ usage: "say", word: 7 })).status).toBe(404);
     expect(create).not.toHaveBeenCalled();
     expect(update).not.toHaveBeenCalled();
+    expect(findByID.mock.calls[0][0]).toMatchObject({
+      collection: "words",
+      ...siteRead(),
+    });
   });
 
   it("502 on other errors", async () => {
