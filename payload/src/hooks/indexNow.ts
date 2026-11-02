@@ -3,6 +3,7 @@ import type {
   CollectionAfterDeleteHook,
   CollectionBeforeChangeHook,
   CollectionConfig,
+  PayloadRequest,
 } from "payload";
 
 import { PRESERVE_CONTENT_MODIFIED_AT } from "../fields/contentModified";
@@ -15,21 +16,25 @@ const wasPublicKey = (id: number | string) => `indexNowWasPublic:${id}`;
 const pathOf = (collection: RoutedCollection, slug: unknown): string[] =>
   typeof slug === "string" && slug ? [docPath(collection, slug)] : [];
 
+/** The public (published) state of a doc, ignoring its drafts. */
+const publicState = (req: PayloadRequest, collection: string, id: number | string) =>
+  req.payload.findByID({
+    collection: collection as "words",
+    depth: 0,
+    disableErrors: true,
+    draft: false,
+    id,
+    req,
+    select: { _status: true, slug: true },
+  });
+
 /**
  * A draft save can be an unpublish: the main table decides. Remembers the slug when the public doc is still published
  * before a draft save, so afterChange can tell "unpublished" from "draft of a published doc".
  */
 export const rememberWasPublic: CollectionBeforeChangeHook = async ({ collection, data, operation, originalDoc, req }) => {
   if (operation !== "update" || !originalDoc || data._status !== "draft" || !collection.versions?.drafts) return data;
-  const published = await req.payload.findByID({
-    collection: collection.slug as "words",
-    depth: 0,
-    disableErrors: true,
-    draft: false,
-    id: originalDoc.id,
-    req,
-    select: { _status: true, slug: true },
-  });
+  const published = await publicState(req, collection.slug, originalDoc.id);
   if (published?._status === "published") req.context[wasPublicKey(originalDoc.id)] = published.slug;
   return data;
 };
@@ -48,15 +53,7 @@ export const pingOnChange: CollectionAfterChangeHook = async ({ collection, doc,
   } else {
     const wasPublic = req.context[wasPublicKey(doc.id)];
     if (wasPublic) {
-      const now = await req.payload.findByID({
-        collection: slug as "words",
-        depth: 0,
-        disableErrors: true,
-        draft: false,
-        id: doc.id,
-        req,
-        select: { _status: true },
-      });
+      const now = await publicState(req, slug, doc.id);
       if (now?._status !== "published") paths.push(...pathOf(slug, wasPublic));
     }
   }
