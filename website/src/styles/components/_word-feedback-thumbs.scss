@@ -1,0 +1,56 @@
+@use "@styles/variables" as vars;
+
+.c-word-feedback-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: vars.$spacer * 0.5 vars.$spacer;
+
+  &__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-block-size: 2.75rem;
+    padding: 0.4rem 0.9rem;
+    border: 1px dashed var(--color-muted);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-body);
+    font: inherit;
+    font-size: 0.875rem;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent-text);
+      outline-offset: 2px;
+    }
+
+    // White-100 on orange-600 (same pair as the primary button) is 5.6:1 in both modes.
+    &.is-active {
+      background: var(--orange-600);
+      border: 1px solid var(--orange-600);
+      color: var(--white-100);
+    }
+  }
+
+  &__icon {
+    inline-size: 1.1rem;
+    block-size: 1.1rem;
+  }
+
+  &__count {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+  }
+
+  &__hint {
+    color: var(--color-muted);
+    font-size: 0.8125rem;
+  }
+}

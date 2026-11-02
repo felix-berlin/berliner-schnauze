@@ -225,7 +225,7 @@ const schemaJson = () => {
     />
 
     <div class:list={['c-word-main', hasImages && 'c-word-main--with-gallery']}>
-      <WordHero word={word} wortartLabel={wortartLabel} wortartAuto={wortartAuto} />
+      <WordHero word={word} wortartLabel={wortartLabel} wortartAuto={wortartAuto} draft={!!draft} />
 
       <div class='c-word-main__content'>
         <WordSectionEtymologie word={word} />

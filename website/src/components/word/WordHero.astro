@@ -5,6 +5,7 @@ import AudioPlayerList from '@components/AudioPlayerList.vue';
 import BadgeTag from '@components/BadgeTag.vue';
 import IsWordOfTheDay from '@components/word/IsWordOfTheDay.vue';
 import WordOptionDropdown from '@components/word/WordOptionDropdown.vue';
+import WordFeedbackThumbs from '@components/word-feedback/WordFeedbackThumbs.vue';
 import TooltipPopover from '@components/TooltipPopover.vue';
 import Tag from '~icons/lucide/tag';
 import { routeToWord } from '@utils/helpers';
@@ -15,9 +16,11 @@ interface Props {
   wortartLabel: string | undefined;
   /** The label is the automatic guess, not an editor's choice. */
   wortartAuto?: boolean;
+  /** A draft preview has no public votes. */
+  draft?: boolean;
 }
 
-const { word, wortartLabel, wortartAuto = false } = Astro.props;
+const { word, wortartLabel, wortartAuto = false, draft = false } = Astro.props;
 const { themen } = word;
 ---
 
@@ -91,6 +94,7 @@ const { themen } = word;
         </div>
       )
     }
+    {!draft && <WordFeedbackThumbs client:idle wordId={word.id} />}
   </div>
   <div class='c-word-hero__right'>
     <WordOptionDropdown
