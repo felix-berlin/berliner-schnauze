@@ -15,12 +15,16 @@ const calls = async () => {
 const pinged = async () =>
   (await calls()).flatMap(([, init]) => (JSON.parse(String(init?.body)) as { urlList: string[] }).urlList.map((u) => new URL(u).pathname));
 
+// Flush queued pings first, or they land after the clear.
+const reset = async () => {
+  await flushIndexNow();
+  fetchSpy.mockClear();
+};
+
 beforeEach(async () => {
   process.env.INDEXNOW_KEY = "testkey";
   vi.stubGlobal("fetch", fetchSpy);
-  // Drop pings queued by the previous test's cleanup.
-  await flushIndexNow();
-  fetchSpy.mockClear();
+  await reset();
 });
 
 afterEach(async () => {
@@ -45,7 +49,7 @@ describe("IndexNow pings", () => {
   it("pings a changed published word and nothing for a draft save of it", async () => {
     const payload = await getTestPayload();
     const word = await create("published");
-    fetchSpy.mockClear();
+    await reset();
     await payload.update({ collection: "words", id: word.id, data: { berlinerisch: "Ping2", _status: "draft" }, draft: true });
     expect(await calls()).toHaveLength(0);
     await payload.update({ collection: "words", id: word.id, data: { berlinerisch: "Ping3", _status: "published" } });
@@ -55,7 +59,7 @@ describe("IndexNow pings", () => {
   it("pings the old and the new URL after a slug change", async () => {
     const payload = await getTestPayload();
     const word = await create("published");
-    fetchSpy.mockClear();
+    await reset();
     await payload.update({ collection: "words", id: word.id, data: { slug: B, _status: "published" } });
     expect((await pinged()).sort()).toEqual([`/wort/${A}`, `/wort/${B}`].sort());
   });
@@ -63,11 +67,11 @@ describe("IndexNow pings", () => {
   it("pings the URL on unpublish and on delete", async () => {
     const payload = await getTestPayload();
     const word = await create("published");
-    fetchSpy.mockClear();
+    await reset();
     await payload.update({ collection: "words", id: word.id, data: { _status: "draft" } });
     expect(await pinged()).toEqual([`/wort/${A}`]);
     await payload.update({ collection: "words", id: word.id, data: { _status: "published" } });
-    fetchSpy.mockClear();
+    await reset();
     await payload.delete({ collection: "words", id: word.id });
     expect(await pinged()).toEqual([`/wort/${A}`]);
   });
