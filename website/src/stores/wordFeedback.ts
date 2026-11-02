@@ -100,6 +100,13 @@ export const sendFeedback = async (
       headers: { "Content-Type": "application/json" },
       method: "PATCH",
     });
+    if (res.status === 429) {
+      // The server says why (daily cap); a generic "try again" would be wrong.
+      $feedbackError.set(true);
+      const { error } = (await res.json().catch(() => ({}))) as { error?: string };
+      createToastNotify({ message: error ?? "Jenug jestimmt für heute.", status: "warning" });
+      return false;
+    }
     if (!res.ok) throw new Error(String(res.status));
     const state = (await res.json()) as WordFeedbackState;
     // The user may have navigated to another word while the PATCH was in flight.

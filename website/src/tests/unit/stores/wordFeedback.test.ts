@@ -157,6 +157,22 @@ describe("sendFeedback", () => {
     expect($feedbackError.get()).toBe(true);
     expect(toast).toHaveBeenCalledTimes(1);
   });
+  it("shows the server's message when the daily cap answers 429", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValue({
+          json: async () => ({ error: "Jenug jestimmt für heute." }),
+          ok: false,
+          status: 429,
+        }),
+    );
+    expect(await sendFeedback(1, { usage: "say" })).toBe(false);
+    expect(toast).toHaveBeenCalledWith(
+      expect.objectContaining({ message: "Jenug jestimmt für heute." }),
+    );
+  });
   it("ignores a response after the next word's GET failed", async () => {
     let release!: (v: unknown) => void;
     const f = vi
