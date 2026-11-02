@@ -15,8 +15,9 @@ const audioRows = (name: string): Field => ({
   fields: [gender, { name: "audio", type: "upload", relationTo: "media" }],
 });
 
-/** comments.word is required (not-null FK): take the word's comments along. Top-level first, their hook removes the replies. */
+/** comments.word and word_feedback.word_id are required (not-null FK): take the word's comments and feedback along. Top-level comments first, their hook removes the replies. */
 const deleteComments: CollectionBeforeDeleteHook = async ({ id, req }) => {
+  await req.payload.delete({ collection: "word-feedback", where: { word: { equals: id } }, req });
   await req.payload.delete({
     collection: "comments",
     where: { word: { equals: id }, parent: { exists: false } },
@@ -29,13 +30,20 @@ export const Words: CollectionConfig = {
   access: draftsAccess,
   admin: { useAsTitle: "berlinerisch", preview: previewUrl("words") },
   versions: { drafts: true },
-  hooks: { beforeChange: [mcpDraftOnly, touchContentModifiedAt, setDerivedWordFields], beforeDelete: [deleteComments] },
+  hooks: {
+    beforeChange: [mcpDraftOnly, touchContentModifiedAt, setDerivedWordFields],
+    beforeDelete: [deleteComments],
+  },
   fields: [
     { name: "berlinerisch", type: "text", required: true },
     ...identityFields,
     { name: "article", type: "text" },
     { name: "translations", type: "array", fields: [{ name: "translation", type: "text" }] },
-    { name: "alternativeWords", type: "array", fields: [{ name: "alternativeWord", type: "text" }] },
+    {
+      name: "alternativeWords",
+      type: "array",
+      fields: [{ name: "alternativeWord", type: "text" }],
+    },
     {
       name: "examples",
       type: "array",
@@ -74,7 +82,11 @@ export const Words: CollectionConfig = {
     {
       name: "derived",
       type: "group",
-      admin: { readOnly: true, position: "sidebar", description: "Computed from berlinerisch on save." },
+      admin: {
+        readOnly: true,
+        position: "sidebar",
+        description: "Computed from berlinerisch on save.",
+      },
       fields: [
         { name: "wordGroup", type: "text" },
         { name: "characterLength", type: "number" },

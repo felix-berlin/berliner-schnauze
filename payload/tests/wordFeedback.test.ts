@@ -42,7 +42,13 @@ describe("word-feedback", () => {
     await row({ reaction: "dislike", usage: "say" });
     await row({ usage: "know" });
     await row({ reaction: "dislike" });
-    expect(await feedbackTotals(payload, wordId)).toEqual({ like: 2, dislike: 2, say: 3, know: 1, never: 0 });
+    expect(await feedbackTotals(payload, wordId)).toEqual({
+      like: 2,
+      dislike: 2,
+      say: 3,
+      know: 1,
+      never: 0,
+    });
   });
 
   it("compares groups, hides small ones", async () => {
@@ -50,7 +56,12 @@ describe("word-feedback", () => {
     await rows(3, { half: "east", usage: "know" });
     await rows(9, { half: "west", usage: "say" });
     await rows(5, { half: "both" });
-    expect(await feedbackCompare(payload, wordId, null)).toEqual({ east: 70, west: null, moved: null, area: null });
+    expect(await feedbackCompare(payload, wordId, null)).toEqual({
+      east: 70,
+      west: null,
+      moved: null,
+      area: null,
+    });
   });
 
   it("ignores rows without usage and groups moved and area", async () => {
@@ -64,9 +75,30 @@ describe("word-feedback", () => {
   it("rejects a second row per word and visitor", async () => {
     await row({ visitor: "same" });
     // Payload turns Postgres 23505 into a ValidationError naming the index columns.
-    const err = (await row({ visitor: "same" }).catch((e: unknown) => e)) as Error;
+    const err = (await row({ visitor: "same" }).catch((e: unknown) => e)) as {
+      data: { errors: { path: string }[] };
+      name: string;
+    };
     expect(err.name).toBe("ValidationError");
-    expect(err.message).toMatch(/word_id, visitor/);
+    // The site's isUniqueViolation reads this path.
+    expect(err.data.errors[0].path).toBe("word_id, visitor");
+  });
+
+  it("deleting a word takes its feedback along", async () => {
+    const w = await payload.create({
+      collection: "words",
+      data: { berlinerisch: "Loeschtest", slug: "feedback-delete-wort", _status: "published" },
+    });
+    await payload.create({
+      collection: "word-feedback",
+      data: { word: w.id, visitor: "del", usage: "say" },
+    });
+    await payload.delete({ collection: "words", id: w.id });
+    const left = await payload.count({
+      collection: "word-feedback",
+      where: { visitor: { equals: "del" } },
+    });
+    expect(left.totalDocs).toBe(0);
   });
 });
 
@@ -74,7 +106,8 @@ describe("word sidebar counts", () => {
   it("is a ui field and stores nothing on the word", async () => {
     const f = Words.fields.find((x) => "name" in x && x.name === "feedbackCounts");
     expect(f?.type).toBe("ui");
-    const versions = () => payload.countVersions({ collection: "words", where: { parent: { equals: wordId } } });
+    const versions = () =>
+      payload.countVersions({ collection: "words", where: { parent: { equals: wordId } } });
     const before = (await versions()).totalDocs;
     await row({ reaction: "like", usage: "say" });
     expect((await versions()).totalDocs).toBe(before);
