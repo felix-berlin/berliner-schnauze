@@ -5,8 +5,9 @@ import { wordSeoDescription, wordSeoTitle } from "../src/lib/routes";
 describe("wordSeoDescription", () => {
   const base = { berlinerisch: "anmachen", translations: ["jemanden anflirten", "sich jemandem nähern"] };
 
-  it("is empty without meanings", () => {
-    expect(wordSeoDescription({ ...base, translations: [] })).toBe("");
+  it("still describes a word without meanings", () => {
+    const text = wordSeoDescription({ ...base, hasExamples: true, translations: [] });
+    expect(text).toBe(`${base.berlinerisch} im Berlinerisch-Wörterbuch der Berliner Schnauze. Mit Beispielsätzen.`);
   });
 
   it("names only the parts the entry has", () => {
