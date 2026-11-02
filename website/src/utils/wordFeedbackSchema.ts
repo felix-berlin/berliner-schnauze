@@ -34,7 +34,7 @@ export const feedbackPatchSchema = z
   })
   .refine((v) => v.half == null || v.origin === "grewUp", { message: "half needs origin grewUp" })
   .refine((v) => v.locality == null || LOCALITY_AREA[v.locality] === v.area, {
-    message: "locality needs the area of its area",
+    message: "locality needs its own area",
   });
 
 export type MyFeedback = {

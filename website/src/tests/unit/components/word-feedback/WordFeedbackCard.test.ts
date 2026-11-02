@@ -123,10 +123,9 @@ describe("WordFeedbackCard", () => {
     await click(w, "Friedrichshain-Kreuzberg");
     expect(store.sendFeedback).toHaveBeenLastCalledWith(7, { area: "friedrichshain-kreuzberg" });
     expect(w.text()).toContain("Welcher Kiez?");
-    expect(w.findAll(".c-word-feedback-card__options--kiez button").map((b) => b.text())).toEqual([
-      "Friedrichshain",
-      "Kreuzberg",
-    ]);
+    expect(
+      w.findAll(".c-word-feedback-card__options--locality button").map((b) => b.text()),
+    ).toEqual(["Friedrichshain", "Kreuzberg"]);
     expect(w.find('[role="img"]').attributes("aria-label")).toBe("Schritt 3 von 5");
   });
 
@@ -387,6 +386,54 @@ describe("WordFeedbackCard", () => {
       expect(store.answerUsage).not.toHaveBeenCalled();
       expect($profile.get()).toEqual({});
       expect(dotButtons(w)[2].attributes("aria-current")).toBe("step");
+    });
+
+    it("offers a locality dot after a borough and jumps to it without sending", async () => {
+      fine(true);
+      const w = await editing({ area: "pankow" });
+      const buttons = dotButtons(w);
+      expect(buttons.map((b) => b.attributes("aria-label"))).toEqual([
+        "Schritt 2: Wo wohnste?",
+        "Schritt 3: Welcher Kiez?",
+        "Schritt 4: Uffjewachsen oder zujezogen?",
+        "Schritt 5: Wie alt biste?",
+      ]);
+      await buttons[1].trigger("click");
+      await flushPromises();
+      expect(w.find("h3").text()).toBe("Welcher Kiez?");
+      expect(dotButtons(w)[1].attributes("aria-current")).toBe("step");
+      expect(store.sendFeedback).not.toHaveBeenCalled();
+      expect($profile.get()).toEqual({ area: "pankow" });
+    });
+
+    it.each([{ area: "brandenburg" }, { area: "elsewhere" }, { area: null }])(
+      "has no locality dot for %j",
+      async (profile) => {
+        fine(true);
+        const w = await editing(profile);
+        const labels = dotButtons(w).map((b) => b.attributes("aria-label"));
+        expect(labels).toHaveLength(3);
+        expect(labels.join()).not.toContain("Kiez");
+      },
+    );
+
+    it("re-picking the same area clears the locality and shows no stale pressed button", async () => {
+      fine(true);
+      $feedback.set(state({ mine: { area: "pankow", locality: "karow", usage: "say" } }));
+      const w = await mountIt();
+      await click(w, "Angaben ändern");
+      await click(w, "Pankow");
+      await click(w, "Karow");
+      expect(store.sendFeedback).toHaveBeenLastCalledWith(7, { area: "pankow", locality: "karow" });
+      await dotButtons(w)[0].trigger("click");
+      await flushPromises();
+      await click(w, "Pankow");
+      // The server still holds the locality, so the area send clears it.
+      expect(store.sendFeedback).toHaveBeenLastCalledWith(7, { area: "pankow", locality: null });
+      expect($profile.get()).toEqual({ area: "pankow" });
+      expect(w.find("h3").text()).toBe("Welcher Kiez?");
+      const b = w.findAll("button").find((x) => x.text() === "Karow")!;
+      expect(b.attributes("aria-pressed")).toBe("false");
     });
 
     it("offers the half dot only for someone who grew up here", async () => {

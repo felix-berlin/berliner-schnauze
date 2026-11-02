@@ -83,7 +83,7 @@
         <div
           v-else
           class="c-word-feedback-card__options"
-          :class="{ 'c-word-feedback-card__options--kiez': current === 'locality' }"
+          :class="{ 'c-word-feedback-card__options--locality': current === 'locality' }"
         >
           <button
             v-for="o in choices"
@@ -280,7 +280,11 @@ const answerProfile = async (key: ProfileStep, value: string | null) => {
   pending.value = true;
   try {
     if (!(await ready())) return;
-    picked.value = { ...picked.value, [key]: value };
+    picked.value = {
+      ...picked.value,
+      [key]: value,
+      ...(key === "area" ? { locality: null } : {}),
+    };
     // The API only accepts a half in the same request as origin grewUp.
     // Likewise a locality only together with its area, and a new area drops the old one.
     const hadLocality = $profile.get().locality || feedback.value?.mine?.locality;

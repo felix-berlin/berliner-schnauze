@@ -22,7 +22,7 @@
   }
 
   // localities: up to 15 names, some long; two columns on a phone, more where there is room.
-  &__options--kiez {
+  &__options--locality {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
 

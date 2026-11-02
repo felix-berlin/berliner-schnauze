@@ -92,7 +92,6 @@ describe("nextStep", () => {
     [{ area: "brandenburg" }, "origin"],
     [{ area: "elsewhere" }, "origin"],
     [{ area: "pankow", locality: null, origin: "grewUp" }, "half"],
-    [{ area: "pankow", locality: null, origin: "grewUp" }, "half"],
     [{ area: null, origin: "movedOver10" }, "age"],
     [{ age: null, area: null, origin: null }, "done"],
   ] as const)("%j -> %s", (p, step) => expect(nextStep(p)).toBe(step));

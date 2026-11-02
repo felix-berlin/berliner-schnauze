@@ -144,6 +144,25 @@ describe("PATCH /api/word-feedback", () => {
     expect(update.mock.calls[0][0]).toMatchObject({ data: { usage: "say" }, id: 4 });
   });
 
+  it("the unique-violation retry keeps a matching locality and clears another area's one", async () => {
+    create.mockRejectedValue(uniqueViolation);
+    const raced = { area: "friedrichshain-kreuzberg", id: 4, locality: "kreuzberg" };
+    find.mockResolvedValueOnce({ docs: [] }).mockResolvedValueOnce({ docs: [raced] });
+    await patch({ area: "friedrichshain-kreuzberg", word: 7 }, "v-1");
+    expect(update.mock.calls[0][0]).toMatchObject({
+      data: { area: "friedrichshain-kreuzberg" },
+      id: 4,
+    });
+    expect(update.mock.calls[0][0].data).not.toHaveProperty("locality");
+    update.mockClear();
+    find.mockResolvedValueOnce({ docs: [] }).mockResolvedValueOnce({ docs: [raced] });
+    await patch({ area: "pankow", word: 7 }, "v-2");
+    expect(update.mock.calls[0][0]).toMatchObject({
+      data: { area: "pankow", locality: null },
+      id: 4,
+    });
+  });
+
   it("400 on unknown key or area", async () => {
     expect((await patch({ foo: 1, word: 7 })).status).toBe(400);
     expect((await patch({ area: "atlantis", word: 7 })).status).toBe(400);
