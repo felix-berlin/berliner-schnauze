@@ -28,7 +28,7 @@
           :key="a.key"
           v-bind="radio(a.key, a.name)"
           class="c-berlin-area-map__area"
-          :class="[`c-berlin-area-map__area--${a.side}`, { 'is-selected': modelValue === a.key }]"
+          :class="{ 'is-selected': modelValue === a.key }"
           :d="a.d"
         />
         <text
@@ -90,9 +90,7 @@
         </button>
       </div>
     </details>
-    <p class="c-berlin-area-map__credit">
-      Karte: Geoportal Berlin / ALKIS Berlin Bezirke, Ortsteile
-    </p>
+    <p class="c-berlin-area-map__credit">Karte: Geoportal Berlin / ALKIS Berlin Bezirke</p>
   </div>
 </template>
 
@@ -107,7 +105,7 @@ import { BERLIN_AREAS, MAP_H, MAP_VIEWBOX, MAP_W } from "@/data/berlinAreas";
 const props = defineProps<{ modelValue: Area | null }>();
 const emit = defineEmits<{ "update:modelValue": [Area] }>();
 
-// The Kreuzberg shape is ~17 px tall on a phone: below NARROW_PX the list is primary and the map secondary.
+// The Bezirk shapes are only ~30-60 px tall on a phone: below NARROW_PX the list is primary and the map secondary.
 // Keep in step with the 28.5rem container query in _berlin-area-map.scss (the smallest width with labels >= 11 px).
 const NARROW_PX = 456;
 const LIST: { key: Area; name: string }[] = [

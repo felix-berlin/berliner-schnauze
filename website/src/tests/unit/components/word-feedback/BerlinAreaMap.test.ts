@@ -6,21 +6,22 @@ const mountMap = (modelValue: string | null = null) =>
   mount(BerlinAreaMap, { attachTo: document.body, props: { modelValue: modelValue as never } });
 
 describe("BerlinAreaMap", () => {
-  it("renders 14 Berlin areas, Brandenburg and a Woanders button in one radiogroup", () => {
+  it("renders the 12 Bezirke, Brandenburg and a Woanders button in one radiogroup", () => {
     const w = mountMap();
     expect(w.find('[role="radiogroup"]').attributes("aria-label")).toBe("Wo wohnste?");
     const radios = w.findAll('[role="radio"]');
-    expect(radios).toHaveLength(15);
+    expect(radios).toHaveLength(13);
     expect(radios.filter((r) => r.attributes("aria-label") === "Brandenburg")).toHaveLength(1);
-    expect(w.find('[aria-label="Wedding/Tiergarten"]').exists()).toBe(true);
+    expect(w.find('[aria-label="Friedrichshain-Kreuzberg"]').exists()).toBe(true);
+    expect(w.find('[aria-label="Wedding/Tiergarten"]').exists()).toBe(false);
     expect(w.find("button").text()).toBe("Woanders");
     w.unmount();
   });
 
   it("emits the key when an area is clicked", async () => {
     const w = mountMap();
-    await w.find('[aria-label="Kreuzberg"]').trigger("click");
-    expect(w.emitted("update:modelValue")![0]).toEqual(["kreuzberg"]);
+    await w.find('[aria-label="Friedrichshain-Kreuzberg"]').trigger("click");
+    expect(w.emitted("update:modelValue")![0]).toEqual(["friedrichshain-kreuzberg"]);
     w.unmount();
   });
 
@@ -83,15 +84,17 @@ describe("BerlinAreaMap", () => {
 
   it("emits the area from the list buttons", async () => {
     const w = mount(BerlinAreaMap, { props: { modelValue: null } });
-    const btn = w.findAll(".c-berlin-area-map__list-item").find((b) => b.text() === "Kreuzberg");
+    const btn = w
+      .findAll(".c-berlin-area-map__list-item")
+      .find((b) => b.text() === "Friedrichshain-Kreuzberg");
     await btn!.trigger("click");
-    expect(w.emitted("update:modelValue")![0]).toEqual(["kreuzberg"]);
+    expect(w.emitted("update:modelValue")![0]).toEqual(["friedrichshain-kreuzberg"]);
   });
 
   it("offers Woanders in the list too, with the same emit contract", async () => {
     const w = mount(BerlinAreaMap, { props: { modelValue: null } });
     const items = w.findAll(".c-berlin-area-map__list-item");
-    expect(items).toHaveLength(16);
+    expect(items).toHaveLength(14);
     await items.find((b) => b.text() === "Woanders")!.trigger("click");
     expect(w.emitted("update:modelValue")![0]).toEqual(["elsewhere"]);
   });

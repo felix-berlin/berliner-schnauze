@@ -3,10 +3,34 @@ import type { BasePayload, Where } from "payload";
 
 export const REACTIONS = ["like", "dislike"] as const;
 export const USAGES = ["say", "know", "never"] as const;
-export const AREAS = ["mitte", "wedding-tiergarten", "friedrichshain", "kreuzberg", "pankow", "lichtenberg", "marzahn-hellersdorf", "treptow-koepenick", "reinickendorf", "spandau", "charlottenburg-wilmersdorf", "steglitz-zehlendorf", "tempelhof-schoeneberg", "neukoelln", "brandenburg", "elsewhere"] as const;
+export const AREAS = [
+  "mitte",
+  "friedrichshain-kreuzberg",
+  "pankow",
+  "charlottenburg-wilmersdorf",
+  "spandau",
+  "steglitz-zehlendorf",
+  "tempelhof-schoeneberg",
+  "neukoelln",
+  "treptow-koepenick",
+  "marzahn-hellersdorf",
+  "lichtenberg",
+  "reinickendorf",
+  "brandenburg",
+  "elsewhere",
+] as const;
 export const ORIGINS = ["grewUp", "movedOver10", "movedUnder10"] as const;
 export const HALVES = ["east", "west", "both"] as const;
-export const AGES = ["u20", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80plus"] as const;
+export const AGES = [
+  "u20",
+  "20-29",
+  "30-39",
+  "40-49",
+  "50-59",
+  "60-69",
+  "70-79",
+  "80plus",
+] as const;
 /** Smallest group whose share is shown. */
 export const MIN_GROUP = 10;
 
@@ -17,8 +41,19 @@ export type Origin = (typeof ORIGINS)[number];
 export type Half = (typeof HALVES)[number];
 export type Age = (typeof AGES)[number];
 
-export type FeedbackTotals = { like: number; dislike: number; say: number; know: number; never: number };
-export type FeedbackCompare = { east: number | null; west: number | null; moved: number | null; area: number | null };
+export type FeedbackTotals = {
+  like: number;
+  dislike: number;
+  say: number;
+  know: number;
+  never: number;
+};
+export type FeedbackCompare = {
+  east: number | null;
+  west: number | null;
+  moved: number | null;
+  area: number | null;
+};
 
 type Counter = Pick<BasePayload, "count">;
 
@@ -28,7 +63,12 @@ const count = async (payload: Counter, where: Where) =>
 export async function feedbackTotals(payload: Counter, wordId: number): Promise<FeedbackTotals> {
   const keys = [...REACTIONS, ...USAGES] as const;
   const counts = await Promise.all(
-    keys.map((k) => count(payload, { word: { equals: wordId }, [REACTIONS.includes(k as Reaction) ? "reaction" : "usage"]: { equals: k } })),
+    keys.map((k) =>
+      count(payload, {
+        word: { equals: wordId },
+        [REACTIONS.includes(k as Reaction) ? "reaction" : "usage"]: { equals: k },
+      }),
+    ),
   );
   return Object.fromEntries(keys.map((k, i) => [k, counts[i]])) as FeedbackTotals;
 }
@@ -42,7 +82,11 @@ async function share(payload: Counter, wordId: number, group: Where): Promise<nu
   return Math.round((say / total) * 100);
 }
 
-export async function feedbackCompare(payload: Counter, wordId: number, area: Area | null): Promise<FeedbackCompare> {
+export async function feedbackCompare(
+  payload: Counter,
+  wordId: number,
+  area: Area | null,
+): Promise<FeedbackCompare> {
   const [east, west, moved, areaShare] = await Promise.all([
     share(payload, wordId, { half: { equals: "east" } }),
     share(payload, wordId, { half: { equals: "west" } }),

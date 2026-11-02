@@ -37,10 +37,6 @@
     cursor: pointer;
     transition: fill 0.15s;
 
-    &--east {
-      fill: color-mix(in srgb, var(--color-muted) 20%, transparent);
-    }
-
     &--brandenburg {
       stroke-width: 1;
       stroke-dasharray: 6 4;

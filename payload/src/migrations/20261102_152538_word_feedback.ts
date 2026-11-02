@@ -4,7 +4,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    CREATE TYPE "public"."enum_word_feedback_reaction" AS ENUM('like', 'dislike');
   CREATE TYPE "public"."enum_word_feedback_usage" AS ENUM('say', 'know', 'never');
-  CREATE TYPE "public"."enum_word_feedback_area" AS ENUM('mitte', 'wedding-tiergarten', 'friedrichshain', 'kreuzberg', 'pankow', 'lichtenberg', 'marzahn-hellersdorf', 'treptow-koepenick', 'reinickendorf', 'spandau', 'charlottenburg-wilmersdorf', 'steglitz-zehlendorf', 'tempelhof-schoeneberg', 'neukoelln', 'brandenburg', 'elsewhere');
+  CREATE TYPE "public"."enum_word_feedback_area" AS ENUM('mitte', 'friedrichshain-kreuzberg', 'pankow', 'charlottenburg-wilmersdorf', 'spandau', 'steglitz-zehlendorf', 'tempelhof-schoeneberg', 'neukoelln', 'treptow-koepenick', 'marzahn-hellersdorf', 'lichtenberg', 'reinickendorf', 'brandenburg', 'elsewhere');
   CREATE TYPE "public"."enum_word_feedback_origin" AS ENUM('grewUp', 'movedOver10', 'movedUnder10');
   CREATE TYPE "public"."enum_word_feedback_half" AS ENUM('east', 'west', 'both');
   CREATE TYPE "public"."enum_word_feedback_age" AS ENUM('u20', '20-29', '30-39', '40-49', '50-59', '60-69', '70-79', '80plus');
