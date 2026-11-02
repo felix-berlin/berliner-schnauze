@@ -7,7 +7,7 @@
         :aria-pressed="mine === b.reaction"
         class="c-word-feedback-thumbs__button"
         :class="{ 'is-active': mine === b.reaction }"
-        :disabled="pending"
+        :aria-disabled="pending"
         type="button"
         @click="vote(b.reaction)"
       >

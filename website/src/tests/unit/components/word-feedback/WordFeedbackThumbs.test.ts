@@ -83,7 +83,8 @@ describe("WordFeedbackThumbs", () => {
     store.sendFeedback.mockReturnValue(new Promise<boolean>((r) => (resolve = r)));
     const w = await mountIt();
     await w.findAll("button")[0].trigger("click");
-    expect(w.findAll("button")[0].attributes("disabled")).toBeDefined();
+    expect(w.findAll("button")[0].attributes("aria-disabled")).toBe("true");
+    expect(w.findAll("button")[0].attributes("disabled")).toBeUndefined(); // keeps focus
     await w.findAll("button")[1].trigger("click");
     expect(store.sendFeedback).toHaveBeenCalledTimes(1);
     resolve(true);

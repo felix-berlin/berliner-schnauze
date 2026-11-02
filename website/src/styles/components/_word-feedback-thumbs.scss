@@ -31,7 +31,7 @@
       outline-offset: 2px;
     }
 
-    &:disabled {
+    &[aria-disabled="true"] {
       cursor: progress;
     }
 
