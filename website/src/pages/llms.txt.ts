@@ -21,7 +21,7 @@ export const GET: APIRoute = async ({ site }) => {
     "",
     `> Berliner Schnauze ist ein kostenloses, werbefreies Berlinerisch–Hochdeutsch-Wörterbuch mit aktuell ${count} Einträgen aus dem Berliner Dialekt, dem Berlinischen und dem Berliner Jargon, einschließlich Berolinismen (Spitznamen für Berliner Orte und Bauwerke).`,
     "",
-    "Nutzungsbedingungen: Das Training von KI-Modellen mit diesen Inhalten ist nicht gestattet (ai-train=no). Welche Crawler zugelassen sind, steht verbindlich in /robots.txt.",
+    "Nutzungsbedingungen: Das Training von KI-Modellen mit diesen Inhalten ist nicht gestattet (ai-train=no). Welche Crawler Zugang bekommen, regelt die Bot-Abwehr der Seite; die Erklärung dazu steht in /robots.txt (Content-Signal) und /.well-known/tdmrep.json.",
     "",
     "Sprache der Seite: Deutsch (de-DE). Die Einträge sind redaktionell gepflegt; sichtbare Datumsangaben auf jeder Wortseite zeigen Erstellung und letzte Änderung.",
     "",
