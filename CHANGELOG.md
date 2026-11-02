@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.3.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.2.1...v4.3.0) (2026-11-02)
+
+
+### Bug Fixes
+
+* **cms:** keep the MCP plugin out of the site bundle ([b5e973f](https://github.com/felix-berlin/berliner-schnauze/commit/b5e973f21f90ed4324593ecf5a1cf51c5ec84d33))
+
+
+### Features
+
+* **cms:** add MCP endpoint for words and suggestions ([08900d0](https://github.com/felix-berlin/berliner-schnauze/commit/08900d0eff0ff808af03ab114a0bd1bf2459990d))
+
 ## [4.2.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.2.0...v4.2.1) (2026-11-01)
 
 
