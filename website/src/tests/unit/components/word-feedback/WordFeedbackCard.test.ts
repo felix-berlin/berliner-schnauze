@@ -1,6 +1,6 @@
 import WordFeedbackCard from "@components/word-feedback/WordFeedbackCard.vue";
 import { flushPromises, mount } from "@vue/test-utils";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const store = vi.hoisted(() => ({
   answerUsage: vi.fn(),
@@ -242,5 +242,82 @@ describe("WordFeedbackCard", () => {
     await click(w, "Kenn ick");
     expect(w.text()).toContain("1 Stimme");
     expect(w.text()).not.toContain("1 Stimmen");
+  });
+
+  describe("step dots", () => {
+    const fine = (matches: boolean) =>
+      vi.stubGlobal("matchMedia", (q: string) => ({
+        addEventListener: () => {},
+        matches,
+        media: q,
+        removeEventListener: () => {},
+      }));
+    const editing = async (profile = {}) => {
+      $feedback.set(state({ mine: { usage: "say" } }));
+      const w = await mountIt();
+      await click(w, "Angaben ändern");
+      if (Object.keys(profile).length) {
+        $profile.set(profile as never);
+        await flushPromises();
+      }
+      return w;
+    };
+    const dotButtons = (w: Awaited<ReturnType<typeof mountIt>>) =>
+      w.findAll("button.c-word-feedback-card__dot-button");
+
+    afterEach(() => vi.unstubAllGlobals());
+
+    it("are plain, non-interactive dots when not editing", async () => {
+      fine(true);
+      const w = await mountIt();
+      await click(w, "Kenn ick");
+      expect(w.find('[role="img"][aria-label="Schritt 2 von 4"]').exists()).toBe(true);
+      expect(dotButtons(w)).toHaveLength(0);
+    });
+
+    it("stay plain dots on a touch device even when editing", async () => {
+      fine(false);
+      const w = await editing();
+      expect(dotButtons(w)).toHaveLength(0);
+    });
+
+    it("jump to a step without sending or storing anything while editing", async () => {
+      fine(true);
+      const w = await editing();
+      const buttons = dotButtons(w);
+      expect(buttons.map((b) => b.attributes("aria-label"))).toEqual([
+        "Schritt 2: Wo wohnste?",
+        "Schritt 3: Uffjewachsen oder zujezogen?",
+        "Schritt 4: Wie alt biste?",
+      ]);
+      expect(buttons[0].attributes("aria-current")).toBe("step");
+      await buttons[2].trigger("click");
+      await flushPromises();
+      expect(w.find("h3").text()).toBe("Wie alt biste?");
+      expect(store.sendFeedback).not.toHaveBeenCalled();
+      expect(store.answerUsage).not.toHaveBeenCalled();
+      expect($profile.get()).toEqual({});
+      expect(dotButtons(w)[2].attributes("aria-current")).toBe("step");
+    });
+
+    it("offers the half dot only for someone who grew up here", async () => {
+      fine(true);
+      const w = await editing();
+      expect(dotButtons(w)).toHaveLength(3);
+      await w.unmount();
+      const grew = await editing({ origin: "grewUp" });
+      expect(dotButtons(grew).map((b) => b.attributes("aria-label"))).toContain(
+        "Schritt 4: In welcher Hälfte?",
+      );
+    });
+  });
+
+  it("animates a step change but not the first paint", async () => {
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    expect(w.find(".c-word-feedback-card__step").classes()).toContain("is-entering");
+    $feedback.set(state({ mine: { usage: "say" } }));
+    const again = await mountIt();
+    expect(again.find(".c-word-feedback-card__done").classes()).not.toContain("is-entering");
   });
 });

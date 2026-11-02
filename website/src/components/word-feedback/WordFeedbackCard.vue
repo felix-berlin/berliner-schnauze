@@ -32,8 +32,34 @@
     </div>
 
     <div aria-live="polite">
-      <div v-if="current !== 'usage' && current !== 'done'" class="c-word-feedback-card__step">
+      <div
+        v-if="current !== 'usage' && current !== 'done'"
+        :key="current"
+        class="c-word-feedback-card__step"
+        :class="enter"
+      >
+        <ol v-if="jumpable" class="c-word-feedback-card__dots" aria-label="Schritte">
+          <li v-for="(d, i) in dots" :key="d">
+            <span
+              v-if="d === 'usage'"
+              class="c-word-feedback-card__dot is-active"
+              role="img"
+              :aria-label="`Schritt ${i + 1}: Sagste det noch?`"
+            />
+            <button
+              v-else
+              :aria-current="i === dotIndex ? 'step' : undefined"
+              :aria-label="`Schritt ${i + 1}: ${QUESTIONS[d as ProfileStep]}`"
+              class="c-word-feedback-card__dot-button"
+              type="button"
+              @click="step = d as ProfileStep"
+            >
+              <span class="c-word-feedback-card__dot" :class="{ 'is-active': i <= dotIndex }" />
+            </button>
+          </li>
+        </ol>
         <div
+          v-else
           class="c-word-feedback-card__dots"
           role="img"
           :aria-label="`Schritt ${dotIndex + 1} von ${dots.length}`"
@@ -78,7 +104,13 @@
         </button>
       </div>
 
-      <div v-if="current === 'done'" ref="doneBox" class="c-word-feedback-card__done" tabindex="-1">
+      <div
+        v-if="current === 'done'"
+        ref="doneBox"
+        class="c-word-feedback-card__done"
+        :class="enter"
+        tabindex="-1"
+      >
         <ul v-if="rows.length" class="c-word-feedback-card__compare">
           <li v-for="r in rows" :key="r.label">{{ r.label }}: {{ r.share }} % sagen det</li>
         </ul>
@@ -105,6 +137,7 @@ import {
   type Profile,
 } from "@stores/wordFeedback.ts";
 import { trackEvent } from "@utils/analytics";
+import { useMediaQuery } from "@vueuse/core";
 import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from "vue";
 
 import { BERLIN_AREAS } from "@/data/berlinAreas";
@@ -166,7 +199,15 @@ const selected = computed(() => ({ usage: pickedUsage.value ?? feedback.value?.m
 const question = useTemplateRef<HTMLElement>("question");
 const doneBox = useTemplateRef<HTMLElement>("doneBox");
 // Only user-driven step changes move focus (the buttons that held it are gone), never mount/hydration.
-watch(step, async () => {
+// Enter animation (CSS only, no View Transitions: nothing to coordinate with the focus move below).
+// Only a user-driven step change sets it, so mount and a revisit's first paint stay still.
+const ORDER: Step[] = ["usage", "area", "origin", "half", "age", "done"];
+const enter = ref<string[]>([]);
+watch(step, async (to, from) => {
+  enter.value = [
+    "is-entering",
+    ...(to && from && ORDER.indexOf(to) < ORDER.indexOf(from) ? ["is-back"] : []),
+  ];
   await nextTick();
   (question.value ?? doneBox.value)?.focus();
 });
@@ -220,7 +261,13 @@ const answerProfile = async (key: ProfileStep, value: string | null) => {
   }
 };
 
+// Navigation only: a jump writes nothing. Offered while the answers are being changed, with a mouse.
+const editing = ref(false);
+const finePointer = useMediaQuery("(pointer: fine)");
+const jumpable = computed(() => editing.value && finePointer.value);
+
 const reset = () => {
+  editing.value = true;
   $profile.set({});
   picked.value = {};
   step.value = "area";
