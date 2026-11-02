@@ -62,6 +62,9 @@ describe("word-feedback", () => {
 
   it("rejects a second row per word and visitor", async () => {
     await row({ visitor: "same" });
-    await expect(row({ visitor: "same" })).rejects.toThrow();
+    // Payload turns Postgres 23505 into a ValidationError naming the index columns.
+    const err = (await row({ visitor: "same" }).catch((e: unknown) => e)) as Error;
+    expect(err.name).toBe("ValidationError");
+    expect(err.message).toMatch(/word_id, visitor/);
   });
 });
