@@ -1,79 +1,16 @@
+# Which crawlers get in is decided by the bot wall (Anubis), not here: it blocks AI training and unverified
+# crawlers by user agent and IP. This file only carries what Anubis cannot enforce.
 User-agent: *
 Allow: /
+# Search yes; answers (ai-input) yes because Googlebot's index feeds AI Overviews and cannot be split off; training no
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
-# Used for many other (non-commercial) purposes as well
-User-agent: CCBot
-Disallow: /
-
-# For new training only
-User-agent: GPTBot
-Disallow: /
-
-# Real-time search (not training) — allow for ChatGPT Search answers
-User-agent: OAI-SearchBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-# Real-time retrieval for a user's Perplexity query (distinct from PerplexityBot's indexing)
-User-agent: Perplexity-User
-Allow: /
-
-# Real-time retrieval when a user asks Claude a question (distinct from ClaudeBot's training crawl)
-User-agent: Claude-User
-Allow: /
-
-# Indexing for Claude's search/retrieval features (not training)
-User-agent: Claude-SearchBot
-Allow: /
-
-# Google AI training opt-out only — does not affect Google Search or AI Overviews,
-# which are grounded on the regular Googlebot-crawled index (not blocked here)
+# Control tokens, not crawlers: they only tell Google/Apple whether already crawled content may train their models,
+# so a bot wall cannot enforce them. Google Search and AI Overviews are not affected.
 User-agent: Google-Extended
 Disallow: /
 
-# Training data for Meta's AI/speech-recognition models
-User-agent: FacebookBot
-Disallow: /
-
-# Multi-purpose, commercial uses; including LLMs
-User-agent: Omgilibot
-Disallow: /
-
-# Training opt-out
-User-agent: ClaudeBot
-Disallow: /
-
-# Anthropic web crawler (separate from ClaudeBot)
-User-agent: anthropic-ai
-Disallow: /
-
-# Apple Intelligence training
 User-agent: Applebot-Extended
-Disallow: /
-
-# ByteDance / TikTok
-User-agent: Bytespider
-Disallow: /
-
-# Meta AI training and indexing (no separate real-time bot exists to split out)
-User-agent: Meta-ExternalAgent
-Disallow: /
-
-# Real-time retrieval when a user asks a Meta AI product a question (not training)
-User-agent: Meta-ExternalFetcher
-Allow: /
-
-# Allen Institute for AI
-User-agent: AI2Bot
-Disallow: /
-
-# Amazon
-User-agent: Amazonbot
 Disallow: /
 
 Sitemap: https://berliner-schnauze.wtf/sitemap-index.xml

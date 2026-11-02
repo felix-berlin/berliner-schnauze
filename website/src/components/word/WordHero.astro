@@ -13,9 +13,11 @@ import type { SiteWord } from '@services/payload/words.ts';
 interface Props {
   word: SiteWord;
   wortartLabel: string | undefined;
+  /** The label is the automatic guess, not an editor's choice. */
+  wortartAuto?: boolean;
 }
 
-const { word, wortartLabel } = Astro.props;
+const { word, wortartLabel, wortartAuto = false } = Astro.props;
 const { themen } = word;
 ---
 
@@ -50,7 +52,17 @@ const { themen } = word;
           </TooltipPopover>
         )
       }
-      {wortartLabel && <span class='c-word-hero__wortart-badge'>{wortartLabel}</span>}
+      {
+        wortartLabel && (
+          <span
+            class:list={['c-word-hero__wortart-badge', { 'c-word-hero__wortart-badge--auto': wortartAuto }]}
+            title={wortartAuto ? 'Automatisch erkannt, kann abweichen' : undefined}
+          >
+            {wortartLabel}
+            {wortartAuto && ' (automatisch)'}
+          </span>
+        )
+      }
       <IsWordOfTheDay
         client:only='vue'
         variant='badge'

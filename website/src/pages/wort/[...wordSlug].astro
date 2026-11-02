@@ -37,7 +37,7 @@ import {
   similarWords,
 } from '@utils/wordHelper.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
-import { wordSeoTitle } from 'payload-app/routes';
+import { wordSeoDescription, wordSeoTitle } from 'payload-app/routes';
 import ChevronRight from '~icons/lucide/chevron-right';
 
 
@@ -64,14 +64,15 @@ const translations = translationTexts(word);
 const dateCreated = word.publishedAt ?? null;
 const dateModified = word.contentModifiedAt ?? null;
 
-const wordDescription = (() => {
-  if (!translations.length) return undefined;
-  const joined = translations.join(', ');
-  const raw = `${berlinerisch} heißt auf Berlinerisch: ${joined}. Mit Etymologie, Aussprache und Beispielsätzen.`;
-  return raw.length > 160 ? raw.slice(0, 157) + '…' : raw;
-})();
-
-const wordPageTitle = wordSeoTitle(berlinerisch);
+const wordSeoFacts = {
+  berlinerisch,
+  hasAudio: word.berlinerischAudio.length > 0,
+  hasEtymology: word.hasInfoText,
+  hasExamples: word.examples.some((e) => e.example),
+  translations,
+};
+const wordDescription = wordSeoDescription(wordSeoFacts) || undefined;
+const wordPageTitle = wordSeoTitle(wordSeoFacts);
 
 const wordTags = word.derived.nlpTags;
 
@@ -84,8 +85,11 @@ const hasNeighbors =
   alphabeticNeighborsResult.before.length > 0 || alphabeticNeighborsResult.after.length > 0;
 const hasRelatedWords = word.relatedWords.length > 0;
 const { books: affiliateBooks, disclaimers: affiliateDisclaimers } = await fetchAffiliateData();
+// An editor-set word type wins; otherwise the automatic guess, marked as such in the hero.
+const editorialWortart = word.wordTypes[0]?.name;
 const wortartLabel: string | undefined =
-  wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined;
+  editorialWortart ?? (wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined);
+const wortartAuto = !editorialWortart;
 
 const firstImage = word.images[0];
 const firstAudio = word.berlinerischAudio[0];
@@ -221,7 +225,7 @@ const schemaJson = () => {
     />
 
     <div class:list={['c-word-main', hasImages && 'c-word-main--with-gallery']}>
-      <WordHero word={word} wortartLabel={wortartLabel} />
+      <WordHero word={word} wortartLabel={wortartLabel} wortartAuto={wortartAuto} />
 
       <div class='c-word-main__content'>
         <WordSectionEtymologie word={word} />

@@ -51,6 +51,13 @@ describe("middleware", () => {
     expect(res.headers.get("Cache-Control")).toBe("no-store");
   });
 
+  it("adds a charset to a bare text/html response and leaves other types alone", async () => {
+    const html = await run(async () => new Response("x", { headers: { "Content-Type": "text/html" } }));
+    expect(html.headers.get("Content-Type")).toBe("text/html; charset=utf-8");
+    const json = await run(async () => Response.json({}));
+    expect(json.headers.get("Content-Type")).toBe("application/json");
+  });
+
   it("gives every response the page cache policy, unless the route set its own", async () => {
     expect((await run(async () => new Response("ok"))).headers.get("Cache-Control")).toContain(
       "s-maxage=300",

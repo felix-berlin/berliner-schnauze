@@ -4,9 +4,27 @@ import { seoPlugin } from "@payloadcms/plugin-seo";
 
 import type { Page, Post, Theman, Word } from "./payload-types";
 
-import { docPath, isRoutedCollection, ROUTES, siteUrl, wordSeoTitle } from "./lib/routes";
+import {
+  docPath,
+  hasLexicalText,
+  isRoutedCollection,
+  ROUTES,
+  siteUrl,
+  wordSeoDescription,
+  wordSeoTitle,
+  type WordSeoFacts,
+} from "./lib/routes";
 
 type SeoDoc = Partial<Page & Post & Theman & Word>;
+
+/** What the entry has, for the generated title and description. */
+const wordFacts = (berlinerisch: string, d: SeoDoc): WordSeoFacts => ({
+  berlinerisch,
+  hasAudio: (d.berlinerischAudio?.length ?? 0) > 0,
+  hasEtymology: hasLexicalText(d.infoText),
+  hasExamples: (d.examples ?? []).some((e) => e.example),
+  translations: (d.translations ?? []).flatMap((t) => t.translation || []),
+});
 
 /** What the plugin has no field for: a canonical override and the robots flags (imported from Yoast). */
 const yoastFields: Field[] = [
@@ -47,15 +65,12 @@ export const seo = seoPlugin({
   ],
   generateTitle: ({ doc }) => {
     const d = doc as SeoDoc;
-    if (d.berlinerisch) return wordSeoTitle(d.berlinerisch);
+    if (d.berlinerisch) return wordSeoTitle(wordFacts(d.berlinerisch, d));
     return `${d.title ?? d.name ?? ""} - Berliner Schnauze`;
   },
   generateDescription: ({ doc }) => {
     const d = doc as SeoDoc;
-    if (d.berlinerisch) {
-      const translations = (d.translations ?? []).map((t) => t.translation).filter(Boolean).join(", ");
-      return translations ? `${d.berlinerisch} heißt auf Berlinerisch: ${translations}.` : "";
-    }
+    if (d.berlinerisch) return wordSeoDescription(wordFacts(d.berlinerisch, d));
     return d.excerpt ?? d.description ?? "";
   },
   generateURL: ({ doc, collectionSlug }) =>

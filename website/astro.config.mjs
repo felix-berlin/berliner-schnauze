@@ -1,11 +1,10 @@
 import node from "@astrojs/node";
-import partytown from "@astrojs/partytown";
 import vue from "@astrojs/vue";
 import codecovplugin from "@codecov/astro-plugin";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import AstroPWA from "@vite-pwa/astro";
 import matomo from "astro-matomo";
-import { defineConfig, envField, fontProviders, svgoOptimizer } from "astro/config";
+import { defineConfig, envField, fontProviders } from "astro/config";
 import { fileURLToPath } from "node:url";
 import { visualizer } from "rollup-plugin-visualizer";
 import Icons from "unplugin-icons/vite";
@@ -53,6 +52,8 @@ export default defineConfig({
   redirects: {
     "/index": { destination: "/", status: 301 },
     "/suggest-word": { destination: "/wort-vorschlagen", status: 301 },
+    // Browsers and crawlers ask for /favicon.ico regardless of the <link rel="icon"> tags.
+    "/favicon.ico": { destination: "/favicons/favicon.ico", status: 301 },
   },
   // The toolbar's fixed-position overlay can intercept Playwright clicks in CI.
   devToolbar: {
@@ -140,6 +141,12 @@ export default defineConfig({
       WAKAPI_HOST: envField.string({
         context: "client",
         access: "public",
+        optional: true,
+      }),
+      // Proves site ownership to IndexNow; the CMS pings with the same key (/indexnow.txt).
+      INDEXNOW_KEY: envField.string({
+        context: "server",
+        access: "secret",
         optional: true,
       }),
       WAKAPI_API_KEY: envField.string({
@@ -308,6 +315,9 @@ export default defineConfig({
       debug: import.meta.env.DEV,
       heartBeatTimer: 5,
       disableCookies: true,
+      // After Anubis' challenge document.referrer is its host, not the real source (Matomo >= 4.12). The same host
+      // must also be listed under Websites > Excluded referrers in Matomo.
+      preInitCommands: [["setExcludedReferrers", ["anubis.berliner-schnauze.wtf"]]],
       partytown: false,
       viewTransition: {
         contentElement: "main",
@@ -571,7 +581,7 @@ export default defineConfig({
         },
       },
       Icons({
-        iconCustomizer(collection, icon, props) {
+        iconCustomizer(collection, _icon, props) {
           // customize all icons in this collection
           if (collection === "lucide") {
             props.width = "24";

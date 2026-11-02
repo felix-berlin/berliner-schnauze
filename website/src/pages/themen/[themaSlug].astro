@@ -25,7 +25,9 @@ const seoProps = seoData({
   seo: {
     canonical: seo.canonical ?? canonicalUrl(`/themen/${thema.slug}/`, Astro.site),
     opengraphDescription:
-      seo.opengraphDescription ?? seo.metaDesc ?? thema.description ?? '',
+      seo.opengraphDescription ??
+      seo.metaDesc ??
+      (thema.description || `${words.length} Berliner Wörter zum Thema ${thema.name} im Wörterbuch der Berliner Schnauze.`),
     ...(seo.opengraphImage && {
       opengraphImage: { sourceUrl: seo.opengraphImage.sourceUrl },
     }),

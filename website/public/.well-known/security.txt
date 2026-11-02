@@ -1,0 +1,4 @@
+Contact: mailto:security@berliner-schnauze.wtf
+Expires: 2027-10-31T23:59:59.000Z
+Preferred-Languages: de, en
+Canonical: https://berliner-schnauze.wtf/.well-known/security.txt

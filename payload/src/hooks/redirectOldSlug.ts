@@ -2,7 +2,7 @@ import type { CollectionAfterChangeHook, CollectionBeforeChangeHook, CollectionC
 
 import { docPath, isRoutedCollection } from "../lib/routes";
 
-const contextKey = (id: number | string) => `publicSlug:${id}`;
+export const contextKey = (id: number | string) => `publicSlug:${id}`;
 
 /**
  * Remembers the slug the public page has before a publishing save. `originalDoc` is the latest version: the public

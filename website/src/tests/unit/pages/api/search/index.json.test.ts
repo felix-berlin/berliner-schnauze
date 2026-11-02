@@ -27,6 +27,7 @@ function makeWord(overrides: Record<string, unknown> = {}): SiteWord {
     derived: deriveWordFields((overrides.berlinerisch as string | undefined) ?? "wat"),
     examples: [],
     globalId: btoa("post:1"),
+    hasInfoText: false,
     id: 1,
     images: [],
     infoTextHtml: null,
@@ -157,11 +158,17 @@ describe("makeOramaSearchIndex — stored derived fields", () => {
     expect(result.berlinerischWordTypes).toEqual(["Verb", "Präsens"]);
   });
 
+  it("prefers the editor-set word types over the automatic ones", () => {
+    const result = makeOramaSearchIndex(makeWord({ derived, wordTypes: [{ id: 1, name: "Nomen" }] }));
+    expect(result.berlinerischWordTypes).toEqual(["Nomen"]);
+  });
+
   it("keeps the public index slim: no definitions, examples, sources or info text", () => {
     const result = makeOramaSearchIndex(
       makeWord({
         derived,
         examples: [{ example: "geheim", exampleAudio: [] }],
+        hasInfoText: true,
         infoTextHtml: "<p>geheim</p>",
         sources: ["geheim"],
       }),

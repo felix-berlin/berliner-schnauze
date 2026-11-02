@@ -5,6 +5,7 @@ import { createAstroRender } from "../../helpers";
 
 const makeWord = (overrides: Record<string, unknown> = {}) => ({
   alternativeWords: [],
+  hasInfoText: false,
   infoTextHtml: null,
   sources: [],
   translations: [],

@@ -14,7 +14,11 @@ const timestamp = (iso: string | null | undefined): number => (iso && Date.parse
  */
 export function makeOramaSearchIndex(word: SiteWord) {
   const { berlinerisch, derived } = word;
-  const wordTypes = [...new Set(derived.nlpTags.flatMap((t) => Object.values(t).flat()))];
+  // Editor-set types win over the automatic guess.
+  const editorial = word.wordTypes.map((t) => t.name);
+  const wordTypes = editorial.length
+    ? editorial
+    : [...new Set(derived.nlpTags.flatMap((t) => Object.values(t).flat()))];
 
   return {
     berlinerischWordTypes: wordTypes,

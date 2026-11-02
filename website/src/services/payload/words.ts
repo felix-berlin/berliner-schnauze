@@ -11,6 +11,7 @@ import { ttl } from "@services/cache.ts";
 import { getPayloadClient, mediaUrl, siteDocs, siteRead } from "@services/payload.ts";
 import { SHOW_TEST_DATA } from "astro:env/client";
 import { lexicalToHtml } from "payload-app/lexical-html";
+import { hasLexicalText } from "payload-app/routes";
 import { type DerivedWordFields, deriveWordFields } from "payload-app/word-derived";
 
 const PAGE_SIZE = 1000;
@@ -49,6 +50,7 @@ export type SiteWord = Omit<
   derived: DerivedWordFields & { decomposition?: string[] | null };
   examples: WordExample[];
   images: SiteMedia[];
+  hasInfoText: boolean;
   infoTextHtml: string | null;
   relatedWords: RelatedWord[];
   slug: string;
@@ -118,6 +120,7 @@ export const toWord = ({
   examples: (examples ?? []).map(({ exampleAudio, ...e }) =>
     Object.assign(e, { exampleAudio: audioRows(exampleAudio) }),
   ),
+  hasInfoText: hasLexicalText(infoText),
   images: (images ?? []).flatMap((m) => toSiteMedia(m) ?? []),
   infoTextHtml: lexicalToHtml(infoText) || null,
   // siteRead() leaves a related word the site may not show unpopulated (an id), and populated() drops ids
