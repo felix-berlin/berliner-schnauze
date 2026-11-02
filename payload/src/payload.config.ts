@@ -25,6 +25,7 @@ import { Home } from "./globals/Home";
 import { Navigation } from "./globals/Navigation";
 import { withSlugRedirects } from "./hooks/redirectOldSlug";
 import { migrations } from "./migrations";
+import { mcp } from "./mcp";
 import { redirects } from "./redirects";
 import { seo } from "./seo";
 
@@ -72,7 +73,7 @@ export default buildConfig({
         }),
       })
     : undefined,
-  plugins: [seo, redirects],
+  plugins: [seo, redirects, mcp],
   // Runs queued jobs (scheduled publishing of posts) only where PAYLOAD_RUN_JOBS=true, the cms container: the site's
   // Local API process must not pick them up as well.
   jobs: {

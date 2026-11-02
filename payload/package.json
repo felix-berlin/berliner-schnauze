@@ -1,6 +1,6 @@
 {
   "name": "payload-app",
-  "version": "1.0.0",
+  "version": "4.2.1",
   "private": true,
   "type": "module",
   "exports": {
@@ -33,6 +33,7 @@
     "@payloadcms/db-postgres": "3.92.1",
     "@payloadcms/email-nodemailer": "3.92.1",
     "@payloadcms/next": "3.92.1",
+    "@payloadcms/plugin-mcp": "3.92.1",
     "@payloadcms/plugin-redirects": "3.92.1",
     "@payloadcms/plugin-seo": "3.92.1",
     "@payloadcms/richtext-lexical": "3.92.1",
