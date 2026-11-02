@@ -90,7 +90,7 @@ export const mailReport: CollectionAfterChangeHook = async ({ context, doc, oper
   const commentId = idOf(doc.comment);
   notifyEditors(req, "Kommentar gemeldet – Berliner Schnauze", [
     `Grund: ${doc.reason ?? ""}`,
-    `Meldungen insgesamt: ${context.reportCount}`,
+    `Meldungen insgesamt: ${String(context.reportCount)}`,
     "",
     commentAdminLink(req, commentId),
   ]);

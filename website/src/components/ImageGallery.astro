@@ -132,7 +132,7 @@ const lightboxImageList = await Promise.all(
         });
 
         // Parse data-pswp attributes
-        this.lightbox.addFilter('itemData', (itemData, index) => {
+        this.lightbox.addFilter('itemData', (itemData) => {
           const webpSrcSet = itemData.element?.dataset.pswpWebpSrcset;
           const avifSrcSet = itemData.element?.dataset.pswpAvifSrcset;
           const sizes = itemData.element?.dataset.pswpSizes;
@@ -147,7 +147,7 @@ const lightboxImageList = await Promise.all(
 
         // use <picture> instead of <img>
         this.lightbox.on('contentLoad', (e) => {
-          const { content, isLazy } = e;
+          const { content } = e;
 
           if (content.data.webpSrcSet || content.data.avifSrcSet) {
             // prevent to stop the default behavior

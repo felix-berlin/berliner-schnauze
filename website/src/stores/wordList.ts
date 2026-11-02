@@ -119,9 +119,7 @@ export const $toggleWordListFilterFlyout = () => {
 /**
  * Set the active letter to filter the word list
  *
- * @param   {string}  letter           [letter DESCription]
- *
- * @return  {void}                   [return DESCription]
+ * @param letter the letter to filter by
  */
 export const setLetterFilter = (letter: string) => {
   useViewTransition(() => $wordSearch.setKey("activeLetterFilter", letter));
@@ -319,11 +317,11 @@ export const $oramaSearchResults = computedAsync(
 );
 
 export const $searchResultCount = computed($oramaSearchResults, (oramaSearchResults) => {
-  if (oramaSearchResults.state !== "ready") return 0;
+  if (oramaSearchResults.status !== "ready") return 0;
   return oramaSearchResults.value?.count ?? 0;
 });
 
 export const $searchState = computed(
   $oramaSearchResults,
-  (oramaSearchResults) => oramaSearchResults.state, // 'loading' | 'ready' | 'failed'
+  (oramaSearchResults) => oramaSearchResults.status, // 'loading' | 'ready' | 'failed'
 );

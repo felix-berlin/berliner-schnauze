@@ -27,6 +27,7 @@ function makeWord(overrides: Record<string, unknown> = {}): SiteWord {
     derived: deriveWordFields((overrides.berlinerisch as string | undefined) ?? "wat"),
     examples: [],
     globalId: btoa("post:1"),
+    hasInfoText: false,
     id: 1,
     images: [],
     infoTextHtml: null,
@@ -167,6 +168,7 @@ describe("makeOramaSearchIndex — stored derived fields", () => {
       makeWord({
         derived,
         examples: [{ example: "geheim", exampleAudio: [] }],
+        hasInfoText: true,
         infoTextHtml: "<p>geheim</p>",
         sources: ["geheim"],
       }),

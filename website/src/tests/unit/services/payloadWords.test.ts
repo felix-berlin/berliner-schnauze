@@ -128,6 +128,7 @@ describe("toWord", () => {
       berolinismus: true,
       contentModifiedAt: "2026-09-20T17:24:19.000Z",
       derived: { soundexCode: "A250", syllablesCount: 2, wordComponents: ["asen"] },
+      hasInfoText: true,
       infoTextHtml: "<p>Adjektiv zu Aas</p>",
       learnMore: "https://example.org/mehr",
       meta: { description: "Meta", title: "aasen" },
@@ -216,6 +217,7 @@ describe("toWord", () => {
     expect(word).toMatchObject({
       berlinerischAudio: [],
       examples: [],
+      hasInfoText: false,
       images: [],
       infoTextHtml: null,
       relatedWords: [],

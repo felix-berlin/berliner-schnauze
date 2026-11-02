@@ -1,11 +1,10 @@
 import node from "@astrojs/node";
-import partytown from "@astrojs/partytown";
 import vue from "@astrojs/vue";
 import codecovplugin from "@codecov/astro-plugin";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import AstroPWA from "@vite-pwa/astro";
 import matomo from "astro-matomo";
-import { defineConfig, envField, fontProviders, svgoOptimizer } from "astro/config";
+import { defineConfig, envField, fontProviders } from "astro/config";
 import { fileURLToPath } from "node:url";
 import { visualizer } from "rollup-plugin-visualizer";
 import Icons from "unplugin-icons/vite";
@@ -582,7 +581,7 @@ export default defineConfig({
         },
       },
       Icons({
-        iconCustomizer(collection, icon, props) {
+        iconCustomizer(collection, _icon, props) {
           // customize all icons in this collection
           if (collection === "lucide") {
             props.width = "24";

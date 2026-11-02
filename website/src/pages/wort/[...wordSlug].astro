@@ -37,7 +37,7 @@ import {
   similarWords,
 } from '@utils/wordHelper.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
-import { hasLexicalText, wordSeoDescription, wordSeoTitle } from 'payload-app/routes';
+import { wordSeoDescription, wordSeoTitle } from 'payload-app/routes';
 import ChevronRight from '~icons/lucide/chevron-right';
 
 
@@ -67,7 +67,7 @@ const dateModified = word.contentModifiedAt ?? null;
 const wordSeoFacts = {
   berlinerisch,
   hasAudio: word.berlinerischAudio.length > 0,
-  hasEtymology: hasLexicalText(word.infoText),
+  hasEtymology: word.hasInfoText,
   hasExamples: word.examples.some((e) => e.example),
   translations,
 };

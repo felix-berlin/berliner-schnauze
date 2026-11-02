@@ -11,20 +11,23 @@ const [{ getPayload }, { default: config }] = await Promise.all([
 ]);
 const payload = await getPayload({ config });
 
-const counts: string[] = [];
-for (const { slug } of payload.config.collections) {
-  // draft: true reads the versions tables too; depth 0 keeps it to the collection's own columns.
-  const found = await payload.find({
-    collection: slug as CollectionSlug,
-    depth: 0,
-    draft: true,
-    limit: 1,
-    overrideAccess: true,
-  });
-  counts.push(`${slug}=${found.totalDocs}`);
-}
-for (const { slug } of payload.config.globals) {
-  await payload.findGlobal({ slug: slug as GlobalSlug, depth: 0, overrideAccess: true });
-}
+// draft: true reads the versions tables too; depth 0 keeps it to the collection's own columns.
+const counts = await Promise.all(
+  payload.config.collections.map(async ({ slug }) => {
+    const found = await payload.find({
+      collection: slug as CollectionSlug,
+      depth: 0,
+      draft: true,
+      limit: 1,
+      overrideAccess: true,
+    });
+    return `${slug}=${found.totalDocs}`;
+  }),
+);
+await Promise.all(
+  payload.config.globals.map(({ slug }) =>
+    payload.findGlobal({ slug: slug as GlobalSlug, depth: 0, overrideAccess: true }),
+  ),
+);
 console.log(`[verify] ${counts.join(" ")}`);
 process.exit(0);
