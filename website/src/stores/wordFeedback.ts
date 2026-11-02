@@ -36,6 +36,8 @@ export const parseProfile = (raw: unknown): Profile => {
     if (v === null || (typeof v === "string" && (allowed as readonly string[]).includes(v)))
       out[key] = v;
   }
+  // The API rejects a half without origin grewUp; a stale one would fail every vote.
+  if (out.half && out.origin !== "grewUp") delete out.half;
   return out as Profile;
 };
 
@@ -65,7 +67,7 @@ export const nextStep = (profile: Profile): "age" | "area" | "done" | "half" | "
   return "done";
 };
 
-const URL = "/api/word-feedback";
+const ENDPOINT = "/api/word-feedback";
 let loadedFor: number | null = null;
 
 export const loadFeedback = async (wordId: number): Promise<void> => {
@@ -73,7 +75,7 @@ export const loadFeedback = async (wordId: number): Promise<void> => {
   loadedFor = wordId;
   $feedback.set(null);
   try {
-    const res = await fetch(`${URL}?word=${wordId}`);
+    const res = await fetch(`${ENDPOINT}?word=${wordId}`);
     if (!res.ok) throw new Error(String(res.status));
     const state = (await res.json()) as WordFeedbackState;
     if (loadedFor === wordId) $feedback.set(state);
@@ -87,13 +89,15 @@ export const sendFeedback = async (
   patch: Partial<MyFeedback>,
 ): Promise<boolean> => {
   try {
-    const res = await fetch(URL, {
+    const res = await fetch(ENDPOINT, {
       body: JSON.stringify({ word: wordId, ...patch }),
       headers: { "Content-Type": "application/json" },
       method: "PATCH",
     });
     if (!res.ok) throw new Error(String(res.status));
-    $feedback.set((await res.json()) as WordFeedbackState);
+    const state = (await res.json()) as WordFeedbackState;
+    // The user may have navigated to another word while the PATCH was in flight.
+    if (loadedFor === null || loadedFor === wordId) $feedback.set(state);
     $feedbackError.set(false);
     return true;
   } catch {
