@@ -19,7 +19,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "npm pkg set version=${nextRelease.version} && npm pkg set version=${nextRelease.version} --prefix website && npm pkg set version=${nextRelease.version} --prefix payload"
+        "prepareCmd": "pnpm pkg set version=${nextRelease.version} && pnpm pkg set version=${nextRelease.version} --prefix website && pnpm pkg set version=${nextRelease.version} --prefix payload"
       }
     ],
     [
