@@ -55,14 +55,14 @@
     "anki:push:sandbox": "infisical run -- env POLAR_SANDBOX=true .venv-anki/bin/python scripts/upload_anki_to_polar.py --version $npm_package_version-dev"
   },
   "devDependencies": {
-    "@infisical/cli": "^0.44.3",
-    "@semantic-release/changelog": "^7.0.0",
-    "@semantic-release/exec": "^7.1.0",
-    "@semantic-release/git": "^11.0.1",
+    "@infisical/cli": "0.44.3",
+    "@semantic-release/changelog": "7.0.0",
+    "@semantic-release/exec": "7.1.0",
+    "@semantic-release/git": "11.0.1",
     "oxfmt": "^0.74.0",
     "oxlint": "^1.89.0",
     "oxlint-tsgolint": "^7.0.2004",
-    "semantic-release": "^25.0.9"
+    "semantic-release": "25.0.9"
   },
   "engines": {
     "node": ">=22.22.0"
