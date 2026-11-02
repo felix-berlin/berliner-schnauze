@@ -100,6 +100,7 @@ import {
   $profile,
   loadFeedback,
   nextStep,
+  answerUsage,
   sendFeedback,
   type Profile,
 } from "@stores/wordFeedback.ts";
@@ -188,7 +189,7 @@ const answerUsageStep = async (usage: Usage) => {
     // The store's update turns the derived step into "done" before this call returns.
     const first = current.value === "usage";
     trackEvent("Word Feedback", "usage", usage);
-    const ok = await sendFeedback(props.wordId, { usage });
+    const ok = await answerUsage(props.wordId, usage);
     if (ok && first) step.value = nextStep($profile.get());
     // A failed re-vote must not keep showing the unsaved choice as selected.
     if (!ok && feedback.value?.mine?.usage) pickedUsage.value = null;

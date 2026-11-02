@@ -2,7 +2,11 @@ import WordFeedbackCard from "@components/word-feedback/WordFeedbackCard.vue";
 import { flushPromises, mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const store = vi.hoisted(() => ({ loadFeedback: vi.fn(), sendFeedback: vi.fn() }));
+const store = vi.hoisted(() => ({
+  answerUsage: vi.fn(),
+  loadFeedback: vi.fn(),
+  sendFeedback: vi.fn(),
+}));
 vi.mock("@stores/wordFeedback.ts", async () => {
   const actual =
     await vi.importActual<typeof import("@stores/wordFeedback.ts")>("@stores/wordFeedback.ts");
@@ -41,6 +45,7 @@ describe("WordFeedbackCard", () => {
     $profile.set({});
     store.loadFeedback.mockImplementation(async () => {});
     store.sendFeedback.mockResolvedValue(true);
+    store.answerUsage.mockResolvedValue(true);
   });
 
   it("starts with the three usage buttons only and loads the state", async () => {
@@ -58,7 +63,7 @@ describe("WordFeedbackCard", () => {
   it("shows bars and the area step after a usage answer", async () => {
     const w = await mountIt();
     await click(w, "Kenn ick");
-    expect(store.sendFeedback).toHaveBeenCalledWith(7, { usage: "know" });
+    expect(store.answerUsage).toHaveBeenCalledWith(7, "know");
     expect(w.text()).toContain("Wo wohnste?");
     expect(w.text()).toContain("10 Stimmen");
     expect(w.text()).toContain("50 %");
@@ -66,7 +71,7 @@ describe("WordFeedbackCard", () => {
   });
 
   it("advances even when the store update already marks the word as answered", async () => {
-    store.sendFeedback.mockImplementation(async () => {
+    store.answerUsage.mockImplementation(async () => {
       $feedback.set(state({ mine: { usage: "know" } }));
       return true;
     });
@@ -76,7 +81,7 @@ describe("WordFeedbackCard", () => {
   });
 
   it("stays on usage when the send fails", async () => {
-    store.sendFeedback.mockResolvedValue(false);
+    store.answerUsage.mockResolvedValue(false);
     const w = await mountIt();
     await click(w, "Kenn ick");
     expect(w.text()).not.toContain("Wo wohnste?");
@@ -95,7 +100,7 @@ describe("WordFeedbackCard", () => {
 
   it("disables the answers while a request is pending", async () => {
     let resolve!: (v: boolean) => void;
-    store.sendFeedback.mockReturnValue(new Promise<boolean>((r) => (resolve = r)));
+    store.answerUsage.mockReturnValue(new Promise<boolean>((r) => (resolve = r)));
     const w = await mountIt();
     await w.findAll("button")[0].trigger("click");
     expect(w.findAll("button").every((b) => b.attributes("disabled") !== undefined)).toBe(true);
@@ -154,13 +159,21 @@ describe("WordFeedbackCard", () => {
     expect(w.text()).not.toContain("Wo wohnste?");
   });
 
+  it("attaches the stored profile to a usage answer via answerUsage", async () => {
+    $profile.set({ area: "pankow", origin: "grewUp" });
+    const w = await mountIt();
+    await click(w, "Sag ick selbst");
+    expect(store.answerUsage).toHaveBeenCalledWith(7, "say");
+    expect(store.sendFeedback).not.toHaveBeenCalled();
+  });
+
   it("starts in the done state for an answered word, usage still clickable", async () => {
     $feedback.set(state({ mine: { usage: "say" } }));
     const w = await mountIt();
     expect(w.text()).toContain("Angaben ändern");
     expect(w.findAll("button")[0].attributes("aria-pressed")).toBe("true");
     await click(w, "Nie jehört");
-    expect(store.sendFeedback).toHaveBeenCalledWith(7, { usage: "never" });
+    expect(store.answerUsage).toHaveBeenCalledWith(7, "never");
   });
 
   it("Angaben ändern clears the profile and asks for the area", async () => {
@@ -201,7 +214,7 @@ describe("WordFeedbackCard", () => {
 
   it("clears a failed usage re-vote back to the saved choice", async () => {
     $feedback.set(state({ mine: { usage: "say" } }));
-    store.sendFeedback.mockResolvedValue(false);
+    store.answerUsage.mockResolvedValue(false);
     const w = await mountIt();
     await click(w, "Nie jehört");
     expect(w.findAll("button")[0].attributes("aria-pressed")).toBe("true");
