@@ -17,9 +17,9 @@ and the editor sees the counts per word in the Payload admin.
 
 ## Non-goals
 
-- Showing like/dislike numbers publicly. "Nee" simply means "I don't like it"; the numbers are collected and shown in the CMS only. Where they appear on the site is decided later.
+- Using like/dislike numbers anywhere beyond the two buttons (rankings, lists). "Nee" simply means "I don't like it"; other uses are decided later.
 - Error reports, spelling-variant votes, user example sentences, pronunciation recordings (discussed, deferred).
-- Payload's form-builder plugin: it stores submissions as field/value pairs, creates a new submission per send and has no word relation. Aggregation per word, district and age needs typed columns, and the UI is custom anyway.
+- Payload's form-builder plugin: it stores submissions as a `submissionData` array of field/value pairs, and by design anyone may create but no one may update a submission (checked in the plugin docs via Context7), so step-by-step saving would mean a new row per step; it has no word relation. Aggregation per word, district and age needs typed columns, and the UI is custom anyway.
 - Accounts, a public analysis/map page across all words, CSV export.
 
 ## Anti-goals
@@ -33,7 +33,7 @@ and the editor sees the counts per word in the Payload admin.
 
 ### Like/dislike (top)
 
-- Two toggle buttons. Clicking the active one again removes the vote; clicking the other switches. No counts shown.
+- Two toggle buttons, each with its public count next to it (e.g. "Jefällt ma 128", "Nee 12"), loaded client-side with the GET. Clicking the active one again removes the vote; clicking the other switches; the counts update from the PATCH response.
 - Independent of the card: a visitor may like without answering the card and vice versa.
 
 ### "Sagste det noch?" card
@@ -112,7 +112,7 @@ Component split, exact copy beyond the labels above, animation between steps, wh
 
 - One row per visitor and word holding both reaction and card answers.
 - Profile copied onto each vote (not a separate profile table), only future votes change when the profile changes.
-- Counts computed live (admin `ui` field + API), never stored on the versioned word document; no aggregation page.
+- Like/dislike counts shown on the buttons (owner's change); counts computed live (admin `ui` field + API), never stored on the versioned word document; no aggregation page.
 - A skipped step is not asked again; the profile also goes onto like/dislike-only rows.
 - No Turnstile, rate limits only (same as comment votes).
 - Minimum group size for comparison bars.
