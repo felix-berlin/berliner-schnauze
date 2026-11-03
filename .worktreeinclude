@@ -1,0 +1,2 @@
+# Git-ignored files copied into every new worktree (Orca): the Claude settings with the personal MCP key
+.claude/settings.local.json

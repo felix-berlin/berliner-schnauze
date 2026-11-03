@@ -66,6 +66,15 @@ Secrets are managed via [Infisical](https://infisical.com). Run `npx infisical l
 
 Docker/compose reads the root `.env`; the `payload/` CLI and Next read a git-ignored `payload/.env` (see `payload/README.md`).
 
+## Worktree setup (Orca)
+
+`orca.yaml` runs `scripts/orca-setup.sh` in every new worktree and `scripts/orca-archive.sh` when it is archived (clear Orca's local setup script, or it wins over the YAML).
+
+- **Setup**: `pnpm install`, a database `bsw_<workspace>` (+ `_test`) cloned from `bs_template` on a dev-only Postgres container `bs-dev-postgres` (own volume, `127.0.0.1:5433`; the scripts start it on demand and generate its password once into `~/.config/berliner-schnauze/dev-postgres.env`, mode 600; it is independent of compose and the root `.env`), migrated to this branch, the fixed dev admin and MCP key (`pnpm --filter payload-app dev:access`; `DEV_ADMIN_EMAIL`, `DEV_ADMIN_PASSWORD`, `DEV_MCP_KEY` live in Infisical dev, never in a file or the chat) and `.env.worktree` (git-ignored: `DATABASE_URL`, `DATABASE_URL_TEST`, `WEBSITE_PORT`, `CMS_PORT`, `E2E_PORT`, `PAYLOAD_SERVER_URL`, `SITE_URL`). Ports derive from the workspace name (web 4400+n, cms 3100+n, e2e 5400+n), so parallel worktrees do not collide.
+- **`scripts/with-env.sh <cmd>`** runs a command with Infisical **dev** plus `.env.worktree`; `pnpm dev`, `pnpm cms:dev` and `build:local` go through it. It refuses prod. `.infisical.yaml` maps every branch to dev: a checkout on `main` used to resolve prod, so builds there baked the production Matomo ID into the client. Never use `--env=prod` locally, and no browser tool (Playwright, Chrome DevTools) against berliner-schnauze.wtf: every page view counts in the production Matomo.
+- **Template**: `scripts/dev-template.sh [dump]` (default `~/backups/berliner-schnauze/latest.dump`, a Portabase/`pg_dump` backup) restores, migrates, strips the production login data (hashes, API keys, sessions, MCP keys; the user rows stay because posts and pages point at them) and verifies. Without a dump it falls back to the invented e2e data. Rebuild it for a fresh backup; worktree databases already cloned keep their copy.
+- **Production reads behind the basic-auth gate**: `scripts/prod-curl.sh <url>` (GET/HEAD only). The credential `PROD_BASIC_AUTH` sits in Infisical dev, folder `/agent`, and is injected at run time; never type, print or paste it.
+
 ## Deployment
 
 Production is not deployed from this repo. The Komodo GitOps repo `felix-berlin/komodo` (local: `../komodo`) holds the compose file (`remote/thrash/berliner-schnauze/compose.yaml`) and the `berliner-schnauze` stack in its `komodo.toml` (server `thrash - Hetzner`). The root `compose.yaml` here is for local use only.

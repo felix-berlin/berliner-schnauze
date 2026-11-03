@@ -33,7 +33,7 @@ pnpm cms:dev          # http://localhost:3001/admin
 
 Beim ersten Aufruf den ersten Admin anlegen. Im Dev-Modus pusht Payload das Schema selbst in die DB.
 
-**4. Inhalte holen.** Echte Daten: ein Backup der Produktions-DB (Portabase bzw. `pg_dump`) in die lokale DB einspielen, die Medien kommen aus dem Backup des `media`-Volumes nach `payload/media`. Nur erfundene Testwörter (wie in der E2E-CI): `pnpm --filter payload-app seed:e2e`.
+**4. Inhalte holen.** In Orca-Worktrees erledigt das `orca.yaml` (siehe `CLAUDE.md`, „Worktree setup“): Dump nach `~/backups/berliner-schnauze/latest.dump` legen, `scripts/dev-template.sh` baut daraus `bs_template`, jeder Worktree klont sich eine eigene DB. Von Hand: ein Backup der Produktions-DB (Portabase bzw. `pg_dump`) in die lokale DB einspielen, die Medien kommen aus dem Backup des `media`-Volumes nach `payload/media`. Nur erfundene Testwörter (wie in der E2E-CI): `pnpm --filter payload-app seed:e2e`.
 
 **5. Prüfen:**
 
