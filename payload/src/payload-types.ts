@@ -464,9 +464,17 @@ export interface Suggestion {
   userMail?: string | null;
   status?: ('new' | 'accepted' | 'rejected') | null;
   /**
-   * Das Wort, das aus diesem Vorschlag entstanden ist.
+   * Das Wort, das aus diesem Vorschlag entstanden ist. Beim Status „Übernommen“ ohne Wort legt das CMS einen Entwurf an; ein hier gewähltes Wort wird stattdessen verknüpft.
    */
   word?: (number | null) | Word;
+  /**
+   * Wörter mit gleicher oder ähnlicher Schreibweise (automatisch, solange der Vorschlag neu ist).
+   */
+  similarWords?: (number | Word)[] | null;
+  /**
+   * Wird automatisch gesetzt, sobald das Wort veröffentlicht ist. Dann ist der Vorschlag nicht mehr änderbar.
+   */
+  published?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1030,6 +1038,8 @@ export interface SuggestionsSelect<T extends boolean = true> {
   userMail?: T;
   status?: T;
   word?: T;
+  similarWords?: T;
+  published?: T;
   updatedAt?: T;
   createdAt?: T;
 }

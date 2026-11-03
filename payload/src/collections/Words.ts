@@ -4,6 +4,7 @@ import { draftsAccess } from "../access";
 import { contentModifiedAtField, touchContentModifiedAt } from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
 import { setDerivedWordFields } from "../hooks/deriveWordFields";
+import { lockSuggestions } from "../hooks/lockSuggestions";
 import { mcpDraftOnly } from "../hooks/mcpDraftOnly";
 import { previewUrl } from "../lib/preview";
 
@@ -27,9 +28,13 @@ const deleteComments: CollectionBeforeDeleteHook = async ({ id, req }) => {
 export const Words: CollectionConfig = {
   slug: "words",
   access: draftsAccess,
-  admin: { useAsTitle: "berlinerisch", preview: previewUrl("words") },
+  admin: {
+    useAsTitle: "berlinerisch",
+    defaultColumns: ["berlinerisch", "slug", "translations", "_status"],
+    preview: previewUrl("words"),
+  },
   versions: { drafts: true },
-  hooks: { beforeChange: [mcpDraftOnly, touchContentModifiedAt, setDerivedWordFields], beforeDelete: [deleteComments] },
+  hooks: { beforeChange: [mcpDraftOnly, touchContentModifiedAt, setDerivedWordFields], beforeDelete: [deleteComments], afterChange: [lockSuggestions] },
   fields: [
     { name: "berlinerisch", type: "text", required: true },
     ...identityFields,
