@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.4.0...v4.4.1) (2026-11-03)
+
+
+### Bug Fixes
+
+* **seo:** give words without meanings a plain description ([516d9d5](https://github.com/felix-berlin/berliner-schnauze/commit/516d9d58e4ac34d8cf038e172f271ab4d6313b78))
+
 # [4.4.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.3.0...v4.4.0) (2026-11-02)
 
 
