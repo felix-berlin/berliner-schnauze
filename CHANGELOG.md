@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.5.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.4.1...v4.5.0) (2026-11-03)
+
+
+### Bug Fixes
+
+* **ci:** keep agent and e2e runs out of the production Matomo ([81c5bee](https://github.com/felix-berlin/berliner-schnauze/commit/81c5bee4a35d5dc869e33250bc1e7541bc28e17f))
+* **cms:** hide suggestion senders from MCP by field access, log the real tool name ([17c7023](https://github.com/felix-berlin/berliner-schnauze/commit/17c70235ecefeef03bcfe405b043091221cf91e2))
+* **dev:** harden the worktree scripts and correct the setup docs ([510ca80](https://github.com/felix-berlin/berliner-schnauze/commit/510ca80373f18a6f97e0521057338e4d65098d3a))
+* **dev:** skip migrate in the worktree setup once cms:dev pushed the schema ([ea2f61e](https://github.com/felix-berlin/berliner-schnauze/commit/ea2f61ec80b0017d6725a9342c639be248628c1c))
+
+
+### Features
+
+* **cms:** harden the MCP endpoint and add the payload client config ([ef369a4](https://github.com/felix-berlin/berliner-schnauze/commit/ef369a45f6fc9b88936885066bc7efa7e82607e0))
+* **dev:** set up every Orca worktree with its own database from a template ([70fc466](https://github.com/felix-berlin/berliner-schnauze/commit/70fc466c8c470d7ad79349f42bb2a37eb69da13e))
+
 ## [4.4.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.4.0...v4.4.1) (2026-11-03)
 
 
