@@ -1,0 +1,88 @@
+/* Berliner Schnauze Design System — generated from tokens.json */
+:root, [data-theme="light"] {
+  --white-100: #f9f9f9;
+  --white-200: #f5f5f5;
+  --white-300: #faf6fa;
+  --red-berlin-500: #f2391d;
+  --red-berlin-600: #d5331a;
+  --red-berlin-700: #b92c16;
+  --red-100: #ffd6cf;
+  --red-200: #f28f7f;
+  --red-500: #cf3018;
+  --orange-100: #fcead7;
+  --orange-200: #fad0b0;
+  --orange-300: #f0ac85;
+  --orange-400: #e28964;
+  --orange-500: #cf5736;
+  --orange-600: #b23b27;
+  --orange-700: #95231b;
+  --orange-800: #781111;
+  --orange-900: #630a11;
+  --yellow-500: #e3e3d2;
+  --blue: var(--blue-500);
+  --blue-100: #617385;
+  --blue-200: #566676;
+  --blue-300: #4b5967;
+  --blue-400: #414d59;
+  --blue-500: #2b333b;
+  --grey-100: #4e545a;
+  --grey-200: #373c40;
+  --gold: #e1b125;
+  --success: #35a672;
+  --danger: hsl(8, 89%, 53%);
+  --new-blue-500: var(--blue);
+  --primary: var(--blue-100);
+  --secondary: var(--red-500);
+  --accent: var(--orange-400);
+  --color-body: var(--blue);
+  --color-border-dashed: var(--grey-100);
+  --color-accent-text: var(--orange-600);
+  --rule-dash: var(--orange-300);
+  --control-color: var(--blue);
+  --shadow-card: 0 0.5px 0.6px rgb(0 0 0 / 8%), 0 4px 5px rgb(0 0 0 / 16%);
+  --shadow-list: 0 0.5px 0.6px rgb(0 0 0 / 8%), 0 2px 3px rgb(0 0 0 / 16%);
+}
+[data-theme="dark"] {
+  --blue: var(--blue-500);
+  --new-blue-500: var(--blue);
+  --primary: var(--blue-500);
+  --secondary: var(--blue-400);
+  --accent: var(--orange-500);
+  --color-body: var(--yellow-500);
+  --color-border-dashed: var(--grey-100);
+  --color-accent-text: var(--orange-300);
+  --rule-dash: var(--orange-300);
+  --control-color: var(--yellow-500);
+}
+:root {
+  --spacer: 1rem;
+  --body-max-width: 1366px;
+  --radius-none: 0px;
+  --radius-xxs: 2px;
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --fs-hero: clamp(2rem, 1.36rem + 3.19vw, 4.5rem);
+  --fs-display: clamp(2rem, 1.36rem + 3.19vw, 4rem);
+  --fs-h1: 2.5rem;
+  --fs-h2: 2rem;
+  --fs-h3: 1.5rem;
+  --fs-h4: 1.25rem;
+  --fs-body: 1.15rem;
+  --fs-small: 0.9rem;
+  --fs-micro: 0.8rem;
+  --tracking-body: 1px;
+  --font-display: "Berliner", "DM Serif Display", "Playfair Display", Georgia, serif;
+  --font-body: "Berlin", "Public Sans", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+.h1 { font-family: var(--font-display); font-size: 2.5rem; line-height: 1.1; font-weight: 400; }
+.h2 { font-family: var(--font-display); font-size: 2rem; line-height: 1.1; font-weight: 400; }
+.h3 { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.1; font-weight: 400; }
+.h4 { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.1; font-weight: 400; }
+.body { font-family: var(--font-body); font-size: 1.15rem; font-weight: 400; letter-spacing: 1px; }
+.small { font-family: var(--font-body); font-size: 0.9rem; font-weight: 400; letter-spacing: 1px; }
+.micro { font-family: var(--font-body); font-size: 0.8rem; font-weight: 400; letter-spacing: 1px; }
+@font-face { font-family: "Berliner"; src: url("./fonts/BerlinerRegular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Berlin"; src: url("./fonts/Berlin.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Berlin"; src: url("./fonts/Berlin-Italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "Berlin"; src: url("./fonts/Berlin-Bold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Berlin"; src: url("./fonts/BerlinX-Bold.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: swap; }
