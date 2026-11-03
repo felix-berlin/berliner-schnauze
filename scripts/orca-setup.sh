@@ -20,6 +20,7 @@ dev_db_lock
 db_exists "$DEV_DB_TEMPLATE" || bash scripts/dev-template.sh
 db_exists "$db" || psql_admin -c "CREATE DATABASE \"$db\" TEMPLATE \"$DEV_DB_TEMPLATE\""
 db_exists "${db}_test" || psql_admin -c "CREATE DATABASE \"${db}_test\""
+dev_db_unlock
 
 # Stable ports per worktree name (parallel agents must not collide on 4321/3001/4322). shortcut: a hash clash is
 # possible (1 in 200); delete .env.worktree and rename the workspace, or edit the ports there.

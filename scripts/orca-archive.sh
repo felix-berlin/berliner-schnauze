@@ -8,12 +8,11 @@ cd "${ORCA_WORKTREE_PATH:-$(dirname "$0")/..}"
 
 [ -f .env.worktree ] || { echo "no .env.worktree: nothing to clean up"; exit 0; }
 db="$(sed -n 's|^DATABASE_URL=.*/\(bsw_[a-z0-9_]*\)$|\1|p' .env.worktree)"
-[[ "$db" == bsw_* ]] || { echo "no bsw_ database in .env.worktree: leaving the databases alone" >&2; exit 0; }
+[ -n "$db" ] || { echo "no bsw_ database in .env.worktree: leaving the databases alone" >&2; exit 0; }
 
 # dev servers of this worktree
-for p in $(sed -n 's/^\(WEBSITE\|CMS\|E2E\)_PORT=//p' .env.worktree); do
-  fuser -k "$p/tcp" >/dev/null 2>&1 || true
-done
+# shellcheck disable=SC2046 # one word per port
+fuser -k $(sed -n 's/^\(WEBSITE\|CMS\|E2E\)_PORT=\(.*\)/\2\/tcp/p' .env.worktree) >/dev/null 2>&1 || true
 
 # A stopped Docker must not block archiving: leave the databases and say so
 dev_db_require_docker || { echo "!! databases $db and ${db}_test stay behind; drop them later (psql on bs-dev-postgres)" >&2; exit 0; }

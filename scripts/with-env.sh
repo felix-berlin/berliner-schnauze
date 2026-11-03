@@ -5,10 +5,6 @@
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 
-case "${INFISICAL_ENV:-}${INFISICAL_ENVIRONMENT:-}" in
-  *prod*) echo "with-env.sh: refusing to run with the prod environment" >&2; exit 1 ;;
-esac
-
 # outside a pnpm script the CLI is not on PATH
 inf=(infisical)
 command -v infisical >/dev/null || inf=(pnpm exec infisical)

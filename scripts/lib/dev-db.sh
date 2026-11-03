@@ -17,7 +17,7 @@ dev_db_require_docker() {
   }
 }
 
-# Starts (or creates) the container, then sets PG_CID and exports POSTGRES_USER / POSTGRES_PASSWORD / POSTGRES_PORT
+# Starts (or creates) the container and sets POSTGRES_USER / POSTGRES_PASSWORD (not exported: each script loads them)
 dev_db_load_env() {
   dev_db_require_docker || return 1
   if [ ! -f "$DEV_PG_ENV" ]; then
@@ -27,37 +27,26 @@ dev_db_load_env() {
   # shellcheck disable=SC1090
   . "$DEV_PG_ENV"
   POSTGRES_USER="bs"
-  POSTGRES_PORT="$DEV_PG_PORT"
+  # dev_db_url puts the password into a URL unencoded: only the generated hex form is safe there
+  [[ "$POSTGRES_PASSWORD" =~ ^[0-9a-f]+$ ]] || { echo "!! $DEV_PG_ENV: POSTGRES_PASSWORD must be hex (openssl rand -hex 24)" >&2; return 1; }
 
-  if [ -z "$(docker ps -q --filter "name=^${DEV_PG_NAME}\$")" ]; then
-    if [ -n "$(docker ps -aq --filter "name=^${DEV_PG_NAME}\$")" ]; then
-      docker start "$DEV_PG_NAME" >/dev/null
-    else
-      docker run -d --name "$DEV_PG_NAME" --restart unless-stopped \
-        -e POSTGRES_USER="$POSTGRES_USER" -e POSTGRES_PASSWORD="$POSTGRES_PASSWORD" -e POSTGRES_DB=postgres \
-        -v bs-dev-pgdata:/var/lib/postgresql -p "127.0.0.1:${DEV_PG_PORT}:5432" postgres:18 >/dev/null
-    fi
-  fi
-  PG_CID="$(docker ps -q --filter "name=^${DEV_PG_NAME}\$")"
-  until docker exec "$PG_CID" pg_isready -q -U "$POSTGRES_USER" -d postgres; do sleep 1; done
-  export PG_CID POSTGRES_USER POSTGRES_PASSWORD POSTGRES_PORT
+  docker start "$DEV_PG_NAME" >/dev/null 2>&1 ||
+    docker run -d --name "$DEV_PG_NAME" --restart unless-stopped \
+      -e POSTGRES_USER="$POSTGRES_USER" -e POSTGRES_PASSWORD="$POSTGRES_PASSWORD" -e POSTGRES_DB=postgres \
+      -v bs-dev-pgdata:/var/lib/postgresql -p "127.0.0.1:${DEV_PG_PORT}:5432" postgres:18 >/dev/null
+  until docker exec "$DEV_PG_NAME" pg_isready -q -U "$POSTGRES_USER" -d postgres; do sleep 1; done
 }
 
 # psql as the superuser, inside the container (no password on the wire); stdin passes through for dumps
-psql_admin() { docker exec -i "$PG_CID" psql -v ON_ERROR_STOP=1 -q -U "$POSTGRES_USER" -d postgres "$@"; }
+psql_admin() { docker exec -i "$DEV_PG_NAME" psql -v ON_ERROR_STOP=1 -q -U "$POSTGRES_USER" -d postgres "$@"; }
 
 db_exists() { [ "$(psql_admin -tAc "SELECT 1 FROM pg_database WHERE datname = '$1'")" = 1 ]; }
 
 # Workspace name -> database name part: lower case [a-z0-9_], at most 40 characters
 dev_db_slug() { printf %s "$1" | tr 'A-Z-' 'a-z_' | tr -cd 'a-z0-9_' | cut -c1-40; }
 
-# URL of a database on that Postgres, credentials encoded
-dev_db_url() {
-  local user pass
-  user="$(node -e 'process.stdout.write(encodeURIComponent(process.argv[1]))' "$POSTGRES_USER")"
-  pass="$(node -e 'process.stdout.write(encodeURIComponent(process.argv[1]))' "$POSTGRES_PASSWORD")"
-  printf 'postgres://%s:%s@127.0.0.1:%s/%s' "$user" "$pass" "$POSTGRES_PORT" "$1"
-}
+# URL of a database on that Postgres (user and password are URL-safe, see dev_db_load_env)
+dev_db_url() { printf 'postgres://%s:%s@127.0.0.1:%s/%s' "$POSTGRES_USER" "$POSTGRES_PASSWORD" "$DEV_PG_PORT" "$1"; }
 
 # One setup/template build at a time: parallel worktrees would race on bs_template. A child script of a locked
 # script (orca-setup.sh -> dev-template.sh) must not lock again: flock on a second descriptor would block forever.
@@ -66,4 +55,10 @@ dev_db_lock() {
   exec 9>"${XDG_RUNTIME_DIR:-/tmp}/bs-dev-db.lock"
   flock 9
   export DEV_DB_LOCKED=1
+}
+
+# Releases the lock once the shared databases are done, so later per-worktree steps don't serialise parallel setups
+dev_db_unlock() {
+  exec 9>&-
+  unset DEV_DB_LOCKED
 }

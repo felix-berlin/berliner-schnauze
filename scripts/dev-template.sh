@@ -28,7 +28,7 @@ if [ -f "$dump" ]; then
   if [[ "$dump" == *.sql ]]; then
     psql_admin -d "$build" <"$dump"
   else
-    docker exec -i "$PG_CID" pg_restore --no-owner --no-privileges -U "$POSTGRES_USER" -d "$build" <"$dump"
+    docker exec -i "$DEV_PG_NAME" pg_restore --no-owner --no-privileges -U "$POSTGRES_USER" -d "$build" <"$dump"
   fi
   echo "== migrate"
   pnpm --filter payload-app migrate

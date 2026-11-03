@@ -31,39 +31,41 @@ const [{ getPayload }, { default: config }] = await Promise.all([
 ]);
 const payload = await getPayload({ config });
 
-const existing = (
-  await payload.find({
-    collection: "users",
-    where: { email: { equals: email } },
+/** `find` by `where`, then `update` or `create`: the script runs once per worktree setup, any number of times. */
+async function upsert(
+  collection: "users" | "payload-mcp-api-keys",
+  where: Record<string, unknown>,
+  data: Record<string, unknown>,
+): Promise<{ id: number }> {
+  const { docs } = await payload.find({
+    collection,
+    where,
     limit: 1,
     depth: 0,
     overrideAccess: true,
-  })
-).docs[0];
-const user = existing
-  ? await payload.update({ collection: "users", id: existing.id, data: { password } })
-  : await payload.create({ collection: "users", data: { email, password } });
+  } as never);
+  return (
+    docs[0]
+      ? payload.update({ collection, id: docs[0].id, data } as never)
+      : payload.create({ collection, data } as never)
+  ) as Promise<{ id: number }>;
+}
+
+const user = await upsert("users", { email: { equals: email } }, { email, password });
 
 // Same capabilities as the production key: words find/create/update, suggestions find/update (see mcp.ts)
-const keyData = {
-  user: user.id,
-  label: "dev",
-  enableAPIKey: true,
-  apiKey,
-  words: { find: true, create: true, update: true },
-  suggestions: { find: true, update: true },
-};
-const key = (
-  await payload.find({
-    collection: "payload-mcp-api-keys",
-    where: { label: { equals: "dev" } },
-    limit: 1,
-    depth: 0,
-    overrideAccess: true,
-  })
-).docs[0];
-if (key) await payload.update({ collection: "payload-mcp-api-keys", id: key.id, data: keyData });
-else await payload.create({ collection: "payload-mcp-api-keys", data: keyData });
+await upsert(
+  "payload-mcp-api-keys",
+  { label: { equals: "dev" } },
+  {
+    user: user.id,
+    label: "dev",
+    enableAPIKey: true,
+    apiKey,
+    words: { find: true, create: true, update: true },
+    suggestions: { find: true, update: true },
+  },
+);
 
 console.log("[dev-access] dev admin and MCP key ready");
 process.exit(0);
