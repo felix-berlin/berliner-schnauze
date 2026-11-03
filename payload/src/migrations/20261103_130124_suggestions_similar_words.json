@@ -4147,13 +4147,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "published": {
-          "name": "published",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp(3) with time zone",
@@ -8309,6 +8302,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "f1743860-ad7b-436a-9af9-b2b2b3fd68a0",
+  "id": "6beb333d-2d37-4f11-9f1e-e5ac63cf5bd3",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

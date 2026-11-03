@@ -4,7 +4,6 @@ import { draftsAccess } from "../access";
 import { contentModifiedAtField, touchContentModifiedAt } from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
 import { setDerivedWordFields } from "../hooks/deriveWordFields";
-import { lockSuggestions } from "../hooks/lockSuggestions";
 import { mcpDraftOnly } from "../hooks/mcpDraftOnly";
 import { previewUrl } from "../lib/preview";
 
@@ -34,7 +33,7 @@ export const Words: CollectionConfig = {
     preview: previewUrl("words"),
   },
   versions: { drafts: true },
-  hooks: { beforeChange: [mcpDraftOnly, touchContentModifiedAt, setDerivedWordFields], beforeDelete: [deleteComments], afterChange: [lockSuggestions] },
+  hooks: { beforeChange: [mcpDraftOnly, touchContentModifiedAt, setDerivedWordFields], beforeDelete: [deleteComments] },
   fields: [
     { name: "berlinerisch", type: "text", required: true },
     ...identityFields,

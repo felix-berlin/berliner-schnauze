@@ -1,7 +1,8 @@
 import type { CollectionAfterChangeHook, CollectionConfig, FieldAccess } from "payload";
 
-import { authenticated, authenticatedOnly } from "../access";
+import { authenticatedOnly } from "../access";
 import { adoptSuggestion } from "../hooks/adoptSuggestion";
+import { lockedByWordValue, refuseWhenLocked, updateUnlocked } from "../hooks/suggestionLock";
 import { notifyEditors } from "../lib/notifyEditors";
 
 /** Mails the editors about a new suggestion; a failed mail is logged, the suggestion stays in the admin. */
@@ -38,23 +39,19 @@ const notOverMcp: FieldAccess = ({ req }) => req.payloadAPI !== "MCP";
 /** Words suggested through the site's form. The site creates them through the Local API (after Turnstile). */
 export const Suggestions: CollectionConfig = {
   slug: "suggestions",
-  // A suggestion whose word is live (`published`) is locked: the Where limits every update, also by REST and MCP,
-  // and the admin shows such a document read-only.
-  access: {
-    ...authenticatedOnly,
-    update: (args) => (authenticated(args) ? { published: { not_equals: true } } : false),
-  },
+  // A suggestion whose word is live is locked (hooks/suggestionLock.ts).
+  access: { ...authenticatedOnly, update: updateUnlocked },
   admin: {
     useAsTitle: "berlinerWord",
     defaultColumns: ["berlinerWord", "translation", "status", "createdAt"],
   },
-  hooks: { beforeChange: [adoptSuggestion], afterChange: [mailEditors] },
+  hooks: { beforeChange: [refuseWhenLocked, adoptSuggestion], afterChange: [mailEditors] },
   fields: [
     {
       name: "lockNotice",
       type: "ui",
       admin: {
-        condition: (data) => Boolean(data?.published),
+        condition: (data) => Boolean(data?.lockedByWord),
         components: { Field: "/components/SuggestionLockNotice#SuggestionLockNotice" },
       },
     },
@@ -86,7 +83,7 @@ export const Suggestions: CollectionConfig = {
       admin: {
         position: "sidebar",
         description:
-          "Das Wort, das aus diesem Vorschlag entstanden ist. Beim Status „Übernommen“ ohne Wort legt das CMS einen Entwurf an; ein hier gewähltes Wort wird stattdessen verknüpft.",
+          "Das Wort, das aus diesem Vorschlag entstanden ist. Beim Wechsel auf „Übernommen“ ohne Wort legt das CMS einen Entwurf an; ein hier gewähltes Wort wird stattdessen verknüpft.",
       },
     },
     {
@@ -97,18 +94,21 @@ export const Suggestions: CollectionConfig = {
       admin: {
         position: "sidebar",
         readOnly: true,
-        description: "Wörter mit gleicher oder ähnlicher Schreibweise (automatisch, solange der Vorschlag neu ist).",
+        description:
+          "Wörter mit gleicher oder ähnlicher Schreibweise (automatisch beim Anlegen und beim Ändern des Berliner Worts).",
       },
     },
     {
-      name: "published",
+      name: "lockedByWord",
       type: "checkbox",
-      defaultValue: false,
-      label: "Wort veröffentlicht (Vorschlag gesperrt)",
+      virtual: true,
+      label: "Gesperrt (Wort ist veröffentlicht)",
+      hooks: { afterRead: [lockedByWordValue] },
       admin: {
         position: "sidebar",
         readOnly: true,
-        description: "Wird automatisch gesetzt, sobald das Wort veröffentlicht ist. Dann ist der Vorschlag nicht mehr änderbar.",
+        description:
+          "Wird aus dem Wort abgeleitet: gesperrt, solange das verknüpfte Wort veröffentlicht ist.",
       },
     },
   ],
