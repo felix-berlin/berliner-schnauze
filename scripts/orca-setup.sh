@@ -40,14 +40,20 @@ SITE_URL=http://localhost:$web
 EOF
 )
 
-# Bring the clone to this branch's schema (the template may come from another branch).
-(
-  set -a
-  # shellcheck disable=SC1091
-  . ./.env.worktree
-  set +a
-  PAYLOAD_SECRET=dev-setup-secret NODE_ENV=production pnpm --filter payload-app migrate
-)
+# Bring the clone to this branch's schema (the template may come from another branch). After `pnpm cms:dev` the
+# database carries Payload's dev-push marker (batch -1): migrate would then stop at an interactive data-loss prompt and
+# hang this hook, and cms:dev syncs the schema itself on its next start.
+if [ "$(psql_admin -d "$db" -tAc "SELECT 1 FROM payload_migrations WHERE batch = -1 LIMIT 1")" = 1 ]; then
+  echo "== migrate skipped: $db is in dev-push mode (pnpm cms:dev syncs its schema)"
+else
+  (
+    set -a
+    # shellcheck disable=SC1091
+    . ./.env.worktree
+    set +a
+    PAYLOAD_SECRET=dev-setup-secret NODE_ENV=production pnpm --filter payload-app migrate
+  )
+fi
 
 # Fixed dev admin and MCP key from Infisical (DEV_ADMIN_EMAIL, DEV_ADMIN_PASSWORD, DEV_MCP_KEY). Needs `infisical login`.
 if ! scripts/with-env.sh env NODE_ENV=production pnpm --filter payload-app dev:access; then
