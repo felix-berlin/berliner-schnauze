@@ -1,6 +1,6 @@
 # Orca worktree hooks: a new worktree gets dependencies, its own database (cloned from bs_template), the dev login
 # and its ports; archiving drops the database again. No secrets here, see scripts/orca-setup.sh.
-# In Orca: clear the local setup script (Settings > Repository > Hooks) or this one is ignored ("Local only").
+# In Orca: Settings > Repository > Advanced > Command Source "orca.yaml only", or a local setup script wins over this file.
 scripts:
   setup: bash scripts/orca-setup.sh
   archive: bash scripts/orca-archive.sh

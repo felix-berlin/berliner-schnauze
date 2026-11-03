@@ -16,7 +16,7 @@ fuser -k $(sed -n 's/^\(WEBSITE\|CMS\|E2E\)_PORT=\(.*\)/\2\/tcp/p' .env.worktree
 
 # A stopped Docker must not block archiving: leave the databases and say so
 dev_db_require_docker || { echo "!! databases $db and ${db}_test stay behind; drop them later (psql on bs-dev-postgres)" >&2; exit 0; }
-dev_db_load_env
+dev_db_load_env || { echo "!! databases $db and ${db}_test stay behind (dev Postgres not usable)" >&2; exit 0; }
 dev_db_lock
 for name in "$db" "${db}_test"; do
   psql_admin -c "DROP DATABASE IF EXISTS \"$name\" WITH (FORCE)"

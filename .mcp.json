@@ -3,7 +3,7 @@
     "payload": {
       "type": "http",
       "url": "${PAYLOAD_MCP_URL:-https://cms.berliner-schnauze.wtf/api/mcp}",
-      "headers": { "Authorization": "Bearer ${PAYLOAD_MCP_KEY}" }
+      "headers": { "Authorization": "Bearer ${PAYLOAD_MCP_KEY:-}" }
     },
     "playwright-test": {
       "command": "pnpm",

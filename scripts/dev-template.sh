@@ -12,6 +12,8 @@ dev_db_load_env
 dev_db_lock
 
 dump="${1:-${BS_DUMP:-$HOME/backups/berliner-schnauze/latest.dump}}"
+# a backup named on purpose must exist; only the default path may fall back to the e2e data
+[ -f "$dump" ] || [ -z "${1:-${BS_DUMP:-}}" ] || { echo "!! no backup at $dump" >&2; exit 1; }
 # the e2e seed only writes to databases named *_e2e / *_smoke
 if [ -f "$dump" ]; then build="bs_template_build"; else build="bs_template_e2e"; fi
 

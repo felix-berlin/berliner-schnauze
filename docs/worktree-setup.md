@@ -59,7 +59,7 @@ pnpm dev                          # Website
 pnpm cms:dev                      # Admin (zweites Terminal)
 ```
 
-Der Datenbankname kommt vom Ordnernamen (`mein-feature` wird zu `bsw_mein_feature`). Du kannst das Skript beliebig oft wiederholen, es überspringt, was schon da ist.
+Der Datenbankname kommt vom Ordnernamen (`mein-feature` wird zu `bsw_mein_feature`). Du kannst das Skript beliebig oft wiederholen, Datenbanken, die schon da sind, bleiben; `.env.worktree` wird neu geschrieben, Migrationen und Dev-Login laufen erneut.
 
 Aufräumen, wenn du den Worktree nicht mehr brauchst:
 
@@ -90,7 +90,7 @@ Alles, was Secrets oder die Datenbank dieses Worktrees braucht, läuft über `sc
 - **Ein Postgres für alle:** Der Container `bs-dev-postgres` (eigenes Volume, Port `127.0.0.1:5433`) wird bei Bedarf gestartet. Sein Passwort erzeugt das Setup einmal selbst und legt es in `~/.config/berliner-schnauze/dev-postgres.env` (nur du darfst die Datei lesen). Er hat nichts mit `compose.yaml` zu tun.
 - **Vorlage und Kopien:** `bs_template` enthält die echten Daten aus dem Dump, migriert auf den aktuellen Stand. Jeder Worktree bekommt per `CREATE DATABASE … TEMPLATE` in Sekunden eine eigene Kopie `bsw_<name>` plus eine leere Testdatenbank `bsw_<name>_test`.
 - **Login-Daten fehlen in der Vorlage:** Beim Bau werden Passwort-Hashes, API-Keys, Sessions und MCP-Keys der echten User entfernt. Stattdessen legt das Setup den festen Dev-Admin an (aus `DEV_ADMIN_EMAIL` und `DEV_ADMIN_PASSWORD`). Hat dein Produktions-User dieselbe E-Mail, bekommt er in der lokalen Kopie dieses Dev-Passwort.
-- **Ports:** Sie werden aus dem Worktree-Namen berechnet (Website ab 4400, CMS ab 3100, E2E ab 5400) und stehen in `.env.worktree`. Zwei Worktrees mit zufällig gleichem Port sind unwahrscheinlich, aber möglich: dann Ports in der Datei ändern.
+- **Ports:** Sie werden aus dem Worktree-Namen berechnet (Website ab 4400, CMS ab 3100, E2E ab 5400) und stehen in `.env.worktree`. Zwei Worktrees mit zufällig gleichem Port sind unwahrscheinlich, aber möglich: dann Ports in der Datei ändern (ein erneutes `orca-setup.sh` setzt sie zurück).
 - **`.env.worktree`:** wird vom Setup geschrieben, ist git-ignoriert und enthält auch das Datenbank-Passwort. Nicht teilen, nicht committen.
 
 Dateien: `orca.yaml` (Orca-Hooks), `scripts/orca-setup.sh`, `scripts/orca-archive.sh`, `scripts/dev-template.sh`, `scripts/with-env.sh`, `scripts/prod-curl.sh`, `scripts/lib/dev-db.sh` (gemeinsame Funktionen), `payload/src/scripts/devAccess.ts` (Dev-Admin und MCP-Key).
@@ -105,7 +105,7 @@ Neue Worktrees bekommen den neuen Stand. Bereits angelegte Worktree-Datenbanken 
 
 ## Produktion lesen (Basic-Auth)
 
-Hinter der Anubis-Schranke kommt man mit dem Skript durch. Es erlaubt nur lesende Zugriffe auf `berliner-schnauze.wtf`:
+Hinter der Basic-Auth-Schranke kommt man mit dem Skript durch. Es erlaubt nur lesende Zugriffe auf `berliner-schnauze.wtf`:
 
 ```bash
 scripts/prod-curl.sh -I https://berliner-schnauze.wtf/        # nur Header
@@ -116,7 +116,7 @@ Das Zugangsdatum liegt in Infisical (dev, Ordner `/agent`, Secret `PROD_BASIC_AU
 
 ## Regeln
 
-- **Nie Produktion lokal:** `with-env.sh` nimmt immer Infisical **dev** und bricht ab, wenn `prod` gewählt wird. `.infisical.yaml` ordnet jeden Branch (auch `main`) dem Environment dev zu.
+- **Nie Produktion lokal:** `with-env.sh` ruft Infisical immer mit `--env=dev` auf; prod lässt sich darüber nicht wählen. `.infisical.yaml` ordnet jeden Branch (auch `main`) dem Environment dev zu.
 - **Kein Browser gegen die echte Seite:** Playwright und Chrome DevTools nie gegen `berliner-schnauze.wtf` richten, jeder Seitenaufruf zählt im Produktions-Matomo. `curl` oder `scripts/prod-curl.sh` sind in Ordnung. Dev hat eine eigene Matomo-ID.
 - **Der Dump enthält personenbezogene Daten** (Vorschläge mit Name und Mail). Er gehört nie ins Repo und nie in den Chat. Er liegt außerhalb des Repos in `~/backups/berliner-schnauze/`.
 - **Keine Secrets in Dateien oder im Chat:** Werte bleiben in Infisical. Die Skripte lesen sie zur Laufzeit.
@@ -129,8 +129,7 @@ Das Zugangsdatum liegt in Infisical (dev, Ordner `/agent`, Secret `PROD_BASIC_AU
 | `dev admin not created` (Warnung, kein Abbruch) | `npx infisical login` fehlt, oder `DEV_ADMIN_EMAIL`, `DEV_ADMIN_PASSWORD`, `DEV_MCP_KEY` stehen nicht in Infisical dev (Wurzelpfad `/`). Nachholen: `scripts/with-env.sh env NODE_ENV=production pnpm --filter payload-app dev:access` |
 | `no backup at …` / Wörter fehlen | Kein Dump unter `~/backups/berliner-schnauze/latest.dump`: Dump ablegen und `bash scripts/dev-template.sh` ausführen. Neue Worktrees bekommen dann echte Daten. |
 | `refusing …only a local database` | `DATABASE_URL` zeigt nicht auf `127.0.0.1`. Ist so gewollt: der Dev-Login wird nur in lokale Datenbanken geschrieben. |
-| `with-env.sh: refusing to run with the prod environment` | `INFISICAL_ENV` steht auf `prod`. Variable löschen. |
-| Port belegt | In `.env.worktree` `WEBSITE_PORT` oder `CMS_PORT` ändern. |
+| Port belegt | In `.env.worktree` `WEBSITE_PORT` oder `CMS_PORT` ändern (ein erneutes Setup setzt sie zurück). |
 | Datenbank `bsw_…` bleibt nach dem Löschen eines Orca-Worktrees stehen | Das Archive-Skript läuft erst, wenn `orca.yaml` auf `main` liegt. Von Hand: `docker exec bs-dev-postgres psql -U bs -d postgres -c 'DROP DATABASE "bsw_<name>" WITH (FORCE)'` |
 | Orca startet das Setup nicht | Command Source muss auf „orca.yaml only“ stehen, und die Freigabe für das Kommando muss bestätigt sein. |
 | Container-Log ansehen | `docker logs bs-dev-postgres` |

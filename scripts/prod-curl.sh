@@ -22,8 +22,11 @@ done
 inf=(infisical)
 command -v infisical >/dev/null || inf=(pnpm exec infisical)
 
-# -q: ignore ~/.curlrc (could add a proxy); the credential is read from the injected env by the inner shell only
+# -q: ignore ~/.curlrc (could add a proxy). The credential goes to curl on stdin (-K -), never on its command line,
+# where `ps` would show it; --fail-with-body: a 401 from the gate or a 5xx exits non-zero instead of passing as content.
 exec "${inf[@]}" run --env=dev --path=/agent -- bash -c '
+  set -u
   url="$1"; shift
-  exec curl -q -sS --proto =https --max-redirs 0 --user "$PROD_BASIC_AUTH" "$@" -- "$url"
+  : "${PROD_BASIC_AUTH:?missing in Infisical dev, folder /agent}"
+  printf "user = \"%s\"\n" "$PROD_BASIC_AUTH" | exec curl -q -K - -sS --fail-with-body --proto =https --max-redirs 0 "$@" -- "$url"
 ' _ "$url" "${flags[@]}"

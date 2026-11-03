@@ -8,6 +8,7 @@ cd "${ORCA_WORKTREE_PATH:-$(dirname "$0")/..}"
 . scripts/lib/dev-db.sh
 
 ws="$(dev_db_slug "${ORCA_WORKSPACE_NAME:-$(basename "$PWD")}")"
+[ -n "$ws" ] || { echo "!! workspace name has no [A-Za-z0-9_-] characters: rename it" >&2; exit 1; }
 db="bsw_${ws}" # never collides with bs_template*
 echo "== worktree database: $db"
 
@@ -23,7 +24,7 @@ db_exists "${db}_test" || psql_admin -c "CREATE DATABASE \"${db}_test\""
 dev_db_unlock
 
 # Stable ports per worktree name (parallel agents must not collide on 4321/3001/4322). shortcut: a hash clash is
-# possible (1 in 200); delete .env.worktree and rename the workspace, or edit the ports there.
+# possible (1 in 200); edit the ports in .env.worktree then, but a rerun of this script resets them.
 h="$(printf %s "$ws" | cksum | cut -d' ' -f1)"
 off=$((h % 200))
 web=$((4400 + off)) cms=$((3100 + off)) e2e=$((5400 + off))
