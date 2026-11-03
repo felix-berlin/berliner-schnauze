@@ -123,6 +123,27 @@ describe("mcp endpoint", () => {
         expect(text(body)).toContain(WORD);
         expect(text(body)).not.toMatch(/Erika|erika@/);
       }
+      // update by id and in bulk (where): the bulk result is one JSON array, which line-based redaction missed
+      for (const target of [
+        { id: made.id },
+        { where: JSON.stringify({ berlinerWord: { equals: WORD } }) },
+      ]) {
+        const body = await rpc("tools/call", `Bearer ${KEY}`, {
+          name: "updateSuggestions",
+          arguments: { ...target, status: "rejected", userMail: "leak@example.test" },
+        });
+        expect(text(body)).toContain(WORD);
+        expect(text(body)).not.toMatch(/Erika|erika@/);
+      }
+      // the fields cannot be queried either (no guessing oracle) and stay intact in the database
+      const probe = await rpc("tools/call", `Bearer ${KEY}`, {
+        name: "findSuggestions",
+        arguments: { where: JSON.stringify({ userMail: { like: "erika" } }) },
+      });
+      expect(text(probe)).not.toContain(WORD);
+      const stored = await payload.findByID({ collection: "suggestions", id: made.id });
+      expect(stored.userMail).toBe("erika@example.test"); // the MCP write to userMail was dropped
+      expect(stored.status).toBe("rejected");
     } finally {
       await payload.delete({ collection: "suggestions", id: made.id });
     }

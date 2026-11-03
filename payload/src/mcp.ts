@@ -1,7 +1,7 @@
 import { mcpPlugin } from "@payloadcms/plugin-mcp";
 
 import { version } from "../package.json";
-import { mcpAuditLine, redactSuggestionResponse } from "./lib/mcpGuards";
+import { mcpAuditLine } from "./lib/mcpGuards";
 
 /**
  * MCP endpoint (`/api/mcp`) so Claude can read and maintain words and suggestions. Auth is a per-user API key made in
@@ -30,8 +30,7 @@ export const mcp = mcpPlugin({
     suggestions: {
       // No create: the site's form makes suggestions, and every create mails the editors.
       enabled: { find: true, update: true },
-      // userName/userMail of the sender never reach the model, whatever `select` it sends.
-      overrideResponse: redactSuggestionResponse,
+      // userName/userMail of the sender never reach the model: field access in collections/Suggestions.ts.
       description:
         "Wortvorschläge aus dem Formular. status: new | accepted | rejected; word verweist auf das daraus entstandene Wort. Bei find `select` setzen, z. B. { word: true, status: true }.",
     },
