@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.6.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.5.0...v4.6.0) (2026-11-03)
+
+
+### Bug Fixes
+
+* **word:** derive the suggestion lock from the word and harden the hooks ([6d5166f](https://github.com/felix-berlin/berliner-schnauze/commit/6d5166f2fe9642b953d6feb008b33b5cbacd0584))
+
+
+### Features
+
+* **word:** adopt suggestions as draft words and lock them once published ([00c331d](https://github.com/felix-berlin/berliner-schnauze/commit/00c331da4fb7937d18bf93aa82e5ae2ae48f6a9a))
+
 # [4.5.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.4.1...v4.5.0) (2026-11-03)
 
 
