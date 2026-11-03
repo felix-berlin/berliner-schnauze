@@ -38,7 +38,7 @@ and the editor sees the counts per word in the Payload admin.
 
 ### "Sagste det noch?" card
 
-Steps, shown one at a time; each answer is saved immediately (no submit button). From step 2 on every step has "überspringen". A small progress indicator (dots) shows the position; the locality step counts only where it applies.
+Steps, shown one at a time; each answer is saved immediately (no submit button). From step 2 on every step has "überspringen". A progress bar of always six segments (usage, area, locality, origin, half, age) shows the position: done and current segments are filled, steps that do not apply (locality, half) are a dashed line, and "Schritt X von N" counts only the steps that apply. From step 2 on "← Zurück" returns to the previous visited step (it skips steps the answers made irrelevant); going back to the first step withdraws the vote (`usage: null`). There is no jump navigation between steps. A fold-out "Warum fragen wa dit?" explains the questions; it is open on the area step and folded on the others.
 
 1. **Sagste det noch?** (required to start the flow): *Sag ick selbst* / *Kenn ick* / *Nie jehört*. After answering, the card shows the result bars for this word (percent per answer + total votes) and moves to step 2.
 2. **Wo wohnste?** Clickable SVG map of Berlin with real outlines: the 12 current Bezirke (areas; since 2001, so Mitte and Friedrichshain-Kreuzberg are whole again, no split along the old wall). Brandenburg is a clickable band around Berlin. Below the map a button *Woanders*.
@@ -102,13 +102,19 @@ Same shape as `website/src/pages/api/comment-votes.ts`: visitor cookie via `visi
 
 The first version used a hybrid map of 14 areas (Mitte split into Mitte / Wedding-Tiergarten, Friedrichshain-Kreuzberg into Friedrichshain / Kreuzberg). Owner decision before release: the map uses exactly the 12 current Bezirke, and a new optional step 2b asks the locality (the 97 Ortsteile, from de.wikipedia "Verwaltungsgliederung Berlins") as a button list. The east/west tint on the map is gone (Ost/West is step 3b). The unreleased `word_feedback` migration was edited in place.
 
+## Decision 2026-11-03: design pass (docs/design/wortseite/SPEC.md)
+
+Dots and the jump navigation of "Angaben ändern" are replaced by the six-segment bar and "← Zurück" (see Flow). The card header shows "Bisher N Stimmen" / "Noch keene Stimme" (the only number visible before the own vote), the result bars mark the own answer ("· deine Antwort"). Controls use the shared `.c-choice` (aria-pressed), `.c-link` and `.c-icon-button`. "Angaben ändern" starts over and clears the stored profile on the server (vote and thumb stay). A failed send takes the chosen answer back and toasts the server's message.
+
 ## Design
 
 Follows `DESIGN.md`: dashed-line texture for the answer buttons and map strokes, currywurst orange for selection and bars, Paper Lift card (`mx.paper-card`), Berlin-dialect copy. Text on orange must meet contrast (the mockups don't). Verified in light and dark mode, desktop and mobile width.
 
 ## Privacy
 
-The visitor cookie already exists for comments. The privacy page gets a short paragraph on what is stored with a vote (answers + random visitor id, no IP).
+The visitor cookie already exists for comments. The privacy page gets a short paragraph on what is stored with a vote (answers + a hash of the random visitor id, no IP). The row holds a hash of the cookie, not the cookie: comments tag authors with their own hash of it, so a profile cannot be joined to a named comment. **Open: the paragraph itself is CMS content and not part of this branch.**
+
+Known limit: a visitor without a cookie gets a new row per request (capped at 30 new rows per IP and word per day), so someone can fake rows and lift a small group over `MIN_GROUP` to read one real answer. Accepted for the low impact (only the usage answer leaks); a signed cookie or Turnstile would be the next step.
 
 ## Left to the builder
 
@@ -120,5 +126,5 @@ Component split, exact copy beyond the labels above, animation between steps, wh
 - Profile copied onto each vote (not a separate profile table), only future votes change when the profile changes.
 - Like/dislike counts shown on the buttons (owner's change); counts computed live (admin `ui` field + API), never stored on the versioned word document; no aggregation page.
 - A skipped step is not asked again; the profile also goes onto like/dislike-only rows.
-- No Turnstile, rate limits only (same as comment votes).
+- No Turnstile, rate limits only (same as comment votes): 500 writes per IP and day, and 30 new rows per IP, word and day. Updating the own row counts only against the 500, so a full card run (up to 7 updates) does not exhaust a shared IP.
 - Minimum group size for comparison bars.

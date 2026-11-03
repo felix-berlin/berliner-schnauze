@@ -38,15 +38,15 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   await db.execute(sql`
    ALTER TABLE "word_feedback" DISABLE ROW LEVEL SECURITY;
   DROP TABLE "word_feedback" CASCADE;
-  ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT IF EXISTS "payload_locked_documents_rels_word_feedback_fk";
+  ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_word_feedback_fk";
   
-  DROP INDEX IF EXISTS "payload_locked_documents_rels_word_feedback_id_idx";
-  ALTER TABLE "payload_locked_documents_rels" DROP COLUMN IF EXISTS "word_feedback_id";
-  DROP TYPE IF EXISTS "public"."enum_word_feedback_reaction";
-  DROP TYPE IF EXISTS "public"."enum_word_feedback_usage";
-  DROP TYPE IF EXISTS "public"."enum_word_feedback_area";
-  DROP TYPE IF EXISTS "public"."enum_word_feedback_locality";
-  DROP TYPE IF EXISTS "public"."enum_word_feedback_origin";
-  DROP TYPE IF EXISTS "public"."enum_word_feedback_half";
-  DROP TYPE IF EXISTS "public"."enum_word_feedback_age";`)
+  DROP INDEX "payload_locked_documents_rels_word_feedback_id_idx";
+  ALTER TABLE "payload_locked_documents_rels" DROP COLUMN "word_feedback_id";
+  DROP TYPE "public"."enum_word_feedback_reaction";
+  DROP TYPE "public"."enum_word_feedback_usage";
+  DROP TYPE "public"."enum_word_feedback_area";
+  DROP TYPE "public"."enum_word_feedback_locality";
+  DROP TYPE "public"."enum_word_feedback_origin";
+  DROP TYPE "public"."enum_word_feedback_half";
+  DROP TYPE "public"."enum_word_feedback_age";`)
 }

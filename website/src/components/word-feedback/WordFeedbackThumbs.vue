@@ -12,7 +12,9 @@
       >
         <component :is="b.icon" aria-hidden="true" class="c-word-feedback-thumbs__icon" />
         <span>{{ b.label }}</span>
-        <span class="c-word-feedback-thumbs__count">{{ feedback?.totals[b.reaction] }}</span>
+        <span class="c-word-feedback-thumbs__count">{{
+          feedback ? feedback.totals[b.reaction] : "–"
+        }}</span>
       </button>
     </div>
     <a class="c-link" href="#sagste-det-noch">Sagste det noch? Hier abstimmen ↓</a>

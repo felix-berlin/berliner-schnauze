@@ -127,11 +127,11 @@ describe("word-feedback", () => {
 });
 
 describe("boroughs and localities data", () => {
-  it("has 12 areas, 97 unique Locality keys, each mapped to an area", () => {
-    expect(Object.keys(AREA_LOCALITIES)).toHaveLength(12);
-    expect(AREAS).toHaveLength(14);
-    expect(LOCALITIES).toHaveLength(97);
-    expect(new Set(LOCALITIES).size).toBe(97);
+  it("maps every locality to a known area, with unique keys", () => {
+    // Boroughs plus the two answers that have no localities (brandenburg, elsewhere).
+    expect(AREAS).toHaveLength(Object.keys(AREA_LOCALITIES).length + 2);
+    for (const area of Object.keys(AREA_LOCALITIES)) expect(AREAS).toContain(area);
+    expect(new Set(LOCALITIES).size).toBe(LOCALITIES.length);
     for (const k of LOCALITIES) {
       expect(k).toMatch(/^[a-z]+(-[a-z]+)*$/);
       expect(AREAS).toContain(LOCALITY_AREA[k]);

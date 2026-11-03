@@ -5,7 +5,6 @@ vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify: toast }));
 
 import {
   $feedback,
-  $feedbackError,
   $profile,
   answerUsage,
   loadFeedback,
@@ -26,7 +25,7 @@ beforeEach(() => {
   vi.restoreAllMocks();
   toast.mockClear();
   $feedback.set(null);
-  $feedbackError.set(false);
+  vi.spyOn(console, "error").mockImplementation(() => {});
   $profile.set({});
 });
 
@@ -168,12 +167,11 @@ describe("sendFeedback", () => {
     expect(await sendFeedback(1, { reaction: "like" })).toBe(true);
     expect($feedback.get()).toEqual(state);
   });
-  it("failure keeps $feedback, sets error, toasts", async () => {
+  it("failure keeps $feedback and toasts", async () => {
     $feedback.set(state);
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("down")));
     expect(await sendFeedback(1, { reaction: "like" })).toBe(false);
     expect($feedback.get()).toBe(state);
-    expect($feedbackError.get()).toBe(true);
     expect(toast).toHaveBeenCalledWith(
       expect.objectContaining({ message: "Hat nich jeklappt, versuch's nochma." }),
     );
@@ -181,8 +179,50 @@ describe("sendFeedback", () => {
   it("non-ok response counts as failure", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ json: async () => ({}), ok: false }));
     expect(await sendFeedback(1, { usage: "say" })).toBe(false);
-    expect($feedbackError.get()).toBe(true);
     expect(toast).toHaveBeenCalledTimes(1);
+  });
+  it("shows the server's message for any non-ok answer", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        json: async () => ({ error: "Is jespeichert, aber die Zahlen wollten nich laden." }),
+        ok: false,
+        status: 502,
+      }),
+    );
+    expect(await sendFeedback(1, { usage: "say" })).toBe(false);
+    expect(toast).toHaveBeenCalledWith({
+      message: "Is jespeichert, aber die Zahlen wollten nich laden.",
+      status: "error",
+    });
+  });
+  it("applies only the newest of two overlapping answers", async () => {
+    await loadFeedback(1);
+    const older = { ...state, mine: { reaction: "like" } };
+    const newer = { ...state, mine: { reaction: "like", usage: "say" } };
+    let slow!: (v: unknown) => void;
+    const fetchMock = vi
+      .fn()
+      .mockReturnValueOnce(new Promise((r) => (slow = r)))
+      .mockResolvedValueOnce(ok(newer));
+    vi.stubGlobal("fetch", fetchMock);
+    const first = sendFeedback(1, { reaction: "like" });
+    await sendFeedback(1, { usage: "say" });
+    slow(ok(older));
+    await first;
+    expect($feedback.get()).toEqual(newer);
+  });
+  it("applies an answer after a failed load (the word is still the one shown)", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("down")));
+    await loadFeedback(5);
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(ok()));
+    expect(await sendFeedback(5, { reaction: "like" })).toBe(true);
+    expect($feedback.get()).toEqual(state);
+  });
+  it("logs a failed load", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 502 }));
+    await loadFeedback(6);
+    expect(console.error).toHaveBeenCalled();
   });
   it("shows the server's message when the daily cap answers 429", async () => {
     vi.stubGlobal(

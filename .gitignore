@@ -39,7 +39,7 @@ pnpm-debug.log*
 # Per-worktree database URLs and ports (scripts/orca-setup.sh)
 .env.worktree
 # Uploads of the local CMS (Orca shares this folder between worktrees)
-/payload/media/
+/payload/media
 
 # macOS-specific files
 .DS_Store

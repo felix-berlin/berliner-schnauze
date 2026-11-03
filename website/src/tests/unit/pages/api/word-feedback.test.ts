@@ -190,6 +190,50 @@ describe("PATCH /api/word-feedback", () => {
       expect((await patch({ usage: "say", word: 99 }, undefined, "10.0.0.2")).status).toBe(200);
     expect((await patch({ usage: "say", word: 99 }, undefined, "10.0.0.2")).status).toBe(429);
   });
+
+  it("updates of the own row do not count against the per-word cap", async () => {
+    find.mockResolvedValue({ docs: [{ id: 3 }] });
+    for (let i = 0; i < 40; i++)
+      expect((await patch({ usage: "say", word: 98 }, "v-1", "10.0.0.3")).status).toBe(200);
+  });
+
+  it("429 on the 501st write per IP across words", async () => {
+    for (let i = 0; i < 500; i++)
+      expect(
+        (await patch({ usage: "say", word: 100 + (i % 20) }, undefined, "10.0.0.4")).status,
+      ).toBe(200);
+    expect((await patch({ usage: "say", word: 130 }, undefined, "10.0.0.4")).status).toBe(429);
+  });
+
+  it("stores a hash of the visitor cookie, never the cookie", async () => {
+    await patch({ usage: "say", word: 7 }, "v-1");
+    const visitor = create.mock.calls[0][0].data.visitor;
+    expect(visitor).toMatch(/^[0-9a-f]{64}$/);
+    expect(visitor).not.toContain("v-1");
+    expect(find.mock.calls[0][0].where.visitor.equals).toBe(visitor);
+  });
+
+  it("400 on a body that is not JSON", async () => {
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    expect((await PATCH(ctx({}))).status).toBe(400);
+  });
+
+  it("says the vote is stored when only the count afterwards fails", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    count.mockRejectedValue(new Error("count down"));
+    const res = await patch({ usage: "say", word: 7 }, "v-1");
+    expect(res.status).toBe(502);
+    expect((await res.json()).error).toContain("jespeichert");
+    expect(create).toHaveBeenCalledOnce();
+  });
+
+  it("computes the comparison only once there is an own vote", async () => {
+    await patch({ reaction: "like", word: 7 }, "v-1");
+    expect(count).toHaveBeenCalledTimes(5); // totals only
+    count.mockClear();
+    await patch({ usage: "say", word: 7 }, "v-1");
+    expect(count.mock.calls.length).toBeGreaterThan(5);
+  });
 });
 
 describe("GET /api/word-feedback", () => {
@@ -202,6 +246,33 @@ describe("GET /api/word-feedback", () => {
     expect(body.mine).toBeNull();
     expect(body.totals).toEqual({ dislike: 2, know: 2, like: 2, never: 2, say: 2 });
     expect(set).not.toHaveBeenCalled();
+  });
+
+  it("with a cookie: mine from the stored row, comparison only with a vote", async () => {
+    const url = "https://berliner-schnauze.wtf/api/word-feedback?word=7";
+    find.mockResolvedValue({ docs: [{ id: 3, reaction: "like" }] });
+    const noVote = await (await GET(ctx({ cookie: "v-1", method: "GET", url }))).json();
+    expect(noVote.mine).toMatchObject({ reaction: "like", usage: null });
+    expect(count).toHaveBeenCalledTimes(5);
+    count.mockClear();
+    find.mockResolvedValue({ docs: [{ id: 3, usage: "say" }] });
+    const voted = await (await GET(ctx({ cookie: "v-1", method: "GET", url }))).json();
+    expect(voted.mine.usage).toBe("say");
+    expect(count.mock.calls.length).toBeGreaterThan(5);
+  });
+
+  it("502 with a read message on a failing read", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    find.mockRejectedValue(new Error("db down"));
+    const res = await GET(
+      ctx({
+        cookie: "v-1",
+        method: "GET",
+        url: "https://berliner-schnauze.wtf/api/word-feedback?word=7",
+      }),
+    );
+    expect(res.status).toBe(502);
+    expect((await res.json()).error).toContain("Zahlen");
   });
 
   it("400 on a bad word", async () => {

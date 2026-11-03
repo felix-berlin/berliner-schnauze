@@ -9,15 +9,31 @@ import {
   type MyFeedback,
   type WordFeedbackState,
 } from "@utils/wordFeedbackSchema.ts";
+import { createHash } from "node:crypto";
 import {
   feedbackCompare,
   feedbackTotals,
   LOCALITY_AREA,
+  type FeedbackCompare,
   type Locality,
 } from "payload-app/word-feedback";
 
 const DAY = 24 * 60 * 60_000;
 const KEYS = ["reaction", "usage", "area", "locality", "origin", "half", "age"] as const;
+
+// Rows carry a hash of the cookie, not the cookie: comments tag authors with their own hash of it, so an admin
+// cannot join a feedback profile (age, Ortsteil) to a named comment.
+const feedbackVisitor = (cookie: string | undefined) =>
+  cookie && createHash("sha256").update(`word-feedback:${cookie}`).digest("hex");
+
+// The comparison is only shown after the own vote, so it is not computed before (10 queries per page view).
+const NO_COMPARE: FeedbackCompare = {
+  area: null,
+  east: null,
+  locality: null,
+  moved: null,
+  west: null,
+};
 
 const toMine = (doc: Partial<Record<(typeof KEYS)[number], string | null>>) =>
   Object.fromEntries(KEYS.map((k) => [k, doc[k] ?? null])) as MyFeedback;
@@ -38,7 +54,9 @@ const findMine = async (payload: Client, word: number, visitor: string | undefin
 
 const state = async (payload: Client, word: number, mine: MyFeedback | null) => {
   const [compare, totals] = await Promise.all([
-    feedbackCompare(payload, word, mine?.area ?? null, mine?.locality ?? null),
+    mine?.usage
+      ? feedbackCompare(payload, word, mine.area ?? null, mine.locality ?? null)
+      : NO_COMPARE,
     feedbackTotals(payload, word),
   ]);
   return { compare, mine, totals } satisfies WordFeedbackState;
@@ -49,17 +67,28 @@ export const GET: APIRoute = async ({ cookies, url }) => {
   if (!word) return reply({ error: "Ungültige Eingabe" }, 400);
   try {
     const payload = await getPayloadClient();
-    const doc = await findMine(payload, word, visitorId(cookies, false));
+    const doc = await findMine(
+      payload,
+      word,
+      feedbackVisitor(visitorId(cookies, false)) || undefined,
+    );
     return reply(await state(payload, word, doc ? toMine(doc) : null), 200);
   } catch (error) {
     console.error(`[word-feedback] read ${word} failed:`, error);
-    return reply({ error: "Die Stimme konnte leider nicht gezählt werden." }, 502);
+    return reply({ error: "Die Zahlen wollten leider nich laden." }, 502);
   }
 };
 
 export const PATCH: APIRoute = async ({ clientAddress, cookies, request }) => {
   const input = feedbackPatchSchema.safeParse(await request.json().catch(() => undefined));
-  if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
+  if (!input.success) {
+    // Paths only, never the values: a stale client profile shows up here.
+    console.warn(
+      "[word-feedback] rejected:",
+      input.error.issues.map((i) => `${i.path.join(".")}:${i.code}`),
+    );
+    return reply({ error: "Ungültige Eingabe" }, 400);
+  }
   const { word, ...sent } = input.data;
 
   try {
@@ -69,15 +98,20 @@ export const PATCH: APIRoute = async ({ clientAddress, cookies, request }) => {
     );
     if (!found) return reply({ error: "Wort nicht gefunden" }, 404);
 
-    // The visitor cookie is free to drop, so cap writes per IP and word as well.
+    const cookie = visitorId(cookies, true);
+    if (!cookie) throw new Error("no visitor id");
+    const visitor = feedbackVisitor(cookie) as string;
+    const existing = await findMine(payload, word, visitor);
+
+    // The visitor cookie is free to drop, so cap writes per IP. Updating the own row adds no vote, so only a
+    // new row counts against the per-word cap (a card run is up to 7 updates, shared IPs would hit it at once).
     const ip = clientIp(request.headers.get("x-forwarded-for"), clientAddress);
     if (
-      rateLimitedBy(ip, `word-feedback ${word}`, 30, DAY) > 0 ||
-      rateLimitedBy(ip, "word-feedback-all", 500, DAY) > 0
+      rateLimitedBy(ip, "word-feedback-all", 500, DAY) > 0 ||
+      (!existing && rateLimitedBy(ip, `word-feedback ${word}`, 30, DAY) > 0)
     )
       return reply({ error: "Jenug jestimmt für heute." }, 429);
 
-    const visitor = visitorId(cookies, true) as string;
     // Only the keys the client sent; a non-grewUp origin drops the stale half.
     const data: Record<string, string | null> = Object.fromEntries(
       Object.entries(sent).filter(([, v]) => v !== undefined),
@@ -98,7 +132,6 @@ export const PATCH: APIRoute = async ({ clientAddress, cookies, request }) => {
         depth: 0,
         id: row.id,
       });
-    const existing = await findMine(payload, word, visitor);
     let doc;
     if (existing) doc = await change(existing);
     else {
@@ -116,7 +149,13 @@ export const PATCH: APIRoute = async ({ clientAddress, cookies, request }) => {
         doc = await change(raced);
       }
     }
-    return reply(await state(payload, word, toMine(doc)), 200);
+    // The vote is stored by now: a failing count must not read as "not counted".
+    try {
+      return reply(await state(payload, word, toMine(doc)), 200);
+    } catch (error) {
+      console.error(`[word-feedback] state after write ${word} failed:`, error);
+      return reply({ error: "Is jespeichert, aber die Zahlen wollten nich laden." }, 502);
+    }
   } catch (error) {
     console.error(`[word-feedback] write ${word} failed:`, error);
     return reply({ error: "Die Stimme konnte leider nicht gezählt werden." }, 502);

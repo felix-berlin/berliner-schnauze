@@ -29,7 +29,6 @@ export type Profile = {
 };
 
 export const $feedback = atom<WordFeedbackState | null>(null);
-export const $feedbackError = atom<boolean>(false);
 
 const FIELDS = {
   age: AGES,
@@ -87,9 +86,14 @@ export const nextStep = (
 
 const ENDPOINT = "/api/word-feedback";
 let loadedFor: number | null = null;
+// The word whose GET failed last: an answer for it may still fill the state, one for another word may not.
+let failedFor: number | null = null;
 let loading: Promise<void> = Promise.resolve();
 // Bumped whenever a PATCH result lands, so a slower GET started before it cannot overwrite it.
 let stateVersion = 0;
+// PATCH responses can overtake each other (thumbs and card send on their own): only the newest sent one applies.
+let sent = 0;
+let applied = 0;
 
 export const loadFeedback = (wordId: number): Promise<void> => {
   if (loadedFor === wordId) return loading; // callers share the in-flight request
@@ -102,8 +106,12 @@ export const loadFeedback = (wordId: number): Promise<void> => {
       if (!res.ok) throw new Error(String(res.status));
       const state = (await res.json()) as WordFeedbackState;
       if (loadedFor === wordId && stateVersion === startedAt) $feedback.set(state);
-    } catch {
-      if (loadedFor === wordId) loadedFor = null; // a failed GET must not block a retry
+    } catch (error) {
+      console.error(`[word-feedback] load ${wordId} failed:`, error);
+      if (loadedFor === wordId) {
+        loadedFor = null; // a failed GET must not block a retry
+        failedFor = wordId;
+      }
     }
   })());
 };
@@ -112,30 +120,34 @@ export const sendFeedback = async (
   wordId: number,
   patch: Partial<MyFeedback>,
 ): Promise<boolean> => {
+  const seq = ++sent;
   try {
     const res = await fetch(ENDPOINT, {
       body: JSON.stringify({ word: wordId, ...patch }),
       headers: { "Content-Type": "application/json" },
       method: "PATCH",
     });
-    if (res.status === 429) {
-      // The server says why (daily cap); a generic "try again" would be wrong.
-      $feedbackError.set(true);
+    if (!res.ok) {
+      // The server says why (daily cap, rejected input, stored but not counted): a generic "try again" can be wrong.
       const { error } = (await res.json().catch(() => ({}))) as { error?: string };
-      createToastNotify({ message: error ?? "Jenug jestimmt für heute.", status: "warning" });
+      console.error(`[word-feedback] send ${wordId} failed: ${res.status}`, error);
+      createToastNotify({
+        message: error ?? "Hat nich jeklappt, versuch's nochma.",
+        status: res.status === 429 ? "warning" : "error",
+      });
       return false;
     }
-    if (!res.ok) throw new Error(String(res.status));
     const state = (await res.json()) as WordFeedbackState;
-    // The user may have navigated to another word while the PATCH was in flight.
-    if (loadedFor === wordId) {
+    // The user may have navigated to another word while the PATCH was in flight; a failed GET left no word set.
+    if ((loadedFor === wordId || (loadedFor === null && failedFor === wordId)) && seq > applied) {
+      loadedFor = wordId;
+      applied = seq;
       stateVersion++;
       $feedback.set(state);
     }
-    $feedbackError.set(false);
     return true;
-  } catch {
-    $feedbackError.set(true);
+  } catch (error) {
+    console.error(`[word-feedback] send ${wordId} failed:`, error);
     createToastNotify({ message: "Hat nich jeklappt, versuch's nochma.", status: "error" });
     return false;
   }

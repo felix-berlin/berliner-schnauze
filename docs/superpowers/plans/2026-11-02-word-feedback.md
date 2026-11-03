@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - pnpm only. Import aliases (`@components/…`, `@stores/…`), never relative paths across folders.
-- Vue: `<script setup lang="ts">`, block order template → script → style, unscoped `<style lang="scss">` that `@use`s its own `src/styles/components/_<name>.scss`; BEMIT classes (`c-word-feedback__…`).
+- Vue: `<script setup lang="ts">`, block order template → script → style, unscoped `<style lang="scss">` that `@use`s its own `src/styles/components/_<name>.scss`; BEMIT classes (`c-word-feedback-card__…`, `c-word-feedback-thumbs__…`, `c-berlin-area-map__…`). Answer buttons are `.c-choice` (`aria-pressed`), text actions `.c-link`, no per-component button CSS (docs/design/wortseite/SPEC.md).
 - Icons: Lucide via `defineAsyncComponent(() => import("virtual:icons/lucide/thumbs-up"))` / `thumbs-down`. No emoji anywhere.
 - Look: `DESIGN.md` (dashed borders, currywurst orange selection, `mx.paper-card`). Functional text ≥ 11 px; text on orange meets WCAG AA. Verified in light + dark, desktop + 360 px mobile.
 - Migrations are expand-only: one new table; nothing changes on `words`. After the schema edit: `pnpm --filter payload-app generate:types`, then `pnpm cms:migrate:create word_feedback`.
@@ -123,12 +123,12 @@
 
 **Interfaces:**
 - Produces:
-  - `berlinAreas.ts`: `export const MAP_VIEWBOX: string`, `export const BERLIN_AREAS: ReadonlyArray<{ key: Exclude<Area, "brandenburg" | "elsewhere">; name: string; short: string; side: "east" | "west"; d: string; labelX: number; labelY: number }>` (14 entries; `name` full, e.g. "Wedding/Tiergarten", `short` map label, e.g. "X'berg"). Header comment: source URLs + licence line.
-  - `BerlinAreaMap.vue`: props `modelValue: Area | null`; emits `update:modelValue(Area)`. Renders an SVG with a Brandenburg frame + 14 paths, each a focusable control in one `role="radiogroup"` (`aria-label="Wo wohnste?"`), `role="radio"`, `aria-checked`, `aria-label` = full name; arrow keys move between areas, Enter/Space selects. Below it a "Woanders" button emitting `"elsewhere"`.
+  - `berlinAreas.ts`: `export const MAP_VIEWBOX: string`, `export const BERLIN_AREAS: ReadonlyArray<{ key: Exclude<Area, "brandenburg" | "elsewhere">; name: string; short: string; side: "east" | "west"; d: string; labelX: number; labelY: number }>` (12 entries; `name` full, e.g. "Wedding/Tiergarten", `short` map label, e.g. "X'berg"). Header comment: source URLs + licence line.
+  - `BerlinAreaMap.vue`: props `modelValue: Area | null`; emits `update:modelValue(Area)`. Renders an SVG with a Brandenburg frame + 12 paths, each a focusable control in one `role="radiogroup"` (`aria-label="Wo wohnste?"`), `role="radio"`, `aria-checked`, `aria-label` = full name; arrow keys move between areas, Enter/Space selects. Below it a "Woanders" button emitting `"elsewhere"`. Narrow containers (`NARROW_PX`) show a list first and the map behind a `<summary>`.
 
 - [ ] **Step 1: Check the licence** of both GeoJSON sources (Geoportal Berlin / FIS-Broker metadata for "Bezirksgrenzen" and "LOR Ortsteile"). Record name + attribution requirement in the `berlinAreas.ts` header; if attribution is required, add it under the map (small text, ≥ 11 px). If the licence forbids reuse, stop and tell the owner.
 - [ ] **Step 2: Generate** `berlinAreas.ts` with `python3 -I scripts/berlin-map/build.py <bezirke.geojson> <ortsteile.geojson> > website/src/data/berlinAreas.ts`. Label positions: use each polygon's area centroid (not the vertex mean the spike used), so no label leaves its area; check by eye in the browser.
-- [ ] **Step 3: Write the failing tests:** renders 14 `role="radio"` + Brandenburg + "Woanders"; clicking "Kreuzberg" emits `"kreuzberg"`; `modelValue: "pankow"` → that radio has `aria-checked="true"`; ArrowRight from the checked radio moves focus to the next; Enter on a focused radio emits its key.
+- [ ] **Step 3: Write the failing tests:** renders 12 `role="radio"` + Brandenburg + "Woanders"; clicking "Kreuzberg" emits `"kreuzberg"`; `modelValue: "pankow"` → that radio has `aria-checked="true"`; ArrowRight from the checked radio moves focus to the next; Enter on a focused radio emits its key.
 - [ ] **Step 4: Run** `(cd website && rtk vitest run src/tests/unit/components/word-feedback/BerlinAreaMap.test.ts)` → FAIL, implement, → PASS.
 - [ ] **Step 5: Commit** `feat(word): add Berlin area map with east/west split districts`.
 
@@ -177,7 +177,7 @@
 
 **Interfaces:**
 - Consumes: Tasks 4 and 5.
-- Behaviour: exactly one step visible; progress dots; states `usage` → (result bars) → `nextStep(profile)` … → `done`. Each answer: update `$profile`, `sendFeedback`, advance only on `true`. "überspringen" sets the profile key to `null`, sends it, advances. Choosing an origin other than `grewUp` also sets `half: null` locally. Done state: usage bars (percent + "N Stimmen") and the comparison rows whose value is non-null ("Ost-Berliner", "West-Berliner", "Zujezogene", "in <area name>"), plus "Angaben ändern" (clears `$profile`, starts at `"area"`). Revisiting an answered word starts in the done state with `mine.usage` highlighted and the usage buttons still clickable. `trackEvent("Word Feedback", <step>, <value|skip>)`.
+- Behaviour: exactly one step visible; a six-segment progress bar with "Schritt X von N", "← Zurück" (history-based; back to the first step withdraws the vote) and a "Warum fragen wa dit?" fold-out; states `usage` → (result bars) → `nextStep(profile)` … → `done`. Each answer: update `$profile`, `sendFeedback`, advance only on `true`. "überspringen" sets the profile key to `null`, sends it, advances. Choosing an origin other than `grewUp` also sets `half: null` locally. Done state: usage bars (percent + "N Stimmen") and the comparison rows whose value is non-null ("Ost-Berliner", "West-Berliner", "Zujezogene", "in <area name>"), plus "Angaben ändern" (clears the stored profile on the server and `$profile`, starts at `"area"`). Revisiting an answered word starts in the done state with `mine.usage` highlighted and the usage buttons still clickable. `trackEvent("Word Feedback", <step>, <value|skip>)`.
 
 - [ ] **Step 1: Write the failing component tests:** initial state shows only the three usage buttons; clicking "Kenn ick" (send resolves true) shows bars and the "Wo wohnste?" step; with send resolving false the usage step stays; skip on area shows "Uffjewachsen oder zujezogen?"; "Hier uffjewachsen" leads to "In welcher Hälfte?", "Zujezogen, über 10 Jahre her" leads to "Wie alt biste?"; with a complete profile, answering usage goes straight to done; `compare.west: null` hides the "West-Berliner" row; "Angaben ändern" shows "Wo wohnste?".
 - [ ] **Step 2: Run** → FAIL, implement, → PASS.

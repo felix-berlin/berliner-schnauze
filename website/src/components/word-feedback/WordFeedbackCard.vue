@@ -11,7 +11,12 @@
       </p>
     </header>
 
-    <div v-if="current === 'usage' || current === 'done'" class="c-word-feedback-card__options">
+    <div
+      v-if="current === 'usage' || current === 'done'"
+      class="c-word-feedback-card__options"
+      role="group"
+      aria-labelledby="word-feedback-title"
+    >
       <button
         v-for="o in USAGE_OPTIONS"
         :key="o.value"
@@ -29,24 +34,27 @@
       Hat nich jeklappt, versuch's nochma.
     </p>
 
-    <div v-if="feedback && current !== 'usage'" class="c-word-feedback-card__bars">
-      <div
-        v-for="b in bars"
-        :key="b.value"
-        class="c-word-feedback-card__bar"
-        :class="{ 'is-mine': b.value === selected.usage }"
-      >
-        <span class="c-word-feedback-card__bar-label">
-          {{ b.label }}<template v-if="b.value === selected.usage"> · deine Antwort</template>
-        </span>
-        <span class="c-word-feedback-card__bar-track" aria-hidden="true">
-          <span class="c-word-feedback-card__bar-fill" :style="{ inlineSize: `${b.percent}%` }" />
-        </span>
-        <span class="c-word-feedback-card__bar-value">{{ b.percent }} % · {{ b.text }}</span>
+    <div aria-live="polite">
+      <div v-if="feedback && current !== 'usage'" class="c-word-feedback-card__bars">
+        <div
+          v-for="b in bars"
+          :key="b.value"
+          class="c-word-feedback-card__bar"
+          :class="{ 'is-mine': b.value === selected.usage }"
+        >
+          <span class="c-word-feedback-card__bar-label">
+            {{ b.label }}<template v-if="b.value === selected.usage"> · deine Antwort</template>
+          </span>
+          <span class="c-word-feedback-card__bar-track" aria-hidden="true">
+            <span class="c-word-feedback-card__bar-fill" :style="{ inlineSize: `${b.percent}%` }" />
+          </span>
+          <span class="c-word-feedback-card__bar-value">{{ b.percent }} % · {{ b.text }}</span>
+        </div>
       </div>
     </div>
 
-    <div aria-live="polite">
+    <!-- No live region here: the focus moves to the new question, which announces it already. -->
+    <div>
       <div
         v-if="current !== 'usage' && current !== 'done'"
         :key="current"
@@ -81,12 +89,11 @@
           <p><em>Mach mit, so weit de willst – jede Frage kannste überspringen.</em></p>
         </div>
         <button
-          v-if="!explainOpen"
           aria-controls="word-feedback-why"
-          aria-expanded="false"
+          :aria-expanded="explainOpen"
           class="c-link c-word-feedback-card__why-link"
           type="button"
-          @click="explainOpen = true"
+          @click="explainOpen = !explainOpen"
         >
           Warum fragen wa dit?
         </button>
@@ -261,18 +268,19 @@ const go = (to: Step, from: Step = current.value) => {
 const explainOpen = ref(false);
 const pending = ref(false);
 const loadFailed = ref(false);
-// Answers that stay selected locally when the send failed.
+// The chosen answer shows at once and is taken back when the send fails.
 const picked = ref<Record<string, string | null>>({});
 const pickedUsage = ref<Usage | null>(null);
 const selected = computed(() => ({ usage: pickedUsage.value ?? feedback.value?.mine?.usage }));
 
 const question = useTemplateRef<HTMLElement>("question");
 const doneBox = useTemplateRef<HTMLElement>("doneBox");
-// Only user-driven step changes move focus (the buttons that held it are gone), never mount/hydration.
+// Step order: decides the slide direction of the enter animation.
+const ORDER: Step[] = ["usage", "area", "locality", "origin", "half", "age", "done"];
 // Enter animation (CSS only, no View Transitions: nothing to coordinate with the focus move below).
 // Only a user-driven step change sets it, so mount and a revisit's first paint stay still.
-const ORDER: Step[] = ["usage", "area", "locality", "origin", "half", "age", "done"];
 const enter = ref<string[]>([]);
+// Only user-driven step changes move focus (the buttons that held it are gone), never mount/hydration.
 watch(step, async (to, from) => {
   enter.value = [
     "is-entering",
@@ -285,7 +293,12 @@ watch(step, async (to, from) => {
 // Open on the first profile question, folded behind a link afterwards.
 watch(current, (c) => (explainOpen.value = c === "area"), { immediate: true });
 
-onMounted(() => loadFeedback(props.wordId));
+onMounted(async () => {
+  await loadFeedback(props.wordId);
+  loadFailed.value = !feedback.value;
+});
+// A later successful answer fills the state: the notice is stale then.
+watch(feedback, (f) => f && (loadFailed.value = false));
 
 // A failed GET left no state: retry it first, or sendFeedback would not store the answer.
 const ready = async () => {
@@ -308,8 +321,8 @@ const answerUsageStep = async (usage: Usage) => {
       // `current` is already "done" here, so name the step we come from.
       go(nextStep($profile.get()), "usage");
     }
-    // A failed re-vote must not keep showing the unsaved choice as selected.
-    if (!ok && feedback.value?.mine?.usage) pickedUsage.value = null;
+    // A failed vote must not keep showing the unsaved choice as selected.
+    if (!ok) pickedUsage.value = null;
   } finally {
     pending.value = false;
   }
@@ -320,6 +333,7 @@ const answerProfile = async (key: ProfileStep, value: string | null) => {
   pending.value = true;
   try {
     if (!(await ready())) return;
+    const before = picked.value;
     picked.value = {
       ...picked.value,
       [key]: value,
@@ -342,13 +356,22 @@ const answerProfile = async (key: ProfileStep, value: string | null) => {
       if (key === "area") delete next.locality;
       $profile.set(next);
       go(nextStep($profile.get()));
-    }
+    } else picked.value = before;
   } finally {
     pending.value = false;
   }
 };
 
-const reset = () => {
+// "Angaben ändern" starts over, so the stored profile goes too (the vote and the thumb stay).
+const reset = async () => {
+  if (pending.value) return;
+  pending.value = true;
+  try {
+    const cleared = { age: null, area: null, half: null, locality: null, origin: null };
+    if (!(await sendFeedback(props.wordId, cleared))) return;
+  } finally {
+    pending.value = false;
+  }
   $profile.set({});
   picked.value = {};
   history.value = [];

@@ -90,7 +90,8 @@ describe("WordFeedbackCard", () => {
     const w = await mountIt();
     await click(w, "Kenn ick");
     expect(w.text()).not.toContain("Wo wohnste?");
-    expect(w.find('[aria-pressed="true"]').text()).toBe("Kenn ick");
+    // Rolled back: the unsaved choice is not shown as pressed.
+    expect(w.find('[aria-pressed="true"]').exists()).toBe(false);
   });
 
   it("retries a failed load on the first answer and does not send without state", async () => {
@@ -198,7 +199,7 @@ describe("WordFeedbackCard", () => {
     expect(w.text()).not.toContain("in Karow");
   });
 
-  it("a failed locality send keeps the step and the answer highlighted", async () => {
+  it("a failed locality send keeps the step and takes the answer back", async () => {
     store.sendFeedback.mockResolvedValueOnce(true).mockResolvedValueOnce(false);
     const w = await mountIt();
     await click(w, "Kenn ick");
@@ -207,7 +208,7 @@ describe("WordFeedbackCard", () => {
     expect(w.text()).toContain("Welcher Kiez?");
     expect($profile.get()).toEqual({ area: "pankow" });
     const b = w.findAll("button").find((x) => x.text() === "Karow")!;
-    expect(b.attributes("aria-pressed")).toBe("true");
+    expect(b.attributes("aria-pressed")).toBe("false");
   });
 
   it("grew up leads to the half step", async () => {
@@ -449,17 +450,69 @@ describe("WordFeedbackCard", () => {
       expect(b.attributes("aria-pressed")).toBe("false");
     });
 
-    it("opens the explanation on the area step and folds it behind a link afterwards", async () => {
+    it("opens the explanation on the area step; the toggle stays and folds it", async () => {
       const w = await mountIt();
-      expect(w.find("#word-feedback-why").exists()).toBe(false);
       await click(w, "Kenn ick");
+      const toggle = () => w.find('button[aria-controls="word-feedback-why"]');
       expect(w.find("#word-feedback-why").isVisible()).toBe(true);
-      expect(w.text()).not.toContain("Warum fragen wa dit?");
+      expect(toggle().attributes("aria-expanded")).toBe("true");
+      await toggle().trigger("click");
+      expect(w.find("#word-feedback-why").isVisible()).toBe(false);
+      expect(toggle().attributes("aria-expanded")).toBe("false");
+      await toggle().trigger("click");
+      expect(w.find("#word-feedback-why").isVisible()).toBe(true);
+    });
+
+    it("folds the explanation again on the next step", async () => {
+      const w = await mountIt();
+      await click(w, "Kenn ick");
       await click(w, "überspringen");
       expect(w.find("#word-feedback-why").isVisible()).toBe(false);
-      await click(w, "Warum fragen wa dit?");
-      expect(w.find("#word-feedback-why").isVisible()).toBe(true);
-      expect(w.text()).not.toContain("Warum fragen wa dit?");
+      expect(w.find('button[aria-controls="word-feedback-why"]').attributes("aria-expanded")).toBe(
+        "false",
+      );
+    });
+  });
+
+  describe("reset and load", () => {
+    it("Angaben ändern clears the stored profile on the server, not the vote", async () => {
+      $profile.set({ age: "30-39", area: null, half: null, origin: "movedOver10" });
+      $feedback.set(state({ mine: { usage: "say" } }));
+      const w = await mountIt();
+      await click(w, "Angaben ändern");
+      expect(store.sendFeedback).toHaveBeenCalledWith(7, {
+        age: null,
+        area: null,
+        half: null,
+        locality: null,
+        origin: null,
+      });
+      expect($profile.get()).toEqual({});
+    });
+
+    it("keeps the profile when clearing it on the server fails", async () => {
+      $profile.set({ age: "30-39", area: null, half: null, origin: "movedOver10" });
+      $feedback.set(state({ mine: { usage: "say" } }));
+      store.sendFeedback.mockResolvedValue(false);
+      const w = await mountIt();
+      await click(w, "Angaben ändern");
+      expect($profile.get()).toMatchObject({ age: "30-39" });
+      expect(w.text()).toContain("Angaben ändern");
+    });
+
+    it("tells a failed first load right away", async () => {
+      $feedback.set(null);
+      const w = await mountIt();
+      expect(w.find('[role="alert"]').exists()).toBe(true);
+    });
+
+    it("labels the usage group and keeps the live region on the results only", async () => {
+      const w = await mountIt();
+      expect(w.find('[role="group"]').attributes("aria-labelledby")).toBe("word-feedback-title");
+      await click(w, "Kenn ick");
+      const live = w.findAll("[aria-live]");
+      expect(live).toHaveLength(1);
+      expect(live[0].find(".c-word-feedback-card__bars").exists()).toBe(true);
     });
   });
 

@@ -4230,6 +4230,137 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.suggestions_rels": {
+      "name": "suggestions_rels",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "path": {
+          "name": "path",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "words_id": {
+          "name": "words_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "suggestions_rels_order_idx": {
+          "name": "suggestions_rels_order_idx",
+          "columns": [
+            {
+              "expression": "order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "suggestions_rels_parent_idx": {
+          "name": "suggestions_rels_parent_idx",
+          "columns": [
+            {
+              "expression": "parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "suggestions_rels_path_idx": {
+          "name": "suggestions_rels_path_idx",
+          "columns": [
+            {
+              "expression": "path",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "suggestions_rels_words_id_idx": {
+          "name": "suggestions_rels_words_id_idx",
+          "columns": [
+            {
+              "expression": "words_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "suggestions_rels_parent_fk": {
+          "name": "suggestions_rels_parent_fk",
+          "tableFrom": "suggestions_rels",
+          "tableTo": "suggestions",
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "suggestions_rels_words_fk": {
+          "name": "suggestions_rels_words_fk",
+          "tableFrom": "suggestions_rels",
+          "tableTo": "words",
+          "columnsFrom": [
+            "words_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.comments": {
       "name": "comments",
       "schema": "",
@@ -8552,6 +8683,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "05e628a0-5248-41cc-b045-75f094f6c457",
+  "id": "d721d17b-3f6b-4c04-903a-039aa23612b9",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

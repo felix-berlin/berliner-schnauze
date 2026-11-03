@@ -63,6 +63,27 @@ describe("BerlinAreaMap", () => {
     w.unmount();
   });
 
+  it("moves with ArrowDown and ArrowUp like Right and Left", async () => {
+    const w = mountMap();
+    const radios = w.findAll('[role="radio"]');
+    (radios[2].element as SVGElement).focus();
+    await radios[2].trigger("keydown", { key: "ArrowDown" });
+    expect(document.activeElement).toBe(radios[3].element);
+    await radios[3].trigger("keydown", { key: "ArrowUp" });
+    expect(document.activeElement).toBe(radios[2].element);
+    w.unmount();
+  });
+
+  it("leaves other keys alone: Tab is not prevented and selects nothing", async () => {
+    const w = mountMap();
+    const radio = w.findAll('[role="radio"]')[0];
+    const event = new KeyboardEvent("keydown", { cancelable: true, key: "Tab" });
+    radio.element.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(false);
+    expect(w.emitted("update:modelValue")).toBeUndefined();
+    w.unmount();
+  });
+
   it.each([null, "pankow", "elsewhere"])("has exactly one tab stop for modelValue %s", (value) => {
     const w = mountMap(value);
     expect(w.findAll('[role="radio"][tabindex="0"]')).toHaveLength(1);

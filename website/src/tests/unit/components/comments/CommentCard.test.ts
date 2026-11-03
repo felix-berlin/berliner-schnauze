@@ -110,6 +110,16 @@ describe("CommentCard", () => {
     expect((wrapper.find("textarea").element as HTMLTextAreaElement).value).toBe("@Icke ");
   });
 
+  it.each([
+    [1, "true", "false"],
+    [-1, "false", "true"],
+    [0, "false", "false"],
+  ])("aria-pressed follows myVote %s", (myVote, up, down) => {
+    const { wrapper } = mountCard({ myVote });
+    expect(wrapper.find('[aria-label="Hochwählen"]').attributes("aria-pressed")).toBe(up);
+    expect(wrapper.find('[aria-label="Runterwählen"]').attributes("aria-pressed")).toBe(down);
+  });
+
   it("vote sends the opposite when clicking the own vote again", async () => {
     const { ctx, wrapper } = mountCard({ myVote: 1 });
     await wrapper.find('[aria-label="Hochwählen"]').trigger("click");
