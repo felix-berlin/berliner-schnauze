@@ -5,5 +5,6 @@ secrets-management:
     default-environment: ""
     mappings:
         git-branch-to-environment:
+            # Every local checkout is dev, main included: a checkout on main must never pick up the prod Matomo ID or
+            # prod database. Prod and staging are explicit (CI: env-slug, Komodo: machine identities).
             .*: dev
-            main: prod

@@ -466,9 +466,17 @@ export interface Suggestion {
   userMail?: string | null;
   status?: ('new' | 'accepted' | 'rejected') | null;
   /**
-   * Das Wort, das aus diesem Vorschlag entstanden ist.
+   * Das Wort, das aus diesem Vorschlag entstanden ist. Beim Wechsel auf „Übernommen“ ohne Wort legt das CMS einen Entwurf an; ein hier gewähltes Wort wird stattdessen verknüpft.
    */
   word?: (number | null) | Word;
+  /**
+   * Wörter mit gleicher oder ähnlicher Schreibweise (automatisch beim Anlegen und beim Ändern des Berliner Worts).
+   */
+  similarWords?: (number | Word)[] | null;
+  /**
+   * Wird aus dem Wort abgeleitet: gesperrt, solange das verknüpfte Wort veröffentlicht ist.
+   */
+  lockedByWord?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1171,6 +1179,8 @@ export interface SuggestionsSelect<T extends boolean = true> {
   userMail?: T;
   status?: T;
   word?: T;
+  similarWords?: T;
+  lockedByWord?: T;
   updatedAt?: T;
   createdAt?: T;
 }

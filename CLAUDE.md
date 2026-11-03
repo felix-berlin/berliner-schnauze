@@ -4,13 +4,17 @@
 
 Berliner Schnauze is a Berlin dialect translator web app. Data lives in the Payload CMS (`payload/`, Postgres); the frontend is an Astro site with Vue 3 islands for interactivity. Every page renders on demand (`output: "server"`, Node adapter, Docker image); the build needs no database.
 
-**Layout** (pnpm workspace, like Payload's `examples/astro`): `website/` is the Astro app (package `website`), `payload/` the CMS (package `payload-app`). The root holds only workspace, release (`.releaserc` bumps the root, `website/` and `payload/` `package.json` versions to one product version (also the MCP `serverInfo.version`)), `compose.yaml`, `docs/`, `data/` and the CMS/Anki scripts in `scripts/`. **App paths in this file (`src/…`, `public/…`, `server/…`, `astro.config.mjs`) are relative to `website/`.** The root scripts below delegate (`pnpm --filter website …`); everything else runs inside `website/`.
+**Layout** (pnpm workspace, like Payload's `examples/astro`): `website/` is the Astro app (package `website`), `payload/` the CMS (package `payload-app`). The root holds only workspace, release (`.releaserc` bumps the root, `website/` and `payload/` `package.json` versions to one product version (also the MCP `serverInfo.version`)), `compose.yaml`, `docs/`, `data/` and the CMS/Anki scripts in `scripts/`. The root scripts below delegate to `website` or `payload-app` via `pnpm --filter`.
+
+**Where the rules live:** this file holds what applies everywhere. Package rules load on demand when you work in that directory: `website/CLAUDE.md` (Astro, Vue, architecture, E2E, design) and `payload/CLAUDE.md` (access, MCP, CMS commands). File-type rules in `.claude/rules/` load when you touch matching files (SCSS/Vue, tests, PWA/build config, Payload migrations, Renovate). Read the matching file before changing code there. A change that crosses both packages (a collection field used by a page) needs both.
 
 ## Commands
 
 ```bash
 # Development
-pnpm dev                     # Start dev server (requires infisical login and Postgres with the CMS data, see payload/README.md; auto-runs supportedBrowsers via predev)
+pnpm dev                     # Website dev server (port WEBSITE_PORT from .env.worktree, else 4321). Needs infisical login and a database, see docs/worktree-setup.md; auto-runs supportedBrowsers via predev
+pnpm cms:dev                 # Payload admin + API, see payload/CLAUDE.md for all cms:* commands
+pnpm dev:all                 # Both in parallel
 
 # Testing
 pnpm test:unit               # Run full test suite with coverage
@@ -22,30 +26,19 @@ pnpm typechecking            # astro check + vue-tsc  (slow — run targeted, no
 
 # Build
 pnpm build                   # Production build (./dist, server entry + assets) — needs no database; no infisical, env vars must already be set
-pnpm build:local             # Production build locally — wraps build with infisical to inject env vars
+pnpm build:local             # Production build locally — wraps build with scripts/with-env.sh (Infisical dev + .env.worktree)
 # in website/: build:strict  # Strict build with full type checking
 
 # Formatting
 pnpm format                  # Format with oxfmt
 pnpm format:check            # Check formatting without writing
 
-# Docker (Node adapter, replacing Cloudflare; run after build)
+# Docker (Node adapter; run after build)
 docker compose up --build    # Serve website/dist/ via server/index.mjs (www redirect + security headers; redirects in astro.config.mjs)
 website/scripts/docker-smoke.sh   # Build image from dist/, check routes/headers/redirects (runs on every PR; leaves a running postgres up)
                              # Release CI builds + pushes ghcr.io/felix-berlin/berliner-schnauze and …/berliner-schnauze-cms (release.yml `docker` job)
 
-# Cloudflare Workers cannot serve this stack (wrangler.jsonc is gone, a Workers Build fails).
-# Don't merge into main before step 7 of docs/cutover-checklist.md (or pause Workers Builds first).
-
-# CMS (Payload, workspace package payload/)
-pnpm cms:dev                 # Payload admin + API on :3001 (secrets via infisical, like pnpm dev)
-pnpm cms:test                # Payload tests (needs DATABASE_URL_TEST, a throwaway Postgres DB named *_test)
-pnpm cms:migrate:create <name>   # After EVERY schema change; commit it. The cms container runs migrations on start (CI fails on drift)
-scripts/migration-upgrade-test.sh [base-ref]   # DATABASE_URL=…_e2e: migrate with base-ref's code + seed, upgrade with this checkout, roll back, forward again (CI: migration-upgrade job)
-scripts/migration-dryrun.sh <backup.dump|.sql>  # Before a risky deploy: restore a prod backup into a throwaway Postgres container, migrate, read every collection
-pnpm cms:migrate                 # Apply migrations to DATABASE_URL (not for dev DBs filled by schema push)
-docker compose up --build cms postgres   # CMS image (payload/Dockerfile, context = repo root)
-infisical run -- pnpm dlx tsx scripts/publish-drafts.ts --dry-run   # Publish all draft words via REST (PAYLOAD_URL, PAYLOAD_API_KEY)
+# Cloudflare Workers cannot serve this stack (no wrangler config, a Workers Build fails).
 
 # Anki decks (Python venv `.venv-anki`, setup in docs/anki/README.md)
 pnpm anki:build              # Build Full + Lite into dist-anki/ (version <package.json version>-dev)
@@ -54,220 +47,46 @@ pnpm anki:push:sandbox       # Upload that Full deck to the Polar sandbox
 
 When Claude runs `oxlint` directly (not via `pnpm lint`), always pass `--format=agent`.
 
-Run a single test file (in `website/`): `pnpm vitest run src/tests/unit/path/to/file.test.ts`
-
-Update snapshots (in `website/`): `pnpm vitest:update`
-
-E2E (Playwright, in `website/`): specs in `src/tests/e2e/`; run with `npx playwright test <file> --project=chromium`. Set `E2E_PORT=4322` to target another server. The specs run against the invented data set of `pnpm --filter payload-app seed:e2e` (never real words; the seed refuses a non-local database), so use a throwaway database: create `bs_e2e`, `NODE_ENV=production pnpm --filter payload-app migrate`, `seed:e2e`, then `E2E_BUILD=1 pnpm build` and `node server/index.mjs` (with `DATABASE_URL`, `PAYLOAD_SECRET`, `PAYLOAD_SERVER_URL`, `PORT=4322`). Don't run the full suite against the user's dev server — it starves it; alternatively start your own with `NO_DEV_TOOLBAR=1 ASTRO_DEV_BACKGROUND=0 npx infisical run -- pnpm exec astro dev --ignore-lock --port 4322`. Always start with `NO_DEV_TOOLBAR=1` (Astro dev toolbar overlay distorts agent/Playwright results); the toolbar is on by default locally, and a server already running without it must be restarted.
+Single test file, snapshots and E2E: `website/CLAUDE.md`.
 
 ## Secrets
 
-Secrets are managed via [Infisical](https://infisical.com). Run `npx infisical login` once before local development. The `dev` script automatically injects secrets via `infisical run --`.
+Secrets are managed via [Infisical](https://infisical.com). Run `npx infisical login` once before local development. The `dev` script automatically injects secrets via `scripts/with-env.sh`.
 
 Docker/compose reads the root `.env`; the `payload/` CLI and Next read a git-ignored `payload/.env` (see `payload/README.md`).
 
+## Worktree setup (Orca)
+
+Walkthrough for developers (also without Orca): `docs/worktree-setup.md`. `orca.yaml` runs `scripts/orca-setup.sh` in every new worktree and `scripts/orca-archive.sh` when it is archived (Orca: Settings → Repository → Advanced → Command Source „orca.yaml only“, or a local setup script wins over the YAML). Every worktree gets its own database `bsw_<workspace>` cloned from `bs_template` (on the dev-only container `bs-dev-postgres`, `127.0.0.1:5433`), a fixed dev admin and MCP key, and its own ports; `.env.worktree` (git-ignored) holds `DATABASE_URL`, `DATABASE_URL_TEST`, `WEBSITE_PORT`, `CMS_PORT`, `E2E_PORT`, `PAYLOAD_SERVER_URL`, `SITE_URL`.
+
+- **`scripts/with-env.sh <cmd>`** runs a command with Infisical **dev** plus `.env.worktree`; `pnpm dev`, `pnpm cms:dev` and `build:local` go through it. It always passes `--env=dev`, so prod is never selected. `.infisical.yaml` maps every branch to dev: a checkout on `main` used to resolve prod, so builds there baked the production Matomo ID into the client. Never use `--env=prod` locally, and no browser tool (Playwright, Chrome DevTools) against berliner-schnauze.wtf: every page view counts in the production Matomo.
+- `DEV_ADMIN_EMAIL`, `DEV_ADMIN_PASSWORD`, `DEV_MCP_KEY` live in Infisical dev, never in a file or the chat. The template is built from a production backup by `scripts/dev-template.sh` (login data stripped; it still holds personal data from suggestions/comments: never in the repo or the chat).
+- **The Payload MCP (`mcp__payload__*`) talks to production by default**, in every worktree (`.mcp.json`, key from `.claude/settings.local.json`). Writes are drafts only, but still prod. For the worktree database set `PAYLOAD_MCP_URL=http://localhost:$CMS_PORT/api/mcp` and `PAYLOAD_MCP_KEY` to `DEV_MCP_KEY` (from Infisical, never into a file or the chat), then restart Claude Code.
+- **Production reads behind the basic-auth gate**: `scripts/prod-curl.sh <url>` (GET/HEAD only). The credential `PROD_BASIC_AUTH` sits in Infisical dev, folder `/agent`, and is injected at run time; never type, print or paste it.
+
 ## Deployment
 
-Production is not deployed from this repo. The Komodo GitOps repo `felix-berlin/komodo` (local: `../komodo`) holds the compose file (`remote/thrash/berliner-schnauze/compose.yaml`) and the `berliner-schnauze` stack in its `komodo.toml` (server `thrash - Hetzner`). The root `compose.yaml` here is for local use only.
+Production is not deployed from this repo. The Komodo GitOps repo `felix-berlin/komodo` (local: `~/workspace/komodo`) holds the compose file (`remote/thrash/berliner-schnauze/compose.yaml`) and the `berliner-schnauze` stack in its `komodo.toml` (server `thrash - Hetzner`). The root `compose.yaml` here is for local use only.
 
 - Release CI pushes `ghcr.io/felix-berlin/berliner-schnauze` and `…-cms`; Komodo pulls them. A change to ports, env vars, volumes, healthchecks or Traefik labels belongs in the komodo repo, not here.
 - Runtime secrets come from Infisical via the stack `environment` in `komodo.toml` (machine identities `web`/`cms`), not from a `.env`.
-- Rolling release: `web` is rolled via `scripts/rollout.sh` (needs a real healthcheck, no `container_name`, no published ports); `cms` is recreated first so migrations run before the new `web` starts.
+- Rolling release: `web` is rolled via `scripts/rollout.sh` in the komodo repo (needs a real healthcheck, no `container_name`, no published ports); `cms` is recreated first so migrations run before the new `web` starts (see the expand/contract rule in `payload/CLAUDE.md`).
 - Pull `komodo` before editing it (Komodo commits to `main` itself) and read its `CLAUDE.md` first; every decision goes into its `docs/entscheidungen.md`.
-
-## Architecture
-
-**Data flow**: Payload (Local API, in the Astro server process) → adapters in `src/services/payload/` (generated Payload types narrowed to `SiteWord` etc.) → on-demand pages and API routes (`api/search/index.json`, sitemap, OG images, word of the day) → Orama in-browser search → Vue components
-
-- **Astro** handles routing and rendering on demand (`src/pages/`). Layout sets `Cache-Control` (`setPageCache`: proxy 5 min, errors never), `src/middleware/index.ts` turns a failing render into a 503. Never name a root `src/middleware.ts`: Next.js in `payload/` picks it up. Content is read through `ttl()` memos (`src/services/cache.ts`: stale-while-revalidate, 60 s)
-- **Vue 3** islands handle all interactive UI (`src/components/`) — flat files for standalone components, subdirs for feature groups (`games/`, `word/`, `toast/`, `header/`, `accordion/`, `filter/`, `modals/`, `word-search/`, `magazin/`, `anki/`, `comments/`, `word-feedback/`). Use **VueUse** (`@vueuse/core`) for browser APIs and Vue utilities before writing custom logic
-- **BON game** (`src/components/games/`) — "Berliner oder Nicht" dialect card game (BerlinerOderNicht.vue, BonCard.vue, BonHUD.vue, BonResult.vue, BonShareView.vue). State in `$bonStats` (persistent high scores/streaks) and `$savedBon` (session resume snapshot). Sharing via URL query params (`src/utils/bonShare.ts`)
-- **Nanostores** manage client state (`src/stores/`) — import directly from individual store files (e.g. `@stores/darkMode.ts`, `@stores/modal.ts`). Do NOT import from `@stores/index` barrel unless the component specifically needs `wordList.ts` exports — the barrel's `computedAsync` side effect triggers `api/search/index.json` on every chunk that imports it.
-- **Suggest-word form**: `SuggestWordForm.vue` posts to `/api/suggest-word`, which validates (`src/utils/suggestWordSchema.ts`), verifies the Turnstile token server-side (fails closed) and stores it in the Payload `suggestions` collection; its `afterChange` hook mails the editors through Payload's nodemailer adapter (`SMTP_URL`, `SUGGEST_MAIL_TO`; without `SMTP_URL` mails go to the console). A failed mail keeps the suggestion.
-- **Word comments**: `comments/WordComments.vue` → `/api/comments*`, `/api/comment-votes`, `/api/comment-reports` → Payload `comments`/`comment-votes`/`comment-reports` (spec: `docs/superpowers/specs/2026-10-31-word-comments-design.md`). A link in text or name holds a comment as pending; reports auto-hide; hooks mail the editors (`SUGGEST_MAIL_TO`, `notifyEditors`, not awaited). The comment collections are login-only, so their site queries (like the `word-feedback` ones) skip `siteRead()`: default overrideAccess, own `status` filter (feedback: counts plus the visitor's own row), always `depth: 0`.
-- **Word feedback**: thumbs island in `WordHero` + `word-feedback/WordFeedbackCard.vue` ("Sagste det noch?") after the examples → `/api/word-feedback` (GET/PATCH) → Payload `word-feedback`, one row per visitor cookie and word, every answer optional (usage, like/dislike, area, locality, origin, east/west, age bracket; spec: `docs/superpowers/specs/2026-11-02-word-feedback-design.md`). Client state in `src/stores/wordFeedback.ts` (localStorage profile `bs-word-feedback-profile`). Identity is a visitor cookie like `comment-votes`; no IPs are stored (the per-IP write cap lives in memory only). Counts are never stored on `words`: they are computed live from `word-feedback` and reach the word sidebar through a `ui` field. Comparison groups show only with >= `MIN_GROUP` (10) votes. The map shows the 12 current Bezirke as `area` keys (+ `brandenburg`, `elsewhere`); an optional step "Welcher Kiez?" then asks the `locality` (Ortsteil) from a button list for that area, no locality map. Area/locality keys, the 97 localities (de.wikipedia "Verwaltungsgliederung Berlins") and the locality→area mapping live once in `payload/src/lib/wordFeedback.ts` (`payload-app/word-feedback`); the API only accepts a locality together with its own area and clears it when the area changes. Map data: `scripts/berlin-map/build.py` (Bezirke GeoJSON only) → `src/data/berlinAreas.ts` (licence note in its header). There is no delete-by-visitor tool, only admin deletion in the CMS.
-- **Orama** provides full-text search with German stemming — the slim index is assembled per request from the stored derived fields in `src/pages/api/search/index.json.ts`
-- **Composables** in `src/composable/` — Vue composables wrapping browser APIs (Cache Storage, Service Worker)
-- **Images** — remote images (CMS/Wikimedia/Amazon) are served through a custom Astro image service backed by Imagor (`src/lib/imagorImageService.ts`, URL signing in `src/utils/imagor.ts`, HMAC-SHA256). Configured via `image.service.entrypoint` in `astro.config.mjs`; local ESM-imported images bypass Imagor and use their original Vite asset URL. No `sharp` dependency — removed in favor of Imagor.
-- **View Transitions**: `ClientRouter` is enabled globally in `src/components/BaseHead.astro`. Header and Footer use `transition:persist`. See **Astro scripts + View Transitions** below.
-- **CMS**: `payload/` (pnpm workspace package `payload-app`) is the Payload 3 backend (Next.js admin + REST, Postgres; GraphQL disabled). Compose services `cms` (image `berliner-schnauze-cms`, media volume) and `postgres`; the Astro site reads it through the Local API (`getPayloadClient()` in `src/services/payload.ts`, `payload-app` workspace dependency; its types come from the `types` export condition)
-  - Schema: dev and tests push it; production (`NODE_ENV=production`, pinned on `cms`) only runs the committed migrations, and only where `PAYLOAD_RUN_MIGRATIONS=true` (set on `cms` alone). Never point a push-filled DB at the prod container.
-  - **Migrations are expand/contract**: during a rolling release the old `web` runs against the new schema for a while. Add columns nullable or with a default; drop or rename them only in a later release, once no running code reads them. Write a working `down` (`DROP … IF EXISTS` after a `DROP TABLE … CASCADE`); the upgrade test runs it.
-  - Schema change: edit → `pnpm --filter payload-app generate:types` → `pnpm cms:migrate:create <name>`. New collections/globals get `authenticated` access from `src/access.ts` + a Forbidden test in `tests/access.test.ts`.
-  - **Drafts**: the Local API ignores access control unless asked — every site query spreads `siteRead()`, or `siteDocs()` for drafts listings (`src/services/payload.ts`: `overrideAccess: false` + `req.context.siteRead`), and `draftsRead`/`contentRead` (`payload/src/access.ts`) then return published docs only, also in populated relations. REST stays login-only (it cannot set `req.context`). `SHOW_TEST_DATA` includes drafts on purpose (`siteDocs()`).
-  - **Derived word fields** (`derived` group) are computed on save by the `beforeChange` hook from `payload/src/lib/wordDerived.ts`, which the site also imports as `payload-app/word-derived` — keep it free of payload/next/config imports. `derived.decomposition` (compound parts) comes from `payload/src/lib/decompose.ts` instead, CMS only: its 28 MB dictionary never loads in the site. Changing the derivation leaves existing words stale until re-saved (there is no bulk tool; write a `payload run` script that updates every word with `req.context[PRESERVE_CONTENT_MODIFIED_AT] = true` to keep the sitemap lastmod).
-  - `payload-app` exports: `.` (types via `src/astro.d.ts`, a hand-kept types-only mirror of `src/index.ts` — update both), `./word-derived`, `./lexical-html`, `./routes` (collection → site path, shared by SEO, redirects and rich-text links), `./preview` (signed preview tokens), `./comments` (pure comment rules: limits, link check, auto-hide, pseudonyms; no payload/next/config imports, like `./word-derived`), `./word-feedback` (pure feedback rules: answer lists, `MIN_GROUP`; same import rule).
-  - **MCP** (`@payloadcms/plugin-mcp`, `payload/src/mcp.ts`): `/api/mcp` on the cms host, so Claude can find/create/update `words` and find/update `suggestions` (no delete). Auth is a per-user key from the admin (`payload-mcp-api-keys`, every capability off until toggled per key); the tools run as that user. The tools default to `draft: false` and take `_status` as an argument, so `hooks/mcpDraftOnly.ts` refuses any MCP write that publishes or edits a published word without `draft: true`. The enabled flags are columns of the keys table: changing them needs a migration. `MCP_DISABLED=true` switches the endpoint off. The site bundle aliases the plugin to `src/lib/payloadMcpStub.ts` (production build): the plugin drags the TypeScript compiler into the bundle, which crashes on `__filename` and 500s every page. Client: `claude mcp add --transport http Payload <cms-url>/api/mcp --header "Authorization: Bearer <key>"`.
-  - **Redirects** (`@payloadcms/plugin-redirects`, `payload/src/redirects.ts`): `src/middleware/index.ts` answers a 404 with a matching redirect (`src/services/payload/redirects.ts`). Changing the slug of a public doc adds a 301 itself (`hooks/redirectOldSlug.ts`).
-  - **Draft preview**: the admin's preview button (words, posts) links to `/api/preview` with a token signed by `PAYLOAD_SECRET` (1 h); the site keeps it in an httpOnly cookie and renders the latest draft with `Cache-Control: private, no-store`. Admin and site are on different hosts, so the Payload login cookie is not used. The CMS builds the link from `SITE_URL`.
-  - **Jobs** (scheduled publishing of posts) run only where `PAYLOAD_RUN_JOBS=true` (the `cms` container), never in the site's Local API process.
-  - **Editable site texts**: globals `home` (facts), `anki` (steps, features with `{liteWords}`/`{totalWords}`, FAQ), `company` (platforms, wallets, donation highlights, social links). Price (Polar) and layouts stay in code.
-  - Schema push in dev asks interactively (rename vs. create, data-loss confirm). Without a TTY the dev server hangs at it; run `pnpm payload run <boot script>` under `script -qfec … /dev/null` and answer, or migrate.
-  - First admin: in production `PAYLOAD_ALLOW_FIRST_USER=true` gates `POST /api/users`, but Payload's `/api/users/first-register` bypasses it. Cutover: create the first admin before the proxy route goes public.
-- **Global Vue app setup** in `src/pages/_app.ts` — registers the `vTooltip` directive and (dev only) Nanostores devtools
-
-## Import Aliases
-
-Always use TypeScript path aliases — never relative paths like `../../stores/`:
-
-| Alias            | Maps to           |
-| ---------------- | ----------------- |
-| `@components/*`  | `src/components/` |
-| `@stores/*`      | `src/stores/`     |
-| `@utils/*`       | `src/utils/`      |
-| `@services/*`    | `src/services/`   |
-| `@composables/*` | `src/composable/` |
-| `@layouts/*`     | `src/layouts/`    |
-| `@lib/*`         | `src/lib/`        |
-| `@assets/*`      | `src/assets/`     |
-| `@styles/*`      | `src/styles/`     |
-| `@/*`            | `src/`            |
-
-## Key Conventions
-
-**Nanostores**: All store exports use `$` prefix (`$isDarkMode`, `$wordList`). Use `useStore()` from `@nanostores/vue` in Vue components; use `.get()/.set()` for direct access in Astro/TS. For async computed stores, use `computedAsync` from `@nanostores/async` (see `$oramaSearchResults` in `src/stores/wordList.ts`). Avoid deprecated `computed() + task()` pattern. Key stores: `darkMode.ts`, `modal.ts`, `wordList.ts`, `toastNotify.ts`, `installApp.ts`, `wordOfTheDay.ts`, `bonStats.ts` (persistent game stats), `savedBon.ts` (session resume snapshot), `notificationPermission.ts`, `pushSubscription.ts`.
-
-**Vue components**: Composition API only — `<script setup lang="ts">`. Block order: `<template>`, `<script>`, `<style>`. Styles are NOT scoped — BEMIT class naming provides isolation instead. Use `<style lang="scss">` without `scoped`. Each component owns its SCSS file at `src/styles/components/_name.scss` and loads it via `@use "@styles/components/name"` inside its own `<style>` block — not globally.
-
-**CSS / BEMIT naming**: This project uses [BEMIT](https://gist.github.com/stephenway/a6145d9b4430e8c55a77) — BEM enhanced with namespaces:
-
-| Prefix           | Purpose                    | Example                       |
-| ---------------- | -------------------------- | ----------------------------- |
-| `.c-`            | Components (reusable UI)   | `.c-word-card__title--active` |
-| `.o-`            | Objects (structural)       | `.o-grid__item`               |
-| `.u-`            | Utilities (single-purpose) | `.u-hidden`                   |
-| `.is-` / `.has-` | State                      | `.is-active`, `.has-dropdown` |
-| `.js-`           | JS hooks (no styling)      | `.js-scroll-target`           |
-
-Pattern: `.c-block__element--modifier`. Hyphens separate words within each part (`c-my-component`, not `c-myComponent`). Never use plain BEM without a namespace prefix.
-
-**JS & CSS feature targeting**: Default to native JS and CSS features that are [Baseline Widely Available or Newly Available](https://web.dev/baseline); no polyfills for Baseline features. Non-Baseline features are allowed as progressive enhancement: either with a fallback, or without one when the feature still works where unsupported (e.g. `interpolate-size` in `_accordion.scss` — Chromium slides the height, other browsers just fade). Never let a non-Baseline feature be required for content or function.
-
-**Icons**: Load asynchronously via `defineAsyncComponent(() => import("virtual:icons/lucide/icon-name"))`. All icons from Lucide.
-
-**Analytics**: Track user interactions with `trackEvent(category, action, label)` from `@utils/analytics`.
-
-**SCSS imports**: Use `@use "@styles/path"` — not `@import`. Global styles (base resets, typography, utilities) belong in `src/styles/app.scss`. Component styles follow the pattern in **Vue components** above.
-
-**Breakpoints & container queries**: Never write raw `@media (width >= vars.$sm)` queries. Fixed viewport breakpoints always go through the sass-butler mixin: `@use "@styles/mixins" as mx;` then `@include mx.breakpoint("sm") { ... }` (direction defaults to `min`; pass `"max"` for a max-width query). The breakpoint map lives in `src/styles/variables/_layout.scss`. Wherever the responsive behavior is really about a component's own available space rather than the viewport, prefer a **container query** instead: `container-type: inline-size; container-name: x;` on the ancestor, then `@container x (inline-size >= Yrem) { ... }` on the descendant — see `src/styles/components/_word-page-layout.scss` and `_word-gallery-col.scss` for the established pattern.
-
-**VueUse** ([vueuse.org/functions](https://vueuse.org/functions.html)): ALWAYS check VueUse before writing any browser API wrapper or Vue utility manually. It covers event listeners, debounce, scroll, storage, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, intersection observer, resize, geolocation, animations, and much more. Do NOT implement manually what VueUse already provides. Grep `@vueuse/core` for the set already in use.
-
-**PWA**: Built with `@vite-pwa/astro` + Workbox, `registerType: "prompt"` (never `autoUpdate`: it reloads open tabs and loses form input). Service worker registered in `src/services/pwa.ts` via `virtual:pwa-register`. A new worker waits: toast „Jetzt aktualisieren“, or the next ClientRouter navigation switches and loads the target in full; other tabs, bfcache restores and failed chunk/island loads (`vite:preloadError`, `astro:hydration-error`) get a „Neu laden“ toast and full-load navigations. Hourly + on-visible `registration.update()` (soft navigations never check). On offline-ready: shows toast. Cache Storage access via `src/composable/useCacheStorage.ts`. Cache management UI in `src/components/PwaCacheOverview.vue`. Precache excludes `og/**` and `screenshots/**`; `maximumFileSizeToCacheInBytes` is 2 MB. No `navigateFallback` (the precache holds no HTML; it would answer every page load with the homepage) — visited pages are cached by a NetworkFirst route (`pages`, 3 s timeout) for page loads and the ClientRouter's page fetches; it skips `no-store`/`private` responses (draft previews) and is cleared when a new worker takes over. Runtime caching (`astro.config.mjs`): StaleWhileRevalidate for search index/meta, NetworkFirst for word-of-the-day, CacheFirst for `imagor-images` (30 days, 500 entries).
-
-**Fonts**: Loaded via the Astro Fonts API (`fonts` in `astro.config.mjs`, local woff2 in `src/assets/fonts/`) with `display: "fallback"`. Don't switch to `swap` (Berlin's size-adjust re-wraps text on swap → CLS 0.46) or `optional` (cold cache shows the fallback font → CLS 0.65).
-
-**Accordion**: native `<details>`/`<summary>` wrappers (`@components/accordion`, docs in `docs/accordion.md`). Works without a `client:*` directive; items with the same `name` = only one open. No interactive elements inside `<summary>`.
-
-**Shared SCSS**: raised cards use `@include mx.paper-card` / `mx.paper-card-title` (`src/styles/mixins/_paper-card.scss`); orange CTA = `.c-button--primary`; muted secondary text = `var(--color-muted)`.
-
-**Modal system**: Open modals via `open()` from `@stores/modal.ts` using `defineAsyncComponent` for dynamic component loading. See `src/components/WordSuggestHint.vue` for reference.
-
-**Composables**: Live in `src/composable/` (note: singular, but alias is `@composables/*`). Use for encapsulating Vue lifecycle + reactive logic that VueUse does not cover — custom composables are for project-specific logic only; prefer VueUse when it exists.
-
-**Content types**: the generated Payload types (`payload-app` exports `payload-types.ts`), narrowed per page in the adapters in `src/services/payload/` (`SiteWord`, `SiteThema`, `SitePage`, `SitePost`). Rich text is typed with `DefaultTypedEditorState` (re-exported by `payload-app/lexical-html`); media URLs are absolute via `mediaUrl()`.
-
-**Astro scripts + View Transitions**: `<script>` in `.astro` files compiles to `<script type="module">` and runs only once — never re-runs after client-side navigation. Wrap any DOM-querying logic in `astro:page-load` so it re-runs on every navigation:
-
-```js
-document.addEventListener("astro:page-load", () => {
-  // re-initialize observers, querySelectorAll, etc.
-});
-```
-
-Also guard `ResizeObserver` / `getBoundingClientRect` callbacks against transitional zero-heights: `if (h > 0) { ... }` — View Transition animations can briefly report `height: 0` for persistent elements.
-
-## Words in dev
-
-The dev server reads words from your local Payload database (fill it from a production backup, or with invented words via `pnpm --filter payload-app seed:e2e`; see `payload/README.md`); `ttl()` caches them for 60 s per process. Words render per request, so a similarity/anagram computation over all ~6000 words must stay cheap (the soundex index is built once per cache window).
-
-## Environment Variables
-
-Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `DATABASE_URL`/`PAYLOAD_SECRET`/`SMTP_URL`/`SUGGEST_MAIL_TO` (read by Payload via `process.env`, not part of the schema), `PAYLOAD_SERVER_URL`, `OG_CACHE_DIR`, `TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `SENTRY_*`, `WAKAPI_API_KEY`, `IMAGOR_HOST`, `IMAGOR_SECRET`. Full list defined in the `env` schema in `astro.config.mjs`. See [Secrets](#secrets) for how vars are injected.
-
-## Testing
-
-- Tests live in `src/tests/unit/` using Vitest + jsdom + `@vue/test-utils`
-- Coverage excludes `src/types/`, `src/tests/`, `src/plugins/`
-
-**Shared helpers** (`src/tests/unit/helpers/`):
-
-- `createAstroRender(Component)` — creates an `AstroContainer` once and returns a reusable `render(props)` fn. Always call in `beforeAll` with a **30 s timeout** (`AstroContainer.create()` costs ~10-15 s). Exception: tests that call `vi.resetModules()` per-test must create the container per-test.
-- `createStoreMockImpl(storeMap)` — builds a `useStore` mock impl that returns the right `ref` per store
-- `createComponentStub(template?)` — Proxy-safe module mock for `vi.mock()` factories; includes `[Symbol.toStringTag]: 'Module'` so Vue's `defineAsyncComponent` correctly extracts `.default` (omitting it causes "Component is missing template or render function" warn)
-- `createSlotStub(name, template?)` — lightweight stub for `config.global.stubs`
-
-**Playwright agents**: they use the `mcp__playwright-test__*` MCP server (not `mcp__plugin_playwright_playwright__*`), which must be allowed in `.claude/settings.json`. Without it a background agent can't get approval, a `browser_click` is rejected and its run ends silently — it looks hung (seen 2026-08-14, 2026-09-19). If an agent seems stuck, check its `.output` (last timestamp/tool result) before waiting. Scroll via `browser_run_code_unsafe`/`browser_evaluate` (`window.scrollTo(0, document.body.scrollHeight)`), give a fixed checklist, and tell it to report rejected tools instead of retrying. Animated/`ResizeObserver` elements and toasts also make clicks flaky.
-
-**E2E in CI**: the Playwright job starts `node server/index.mjs` against a Postgres service that is migrated and seeded with `payload/src/seed/e2e.ts` (invented words; the repo is public). Specs target that data set: `E2E_WORD_SLUGS` in the seed (aasen, anmachen, wa, …). A search needs ≥ 2 results for the `N Ergebnisse` text (1 shows `1 Ergebnis`). Env var `E2E_BUILD=1` only skips the Sentry/Codecov upload plugins.
-
-**Testing gotchas:**
-
-- **Icons**: `virtual:icons/*` are auto-stubbed by the Vitest plugin in `vitest.config.ts` — they render as `<span data-testid="icon-lucide-<name>" />`. No per-file `vi.mock` needed.
-- **`markRaw()`**: Wrap any component object stored in `ref()` or passed as a reactive prop. Without it Vue makes it a Proxy and warns about missing template/render function.
-- **`config.global.stubs`**: Preferred way to stub `defineAsyncComponent` components in `mount()` — avoids `vi.mock` hoisting issues.
-- **Proxy `vi.mock` factories**: Must include `[Symbol.toStringTag]: 'Module'` in the target object; use `createComponentStub` from helpers instead of rolling your own.
 
 ## Git Commit Conventions
 
-Format: `<type>(<scope>): <description>` — imperative, lowercase, no trailing period.
+Format: `<type>(<scope>): <description>` — imperative, lowercase, no trailing period (Conventional Commits).
 
-| Type       | When to use                                      |
-| ---------- | ------------------------------------------------ |
-| `feat`     | New feature (bumps minor version)                |
-| `fix`      | Bug fix (bumps patch)                            |
-| `refactor` | Code restructure, no behavior change             |
-| `perf`     | Performance-focused refactor                     |
-| `style`    | Formatting only, no logic change                 |
-| `test`     | Adding or correcting tests                       |
-| `docs`     | Documentation only                               |
-| `build`    | Dependencies, tooling, version changes           |
-| `chore`    | Maintenance (initial commits, config, CI tweaks) |
+Types: `feat` (bumps minor), `fix` (bumps patch), `refactor`, `perf`, `style` (formatting only), `test`, `docs`, `build` (deps, tooling, versions), `chore` (config, CI tweaks). Breaking change: `!` before the colon (`feat(api)!: remove endpoint`) plus a `BREAKING CHANGE: <description>` footer.
 
-Breaking change: append `!` before colon → `feat(api)!: remove endpoint`. Footer must include `BREAKING CHANGE: <description>`.
-
-Scope is optional but encouraged for this project: `bon`, `pwa`, `search`, `toast`, `word`, `images`, `anki`, `ci`, `deps`, `dev`.
-
-Reference: [Conventional Commits](https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13)
+Scopes (optional, encouraged): `bon`, `pwa`, `search`, `toast`, `word`, `images`, `anki`, `ci`, `deps`, `dev`.
 
 ## Renovate
 
-`renovate.json` (validate with `npx --yes --package renovate@latest -- renovate-config-validator renovate.json`; a cached older Renovate misreports options):
-- Only **patch** updates of stable (non-0.x) packages automerge. Minor/major stay PRs for review; GitHub Actions and Docker images never automerge (they reach release/prod). `platformAutomerge` is off so Renovate merges itself only on a green branch, not GitHub on enable.
-- `minimumReleaseAge` must stay **above pnpm's own gate** (1 day): 3 days for patch, 2 for minor/major. Renovate proposing a version pnpm rejects breaks `pnpm install` on main (happened with `@iconify-json/lucide@1.2.150`).
-- Packages that must move together are grouped (astro, payload + next/react, vue, sentry, test tooling, …). A new dependency family gets a group rule there, not a separate PR stream.
-- `minimumReleaseAgeExclude` in `pnpm-workspace.yaml` is a short-lived exception for one specific version: remove it once the version is old enough.
-- The CI step running `scripts/migration-upgrade-test.sh` sets `pnpm_config_minimum_release_age: 0`: the base ref is installed without the age gate, so a base lockfile with too-young packages cannot fail the upgrade test. The PR's own install keeps the gate.
+Rules for `renovate.json` and the dependency age gates load from `.claude/rules/renovate.md` when you touch `renovate.json`, `pnpm-workspace.yaml` or workflows.
 
 ## Package Manager
 
-This project uses **pnpm only**. Never use `npm` or `yarn`. The `preinstall` script enforces this via `only-allow pnpm`.
+This project uses **pnpm only**: never `npm` or `yarn` to install or run scripts (`npx` for one-off CLIs such as `infisical` or `playwright` is fine). The `preinstall` script enforces this via `only-allow pnpm`.
 
 pnpm supply-chain policy: freshly published packages (< 24h) trigger a lockfile age-gate. Fix: `pnpm clean --lockfile && pnpm install` — rebuilds the lockfile from scratch.
-
-## Astro v7 / Vite 8 Notes
-
-- `compressHTML: true` is set explicitly — v7 changed default to `'jsx'` which strips spaces between inline elements
-- `build.cssMinify: "esbuild"` kept — LightningCSS 1.32.0 has a deeper tokenizer bug with this project's bundled CSS: fails with `Unexpected token Function("hsl")` and `Unexpected token IDHash(...)` even on plain hex colors. Converting `$danger` from `hsl()` to hex did not help. LightningCSS bug — revisit when upstream fixes it
-- `build.rolldownOptions` replaces deprecated `build.rollupOptions` (Vite 8 moved from Rollup → Rolldown)
-- `Uint8Array<ArrayBuffer>` (not plain `Uint8Array`) required for `PushManager.subscribe()` — TS 6 made `Uint8Array` generic
-- `@vueuse/core` emits `INVALID_ANNOTATION` Rolldown warnings about `#__PURE__` comment positions — upstream issue, build still succeeds, ignore
-
-## AI / Agent Development (Astro v7)
-
-**Background dev server** — agents struggle with long-running processes; use background mode:
-
-```bash
-astro dev --background   # starts server, blocks until ready, then detaches
-astro dev status         # check running instance (URL + PID)
-astro dev logs           # stream logs from background server
-astro dev stop           # idempotent — succeeds even if not running
-```
-
-Astro auto-detects AI agents and enables background mode automatically. A lockfile prevents duplicate instances — starting when already running returns the existing instance. Health endpoint: `/_astro/status`.
-
-## Design Context
-
-Full strategic/visual system in `PRODUCT.md` and `DESIGN.md` at project root (managed by the `impeccable` skill). Visitor mode is chosen per surface (impeccable v4); fast lookup beats decoration. Voice: cheeky/schnodderig + warm/heimatlich — never generic dictionary-app neutrality. Visual north star: **"The Postcard Rule"** — a dashed-line texture (borders, dividers, underlines, the headword underline) is the one recurring signature. Currywurst orange is the dominant accent; Berlin Red is rare and declarative; navy-ink `#2b333b` is structural (text/dark-mode surfaces) only. One shadow ("Paper Lift") for every raised surface. Read `DESIGN.md` before any UI work.
-
-**Light + dark check (mandatory)**: every UI change is verified in the browser in both light and dark mode before it counts as done, and in both a desktop and a mobile width. Toggle dark in the browser with `document.documentElement.classList.toggle('dark')` (the `.dark` class drives `butler-mx.dark-mode-class`) and take a screenshot of each state.

@@ -55,6 +55,8 @@ export default defineConfig({
     // Browsers and crawlers ask for /favicon.ico regardless of the <link rel="icon"> tags.
     "/favicon.ico": { destination: "/favicons/favicon.ico", status: 301 },
   },
+  // Per-worktree dev port (.env.worktree, scripts/orca-setup.sh); `astro dev --port` still wins.
+  server: { port: Number(process.env.WEBSITE_PORT) || 4321 },
   // The toolbar's fixed-position overlay can intercept Playwright clicks in CI.
   devToolbar: {
     enabled: !process.env.CI && !process.env.NO_DEV_TOOLBAR,

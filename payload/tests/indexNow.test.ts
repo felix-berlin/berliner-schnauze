@@ -10,10 +10,14 @@ const fetchSpy = vi.fn<typeof fetch>(async () => new Response(null, { status: 20
 // Payload's own telemetry also goes through fetch.
 const calls = async () => {
   await flushIndexNow();
-  return fetchSpy.mock.calls.filter(([url]) => String(url).includes("indexnow"));
+  return fetchSpy.mock.calls.filter(([url]) => new Request(url).url.includes("indexnow"));
 };
 const pinged = async () =>
-  (await calls()).flatMap(([, init]) => (JSON.parse(String(init?.body)) as { urlList: string[] }).urlList.map((u) => new URL(u).pathname));
+  (await calls()).flatMap(([, init]) =>
+    (JSON.parse(init?.body as string) as { urlList: string[] }).urlList.map(
+      (u) => new URL(u).pathname,
+    ),
+  );
 
 // Flush queued pings first, or they land after the clear.
 const reset = async () => {
@@ -36,7 +40,10 @@ afterEach(async () => {
 });
 
 const create = async (status: "draft" | "published", slug = A) =>
-  (await getTestPayload()).create({ collection: "words", data: { berlinerisch: "Ping", slug, _status: status } });
+  (await getTestPayload()).create({
+    collection: "words",
+    data: { berlinerisch: "Ping", slug, _status: status },
+  });
 
 describe("IndexNow pings", () => {
   it("pings a published word, not a draft", async () => {
@@ -50,9 +57,18 @@ describe("IndexNow pings", () => {
     const payload = await getTestPayload();
     const word = await create("published");
     await reset();
-    await payload.update({ collection: "words", id: word.id, data: { berlinerisch: "Ping2", _status: "draft" }, draft: true });
+    await payload.update({
+      collection: "words",
+      id: word.id,
+      data: { berlinerisch: "Ping2", _status: "draft" },
+      draft: true,
+    });
     expect(await calls()).toHaveLength(0);
-    await payload.update({ collection: "words", id: word.id, data: { berlinerisch: "Ping3", _status: "published" } });
+    await payload.update({
+      collection: "words",
+      id: word.id,
+      data: { berlinerisch: "Ping3", _status: "published" },
+    });
     expect(await pinged()).toEqual([`/wort/${A}`]);
   });
 
@@ -60,7 +76,11 @@ describe("IndexNow pings", () => {
     const payload = await getTestPayload();
     const word = await create("published");
     await reset();
-    await payload.update({ collection: "words", id: word.id, data: { slug: B, _status: "published" } });
+    await payload.update({
+      collection: "words",
+      id: word.id,
+      data: { slug: B, _status: "published" },
+    });
     expect((await pinged()).sort()).toEqual([`/wort/${A}`, `/wort/${B}`].sort());
   });
 

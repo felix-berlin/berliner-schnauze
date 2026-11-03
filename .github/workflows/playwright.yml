@@ -57,9 +57,12 @@ jobs:
       # The build reads no database: pages render on demand, the shards below start the server against a
       # seeded Postgres. E2E_BUILD only skips the Sentry/Codecov source-map upload plugins, which add real
       # time for a build nobody deploys (see astro.config.mjs's isE2eBuild).
+      # env-slug is prod on main, so MATOMO_* are the production ones and get baked into the client: analytics off,
+      # or every e2e run on main would count as visits in the production Matomo.
       - name: Build site
         env:
           E2E_BUILD: "1"
+          ENABLE_ANALYTICS: "false"
         run: pnpm run build
 
       # dist/ is served by `node server/index.mjs` in every shard job. Same public-repo

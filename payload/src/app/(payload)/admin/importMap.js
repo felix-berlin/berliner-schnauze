@@ -27,6 +27,7 @@ import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea
 import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { default as default_2aaa63faea7d9142fbd3937ef60213b1 } from '@/components/WordFeedbackCounts'
+import { SuggestionLockNotice as SuggestionLockNotice_eac43f05cc8466bcf19cbf55207cad71 } from '../../../components/SuggestionLockNotice'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -60,5 +61,6 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@/components/WordFeedbackCounts#default": default_2aaa63faea7d9142fbd3937ef60213b1,
+  "/components/SuggestionLockNotice#SuggestionLockNotice": SuggestionLockNotice_eac43f05cc8466bcf19cbf55207cad71,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

@@ -1,14 +1,14 @@
 {
   "name": "website",
-  "version": "4.4.0",
+  "version": "4.6.0",
   "private": true,
   "type": "module",
   "scripts": {
     "predev": "pnpm run supportedBrowsers",
-    "dev": "infisical run -- astro dev",
+    "dev": "bash ../scripts/with-env.sh astro dev",
     "start": "astro dev",
     "build": "pnpm run supportedBrowsers && astro build",
-    "build:local": "infisical run -- pnpm run build",
+    "build:local": "bash ../scripts/with-env.sh pnpm run build",
     "build:strict": "astro check && tsc --noEmit && vue-tsc --noEmit && astro build",
     "preview": "astro preview",
     "astro": "astro",
