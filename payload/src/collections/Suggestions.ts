@@ -1,4 +1,4 @@
-import type { CollectionAfterChangeHook, CollectionConfig } from "payload";
+import type { CollectionAfterChangeHook, CollectionConfig, FieldAccess } from "payload";
 
 import { authenticatedOnly } from "../access";
 import { notifyEditors } from "../lib/notifyEditors";
@@ -26,6 +26,12 @@ const mailEditors: CollectionAfterChangeHook = ({ doc, operation, req }) => {
   return doc;
 };
 
+/**
+ * The sender's name and mail never reach an MCP client (and so the model): Payload drops the fields from every MCP
+ * read, write result and query, whatever the plugin's output format or `select` (its tools run with overrideAccess: false).
+ */
+const notOverMcp: FieldAccess = ({ req }) => req.payloadAPI !== "MCP";
+
 /** Words suggested through the site's form. The site creates them through the Local API (after Turnstile). */
 export const Suggestions: CollectionConfig = {
   slug: "suggestions",
@@ -39,8 +45,13 @@ export const Suggestions: CollectionConfig = {
     { name: "berlinerWord", type: "text", required: true, maxLength: 100 },
     { name: "translation", type: "text", required: true, maxLength: 300 },
     { name: "example", type: "textarea", maxLength: 1000 },
-    { name: "userName", type: "text", maxLength: 100 },
-    { name: "userMail", type: "email" },
+    {
+      name: "userName",
+      type: "text",
+      maxLength: 100,
+      access: { read: notOverMcp, update: notOverMcp },
+    },
+    { name: "userMail", type: "email", access: { read: notOverMcp, update: notOverMcp } },
     {
       name: "status",
       type: "select",

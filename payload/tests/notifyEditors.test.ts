@@ -7,8 +7,11 @@ import { notifyEditors } from "../src/lib/notifyEditors";
 describe("notifyEditors cap", () => {
   it("mails 30 an hour, then one summary, then only logs", () => {
     process.env.SUGGEST_MAIL_TO = "editors@example.com";
-    const sendEmail = vi.fn().mockResolvedValue(undefined);
-    const logger = { error: vi.fn(), warn: vi.fn() };
+    const sendEmail = vi.fn<PayloadRequest["payload"]["sendEmail"]>().mockResolvedValue(undefined);
+    const logger = {
+      error: vi.fn<(msg: unknown) => void>(),
+      warn: vi.fn<(msg: unknown) => void>(),
+    };
     const req = { payload: { logger, sendEmail } } as unknown as PayloadRequest;
 
     for (let i = 0; i < 40; i++) notifyEditors(req, `s${i}`, ["x"]);

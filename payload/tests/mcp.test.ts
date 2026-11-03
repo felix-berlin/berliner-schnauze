@@ -29,7 +29,10 @@ async function rpc(method: string, authorization?: string, params: object = {}) 
 
 beforeAll(async () => {
   const payload = await getTestPayload();
-  const user = await payload.create({ collection: "users", data: { email: EMAIL, password: "x".repeat(16) } });
+  const user = await payload.create({
+    collection: "users",
+    data: { email: EMAIL, password: "x".repeat(16) },
+  });
   await payload.create({
     collection: "payload-mcp-api-keys",
     data: {
@@ -45,7 +48,10 @@ beforeAll(async () => {
 
 afterAll(async () => {
   const payload = await getTestPayload();
-  await payload.delete({ collection: "payload-mcp-api-keys", where: { label: { equals: "test" } } });
+  await payload.delete({
+    collection: "payload-mcp-api-keys",
+    where: { label: { equals: "test" } },
+  });
   await payload.delete({ collection: "users", where: { email: { equals: EMAIL } } });
 });
 
@@ -77,18 +83,79 @@ describe("mcp endpoint", () => {
   it("creates a word as a draft", async () => {
     const payload = await getTestPayload();
     try {
-      const body = await rpc("tools/call", `Bearer ${KEY}`, { name: "createWords", arguments: { berlinerisch: WORD } });
+      const body = await rpc("tools/call", `Bearer ${KEY}`, {
+        name: "createWords",
+        arguments: { berlinerisch: WORD },
+      });
       expect(body.result.isError).toBeFalsy();
-      const { docs } = await payload.find({ collection: "words", where: { berlinerisch: { equals: WORD } }, draft: true, limit: 1 });
+      const { docs } = await payload.find({
+        collection: "words",
+        where: { berlinerisch: { equals: WORD } },
+        draft: true,
+        limit: 1,
+      });
       expect(docs[0]?._status).toBe("draft");
     } finally {
       await payload.delete({ collection: "words", where: { berlinerisch: { equals: WORD } } });
     }
   });
 
+  it("never shows the sender of a suggestion, with or without select", async () => {
+    const payload = await getTestPayload();
+    const made = await payload.create({
+      collection: "suggestions",
+      data: {
+        berlinerWord: WORD,
+        translation: "t",
+        userName: "Erika Geheim",
+        userMail: "erika@example.test",
+      },
+    });
+    try {
+      for (const select of [undefined, { userName: true, userMail: true, berlinerWord: true }]) {
+        const body = await rpc("tools/call", `Bearer ${KEY}`, {
+          name: "findSuggestions",
+          arguments: {
+            where: JSON.stringify({ berlinerWord: { equals: WORD } }),
+            ...(select && { select }),
+          },
+        });
+        expect(text(body)).toContain(WORD);
+        expect(text(body)).not.toMatch(/Erika|erika@/);
+      }
+      // update by id and in bulk (where): the bulk result is one JSON array, which line-based redaction missed
+      for (const target of [
+        { id: made.id },
+        { where: JSON.stringify({ berlinerWord: { equals: WORD } }) },
+      ]) {
+        const body = await rpc("tools/call", `Bearer ${KEY}`, {
+          name: "updateSuggestions",
+          arguments: { ...target, status: "rejected", userMail: "leak@example.test" },
+        });
+        expect(text(body)).toContain(WORD);
+        expect(text(body)).not.toMatch(/Erika|erika@/);
+      }
+      // the fields cannot be queried either (no guessing oracle) and stay intact in the database
+      const probe = await rpc("tools/call", `Bearer ${KEY}`, {
+        name: "findSuggestions",
+        arguments: { where: JSON.stringify({ userMail: { like: "erika" } }) },
+      });
+      expect(text(probe)).not.toContain(WORD);
+      const stored = await payload.findByID({ collection: "suggestions", id: made.id });
+      expect(stored.userMail).toBe("erika@example.test"); // the MCP write to userMail was dropped
+      expect(stored.status).toBe("rejected");
+    } finally {
+      await payload.delete({ collection: "suggestions", id: made.id });
+    }
+  });
+
   it("never publishes, and edits a published word only as a draft", async () => {
     const payload = await getTestPayload();
-    const live = await payload.create({ collection: "words", data: { berlinerisch: WORD, _status: "published" }, draft: false });
+    const live = await payload.create({
+      collection: "words",
+      data: { berlinerisch: WORD, _status: "published" },
+      draft: false,
+    });
     const publishedText = async () =>
       (await payload.findByID({ collection: "words", id: live.id, draft: false })).berlinerisch;
     try {
@@ -111,7 +178,9 @@ describe("mcp endpoint", () => {
       });
       expect(text(draftEdit)).toContain("updated successfully");
       expect(await publishedText()).toBe(WORD);
-      expect((await payload.findByID({ collection: "words", id: live.id, draft: true })).berlinerisch).toBe(`${WORD}-entwurf`);
+      expect(
+        (await payload.findByID({ collection: "words", id: live.id, draft: true })).berlinerisch,
+      ).toBe(`${WORD}-entwurf`);
     } finally {
       await payload.delete({ collection: "words", where: { berlinerisch: { like: WORD } } });
     }

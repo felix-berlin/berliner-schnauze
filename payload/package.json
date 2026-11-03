@@ -16,7 +16,8 @@
   },
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
-    "dev": "infisical run -- cross-env NODE_OPTIONS=--no-deprecation next dev -p 3001",
+    "dev": "bash ../scripts/with-env.sh cross-env NODE_OPTIONS=--no-deprecation sh -c 'next dev -p ${CMS_PORT:-3001}'",
+    "dev:access": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/devAccess.ts",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
