@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.7.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.6.0...v4.7.0) (2026-11-03)
+
+
+### Bug Fixes
+
+* **word:** attach the stored profile to the usage vote ([dd34da3](https://github.com/felix-berlin/berliner-schnauze/commit/dd34da3f26c453714f2fbce7a01c2ec8d3fcd7ab))
+* **word:** clear half whenever origin is not grewUp ([e8a5cc7](https://github.com/felix-berlin/berliner-schnauze/commit/e8a5cc79a3dff852097f69fe765ee57cae8767c6))
+* **word:** cover locality dots, drop stale locality highlight, rename --kiez modifier ([ac4ced7](https://github.com/felix-berlin/berliner-schnauze/commit/ac4ced77dfbb686890d63056a524ac4e3a76727a))
+* **word:** delete a word's feedback with the word ([c5ebabb](https://github.com/felix-berlin/berliner-schnauze/commit/c5ebabb3029513723d3b6362d8feffff07e20fc6))
+* **word:** fit full district names on the Berlin map and list first on narrow screens ([4d7be93](https://github.com/felix-berlin/berliner-schnauze/commit/4d7be93e589fc5158f8545f5aacd598b2fd75a06))
+* **word:** harden word feedback after branch review ([0827673](https://github.com/felix-berlin/berliner-schnauze/commit/0827673f4a23c177188a129c3da934a4deaeb5a9))
+* **word:** harden word feedback profile parsing ([2c65c51](https://github.com/felix-berlin/berliner-schnauze/commit/2c65c51e5380d65d47ff3f9b887b15862df3a280))
+* **word:** keep focus on the thumb buttons while a vote is pending ([07ce97c](https://github.com/felix-berlin/berliner-schnauze/commit/07ce97c76eec59ce178c377ab3b62560c7abe5fd))
+* **word:** make Berlin area map accessible ([0df2a09](https://github.com/felix-berlin/berliner-schnauze/commit/0df2a0942b89f2ee14950863c79a8e4076ad8d35))
+* **word:** make Brandenburg label readable when selected ([346d170](https://github.com/felix-berlin/berliner-schnauze/commit/346d1704e475e1016e64336cb3df1cf81f468c0d))
+* **word:** make the feedback down migration idempotent and the e2e pick work on narrow cards ([176aa22](https://github.com/felix-berlin/berliner-schnauze/commit/176aa22791f0a8a87c5e949e841618464e2d61ee))
+* **word:** make word-feedback migration down re-runnable ([47f845e](https://github.com/felix-berlin/berliner-schnauze/commit/47f845e71cce1d09273d8fdbc712c05bc9138e99))
+* **word:** manage focus in the feedback card ([aefe833](https://github.com/felix-berlin/berliner-schnauze/commit/aefe833afe283a29ea1f1b27879acdf3c3634e8e))
+* **word:** only apply feedback responses for the loaded word ([cb17dca](https://github.com/felix-berlin/berliner-schnauze/commit/cb17dcaae267289021512a0430486841cbe9bd4e))
+* **word:** rate-limit GET word-feedback and run its queries concurrently ([e83db50](https://github.com/felix-berlin/berliner-schnauze/commit/e83db508be4dc9a42374a95a2d54c29f4f0b66bb))
+* **word:** satisfy vue-tsc in the feedback components ([fb28235](https://github.com/felix-berlin/berliner-schnauze/commit/fb2823541ba9786303858215158abb106c30c344))
+* **word:** share the in-flight feedback load and keep newer vote state ([24585a2](https://github.com/felix-berlin/berliner-schnauze/commit/24585a225f862e15c3177bf998611eba05dc9a5a))
+* **word:** show the daily-cap message instead of a generic save error ([f3a0310](https://github.com/felix-berlin/berliner-schnauze/commit/f3a031064ead107d2ae651759b3f1a034b7b2397))
+
+
+### Features
+
+* **cms:** show word feedback counts in the word sidebar ([6d73775](https://github.com/felix-berlin/berliner-schnauze/commit/6d737757f26b038a3c1d346a2500fa6fd2bbc9f4))
+* **word:** add an optional Kiez step with the Ortsteile ([ca23323](https://github.com/felix-berlin/berliner-schnauze/commit/ca2332364ca3f9d18d0ab35f005b0ed94bd71f41))
+* **word:** add Berlin area map with east/west split districts ([9e5ef83](https://github.com/felix-berlin/berliner-schnauze/commit/9e5ef83f47724ca1ba43476d443ba56fd30020fa))
+* **word:** add like/dislike to the word hero ([8d69aaa](https://github.com/felix-berlin/berliner-schnauze/commit/8d69aaace43e7b2de74a9cbcd2a708164cf485e6))
+* **word:** add Sagste det noch? card to word pages ([c511de5](https://github.com/felix-berlin/berliner-schnauze/commit/c511de5ba2d6136bc0b55bc8dd1b22650c6ce795))
+* **word:** add word feedback API ([8ee88cc](https://github.com/felix-berlin/berliner-schnauze/commit/8ee88ccfb102ce1826f716c1ddfd2c12866370a9))
+* **word:** add word feedback store and profile ([73aeba1](https://github.com/felix-berlin/berliner-schnauze/commit/73aeba1ea33c84f67e328803831560451186b153))
+* **word:** add word-feedback collection and shared options ([777f105](https://github.com/felix-berlin/berliner-schnauze/commit/777f1054dd87e13bddb55e01763e895dd8d654ad))
+* **word:** clickable step dots while editing, uppercase question headings, step enter animation ([0fcf864](https://github.com/felix-berlin/berliner-schnauze/commit/0fcf86487ea701352f4508e403bcc0842a824a9d))
+* **word:** unify word page controls and redesign poll, voting and comments ([5fc5a65](https://github.com/felix-berlin/berliner-schnauze/commit/5fc5a65e4211881ecf631ed999690657713e90d9))
+* **word:** use the 12 current Bezirke on the area map ([ff9de32](https://github.com/felix-berlin/berliner-schnauze/commit/ff9de329124ef7cfa227a5c103bb2edd1bb77de2))
+
 # [4.6.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.5.0...v4.6.0) (2026-11-03)
 
 
