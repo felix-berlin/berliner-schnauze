@@ -9,10 +9,24 @@
   padding: vars.$spacer * 1.25;
   margin-block: vars.$spacer * 2;
 
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: vars.$spacer * 0.25 vars.$spacer;
+  }
+
   &__title {
     @include mx.paper-card-title;
 
     margin: 0;
+  }
+
+  &__count {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.8rem;
   }
 
   &__options {
@@ -21,49 +35,32 @@
     gap: vars.$spacer * 0.5;
   }
 
-  // localities: up to 15 names, some long; two columns on a phone, more where there is room.
-  &__options--locality {
+  // Answer grids: as many columns as fit, each at least --min wide, buttons left-aligned.
+  &__options--locality,
+  &__options--origin,
+  &__options--half,
+  &__options--age {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 100%), 1fr));
 
-    .c-word-feedback-card__option {
-      padding-inline: 0.6rem;
+    .c-choice {
+      justify-content: flex-start;
       overflow-wrap: anywhere;
-      border-radius: 1.4rem;
+      text-align: start;
     }
   }
 
-  &__option {
-    min-block-size: 2.75rem;
-    padding: 0.4rem 1rem;
-    border: 1px dashed var(--color-muted);
-    border-radius: 999px;
-    background: transparent;
-    color: var(--color-body);
-    font: inherit;
-    font-size: 0.9375rem;
-    cursor: pointer;
+  &__options--locality,
+  &__options--half {
+    --min: 180px;
+  }
 
-    &:focus-visible {
-      outline: 2px solid var(--color-accent-text);
-      outline-offset: 2px;
-    }
+  &__options--origin {
+    --min: 240px;
+  }
 
-    &:disabled {
-      cursor: progress;
-
-      // Dimming the selected pill would drop white-on-orange below AA.
-      &:not(.is-selected) {
-        opacity: 0.6;
-      }
-    }
-
-    // White-100 on orange-600 (same pair as the primary button) is 5.6:1 in both modes.
-    &.is-selected {
-      background: var(--orange-600);
-      border: 1px solid var(--orange-600);
-      color: var(--white-100);
-    }
+  &__options--age {
+    --min: 96px;
   }
 
   &__bars {
@@ -76,21 +73,29 @@
     grid-template-columns: 1fr auto;
     gap: 0.15rem 0.75rem;
     font-size: 0.875rem;
+
+    &.is-mine .c-word-feedback-card__bar-label {
+      font-weight: 700;
+    }
+
+    &.is-mine .c-word-feedback-card__bar-fill {
+      background: var(--orange-600);
+    }
   }
 
   &__bar-track {
     grid-column: 1 / -1;
     grid-row: 2;
-    block-size: 0.5rem;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--color-muted) 20%, transparent);
+    block-size: 6px;
+    border-radius: var(--radius-xxs, 2px);
+    background: var(--surface-chip);
     overflow: hidden;
   }
 
   &__bar-fill {
     display: block;
     block-size: 100%;
-    background: var(--orange-600);
+    background: var(--orange-300);
   }
 
   &__bar-value {
@@ -115,46 +120,44 @@
     }
   }
 
-  &__dots {
+  &__progress {
     display: flex;
-    gap: 0.4rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: vars.$spacer * 0.5 vars.$spacer;
   }
 
-  // A pointer-sized hit area around the 0.6rem dot.
-  &__dot-button {
-    display: grid;
-    place-items: center;
-    margin: -0.3rem;
-    padding: 0.3rem;
-    border: 0;
-    border-radius: 50%;
-    background: none;
-    cursor: pointer;
-
-    &:focus-visible {
-      outline: 2px solid var(--color-accent-text);
-      outline-offset: 1px;
-    }
-
-    &:hover .c-word-feedback-card__dot {
-      border-color: var(--orange-600);
-    }
+  // Always six segments: done / current / open, a skipped optional step is a dashed line.
+  &__segments {
+    display: flex;
+    flex: 1 1 8rem;
+    gap: 4px;
+    max-inline-size: 16rem;
   }
 
-  &__dot {
-    display: block;
-    inline-size: 0.6rem;
-    block-size: 0.6rem;
-    border: 1px solid var(--color-muted);
-    border-radius: 50%;
+  &__segment {
+    flex: 1;
+    block-size: 4px;
+    background: var(--rule-inner);
 
-    &.is-active {
+    &.is-done {
       background: var(--orange-600);
-      border-color: var(--orange-600);
     }
+
+    &.is-current {
+      background: var(--orange-400);
+    }
+
+    &.is-skipped {
+      background: none;
+      border-block-start: 1px dashed var(--rule-card);
+      block-size: 0;
+      align-self: center;
+    }
+  }
+
+  &__eyebrow {
+    @include mx.eyebrow;
   }
 
   // Same face as the other cards' titles, set as a smaller uppercase label (text-transform only: the source text stays).
@@ -166,22 +169,37 @@
     letter-spacing: 0.06em;
   }
 
-  &__skip {
-    justify-self: start;
-    padding: 0.5rem 0;
-    border: 0;
-    background: none;
-    color: var(--color-muted);
-    font: inherit;
+  &__why {
+    display: grid;
+    gap: 0.5rem;
+    padding: vars.$spacer * 0.75 vars.$spacer;
+    background: var(--surface-callout);
     font-size: 0.875rem;
-    text-decoration: underline dashed;
-    text-underline-offset: 0.2em;
-    cursor: pointer;
 
-    &:focus-visible {
-      outline: 2px solid var(--color-accent-text);
-      outline-offset: 2px;
+    p {
+      margin: 0;
     }
+  }
+
+  &__why-link {
+    justify-self: start;
+    padding-inline-start: 0;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer;
+    padding-block-start: vars.$spacer * 0.25;
+    border-block-start: 1px dashed var(--rule-inner);
+  }
+
+  &__skip {
+    margin-inline-start: auto;
+  }
+
+  &__thanks {
+    margin: 0;
   }
 
   &__compare {
@@ -192,6 +210,7 @@
 
   &__done {
     display: grid;
+    justify-items: start;
     gap: vars.$spacer * 0.5;
   }
 

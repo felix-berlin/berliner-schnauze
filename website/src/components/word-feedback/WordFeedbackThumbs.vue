@@ -5,8 +5,7 @@
         v-for="b in buttons"
         :key="b.reaction"
         :aria-pressed="mine === b.reaction"
-        class="c-word-feedback-thumbs__button"
-        :class="{ 'is-active': mine === b.reaction }"
+        class="c-choice c-word-feedback-thumbs__button"
         :aria-disabled="pending"
         type="button"
         @click="vote(b.reaction)"
@@ -16,9 +15,7 @@
         <span class="c-word-feedback-thumbs__count">{{ feedback?.totals[b.reaction] }}</span>
       </button>
     </div>
-    <a class="c-word-feedback-thumbs__hint" href="#sagste-det-noch"
-      >Sagste det noch? Hier abstimmen ↓</a
-    >
+    <a class="c-link" href="#sagste-det-noch">Sagste det noch? Hier abstimmen ↓</a>
   </div>
 </template>
 

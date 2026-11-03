@@ -50,12 +50,7 @@
       >
         {{ sending ? "Wird jeschickt …" : "Abschicken" }}
       </button>
-      <button
-        v-if="cancellable"
-        class="c-button c-comment-form__button"
-        type="button"
-        @click="emit('cancel')"
-      >
+      <button v-if="cancellable" class="c-link" type="button" @click="emit('cancel')">
         Abbrechen
       </button>
       <span class="c-shortcut c-comment-form__kbd" aria-hidden="true">

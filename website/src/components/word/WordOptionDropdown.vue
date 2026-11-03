@@ -9,7 +9,7 @@
         v-bind="triggerProps"
         type="button"
         aria-label="Optionen"
-        class="c-options-dropdown__options-icon c-button c-button--center-icon"
+        class="c-options-dropdown__options-icon c-icon-button"
       >
         <EllipsisVertical width="18" height="18" aria-hidden="true" />
       </button>

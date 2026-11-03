@@ -9,7 +9,7 @@
           v-for="option in SORTS"
           :key="option.value"
           type="button"
-          class="c-word-comments__sort-button"
+          class="c-choice"
           :aria-pressed="ctx.sort.value === option.value"
           @click="ctx.sort.value = option.value"
         >
@@ -57,11 +57,7 @@
 
     <p v-if="ctx.failed.value && !ctx.loading.value" class="c-word-comments__empty" role="alert">
       Die Kommentare wollten grad nich laden.
-      <button
-        type="button"
-        class="c-button c-button--primary c-word-comments__retry"
-        @click="ctx.loadMore()"
-      >
+      <button type="button" class="c-link c-word-comments__retry" @click="ctx.loadMore()">
         Nochmal versuchen
       </button>
     </p>

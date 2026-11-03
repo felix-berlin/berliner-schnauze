@@ -5,7 +5,7 @@
       :open="mapOpen"
       @toggle="mapOpen = ($event.target as HTMLDetailsElement).open"
     >
-      <summary>Karte anzeigen</summary>
+      <summary class="c-link">Karte anzeigen</summary>
       <svg
         ref="group"
         class="c-berlin-area-map__svg"
@@ -21,7 +21,7 @@
           y="-22"
           :width="MAP_W + 44"
           :height="MAP_H + 44"
-          rx="40"
+          rx="4"
         />
         <path
           v-for="a in BERLIN_AREAS"
@@ -62,8 +62,7 @@
       </svg>
       <button
         type="button"
-        class="c-button c-berlin-area-map__elsewhere"
-        :class="{ 'is-selected': modelValue === 'elsewhere' }"
+        class="c-choice c-berlin-area-map__elsewhere"
         :aria-pressed="modelValue === 'elsewhere'"
         @click="emit('update:modelValue', 'elsewhere')"
       >
@@ -75,14 +74,13 @@
       :open="listOpen"
       @toggle="listOpen = ($event.target as HTMLDetailsElement).open"
     >
-      <summary>Lieber aus ner Liste wählen</summary>
+      <summary class="c-link">Lieber aus ner Liste wählen</summary>
       <div class="c-berlin-area-map__list-items">
         <button
           v-for="a in LIST"
           :key="a.key"
           type="button"
-          class="c-berlin-area-map__list-item"
-          :class="{ 'is-selected': modelValue === a.key }"
+          class="c-choice c-berlin-area-map__list-item"
           :aria-pressed="modelValue === a.key"
           @click="emit('update:modelValue', a.key)"
         >

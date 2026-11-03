@@ -1,0 +1,29 @@
+// Link (docs/design/wortseite/SPEC.md): text action, also on <button>. 44px hit area.
+:where(.c-link) {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+  padding: 0 0.25rem;
+  border: 0;
+  background: none;
+  color: var(--color-muted);
+  font: inherit;
+  font-size: 0.8rem;
+  letter-spacing: inherit;
+  text-decoration: underline dashed from-font;
+  text-underline-position: from-font;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    color: var(--color-accent-text);
+  }
+
+  &:focus-visible {
+    outline: 2px dashed var(--orange-400);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: progress;
+  }
+}

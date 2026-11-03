@@ -112,7 +112,7 @@ describe("CommentCard", () => {
 
   it("vote sends the opposite when clicking the own vote again", async () => {
     const { ctx, wrapper } = mountCard({ myVote: 1 });
-    await wrapper.find(".c-comment-card__vote-up").trigger("click");
+    await wrapper.find('[aria-label="Hochwählen"]').trigger("click");
     expect(ctx.vote).toHaveBeenCalledWith(1, 0);
   });
 
@@ -185,11 +185,11 @@ describe("CommentCard", () => {
     vi.mocked(trackEvent).mockClear();
     const { ctx, wrapper } = mountCard({});
     ctx.vote.mockResolvedValueOnce(true).mockResolvedValueOnce(false);
-    await wrapper.find(".c-comment-card__vote-down").trigger("click");
+    await wrapper.find('[aria-label="Runterwählen"]').trigger("click");
     await flushPromises();
     expect(ctx.vote).toHaveBeenCalledWith(1, -1);
     expect(trackEvent).toHaveBeenCalledWith("Comments", "Vote", "7");
-    await wrapper.find(".c-comment-card__vote-down").trigger("click");
+    await wrapper.find('[aria-label="Runterwählen"]').trigger("click");
     await flushPromises();
     expect(trackEvent).toHaveBeenCalledTimes(1);
   });

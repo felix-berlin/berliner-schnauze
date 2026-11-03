@@ -1,6 +1,6 @@
 import WordFeedbackCard from "@components/word-feedback/WordFeedbackCard.vue";
 import { flushPromises, mount } from "@vue/test-utils";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const store = vi.hoisted(() => ({
   answerUsage: vi.fn(),
@@ -30,6 +30,8 @@ const mountIt = async () => {
   await flushPromises();
   return w;
 };
+const eyebrow = (w: Awaited<ReturnType<typeof mountIt>>) =>
+  w.find(".c-word-feedback-card__eyebrow").text();
 const click = async (w: Awaited<ReturnType<typeof mountIt>>, text: string) => {
   const b = w.findAll("button").find((x) => x.text().includes(text));
   expect(b !== undefined).toBe(true);
@@ -56,7 +58,10 @@ describe("WordFeedbackCard", () => {
       "Kenn ick",
       "Nie jehört",
     ]);
-    expect(w.text()).not.toContain("Stimmen");
+    // The results stay hidden until the own vote; only the header counts.
+    expect(w.find(".c-word-feedback-card__bars").exists()).toBe(false);
+    expect(w.text()).not.toContain("%");
+    expect(w.find(".c-word-feedback-card__count").text()).toBe("Bisher 20 Stimmen");
     expect(store.loadFeedback).toHaveBeenCalledWith(7);
   });
 
@@ -126,7 +131,7 @@ describe("WordFeedbackCard", () => {
     expect(
       w.findAll(".c-word-feedback-card__options--locality button").map((b) => b.text()),
     ).toEqual(["Friedrichshain", "Kreuzberg"]);
-    expect(w.find('[role="img"]').attributes("aria-label")).toBe("Schritt 3 von 5");
+    expect(eyebrow(w)).toBe("Schritt 3 von 5");
   });
 
   it("picking a locality sends it together with its area", async () => {
@@ -158,7 +163,7 @@ describe("WordFeedbackCard", () => {
     await click(w, name);
     expect(w.text()).toContain("Uffjewachsen oder zujezogen?");
     expect(w.text()).not.toContain("Welcher Kiez?");
-    expect(w.find('[role="img"]').attributes("aria-label")).toBe("Schritt 3 von 4");
+    expect(eyebrow(w)).toBe("Schritt 3 von 4");
   });
 
   it("changing the area clears the earlier locality and asks again", async () => {
@@ -332,101 +337,109 @@ describe("WordFeedbackCard", () => {
     expect(w.text()).not.toContain("1 Stimmen");
   });
 
-  describe("step dots", () => {
-    const fine = (matches: boolean) =>
-      vi.stubGlobal("matchMedia", (q: string) => ({
-        addEventListener: () => {},
-        matches,
-        media: q,
-        removeEventListener: () => {},
-      }));
-    const editing = async (profile = {}) => {
+  describe("header, progress, back and explanation", () => {
+    const segmentStates = (w: Awaited<ReturnType<typeof mountIt>>) =>
+      w
+        .findAll(".c-word-feedback-card__segment")
+        .map((x) => x.classes().find((c) => c.startsWith("is-")));
+
+    it("counts the votes in the header", async () => {
+      const w = await mountIt();
+      expect(w.find(".c-word-feedback-card__count").text()).toBe("Bisher 20 Stimmen");
+      $feedback.set(state({ totals: { know: 0, never: 0, say: 1 } }));
+      await flushPromises();
+      expect(w.find(".c-word-feedback-card__count").text()).toBe("Bisher 1 Stimme");
+      $feedback.set(state({ totals: { know: 0, never: 0, say: 0 } }));
+      await flushPromises();
+      expect(w.find(".c-word-feedback-card__count").text()).toBe("Noch keene Stimme");
+    });
+
+    it("always draws six segments and dashes the optional steps that do not apply", async () => {
+      const w = await mountIt();
+      await click(w, "Kenn ick");
+      expect(segmentStates(w)).toEqual([
+        "is-done",
+        "is-current",
+        "is-skipped",
+        "is-open",
+        "is-skipped",
+        "is-open",
+      ]);
+      expect(eyebrow(w)).toBe("Schritt 2 von 4");
+      await click(w, "Pankow");
+      expect(segmentStates(w)).toHaveLength(6);
+      expect(segmentStates(w)[2]).toBe("is-current");
+      expect(eyebrow(w)).toBe("Schritt 3 von 5");
+    });
+
+    it("marks the answered vote with its label in the bars", async () => {
+      $feedback.set(state({ mine: { usage: "know" } }));
+      const w = await mountIt();
+      const mine = w.find(".c-word-feedback-card__bar.is-mine");
+      expect(mine.text()).toContain("Kenn ick · deine Antwort");
+      expect(w.findAll(".c-word-feedback-card__bar.is-mine")).toHaveLength(1);
+    });
+
+    it("offers no back link on the first question of an edit, then one after an answer", async () => {
       $feedback.set(state({ mine: { usage: "say" } }));
       const w = await mountIt();
       await click(w, "Angaben ändern");
-      if (Object.keys(profile).length) {
-        $profile.set(profile as never);
-        await flushPromises();
-      }
-      return w;
-    };
-    const dotButtons = (w: Awaited<ReturnType<typeof mountIt>>) =>
-      w.findAll("button.c-word-feedback-card__dot-button");
+      expect(w.text()).not.toContain("← Zurück");
+      await click(w, "Pankow");
+      expect(w.text()).toContain("← Zurück");
+    });
 
-    afterEach(() => vi.unstubAllGlobals());
-
-    it("are plain, non-interactive dots when not editing", async () => {
-      fine(true);
+    it("goes back over a step the answers made irrelevant, without sending", async () => {
       const w = await mountIt();
       await click(w, "Kenn ick");
-      expect(w.find('[role="img"][aria-label="Schritt 2 von 4"]').exists()).toBe(true);
-      expect(dotButtons(w)).toHaveLength(0);
-    });
-
-    it("stay plain dots on a touch device even when editing", async () => {
-      fine(false);
-      const w = await editing();
-      expect(dotButtons(w)).toHaveLength(0);
-    });
-
-    it("jump to a step without sending or storing anything while editing", async () => {
-      fine(true);
-      const w = await editing();
-      const buttons = dotButtons(w);
-      expect(buttons.map((b) => b.attributes("aria-label"))).toEqual([
-        "Schritt 2: Wo wohnste?",
-        "Schritt 3: Uffjewachsen oder zujezogen?",
-        "Schritt 4: Wie alt biste?",
-      ]);
-      expect(buttons[0].attributes("aria-current")).toBe("step");
-      await buttons[2].trigger("click");
-      await flushPromises();
-      expect(w.find("h3").text()).toBe("Wie alt biste?");
+      await click(w, "Woanders"); // no locality step for Woanders
+      expect(w.find("h3").text()).toBe("Uffjewachsen oder zujezogen?");
+      store.sendFeedback.mockClear();
+      await click(w, "← Zurück");
+      expect(w.find("h3").text()).toBe("Wo wohnste?");
       expect(store.sendFeedback).not.toHaveBeenCalled();
-      expect(store.answerUsage).not.toHaveBeenCalled();
-      expect($profile.get()).toEqual({});
-      expect(dotButtons(w)[2].attributes("aria-current")).toBe("step");
     });
 
-    it("offers a locality dot after a borough and jumps to it without sending", async () => {
-      fine(true);
-      const w = await editing({ area: "pankow" });
-      const buttons = dotButtons(w);
-      expect(buttons.map((b) => b.attributes("aria-label"))).toEqual([
-        "Schritt 2: Wo wohnste?",
-        "Schritt 3: Welcher Kiez?",
-        "Schritt 4: Uffjewachsen oder zujezogen?",
-        "Schritt 5: Wie alt biste?",
+    it("goes back to a step that was skipped with the button", async () => {
+      const w = await mountIt();
+      await click(w, "Kenn ick");
+      await click(w, "überspringen");
+      expect(w.find("h3").text()).toBe("Uffjewachsen oder zujezogen?");
+      await click(w, "← Zurück");
+      expect(w.find("h3").text()).toBe("Wo wohnste?");
+    });
+
+    it("going back to the vote withdraws it", async () => {
+      const w = await mountIt();
+      await click(w, "Kenn ick");
+      await click(w, "← Zurück");
+      expect(store.sendFeedback).toHaveBeenLastCalledWith(7, { usage: null });
+      expect(w.findAll("button").map((b) => b.text())).toEqual([
+        "Sag ick selbst",
+        "Kenn ick",
+        "Nie jehört",
       ]);
-      await buttons[1].trigger("click");
-      await flushPromises();
-      expect(w.find("h3").text()).toBe("Welcher Kiez?");
-      expect(dotButtons(w)[1].attributes("aria-current")).toBe("step");
-      expect(store.sendFeedback).not.toHaveBeenCalled();
-      expect($profile.get()).toEqual({ area: "pankow" });
+      expect(w.find('[aria-pressed="true"]').exists()).toBe(false);
     });
 
-    it.each([{ area: "brandenburg" }, { area: "elsewhere" }, { area: null }])(
-      "has no locality dot for %j",
-      async (profile) => {
-        fine(true);
-        const w = await editing(profile);
-        const labels = dotButtons(w).map((b) => b.attributes("aria-label"));
-        expect(labels).toHaveLength(3);
-        expect(labels.join()).not.toContain("Kiez");
-      },
-    );
+    it("stays on the step when withdrawing the vote fails", async () => {
+      const w = await mountIt();
+      await click(w, "Kenn ick");
+      store.sendFeedback.mockResolvedValue(false);
+      await click(w, "← Zurück");
+      expect(w.find("h3").text()).toBe("Wo wohnste?");
+      expect(w.text()).toContain("← Zurück");
+    });
 
     it("re-picking the same area clears the locality and shows no stale pressed button", async () => {
-      fine(true);
       $feedback.set(state({ mine: { area: "pankow", locality: "karow", usage: "say" } }));
       const w = await mountIt();
       await click(w, "Angaben ändern");
       await click(w, "Pankow");
       await click(w, "Karow");
       expect(store.sendFeedback).toHaveBeenLastCalledWith(7, { area: "pankow", locality: "karow" });
-      await dotButtons(w)[0].trigger("click");
-      await flushPromises();
+      await click(w, "← Zurück");
+      await click(w, "← Zurück");
       await click(w, "Pankow");
       // The server still holds the locality, so the area send clears it.
       expect(store.sendFeedback).toHaveBeenLastCalledWith(7, { area: "pankow", locality: null });
@@ -436,15 +449,17 @@ describe("WordFeedbackCard", () => {
       expect(b.attributes("aria-pressed")).toBe("false");
     });
 
-    it("offers the half dot only for someone who grew up here", async () => {
-      fine(true);
-      const w = await editing();
-      expect(dotButtons(w)).toHaveLength(3);
-      w.unmount();
-      const grew = await editing({ origin: "grewUp" });
-      expect(dotButtons(grew).map((b) => b.attributes("aria-label"))).toContain(
-        "Schritt 4: In welcher Hälfte?",
-      );
+    it("opens the explanation on the area step and folds it behind a link afterwards", async () => {
+      const w = await mountIt();
+      expect(w.find("#word-feedback-why").exists()).toBe(false);
+      await click(w, "Kenn ick");
+      expect(w.find("#word-feedback-why").isVisible()).toBe(true);
+      expect(w.text()).not.toContain("Warum fragen wa dit?");
+      await click(w, "überspringen");
+      expect(w.find("#word-feedback-why").isVisible()).toBe(false);
+      await click(w, "Warum fragen wa dit?");
+      expect(w.find("#word-feedback-why").isVisible()).toBe(true);
+      expect(w.text()).not.toContain("Warum fragen wa dit?");
     });
   });
 

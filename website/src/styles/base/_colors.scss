@@ -27,6 +27,12 @@ html {
   --control-bg: var(--orange-100);
   --control-color: var(--blue);
   --control-border: var(--orange-600);
+  // Word-page canon (docs/design/wortseite/SPEC.md): surfaces, dashed rules, hover glow.
+  --surface-chip: color-mix(in srgb, var(--orange-600) 10%, white);
+  --surface-callout: color-mix(in srgb, var(--orange-100) 60%, white);
+  --rule-card: var(--grey-100);
+  --rule-inner: var(--orange-200);
+  --shadow-hover-glow: 0 0 12px 0 color-mix(in srgb, var(--orange-500) 60%, white);
 
   color-scheme: light;
 
@@ -40,6 +46,11 @@ html {
     --control-bg: var(--new-blue-600);
     --control-color: var(--yellow-500);
     --control-border: color-mix(in srgb, var(--blue) 80%, white);
+    --surface-chip: color-mix(in srgb, var(--new-blue-400) 80%, black);
+    --surface-callout: color-mix(in srgb, var(--new-blue-400) 80%, black);
+    --rule-card: color-mix(in srgb, var(--orange-300) 25%, transparent);
+    --rule-inner: color-mix(in srgb, var(--orange-300) 30%, transparent);
+    --shadow-hover-glow: 0 0 12px 0 var(--orange-500);
 
     color-scheme: dark;
   }
