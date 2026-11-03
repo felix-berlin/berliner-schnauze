@@ -1,6 +1,7 @@
 import { mcpPlugin } from "@payloadcms/plugin-mcp";
 
 import { version } from "../package.json";
+import { mcpAuditLine, redactSuggestionResponse } from "./lib/mcpGuards";
 
 /**
  * MCP endpoint (`/api/mcp`) so Claude can read and maintain words and suggestions. Auth is a per-user API key made in
@@ -10,16 +11,29 @@ import { version } from "../package.json";
 export const mcp = mcpPlugin({
   // Kill switch without a schema change (the keys table stays): MCP_DISABLED=true on the cms container.
   disabled: process.env.MCP_DISABLED === "true",
-  mcp: { serverOptions: { serverInfo: { name: "Berliner Schnauze CMS", version } } },
+  mcp: {
+    serverOptions: { serverInfo: { name: "Berliner Schnauze CMS", version } },
+    // Audit trail of what runs over the keys, in the cms container's log (metadata only, see mcpAuditLine).
+    handlerOptions: {
+      onEvent: (event) => {
+        const line = mcpAuditLine(event);
+        if (line) console.info(line);
+      },
+    },
+  },
   collections: {
     words: {
       enabled: { find: true, create: true, update: true },
-      description: "Berliner Wörter (Entwürfe und veröffentlicht). Abgeleitete Felder (derived) berechnet das CMS beim Speichern.",
+      description:
+        "Berliner Wörter (Entwürfe und veröffentlicht). Abgeleitete Felder (derived) berechnet das CMS beim Speichern. Wörter sind groß (Rich Text, derived): bei find immer `select` setzen, z. B. { slug: true, berlinerisch: true }.",
     },
     suggestions: {
       // No create: the site's form makes suggestions, and every create mails the editors.
       enabled: { find: true, update: true },
-      description: "Wortvorschläge aus dem Formular. status: new | accepted | rejected; word verweist auf das daraus entstandene Wort.",
+      // userName/userMail of the sender never reach the model, whatever `select` it sends.
+      overrideResponse: redactSuggestionResponse,
+      description:
+        "Wortvorschläge aus dem Formular. status: new | accepted | rejected; word verweist auf das daraus entstandene Wort. Bei find `select` setzen, z. B. { word: true, status: true }.",
     },
   },
 });
