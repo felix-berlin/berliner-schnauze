@@ -34,8 +34,7 @@
       <div class="c-comment-card__actions">
         <span class="c-comment-card__vote">
           <button
-            class="c-comment-card__vote-up"
-            :class="{ 'is-active': comment.myVote === 1 }"
+            class="c-choice c-comment-card__vote-button"
             type="button"
             aria-label="Hochwählen"
             :aria-pressed="comment.myVote === 1"
@@ -46,8 +45,7 @@
           </button>
           <span class="c-comment-card__score">{{ comment.upvotes - comment.downvotes }}</span>
           <button
-            class="c-comment-card__vote-down"
-            :class="{ 'is-active': comment.myVote === -1 }"
+            class="c-choice c-comment-card__vote-button"
             type="button"
             aria-label="Runterwählen"
             :aria-pressed="comment.myVote === -1"
@@ -59,7 +57,7 @@
         </span>
         <button
           v-if="parentVisible"
-          class="c-comment-card__reply c-comment-card__link"
+          class="c-link c-comment-card__reply"
           type="button"
           @click="toggle('reply')"
         >
@@ -73,7 +71,7 @@
           <template #default="{ triggerProps }">
             <button
               v-bind="triggerProps"
-              class="c-comment-card__menu-button"
+              class="c-icon-button c-comment-card__menu-button"
               type="button"
               aria-label="Weitere Aktionen"
             >
@@ -130,12 +128,7 @@
             >
               {{ reporting ? "Wird jemeldet …" : "Melden" }}
             </button>
-            <button
-              class="c-button c-comment-card__report-button"
-              type="button"
-              :disabled="reporting"
-              @click="mode = null"
-            >
+            <button class="c-link" type="button" :disabled="reporting" @click="mode = null">
               Abbrechen
             </button>
           </div>

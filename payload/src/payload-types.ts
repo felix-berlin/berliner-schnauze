@@ -102,6 +102,7 @@ export interface Config {
     comments: Comment;
     'comment-votes': CommentVote;
     'comment-reports': CommentReport;
+    'word-feedback': WordFeedback;
     redirects: Redirect;
     'payload-mcp-api-keys': PayloadMcpApiKey;
     'payload-kv': PayloadKv;
@@ -123,6 +124,7 @@ export interface Config {
     comments: CommentsSelect<false> | CommentsSelect<true>;
     'comment-votes': CommentVotesSelect<false> | CommentVotesSelect<true>;
     'comment-reports': CommentReportsSelect<false> | CommentReportsSelect<true>;
+    'word-feedback': WordFeedbackSelect<false> | WordFeedbackSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'payload-mcp-api-keys': PayloadMcpApiKeysSelect<false> | PayloadMcpApiKeysSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -533,6 +535,141 @@ export interface CommentReport {
   createdAt: string;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "word-feedback".
+ */
+export interface WordFeedback {
+  id: number;
+  word: number | Word;
+  visitor: string;
+  reaction?: ('like' | 'dislike') | null;
+  usage?: ('say' | 'know' | 'never') | null;
+  area?:
+    | (
+        | 'mitte'
+        | 'friedrichshain-kreuzberg'
+        | 'pankow'
+        | 'charlottenburg-wilmersdorf'
+        | 'spandau'
+        | 'steglitz-zehlendorf'
+        | 'tempelhof-schoeneberg'
+        | 'neukoelln'
+        | 'treptow-koepenick'
+        | 'marzahn-hellersdorf'
+        | 'lichtenberg'
+        | 'reinickendorf'
+        | 'brandenburg'
+        | 'elsewhere'
+      )
+    | null;
+  locality?:
+    | (
+        | 'mitte'
+        | 'moabit'
+        | 'hansaviertel'
+        | 'tiergarten'
+        | 'wedding'
+        | 'gesundbrunnen'
+        | 'friedrichshain'
+        | 'kreuzberg'
+        | 'prenzlauer-berg'
+        | 'weissensee'
+        | 'blankenburg'
+        | 'heinersdorf'
+        | 'karow'
+        | 'stadtrandsiedlung-malchow'
+        | 'pankow'
+        | 'blankenfelde'
+        | 'buch'
+        | 'franzoesisch-buchholz'
+        | 'niederschoenhausen'
+        | 'rosenthal'
+        | 'wilhelmsruh'
+        | 'charlottenburg'
+        | 'wilmersdorf'
+        | 'schmargendorf'
+        | 'grunewald'
+        | 'westend'
+        | 'charlottenburg-nord'
+        | 'halensee'
+        | 'spandau'
+        | 'haselhorst'
+        | 'siemensstadt'
+        | 'staaken'
+        | 'gatow'
+        | 'kladow'
+        | 'hakenfelde'
+        | 'falkenhagener-feld'
+        | 'wilhelmstadt'
+        | 'steglitz'
+        | 'lichterfelde'
+        | 'lankwitz'
+        | 'zehlendorf'
+        | 'dahlem'
+        | 'nikolassee'
+        | 'wannsee'
+        | 'schlachtensee'
+        | 'schoeneberg'
+        | 'friedenau'
+        | 'tempelhof'
+        | 'mariendorf'
+        | 'marienfelde'
+        | 'lichtenrade'
+        | 'neukoelln'
+        | 'britz'
+        | 'buckow'
+        | 'rudow'
+        | 'gropiusstadt'
+        | 'alt-treptow'
+        | 'plaenterwald'
+        | 'baumschulenweg'
+        | 'johannisthal'
+        | 'niederschoeneweide'
+        | 'altglienicke'
+        | 'adlershof'
+        | 'bohnsdorf'
+        | 'oberschoeneweide'
+        | 'koepenick'
+        | 'friedrichshagen'
+        | 'rahnsdorf'
+        | 'gruenau'
+        | 'mueggelheim'
+        | 'schmoeckwitz'
+        | 'marzahn'
+        | 'biesdorf'
+        | 'kaulsdorf'
+        | 'mahlsdorf'
+        | 'hellersdorf'
+        | 'friedrichsfelde'
+        | 'karlshorst'
+        | 'lichtenberg'
+        | 'falkenberg'
+        | 'malchow'
+        | 'wartenberg'
+        | 'neu-hohenschoenhausen'
+        | 'alt-hohenschoenhausen'
+        | 'fennpfuhl'
+        | 'rummelsburg'
+        | 'reinickendorf'
+        | 'tegel'
+        | 'konradshoehe'
+        | 'heiligensee'
+        | 'frohnau'
+        | 'hermsdorf'
+        | 'waidmannslust'
+        | 'luebars'
+        | 'wittenau'
+        | 'maerkisches-viertel'
+        | 'borsigwalde'
+      )
+    | null;
+  origin?: ('grewUp' | 'movedOver10' | 'movedUnder10') | null;
+  half?: ('east' | 'west' | 'both') | null;
+  age?: ('u20' | '20-29' | '30-39' | '40-49' | '50-59' | '60-69' | '70-79' | '80plus') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Alter Pfad, z. B. /wort/alter-slug → Dokument oder eigene URL.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -777,6 +914,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'comment-reports';
         value: number | CommentReport;
+      } | null)
+    | ({
+        relationTo: 'word-feedback';
+        value: number | WordFeedback;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1085,6 +1226,23 @@ export interface CommentReportsSelect<T extends boolean = true> {
   comment?: T;
   visitor?: T;
   reason?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "word-feedback_select".
+ */
+export interface WordFeedbackSelect<T extends boolean = true> {
+  word?: T;
+  visitor?: T;
+  reaction?: T;
+  usage?: T;
+  area?: T;
+  locality?: T;
+  origin?: T;
+  half?: T;
+  age?: T;
   updatedAt?: T;
   createdAt?: T;
 }

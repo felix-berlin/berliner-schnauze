@@ -35,7 +35,7 @@ infisical run -- pnpm dlx tsx scripts/publish-drafts.ts --dry-run   # Publish al
 ## Derived fields and exports
 
 - **Derived word fields** (`derived` group) are computed on save by the `beforeChange` hook from `src/lib/wordDerived.ts`, which the site also imports as `payload-app/word-derived` — keep it free of payload/next/config imports. `derived.decomposition` (compound parts) comes from `src/lib/decompose.ts` instead, CMS only: its 28 MB dictionary never loads in the site. Changing the derivation leaves existing words stale until re-saved (there is no bulk tool; write a `payload run` script that updates every word with `req.context[PRESERVE_CONTENT_MODIFIED_AT] = true` to keep the sitemap lastmod).
-- `payload-app` exports: `.` (types via `src/astro.d.ts`, a hand-kept types-only mirror of `src/index.ts` — update both), `./word-derived`, `./lexical-html`, `./routes` (collection → site path, shared by SEO, redirects and rich-text links), `./preview` (signed preview tokens), `./comments` (pure comment rules: limits, link check, auto-hide, pseudonyms; no payload/next/config imports, like `./word-derived`).
+- `payload-app` exports: `.` (types via `src/astro.d.ts`, a hand-kept types-only mirror of `src/index.ts` — update both), `./word-derived`, `./lexical-html`, `./routes` (collection → site path, shared by SEO, redirects and rich-text links), `./preview` (signed preview tokens), `./comments` (pure comment rules: limits, link check, auto-hide, pseudonyms; no payload/next/config imports, like `./word-derived`), `./word-feedback` (pure feedback rules: answer lists, `MIN_GROUP`; same import rule).
 
 ## MCP (`@payloadcms/plugin-mcp`, `src/mcp.ts`)
 

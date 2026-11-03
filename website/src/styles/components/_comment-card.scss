@@ -2,21 +2,6 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// 44px tap area around small controls without growing them visually.
-%c-comment-card-hit-area {
-  position: relative;
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset-block-start: 50%;
-    inset-inline-start: 50%;
-    inline-size: max(100%, 44px);
-    block-size: max(100%, 44px);
-    translate: -50% -50%;
-  }
-}
-
 .c-comment-card {
   display: grid;
   gap: vars.$spacer * 0.5;
@@ -29,7 +14,7 @@
     padding: vars.$spacer * 0.5 0 vars.$spacer * 0.5 vars.$spacer;
     background: transparent;
     border: 0;
-    border-inline-start: 1px dashed var(--c-word-comments-rule, var(--grey-100));
+    border-inline-start: 1px dashed var(--rule-card);
     border-radius: 0;
     box-shadow: none;
   }
@@ -115,29 +100,12 @@
     display: inline-flex;
     align-items: center;
     gap: vars.$spacer * 0.25;
-    padding-inline: vars.$spacer * 0.25;
-    border: 1px dashed var(--c-word-comments-rule, var(--grey-100));
-    border-radius: 4px;
+  }
 
-    button {
-      @extend %c-comment-card-hit-area;
-
-      display: inline-flex;
-      padding: vars.$spacer * 0.25;
-      border: 0;
-      background: transparent;
-      color: inherit;
-      cursor: pointer;
-
-      &.is-active {
-        color: var(--color-accent-text);
-      }
-
-      &:disabled {
-        opacity: 0.5;
-        cursor: progress;
-      }
-    }
+  &__vote-button {
+    justify-content: center;
+    min-inline-size: 2.75rem;
+    padding-inline: vars.$spacer * 0.5;
   }
 
   &__score {
@@ -146,49 +114,9 @@
     font-variant-numeric: tabular-nums;
   }
 
-  &__link {
-    @extend %c-comment-card-hit-area;
-
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: var(--color-muted);
-    font: inherit;
-    cursor: pointer;
-    text-decoration: underline dashed;
-    text-underline-offset: 3px;
-
-    @include butler-mx.hover {
-      color: var(--color-accent-text);
-    }
-  }
-
   &__menu {
     margin-inline-start: auto;
   }
-
-  &__menu-button {
-    @extend %c-comment-card-hit-area;
-
-    display: inline-flex;
-    padding: vars.$spacer * 0.25;
-    border: 1px dashed transparent;
-    border-radius: 4px;
-    background: transparent;
-    color: var(--color-muted);
-    cursor: pointer;
-
-    @include butler-mx.hover {
-      border-color: currentcolor;
-      color: var(--color-accent-text);
-    }
-
-    &[aria-expanded="true"] {
-      border-color: currentcolor;
-      color: var(--color-accent-text);
-    }
-  }
-
 
   // Compact inline report form: label above, field + actions on one row when there is room.
   &__report {
@@ -230,7 +158,6 @@
     margin-inline-start: vars.$spacer * 0.5;
   }
 }
-
 
 @keyframes c-comment-card-wash {
   to {

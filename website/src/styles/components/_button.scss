@@ -39,10 +39,6 @@
     }
 
     box-shadow: vars.$hover-glow;
-
-    @include butler-mx.dark-mode-class {
-      box-shadow: 0 0 12px 0 var(--orange-500);
-    }
   }
 
   // Orange call-to-action (e.g. buy buttons): body font, bold, stays orange in dark mode.

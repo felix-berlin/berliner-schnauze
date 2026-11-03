@@ -1,0 +1,229 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+
+.c-word-feedback-card {
+  @include mx.paper-card;
+
+  display: grid;
+  gap: vars.$spacer;
+  padding: vars.$spacer * 1.25;
+  margin-block: vars.$spacer * 2;
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: vars.$spacer * 0.25 vars.$spacer;
+  }
+
+  &__title {
+    @include mx.paper-card-title;
+
+    margin: 0;
+  }
+
+  &__count {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.8rem;
+  }
+
+  &__options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.5;
+  }
+
+  // Answer grids: as many columns as fit, each at least --min wide, buttons left-aligned.
+  &__options--locality,
+  &__options--origin,
+  &__options--half,
+  &__options--age {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 100%), 1fr));
+
+    .c-choice {
+      justify-content: flex-start;
+      overflow-wrap: anywhere;
+      text-align: start;
+    }
+  }
+
+  &__options--locality,
+  &__options--half {
+    --min: 180px;
+  }
+
+  &__options--origin {
+    --min: 240px;
+  }
+
+  &__options--age {
+    --min: 96px;
+  }
+
+  &__bars {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  &__bar {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.15rem 0.75rem;
+    font-size: 0.875rem;
+
+    &.is-mine .c-word-feedback-card__bar-label {
+      font-weight: 700;
+    }
+
+    &.is-mine .c-word-feedback-card__bar-fill {
+      background: var(--orange-600);
+    }
+  }
+
+  &__bar-track {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    block-size: 6px;
+    border-radius: var(--radius-xxs, 2px);
+    background: var(--surface-chip);
+    overflow: hidden;
+  }
+
+  &__bar-fill {
+    display: block;
+    block-size: 100%;
+    background: var(--orange-300);
+  }
+
+  &__bar-value {
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__step {
+    display: grid;
+    gap: vars.$spacer * 0.75;
+  }
+
+  // Short fade + slide in from the direction of travel; the old step is gone at once, so nothing waits.
+  @media (prefers-reduced-motion: no-preference) {
+    &__step.is-entering,
+    &__done.is-entering {
+      animation: word-feedback-step-in 0.2s ease-out;
+
+      &.is-back {
+        --step-shift: -0.75rem;
+      }
+    }
+  }
+
+  &__progress {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: vars.$spacer * 0.5 vars.$spacer;
+  }
+
+  // Always six segments: done / current / open, a skipped optional step is a dashed line.
+  &__segments {
+    display: flex;
+    flex: 1 1 8rem;
+    gap: 4px;
+    max-inline-size: 16rem;
+  }
+
+  &__segment {
+    flex: 1;
+    block-size: 4px;
+    background: var(--rule-inner);
+
+    &.is-done {
+      background: var(--orange-600);
+    }
+
+    &.is-current {
+      background: var(--orange-400);
+    }
+
+    &.is-skipped {
+      background: none;
+      border-block-start: 1px dashed var(--rule-card);
+      block-size: 0;
+      align-self: center;
+    }
+  }
+
+  &__eyebrow {
+    @include mx.eyebrow;
+  }
+
+  // Same face as the other cards' titles, set as a smaller uppercase label (text-transform only: the source text stays).
+  &__question {
+    @include mx.paper-card-title;
+
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  &__why {
+    display: grid;
+    gap: 0.5rem;
+    padding: vars.$spacer * 0.75 vars.$spacer;
+    background: var(--surface-callout);
+    font-size: 0.875rem;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  &__why-link {
+    justify-self: start;
+    padding-inline-start: 0;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer;
+    padding-block-start: vars.$spacer * 0.25;
+    border-block-start: 1px dashed var(--rule-inner);
+  }
+
+  &__skip {
+    margin-inline-start: auto;
+  }
+
+  &__thanks {
+    margin: 0;
+  }
+
+  &__compare {
+    margin: 0;
+    padding-inline-start: 1.1rem;
+    font-size: 0.9375rem;
+  }
+
+  &__done {
+    display: grid;
+    justify-items: start;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__error {
+    margin: 0;
+    color: color-mix(in srgb, var(--danger) 75%, black);
+    font-size: 0.875rem;
+  }
+}
+
+@keyframes word-feedback-step-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--step-shift, 0.75rem));
+  }
+}

@@ -1,21 +1,13 @@
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
-@use "@sass-butler/mixins" as butler-mx;
 
 .c-word-comments {
-  // Dashed rails (replies, vote pill, sort toggle); grey-100 vanishes on the dark card.
-  --c-word-comments-rule: var(--grey-100);
-
   display: grid;
   gap: vars.$spacer * 1.5;
   max-inline-size: 48rem;
   margin-inline: auto;
   padding-block: vars.$spacer * 2;
   border-block-start: 1px dashed var(--new-blue-200);
-
-  @include butler-mx.dark-mode-class {
-    --c-word-comments-rule: color-mix(in srgb, var(--color-body) 50%, transparent);
-  }
 
   &__header {
     display: flex;
@@ -34,28 +26,9 @@
     font-weight: 400;
   }
 
-  // Segmented toggle: the pressed segment is the orange one.
   &__sort {
     display: inline-flex;
-    border: 1px dashed var(--c-word-comments-rule);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  &__sort-button {
-    padding: vars.$spacer * 0.35 vars.$spacer * 0.9;
-    border: 0;
-    background: transparent;
-    color: inherit;
-    font: inherit;
-    font-size: 0.9rem;
-    cursor: pointer;
-
-    &[aria-pressed="true"] {
-      background: var(--orange-600);
-      color: var(--white-100);
-      font-weight: 700;
-    }
+    gap: vars.$spacer * 0.5;
   }
 
   &__captcha-text {
@@ -69,7 +42,7 @@
     padding: vars.$spacer * 1.5;
     text-align: center;
     color: var(--color-muted);
-    border: 1px dashed var(--c-word-comments-rule);
+    border: 1px dashed var(--rule-card);
     border-radius: 4px;
   }
 

@@ -110,7 +110,7 @@ describe("WordComments", () => {
     fetchMock.mockResolvedValue(page(empty));
     const wrapper = mount(WordComments, { global: { stubs: { TurnStile: true } }, props: { wordId: 7 } });
     await flushPromises();
-    await wrapper.findAll(".c-word-comments__sort-button")[1]!.trigger("click");
+    await wrapper.findAll(".c-word-comments__sort button")[1]!.trigger("click");
     await flushPromises();
     expect(wrapper.find("[aria-pressed=true]").text()).toBe("Neueste");
     expect(fetchMock.mock.calls.at(-1)![0]).toContain("sort=new");

@@ -35,6 +35,15 @@ describe("rateLimit", () => {
     expect(rateLimited(client, patch, 0)).toBeGreaterThan(0);
   });
 
+  it("limits GET /api/word-feedback to 60 per minute, PATCH not here", () => {
+    const get = rateLimitRule("/api/word-feedback", "GET")!;
+    expect(get.max).toBe(60);
+    expect(rateLimitRule("/api/word-feedback", "PATCH")).toBeUndefined();
+    const client = "t-feedback-get";
+    for (let i = 0; i < 60; i++) expect(rateLimited(client, get, 0)).toBe(0);
+    expect(rateLimited(client, get, 0)).toBeGreaterThan(0);
+  });
+
   it("vote limited at 31st per minute", () => {
     const vote = rateLimitRule("/api/comment-votes", "POST")!;
     const client = "t-vote";

@@ -15,6 +15,8 @@ const RULES: Rule[] = [
   { key: "comment-own", max: 10, method: "DELETE", prefix: "/api/comments/", windowMs: 5 * 60_000 },
   { max: 30, method: "POST", prefix: "/api/comment-votes", windowMs: 60_000 },
   { max: 10, method: "POST", prefix: "/api/comment-reports", windowMs: 60 * 60_000 },
+  // PATCH is capped per IP and word inside the route.
+  { max: 60, method: "GET", prefix: "/api/word-feedback", windowMs: 60_000 },
 ];
 
 // ponytail: in memory, one process; a second web container would need a shared store.

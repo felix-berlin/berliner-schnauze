@@ -1,0 +1,50 @@
+// Auswahl (docs/design/wortseite/SPEC.md): one answer out of several. State via aria-pressed.
+// :where keeps specificity at zero, so a component class can override display/margin/padding.
+:where(.c-choice) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-block-size: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid var(--control-border);
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-body);
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease-in-out,
+    border-color 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
+
+  &:hover:not(:disabled) {
+    border-style: dashed;
+    box-shadow: var(--shadow-hover-glow);
+  }
+
+  &[aria-pressed="true"] {
+    border-color: var(--orange-600);
+    background: var(--orange-600);
+    color: var(--white-100);
+    font-weight: 700;
+  }
+
+  &:focus-visible {
+    outline: 2px dashed var(--orange-400);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: progress;
+  }
+
+  // Dimming the pressed one would drop white-on-orange below AA.
+  &:disabled:not([aria-pressed="true"]) {
+    opacity: 0.6;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition-duration: 0ms;
+  }
+}

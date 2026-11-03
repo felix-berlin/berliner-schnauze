@@ -1,0 +1,29 @@
+@use "@styles/variables" as vars;
+
+.c-word-feedback-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: vars.$spacer * 0.5 vars.$spacer;
+
+  &__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__button[aria-disabled="true"] {
+    cursor: progress;
+  }
+
+  &__icon {
+    inline-size: 1.1rem;
+    block-size: 1.1rem;
+  }
+
+  &__count {
+    min-inline-size: 3ch; // reserves the digits so the count arriving does not shift the row
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+  }
+}

@@ -146,10 +146,6 @@
       border-color: var(--orange-600);
       box-shadow: vars.$hover-glow;
 
-      @include butler-mx.dark-mode-class {
-        box-shadow: 0 0 12px 0 var(--orange-500);
-      }
-
       .c-app-settings__nav-card-arrow {
         translate: 3px 0;
       }

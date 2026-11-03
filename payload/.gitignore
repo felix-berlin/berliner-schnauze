@@ -1,5 +1,5 @@
 .next/
 next-env.d.ts
-media/
+/media
 AGENTS.md
 *.tsbuildinfo

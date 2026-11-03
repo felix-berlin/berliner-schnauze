@@ -14,9 +14,9 @@ export const orNull = <T>(p: Promise<T>): Promise<T | null> =>
  * Postgres' unique violation on (comment, visitor), as Payload throws it: a ValidationError whose
  * first error path is the index columns (pinned by payload/tests/comments.test.ts). Hook errors don't match.
  */
-export const isUniqueViolation = (error: unknown) => {
+export const isUniqueViolation = (error: unknown, columns = "comment_id, visitor") => {
   const e = error as { data?: { errors?: { path?: string }[] }; name?: string };
-  return e?.name === "ValidationError" && e.data?.errors?.[0]?.path === "comment_id, visitor";
+  return e?.name === "ValidationError" && e.data?.errors?.[0]?.path === columns;
 };
 
 /** Positive integer from a string (≤ 9 digits), else undefined; `null` yields `fallback`. */

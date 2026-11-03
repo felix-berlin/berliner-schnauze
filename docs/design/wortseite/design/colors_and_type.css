@@ -1,0 +1,140 @@
+/* ============================================================
+   Berliner Schnauze — Foundations
+   Colors + Typography tokens, extracted from src/styles/variables
+   ============================================================ */
+
+/* The palette, shadow recipes, spacing, radii, fonts and font sizes are declared
+   by tokens.css (generated from tokens.json) and are not repeated here. What stays
+   in this file: the tokens that are a color-mix() of the palette or an alias of one,
+   the dark-mode mapping, and the base element styles. */
+
+:root {
+  /* Mixed/derived blues used heavily in dark mode */
+  --new-blue-200: color-mix(in srgb, var(--blue) 86%, white);
+  --new-blue-300: color-mix(in srgb, var(--blue) 90%, white);
+  --new-blue-400: color-mix(in srgb, var(--blue) 92%, white);
+  --new-blue-600: color-mix(in srgb, var(--blue) 90%, black);
+
+  /* ---------- Semantic — light mode ---------- */
+  --color-background-body: color-mix(in srgb, var(--orange-100) 5%, transparent);
+  --color-gradient-body-1: color-mix(in srgb, var(--blue) 15%, transparent);
+  --color-gradient-body-2: color-mix(in srgb, var(--orange-100) 10%, white);
+  --floating-color-background: color-mix(in srgb, var(--orange-200) 50%, white);
+
+  /* Card defaults */
+  --color-background-card: color-mix(in srgb, var(--orange-100) 30%, white);
+  --color-border-card:    var(--orange-200);
+
+  /* Shadows — soft "drop-on-paper" (--shadow-card and --shadow-list: tokens.css) */
+  --shadow-hover-glow:
+    0 0 12px 0 color-mix(in srgb, var(--orange-500) 60%, white);
+  /* Paper Lift — the ONE shadow for raised surfaces (alias of --shadow-card) */
+  --paper-lift: var(--shadow-card);
+
+  /* ---------- Word-page canon (semantic) ---------- */
+  --color-muted: color-mix(in srgb, var(--blue) 75%, white);      /* AA-safe secondary text */
+  --color-ink-strong: var(--new-blue-400);                          /* titles, headwords, values */
+  --surface-sheet: #fff;                                            /* section cards */
+  --surface-paper: var(--white-100);                                /* sidebar, topbar */
+  --surface-hero: color-mix(in srgb, var(--orange-100) 30%, white); /* word hero */
+  --surface-chip: color-mix(in srgb, var(--orange-600) 10%, white); /* stat boxes */
+  --surface-tag: color-mix(in srgb, var(--orange-100) 80%, white);  /* grammar tags */
+  --surface-badge: color-mix(in srgb, var(--orange-200) 60%, white);
+  --surface-callout: color-mix(in srgb, var(--orange-100) 60%, white);
+  --rule-card: var(--grey-100);       /* dashed outer border */
+  --rule-inner: var(--orange-200);    /* dashed header/footer dividers */
+  --control-bg: var(--orange-100);
+  --control-border: var(--orange-600);
+}
+
+/* ---------- Dark mode ---------- */
+html.dark,
+[data-theme="dark"] {
+  --primary:   var(--blue-500);
+  --secondary: var(--blue-400);
+  --accent:    var(--orange-500);
+  --color-body: var(--yellow-500);
+  --color-background-body: var(--new-blue-300);
+  --color-gradient-body-1: color-mix(in srgb, var(--new-blue-400) 98%, white);
+  --color-gradient-body-2: color-mix(in srgb, var(--blue) 70%, transparent);
+  --floating-color-background: var(--new-blue-200);
+
+  --color-background-card: var(--new-blue-400);
+  --color-border-card:    var(--new-blue-200);
+
+  --color-muted: color-mix(in srgb, var(--yellow-500) 75%, var(--blue));
+  --color-accent-text: var(--orange-300);
+  --color-ink-strong: var(--white-100);
+  --surface-sheet: var(--new-blue-400);
+  --surface-paper: var(--new-blue-400);
+  --surface-hero: var(--new-blue-400);
+  --surface-chip: color-mix(in srgb, var(--new-blue-400) 80%, black);
+  --surface-tag: color-mix(in srgb, var(--new-blue-400) 70%, black);
+  --surface-badge: color-mix(in srgb, var(--new-blue-400) 80%, black);
+  --surface-callout: color-mix(in srgb, var(--new-blue-400) 80%, black);
+  --rule-card: color-mix(in srgb, var(--orange-300) 25%, transparent);
+  --rule-inner: color-mix(in srgb, var(--orange-300) 30%, transparent);
+  --control-bg: var(--new-blue-600);
+  --control-color: var(--yellow-500);
+  --control-border: color-mix(in srgb, var(--blue) 80%, white);
+}
+
+/* ---------- Base element styles ---------- */
+html, button {
+  font-family: var(--font-body);
+  font-weight: 400;
+  letter-spacing: var(--tracking-body);
+}
+
+body {
+  margin: 0;
+  color: var(--color-body);
+  background-color: var(--color-background-body);
+  /* The signature dotted-paper background */
+  background-image: radial-gradient(
+    var(--color-gradient-body-1) 1.1px,
+    var(--color-gradient-body-2) 1.1px
+  );
+  background-size: 22px 22px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  margin: 0 0 0.25rem 0;
+  line-height: 1.1;
+}
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+h4 { font-size: var(--fs-h4); }
+
+p, li { font-size: var(--fs-body); }
+
+a {
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.c-content a {
+  text-decoration: underline dashed from-font;
+  text-underline-position: from-font;
+}
+@media (hover: hover) {
+  .c-content a {
+    text-decoration: none;
+  }
+  .c-content a:hover {
+    text-decoration: underline dashed from-font;
+  }
+}
+
+::selection {
+  background: var(--red-200);
+  color: var(--white-100);
+}
+html.dark ::selection {
+  background: var(--blue-200);
+  color: var(--white-100);
+}

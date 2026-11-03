@@ -110,9 +110,19 @@ describe("CommentCard", () => {
     expect((wrapper.find("textarea").element as HTMLTextAreaElement).value).toBe("@Icke ");
   });
 
+  it.each([
+    [1, "true", "false"],
+    [-1, "false", "true"],
+    [0, "false", "false"],
+  ])("aria-pressed follows myVote %s", (myVote, up, down) => {
+    const { wrapper } = mountCard({ myVote });
+    expect(wrapper.find('[aria-label="Hochwählen"]').attributes("aria-pressed")).toBe(up);
+    expect(wrapper.find('[aria-label="Runterwählen"]').attributes("aria-pressed")).toBe(down);
+  });
+
   it("vote sends the opposite when clicking the own vote again", async () => {
     const { ctx, wrapper } = mountCard({ myVote: 1 });
-    await wrapper.find(".c-comment-card__vote-up").trigger("click");
+    await wrapper.find('[aria-label="Hochwählen"]').trigger("click");
     expect(ctx.vote).toHaveBeenCalledWith(1, 0);
   });
 
@@ -185,11 +195,11 @@ describe("CommentCard", () => {
     vi.mocked(trackEvent).mockClear();
     const { ctx, wrapper } = mountCard({});
     ctx.vote.mockResolvedValueOnce(true).mockResolvedValueOnce(false);
-    await wrapper.find(".c-comment-card__vote-down").trigger("click");
+    await wrapper.find('[aria-label="Runterwählen"]').trigger("click");
     await flushPromises();
     expect(ctx.vote).toHaveBeenCalledWith(1, -1);
     expect(trackEvent).toHaveBeenCalledWith("Comments", "Vote", "7");
-    await wrapper.find(".c-comment-card__vote-down").trigger("click");
+    await wrapper.find('[aria-label="Runterwählen"]').trigger("click");
     await flushPromises();
     expect(trackEvent).toHaveBeenCalledTimes(1);
   });
