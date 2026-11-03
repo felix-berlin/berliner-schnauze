@@ -32,7 +32,7 @@ export const mcp = mcpPlugin({
       enabled: { find: true, update: true },
       // userName/userMail of the sender never reach the model: field access in collections/Suggestions.ts.
       description:
-        "Wortvorschläge aus dem Formular. status: new | accepted | rejected; word verweist auf das daraus entstandene Wort. Bei find `select` setzen, z. B. { word: true, status: true }.",
+        "Wortvorschläge aus dem Formular. status: new | accepted | rejected; word verweist auf das daraus entstandene Wort; lockedByWord=true heißt: Wort ist veröffentlicht, der Vorschlag lässt sich nicht ändern (erst das Wort zurück in den Entwurf setzen). Bei find `select` setzen, z. B. { word: true, status: true }.",
     },
   },
 });
