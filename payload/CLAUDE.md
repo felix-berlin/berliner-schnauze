@@ -30,6 +30,7 @@ infisical run -- pnpm dlx tsx scripts/publish-drafts.ts --dry-run   # Publish al
 
 - **Drafts**: the Local API ignores access control unless asked — every site query spreads `siteRead()`, or `siteDocs()` for drafts listings (`website/src/services/payload.ts`: `overrideAccess: false` + `req.context.siteRead`), and `draftsRead`/`contentRead` (`src/access.ts`) then return published docs only, also in populated relations. REST stays login-only (it cannot set `req.context`). `SHOW_TEST_DATA` includes drafts on purpose (`siteDocs()`).
 - The comment collections (`comments`, `comment-votes`, `comment-reports`) are login-only; the site queries them outside `siteRead()` with its own `status` filter and `depth: 0` (`website/CLAUDE.md`, Word comments). Keep access and that filter in step.
+- `bon-games` (BON game results) is login-only; the site writes it through the Local API. It holds a hash of the visitor cookie, the display name, the result and timestamps, no IPs; there is no delete-by-visitor tool, only the CMS (website/CLAUDE.md, BON game).
 - First admin: in production `PAYLOAD_ALLOW_FIRST_USER=true` gates `POST /api/users`, but Payload's `/api/users/first-register` bypasses it. Cutover: create the first admin before the proxy route goes public.
 
 ## Derived fields and exports
