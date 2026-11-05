@@ -2,8 +2,10 @@
  * Seeds `testwort`: one word with every field of the word detail page filled, plus partner words that the page
  * derives its sections from (anagram, similar sounding, similar spelling, neighbors). Idempotent (upsert by slug);
  * local databases only. Called by scripts/orca-setup.sh, rerun with `pnpm cms:seed-test`.
- * shortcut: no audio/gallery uploads (needs files), the gallery uses `wikimediaFiles` only; add media when needed.
+ * Audio (tones) and images (flat colors) are generated dummies in seed-assets/.
  */
+import { fileURLToPath } from "node:url";
+
 import { LOCAL_DB_HOSTS } from "../lib/localDb";
 
 const url = process.env["DATABASE_URL"];
@@ -40,6 +42,23 @@ async function upsert(
   ) as Promise<{ id: number }>;
 }
 
+/** Media by `alt` (idempotent), uploaded from seed-assets/. */
+async function media(file: string, alt: string): Promise<number> {
+  const { docs } = await payload.find({
+    collection: "media",
+    where: { alt: { equals: alt } },
+    limit: 1,
+    depth: 0,
+  });
+  if (docs[0]) return docs[0].id;
+  const filePath = fileURLToPath(new URL(`./seed-assets/${file}`, import.meta.url));
+  return (await payload.create({ collection: "media", data: { alt }, filePath })).id;
+}
+const audio = async (name: string) => [
+  { gender: "male" as const, audio: await media(`${name}-male.wav`, `${name} männlich`) },
+  { gender: "female" as const, audio: await media(`${name}-female.wav`, `${name} weiblich`) },
+];
+
 const published = { _status: "published", publishedAt: new Date().toISOString() };
 
 // Partners first: they must exist before `testwort` links to them.
@@ -70,8 +89,17 @@ await upsert("words", "testwort", {
   translations: [{ translation: "Prüfwort" }, { translation: "Beispielwort" }],
   alternativeWords: [{ alternativeWord: "testwörtchen" }],
   examples: [
-    { example: "Dit is ein Testwort.", exampleExplanation: "Erklärung zum ersten Beispiel." },
+    {
+      example: "Dit is ein Testwort.",
+      exampleExplanation: "Erklärung zum ersten Beispiel.",
+      exampleAudio: await audio("testwort"),
+    },
     { example: "Zweet Beispiel, zweet Satz.", exampleExplanation: "Und noch eine Erklärung." },
+  ],
+  berlinerischAudio: await audio("testwort"),
+  images: [
+    await media("testwort-1.png", "Testbild 1"),
+    await media("testwort-2.png", "Testbild 2"),
   ],
   relatedWords: partners.map((p) => p.id),
   wikimediaFiles: [
