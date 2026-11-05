@@ -5,12 +5,20 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { dayStart, trending, type Ranked } from "../src/lib/wordStats";
 import { getTestPayload } from "./helpers/payload";
 
-const slugs = ["trend-test-a", "trend-test-b", "trend-test-draft"];
+const slugs = [
+  "trend-test-a",
+  "trend-test-b",
+  "trend-test-draft",
+  "trend-test-held",
+  "trend-test-plain",
+];
 const today = "2026-11-30";
 let payload: Payload;
 let a: number;
 let b: number;
 let draft: number;
+let held: number;
+let plain: number;
 
 const stat = (word: number, day: string, data: Record<string, number>) =>
   payload.create({ collection: "word-stats", data: { word, day, ...data } as never });
@@ -41,18 +49,22 @@ beforeAll(async () => {
   b = await mk("Trendzwei", slugs[1], "published");
   draft = await mk("Trendentwurf", slugs[2], "draft");
   await stat(a, "2026-11-10", { views: 10 });
+  held = await mk("Trendheld", slugs[3], "published");
+  plain = await mk("Trendplain", slugs[4], "published");
+  await stat(held, "2026-11-12", { views: 5 });
+  await stat(plain, "2026-11-12", { views: 5 });
   await stat(a, "2026-10-05", { views: 4 }); // previous period
   await stat(a, "2026-09-01", { views: 99 }); // outside both
   await stat(b, "2026-11-12", { views: 5, audio: 1 });
   await stat(draft, "2026-11-12", { views: 500 });
   const at = "2026-11-15T12:00:00.000Z";
-  const c = (authorName: string) =>
+  const c = (authorName: string, word = b) =>
     payload.create({
       collection: "comments",
-      data: { word: b, text: "kiek ma", authorName, createdAt: at } as never,
+      data: { word, text: "kiek ma", authorName, createdAt: at } as never,
     });
   await c("Icke");
-  expect((await c("casino-bonus.com")).status).toBe("pending"); // held comments count 0
+  expect((await c("casino-bonus.com", held)).status).toBe("pending");
   await payload.create({
     collection: "word-feedback",
     data: { word: b, visitor: "v-trend", reaction: "like", createdAt: at } as never,
@@ -90,6 +102,13 @@ describe("trending", () => {
   it("engaged: published comment counts 3, pending 0", async () => {
     const r = ids(await trending(payload, { ...opts, type: "engaged" }));
     expect(r.map((x) => x.word)).toEqual([b, a]);
+  });
+
+  it("engaged: a pending comment weighs 0 (same value as a word without one)", async () => {
+    const r = await trending(payload, { ...opts, type: "engaged", limit: 1000 });
+    const value = (w: number) => r.find((x) => x.word === w)?.value;
+    expect(value(held)).toBeDefined();
+    expect(value(held)).toBe(value(plain)); // identical views; any comment weight would lift `held`
   });
 
   it("never lists a draft word", async () => {
