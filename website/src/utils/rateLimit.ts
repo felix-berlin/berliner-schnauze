@@ -19,6 +19,7 @@ const RULES: Rule[] = [
   { max: 60, method: "GET", prefix: "/api/word-feedback", windowMs: 60_000 },
   // A daily cap per IP lives in the route.
   { max: 60, method: "POST", prefix: "/api/word-pulse", windowMs: 60_000 },
+  { max: 60, method: "GET", prefix: "/api/trending", windowMs: 60_000 },
 ];
 
 // ponytail: in memory, one process; a second web container would need a shared store.
