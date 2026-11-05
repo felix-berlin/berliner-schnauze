@@ -51,6 +51,19 @@ describe("rateLimit", () => {
     expect(rateLimited(client, vote, 0)).toBeGreaterThan(0);
   });
 
+  it("limits the bon endpoints on POST, start stricter than next", () => {
+    const start = rateLimitRule("/api/bon/start", "POST")!;
+    const next = rateLimitRule("/api/bon/next", "POST")!;
+    const finish = rateLimitRule("/api/bon/finish", "POST")!;
+    expect(start.max).toBeLessThan(next.max);
+    expect(finish).toBeDefined();
+    expect(rateLimitRule("/api/bon/start", "GET")).toBeUndefined();
+    const client = "t-bon-start";
+    for (let i = 0; i < start.max; i++) expect(rateLimited(client, start, 0)).toBe(0);
+    expect(rateLimited(client, start, 0)).toBeGreaterThan(0);
+    expect(rateLimited(client, next, 0)).toBe(0);
+  });
+
   it("takes the last forwarded-for entry, else the socket address", () => {
     expect(clientIp("1.1.1.1, 2.2.2.2 ", "9.9.9.9")).toBe("2.2.2.2");
     expect(clientIp(null, "9.9.9.9")).toBe("9.9.9.9");
