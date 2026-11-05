@@ -683,8 +683,6 @@ export interface WordStat {
   audio: number;
   shares: number;
   clicks: number;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * Alter Pfad, z. B. /wort/alter-slug → Dokument oder eigene URL.
@@ -1278,8 +1276,6 @@ export interface WordStatsSelect<T extends boolean = true> {
   audio?: T;
   shares?: T;
   clicks?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

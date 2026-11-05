@@ -5096,20 +5096,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": 0
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
       "indexes": {
@@ -5128,26 +5114,11 @@
           "method": "btree",
           "with": {}
         },
-        "word_stats_updated_at_idx": {
-          "name": "word_stats_updated_at_idx",
+        "word_stats_day_idx": {
+          "name": "word_stats_day_idx",
           "columns": [
             {
-              "expression": "updated_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "word_stats_created_at_idx": {
-          "name": "word_stats_created_at_idx",
-          "columns": [
-            {
-              "expression": "created_at",
+              "expression": "day",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -8871,6 +8842,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "b498e8bf-1e19-4d8b-bc73-52ac5ad62c4f",
+  "id": "f5c1caf0-232c-4ec9-b088-a730bdecfe2a",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

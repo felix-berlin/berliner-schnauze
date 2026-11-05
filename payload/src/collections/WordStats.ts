@@ -9,11 +9,12 @@ const counter = (name: string) =>
 export const WordStats: CollectionConfig = {
   slug: "word-stats",
   access: authenticatedOnly,
+  timestamps: false, // created/updated would store the visit time of one visitor at low traffic
   admin: { defaultColumns: ["word", "day", "views", "audio", "shares", "clicks"] },
   indexes: [{ fields: ["word", "day"], unique: true }],
   fields: [
     { name: "word", type: "relationship", relationTo: "words", required: true, index: true },
-    { name: "day", type: "text", required: true },
+    { name: "day", type: "text", required: true, index: true },
     counter("views"),
     counter("audio"),
     counter("shares"),

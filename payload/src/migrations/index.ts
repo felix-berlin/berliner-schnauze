@@ -16,7 +16,7 @@ import * as migration_20261101_210000_clear_legacy_word_meta from './20261101_21
 import * as migration_20261101_234120_mcp_api_keys from './20261101_234120_mcp_api_keys';
 import * as migration_20261103_130124_suggestions_similar_words from './20261103_130124_suggestions_similar_words';
 import * as migration_20261103_163400_word_feedback from './20261103_163400_word_feedback';
-import * as migration_20261105_105629_word_stats from './20261105_105629_word_stats';
+import * as migration_20261105_112655_word_stats from './20261105_112655_word_stats';
 
 export const migrations = [
   {
@@ -110,8 +110,8 @@ export const migrations = [
     name: '20261103_163400_word_feedback',
   },
   {
-    up: migration_20261105_105629_word_stats.up,
-    down: migration_20261105_105629_word_stats.down,
-    name: '20261105_105629_word_stats'
+    up: migration_20261105_112655_word_stats.up,
+    down: migration_20261105_112655_word_stats.down,
+    name: '20261105_112655_word_stats'
   },
 ];
