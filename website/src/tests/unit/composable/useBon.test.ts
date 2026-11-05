@@ -39,6 +39,7 @@ import { $bonStats } from "@stores/bonStats";
 import { $savedBon } from "@stores/savedBon";
 import { createToastNotify } from "@stores/toastNotify";
 import { trackEvent } from "@utils/analytics";
+import { computeMultiplier as serverMultiplier } from "payload-app/bon-rules";
 
 import type { FakeWord } from "@/data/fakeWords";
 
@@ -67,6 +68,11 @@ describe("computeMultiplier", () => {
   it("returns 3 for streak 9", () => expect(computeMultiplier(9)).toBe(3));
   it("returns 5 for streak 10", () => expect(computeMultiplier(10)).toBe(5));
   it("returns 5 for streak 20", () => expect(computeMultiplier(20)).toBe(5));
+  it("agrees with the server rules for streaks 0-25", () => {
+    for (let streak = 0; streak <= 25; streak++) {
+      expect(serverMultiplier(streak)).toBe(computeMultiplier(streak));
+    }
+  });
 });
 
 // ─── deck composition (_makeQueuedDeck) ──────────────────────────────────────
