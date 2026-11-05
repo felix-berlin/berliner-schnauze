@@ -9,7 +9,7 @@ const TTL = 5 * 60_000;
 const TYPES: readonly string[] = ["viewed", "rising", "engaged"] satisfies TrendType[];
 
 // shortcut: per process; with several web containers use a shared cache
-const cache = new Map<string, { at: number; body: unknown }>();
+const cache = new Map<string, { at: number; items: unknown }>();
 
 const inRange = (n: number | undefined, max: number): n is number => n !== undefined && n <= max;
 
@@ -22,8 +22,8 @@ export const GET: APIRoute = async ({ url }) => {
 
   const key = `${type}:${days}:${limit}`;
   const now = Date.now();
-  let body = cache.get(key);
-  if (!body || now - body.at >= TTL) {
+  let hit = cache.get(key);
+  if (!hit || now - hit.at >= TTL) {
     try {
       const payload = await getPayloadClient();
       const ranked = await trending(payload, { days, limit, type: type as TrendType });
@@ -47,11 +47,11 @@ export const GET: APIRoute = async ({ url }) => {
           word: toWordRef(byId.get(r.word) as Parameters<typeof toWordRef>[0]),
         }));
       for (const [k, v] of cache) if (now - v.at >= TTL) cache.delete(k);
-      cache.set(key, (body = { at: now, body: { items } }));
+      cache.set(key, (hit = { at: now, items }));
     } catch (error) {
       console.error(`[trending] ${key} failed:`, error);
       return reply({ error: "Die Liste konnte leider nicht jeladen werden." }, 502);
     }
   }
-  return Response.json(body.body, { headers: { "Cache-Control": "public, max-age=300" } });
+  return Response.json({ items: hit.items }, { headers: { "Cache-Control": "public, max-age=300" } });
 };
