@@ -609,17 +609,17 @@ describe("BerlinerOderNicht.vue", () => {
     expect(mockNextCard).toHaveBeenCalled();
   });
 
-  it("onMounted maps word with empty translations to translation=undefined (covers line 246 ?? branch)", async () => {
+  it("onMounted does not offer a word without translation", async () => {
     mockFetchSearchIndex.mockResolvedValue([
       { slug: "schnauze", wordProperties: { berlinerisch: "Schnauze", translations: [] } },
+      { slug: "kiez", wordProperties: { berlinerisch: "Kiez", translations: ["Viertel"] } },
     ]);
     mount(BerlinerOderNicht);
     await vi.runAllTimersAsync();
-    expect(mockInit).toHaveBeenCalled();
     const [realWords] = mockInit.mock.calls[mockInit.mock.calls.length - 1] as [
-      { translation: unknown }[],
+      { word: string }[],
       unknown,
     ];
-    expect(realWords[0].translation).toBeUndefined();
+    expect(realWords.map((w) => w.word)).toEqual(["Kiez"]);
   });
 });
