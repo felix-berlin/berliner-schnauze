@@ -1,4 +1,9 @@
-// Word stats helpers (`payload-app/word-stats`): the Berlin day and the trending ranks. Types only, no payload/next/config runtime imports.
+import type { PostgresAdapter } from "@payloadcms/db-postgres";
+import type { Payload } from "payload";
+
+import { sql } from "@payloadcms/db-postgres/drizzle";
+
+// Word stats helpers (`payload-app/word-stats`): the Berlin day, the trending ranks and the atomic counter.
 
 export const STAT_KINDS = ["view", "audio", "share", "click"] as const;
 export type StatKind = (typeof STAT_KINDS)[number];
@@ -72,4 +77,23 @@ export const rankEngaged = (cur: Map<number, Counts>, limit: number): Ranked[] =
     })),
     limit,
   );
+};
+
+const COLUMN = { view: "views", audio: "audio", share: "shares", click: "clicks" } as const;
+
+/** Atomic upsert of one daily counter: concurrent bumps never lose an increment. */
+export const bumpWordStat = async (
+  payload: Payload,
+  wordId: number,
+  kind: StatKind,
+  day: string = berlinDay(),
+): Promise<void> => {
+  const n = (k: StatKind) => (k === kind ? 1 : 0); // the first bump of a day starts its column at 1
+  const col = sql.identifier(COLUMN[kind]);
+  const { drizzle } = payload.db as unknown as PostgresAdapter;
+  await drizzle.execute(sql`
+    insert into word_stats (word_id, day, views, audio, shares, clicks, updated_at, created_at)
+    values (${wordId}, ${day}, ${n("view")}, ${n("audio")}, ${n("share")}, ${n("click")}, now(), now())
+    on conflict (word_id, day) do update set ${col} = word_stats.${col} + 1, updated_at = now()
+  `);
 };
