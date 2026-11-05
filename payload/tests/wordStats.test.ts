@@ -88,4 +88,17 @@ describe("bumpWordStat", () => {
       }),
     ).rejects.toThrow();
   });
+
+  it("is removed together with its word", async () => {
+    const id = (
+      await payload.create({
+        collection: "words",
+        data: { berlinerisch: "Statsweg", slug: "word-stats-test-del", _status: "published" },
+      })
+    ).id;
+    await bumpWordStat(payload, id, "view", "2026-11-09");
+    await payload.delete({ collection: "words", id });
+    const left = await payload.count({ collection: "word-stats", where: { word: { equals: id } } });
+    expect(left.totalDocs).toBe(0);
+  });
 });

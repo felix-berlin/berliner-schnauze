@@ -39,7 +39,7 @@ infisical run -- pnpm dlx tsx scripts/publish-drafts.ts --dry-run   # Publish al
 
 ## Trending words (`word-stats`, `src/lib/wordStats.ts`, export `payload-app/word-stats`)
 
-- Collection `word-stats`: one row per word and Berlin day (`day` text `YYYY-MM-DD`, unique `(word, day)`), counters `views`/`audio`/`shares`/`clicks`. `bumpWordStat(payload, word, kind)` increments one atomically.
+- Collection `word-stats`: one row per word and Berlin day (`day` text `YYYY-MM-DD`, unique `(word, day)`), counters `views`/`audio`/`shares`/`clicks`. `bumpWordStat(payload, word, kind)` increments one atomically. Daily rows go away together with their word (`deleteComments` beforeDelete hook in `collections/Words.ts` removes `word-feedback`, `word-stats` and `comments`; the FK is NOT NULL). No timestamps on the collection (privacy: created/updated would show one visitor's visit time).
 - `trending(payload, { type, days, limit })` ranks published words only (`limit` applied inside). Interactions I = Audio + Teilen + Weiterklick + Reaktion (weight 1 each) + Kommentar (weight 3, published comments only); m = max(1, Σviews / words with views). `viewed` = views; `rising` = (jetzt − davor)/(davor + m), values ≤ 0 dropped; `engaged` = (I + m·rate)/(V + m).
 - Site routes: `POST /api/word-pulse` (counts one report, 404 for drafts) and `GET /api/trending?type=viewed|rising|engaged&days=1..365&limit=1..50` (defaults 30/10; 5 min in-process cache, `Cache-Control: public, max-age=300`).
 
