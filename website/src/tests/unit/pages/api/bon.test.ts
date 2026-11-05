@@ -283,9 +283,9 @@ describe("POST /api/bon/next", () => {
     expect((await next("nope", "v-1")).status).toBe(400);
   });
 
-  it("stops at 50 batches per game", async () => {
+  it("stops at 20 batches per game", async () => {
     const { token } = await newGame("v-1");
-    row(token).batches = Array.from({ length: 50 }, (_, i) => ({ issuedAt: T0, start: i * 20 }));
+    row(token).batches = Array.from({ length: 20 }, (_, i) => ({ issuedAt: T0, start: i * 20 }));
     expect((await next(token, "v-1")).status).toBe(400);
     expect(dealt(token)).toHaveLength(20);
   });
@@ -462,6 +462,7 @@ describe("POST /api/bon/finish", () => {
   it.each([
     ["a link", "http://x"],
     ["www.", "www.x.de"],
+    ["a bare domain", "evil.com"],
     ["10 000 chars", "a".repeat(10_000)],
     ["25 chars", "a".repeat(25)],
   ])("400 on a playerName with %s", async (_, playerName) => {

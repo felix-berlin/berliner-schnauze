@@ -8,7 +8,7 @@ import { reply } from "@utils/apiReply.ts";
 import { dealBatch, toPublic } from "@utils/bonDeck.ts";
 import { nextSchema } from "@utils/bonSchema.ts";
 
-const MAX_BATCHES = 50;
+const MAX_BATCHES = 20; // 20 batches = at most the 400 answers finish accepts
 
 export const POST: APIRoute = async ({ cookies, request }) => {
   const input = nextSchema.safeParse(await request.json().catch(() => undefined));
@@ -24,7 +24,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
       return reply({ error: "Jenug Karten für een Spiel." }, 400);
 
     const cards = dealBatch(await loadPool(), new Set(game.cards.map((c) => c.id)));
-    // shortcut: two parallel nexts can overwrite each other's batch; the lost cards then fail finish's order check.
+    // shortcut: two parallel nexts hand out the same positions with different words and only one batch is stored, so answers to the lost batch are scored against other words. Not exploitable for cheating; the client must keep at most one next in flight.
     await payload.update({
       collection: "bon-games",
       data: {

@@ -1,3 +1,4 @@
+import { containsLink } from "payload-app/comments";
 import { z } from "zod";
 
 const token = z.string().regex(/^[0-9a-f]{64}$/);
@@ -11,7 +12,7 @@ export const finishSchema = z.strictObject({
     .string()
     .trim()
     .max(24)
-    .refine((v) => !/:\/\/|www\./i.test(v), "no links")
+    .refine((v) => !containsLink(v), "no links")
     .optional()
     .transform((v) => v || "Anonym"),
   token,

@@ -44,7 +44,7 @@ Neu: Ein beendetes Spiel wird auf dem Server gespeichert, und der Server liefert
 - Die Spielregeln (10 × Multiplikator, 3 Leben, Multiplikator ab Streak 3/6/10 = 2/3/5) werden einmal serverseitig abgebildet. `computeMultiplier` aus `useBon.ts` ist die Referenz; der Server importiert sie nicht aus der Vue-Composable-Datei, sondern die Logik wird in eine gemeinsame reine Datei gezogen oder dupliziert und per Test gegen `useBon` abgeglichen.
 - Echte Wörter kommen aus der CMS-Datenbank, Fake-Wörter aus `website/src/data/fakeWords.ts`. Beides ist im Astro-Server verfügbar.
 - Eine neue Payload-Collection (Arbeitsname `bon-games`, nur Login-Zugriff wie `word-feedback`) und Astro-API-Routen unter `website/src/pages/api/`, nach dem Muster von `word-feedback`.
-- Rate-Limit pro Pseudonym und pro IP im Speicher, ohne IPs zu speichern (wie bei `word-feedback`).
+- Rate-Limit nur pro IP im Speicher (ein Limit pro Pseudonym ist sinnlos, Cookies sind kostenlos), ohne IPs zu speichern (wie bei `word-feedback`).
 
 ## Missbrauchsschutz
 
@@ -59,7 +59,7 @@ Neu: Ein beendetes Spiel wird auf dem Server gespeichert, und der Server liefert
 
 - Start: liefert Spiel-Token plus ersten Stapel (pro Karte nur Karten-ID und Wort, nie die Lösung). Heute zeigt der Client nach einer richtigen Antwort die Übersetzung an (`translation`); der Server liefert sie erst in der Ende-Antwort oder in einer eigenen Antwort pro Karte, das entscheidet das Frontend-Ticket.
 - Nachladen: Token plus nächster Stapel.
-- Ende: Token, Antworten (Karten-ID, Antwort, Zeitpunkt), Anzeigename. Antwort: Score, bester Streak, Antworten gesamt, richtige Antworten, Platz, Gesamtzahl gespeicherter Spiele.
+- Ende: Token, `{ token, answers: [{ card, real }], playerName? }`, `card` ist die Position im Spiel, keine Zeitstempel pro Antwort. Ein fehlgeschlagenes Ende verbraucht das Spiel nicht. Antwort: Score, bester Streak, Antworten gesamt, richtige Antworten, Platz, Gesamtzahl gespeicherter Spiele.
 - Platz = 1 + Anzahl gespeicherter, beendeter Spiele mit höherem Score. Bei Gleichstand teilen sich Spiele denselben Platz (Entscheidung des Builders, wenn sie anders gewichtet werden soll).
 
 ## Datenschutz
@@ -74,5 +74,5 @@ Namen und Felder der Collection und Routen, Token-Verfahren, Mindestzeit pro Kar
 
 - **Cookie:** Der Server setzt das Pseudonym-Cookie selbst beim Start, über `visitorId(cookies, true)` aus `website/src/services/payload/comments.ts` (httpOnly, 1 Jahr, Pfad `/api/`). Ohne Cookie (blockiert, privates Fenster) kann kein Spiel gestartet werden; das Frontend spielt dann ohne Ranking, wie offline.
 - **Zeitprüfung:** Nur Serverzeiten zählen. Der Server prüft die Gesamtzeit zwischen Ausgabe der Stapel und dem Ende-Request gegen eine Mindestzeit pro beantworteter Karte. Die Zeitstempel des Clients sind nur Hinweis. Es bleiben drei Endpunkte (Start, Nachladen, Ende), keine Anfrage pro Antwort. Grenze: Ein Bot, der wartet, fällt nicht auf.
-- **Kartenpool:** Echte Wörter: veröffentlicht, mit nicht leerem `berlinerisch` und mindestens einer nicht leeren Übersetzung. Der Auftraggeber hat bestätigt, dass die Übersetzung Pflicht ist; das heutige Filtern in `BerlinerOderNicht.vue` (nur `berlinerisch`) wird dafür angepasst. Eine Karte kommt innerhalb eines Spiels nicht doppelt vor. Der Pool hat tausende Wörter, ein leerer Pool wird nicht gesondert behandelt (Fehler statt Endlosschleife).
+- **Kartenpool:** Echte Wörter: veröffentlicht, mit nicht leerem `berlinerisch` und erster Übersetzung nicht leer. Der Auftraggeber hat bestätigt, dass die Übersetzung Pflicht ist; das heutige Filtern in `BerlinerOderNicht.vue` (nur `berlinerisch`) wird dafür angepasst. Eine Karte kommt innerhalb eines Spiels nicht doppelt vor. Der Pool hat tausende Wörter, ein leerer Pool wird nicht gesondert behandelt (Fehler statt Endlosschleife).
 - **Anzeigename:** optional, Standard „Anonym". Validiert nur auf Länge und Links. Eine Prüfung auf Schimpfwörter gehört ins Anzeige-Ticket, weil Namen erst dort öffentlich werden.
