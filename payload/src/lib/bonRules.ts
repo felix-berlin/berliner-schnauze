@@ -1,4 +1,4 @@
-// Pure BON game rules, shared by the API routes; the client copy lives in website/src/composable/useBon.ts.
+// Pure BON game rules, shared by the API routes; the client copy of the multiplier and scoring lives in website/src/composable/useBon.ts; lives and timing are server-only.
 export const LIVES = 3;
 export const MIN_MS_PER_ANSWER = 700;
 

@@ -21,5 +21,7 @@ export const findGame = async (payload: Client, token: string, visitor: string) 
       where: { token: { equals: token }, visitor: { equals: visitor } },
     })
   ).docs[0];
+  if (game && !(Array.isArray(game.batches) && Array.isArray(game.cards)))
+    throw new Error(`bon-games ${game.id}: malformed cards or batches`);
   return game && { ...game, batches: game.batches as Batch[], cards: game.cards as DealtCard[] };
 };

@@ -17,14 +17,20 @@ export const POST: APIRoute = async ({ cookies }) => {
     const visitor = bonVisitor(cookie);
     const payload = await getPayloadClient();
     // Unfinished games never rank; drop everyone's abandoned ones (cookie-less clients get a new visitor per start).
-    await payload.delete({
-      collection: "bon-games",
-      depth: 0,
-      where: {
-        createdAt: { less_than: new Date(Date.now() - DAY).toISOString() },
-        status: { equals: "playing" },
-      },
-    });
+    // Housekeeping must never keep anyone from playing.
+    await payload
+      .delete({
+        collection: "bon-games",
+        depth: 0,
+        where: {
+          createdAt: { less_than: new Date(Date.now() - DAY).toISOString() },
+          status: { equals: "playing" },
+        },
+      })
+      .then(({ errors }) => {
+        if (errors.length > 0) console.error("[bon] cleanup failed for some games:", errors);
+      })
+      .catch((error: unknown) => console.error("[bon] cleanup failed:", error));
     const cards = dealBatch(await loadPool(), new Set());
     const game = await payload.create({
       collection: "bon-games",

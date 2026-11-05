@@ -25,7 +25,9 @@ export function dealBatch(
   const real = fresh(pool.real);
   const fake = fresh(pool.fake);
   if (real.length < realCount || fake.length < BATCH_SIZE - realCount) {
-    throw new Error("pool too small");
+    throw new Error(
+      `pool too small: ${real.length} real (need ${realCount}), ${fake.length} fake (need ${BATCH_SIZE - realCount}), ${used.size} used`,
+    );
   }
   return shuffle(
     [

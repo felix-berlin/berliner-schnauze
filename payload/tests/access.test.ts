@@ -3,7 +3,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest
 import { mediaRead, usersCreate } from "../src/access";
 import { getTestPayload } from "./helpers/payload";
 
-// Task 3 and Task 5 append their collections/globals here.
+// Add every new collection/global here.
 const lockedCollections = ["users", "words", "word-types", "themen", "posts", "pages", "suggestions", "redirects", "comments", "comment-votes", "comment-reports", "word-feedback", "bon-games"] as const;
 const lockedGlobals = ["navigation", "affiliate", "company", "home", "anki"] as const;
 

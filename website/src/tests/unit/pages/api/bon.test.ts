@@ -211,6 +211,12 @@ describe("POST /api/bon/start", () => {
     expect(db.rows[0].visitor).toMatch(/^[0-9a-f]{64}$/);
   });
 
+  it("still deals a game when the cleanup fails", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    db.api.delete.mockRejectedValueOnce(new Error("delete down"));
+    expect((await start("v-1")).status).toBe(200);
+  });
+
   it("deletes every visitor's playing games older than 24 h, keeps finished and fresh ones", async () => {
     const seed = (visitor: string, status: string, age: number) =>
       db.rows.push({
@@ -483,14 +489,16 @@ describe("POST /api/bon/finish", () => {
     expect(row(token).playerName).toBe("Anonym");
   });
 
-  it("says the result is stored when only the rank count fails", async () => {
+  it("returns the stored result without a rank when only the rank count fails", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     const { token } = await newGame("v-1");
     later(60_000);
     db.api.count.mockRejectedValueOnce(new Error("count down"));
     const res = await finish({ answers: run(token, 4), token }, "v-1");
-    expect(res.status).toBe(502);
-    expect((await res.json()).error).toContain("jespeichert");
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.score).toEqual(expect.any(Number));
+    expect(body).not.toHaveProperty("rank");
     expect(row(token).status).toBe("finished");
   });
 });

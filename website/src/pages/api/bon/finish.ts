@@ -24,7 +24,6 @@ export const POST: APIRoute = async ({ cookies, request }) => {
 
   if (finishing.has(token)) return reply(DONE, 409);
   finishing.add(token);
-  let stored = false;
   try {
     const payload = await getPayloadClient();
     const game = await findGame(payload, token, bonVisitor(cookie));
@@ -34,39 +33,53 @@ export const POST: APIRoute = async ({ cookies, request }) => {
     const { batches, cards } = game;
     const now = Date.now();
     // Each answer names the public id (position) of its card; that also rules out reordered, duplicated and undealt ones.
-    if (answers.length > cards.length || answers.some((a, i) => a.card !== String(i)))
+    const rejected = (reason: string) => {
+      console.warn("[bon] finish rejected:", reason, { answers: answers.length, id: game.id });
       return reply(INVALID, 400);
+    };
+    if (answers.length > cards.length || answers.some((a, i) => a.card !== String(i)))
+      return rejected("answers do not match the dealt cards");
     const result = verifyRun(
       cards.map((c) => c.isReal),
       answers.map((a) => a.real),
     );
-    if (!result || batches.length === 0 || !plausibleTiming(batches, answers.length, now))
-      return reply(INVALID, 400);
+    if (!result) return rejected("run does not end at the third wrong answer");
+    if (batches.length === 0 || !plausibleTiming(batches, answers.length, now))
+      return rejected("implausible timing");
 
     // Still conditional on "playing", so a finish after a completed one changes nothing.
-    const { docs } = await payload.update({
+    const { docs, errors } = await payload.update({
       collection: "bon-games",
       data: { ...result, finishedAt: new Date(now).toISOString(), playerName, status: "finished" },
       depth: 0,
       where: { id: { equals: game.id }, status: { equals: "playing" } },
     });
+    if (errors.length > 0) throw new Error(`update failed: ${errors[0].message}`);
     if (docs.length === 0) return reply(DONE, 409);
-    stored = true;
 
     const finished = { status: { equals: "finished" } } as const;
-    const [higher, total] = await Promise.all([
+    // The result is stored; a failed rank lookup must not hide it.
+    const ranking = await Promise.all([
       payload.count({
         collection: "bon-games",
         where: { ...finished, score: { greater_than: result.score } },
       }),
       payload.count({ collection: "bon-games", where: finished }),
-    ]);
-    return reply({ ...result, rank: higher.totalDocs + 1, totalGames: total.totalDocs }, 200);
+    ]).catch((error: unknown) => {
+      console.error("[bon] rank lookup failed:", error);
+      return undefined;
+    });
+    return reply(
+      {
+        ...result,
+        rank: ranking && ranking[0].totalDocs + 1,
+        totalGames: ranking && ranking[1].totalDocs,
+      },
+      200,
+    );
   } catch (error) {
     console.error("[bon] finish failed:", error);
-    return stored
-      ? reply({ error: "Is jespeichert, aber der Platz wollte nich laden." }, 502)
-      : reply({ error: "Dett Ergebnis konnte nich jespeichert werden." }, 502);
+    return reply({ error: "Dett Ergebnis konnte nich jespeichert werden." }, 502);
   } finally {
     finishing.delete(token);
   }
