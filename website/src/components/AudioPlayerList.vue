@@ -11,6 +11,7 @@
       <span class="c-audio-list__gender">{{ item.gender === "female" ? "♀" : "♂" }}</span>
       <AudioPlayer
         :audio="item.audio.url"
+        :word-id="wordId"
         class="c-audio-list__audio-player"
       />
     </div>
@@ -25,9 +26,10 @@ import AudioPlayer from "@components/AudioPlayer.vue";
 type AudioPlayerListProps = {
   audio: AudioRow[];
   isType: "berlinerisch" | "example";
+  wordId?: number;
 };
 
-const { audio, isType } = defineProps<AudioPlayerListProps>();
+const { audio, isType, wordId } = defineProps<AudioPlayerListProps>();
 </script>
 
 <style lang="scss">

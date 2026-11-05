@@ -3,6 +3,8 @@ import { mount } from "@vue/test-utils";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { nextTick } from "vue";
 
+vi.mock("@utils/wordPulse.ts", () => ({ reportWord: vi.fn() }));
+
 describe("AudioPlayer.vue", () => {
   let audioPlayMock: ReturnType<typeof vi.fn>;
   let audioPauseMock: ReturnType<typeof vi.fn>;
@@ -42,6 +44,20 @@ describe("AudioPlayer.vue", () => {
     await wrapper.find("button").trigger("click");
     expect(audioPlayMock).toHaveBeenCalled();
     expect(wrapper.find("[data-testid='icon-lucide-pause']").exists()).toBe(true);
+  });
+
+  it("reports the audio play for the word, only when a wordId is given", async () => {
+    const { reportWord } = await import("@utils/wordPulse.ts");
+    audioPlayMock.mockResolvedValue(undefined);
+    await mount(AudioPlayer, { props: { audio: "test-audio-url", wordId: 5 } })
+      .find("button")
+      .trigger("click");
+    expect(reportWord).toHaveBeenCalledWith(5, "audio");
+    vi.mocked(reportWord).mockClear();
+    await mount(AudioPlayer, { props: { audio: "test-audio-url" } })
+      .find("button")
+      .trigger("click");
+    expect(reportWord).not.toHaveBeenCalled();
   });
 
   it("stops audio on button click when playing", async () => {

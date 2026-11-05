@@ -17,6 +17,7 @@
 </template>
 
 <script setup lang="ts">
+import { reportWord } from "@utils/wordPulse.ts";
 import { useEventListener, useRafFn } from "@vueuse/core";
 import Pause from "virtual:icons/lucide/pause";
 import Play from "virtual:icons/lucide/play";
@@ -24,9 +25,10 @@ import { computed, nextTick, onMounted, ref } from "vue";
 
 type AudioPlayerListProps = {
   audio: string | null;
+  wordId?: number;
 };
 
-const { audio } = defineProps<AudioPlayerListProps>();
+const { audio, wordId } = defineProps<AudioPlayerListProps>();
 
 const audioFile: HTMLAudioElement | null = audio ? new Audio(audio) : null;
 const isPlaying = ref(false);
@@ -55,6 +57,7 @@ const handleEnded = () => {
 
 const playAudio = async () => {
   await audioFile?.play();
+  if (wordId !== undefined) reportWord(wordId, "audio");
   isPlaying.value = true;
   startProgress();
 };

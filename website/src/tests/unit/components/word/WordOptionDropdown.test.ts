@@ -27,6 +27,8 @@ vi.mock("@stores/toastNotify.ts", () => ({
   createToastNotify: vi.fn(),
 }));
 
+vi.mock("@utils/wordPulse.ts", () => ({ reportWord: vi.fn() }));
+
 vi.mock("@utils/analytics", () => ({
   trackEvent: vi.fn(),
 }));
@@ -309,5 +311,15 @@ describe("WordOptionDropdown.vue", () => {
     expect(vi.mocked(createToastNotify)).toHaveBeenCalledWith(
       expect.objectContaining({ message: "Wort geteilt" }),
     );
+  });
+
+  it("reports the share for the word when a wordId is given", async () => {
+    const { reportWord } = await import("@utils/wordPulse.ts");
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: "schnauze", wordId: 5 },
+    });
+    await wrapper.find("[aria-label='Wort teilen']").trigger("click");
+    await vi.waitFor(() => expect(reportWord).toHaveBeenCalledWith(5, "share"));
   });
 });
