@@ -45,7 +45,8 @@ describe("POST /api/word-pulse", () => {
     { kind: "x", word: 7 },
     { kind: "view", word: -1 },
     { kind: "view", word: 1.5 },
-    { kind: "view", word: 7, extra: 1 },
+    { extra: 1, kind: "view", word: 7 },
+    { kind: "view", word: 2147483648 },
   ])("400 on %j, nothing counted", async (body) => {
     expect((await post(body)).status).toBe(400);
     expect(bumpWordStat).not.toHaveBeenCalled();

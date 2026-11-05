@@ -3,5 +3,5 @@ import { z } from "zod";
 
 export const wordPulseSchema = z.strictObject({
   kind: z.enum(STAT_KINDS),
-  word: z.number().int().positive(),
+  word: z.number().int().positive().max(2_147_483_647),
 });
