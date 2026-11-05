@@ -70,11 +70,13 @@ export const rankEngaged = (cur: Map<number, Counts>, limit: number): Ranked[] =
   }
   const rate = views ? interactions / views : 0;
   return top(
-    [...cur].map(([word, c]) => ({
-      word,
-      value: (c.interactions + m * rate) / (c.views + m),
-      views: c.views,
-    })),
+    [...cur]
+      .filter(([, c]) => c.views > 0) // interactions without views (comments/reactions alone) would divide by m only
+      .map(([word, c]) => ({
+        word,
+        value: (c.interactions + m * rate) / (c.views + m),
+        views: c.views,
+      })),
     limit,
   );
 };
@@ -92,9 +94,9 @@ export const bumpWordStat = async (
   const col = sql.identifier(COLUMN[kind]);
   const { drizzle } = payload.db as unknown as PostgresAdapter;
   await drizzle.execute(sql`
-    insert into word_stats (word_id, day, views, audio, shares, clicks, updated_at, created_at)
-    values (${wordId}, ${day}, ${n("view")}, ${n("audio")}, ${n("share")}, ${n("click")}, now(), now())
-    on conflict (word_id, day) do update set ${col} = word_stats.${col} + 1, updated_at = now()
+    insert into word_stats (word_id, day, views, audio, shares, clicks)
+    values (${wordId}, ${day}, ${n("view")}, ${n("audio")}, ${n("share")}, ${n("click")})
+    on conflict (word_id, day) do update set ${col} = word_stats.${col} + 1
   `);
 };
 
@@ -155,6 +157,8 @@ const collect = async (payload: Payload, first: string, last: string) => {
   for (const s of stats.docs) {
     bump(s.word, s.views, (s.audio + s.shares + s.clicks) * W_OTHER);
   }
+  // A reaction counts on the Berlin day the visitor FIRST answered anything (one row per visitor and word, createdAt
+  // is the first-answer time); a later change is not moved.
   for (const f of feedback.docs) bump(f.word, 0, W_OTHER);
   for (const c of comments.docs) bump(c.word, 0, W_COMMENT);
   return map;

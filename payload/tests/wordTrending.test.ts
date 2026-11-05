@@ -11,6 +11,7 @@ const slugs = [
   "trend-test-draft",
   "trend-test-held",
   "trend-test-plain",
+  "trend-test-zero",
 ];
 const today = "2026-11-30";
 let payload: Payload;
@@ -19,6 +20,7 @@ let b: number;
 let draft: number;
 let held: number;
 let plain: number;
+let zero: number;
 
 const stat = (word: number, day: string, data: Record<string, number>) =>
   payload.create({ collection: "word-stats", data: { word, day, ...data } as never });
@@ -51,6 +53,7 @@ beforeAll(async () => {
   await stat(a, "2026-11-10", { views: 10 });
   held = await mk("Trendheld", slugs[3], "published");
   plain = await mk("Trendplain", slugs[4], "published");
+  zero = await mk("Trendnull", slugs[5], "published");
   await stat(held, "2026-11-12", { views: 5 });
   await stat(plain, "2026-11-12", { views: 5 });
   await stat(a, "2026-10-05", { views: 4 }); // previous period
@@ -64,6 +67,7 @@ beforeAll(async () => {
       data: { word, text: "kiek ma", authorName, createdAt: at } as never,
     });
   await c("Icke");
+  await c("Nullviews", zero);
   expect((await c("casino-bonus.com", held)).status).toBe("pending");
   await payload.create({
     collection: "word-feedback",
@@ -111,6 +115,11 @@ describe("trending", () => {
     expect(value(held)).toBe(value(plain)); // identical views; any comment weight would lift `held`
   });
 
+  it("engaged: a word with a comment but no views is not listed", async () => {
+    const r = await trending(payload, { ...opts, type: "engaged", limit: 1000 });
+    expect(r.map((x) => x.word)).not.toContain(zero);
+  });
+
   it("never lists a draft word", async () => {
     for (const type of ["viewed", "rising", "engaged"] as const) {
       const r = await trending(payload, { ...opts, type });
@@ -119,6 +128,8 @@ describe("trending", () => {
   });
 
   it("returns [] without data", async () => {
-    expect(await trending(payload, { ...opts, type: "viewed", today: "2020-01-31" })).toEqual([]);
+    for (const type of ["viewed", "rising", "engaged"] as const) {
+      expect(await trending(payload, { ...opts, type, today: "2020-01-31" })).toEqual([]);
+    }
   });
 });

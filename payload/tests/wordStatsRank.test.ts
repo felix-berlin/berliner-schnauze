@@ -42,6 +42,15 @@ describe("ranks", () => {
     ]);
   });
 
+  it("rankEngaged ignores words without views", () => {
+    const cur = new Map<number, Counts>([
+      [1, { views: 0, interactions: 3 }],
+      [2, { views: 10, interactions: 1 }],
+      [3, { views: 10, interactions: 0 }],
+    ]);
+    expect(rankEngaged(cur, 10).map((x) => x.word)).toEqual([2, 3]);
+  });
+
   it("returns [] for empty maps", () => {
     expect(rankViewed(new Map(), 5)).toEqual([]);
     expect(rankRising(new Map(), new Map(), 5)).toEqual([]);
