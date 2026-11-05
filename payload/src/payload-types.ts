@@ -103,6 +103,7 @@ export interface Config {
     'comment-votes': CommentVote;
     'comment-reports': CommentReport;
     'word-feedback': WordFeedback;
+    'bon-games': BonGame;
     redirects: Redirect;
     'payload-mcp-api-keys': PayloadMcpApiKey;
     'payload-kv': PayloadKv;
@@ -125,6 +126,7 @@ export interface Config {
     'comment-votes': CommentVotesSelect<false> | CommentVotesSelect<true>;
     'comment-reports': CommentReportsSelect<false> | CommentReportsSelect<true>;
     'word-feedback': WordFeedbackSelect<false> | WordFeedbackSelect<true>;
+    'bon-games': BonGamesSelect<false> | BonGamesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'payload-mcp-api-keys': PayloadMcpApiKeysSelect<false> | PayloadMcpApiKeysSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -670,6 +672,48 @@ export interface WordFeedback {
   createdAt: string;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bon-games".
+ */
+export interface BonGame {
+  id: number;
+  visitor: string;
+  token: string;
+  status: 'playing' | 'finished';
+  /**
+   * { id, word, isReal, translation? }[] in dealt order
+   */
+  cards:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * { issuedAt: number, start: number }[]
+   */
+  batches:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  playerName?: string | null;
+  score?: number | null;
+  bestStreak?: number | null;
+  totalAnswered?: number | null;
+  correctAnswers?: number | null;
+  finishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Alter Pfad, z. B. /wort/alter-slug → Dokument oder eigene URL.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -918,6 +962,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'word-feedback';
         value: number | WordFeedback;
+      } | null)
+    | ({
+        relationTo: 'bon-games';
+        value: number | BonGame;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1243,6 +1291,25 @@ export interface WordFeedbackSelect<T extends boolean = true> {
   origin?: T;
   half?: T;
   age?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bon-games_select".
+ */
+export interface BonGamesSelect<T extends boolean = true> {
+  visitor?: T;
+  token?: T;
+  status?: T;
+  cards?: T;
+  batches?: T;
+  playerName?: T;
+  score?: T;
+  bestStreak?: T;
+  totalAnswered?: T;
+  correctAnswers?: T;
+  finishedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }

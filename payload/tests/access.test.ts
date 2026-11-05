@@ -4,7 +4,7 @@ import { mediaRead, usersCreate } from "../src/access";
 import { getTestPayload } from "./helpers/payload";
 
 // Task 3 and Task 5 append their collections/globals here.
-const lockedCollections = ["users", "words", "word-types", "themen", "posts", "pages", "suggestions", "redirects", "comments", "comment-votes", "comment-reports", "word-feedback"] as const;
+const lockedCollections = ["users", "words", "word-types", "themen", "posts", "pages", "suggestions", "redirects", "comments", "comment-votes", "comment-reports", "word-feedback", "bon-games"] as const;
 const lockedGlobals = ["navigation", "affiliate", "company", "home", "anki"] as const;
 
 const png = Buffer.from(
