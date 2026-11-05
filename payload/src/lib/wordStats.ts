@@ -41,7 +41,7 @@ export const rankViewed = (cur: Map<number, Counts>, limit: number): Ranked[] =>
     limit,
   );
 
-/** Change in views, damped by `m` so small words do not jump. */
+/** Relative change in views against the previous period, damped by `m` so small words do not jump. */
 export const rankRising = (
   cur: Map<number, Counts>,
   prev: Map<number, Counts>,
@@ -59,7 +59,7 @@ export const rankRising = (
   );
 };
 
-/** Interactions per view, pulled towards the overall rate by `m` views. */
+/** Interactions per view, pulled towards the overall rate (all words, also those without views) by `m` views. */
 export const rankEngaged = (cur: Map<number, Counts>, limit: number): Ranked[] => {
   const m = prior(cur);
   let views = 0;
@@ -71,7 +71,7 @@ export const rankEngaged = (cur: Map<number, Counts>, limit: number): Ranked[] =
   const rate = views ? interactions / views : 0;
   return top(
     [...cur]
-      .filter(([, c]) => c.views > 0) // interactions without views (comments/reactions alone) would divide by m only
+      .filter(([, c]) => c.views > 0) // a word with interactions but no views would be scored as if it had views
       .map(([word, c]) => ({
         word,
         value: (c.interactions + m * rate) / (c.views + m),
@@ -100,7 +100,8 @@ export const bumpWordStat = async (
   `);
 };
 
-export type TrendType = "viewed" | "rising" | "engaged";
+export const TREND_TYPES = ["viewed", "rising", "engaged"] as const;
+export type TrendType = (typeof TREND_TYPES)[number];
 
 const W_COMMENT = 3;
 const W_OTHER = 1; // audio, share, click and reaction each

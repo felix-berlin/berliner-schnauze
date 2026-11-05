@@ -43,6 +43,13 @@ describe("reportWord", () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
+  it("sends one report for synchronous repeats", async () => {
+    reportWord(7, "audio");
+    reportWord(7, "audio");
+    await flush();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
   it("sends another kind or another word", async () => {
     reportWord(7, "view");
     reportWord(7, "audio");

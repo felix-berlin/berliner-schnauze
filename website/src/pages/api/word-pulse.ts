@@ -11,7 +11,10 @@ const DAY = 24 * 60 * 60_000;
 // Nothing about the visitor is stored: the IP only feeds the in-memory caps.
 export const POST: APIRoute = async ({ clientAddress, request }) => {
   const input = wordPulseSchema.safeParse(await request.json().catch(() => undefined));
-  if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
+  if (!input.success) {
+    console.warn("[word-pulse] invalid input:", input.error.issues);
+    return reply({ error: "Ungültige Eingabe" }, 400);
+  }
   const { kind, word } = input.data;
 
   try {
@@ -22,8 +25,10 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
     if (!found) return reply({ error: "Wort nicht gefunden" }, 404);
 
     const ip = clientIp(request.headers.get("x-forwarded-for"), clientAddress);
-    if (rateLimitedBy(ip, "word-pulse-all", 2000, DAY) > 0)
+    if (rateLimitedBy(ip, "word-pulse-all", 2000, DAY) > 0) {
+      console.warn("[word-pulse] daily cap reached");
       return reply({ error: "Jenug jemeldet für heute." }, 429);
+    }
 
     await bumpWordStat(payload, word, kind);
     return reply({ ok: true }, 200);

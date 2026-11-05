@@ -44,7 +44,7 @@ describe("GET /api/trending", () => {
     const res = await get("type=viewed");
     expect(res.status).toBe(200);
     expect(res.headers.get("Cache-Control")).toBe("public, max-age=300");
-    expect(trending).toHaveBeenCalledWith(payload, { days: 30, limit: 10, type: "viewed" });
+    expect(trending).toHaveBeenCalledWith(payload, { days: 30, limit: 50, type: "viewed" });
     expect(find.mock.calls[0][0]).toMatchObject({
       collection: "words",
       depth: 0,
@@ -80,9 +80,9 @@ describe("GET /api/trending", () => {
     expect(trending).not.toHaveBeenCalled();
   });
 
-  it("caches per parameters for 5 minutes", async () => {
+  it("caches per type and days for 5 minutes, whatever the limit", async () => {
     await get("type=rising&days=7&limit=5");
-    await get("type=rising&days=7&limit=5");
+    await get("type=rising&days=7&limit=6");
     expect(trending).toHaveBeenCalledTimes(1);
     await get("type=rising&days=8&limit=5");
     expect(trending).toHaveBeenCalledTimes(2);

@@ -51,6 +51,15 @@ describe("ranks", () => {
     expect(rankEngaged(cur, 10).map((x) => x.word)).toEqual([2, 3]);
   });
 
+  it("rankRising keeps falling words for the caller to drop; empty current period uses m = 1", () => {
+    const r = rankRising(new Map(), views({ 1: 4 }), 10);
+    expect(r).toEqual([{ word: 1, value: -4 / 5, views: 0, previous: 4 }]);
+  });
+
+  it("breaks ties by views, then lowest id", () => {
+    expect(rankViewed(views({ 3: 5, 1: 5, 2: 5 }), 3).map((r) => r.word)).toEqual([1, 2, 3]);
+  });
+
   it("returns [] for empty maps", () => {
     expect(rankViewed(new Map(), 5)).toEqual([]);
     expect(rankRising(new Map(), new Map(), 5)).toEqual([]);

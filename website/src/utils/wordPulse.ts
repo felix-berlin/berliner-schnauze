@@ -4,6 +4,7 @@ const KEY = "bsw-pulse";
 const berlinDay = new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Berlin" });
 // Fallback for when localStorage is unavailable (private mode): dedupe for the page's lifetime.
 const memory = new Set<string>();
+const inFlight = new Set<string>(); // a double click must not send two reports
 
 type Stored = { day: string; seen: string[] };
 
@@ -21,7 +22,9 @@ export const reportWord = (wordId: number, kind: PulseKind): void => {
   const day = berlinDay.format(new Date());
   const entry = `${wordId}:${kind}`;
   const seen = read(day);
-  if (seen.includes(entry) || memory.has(`${day}:${entry}`)) return;
+  const id = `${day}:${entry}`;
+  if (seen.includes(entry) || memory.has(id) || inFlight.has(id)) return;
+  inFlight.add(id);
 
   // A synchronous throw (e.g. no fetch) must not escape either.
   void Promise.resolve()
@@ -34,8 +37,11 @@ export const reportWord = (wordId: number, kind: PulseKind): void => {
       }),
     )
     .then((res) => {
-      if (!res.ok) return;
-      memory.add(`${day}:${entry}`);
+      if (!res.ok) {
+        console.warn("[word-pulse] rejected", res.status, entry);
+        return;
+      }
+      memory.add(id);
       try {
         // Re-read: another tab or call may have added entries meanwhile. Other days are dropped.
         localStorage.setItem(KEY, JSON.stringify({ day, seen: [...read(day), entry] }));
@@ -43,5 +49,6 @@ export const reportWord = (wordId: number, kind: PulseKind): void => {
         /* private mode */
       }
     })
-    .catch(() => {});
+    .catch((error) => console.warn("[word-pulse] failed", error))
+    .finally(() => inFlight.delete(id));
 };
