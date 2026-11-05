@@ -103,6 +103,7 @@ export interface Config {
     'comment-votes': CommentVote;
     'comment-reports': CommentReport;
     'word-feedback': WordFeedback;
+    'word-stats': WordStat;
     redirects: Redirect;
     'payload-mcp-api-keys': PayloadMcpApiKey;
     'payload-kv': PayloadKv;
@@ -125,6 +126,7 @@ export interface Config {
     'comment-votes': CommentVotesSelect<false> | CommentVotesSelect<true>;
     'comment-reports': CommentReportsSelect<false> | CommentReportsSelect<true>;
     'word-feedback': WordFeedbackSelect<false> | WordFeedbackSelect<true>;
+    'word-stats': WordStatsSelect<false> | WordStatsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'payload-mcp-api-keys': PayloadMcpApiKeysSelect<false> | PayloadMcpApiKeysSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -670,6 +672,19 @@ export interface WordFeedback {
   createdAt: string;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "word-stats".
+ */
+export interface WordStat {
+  id: number;
+  word: number | Word;
+  day: string;
+  views: number;
+  audio: number;
+  shares: number;
+  clicks: number;
+}
+/**
  * Alter Pfad, z. B. /wort/alter-slug → Dokument oder eigene URL.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -918,6 +933,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'word-feedback';
         value: number | WordFeedback;
+      } | null)
+    | ({
+        relationTo: 'word-stats';
+        value: number | WordStat;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1245,6 +1264,18 @@ export interface WordFeedbackSelect<T extends boolean = true> {
   age?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "word-stats_select".
+ */
+export interface WordStatsSelect<T extends boolean = true> {
+  word?: T;
+  day?: T;
+  views?: T;
+  audio?: T;
+  shares?: T;
+  clicks?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

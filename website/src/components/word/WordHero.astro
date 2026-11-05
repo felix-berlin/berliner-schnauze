@@ -78,6 +78,7 @@ const { themen } = word;
             audio={word.berlinerischAudio}
             client:only='vue'
             isType='berlinerisch'
+            wordId={draft ? undefined : word.id}
           />
         )
       }
@@ -101,6 +102,7 @@ const { themen } = word;
       berlinerisch={word.berlinerisch}
       client:load
       slug={word.slug}
+      wordId={draft ? undefined : word.id}
     />
   </div>
 </header>

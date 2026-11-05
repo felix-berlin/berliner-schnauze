@@ -64,6 +64,7 @@ import DropdownPopover from "@components/DropdownPopover.vue";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
 import { routeToWord } from "@utils/helpers.ts";
+import { reportWord } from "@utils/wordPulse.ts";
 import { useClipboard, useShare } from "@vueuse/core";
 import { SITE_URL } from "astro:env/client";
 import Copy from "virtual:icons/lucide/copy";
@@ -74,9 +75,10 @@ import { defineAsyncComponent } from "vue";
 interface WordProps {
   berlinerisch: string;
   slug: string;
+  wordId?: number;
 }
 
-const { berlinerisch, slug } = defineProps<WordProps>();
+const { berlinerisch, slug, wordId } = defineProps<WordProps>();
 
 const EllipsisVertical = defineAsyncComponent(
   () => import("virtual:icons/lucide/ellipsis-vertical"),
@@ -99,7 +101,11 @@ const shareWord = (slug: string): void => {
     url: routeToWord(slug),
   };
 
-  share(shareData).catch((err) => err);
+  share(shareData)
+    .then(() => {
+      if (wordId !== undefined) reportWord(wordId, "share");
+    })
+    .catch((err) => err);
   createToastNotify({ message: "Wort geteilt", status: "success" });
 
   trackEvent("Word Share", "Word shared", `Word: ${slug}`);

@@ -213,7 +213,7 @@ const schemaJson = () => {
     </Breadcrumbs>
   </nav>
 
-  <article class='c-word-page'>
+  <article class='c-word-page' data-pulse-word={draft ? undefined : word.id}>
     <WordSidebar
       hasAnagrams={hasAnagrams}
       hasLinguistik={hasLinguistik}
@@ -286,6 +286,21 @@ const schemaJson = () => {
     </li>
   </RelatedWords>
 </Layout>
+
+<script>
+  import { reportWord } from '@utils/wordPulse.ts';
+
+  // Draft previews carry no data-pulse-word and are never reported. The related-words
+  // section is replaced on every navigation, so its listener cannot pile up.
+  document.addEventListener('astro:page-load', () => {
+    const id = Number(document.querySelector<HTMLElement>('[data-pulse-word]')?.dataset.pulseWord);
+    if (!id) return;
+    reportWord(id, 'view');
+    document.getElementById('verwandte-worte')?.addEventListener('click', (e) => {
+      if ((e.target as Element).closest('a')) reportWord(id, 'click');
+    });
+  });
+</script>
 
 <script>
   // The comments island hydrates only when visible; a comment link brings it into view, it then scrolls to the card.

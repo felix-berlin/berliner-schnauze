@@ -44,6 +44,18 @@ describe("rateLimit", () => {
     expect(rateLimited(client, get, 0)).toBeGreaterThan(0);
   });
 
+  it("limits POST /api/word-pulse to 60 per minute", () => {
+    const rule = rateLimitRule("/api/word-pulse", "POST")!;
+    expect(rule.max).toBe(60);
+    expect(rateLimitRule("/api/word-pulse", "GET")).toBeUndefined();
+  });
+
+  it("limits GET /api/trending to 60 per minute", () => {
+    const rule = rateLimitRule("/api/trending", "GET")!;
+    expect(rule.max).toBe(60);
+    expect(rateLimitRule("/api/trending", "POST")).toBeUndefined();
+  });
+
   it("vote limited at 31st per minute", () => {
     const vote = rateLimitRule("/api/comment-votes", "POST")!;
     const client = "t-vote";
