@@ -85,4 +85,37 @@ describe("reportWord", () => {
     await flush();
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
+
+  it("does not remember a non-ok response", async () => {
+    fetchMock.mockResolvedValueOnce({ ok: false });
+    reportWord(11, "view");
+    await flush();
+    reportWord(11, "view");
+    await flush();
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("dedupes in memory when localStorage throws", async () => {
+    vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+      throw new Error("denied");
+    });
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new Error("denied");
+    });
+    reportWord(12, "view");
+    await flush();
+    reportWord(12, "view");
+    await flush();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    reportWord(12, "audio");
+    await flush();
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not throw when fetch throws synchronously", () => {
+    fetchMock.mockImplementationOnce(() => {
+      throw new Error("boom");
+    });
+    expect(() => reportWord(13, "view")).not.toThrow();
+  });
 });

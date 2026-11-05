@@ -23,12 +23,16 @@ export const reportWord = (wordId: number, kind: PulseKind): void => {
   const seen = read(day);
   if (seen.includes(entry) || memory.has(`${day}:${entry}`)) return;
 
-  void fetch("/api/word-pulse", {
-    body: JSON.stringify({ kind, word: wordId }),
-    headers: { "Content-Type": "application/json" },
-    keepalive: true,
-    method: "POST",
-  })
+  // A synchronous throw (e.g. no fetch) must not escape either.
+  void Promise.resolve()
+    .then(() =>
+      fetch("/api/word-pulse", {
+        body: JSON.stringify({ kind, word: wordId }),
+        headers: { "Content-Type": "application/json" },
+        keepalive: true,
+        method: "POST",
+      }),
+    )
     .then((res) => {
       if (!res.ok) return;
       memory.add(`${day}:${entry}`);
