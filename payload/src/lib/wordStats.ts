@@ -97,3 +97,101 @@ export const bumpWordStat = async (
     on conflict (word_id, day) do update set ${col} = word_stats.${col} + 1, updated_at = now()
   `);
 };
+
+export type TrendType = "viewed" | "rising" | "engaged";
+
+const W_COMMENT = 3;
+const W_OTHER = 1; // audio, share, click and reaction each
+
+const addDays = (day: string, n: number): string =>
+  new Date(Date.parse(`${day}T00:00:00Z`) + n * 864e5).toISOString().slice(0, 10);
+
+/** The instant Berlin's `day` starts; tries both UTC offsets, so it survives DST changes. */
+export const dayStart = (day: string): Date => {
+  for (const h of [1, 2]) {
+    const t = new Date(Date.parse(`${day}T00:00:00Z`) - h * 36e5);
+    if (berlinDay(t) === day && berlinDay(new Date(+t - 1)) !== day) return t;
+  }
+  throw new Error(`no Berlin midnight for ${day}`);
+};
+
+/** Counts per word for the Berlin days `first..last` (inclusive). Words without activity get no entry. */
+const collect = async (payload: Payload, first: string, last: string) => {
+  const map = new Map<number, Counts>();
+  const bump = (word: unknown, views: number, interactions: number) => {
+    if (typeof word !== "number") return;
+    const c = map.get(word) ?? { views: 0, interactions: 0 };
+    c.views += views;
+    c.interactions += interactions;
+    map.set(word, c);
+  };
+  const created = {
+    createdAt: {
+      greater_than_equal: dayStart(first).toISOString(),
+      less_than: dayStart(addDays(last, 1)).toISOString(),
+    },
+  };
+  const opts = { pagination: false, depth: 0 } as const;
+  const [stats, feedback, comments] = await Promise.all([
+    payload.find({
+      collection: "word-stats",
+      where: { day: { greater_than_equal: first, less_than_equal: last } },
+      select: { word: true, views: true, audio: true, shares: true, clicks: true },
+      ...opts,
+    }),
+    payload.find({
+      collection: "word-feedback",
+      where: { ...created, reaction: { exists: true } },
+      select: { word: true },
+      ...opts,
+    }),
+    payload.find({
+      collection: "comments",
+      where: { ...created, status: { equals: "published" } },
+      select: { word: true },
+      ...opts,
+    }),
+  ]);
+  for (const s of stats.docs) {
+    bump(s.word, s.views, (s.audio + s.shares + s.clicks) * W_OTHER);
+  }
+  for (const f of feedback.docs) bump(f.word, 0, W_OTHER);
+  for (const c of comments.docs) bump(c.word, 0, W_COMMENT);
+  return map;
+};
+
+/** Top words of a trending list over the `days` Berlin days ending at `today`; published words only. */
+export const trending = async (
+  payload: Payload,
+  opts: { type: TrendType; days: number; limit: number; today?: string },
+): Promise<Ranked[]> => {
+  const { type, days, limit, today = berlinDay() } = opts;
+  const cur = await collect(payload, addDays(today, 1 - days), today);
+  const prev =
+    type === "rising"
+      ? await collect(payload, addDays(today, 1 - 2 * days), addDays(today, -days))
+      : new Map<number, Counts>();
+  // Drop unpublished words before ranking so they never take a slot from a live one.
+  const ids = [...new Set([...cur.keys(), ...prev.keys()])];
+  if (!ids.length) return [];
+  const live = new Set(
+    (
+      await payload.find({
+        collection: "words",
+        draft: false,
+        where: { id: { in: ids }, _status: { equals: "published" } },
+        select: {},
+        pagination: false,
+        depth: 0,
+      })
+    ).docs.map((w) => w.id),
+  );
+  for (const m of [cur, prev]) for (const id of m.keys()) if (!live.has(id)) m.delete(id);
+  const ranked =
+    type === "viewed"
+      ? rankViewed(cur, limit)
+      : type === "engaged"
+        ? rankEngaged(cur, limit)
+        : rankRising(cur, prev, Infinity).filter((r) => r.value > 0);
+  return ranked.slice(0, limit);
+};
