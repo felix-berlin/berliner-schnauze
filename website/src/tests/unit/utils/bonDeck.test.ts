@@ -54,8 +54,8 @@ describe("dealBatch", () => {
 });
 
 describe("toPublic", () => {
-  it("exposes only id and word", () => {
-    expect(Object.keys(toPublic(pool.real[0]))).toEqual(["id", "word"]);
+  it("exposes only the position as id and the word", () => {
+    expect(toPublic(pool.real[0], 7)).toEqual({ id: "7", word: pool.real[0].word });
   });
 });
 

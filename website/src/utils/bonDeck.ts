@@ -36,4 +36,5 @@ export function dealBatch(
   );
 }
 
-export const toPublic = (c: DealtCard) => ({ id: c.id, word: c.word });
+/** The public card: its position in the game's dealt order as id, so the id tells nothing about the solution. */
+export const toPublic = (c: DealtCard, index: number) => ({ id: String(index), word: c.word });

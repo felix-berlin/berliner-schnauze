@@ -34,7 +34,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
       depth: 0,
       id: game.id,
     });
-    return reply({ cards: cards.map(toPublic) }, 200);
+    return reply({ cards: cards.map((c, i) => toPublic(c, game.cards.length + i)) }, 200);
   } catch (error) {
     console.error("[bon] next failed:", error);
     return reply({ error: "Die Karten wollten leider nich kommen." }, 502);

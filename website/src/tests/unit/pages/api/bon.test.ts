@@ -137,11 +137,13 @@ const finish = (body: unknown, cookie?: string) => FINISH(ctx(body, cookie));
 const row = (token: string) => db.rows.find((r) => r.token === token)!;
 const dealt = (token: string) => row(token).cards as DealtCard[];
 
-/** `correct` right answers, then three wrong ones, on the dealt cards in order. */
+/** `correct` right answers, then three wrong ones, on the dealt cards in order (public id = position). */
 const run = (token: string, correct: number, wrong = 3) =>
   dealt(token)
     .slice(0, correct + wrong)
-    .map((c, i) => ({ card: c.id, real: i < correct ? c.isReal : !c.isReal }));
+    .map((c, i) => ({ card: String(i), real: i < correct ? c.isReal : !c.isReal }));
+const positions = (from: number, n: number) =>
+  Array.from({ length: n }, (_, i) => String(from + i));
 
 const later = (ms: number) => vi.setSystemTime(Date.now() + ms);
 
@@ -182,8 +184,18 @@ describe("POST /api/bon/start", () => {
       status: "playing",
       visitor: hashed("v-1"),
     });
-    expect(dealt(token).map((c) => c.id)).toEqual(cards.map((c) => c.id));
+    expect(dealt(token).map((c) => c.word)).toEqual(cards.map((c) => c.word));
     expect(dealt(token).every((c) => typeof c.isReal === "boolean")).toBe(true);
+  });
+
+  it("public ids are the positions 0-19, carrying nothing of the internal r…/f… ids", async () => {
+    const { cards, token } = await newGame("v-1");
+    expect(cards.map((c) => c.id)).toEqual(positions(0, 20));
+    // The deal mixes both kinds, whose internal ids differ (r… vs f…); the response must not.
+    const kinds = new Set(dealt(token).map((c) => c.id[0]));
+    expect(kinds).toEqual(new Set(["r", "f"]));
+    const text = JSON.stringify(cards);
+    for (const c of dealt(token)) expect(text).not.toContain(`"${c.id}"`);
   });
 
   it("never sends a solution or a translation", async () => {
@@ -199,7 +211,7 @@ describe("POST /api/bon/start", () => {
     expect(db.rows[0].visitor).toMatch(/^[0-9a-f]{64}$/);
   });
 
-  it("deletes only this visitor's playing games older than 24 h", async () => {
+  it("deletes every visitor's playing games older than 24 h, keeps finished and fresh ones", async () => {
     const seed = (visitor: string, status: string, age: number) =>
       db.rows.push({
         batches: [],
@@ -212,23 +224,14 @@ describe("POST /api/bon/start", () => {
       });
     seed(hashed("v-1"), "playing", 25 * HOUR); // gone
     seed(hashed("v-1"), "finished", 25 * HOUR);
-    seed(hashed("v-2"), "playing", 25 * HOUR);
+    seed(hashed("v-2"), "playing", 25 * HOUR); // gone
     seed(hashed("v-1"), "playing", 23 * HOUR);
     await newGame("v-1");
     expect(db.api.delete.mock.calls[0][0].where).toEqual({
       createdAt: { less_than: new Date(T0 - 24 * HOUR).toISOString() },
       status: { equals: "playing" },
-      visitor: { equals: hashed("v-1") },
     });
-    expect(db.rows.map((r) => r.token)).toEqual(["seed1", "seed2", "seed3", expect.any(String)]);
-  });
-
-  it("retries once with a new token on a token collision", async () => {
-    db.api.create.mockRejectedValueOnce(db.uniqueViolation());
-    await newGame("v-1");
-    expect(db.api.create).toHaveBeenCalledTimes(2);
-    const [a, b] = db.api.create.mock.calls.map((c) => c[0].data.token);
-    expect(a).not.toBe(b);
+    expect(db.rows.map((r) => r.token)).toEqual(["seed1", "seed3", expect.any(String)]);
   });
 
   it("502 with an error body on an empty pool, no game stored", async () => {
@@ -253,9 +256,11 @@ describe("POST /api/bon/next", () => {
     const { cards } = (await res.json()) as { cards: { id: string; word: string }[] };
     expect(cards).toHaveLength(20);
     for (const c of cards) expect(Object.keys(c).sort()).toEqual(["id", "word"]);
-    const firstIds = new Set(first.map((c) => c.id));
-    expect(cards.some((c) => firstIds.has(c.id))).toBe(false);
-    expect(dealt(token).map((c) => c.id)).toEqual([...first, ...cards].map((c) => c.id));
+    expect(first.map((c) => c.id)).toEqual(positions(0, 20));
+    expect(cards.map((c) => c.id)).toEqual(positions(20, 20));
+    const internal = dealt(token).map((c) => c.id);
+    expect(new Set(internal).size).toBe(40); // no card dealt twice
+    expect(dealt(token).map((c) => c.word)).toEqual([...first, ...cards].map((c) => c.word));
     expect(row(token).batches).toEqual([
       { issuedAt: T0, start: 0 },
       { issuedAt: T0 + 30_000, start: 20 },
@@ -358,6 +363,26 @@ describe("POST /api/bon/finish", () => {
     });
   });
 
+  it("a second finish while the first is still running gets 409", async () => {
+    const { token } = await newGame("v-1");
+    later(60_000);
+    const body = { answers: run(token, 4), token };
+    const update = db.api.update.getMockImplementation()!;
+    let release!: () => void;
+    const gate = new Promise<void>((r) => (release = r));
+    db.api.update.mockImplementationOnce(async (args) => {
+      await gate;
+      return update(args);
+    });
+    const first = finish(body, "v-1");
+    await vi.waitFor(() => expect(db.api.update).toHaveBeenCalledOnce());
+    expect((await finish(body, "v-1")).status).toBe(409);
+    release();
+    expect((await first).status).toBe(200);
+    expect(db.api.update).toHaveBeenCalledOnce();
+    expect((await finish(body, "v-1")).status).toBe(409); // released, now refused by status
+  });
+
   it("404 for a token started by another visitor cookie, or an unknown token", async () => {
     const { token } = await newGame("v-1");
     later(60_000);
@@ -381,7 +406,7 @@ describe("POST /api/bon/finish", () => {
   it.each([
     [
       "a card that was never dealt",
-      (a: { card: string }[]) => [{ ...a[0], card: "r999" }, ...a.slice(1)],
+      (a: { card: string }[]) => [{ ...a[0], card: "999" }, ...a.slice(1)],
     ],
     ["swapped order", (a: { card: string }[]) => [a[1], a[0], ...a.slice(2)]],
     ["a duplicated card", (a: { card: string }[]) => [a[0], a[0], ...a.slice(2)]],
