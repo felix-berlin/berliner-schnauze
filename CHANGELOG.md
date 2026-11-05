@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.8.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.7.0...v4.8.0) (2026-11-05)
+
+
+### Bug Fixes
+
+* **word:** cache trending per type and days, log dropped pulses ([e3a9f55](https://github.com/felix-berlin/berliner-schnauze/commit/e3a9f55d2eaf1d64b5207f9acbc4f417a8d76261))
+* **word:** correct the trending route in the docs and cover the pulse fallbacks ([b70d2f9](https://github.com/felix-berlin/berliner-schnauze/commit/b70d2f925f52c4bf34df44fb7d2b63e59d99ad66))
+* **word:** delete a word's stats with the word ([e40f172](https://github.com/felix-berlin/berliner-schnauze/commit/e40f1729398a74704f8d72610ef300aad67dc12a))
+* **word:** index the stats day and drop its timestamps ([c2964c6](https://github.com/felix-berlin/berliner-schnauze/commit/c2964c611a25d920968e773d11f92b980635a61b))
+* **word:** rank only viewed words as engaged ([57dc731](https://github.com/felix-berlin/berliner-schnauze/commit/57dc731659a143edcceb30f9f6ed23419e6758a5))
+* **word:** sort the pulse test keys and bound the word id ([de7049e](https://github.com/felix-berlin/berliner-schnauze/commit/de7049ebae51de44ac6548126c91a56d37be9b5e))
+
+
+### Features
+
+* **word:** add the berlin day and trending rank functions ([b7983f2](https://github.com/felix-berlin/berliner-schnauze/commit/b7983f22fa59c974c1ed0a157a043753c0905db6))
+* **word:** add the daily word stats collection ([b380959](https://github.com/felix-berlin/berliner-schnauze/commit/b3809590a951fdfc63f337afb4665dd1f7295cb1))
+* **word:** add the trending words endpoint ([ad1de5a](https://github.com/felix-berlin/berliner-schnauze/commit/ad1de5afc049c559bd1fe5d06dbd945b2d929ef8))
+* **word:** add the word pulse reporting endpoint ([7a99718](https://github.com/felix-berlin/berliner-schnauze/commit/7a997184d207c4e56ad62a5e4c607d66c13b2716))
+* **word:** aggregate the trending lists ([4c14cfd](https://github.com/felix-berlin/berliner-schnauze/commit/4c14cfd9ebf39529d8374e973d8bfa6c4eae40fa))
+* **word:** report word views and interactions from the browser ([6b70cda](https://github.com/felix-berlin/berliner-schnauze/commit/6b70cda1f0171a02e92c1ad9e91858448dce236e))
+
 # [4.7.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.6.0...v4.7.0) (2026-11-03)
 
 
