@@ -33,8 +33,8 @@ describe("bon-games", () => {
   });
 
   it("denies reading without a user", async () => {
-    await expect(
-      payload.find({ collection: "bon-games", overrideAccess: false }),
-    ).rejects.toThrow(/not allowed|forbidden/i);
+    await expect(payload.find({ collection: "bon-games", overrideAccess: false })).rejects.toThrow(
+      /not allowed|forbidden/i,
+    );
   });
 });

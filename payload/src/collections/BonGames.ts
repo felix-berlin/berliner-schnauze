@@ -7,10 +7,7 @@ export const BonGames: CollectionConfig = {
   slug: "bon-games",
   access: authenticatedOnly,
   admin: { defaultColumns: ["playerName", "score", "status", "finishedAt"] },
-  indexes: [
-    { fields: ["status", "score"] },
-    { fields: ["token"], unique: true },
-  ],
+  indexes: [{ fields: ["status", "score"] }, { fields: ["token"], unique: true }],
   fields: [
     { name: "visitor", type: "text", required: true },
     { name: "token", type: "text", required: true },
