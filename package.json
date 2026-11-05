@@ -48,6 +48,7 @@
     "format:check": "pnpm exec oxfmt --check .",
     "cms:dev": "pnpm --filter payload-app dev",
     "cms:test": "pnpm --filter payload-app test",
+    "cms:seed-test": "scripts/with-env.sh env NODE_ENV=production pnpm --filter payload-app seed:test",
     "cms:migrate": "pnpm --filter payload-app migrate",
     "cms:migrate:create": "pnpm --filter payload-app migrate:create",
     "browserslist:update": "pnpx update-browserslist-db@latest",
