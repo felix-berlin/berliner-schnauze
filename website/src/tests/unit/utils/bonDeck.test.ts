@@ -68,6 +68,8 @@ describe("loadPool", () => {
         { berlinerisch: "Ohne", id: 2, translations: [] },
         { berlinerisch: "Leer", id: 3, translations: [{ translation: "" }] },
         { berlinerisch: "", id: 4, translations: [{ translation: "x" }] },
+        { berlinerisch: "Blank", id: 5, translations: [{ translation: "  " }] },
+        { berlinerisch: "  ", id: 6, translations: [{ translation: "x" }] },
       ],
     });
   });

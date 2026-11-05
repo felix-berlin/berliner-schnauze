@@ -15,7 +15,7 @@ const loadReal = async (): Promise<DealtCard[]> => {
   });
   return docs.flatMap((w) => {
     const translation = w.translations?.[0]?.translation;
-    return w.berlinerisch && translation
+    return w.berlinerisch?.trim() && translation?.trim()
       ? [{ id: `r${w.id}`, isReal: true, translation, word: w.berlinerisch }]
       : [];
   });

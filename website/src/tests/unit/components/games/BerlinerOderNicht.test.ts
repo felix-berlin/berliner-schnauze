@@ -612,6 +612,8 @@ describe("BerlinerOderNicht.vue", () => {
   it("onMounted does not offer a word without translation", async () => {
     mockFetchSearchIndex.mockResolvedValue([
       { slug: "schnauze", wordProperties: { berlinerisch: "Schnauze", translations: [] } },
+      { slug: "blank", wordProperties: { berlinerisch: "Blank", translations: ["  "] } },
+      { slug: "blank2", wordProperties: { berlinerisch: "  ", translations: ["x"] } },
       { slug: "kiez", wordProperties: { berlinerisch: "Kiez", translations: ["Viertel"] } },
     ]);
     mount(BerlinerOderNicht);

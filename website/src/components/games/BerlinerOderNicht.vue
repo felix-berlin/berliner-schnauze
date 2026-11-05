@@ -260,7 +260,9 @@ const cardTransitionName = computed(() => {
 onMounted(async () => {
   try {
     const realWords: BonCardData[] = (await fetchSearchIndex())
-      .filter((r) => r.wordProperties.berlinerisch && r.wordProperties.translations?.[0])
+      .filter(
+        (r) => r.wordProperties.berlinerisch?.trim() && r.wordProperties.translations?.[0]?.trim(),
+      )
       .map((r) => ({
         isReal: true,
         slug: r.slug,
