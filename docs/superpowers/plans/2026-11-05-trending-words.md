@@ -4,7 +4,7 @@
 
 **Goal:** Tageszähler pro Wort (Aufrufe, Audio, Teilen, Weiterklick) erfassen und die Ranglisten meistgesehen, steigend und viel Interaktion als Lese-Endpunkt bereitstellen.
 
-**Architecture:** Neue Payload-Collection `word-stats` (eine Zeile pro Wort und Berliner Tag), atomar hochgezählt per SQL-Upsert. Reine Ranking-Funktionen und die Aggregation liegen in `payload/src/lib/wordStats.ts` (Export `payload-app/word-stats`). Zwei Astro-Routen im `website`-Paket: `POST /api/word-pulse` (Melden) und `GET /api/trending` (Lesen). Der Browser meldet und dedupliziert per `localStorage`.
+**Architecture:** Neue Payload-Collection `word-stats` (eine Zeile pro Wort und Berliner Tag), atomar hochgezählt per SQL-Upsert. Reine Ranking-Funktionen und die Aggregation liegen in `payload/src/lib/wordStats.ts` (Export `payload-app/word-stats`). Zwei Astro-Routen im `website`-Paket: `POST /api/word-pulse` (Melden) und `GET /api/trending` (Lesen). Der Browser meldet (ohne eigenen Speicher), der Server dedupliziert pro IP im Arbeitsspeicher.
 
 **Tech Stack:** Payload 3 (Postgres, drizzle `sql`), Astro-API-Routen, Vue/nanostores, Vitest.
 
@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - Gezählt wird nach dem **Berliner Kalendertag** (`Europe/Berlin`), gespeichert als `YYYY-MM-DD`.
-- Der Server speichert **keine Besucher-IDs und keine Hashes** in `word-stats`; Dedupe macht der Browser (`localStorage`).
+- Der Server speichert **keine Besucher-IDs und keine Hashes** in `word-stats`; Dedupe macht der Server pro IP, Wort, Art und Berliner Tag im Arbeitsspeicher (`rateLimitedBy`, nichts in der Datenbank); der Browser schreibt nichts in `localStorage` (§ 25 TDDDG).
 - Aufrufe zählen nur auf der Wortseite selbst, nur für **veröffentlichte** Wörter.
 - Gewichte als Konstanten: Audio, Teilen, Weiterklick, Reaktion je 1; Kommentar 3. Nur Kommentare mit `status = published` zählen.
 - Formeln ohne feste Schwellen. `m = max(1, Summe der Aufrufe im aktuellen Zeitraum / Anzahl Wörter mit Aufrufen im aktuellen Zeitraum)`.
@@ -31,7 +31,7 @@
 - `days=0`, `days=9999`, `days=abc`, `limit=-1`, unbekannter `type` → 400, kein Absturz.
 - Meldung für ein Wort, das nur als Entwurf existiert oder gelöscht ist → 404, kein Zähler.
 - Meldung kurz vor und nach Mitternacht Berliner Zeit (auch bei Sommerzeit, 22:30 UTC) landet am richtigen Tag.
-- `localStorage` wirft (privater Modus): der Reporter meldet trotzdem einmal pro Seitenaufruf und wirft nicht.
+- Der Reporter nutzt keinen Browser-Speicher; er meldet höchstens einmal pro Wort und Art je Seitenaufruf und wirft nicht.
 - 20 gleichzeitige Meldungen zählen genau 20 (kein verlorenes Update).
 
 ---
@@ -125,7 +125,7 @@
 
 - [ ] **Step 1: Write the failing test** (Muster `word-feedback.test.ts`: `getPayloadClient` per `vi.mock` ersetzen, `bumpWordStat` mocken). Tests: gültige Meldung → 200 und `bumpWordStat` mit `(payload, wordId, "view")`; ungültiger Body, `kind: "x"`, `word: -1` → 400 ohne Zählen; `findByID` wirft 404 (`orNull` liefert `null`) → 404 ohne Zählen; Wort-Prüfung nutzt `siteRead()`; 502 bei Datenbankfehler (Fehler wird geloggt); mehr als das Tageslimit pro IP → 429.
 - [ ] **Step 2: Run to verify it fails.** Run: `(cd website && rtk vitest run src/tests/unit/pages/api/word-pulse.test.ts)` — Expected: FAIL.
-- [ ] **Step 3: Implement** `POST` im Stil von `website/src/pages/api/word-feedback.ts`: JSON lesen, `wordPulseSchema.safeParse`, Wort per `payload.findByID({ collection: "words", depth: 0, id, ...siteRead() })` über `orNull`, IP über `clientIp(...)`, Tageslimit `rateLimitedBy(ip, "word-pulse-all", 2000, DAY)`, dann `bumpWordStat`. Antworten über `reply(...)`. In `RULES` die Regel `{ max: 60, method: "POST", prefix: "/api/word-pulse", windowMs: 60_000 }` ergänzen (neutraler Routenname, bewusst ohne "stats", "track" oder "analytics").
+- [ ] **Step 3: Implement** `POST` im Stil von `website/src/pages/api/word-feedback.ts`: JSON lesen, `wordPulseSchema.safeParse`, Wort per `payload.findByID({ collection: "words", depth: 0, id, ...siteRead() })` über `orNull`, IP über `clientIp(...)`, Tageslimit `rateLimitedBy(ip, "word-pulse-all", 2000, DAY)`, dann die Tages-Dedupe `rateLimitedBy(ip, "word-pulse <berlinDay> <word> <kind>", 1, DAY)` (bei Treffer `200 { ok: true }` ohne Zählen), dann `bumpWordStat`. Antworten über `reply(...)`. In `RULES` die Regel `{ max: 60, method: "POST", prefix: "/api/word-pulse", windowMs: 60_000 }` ergänzen (neutraler Routenname, bewusst ohne "stats", "track" oder "analytics").
 - [ ] **Step 4: Run to verify it passes.** Same command — Expected: PASS. Dazu der bestehende `rateLimit`-Test (`pnpm test:unit` für die Datei) bleibt grün.
 - [ ] **Step 5: Commit** `feat(word): add the word pulse reporting endpoint`
 
@@ -154,15 +154,15 @@
 - Modify: `website/src/pages/wort/[...wordSlug].astro` (Aufruf melden, Klick auf verwandte Wörter)
 - Modify: `website/src/components/AudioPlayer.vue` (Audio)
 - Modify: `website/src/components/word/WordOptionDropdown.vue` (Teilen; Bon-Share, falls als eigener Pfad vorhanden, gleiche Meldung)
-- Modify: `website/CLAUDE.md` (Hinweis auf den Reporter und die Dedupe-Regel)
+- Modify: `website/CLAUDE.md` (Hinweis auf den Reporter und die serverseitige Dedupe-Regel)
 
 **Interfaces:**
 - Consumes: `POST /api/word-pulse` aus Task 4; die Schlüssel `StatKind` als Literal (`"view" | "audio" | "share" | "click"`).
 - Produces: `export const reportWord = (wordId: number, kind: StatKind): void` — meldet höchstens einmal je Wort, Art und Berliner Tag.
 
-- [ ] **Step 1: Write the failing test** (jsdom, `fetch` per `vi.fn`). Tests: erster Aufruf sendet `POST /api/word-pulse` mit `{ word, kind }`; zweiter Aufruf mit gleichem Wort und gleicher Art am selben Tag sendet nichts; andere Art oder anderes Wort sendet; am nächsten Berliner Tag (`vi.setSystemTime`) sendet wieder; wirft `localStorage.getItem` (privater Modus), sendet der Reporter trotzdem und wirft nicht; schlägt `fetch` fehl, wirft der Reporter nicht und merkt sich den Versuch **nicht**; Einträge von früheren Tagen werden beim Schreiben entfernt (der Speicher wächst nicht).
+- [ ] **Step 1: Write the failing test** (jsdom, `fetch` per `vi.fn`). Tests: erster Aufruf sendet `POST /api/word-pulse` mit `{ word, kind }`; zweiter Aufruf mit gleichem Wort und gleicher Art im selben Seitenaufruf sendet nichts; andere Art oder anderes Wort sendet; der Reporter berührt `localStorage` nie; schlägt `fetch` fehl, wirft der Reporter nicht und merkt sich den Versuch **nicht**. Servertest (`word-pulse.test.ts`): gleiche IP, gleiches Wort und gleiche Art zählt am Tag einmal (beide Antworten 200), andere Art, anderes Wort oder andere IP zählt.
 - [ ] **Step 2: Run to verify it fails.** Run: `(cd website && rtk vitest run src/tests/unit/utils/wordPulse.test.ts)` — Expected: FAIL.
-- [ ] **Step 3: Implement `reportWord`**: Schlüssel `bsw-pulse` in `localStorage` mit `{ day, seen: ["<wordId>:<kind>", …] }`; der Berliner Tag über dieselbe Logik wie `berlinDay` (kleine Kopie im Browser, weil `payload-app/word-stats` Serverabhängigkeiten hat), Senden per `fetch(..., { keepalive: true, method: "POST", headers: { "Content-Type": "application/json" } })`, Fehler schlucken.
+- [ ] **Step 3: Implement `reportWord`**: Ein `Set` im Modul (`sent`, `inFlight`) gegen Doppelklicks, **kein** Browser-Speicher; Senden per `fetch(..., { keepalive: true, method: "POST", headers: { "Content-Type": "application/json" } })`, Fehler schlucken.
 - [ ] **Step 4: Run to verify it passes.** Same command — Expected: PASS.
 - [ ] **Step 5: Wire the hooks.** Aufruf: in der Wortseite ein Client-Skript, das `reportWord(word.id, "view")` ruft. Audio: beim Start der Wiedergabe in `AudioPlayer.vue` (`playAudio`) `reportWord(wordId, "audio")`, `wordId` als neue Prop aus `WordHero.astro` bzw. der Liste. Teilen: in `shareWord` von `WordOptionDropdown.vue` nach erfolgreichem `share`. Weiterklick: ein Klick-Handler (Event-Delegation) auf `#verwandte-worte`, der bei Klick auf einen Link `reportWord(currentWordId, "click")` ruft. Bestehende Unit-Tests von `AudioPlayer` und `WordOptionDropdown` laufen weiter; je ein Test für die neue Meldung.
 - [ ] **Step 6: Verify** Run: `pnpm test:unit` und `pnpm build` — Expected: grün; im Build taucht `payload-app/word-stats` nur serverseitig auf (kein Client-Bundle-Import).
@@ -172,6 +172,6 @@
 
 ## Self-Review
 
-- **Spec-Abdeckung:** Zähler (T2, T6), drei Ranglisten (T1, T3), wählbare Zeiträume bis 365 Tage (T3, T5), Lese-Endpunkt (T5), Melde-Endpunkt mit Wortprüfung und Rate-Limit (T4), Berliner Tag (T1, T2), Dedupe im Browser (T6), dauerhafte Speicherung ohne Aufräumen (T2), Reaktionen und Kommentare live gezählt (T3), Antwortform mit Rang und Vorwert (T5), Cache (T5), Migration (T2), Doku (T5, T6).
+- **Spec-Abdeckung:** Zähler (T2, T6), drei Ranglisten (T1, T3), wählbare Zeiträume bis 365 Tage (T3, T5), Lese-Endpunkt (T5), Melde-Endpunkt mit Wortprüfung und Rate-Limit (T4), Berliner Tag (T1, T2), Dedupe auf dem Server (T4, T6), dauerhafte Speicherung ohne Aufräumen (T2), Reaktionen und Kommentare live gezählt (T3), Antwortform mit Rang und Vorwert (T5), Cache (T5), Migration (T2), Doku (T5, T6).
 - **Abweichung von der Spec:** `day` ist ein `text`-Feld im Format `YYYY-MM-DD` statt eines `date`-Felds (Plan-Entscheidung, siehe T2).
 - **Typkonsistenz:** `StatKind`, `Counts`, `Ranked`, `TrendType` und `bumpWordStat` heißen in allen Tasks gleich; die Wörter-Schlüssel der Wire-Typen (`view|audio|share|click`) werden in T6 als Literal wiederholt, weil der Browser den Server-Export nicht importiert.
