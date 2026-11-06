@@ -65,7 +65,14 @@ export const PATCH = own(
 );
 export const DELETE = own(
   deleteSchema,
-  () => ({ authorName: null, pseudonym: null, status: "deleted", text: "[gelöscht]" }),
+  () => ({
+    authorName: null,
+    authorTag: null,
+    editKeyHash: null,
+    pseudonym: null,
+    status: "deleted",
+    text: "[gelöscht]",
+  }),
   () => reply({ deleted: true }, 200),
 );
 
