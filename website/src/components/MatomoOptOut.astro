@@ -1,0 +1,16 @@
+---
+// Opt-out checkbox for the privacy page. The cookies it sets are described in the privacy policy.
+---
+
+<div id="matomo-opt-out"></div>
+
+<script>
+  import { renderMatomoOptOut } from "@utils/matomoOptOut.ts";
+
+  const render = () => {
+    const root = document.getElementById("matomo-opt-out");
+    if (root) renderMatomoOptOut(root);
+  };
+  render();
+  document.addEventListener("astro:page-load", render);
+</script>

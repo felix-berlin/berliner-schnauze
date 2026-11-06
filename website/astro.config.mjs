@@ -319,7 +319,12 @@ export default defineConfig({
       disableCookies: true,
       // After Anubis' challenge document.referrer is its host, not the real source (Matomo >= 4.12). The same host
       // must also be listed under Websites > Excluded referrers in Matomo.
-      preInitCommands: [["setExcludedReferrers", ["anubis.berliner-schnauze.wtf"]]],
+      // No access to resolution/plugins (also drops the cookieless config_id) and no campaign parameters (privacy policy, point 9).
+      preInitCommands: [
+        ["setExcludedReferrers", ["anubis.berliner-schnauze.wtf"]],
+        ["disableBrowserFeatureDetection"],
+        ["disableCampaignParameters"],
+      ],
       partytown: false,
       viewTransition: {
         contentElement: "main",
@@ -543,7 +548,11 @@ export default defineConfig({
         // Production only: dev keeps deps external, where the real plugin loads fine.
         ...(import.meta.env.DEV
           ? {}
-          : { "@payloadcms/plugin-mcp": fileURLToPath(new URL("./src/lib/payloadMcpStub.ts", import.meta.url)) }),
+          : {
+              "@payloadcms/plugin-mcp": fileURLToPath(
+                new URL("./src/lib/payloadMcpStub.ts", import.meta.url),
+              ),
+            }),
       },
     },
 
