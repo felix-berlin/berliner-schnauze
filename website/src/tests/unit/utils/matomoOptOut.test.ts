@@ -1,17 +1,14 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { initMatomoOptOut, isTracked, OPT_OUT_COOKIE, renderMatomoOptOut } from "../../../utils/matomoOptOut";
+import { initMatomoOptOut, isTracked, renderMatomoOptOut } from "../../../utils/matomoOptOut";
 
 const clear = () =>
   document.cookie.split("; ").forEach((c) => {
     document.cookie = `${c.split("=")[0]}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
   });
 
-beforeEach(() => {
-  clear();
-  delete (window as { _paq?: unknown })._paq;
-});
+beforeEach(clear);
 
 const change = (root: HTMLElement, checked: boolean) => {
   const box = root.querySelector("input") as HTMLInputElement;
@@ -28,21 +25,18 @@ describe("matomo opt-out", () => {
     expect(root.textContent).toContain("wird aktuell von der Reichweitenmessung erfasst");
   });
 
-  it("unchecking sets the opt-out cookie and stops a running tracker, checking brings tracking back", () => {
-    const push = vi.fn();
-    (window as { _paq?: unknown })._paq = { push };
+  it("unchecking sets the cookie matomo.js honours, checking brings tracking back", () => {
     const root = document.createElement("div");
     renderMatomoOptOut(root);
     change(root, false);
-    expect(document.cookie).toContain(`${OPT_OUT_COOKIE}=1`);
-    expect(push).toHaveBeenCalledWith(["optUserOut"]);
+    expect(document.cookie).toMatch(/mtm_consent_removed=\d+/);
     expect(isTracked()).toBe(false);
     expect(root.querySelector("input")?.checked).toBe(false);
     expect(root.textContent).toContain("Opt-out aktiv");
     expect(root.querySelectorAll("input")).toHaveLength(1);
     change(root, true);
     expect(isTracked()).toBe(true);
-    expect(document.cookie).not.toContain(OPT_OUT_COOKIE);
+    expect(document.cookie).not.toContain("mtm_consent_removed");
   });
 
   it("says so when the browser does not keep the cookie", () => {

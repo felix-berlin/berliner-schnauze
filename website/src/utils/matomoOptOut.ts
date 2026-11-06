@@ -1,14 +1,14 @@
 // Own-code Matomo opt-out (a cookie on this site, so it also works where the opt-out iframe's third-party cookie
-// is blocked). The tracker does not read this cookie: Layout.astro checks it before astro-matomo starts and swaps
-// `_paq` for a sink, so no tracking request is ever built. A tracker that is already running (privacy page opened
-// via view transition) is stopped with `optUserOut` in setTracked.
-export const OPT_OUT_COOKIE = "bs_matomo_optout";
+// is blocked). matomo.js checks `mtm_consent_removed` before every request, even with disableCookies (the one cookie
+// it still reads), and queues instead of sending while it exists. Opting out therefore stops a running tracker at
+// once; opting back in is picked up by the next full page load.
+const REMOVED = "mtm_consent_removed";
 const THIRTY_YEARS = 946_080_000_000;
 
 // document.cookie throws in sandboxed frames and some hardened browsers: treat that as "cannot store".
 const readCookie = (): boolean => {
   try {
-    return document.cookie.split("; ").some((c) => c.startsWith(`${OPT_OUT_COOKIE}=`));
+    return document.cookie.split("; ").some((c) => c.startsWith(`${REMOVED}=`));
   } catch {
     return false;
   }
@@ -18,7 +18,7 @@ const writeCookie = (value: string, msToExpire: number) => {
   const secure = location.protocol === "https:" ? ";Secure" : "";
   const expires = new Date(Date.now() + msToExpire).toUTCString();
   try {
-    document.cookie = `${OPT_OUT_COOKIE}=${value};expires=${expires};path=/;SameSite=Lax${secure}`;
+    document.cookie = `${REMOVED}=${value};expires=${expires};path=/;SameSite=Lax${secure}`;
   } catch {
     // verified by the caller through readCookie
   }
@@ -28,8 +28,8 @@ export const isTracked = () => !readCookie();
 
 /** Sets or clears the opt-out; false when the browser did not keep the cookie. */
 const setTracked = (tracked: boolean): boolean => {
-  writeCookie(tracked ? "" : "1", tracked ? -1 : THIRTY_YEARS);
-  if (!tracked) window._paq?.push(["optUserOut"]);
+  // matomo.js ignores an empty value, so the cookie carries a timestamp.
+  writeCookie(tracked ? "" : String(Date.now()), tracked ? -1 : THIRTY_YEARS);
   return isTracked() === tracked;
 };
 
