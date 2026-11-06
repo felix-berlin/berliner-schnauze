@@ -1,5 +1,10 @@
 <template>
-  <section class="c-word-comments" aria-labelledby="word-comments-title" @click="onLinkClick">
+  <section
+    class="c-word-comments"
+    aria-labelledby="word-comments-title"
+    @click="onLinkClick"
+    @focusin="onFocusIn"
+  >
     <header class="c-word-comments__header">
       <h2 id="word-comments-title" class="c-word-comments__title">
         Wat sagste dazu? <span class="c-word-comments__count">({{ ctx.total.value }})</span>
@@ -26,6 +31,7 @@
       </p>
       <div ref="captcha">
         <TurnStile
+          v-if="captchaOn"
           ref="turnstile"
           wrapper-id="commentsTurnstile"
           appearance="interaction-only"
@@ -98,6 +104,11 @@ const captchaFailed = ref(false);
 const onToken = (value: string): void => {
   token.value = value;
   if (value) captchaFailed.value = false;
+};
+// Cloudflare's script loads only once someone works in a form (privacy policy, "Spam-Schutz").
+const captchaOn = ref(false);
+const onFocusIn = (e: FocusEvent): void => {
+  if ((e.target as Element).closest("form")) captchaOn.value = true;
 };
 const turnstile = useTemplateRef<{ reset: () => void }>("turnstile");
 const ctx: CommentsContext = {

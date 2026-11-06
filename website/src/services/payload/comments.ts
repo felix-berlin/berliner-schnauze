@@ -30,6 +30,13 @@ export const visitorId = (cookies: AstroCookies, create: boolean): string | unde
   return id;
 };
 
+/**
+ * What the vote and report rows store instead of the cookie id. Its own prefix keeps those rows from being joined to
+ * a comment's `authorTag` or a feedback row, which hash the same cookie differently.
+ */
+export const voterKey = (visitor: string): string =>
+  createHash("sha256").update(`votes:${visitor}`).digest("hex");
+
 export const hashEditKey = (key: string): string => createHash("sha256").update(key).digest("hex");
 
 const idOf = (rel: number | { id: number } | null | undefined): number | null =>
@@ -113,7 +120,7 @@ const buildThreads = async (
             collection: "comment-votes",
             depth: 0,
             pagination: false,
-            where: { comment: { in: allIds }, visitor: { equals: visitor } },
+            where: { comment: { in: allIds }, visitor: { equals: voterKey(visitor) } },
           })
         ).docs
       : [];

@@ -1,6 +1,7 @@
 <template>
   <form
     ref="root"
+    @focusin.once="captchaOn = true"
     class="c-suggest-word-form c-form"
     novalidate
     data-track-content
@@ -66,7 +67,7 @@
       </Transition>
     </button>
 
-    <TurnStile :site-key="TURNSTILE_SITE_KEY" @token="turnstileToken = $event" />
+    <TurnStile v-if="captchaOn" :site-key="TURNSTILE_SITE_KEY" @token="turnstileToken = $event" />
   </form>
 </template>
 
@@ -126,6 +127,8 @@ const form = reactive<SuggestWord>({ ...emptyForm(), berlinerWord });
 const errors = ref<Partial<Record<FieldName, string>>>({});
 // The token is checked by the server; a token works once, so the widget is reset after every send.
 const turnstileToken = ref("");
+// Cloudflare's script loads only once the form is used (privacy policy, "Spam-Schutz").
+const captchaOn = ref(false);
 const isSending = ref(false);
 
 const root = ref<HTMLFormElement | null>(null);

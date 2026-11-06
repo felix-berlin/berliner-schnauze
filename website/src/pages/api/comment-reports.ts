@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
-import { visitorId } from "@services/payload/comments.ts";
+import { visitorId, voterKey } from "@services/payload/comments.ts";
 import { captchaGate, isUniqueViolation, orNull, reply } from "@utils/apiReply.ts";
 import { reportSchema } from "@utils/commentSchema.ts";
 import { clientIp, rateLimitedBy } from "@utils/rateLimit.ts";
@@ -38,7 +38,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     try {
       await payload.create({
         collection: "comment-reports",
-        data: { comment: commentId, reason, visitor: visitorId(cookies, true) as string },
+        data: { comment: commentId, reason, visitor: voterKey(visitorId(cookies, true) as string) },
         depth: 0,
       });
     } catch (error) {

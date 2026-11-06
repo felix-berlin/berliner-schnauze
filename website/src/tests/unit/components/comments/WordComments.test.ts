@@ -122,6 +122,7 @@ describe("WordComments", () => {
     vi.mocked(trackEvent).mockClear();
     fetchMock.mockResolvedValue(page(empty));
     const wrapper = mount(WordComments, { global: { stubs: { TurnStile: TurnStileStub } }, props: { wordId: 7 } });
+    await wrapper.find("form").trigger("focusin");
     await flushPromises();
     const submit = wrapper.findComponent(CommentForm).props("submit") as (v: { authorName: string; text: string }) => Promise<boolean>;
     expect(await submit({ authorName: "", text: "Na sowat" })).toBe(false);

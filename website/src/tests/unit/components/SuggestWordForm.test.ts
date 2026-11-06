@@ -78,9 +78,15 @@ describe("SuggestWordForm.vue", () => {
     expect(wrapper.find("button[type='submit']").text()).toContain("Wort einreichen");
   });
 
-  it("renders the TurnStile component", () => {
+  it("renders the TurnStile component", async () => {
     const wrapper = mount(SuggestWordForm);
+    await wrapper.find("form").trigger("focusin");
     expect(wrapper.find(".mock-turnstile").exists()).toBe(true);
+  });
+
+  it("loads no captcha until the form is used", () => {
+    const wrapper = mount(SuggestWordForm);
+    expect(wrapper.find(".mock-turnstile").exists()).toBe(false);
   });
 
   it("pre-fills berlinerWord from prop", () => {
@@ -145,6 +151,7 @@ describe("SuggestWordForm.vue", () => {
 
   it("posts the suggestion with the turnstile token to the server", async () => {
     const wrapper = mount(SuggestWordForm);
+    await wrapper.find("form").trigger("focusin");
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
     // Simulate TurnStile verification
@@ -205,6 +212,7 @@ describe("SuggestWordForm.vue", () => {
   it("shows 'Wort wird gesendet' while the request is pending", async () => {
     fetchMock.mockImplementationOnce(() => new Promise(() => {}));
     const wrapper = mount(SuggestWordForm);
+    await wrapper.find("form").trigger("focusin");
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
     await wrapper.findComponent(TurnStile).vm.$emit("token", "tok");
@@ -218,6 +226,7 @@ describe("SuggestWordForm.vue", () => {
       Promise.resolve({ json: async () => ({ error: "x" }), ok: false }),
     );
     const wrapper = mount(SuggestWordForm);
+    await wrapper.find("form").trigger("focusin");
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
     await wrapper.findComponent(TurnStile).vm.$emit("token", "tok");
@@ -232,6 +241,7 @@ describe("SuggestWordForm.vue", () => {
     const { createToastNotify } = await import("@stores/toastNotify.ts");
     fetchMock.mockImplementationOnce(() => Promise.reject(new Error("offline")));
     const wrapper = mount(SuggestWordForm);
+    await wrapper.find("form").trigger("focusin");
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
     await wrapper.findComponent(TurnStile).vm.$emit("token", "tok");
@@ -282,6 +292,7 @@ describe("SuggestWordForm.vue", () => {
     vi.useFakeTimers();
 
     const wrapper = mount(SuggestWordForm);
+    await wrapper.find("form").trigger("focusin");
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
     await wrapper.findComponent(TurnStile).vm.$emit("token", "tok");
@@ -307,6 +318,7 @@ describe("SuggestWordForm.vue", () => {
 
   it("posts the user's email as userMail and the raw text, the server builds the mail", async () => {
     const wrapper = mount(SuggestWordForm);
+    await wrapper.find("form").trigger("focusin");
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("<b>Kiez</b>");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
     await wrapper.find<HTMLInputElement>("#userEmail").setValue("test@example.com");
@@ -332,6 +344,7 @@ describe("SuggestWordForm.vue", () => {
 
   it("needs a fresh captcha after every send (a token works once)", async () => {
     const wrapper = mount(SuggestWordForm);
+    await wrapper.find("form").trigger("focusin");
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
     await wrapper.findComponent(TurnStile).vm.$emit("token", "tok");
@@ -346,6 +359,7 @@ describe("SuggestWordForm.vue", () => {
   it("re-enables the submit button after a failed send", async () => {
     fetchMock.mockImplementationOnce(() => Promise.reject(new Error("boom")));
     const wrapper = mount(SuggestWordForm);
+    await wrapper.find("form").trigger("focusin");
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
     await wrapper.findComponent(TurnStile).vm.$emit("token", "tok");
