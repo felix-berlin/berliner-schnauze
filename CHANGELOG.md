@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.9.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.8.0...v4.9.0) (2026-11-06)
+
+
+### Bug Fixes
+
+* **deps:** harden privacy changes after review ([e011431](https://github.com/felix-berlin/berliner-schnauze/commit/e0114314b984832adace28d19c9cc70d15270d72))
+* **dev:** surface failed bulk deletes and share cleanup helpers ([4f88e2a](https://github.com/felix-berlin/berliner-schnauze/commit/4f88e2a92ec5c7f8d976dfb42209c1007a9333e3))
+* **word:** dedupe word pulses on the server ([5bafd3f](https://github.com/felix-berlin/berliner-schnauze/commit/5bafd3fb5e682379ad01f53bb15f5e66629e1180))
+* **word:** hash voter ids and load Turnstile on first form focus ([abc6ddf](https://github.com/felix-berlin/berliner-schnauze/commit/abc6ddf7061d76db3d033f4fe81b344655c94a30))
+* **word:** point privacy links at numbered section anchors ([e2d50d2](https://github.com/felix-berlin/berliner-schnauze/commit/e2d50d235068aa765ff5103e9ff42aa10f0d17c6))
+
+
+### Features
+
+* add Matomo opt-out and stop reading browser features ([90470c1](https://github.com/felix-berlin/berliner-schnauze/commit/90470c18382671c20a8b17066eb6657010493700))
+* add retention job for suggestions and comments ([598f4f7](https://github.com/felix-berlin/berliner-schnauze/commit/598f4f7f6185b482bd4c43c3c6cd71dd12fcc664))
+* **word:** harden word feedback privacy ([ad96da3](https://github.com/felix-berlin/berliner-schnauze/commit/ad96da3fbc863b9b98d625e38f23122ff6efb99c))
+
 # [4.8.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.7.0...v4.8.0) (2026-11-05)
 
 
