@@ -12,7 +12,7 @@ const CANONICAL_HOST = "berliner-schnauze.wtf";
 
 const SECURITY_HEADERS = {
   "Content-Security-Policy":
-    "default-src 'self'; script-src 'self' 'unsafe-inline' data: https://challenges.cloudflare.com https://pulse.berliner-schnauze.wtf https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; media-src 'self' https://cms.berliner-schnauze.wtf; img-src 'self' data: https://assets.kasimir.dev https://pulse.berliner-schnauze.wtf; font-src 'self' data:; connect-src 'self' https://assets.kasimir.dev https://challenges.cloudflare.com https://pulse.berliner-schnauze.wtf https://cloudflareinsights.com https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.ingest.de.sentry.io; frame-src https://challenges.cloudflare.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "default-src 'self'; script-src 'self' 'unsafe-inline' data: https://challenges.cloudflare.com https://pulse.berliner-schnauze.wtf; style-src 'self' 'unsafe-inline'; media-src 'self' https://cms.berliner-schnauze.wtf; img-src 'self' data: https://assets.kasimir.dev https://pulse.berliner-schnauze.wtf; font-src 'self' data:; connect-src 'self' https://assets.kasimir.dev https://challenges.cloudflare.com https://pulse.berliner-schnauze.wtf https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.ingest.de.sentry.io; frame-src https://challenges.cloudflare.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
   "Cross-Origin-Opener-Policy": "same-origin",
   "Cross-Origin-Resource-Policy": "same-origin",
   "Permissions-Policy": "camera=(), microphone=(), geolocation=(), interest-cohort=()",
