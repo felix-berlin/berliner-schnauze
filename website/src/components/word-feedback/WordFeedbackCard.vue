@@ -173,7 +173,7 @@
       </label>
       <p>
         Wir speichern Deine Antworten ohne Namen, aber mit einer Kennung aus einem Cookie (<a
-          href="/datenschutz#wort-feedback"
+          href="/datenschutz#7-wort-feedback"
           >Datenschutz</a
         >).
         <button class="c-link" :disabled="pending" type="button" @click="deleteAll">
