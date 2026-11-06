@@ -13,6 +13,8 @@ vi.mock("@services/payload.ts", () => ({
 
 import type { APIContext } from "astro";
 
+import { voterKey } from "@services/payload/comments.ts";
+
 import { POST } from "@/pages/api/comment-votes.ts";
 
 const set = vi.fn();
@@ -53,6 +55,12 @@ describe("POST /api/comment-votes", () => {
     expect(await res.json()).toEqual({ downvotes: 0, myVote: 1, upvotes: 1 });
     expect(set).toHaveBeenCalledOnce();
     expect(create.mock.calls[0][0].data).toMatchObject({ comment: 7, value: 1 });
+  });
+
+  it("stores and looks up the hashed visitor id, not the cookie", async () => {
+    await post({ commentId: 7, value: 1 }, "v-1");
+    expect(create.mock.calls[0][0].data.visitor).toBe(voterKey("v-1"));
+    expect(find.mock.calls[0][0].where.visitor).toEqual({ equals: voterKey("v-1") });
   });
 
   it("switch +1 -> -1 updates the one row", async () => {

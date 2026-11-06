@@ -115,7 +115,11 @@ describe("CommentForm", () => {
   });
 
   it("shows ⌘ on Apple devices and Strg elsewhere", async () => {
-    expect(mount(CommentForm, { props: { submit: vi.fn() } }).find(".c-shortcut__key").text()).toBe("Strg");
+    expect(
+      mount(CommentForm, { props: { submit: vi.fn() } })
+        .find(".c-shortcut__key")
+        .text(),
+    ).toBe("Strg");
     const ua = vi.spyOn(navigator, "userAgent", "get").mockReturnValue("Mozilla/5.0 (Macintosh)");
     const wrapper = mount(CommentForm, { props: { submit: vi.fn() } });
     await flushPromises();
@@ -123,4 +127,3 @@ describe("CommentForm", () => {
     ua.mockRestore();
   });
 });
-

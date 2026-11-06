@@ -1,25 +1,25 @@
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import { LinkFeature, lexicalEditor } from "@payloadcms/richtext-lexical";
+import nodemailer from "nodemailer";
 import os from "os";
 import path from "path";
-import nodemailer from "nodemailer";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 
 import { CommentReports } from "./collections/CommentReports";
 import { Comments } from "./collections/Comments";
 import { CommentVotes } from "./collections/CommentVotes";
-import { WordFeedback } from "./collections/WordFeedback";
-import { WordStats } from "./collections/WordStats";
 import { Media } from "./collections/Media";
 import { Pages } from "./collections/Pages";
 import { Posts } from "./collections/Posts";
 import { Suggestions } from "./collections/Suggestions";
 import { Themen } from "./collections/Themen";
 import { Users } from "./collections/Users";
-import { WordTypes } from "./collections/WordTypes";
+import { WordFeedback } from "./collections/WordFeedback";
 import { Words } from "./collections/Words";
+import { WordStats } from "./collections/WordStats";
+import { WordTypes } from "./collections/WordTypes";
 import { Affiliate } from "./globals/Affiliate";
 import { Anki } from "./globals/Anki";
 import { Company } from "./globals/Company";
@@ -27,8 +27,9 @@ import { Home } from "./globals/Home";
 import { Navigation } from "./globals/Navigation";
 import { withIndexNow } from "./hooks/indexNow";
 import { withSlugRedirects } from "./hooks/redirectOldSlug";
-import { migrations } from "./migrations";
+import { retentionTask } from "./jobs/retention";
 import { mcp } from "./mcp";
+import { migrations } from "./migrations";
 import { redirects } from "./redirects";
 import { seo } from "./seo";
 
@@ -46,7 +47,23 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname) },
   },
   // A slug change on a collection with a public page adds a 301 from the old path.
-  collections: [Users, Media, WordTypes, Themen, Words, Posts, Pages, Suggestions, Comments, CommentVotes, CommentReports, WordFeedback, WordStats].map(withSlugRedirects).map(withIndexNow),
+  collections: [
+    Users,
+    Media,
+    WordTypes,
+    Themen,
+    Words,
+    Posts,
+    Pages,
+    Suggestions,
+    Comments,
+    CommentVotes,
+    CommentReports,
+    WordFeedback,
+    WordStats,
+  ]
+    .map(withSlugRedirects)
+    .map(withIndexNow),
   globals: [Navigation, Affiliate, Company, Home, Anki],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
@@ -55,7 +72,12 @@ export default buildConfig({
         fields: ({ defaultFields }) => [
           ...defaultFields,
           // Rendered as rel="sponsored": the site labels such links „Anzeige“ and shows the affiliate notice.
-          { name: "sponsored", type: "checkbox", label: "Werbelink (Affiliate)", admin: { description: "Wird als „Anzeige“ gekennzeichnet." } },
+          {
+            name: "sponsored",
+            type: "checkbox",
+            label: "Werbelink (Affiliate)",
+            admin: { description: "Wird als „Anzeige“ gekennzeichnet." },
+          },
         ],
       }),
     ],
@@ -77,10 +99,14 @@ export default buildConfig({
       })
     : undefined,
   plugins: [seo, redirects, mcp],
-  // Runs queued jobs (scheduled publishing of posts) only where PAYLOAD_RUN_JOBS=true, the cms container: the site's
+  // Runs queued jobs (scheduled publishing, the retention task) only where PAYLOAD_RUN_JOBS=true, the cms container: the site's
   // Local API process must not pick them up as well.
   jobs: {
-    autoRun: process.env.PAYLOAD_RUN_JOBS === "true" ? [{ cron: "* * * * *", queue: "default" }] : undefined,
+    tasks: [retentionTask],
+    autoRun:
+      process.env.PAYLOAD_RUN_JOBS === "true"
+        ? [{ cron: "* * * * *", queue: "default" }]
+        : undefined,
   },
   secret: process.env.PAYLOAD_SECRET || "",
   serverURL: process.env.PAYLOAD_SERVER_URL || "",

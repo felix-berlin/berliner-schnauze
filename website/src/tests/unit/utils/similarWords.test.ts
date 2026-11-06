@@ -18,11 +18,7 @@ describe("similarWords", () => {
   it("returns words with similarity score", () => {
     const result = similarWords(mockWords, mockWords[0]);
     expect(result[0].isSimilar).toBe(
-      natural.JaroWinklerDistance(
-        mockWords[1].berlinerisch,
-        mockWords[0].berlinerisch,
-        false,
-      ),
+      natural.JaroWinklerDistance(mockWords[1].berlinerisch, mockWords[0].berlinerisch, false),
     );
   });
 
@@ -50,11 +46,7 @@ describe("similarWords", () => {
         const expected = words
           .filter((w) => w.id !== current.id)
           .filter(
-            (w) =>
-              natural.JaroWinklerDistance(
-                w.berlinerisch,
-                current.berlinerisch,
-              ) >= threshold,
+            (w) => natural.JaroWinklerDistance(w.berlinerisch, current.berlinerisch) >= threshold,
           );
         expect(similarWords(words, current, threshold).map((r) => r.word)).toEqual(expected);
       }

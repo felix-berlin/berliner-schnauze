@@ -40,6 +40,7 @@ const openMenu = async (wrapper: VueWrapper) => {
 
 const mountCard = (comment: Partial<PublicComment>, canEdit = false) => {
   const ctx = {
+    armCaptcha: vi.fn(),
     busy: ref(new Set<number>()),
     canEdit: () => canEdit,
     edit: vi.fn(async () => "ok"),
@@ -161,7 +162,13 @@ describe("CommentCard", () => {
   });
 
   it("hides „Antworten“ on a reply under a placeholder", () => {
-    const placeholder = { ...base, id: 2, replies: [{ ...base, id: 3, parentId: 2 }], state: "removed" as const, text: null };
+    const placeholder = {
+      ...base,
+      id: 2,
+      replies: [{ ...base, id: 3, parentId: 2 }],
+      state: "removed" as const,
+      text: null,
+    };
     const { wrapper } = mountCard(placeholder);
     expect(wrapper.text()).toContain("Hallo");
     expect(wrapper.find(".c-comment-card__reply").exists()).toBe(false);
@@ -204,10 +211,20 @@ describe("CommentCard", () => {
     expect(trackEvent).toHaveBeenCalledTimes(1);
   });
 
+  it("arms the captcha when a reply form opens", async () => {
+    const { ctx, wrapper } = mountCard({});
+    await wrapper.find(".c-comment-card__reply").trigger("click");
+    expect(ctx.armCaptcha).toHaveBeenCalledOnce();
+  });
+
   it("reply: posts under the thread root, closes on success, stays open on error or without token", async () => {
     const { ctx, wrapper } = mountCard({ id: 3, parentId: 1 });
     await wrapper.find(".c-comment-card__reply").trigger("click");
-    const submit = () => wrapper.findComponent(CommentForm).props("submit") as (v: { authorName: string; text: string }) => Promise<boolean>;
+    const submit = () =>
+      wrapper.findComponent(CommentForm).props("submit") as (v: {
+        authorName: string;
+        text: string;
+      }) => Promise<boolean>;
     ctx.post.mockResolvedValueOnce("error");
     expect(await submit()({ authorName: "", text: "Jenau so" })).toBe(false);
     expect(ctx.post).toHaveBeenCalledWith({ authorName: "", parentId: 1, text: "Jenau so" }, "tok");
@@ -282,13 +299,18 @@ describe("CommentCard", () => {
   });
 
   it("removed placeholder without a reason", () => {
-    expect(mountCard({ state: "removed", text: null }).wrapper.text()).toContain("Kommentar entfernt");
+    expect(mountCard({ state: "removed", text: null }).wrapper.text()).toContain(
+      "Kommentar entfernt",
+    );
   });
 
   it("a reply to a top-level comment goes under that comment", async () => {
     const { ctx, wrapper } = mountCard({ id: 4 });
     await wrapper.find(".c-comment-card__reply").trigger("click");
-    const submit = wrapper.findComponent(CommentForm).props("submit") as (v: { authorName: string; text: string }) => Promise<boolean>;
+    const submit = wrapper.findComponent(CommentForm).props("submit") as (v: {
+      authorName: string;
+      text: string;
+    }) => Promise<boolean>;
     await submit({ authorName: "", text: "Jenau so" });
     expect(ctx.post).toHaveBeenCalledWith({ authorName: "", parentId: 4, text: "Jenau so" }, "tok");
   });
@@ -299,4 +321,3 @@ describe("CommentCard", () => {
     expect(wrapper.findComponent(CommentForm).props("initialText")).toBe("");
   });
 });
-

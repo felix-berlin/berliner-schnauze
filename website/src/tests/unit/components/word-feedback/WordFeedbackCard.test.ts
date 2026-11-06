@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const store = vi.hoisted(() => ({
   answerUsage: vi.fn(),
+  deleteAllFeedback: vi.fn(),
   loadFeedback: vi.fn(),
   sendFeedback: vi.fn(),
 }));
@@ -277,6 +278,54 @@ describe("WordFeedbackCard", () => {
     await click(w, "Angaben ändern");
     expect($profile.get()).toEqual({});
     expect(w.text()).toContain("Wo wohnste?");
+  });
+
+  it("sends no profile answer to the analytics", async () => {
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    await click(w, "überspringen");
+    expect(track.mock.calls.map((c) => c[1])).toEqual(["usage"]);
+  });
+
+  it("Stimme zurückziehen sends usage null and shows the usage buttons again", async () => {
+    $feedback.set(state({ mine: { usage: "say" } }));
+    store.sendFeedback.mockImplementation(async () => {
+      $feedback.set(state({ mine: { usage: null } }));
+      return true;
+    });
+    const w = await mountIt();
+    await click(w, "Stimme zurückziehen");
+    expect(store.sendFeedback).toHaveBeenCalledWith(7, { usage: null });
+    expect(w.text()).toContain("Sag ick selbst");
+    expect(w.text()).not.toContain("Danke fürs Mitmachen");
+  });
+
+  it("the remember box is off by default and toggles the store flag", async () => {
+    const { $remember } = await import("@stores/wordFeedback.ts");
+    $remember.set(false);
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    const box = w.find('input[type="checkbox"]');
+    expect((box.element as HTMLInputElement).checked).toBe(false);
+    await box.setValue(true);
+    expect($remember.get()).toBe(true);
+    await box.setValue(false);
+    expect($remember.get()).toBe(false);
+  });
+
+  it("Alle meine Antworten löschen asks first and then deletes through the store", async () => {
+    $feedback.set(state({ mine: { usage: "say" } }));
+    store.deleteAllFeedback.mockResolvedValue(true);
+    const confirm = vi
+      .spyOn(window, "confirm")
+      .mockReturnValueOnce(false)
+      .mockReturnValueOnce(true);
+    const w = await mountIt();
+    await click(w, "Alle meine Antworten löschen");
+    expect(store.deleteAllFeedback).not.toHaveBeenCalled();
+    await click(w, "Alle meine Antworten löschen");
+    expect(store.deleteAllFeedback).toHaveBeenCalledWith(7);
+    confirm.mockRestore();
   });
 
   it("moves focus to the new question after an answer, not on mount", async () => {

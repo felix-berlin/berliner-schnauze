@@ -1,3 +1,5 @@
+import type { WordRef } from "@utils/wordHelper.ts";
+
 import {
   alphabeticNeighbors,
   capitalizeFirstLetter,
@@ -10,8 +12,6 @@ import {
   translateNlpTags,
 } from "@utils/wordHelper";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-
-import type { WordRef } from "@utils/wordHelper.ts";
 
 vi.mock("@services/wikimediaApi.ts", () => ({
   fetchWikimediaAPI: vi.fn(),

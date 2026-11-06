@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
-import { visitorId } from "@services/payload/comments.ts";
+import { visitorId, voterKey } from "@services/payload/comments.ts";
 import { isUniqueViolation, orNull, reply } from "@utils/apiReply.ts";
 import { voteSchema } from "@utils/commentSchema.ts";
 import { clientIp, rateLimitedBy } from "@utils/rateLimit.ts";
@@ -27,7 +27,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     )
       return reply({ error: "Jenug jestimmt für heute." }, 429);
 
-    const visitor = visitorId(cookies, true) as string;
+    const visitor = voterKey(visitorId(cookies, true) as string);
     const mine = async () =>
       (
         await payload.find({

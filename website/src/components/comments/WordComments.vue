@@ -1,5 +1,10 @@
 <template>
-  <section class="c-word-comments" aria-labelledby="word-comments-title" @click="onLinkClick">
+  <section
+    class="c-word-comments"
+    aria-labelledby="word-comments-title"
+    @click="onLinkClick"
+    @focusin="onFocusIn"
+  >
     <header class="c-word-comments__header">
       <h2 id="word-comments-title" class="c-word-comments__title">
         Wat sagste dazu? <span class="c-word-comments__count">({{ ctx.total.value }})</span>
@@ -26,6 +31,7 @@
       </p>
       <div ref="captcha">
         <TurnStile
+          v-if="captchaOn"
           ref="turnstile"
           wrapper-id="commentsTurnstile"
           appearance="interaction-only"
@@ -72,6 +78,7 @@ import CommentForm from "@components/comments/CommentForm.vue";
 import TurnStile from "@components/TurnStile.vue";
 import { commentsKey, useComments, type CommentsContext } from "@composables/useComments.ts";
 import { createToastNotify } from "@stores/toastNotify.ts";
+import { captchaWaitToast } from "@utils/captchaToast.ts";
 import { trackEvent } from "@utils/analytics";
 import {
   useElementSize,
@@ -99,21 +106,22 @@ const onToken = (value: string): void => {
   token.value = value;
   if (value) captchaFailed.value = false;
 };
+// Cloudflare's script loads on the first focus inside any form of this section, or when a reply/report form opens
+// (privacy policy, "Spam-Schutz").
+const captchaOn = ref(false);
+const onFocusIn = (e: FocusEvent): void => {
+  if ((e.target as Element).closest("form")) captchaOn.value = true;
+};
 const turnstile = useTemplateRef<{ reset: () => void }>("turnstile");
 const ctx: CommentsContext = {
   ...comments,
+  armCaptcha: () => {
+    captchaOn.value = true;
+  },
   resetCaptcha: () => turnstile.value?.reset(),
   takeToken: () => {
     if (token.value) return token.value;
-    createToastNotify(
-      captchaFailed.value
-        ? {
-            message:
-              "Die Prüfung, ob de 'n Mensch bist, klemmt. Lad die Seite neu oder mach den Blocker kurz aus.",
-            status: "error",
-          }
-        : { message: "Moment noch, ick prüf dich kurz.", status: "warning" },
-    );
+    createToastNotify(captchaWaitToast(captchaFailed.value));
     return null;
   },
   token,

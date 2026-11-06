@@ -8,6 +8,7 @@ import MainHeader from '@components/header/MainHeader.astro';
 import Modal from '@components/Modal.vue';
 import ScrollToTop from '@components/ScrollToTop.vue';
 import ToastNotifyContainer from '@components/toast/ToastNotifyContainer.vue';
+import { OPT_OUT_COOKIE } from '@utils/matomoOptOut';
 
 export interface DefaultLayoutProps {
   bodyClasses?: Array<string> | string;
@@ -31,6 +32,19 @@ const {
   <head>
     <BaseHead seo={seo} title={title} />
 
+    <!-- Matomo opt-out (matomoOptOut.ts): runs before astro-matomo, whose pushes then go nowhere. -->
+    <script is:inline define:vars={{ optOutCookie: OPT_OUT_COOKIE }}>
+      try {
+        if (document.cookie.indexOf(optOutCookie + '=') > -1) {
+          window._paq = [];
+          window._paq.push = function () {
+            return 0;
+          };
+        }
+      } catch (e) {
+        // no cookie access: nothing to opt out of
+      }
+    </script>
     <slot name='head' />
   </head>
   <body class='o-body' class:list={bodyClasses}>

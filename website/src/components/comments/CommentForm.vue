@@ -39,7 +39,7 @@
     </div>
     <p class="c-comment-form__privacy">
       Mit dem Abschicken wird dein Kommentar öffentlich angezeigt. Was wir dabei speichern, steht in
-      der <a href="/datenschutz#kommentare">Datenschutzerklärung</a>.
+      der <a href="/datenschutz#5-kommentare-abstimmungen-und-meldungen">Datenschutzerklärung</a>.
     </p>
     <div class="c-comment-form__actions">
       <button

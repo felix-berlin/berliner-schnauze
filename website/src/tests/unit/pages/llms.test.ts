@@ -18,8 +18,7 @@ vi.mock("@services/payload/posts.ts", () => ({ fetchAllPosts: async () => data.p
 
 import { GET } from "@/pages/llms.txt.ts";
 
-const get = async (site?: URL) =>
-  (GET as (ctx: unknown) => Promise<Response>)({ site });
+const get = async (site?: URL) => (GET as (ctx: unknown) => Promise<Response>)({ site });
 
 describe("llms.txt", () => {
   it("is plain text, cached, with the live word count", async () => {
@@ -40,8 +39,12 @@ describe("llms.txt", () => {
 
   it("drops a description that repeats the post title", async () => {
     const body = await (await get(new URL("https://berliner-schnauze.wtf"))).text();
-    expect(body).toContain("[Alter Titel](https://berliner-schnauze.wtf/magazin/alter-titel): Mehr dazu");
-    expect(body).toContain("[Zweiter](https://berliner-schnauze.wtf/magazin/zweiter): Eigene Beschreibung");
+    expect(body).toContain(
+      "[Alter Titel](https://berliner-schnauze.wtf/magazin/alter-titel): Mehr dazu",
+    );
+    expect(body).toContain(
+      "[Zweiter](https://berliner-schnauze.wtf/magazin/zweiter): Eigene Beschreibung",
+    );
     expect(body).toMatch(/\[Dritter\]\([^)]*\)\n/);
   });
 

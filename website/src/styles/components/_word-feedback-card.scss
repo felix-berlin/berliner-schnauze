@@ -198,6 +198,23 @@
     margin-inline-start: auto;
   }
 
+  &__privacy {
+    display: grid;
+    gap: vars.$spacer * 0.25;
+    color: var(--color-muted);
+    font-size: 0.8rem;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  &__remember {
+    display: flex;
+    align-items: baseline;
+    gap: vars.$spacer * 0.5;
+  }
+
   &__thanks {
     margin: 0;
   }

@@ -7,6 +7,7 @@ import {
   $feedback,
   $profile,
   answerUsage,
+  deleteAllFeedback,
   loadFeedback,
   nextStep,
   parseProfile,
@@ -75,9 +76,36 @@ describe("parseProfile", () => {
     ["{not json", {}],
   ])("decodes persisted %s on a fresh store", async (stored, expected) => {
     vi.resetModules();
+    localStorage.setItem("bs-word-feedback-remember", "yes");
     localStorage.setItem("bs-word-feedback-profile", stored);
     const fresh = await import("@stores/wordFeedback.ts");
     expect(fresh.$profile.get()).toEqual(expected);
+  });
+
+  it("ignores and drops a stored profile when the visitor never ticked remember", async () => {
+    vi.resetModules();
+    localStorage.removeItem("bs-word-feedback-remember");
+    localStorage.setItem("bs-word-feedback-profile", '{"area":"pankow"}');
+    const fresh = await import("@stores/wordFeedback.ts");
+    expect(fresh.$profile.get()).toEqual({});
+    expect(localStorage.getItem("bs-word-feedback-profile")).toBeNull();
+  });
+
+  it("writes the profile to the browser only while remember is on", async () => {
+    vi.resetModules();
+    localStorage.clear();
+    const fresh = await import("@stores/wordFeedback.ts");
+    fresh.$profile.set({ area: "pankow" });
+    expect(localStorage.getItem("bs-word-feedback-profile")).toBeNull();
+    fresh.setRemember(true);
+    expect(JSON.parse(localStorage.getItem("bs-word-feedback-profile") as string)).toEqual({
+      area: "pankow",
+    });
+    fresh.$profile.set({ age: "30-39", area: "pankow" });
+    expect(localStorage.getItem("bs-word-feedback-profile")).toContain("30-39");
+    fresh.setRemember(false);
+    expect(localStorage.getItem("bs-word-feedback-profile")).toBeNull();
+    expect(localStorage.getItem("bs-word-feedback-remember")).toBeNull();
   });
 });
 
@@ -307,5 +335,27 @@ describe("answerUsage", () => {
       word: 5,
     });
     expect(f.mock.calls[0][1].method).toBe("PATCH");
+  });
+});
+
+describe("deleteAllFeedback", () => {
+  it("sends DELETE, forgets the profile and reloads the word", async () => {
+    $profile.set({ area: "pankow" });
+    const fetchMock = vi.fn().mockResolvedValueOnce({ ok: true }).mockResolvedValueOnce(ok());
+    vi.stubGlobal("fetch", fetchMock);
+    expect(await deleteAllFeedback(7)).toBe(true);
+    expect(fetchMock.mock.calls[0]).toEqual(["/api/word-feedback", { method: "DELETE" }]);
+    expect($profile.get()).toEqual({});
+    expect(fetchMock.mock.calls[1][0]).toBe("/api/word-feedback?word=7");
+    vi.unstubAllGlobals();
+  });
+
+  it("keeps everything and toasts when the delete fails", async () => {
+    $profile.set({ area: "pankow" });
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 502 }));
+    expect(await deleteAllFeedback(7)).toBe(false);
+    expect($profile.get()).toEqual({ area: "pankow" });
+    expect(toast).toHaveBeenCalled();
+    vi.unstubAllGlobals();
   });
 });

@@ -17,6 +17,9 @@ import * as migration_20261101_234120_mcp_api_keys from './20261101_234120_mcp_a
 import * as migration_20261103_130124_suggestions_similar_words from './20261103_130124_suggestions_similar_words';
 import * as migration_20261103_163400_word_feedback from './20261103_163400_word_feedback';
 import * as migration_20261105_112655_word_stats from './20261105_112655_word_stats';
+import * as migration_20261106_142557_retention_task from './20261106_142557_retention_task';
+import * as migration_20261106_150000_hash_visitor_ids from './20261106_150000_hash_visitor_ids';
+import * as migration_20261106_165028_feedback_visitor_nullable from './20261106_165028_feedback_visitor_nullable';
 
 export const migrations = [
   {
@@ -112,6 +115,21 @@ export const migrations = [
   {
     up: migration_20261105_112655_word_stats.up,
     down: migration_20261105_112655_word_stats.down,
-    name: '20261105_112655_word_stats'
+    name: '20261105_112655_word_stats',
+  },
+  {
+    up: migration_20261106_142557_retention_task.up,
+    down: migration_20261106_142557_retention_task.down,
+    name: '20261106_142557_retention_task',
+  },
+  {
+    up: migration_20261106_150000_hash_visitor_ids.up,
+    down: migration_20261106_150000_hash_visitor_ids.down,
+    name: '20261106_150000_hash_visitor_ids',
+  },
+  {
+    up: migration_20261106_165028_feedback_visitor_nullable.up,
+    down: migration_20261106_165028_feedback_visitor_nullable.down,
+    name: '20261106_165028_feedback_visitor_nullable'
   },
 ];

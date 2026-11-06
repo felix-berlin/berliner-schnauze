@@ -1,3 +1,4 @@
+import { voterKey } from "@services/payload/comments.ts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { create, findByID, verifyTurnstile } = vi.hoisted(() => ({
@@ -46,7 +47,7 @@ describe("POST /api/comment-reports", () => {
     expect(await res.json()).toEqual({ reported: true });
     expect(create.mock.calls[0][0]).toMatchObject({
       collection: "comment-reports",
-      data: { comment: id, reason: "Spam", visitor: "v-1" },
+      data: { comment: id, reason: "Spam", visitor: voterKey("v-1") },
     });
   });
 

@@ -43,13 +43,29 @@ describe("WordComments", () => {
       ok: true,
       status: 200,
     });
-    const wrapper = mount(WordComments, { global: { stubs: { TurnStile: true } }, props: { wordId: 7 } });
+    const wrapper = mount(WordComments, {
+      global: { stubs: { TurnStile: true } },
+      props: { wordId: 7 },
+    });
     await flushPromises();
     expect(wrapper.text()).not.toContain("noch keener wat jesacht");
   });
 
   it("loads the linked thread and highlights its card for a #kommentar hash", async () => {
-    const card = { authorName: "Icke", createdAt: new Date().toISOString(), downvotes: 0, edited: false, id: 42, myVote: 0, parentId: null, removalReason: null, replies: [], state: "visible", text: "Verlinkt", upvotes: 0 };
+    const card = {
+      authorName: "Icke",
+      createdAt: new Date().toISOString(),
+      downvotes: 0,
+      edited: false,
+      id: 42,
+      myVote: 0,
+      parentId: null,
+      removalReason: null,
+      replies: [],
+      state: "visible",
+      text: "Verlinkt",
+      upvotes: 0,
+    };
     fetchMock.mockImplementation(async (url: string) => ({
       json: async () =>
         url.endsWith("/42") ? { comment: card } : { comments: [], hasMore: false, total: 1 },
@@ -63,7 +79,9 @@ describe("WordComments", () => {
       },
       props: { wordId: 7 },
     });
-    await vi.waitFor(() => expect(wrapper.find("#kommentar-42.is-highlighted").exists()).toBe(true));
+    await vi.waitFor(() =>
+      expect(wrapper.find("#kommentar-42.is-highlighted").exists()).toBe(true),
+    );
     expect(wrapper.text()).toContain("Verlinkt");
     wrapper.unmount();
     location.hash = "";
@@ -71,7 +89,20 @@ describe("WordComments", () => {
 
   // The ClientRouter moves same-page hash links with pushState: no hashchange fires.
   it("highlights a card when its timestamp link is clicked", async () => {
-    const card = { authorName: "Icke", createdAt: new Date().toISOString(), downvotes: 0, edited: false, id: 5, myVote: 0, parentId: null, removalReason: null, replies: [], state: "visible", text: "Hier", upvotes: 0 };
+    const card = {
+      authorName: "Icke",
+      createdAt: new Date().toISOString(),
+      downvotes: 0,
+      edited: false,
+      id: 5,
+      myVote: 0,
+      parentId: null,
+      removalReason: null,
+      replies: [],
+      state: "visible",
+      text: "Hier",
+      upvotes: 0,
+    };
     fetchMock.mockResolvedValue({
       json: async () => ({ comments: [card], hasMore: false, total: 1 }),
       ok: true,
@@ -85,11 +116,17 @@ describe("WordComments", () => {
       history.pushState({}, "", a.getAttribute("href")!);
     };
     document.addEventListener("click", router);
-    const wrapper = mount(WordComments, { attachTo: document.body, global: { stubs: { TurnStile: true } }, props: { wordId: 7 } });
+    const wrapper = mount(WordComments, {
+      attachTo: document.body,
+      global: { stubs: { TurnStile: true } },
+      props: { wordId: 7 },
+    });
     await vi.waitFor(() => expect(wrapper.find("#kommentar-5").exists()).toBe(true));
     expect(wrapper.find("#kommentar-5").classes()).not.toContain("is-highlighted");
     await wrapper.find('a[href="#kommentar-5"]').trigger("click");
-    await vi.waitFor(() => expect(wrapper.find("#kommentar-5").classes()).toContain("is-highlighted"));
+    await vi.waitFor(() =>
+      expect(wrapper.find("#kommentar-5").classes()).toContain("is-highlighted"),
+    );
     document.removeEventListener("click", router);
     wrapper.unmount();
     location.hash = "";
@@ -108,7 +145,10 @@ describe("WordComments", () => {
 
   it("„Neueste“ reloads sorted by date", async () => {
     fetchMock.mockResolvedValue(page(empty));
-    const wrapper = mount(WordComments, { global: { stubs: { TurnStile: true } }, props: { wordId: 7 } });
+    const wrapper = mount(WordComments, {
+      global: { stubs: { TurnStile: true } },
+      props: { wordId: 7 },
+    });
     await flushPromises();
     await wrapper.findAll(".c-word-comments__sort button")[1]!.trigger("click");
     await flushPromises();
@@ -121,9 +161,16 @@ describe("WordComments", () => {
     const { trackEvent } = await import("@utils/analytics");
     vi.mocked(trackEvent).mockClear();
     fetchMock.mockResolvedValue(page(empty));
-    const wrapper = mount(WordComments, { global: { stubs: { TurnStile: TurnStileStub } }, props: { wordId: 7 } });
+    const wrapper = mount(WordComments, {
+      global: { stubs: { TurnStile: TurnStileStub } },
+      props: { wordId: 7 },
+    });
+    await wrapper.find("form").trigger("focusin");
     await flushPromises();
-    const submit = wrapper.findComponent(CommentForm).props("submit") as (v: { authorName: string; text: string }) => Promise<boolean>;
+    const submit = wrapper.findComponent(CommentForm).props("submit") as (v: {
+      authorName: string;
+      text: string;
+    }) => Promise<boolean>;
     expect(await submit({ authorName: "", text: "Na sowat" })).toBe(false);
     expect(createToastNotify).toHaveBeenCalledWith(expect.objectContaining({ status: "warning" }));
     expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -132,10 +179,40 @@ describe("WordComments", () => {
     fetchMock.mockResolvedValueOnce({ json: async () => ({ error: "x" }), ok: false, status: 400 });
     expect(await submit({ authorName: "", text: "Na sowat" })).toBe(false);
     expect(trackEvent).not.toHaveBeenCalled();
-    fetchMock.mockResolvedValueOnce({ json: async () => ({ editKey: "k".repeat(43), pending: true }), ok: true, status: 201 });
+    fetchMock.mockResolvedValueOnce({
+      json: async () => ({ editKey: "k".repeat(43), pending: true }),
+      ok: true,
+      status: 201,
+    });
     expect(await submit({ authorName: "", text: "Na sowat" })).toBe(true);
     expect(resetSpy).toHaveBeenCalledTimes(2);
     expect(trackEvent).toHaveBeenCalledWith("Comments", "Post", "7");
+  });
+
+  it("mounts the captcha when a reply form opens, without any field focus", async () => {
+    const comment = {
+      authorName: "Det",
+      createdAt: "2026-01-01T00:00:00.000Z",
+      downvotes: 0,
+      edited: false,
+      id: 1,
+      myVote: 0,
+      parentId: null,
+      removalReason: null,
+      replies: [],
+      state: "visible",
+      text: "kiek ma",
+      upvotes: 0,
+    };
+    fetchMock.mockResolvedValue(page({ comments: [comment], hasMore: false, total: 1 }));
+    const wrapper = mount(WordComments, {
+      global: { stubs: { TurnStile: TurnStileStub } },
+      props: { wordId: 7 },
+    });
+    await flushPromises();
+    expect(wrapper.findComponent(TurnStileStub).exists()).toBe(false);
+    await wrapper.find(".c-comment-card__reply").trigger("click");
+    expect(wrapper.findComponent(TurnStileStub).exists()).toBe(true);
   });
 
   it("loads the next page when the end of the list scrolls into view", async () => {
@@ -165,7 +242,10 @@ describe("WordComments", () => {
   it("ignores other hashes and clicks that are not comment links", async () => {
     fetchMock.mockResolvedValue(page(empty));
     location.hash = "#bedeutung";
-    const wrapper = mount(WordComments, { global: { stubs: { TurnStile: true } }, props: { wordId: 7 } });
+    const wrapper = mount(WordComments, {
+      global: { stubs: { TurnStile: true } },
+      props: { wordId: 7 },
+    });
     await flushPromises();
     await wrapper.find("h2").trigger("click");
     await flushPromises();
@@ -178,7 +258,10 @@ describe("WordComments", () => {
       url.endsWith("/77") ? { json: async () => ({}), ok: false, status: 404 } : page(empty),
     );
     location.hash = "#kommentar-77";
-    const wrapper = mount(WordComments, { global: { stubs: { TurnStile: true } }, props: { wordId: 7 } });
+    const wrapper = mount(WordComments, {
+      global: { stubs: { TurnStile: true } },
+      props: { wordId: 7 },
+    });
     await flushPromises();
     expect(fetchMock.mock.calls.some(([u]) => String(u).endsWith("/77"))).toBe(true);
     expect(wrapper.find(".is-highlighted").exists()).toBe(false);
@@ -186,10 +269,32 @@ describe("WordComments", () => {
   });
 
   it("finds a linked reply inside its thread", async () => {
-    const card = (id: number, replies: object[] = []) => ({ authorName: "Icke", createdAt: new Date().toISOString(), downvotes: 0, edited: false, id, myVote: 0, parentId: null, removalReason: null, replies, state: "visible", text: `Text ${id}`, upvotes: 0 });
-    fetchMock.mockResolvedValue(page({ comments: [card(1), card(5, [{ ...card(6), parentId: 5 }])], hasMore: false, total: 3 }));
+    const card = (id: number, replies: object[] = []) => ({
+      authorName: "Icke",
+      createdAt: new Date().toISOString(),
+      downvotes: 0,
+      edited: false,
+      id,
+      myVote: 0,
+      parentId: null,
+      removalReason: null,
+      replies,
+      state: "visible",
+      text: `Text ${id}`,
+      upvotes: 0,
+    });
+    fetchMock.mockResolvedValue(
+      page({
+        comments: [card(1), card(5, [{ ...card(6), parentId: 5 }])],
+        hasMore: false,
+        total: 3,
+      }),
+    );
     Element.prototype.scrollIntoView = vi.fn();
-    const wrapper = mount(WordComments, { global: { stubs: { TurnStile: true } }, props: { wordId: 7 } });
+    const wrapper = mount(WordComments, {
+      global: { stubs: { TurnStile: true } },
+      props: { wordId: 7 },
+    });
     await flushPromises();
     location.hash = "#kommentar-6";
     window.dispatchEvent(new HashChangeEvent("hashchange"));
@@ -198,4 +303,3 @@ describe("WordComments", () => {
     location.hash = "";
   });
 });
-
