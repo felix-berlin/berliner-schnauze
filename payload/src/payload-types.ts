@@ -546,7 +546,7 @@ export interface CommentReport {
 export interface WordFeedback {
   id: number;
   word: number | Word;
-  visitor: string;
+  visitor?: string | null;
   reaction?: ('like' | 'dislike') | null;
   usage?: ('say' | 'know' | 'never') | null;
   area?:

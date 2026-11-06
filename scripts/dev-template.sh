@@ -41,7 +41,9 @@ if [ -f "$dump" ]; then
     UPDATE users SET hash = NULL, salt = NULL, api_key = NULL, api_key_index = NULL, enable_a_p_i_key = false,
       reset_password_token = NULL, reset_password_expiration = NULL, login_attempts = 0, lock_until = NULL;
     TRUNCATE users_sessions, payload_mcp_api_keys, payload_preferences_rels, payload_preferences,
-      payload_locked_documents_rels, payload_locked_documents RESTART IDENTITY;"
+      payload_locked_documents_rels, payload_locked_documents RESTART IDENTITY;
+    -- Profile answers (Ortsteil, age, origin) with a visitor hash stay out of dev databases.
+    TRUNCATE word_feedback RESTART IDENTITY;"
 else
   echo "!! no backup at $dump: building the template from the invented e2e data (no real words, images or audio)" >&2
   pnpm --filter payload-app migrate

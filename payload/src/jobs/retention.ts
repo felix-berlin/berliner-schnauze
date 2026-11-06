@@ -5,6 +5,7 @@ const DAY = 86_400_000;
 export const SUGGESTION_PII_DAYS = 90;
 export const UNHANDLED_SUGGESTION_DAYS = 365;
 export const REMOVED_COMMENT_DAYS = 183;
+export const FEEDBACK_VISITOR_DAYS = 395; // 13 months
 
 /**
  * Daily clean-up of personal data: name and mail of finished suggestions after 90 days (never handled ones after a
@@ -42,6 +43,19 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
     },
     data: { userName: null, userMail: null },
   });
+
+  // The answers stay (they are statistics); the per-word visitor hash goes, so the row no longer points at a browser.
+  const unlinked =
+    (await payload.db.updateMany({
+      collection: "word-feedback",
+      where: {
+        and: [
+          { visitor: { exists: true } },
+          { updatedAt: { less_than: ago(FEEDBACK_VISITOR_DAYS) } },
+        ],
+      },
+      data: { visitor: null },
+    })) ?? [];
 
   const stale = await payload.find({
     collection: "comments",
@@ -104,6 +118,7 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
     }
   }
   return {
+    feedbackUnlinked: unlinked.length,
     suggestionsCleared: cleared?.length ?? 0,
     commentsDeleted: deleted,
     commentsScrubbed: scrubbed,

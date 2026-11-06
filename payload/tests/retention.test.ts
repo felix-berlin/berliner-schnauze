@@ -257,4 +257,22 @@ describe("runRetention edge cases", () => {
         .totalDocs,
     ).toBe(0);
   });
+
+  it("removes the visitor hash of old feedback rows but keeps the answers", async () => {
+    const mk = (visitor: string) =>
+      payload.create({
+        collection: "word-feedback",
+        data: { word: wordId, visitor, usage: "say", area: "pankow" },
+      });
+    const row = await mk("retention-test-visitor");
+    await runRetention(payload, days(10));
+    expect((await payload.findByID({ collection: "word-feedback", id: row.id })).visitor).toBe(
+      "retention-test-visitor",
+    );
+    await runRetention(payload, days(500));
+    const after = await payload.findByID({ collection: "word-feedback", id: row.id });
+    expect(after.visitor ?? null).toBeNull();
+    expect(after).toMatchObject({ usage: "say", area: "pankow" });
+    await payload.delete({ collection: "word-feedback", id: row.id });
+  });
 });

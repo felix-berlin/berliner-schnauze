@@ -9,7 +9,10 @@ const pick = (name: string, options: readonly string[]): Field => ({
   options: [...options],
 });
 
-/** One feedback row per visitor cookie and word; every answer is optional. */
+/**
+ * One feedback row per visitor and word; every answer is optional. `visitor` is a per-word hash of the cookie and is
+ * removed after 13 months (jobs/retention.ts), the answers stay.
+ */
 export const WordFeedback: CollectionConfig = {
   slug: "word-feedback",
   access: authenticatedOnly,
@@ -17,7 +20,7 @@ export const WordFeedback: CollectionConfig = {
   indexes: [{ fields: ["word", "visitor"], unique: true }],
   fields: [
     { name: "word", type: "relationship", relationTo: "words", required: true },
-    { name: "visitor", type: "text", required: true },
+    { name: "visitor", type: "text" },
     pick("reaction", REACTIONS),
     pick("usage", USAGES),
     pick("area", AREAS),
