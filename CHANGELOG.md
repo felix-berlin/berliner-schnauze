@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.9.0...v4.9.1) (2026-11-06)
+
+
+### Bug Fixes
+
+* **dev:** use matomo's own opt-out cookie again ([a80957b](https://github.com/felix-berlin/berliner-schnauze/commit/a80957b89b9a11b4dec596c21c6098f0a0bc5581))
+
 # [4.9.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.8.0...v4.9.0) (2026-11-06)
 
 
