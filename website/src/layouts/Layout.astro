@@ -31,6 +31,19 @@ const {
   <head>
     <BaseHead seo={seo} title={title} />
 
+    <!-- Matomo opt-out (matomoOptOut.ts): runs before astro-matomo, whose pushes then go nowhere. -->
+    <script is:inline>
+      try {
+        if (document.cookie.indexOf('bs_matomo_optout=') > -1) {
+          window._paq = [];
+          window._paq.push = function () {
+            return 0;
+          };
+        }
+      } catch (e) {
+        // no cookie access: nothing to opt out of
+      }
+    </script>
     <slot name='head' />
   </head>
   <body class='o-body' class:list={bodyClasses}>

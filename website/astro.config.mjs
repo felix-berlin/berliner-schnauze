@@ -319,7 +319,7 @@ export default defineConfig({
       disableCookies: true,
       // After Anubis' challenge document.referrer is its host, not the real source (Matomo >= 4.12). The same host
       // must also be listed under Websites > Excluded referrers in Matomo.
-      // No access to resolution/plugins (also drops the cookieless config_id) and no campaign parameters (privacy policy, point 9).
+      // No access to resolution/plugins (also drops the cookieless config_id) and no campaign parameters (privacy policy, section "Reichweitenmessung").
       preInitCommands: [
         ["setExcludedReferrers", ["anubis.berliner-schnauze.wtf"]],
         ["disableBrowserFeatureDetection"],

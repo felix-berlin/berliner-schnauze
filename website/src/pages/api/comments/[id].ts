@@ -67,6 +67,7 @@ export const DELETE = own(
   deleteSchema,
   () => ({
     authorName: null,
+    // authorTag (per-word visitor hash) and editKeyHash are personal data too. Keep in step with retention.ts.
     authorTag: null,
     editKeyHash: null,
     pseudonym: null,

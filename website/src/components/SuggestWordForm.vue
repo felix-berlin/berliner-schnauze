@@ -67,7 +67,12 @@
       </Transition>
     </button>
 
-    <TurnStile v-if="captchaOn" :site-key="TURNSTILE_SITE_KEY" @token="turnstileToken = $event" />
+    <TurnStile
+      v-if="captchaOn"
+      :site-key="TURNSTILE_SITE_KEY"
+      @token="onToken"
+      @error="captchaFailed = true"
+    />
   </form>
 </template>
 
@@ -129,6 +134,12 @@ const errors = ref<Partial<Record<FieldName, string>>>({});
 const turnstileToken = ref("");
 // Cloudflare's script loads only once the form is used (privacy policy, "Spam-Schutz").
 const captchaOn = ref(false);
+// The check cannot run (script blocked, bad site key): waiting would never help.
+const captchaFailed = ref(false);
+const onToken = (value: string): void => {
+  turnstileToken.value = value;
+  if (value) captchaFailed.value = false;
+};
 const isSending = ref(false);
 
 const root = ref<HTMLFormElement | null>(null);
@@ -149,7 +160,19 @@ const onSubmit = async (): Promise<void> => {
     return;
   }
   errors.value = {};
-  if (!turnstileToken.value || isSending.value) return;
+  if (!turnstileToken.value) {
+    createToastNotify(
+      captchaFailed.value
+        ? {
+            message:
+              "Die Prüfung, ob de 'n Mensch bist, klemmt. Lad die Seite neu oder mach den Blocker kurz aus.",
+            status: "error",
+          }
+        : { message: "Moment noch, ick prüf dich kurz.", status: "warning" },
+    );
+    return;
+  }
+  if (isSending.value) return;
 
   isSending.value = true;
   // undefined = sent; otherwise the server's message, if it gave one

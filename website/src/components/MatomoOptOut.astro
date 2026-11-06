@@ -12,5 +12,6 @@
     if (root) renderMatomoOptOut(root);
   };
   render();
+  // The ClientRouter swaps the page without a reload: draw the box again.
   document.addEventListener("astro:page-load", render);
 </script>

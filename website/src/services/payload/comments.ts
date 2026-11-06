@@ -32,7 +32,8 @@ export const visitorId = (cookies: AstroCookies, create: boolean): string | unde
 
 /**
  * What the vote and report rows store instead of the cookie id. Its own prefix keeps those rows from being joined to
- * a comment's `authorTag` or a feedback row, which hash the same cookie differently.
+ * a comment's `authorTag` or a feedback row, which hash the same cookie differently. No secret: this pseudonymises
+ * (whoever holds the DB and a cookie value can recompute it), it does not anonymise.
  */
 export const voterKey = (visitor: string): string =>
   createHash("sha256").update(`votes:${visitor}`).digest("hex");

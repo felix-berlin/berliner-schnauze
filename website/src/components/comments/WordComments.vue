@@ -105,7 +105,8 @@ const onToken = (value: string): void => {
   token.value = value;
   if (value) captchaFailed.value = false;
 };
-// Cloudflare's script loads only once someone works in a form (privacy policy, "Spam-Schutz").
+// Cloudflare's script loads on the first focus inside any form of this section, or when a reply/report form opens
+// (privacy policy, "Spam-Schutz").
 const captchaOn = ref(false);
 const onFocusIn = (e: FocusEvent): void => {
   if ((e.target as Element).closest("form")) captchaOn.value = true;
@@ -113,6 +114,9 @@ const onFocusIn = (e: FocusEvent): void => {
 const turnstile = useTemplateRef<{ reset: () => void }>("turnstile");
 const ctx: CommentsContext = {
   ...comments,
+  armCaptcha: () => {
+    captchaOn.value = true;
+  },
   resetCaptcha: () => turnstile.value?.reset(),
   takeToken: () => {
     if (token.value) return token.value;

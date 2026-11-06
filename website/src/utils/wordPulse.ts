@@ -1,11 +1,11 @@
 export type PulseKind = "audio" | "click" | "share" | "view";
 
-// Dedupe for this page load only (a double click, a re-render). Per day and visitor the server dedupes, so
-// nothing is written to the browser's storage.
+// Dedupe within this browser session (a double click, a re-render, back to a word; the module survives view
+// transitions). The server dedupes per IP, word, kind and Berlin day, so nothing is written to browser storage.
 const sent = new Set<string>();
 const inFlight = new Set<string>(); // a double click must not send two reports
 
-/** Reports a word view or interaction at most once per word and kind while the page lives. Never throws. */
+/** Reports a word view or interaction at most once per word and kind per session. Never throws. */
 export const reportWord = (wordId: number, kind: PulseKind): void => {
   const id = `${wordId}:${kind}`;
   if (sent.has(id) || inFlight.has(id)) return;

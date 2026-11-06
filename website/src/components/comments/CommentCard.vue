@@ -178,6 +178,8 @@ const reporting = ref(false);
 const pending = computed(() => ctx.busy.value.has(comment.id));
 const toggle = (m: "edit" | "reply" | "report"): void => {
   mode.value = mode.value === m ? null : m;
+  // Report has an optional reason, so the form can be submitted without focusing a field (Safari never focuses buttons).
+  if (mode.value && m !== "edit") ctx.armCaptcha();
 };
 
 const placeholder = computed(() =>

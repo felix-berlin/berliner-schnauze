@@ -250,6 +250,8 @@ export const useComments = (wordId: number) => {
 
 export type CommentsContext = ReturnType<typeof useComments> & {
   /** Re-issues the shared captcha token after it was spent. */
+  /** Mounts the Turnstile widget; called when a reply/report form opens, before any field is focused. */
+  armCaptcha: () => void;
   resetCaptcha: () => void;
   /** The current captcha token, or null (with a toast) while the check is still running. */
   takeToken: () => null | string;

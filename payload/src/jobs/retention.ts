@@ -1,46 +1,47 @@
 import type { Payload, TaskConfig } from "payload";
 
 const DAY = 86_400_000;
-/** Deletion periods promised in the privacy policy (docs/datenschutzerklaerung-entwurf.md): keep both in step. */
+/** Deletion periods promised in the privacy policy (section "Speicherdauer"): change both together. */
 export const SUGGESTION_PII_DAYS = 90;
 export const UNHANDLED_SUGGESTION_DAYS = 365;
 export const REMOVED_COMMENT_DAYS = 183;
 
 /**
  * Daily clean-up of personal data: name and mail of finished suggestions after 90 days (never handled ones after a
- * year), removed, hidden, held and self-deleted comments after about 6 months. `updatedAt` stands in for "when it was finished or removed" (no separate timestamp is kept).
+ * year); removed, hidden, pending (never approved) and self-deleted comments after about 6 months.
+ * `updatedAt` stands in for "when it was finished or removed" (no separate timestamp is kept).
+ * A failing comment is logged and skipped so it cannot block the ones behind it; the run then throws at the end.
  */
 export const runRetention = async (payload: Payload, now = new Date()) => {
   const ago = (days: number) => new Date(now.getTime() - days * DAY).toISOString();
 
   // db.updateMany skips the hooks on purpose: a suggestion whose word is live is locked (refuseWhenLocked), but its
   // sender data must go all the same. The suggestion text stays.
-  const cleared =
-    (await payload.db.updateMany({
-      collection: "suggestions",
-      where: {
-        and: [
-          {
-            or: [
-              {
-                and: [
-                  { status: { in: ["accepted", "rejected"] } },
-                  { updatedAt: { less_than: ago(SUGGESTION_PII_DAYS) } },
-                ],
-              },
-              {
-                and: [
-                  { status: { equals: "new" } },
-                  { updatedAt: { less_than: ago(UNHANDLED_SUGGESTION_DAYS) } },
-                ],
-              },
-            ],
-          },
-          { or: [{ userName: { exists: true } }, { userMail: { exists: true } }] },
-        ],
-      },
-      data: { userName: null, userMail: null },
-    })) ?? [];
+  const cleared = await payload.db.updateMany({
+    collection: "suggestions",
+    where: {
+      and: [
+        {
+          or: [
+            {
+              and: [
+                { status: { in: ["accepted", "rejected"] } },
+                { updatedAt: { less_than: ago(SUGGESTION_PII_DAYS) } },
+              ],
+            },
+            {
+              and: [
+                { status: { equals: "new" } },
+                { updatedAt: { less_than: ago(UNHANDLED_SUGGESTION_DAYS) } },
+              ],
+            },
+          ],
+        },
+        { or: [{ userName: { exists: true } }, { userMail: { exists: true } }] },
+      ],
+    },
+    data: { userName: null, userMail: null },
+  });
 
   const stale = await payload.find({
     collection: "comments",
@@ -59,7 +60,8 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
   const context = { skipCommentHooks: true };
   let deleted = 0;
   let scrubbed = 0;
-  const purge = async (id: number, status: string) => {
+  const failures: number[] = [];
+  const purge = async (id: number, status: string | null | undefined) => {
     const replies = await payload.count({
       collection: "comments",
       where: { parent: { equals: id } },
@@ -70,11 +72,12 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
       deleted++;
       return;
     }
-    // Deleting would take other people's replies along: blank it like a self-delete and keep the thread.
+    // Deleting would take other people's replies along: blank it like a self-delete (keep the field list in step
+    // with DELETE in website/src/pages/api/comments/[id].ts) and keep the thread.
     const where = { comment: { equals: id } };
     await payload.delete({ collection: "comment-votes", where, context });
     await payload.delete({ collection: "comment-reports", where, context });
-    if (status === "deleted") return; // already blank
+    if (status === "deleted") return; // already blank; votes and reports are gone, nothing personal is left
     await payload.update({
       collection: "comments",
       id,
@@ -92,13 +95,19 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
     scrubbed++;
   };
   for (const { id, status } of stale.docs) {
-    // oxlint-disable-next-line no-await-in-loop -- a few comments per run, one at a time keeps the DB load flat
-    await purge(id, status);
+    try {
+      // oxlint-disable-next-line no-await-in-loop -- a few comments per run, one at a time keeps the DB load flat
+      await purge(id, status);
+    } catch (error) {
+      payload.logger.error({ msg: "retention: purge failed", commentId: id, status, err: error });
+      failures.push(id);
+    }
   }
   return {
-    suggestionsCleared: cleared.length,
+    suggestionsCleared: cleared?.length ?? 0,
     commentsDeleted: deleted,
     commentsScrubbed: scrubbed,
+    commentsFailed: failures.length,
   };
 };
 
@@ -108,6 +117,9 @@ export const retentionTask: TaskConfig = {
   handler: async ({ req }) => {
     const result = await runRetention(req.payload);
     req.payload.logger.info({ msg: "retention run", ...result });
+    // A promised deletion that did not happen must show up as a failed job, not a quiet success.
+    if (result.commentsFailed)
+      throw new Error(`retention: ${result.commentsFailed} comment(s) not purged`);
     return { output: {} };
   },
 };

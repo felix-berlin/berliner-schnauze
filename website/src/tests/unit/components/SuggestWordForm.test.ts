@@ -28,7 +28,7 @@ vi.mock("@utils/analytics", () => ({
 
 vi.mock("@components/TurnStile.vue", () => ({
   default: {
-    emits: ["token"],
+    emits: ["token", "error"],
     name: "TurnStile",
     template: "<div class='mock-turnstile' />",
   },
@@ -167,6 +167,34 @@ describe("SuggestWordForm.vue", () => {
       translation: "Viertel",
       turnstileToken: "tok",
     });
+  });
+
+  it("tells the user to wait when the captcha has no token yet, and does not send", async () => {
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    vi.mocked(createToastNotify).mockClear();
+    const wrapper = mount(SuggestWordForm);
+    await wrapper.find("form").trigger("focusin");
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.find("form").trigger("submit");
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(vi.mocked(createToastNotify)).toHaveBeenCalledWith(
+      expect.objectContaining({ status: "warning" }),
+    );
+  });
+
+  it("says the check is stuck when the widget reported an error", async () => {
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    vi.mocked(createToastNotify).mockClear();
+    const wrapper = mount(SuggestWordForm);
+    await wrapper.find("form").trigger("focusin");
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.findComponent(TurnStile).vm.$emit("error");
+    await wrapper.find("form").trigger("submit");
+    expect(vi.mocked(createToastNotify)).toHaveBeenCalledWith(
+      expect.objectContaining({ status: "error" }),
+    );
   });
 
   it("shows eMail has-error when invalid email is provided", async () => {

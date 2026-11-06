@@ -69,7 +69,7 @@ describe("POST /api/word-pulse", () => {
     expect(error).toHaveBeenCalled();
   });
 
-  it("counts the same word and kind once a day per visitor, answering 200 both times", async () => {
+  it("counts the same word and kind once a day per IP, answering 200 both times", async () => {
     expect((await post({ kind: "view", word: 7 })).status).toBe(200);
     expect((await post({ kind: "view", word: 7 })).status).toBe(200);
     expect(bumpWordStat).toHaveBeenCalledTimes(1);
@@ -78,6 +78,29 @@ describe("POST /api/word-pulse", () => {
     expect(bumpWordStat).toHaveBeenCalledTimes(3);
     await post({ kind: "view", word: 7 }, "10.99.0.1");
     expect(bumpWordStat).toHaveBeenCalledTimes(4);
+  });
+
+  it("counts a failed report again on retry", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    bumpWordStat.mockRejectedValueOnce(new Error("db down"));
+    expect((await post({ kind: "view", word: 7 })).status).toBe(502);
+    expect((await post({ kind: "view", word: 7 })).status).toBe(200);
+    expect(bumpWordStat).toHaveBeenCalledTimes(2);
+  });
+
+  it("counts the same visitor again on the next Berlin day", async () => {
+    vi.useFakeTimers();
+    try {
+      vi.setSystemTime(new Date("2026-11-06T12:00:00Z"));
+      await post({ kind: "view", word: 7 });
+      await post({ kind: "view", word: 7 });
+      expect(bumpWordStat).toHaveBeenCalledTimes(1);
+      vi.setSystemTime(new Date("2026-11-07T12:00:00Z"));
+      await post({ kind: "view", word: 7 });
+      expect(bumpWordStat).toHaveBeenCalledTimes(2);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("429 after 2000 reports per IP and day", async () => {

@@ -40,6 +40,7 @@ const openMenu = async (wrapper: VueWrapper) => {
 
 const mountCard = (comment: Partial<PublicComment>, canEdit = false) => {
   const ctx = {
+    armCaptcha: vi.fn(),
     busy: ref(new Set<number>()),
     canEdit: () => canEdit,
     edit: vi.fn(async () => "ok"),
@@ -202,6 +203,12 @@ describe("CommentCard", () => {
     await wrapper.find('[aria-label="Runterwählen"]').trigger("click");
     await flushPromises();
     expect(trackEvent).toHaveBeenCalledTimes(1);
+  });
+
+  it("arms the captcha when a reply form opens", async () => {
+    const { ctx, wrapper } = mountCard({});
+    await wrapper.find(".c-comment-card__reply").trigger("click");
+    expect(ctx.armCaptcha).toHaveBeenCalledOnce();
   });
 
   it("reply: posts under the thread root, closes on success, stays open on error or without token", async () => {

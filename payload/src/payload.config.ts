@@ -99,7 +99,7 @@ export default buildConfig({
       })
     : undefined,
   plugins: [seo, redirects, mcp],
-  // Runs queued jobs (scheduled publishing of posts) only where PAYLOAD_RUN_JOBS=true, the cms container: the site's
+  // Runs queued jobs (scheduled publishing, the retention task) only where PAYLOAD_RUN_JOBS=true, the cms container: the site's
   // Local API process must not pick them up as well.
   jobs: {
     tasks: [retentionTask],

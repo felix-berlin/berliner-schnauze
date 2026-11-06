@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const { find, count } = vi.hoisted(() => ({ count: vi.fn(), find: vi.fn() }));
 vi.mock("@services/payload.ts", () => ({ getPayloadClient: async () => ({ count, find }) }));
 
-import { listComments } from "@services/payload/comments.ts";
+import { listComments, voterKey } from "@services/payload/comments.ts";
 
 const c = (id: number, extra: Record<string, unknown> = {}) => ({
   authorName: "Det",
@@ -69,6 +69,17 @@ describe("listComments", () => {
     const r = await listComments(5, "best", 1, "v-1");
     expect(r.comments.map((x) => x.myVote)).toEqual([1, 0]);
     expect(r.comments[0].replies[0].myVote).toBe(-1);
+  });
+
+  it("looks votes up by the hashed visitor id, never the raw cookie", async () => {
+    setup([c(1)]);
+    await listComments(5, "best", 1, "v-1");
+    const votes = find.mock.calls.find(([a]) => a.collection === "comment-votes")![0];
+    expect(votes.where.visitor).toEqual({ equals: voterKey("v-1") });
+  });
+
+  it("voterKey is a fixed, prefixed sha256", () => {
+    expect(voterKey("v-1")).toBe("90124b131dbe7b45d3dc23d73e27e2c027d3b0cdf62930e21ad6a124623f38f2");
   });
 
   it('empty name becomes "Anonymer Berliner"', async () => {
