@@ -49,7 +49,9 @@ describe("AudioPlayerList.vue", () => {
       props: { audio: [makeAudio("male")], isType: "berlinerisch" },
     });
     // the mocked player declares no props: `audio` falls through as an attribute
-    expect(wrapper.find(".mock-audio-player").attributes("audio")).toBe("https://example.com/male.mp3");
+    expect(wrapper.find(".mock-audio-player").attributes("audio")).toBe(
+      "https://example.com/male.mp3",
+    );
   });
 
   it("passes the wordId on to the player", async () => {

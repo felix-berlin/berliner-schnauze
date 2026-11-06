@@ -5,13 +5,7 @@
 <div id="matomo-opt-out"></div>
 
 <script>
-  import { renderMatomoOptOut } from "@utils/matomoOptOut.ts";
+  import { initMatomoOptOut } from "@utils/matomoOptOut.ts";
 
-  const render = () => {
-    const root = document.getElementById("matomo-opt-out");
-    if (root) renderMatomoOptOut(root);
-  };
-  render();
-  // The ClientRouter swaps the page without a reload: draw the box again.
-  document.addEventListener("astro:page-load", render);
+  initMatomoOptOut();
 </script>

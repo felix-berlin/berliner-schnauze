@@ -4,7 +4,9 @@ import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 
 // A worker script that fails to load, like a missing dependency in the image.
-const { brokenWorker } = vi.hoisted(() => ({ brokenWorker: `og-worker-broken-${process.pid}.mjs` }));
+const { brokenWorker } = vi.hoisted(() => ({
+  brokenWorker: `og-worker-broken-${process.pid}.mjs`,
+}));
 vi.mock("node:path", async (importOriginal) => {
   const path = await importOriginal<typeof import("node:path")>();
   const { tmpdir } = await import("node:os");

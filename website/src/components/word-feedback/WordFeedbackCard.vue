@@ -156,7 +156,30 @@
           <li v-for="r in rows" :key="r.label">{{ r.label }}: {{ r.share }} % sagen det</li>
         </ul>
         <button class="c-link" type="button" @click="reset">Angaben ändern</button>
+        <button class="c-link" :disabled="pending" type="button" @click="withdraw">
+          Stimme zurückziehen
+        </button>
       </div>
+    </div>
+
+    <div v-if="current !== 'usage'" class="c-word-feedback-card__privacy">
+      <label class="c-word-feedback-card__remember">
+        <input
+          type="checkbox"
+          :checked="remember"
+          @change="setRemember(($event.target as HTMLInputElement).checked)"
+        />
+        Meine Angaben für weitere Wörter merken (nur in diesem Browser)
+      </label>
+      <p>
+        Wir speichern Deine Antworten ohne Namen, aber mit einer Kennung aus einem Cookie (<a
+          href="/datenschutz#wort-feedback"
+          >Datenschutz</a
+        >).
+        <button class="c-link" :disabled="pending" type="button" @click="deleteAll">
+          Alle meine Antworten löschen
+        </button>
+      </p>
     </div>
   </section>
 </template>
@@ -170,7 +193,10 @@ import {
   loadFeedback,
   nextStep,
   answerUsage,
+  deleteAllFeedback,
   sendFeedback,
+  setRemember,
+  $remember,
   type Profile,
 } from "@stores/wordFeedback.ts";
 import { trackEvent } from "@utils/analytics";
@@ -235,6 +261,7 @@ const CHOICES: Record<
 
 const feedback = useStore($feedback);
 const profile = useStore($profile);
+const remember = useStore($remember);
 
 // The area whose localities are offered; null for Brandenburg, Woanders and a skipped area.
 const localityArea = computed(() => {
@@ -349,7 +376,6 @@ const answerProfile = async (key: ProfileStep, value: string | null) => {
       ...(key === "locality" && value ? { area: $profile.get().area } : {}),
       ...(key === "area" && hadLocality ? { locality: null } : {}),
     } as Parameters<typeof sendFeedback>[1];
-    trackEvent("Word Feedback", key, value ?? "skip");
     if (await sendFeedback(props.wordId, patch)) {
       const next = { ...$profile.get(), ...patch } as Profile;
       // The sent null only clears the server row; for the profile the new area's locality is "not asked yet".
@@ -376,6 +402,34 @@ const reset = async () => {
   picked.value = {};
   history.value = [];
   step.value = "area";
+};
+
+// Takes the vote back after a reload too (the "Zurück" path only exists in the same run).
+const withdraw = async () => {
+  if (pending.value) return;
+  pending.value = true;
+  try {
+    if (!(await sendFeedback(props.wordId, { usage: null }))) return;
+  } finally {
+    pending.value = false;
+  }
+  pickedUsage.value = null;
+  history.value = [];
+  step.value = null;
+};
+
+const deleteAll = async () => {
+  if (pending.value || !window.confirm("Alle Deine Antworten zu allen Wörtern löschen?")) return;
+  pending.value = true;
+  try {
+    if (!(await deleteAllFeedback(props.wordId))) return;
+  } finally {
+    pending.value = false;
+  }
+  picked.value = {};
+  pickedUsage.value = null;
+  history.value = [];
+  step.value = null;
 };
 
 // Going back to the vote withdraws it, so the first step starts clean again.

@@ -19,7 +19,12 @@ const c = (id: number, extra: Record<string, unknown> = {}) => ({
 });
 
 /** top: top-level page, replies: replies of those, votes: the visitor's votes */
-const setup = (top: unknown[], replies: unknown[] = [], votes: unknown[] = [], hasNextPage = false) => {
+const setup = (
+  top: unknown[],
+  replies: unknown[] = [],
+  votes: unknown[] = [],
+  hasNextPage = false,
+) => {
   count.mockResolvedValue({ totalDocs: 7 });
   find.mockImplementation(async ({ collection, where }) => {
     if (collection === "comment-votes") return { docs: votes };
@@ -62,10 +67,14 @@ describe("listComments", () => {
   });
 
   it("myVote from the visitor's votes", async () => {
-    setup([c(1), c(2)], [c(3, { parent: 1 })], [
-      { comment: 1, value: 1 },
-      { comment: 3, value: -1 },
-    ]);
+    setup(
+      [c(1), c(2)],
+      [c(3, { parent: 1 })],
+      [
+        { comment: 1, value: 1 },
+        { comment: 3, value: -1 },
+      ],
+    );
     const r = await listComments(5, "best", 1, "v-1");
     expect(r.comments.map((x) => x.myVote)).toEqual([1, 0]);
     expect(r.comments[0].replies[0].myVote).toBe(-1);
@@ -79,7 +88,9 @@ describe("listComments", () => {
   });
 
   it("voterKey is a fixed, prefixed sha256", () => {
-    expect(voterKey("v-1")).toBe("90124b131dbe7b45d3dc23d73e27e2c027d3b0cdf62930e21ad6a124623f38f2");
+    expect(voterKey("v-1")).toBe(
+      "90124b131dbe7b45d3dc23d73e27e2c027d3b0cdf62930e21ad6a124623f38f2",
+    );
   });
 
   it('empty name becomes "Anonymer Berliner"', async () => {
@@ -91,7 +102,11 @@ describe("listComments", () => {
   it("sorts best by score then date, new by date", async () => {
     setup([]);
     await listComments(5, "best", 2);
-    expect(find.mock.calls[0][0]).toMatchObject({ limit: 20, page: 2, sort: ["-score", "-createdAt"] });
+    expect(find.mock.calls[0][0]).toMatchObject({
+      limit: 20,
+      page: 2,
+      sort: ["-score", "-createdAt"],
+    });
     find.mockClear();
     await listComments(5, "new", 1);
     expect(find.mock.calls[0][0].sort).toEqual(["-createdAt"]);

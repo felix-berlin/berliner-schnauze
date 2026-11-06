@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import { voterKey } from "@services/payload/comments.ts";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { create, findByID, verifyTurnstile } = vi.hoisted(() => ({
   create: vi.fn(),

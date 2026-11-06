@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { isTracked, OPT_OUT_COOKIE, renderMatomoOptOut } from "../../../utils/matomoOptOut";
+import { initMatomoOptOut, isTracked, OPT_OUT_COOKIE, renderMatomoOptOut } from "../../../utils/matomoOptOut";
 
 const clear = () =>
   document.cookie.split("; ").forEach((c) => {
@@ -62,5 +62,14 @@ describe("matomo opt-out", () => {
     const root = document.createElement("div");
     expect(() => renderMatomoOptOut(root)).not.toThrow();
     get.mockRestore();
+  });
+
+  it("initMatomoOptOut draws the box and again after a page swap", () => {
+    document.body.innerHTML = '<div id="matomo-opt-out"></div>';
+    initMatomoOptOut();
+    expect(document.querySelectorAll("#matomo-opt-out input")).toHaveLength(1);
+    document.body.innerHTML = '<div id="matomo-opt-out"></div>';
+    document.dispatchEvent(new Event("astro:page-load"));
+    expect(document.querySelectorAll("#matomo-opt-out input")).toHaveLength(1);
   });
 });

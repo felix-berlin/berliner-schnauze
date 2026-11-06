@@ -25,9 +25,7 @@ describe("toWordRef", () => {
 describe("fetchWordRefs", () => {
   it("maps every word to its slim ref", async () => {
     fetchAllWords.mockResolvedValue([word]);
-    expect(await fetchWordRefs()).toEqual([
-      { berlinerisch: "aasen", id: 1, slug: "aasen" },
-    ]);
+    expect(await fetchWordRefs()).toEqual([{ berlinerisch: "aasen", id: 1, slug: "aasen" }]);
   });
 });
 

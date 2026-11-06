@@ -1,22 +1,23 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { count, create, find, findByID, update } = vi.hoisted(() => ({
+const { count, create, del, find, findByID, update } = vi.hoisted(() => ({
   count: vi.fn(),
   create: vi.fn(),
+  del: vi.fn(),
   find: vi.fn(),
   findByID: vi.fn(),
   update: vi.fn(),
 }));
 vi.mock("@services/payload.ts", async (importOriginal) => ({
   ...(await importOriginal<object>()),
-  getPayloadClient: async () => ({ count, create, find, findByID, update }),
+  getPayloadClient: async () => ({ count, create, delete: del, find, findByID, update }),
 }));
 
 import type { APIContext } from "astro";
 
 import { siteRead } from "@services/payload.ts";
 
-import { GET, PATCH } from "@/pages/api/word-feedback.ts";
+import { DELETE, GET, PATCH } from "@/pages/api/word-feedback.ts";
 
 const set = vi.fn();
 const ctx = (init: {
@@ -48,6 +49,7 @@ beforeEach(() => {
   create.mockReset().mockImplementation(async ({ data }) => ({ id: 1, ...data }));
   update.mockReset().mockImplementation(async ({ data }) => ({ id: 1, ...data }));
   find.mockReset().mockResolvedValue({ docs: [] });
+  del.mockReset();
   findByID.mockReset().mockResolvedValue({ id: 7 });
 });
 
@@ -205,12 +207,22 @@ describe("PATCH /api/word-feedback", () => {
     expect((await patch({ usage: "say", word: 130 }, undefined, "10.0.0.4")).status).toBe(429);
   });
 
-  it("stores a hash of the visitor cookie, never the cookie", async () => {
+  it("stores a hash of cookie and word, never the cookie, and a different one per word", async () => {
     await patch({ usage: "say", word: 7 }, "v-1");
-    const visitor = create.mock.calls[0][0].data.visitor;
-    expect(visitor).toMatch(/^[0-9a-f]{64}$/);
-    expect(visitor).not.toContain("v-1");
-    expect(find.mock.calls[0][0].where.visitor.equals).toBe(visitor);
+    await patch({ usage: "say", word: 8 }, "v-1");
+    const [a, b] = create.mock.calls.map((c) => c[0].data.visitor);
+    expect(a).toMatch(/^[0-9a-f]{64}$/);
+    expect(a).not.toContain("v-1");
+    expect(a).not.toBe(b);
+    expect(find.mock.calls[0][0].where.visitor.in).toContain(a);
+  });
+
+  it("moves a row with the old cross-word hash to the per-word hash on the next write", async () => {
+    await patch({ usage: "say", word: 7 }, "v-1");
+    const [fresh, legacy] = find.mock.calls[0][0].where.visitor.in;
+    find.mockResolvedValue({ docs: [{ id: 5, visitor: legacy }] });
+    await patch({ usage: "know", word: 7 }, "v-1");
+    expect(update.mock.calls[0][0].data).toMatchObject({ usage: "know", visitor: fresh });
   });
 
   it("400 on a body that is not JSON", async () => {
@@ -283,5 +295,32 @@ describe("GET /api/word-feedback", () => {
         )
       ).status,
     ).toBe(400);
+  });
+});
+
+describe("DELETE /api/word-feedback", () => {
+  const del_ = (cookie?: string, ip = "10.0.0.9") => DELETE(ctx({ cookie, ip, method: "DELETE" }));
+
+  it("deletes the rows of every word and the old hash, in chunks, by the cookie's hashes", async () => {
+    find.mockResolvedValue({ docs: Array.from({ length: 2500 }, (_, i) => ({ id: i + 1 })) });
+    del.mockResolvedValue({ docs: [], errors: [] });
+    expect((await del_("v-1")).status).toBe(200);
+    expect(del).toHaveBeenCalledTimes(3);
+    const hashes = del.mock.calls.flatMap((c) => c[0].where.visitor.in);
+    expect(hashes).toHaveLength(2501);
+    expect(new Set(hashes).size).toBe(2501);
+    expect(JSON.stringify(hashes)).not.toContain("v-1");
+  });
+
+  it("does nothing without a cookie", async () => {
+    expect((await del_(undefined)).status).toBe(200);
+    expect(del).not.toHaveBeenCalled();
+  });
+
+  it("502 when the delete fails", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    find.mockResolvedValue({ docs: [{ id: 1 }] });
+    del.mockRejectedValue(new Error("down"));
+    expect((await del_("v-1", "10.0.0.10")).status).toBe(502);
   });
 });

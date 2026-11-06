@@ -50,3 +50,13 @@ export const renderMatomoOptOut = (root: HTMLElement, failed = false) => {
   box.addEventListener("change", () => renderMatomoOptOut(root, !setTracked(box.checked)));
   root.replaceChildren(box, " ", label);
 };
+
+/** Draws the box into `#matomo-opt-out` now and after every ClientRouter page swap. */
+export const initMatomoOptOut = () => {
+  const render = () => {
+    const root = document.getElementById("matomo-opt-out");
+    if (root) renderMatomoOptOut(root);
+  };
+  render();
+  document.addEventListener("astro:page-load", render);
+};
