@@ -78,6 +78,7 @@ import CommentForm from "@components/comments/CommentForm.vue";
 import TurnStile from "@components/TurnStile.vue";
 import { commentsKey, useComments, type CommentsContext } from "@composables/useComments.ts";
 import { createToastNotify } from "@stores/toastNotify.ts";
+import { captchaWaitToast } from "@utils/captchaToast.ts";
 import { trackEvent } from "@utils/analytics";
 import {
   useElementSize,
@@ -120,15 +121,7 @@ const ctx: CommentsContext = {
   resetCaptcha: () => turnstile.value?.reset(),
   takeToken: () => {
     if (token.value) return token.value;
-    createToastNotify(
-      captchaFailed.value
-        ? {
-            message:
-              "Die Prüfung, ob de 'n Mensch bist, klemmt. Lad die Seite neu oder mach den Blocker kurz aus.",
-            status: "error",
-          }
-        : { message: "Moment noch, ick prüf dich kurz.", status: "warning" },
-    );
+    createToastNotify(captchaWaitToast(captchaFailed.value));
     return null;
   },
   token,

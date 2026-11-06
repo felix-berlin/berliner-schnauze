@@ -35,10 +35,12 @@ export const visitorId = (cookies: AstroCookies, create: boolean): string | unde
  * a comment's `authorTag` or a feedback row, which hash the same cookie differently. No secret: this pseudonymises
  * (whoever holds the DB and a cookie value can recompute it), it does not anonymise.
  */
-export const voterKey = (visitor: string): string =>
-  createHash("sha256").update(`votes:${visitor}`).digest("hex");
+export const sha256 = (text: string): string => createHash("sha256").update(text).digest("hex");
 
-export const hashEditKey = (key: string): string => createHash("sha256").update(key).digest("hex");
+export const voterKey = (visitor: string): string =>
+  sha256(`votes:${visitor}`);
+
+export const hashEditKey = sha256;
 
 const idOf = (rel: number | { id: number } | null | undefined): number | null =>
   rel == null ? null : typeof rel === "object" ? rel.id : rel;

@@ -80,6 +80,7 @@
 import TurnStile from "@components/TurnStile.vue";
 import { useContentTracking } from "@composables/useContentTracking";
 import { createToastNotify } from "@stores/toastNotify.ts";
+import { captchaWaitToast } from "@utils/captchaToast.ts";
 import { trackEvent } from "@utils/analytics";
 import { type SuggestWord, suggestWordSchema } from "@utils/suggestWordSchema.ts";
 import { useTimeoutFn } from "@vueuse/core";
@@ -161,15 +162,7 @@ const onSubmit = async (): Promise<void> => {
   }
   errors.value = {};
   if (!turnstileToken.value) {
-    createToastNotify(
-      captchaFailed.value
-        ? {
-            message:
-              "Die Prüfung, ob de 'n Mensch bist, klemmt. Lad die Seite neu oder mach den Blocker kurz aus.",
-            status: "error",
-          }
-        : { message: "Moment noch, ick prüf dich kurz.", status: "warning" },
-    );
+    createToastNotify(captchaWaitToast(captchaFailed.value));
     return;
   }
   if (isSending.value) return;

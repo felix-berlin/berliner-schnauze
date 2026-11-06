@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 
 import { getPayloadClient, siteRead } from "@services/payload.ts";
-import { visitorId } from "@services/payload/comments.ts";
+import { sha256, visitorId } from "@services/payload/comments.ts";
 import { isUniqueViolation, orNull, positiveInt, reply } from "@utils/apiReply.ts";
 import { clientIp, rateLimitedBy } from "@utils/rateLimit.ts";
 import {
@@ -9,7 +9,6 @@ import {
   type MyFeedback,
   type WordFeedbackState,
 } from "@utils/wordFeedbackSchema.ts";
-import { createHash } from "node:crypto";
 import {
   feedbackCompare,
   feedbackTotals,
@@ -21,12 +20,11 @@ import {
 const DAY = 24 * 60 * 60_000;
 const KEYS = ["reaction", "usage", "area", "locality", "origin", "half", "age"] as const;
 
-const sha = (text: string) => createHash("sha256").update(text).digest("hex");
 // Rows carry a hash of cookie and word, not the cookie: two rows of one visitor share no value, so a profile (age,
 // Ortsteil) cannot be joined across words or to a named comment.
-const feedbackVisitor = (cookie: string, word: number) => sha(`word-feedback:${word}:${cookie}`);
+const feedbackVisitor = (cookie: string, word: number) => sha256(`word-feedback:${word}:${cookie}`);
 // Rows written before the per-word hash carry this one: found, moved to the new hash on the next write, deleted with "all".
-const legacyVisitor = (cookie: string) => sha(`word-feedback:${cookie}`);
+const legacyVisitor = (cookie: string) => sha256(`word-feedback:${cookie}`);
 
 // The comparison is only shown after the own vote, so it is not computed before (10 queries per page view).
 const NO_COMPARE: FeedbackCompare = {
@@ -188,10 +186,12 @@ export const DELETE: APIRoute = async ({ clientAddress, cookies, request }) => {
     const hashes = [legacyVisitor(cookie), ...docs.map((w) => feedbackVisitor(cookie, w.id))];
     for (let i = 0; i < hashes.length; i += CHUNK) {
       // oxlint-disable-next-line no-await-in-loop -- a handful of chunks, one at a time keeps the DB load flat
-      await payload.delete({
+      const { errors } = await payload.delete({
         collection: "word-feedback",
         where: { visitor: { in: hashes.slice(i, i + CHUNK) } },
       });
+      // A bulk delete reports a failing row here instead of throwing: never answer "deleted" then.
+      if (errors.length) throw new Error(`${errors.length} row(s) not deleted`);
     }
     return reply({ deleted: true }, 200);
   } catch (error) {

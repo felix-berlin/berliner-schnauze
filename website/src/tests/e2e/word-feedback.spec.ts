@@ -30,6 +30,8 @@ test.describe("word feedback", () => {
     await card.getByRole("button", { name: "30–39" }).click();
     await expect(card.getByRole("button", { name: "Angaben ändern" })).toBeVisible();
     await expect(card.getByText(/\d+ Stimmen?/).first()).toBeVisible();
+    // The profile only carries over to other words once the visitor opted in.
+    await card.getByLabel(/Meine Angaben für weitere Wörter merken/).check();
 
     await page.reload();
     const again = page.locator("#sagste-det-noch");

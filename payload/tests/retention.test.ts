@@ -29,6 +29,13 @@ afterAll(async () => {
   await payload.delete({ collection: "words", where: { id: { equals: wordId } } });
 });
 
+const make = (data: Record<string, unknown>) =>
+  payload.create({
+    collection: "comments",
+    data: { word: wordId, text: "kiek ma", authorName: "Icke", ...data } as never,
+  });
+const days = (n: number) => new Date(Date.now() + n * 86_400_000);
+
 const suggest = (status: string, extra = {}) =>
   payload.create({
     collection: "suggestions",
@@ -76,11 +83,6 @@ describe("runRetention", () => {
   });
 
   it("deletes held comments and drops votes of a self-deleted comment that has replies", async () => {
-    const make = (data: Record<string, unknown>) =>
-      payload.create({
-        collection: "comments",
-        data: { word: wordId, text: "kiek ma", authorName: "Icke", ...data } as never,
-      });
     const held = await make({});
     const gone = await make({});
     await make({ parent: gone.id });
@@ -117,11 +119,6 @@ describe("runRetention", () => {
   });
 
   it("deletes a removed comment, but only blanks one that has replies", async () => {
-    const make = (data: Record<string, unknown>) =>
-      payload.create({
-        collection: "comments",
-        data: { word: wordId, text: "kiek ma", authorName: "Icke", ...data } as never,
-      });
     const lone = await make({});
     const parent = await make({});
     const reply = await make({ parent: parent.id });
@@ -142,13 +139,6 @@ describe("runRetention", () => {
 });
 
 describe("runRetention edge cases", () => {
-  const make = (data: Record<string, unknown>) =>
-    payload.create({
-      collection: "comments",
-      data: { word: wordId, text: "kiek ma", authorName: "Icke", ...data } as never,
-    });
-  const days = (n: number) => new Date(Date.now() + n * 86_400_000);
-
   it("separates the 90 and 365 day periods and clears accepted suggestions too", async () => {
     // Accepting through the API would adopt the word (hook); set the status behind its back.
     const accepted = await suggest("rejected");

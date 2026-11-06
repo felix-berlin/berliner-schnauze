@@ -1,5 +1,7 @@
 import type { Payload, TaskConfig } from "payload";
 
+import { SELF_DELETED } from "../lib/comments";
+
 const DAY = 86_400_000;
 /** Deletion periods promised in the privacy policy (section "Speicherdauer"): change both together. */
 export const SUGGESTION_PII_DAYS = 90;
@@ -86,24 +88,19 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
       deleted++;
       return;
     }
-    // Deleting would take other people's replies along: blank it like a self-delete (keep the field list in step
-    // with DELETE in website/src/pages/api/comments/[id].ts) and keep the thread.
+    // Deleting would take other people's replies along: blank it like a self-delete and keep the thread.
     const where = { comment: { equals: id } };
-    await payload.delete({ collection: "comment-votes", where, context });
-    await payload.delete({ collection: "comment-reports", where, context });
+    for (const collection of ["comment-votes", "comment-reports"] as const) {
+      // oxlint-disable-next-line no-await-in-loop -- two small deletes, in order
+      const { errors } = await payload.delete({ collection, where, context });
+      // A bulk delete reports a failing row instead of throwing: without this the comment would be blanked and never retried.
+      if (errors.length) throw new Error(`retention: ${collection} of comment ${id} not deleted`);
+    }
     if (status === "deleted") return; // already blank; votes and reports are gone, nothing personal is left
     await payload.update({
       collection: "comments",
       id,
-      data: {
-        authorName: null,
-        pseudonym: null,
-        authorTag: null,
-        editKeyHash: null,
-        removalReason: null,
-        status: "deleted",
-        text: "[gelöscht]",
-      },
+      data: { ...SELF_DELETED, removalReason: null },
       context,
     });
     scrubbed++;

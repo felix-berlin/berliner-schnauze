@@ -30,7 +30,8 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
 
     const ip = clientIp(request.headers.get("x-forwarded-for"), clientAddress);
     const day = berlinDay();
-    if (day !== seenDay) {
+    // Also bounded by size (a bot rotating IPs): dropping the keys only allows a few repeat counts.
+    if (day !== seenDay || seen.size > 50_000) {
       seen.clear();
       seenDay = day;
     }
