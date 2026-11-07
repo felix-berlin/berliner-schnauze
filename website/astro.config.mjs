@@ -1,7 +1,7 @@
 import node from "@astrojs/node";
 import vue from "@astrojs/vue";
 import codecovplugin from "@codecov/astro-plugin";
-import { sentryVitePlugin } from "@sentry/vite-plugin";
+import { sentryAstro } from "@sentry/astro";
 import AstroPWA from "@vite-pwa/astro";
 import matomo from "astro-matomo";
 import { defineConfig, envField, fontProviders } from "astro/config";
@@ -304,6 +304,16 @@ export default defineConfig({
   },
   compressHTML: true,
   integrations: [
+    // Server SDK + source map upload. The client SDK stays our own lazy init (src/plugins/sentryBrowser.ts): with
+    // enabled.client the integration would inject an eager one. Source maps only for CI deploy builds.
+    sentryAstro({
+      enabled: { client: false, server: true },
+      org: SENTRY_ORG,
+      project: SENTRY_PROJECT,
+      authToken: SENTRY_AUTH_TOKEN,
+      sourcemaps: { disable: !uploadsArtifacts, filesToDeleteAfterUpload: ["dist/**/*.map"] },
+      bundleSizeOptimizations: { excludeDebugStatements: true },
+    }),
     vue({
       appEntrypoint: "/src/pages/_app",
       // devtools: {
@@ -600,22 +610,6 @@ export default defineConfig({
           }
         },
       }), // chooses the compiler automatically
-      ...(!uploadsArtifacts
-        ? []
-        : [
-            sentryVitePlugin({
-              authToken: SENTRY_AUTH_TOKEN,
-              org: SENTRY_ORG,
-              project: SENTRY_PROJECT,
-              sourcemaps: {
-                filesToDeleteAfterUpload: ["dist/**/*.map"],
-              },
-              bundleSizeOptimizations: {
-                excludeDebugStatements: true,
-              },
-              debug: false,
-            }),
-          ]),
       visualizerPlugin,
     ],
 
@@ -640,7 +634,7 @@ export default defineConfig({
     },
 
     build: {
-      sourcemap: uploadsArtifacts, // only needed for sentryVitePlugin (~9s), which is skipped for local and e2e builds
+      sourcemap: uploadsArtifacts, // only needed for the Sentry source map upload (~9s), which is skipped for local and e2e builds
       target: "esnext",
       cssMinify: "esbuild",
       rolldownOptions: {
