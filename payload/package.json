@@ -44,7 +44,7 @@
     "all-the-german-words": "^1.1.0",
     "cross-env": "^10.1.0",
     "de-compromise": "^0.1.2",
-    "graphql": "^16.8.1",
+    "graphql": "^17.0.0",
     "hyphenation.de": "^0.2.1",
     "hypher": "^0.2.5",
     "jsdom": "^31.0.0",
