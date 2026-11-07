@@ -22,6 +22,22 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  # The browser image must match the installed @playwright/test exactly; read it from the lockfile so they cannot drift.
+  playwright-version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    steps:
+      - name: Checkout ✅
+        uses: actions/checkout@v7
+      - name: Read @playwright/test version from pnpm-lock.yaml
+        id: v
+        run: |
+          version=$(grep -oE "^  '@playwright/test@[0-9][^']*'" pnpm-lock.yaml | head -1 | sed -E "s/.*@([0-9][^']*)'/\1/")
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "no @playwright/test version in lockfile (got '$version')" >&2; exit 1; }
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
   build:
     timeout-minutes: 30
     runs-on: ubuntu-latest
@@ -120,12 +136,12 @@ jobs:
           cache-from: type=gha,scope=cms
 
   test:
-    needs: build
+    needs: [build, playwright-version]
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    # Browsers + OS libs are baked into the image. Keep the tag in sync with @playwright/test.
+    # Browsers + OS libs are baked into the image; the tag follows the lockfile (playwright-version job).
     container:
-      image: mcr.microsoft.com/playwright:v1.65.0-noble
+      image: mcr.microsoft.com/playwright:v${{ needs.playwright-version.outputs.version }}-noble
       # --init reaps zombie browser/server processes; without it the run hangs after the last test.
       options: --init --ipc=host
     # GitHub sets HOME=/github/home in container jobs; Firefox/WebKit refuse to start
