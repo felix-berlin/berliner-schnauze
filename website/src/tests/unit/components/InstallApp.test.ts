@@ -43,21 +43,21 @@ describe("InstallApp.vue", () => {
 
   it("button is hidden when hideIfInstalled=true and isPwaInstalled=true", () => {
     isPwaInstalledRef.value = true;
-    const wrapper = mount(InstallApp, { props: { hideIfInstalled: true } });
+    const wrapper = mount(InstallApp, { attachTo: document.body, props: { hideIfInstalled: true } });
     // v-show="hideIfInstalled && !isPwaInstalled" → true && false → hidden
     expect(wrapper.find("button").isVisible()).toBe(false);
   });
 
   it("button is visible when hideIfInstalled=true and isPwaInstalled=false", () => {
     isPwaInstalledRef.value = false;
-    const wrapper = mount(InstallApp, { props: { hideIfInstalled: true } });
+    const wrapper = mount(InstallApp, { attachTo: document.body, props: { hideIfInstalled: true } });
     // v-show="true && !false" → visible
     expect(wrapper.find("button").isVisible()).toBe(true);
   });
 
   it("button is hidden when hideIfInstalled=false", () => {
     isPwaInstalledRef.value = false;
-    const wrapper = mount(InstallApp, { props: { hideIfInstalled: false } });
+    const wrapper = mount(InstallApp, { attachTo: document.body, props: { hideIfInstalled: false } });
     // v-show="false && ..." → always hidden
     expect(wrapper.find("button").isVisible()).toBe(false);
   });
