@@ -1,7 +1,7 @@
 import node from "@astrojs/node";
 import vue from "@astrojs/vue";
 import codecovplugin from "@codecov/astro-plugin";
-import { sentryAstro } from "@sentry/astro";
+import sentry from "@sentry/astro";
 import AstroPWA from "@vite-pwa/astro";
 import matomo from "astro-matomo";
 import { defineConfig, envField, fontProviders } from "astro/config";
@@ -306,7 +306,7 @@ export default defineConfig({
   integrations: [
     // Server SDK + source map upload. The client SDK stays our own lazy init (src/plugins/sentryBrowser.ts): with
     // enabled.client the integration would inject an eager one. Source maps only for CI deploy builds.
-    sentryAstro({
+    sentry({
       enabled: { client: false, server: true },
       org: SENTRY_ORG,
       project: SENTRY_PROJECT,
