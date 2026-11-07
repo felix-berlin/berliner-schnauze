@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.10.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.9.1...v4.10.0) (2026-11-07)
+
+
+### Bug Fixes
+
+* **dev:** import the sentry integration as default export ([c51b48c](https://github.com/felix-berlin/berliner-schnauze/commit/c51b48cdba3f100888e6dcd81db6b9dda80f84fa))
+
+
+### Features
+
+* **dev:** add @sentry/astro server SDK and drop direct @sentry/browser ([23e0f3d](https://github.com/felix-berlin/berliner-schnauze/commit/23e0f3dc2f07db19cb430147d06836c3a5014c64))
+
 ## [4.9.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.9.0...v4.9.1) (2026-11-06)
 
 
