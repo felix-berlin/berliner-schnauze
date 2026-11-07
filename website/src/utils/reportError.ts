@@ -4,5 +4,5 @@
  */
 export const reportError = (error: unknown): void => {
   console.error(error);
-  import("@sentry/browser").then((sentry) => sentry.captureException(error)).catch(() => {});
+  import("@sentry/astro").then((sentry) => sentry.captureException(error)).catch(() => {});
 };

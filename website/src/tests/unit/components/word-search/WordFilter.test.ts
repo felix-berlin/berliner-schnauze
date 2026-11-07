@@ -101,7 +101,7 @@ describe("WordFilter.vue", () => {
   it("hides the aside when showWordListFilterFlyout is false", async () => {
     showFilterRef.value = false;
     const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
-    const wrapper = mount(WordFilter);
+    const wrapper = mount(WordFilter, { attachTo: document.body });
     // v-show sets display:none
     const aside = wrapper.find("aside");
     expect(aside.isVisible()).toBe(false);
@@ -110,7 +110,7 @@ describe("WordFilter.vue", () => {
   it("shows the aside when showWordListFilterFlyout is true", async () => {
     showFilterRef.value = true;
     const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
-    const wrapper = mount(WordFilter);
+    const wrapper = mount(WordFilter, { attachTo: document.body });
     const aside = wrapper.find("aside");
     expect(aside.isVisible()).toBe(true);
   });
