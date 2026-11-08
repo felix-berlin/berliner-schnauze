@@ -138,11 +138,6 @@
     }
   }
 
-  // The mock drops the dashed "guessed" outline here; the "(geraten)" text carries the meaning.
-  .c-badge--auto {
-    outline: none;
-  }
-
   &__wotd-badge svg {
     flex-shrink: 0;
     color: var(--gold);
