@@ -1,0 +1,104 @@
+---
+import type { AffiliateData } from '@services/payload/site.ts';
+
+import { Picture } from 'astro:assets';
+import '@styles/components/_book-shelf.scss';
+import BookOpen from '~icons/lucide/book-open';
+
+interface Props {
+  books: AffiliateData['books'];
+  disclaimers: AffiliateData['disclaimers'];
+}
+
+const { books: allBooks, disclaimers } = Astro.props;
+
+// CMS data: only http(s) links are rendered (no javascript: URLs), at most three books (Spec §2).
+const isWebUrl = (href?: string | null) => /^https?:\/\//i.test(href ?? '');
+const books = allBooks.filter((b) => isWebUrl(b.href)).slice(0, 3);
+
+const isAmazonLink = (href?: string | null) => /amazon\.|amzn\.to/i.test(href ?? '');
+const hostOf = (href?: string | null) => {
+  try {
+    return new URL(href ?? '').hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+};
+const ctaFor = (href?: string | null) =>
+  isAmazonLink(href) ? 'Bei Amazon ansehen' : `Bei ${hostOf(href)} ansehen`;
+
+// The partner statements the CMS holds for the shown platforms (legal text, appended to the Spec copy).
+const partnerNotes = disclaimers
+  .filter((d) => {
+    const plat = d.plattform?.toLowerCase() ?? '';
+    if (plat.includes('amazon') && books.some((b) => isAmazonLink(b.href))) return true;
+    return books.some((b) => hostOf(b.href).toLowerCase() === plat);
+  })
+  .map((d) => d.text)
+  .join(' ');
+---
+
+{books.length > 0 && (
+  <section class='c-book-shelf' id='buecher' aria-labelledby='heading-buecher'>
+    <div class='c-book-shelf__head'>
+      <h2 class='c-band' id='heading-buecher'>Ooch als Buch zu haben, wa?</h2>
+      <span class='c-badge'>Anzeige</span>
+    </div>
+    <p class='c-book-shelf__intro'>
+      Für Berliner &amp; solche, die es werden wollen – zum Nachschlagen, Rätseln und Verschenken.
+    </p>
+    <ul class='c-shelf' role='list'>
+      {books.map((book) => (
+        <li class='c-shelf__item'>
+          <a
+            class='c-book'
+            href={book.href ?? undefined}
+            rel='sponsored noopener noreferrer'
+            target='_blank'
+            data-track-content
+            data-content-name='Book Recommendation'
+            data-content-piece={book.title}
+            data-content-target={book.href}
+          >
+            <span class='c-book__cover' aria-hidden='true'>
+              {book.imageUrl ? (
+                <Picture
+                  alt=''
+                  densities={[1, 2]}
+                  fallbackFormat='webp'
+                  formats={['avif', 'webp']}
+                  height={160}
+                  loading='lazy'
+                  src={book.imageUrl}
+                  width={120}
+                />
+              ) : (
+                <BookOpen height='32' width='32' />
+              )}
+            </span>
+            {book.badge && <span class='c-book__tag'>{book.badge}</span>}
+            <b class='c-book__title'>{book.title}</b>
+            {book.description && <span class='t-small'>{book.description}</span>}
+            <span class='c-book__cta'>
+              {ctaFor(book.href)} <span aria-hidden='true'>↗</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class='t-small c-book-shelf__note'>
+      Bezahlte Links zu Amazon.de. Kaufst du darüber, kriegen wa ’ne kleine Provision – für dich bleibt der Preis gleich.{partnerNotes && ` ${partnerNotes}`}
+    </p>
+  </section>
+)}
+
+<script>
+  import { trackEvent } from '@utils/analytics';
+
+  // Delegated + registered once (module scripts run once): survives View Transitions
+  // without rebinding per navigation.
+  document.addEventListener('click', (event) => {
+    const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('.c-book');
+    if (link) trackEvent('Affiliate', 'Book clicked', link.dataset.contentPiece ?? '');
+  });
+</script>

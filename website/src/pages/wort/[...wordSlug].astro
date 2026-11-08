@@ -4,8 +4,6 @@ import '@styles/objects/_word.scss';
 import '@styles/components/_word-page-layout.scss';
 import '@styles/plugins/astro-breadcrumbs.scss';
 
-import RandomWordButton from '@components/RandomWordButton.vue';
-import RelatedWords from '@components/RelatedWords.vue';
 import Lightbox from '@components/word/Lightbox.vue';
 import WordImages from '@components/word/WordImages.astro';
 import { getImage } from 'astro:assets';
@@ -19,9 +17,9 @@ import WordAudio from '@components/word/WordAudio.vue';
 import WordTrendBox from '@components/word/WordTrendBox.astro';
 import WordSectionBeispiele from '@components/word/WordSectionBeispiele.astro';
 import WordSectionEtymologie from '@components/word/WordSectionEtymologie.astro';
-import WordSectionNachbarn from '@components/word/WordSectionNachbarn.astro';
-import WordSectionVerwandteWorte from '@components/word/WordSectionVerwandteWorte.astro';
-import BookRecommendations from '@components/word/BookRecommendations.astro';
+import BookShelf from '@components/word/BookShelf.astro';
+import NextLinks from '@components/word/NextLinks.astro';
+import WordNeighborhood from '@components/word/WordNeighborhood.astro';
 import WordAnalysis from '@components/word/WordAnalysis.astro';
 import WordSidebar from '@components/word/WordSidebar.astro';
 import WordTabBar from '@components/word/WordTabBar.vue';
@@ -266,16 +264,15 @@ const schemaJson = () => {
 
         {!hasImages && word.learnMore && <WordLearnMore learnMore={word.learnMore} />}
 
-        <BookRecommendations books={affiliateBooks} disclaimers={affiliateDisclaimers} />
+        <BookShelf books={affiliateBooks} disclaimers={affiliateDisclaimers} />
 
-        <div class='c-word-main__group' id='verwandte-worte'>
-          <WordSectionNachbarn neighbors={alphabeticNeighborsResult} />
-
-          <WordSectionVerwandteWorte
-            relatedWords={word.relatedWords}
-            currentWord={berlinerisch}
-          />
-        </div>
+        <WordNeighborhood
+          after={alphabeticNeighborsResult.after}
+          before={alphabeticNeighborsResult.before}
+          exclude={[...soundingWordsResult, ...similarSpellingResult].map((w) => w.slug)}
+          related={word.relatedWords}
+          word={berlinerisch}
+        />
 
         {!draft && (
           <div id='kommentare'>
@@ -283,24 +280,21 @@ const schemaJson = () => {
           </div>
         )}
 
+        <NextLinks trending={!!trend} words={wordRefs} />
+
         <WordPageFooter publishedAt={word.publishedAt} modifiedAt={word.contentModifiedAt} />
       </div>
 
     </div>
   </article>
 
-  <RelatedWords words={wordRefs} currentWord={berlinerisch}>
-    <li>
-      <RandomWordButton class:list='c-related-words__word is-random' words={wordRefs} />
-    </li>
-  </RelatedWords>
 </Layout>
 
 <script>
   import { reportWord } from '@utils/wordPulse.ts';
 
   // Draft previews carry no data-pulse-word and are never reported. The related-words
-  // section is replaced on every navigation, so its listener cannot pile up.
+  // list is replaced on every navigation, so its listener cannot pile up.
   document.addEventListener('astro:page-load', () => {
     const id = Number(document.querySelector<HTMLElement>('[data-pulse-word]')?.dataset.pulseWord);
     if (!id) return;

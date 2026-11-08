@@ -8,7 +8,7 @@
     data-content-piece="Zufälliges Wort"
     :data-content-target="routeToWord(randomElement(words).slug)"
   >
-    <Dices /> <span>zufälliges Wort</span>
+    <slot><Dices /> <span>zufälliges Wort</span></slot>
   </a>
 </template>
 

@@ -49,7 +49,9 @@
   #grammatik,
   #phonologie,
   #anagramme,
+  #buecher,
   #verwandte-worte,
+  #verwandte,
   #navigation,
   #kommentare
 ) {
@@ -67,8 +69,7 @@
     gap: 1.25rem;
   }
 
-  &__content,
-  &__group {
+  &__content {
     display: flex;
     flex-direction: column;
     gap: vars.$spacer;

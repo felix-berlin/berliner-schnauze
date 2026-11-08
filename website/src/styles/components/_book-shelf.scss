@@ -1,0 +1,147 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Book shelf (docs/design/wortseite/SPEC.md §3/§5, mock #n-buecher, ds bundle .c-shelf/.c-book).
+.c-book-shelf {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-block-start: 1rem;
+  scroll-margin-block-start: calc(var(--word-tabbar-top, 0px) + 56px);
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.75rem;
+
+    // Ad label: borderless wash, not a solid orange surface (Spec §8.2/§8.4).
+    .c-badge {
+      flex-shrink: 0;
+      padding: 0.25rem 0.6rem;
+      border-radius: var(--radius-sm);
+      background: var(--surface-badge);
+      color: var(--color-ink-strong);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+
+      @include butler-mx.dark-mode-class {
+        color: var(--orange-200);
+      }
+    }
+  }
+
+  &__intro,
+  &__note {
+    margin: 0;
+  }
+
+  &__intro {
+    color: var(--color-muted);
+  }
+}
+
+.c-shelf {
+  display: flex;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0.25rem 0.125rem 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  list-style: none;
+
+  @include mx.breakpoint("word") {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    overflow: visible;
+  }
+
+  &__item {
+    display: flex;
+    flex: 0 0 64%;
+    scroll-snap-align: start;
+
+    @include mx.breakpoint("word") {
+      flex: none;
+    }
+  }
+}
+
+.c-book {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.625rem 0.625rem 0.25rem;
+  background: var(--surface-paper);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--paper-lift);
+  color: var(--color-body);
+  text-decoration: none;
+  transition: box-shadow 0.3s;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+  @media (hover: hover) {
+    &:hover {
+      box-shadow: var(--shadow-hover-glow);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px dashed var(--orange-400);
+    outline-offset: 2px;
+  }
+
+  &__cover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--surface-chip);
+    border-radius: var(--radius-xxs);
+    color: var(--color-muted);
+
+    picture {
+      display: contents;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  // Wash tag, borderless (Spec §8.4).
+  &__tag {
+    align-self: flex-start;
+    padding: 0.125rem 0.625rem;
+    background: color-mix(in srgb, var(--orange-500) 16%, transparent);
+    border-radius: var(--radius-sm);
+    color: var(--color-body);
+    font-size: 0.75rem;
+  }
+
+  &__title {
+    color: var(--color-ink-strong);
+    line-height: 1.3;
+  }
+
+  &__cta {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-block-size: 44px;
+    margin-block-start: auto;
+    border-block-start: 1px dashed var(--rule-inner);
+    color: var(--color-accent-text);
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+}

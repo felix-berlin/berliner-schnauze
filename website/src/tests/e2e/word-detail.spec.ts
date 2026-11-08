@@ -140,6 +140,43 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await expect(verwandteWorte.getByRole("link").first()).toHaveAttribute("href", /^\/wort\//);
   });
 
+  test("Bücher, Umfeld und Und nu? (ballast-der-republik)", async ({ page }) => {
+    await page.goto("/wort/ballast-der-republik");
+
+    const buecher = page.locator("#buecher");
+    await expect(buecher.getByRole("heading", { level: 2, name: "Ooch als Buch zu haben, wa?" })).toBeVisible();
+    await expect(buecher.getByText("Anzeige", { exact: true })).toBeVisible();
+    await expect(buecher.getByText("Bezahlte Links zu Amazon.de.")).toBeVisible();
+    const books = buecher.locator("a.c-book");
+    await expect(books).toHaveCount(3);
+    await expect(books.first()).toHaveAttribute("rel", /sponsored/);
+    await expect(books.first()).toContainText("Bei Amazon ansehen ↗");
+
+    const umfeld = page.locator("#verwandte-worte");
+    await expect(umfeld.getByRole("heading", { level: 2, name: "Lexikalisches Umfeld" })).toBeVisible();
+    await expect(umfeld.locator("#verwandte a").first()).toHaveAttribute("href", /^\/wort\//);
+    await expect(umfeld.locator("#navigation [aria-current=page]")).toHaveText(/Ballast der Republik/);
+
+    // The bottom random-word block is gone; "Und nu?" replaces it.
+    await expect(page.getByText("Bock mehr Wörter kennen zu lernen?")).toHaveCount(0);
+    const next = page.getByRole("navigation", { name: "Und nu?" });
+    await expect(next.getByRole("link", { name: /Zufälliges Wort/ })).toHaveAttribute("href", /^\/wort\//);
+    await expect(next.getByRole("link", { name: /Wort-Index/ })).toHaveAttribute("href", "/wort");
+    await expect(next.getByRole("link", { name: /Wort vorschlagen/ })).toHaveAttribute("href", "/wort-vorschlagen");
+    await expect(page.locator(".c-single-word__footer")).toContainText("Wort erstellt am");
+  });
+
+  test("kein horizontales Scrollen bei 1280px und 390px (ballast-der-republik)", async ({ page }) => {
+    for (const width of [1280, 390]) {
+      await page.setViewportSize({ height: 900, width });
+      await page.goto("/wort/ballast-der-republik");
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      );
+      expect(overflow, `viewport ${width}`).toBeLessThanOrEqual(0);
+    }
+  });
+
   test("Wort mit Anagramme-Section (alsche)", async ({ page }) => {
     await page.goto("/wort/alsche");
 
