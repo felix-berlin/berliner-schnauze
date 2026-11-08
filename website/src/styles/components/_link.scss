@@ -1,5 +1,5 @@
 // Link (docs/design/wortseite/SPEC.md): text action, also on <button>. 44px hit area.
-:where(.c-link) {
+:where(.c-link, .c-textlink) {
   display: inline-flex;
   align-items: center;
   min-block-size: 2.75rem;
@@ -26,4 +26,13 @@
   &:disabled {
     cursor: progress;
   }
+}
+
+// Inline in running text: no hit-area padding, inherits size and colour.
+:where(.c-textlink--inline) {
+  display: inline;
+  min-block-size: 0;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
 }

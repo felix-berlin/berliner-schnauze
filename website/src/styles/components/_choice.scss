@@ -44,7 +44,27 @@
     opacity: 0.6;
   }
 
+  // Locked but still focusable, so the reason can be read out (Spec §9). Not :disabled.
+  &[aria-disabled="true"] {
+    border-style: dotted;
+    box-shadow: none;
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     transition-duration: 0ms;
   }
+}
+
+// Poll answer: a big choice on a chip ground. Declared after .c-choice (same zero specificity),
+// the pressed state still wins because it carries an attribute selector.
+:where(.c-choice--tile) {
+  inline-size: 100%;
+  min-block-size: 4.5rem;
+  padding: 0.75rem 1rem;
+  justify-content: flex-start;
+  gap: 0.875rem;
+  text-align: start;
+  background: var(--surface-chip);
 }

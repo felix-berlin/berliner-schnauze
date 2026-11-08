@@ -1,0 +1,11 @@
+@use "@styles/variables" as vars;
+
+// Page band (docs/design/wortseite/SPEC.md §4): section headline outside a card, the only display-font use on the page.
+:where(.c-band) {
+  margin: 0;
+  font-family: vars.$berliner;
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  color: var(--color-ink-strong);
+}
