@@ -164,7 +164,7 @@ const schemaJson = () => {
     publisher: { '@id': `${Astro.site}#organization` },
     speakable: {
       '@type': 'SpeakableSpecification',
-      cssSelector: ['.c-word-hero__title', '.c-single-word__translation-item', '.c-single-word__example'],
+      cssSelector: ['.c-word-hero__title', '.c-word-meanings .t-em', '.c-word-examples__text'],
     },
     ...(firstImage && {
       image: {

@@ -126,16 +126,6 @@
     }
   }
 
-  &__infotext {
-    padding: 0.75rem 1rem;
-
-    @include mx.side-stripe;
-
-    &:not(:first-child) {
-      margin-block-start: vars.$spacer;
-    }
-  }
-
   &__stat-row {
     display: flex;
     gap: vars.$spacer * 0.75;
