@@ -64,6 +64,22 @@ describe("BookShelf.astro", () => {
     expect(short).toContain("Bezahlte Links zu Amazon.de.");
   });
 
+  it("does not treat look-alike hosts as Amazon, but real ones are", async () => {
+    for (const href of ["https://amazon.example.com/x", "https://amazon.de.example.org/x"]) {
+      const result = await render({ books: [book({ href })], disclaimers: [] });
+      expect(result).not.toContain("Bei Amazon ansehen");
+      expect(result).not.toContain("Bezahlte Links zu Amazon.de.");
+    }
+    for (const href of ["https://www.amazon.de/dp/X", "https://amzn.to/abc"]) {
+      expect(await render({ books: [book({ href })], disclaimers: [] })).toContain("Bei Amazon ansehen");
+    }
+  });
+
+  it("omits the note paragraph when there is nothing to say", async () => {
+    const result = await render({ books: [book({ href: "https://www.thalia.de/b" })], disclaimers: [] });
+    expect(result).not.toContain("c-book-shelf__note");
+  });
+
   it("renders nothing without books", async () => {
     expect(await render({ books: [], disclaimers })).not.toContain("buecher");
   });

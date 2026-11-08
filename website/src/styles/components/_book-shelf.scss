@@ -48,8 +48,9 @@
   gap: 0.75rem;
   // Room for the 2px dashed focus ring (offset 2px) that overflow-x would clip; the negative margin keeps the layout.
   margin: -0.3125rem;
-  padding: 0.5rem 0.3125rem;
-  scroll-padding-inline: 0.3125rem;
+  // Old padding (0.25rem 0.125rem 0.5rem) plus the 0.3125rem the margin gives away: layout unchanged.
+  padding: 0.5625rem 0.4375rem 0.8125rem;
+  scroll-padding-inline: 0.4375rem;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
