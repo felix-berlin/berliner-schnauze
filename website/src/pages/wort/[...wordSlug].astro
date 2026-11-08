@@ -34,6 +34,7 @@ import { previewDraft } from '@services/preview.ts';
 import { escapeHtml } from 'payload-app/lexical-html';
 import { seoData, canonicalUrl } from '@utils/helpers.ts';
 import { buildWordSections, hasOrigin } from '@utils/wordSections.ts';
+import { hasNeighborhood } from '@utils/wordNeighborhood.ts';
 import { resolvePos } from '@utils/wordPos.ts';
 import {
   alphabeticNeighbors,
@@ -96,9 +97,19 @@ const { books: affiliateBooks, disclaimers: affiliateDisclaimers } = await fetch
 // An editor-set word type wins; otherwise the automatic guess, marked as such in the hero.
 const wordPos = resolvePos(word.wordTypes[0]?.name, wordTags);
 
+const neighborhood = {
+  after: alphabeticNeighborsResult.after,
+  before: alphabeticNeighborsResult.before,
+  // Already in the analysis band: not repeated in the Umfeld card.
+  exclude: [...soundingWordsResult, ...similarSpellingResult].map((w) => w.slug),
+  related: word.relatedWords,
+  word: berlinerisch,
+};
+
 const sections = buildWordSections({
   draft: !!draft,
   hasExamples: wordSeoFacts.hasExamples,
+  hasNeighborhood: hasNeighborhood(neighborhood),
   hasOrigin: hasOrigin(word),
 });
 
@@ -266,13 +277,7 @@ const schemaJson = () => {
 
         <BookShelf books={affiliateBooks} disclaimers={affiliateDisclaimers} />
 
-        <WordNeighborhood
-          after={alphabeticNeighborsResult.after}
-          before={alphabeticNeighborsResult.before}
-          exclude={[...soundingWordsResult, ...similarSpellingResult].map((w) => w.slug)}
-          related={word.relatedWords}
-          word={berlinerisch}
-        />
+        <WordNeighborhood {...neighborhood} />
 
         {!draft && (
           <div id='kommentare'>

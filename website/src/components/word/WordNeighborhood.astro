@@ -2,7 +2,7 @@
 import '@styles/components/_word-neighborhood.scss';
 import SectionCard from '@components/word/SectionCard.astro';
 import { routeToWord } from '@utils/helpers';
-import { dedupeRelated } from '@utils/wordNeighborhood';
+import { neighborhoodWords } from '@utils/wordNeighborhood';
 import type { RelatedWord } from '@services/payload/words.ts';
 import type { WordRef } from '@utils/wordHelper';
 
@@ -15,14 +15,8 @@ interface Props {
   exclude: string[];
 }
 
-const { word, related, before, after, exclude } = Astro.props;
-const relatedShown = dedupeRelated(
-  related.filter((w) => w.berlinerisch !== word),
-  exclude,
-);
-const near = (list: WordRef[]) => list.filter((w) => w.berlinerisch);
-const nearBefore = near(before);
-const nearAfter = near(after);
+const { word } = Astro.props;
+const { related: relatedShown, before: nearBefore, after: nearAfter } = neighborhoodWords(Astro.props);
 const hasNeighbors = nearBefore.length > 0 || nearAfter.length > 0;
 ---
 

@@ -1,7 +1,7 @@
 import { buildWordSections, hasOrigin } from "@utils/wordSections";
 import { describe, expect, it } from "vitest";
 
-const full = { draft: false, hasExamples: true, hasOrigin: true };
+const full = { draft: false, hasExamples: true, hasNeighborhood: true, hasOrigin: true };
 const ids = (facts: Parameters<typeof buildWordSections>[0]) =>
   buildWordSections(facts).map((s) => s.id);
 
@@ -24,6 +24,10 @@ describe("buildWordSections", () => {
 
   it("drops Beispiele without examples", () => {
     expect(ids({ ...full, hasExamples: false })).not.toContain("beispiele");
+  });
+
+  it("drops Umfeld when the card has nothing to show", () => {
+    expect(ids({ ...full, hasNeighborhood: false })).not.toContain("verwandte-worte");
   });
 
   it("drops Umfrage and Kommentare for a draft but keeps Umfeld", () => {

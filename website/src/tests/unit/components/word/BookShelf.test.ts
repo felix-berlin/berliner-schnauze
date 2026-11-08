@@ -50,6 +50,20 @@ describe("BookShelf.astro", () => {
     expect(thalia).toContain("Bei thalia.de ansehen");
   });
 
+  it("classifies Amazon by hostname and shows the Amazon sentence only then", async () => {
+    const tricky = await render({
+      books: [book({ href: "https://www.thalia.de/buch/1?ref=amazon.de/dp/x" })],
+      disclaimers,
+    });
+    expect(tricky).toContain("Bei thalia.de ansehen");
+    expect(tricky).not.toContain("Bei Amazon ansehen");
+    expect(tricky).not.toContain("Bezahlte Links zu Amazon.de.");
+
+    const short = await render({ books: [book({ href: "https://amzn.to/EXAMPLE" })], disclaimers });
+    expect(short).toContain("Bei Amazon ansehen");
+    expect(short).toContain("Bezahlte Links zu Amazon.de.");
+  });
+
   it("renders nothing without books", async () => {
     expect(await render({ books: [], disclaimers })).not.toContain("buecher");
   });

@@ -23,6 +23,8 @@ export function hasOrigin(word: {
 interface WordSectionFacts {
   hasOrigin: boolean;
   hasExamples: boolean;
+  /** See hasNeighborhood in wordNeighborhood.ts. */
+  hasNeighborhood: boolean;
   draft: boolean;
 }
 
@@ -30,6 +32,7 @@ interface WordSectionFacts {
 export function buildWordSections({
   hasOrigin,
   hasExamples,
+  hasNeighborhood,
   draft,
 }: WordSectionFacts): WordSection[] {
   const all: (WordSection & { show: boolean })[] = [
@@ -38,7 +41,7 @@ export function buildWordSections({
     { id: "etymologie", label: "Etymologie", show: hasOrigin },
     { id: "beispiele", label: "Beispiele", show: hasExamples },
     { id: "analyse", label: "Analyse", show: true },
-    { id: "verwandte-worte", label: "Umfeld", show: true },
+    { id: "verwandte-worte", label: "Umfeld", show: hasNeighborhood },
     { id: "kommentare", label: "Kommentare", show: !draft },
   ];
   return all.filter((s) => s.show).map(({ id, label }) => ({ id, label }));

@@ -16,7 +16,6 @@ const { books: allBooks, disclaimers } = Astro.props;
 const isWebUrl = (href?: string | null) => /^https?:\/\//i.test(href ?? '');
 const books = allBooks.filter((b) => isWebUrl(b.href)).slice(0, 3);
 
-const isAmazonLink = (href?: string | null) => /amazon\.|amzn\.to/i.test(href ?? '');
 const hostOf = (href?: string | null) => {
   try {
     return new URL(href ?? '').hostname.replace(/^www\./, '');
@@ -24,6 +23,9 @@ const hostOf = (href?: string | null) => {
     return '';
   }
 };
+// By hostname: "amazon." in a path or query must not count.
+const isAmazonLink = (href?: string | null) => /^(.+\.)?(amazon\.[a-z.]+|amzn\.to)$/i.test(hostOf(href));
+const hasAmazon = books.some((b) => isAmazonLink(b.href));
 const ctaFor = (href?: string | null) =>
   isAmazonLink(href) ? 'Bei Amazon ansehen' : `Bei ${hostOf(href)} ansehen`;
 
@@ -31,7 +33,7 @@ const ctaFor = (href?: string | null) =>
 const partnerNotes = disclaimers
   .filter((d) => {
     const plat = d.plattform?.toLowerCase() ?? '';
-    if (plat.includes('amazon') && books.some((b) => isAmazonLink(b.href))) return true;
+    if (plat.includes('amazon') && hasAmazon) return true;
     return books.some((b) => hostOf(b.href).toLowerCase() === plat);
   })
   .map((d) => d.text)
@@ -87,7 +89,7 @@ const partnerNotes = disclaimers
       ))}
     </ul>
     <p class='t-small c-book-shelf__note'>
-      Bezahlte Links zu Amazon.de. Kaufst du darüber, kriegen wa ’ne kleine Provision – für dich bleibt der Preis gleich.{partnerNotes && ` ${partnerNotes}`}
+      {hasAmazon && 'Bezahlte Links zu Amazon.de. Kaufst du darüber, kriegen wa ’ne kleine Provision – für dich bleibt der Preis gleich.'}{partnerNotes && `${hasAmazon ? ' ' : ''}${partnerNotes}`}
     </p>
   </section>
 )}
