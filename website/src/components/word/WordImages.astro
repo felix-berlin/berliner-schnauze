@@ -1,0 +1,63 @@
+---
+import '@styles/components/_word-images.scss';
+import { Image } from 'astro:assets';
+import type { WordImage } from '@utils/wordImages.ts';
+
+interface Props {
+  images: WordImage[];
+  /** strip: below the hero (< 808px). hero: inside the hero (from 808px). Both are in the page, CSS shows one. */
+  placement: 'strip' | 'hero';
+  learnMore?: string | null | undefined;
+  class?: string;
+}
+
+const { images, placement, learnMore, class: className } = Astro.props;
+const hero = placement === 'hero';
+const widths = hero ? [220, 330, 440, 660] : [320, 480, 640, 800];
+const sizes = hero ? '(max-width: 999px) 70vw, 380px' : '82vw';
+---
+
+<section class:list={['c-word-images', `c-word-images--${placement}`, className]} aria-label='Bilder'>
+  <div class:list={['c-image-strip', { 'c-image-strip--single': images.length === 1 }]}>
+    {
+      images.map((image, i) => (
+        <figure>
+          <button
+            class='c-image-strip__btn'
+            type='button'
+            data-lightbox-index={i}
+            aria-label={`Bild ${i + 1} von ${images.length} vergrößern: ${image.alt}`}
+          >
+            <Image
+              alt=''
+              format='webp'
+              height={image.height}
+              loading={hero && i === 0 ? 'eager' : 'lazy'}
+              sizes={sizes}
+              src={image.src}
+              width={image.width}
+              widths={widths}
+            />
+          </button>
+          {image.credit && (
+            <figcaption class='t-small'>
+              Foto: <Fragment set:html={image.credit} />
+            </figcaption>
+          )}
+        </figure>
+      ))
+    }
+  </div>
+  {
+    learnMore && (
+      <a
+        class='c-textlink c-textlink--inline t-small c-word-images__more'
+        href={learnMore}
+        rel='noopener noreferrer'
+        target='_blank'
+      >
+        Erfahre mehr über dieses Wort ↗
+      </a>
+    )
+  }
+</section>

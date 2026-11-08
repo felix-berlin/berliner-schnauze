@@ -77,26 +77,4 @@
       gap: 1.25rem;
     }
   }
-
-  // Gallery layout uses word-page container (self-query of word-main is not possible).
-  // 60rem = ~200px sidebar + 2rem gap + 1fr content + 280px gallery column.
-  &--with-gallery {
-    @container word-page (inline-size >= 60rem) {
-      display: grid;
-      grid-template-columns: 1fr 280px;
-      grid-template-areas:
-        "hero hero"
-        "content gallery";
-      gap: vars.$spacer;
-      align-items: start;
-
-      .c-word-hero {
-        grid-area: hero;
-      }
-
-      .c-word-main__content {
-        grid-area: content;
-      }
-    }
-  }
 }

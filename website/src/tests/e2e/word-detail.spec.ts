@@ -39,14 +39,67 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await expect(etymologie.locator(".c-section-card__infotext")).not.toBeEmpty();
   });
 
-  test("Wort mit Bildergalerie (akademiebusen)", async ({ page }) => {
-    await page.goto("/wort/akademiebusen");
+  test.describe("Bilder", () => {
+    // Only the section the viewport shows is in the accessibility tree (the other one is display: none).
+    const images = (page: import("@playwright/test").Page) => page.getByRole("region", { name: "Bilder" });
 
-    await expect(page.locator("h1 dfn")).toHaveText("Akademiebusen");
+    test("vier Bilder im Hero, Credits, Lightbox per Tastatur (akademiebusen)", async ({ page }) => {
+      await page.setViewportSize({ height: 900, width: 1280 });
+      await page.goto("/wort/akademiebusen");
+      await expect(page.locator("h1 dfn")).toHaveText("Akademiebusen");
 
-    const gallery = page.getByRole("complementary", { name: "Bildergalerie" });
-    await expect(gallery).toBeVisible();
-    await expect(gallery.locator("img").first()).toBeVisible();
+      const section = images(page);
+      await expect(section.locator("img").first()).toBeVisible();
+      const buttons = section.getByRole("button", { name: /vergrößern/ });
+      await expect(buttons).toHaveCount(4);
+      await expect(buttons.first()).toHaveAttribute("aria-label", "Bild 1 von 4 vergrößern: Testbild");
+      // Hero: only the first image shows its caption.
+      await expect(section.locator("figcaption")).toHaveCount(3);
+      await expect(section.locator("figcaption").first()).toContainText("Foto: Erfundene Attribution");
+      await expect(section.locator("figcaption").nth(1)).toBeHidden();
+
+      const dialog = page.getByRole("dialog", { name: "Bildansicht" });
+      // The island hydrates after load: retry the click until the dialog opens.
+      await expect(async () => {
+        await buttons.first().click();
+        await expect(dialog).toBeVisible({ timeout: 500 });
+      }).toPass();
+      await expect(dialog).toContainText("1 / 4");
+      await page.keyboard.press("ArrowRight");
+      await expect(dialog).toContainText("2 / 4");
+      await expect(dialog.getByRole("link", { name: "Beispielquelle" })).toHaveAttribute("href", "https://example.org/quelle");
+      await page.keyboard.press("ArrowLeft");
+      await page.keyboard.press("ArrowLeft");
+      await expect(dialog).toContainText("4 / 4");
+      await expect(dialog.locator(".c-lightbox__caption")).toHaveCount(0); // 4th image has no credit
+      await page.keyboard.press("Escape");
+      await expect(dialog).toBeHidden();
+      await expect(buttons.first()).toBeFocused();
+    });
+
+    test("ein Bild: eine Figure, Erfahre-mehr-Link (bildeins)", async ({ page }) => {
+      await page.setViewportSize({ height: 900, width: 1280 });
+      await page.goto("/wort/bildeins");
+      const section = images(page);
+      await expect(section.locator("figure")).toHaveCount(1);
+      await expect(section.getByRole("link", { name: /Erfahre mehr über dieses Wort/ })).toHaveAttribute("href", "https://example.org/mehr");
+    });
+
+    test("zwei Bilder, Mobile-Strip statt Hero (bildzwei)", async ({ page }) => {
+      await page.setViewportSize({ height: 800, width: 390 });
+      await page.goto("/wort/bildzwei");
+      const section = images(page);
+      await expect(section).toHaveCount(1);
+      await expect(section.locator(".c-image-strip")).toBeVisible();
+      await expect(section.locator("figure")).toHaveCount(2);
+      // No horizontal page scroll: the strip scrolls inside itself.
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    });
+
+    test("Wort ohne Bilder hat keinen Bilder-Bereich (alsche)", async ({ page }) => {
+      await page.goto("/wort/alsche");
+      await expect(images(page)).toHaveCount(0);
+    });
   });
 
   test("Wort mit Verwandte-Worte-Section (ballast-der-republik)", async ({ page }) => {

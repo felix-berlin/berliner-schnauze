@@ -4,10 +4,12 @@ import BadgeTag from '@components/BadgeTag.vue';
 import IsWordOfTheDay from '@components/word/IsWordOfTheDay.vue';
 import WordMeanings from '@components/word/WordMeanings.vue';
 import WordOptionDropdown from '@components/word/WordOptionDropdown.vue';
+import WordImages from '@components/word/WordImages.astro';
 import WordReactions from '@components/word/WordReactions.vue';
 import TooltipPopover from '@components/TooltipPopover.vue';
 import { routeToWord } from '@utils/helpers';
 import { posBadge } from '@utils/wordPos';
+import type { WordImage } from '@utils/wordImages.ts';
 import type { WordTrend } from '@utils/wordTrend.ts';
 import TrendingUp from '~icons/lucide/trending-up';
 import type { SiteWord } from '@services/payload/words.ts';
@@ -22,9 +24,11 @@ interface Props {
   /** A draft preview has no public votes. */
   draft?: boolean;
   trend?: Pick<WordTrend, 'rank'> | undefined;
+  images?: WordImage[];
+  learnMore?: string | null | undefined;
 }
 
-const { word, pos, posAuto = false, meanings = [], draft = false, trend } = Astro.props;
+const { word, pos, posAuto = false, meanings = [], draft = false, trend, images = [], learnMore } = Astro.props;
 const { themen } = word;
 const badge = pos ? posBadge(pos, posAuto) : undefined;
 const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(Boolean).join(', ');
@@ -32,7 +36,7 @@ const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(
 
 <header
   id='bedeutung'
-  class='c-word-hero'
+  class:list={['c-word-hero', { 'c-word-hero--has-images': images.length > 0 }]}
   data-track-content
   data-content-name='Word Hero'
   data-content-piece={word.berlinerisch}
@@ -119,5 +123,6 @@ const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(
       </div>
     )
   }
-  {/* The image column (class c-word-hero__images, spans the rows from 1000px) joins this grid. */}
+  {/* From 808px the images live here (right column from 1000px); below, the page renders the strip under the hero. */}
+  {images.length > 0 && <WordImages class='c-word-hero__images' images={images} learnMore={learnMore} placement='hero' />}
 </header>

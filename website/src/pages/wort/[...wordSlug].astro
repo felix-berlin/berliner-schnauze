@@ -7,7 +7,10 @@ import '@styles/plugins/astro-breadcrumbs.scss';
 import RandomWordButton from '@components/RandomWordButton.vue';
 import RelatedWords from '@components/RelatedWords.vue';
 import WordAnagrams from '@components/word/WordAnagrams.astro';
-import WordGalleryCol from '@components/word/WordGalleryCol.astro';
+import Lightbox from '@components/word/Lightbox.vue';
+import WordImages from '@components/word/WordImages.astro';
+import { getImage } from 'astro:assets';
+import { toWordImages } from '@utils/wordImages.ts';
 import WordHero from '@components/word/WordHero.astro';
 import WordLearnMore from '@components/word/WordLearnMore.astro';
 import WordComments from '@components/comments/WordComments.vue';
@@ -86,7 +89,16 @@ const wordPageTitle = wordSeoTitle(wordSeoFacts);
 
 const wordTags = word.derived.nlpTags;
 
-const hasImages = word.images.length > 0;
+const wordImages = toWordImages(word.images, word.berlinerisch);
+const hasImages = wordImages.length > 0;
+// Large version for the lightbox (the strip/hero sizes come from WordImages).
+const lightboxImages = await Promise.all(
+  wordImages.map(async ({ alt, credit, height, src, width }) => ({
+    alt,
+    credit,
+    src: (await getImage({ format: 'webp', height: Math.round((1600 * height) / width), src, width: 1600 })).src,
+  })),
+);
 const { books: affiliateBooks, disclaimers: affiliateDisclaimers } = await fetchAffiliateData();
 // An editor-set word type wins; otherwise the automatic guess, marked as such in the hero.
 const wordPos = resolvePos(word.wordTypes[0]?.name, wordTags);
@@ -229,8 +241,12 @@ const schemaJson = () => {
     <WordTabBar client:load sections={sections} />
     <WordSidebar posLabel={wordPos?.pos} sections={sections} word={word} />
 
-    <div class:list={['c-word-main', hasImages && 'c-word-main--with-gallery']}>
-      <WordHero word={word} pos={wordPos?.pos} posAuto={wordPos?.auto} meanings={translations} draft={!!draft} trend={trend} />
+    <div class='c-word-main'>
+      <WordHero images={wordImages} learnMore={word.learnMore} word={word} pos={wordPos?.pos} posAuto={wordPos?.auto} meanings={translations} draft={!!draft} trend={trend} />
+
+      {hasImages && <WordImages images={wordImages} learnMore={word.learnMore} placement='strip' />}
+      {/* Only the lightbox needs JS: the strip is server-rendered, its buttons open the dialog once this hydrates. */}
+      {hasImages && <Lightbox client:idle images={lightboxImages} />}
 
       <div class='c-word-main__content'>
         {trend && <WordTrendBox {...trend} />}
@@ -289,7 +305,6 @@ const schemaJson = () => {
         <WordPageFooter publishedAt={word.publishedAt} modifiedAt={word.contentModifiedAt} />
       </div>
 
-      {hasImages && <WordGalleryCol images={word.images} learnMore={word.learnMore} />}
     </div>
   </article>
 

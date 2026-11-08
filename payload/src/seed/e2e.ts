@@ -11,7 +11,7 @@ import { LOCAL_DB_HOSTS } from "../lib/localDb";
 import { berlinDay } from "../lib/wordStats";
 
 /** Slugs the e2e specs navigate to directly. */
-export const E2E_WORD_SLUGS = ["aasen", "akademiebusen", "alex", "alsche", "anmachen", "ballast-der-republik", "schale", "wa"] as const;
+export const E2E_WORD_SLUGS = ["aasen", "akademiebusen", "alex", "alsche", "anmachen", "ballast-der-republik", "bildeins", "bildzwei", "schale", "wa"] as const;
 
 /** The seed writes invented words: never let it near a real database. */
 export function assertLocalDatabase(url: string | undefined): void {
@@ -54,7 +54,8 @@ type SeedWord = {
   berlinerisch: string;
   berolinismus?: boolean;
   examples?: { example: string; explanation?: string; voices?: ("female" | "male")[] }[];
-  images?: boolean;
+  /** How many of the four seed images (see above) the word shows. */
+  images?: number;
   infoText?: string;
   learnMore?: string;
   related?: string[];
@@ -67,7 +68,9 @@ type SeedWord = {
 const WORDS: SeedWord[] = [
   { berlinerisch: "aasen", voices: ["male"], infoText: "Erfundener Infotext: das Verb ist im Beispieldatensatz nur für die Tests da.", slug: "aasen", themen: ["alltag-wohnen"], translations: ["verschwenden", "vergeuden"], alternativeWords: ["veraasen"], examples: [{ example: "Aase nich so mit dem Wasser.", explanation: "Verschwende das Wasser nicht." }] },
   { berlinerisch: "ab", slug: "ab", themen: ["bewegung-gehen"], translations: ["weg"] },
-  { berlinerisch: "Akademiebusen", images: true, slug: "akademiebusen", themen: ["kleidung-aussehen"], translations: ["Zierfransen am Kleid"] },
+  { berlinerisch: "Akademiebusen", images: 4, slug: "akademiebusen", themen: ["kleidung-aussehen"], translations: ["Zierfransen am Kleid"] },
+  { berlinerisch: "Bildeins", images: 1, learnMore: "https://example.org/mehr", slug: "bildeins", translations: ["Testwort mit einem Bild"] },
+  { berlinerisch: "Bildzwei", images: 2, slug: "bildzwei", translations: ["Testwort mit zwei Bildern"] },
   { berlinerisch: "Alex", berolinismus: true, slug: "alex", themen: ["berlin-orte"], translations: ["Kurzform für den Alexanderplatz"] },
   { berlinerisch: "Alsche", slug: "alsche", translations: ["Testwort für Anagramme"] },
   { berlinerisch: "schale", slug: "schale", themen: ["essen-trinken"], translations: ["flaches Gefäß"] },
@@ -151,18 +154,28 @@ async function upsert(payload: Payload, collection: "themen" | "words" | "posts"
 }
 
 export async function seedE2e(payload: Payload): Promise<void> {
-  // Media: one image for the gallery and the post.
-  const media = await (async () => {
-    const found = await payload.find({ collection: "media", depth: 0, limit: 1, where: { wpPath: { equals: "e2e/galerie.png" } } });
-    return (
-      found.docs[0] ??
-      payload.create({
-        collection: "media",
-        data: { alt: "Testbild", caption: "Ein Testbild", wpPath: "e2e/galerie.png" },
-        file: { data: PNG, mimetype: "image/png", name: "galerie.png", size: PNG.length },
-      })
+  // Media: four images for the word page and the post. Credits follow the CMS convention (description = attribution,
+  // caption = fallback): plain, with a link, caption only, none.
+  const imageMedia: { id: number }[] = [];
+  for (const [i, data] of [
+    { alt: "Testbild", caption: "Ein Testbild", description: lexical(paragraph("Erfundene Attribution: Beispielfoto, CC BY 4.0")) },
+    {
+      alt: "Zweites Testbild",
+      caption: "Ein zweites Testbild",
+      description: lexical({ children: [text("Erfundene Attribution: "), { children: [text("Beispielquelle")], direction: "ltr", fields: { linkType: "custom", newTab: true, url: "https://example.org/quelle" }, format: "", indent: 0, type: "link", version: 3 }], direction: "ltr", format: "", indent: 0, textFormat: 0, type: "paragraph", version: 1 }),
+    },
+    { alt: "Drittes Testbild", caption: "Credit: Erfundene_Person", description: null },
+    { alt: "Viertes Testbild", caption: null, description: null },
+  ].entries()) {
+    const wpPath = i === 0 ? "e2e/galerie.png" : `e2e/galerie-${i + 1}.png`;
+    const found = await payload.find({ collection: "media", depth: 0, limit: 1, where: { wpPath: { equals: wpPath } } });
+    imageMedia.push(
+      found.docs[0]
+        ? await payload.update({ collection: "media", data, depth: 0, id: found.docs[0].id })
+        : await payload.create({ collection: "media", data: { ...data, wpPath }, file: { data: PNG, mimetype: "image/png", name: wpPath.slice(4), size: PNG.length } }),
     );
-  })();
+  }
+  const media = imageMedia[0]!;
 
   // Two voices: one silent WAV each.
   const voiceMedia = new Map<"female" | "male", number>();
@@ -195,7 +208,7 @@ export async function seedE2e(payload: Payload): Promise<void> {
       berlinerischAudio: audioRows(w.voices),
       berolinismus: w.berolinismus ?? false,
       examples: (w.examples ?? []).map((e) => ({ example: e.example, exampleAudio: audioRows(e.voices), exampleExplanation: e.explanation })),
-      images: w.images ? [media.id] : [],
+      images: imageMedia.slice(0, w.images ?? 0).map((m) => m.id),
       infoText: w.infoText ? lexical(paragraph(w.infoText)) : null,
       learnMore: w.learnMore ?? null,
       publishedAt: "2025-01-01T00:00:00.000Z",
