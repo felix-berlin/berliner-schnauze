@@ -118,7 +118,7 @@
   }
 
   &__trend-badge {
-    order: -1;
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
@@ -130,6 +130,13 @@
     letter-spacing: 0.05em;
     text-transform: uppercase;
     text-decoration: none;
+
+    // 44px hit area without changing the visual size
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -0.75rem -0.25rem;
+    }
   }
 
   // Badges are borderless washes here (Spec §8.4); the global .c-badge (word index) keeps its look.

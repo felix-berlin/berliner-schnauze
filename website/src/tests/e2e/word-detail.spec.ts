@@ -136,7 +136,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await expect(hero.locator("ol.c-meanings")).toHaveCount(0);
     });
 
-    test("Tab-Reihenfolge: Like, Menü, Kategorie", async ({ page }) => {
+    test("Tab-Reihenfolge: Like, Menü, Trend-Badge, Kategorie", async ({ page }) => {
       await page.setViewportSize({ height: 800, width: 1280 });
       await page.goto("/wort/anmachen");
       const hero = page.locator("#bedeutung");
@@ -148,6 +148,9 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await expect(hero.getByRole("button", { name: /^Nee/ })).toBeFocused();
       await page.keyboard.press("Tab");
       await expect(hero.getByRole("button", { name: "Weitere Aktionen" })).toBeFocused();
+      // anmachen is trending: the badge row starts with the trend badge (Spec §5), then the category.
+      await page.keyboard.press("Tab");
+      await expect(hero.locator('a[href="#n-trend"]')).toBeFocused();
       await page.keyboard.press("Tab");
       await expect(hero.locator('a[href^="/themen/"]').first()).toBeFocused();
     });
@@ -229,7 +232,8 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await expect(box).toBeVisible();
     await expect(box).toContainText("Trendet jerade");
     await expect(box).toContainText("Platz 1 diese Woche");
-    await expect(box).toContainText("47 Aufrufe in 7 Tagen · +370 % zur Vorwoche");
+    // Pulse views of other tests change the numbers, so only the shape is asserted.
+    await expect(box).toContainText(/\d+ Aufrufe in 7 Tagen · [+−±]\d+ % zur Vorwoche/);
     await expect(box.locator(".c-trend__bars")).toHaveAttribute("aria-hidden", "true");
     await expect(box.locator(".c-trend__bars span")).toHaveCount(7);
   });

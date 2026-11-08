@@ -9,9 +9,9 @@ export type TrendRow = { word: number; day: string; views: number };
 const shiftDay = (day: string, n: number): string =>
   new Date(Date.parse(`${day}T00:00:00Z`) + n * 864e5).toISOString().slice(0, 10);
 
-/** Signed percent against the previous week (`+12 %`); without a previous week there is nothing to compare: `neu`. */
+/** Signed percent against the previous week (`+12 %`); without a previous week there is nothing to compare: empty. */
 export const formatChange = (views: number, previous: number): string => {
-  if (previous <= 0) return "neu";
+  if (previous <= 0) return "";
   const pct = Math.round(((views - previous) / previous) * 100);
   return `${pct > 0 ? "+" : pct < 0 ? "−" : "±"}${Math.abs(pct)} %`;
 };

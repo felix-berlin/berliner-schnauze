@@ -57,6 +57,15 @@ const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(
       />
     </div>
     <div class='c-word-hero__badges'>
+      {/* Spec §5 order: trend, word type, Berolinismus, category (the §14 focus order lists the trend link later; §5 wins). */}
+      {
+        trend && (
+          <a href='#n-trend' class='c-badge c-badge--strong c-word-hero__trend-badge'>
+            <TrendingUp width='12' height='12' aria-hidden='true' />
+            Im Trend · Platz {trend.rank}
+          </a>
+        )
+      }
       {
         badge && (
           <span
@@ -96,15 +105,6 @@ const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(
             {thema.name}
           </a>
         ))
-      }
-      {/* Visually first (order: -1), but after the category in the DOM: focus order is Like, ⋮, category, …, trend link (Spec §14). */}
-      {
-        trend && (
-          <a href='#n-trend' class='c-badge c-badge--strong c-word-hero__trend-badge'>
-            <TrendingUp width='12' height='12' aria-hidden='true' />
-            Im Trend · Platz {trend.rank}
-          </a>
-        )
       }
       {
         word.berlinerischAudio.length > 0 && (

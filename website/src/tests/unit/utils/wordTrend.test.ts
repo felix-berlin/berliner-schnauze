@@ -40,7 +40,7 @@ describe("formatChange", () => {
     [112, 100, "+12 %"],
     [50, 100, "−50 %"],
     [100, 100, "±0 %"],
-    [10, 0, "neu"],
+    [10, 0, ""],
   ])("%i vs %i gives %s", (views, previous, expected) => {
     expect(formatChange(views, previous)).toBe(expected);
   });

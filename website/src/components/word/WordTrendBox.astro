@@ -13,7 +13,7 @@ const max = Math.max(...bars, 1);
     <p id='n-trend-t' class='t-label c-trend__label'>Trendet jerade</p>
     <p class='c-trend__rank'><b class='t-em'>Platz {rank}</b> diese Woche</p>
     <p class='t-small c-trend__meta'>
-      {views.toLocaleString('de-DE')} Aufrufe in 7 Tagen · {change} zur Vorwoche
+      {views.toLocaleString('de-DE')} Aufrufe in 7 Tagen{change && ` · ${change} zur Vorwoche`}
     </p>
   </div>
   <div class='c-trend__bars' aria-hidden='true'>
