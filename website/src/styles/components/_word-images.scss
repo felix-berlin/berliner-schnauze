@@ -9,9 +9,9 @@
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   // Room for the 2px dashed focus ring (offset 2px) that overflow-x would clip; the negative margin keeps the layout.
-  margin: -0.25rem;
-  padding: 0.25rem;
-  scroll-padding-inline: 0.25rem;
+  margin: -0.3125rem;
+  padding: 0.3125rem;
+  scroll-padding-inline: 0.3125rem;
 
   > figure {
     flex: 0 0 82%;
@@ -35,6 +35,11 @@
     cursor: zoom-in;
     border-radius: var(--radius-sm);
     overflow: hidden;
+
+    &:focus-visible {
+      outline: 2px dashed var(--orange-400);
+      outline-offset: 2px;
+    }
 
     img {
       display: block;

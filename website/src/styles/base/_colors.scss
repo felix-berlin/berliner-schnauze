@@ -39,6 +39,9 @@ html {
   --surface-sheet: white;
   --surface-paper: var(--white-100);
   --surface-badge: color-mix(in srgb, var(--orange-200) 60%, white);
+  // Lightbox ground: dark in both themes, so these are not redefined under .dark.
+  --overlay-base: black;
+  --overlay-ink: var(--white-100);
   --paper-lift: #{vars.$paper-lift};
   --radius-sm: #{vars.$radius-sm};
   --radius-xs: #{vars.$radius-xs};

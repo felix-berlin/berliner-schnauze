@@ -12,9 +12,9 @@
   justify-content: center;
   gap: 0.75rem;
   // Dark in both themes: the photo needs a dark ground.
-  --lightbox-scrim: color-mix(in srgb, black 82%, transparent);
-  --lightbox-button-bg: color-mix(in srgb, black 45%, transparent);
-  --lightbox-ink: white;
+  --lightbox-scrim: color-mix(in srgb, var(--overlay-base) 82%, transparent);
+  --lightbox-button-bg: color-mix(in srgb, var(--overlay-base) 45%, transparent);
+  --lightbox-ink: var(--overlay-ink);
 
   background: var(--lightbox-scrim);
   backdrop-filter: blur(4px);
