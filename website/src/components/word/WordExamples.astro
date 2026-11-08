@@ -1,61 +1,32 @@
 ---
+import '@styles/components/_word-examples.scss';
 import VoiceButtons from "@components/word/VoiceButtons.vue";
 import { voiceSources } from "@composables/useVoicePlayer.ts";
-import Quote from "virtual:icons/lucide/quote";
 
 import type { WordExample } from "@services/payload/words.ts";
 
 interface WordExamplesProps {
   examples?: WordExample[];
-  rootBemClass?: string;
 }
 
-const { examples = [], rootBemClass = "c-word-list" } = Astro.props as WordExamplesProps;
-
-const hasVoice = (example?: WordExample) => {
-  const { m, w } = voiceSources(example?.exampleAudio);
-  return Boolean(m || w);
-};
+const { examples = [] } = Astro.props as WordExamplesProps;
 ---
 
-{examples.length > 0 && <div class={rootBemClass + "__example-wrapper"}>
-  <Quote class={rootBemClass + "__quote-icon"} height={44} stroke-width={0} width={44} />
-
-  {
-    examples && examples.length === 1 && (
-      <div class={rootBemClass + "__single-example"}>
-        <p class={rootBemClass + "__example"}>{examples[0]?.example}</p>
-
-        {examples[0]?.exampleExplanation && (
-          <p class={rootBemClass + "__example-explanation"}>
-            {"– " + examples[0].exampleExplanation}
+{examples.length > 0 && <ol class='c-word-examples'>
+  {examples.map((item, index) => {
+    const sources = voiceSources(item.exampleAudio);
+    return (
+      <li class='c-word-examples__item'>
+        <blockquote class='c-word-examples__quote'>
+          <p class='t-em c-word-examples__text'>
+            <span aria-hidden='true' class='c-word-examples__mark'>“</span>{item.example}
           </p>
+          {item.exampleExplanation && <p class='c-word-examples__explanation'>{"– " + item.exampleExplanation}</p>}
+        </blockquote>
+        {(sources.m || sources.w) && (
+          <VoiceButtons aria-label={`Beispiel ${index + 1} anhören`} client:visible sources={sources} />
         )}
-
-        {hasVoice(examples[0]) && (
-          <VoiceButtons aria-label="Beispiel anhören" client:visible sources={voiceSources(examples[0]?.exampleAudio)} />
-        )}
-      </div>
-    )
-  }
-
-  {
-    examples && examples.length > 1 && (
-      <ol class={rootBemClass + "__examples"}>
-        {examples.map((item, index) => (
-          <li class={rootBemClass + "__examples-list-item"}>
-            <span class={rootBemClass + "__examples-item"}>{item?.example}</span>
-            {item?.exampleExplanation && (
-              <div class={rootBemClass + "__examples-explanation"}>
-                {"– " + item.exampleExplanation}
-              </div>
-            )}
-            {hasVoice(item) && (
-              <VoiceButtons aria-label={`Beispiel ${index + 1} anhören`} client:visible sources={voiceSources(item.exampleAudio)} />
-            )}
-          </li>
-        ))}
-      </ol>
-    )
-  }
-</div>}
+      </li>
+    );
+  })}
+</ol>}

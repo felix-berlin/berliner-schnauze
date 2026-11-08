@@ -46,6 +46,51 @@
     }
   }
 
+  // Word page (SPEC §3/§5): numbers and the header rule are gone, paddings follow the viewport.
+  .c-word-main & {
+    background: var(--surface-sheet);
+    border-color: var(--rule-card);
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+
+    .c-section-card__num {
+      display: none;
+    }
+
+    .c-section-card__header {
+      padding: 0.875rem 1rem;
+      border-block-end: 0;
+
+      @include mx.breakpoint("word") {
+        padding: 1rem 1.5rem;
+      }
+    }
+
+    .c-section-card__body {
+      padding: 0 1rem 1rem;
+
+      @include mx.breakpoint("word") {
+        padding: 0 1.5rem 1.5rem;
+      }
+    }
+
+    .c-section-card__footer {
+      padding: 0.75rem 1rem;
+
+      @include mx.breakpoint("word") {
+        padding: 0.75rem 1.5rem;
+      }
+    }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.375rem 0.75rem;
+    border-block-start: 1px dashed var(--rule-inner);
+  }
+
   &__title {
     color: var(--new-blue-400);
 

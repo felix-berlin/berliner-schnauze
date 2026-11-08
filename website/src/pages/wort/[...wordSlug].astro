@@ -39,7 +39,7 @@ import { metaToSeo } from '@services/payload/seo.ts';
 import { previewDraft } from '@services/preview.ts';
 import { escapeHtml } from 'payload-app/lexical-html';
 import { seoData, canonicalUrl } from '@utils/helpers.ts';
-import { buildWordSections } from '@utils/wordSections.ts';
+import { buildWordSections, hasOrigin } from '@utils/wordSections.ts';
 import { resolvePos } from '@utils/wordPos.ts';
 import {
   alphabeticNeighbors,
@@ -102,16 +102,10 @@ const { books: affiliateBooks, disclaimers: affiliateDisclaimers } = await fetch
 // An editor-set word type wins; otherwise the automatic guess, marked as such in the hero.
 const wordPos = resolvePos(word.wordTypes[0]?.name, wordTags);
 
-// Same test as the etymology card uses to render itself.
-const hasOrigin =
-  Boolean(word.infoTextHtml) ||
-  (word.alternativeWords?.length ?? 0) > 0 ||
-  (word.translations?.length ?? 0) > 0 ||
-  (word.sources ?? []).some(Boolean);
 const sections = buildWordSections({
   draft: !!draft,
   hasExamples: wordSeoFacts.hasExamples,
-  hasOrigin,
+  hasOrigin: hasOrigin(word),
 });
 
 const firstImage = word.images[0];

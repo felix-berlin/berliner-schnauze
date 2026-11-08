@@ -12,6 +12,14 @@ export interface WordSection {
   label: string;
 }
 
+/** The etymology card renders for an origin text or sources (meanings and alternatives live in the hero). */
+export function hasOrigin(word: {
+  infoTextHtml?: string | null | undefined;
+  sources?: (string | null | undefined)[] | null | undefined;
+}): boolean {
+  return Boolean(word.infoTextHtml) || (word.sources ?? []).some(Boolean);
+}
+
 interface WordSectionFacts {
   hasOrigin: boolean;
   hasExamples: boolean;

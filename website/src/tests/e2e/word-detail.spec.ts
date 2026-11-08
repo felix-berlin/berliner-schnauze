@@ -7,8 +7,10 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
 
     await expect(page).toHaveTitle(/^wa auf Berlinerisch/);
     await expect(page.locator("h1 dfn")).toHaveText("wa");
-    await expect(page.locator("#etymologie")).toBeVisible();
-    await expect(page.locator("#etymologie")).toContainText("Bedeutung");
+    await expect(page.locator(".c-word-hero")).toContainText("nicht wahr");
+    // No origin, sources or examples: neither card renders.
+    await expect(page.locator("#etymologie")).toHaveCount(0);
+    await expect(page.locator("#beispiele")).toHaveCount(0);
   });
 
   test("umfangreiches Wort zeigt vollständige Phonologie-Section (anmachen)", async ({ page }) => {
@@ -33,10 +35,36 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
 
     await expect(page.locator("h1 dfn")).toHaveText("aasen");
 
+    // The hero owns the meanings; the etymology card only holds the origin.
+    await expect(page.locator(".c-word-hero .c-meanings li")).toHaveCount(2);
     const etymologie = page.locator("#etymologie");
-    await expect(etymologie.locator(".c-single-word__translation-list li")).toHaveCount(2);
-    await expect(etymologie.locator(".c-section-card__infotext")).toBeVisible();
-    await expect(etymologie.locator(".c-section-card__infotext")).not.toBeEmpty();
+    await expect(etymologie.getByRole("heading", { level: 2, name: "Etymologie" })).toBeVisible();
+    await expect(etymologie.locator(".c-meanings")).toHaveCount(0);
+    await expect(etymologie.locator(".c-word-origin")).toContainText("Erfundener Infotext");
+    await expect(etymologie.locator(".c-section-card__footer")).toHaveCount(0);
+
+    const beispiele = page.locator("#beispiele");
+    await expect(beispiele.locator("li")).toHaveCount(1);
+    await expect(beispiele.locator(".t-em")).toContainText("Aase nich so mit dem Wasser.");
+    await expect(beispiele).toContainText("– Verschwende das Wasser nicht.");
+    await expect(beispiele.getByRole("group")).toHaveCount(0);
+  });
+
+  test("Quellen im Footer, Beispiele mit Stimmen (anmachen)", async ({ page }) => {
+    await page.goto("/wort/anmachen");
+
+    // Sources without origin text: footer only, no body.
+    const etymologie = page.locator("#etymologie");
+    await expect(etymologie.locator(".c-section-card__body")).toHaveCount(0);
+    await expect(etymologie.locator(".c-section-card__footer")).toContainText("Quelle");
+    await expect(etymologie.locator(".c-section-card__footer")).toContainText("Erfundene Testquelle");
+
+    const beispiele = page.locator("#beispiele");
+    await expect(beispiele.locator("li")).toHaveCount(2);
+    const voices = beispiele.getByRole("group", { name: "Beispiel 1 anhören" });
+    await expect(voices.getByRole("button")).toHaveCount(2);
+    await expect(beispiele.getByRole("group", { name: "Beispiel 2 anhören" })).toHaveCount(0);
+    // Playing and the single-player rule are covered by the audio tests below.
   });
 
   test.describe("Bilder", () => {

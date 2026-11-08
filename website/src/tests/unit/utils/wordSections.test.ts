@@ -1,4 +1,4 @@
-import { buildWordSections } from "@utils/wordSections";
+import { buildWordSections, hasOrigin } from "@utils/wordSections";
 import { describe, expect, it } from "vitest";
 
 const full = { draft: false, hasExamples: true, hasOrigin: true };
@@ -31,5 +31,17 @@ describe("buildWordSections", () => {
     expect(result).not.toContain("sagste-det-noch");
     expect(result).not.toContain("kommentare");
     expect(result).toContain("verwandte-worte");
+  });
+});
+
+describe("hasOrigin", () => {
+  it("is true for an origin text or a non-empty source", () => {
+    expect(hasOrigin({ infoTextHtml: "<p>x</p>" })).toBe(true);
+    expect(hasOrigin({ sources: ["", "Meyer"] })).toBe(true);
+  });
+
+  it("is false without origin text and sources", () => {
+    expect(hasOrigin({ infoTextHtml: null, sources: ["", null] })).toBe(false);
+    expect(hasOrigin({})).toBe(false);
   });
 });
