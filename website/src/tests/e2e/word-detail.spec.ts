@@ -245,4 +245,80 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await expect(page.locator("#n-trend")).toHaveCount(0);
     await expect(page.locator(".c-badge--strong")).toHaveCount(0);
   });
+
+  test.describe("Audio „Anhören“", () => {
+    // The CSP (media-src: the production CMS host) blocks the seed's media on localhost, so playback is stubbed: play()
+    // resolves and records the src (the src setter is stubbed too). What the test covers is the UI state and the single shared player.
+    test.beforeEach(async ({ page }) => {
+      await page.addInitScript(() => {
+        (window as unknown as { played: string[] }).played = [];
+        // A real src would load, hit the CSP and fire `error`, which resets the player.
+        const sources = new WeakMap<HTMLMediaElement, string>();
+        Object.defineProperty(HTMLMediaElement.prototype, "src", {
+          get() {
+            return sources.get(this) ?? "";
+          },
+          set(value: string) {
+            sources.set(this, value);
+          },
+        });
+        HTMLMediaElement.prototype.play = function () {
+          (window as unknown as { played: string[] }).played.push(this.src);
+          return Promise.resolve();
+        };
+      });
+    });
+
+    test("Wort mit beiden Stimmen: eine Stimme zugleich, auch über Beispiele hinweg (anmachen)", async ({ page }) => {
+      const audioRequests: string[] = [];
+      page.on("request", (request) => /\.wav(\?|$)/.test(request.url()) && audioRequests.push(request.url()));
+      await page.goto("/wort/anmachen");
+
+      const row = page.getByRole("group", { exact: true, name: "Anhören" });
+      await expect(row).toBeVisible();
+      await expect(page.getByText("Anhören", { exact: true })).toHaveCount(1);
+      const male = row.getByRole("button", { name: "Männlich" });
+      const female = row.getByRole("button", { name: "Weiblich" });
+      await expect(male).toHaveAttribute("aria-pressed", "false");
+      // Sits after the hero, before the poll; preload="none": no audio request before the first click.
+      expect(audioRequests).toHaveLength(0);
+
+      // client:visible: a click before hydration would hit the plain server markup.
+      await expect(page.locator("astro-island[component-url*='WordAudio']")).not.toHaveAttribute("ssr", "");
+      await male.click();
+      await expect(male).toHaveAttribute("aria-pressed", "true");
+      await female.click();
+      await expect(female).toHaveAttribute("aria-pressed", "true");
+      await expect(male).toHaveAttribute("aria-pressed", "false");
+      expect(await page.evaluate(() => (window as unknown as { played: string[] }).played)).toEqual([
+        expect.stringContaining("stimme-m.wav"),
+        expect.stringContaining("stimme-w.wav"),
+      ]);
+
+      const example = page.getByRole("group", { name: "Beispiel 1 anhören" });
+      await example.scrollIntoViewIfNeeded();
+      await expect(page.locator("astro-island[component-url*='VoiceButtons']:not([component-url*='WordAudio'])").first()).not.toHaveAttribute("ssr", "");
+      await example.getByRole("button", { name: "Männlich" }).click();
+      await expect(example.getByRole("button", { name: "Männlich" })).toHaveAttribute("aria-pressed", "true");
+      await expect(female).toHaveAttribute("aria-pressed", "false");
+      await example.getByRole("button", { name: "Männlich" }).click();
+      await expect(example.getByRole("button", { name: "Männlich" })).toHaveAttribute("aria-pressed", "false");
+      // The second example has no audio.
+      await expect(page.getByRole("group", { name: "Beispiel 2 anhören" })).toHaveCount(0);
+    });
+
+    test("Wort mit einer Stimme zeigt einen Button (aasen)", async ({ page }) => {
+      await page.goto("/wort/aasen");
+      const row = page.getByRole("group", { exact: true, name: "Anhören" });
+      await expect(row.getByRole("button")).toHaveCount(1);
+      await expect(row.getByRole("button", { name: "Männlich" })).toBeVisible();
+    });
+
+    test("Wort ohne Audio hat weder Zeile noch Beschriftung (wa)", async ({ page }) => {
+      await page.goto("/wort/wa");
+      await expect(page.locator("h1 dfn")).toHaveText("wa");
+      await expect(page.getByText("Anhören", { exact: true })).toHaveCount(0);
+      await expect(page.getByRole("group", { exact: true, name: "Anhören" })).toHaveCount(0);
+    });
+  });
 });

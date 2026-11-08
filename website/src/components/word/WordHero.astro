@@ -1,6 +1,5 @@
 ---
 import '@styles/components/_word-hero.scss';
-import AudioPlayerList from '@components/AudioPlayerList.vue';
 import BadgeTag from '@components/BadgeTag.vue';
 import IsWordOfTheDay from '@components/word/IsWordOfTheDay.vue';
 import WordMeanings from '@components/word/WordMeanings.vue';
@@ -105,16 +104,6 @@ const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(
             {thema.name}
           </a>
         ))
-      }
-      {
-        word.berlinerischAudio.length > 0 && (
-          <AudioPlayerList
-            audio={word.berlinerischAudio}
-            client:only='vue'
-            isType='berlinerisch'
-            wordId={draft ? undefined : word.id}
-          />
-        )
       }
     </div>
   </div>

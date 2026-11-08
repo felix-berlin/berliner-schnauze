@@ -29,7 +29,7 @@ export function assertLocalDatabase(url: string | undefined): void {
 
 /** Every slug/path the seed writes, so a test can remove exactly this data again from a shared database. */
 export const SEEDED = {
-  media: ["e2e/galerie.png"],
+  media: ["e2e/galerie.png", "e2e/stimme-m.wav", "e2e/stimme-w.wav"],
   pages: ["datenschutz", "impressum"],
   posts: ["berlinerisch-fuer-anfaenger"],
 };
@@ -49,9 +49,11 @@ const THEMEN = [
 
 type SeedWord = {
   alternativeWords?: string[];
+  /** Voices of the word itself; `exampleVoices` on the first example. */
+  voices?: ("female" | "male")[];
   berlinerisch: string;
   berolinismus?: boolean;
-  examples?: { example: string; explanation?: string }[];
+  examples?: { example: string; explanation?: string; voices?: ("female" | "male")[] }[];
   images?: boolean;
   infoText?: string;
   learnMore?: string;
@@ -63,7 +65,7 @@ type SeedWord = {
 };
 
 const WORDS: SeedWord[] = [
-  { berlinerisch: "aasen", infoText: "Erfundener Infotext: das Verb ist im Beispieldatensatz nur für die Tests da.", slug: "aasen", themen: ["alltag-wohnen"], translations: ["verschwenden", "vergeuden"], alternativeWords: ["veraasen"], examples: [{ example: "Aase nich so mit dem Wasser.", explanation: "Verschwende das Wasser nicht." }] },
+  { berlinerisch: "aasen", voices: ["male"], infoText: "Erfundener Infotext: das Verb ist im Beispieldatensatz nur für die Tests da.", slug: "aasen", themen: ["alltag-wohnen"], translations: ["verschwenden", "vergeuden"], alternativeWords: ["veraasen"], examples: [{ example: "Aase nich so mit dem Wasser.", explanation: "Verschwende das Wasser nicht." }] },
   { berlinerisch: "ab", slug: "ab", themen: ["bewegung-gehen"], translations: ["weg"] },
   { berlinerisch: "Akademiebusen", images: true, slug: "akademiebusen", themen: ["kleidung-aussehen"], translations: ["Zierfransen am Kleid"] },
   { berlinerisch: "Alex", berolinismus: true, slug: "alex", themen: ["berlin-orte"], translations: ["Kurzform für den Alexanderplatz"] },
@@ -72,8 +74,9 @@ const WORDS: SeedWord[] = [
   {
     alternativeWords: ["anknipsen"],
     berlinerisch: "anmachen",
+    voices: ["male", "female"],
     examples: [
-      { example: "Mach ma det Licht an.", explanation: "Schalte das Licht ein." },
+      { example: "Mach ma det Licht an.", explanation: "Schalte das Licht ein.", voices: ["male", "female"] },
       { example: "Der hat mich anjemacht.", explanation: "Er hat mich forsch angesprochen." },
     ],
     learnMore: "https://example.org/anmachen",
@@ -119,6 +122,25 @@ const lexical = (...children: unknown[]) => ({ root: { children, direction: "ltr
 // 1x1 PNG
 const PNG = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==", "base64");
 
+// 0.3 s of silence (8 kHz, 8 bit mono WAV): a real, playable audio file for the voice buttons.
+const WAV = (() => {
+  const data = Buffer.alloc(2400, 128);
+  const head = Buffer.alloc(44);
+  head.write("RIFF", 0);
+  head.writeUInt32LE(36 + data.length, 4);
+  head.write("WAVEfmt ", 8);
+  head.writeUInt32LE(16, 16);
+  head.writeUInt16LE(1, 20);
+  head.writeUInt16LE(1, 22);
+  head.writeUInt32LE(8000, 24);
+  head.writeUInt32LE(8000, 28);
+  head.writeUInt16LE(1, 32);
+  head.writeUInt16LE(8, 34);
+  head.write("data", 36);
+  head.writeUInt32LE(data.length, 40);
+  return Buffer.concat([head, data]);
+})();
+
 /** `find` by `where`, then `update` or `create`: the seed can run any number of times. */
 async function upsert(payload: Payload, collection: "themen" | "words" | "posts" | "pages", where: Record<string, unknown>, data: Record<string, unknown>): Promise<{ id: number }> {
   // `draft` only for collections with drafts (strictDraftTypes); the union of slugs is too wide to type the calls.
@@ -142,6 +164,22 @@ export async function seedE2e(payload: Payload): Promise<void> {
     );
   })();
 
+  // Two voices: one silent WAV each.
+  const voiceMedia = new Map<"female" | "male", number>();
+  for (const [gender, name] of [["male", "stimme-m"], ["female", "stimme-w"]] as const) {
+    const wpPath = `e2e/${name}.wav`;
+    const found = await payload.find({ collection: "media", depth: 0, limit: 1, where: { wpPath: { equals: wpPath } } });
+    const doc =
+      found.docs[0] ??
+      (await payload.create({
+        collection: "media",
+        data: { alt: `Stimme ${gender}`, wpPath },
+        file: { data: WAV, mimetype: "audio/wav", name: `${name}.wav`, size: WAV.length },
+      }));
+    voiceMedia.set(gender, doc.id);
+  }
+  const audioRows = (voices: ("female" | "male")[] = []) => voices.map((gender) => ({ audio: voiceMedia.get(gender)!, gender }));
+
   const themaIds = new Map<string, number>();
   for (const [slug, name] of THEMEN) {
     const doc = await upsert(payload, "themen", { slug: { equals: slug } }, { description: `Beispielwörter zum Thema ${name}.`, name, slug });
@@ -154,8 +192,9 @@ export async function seedE2e(payload: Payload): Promise<void> {
       _status: "published",
       alternativeWords: (w.alternativeWords ?? []).map((alternativeWord) => ({ alternativeWord })),
       berlinerisch: w.berlinerisch,
+      berlinerischAudio: audioRows(w.voices),
       berolinismus: w.berolinismus ?? false,
-      examples: (w.examples ?? []).map((e) => ({ example: e.example, exampleExplanation: e.explanation })),
+      examples: (w.examples ?? []).map((e) => ({ example: e.example, exampleAudio: audioRows(e.voices), exampleExplanation: e.explanation })),
       images: w.images ? [media.id] : [],
       infoText: w.infoText ? lexical(paragraph(w.infoText)) : null,
       learnMore: w.learnMore ?? null,

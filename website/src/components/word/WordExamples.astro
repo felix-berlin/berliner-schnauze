@@ -1,5 +1,6 @@
 ---
-import AudioPlayerList from "@components/AudioPlayerList.vue";
+import VoiceButtons from "@components/word/VoiceButtons.vue";
+import { voiceSources } from "@composables/useVoicePlayer.ts";
 import Quote from "virtual:icons/lucide/quote";
 
 import type { WordExample } from "@services/payload/words.ts";
@@ -10,6 +11,11 @@ interface WordExamplesProps {
 }
 
 const { examples = [], rootBemClass = "c-word-list" } = Astro.props as WordExamplesProps;
+
+const hasVoice = (example?: WordExample) => {
+  const { m, w } = voiceSources(example?.exampleAudio);
+  return Boolean(m || w);
+};
 ---
 
 {examples.length > 0 && <div class={rootBemClass + "__example-wrapper"}>
@@ -26,8 +32,8 @@ const { examples = [], rootBemClass = "c-word-list" } = Astro.props as WordExamp
           </p>
         )}
 
-        {(examples[0]?.exampleAudio.length ?? 0) > 0 && (
-          <AudioPlayerList audio={examples[0]?.exampleAudio} client:only="vue" isType="example" />
+        {hasVoice(examples[0]) && (
+          <VoiceButtons aria-label="Beispiel anhören" client:visible sources={voiceSources(examples[0]?.exampleAudio)} />
         )}
       </div>
     )
@@ -36,7 +42,7 @@ const { examples = [], rootBemClass = "c-word-list" } = Astro.props as WordExamp
   {
     examples && examples.length > 1 && (
       <ol class={rootBemClass + "__examples"}>
-        {examples.map((item) => (
+        {examples.map((item, index) => (
           <li class={rootBemClass + "__examples-list-item"}>
             <span class={rootBemClass + "__examples-item"}>{item?.example}</span>
             {item?.exampleExplanation && (
@@ -44,8 +50,8 @@ const { examples = [], rootBemClass = "c-word-list" } = Astro.props as WordExamp
                 {"– " + item.exampleExplanation}
               </div>
             )}
-            {item.exampleAudio.length > 0 && (
-              <AudioPlayerList audio={item?.exampleAudio} client:only="vue" isType="example" />
+            {hasVoice(item) && (
+              <VoiceButtons aria-label={`Beispiel ${index + 1} anhören`} client:visible sources={voiceSources(item.exampleAudio)} />
             )}
           </li>
         ))}

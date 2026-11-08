@@ -13,6 +13,7 @@ import WordLearnMore from '@components/word/WordLearnMore.astro';
 import WordComments from '@components/comments/WordComments.vue';
 import WordFeedbackCard from '@components/word-feedback/WordFeedbackCard.vue';
 import WordPageFooter from '@components/word/WordPageFooter.astro';
+import WordAudio from '@components/word/WordAudio.vue';
 import WordTrendBox from '@components/word/WordTrendBox.astro';
 import WordSectionBeispiele from '@components/word/WordSectionBeispiele.astro';
 import WordSectionEtymologie from '@components/word/WordSectionEtymologie.astro';
@@ -28,6 +29,7 @@ import WordTabBar from '@components/word/WordTabBar.vue';
 import Layout from '@layouts/Layout.astro';
 import { fetchAffiliateData } from '@services/payload/site.ts';
 import { fetchDraftWord, fetchWordBySlug, translationTexts } from '@services/payload/words.ts';
+import { voiceSources } from '@composables/useVoicePlayer.ts';
 import { getWordTrend } from '@services/payload/wordTrend.ts';
 import { fetchWordRefs, toWordRef } from '@services/payload/wordRefs.ts';
 import { metaToSeo } from '@services/payload/seo.ts';
@@ -102,6 +104,7 @@ const sections = buildWordSections({
 });
 
 const firstImage = word.images[0];
+const voices = voiceSources(word.berlinerischAudio);
 const firstAudio = word.berlinerischAudio[0];
 const seo = metaToSeo(word.meta, 'article');
 
@@ -231,6 +234,9 @@ const schemaJson = () => {
 
       <div class='c-word-main__content'>
         {trend && <WordTrendBox {...trend} />}
+
+        {/* client:visible: the row sits right under the hero, but nothing needs JS before a click and the buttons are server-rendered. */}
+        {(voices.m || voices.w) && <WordAudio client:visible sources={voices} wordId={draft ? undefined : word.id} />}
 
         {!draft && (
           <div id='sagste-det-noch'>
