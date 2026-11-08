@@ -92,6 +92,8 @@ const WORDS: SeedWord[] = [
   { berlinerisch: "anmachn", slug: "anmachn", themen: ["beziehungen-soziales"], translations: ["Kurzform von anmachen"] },
   { berlinerisch: "Ballast der Republik", related: ["aasen", "alex"], slug: "ballast-der-republik", themen: ["berlin-orte"], translations: ["Spitzname für ein Gebäude"] },
   { berlinerisch: "wa", slug: "wa", translations: ["nicht wahr"] },
+  // 36 letters and six meanings: long-word and many-meanings edge cases (invented).
+  { berlinerisch: "Rinnsteinschwalbenbeobachtungsposten", slug: "rinnsteinschwalbenbeobachtungsposten", translations: ["Testbedeutung eins", "Testbedeutung zwei", "Testbedeutung drei", "Testbedeutung vier", "Testbedeutung fünf", "Testbedeutung sechs"] },
   { berlinerisch: "Anmache", slug: "anmache", themen: ["beziehungen-soziales"], translations: ["plumpe Annäherung", "Versuch, sich jemandem zu nähern"] },
   { berlinerisch: "Anmacher", slug: "anmacher", themen: ["beziehungen-soziales"], translations: ["wer sich aufdringlich nähern will"] },
   { berlinerisch: "Bordstein", slug: "bordstein", themen: ["berlin-orte"], translations: ["Kante der Straße"] },

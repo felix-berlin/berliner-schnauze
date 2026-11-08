@@ -144,7 +144,7 @@ export const capitalizeFirstLetter = (word: string) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
 };
 
-const GERMAN_LETTER_FREQ: Record<string, number> = {
+export const GERMAN_LETTER_FREQ: Record<string, number> = {
   a: 6.51,
   b: 1.96,
   c: 3.06,

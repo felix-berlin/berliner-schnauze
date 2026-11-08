@@ -1,0 +1,198 @@
+---
+import '@styles/components/_word-analysis.scss';
+import LetterTiles from '@components/word/LetterTiles.vue';
+import SectionCard from '@components/word/SectionCard.astro';
+import { routeToWord } from '@utils/helpers';
+import { toLetterTiles } from '@utils/letterTiles';
+import {
+  capitalizeFirstLetter,
+  countLetters,
+  findWordByHeadword,
+  GERMAN_LETTER_FREQ,
+  letterFrequency,
+  wordCuriosities,
+  type WordRef,
+} from '@utils/wordHelper';
+import { hypher } from 'payload-app/word-derived';
+
+interface Props {
+  word: string;
+  /** Compound parts stored on save (derived.decomposition), empty for a non-compound. */
+  parts: string[];
+  allWords: WordRef[];
+  /** Orthographie "Ähnlich geschrieben". */
+  similarSpelling: WordRef[];
+  /** Phonologie "Ähnlich klingende Wörter". */
+  soundingWords: WordRef[];
+  anagrams: WordRef[];
+  /** The word type shown in badge and sidebar; for a single word it is the grammar card's type too. */
+  pos?: string | undefined;
+  wordTags: Record<string, string[]>[];
+}
+
+const { word, parts, allWords, similarSpelling, soundingWords, anagrams, pos, wordTags } =
+  Astro.props;
+
+const syllables = hypher.hyphenate(word);
+const hasParts = parts.length >= 2;
+
+// Grammar: one row per token of the NLP analysis; a single token takes the shared `pos`.
+const tokens = Object.keys(wordTags[0] ?? {});
+const grammar = tokens.map((key) => {
+  const tags = wordTags[0]![key]!;
+  const shown = tokens.length === 1 && pos ? [pos, ...tags.slice(1)] : tags;
+  return { label: shown.includes('Nomen') ? capitalizeFirstLetter(key) : key, tags: shown };
+});
+const grammarRows = grammar.length > 0 ? grammar : pos ? [{ label: word, tags: [pos] }] : [];
+
+const letters = countLetters(word);
+const curiosities = wordCuriosities(word);
+const stats = [
+  ['Buchstaben', curiosities.totalLetterCount],
+  ['Vokale', letters.vowels],
+  ['Konsonanten', letters.consonants],
+  ['Verschiedene', curiosities.uniqueLetterCount],
+] as const;
+const { doubleLetters, longestConsonantRun, longestVowelRun } = curiosities;
+const facts = [
+  curiosities.isPalindrome ? 'Palindrom – vorwärts wie rückwärts lesbar' : 'Kein Palindrom',
+  curiosities.isIsogram && 'Isogramm – kein Buchstabe wiederholt sich',
+  curiosities.isAlternating && 'Vokal und Konsonant wechseln sich perfekt ab',
+  curiosities.hasAllVowels && 'Enthält alle 8 deutschen Vokale (a, e, i, o, u, ä, ö, ü)',
+  curiosities.hasUmlaut && 'Enthält Umlaut (ä, ö oder ü)',
+  doubleLetters.length > 0 &&
+    `Doppelbuchstabe${doubleLetters.length > 1 ? 'n' : ''}: ${doubleLetters.map((l) => l + l).join(', ')}`,
+  longestConsonantRun.length >= 3 &&
+    `Längste Konsonantenfolge: „${longestConsonantRun.chars}“ (${longestConsonantRun.length} Buchstaben)`,
+  longestVowelRun.length >= 2 &&
+    `Längste Vokalkette: „${longestVowelRun.chars}“ (${longestVowelRun.length} Buchstaben)`,
+  `Beginnt mit ${curiosities.startsWithConsonant ? 'Konsonant' : 'Vokal'}, endet mit ${curiosities.endsWithConsonant ? 'Konsonant' : 'Vokal'}`,
+].filter(Boolean) as string[];
+---
+
+<section class='c-word-analysis' id='analyse' aria-labelledby='heading-analyse'>
+  <h2 class='c-band' id='heading-analyse'>Sprachliche Analyse</h2>
+
+  <div class='c-word-analysis__pair'>
+    <SectionCard id='orthographie' title='Orthographie' level={3}>
+      <div class='c-word-analysis__block'>
+        <div class='t-label'>Silbentrennung</div>
+        <div class='t-em'>
+          {syllables.join(' · ')}
+          <span class='c-word-analysis__count'>· {syllables.length} {syllables.length === 1 ? 'Silbe' : 'Silben'}</span>
+        </div>
+      </div>
+      {hasParts && (
+        <div class='c-word-analysis__block'>
+          <div class='t-label'>Wortzerlegung</div>
+          <div class='c-word-analysis__parts'>
+            {parts.map((part, i) => {
+              const linked = findWordByHeadword(allWords, part);
+              return (
+                <>
+                  {i > 0 && <span aria-hidden='true'>+</span>}
+                  {linked ? (
+                    <a class='c-textlink c-textlink--inline' href={routeToWord(linked.slug)}>
+                      {capitalizeFirstLetter(part)}
+                    </a>
+                  ) : (
+                    <span>{capitalizeFirstLetter(part)}</span>
+                  )}
+                </>
+              );
+            })}
+          </div>
+        </div>
+      )}
+      {similarSpelling.length > 0 && (
+        <div
+          class='c-word-analysis__block'
+          data-track-content
+          data-content-name='Similar Spelling'
+          data-content-piece={similarSpelling[0]?.berlinerisch ?? ''}
+          data-content-target='#'
+        >
+          <div class='t-label'>Ähnlich geschrieben</div>
+          <ul class='c-word-analysis__links'>
+            {similarSpelling.map((w) => (
+              <li><a class='c-textlink c-textlink--inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a></li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {anagrams.length > 0 && (
+        <div
+          class='c-word-analysis__block'
+          id='anagramme'
+          data-track-content
+          data-content-name='Word Anagrams'
+          data-content-piece={anagrams[0]?.berlinerisch ?? ''}
+          data-content-target='#'
+        >
+          <div class='t-label'>Anagramme</div>
+          <ul class='c-word-analysis__links'>
+            {anagrams.map((w) => (
+              <li><a class='c-textlink c-textlink--inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a></li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </SectionCard>
+
+    {grammarRows.length > 0 && (
+      <SectionCard id='grammatik' title='Grammatik' level={3}>
+        <div class='c-word-analysis__block'>
+          <div class='t-label'>Wortart (NLP-Analyse)</div>
+          <ul class='c-word-analysis__grammar'>
+            {grammarRows.map((row) => (
+              <li>
+                <b>{row.label}</b>
+                <span class='c-word-analysis__tags'>
+                  {row.tags.map((tag) => <span class='c-word-analysis__tag'>{tag}</span>)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </SectionCard>
+    )}
+  </div>
+
+  <SectionCard id='linguistik' title='Quantitative Linguistik' level={3}>
+    <div class='c-word-analysis__tiles'>
+      <div class='t-label'>Buchstaben &amp; Häufigkeit</div>
+      <LetterTiles
+        client:visible
+        letters={toLetterTiles(word, GERMAN_LETTER_FREQ)}
+        frequencies={letterFrequency(word)}
+      />
+      <dl class='c-word-analysis__stats'>
+        {stats.map(([label, value]) => (
+          <div><dt>{label}</dt><dd>{value}</dd></div>
+        ))}
+      </dl>
+      <ul class='c-word-analysis__facts'>
+        {facts.map((fact) => <li>{fact}</li>)}
+      </ul>
+    </div>
+    <Fragment slot='footer'>
+      <span>
+        Häufigkeit: knapp 180 Mrd. Zeichen aus dem Deutschen Referenzkorpus ·
+        <a class='c-textlink c-textlink--inline' href='https://de.wikipedia.org/wiki/Buchstabenh%C3%A4ufigkeit' target='_blank' rel='noopener noreferrer'>Wikipedia</a>
+      </span>
+    </Fragment>
+  </SectionCard>
+
+  {soundingWords.length > 0 && (
+    <SectionCard id='phonologie' title='Phonologie' level={3}>
+      <div class='c-word-analysis__block'>
+        <div class='t-label'>Ähnlich klingende Wörter</div>
+        <ul class='c-word-analysis__links'>
+          {soundingWords.map((w) => (
+            <li><a class='c-textlink c-textlink--inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a></li>
+          ))}
+        </ul>
+      </div>
+    </SectionCard>
+  )}
+</section>

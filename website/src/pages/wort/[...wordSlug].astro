@@ -6,7 +6,6 @@ import '@styles/plugins/astro-breadcrumbs.scss';
 
 import RandomWordButton from '@components/RandomWordButton.vue';
 import RelatedWords from '@components/RelatedWords.vue';
-import WordAnagrams from '@components/word/WordAnagrams.astro';
 import Lightbox from '@components/word/Lightbox.vue';
 import WordImages from '@components/word/WordImages.astro';
 import { getImage } from 'astro:assets';
@@ -20,13 +19,10 @@ import WordAudio from '@components/word/WordAudio.vue';
 import WordTrendBox from '@components/word/WordTrendBox.astro';
 import WordSectionBeispiele from '@components/word/WordSectionBeispiele.astro';
 import WordSectionEtymologie from '@components/word/WordSectionEtymologie.astro';
-import WordSectionGrammatik from '@components/word/WordSectionGrammatik.astro';
-import WordSectionLinguistik from '@components/word/WordSectionLinguistik.astro';
 import WordSectionNachbarn from '@components/word/WordSectionNachbarn.astro';
-import WordSectionOrthographie from '@components/word/WordSectionOrthographie.astro';
-import WordSectionPhonologie from '@components/word/WordSectionPhonologie.astro';
 import WordSectionVerwandteWorte from '@components/word/WordSectionVerwandteWorte.astro';
 import BookRecommendations from '@components/word/BookRecommendations.astro';
+import WordAnalysis from '@components/word/WordAnalysis.astro';
 import WordSidebar from '@components/word/WordSidebar.astro';
 import WordTabBar from '@components/word/WordTabBar.vue';
 import Layout from '@layouts/Layout.astro';
@@ -257,24 +253,16 @@ const schemaJson = () => {
 
         <WordSectionBeispiele examples={word.examples} />
 
-        <div class='c-word-main__group' id='analyse'>
-          <WordSectionOrthographie
-            allWords={wordRefs}
-            parts={word.derived.decomposition ?? []}
-            word={berlinerisch}
-          />
-
-          <WordSectionLinguistik word={berlinerisch} />
-
-          <WordSectionGrammatik pos={wordPos?.pos} wordTags={wordTags} />
-
-          <WordSectionPhonologie
-            soundingWords={soundingWordsResult}
-            similarSpelling={similarSpellingResult}
-          />
-
-          <WordAnagrams anagrams={anagramsResult} />
-        </div>
+        <WordAnalysis
+          allWords={wordRefs}
+          anagrams={anagramsResult}
+          parts={word.derived.decomposition ?? []}
+          pos={wordPos?.pos}
+          similarSpelling={similarSpellingResult}
+          soundingWords={soundingWordsResult}
+          word={berlinerisch}
+          wordTags={wordTags}
+        />
 
         {!hasImages && word.learnMore && <WordLearnMore learnMore={word.learnMore} />}
 

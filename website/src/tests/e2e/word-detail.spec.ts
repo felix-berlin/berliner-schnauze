@@ -20,14 +20,14 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
 
     const phonologie = page.locator("#phonologie");
     await expect(phonologie).toBeVisible();
-    await expect(
-      phonologie.getByRole("heading", { name: "Ähnlich klingende Wörter" }),
-    ).toBeVisible();
-    await expect(phonologie.getByRole("heading", { name: "Ähnlich geschrieben" })).toBeVisible();
+    await expect(phonologie.getByRole("heading", { name: "Phonologie" })).toBeVisible();
+    await expect(phonologie.getByText("Ähnlich klingende Wörter")).toBeVisible();
     await expect(phonologie.getByRole("link").first()).toHaveAttribute("href", /^\/wort\//);
 
-    const grammatikTags = page.locator("#grammatik .c-section-card__grammar-tag");
-    await expect(grammatikTags).toHaveCount(3);
+    // "Ähnlich geschrieben" lives in the Orthographie card now.
+    await expect(page.locator("#orthographie").getByText("Ähnlich geschrieben")).toBeVisible();
+
+    await expect(page.locator("#grammatik li").first()).toBeVisible();
   });
 
   test("Wort mit mehreren Bedeutungen und historischem Infotext (aasen)", async ({ page }) => {
@@ -144,7 +144,6 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await page.goto("/wort/alsche");
 
     await expect(page.locator("h1 dfn")).toHaveText("Alsche");
-    await expect(page.getByRole("heading", { name: "Buchstabenspiele" })).toBeVisible();
 
     const anagramme = page.locator("#anagramme");
     await expect(anagramme).toBeVisible();
@@ -401,5 +400,40 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await expect(page.getByText("Anhören", { exact: true })).toHaveCount(0);
       await expect(page.getByRole("group", { exact: true, name: "Anhören" })).toHaveCount(0);
     });
+  });
+
+  test("Quantitative Linguistik: Kacheln sind dekorativ, Häufigkeiten per Toggle (anmachen)", async ({
+    page,
+  }) => {
+    await page.goto("/wort/anmachen");
+
+    const card = page.locator("#linguistik");
+    const tiles = card.locator(".c-letters");
+    await expect(tiles).toHaveAttribute("aria-hidden", "true");
+    await expect(tiles.locator(".c-letters__tile")).toHaveCount(8);
+
+    // client:visible island: hydrates once scrolled into view; a click before would do nothing.
+    await card.scrollIntoViewIfNeeded();
+    await expect(card.locator("astro-island:not([ssr])")).toBeAttached();
+    const toggle = card.getByRole("button", { name: "Häufigkeiten als Zahlen zeigen" });
+    await expect(toggle).toHaveAttribute("aria-expanded", "false");
+    await toggle.click();
+    await expect(card.getByRole("button", { name: "Häufigkeiten ausblenden" })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
+    // a (6,51 %) is distinct once, e (17,40 %) is "sehr häufig"
+    await expect(card.locator("#letter-frequencies")).toContainText("17,40 % · sehr häufig");
+  });
+
+  test("langes Wort (36 Zeichen) läuft mobil nicht über", async ({ page }) => {
+    await page.setViewportSize({ height: 844, width: 390 });
+    await page.goto("/wort/rinnsteinschwalbenbeobachtungsposten");
+
+    await expect(page.locator("#linguistik .c-letters__tile")).toHaveCount(36);
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - window.innerWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
   });
 });
