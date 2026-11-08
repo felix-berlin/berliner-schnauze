@@ -143,6 +143,8 @@ export const loadFeedback = (wordId: number): Promise<void> => {
 export const sendFeedback = async (
   wordId: number,
   patch: Partial<MyFeedback>,
+  /** Replaces the generic text when the server sent no reason of its own. */
+  fallbackMessage = "Hat nich jeklappt, versuch's nochma.",
 ): Promise<boolean> => {
   const seq = ++sent;
   try {
@@ -156,7 +158,7 @@ export const sendFeedback = async (
       const { error } = (await res.json().catch(() => ({}))) as { error?: string };
       console.error(`[word-feedback] send ${wordId} failed: ${res.status}`, error);
       createToastNotify({
-        message: error ?? "Hat nich jeklappt, versuch's nochma.",
+        message: error ?? fallbackMessage,
         status: res.status === 429 ? "warning" : "error",
       });
       return false;
@@ -172,7 +174,7 @@ export const sendFeedback = async (
     return true;
   } catch (error) {
     console.error(`[word-feedback] send ${wordId} failed:`, error);
-    createToastNotify({ message: "Hat nich jeklappt, versuch's nochma.", status: "error" });
+    createToastNotify({ message: fallbackMessage, status: "error" });
     return false;
   }
 };

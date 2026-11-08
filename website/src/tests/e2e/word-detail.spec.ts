@@ -111,4 +111,112 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await expect(page.locator(".c-word-sidebar")).toBeVisible();
     await expect(page.getByRole("navigation", { name: "Inhalt der Wortseite" })).toBeHidden();
   });
+
+  test.describe("Hero v3", () => {
+    test("Bedeutungen als Liste, Wortart-Badge, Kategorie-Link (anmachen)", async ({ page }) => {
+      await page.setViewportSize({ height: 800, width: 1280 });
+      await page.goto("/wort/anmachen");
+
+      const hero = page.locator("#bedeutung");
+      await expect(hero.locator("h1 dfn")).toHaveText("anmachen");
+      await expect(hero.locator(".t-label")).toHaveText("Bedeutungen");
+      await expect(hero.locator("ol.c-meanings li")).toHaveText([
+        "einschalten",
+        "sich jemandem forsch nähern",
+      ]);
+      await expect(hero.locator(".c-badge").first()).toHaveText(/\S/);
+      await expect(hero.locator('a[href^="/themen/"]').first()).toBeVisible();
+    });
+
+    test("einzelne Bedeutung als Absatz (wa)", async ({ page }) => {
+      await page.goto("/wort/wa");
+      const hero = page.locator("#bedeutung");
+      await expect(hero.locator(".t-label")).toHaveText("Bedeutung");
+      await expect(hero.locator("p.t-em")).toHaveText("nicht wahr");
+      await expect(hero.locator("ol.c-meanings")).toHaveCount(0);
+    });
+
+    test("Tab-Reihenfolge: Like, Menü, Kategorie", async ({ page }) => {
+      await page.setViewportSize({ height: 800, width: 1280 });
+      await page.goto("/wort/anmachen");
+      const hero = page.locator("#bedeutung");
+      await expect(hero.getByRole("button", { name: /^Jefällt ma/ })).toBeVisible();
+
+      await hero.getByRole("button", { name: /^Jefällt ma/ }).focus();
+      // Focus on the group reveals Dislike, which is part of the order (Spec §14).
+      await page.keyboard.press("Tab");
+      await expect(hero.getByRole("button", { name: /^Nee/ })).toBeFocused();
+      await page.keyboard.press("Tab");
+      await expect(hero.getByRole("button", { name: "Weitere Aktionen" })).toBeFocused();
+      await page.keyboard.press("Tab");
+      await expect(hero.locator('a[href^="/themen/"]').first()).toBeFocused();
+    });
+
+    test("Desktop: Dislike erscheint erst bei Hover auf die Gruppe", async ({ page }) => {
+      await page.setViewportSize({ height: 800, width: 1280 });
+      await page.goto("/wort/anmachen");
+      const hero = page.locator("#bedeutung");
+      const like = hero.getByRole("button", { name: /^Jefällt ma/ });
+      const dislike = hero.getByRole("button", { name: /^Nee/ });
+      await expect(like).toBeVisible();
+      await expect(dislike).toBeHidden();
+      await like.hover();
+      await expect(dislike).toBeVisible();
+      await page.mouse.move(5, 400);
+      await expect(dislike).toBeHidden();
+    });
+
+    test("Touch: Dislike bleibt versteckt", async ({ browser, browserName }) => {
+      test.skip(browserName !== "chromium", "isMobile is not available in Firefox");
+      const context = await browser.newContext({
+        baseURL: test.info().project.use.baseURL,
+        hasTouch: true,
+        isMobile: true,
+        viewport: { height: 800, width: 390 },
+      });
+      const page = await context.newPage();
+      await page.goto("/wort/anmachen");
+      const hero = page.locator("#bedeutung");
+      await expect(hero.getByRole("button", { name: /^Jefällt ma/ })).toBeVisible();
+      await expect(hero.getByRole("button", { name: /^Nee/ })).toBeHidden();
+      await context.close();
+    });
+
+    test("Menü: Wort kopieren zeigt Haken statt Toast, Esc gibt den Fokus zurück", async ({
+      browserName,
+      context,
+      page,
+    }) => {
+      test.skip(browserName !== "chromium", "clipboard permissions differ per browser");
+      await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+      await page.setViewportSize({ height: 800, width: 1280 });
+      await page.goto("/wort/anmachen");
+
+      const hero = page.locator("#bedeutung");
+      const trigger = hero.getByRole("button", { name: "Weitere Aktionen" });
+      await trigger.click();
+      await expect(trigger).toHaveAttribute("aria-expanded", "true");
+      const menu = page.getByRole("menu", { name: "Weitere Aktionen" });
+      await expect(menu.getByRole("menuitem")).toHaveText([
+        "Wort teilen",
+        "Link kopieren",
+        "Wort kopieren",
+      ]);
+
+      await menu.getByRole("menuitem", { name: "Wort kopieren" }).click();
+      await expect(menu.getByRole("menuitem", { name: "Wort kopiert" })).toHaveAttribute(
+        "data-done",
+        "true",
+      );
+      await expect(page.locator(".c-toast-notify")).toHaveCount(0);
+      expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("anmachen");
+      await expect(menu.getByRole("menuitem", { name: "Wort kopieren" })).toBeVisible({
+        timeout: 4000,
+      });
+
+      await page.keyboard.press("Escape");
+      await expect(menu).toBeHidden();
+      await expect(trigger).toBeFocused();
+    });
+  });
 });

@@ -322,4 +322,121 @@ describe("WordOptionDropdown.vue", () => {
     await wrapper.find("[aria-label='Wort teilen']").trigger("click");
     await vi.waitFor(() => expect(reportWord).toHaveBeenCalledWith(5, "share"));
   });
+
+  describe("variant word (v3 word page)", () => {
+    const mountWord = async (extra: Record<string, unknown> = {}) => {
+      const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+      return mount(WordOptionDropdown, {
+        attachTo: document.body,
+        props: { berlinerisch: "Schnauze", slug: "schnauze", variant: "word", wordId: 5, ...extra },
+      });
+    };
+
+    it("renders the icon button, a menu and three menuitems", async () => {
+      const wrapper = await mountWord();
+      const btn = wrapper.find(".c-icon-button");
+      expect(btn.attributes("aria-label")).toBe("Weitere Aktionen");
+      expect(btn.attributes("aria-haspopup")).toBe("menu");
+      expect(wrapper.find('[role="menu"]').exists()).toBe(true);
+      expect(wrapper.findAll('[role="menuitem"]').map((i) => i.text())).toEqual([
+        "Wort teilen",
+        "Link kopieren",
+        "Wort kopieren",
+      ]);
+      wrapper.unmount();
+    });
+
+    it("copies the link, shows the check state for 2s, announces it and shows no toast", async () => {
+      vi.useFakeTimers();
+      const wrapper = await mountWord();
+      const items = () => wrapper.findAll('[role="menuitem"]');
+      await items()[1].trigger("click");
+      await nextTick();
+      expect(items()[1].text()).toBe("Link kopiert");
+      expect(items()[1].attributes("data-done")).toBe("true");
+      expect(wrapper.find('[aria-live="polite"]').text()).toBe("Link kopiert");
+      const { createToastNotify } = await import("@stores/toastNotify.ts");
+      expect(vi.mocked(createToastNotify)).not.toHaveBeenCalled();
+      vi.advanceTimersByTime(2000);
+      await nextTick();
+      expect(items()[1].text()).toBe("Link kopieren");
+      expect(items()[1].attributes("data-done")).toBe("false");
+      expect(wrapper.find('[aria-live="polite"]').text()).toBe("");
+      vi.useRealTimers();
+      wrapper.unmount();
+    });
+
+    it("copy word shows 'Wort kopiert' without a toast", async () => {
+      const wrapper = await mountWord();
+      await wrapper.findAll('[role="menuitem"]')[2].trigger("click");
+      await nextTick();
+      expect(wrapper.findAll('[role="menuitem"]')[2].text()).toBe("Wort kopiert");
+      const { createToastNotify } = await import("@stores/toastNotify.ts");
+      expect(vi.mocked(createToastNotify)).not.toHaveBeenCalled();
+      wrapper.unmount();
+    });
+
+    it("shares and reports the share, without a toast", async () => {
+      const { useShare } = await import("@vueuse/core");
+      const shareMock = vi.fn().mockResolvedValue(undefined);
+      vi.mocked(useShare).mockReturnValueOnce({
+        isSupported: ref(true),
+        share: shareMock,
+      });
+      const { reportWord } = await import("@utils/wordPulse.ts");
+      const wrapper = await mountWord();
+      await wrapper.findAll('[role="menuitem"]')[0].trigger("click");
+      expect(shareMock).toHaveBeenCalled();
+      await vi.waitFor(() => expect(reportWord).toHaveBeenCalledWith(5, "share"));
+      const { createToastNotify } = await import("@stores/toastNotify.ts");
+      expect(vi.mocked(createToastNotify)).not.toHaveBeenCalled();
+      wrapper.unmount();
+    });
+
+    it("without the Web Share API the share item copies the link instead", async () => {
+      const { useShare, useClipboard } = await import("@vueuse/core");
+      const copyMock = vi.fn().mockResolvedValue(undefined);
+      vi.mocked(useShare).mockReturnValueOnce({
+        isSupported: ref(false),
+        share: vi.fn(),
+      });
+      vi.mocked(useClipboard).mockReturnValueOnce({
+        copied: ref(false),
+        copy: copyMock,
+        isSupported: ref(true),
+        text: ref(""),
+      });
+      const wrapper = await mountWord();
+      await wrapper.findAll('[role="menuitem"]')[0].trigger("click");
+      await nextTick();
+      expect(copyMock).toHaveBeenCalledWith("https://berliner-schnauze.wtf/wort/schnauze");
+      expect(wrapper.findAll('[role="menuitem"]')[1].text()).toBe("Link kopiert");
+      wrapper.unmount();
+    });
+
+    it("arrow keys move focus between items and wrap", async () => {
+      const wrapper = await mountWord();
+      const items = wrapper.findAll('[role="menuitem"]');
+      (items[0].element as HTMLElement).focus();
+      await wrapper.find('[role="menu"]').trigger("keydown", { key: "ArrowDown" });
+      expect(document.activeElement).toBe(items[1].element);
+      await wrapper.find('[role="menu"]').trigger("keydown", { key: "ArrowUp" });
+      await wrapper.find('[role="menu"]').trigger("keydown", { key: "ArrowUp" });
+      expect(document.activeElement).toBe(items[2].element);
+      wrapper.unmount();
+    });
+
+    it("list variant keeps its toasts", async () => {
+      const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+      const wrapper = mount(WordOptionDropdown, {
+        props: { berlinerisch: "Schnauze", slug: "schnauze" },
+      });
+      await wrapper.find("[aria-label='Wort kopieren']").trigger("click");
+      await nextTick();
+      const { createToastNotify } = await import("@stores/toastNotify.ts");
+      expect(vi.mocked(createToastNotify)).toHaveBeenCalledWith(
+        expect.objectContaining({ message: "Wort kopiert" }),
+      );
+    });
+  });
 });

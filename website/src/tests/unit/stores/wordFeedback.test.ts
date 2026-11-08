@@ -204,6 +204,19 @@ describe("sendFeedback", () => {
       expect.objectContaining({ message: "Hat nich jeklappt, versuch's nochma." }),
     );
   });
+  it("a caller's fallback message replaces the generic one, the server's reason still wins", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("down")));
+    await sendFeedback(1, { reaction: "like" }, "Ditt hat nich jeklappt.");
+    expect(toast).toHaveBeenLastCalledWith(
+      expect.objectContaining({ message: "Ditt hat nich jeklappt." }),
+    );
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({ json: async () => ({ error: "Zu oft." }), ok: false, status: 429 }),
+    );
+    await sendFeedback(1, { reaction: "like" }, "Ditt hat nich jeklappt.");
+    expect(toast).toHaveBeenLastCalledWith(expect.objectContaining({ message: "Zu oft." }));
+  });
   it("non-ok response counts as failure", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ json: async () => ({}), ok: false }));
     expect(await sendFeedback(1, { usage: "say" })).toBe(false);

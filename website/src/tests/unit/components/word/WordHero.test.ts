@@ -6,10 +6,12 @@ import { createAstroRender } from "../../helpers";
 vi.mock("@styles/components/_word-hero.scss", () => ({}));
 
 const makeWord = (overrides: Record<string, unknown> = {}) => ({
+  alternativeWords: [],
   article: "die",
   berlinerisch: "Schnauze",
   berlinerischAudio: [],
   berolinismus: false,
+  id: 1,
   slug: "schnauze",
   themen: [],
   ...overrides,
@@ -23,49 +25,72 @@ describe("WordHero.astro", () => {
     render = await createAstroRender(WordHero);
   }, 30_000);
 
-  it("renders .c-word-hero header element", async () => {
-    const result = await render({ word: makeWord(), wortartLabel: undefined });
+  it("renders .c-word-hero header element with the #bedeutung anchor", async () => {
+    const result = await render({ word: makeWord() });
     expect(result).toContain("c-word-hero");
+    expect(result).toContain('id="bedeutung"');
   });
 
-  it("renders the berlinerisch word in a dfn tag", async () => {
-    const result = await render({ word: makeWord(), wortartLabel: undefined });
-    expect(result).toContain("Schnauze");
-    expect(result).toContain("<dfn>");
+  it("renders the berlinerisch word as headword in a dfn tag", async () => {
+    const result = await render({ word: makeWord() });
+    expect(result).toMatch(/<dfn class="c-headword[^"]*">Schnauze<\/dfn>/);
   });
 
-  it("renders article when provided", async () => {
-    const result = await render({ word: makeWord({ article: "die" }), wortartLabel: undefined });
-    expect(result).toContain("die");
-    expect(result).toContain("c-word-hero__word-article");
+  it("renders article when provided, not when absent", async () => {
+    expect(await render({ word: makeWord({ article: "die" }) })).toContain(
+      "c-word-hero__word-article",
+    );
+    expect(await render({ word: makeWord({ article: null }) })).not.toContain(
+      "c-word-hero__word-article",
+    );
   });
 
-  it("does not render article element when article is absent", async () => {
-    const result = await render({ word: makeWord({ article: null }), wortartLabel: undefined });
-    expect(result).not.toContain("c-word-hero__word-article");
-  });
-
-  it("renders wortartLabel badge when provided", async () => {
-    const result = await render({ word: makeWord(), wortartLabel: "Verb" });
+  it("renders the word type as plain badge, without suffix for an editorial value", async () => {
+    const result = await render({ pos: "Verb", word: makeWord() });
     expect(result).toContain("Verb");
-    expect(result).toContain("c-word-hero__wortart-badge");
+    expect(result).not.toContain("geraten");
+    expect(result).not.toContain("c-badge--auto");
   });
 
-  it("marks an automatic word type, but not an editorial one", async () => {
-    const auto = await render({ word: makeWord(), wortartAuto: true, wortartLabel: "Verb" });
-    expect(auto).toContain("(automatisch)");
-    const editorial = await render({ word: makeWord(), wortartLabel: "Verb" });
-    expect(editorial).not.toContain("automatisch");
+  it("marks a guessed word type as (geraten) with the auto badge", async () => {
+    const result = await render({ pos: "Verb", posAuto: true, word: makeWord() });
+    expect(result).toContain("Verb (geraten)");
+    expect(result).toContain("c-badge--auto");
   });
 
-  it("does not render wortartLabel badge when undefined", async () => {
-    const result = await render({ word: makeWord(), wortartLabel: undefined });
-    expect(result).not.toContain("c-word-hero__wortart-badge");
+  it("renders no word type badge when pos is undefined", async () => {
+    const result = await render({ word: makeWord() });
+    expect(result).not.toContain("c-badge");
   });
 
-  it("renders left and right layout columns", async () => {
-    const result = await render({ word: makeWord(), wortartLabel: undefined });
-    expect(result).toContain("c-word-hero__left");
-    expect(result).toContain("c-word-hero__right");
+  it("links the Themen as category links", async () => {
+    const result = await render({
+      word: makeWord({ themen: [{ id: 1, name: "Essen", slug: "essen" }] }),
+    });
+    expect(result).toContain('href="/themen/essen"');
+    expect(result).toContain("c-word-hero__category");
+  });
+
+  it("puts actions before the badges so focus runs Like, menu, category", async () => {
+    const result = await render({
+      pos: "Nomen",
+      word: makeWord({ themen: [{ id: 1, name: "Essen", slug: "essen" }] }),
+    });
+    expect(result.indexOf("c-word-hero__actions")).toBeLessThan(
+      result.indexOf("c-word-hero__badges"),
+    );
+    expect(result.indexOf("c-word-hero__title")).toBeLessThan(result.indexOf("c-word-hero__actions"));
+  });
+
+  it("shows the alternative words as 'Selbe Bedeutung wie'", async () => {
+    const result = await render({
+      word: makeWord({ alternativeWords: [{ alternativeWord: "Kiez" }, { alternativeWord: "Kietz" }] }),
+    });
+    expect(result).toContain("Selbe Bedeutung wie");
+    expect(result).toContain("Kiez, Kietz");
+  });
+
+  it("hides the meaning block without meanings and alternatives", async () => {
+    expect(await render({ word: makeWord() })).not.toContain("c-word-hero__meaning");
   });
 });

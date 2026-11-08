@@ -1,0 +1,54 @@
+// Like/Dislike group in the hero (docs/design/wortseite/SPEC.md §9). Base look: _reaction.scss.
+.c-reaction-group {
+  display: inline-flex;
+  align-items: center;
+
+  .c-reaction {
+    padding-inline: 0.5rem;
+
+    &[aria-disabled="true"] {
+      cursor: progress;
+    }
+  }
+
+  &__more {
+    // Pressed counts as the visitor's answer and stays visible; otherwise only a hovering pointer reveals it.
+    &:not([aria-pressed="true"]) {
+      display: none;
+    }
+  }
+
+  &__count {
+    min-inline-size: 1.5ch; // the count arriving does not shift the row
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (hover: hover) {
+    &:is(:hover, :focus-within) &__more {
+      display: inline-flex;
+    }
+
+    // c-pop only for the reveal, not for a dislike that is shown because it is pressed
+    &:is(:hover, :focus-within) &__more:not([aria-pressed="true"]) {
+      animation: c-pop 0.2s ease-out;
+    }
+  }
+}
+
+@keyframes c-pop {
+  from {
+    opacity: 0;
+    translate: -6px 0;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-reaction-group__more {
+    animation: none !important;
+  }
+}

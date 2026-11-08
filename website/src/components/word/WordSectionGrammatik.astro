@@ -3,10 +3,17 @@ import '@styles/components/_section-card.scss';
 import { capitalizeFirstLetter } from '@utils/wordHelper';
 
 interface Props {
+  /** The word type shown in badge and sidebar; for a single word it is the card's type too. */
+  pos?: string | undefined;
   wordTags: Record<string, string[]>[];
 }
 
-const { wordTags } = Astro.props;
+const { pos, wordTags } = Astro.props;
+const tokens = Object.keys(wordTags[0] ?? {});
+const tagsOf = (key: string): string[] => {
+  const tags = wordTags[0][key];
+  return tokens.length === 1 && pos ? [pos, ...tags.slice(1)] : tags;
+};
 ---
 
 {
@@ -17,16 +24,17 @@ const { wordTags } = Astro.props;
         <h2 class='c-section-card__title' id='heading-grammatik'>Grammatik</h2>
       </div>
       <div class='c-section-card__body'>
-        <p class='c-section-card__grammar-label'>Wortart pro Wort (NLP-Analyse)</p>
-        {Object.keys(wordTags[0]).map((key) => {
-          const isNomenPresent = wordTags[0][key].includes('Nomen');
+        <p class='c-section-card__grammar-label'>Wortart (NLP-Analyse)</p>
+        {tokens.map((key) => {
+          const tags = tagsOf(key);
+          const isNomenPresent = tags.includes('Nomen');
           return (
             <div class='c-section-card__grammar-entry'>
               <div class='c-section-card__grammar-word'>
                 {isNomenPresent ? capitalizeFirstLetter(key) : key}
               </div>
               <div class='c-section-card__grammar-tags'>
-                {wordTags[0][key].map((tag) => (
+                {tags.map((tag) => (
                   <span class='c-section-card__grammar-tag'>{tag}</span>
                 ))}
               </div>

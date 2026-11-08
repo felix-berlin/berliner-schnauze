@@ -1,27 +1,31 @@
 ---
 import '@styles/components/_word-hero.scss';
-import '@styles/components/_word-themen.scss';
 import AudioPlayerList from '@components/AudioPlayerList.vue';
 import BadgeTag from '@components/BadgeTag.vue';
 import IsWordOfTheDay from '@components/word/IsWordOfTheDay.vue';
+import WordMeanings from '@components/word/WordMeanings.vue';
 import WordOptionDropdown from '@components/word/WordOptionDropdown.vue';
-import WordFeedbackThumbs from '@components/word-feedback/WordFeedbackThumbs.vue';
+import WordReactions from '@components/word/WordReactions.vue';
 import TooltipPopover from '@components/TooltipPopover.vue';
-import Tag from '~icons/lucide/tag';
 import { routeToWord } from '@utils/helpers';
+import { posBadge } from '@utils/wordPos';
 import type { SiteWord } from '@services/payload/words.ts';
 
 interface Props {
   word: SiteWord;
-  wortartLabel: string | undefined;
-  /** The label is the automatic guess, not an editor's choice. */
-  wortartAuto?: boolean;
+  /** Same word type as sidebar and grammar card, without the "(geraten)" suffix. */
+  pos?: string | undefined;
+  /** The word type is the automatic guess, not an editor's choice. */
+  posAuto?: boolean;
+  meanings?: string[];
   /** A draft preview has no public votes. */
   draft?: boolean;
 }
 
-const { word, wortartLabel, wortartAuto = false, draft = false } = Astro.props;
+const { word, pos, posAuto = false, meanings = [], draft = false } = Astro.props;
 const { themen } = word;
+const badge = pos ? posBadge(pos, posAuto) : undefined;
+const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(Boolean).join(', ');
 ---
 
 <header
@@ -32,13 +36,35 @@ const { themen } = word;
   data-content-piece={word.berlinerisch}
   data-content-target={routeToWord(word.slug)}
 >
-  <div class='c-word-hero__left'>
+  <div class='c-word-hero__head'>
     <h1 class='c-word-hero__title'>
-      <dfn>{word.berlinerisch}</dfn>{word.article && (
+      <dfn class='c-headword'>{word.berlinerisch}</dfn>{word.article && (
         <span class='c-word-hero__word-article'>, {word.article}</span>
       )}
     </h1>
+    {/* Before the badges in the DOM: focus order is Like, ⋮, category (Spec §14). */}
+    <div class='c-word-hero__actions'>
+      {!draft && <WordReactions client:idle wordId={word.id} />}
+      <WordOptionDropdown
+        berlinerisch={word.berlinerisch}
+        client:load
+        slug={word.slug}
+        variant='word'
+        wordId={draft ? undefined : word.id}
+      />
+    </div>
     <div class='c-word-hero__badges'>
+      {/* The trend badge (.c-badge--strong) comes first in this row. */}
+      {
+        badge && (
+          <span
+            class:list={['c-badge', { 'c-badge--auto': badge.auto }]}
+            title={badge.auto ? 'Automatisch erkannt, kann abweichen' : undefined}
+          >
+            {badge.text}
+          </span>
+        )
+      }
       {
         word.berolinismus && (
           <TooltipPopover client:only='vue'>
@@ -56,23 +82,19 @@ const { themen } = word;
           </TooltipPopover>
         )
       }
-      {
-        wortartLabel && (
-          <span
-            class:list={['c-word-hero__wortart-badge', { 'c-word-hero__wortart-badge--auto': wortartAuto }]}
-            title={wortartAuto ? 'Automatisch erkannt, kann abweichen' : undefined}
-          >
-            {wortartLabel}
-            {wortartAuto && ' (automatisch)'}
-          </span>
-        )
-      }
       <IsWordOfTheDay
         client:only='vue'
         variant='badge'
         word={word.berlinerisch}
         slug={word.slug}
       />
+      {
+        themen.map((thema) => (
+          <a href={`/themen/${thema.slug}`} class='c-textlink c-textlink--inline t-small c-word-hero__category'>
+            {thema.name}
+          </a>
+        ))
+      }
       {
         word.berlinerischAudio.length > 0 && (
           <AudioPlayerList
@@ -84,26 +106,18 @@ const { themen } = word;
         )
       }
     </div>
-    {
-      themen.length > 0 && (
-        <div class='c-word-themen'>
-          {themen.map((thema) => (
-            <a href={`/themen/${thema.slug}`} class='c-word-themen__badge'>
-              <Tag height='12' width='12' />
-              {thema.name}
-            </a>
-          ))}
-        </div>
-      )
-    }
-    {!draft && <WordFeedbackThumbs client:idle wordId={word.id} />}
   </div>
-  <div class='c-word-hero__right'>
-    <WordOptionDropdown
-      berlinerisch={word.berlinerisch}
-      client:load
-      slug={word.slug}
-      wordId={draft ? undefined : word.id}
-    />
-  </div>
+  {
+    (meanings.length > 0 || same) && (
+      <div class='c-word-hero__meaning'>
+        {meanings.length > 0 && <WordMeanings client:idle meanings={meanings} />}
+        {same && (
+          <p class='c-word-hero__same'>
+            Selbe Bedeutung wie <span>{same}</span>
+          </p>
+        )}
+      </div>
+    )
+  }
+  {/* The image column (class c-word-hero__images, spans the rows from 1000px) joins this grid. */}
 </header>

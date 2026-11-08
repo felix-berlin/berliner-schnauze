@@ -44,13 +44,13 @@ test.describe("word feedback", () => {
 
     const like = page.getByRole("button", { name: /Jefällt ma/ });
     const count = async () =>
-      Number((await like.locator(".c-word-feedback-thumbs__count").textContent()) ?? "NaN");
-    await expect(like.locator(".c-word-feedback-thumbs__count")).toHaveText(/^\d+$/);
+      Number((await like.locator(".c-reaction__count").textContent()) ?? "NaN");
+    await expect(like.locator(".c-reaction__count")).toHaveText(/^\d+$/);
     const before = await count();
     await like.click();
-    await expect(like.locator(".c-word-feedback-thumbs__count")).toHaveText(String(before + 1));
+    await expect(like.locator(".c-reaction__count")).toHaveText(String(before + 1));
     await like.click();
-    await expect(like.locator(".c-word-feedback-thumbs__count")).toHaveText(String(before));
+    await expect(like.locator(".c-reaction__count")).toHaveText(String(before));
 
     // A second word in the same context: usage alone carries the stored profile.
     await page.goto("/wort/wa");

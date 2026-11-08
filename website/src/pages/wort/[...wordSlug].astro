@@ -33,6 +33,7 @@ import { previewDraft } from '@services/preview.ts';
 import { escapeHtml } from 'payload-app/lexical-html';
 import { seoData, canonicalUrl } from '@utils/helpers.ts';
 import { buildWordSections } from '@utils/wordSections.ts';
+import { resolvePos } from '@utils/wordPos.ts';
 import {
   alphabeticNeighbors,
   findAnagrams,
@@ -82,10 +83,7 @@ const wordTags = word.derived.nlpTags;
 const hasImages = word.images.length > 0;
 const { books: affiliateBooks, disclaimers: affiliateDisclaimers } = await fetchAffiliateData();
 // An editor-set word type wins; otherwise the automatic guess, marked as such in the hero.
-const editorialWortart = word.wordTypes[0]?.name;
-const wortartLabel: string | undefined =
-  editorialWortart ?? (wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined);
-const wortartAuto = !editorialWortart;
+const wordPos = resolvePos(word.wordTypes[0]?.name, wordTags);
 
 // Same test as the etymology card uses to render itself.
 const hasOrigin =
@@ -222,10 +220,10 @@ const schemaJson = () => {
 
   <article class='c-word-page' data-pulse-word={draft ? undefined : word.id}>
     <WordTabBar client:load sections={sections} />
-    <WordSidebar posLabel={wortartLabel} sections={sections} word={word} />
+    <WordSidebar posLabel={wordPos?.pos} sections={sections} word={word} />
 
     <div class:list={['c-word-main', hasImages && 'c-word-main--with-gallery']}>
-      <WordHero word={word} wortartLabel={wortartLabel} wortartAuto={wortartAuto} draft={!!draft} />
+      <WordHero word={word} pos={wordPos?.pos} posAuto={wordPos?.auto} meanings={translations} draft={!!draft} />
 
       <div class='c-word-main__content'>
         {!draft && (
@@ -247,7 +245,7 @@ const schemaJson = () => {
 
           <WordSectionLinguistik word={berlinerisch} />
 
-          <WordSectionGrammatik wordTags={wordTags} />
+          <WordSectionGrammatik pos={wordPos?.pos} wordTags={wordTags} />
 
           <WordSectionPhonologie
             soundingWords={soundingWordsResult}
