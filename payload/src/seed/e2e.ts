@@ -232,6 +232,8 @@ export async function seedE2e(payload: Payload): Promise<void> {
     // Eight fillers with 10 views each: with them "wa" (a few views from the pulse tests) is outside the top 10.
     ...["kiez", "kneipe", "bolle", "bulette", "bammel", "ulk", "zille", "stulle"].map((s): [string, number[], number] => [s, [2, 1, 2, 1, 1, 2, 1], 0]),
   ];
+  // Pulse views of earlier e2e runs pile up on words outside STATS (e.g. "wa") and push them into the top 10: start from zero.
+  await payload.delete({ collection: "word-stats", depth: 0, where: { id: { exists: true } } });
   const today = Date.parse(`${berlinDay()}T00:00:00Z`);
   const dayOf = (back: number) => new Date(today - back * 864e5).toISOString().slice(0, 10);
   for (const [slug, week, before] of STATS) {
