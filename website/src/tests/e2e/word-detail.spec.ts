@@ -219,4 +219,26 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await expect(trigger).toBeFocused();
     });
   });
+
+  test("Trend-Kasten und Badge für ein Wort in den Top 10 (alex)", async ({ page }) => {
+    await page.goto("/wort/alex");
+
+    const badge = page.locator(".c-word-hero .c-badge--strong");
+    await expect(badge).toHaveText(/Im Trend · Platz 1/);
+    const box = page.locator("#n-trend");
+    await expect(box).toBeVisible();
+    await expect(box).toContainText("Trendet jerade");
+    await expect(box).toContainText("Platz 1 diese Woche");
+    await expect(box).toContainText("47 Aufrufe in 7 Tagen · +370 % zur Vorwoche");
+    await expect(box.locator(".c-trend__bars")).toHaveAttribute("aria-hidden", "true");
+    await expect(box.locator(".c-trend__bars span")).toHaveCount(7);
+  });
+
+  test("Wort außerhalb der Top 10 hat weder Trend-Kasten noch Badge (wa)", async ({ page }) => {
+    await page.goto("/wort/wa");
+
+    await expect(page.locator("h1 dfn")).toHaveText("wa");
+    await expect(page.locator("#n-trend")).toHaveCount(0);
+    await expect(page.locator(".c-badge--strong")).toHaveCount(0);
+  });
 });

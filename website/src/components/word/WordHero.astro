@@ -9,6 +9,8 @@ import WordReactions from '@components/word/WordReactions.vue';
 import TooltipPopover from '@components/TooltipPopover.vue';
 import { routeToWord } from '@utils/helpers';
 import { posBadge } from '@utils/wordPos';
+import type { WordTrend } from '@utils/wordTrend.ts';
+import TrendingUp from '~icons/lucide/trending-up';
 import type { SiteWord } from '@services/payload/words.ts';
 
 interface Props {
@@ -20,9 +22,10 @@ interface Props {
   meanings?: string[];
   /** A draft preview has no public votes. */
   draft?: boolean;
+  trend?: Pick<WordTrend, 'rank'> | undefined;
 }
 
-const { word, pos, posAuto = false, meanings = [], draft = false } = Astro.props;
+const { word, pos, posAuto = false, meanings = [], draft = false, trend } = Astro.props;
 const { themen } = word;
 const badge = pos ? posBadge(pos, posAuto) : undefined;
 const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(Boolean).join(', ');
@@ -54,7 +57,6 @@ const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(
       />
     </div>
     <div class='c-word-hero__badges'>
-      {/* The trend badge (.c-badge--strong) comes first in this row. */}
       {
         badge && (
           <span
@@ -94,6 +96,15 @@ const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(
             {thema.name}
           </a>
         ))
+      }
+      {/* Visually first (order: -1), but after the category in the DOM: focus order is Like, ⋮, category, …, trend link (Spec §14). */}
+      {
+        trend && (
+          <a href='#n-trend' class='c-badge c-badge--strong c-word-hero__trend-badge'>
+            <TrendingUp width='12' height='12' aria-hidden='true' />
+            Im Trend · Platz {trend.rank}
+          </a>
+        )
       }
       {
         word.berlinerischAudio.length > 0 && (

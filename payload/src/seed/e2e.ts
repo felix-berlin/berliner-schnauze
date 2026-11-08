@@ -8,6 +8,7 @@ import type { Word } from "../payload-types";
 
 import { affiliate, company, navigation } from "./siteData";
 import { LOCAL_DB_HOSTS } from "../lib/localDb";
+import { berlinDay } from "../lib/wordStats";
 
 /** Slugs the e2e specs navigate to directly. */
 export const E2E_WORD_SLUGS = ["aasen", "akademiebusen", "alex", "alsche", "anmachen", "ballast-der-republik", "schale", "wa"] as const;
@@ -169,6 +170,27 @@ export async function seedE2e(payload: Payload): Promise<void> {
   // Second pass: related words need every id.
   for (const w of WORDS.filter((x) => x.related)) {
     await payload.update({ collection: "words", data: { relatedWords: w.related!.map((s) => wordIds.get(s)!) }, depth: 0, draft: false, id: wordIds.get(w.slug)! });
+  }
+
+  // Invented views for the trend box: alex is #1 of the week (47 views, +370 % to the week before), anmachen #2, aasen #3 (12), eight fillers (10) behind.
+  const STATS: [string, number[], number][] = [
+    ["alex", [3, 5, 4, 8, 6, 9, 12], 10],
+    ["anmachen", [1, 2, 3, 3, 4, 3, 4], 20],
+    ["aasen", [1, 2, 1, 3, 2, 1, 2], 2],
+    // Eight fillers with 10 views each: with them "wa" (a few views from the pulse tests) is outside the top 10.
+    ...["kiez", "kneipe", "bolle", "bulette", "bammel", "ulk", "zille", "stulle"].map((s): [string, number[], number] => [s, [2, 1, 2, 1, 1, 2, 1], 0]),
+  ];
+  const today = Date.parse(`${berlinDay()}T00:00:00Z`);
+  const dayOf = (back: number) => new Date(today - back * 864e5).toISOString().slice(0, 10);
+  for (const [slug, week, before] of STATS) {
+    const word = wordIds.get(slug)!;
+    // Last 7 days oldest first, then the previous week as one row on its first day.
+    const rows = [...week.map((views, i) => [dayOf(6 - i), views] as const), [dayOf(10), before] as const];
+    for (const [day, views] of rows) {
+      const { docs } = await payload.find({ collection: "word-stats", depth: 0, limit: 1, where: { day: { equals: day }, word: { equals: word } } });
+      if (docs[0]) await payload.update({ collection: "word-stats", data: { views }, depth: 0, id: docs[0].id });
+      else await payload.create({ collection: "word-stats", data: { day, views, word }, depth: 0 });
+    }
   }
 
   await upsert(payload, "posts", { slug: { equals: "berlinerisch-fuer-anfaenger" } }, {
