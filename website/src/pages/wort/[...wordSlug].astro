@@ -299,7 +299,7 @@ const schemaJson = () => {
     const id = Number(document.querySelector<HTMLElement>('[data-pulse-word]')?.dataset.pulseWord);
     if (!id) return;
     reportWord(id, 'view');
-    document.getElementById('verwandte-worte')?.addEventListener('click', (e) => {
+    document.getElementById('verwandte')?.addEventListener('click', (e) => {
       if ((e.target as Element).closest('a')) reportWord(id, 'click');
     });
   });

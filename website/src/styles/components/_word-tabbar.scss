@@ -1,3 +1,4 @@
+@use "@styles/variables" as vars;
 @use "@sass-butler/mixins" as butler-mx;
 @use "@sass-butler/functions" as butler-fn;
 
@@ -9,8 +10,11 @@
   display: flex;
   overflow-x: auto;
   scrollbar-width: none;
-  background: var(--surface-sheet);
-  border-block-end: 1px dashed var(--rule-card);
+  // Full-bleed: cancels the 20px side padding of .u-max-body-width (mock: nav sits outside the page padding).
+  margin-inline: -20px;
+  padding-inline: 0.5rem;
+  background: var(--surface-paper);
+  box-shadow: vars.$paper-lift;
 
   @media (width > butler-fn.px-to-rem(807)) {
     display: none;
