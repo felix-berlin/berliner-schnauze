@@ -18,7 +18,7 @@
     border-color 0.3s ease-in-out,
     background-color 0.3s ease-in-out;
 
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled, [aria-disabled="true"]) {
     border-color: var(--rule-card);
     color: var(--color-ink-strong);
   }
