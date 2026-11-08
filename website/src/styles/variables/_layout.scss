@@ -12,6 +12,7 @@ $uhd: butler-fn.px-to-rem(2560); // UHD
 
 // Breakpoint Map
 $custom-breakpoints: (
+  "word": butler-fn.px-to-rem(808), // Word page: tab bar becomes sidebar, images move into the hero
   "xxs": $xxs,
   "xs": $xs,
   "sm": $sm,

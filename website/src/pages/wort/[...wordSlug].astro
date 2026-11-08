@@ -93,11 +93,10 @@ const wordImages = toWordImages(word.images, word.berlinerisch);
 const hasImages = wordImages.length > 0;
 // Large version for the lightbox (the strip/hero sizes come from WordImages).
 const lightboxImages = await Promise.all(
-  wordImages.map(async ({ alt, credit, height, src, width }) => ({
-    alt,
-    credit,
-    src: (await getImage({ format: 'webp', height: Math.round((1600 * height) / width), src, width: 1600 })).src,
-  })),
+  wordImages.map(async ({ alt, credit, height, src, width }) => {
+    const target = Math.min(1600, width); // never upscale a smaller source
+    return { alt, credit, src: (await getImage({ format: 'webp', height: Math.round((target * height) / width), src, width: target })).src };
+  }),
 );
 const { books: affiliateBooks, disclaimers: affiliateDisclaimers } = await fetchAffiliateData();
 // An editor-set word type wins; otherwise the automatic guess, marked as such in the hero.

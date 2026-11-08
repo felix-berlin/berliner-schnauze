@@ -1,6 +1,9 @@
 import Lightbox from "@components/word/Lightbox.vue";
 import { flushPromises, mount } from "@vue/test-utils";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+const { trackEvent } = vi.hoisted(() => ({ trackEvent: vi.fn() }));
+vi.mock("@utils/analytics", () => ({ trackEvent }));
 
 const images = [1, 2, 3].map((i) => ({ alt: `Bild ${i}`, credit: i === 2 ? "Foto <a href='#'>X</a>" : null, src: `/${i}.jpg` }));
 
@@ -29,6 +32,16 @@ describe("Lightbox", () => {
     expect(shown(wrapper)).toBe("/2.jpg");
     expect(wrapper.text()).toContain("2 / 3");
     expect(wrapper.find(".c-lightbox__caption").html()).toContain("<a href");
+  });
+
+  it("tracks opening and slide switches", async () => {
+    trackEvent.mockClear();
+    const { openers, wrapper } = await setup();
+    openers[0]!.click();
+    await flushPromises();
+    expect(trackEvent).toHaveBeenCalledWith("Lightbox", "Opened", "Image Gallery");
+    await wrapper.find("dialog").trigger("keydown", { key: "ArrowRight" });
+    expect(trackEvent).toHaveBeenCalledWith("Lightbox", "Slide switched", "Image Gallery");
   });
 
   it("wraps with ArrowRight and ArrowLeft", async () => {

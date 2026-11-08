@@ -11,9 +11,14 @@
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  background: color-mix(in srgb, #000 82%, transparent);
+  // Dark in both themes: the photo needs a dark ground.
+  --lightbox-scrim: color-mix(in srgb, black 82%, transparent);
+  --lightbox-button-bg: color-mix(in srgb, black 45%, transparent);
+  --lightbox-ink: white;
+
+  background: var(--lightbox-scrim);
   backdrop-filter: blur(4px);
-  color: #fff;
+  color: var(--lightbox-ink);
   opacity: 0;
   transition:
     opacity 200ms ease-out,
@@ -63,7 +68,7 @@
       position: absolute;
       inset-block-start: 50%;
       translate: 0 -50%;
-      background: rgb(0 0 0 / 45%);
+      background: var(--lightbox-button-bg);
 
       &:first-child {
         inset-inline-start: 0.25rem;
@@ -83,7 +88,7 @@
   }
 
   .c-icon-button {
-    color: #fff;
+    color: var(--lightbox-ink);
 
     &:hover {
       border-color: currentcolor;

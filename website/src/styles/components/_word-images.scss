@@ -1,3 +1,5 @@
+@use "@styles/mixins" as mx;
+
 // Word images (docs/design/wortseite/SPEC.md §3/§5; mock: Mobile2 strip, Desktop3 .bs-heroimg, bundle.css "Image strip").
 // The page renders the section twice: .c-word-images--strip below the hero (< 808px), --hero inside it (from 808px).
 .c-image-strip {
@@ -6,8 +8,10 @@
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
-  margin: 0;
-  padding: 0;
+  // Room for the 2px dashed focus ring (offset 2px) that overflow-x would clip; the negative margin keeps the layout.
+  margin: -0.25rem;
+  padding: 0.25rem;
+  scroll-padding-inline: 0.25rem;
 
   > figure {
     flex: 0 0 82%;
@@ -57,7 +61,7 @@
   &--strip {
     display: flex;
 
-    @media (width >= 808px) {
+    @include mx.breakpoint("word") {
       display: none;
     }
   }
@@ -65,7 +69,7 @@
   &--hero {
     display: none;
 
-    @media (width >= 808px) {
+    @include mx.breakpoint("word") {
       display: flex;
 
       .c-image-strip {

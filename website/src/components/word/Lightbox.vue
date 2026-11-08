@@ -30,6 +30,7 @@
 </template>
 
 <script setup lang="ts">
+import { trackEvent } from "@utils/analytics";
 import { useEventListener } from "@vueuse/core";
 import { computed, ref, useTemplateRef } from "vue";
 import IconClose from "virtual:icons/lucide/x";
@@ -45,6 +46,7 @@ let opener: HTMLElement | null = null;
 
 const step = (by: number) => {
   index.value = (index.value + by + props.images.length) % props.images.length;
+  trackEvent("Lightbox", "Slide switched", "Image Gallery");
 };
 
 // The buttons are server-rendered by WordImages.astro (before hydration they do nothing, the page stays usable).
@@ -54,6 +56,7 @@ useEventListener(document, "click", (event) => {
   opener = button;
   index.value = Number(button.dataset.lightboxIndex);
   dialog.value?.showModal();
+  trackEvent("Lightbox", "Opened", "Image Gallery");
 });
 
 // Native <dialog>: focus trap and Esc come for free; arrows and focus return are ours.
