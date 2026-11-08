@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Wortseite mobil v2</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/berliner-schnauze/tokens.css">
+<link rel="stylesheet" href="ds/berliner-schnauze/colors_and_type.css">
+<link rel="stylesheet" href="ds/berliner-schnauze/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:inherit}a:hover{color:var(--color-accent-text)}
+.bs-n .c-section-card__num{display:none}
+.bs-n .c-section-card__header{padding:.875rem 1rem;border-block-end:0}
+.bs-n .c-section-card__body{padding:0 1rem 1rem}
+.bs-n .c-section-card__footer{padding:.75rem 1rem;font-size:.75rem}
+.bs-n .c-section-card__title{font-size:1.25rem}
+.bs-n .c-word-hero__title{overflow-wrap:anywhere;hyphens:auto}
+.c-choice[aria-disabled="true"]{opacity:.55;cursor:not-allowed;box-shadow:none;border-style:dotted}
+/*desktop*/
+</style>
+</helmet>
+<div class="bs-n" lang="de" data-theme="{{theme}}" style="box-sizing: border-box; min-height: 100vh; font-family: var(--font-body); letter-spacing: 1px; color: var(--color-body); background-color: var(--color-background-body); background-image: radial-gradient(var(--color-gradient-body-1) 1.1px, var(--color-gradient-body-2) 1.1px); background-size: 22px 22px;">
+
+<nav aria-label="Inhalt der Wortseite" style="position: sticky; top: 0; z-index: 3; display: flex; overflow-x: auto; scrollbar-width: none; padding-inline: 0.5rem; background: var(--surface-paper); box-shadow: var(--paper-lift);">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="5"><a class="c-tabbar__tab" href="{{t.href}}" aria-current="{{t.current}}" onClick="{{t.pick}}">{{t.label}}</a></sc-for>
+</nav>
+
+<main style="display: flex; flex-direction: column; gap: 1rem; padding: 1rem 1rem 3rem; container-type: inline-size;">
+<sc-if value="{{isLoading}}" hint-placeholder-val="{{false}}">
+<div aria-busy="true" aria-label="Wort wird jeladen" style="display: flex; flex-direction: column; gap: 1rem;">
+<div class="c-word-hero" style="flex-direction: column; align-items: stretch; gap: 0.75rem; padding: 1.5rem 1.25rem;"><span class="c-skeleton c-skeleton--title"></span><span style="display: flex; gap: 0.5rem;"><span class="c-skeleton" style="width: 72px; height: 22px;"></span><span class="c-skeleton" style="width: 104px; height: 22px;"></span></span><span class="c-skeleton c-skeleton--line" style="width: 92%; margin-top: 0.75rem;"></span><span class="c-skeleton c-skeleton--line" style="width: 64%;"></span></div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;"><span class="c-skeleton" style="height: 44px;"></span><span class="c-skeleton" style="height: 44px;"></span></div>
+<div class="c-section-card" style="padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem;"><span class="c-skeleton" style="width: 45%; height: 1.25rem;"></span><span class="c-skeleton" style="height: 72px;"></span><span class="c-skeleton" style="height: 72px;"></span></div>
+<div class="c-section-card" style="padding: 1rem;"><span class="c-skeleton" style="width: 35%; height: 1.25rem;"></span><span class="c-skeleton c-skeleton--line" style="width: 100%;"></span><span class="c-skeleton c-skeleton--line" style="width: 80%;"></span></div>
+</div>
+</sc-if>
+<sc-if value="{{isReady}}" hint-placeholder-val="{{true}}">
+<sc-if value="{{isOffline}}" hint-placeholder-val="{{false}}"><div class="c-state c-state--offline" role="status"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path><path d="M5 12.86a10 10 0 0 1 5.17-2.69"></path><path d="M19 12.86a10 10 0 0 0-2-1.43"></path><path d="M2 8.82a15 15 0 0 1 4.17-2.65"></path><path d="M22 8.82a15 15 0 0 0-6.32-3.27"></path><path d="m2 2 20 20"></path></svg><span class="c-state__body"><b>Du bist offline.</b><span>Du siehst die jespeicherte Version. Abstimmen und Kommentieren jeht wieder, sobald du Netz hast.</span></span></div></sc-if>
+
+<header id="n-bedeutung" class="c-word-hero" style="flex-direction: column; align-items: stretch; gap: 1.5rem; padding: 1.5rem 1.25rem;">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;">
+<div style="display: flex; flex-direction: column; gap: 0.625rem; min-width: 0;">
+<h1 class="c-word-hero__title" style="font-size: clamp(2rem, 11cqi, 2.75rem);"><span class="c-headword">{{d.word}}</span><sc-if value="{{d.article}}" hint-placeholder-val="{{true}}"><span class="c-word-hero__article" style="margin-inline: 0.15em 0;">{{d.article}}</span></sc-if></h1>
+<div class="c-word-hero__badges">
+<sc-if value="{{isTrending}}" hint-placeholder-val="{{false}}"><a href="#n-trend" class="c-badge c-badge--strong"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: currentColor;"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>Im Trend · Platz {{trend.rank}}</a></sc-if>
+<span class="{{posCls}}" style="border-color: transparent; outline: none;">{{posLabel}}</span>
+<sc-if value="{{d.berolinismus}}" hint-placeholder-val="{{true}}"><span class="c-badge">Berolinismus</span></sc-if>
+<sc-if value="{{d.category}}" hint-placeholder-val="{{true}}"><a class="c-textlink c-textlink--inline t-small" href="#" style="display: inline-flex; align-items: center; min-height: 32px;">{{d.category}}</a></sc-if>
+</div>
+</div>
+<span style="display: flex; align-items: center; margin: -0.5rem -0.5rem 0 0;">
+<span class="c-reaction-group" onMouseEnter="{{likeEnter}}" onMouseLeave="{{likeLeave}}" onFocus="{{likeEnter}}" onBlur="{{likeLeave}}">
+<button class="c-reaction" aria-pressed="{{liked}}" onClick="{{toggleLike}}" aria-label="Jefällt ma, {{likes}}" style="padding: 0 0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v12"></path><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path></svg><b>{{likes}}</b></button>
+<sc-if value="{{showDislike}}" hint-placeholder-val="{{false}}"><button class="c-reaction c-reaction-group__more" aria-pressed="{{disliked}}" onClick="{{toggleDislike}}" aria-label="Nee, {{dislikes}}" style="padding: 0 0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 14V2"></path><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"></path></svg><b>{{dislikes}}</b></button></sc-if>
+</span>
+<span style="position: relative; display: inline-flex;">
+<button class="c-icon-button" aria-label="Weitere Aktionen" aria-haspopup="menu" aria-expanded="{{menuOpen}}" onClick="{{toggleMenu}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button>
+<sc-if value="{{menuOpen}}" hint-placeholder-val="{{false}}">
+<div role="menu" aria-label="Weitere Aktionen" class="c-menu">
+<button role="menuitem" class="c-menu__item" onClick="{{shareWord}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg><span>Wort teilen</span></button>
+<button role="menuitem" class="c-menu__item" data-done="{{linkDone}}" onClick="{{copyLink}}"><sc-if value="{{linkIdle}}" hint-placeholder-val="{{true}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></sc-if><sc-if value="{{linkDone}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></sc-if><span>{{linkLabel}}</span></button>
+<button role="menuitem" class="c-menu__item" data-done="{{wordDone}}" onClick="{{copyWord}}"><sc-if value="{{wordIdle}}" hint-placeholder-val="{{true}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></sc-if><sc-if value="{{wordDone}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></sc-if><span>{{wordLabel}}</span></button>
+</div>
+</sc-if>
+</span>
+</span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 0.5rem;">
+<p class="t-label">{{meaningLabel}}</p>
+<sc-if value="{{multiMeaning}}" hint-placeholder-val="{{true}}"><ol class="c-meanings"><sc-for list="{{shownMeanings}}" as="m" hint-placeholder-count="2"><li class="t-em" style="font-size: 1.25rem;">{{m}}</li></sc-for></ol></sc-if>
+<sc-if value="{{hasMoreMeanings}}" hint-placeholder-val="{{false}}"><button class="c-textlink" aria-expanded="false" onClick="{{showAllMeanings}}" style="align-self: flex-start;">{{moreMeaningsLabel}}</button></sc-if>
+<sc-if value="{{singleMeaning}}" hint-placeholder-val="{{false}}"><p class="t-em" style="margin: 0;">{{firstMeaning}}</p></sc-if>
+<sc-if value="{{d.same}}" hint-placeholder-val="{{true}}"><p style="margin: 0; color: var(--color-muted);">Selbe Bedeutung wie <a class="c-textlink c-textlink--inline" href="#" style="color: var(--color-body);">{{d.same}}</a></p></sc-if>
+</div>
+
+</header>
+
+<sc-if value="{{isTrending}}" hint-placeholder-val="{{false}}">
+<section id="n-trend" aria-labelledby="n-trend-t" style="display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 0.25rem 1rem; padding: 0.875rem 1rem; background: color-mix(in srgb, var(--orange-500) 14%, var(--surface-paper)); border-radius: var(--radius-sm); box-shadow: var(--paper-lift);">
+<div style="display: flex; flex-direction: column; gap: 0.125rem;">
+<p id="n-trend-t" class="t-label" style="color: var(--color-accent-text);">Trendet jerade</p>
+<p style="margin: 0; color: var(--color-ink-strong);"><b class="t-em">Platz {{trend.rank}}</b> diese Woche</p>
+<p class="t-small" style="margin: 0;">{{trend.views}} Aufrufe in 7 Tagen · {{trend.change}} zur Vorwoche</p>
+</div>
+<div aria-hidden="true" style="display: flex; align-items: flex-end; gap: 3px; height: 44px;">
+<sc-for list="{{trend.bars}}" as="tb" hint-placeholder-count="7"><span style="{{tb.style}}"></span></sc-for>
+</div>
+<a class="c-textlink c-textlink--inline t-small" href="#" style="grid-column: 1 / -1; display: inline-flex; align-items: center; min-height: 36px;">Alle Trend-Wörter ansehen →</a>
+</section>
+</sc-if>
+
+<sc-if value="{{d.audio}}" hint-placeholder-val="{{true}}">
+<div role="group" aria-labelledby="n-aussprache" style="display: flex; align-items: center; gap: 0.75rem; padding-inline: 0.25rem;">
+<p id="n-aussprache" class="t-label" style="flex-shrink: 0;">Anhören</p>
+<div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+<sc-for list="{{wordAudio}}" as="au" hint-placeholder-count="2"><button class="c-choice" aria-pressed="{{au.playing}}" onClick="{{au.toggle}}" style="padding: 0 0.5rem; font-size: 0.9rem;"><sc-if value="{{au.idle}}" hint-placeholder-val="{{true}}"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></sc-if><sc-if value="{{au.playing}}" hint-placeholder-val="{{false}}"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12"></rect></svg></sc-if>{{au.short}}</button></sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{hasImages}}" hint-placeholder-val="{{true}}">
+<section aria-label="Bilder" style="display: flex; flex-direction: column; gap: 0.5rem;">
+<div class="c-image-strip">
+<sc-for list="{{images}}" as="im" hint-placeholder-count="2">
+<figure>
+<button class="c-image-strip__btn" onClick="{{im.open}}" aria-label="{{im.openAria}}">
+<sc-if value="{{im.src}}" hint-placeholder-val="{{false}}"><img src="{{im.src}}" alt="" style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;"></sc-if>
+<sc-if value="{{im.placeholder}}" hint-placeholder-val="{{true}}"><span style="display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 4 / 3; background: var(--surface-chip); color: var(--color-muted); font-size: 0.75rem;">{{im.alt}}</span></sc-if>
+</button>
+<sc-if value="{{im.credit}}" hint-placeholder-val="{{false}}"><figcaption class="t-small">{{im.caption}}</figcaption></sc-if>
+</figure>
+</sc-for>
+</div>
+<a class="c-textlink c-textlink--inline t-small" href="#" style="align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; font-size: 0.85rem;">Erfahre mehr über dieses Wort ↗</a>
+</section>
+</sc-if>
+
+<div id="n-umfrage" style="scroll-margin-top: 56px;"><dc-import name="Poll" theme="{{theme}}" embedded="{{yes}}" optin="{{yes}}" status="{{pollStatus}}" hint-size="100%,300px"></dc-import>
+
+</div>
+
+<sc-if value="{{hasOrigin}}" hint-placeholder-val="{{true}}">
+<section id="n-etymologie" class="c-section-card" aria-labelledby="n-herkunft">
+<div class="c-section-card__header"><h2 id="n-herkunft" class="c-section-card__title">Etymologie</h2></div>
+<sc-if value="{{d.origin}}" hint-placeholder-val="{{true}}"><div class="c-section-card__body"><p style="margin: 0;">{{d.origin}}</p></div></sc-if>
+<sc-if value="{{hasSources}}" hint-placeholder-val="{{true}}"><div class="c-section-card__footer"><span class="t-label" style="font-size: 0.7rem;">{{sourceLabel}}</span><sc-for list="{{d.sources}}" as="q" hint-placeholder-count="2"><span>{{q}}</span></sc-for></div></sc-if>
+</section>
+</sc-if>
+
+<sc-if value="{{hasExamples}}" hint-placeholder-val="{{true}}">
+<section id="n-beispiele" class="c-section-card" aria-labelledby="n-beispiele-t">
+<div class="c-section-card__header"><h2 id="n-beispiele-t" class="c-section-card__title">Beispiele</h2></div>
+<ol class="c-section-card__body" style="margin: 0; list-style: none; display: flex; flex-direction: column; gap: 1.5rem;">
+<sc-for list="{{examples}}" as="ex" hint-placeholder-count="2">
+<li style="display: flex; flex-direction: column; gap: 0.5rem;">
+<blockquote style="margin: 0; display: flex; flex-direction: column; gap: 0.25rem;">
+<p class="t-em" style="margin: 0; font-style: italic;"><span aria-hidden="true" style="font-family: var(--font-display); font-style: normal; color: var(--color-accent-text); margin-right: 0.25rem;">“</span>{{ex.text}}</p>
+<p style="margin: 0; color: var(--color-muted);">– {{ex.explanation}}</p>
+</blockquote>
+<sc-if value="{{ex.audio}}" hint-placeholder-val="{{true}}">
+<div role="group" aria-label="{{ex.groupAria}}" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+<sc-for list="{{ex.voices}}" as="au" hint-placeholder-count="2"><button class="c-choice" aria-pressed="{{au.playing}}" onClick="{{au.toggle}}" style="padding: 0 0.75rem;"><sc-if value="{{au.idle}}" hint-placeholder-val="{{true}}"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></sc-if><sc-if value="{{au.playing}}" hint-placeholder-val="{{false}}"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12"></rect></svg></sc-if>{{au.label}}</button></sc-for>
+</div>
+</sc-if>
+</li>
+</sc-for>
+</ol>
+</section>
+</sc-if>
+
+<section id="n-analyse" aria-labelledby="n-analyse-t" style="display: flex; flex-direction: column; gap: 1rem; padding-top: 1rem; scroll-margin-top: 56px;">
+<h2 id="n-analyse-t" class="c-band">Sprachliche Analyse</h2>
+
+<section class="c-section-card" aria-labelledby="n-ortho">
+<div class="c-section-card__header"><h3 id="n-ortho" class="c-section-card__title">Orthographie</h3></div>
+<div class="c-section-card__body" style="display: flex; flex-direction: column; gap: 1rem;">
+<div style="display: flex; flex-direction: column; gap: 0.25rem;">
+<p class="t-label">Silbentrennung</p>
+<p class="t-em" style="margin: 0;">{{syllableText}} <span class="t-small" style="font-size: 0.75rem;">· {{d.counts.s}} Silben</span></p>
+</div>
+<sc-if value="{{hasParts}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 0.25rem;">
+<p class="t-label">Wortzerlegung</p>
+<p style="margin: 0; display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem;"><sc-for list="{{parts}}" as="p" hint-placeholder-count="2"><sc-if value="{{p.plus}}" hint-placeholder-val="{{false}}"><span style="color: var(--color-muted);">+</span></sc-if><a class="c-textlink c-textlink--inline" href="#">{{p.label}}</a></sc-for></p>
+</div>
+</sc-if>
+<sc-if value="{{hasWritten}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; gap: 0.25rem;">
+<p class="t-label">Ähnlich geschrieben</p>
+<p style="margin: 0; display: flex; flex-wrap: wrap; column-gap: 1rem;"><sc-for list="{{d.written}}" as="w" hint-placeholder-count="2"><a class="c-textlink c-textlink--inline" href="#" style="display: inline-flex; align-items: center; min-height: 40px;">{{w}}</a></sc-for></p>
+</div>
+</sc-if>
+<sc-if value="{{hasAnagrams}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; gap: 0.25rem;">
+<p class="t-label">Anagramme</p>
+<p style="margin: 0; display: flex; flex-wrap: wrap; column-gap: 1rem;"><sc-for list="{{d.anagrams}}" as="w" hint-placeholder-count="1"><a class="c-textlink c-textlink--inline" href="#" style="display: inline-flex; align-items: center; min-height: 40px;">{{w}}</a></sc-for></p>
+</div>
+</sc-if>
+</div>
+</section>
+
+<section class="c-section-card" aria-labelledby="n-gram">
+<div class="c-section-card__header"><h3 id="n-gram" class="c-section-card__title">Grammatik</h3></div>
+<div class="c-section-card__body">
+<div style="display: flex; flex-direction: column; gap: 0.375rem;">
+<p class="t-label">{{grammarLabel}}</p>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.375rem;">
+<sc-for list="{{d.grammar}}" as="g" hint-placeholder-count="2"><li style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 32px;"><b style="color: var(--color-ink-strong);">{{g.w}}</b><span class="c-tag">{{g.pos}}</span></li></sc-for>
+</ul>
+</div>
+</div>
+</section>
+
+<section class="c-section-card" aria-labelledby="n-quant">
+<div class="c-section-card__header"><h3 id="n-quant" class="c-section-card__title">Quantitative Linguistik</h3></div>
+<div class="c-section-card__body">
+<div style="display: flex; flex-direction: column; gap: 0.75rem;">
+<p class="t-label">Buchstaben &amp; Häufigkeit</p>
+<div aria-hidden="true" style="display: flex; flex-wrap: wrap; gap: 3px;">
+<sc-for list="{{tiles}}" as="t" hint-placeholder-count="8"><span style="{{t.box}}"><span style="{{t.fill}}"></span><span style="position: relative;">{{t.ch}}</span></span></sc-for>
+</div>
+<p class="t-small" style="margin: 0;">Füllhöhe = wie häufig der Buchstabe im Deutschen vorkommt. Orange = Vokal, grau = Konsonant.</p>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+<sc-for list="{{stats}}" as="s" hint-placeholder-count="4"><div style="display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; padding: 0.625rem 0.75rem; background: var(--surface-chip); border-radius: var(--radius-sm);"><span class="t-small">{{s.label}}</span><b class="t-em">{{s.value}}</b></div></sc-for>
+</div>
+<ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.375rem;">
+<sc-for list="{{d.facts}}" as="f" hint-placeholder-count="4"><li style="display: flex; align-items: baseline; gap: 0.625rem;"><span aria-hidden="true" style="width: 6px; height: 6px; flex-shrink: 0; background: var(--orange-400); rotate: 45deg; translate: 0 -2px;"></span><span>{{f}}</span></li></sc-for>
+</ul>
+<div>
+<button class="c-textlink" aria-expanded="{{showFreq}}" onClick="{{toggleFreq}}">{{freqToggle}}</button>
+<sc-if value="{{showFreq}}" hint-placeholder-val="{{false}}">
+<ul style="list-style: none; padding: 0; margin: 0.25rem 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem 1rem;">
+<sc-for list="{{freq}}" as="f" hint-placeholder-count="6"><li style="display: flex; justify-content: space-between; gap: 0.5rem;"><b style="color: var(--color-ink-strong);">{{f.ch}}</b><span class="t-small" style="font-size: 0.75rem;">{{f.pct}} · {{f.label}}</span></li></sc-for>
+</ul>
+</sc-if>
+</div>
+</div>
+</div>
+<div class="c-section-card__footer">Häufigkeit: knapp 180 Mrd. Zeichen aus dem Deutschen Referenzkorpus · <a class="c-textlink c-textlink--inline" href="#">Wikipedia</a></div>
+</section>
+
+<sc-if value="{{hasSimilar}}" hint-placeholder-val="{{true}}">
+<section class="c-section-card" aria-labelledby="n-phon">
+<div class="c-section-card__header"><h3 id="n-phon" class="c-section-card__title">Phonologie</h3></div>
+<div class="c-section-card__body" style="display: flex; flex-direction: column; gap: 0.25rem;">
+<p class="t-label">Ähnlich klingende Wörter</p>
+<p style="margin: 0; display: flex; flex-wrap: wrap; column-gap: 1rem;"><sc-for list="{{d.similar}}" as="w" hint-placeholder-count="2"><a class="c-textlink c-textlink--inline" href="#" style="display: inline-flex; align-items: center; min-height: 40px; font-size: 1.05rem;">{{w}}</a></sc-for></p>
+</div>
+</section>
+</sc-if>
+</section>
+
+<section id="n-buecher" aria-labelledby="n-buch" style="display: flex; flex-direction: column; gap: 0.75rem; padding-top: 1rem;">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem;">
+<h2 id="n-buch" class="c-band">Ooch als Buch zu haben, wa?</h2>
+<span class="c-badge" style="flex-shrink: 0;">Anzeige</span>
+</div>
+<p style="margin: 0; color: var(--color-muted);">Für Berliner &amp; solche, die es werden wollen – zum Nachschlagen, Rätseln und Verschenken.</p>
+<div class="c-shelf">
+<sc-for list="{{books}}" as="b" hint-placeholder-count="3">
+<a class="c-book" href="#">
+<span aria-hidden="true" style="{{b.coverStyle}}"><span style="font-family: var(--font-display); font-size: 1.15rem; line-height: 1.15;">{{b.title}}</span></span>
+<span class="c-tag" style="align-self: flex-start; font-size: 0.75rem;">{{b.kind}}</span>
+<b style="color: var(--color-ink-strong); line-height: 1.3;">{{b.title}}</b>
+<span class="t-small">{{b.desc}}</span>
+<span style="margin-top: auto; display: inline-flex; align-items: center; gap: 0.35rem; min-height: 40px; font-weight: 700; color: var(--color-accent-text);">Bei Amazon ansehen <span aria-hidden="true">↗</span></span>
+</a>
+</sc-for>
+</div>
+<p class="t-small" style="margin: 0;">Bezahlte Links zu Amazon.de. Kaufst du darüber, kriegen wa ’ne kleine Provision – für dich bleibt der Preis gleich.</p>
+</section>
+
+<section id="n-umfeld" class="c-section-card" aria-labelledby="n-verwandt-t" style="scroll-margin-top: 56px;">
+<div class="c-section-card__header"><h2 id="n-verwandt-t" class="c-section-card__title">Lexikalisches Umfeld</h2></div>
+<div class="c-section-card__body" style="display: flex; flex-direction: column; gap: 1.5rem;">
+<sc-if value="{{hasRelatedWords}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; gap: 0.25rem;">
+<p class="t-label">Verwandte Wörter</p>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column;">
+<sc-for list="{{relatedWords}}" as="rw" hint-placeholder-count="3">
+<li><a href="#" style="display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; min-height: 44px; padding-block: 0.5rem; box-sizing: border-box; text-decoration: none;"><span class="c-textlink c-textlink--inline" style="font-size: 1.05rem; color: var(--color-ink-strong);">{{rw.word}}</span><span class="t-small" style="text-align: right;">{{rw.relations}}</span></a></li>
+</sc-for>
+</ul>
+</div>
+</sc-if>
+<nav aria-labelledby="n-nachbarn" style="display: flex; flex-direction: column; gap: 0.375rem;">
+<p id="n-nachbarn" class="t-label">Alphabetische Nachbarn</p>
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column;">
+<sc-for list="{{beforeNear}}" as="w" hint-placeholder-count="3"><li><a class="c-textlink c-textlink--inline" href="#" style="display: flex; align-items: center; gap: 0.5rem; min-height: 40px; color: var(--color-muted);"><span aria-hidden="true">↑</span>{{w}}</a></li></sc-for>
+<li aria-current="page" style="display: flex; align-items: center; gap: 0.5rem; min-height: 40px; padding-inline: 0.5rem; margin-inline: -0.5rem; background: color-mix(in srgb, var(--orange-500) 14%, transparent); border-radius: var(--radius-sm); font-weight: 700; color: var(--color-accent-text);"><span aria-hidden="true">●</span>{{d.word}}</li>
+<sc-for list="{{d.after}}" as="w" hint-placeholder-count="3"><li><a class="c-textlink c-textlink--inline" href="#" style="display: flex; align-items: center; gap: 0.5rem; min-height: 40px; color: var(--color-muted);"><span aria-hidden="true">↓</span>{{w}}</a></li></sc-for>
+</ol>
+</nav>
+</div>
+</section>
+
+<section id="n-kommentare" class="c-section-card" aria-labelledby="n-komm" style="scroll-margin-top: 56px;">
+<div class="c-section-card__header"><h2 id="n-komm" class="c-section-card__title" style="margin: 0;">Wat sagste dazu? <span style="font-weight: 400; color: var(--color-muted);">({{commentCount}})</span></h2>
+<sc-if value="{{canSort}}" hint-placeholder-val="{{false}}"><div role="group" aria-label="Sortierung" style="margin-left: auto; display: flex;"><sc-for list="{{sorts}}" as="so" hint-placeholder-count="2"><button class="c-choice" aria-pressed="{{so.on}}" onClick="{{so.pick}}" style="min-height: 36px; padding: 0 0.625rem; font-size: 0.75rem; margin-left: -1px;">{{so.label}}</button></sc-for></div></sc-if>
+</div>
+<div class="c-section-card__body" style="display: flex; flex-direction: column; gap: 0.875rem;">
+<sc-if value="{{noComments}}" hint-placeholder-val="{{true}}"><p style="margin: 0; color: var(--color-muted);">Hier hat noch keener wat jesacht. Fang du doch an!</p></sc-if>
+<sc-if value="{{hasComments}}" hint-placeholder-val="{{false}}">
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1.25rem;">
+<sc-for list="{{commentList}}" as="cm" hint-placeholder-count="3">
+<li style="{{cm.rowStyle}}">
+<article style="display: flex; flex-direction: column; gap: 0.375rem;">
+<header style="display: flex; align-items: center; gap: 0.625rem;">
+<span aria-hidden="true" style="{{cm.avatarStyle}}">{{cm.initial}}</span>
+<span style="display: flex; flex-direction: column; line-height: 1.25;"><b style="color: var(--color-ink-strong);">{{cm.name}}</b><span class="t-small">{{cm.meta}}</span></span>
+</header>
+<p style="margin: 0; line-height: 1.5;">{{cm.text}}</p>
+<div style="display: flex; align-items: center; gap: 0.75rem; margin-left: -0.75rem;">
+<button class="c-reaction" aria-pressed="{{cm.liked}}" onClick="{{cm.toggle}}" aria-label="Hilfreich, {{cm.votes}}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v12"></path><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path></svg><b>{{cm.votes}}</b></button>
+<button class="c-textlink" style="font-size: 0.85rem;">Antworten</button>
+</div>
+</article>
+</li>
+</sc-for>
+</ol>
+<sc-if value="{{hasMoreComments}}" hint-placeholder-val="{{true}}"><button class="c-textlink" onClick="{{showAllComments}}" style="align-self: flex-start;">{{moreLabel}}</button></sc-if>
+</sc-if>
+<sc-if value="{{commentSent}}" hint-placeholder-val="{{false}}"><div class="c-state c-state--done" role="status"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span class="c-state__body"><b>Danke, is anjekommen!</b><span>Dein Kommentar erscheint, sobald wa ihn jesehen haben.</span></span></div></sc-if>
+<sc-if value="{{notWriting}}" hint-placeholder-val="{{true}}">
+<button class="c-choice" aria-expanded="false" aria-disabled="{{writeOff}}" onClick="{{startWriting}}" style="width: 100%;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"></path></svg>Kommentar schreiben</button>
+</sc-if>
+<sc-if value="{{writing}}" hint-placeholder-val="{{false}}">
+<form style="display: flex; flex-direction: column; gap: 0.875rem;">
+<div style="display: flex; flex-direction: column; gap: 0.375rem;">
+<label for="n-text" style="font-weight: 700; color: var(--color-ink-strong);">Dein Kommentar</label>
+<textarea id="n-text" class="c-field" rows="4" maxlength="1000"></textarea>
+<span class="t-small" style="align-self: flex-end;">0 / 1000</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 0.375rem;">
+<label for="n-name" style="font-weight: 700; color: var(--color-ink-strong);">Dein Name <span style="font-weight: 400; color: var(--color-muted);">(optional)</span></label>
+<input id="n-name" class="c-field" type="text" placeholder="z. B. Kiez-Kalle" aria-describedby="n-name-hint" style="height: 44px; padding-block: 0;">
+<span id="n-name-hint" class="t-small">Leer jelassen? Dann kriegste ’n Berliner Namen, z. B. „Anonyme Schrippe“.</span>
+</div>
+<sc-if value="{{commentFailed}}" hint-placeholder-val="{{false}}"><div class="c-state c-state--error" role="alert"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg><span class="c-state__body"><b>Ditt hat nich jeklappt.</b><span>Dein Kommentar is nich rausjegangen. Dein Text bleibt stehen – versuch’s gleich nochmal.</span></span></div></sc-if>
+<button class="c-button c-button--primary" type="button" onClick="{{submitComment}}" style="width: 100%; height: 48px;">{{submitLabel}}</button>
+<p class="t-small" style="margin: 0;">Dein Kommentar wird öffentlich angezeigt. Was wir dabei speichern, steht in der <a class="c-textlink c-textlink--inline" href="#">Datenschutzerklärung</a>.</p>
+</form>
+</sc-if>
+</div>
+</section>
+
+<nav aria-labelledby="n-weiter" style="display: flex; flex-direction: column; gap: 0.5rem; padding-top: 1.5rem;">
+<h2 id="n-weiter" class="c-band" style="margin-bottom: 0.25rem;">Und nu?</h2>
+<sc-if value="{{isTrending}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 0.375rem; padding-bottom: 0.5rem;">
+<p class="t-label">Ooch im Trend</p>
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; gap: 0.5rem; overflow-x: auto; scrollbar-width: none;">
+<sc-for list="{{trend.others}}" as="tw" hint-placeholder-count="4"><li style="flex-shrink: 0;"><a href="#" style="{{tw.style}}"><b style="color: var(--color-accent-text);">{{tw.rank}}</b><span>{{tw.word}}</span></a></li></sc-for>
+</ol>
+</div>
+</sc-if>
+<a class="c-next-link" href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 14 4 4-4 4"></path><path d="m18 2 4 4-4 4"></path><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-7.6a4 4 0 0 1 3.3-1.7H22"></path><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2"></path><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45"></path></svg><span style="display: flex; flex-direction: column;"><b>Zufälliges Wort</b><span class="t-small">Lass dich überraschen</span></span><span aria-hidden="true" style="color: var(--color-muted);">→</span></a>
+<a class="c-next-link" href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 16 4 4 4-4"></path><path d="M7 20V4"></path><path d="M20 8h-5"></path><path d="M15 10V6.5a2.5 2.5 0 0 1 5 0V10"></path><path d="M15 14h5l-5 6h5"></path></svg><span style="display: flex; flex-direction: column;"><b>Wort Index</b><span class="t-small">Alle Wörter von A bis Z</span></span><span aria-hidden="true" style="color: var(--color-muted);">→</span></a>
+<a class="c-next-link" href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg><span style="display: flex; flex-direction: column;"><b>Wort vorschlagen</b><span class="t-small">Fehlt dir ’n Wort? Her damit!</span></span><span aria-hidden="true" style="color: var(--color-muted);">→</span></a>
+</nav>
+
+<p class="t-small" style="margin: 1rem 0 0;">Wort erstellt am {{d.created}} · Bearbeitet am {{d.edited}}</p>
+
+</sc-if>
+</main>
+
+<sc-if value="{{lightboxOpen}}" hint-placeholder-val="{{false}}">
+<div role="dialog" aria-modal="true" aria-label="{{lb.alt}}" style="position: fixed; inset: 0; z-index: 10; display: flex; flex-direction: column; justify-content: center; gap: 0.75rem; padding: 1rem; background: rgb(0 0 0 / 88%); backdrop-filter: blur(4px);">
+<button class="c-icon-button" aria-label="Bild schließen" onClick="{{closeLightbox}}" style="position: absolute; top: 0.5rem; right: 0.5rem; color: var(--white-100);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+<sc-if value="{{lb.src}}" hint-placeholder-val="{{false}}"><img src="{{lb.src}}" alt="{{lb.alt}}" style="display: block; width: 100%; max-height: 70vh; object-fit: contain;"></sc-if>
+<sc-if value="{{lb.placeholder}}" hint-placeholder-val="{{true}}"><div role="img" aria-label="{{lb.alt}}" style="display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 4 / 3; background: var(--grey-100); color: var(--white-100);">{{lb.alt}}</div></sc-if>
+<p style="margin: 0; font-size: 0.85rem; color: var(--white-100);">{{lb.caption}}</p>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"word":{"editor":"enum","options":["testwort","abnotam","akademiebusen","lang","leer"],"default":"testwort"},"comments":{"editor":"boolean","default":false},"trending":{"editor":"boolean","default":false},"status":{"editor":"enum","options":["normal","laden","offline","fehler"],"default":"normal"},"$preview":{"width":390,"height":4900}}'>
+class Component extends DCLogic {
+  isDesktop() { return false; }
+  constructor(props) {
+    super(props);
+    this.state = { liked: false, disliked: false, playing: null, tab: 'bedeutung', showFreq: false, writing: false, lightbox: -1, sort: 'beste', allComments: false, cLikes: {} };
+  }
+  words() {
+    return {
+      testwort: {
+        word: 'testwort', article: ', der', pos: 'Nomen', posAuto: false, berolinismus: true, category: 'Testkategorie', audio: true,
+        meanings: ['Prüfwort', 'Beispielwort'], same: 'testwörtchen',
+        origin: 'Bedeutung seit dem 19. Jahrhundert gebräuchlich.', sources: ['Testquelle 1', 'Testquelle 2'],
+        examples: [
+          { text: 'Dit is ein Testwort.', explanation: 'Erklärung zum ersten Beispiel.', audio: true },
+          { text: 'Zweet Beispiel, zweet Satz.', explanation: 'Und noch eine Erklärung.', audio: false }
+        ],
+        syllables: ['test', 'wort'], parts: [],
+        counts: { b: 8, v: 2, k: 6, u: 6, va: 2, s: 2 },
+        freq: [['t', 6.15, 'häufig'], ['e', 17.40, 'sehr häufig'], ['s', 7.27, 'häufig'], ['w', 1.89, 'selten'], ['o', 2.51, 'gelegentlich'], ['r', 7.00, 'häufig']],
+        facts: ['Kein Palindrom', 'Längste Konsonantenfolge: „stw“ (3 Buchstaben)', 'Beginnt und endet mit Konsonant'],
+        grammar: [{ w: 'testwort', pos: 'Nomen' }],
+        similar: ['testwart', 'testwerk'], written: ['testwart', 'testwerk'], anagrams: ['wortstet'], related: ['wortstet', 'testwart', 'testwerk'],
+        before: ['testwerk', 'testwart', 'Terke'], after: ['Text, weiter in Text', 'Thedor', 'Tick'],
+        created: '5. November 2026', edited: '5. November 2026',
+        images: [{ src: '', alt: 'Testbild 1', credit: '' }, { src: '', alt: 'Testbild 2', credit: '' }]
+      },
+      akademiebusen: {
+        word: 'Akademiebusen', article: ', der', pos: 'Nomen', posAuto: false, berolinismus: true, category: 'Berliner Orte & Spitznamen', audio: false,
+        meanings: ['die Isothermischen Kugellabore in Berlin-Adlershof'], same: 'Adlershofer Busen',
+        origin: '', sources: [], examples: [],
+        syllables: ['Aka', 'de', 'mie', 'bu', 'sen'], parts: ['Akademie', 'Busen'],
+        counts: { b: 13, v: 7, k: 6, u: 10, va: 4, s: 5 },
+        freq: [['a', 6.51, 'häufig'], ['k', 1.21, 'selten'], ['d', 4.80, 'gelegentlich'], ['e', 17.40, 'sehr häufig'], ['m', 2.53, 'gelegentlich'], ['i', 7.55, 'häufig'], ['b', 1.96, 'selten'], ['u', 4.35, 'gelegentlich'], ['s', 7.27, 'häufig'], ['n', 9.78, 'häufig']],
+        facts: ['Kein Palindrom', 'Längste Vokalkette: „ie“ (2 Buchstaben)', 'Beginnt mit Vokal, endet mit Konsonant'],
+        grammar: [{ w: 'Akademiebusen', pos: 'Nomen' }],
+        similar: ['Achtung – Dampfwalze', 'Akedemie', 'asten', 'Asthmakiste', 'Ausstehn'], written: [], anagrams: [], related: [],
+        before: ['Ahnung', 'Ahnen', 'Affig'], after: ['Akedemie', 'Aki', 'Akklamatoren'],
+        created: '9. Dezember 2023', edited: '1. Juli 2026',
+        images: [
+          { src: '/_blob/527d6a5be0434c319507252cea4852df', alt: 'Kugelförmiges Labor in Berlin-Adlershof', credit: '' },
+          { src: '/_blob/a95ed727b1aa272bc2ae1e181b0755f1', alt: 'Zwei Kugellabore nebeneinander in Berlin-Adlershof', credit: 'Dr._Bernd_Gross' }
+        ]
+      },
+      lang: {
+        word: 'Rinnsteinschwalbenbeobachtungsposten', article: ', der', pos: 'Nomen', posAuto: false, berolinismus: true, category: 'Grenzfall: langes Wort', audio: true,
+        meanings: ['Bank vor der Eckkneipe', 'Platz am Fenster mit Blick auf die Straße', 'scherzhaft für Hausmeisterloge', 'Stammplatz von Nachbarn, die alles mitkriegen', 'Ort, von dem aus Klatsch verbreitet wird', 'Balkon im Erdgeschoss', 'Wartebank an der Haltestelle', 'Ecke vorm Späti', 'Hocker am Hauseingang', 'übertragen: neugierige Person'],
+        same: 'Fensterkissen',
+        origin: 'Zusammengesetzt aus „Rinnstein“, „Schwalbe“ (spöttisch für Spatz) und „Beobachtungsposten“; Grenzfall für sehr lange Komposita.', sources: ['Testquelle 1'],
+        examples: [{ text: 'Oma sitzt schon wieder uff ihrm Rinnsteinschwalbenbeobachtungsposten und kiekt, wer kommt.', explanation: 'Oma sitzt wieder an ihrem Lieblingsplatz und beobachtet die Straße.', audio: true }],
+        syllables: ['Rinn', 'stein', 'schwal', 'ben', 'be', 'ob', 'ach', 'tungs', 'pos', 'ten'], parts: ['Rinnstein', 'Schwalben', 'Beobachtungs', 'Posten'],
+        counts: { b: 36, v: 10, k: 26, u: 14, va: 3, s: 10 },
+        freq: [['r', 7.00, 'häufig'], ['i', 7.55, 'häufig'], ['n', 9.78, 'häufig'], ['s', 7.27, 'häufig'], ['t', 6.15, 'häufig'], ['e', 17.40, 'sehr häufig'], ['c', 3.06, 'gelegentlich'], ['h', 4.76, 'gelegentlich'], ['w', 1.89, 'selten'], ['a', 6.51, 'häufig'], ['l', 3.44, 'gelegentlich'], ['b', 1.96, 'selten'], ['o', 2.51, 'gelegentlich'], ['u', 4.35, 'gelegentlich'], ['g', 3.01, 'gelegentlich'], ['p', 0.79, 'selten']],
+        facts: ['Kein Palindrom', 'Längste Konsonantenfolge: „nnst“ (4 Buchstaben)', 'Vier Bestandteile'],
+        grammar: [{ w: 'Rinnsteinschwalbenbeobachtungsposten', pos: 'Nomen' }],
+        similar: ['Rinnstein', 'Rinnsteinschwalbe'], written: ['Rinnsteinschwalbe'], anagrams: [], related: ['Rinnsteinschwalbe', 'Fensterkissen', 'Kiezwache'],
+        before: ['Rinnstein', 'Rindvieh', 'Ringelpietz'], after: ['Rinnsteinschwalbe', 'Ritze', 'Rixdorf'],
+        created: '8. November 2026', edited: '8. November 2026',
+        images: [{ src: '', alt: 'Testbild 1', credit: 'Beispiel' }, { src: '', alt: 'Testbild 2', credit: '' }, { src: '', alt: 'Testbild 3', credit: '' }]
+      },
+      leer: {
+        word: 'Kiekste', article: '', pos: 'Verb', posAuto: true, berolinismus: false, category: '', audio: false,
+        meanings: ['schaust du'], same: '',
+        origin: '', sources: [], examples: [],
+        syllables: ['Kiek', 'ste'], parts: [],
+        counts: { b: 7, v: 3, k: 4, u: 5, va: 1, s: 2 },
+        freq: [['k', 1.21, 'selten'], ['i', 7.55, 'häufig'], ['e', 17.40, 'sehr häufig'], ['s', 7.27, 'häufig'], ['t', 6.15, 'häufig']],
+        facts: ['Kein Palindrom'],
+        grammar: [{ w: 'Kiekste', pos: 'Verb' }],
+        similar: [], written: [], anagrams: [], related: [],
+        before: ['Kiek', 'Kiebitz', 'Kerl'], after: ['Kiez', 'Kinkerlitzchen', 'Kladderadatsch'],
+        created: '8. November 2026', edited: '8. November 2026',
+        images: []
+      },
+      abnotam: {
+        word: 'Ab Notam', article: '', pos: 'Präposition', posAuto: true, berolinismus: false, category: '', audio: false,
+        meanings: ['sich (etwas) merken'], same: '',
+        origin: 'Von lateinisch „ad notam“ (zur Kenntnis).', sources: ['Der richtige Berliner in Wörtern und Redensarten / Meyer, Hans'],
+        examples: [{ text: 'Det wer’k mir ab Notam nehmen.', explanation: 'das werde ich mir merken', audio: false }],
+        syllables: ['Ab', 'Notam'], parts: [],
+        counts: { b: 8, v: 3, k: 4, u: 6, va: 2, s: 2 },
+        freq: [['a', 6.51, 'häufig'], ['b', 1.96, 'selten'], ['n', 9.78, 'häufig'], ['o', 2.51, 'gelegentlich'], ['t', 6.15, 'häufig'], ['m', 2.53, 'gelegentlich']],
+        facts: ['Kein Palindrom', 'Beginnt mit Vokal, endet mit Konsonant'],
+        grammar: [{ w: 'ab', pos: 'Präposition' }, { w: 'Notam', pos: 'Nomen' }],
+        similar: ['Abend', 'Affendarjus', 'Affenhitze', 'Affentheater', 'Affentöter', 'aufmotzen'], written: [], anagrams: [], related: [],
+        before: ['ab', 'Aasig', 'aasen'], after: ['abäschern', 'Abbachern', 'abbeißen'],
+        created: '16. September 2026', edited: '16. September 2026',
+        images: []
+      }
+    };
+  }
+  extras(d) {
+    const { sort, allComments, cLikes } = this.state;
+    const raw = (this.props.comments || this.props.word === 'lang') ? [
+      { id: 'a', name: 'Kiez-Kalle', when: 'vor 2 Tagen', ago: 2, where: 'Pankow', text: 'Sag ick jeden Tach, meene Oma hat det schon so jesacht.', votes: 12 },
+      { id: 'b', name: 'Anonyme Schrippe', when: 'vor 5 Stunden', ago: 0.2, where: '', text: 'Kenn ick nur aus\'m Fernsehen – is det wirklich noch jebräuchlich?', votes: 4 },
+      { id: 'c', name: 'Spree-Sabine', when: 'vor 1 Woche', ago: 7, where: 'Neukölln', text: 'Bei uns im Kiez sagt man dazu ooch manchmal anders, aber die Bedeutung stimmt.', votes: 7 },
+      { id: 'd', name: 'Ostkreuz-Olli', when: 'vor 3 Wochen', ago: 21, where: '', text: 'Jutes Beispiel oben, hab ick so ooch schon jehört.', votes: 1 }
+    ] : [];
+    if (this.props.word === 'lang') {
+      const names = ['Kiez-Kalle', 'Anonyme Schrippe', 'Spree-Sabine', 'Ostkreuz-Olli', 'Wedding-Wanda', 'Mauerpark-Micha', 'Anonyme Bulette', 'Tempelhof-Tine', 'Späti-Sven', 'Kreuzberg-Kemal'];
+      for (let k = raw.length; k < 20; k++) raw.push({ id: 'x' + k, name: names[k % names.length], when: 'vor ' + (k + 1) + ' Tagen', ago: k + 1, where: k % 3 ? '' : 'Lichtenberg', text: k === 4 ? 'Ick hab da ma ’ne janz lange Jeschichte zu: Meine Tante Erna saß jeden Abend uff ihrm Platz am Fenster, hat die janze Straße im Blick jehabt und wusste immer als Erste, wer mit wem und warum. Dit war ihr Rinnsteinschwalbenbeobachtungsposten, so hat Opa dit jenannt, und die janze Familie hat jelacht. Heute sitz ick da.' : 'Kommentar Nummer ' + (k + 1) + ' – jenau so kenn ick dit ooch.', votes: 20 - k });
+    }
+    const sorted = raw.slice().sort((x, y) => sort === 'beste' ? (y.votes + (cLikes[y.id] ? 1 : 0)) - (x.votes + (cLikes[x.id] ? 1 : 0)) : x.ago - y.ago);
+    const shown = allComments ? sorted : sorted.slice(0, 3);
+    const commentList = shown.map((c, i) => ({
+      ...c,
+      initial: c.name.charAt(0),
+      meta: c.when + (c.where ? ' · ' + c.where : ''),
+      liked: !!cLikes[c.id],
+      votes: c.votes + (cLikes[c.id] ? 1 : 0),
+      toggle: () => this.setState({ cLikes: { ...cLikes, [c.id]: !cLikes[c.id] } }),
+      avatarStyle: 'display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex-shrink: 0; border-radius: var(--radius-sm); font-weight: 700; color: var(--color-accent-text); background: color-mix(in srgb, var(--orange-500) 16%, transparent);',
+      rowStyle: i > 0 ? 'padding-top: 1.25rem; border-top: 1px dashed var(--rule-inner);' : ''
+    }));
+    const ranks = [2, 1, 3, 4, 5];
+    const others = [['Knorke', 1], ['Schrippe', 3], ['Atze', 4], ['Icke', 5]];
+    const views = [22, 30, 28, 45, 61, 84, 128];
+    const max = Math.max(...views);
+    return {
+      commentCount: raw.length,
+      hasComments: raw.length > 0, noComments: raw.length === 0,
+      canSort: raw.length > 1,
+      sorts: [['beste', 'Beste'], ['neueste', 'Neueste']].map(([id, label]) => ({ label, on: sort === id, pick: () => this.setState({ sort: id }) })),
+      commentList,
+      hasMoreComments: !allComments && raw.length > 3,
+      moreLabel: 'Alle ' + raw.length + ' Kommentare zeigen',
+      showAllComments: () => this.setState({ allComments: true }),
+      isTrending: !!this.props.trending,
+      trend: {
+        rank: ranks[0], views: views.reduce((a, b) => a + b, 0), change: '+340 %',
+        bars: views.map((v, i) => ({ style: 'width: 7px; height: ' + Math.max(10, Math.round((v / max) * 100)) + '%; border-radius: 1px; background: ' + (i === views.length - 1 ? 'var(--orange-600)' : 'var(--orange-400)') + '; opacity: ' + (i === views.length - 1 ? 1 : 0.55) + ';' })),
+        others: others.map(([word, rank]) => ({ word, rank: rank + '.', style: 'display: inline-flex; align-items: center; gap: 0.5rem; min-height: 44px; padding: 0 0.875rem; text-decoration: none; background: var(--surface-paper); box-shadow: var(--paper-lift); border-radius: var(--radius-sm); color: var(--color-ink-strong); white-space: nowrap;' }))
+      }
+    };
+  }
+  voices(key, label) {
+    const { playing } = this.state;
+    return [['m', 'Männerstimme'], ['f', 'Frauenstimme']].map(([g, name]) => {
+      const id = key + '-' + g;
+      const on = playing === id;
+      return { playing: on, idle: !on, label: name, short: g === 'm' ? 'Männlich' : 'Weiblich', toggle: () => this.setState({ playing: on ? null : id }) };
+    });
+  }
+  renderVals() {
+    const all = this.words();
+    const d = all[this.props.word] || all.testwort;
+    const { liked, disliked, tab, showFreq, writing, lightbox } = this.state;
+    const tabDefs = [['bedeutung', 'Bedeutung', '#n-bedeutung', true], ['umfrage', 'Umfrage', '#n-umfrage', true], ['etymologie', 'Etymologie', '#n-etymologie', !!d.origin || d.sources.length > 0], ['beispiele', 'Beispiele', '#n-beispiele', d.examples.length > 0], ['analyse', 'Analyse', '#n-analyse', true], ['umfeld', 'Umfeld', '#n-umfeld', true], ['kommentare', 'Kommentare', '#n-kommentare', true]];
+    const tabs = tabDefs.filter((t) => t[3]).map(([id, label, href]) => ({ label, href, current: tab === id ? 'true' : 'false', pick: () => this.setState({ tab: id }) }));
+    const images = d.images.map((im, i) => ({
+      ...im, placeholder: !im.src,
+      caption: im.credit ? 'Foto: ' + im.credit : '',
+      openAria: im.alt + ' vergrößern',
+      open: () => this.setState({ lightbox: i })
+    }));
+    const lbImg = images[lightbox] || { src: '', alt: '', caption: '', placeholder: false };
+    const fmap = {};
+    d.freq.forEach(([ch, p]) => { fmap[ch] = p; });
+    const vowels = 'aeiouäöü';
+    const tiles = d.word.split('').map((ch) => {
+      if (ch === ' ') return { ch: '', box: 'flex: 0 0 8px;', fill: 'display: none;' };
+      const lc = ch.toLowerCase();
+      const p = fmap[lc] || 1;
+      const isV = vowels.includes(lc);
+      return {
+        ch,
+        box: 'position: relative; overflow: hidden; flex: 1 1 0; min-width: 28px; max-width: 44px; height: 52px; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; font-weight: 700; color: var(--color-ink-strong); background: var(--surface-chip); border-radius: var(--radius-xxs);',
+        fill: 'position: absolute; inset-inline: 0; bottom: 0; height: ' + Math.max(8, Math.round((p / 18) * 100)) + '%; background: color-mix(in srgb, ' + (isV ? 'var(--orange-500) 34%' : 'var(--color-muted) 26%') + ', transparent);'
+      };
+    });
+    const rel = new Map();
+    const add = (list, label) => list.forEach((w) => { if (!rel.has(w)) rel.set(w, []); rel.get(w).push(label); });
+    add(d.related, 'verwandt');
+    const relatedWords = Array.from(rel.entries()).map(([word]) => {
+      const also = [];
+      if (d.similar.includes(word)) also.push('klingt ähnlich');
+      if (d.written.includes(word)) also.push('ähnlich geschrieben');
+      if (d.anagrams.includes(word)) also.push('Anagramm');
+      return { word, relations: also.join(' · ') };
+    });
+    const covers = ['color-mix(in srgb, var(--color-muted) 22%, var(--surface-paper))', 'color-mix(in srgb, var(--color-muted) 34%, var(--surface-paper))', 'color-mix(in srgb, var(--color-muted) 14%, var(--surface-paper))'];
+    const books = [
+      { title: 'Langenscheidt Lilliput Berlinerisch', kind: 'Wörterbuch', desc: '~5.000 Stichwörter, Berlinerisch ↔ Hochdeutsch – passt in jede Jackentasche.' },
+      { title: 'Berlinerisch: Watt denn, icke?', kind: 'Nachschlagewerk', desc: 'Typische Berliner Sprüche und die Geschichte dahinter.' },
+      { title: 'Da kiekste, wa?! Dialekt-Quiz', kind: 'Geschenk', desc: '50 Berliner Begriffe als Kartenspiel – für den nächsten Spieleabend.' }
+    ].map((b, i) => ({ ...b, coverStyle: 'display: flex; align-items: flex-end; aspect-ratio: 5 / 4; padding: 0.75rem; box-sizing: border-box; border-radius: var(--radius-xxs); color: var(--color-ink-strong); background: linear-gradient(90deg, rgb(0 0 0 / 18%) 0 6px, transparent 6px), ' + covers[i] + ';' }));
+    const c = d.counts;
+    return {
+      theme: this.props.theme ?? 'dark',
+      yes: true,
+      d, tabs, images, tiles, relatedWords, books,
+      hasWritten: d.written.length > 0,
+      hasAnagrams: d.anagrams.length > 0,
+      hasSimilar: d.similar.length > 0,
+      grammarLabel: d.grammar.length > 1 ? 'Wortart pro Wort (NLP-Analyse)' : 'Wortart (NLP-Analyse)',
+      posLabel: d.pos + (d.posAuto ? ' (automatisch)' : ''),
+      posCls: 'c-badge' + (d.posAuto ? ' c-badge--auto' : ''),
+      meaningLabel: d.meanings.length > 1 ? 'Bedeutungen' : 'Bedeutung',
+      shownMeanings: this.state.allMeanings ? d.meanings : d.meanings.slice(0, 5),
+      hasMoreMeanings: !this.state.allMeanings && d.meanings.length > 5,
+      moreMeaningsLabel: 'Alle ' + d.meanings.length + ' Bedeutungen zeigen',
+      showAllMeanings: () => this.setState({ allMeanings: true }),
+      isLoading: this.props.status === 'laden', isReady: this.props.status !== 'laden',
+      isOffline: this.props.status === 'offline',
+      pollStatus: this.props.status === 'offline' || this.props.status === 'fehler' ? this.props.status : 'normal',
+      writeOff: this.props.status === 'offline' ? 'true' : 'false',
+      commentFailed: this.state.sent === 'error',
+      commentSent: this.state.sent === 'done',
+      submitLabel: this.state.sent === 'error' ? 'Nochmal abschicken' : 'Abschicken',
+      submitComment: () => this.setState(this.props.status === 'fehler' && this.state.sent !== 'error' ? { sent: 'error' } : { sent: 'done', writing: false }),
+      multiMeaning: d.meanings.length > 1,
+      singleMeaning: d.meanings.length === 1,
+      firstMeaning: d.meanings[0] || '',
+      wordAudio: this.voices('word', d.word),
+      hasImages: images.length > 0,
+      hasOrigin: !!d.origin || d.sources.length > 0,
+      hasSources: d.sources.length > 0,
+      sourceLabel: d.sources.length > 1 ? 'Quellen' : 'Quelle',
+      hasExamples: d.examples.length > 0,
+      examples: d.examples.map((ex, i) => ({ ...ex, groupAria: 'Beispiel ' + (i + 1) + ' anhören', voices: this.voices('ex' + i, 'Beispiel ' + (i + 1)) })),
+      syllableText: d.syllables.join(' · '),
+      parts: d.parts.map((label, i) => ({ label, plus: i > 0 })),
+      hasParts: d.parts.length > 0,
+      multiWord: d.grammar.length > 1,
+      stats: [['Buchstaben', c.b], ['Vokale', c.v], ['Konsonanten', c.k], ['Verschiedene', c.u]].map(([label, value]) => ({ label, value })),
+      freq: d.freq.map(([ch, p, label]) => ({ ch, label, pct: p.toFixed(2).replace('.', ',') + ' %' })),
+      showFreq,
+      freqToggle: showFreq ? 'Häufigkeiten ausblenden' : 'Häufigkeiten als Zahlen zeigen',
+      toggleFreq: () => this.setState({ showFreq: !showFreq }),
+      hasRelatedWords: relatedWords.length > 0,
+      beforeNear: d.before.slice().reverse(),
+      writing, notWriting: !writing,
+      showDislike: (this.isDesktop() && !!this.state.hoverLike) || this.state.disliked,
+      likeEnter: () => { if (this.isDesktop() && !this.state.hoverLike) this.setState({ hoverLike: true }); },
+      likeLeave: () => { if (this.state.hoverLike) this.setState({ hoverLike: false }); },
+      menuOpen: !!this.state.menuOpen,
+      toggleMenu: () => this.setState({ menuOpen: !this.state.menuOpen, copied: null }),
+      shareWord: () => this.setState({ menuOpen: false }),
+      linkDone: this.state.copied === 'link', linkIdle: this.state.copied !== 'link',
+      wordDone: this.state.copied === 'word', wordIdle: this.state.copied !== 'word',
+      linkLabel: this.state.copied === 'link' ? 'Link kopiert' : 'Link kopieren',
+      wordLabel: this.state.copied === 'word' ? 'Wort kopiert' : 'Wort kopieren',
+      copyLink: () => this.setState({ copied: 'link' }),
+      copyWord: () => this.setState({ copied: 'word' }),
+      ...this.extras(d),
+      startWriting: () => { if (this.props.status !== 'offline') this.setState({ writing: true, sent: null }); },
+      lightboxOpen: lightbox >= 0,
+      lb: lbImg,
+      closeLightbox: () => this.setState({ lightbox: -1 }),
+      liked, disliked,
+      likes: liked ? 1 : 0,
+      dislikes: disliked ? 1 : 0,
+      toggleLike: () => this.setState({ liked: !liked, disliked: false }),
+      toggleDislike: () => this.setState({ disliked: !disliked, liked: false })
+    };
+  }
+}
+</script>
+</body>
+</html>
