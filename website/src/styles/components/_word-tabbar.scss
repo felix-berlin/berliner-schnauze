@@ -1,0 +1,45 @@
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
+
+// Mobile counterpart of .c-word-sidebar; both list the same sections.
+.c-word-tabbar {
+  position: sticky;
+  inset-block-start: var(--word-tabbar-top, 0);
+  z-index: 4;
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: var(--surface-sheet);
+  border-block-end: 1px dashed var(--rule-card);
+
+  @media (width > butler-fn.px-to-rem(807)) {
+    display: none;
+  }
+
+  &__tab {
+    display: flex;
+    align-items: center;
+    min-block-size: 48px;
+    padding-inline: 0.875rem;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--color-muted);
+    border-block-end: 3px solid transparent;
+
+    @include butler-mx.hover {
+      color: var(--color-ink-strong);
+    }
+
+    &[aria-current="true"] {
+      color: var(--color-ink-strong);
+      border-block-end-color: var(--orange-600);
+    }
+
+    &:focus-visible {
+      outline: 2px dashed var(--orange-400);
+      outline-offset: 2px;
+    }
+  }
+}

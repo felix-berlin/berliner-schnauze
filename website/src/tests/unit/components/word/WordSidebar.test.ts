@@ -5,22 +5,16 @@ import { createAstroRender } from "../../helpers";
 
 vi.mock("@styles/components/_word-sidebar.scss", () => ({}));
 
-const makeWord = (overrides: Record<string, unknown> = {}) => ({
-  article: "die",
-  berlinerisch: "Schnauze",
-  examples: [{ example: "Det is keen Zufall." }],
-  ...overrides,
-});
+const sections = [
+  { id: "bedeutung", label: "Bedeutung" },
+  { id: "analyse", label: "Analyse" },
+  { id: "verwandte-worte", label: "Umfeld" },
+];
 
 const defaultProps = {
-  hasAnagrams: false,
-  hasLinguistik: false,
-  hasNeighbors: false,
-  hasOrthographie: false,
-  hasPhonologie: false,
-  hasRelatedWords: false,
-  word: makeWord(),
-  wordTags: [],
+  posLabel: "Nomen",
+  sections,
+  word: { berlinerisch: "Schnauze" },
 };
 
 describe("WordSidebar.astro", () => {
@@ -31,115 +25,29 @@ describe("WordSidebar.astro", () => {
     render = await createAstroRender(WordSidebar);
   }, 30_000);
 
-  it("renders the aside with c-word-sidebar class", async () => {
+  it("renders the aside with the word title", async () => {
     const result = await render(defaultProps);
-    expect(result).toContain("c-word-sidebar");
     expect(result).toContain("<aside");
-  });
-
-  it("renders the word title", async () => {
-    const result = await render(defaultProps);
-    expect(result).toContain("Schnauze");
     expect(result).toContain("c-word-sidebar__word-title");
+    expect(result).toContain("Schnauze");
   });
 
-  it("renders the article when provided", async () => {
+  it("shows the part-of-speech label as subtitle", async () => {
     const result = await render(defaultProps);
-    expect(result).toContain("die");
     expect(result).toContain("c-word-sidebar__word-subtitle");
+    expect(result).toContain("Nomen");
   });
 
-  it("does not render article element when article is absent", async () => {
-    const result = await render({
-      ...defaultProps,
-      word: makeWord({ article: null }),
-    });
+  it("omits the subtitle without a part-of-speech label", async () => {
+    const result = await render({ ...defaultProps, posLabel: undefined });
     expect(result).not.toContain("c-word-sidebar__word-subtitle");
   });
 
-  it("always renders the Bedeutung nav link", async () => {
+  it("renders one flat link per section in the given order", async () => {
     const result = await render(defaultProps);
-    expect(result).toContain("Bedeutung");
-    expect(result).toContain('href="#etymologie"');
-  });
-
-  it("renders the Beispiele link when examples are present", async () => {
-    const result = await render(defaultProps);
-    expect(result).toContain("Beispiele");
-    expect(result).toContain('href="#beispiele"');
-  });
-
-  it("does not render the Beispiele link when examples are absent", async () => {
-    const result = await render({
-      ...defaultProps,
-      word: makeWord({ examples: [] }),
-    });
-    expect(result).not.toContain('href="#beispiele"');
-  });
-
-  it("renders Orthographie link when hasOrthographie is true", async () => {
-    const result = await render({ ...defaultProps, hasOrthographie: true });
-    expect(result).toContain("Orthographie");
-    expect(result).toContain('href="#orthographie"');
-  });
-
-  it("does not render Orthographie link when hasOrthographie is false", async () => {
-    const result = await render(defaultProps);
-    expect(result).not.toContain('href="#orthographie"');
-  });
-
-  it("renders Linguistik link when hasLinguistik is true", async () => {
-    const result = await render({ ...defaultProps, hasLinguistik: true });
-    expect(result).toContain("Linguistik");
-    expect(result).toContain('href="#linguistik"');
-  });
-
-  it("renders Grammatik link when wordTags is non-empty", async () => {
-    const result = await render({
-      ...defaultProps,
-      wordTags: [{ Schnauze: ["Nomen"] }],
-    });
-    expect(result).toContain("Grammatik");
-    expect(result).toContain('href="#grammatik"');
-  });
-
-  it("does not render Grammatik link when wordTags is empty", async () => {
-    const result = await render(defaultProps);
-    expect(result).not.toContain('href="#grammatik"');
-  });
-
-  it("renders Phonologie link when hasPhonologie is true", async () => {
-    const result = await render({ ...defaultProps, hasPhonologie: true });
-    expect(result).toContain("Phonologie");
-    expect(result).toContain('href="#phonologie"');
-  });
-
-  it("renders Anagramme link when hasAnagrams is true", async () => {
-    const result = await render({ ...defaultProps, hasAnagrams: true });
-    expect(result).toContain("Anagramme");
-    expect(result).toContain('href="#anagramme"');
-  });
-
-  it("does not render Anagramme link when hasAnagrams is false", async () => {
-    const result = await render(defaultProps);
-    expect(result).not.toContain('href="#anagramme"');
-  });
-
-  it("renders Nachbarn link when hasNeighbors is true", async () => {
-    const result = await render({ ...defaultProps, hasNeighbors: true });
-    expect(result).toContain("Nachbarn");
-    expect(result).toContain('href="#navigation"');
-  });
-
-  it("renders Verwandte Worte link when hasRelatedWords is true", async () => {
-    const result = await render({ ...defaultProps, hasRelatedWords: true });
-    expect(result).toContain("Verwandte Worte");
-    expect(result).toContain('href="#verwandte-worte"');
-  });
-
-  it("does not render Verwandte Worte link when hasRelatedWords is false", async () => {
-    const result = await render(defaultProps);
-    expect(result).not.toContain('href="#verwandte-worte"');
+    const hrefs = [...result.matchAll(/href="(#[^"]+)"/g)].map((m) => m[1]);
+    expect(hrefs).toEqual(["#bedeutung", "#analyse", "#verwandte-worte"]);
+    expect(result).toContain("Umfeld");
   });
 
   it("renders the nav with aria-label Seitennavigation", async () => {

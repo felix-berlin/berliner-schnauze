@@ -90,4 +90,25 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     const breadcrumb = page.getByRole("navigation", { name: "breadcrumbs" });
     await expect(breadcrumb.getByRole("link").last()).toHaveText("Wa");
   });
+
+  test("mobile: Tab-Leiste statt Seitenleiste, Tab scrollt zum Anker (anmachen)", async ({ page }) => {
+    await page.setViewportSize({ height: 800, width: 390 });
+    await page.goto("/wort/anmachen");
+
+    const tabbar = page.getByRole("navigation", { name: "Inhalt der Wortseite" });
+    await expect(tabbar).toBeVisible();
+    await expect(page.locator(".c-word-sidebar")).toBeHidden();
+
+    await tabbar.getByRole("link", { name: "Analyse" }).click();
+    await expect(page).toHaveURL(/#analyse$/);
+    await expect(page.locator("#analyse")).toBeInViewport();
+  });
+
+  test("Desktop: Seitenleiste statt Tab-Leiste (anmachen)", async ({ page }) => {
+    await page.setViewportSize({ height: 800, width: 1280 });
+    await page.goto("/wort/anmachen");
+
+    await expect(page.locator(".c-word-sidebar")).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Inhalt der Wortseite" })).toBeHidden();
+  });
 });

@@ -37,7 +37,7 @@ describe("WordSectionVerwandteWorte.astro", () => {
       relatedWords: makeRelatedWords([{ berlinerisch: "Fresse", slug: "fresse" }]),
     });
     expect(result).toContain("Verwandte Worte");
-    expect(result).toContain('id="verwandte-worte"');
+    expect(result).toContain('id="verwandte"');
     expect(result).toContain("c-section-card");
   });
 

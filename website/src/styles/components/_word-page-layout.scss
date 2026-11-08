@@ -23,15 +23,37 @@
   display: flex;
   flex-direction: column;
   gap: vars.$spacer;
+  padding-block-end: vars.$spacer * 3;
+  // The site header is still sticky, so the bar sits below it; a header that hides on scroll would reset this to 0.
+  --word-tabbar-top: var(--site-header-height);
 
   // A container cannot query its own size — media query needed here.
   // Children still use @container word-page correctly.
   @media (width > butler-fn.px-to-rem(807)) {
     display: grid;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 200px minmax(0, 1fr);
     gap: 2rem;
     align-items: start;
   }
+}
+
+// Anchors of the tab bar and sidebar, plus the inner Analyse ids.
+:is(
+  #bedeutung,
+  #sagste-det-noch,
+  #etymologie,
+  #beispiele,
+  #analyse,
+  #orthographie,
+  #linguistik,
+  #grammatik,
+  #phonologie,
+  #anagramme,
+  #verwandte-worte,
+  #navigation,
+  #kommentare
+) {
+  scroll-margin-block-start: calc(var(--word-tabbar-top, 0px) + 56px);
 }
 
 .c-word-main {
@@ -41,10 +63,19 @@
   flex-direction: column;
   gap: vars.$spacer;
 
-  &__content {
+  @media (width > butler-fn.px-to-rem(807)) {
+    gap: 1.25rem;
+  }
+
+  &__content,
+  &__group {
     display: flex;
     flex-direction: column;
     gap: vars.$spacer;
+
+    @media (width > butler-fn.px-to-rem(807)) {
+      gap: 1.25rem;
+    }
   }
 
   // Gallery layout uses word-page container (self-query of word-main is not possible).
