@@ -16,7 +16,14 @@ test.describe("word feedback", () => {
     await card.scrollIntoViewIfNeeded();
     await expect(card.getByRole("heading", { name: "Sagste det noch?" })).toBeVisible();
 
+    // One click on a tile is the vote: no confirm button, the results show the own answer.
+    await expect(card.getByRole("button", { name: /bestätigen|abschicken|absenden/i })).toHaveCount(
+      0,
+    );
     await card.getByRole("button", { name: "Sag ick selbst" }).click();
+    await expect(card.getByRole("heading", { name: "Danke für deine Stimme!" })).toBeFocused();
+    await expect(card.getByText("Sag ick selbst · deine Antwort")).toBeVisible();
+    await card.getByRole("button", { name: /Klar, los/ }).click();
     await expect(card.getByText("Wo wohnste?").first()).toBeVisible();
     // Narrow cards show the list instead of the map, wide ones the map: click whichever is visible.
     await card
@@ -36,11 +43,10 @@ test.describe("word feedback", () => {
     await page.reload();
     const again = page.locator("#sagste-det-noch");
     await again.scrollIntoViewIfNeeded();
-    await expect(again.getByRole("button", { name: "Sag ick selbst" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
+    // A visitor with a profile does not see the questions again.
+    await expect(again.getByText("Sag ick selbst · deine Antwort")).toBeVisible();
     await expect(again.getByRole("button", { name: "Angaben ändern" })).toBeVisible();
+    await expect(again.getByText("Wo wohnste?")).toHaveCount(0);
 
     const like = page.getByRole("button", { name: /Jefällt ma/ });
     const count = async () =>
@@ -68,5 +74,91 @@ test.describe("word feedback", () => {
       origin: "grewUp",
       usage: "say",
     });
+  });
+
+  // Fresh visitor per test; words other than aasen keep the per-IP cap of the first test free.
+  const startProfile = async (
+    page: import("@playwright/test").Page,
+    slug: string,
+    tile: string,
+  ) => {
+    await page.goto(slug);
+    const card = page.locator("#sagste-det-noch");
+    await card.scrollIntoViewIfNeeded();
+    // The island is server-rendered first: a click before it hydrated does nothing.
+    await expect(card.locator("astro-island")).not.toHaveAttribute("ssr", "");
+    await card.getByRole("button", { name: tile }).click();
+    await card.getByRole("button", { name: /Klar, los/ }).click();
+    return card;
+  };
+  const pickArea = (card: import("@playwright/test").Locator, name: string) =>
+    card
+      .getByRole("radio", { name })
+      .or(card.getByRole("button", { exact: true, name }))
+      .click();
+
+  test("Zujezogen, unter 10 Jahren skips the half", async ({ page, browserName }) => {
+    test.skip(browserName === "webkit", "WebKit drops the Secure visitor cookie over plain http");
+    const card = await startProfile(page, "/wort/alex", "Kenn ick");
+    await pickArea(card, "Pankow");
+    await card.getByRole("button", { exact: true, name: "Pankow" }).click();
+    await card.getByRole("button", { name: "Zujezogen, unter 10 Jahren" }).click();
+    await expect(card.getByText("Wie alt biste?").first()).toBeVisible();
+    await expect(card.getByText("In welcher Hälfte?")).toHaveCount(0);
+    await expect(card.getByRole("img", { name: "Schritt 5 von 5" })).toBeVisible();
+  });
+
+  test("Woanders skips the Kiez and the half", async ({ page, browserName }) => {
+    test.skip(browserName === "webkit", "WebKit drops the Secure visitor cookie over plain http");
+    const card = await startProfile(page, "/wort/alsche", "Nie jehört");
+    await card.getByRole("button", { exact: true, name: "Woanders" }).click();
+    await expect(card.getByText("Uffjewachsen oder zujezogen?").first()).toBeVisible();
+    await expect(card.getByText("Welcher Kiez?")).toHaveCount(0);
+    await card.getByRole("button", { name: "Hier uffjewachsen" }).click();
+    await expect(card.getByText("Wie alt biste?").first()).toBeVisible();
+    await expect(card.getByText("In welcher Hälfte?")).toHaveCount(0);
+    await expect(card.getByRole("img", { name: "Schritt 4 von 4" })).toBeVisible();
+  });
+
+  test("a failed vote shows the error and Nochmal versuchen resends the same answer", async ({
+    page,
+  }) => {
+    await page.goto("/wort/schale");
+    const card = page.locator("#sagste-det-noch");
+    await card.scrollIntoViewIfNeeded();
+    await expect(card.locator("astro-island")).not.toHaveAttribute("ssr", "");
+    const sent: string[] = [];
+    let fail = true;
+    await page.route("**/api/word-feedback", async (route) => {
+      if (route.request().method() !== "PATCH") return route.continue();
+      sent.push(route.request().postData() ?? "");
+      if (fail) return route.fulfill({ json: { error: "kaputt" }, status: 500 });
+      return route.continue();
+    });
+    await card.getByRole("button", { name: "Kenn ick" }).click();
+    const error = card.locator(".c-state--error");
+    await expect(error).toBeVisible();
+    await expect(error).toHaveAttribute("role", "alert");
+    fail = false;
+    await error.getByRole("button", { name: "Nochmal versuchen" }).click();
+    await expect(card.getByText("Kenn ick · deine Antwort")).toBeVisible();
+    expect(sent).toHaveLength(2);
+    expect(JSON.parse(sent[1])).toMatchObject({ usage: "know" });
+    expect(JSON.parse(sent[0])).toMatchObject({ usage: "know" });
+  });
+
+  test("offline locks the tiles with aria-disabled", async ({ context, page }) => {
+    await page.goto("/wort/schale");
+    const card = page.locator("#sagste-det-noch");
+    await card.scrollIntoViewIfNeeded();
+    await expect(card.getByRole("button", { name: "Kenn ick" })).toBeVisible();
+    await context.setOffline(true);
+    const tiles = card.locator(".c-choice--tile");
+    await expect(tiles).toHaveCount(3);
+    for (const tile of await tiles.all())
+      await expect(tile).toHaveAttribute("aria-disabled", "true");
+    await expect(card.locator(".c-state--offline")).toBeVisible();
+    await context.setOffline(false);
+    await expect(tiles.first()).toHaveAttribute("aria-disabled", "false");
   });
 });

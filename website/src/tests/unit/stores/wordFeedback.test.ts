@@ -120,6 +120,9 @@ describe("nextStep", () => {
     [{ area: "elsewhere" }, "origin"],
     [{ area: "pankow", locality: null, origin: "grewUp" }, "half"],
     [{ area: null, origin: "movedOver10" }, "age"],
+    // Woanders: no half question, even for someone who grew up there.
+    [{ area: "elsewhere", origin: "grewUp" }, "age"],
+    [{ area: "brandenburg", origin: "grewUp" }, "age"],
     [{ age: null, area: null, origin: null }, "done"],
   ] as const)("%j -> %s", (p, step) => expect(nextStep(p)).toBe(step));
 });
@@ -212,7 +215,9 @@ describe("sendFeedback", () => {
     );
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({ json: async () => ({ error: "Zu oft." }), ok: false, status: 429 }),
+      vi
+        .fn()
+        .mockResolvedValue({ json: async () => ({ error: "Zu oft." }), ok: false, status: 429 }),
     );
     await sendFeedback(1, { reaction: "like" }, "Ditt hat nich jeklappt.");
     expect(toast).toHaveBeenLastCalledWith(expect.objectContaining({ message: "Zu oft." }));

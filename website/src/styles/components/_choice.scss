@@ -18,9 +18,11 @@
     border-color 0.3s ease-in-out,
     box-shadow 0.3s ease-in-out;
 
-  &:hover:not(:disabled, [aria-disabled="true"]) {
-    border-style: dashed;
-    box-shadow: var(--shadow-hover-glow);
+  @media (hover: hover) {
+    &:hover:not(:disabled, [aria-disabled="true"]) {
+      border-style: dashed;
+      box-shadow: var(--shadow-hover-glow);
+    }
   }
 
   &[aria-pressed="true"] {
@@ -67,4 +69,69 @@
   gap: 0.875rem;
   text-align: start;
   background: var(--surface-chip);
+}
+
+// Icon in a dashed square; on hover it tips and the colour softens (Spec §10/§13).
+.c-choice__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  border: 1px dashed var(--rule-card);
+  border-radius: var(--radius-sm);
+  color: var(--orange-400);
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+:where(.c-choice--tile) {
+  @media (hover: hover) {
+    &:hover:not(:disabled, [aria-disabled="true"]) .c-choice__icon {
+      border-color: var(--orange-400);
+      color: var(--orange-300);
+      transform: rotate(-8deg) scale(1.08);
+
+      @media (prefers-reduced-motion: reduce) {
+        transform: none;
+      }
+    }
+  }
+
+  &[aria-pressed="true"] .c-choice__icon {
+    border-color: currentcolor;
+    color: var(--white-100);
+  }
+}
+
+.c-choice__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+
+  b {
+    color: inherit;
+    font-size: 1rem;
+  }
+
+  span {
+    color: var(--color-muted);
+    font-size: 0.75rem;
+  }
+
+  :where(.c-choice--tile:not([aria-pressed="true"])) & b {
+    color: var(--color-ink-strong);
+  }
+
+  :where(.c-choice--tile[aria-pressed="true"]) & span {
+    color: inherit;
+    opacity: 0.9;
+  }
 }

@@ -1,68 +1,141 @@
 <template>
-  <section class="c-word-feedback-card" aria-labelledby="word-feedback-title">
-    <header class="c-word-feedback-card__header">
-      <h2 id="word-feedback-title" class="c-word-feedback-card__title">Sagste det noch?</h2>
-      <p v-if="feedback" class="c-word-feedback-card__count">
+  <section
+    class="c-section-card c-section-card--unnumbered c-word-feedback-card"
+    aria-labelledby="word-feedback-title"
+  >
+    <div class="c-section-card__header">
+      <span class="c-section-card__num" />
+      <h2 id="word-feedback-title" class="c-section-card__title">Sagste det noch?</h2>
+      <span v-if="feedback" class="c-word-feedback-card__count">
         {{
           totalVotes
             ? `Bisher ${totalVotes} ${totalVotes === 1 ? "Stimme" : "Stimmen"}`
             : "Noch keene Stimme"
         }}
-      </p>
-    </header>
-
-    <div
-      v-if="current === 'usage' || current === 'done'"
-      class="c-word-feedback-card__options"
-      role="group"
-      aria-labelledby="word-feedback-title"
-    >
-      <button
-        v-for="o in USAGE_OPTIONS"
-        :key="o.value"
-        :aria-pressed="selected.usage === o.value"
-        class="c-choice"
-        :disabled="pending"
-        type="button"
-        @click="answerUsageStep(o.value)"
-      >
-        {{ o.label }}
-      </button>
+      </span>
     </div>
 
-    <p v-if="loadFailed" class="c-word-feedback-card__error" role="alert">
-      Hat nich jeklappt, versuch's nochma.
-    </p>
-
-    <div aria-live="polite">
-      <div v-if="feedback && current !== 'usage'" class="c-word-feedback-card__bars">
-        <div
-          v-for="b in bars"
-          :key="b.value"
-          class="c-word-feedback-card__bar"
-          :class="{ 'is-mine': b.value === selected.usage }"
-        >
-          <span class="c-word-feedback-card__bar-label">
-            {{ b.label }}<template v-if="b.value === selected.usage"> · deine Antwort</template>
+    <div class="c-section-card__body c-word-feedback-card__body">
+      <template v-if="current === 'usage'">
+        <p ref="lead" class="c-word-feedback-card__lead" tabindex="-1">
+          Is dit Wort bei dir noch im Einsatz?
+        </p>
+        <div v-if="!online" class="c-state c-state--offline" role="status">
+          <WifiOff aria-hidden="true" height="18" width="18" />
+          <span class="c-state__body">
+            <b>Du bist offline.</b>
+            <span>Abstimmen jeht wieder, sobald du Netz hast.</span>
           </span>
-          <span class="c-word-feedback-card__bar-track" aria-hidden="true">
-            <span class="c-word-feedback-card__bar-fill" :style="{ inlineSize: `${b.percent}%` }" />
-          </span>
-          <span class="c-word-feedback-card__bar-value">{{ b.percent }} % · {{ b.text }}</span>
         </div>
-      </div>
-    </div>
+        <div v-if="failed" class="c-state c-state--error" role="alert">
+          <CircleAlert aria-hidden="true" height="18" width="18" />
+          <span class="c-state__body">
+            <b>Ditt hat nich jeklappt.</b>
+            <span>
+              {{
+                failed.usage
+                  ? "Deine Stimme is nich anjekommen."
+                  : "Die Stimmen sind nich anjekommen."
+              }}
+              <button
+                class="c-textlink c-textlink--inline"
+                :disabled="pending"
+                type="button"
+                @click="retry"
+              >
+                Nochmal versuchen
+              </button>
+            </span>
+          </span>
+        </div>
+        <div class="c-word-feedback-card__tiles" role="group" aria-labelledby="word-feedback-title">
+          <button
+            v-for="o in USAGE_OPTIONS"
+            :key="o.value"
+            :aria-disabled="!online"
+            :aria-pressed="pickedUsage === o.value"
+            class="c-choice c-choice--tile"
+            :disabled="pending"
+            type="button"
+            @click="answerUsageStep(o.value)"
+          >
+            <span class="c-choice__icon" aria-hidden="true">
+              <component :is="o.icon" height="22" width="22" />
+            </span>
+            <span class="c-choice__text">
+              <b>{{ o.label }}</b>
+              <span>{{ o.hint }}</span>
+            </span>
+          </button>
+        </div>
+        <p class="c-word-feedback-card__teaser">
+          {{
+            totalVotes
+              ? `Schon ${totalVotes} ${totalVotes === 1 ? "Stimme" : "Stimmen"} – wat sagst du?`
+              : "Noch keener hat abjestimmt – mach den Anfang!"
+          }}
+        </p>
+      </template>
 
-    <!-- No live region here: the focus moves to the new question, which announces it already. -->
-    <div>
-      <div
-        v-if="current !== 'usage' && current !== 'done'"
-        :key="current"
-        class="c-word-feedback-card__step"
-        :class="enter"
-      >
-        <div class="c-word-feedback-card__progress">
-          <span class="c-word-feedback-card__segments" aria-hidden="true">
+      <template v-else>
+        <div aria-live="polite">
+          <div v-if="feedback" class="c-word-feedback-card__bars">
+            <div
+              v-for="b in bars"
+              :key="b.value"
+              class="c-word-feedback-card__bar"
+              :class="{ 'is-mine': b.value === selected.usage }"
+            >
+              <span class="c-word-feedback-card__bar-label">
+                {{ b.label }}<template v-if="b.value === selected.usage"> · deine Antwort</template>
+              </span>
+              <span class="c-word-feedback-card__bar-value">{{ b.percent }} % · {{ b.text }}</span>
+              <span class="c-word-feedback-card__bar-track" aria-hidden="true">
+                <span
+                  class="c-word-feedback-card__bar-fill"
+                  :style="{ inlineSize: `${b.percent}%` }"
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- No live region here: the focus moves to the new heading, which announces it already. -->
+        <div v-if="current === 'results'" class="c-word-feedback-card__results" :class="enter">
+          <h3 ref="thanks" class="c-word-feedback-card__thanks" tabindex="-1">
+            Danke für deine Stimme!
+          </h3>
+          <div
+            class="c-word-feedback-card__react"
+            role="group"
+            aria-labelledby="word-feedback-react"
+          >
+            <span id="word-feedback-react">Und jefällt dir ditt Wort?</span>
+            <WordReactions :word-id="wordId" />
+          </div>
+          <p>
+            Willste noch mehr helfen? Mit 5 kurzen Fragen zu dir erforschen wa, wo und von wem det
+            Berlinerische heute jesprochen wird.
+          </p>
+          <div class="c-word-feedback-card__actions">
+            <button class="c-button c-button--primary" type="button" @click="startFlow">
+              Klar, los jeht’s →
+            </button>
+            <button class="c-textlink" type="button" @click="changeVote">Stimme ändern</button>
+          </div>
+        </div>
+
+        <div
+          v-else-if="current !== 'done'"
+          :key="current"
+          class="c-word-feedback-card__step"
+          :class="enter"
+        >
+          <span
+            class="c-word-feedback-card__segments"
+            role="img"
+            :aria-label="`Schritt ${stepIndex + 1} von ${steps.length}`"
+          >
             <span
               v-for="s in segments"
               :key="s.step"
@@ -70,122 +143,130 @@
               :class="`is-${s.state}`"
             />
           </span>
-          <span class="c-word-feedback-card__eyebrow">
-            Schritt {{ stepIndex + 1 }} von {{ steps.length }}
-          </span>
-        </div>
-        <h3 ref="question" class="c-word-feedback-card__question" tabindex="-1">
-          {{ QUESTIONS[current] }}
-        </h3>
+          <div class="c-word-feedback-card__progress">
+            <h3 ref="question" class="c-word-feedback-card__question" tabindex="-1">
+              {{ QUESTIONS[current] }}
+            </h3>
+            <span class="c-word-feedback-card__eyebrow" aria-hidden="true">
+              Schritt {{ stepIndex + 1 }} von {{ steps.length }}
+            </span>
+          </div>
 
-        <div v-show="explainOpen" id="word-feedback-why" class="c-word-feedback-card__why">
-          <strong>Warum so ville Fragen?</strong>
+          <div
+            v-show="explainOpen"
+            id="word-feedback-why"
+            class="c-infotext c-word-feedback-card__why"
+          >
+            <b>Warum so ville Fragen?</b>
+            <span>
+              Weil wa hier zusammen forschen: Wie klingt det Berlinerische heute, wo wird’s noch
+              jesprochen und von wem? Jede Antwort hilft uns, den Berliner Metrolekt besser zu
+              verstehen – dafür brauchen wa ’n paar Angaben von dir: wo de wohnst, ob de hier
+              uffjewachsen bist und wie alt de bist.
+            </span>
+            <span class="c-word-feedback-card__why-note">
+              Mach mit, so weit de willst – jede Frage kannste überspringen.
+            </span>
+          </div>
+          <div>
+            <button
+              aria-controls="word-feedback-why"
+              :aria-expanded="explainOpen"
+              class="c-textlink c-word-feedback-card__why-link"
+              type="button"
+              @click="explainOpen = !explainOpen"
+            >
+              Warum fragen wa dit?
+            </button>
+          </div>
+
+          <BerlinAreaMap
+            v-if="current === 'area'"
+            :model-value="(picked.area as Area | null) ?? null"
+            @update:model-value="answerProfile('area', $event)"
+          />
+          <div
+            v-else
+            class="c-word-feedback-card__options"
+            :class="`c-word-feedback-card__options--${current}`"
+            role="group"
+            :aria-label="QUESTIONS[current]"
+          >
+            <button
+              v-for="o in choices"
+              :key="o.value"
+              :aria-pressed="picked[current] === o.value"
+              class="c-choice"
+              :disabled="pending"
+              type="button"
+              @click="answerProfile(current, o.value)"
+            >
+              {{ o.label }}
+            </button>
+          </div>
+        </div>
+
+        <div v-else ref="doneBox" class="c-word-feedback-card__done" :class="enter" tabindex="-1">
+          <p class="c-word-feedback-card__done-title"><strong>Danke fürs Mitmachen!</strong></p>
+          <ul v-if="rows.length" class="c-word-feedback-card__compare">
+            <li v-for="r in rows" :key="r.label">{{ r.label }}: {{ r.share }} % sagen det</li>
+          </ul>
+          <button class="c-textlink" type="button" @click="reset">Angaben ändern</button>
+          <button class="c-textlink" :disabled="pending" type="button" @click="withdraw">
+            Stimme zurückziehen
+          </button>
+        </div>
+
+        <div class="c-word-feedback-card__privacy">
+          <label class="c-word-feedback-card__remember">
+            <input
+              type="checkbox"
+              :checked="remember"
+              @change="setRemember(($event.target as HTMLInputElement).checked)"
+            />
+            Meine Angaben für weitere Wörter merken (nur in diesem Browser)
+          </label>
           <p>
-            Weil wa hier zusammen forschen: Wie klingt det Berlinerische heute, wo wird’s noch
-            jesprochen und von wem? Jede Antwort hilft uns, den Berliner Metrolekt besser zu
-            verstehen – dafür brauchen wa ’n paar Angaben von dir: wo de wohnst, ob de hier
-            uffjewachsen bist und wie alt de bist.
+            Wir speichern Deine Antworten ohne Namen, aber mit einer Kennung aus einem Cookie (<a
+              href="/datenschutz#7-wort-feedback"
+              >Datenschutz</a
+            >).
+            <button class="c-textlink" :disabled="pending" type="button" @click="deleteAll">
+              Alle meine Antworten löschen
+            </button>
           </p>
-          <p><em>Mach mit, so weit de willst – jede Frage kannste überspringen.</em></p>
         </div>
-        <button
-          aria-controls="word-feedback-why"
-          :aria-expanded="explainOpen"
-          class="c-link c-word-feedback-card__why-link"
-          type="button"
-          @click="explainOpen = !explainOpen"
-        >
-          Warum fragen wa dit?
-        </button>
+      </template>
+    </div>
 
-        <BerlinAreaMap
-          v-if="current === 'area'"
-          :model-value="(picked.area as Area | null) ?? null"
-          @update:model-value="answerProfile('area', $event)"
-        />
-        <div
-          v-else
-          class="c-word-feedback-card__options"
-          :class="`c-word-feedback-card__options--${current}`"
-          role="group"
-          :aria-label="QUESTIONS[current]"
-        >
-          <button
-            v-for="o in choices"
-            :key="o.value"
-            :aria-pressed="picked[current] === o.value"
-            class="c-choice"
-            :disabled="pending"
-            type="button"
-            @click="answerProfile(current, o.value)"
-          >
-            {{ o.label }}
-          </button>
-        </div>
-
-        <footer class="c-word-feedback-card__footer">
-          <button
-            v-if="history.length"
-            class="c-link"
-            :disabled="pending"
-            type="button"
-            @click="back"
-          >
-            ← Zurück
-          </button>
-          <button
-            class="c-link c-word-feedback-card__skip"
-            :disabled="pending"
-            type="button"
-            @click="answerProfile(current, null)"
-          >
-            überspringen
-          </button>
-        </footer>
-      </div>
-
-      <div
-        v-if="current === 'done'"
-        ref="doneBox"
-        class="c-word-feedback-card__done"
-        :class="enter"
-        tabindex="-1"
+    <footer
+      v-if="current !== 'usage' && current !== 'results' && current !== 'done'"
+      class="c-word-feedback-card__footer"
+    >
+      <button
+        v-if="history.length"
+        class="c-textlink"
+        :disabled="pending"
+        type="button"
+        @click="back"
       >
-        <p class="c-word-feedback-card__thanks"><strong>Danke fürs Mitmachen!</strong></p>
-        <ul v-if="rows.length" class="c-word-feedback-card__compare">
-          <li v-for="r in rows" :key="r.label">{{ r.label }}: {{ r.share }} % sagen det</li>
-        </ul>
-        <button class="c-link" type="button" @click="reset">Angaben ändern</button>
-        <button class="c-link" :disabled="pending" type="button" @click="withdraw">
-          Stimme zurückziehen
-        </button>
-      </div>
-    </div>
-
-    <div v-if="current !== 'usage'" class="c-word-feedback-card__privacy">
-      <label class="c-word-feedback-card__remember">
-        <input
-          type="checkbox"
-          :checked="remember"
-          @change="setRemember(($event.target as HTMLInputElement).checked)"
-        />
-        Meine Angaben für weitere Wörter merken (nur in diesem Browser)
-      </label>
-      <p>
-        Wir speichern Deine Antworten ohne Namen, aber mit einer Kennung aus einem Cookie (<a
-          href="/datenschutz#7-wort-feedback"
-          >Datenschutz</a
-        >).
-        <button class="c-link" :disabled="pending" type="button" @click="deleteAll">
-          Alle meine Antworten löschen
-        </button>
-      </p>
-    </div>
+        ← Zurück
+      </button>
+      <button
+        class="c-textlink c-word-feedback-card__skip"
+        :disabled="pending"
+        type="button"
+        @click="answerProfile(current, null)"
+      >
+        überspringen
+      </button>
+    </footer>
   </section>
 </template>
 
 <script setup lang="ts">
 import BerlinAreaMap from "@components/word-feedback/BerlinAreaMap.vue";
+import WordReactions from "@components/word/WordReactions.vue";
 import { useStore } from "@nanostores/vue";
 import {
   $feedback,
@@ -200,6 +281,7 @@ import {
   type Profile,
 } from "@stores/wordFeedback.ts";
 import { trackEvent } from "@utils/analytics";
+import { useOnline } from "@vueuse/core";
 import {
   AREA_LOCALITIES,
   LOCALITY_NAMES,
@@ -211,20 +293,30 @@ import {
   type Origin,
   type Usage,
 } from "payload-app/word-feedback";
+import CircleAlert from "virtual:icons/lucide/circle-alert";
+import CircleQuestionMark from "virtual:icons/lucide/circle-question-mark";
+import Ear from "virtual:icons/lucide/ear";
+import MessageCircleMore from "virtual:icons/lucide/message-circle-more";
+import WifiOff from "virtual:icons/lucide/wifi-off";
 import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from "vue";
 
 import { BERLIN_AREAS } from "@/data/berlinAreas";
 
-type Step = "age" | "area" | "done" | "half" | "locality" | "origin" | "usage";
+type Step = "age" | "area" | "done" | "half" | "locality" | "origin" | "results" | "usage";
 type ProfileStep = "age" | "area" | "half" | "locality" | "origin";
 
 const props = defineProps<{ wordId: number }>();
 
-const USAGE_OPTIONS: { label: string; value: Usage }[] = [
-  { label: "Sag ick selbst", value: "say" },
-  { label: "Kenn ick", value: "know" },
-  { label: "Nie jehört", value: "never" },
-];
+const USAGE_OPTIONS = [
+  {
+    hint: "Kommt mir regelmäßig übern Mund",
+    icon: MessageCircleMore,
+    label: "Sag ick selbst",
+    value: "say",
+  },
+  { hint: "Hab ick schon mal jehört", icon: Ear, label: "Kenn ick", value: "know" },
+  { hint: "Is mir janz neu", icon: CircleQuestionMark, label: "Nie jehört", value: "never" },
+] as const;
 const QUESTIONS = {
   age: "Wie alt biste?",
   area: "Wo wohnste?",
@@ -259,6 +351,7 @@ const CHOICES: Record<
   ],
 };
 
+const online = useOnline();
 const feedback = useStore($feedback);
 const profile = useStore($profile);
 const remember = useStore($remember);
@@ -281,10 +374,16 @@ const choices = computed(() =>
       : CHOICES[current.value as keyof typeof CHOICES],
 );
 
-// null = not chosen yet: derived from the loaded state, so a revisit starts in "done".
+// Someone with a stored profile does not see the questions again (Spec §10).
+const hasProfile = computed(() => {
+  const m = feedback.value?.mine;
+  return !!(m?.area || m?.locality || m?.origin || m?.half || m?.age);
+});
+// null = not chosen yet: derived from the loaded state, so a revisit starts on the results or in "done".
 const step = ref<Step | null>(null);
 const current = computed<Step>(
-  () => step.value ?? (feedback.value?.mine?.usage ? "done" : "usage"),
+  () =>
+    step.value ?? (feedback.value?.mine?.usage ? (hasProfile.value ? "done" : "results") : "usage"),
 );
 // Steps the visitor went through (skipped-by-condition ones never enter), so "Zurück" jumps over them.
 const history = ref<Step[]>([]);
@@ -295,15 +394,22 @@ const go = (to: Step, from: Step = current.value) => {
 const explainOpen = ref(false);
 const pending = ref(false);
 const loadFailed = ref(false);
+// The vote that did not arrive: "Nochmal versuchen" sends this very answer again.
+const failedUsage = ref<Usage | null>(null);
+const failed = computed(() =>
+  failedUsage.value || loadFailed.value ? { usage: failedUsage.value } : null,
+);
 // The chosen answer shows at once and is taken back when the send fails.
 const picked = ref<Record<string, string | null>>({});
 const pickedUsage = ref<Usage | null>(null);
 const selected = computed(() => ({ usage: pickedUsage.value ?? feedback.value?.mine?.usage }));
 
+const lead = useTemplateRef<HTMLElement>("lead");
+const thanks = useTemplateRef<HTMLElement>("thanks");
 const question = useTemplateRef<HTMLElement>("question");
 const doneBox = useTemplateRef<HTMLElement>("doneBox");
 // Step order: decides the slide direction of the enter animation.
-const ORDER: Step[] = ["usage", "area", "locality", "origin", "half", "age", "done"];
+const ORDER: Step[] = ["usage", "results", "area", "locality", "origin", "half", "age", "done"];
 // Enter animation (CSS only, no View Transitions: nothing to coordinate with the focus move below).
 // Only a user-driven step change sets it, so mount and a revisit's first paint stay still.
 const enter = ref<string[]>([]);
@@ -314,7 +420,7 @@ watch(step, async (to, from) => {
     ...(to && from && ORDER.indexOf(to) < ORDER.indexOf(from) ? ["is-back"] : []),
   ];
   await nextTick();
-  (question.value ?? doneBox.value)?.focus();
+  (question.value ?? thanks.value ?? doneBox.value ?? lead.value)?.focus();
 });
 
 // Open on the first profile question, folded behind a link afterwards.
@@ -335,10 +441,14 @@ const ready = async () => {
 };
 
 const answerUsageStep = async (usage: Usage) => {
-  if (pending.value) return;
+  if (pending.value || !online.value) return;
+  failedUsage.value = null;
   pending.value = true;
   try {
-    if (!(await ready())) return;
+    if (!(await ready())) {
+      failedUsage.value = usage;
+      return;
+    }
     pickedUsage.value = usage;
     // The store's update turns the derived step into "done" before this call returns.
     const first = current.value === "usage";
@@ -346,14 +456,24 @@ const answerUsageStep = async (usage: Usage) => {
     const ok = await answerUsage(props.wordId, usage);
     if (ok && first) {
       // `current` is already "done" here, so name the step we come from.
-      go(nextStep($profile.get()), "usage");
+      go(nextStep($profile.get()) === "done" ? "done" : "results", "usage");
     }
     // A failed vote must not keep showing the unsaved choice as selected.
-    if (!ok) pickedUsage.value = null;
+    if (!ok) {
+      pickedUsage.value = null;
+      failedUsage.value = usage;
+    }
   } finally {
     pending.value = false;
   }
 };
+
+const retry = () => (failedUsage.value ? answerUsageStep(failedUsage.value) : ready());
+
+const startFlow = () => go(nextStep($profile.get()));
+
+// Back to the tiles; the stored vote stays until the new one replaces it.
+const changeVote = () => go("usage");
 
 const answerProfile = async (key: ProfileStep, value: string | null) => {
   if (pending.value) return;
@@ -432,29 +552,24 @@ const deleteAll = async () => {
   step.value = null;
 };
 
-// Going back to the vote withdraws it, so the first step starts clean again.
-const back = async () => {
+const back = () => {
   const prev = history.value[history.value.length - 1];
   if (!prev || pending.value) return;
-  if (prev === "usage") {
-    pending.value = true;
-    try {
-      if (!(await sendFeedback(props.wordId, { usage: null }))) return;
-      pickedUsage.value = null;
-    } finally {
-      pending.value = false;
-    }
-  }
   history.value.pop();
   step.value = prev;
 };
 
+const woanders = computed(
+  () => profile.value.area === "brandenburg" || profile.value.area === "elsewhere",
+);
 const steps = computed(() => [
   "usage",
   "area",
   ...(localityArea.value || current.value === "locality" ? ["locality"] : []),
   "origin",
-  ...(profile.value.origin === "grewUp" || current.value === "half" ? ["half"] : []),
+  ...((profile.value.origin === "grewUp" && !woanders.value) || current.value === "half"
+    ? ["half"]
+    : []),
   "age",
 ]);
 const stepIndex = computed(() => Math.max(0, steps.value.indexOf(current.value)));

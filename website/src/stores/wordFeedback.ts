@@ -103,7 +103,9 @@ export const nextStep = (
   if (profile.area && profile.area in AREA_LOCALITIES && !("locality" in profile))
     return "locality";
   if (!("origin" in profile)) return "origin";
-  if (profile.origin === "grewUp" && !("half" in profile)) return "half";
+  // Woanders (outside Berlin) is not asked for the East/West half.
+  const woanders = profile.area === "brandenburg" || profile.area === "elsewhere";
+  if (profile.origin === "grewUp" && !woanders && !("half" in profile)) return "half";
   if (!("age" in profile)) return "age";
   return "done";
 };
