@@ -97,8 +97,6 @@ export default getViteConfig(
           "src/components/Footer.astro",
           // Layout.astro only composes BaseHead, Footer and MainHeader (all excluded above).
           "src/layouts/Layout.astro",
-          // ImageGallery.astro wires PhotoSwipe via a client-side custom element.
-          "src/components/ImageGallery.astro",
           // berliner-oder-nicht.astro is a thin shell around a client:only Vue island with astro:env deps.
           "src/pages/games/berliner-oder-nicht.astro",
         ],
