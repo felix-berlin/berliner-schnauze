@@ -10,6 +10,11 @@
     gap: vars.$spacer * 0.25;
   }
 
+  // Why it failed (429 / server message), under the Spec sentence inside the error box.
+  &__reason {
+    color: var(--color-muted);
+  }
+
   &__hint {
     font-size: 0.8rem;
     color: var(--color-muted);

@@ -113,6 +113,46 @@ describe("CommentForm", () => {
     expect(wrapper.find("button[type=submit]").text()).toBe("Abschicken");
   });
 
+  it("a missing captcha token shows a calm status, no error box, and the retry works", async () => {
+    const submit = vi.fn().mockResolvedValueOnce("wait").mockResolvedValueOnce(true);
+    const wrapper = mount(CommentForm, { props: { submit } });
+    await wrapper.find("textarea").setValue("Hallo Welt");
+    await wrapper.find("form").trigger("submit");
+    await flushPromises();
+    expect(wrapper.find(".c-state--error").exists()).toBe(false);
+    expect(wrapper.find("[role=alert]").exists()).toBe(false);
+    expect(wrapper.find("[role=status]").text()).toBe("Moment noch, ick prüf dich kurz.");
+    expect(wrapper.find("button[type=submit]").text()).toBe("Abschicken");
+    expect((wrapper.find("textarea").element as HTMLTextAreaElement).value).toBe("Hallo Welt");
+    await wrapper.find("form").trigger("submit");
+    await flushPromises();
+    expect(wrapper.find("[role=status]").exists()).toBe(false);
+  });
+
+  it("a stuck captcha says so in the status box", async () => {
+    const wrapper = mount(CommentForm, { props: { submit: vi.fn(async () => "stuck" as const) } });
+    await wrapper.find("textarea").setValue("Hallo Welt");
+    await wrapper.find("form").trigger("submit");
+    await flushPromises();
+    expect(wrapper.find("[role=status]").text()).toContain("klemmt");
+    expect(wrapper.find(".c-state--error").exists()).toBe(false);
+  });
+
+  it("a failure with a reason shows it under the Spec sentence, headline unchanged", async () => {
+    const submit = vi.fn(async () => ({ error: "Ma langsam, Keule – versuch's gleich nochmal." }));
+    const wrapper = mount(CommentForm, { props: { submit } });
+    await wrapper.find("textarea").setValue("Hallo Welt");
+    await wrapper.find("form").trigger("submit");
+    await flushPromises();
+    const box = wrapper.find(".c-state--error");
+    expect(box.find("b").text()).toBe("Ditt hat nich jeklappt.");
+    expect(box.text()).toContain("Dein Text bleibt stehen");
+    expect(box.find(".c-comment-form__reason").text()).toBe(
+      "Ma langsam, Keule – versuch's gleich nochmal.",
+    );
+    expect(wrapper.findAll("[role=alert]")).toHaveLength(1);
+  });
+
   it("offline: the button locks with a visible reason and nothing is sent", async () => {
     const online = vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
     const submit = vi.fn(async () => true);

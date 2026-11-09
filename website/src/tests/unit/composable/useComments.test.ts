@@ -105,10 +105,27 @@ describe("useComments", () => {
     expect(c.isOwn(1)).toBe(false);
   });
 
-  it("answers 429 with a warning toast and reports the error", async () => {
+  it("answers 429 with an error result (reason: see failReason)", async () => {
     fetchMock.mockReturnValueOnce(answer("Too many", 429));
     const c = useComments(7);
     expect(await c.post({ authorName: "", text: "Hallo" }, "tok")).toBe("error");
+  });
+
+  it("post and edit failures are silent and hand the reason to failReason", async () => {
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    const toast = vi.mocked(createToastNotify);
+    toast.mockClear();
+    const c = useComments(7);
+    fetchMock.mockReturnValueOnce(answer("Too many", 429));
+    expect(await c.post({ authorName: "", text: "Hallo" }, "tok")).toBe("error");
+    expect(c.failReason.value).toBe("Ma langsam, Keule – versuch's gleich nochmal.");
+    fetchMock.mockReturnValueOnce(answer({ error: "Zu kurz" }, 400));
+    expect(await c.post({ authorName: "", text: "Hallo" }, "tok")).toBe("error");
+    expect(c.failReason.value).toBe("Zu kurz");
+    fetchMock.mockReturnValueOnce(Promise.reject(new TypeError("Failed to fetch")));
+    expect(await c.edit(1, "neu")).toBe("error");
+    expect(c.failReason.value).toBe(""); // generic: the box already says it
+    expect(toast).not.toHaveBeenCalled();
   });
 
   it("does not duplicate an own post when the next page repeats it", async () => {

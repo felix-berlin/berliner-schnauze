@@ -59,7 +59,7 @@
           type="button"
           :aria-label="`Hilfreich, ${comment.upvotes}`"
           :aria-pressed="comment.myVote === 1"
-          :aria-disabled="!ctx.online.value"
+          :aria-disabled="!ctx.online.value || pending"
           @click="vote"
         >
           <IconHelpful aria-hidden="true" width="15" height="15" />
@@ -160,7 +160,7 @@
 <script setup lang="ts">
 import type { PublicComment } from "@utils/commentSchema.ts";
 
-import CommentForm from "@components/comments/CommentForm.vue";
+import CommentForm, { type SubmitResult } from "@components/comments/CommentForm.vue";
 import DropdownPopover from "@components/DropdownPopover.vue";
 import { commentsKey } from "@composables/useComments.ts";
 import { createToastNotify } from "@stores/toastNotify.ts";
@@ -231,21 +231,21 @@ const vote = async (): Promise<void> => {
     trackEvent("Comments", "Vote", String(ctx.wordId));
 };
 
-const submitReply = async (v: { authorName: string; text: string }): Promise<boolean> => {
-  const token = ctx.takeToken();
-  if (!token) return false;
+const submitReply = async (v: { authorName: string; text: string }): Promise<SubmitResult> => {
+  const token = ctx.takeToken(true);
+  if (!token) return ctx.captchaFailed.value ? "stuck" : "wait"; // the form says it, no toast
   const result = await ctx.post({ ...v, parentId: comment.parentId ?? comment.id }, token);
   ctx.resetCaptcha();
-  if (result === "error") return false;
+  if (result === "error") return { error: ctx.failReason.value };
   trackEvent("Comments", "Reply", String(ctx.wordId));
   mode.value = null;
   return true;
 };
 
-const submitEdit = async (v: { text: string }): Promise<boolean> => {
+const submitEdit = async (v: { text: string }): Promise<SubmitResult> => {
   const ok = (await ctx.edit(comment.id, v.text)) !== "error";
   if (ok) mode.value = null;
-  return ok;
+  return ok || { error: ctx.failReason.value };
 };
 
 const onRemove = (): void => {

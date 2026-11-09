@@ -179,13 +179,16 @@ describe("WordComments", () => {
       authorName: string;
       text: string;
     }) => Promise<boolean>;
-    expect(await submit({ authorName: "", text: "Na sowat" })).toBe(false);
-    expect(createToastNotify).toHaveBeenCalledWith(expect.objectContaining({ status: "warning" }));
+    // no token yet: nothing sent, the form says "wait" itself, no toast on top
+    vi.mocked(createToastNotify).mockClear();
+    expect(await submit({ authorName: "", text: "Na sowat" })).toBe("wait");
+    expect(createToastNotify).not.toHaveBeenCalled();
     expect(fetchMock).toHaveBeenCalledTimes(1);
 
     wrapper.findComponent(TurnStileStub).vm.$emit("token", "tok");
     fetchMock.mockResolvedValueOnce({ json: async () => ({ error: "x" }), ok: false, status: 400 });
-    expect(await submit({ authorName: "", text: "Na sowat" })).toBe(false);
+    expect(await submit({ authorName: "", text: "Na sowat" })).toEqual({ error: "x" });
+    expect(createToastNotify).not.toHaveBeenCalled(); // the form's box carries the reason
     expect(trackEvent).not.toHaveBeenCalled();
     fetchMock.mockResolvedValueOnce({
       json: async () => ({ editKey: "k".repeat(43), pending: true }),

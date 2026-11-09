@@ -114,7 +114,7 @@
 
 <script setup lang="ts">
 import CommentCard from "@components/comments/CommentCard.vue";
-import CommentForm from "@components/comments/CommentForm.vue";
+import CommentForm, { type SubmitResult } from "@components/comments/CommentForm.vue";
 import TurnStile from "@components/TurnStile.vue";
 import { commentsKey, useComments, type CommentsContext } from "@composables/useComments.ts";
 import { createToastNotify } from "@stores/toastNotify.ts";
@@ -185,11 +185,12 @@ const ctx: CommentsContext = {
   armCaptcha: () => {
     captchaOn.value = true;
   },
+  captchaFailed,
   online,
   resetCaptcha: () => turnstile.value?.reset(),
-  takeToken: () => {
+  takeToken: (quiet = false) => {
     if (token.value) return token.value;
-    createToastNotify(captchaWaitToast(captchaFailed.value));
+    if (!quiet) createToastNotify(captchaWaitToast(captchaFailed.value));
     return null;
   },
   token,
@@ -200,12 +201,12 @@ provide(commentsKey, ctx);
 const captcha = useTemplateRef<HTMLElement>("captcha");
 const captchaSize = useElementSize(captcha);
 
-const submitNew = async (v: { authorName: string; text: string }): Promise<boolean> => {
-  const t = ctx.takeToken();
-  if (!t) return false;
+const submitNew = async (v: { authorName: string; text: string }): Promise<SubmitResult> => {
+  const t = ctx.takeToken(true);
+  if (!t) return captchaFailed.value ? "stuck" : "wait"; // nothing was sent: the form says why, no toast
   const result = await comments.post(v, t);
   ctx.resetCaptcha();
-  if (result === "error") return false;
+  if (result === "error") return { error: comments.failReason.value };
   trackEvent("Comments", "Post", String(wordId));
   // The form closes, the success box says it; the focus goes back to the button that opened it.
   writing.value = false;

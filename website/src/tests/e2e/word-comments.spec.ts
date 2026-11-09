@@ -33,7 +33,10 @@ const stubTurnstile = async (page: Page) => {
   await page.addInitScript(() => {
     (window as unknown as { turnstile: object }).turnstile = {
       render: (_el: string, o: { callback: (t: string) => void }) => {
-        setTimeout(() => o.callback("test-token"), 0);
+        setTimeout(() => {
+          o.callback("test-token");
+          (window as unknown as { tokenReady: boolean }).tokenReady = true;
+        }, 0);
         return "w1";
       },
       reset: () => {},
@@ -74,11 +77,12 @@ test.describe("word comments", () => {
   }) => {
     await stubTurnstile(page);
     await mockList(page, []);
-    await page.route(/\/api\/comments$/, (route) =>
-      route.request().method() === "POST"
-        ? route.fulfill({ json: { error: "kaputt" }, status: 500 })
-        : route.continue(),
-    );
+    // The POST answers after a moment, so the busy state can be observed.
+    await page.route(/\/api\/comments$/, async (route) => {
+      if (route.request().method() !== "POST") return route.continue();
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      return route.fulfill({ json: { error: "kaputt" }, status: 500 });
+    });
     const card = await open(page);
     const write = card.getByRole("button", { name: "Kommentar schreiben" });
     await write.click();
@@ -86,11 +90,13 @@ test.describe("word comments", () => {
     await expect(area).toBeFocused();
     await area.fill("Ein erfundener Text, der stehen bleiben soll.");
     const send = card.getByRole("button", { exact: true, name: "Abschicken" });
-    // The token arrives a moment after the Turnstile widget mounts on the first focus.
-    await expect(async () => {
-      await send.click();
-      await expect(card.getByText("Ditt hat nich jeklappt.")).toBeVisible({ timeout: 500 });
-    }).toPass();
+    // Deterministic: the stub hands out its token once the widget mounted on the first focus.
+    await page.waitForFunction(() => (window as unknown as { tokenReady?: boolean }).tokenReady);
+    await send.click();
+    await expect(send).toHaveAttribute("aria-busy", "true");
+    await expect(card.getByText("Ditt hat nich jeklappt.")).toBeVisible();
+    // The focus stays on the send button (aria-disabled, never :disabled).
+    await expect(card.getByRole("button", { name: "Nochmal abschicken" })).toBeFocused();
     await expect(area).toHaveValue("Ein erfundener Text, der stehen bleiben soll.");
     const retry = card.getByRole("button", { name: "Nochmal abschicken" });
     await expect(retry).toBeVisible();

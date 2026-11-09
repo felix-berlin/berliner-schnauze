@@ -46,7 +46,13 @@
         <span>
           Dein Kommentar is nich rausjegangen. Dein Text bleibt stehen – versuch’s gleich nochmal.
         </span>
+        <span v-if="reason" class="c-comment-form__reason">{{ reason }}</span>
       </span>
+    </div>
+    <!-- Nothing was sent (captcha still running): a calm status, not the error box. -->
+    <div v-if="waiting" class="c-state" role="status">
+      <Hourglass aria-hidden="true" height="18" width="18" />
+      <span class="c-state__body">{{ waiting }}</span>
     </div>
     <p v-if="!online" :id="`${uid}-offline`" class="c-comment-form__hint t-small">
       Du bist offline. Abschicken jeht wieder, sobald du Netz hast.
@@ -80,10 +86,15 @@
 </template>
 
 <script setup lang="ts">
+/** true = stored, false = failed, {error} = failed with a reason, "wait"/"stuck" = nothing sent, captcha not ready. */
+export type SubmitResult = { error: string } | "stuck" | "wait" | boolean;
+
 import { useOnline } from "@vueuse/core";
 import { COMMENT_MAX, COMMENT_MIN, NAME_MAX } from "payload-app/comments";
 import { computed, onMounted, ref, useId, useTemplateRef, watch } from "vue";
 import CircleAlert from "virtual:icons/lucide/circle-alert";
+import Hourglass from "virtual:icons/lucide/hourglass";
+import { captchaWaitToast } from "@utils/captchaToast.ts";
 
 // The counter becomes a live region from here, so a screen reader hears the limit coming, not every keystroke.
 const LIVE_FROM = 900;
@@ -111,7 +122,7 @@ const {
   label?: string;
   showName?: boolean;
   /** Resolves true when the text was stored (the form clears), false to keep the input. */
-  submit: (value: { authorName: string; text: string }) => Promise<boolean>;
+  submit: (value: { authorName: string; text: string }) => Promise<SubmitResult>;
 }>();
 
 const emit = defineEmits<{ cancel: [] }>();
@@ -122,6 +133,9 @@ const text = ref(initialText);
 const sending = ref(false);
 // The send failed: the text stays and the button reads „Nochmal abschicken“.
 const failed = ref(false);
+const reason = ref("");
+// The captcha check is still running (or stuck): said once, here, instead of a toast.
+const waiting = ref("");
 // Shown after a refused submit (button stays enabled, so the reason is never hidden behind it).
 const error = ref("");
 const area = useTemplateRef<HTMLTextAreaElement>("area");
@@ -146,11 +160,18 @@ const onSubmit = async (): Promise<void> => {
   }
   error.value = "";
   failed.value = false;
+  reason.value = "";
+  waiting.value = "";
   sending.value = true;
-  const ok = await submit({ authorName: authorName.value.trim(), text: text.value.trim() });
+  const result = await submit({ authorName: authorName.value.trim(), text: text.value.trim() });
   sending.value = false;
-  failed.value = !ok;
-  if (ok) text.value = "";
+  if (result === "wait" || result === "stuck") {
+    waiting.value = captchaWaitToast(result === "stuck").message;
+    return;
+  }
+  failed.value = result !== true;
+  reason.value = typeof result === "object" ? result.error : "";
+  if (result === true) text.value = "";
 };
 </script>
 

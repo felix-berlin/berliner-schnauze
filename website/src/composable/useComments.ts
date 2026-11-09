@@ -19,16 +19,19 @@ const json = (body: unknown) => ({
 
 /**
  * Runs a request; null (plus a toast) when it failed. 429 keeps the input, the caller decides what else.
- * `silent`: no failure toast, the form shows its own error box (one announcement channel).
+ * `onFail`: no failure toast; the reason (429 text, the server's message) goes to the caller, whose form shows it in
+ * its own error box (one announcement channel). The generic text is not passed on: the box already says it.
  */
+const GENERIC = "Dit hat leider nich geklappt.";
 const call = async <T>(
   url: string,
   init?: RequestInit,
   notFound?: string,
-  silent = false,
+  onFail?: (reason: string) => void,
 ): Promise<null | T> => {
   const toast = (n: Parameters<typeof createToastNotify>[0]): void => {
-    if (!silent) createToastNotify(n);
+    if (!onFail) createToastNotify(n);
+    else if (n.message !== GENERIC) onFail(n.message);
   };
   try {
     const res = await fetch(url, init);
@@ -47,7 +50,7 @@ const call = async <T>(
     // A 2xx without a JSON body is a failure too: the caller would treat `{}` as done.
     if (!res.ok || !body) {
       toast({
-        message: body?.error || "Dit hat leider nich geklappt.",
+        message: body?.error || GENERIC,
         status: "error",
       });
       return null;
@@ -56,7 +59,7 @@ const call = async <T>(
   } catch (error) {
     // fetch() rejects with a TypeError when offline; anything else is a bug worth reporting.
     if (!(error instanceof TypeError)) reportError(error);
-    toast({ message: "Dit hat leider nich geklappt.", status: "error" });
+    toast({ message: GENERIC, status: "error" });
     return null;
   }
 };
@@ -79,6 +82,8 @@ export const useComments = (wordId: number) => {
   const loaded = ref(false);
   /** The last page failed to load; the list offers a retry instead of waiting for a scroll that never comes. */
   const failed = ref(false);
+  /** Why the last post/edit failed (429 or the server's message), "" when only the generic text applies. */
+  const failReason = ref("");
   const busy = ref(new Set<number>());
   /** The comment a link points at; its card shows the highlight. */
   const highlighted = ref<null | number>(null);
@@ -169,11 +174,12 @@ export const useComments = (wordId: number) => {
   });
 
   const post = async (input: Input, turnstileToken: string): Promise<PostResult> => {
+    failReason.value = "";
     const data = await call<{ comment?: PublicComment; editKey: string; pending: boolean }>(
       API,
       { ...json({ ...input, turnstileToken, wordId }), method: "POST" },
       undefined,
-      true,
+      (reason) => (failReason.value = reason),
     );
     if (!data) return "error";
     if (data.comment) {
@@ -192,11 +198,12 @@ export const useComments = (wordId: number) => {
   };
 
   const edit = async (id: number, text: string): Promise<PostResult> => {
+    failReason.value = "";
     const data = await call<{ comment?: PublicComment; pending: boolean }>(
       `${API}/${id}`,
       { ...json({ editKey: keys.value[id]?.key, text }), method: "PATCH" },
       undefined,
-      true,
+      (reason) => (failReason.value = reason),
     );
     const target = find(id);
     if (!data || !target) return data ? "ok" : "error";
@@ -245,6 +252,7 @@ export const useComments = (wordId: number) => {
     canEdit,
     comments,
     edit,
+    failReason,
     failed,
     hasMore,
     highlighted,
@@ -270,8 +278,10 @@ export type CommentsContext = ReturnType<typeof useComments> & {
   armCaptcha: () => void;
   /** Re-issues the shared captcha token after it was spent. */
   resetCaptcha: () => void;
-  /** The current captcha token, or null (with a toast) while the check is still running. */
-  takeToken: () => null | string;
+  /** The captcha check cannot run (blocked script, bad key): waiting would never help. */
+  captchaFailed: Ref<boolean>;
+  /** The current captcha token, or null while the check runs (a toast, unless `quiet`: the form says it itself). */
+  takeToken: (quiet?: boolean) => null | string;
   token: Ref<string>;
 };
 

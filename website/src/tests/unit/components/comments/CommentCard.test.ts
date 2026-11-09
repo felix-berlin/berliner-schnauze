@@ -43,7 +43,9 @@ const mountCard = (comment: Partial<PublicComment>, canEdit = false) => {
     armCaptcha: vi.fn(),
     busy: ref(new Set<number>()),
     canEdit: () => canEdit,
+    captchaFailed: ref(false),
     edit: vi.fn(async () => "ok"),
+    failReason: ref(""),
     highlighted: ref<null | number>(null),
     isOwn: (id: number) => id === 99,
     online: ref(true),
@@ -121,6 +123,17 @@ describe("CommentCard", () => {
     const button = wrapper.find(".c-comment__helpful");
     expect(button.attributes("aria-pressed")).toBe(pressed);
     expect(button.attributes("aria-label")).toBe("Hilfreich, 3");
+  });
+
+  it("a pending vote locks „hilfreich“ with aria-disabled (no :disabled) and sends nothing", async () => {
+    const { ctx, wrapper } = mountCard({});
+    ctx.busy.value = new Set([1]);
+    await wrapper.vm.$nextTick();
+    const button = wrapper.find(".c-comment__helpful");
+    expect(button.attributes("aria-disabled")).toBe("true");
+    expect(button.attributes("disabled")).toBeUndefined();
+    await button.trigger("click");
+    expect(ctx.vote).not.toHaveBeenCalled();
   });
 
   it("„hilfreich“ toggles one up-vote: 0 -> 1, 1 -> 0", async () => {
@@ -259,13 +272,21 @@ describe("CommentCard", () => {
       wrapper.findComponent(CommentForm).props("submit") as (v: {
         authorName: string;
         text: string;
-      }) => Promise<boolean>;
+      }) => Promise<unknown>;
     ctx.post.mockResolvedValueOnce("error");
-    expect(await submit()({ authorName: "", text: "Jenau so" })).toBe(false);
+    expect(await submit()({ authorName: "", text: "Jenau so" })).toEqual({ error: "" });
     expect(ctx.post).toHaveBeenCalledWith({ authorName: "", parentId: 1, text: "Jenau so" }, "tok");
     expect(ctx.resetCaptcha).toHaveBeenCalled();
-    ctx.takeToken = () => null as unknown as string;
-    expect(await submit()({ authorName: "", text: "Jenau so" })).toBe(false);
+    // no token yet: nothing is sent, the form is told to wait (quiet: no toast), it is no error
+    const take = vi.fn(() => null as unknown as string);
+    ctx.takeToken = take;
+    ctx.post.mockClear();
+    expect(await submit()({ authorName: "", text: "Jenau so" })).toBe("wait");
+    expect(take).toHaveBeenCalledWith(true);
+    expect(ctx.post).not.toHaveBeenCalled();
+    ctx.captchaFailed.value = true;
+    expect(await submit()({ authorName: "", text: "Jenau so" })).toBe("stuck");
+    ctx.captchaFailed.value = false;
     ctx.takeToken = () => "tok";
     expect(await submit()({ authorName: "", text: "Jenau so" })).toBe(true);
     await flushPromises();
@@ -291,7 +312,7 @@ describe("CommentCard", () => {
     expect(form().props("initialText")).toBe("Hallo");
     const submit = form().props("submit") as (v: { text: string }) => Promise<boolean>;
     ctx.edit.mockResolvedValueOnce("error");
-    expect(await submit({ text: "Neu jeschrieben" })).toBe(false);
+    expect(await submit({ text: "Neu jeschrieben" })).toEqual({ error: "" });
     expect(form().exists()).toBe(true);
     expect(await submit({ text: "Neu jeschrieben" })).toBe(true);
     expect(ctx.edit).toHaveBeenCalledWith(99, "Neu jeschrieben");
