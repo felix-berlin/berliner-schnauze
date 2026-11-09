@@ -285,7 +285,8 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await expect(hero.locator('.c-themes a[href^="/themen/"]').first()).toBeFocused();
     });
 
-    test("Like und Dislike immer beide sichtbar: setzen und zurücknehmen", async ({ page }) => {
+    test("Like und Dislike immer beide sichtbar: setzen und zurücknehmen", async ({ isMobile, page }) => {
+      test.skip(isMobile, "a phone emulation stays a phone at 1280px; the touch test below covers it");
       await page.setViewportSize({ height: 800, width: 1280 });
       await page.goto("/wort/anmachen");
       const hero = page.locator("#bedeutung");

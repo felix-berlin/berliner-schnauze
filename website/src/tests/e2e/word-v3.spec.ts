@@ -13,6 +13,15 @@ const WORDS = {
 } as const;
 const WIDTHS = [390, 900, 1280] as const;
 
+/** WebKit can miss the visibility callback of a short island while a sweep passes: visit what is left one by one. */
+const visitLeftoverIslands = async (page: Page) => {
+  const left = page.locator("astro-island[ssr]");
+  for (let n = await left.count(); n > 0; n = await left.count()) {
+    await left.first().scrollIntoViewIfNeeded();
+    await expect(left).toHaveCount(n - 1);
+  }
+};
+
 /** Scrolls through the page once so every client:visible island hydrates, then back to the top. */
 const settle = async (page: Page, slug: string, width: number) => {
   await page.setViewportSize({ height: 900, width });
@@ -24,6 +33,7 @@ const settle = async (page: Page, slug: string, width: number) => {
       await new Promise((r) => setTimeout(r, 80));
     }
   });
+  await visitLeftoverIslands(page);
   await page.locator("#kommentare").getByRole("heading", { level: 2 }).waitFor();
   // No "networkidle": it never settled on this page in the first run (cause not investigated). Hydrated islands lose `ssr`.
   await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
@@ -220,7 +230,9 @@ test.describe("prefers-reduced-motion", () => {
 });
 
 test.describe("draft preview (existing preview cookie flow)", () => {
-  test("shows no vote, comment, pulse or trend", async ({ page }) => {
+  test("shows no vote, comment, pulse or trend", async ({ browserName, page }) => {
+    // api/preview sets a Secure cookie in the production build; WebKit drops it over http://localhost.
+    test.skip(browserName === "webkit", "WebKit does not keep Secure cookies over http");
     const secret = process.env.PAYLOAD_SECRET;
     expect(secret, "PAYLOAD_SECRET must match the server's").toBeTruthy();
 
@@ -246,6 +258,7 @@ test.describe("draft preview (existing preview cookie flow)", () => {
         await new Promise((r) => setTimeout(r, 60));
       }
     });
+    await visitLeftoverIslands(page);
     // Every island hydrated (and so has fired its mount requests) before the "no requests" assertion below.
     await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
 

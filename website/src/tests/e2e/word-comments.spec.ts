@@ -138,7 +138,10 @@ test.describe("word comments", () => {
     await expect(retry).toBeVisible();
     // One channel only: the inline alert, no toast on top of it.
     await expect(card.getByRole("alert")).toHaveCount(1);
-    await expect(page.getByRole("button", { name: "Benachrichtigung schließen" })).toHaveCount(0);
+    // Scoped to the failure: unrelated global toasts (outdated WebKit, "offline ready") may be up.
+    await expect(
+      page.locator(".c-toast-notify").filter({ hasText: /nich geklappt|kaputt/ }),
+    ).toHaveCount(0);
   });
 
   test("offline: banner shows, writing locks but stays focusable", async ({ page, context }) => {

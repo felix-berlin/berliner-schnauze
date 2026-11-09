@@ -12,6 +12,8 @@ test.describe("Wort-Sidebar-Navigation (c-word-sidebar)", () => {
     page,
   }) => {
     await dismissToasts(page);
+    // The sidebar only exists from 808px; phone projects start below it.
+    await page.setViewportSize({ height: 800, width: 1280 });
     await page.goto("/wort/anmachen");
 
     // A marker that only survives if the page is NOT reloaded.
