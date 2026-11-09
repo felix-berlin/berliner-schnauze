@@ -301,8 +301,8 @@ const schemaJson = () => {
 <script>
   import { reportWord } from '@utils/wordPulse.ts';
 
-  // Draft previews carry no data-pulse-word and are never reported. The related-words
-  // list is replaced on every navigation, so its listener cannot pile up.
+  // Draft previews carry no data-pulse-word and are never reported. The #verwandte list
+  // (WordNeighborhood) is replaced on every navigation, so its listener cannot pile up.
   document.addEventListener('astro:page-load', () => {
     const id = Number(document.querySelector<HTMLElement>('[data-pulse-word]')?.dataset.pulseWord);
     if (!id) return;
