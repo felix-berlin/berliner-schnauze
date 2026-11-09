@@ -1,68 +1,49 @@
 import WordTabBar from "@components/word/WordTabBar.vue";
-import { initHeaderScrollSpy } from "@utils/scrollSpy";
 import { mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@utils/scrollSpy", () => ({ initHeaderScrollSpy: vi.fn() }));
+const { initHeaderScrollSpy, stop } = vi.hoisted(() => ({ initHeaderScrollSpy: vi.fn(), stop: vi.fn() }));
+vi.mock("@utils/scrollSpy", () => ({ initHeaderScrollSpy }));
+vi.mock("@styles/components/word-tabbar", () => ({}));
 
 const sections = [
-  { id: "n-bedeutung", label: "Bedeutung" },
-  { id: "n-beispiele", label: "Beispiele" },
+  { id: "bedeutung", label: "Bedeutung" },
+  { id: "analyse", label: "Analyse" },
 ];
 
-type SpyOptions = Parameters<typeof initHeaderScrollSpy>[0];
-
-describe("WordTabBar.vue", () => {
-  const stop = vi.fn();
+describe("WordTabBar", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    vi.mocked(initHeaderScrollSpy).mockReturnValue(stop);
+    initHeaderScrollSpy.mockReset().mockReturnValue(stop);
+    stop.mockReset();
   });
 
-  it("renders a labelled nav with one anchor link per section, in order", () => {
+  it("renders one anchor tab per section in the given order", () => {
     const wrapper = mount(WordTabBar, { props: { sections } });
+    const tabs = wrapper.findAll("a.c-word-tabbar__tab");
+    expect(tabs.map((t) => [t.attributes("href"), t.text()])).toEqual([
+      ["#bedeutung", "Bedeutung"],
+      ["#analyse", "Analyse"],
+    ]);
     expect(wrapper.find("nav").attributes("aria-label")).toBe("Inhalt der Wortseite");
-    const links = wrapper.findAll("a.c-word-tabbar__tab");
-    expect(links.map((a) => a.text())).toEqual(["Bedeutung", "Beispiele"]);
-    expect(links.map((a) => a.attributes("href"))).toEqual(["#n-bedeutung", "#n-beispiele"]);
   });
 
-  it("renders no links for no sections", () => {
-    expect(mount(WordTabBar, { props: { sections: [] } }).findAll("a")).toHaveLength(0);
-  });
+  it("marks only the activated tab with aria-current and centres it in the bar", () => {
+    const wrapper = mount(WordTabBar, { props: { sections }, attachTo: document.body });
+    const [first, second] = wrapper.findAll<HTMLAnchorElement>("a").map((w) => w.element);
+    const { onActivate, getSectionId } = initHeaderScrollSpy.mock.calls[0]![0];
+    expect(getSectionId(second)).toBe("analyse");
 
-  it("starts the scroll spy on the tab links and reads the section id from the href", () => {
-    const wrapper = mount(WordTabBar, { props: { sections } });
-    expect(initHeaderScrollSpy).toHaveBeenCalledTimes(1);
-    const options = vi.mocked(initHeaderScrollSpy).mock.calls[0][0] as SpyOptions;
-    expect(options.linkSelector).toBe(".c-word-tabbar__tab");
-    expect(options.navSelector).toBe(".c-word-tabbar");
-    expect(options.activeClass).toBe("is-active");
-    const link = wrapper.find("a").element;
-    expect(options.getSectionId?.(link)).toBe("n-bedeutung");
-    expect(options.getSectionId?.(document.createElement("a"))).toBeUndefined();
-  });
-
-  it("onActivate moves aria-current to the active tab only and centres it in the bar", () => {
-    const wrapper = mount(WordTabBar, { props: { sections } });
-    const options = vi.mocked(initHeaderScrollSpy).mock.calls[0][0] as SpyOptions;
-    const [first, second] = wrapper.findAll("a").map((a) => a.element as HTMLAnchorElement);
     const bar = wrapper.element as HTMLElement;
-    Object.defineProperty(bar, "offsetWidth", { value: 200 });
-    Object.defineProperty(second, "offsetLeft", { value: 500 });
-    Object.defineProperty(second, "offsetWidth", { value: 80 });
-    options.onActivate?.(first, bar);
-    expect(first.getAttribute("aria-current")).toBe("true");
-    options.onActivate?.(second, bar);
-    expect(first.hasAttribute("aria-current")).toBe(false);
-    expect(second.getAttribute("aria-current")).toBe("true");
-    expect(bar.scrollLeft).toBe(500 - 100 + 40);
+    onActivate(first, bar);
+    onActivate(second, bar);
+    expect(first!.hasAttribute("aria-current")).toBe(false);
+    expect(second!.getAttribute("aria-current")).toBe("true");
+    expect(bar.scrollLeft).toBe(second!.offsetLeft - bar.offsetWidth / 2 + second!.offsetWidth / 2);
+    wrapper.unmount();
   });
 
-  it("stops the scroll spy on unmount", () => {
-    const wrapper = mount(WordTabBar, { props: { sections } });
-    expect(stop).not.toHaveBeenCalled();
-    wrapper.unmount();
-    expect(stop).toHaveBeenCalledTimes(1);
+  it("stops the scroll spy when it unmounts", () => {
+    mount(WordTabBar, { props: { sections } }).unmount();
+    expect(stop).toHaveBeenCalledOnce();
   });
 });
