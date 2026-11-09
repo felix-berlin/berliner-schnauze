@@ -16,6 +16,8 @@
     </div>
 
     <div class="c-section-card__body c-word-feedback-card__body">
+      <!-- Persistent, so the announcement works although the card swaps its content. -->
+      <p class="u-sr-only" role="status">{{ announcement }}</p>
       <template v-if="current === 'usage'">
         <p ref="lead" class="c-word-feedback-card__lead" tabindex="-1">
           Is dit Wort bei dir noch im Einsatz?
@@ -101,33 +103,8 @@
           </div>
         </div>
 
-        <!-- No live region here: the focus moves to the new heading, which announces it already. -->
-        <div v-if="current === 'results'" class="c-word-feedback-card__results" :class="enter">
-          <h3 ref="thanks" class="c-word-feedback-card__thanks" tabindex="-1">
-            Danke für deine Stimme!
-          </h3>
-          <div
-            class="c-word-feedback-card__react"
-            role="group"
-            aria-labelledby="word-feedback-react"
-          >
-            <span id="word-feedback-react">Und jefällt dir ditt Wort?</span>
-            <WordReactions :word-id="wordId" />
-          </div>
-          <p>
-            Willste noch mehr helfen? Mit 5 kurzen Fragen zu dir erforschen wa, wo und von wem det
-            Berlinerische heute jesprochen wird.
-          </p>
-          <div class="c-word-feedback-card__actions">
-            <button class="c-button c-button--primary" type="button" @click="startFlow">
-              Klar, los jeht’s →
-            </button>
-            <button class="c-textlink" type="button" @click="changeVote">Stimme ändern</button>
-          </div>
-        </div>
-
         <div
-          v-else-if="current !== 'done'"
+          v-if="current !== 'done'"
           :key="current"
           class="c-word-feedback-card__step"
           :class="enter"
@@ -241,11 +218,10 @@
     </div>
 
     <footer
-      v-if="current !== 'usage' && current !== 'results' && current !== 'done'"
+      v-if="current !== 'usage' && current !== 'done'"
       class="c-word-feedback-card__footer"
     >
       <button
-        v-if="history.length"
         class="c-textlink"
         :disabled="pending"
         type="button"
@@ -267,7 +243,6 @@
 
 <script setup lang="ts">
 import BerlinAreaMap from "@components/word-feedback/BerlinAreaMap.vue";
-import WordReactions from "@components/word/WordReactions.vue";
 import { useStore } from "@nanostores/vue";
 import {
   $feedback,
@@ -304,7 +279,7 @@ import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from "vue";
 
 import { BERLIN_AREAS } from "@/data/berlinAreas";
 
-type Step = "age" | "area" | "done" | "half" | "locality" | "origin" | "results" | "usage";
+type Step = "age" | "area" | "done" | "half" | "locality" | "origin" | "usage";
 type ProfileStep = "age" | "area" | "half" | "locality" | "origin";
 
 const props = defineProps<{ wordId: number }>();
@@ -382,11 +357,16 @@ const hasProfile = computed(() => {
   const m = feedback.value?.mine;
   return !!(m?.area || m?.locality || m?.origin || m?.half || m?.age);
 });
-// null = not chosen yet: derived from the loaded state, so a revisit starts on the results or in "done".
+// null = not chosen yet: derived from the loaded state, so a revisit starts on the first open question or in "done".
 const step = ref<Step | null>(null);
 const current = computed<Step>(
   () =>
-    step.value ?? (feedback.value?.mine?.usage ? (hasProfile.value ? "done" : "results") : "usage"),
+    step.value ??
+    (feedback.value?.mine?.usage
+      ? hasProfile.value
+        ? "done"
+        : nextStep($profile.value)
+      : "usage"),
 );
 // Steps the visitor went through (skipped-by-condition ones never enter), so "Zurück" jumps over them.
 const history = ref<Step[]>([]);
@@ -395,6 +375,8 @@ const go = (to: Step, from: Step = current.value) => {
   step.value = to;
 };
 const explainOpen = ref(false);
+// Live region text after a vote (the focus moves to the first question, which does not say the vote counted).
+const announcement = ref("");
 const pending = ref(false);
 const loadFailed = ref(false);
 // The vote that did not arrive: "Nochmal versuchen" sends this very answer again.
@@ -408,11 +390,10 @@ const pickedUsage = ref<Usage | null>(null);
 const selected = computed(() => ({ usage: pickedUsage.value ?? feedback.value?.mine?.usage }));
 
 const lead = useTemplateRef<HTMLElement>("lead");
-const thanks = useTemplateRef<HTMLElement>("thanks");
 const question = useTemplateRef<HTMLElement>("question");
 const doneBox = useTemplateRef<HTMLElement>("doneBox");
 // Step order: decides the slide direction of the enter animation.
-const ORDER: Step[] = ["usage", "results", "area", "locality", "origin", "half", "age", "done"];
+const ORDER: Step[] = ["usage", "area", "locality", "origin", "half", "age", "done"];
 // Enter animation (CSS only, no View Transitions: nothing to coordinate with the focus move below).
 // Only a user-driven step change sets it, so mount and a revisit's first paint stay still.
 const enter = ref<string[]>([]);
@@ -422,8 +403,9 @@ watch(step, async (to, from) => {
     "is-entering",
     ...(to && from && ORDER.indexOf(to) < ORDER.indexOf(from) ? ["is-back"] : []),
   ];
+  if (to === "usage") announcement.value = "";
   await nextTick();
-  (question.value ?? thanks.value ?? doneBox.value ?? lead.value)?.focus();
+  (question.value ?? doneBox.value ?? lead.value)?.focus();
 });
 
 // Open on the first profile question, folded behind a link afterwards.
@@ -460,9 +442,10 @@ const answerUsageStep = async (usage: Usage) => {
     // silent: the inline alert is the one channel for a failed vote, the store must not toast it too.
     const ok = await answerUsage(props.wordId, usage, true);
     if (ok) failedUsage.value = null;
+    if (ok) announcement.value = "Stimme jezählt";
     if (ok && first) {
-      // `current` is already "done" here, so name the step we come from.
-      go(nextStep($profile.get()) === "done" ? "done" : "results", "usage");
+      // `current` has moved on already here, so name the step we come from.
+      go(nextStep($profile.get()), "usage");
     }
     // A failed vote must not keep showing the unsaved choice as selected.
     if (!ok) {
@@ -479,11 +462,6 @@ const retry = () => {
   if (pending.value || !online.value) return;
   return failedUsage.value ? answerUsageStep(failedUsage.value) : ready();
 };
-
-const startFlow = () => go(nextStep($profile.get()));
-
-// Back to the tiles; the stored vote stays until the new one replaces it.
-const changeVote = () => go("usage");
 
 const answerProfile = async (key: ProfileStep, value: string | null) => {
   if (pending.value) return;
@@ -568,11 +546,10 @@ const deleteAll = async () => {
   step.value = null;
 };
 
+// Without history (after a reload) the way back is the vote; the stored vote stays until a new one replaces it.
 const back = () => {
-  const prev = history.value[history.value.length - 1];
-  if (!prev || pending.value) return;
-  history.value.pop();
-  step.value = prev;
+  if (pending.value) return;
+  step.value = history.value.pop() ?? "usage";
 };
 
 const woanders = computed(

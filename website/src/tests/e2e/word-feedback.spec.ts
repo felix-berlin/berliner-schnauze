@@ -18,15 +18,16 @@ test.describe("word feedback", () => {
     await expect(card.locator("astro-island")).not.toHaveAttribute("ssr", "");
     await expect(card.getByRole("heading", { name: "Sagste det noch?" })).toBeVisible();
 
-    // One click on a tile is the vote: no confirm button, the results show the own answer.
+    // One click on a tile is the vote: no confirm button; the results with the own answer and the first question follow at once (Spec §10, v3.1).
     await expect(card.getByRole("button", { name: /bestätigen|abschicken|absenden/i })).toHaveCount(
       0,
     );
     await card.getByRole("button", { name: "Sag ick selbst" }).click();
-    await expect(card.getByRole("heading", { name: "Danke für deine Stimme!" })).toBeFocused();
+    await expect(card.getByRole("heading", { name: "Wo wohnste?" })).toBeFocused();
+    await expect(card.getByRole("status").filter({ hasText: "Stimme jezählt" })).toBeAttached();
     await expect(card.getByText("Sag ick selbst · deine Antwort")).toBeVisible();
-    await card.getByRole("button", { name: /Klar, los/ }).click();
-    await expect(card.getByText("Wo wohnste?").first()).toBeVisible();
+    await expect(card.getByText("Und jefällt dir ditt Wort?")).toHaveCount(0);
+    await expect(card.getByRole("button", { name: /Klar, los/ })).toHaveCount(0);
     // Narrow cards show the list instead of the map, wide ones the map: click whichever is visible.
     await card
       .getByRole("radio", { name: "Friedrichshain-Kreuzberg" })
@@ -91,7 +92,7 @@ test.describe("word feedback", () => {
     // The island is server-rendered first: a click before it hydrated does nothing.
     await expect(card.locator("astro-island")).not.toHaveAttribute("ssr", "");
     await card.getByRole("button", { name: tile }).click();
-    await card.getByRole("button", { name: /Klar, los/ }).click();
+    await expect(card.getByText("Wo wohnste?").first()).toBeVisible();
     return card;
   };
   const pickArea = (card: import("@playwright/test").Locator, name: string) =>

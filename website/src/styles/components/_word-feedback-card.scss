@@ -106,58 +106,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  &__results {
-    display: grid;
-    gap: 0.625rem;
-
-    p {
-      margin: 0;
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-  }
-
-  // Doubled with the body class: the section card styles every body h3 (margins, face, colour).
-  &__body &__thanks {
-    margin: 0;
-    color: var(--color-ink-strong);
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 700;
-  }
-
-  // The same thumbs as in the hero; here both stay visible (no hover reveal).
-  &__react {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    padding: 0.25rem 0.25rem 0.25rem 0.875rem;
-    border-radius: var(--radius-sm);
-    background: var(--surface-chip);
-
-    .c-reaction-group .c-reaction-group__more:not([aria-pressed="true"]) {
-      display: inline-flex;
-    }
-  }
-
-  &__actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem 1rem;
-
-    // 44px touch target like the other controls (Spec §14).
-    .c-button {
-      min-block-size: 2.75rem;
-
-      &:focus-visible {
-        outline: 2px dashed var(--orange-400);
-        outline-offset: 2px;
-      }
-    }
-  }
-
   &__step {
     display: grid;
     gap: 0.625rem;
@@ -168,7 +116,6 @@
   // Short fade + slide in from the direction of travel; the old step is gone at once, so nothing waits.
   @media (prefers-reduced-motion: no-preference) {
     &__step.is-entering,
-    &__results.is-entering,
     &__done.is-entering {
       animation: word-feedback-step-in 0.2s ease-out;
 
