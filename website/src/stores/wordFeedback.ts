@@ -147,6 +147,8 @@ export const sendFeedback = async (
   patch: Partial<MyFeedback>,
   /** Replaces the generic text when the server sent no reason of its own. */
   fallbackMessage = "Hat nich jeklappt, versuch's nochma.",
+  /** The caller shows the failure itself (inline), so no toast. */
+  silent = false,
 ): Promise<boolean> => {
   const seq = ++sent;
   try {
@@ -159,10 +161,11 @@ export const sendFeedback = async (
       // The server says why (daily cap, rejected input, stored but not counted): a generic "try again" can be wrong.
       const { error } = (await res.json().catch(() => ({}))) as { error?: string };
       console.error(`[word-feedback] send ${wordId} failed: ${res.status}`, error);
-      createToastNotify({
-        message: error ?? fallbackMessage,
-        status: res.status === 429 ? "warning" : "error",
-      });
+      if (!silent)
+        createToastNotify({
+          message: error ?? fallbackMessage,
+          status: res.status === 429 ? "warning" : "error",
+        });
       return false;
     }
     const state = (await res.json()) as WordFeedbackState;
@@ -176,13 +179,13 @@ export const sendFeedback = async (
     return true;
   } catch (error) {
     console.error(`[word-feedback] send ${wordId} failed:`, error);
-    createToastNotify({ message: fallbackMessage, status: "error" });
+    if (!silent) createToastNotify({ message: fallbackMessage, status: "error" });
     return false;
   }
 };
 
-export const answerUsage = (wordId: number, usage: Usage): Promise<boolean> =>
-  sendFeedback(wordId, { usage, ...parseProfile($profile.get()) });
+export const answerUsage = (wordId: number, usage: Usage, silent = false): Promise<boolean> =>
+  sendFeedback(wordId, { usage, ...parseProfile($profile.get()) }, undefined, silent);
 
 /** Deletes every answer tied to this browser (all words) and forgets the stored profile. */
 export const deleteAllFeedback = async (wordId: number): Promise<boolean> => {

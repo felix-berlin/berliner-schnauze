@@ -72,7 +72,7 @@ describe("WordFeedbackCard", () => {
   it("one click is the vote and leads to the results with the own answer marked", async () => {
     const w = await mountIt();
     await click(w, "Kenn ick");
-    expect(store.answerUsage).toHaveBeenCalledWith(7, "know");
+    expect(store.answerUsage).toHaveBeenCalledWith(7, "know", true);
     expect(w.text()).toContain("Danke für deine Stimme!");
     expect(w.text()).toContain("Kenn ick · deine Antwort");
     expect(w.text()).not.toContain("Sag ick selbst · deine Antwort");
@@ -104,7 +104,7 @@ describe("WordFeedbackCard", () => {
     expect(w.find('.c-state--error[role="alert"]').text()).toContain("Nochmal versuchen");
     await click(w, "Nochmal versuchen");
     expect(store.answerUsage).toHaveBeenCalledTimes(2);
-    expect(store.answerUsage).toHaveBeenLastCalledWith(7, "know");
+    expect(store.answerUsage).toHaveBeenLastCalledWith(7, "know", true);
     expect(w.find(".c-state--error").exists()).toBe(false);
     expect(w.text()).toContain("Danke für deine Stimme!");
   });
@@ -126,6 +126,27 @@ describe("WordFeedbackCard", () => {
     online.mockRestore();
   });
 
+  it("keeps focus on the retry button, and offline it sends nothing and points to the banner", async () => {
+    store.answerUsage.mockResolvedValueOnce(false);
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    const retryButton = w.findAll("button").find((b) => b.text().includes("Nochmal versuchen"))!;
+    (retryButton.element as HTMLButtonElement).focus();
+    const online = vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
+    window.dispatchEvent(new Event("offline"));
+    await flushPromises();
+    expect(retryButton.attributes("disabled")).toBeUndefined();
+    expect(retryButton.attributes("aria-disabled")).toBe("true");
+    expect(retryButton.attributes("aria-describedby")).toBe("word-feedback-offline");
+    expect(document.getElementById("word-feedback-offline")).not.toBeNull();
+    expect(document.activeElement).toBe(retryButton.element);
+    store.answerUsage.mockClear();
+    await retryButton.trigger("click");
+    expect(store.answerUsage).not.toHaveBeenCalled();
+    online.mockRestore();
+    w.unmount();
+  });
+
   it("retries a failed load on the first answer and does not send without state", async () => {
     $feedback.set(null);
     const w = await mountIt();
@@ -141,7 +162,7 @@ describe("WordFeedbackCard", () => {
     store.answerUsage.mockReturnValue(new Promise<boolean>((r) => (resolve = r)));
     const w = await mountIt();
     await w.findAll("button")[0].trigger("click");
-    expect(w.findAll("button").every((b) => b.attributes("disabled") !== undefined)).toBe(true);
+    expect(w.findAll("button").every((b) => b.attributes("aria-disabled") === "true")).toBe(true);
     resolve(true);
     await flushPromises();
   });
@@ -298,7 +319,7 @@ describe("WordFeedbackCard", () => {
     $profile.set({ area: "pankow", origin: "grewUp" });
     const w = await mountIt();
     await click(w, "Sag ick selbst");
-    expect(store.answerUsage).toHaveBeenCalledWith(7, "say");
+    expect(store.answerUsage).toHaveBeenCalledWith(7, "say", true);
     expect(store.sendFeedback).not.toHaveBeenCalled();
   });
 
@@ -309,7 +330,7 @@ describe("WordFeedbackCard", () => {
     expect(w.text()).toContain("Sag ick selbst · deine Antwort");
     await click(w, "Stimme ändern");
     await click(w, "Nie jehört");
-    expect(store.answerUsage).toHaveBeenCalledWith(7, "never");
+    expect(store.answerUsage).toHaveBeenCalledWith(7, "never", true);
   });
 
   it("an answered word with a profile starts in done and shows no further questions", async () => {
@@ -430,6 +451,16 @@ describe("WordFeedbackCard", () => {
     expect(w.text()).toContain("Wie alt biste?");
     expect(w.text()).not.toContain("In welcher Hälfte?");
     expect(eyebrow(w)).toBe("Schritt 4 von 4");
+  });
+
+  it("Woanders drops a half answered before Zurück, on the server and in the stored profile", async () => {
+    $profile.set({ half: "east", origin: "grewUp" });
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    await click(w, "Klar, los");
+    await click(w, "Woanders");
+    expect(store.sendFeedback).toHaveBeenLastCalledWith(7, { area: "elsewhere", half: null });
+    expect($profile.get().half).toBeNull();
   });
 
   it("Zujezogen, unter 10 Jahren skips the half", async () => {

@@ -20,7 +20,7 @@
         <p ref="lead" class="c-word-feedback-card__lead" tabindex="-1">
           Is dit Wort bei dir noch im Einsatz?
         </p>
-        <div v-if="!online" class="c-state c-state--offline" role="status">
+        <div v-if="!online" id="word-feedback-offline" class="c-state c-state--offline" role="status">
           <WifiOff aria-hidden="true" height="18" width="18" />
           <span class="c-state__body">
             <b>Du bist offline.</b>
@@ -38,8 +38,9 @@
                   : "Die Stimmen sind nich anjekommen."
               }}
               <button
+                :aria-describedby="!online ? 'word-feedback-offline' : undefined"
+                :aria-disabled="pending || !online"
                 class="c-textlink c-textlink--inline"
-                :disabled="pending"
                 type="button"
                 @click="retry"
               >
@@ -52,10 +53,9 @@
           <button
             v-for="o in USAGE_OPTIONS"
             :key="o.value"
-            :aria-disabled="!online"
+            :aria-disabled="!online || pending"
             :aria-pressed="pickedUsage === o.value"
             class="c-choice c-choice--tile"
-            :disabled="pending"
             type="button"
             @click="answerUsageStep(o.value)"
           >
@@ -453,7 +453,8 @@ const answerUsageStep = async (usage: Usage) => {
     // The store's update turns the derived step into "done" before this call returns.
     const first = current.value === "usage";
     trackEvent("Word Feedback", "usage", usage);
-    const ok = await answerUsage(props.wordId, usage);
+    // silent: the inline alert is the one channel for a failed vote, the store must not toast it too.
+    const ok = await answerUsage(props.wordId, usage, true);
     if (ok && first) {
       // `current` is already "done" here, so name the step we come from.
       go(nextStep($profile.get()) === "done" ? "done" : "results", "usage");
@@ -468,7 +469,11 @@ const answerUsageStep = async (usage: Usage) => {
   }
 };
 
-const retry = () => (failedUsage.value ? answerUsageStep(failedUsage.value) : ready());
+// aria-disabled keeps focus on the button, so a locked retry has to be ignored here (offline: the banner says why).
+const retry = () => {
+  if (pending.value || !online.value) return;
+  return failedUsage.value ? answerUsageStep(failedUsage.value) : ready();
+};
 
 const startFlow = () => go(nextStep($profile.get()));
 
@@ -481,10 +486,12 @@ const answerProfile = async (key: ProfileStep, value: string | null) => {
   try {
     if (!(await ready())) return;
     const before = picked.value;
+    const dropsHalf = key === "area" && (value === "brandenburg" || value === "elsewhere");
     picked.value = {
       ...picked.value,
       [key]: value,
       ...(key === "area" ? { locality: null } : {}),
+      ...(dropsHalf ? { half: null } : {}),
     };
     // The API only accepts a half in the same request as origin grewUp.
     // Likewise a locality only together with its area, and a new area drops the old one.
@@ -492,6 +499,8 @@ const answerProfile = async (key: ProfileStep, value: string | null) => {
     const patch = {
       [key]: value,
       ...(key === "origin" && value !== "grewUp" ? { half: null } : {}),
+      // Woanders/Brandenburg skip the half step: a half answered before "Zurück" must go too.
+      ...(dropsHalf ? { half: null } : {}),
       ...(key === "half" && value ? { origin: "grewUp" } : {}),
       ...(key === "locality" && value ? { area: $profile.get().area } : {}),
       ...(key === "area" && hadLocality ? { locality: null } : {}),

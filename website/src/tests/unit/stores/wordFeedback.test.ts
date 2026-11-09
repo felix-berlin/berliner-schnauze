@@ -222,6 +222,16 @@ describe("sendFeedback", () => {
     await sendFeedback(1, { reaction: "like" }, "Ditt hat nich jeklappt.");
     expect(toast).toHaveBeenLastCalledWith(expect.objectContaining({ message: "Zu oft." }));
   });
+  it("silent callers get the failure back without a toast, on both failure paths", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("down")));
+    expect(await sendFeedback(1, { usage: "say" }, undefined, true)).toBe(false);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({ json: async () => ({ error: "Zu oft." }), ok: false, status: 429 }),
+    );
+    expect(await sendFeedback(1, { usage: "say" }, undefined, true)).toBe(false);
+    expect(toast).not.toHaveBeenCalled();
+  });
   it("non-ok response counts as failure", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ json: async () => ({}), ok: false }));
     expect(await sendFeedback(1, { usage: "say" })).toBe(false);
