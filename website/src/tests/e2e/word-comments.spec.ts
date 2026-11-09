@@ -72,8 +72,10 @@ test.describe("word comments", () => {
   });
 
   test("Strg+Enter shows its hint from 808px on hover devices and is hidden below", async ({
+    isMobile,
     page,
   }) => {
+    test.skip(isMobile, "phone emulation has no hover, the hint is never shown");
     await mockList(page, []);
     await stubTurnstile(page);
     await page.setViewportSize({ height: 800, width: 1280 });

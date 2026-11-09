@@ -424,8 +424,10 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       // Sits after the hero, before the poll; preload="none": no audio request before the first click.
       expect(audioRequests).toHaveLength(0);
 
-      // client:visible: a click before hydration would hit the plain server markup.
-      await expect(page.locator("astro-island[component-url*='WordAudio']")).not.toHaveAttribute("ssr", "");
+      // client:visible: a click before hydration would hit the plain server markup (WebKit needs the scroll).
+      const audioIsland = page.locator("astro-island[component-url*='WordAudio']");
+      await audioIsland.scrollIntoViewIfNeeded();
+      await expect(audioIsland).not.toHaveAttribute("ssr", "");
       await male.click();
       await expect(male).toHaveAttribute("aria-pressed", "true");
       await female.click();

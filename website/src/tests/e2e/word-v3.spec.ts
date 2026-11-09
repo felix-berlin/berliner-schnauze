@@ -18,7 +18,8 @@ const visitLeftoverIslands = async (page: Page) => {
   const left = page.locator("astro-island[ssr]");
   for (let n = await left.count(); n > 0; n = await left.count()) {
     await left.first().scrollIntoViewIfNeeded();
-    await expect(left).toHaveCount(n - 1);
+    // Several islands can hydrate at once, so wait for any drop, not for exactly one.
+    await expect.poll(() => left.count()).toBeLessThan(n);
   }
 };
 
