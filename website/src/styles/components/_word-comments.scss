@@ -1,24 +1,10 @@
 @use "@styles/variables" as vars;
-@use "@styles/mixins" as mx;
 
+// Card chrome comes from .c-section-card (this block only adds what the comments need inside it).
 .c-word-comments {
-  display: grid;
-  gap: vars.$spacer * 1.5;
-  max-inline-size: 48rem;
-  margin-inline: auto;
-  padding-block: vars.$spacer * 2;
-  border-block-start: 1px dashed var(--new-blue-200);
-
   &__header {
-    display: flex;
-    flex-wrap: wrap;
-    gap: vars.$spacer;
-    align-items: center;
     justify-content: space-between;
-  }
-
-  &__title {
-    @include mx.paper-card-title;
+    flex-wrap: wrap;
   }
 
   &__count {
@@ -26,29 +12,36 @@
     font-weight: 400;
   }
 
+  // Small connected segmented control (mock: 36px, -1px overlap).
   &__sort {
-    display: inline-flex;
-    gap: vars.$spacer * 0.5;
+    display: flex;
+    margin-inline-start: auto;
   }
 
-  &__captcha-text {
-    margin: 0 0 vars.$spacer * 0.5;
-    font-size: 0.9rem;
-    color: var(--color-muted);
+  &__sort-button {
+    min-block-size: 2.25rem;
+    padding-inline: 0.625rem;
+    font-size: 0.75rem;
+
+    & + & {
+      margin-inline-start: -1px;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  // .c-section-card__body forces p to 1rem; small print stays small (same size as the field hints).
+  &__body p.t-small {
+    font-size: 0.8rem;
   }
 
   &__empty {
     margin: 0;
-    padding: vars.$spacer * 1.5;
-    text-align: center;
     color: var(--color-muted);
-    border: 1px dashed var(--rule-card);
-    border-radius: 4px;
-  }
-
-  &__retry {
-    display: flex;
-    margin: vars.$spacer * 0.75 auto 0;
   }
 
   &__list {
@@ -57,12 +50,21 @@
     list-style: none;
   }
 
-  // virtua measures the li without its padding: the gap lives inside it, on this wrapper.
-  &__item {
-    padding-block-end: vars.$spacer;
+  &__item:first-child > .c-comment {
+    border-block-start: 0;
+    padding-block-start: 0;
   }
 
-  &__sentinel {
-    block-size: 1px;
+  &__more {
+    align-self: flex-start;
+  }
+
+  &__write {
+    inline-size: 100%;
+    justify-content: center;
+  }
+
+  &__captcha-text {
+    margin: 0 0 vars.$spacer * 0.5;
   }
 }

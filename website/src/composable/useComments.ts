@@ -17,8 +17,19 @@ const json = (body: unknown) => ({
   headers: { "Content-Type": "application/json" },
 });
 
-/** Runs a request; null (plus a toast) when it failed. 429 keeps the input, the caller decides what else. */
-const call = async <T>(url: string, init?: RequestInit, notFound?: string): Promise<null | T> => {
+/**
+ * Runs a request; null (plus a toast) when it failed. 429 keeps the input, the caller decides what else.
+ * `silent`: no failure toast, the form shows its own error box (one announcement channel).
+ */
+const call = async <T>(
+  url: string,
+  init?: RequestInit,
+  notFound?: string,
+  silent = false,
+): Promise<null | T> => {
+  const toast = (n: Parameters<typeof createToastNotify>[0]): void => {
+    if (!silent) createToastNotify(n);
+  };
   try {
     const res = await fetch(url, init);
     if (res.status === 404 && notFound) {
@@ -26,7 +37,7 @@ const call = async <T>(url: string, init?: RequestInit, notFound?: string): Prom
       return null;
     }
     if (res.status === 429) {
-      createToastNotify({
+      toast({
         message: "Ma langsam, Keule – versuch's gleich nochmal.",
         status: "warning",
       });
@@ -35,7 +46,7 @@ const call = async <T>(url: string, init?: RequestInit, notFound?: string): Prom
     const body = (await res.json().catch(() => null)) as (T & { error?: string }) | null;
     // A 2xx without a JSON body is a failure too: the caller would treat `{}` as done.
     if (!res.ok || !body) {
-      createToastNotify({
+      toast({
         message: body?.error || "Dit hat leider nich geklappt.",
         status: "error",
       });
@@ -45,13 +56,13 @@ const call = async <T>(url: string, init?: RequestInit, notFound?: string): Prom
   } catch (error) {
     // fetch() rejects with a TypeError when offline; anything else is a bug worth reporting.
     if (!(error instanceof TypeError)) reportError(error);
-    createToastNotify({ message: "Dit hat leider nich geklappt.", status: "error" });
+    toast({ message: "Dit hat leider nich geklappt.", status: "error" });
     return null;
   }
 };
 
-const told = (pending: boolean): PostResult => {
-  if (pending)
+const told = (pending: boolean, quiet = false): PostResult => {
+  if (pending && !quiet)
     createToastNotify({
       message: "Dein Kommentar hat 'nen Link, den kieken wir uns erst an.",
       status: "info",
@@ -158,10 +169,12 @@ export const useComments = (wordId: number) => {
   });
 
   const post = async (input: Input, turnstileToken: string): Promise<PostResult> => {
-    const data = await call<{ comment?: PublicComment; editKey: string; pending: boolean }>(API, {
-      ...json({ ...input, turnstileToken, wordId }),
-      method: "POST",
-    });
+    const data = await call<{ comment?: PublicComment; editKey: string; pending: boolean }>(
+      API,
+      { ...json({ ...input, turnstileToken, wordId }), method: "POST" },
+      undefined,
+      true,
+    );
     if (!data) return "error";
     if (data.comment) {
       keys.value = {
@@ -175,14 +188,16 @@ export const useComments = (wordId: number) => {
       else comments.value.unshift(data.comment);
       total.value += 1;
     }
-    return told(data.pending);
+    return told(data.pending, !input.parentId); // a new comment: the success box says it
   };
 
   const edit = async (id: number, text: string): Promise<PostResult> => {
-    const data = await call<{ comment?: PublicComment; pending: boolean }>(`${API}/${id}`, {
-      ...json({ editKey: keys.value[id]?.key, text }),
-      method: "PATCH",
-    });
+    const data = await call<{ comment?: PublicComment; pending: boolean }>(
+      `${API}/${id}`,
+      { ...json({ editKey: keys.value[id]?.key, text }), method: "PATCH" },
+      undefined,
+      true,
+    );
     const target = find(id);
     if (!data || !target) return data ? "ok" : "error";
     if (data.comment) Object.assign(target, { ...data.comment, replies: target.replies });
@@ -249,6 +264,8 @@ export const useComments = (wordId: number) => {
 };
 
 export type CommentsContext = ReturnType<typeof useComments> & {
+  /** Browser connectivity: votes and writing lock (aria-disabled) while it is false. */
+  online: Ref<boolean>;
   /** Mounts the Turnstile widget; called when a reply/report form opens, before any field is focused. */
   armCaptcha: () => void;
   /** Re-issues the shared captcha token after it was spent. */

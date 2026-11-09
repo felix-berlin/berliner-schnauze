@@ -26,16 +26,15 @@ describe("CommentForm", () => {
     expect((area.element as HTMLTextAreaElement).value).toBe("");
   });
 
-  it("announces the remaining characters only near the limit", async () => {
+  it("makes the counter a live region only from 900 characters", async () => {
     const wrapper = mount(CommentForm, { props: { submit: vi.fn() } });
-    const status = () => wrapper.find("[role=status]").text();
-    expect(wrapper.find(".c-comment-form__counter").attributes("aria-live")).toBeUndefined();
-    await wrapper.find("textarea").setValue("a".repeat(100));
-    expect(status()).toBe("");
-    await wrapper.find("textarea").setValue("a".repeat(960));
-    expect(status()).toBe("Noch 40 Zeichen");
-    await wrapper.find("textarea").setValue("a".repeat(1003));
-    expect(status()).toBe("3 Zeichen zu viel");
+    const counter = () => wrapper.find(".c-comment-form__counter").attributes("aria-live");
+    expect(counter()).toBeUndefined();
+    await wrapper.find("textarea").setValue("a".repeat(899));
+    expect(counter()).toBeUndefined();
+    await wrapper.find("textarea").setValue("a".repeat(900));
+    expect(counter()).toBe("polite");
+    expect(wrapper.find("[role=status]").exists()).toBe(false);
   });
 
   it("explains a refused submit and clears the hint once the text is long enough", async () => {
@@ -86,12 +85,57 @@ describe("CommentForm", () => {
     await wrapper.find("form").trigger("submit");
     const button = wrapper.find("button[type=submit]");
     expect(submit).toHaveBeenCalledTimes(1);
-    expect(button.text()).toBe("Wird jeschickt …");
+    expect(button.text()).toBe("Abschicken");
     expect(button.attributes("aria-busy")).toBe("true");
-    expect(button.attributes("disabled")).toBeDefined();
+    // aria-disabled, not :disabled: the button keeps the focus
+    expect(button.attributes("aria-disabled")).toBe("true");
+    expect(button.attributes("disabled")).toBeUndefined();
     done(true);
     await flushPromises();
-    expect(button.text()).toBe("Abschicken");
+    expect(button.attributes("aria-busy")).toBe("false");
+  });
+
+  it("a failed send shows the error box once, keeps the text and renames the button", async () => {
+    const submit = vi.fn().mockResolvedValueOnce(false).mockResolvedValueOnce(true);
+    const wrapper = mount(CommentForm, { props: { submit } });
+    await wrapper.find("textarea").setValue("Hallo Welt");
+    await wrapper.find("form").trigger("submit");
+    await flushPromises();
+    const box = wrapper.find(".c-state--error");
+    expect(box.attributes("role")).toBe("alert");
+    expect(box.text()).toContain("Ditt hat nich jeklappt.");
+    expect(box.text()).toContain("Dein Text bleibt stehen");
+    expect(wrapper.find("button[type=submit]").text()).toBe("Nochmal abschicken");
+    expect((wrapper.find("textarea").element as HTMLTextAreaElement).value).toBe("Hallo Welt");
+    await wrapper.find("form").trigger("submit");
+    await flushPromises();
+    expect(wrapper.find(".c-state--error").exists()).toBe(false);
+    expect(wrapper.find("button[type=submit]").text()).toBe("Abschicken");
+  });
+
+  it("offline: the button locks with a visible reason and nothing is sent", async () => {
+    const online = vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
+    const submit = vi.fn(async () => true);
+    const wrapper = mount(CommentForm, { props: { submit } });
+    await wrapper.find("textarea").setValue("Hallo Welt");
+    await wrapper.find("form").trigger("submit");
+    const button = wrapper.find("button[type=submit]");
+    expect(submit).not.toHaveBeenCalled();
+    expect(button.attributes("aria-disabled")).toBe("true");
+    expect(button.attributes("disabled")).toBeUndefined();
+    expect(wrapper.find(`#${button.attributes("aria-describedby")}`).text()).toContain(
+      "Du bist offline.",
+    );
+    online.mockRestore();
+  });
+
+  it("focusOnMount puts the focus into the textarea", () => {
+    const wrapper = mount(CommentForm, {
+      attachTo: document.body,
+      props: { focusOnMount: true, submit: vi.fn() },
+    });
+    expect(document.activeElement).toBe(wrapper.find("textarea").element);
+    wrapper.unmount();
   });
 
   it("marks the name placeholder as an example and describes the anonymous default", () => {

@@ -1,22 +1,21 @@
 @use "@styles/variables" as vars;
-@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-.c-comment-card {
+.c-comment {
   display: grid;
-  gap: vars.$spacer * 0.5;
-  padding: vars.$spacer;
+  grid-template-columns: 2.25rem 1fr;
+  gap: 0.25rem 0.75rem;
+  padding: 0.875rem 0;
+  border-block-start: 1px dashed var(--rule-inner);
 
-  @include mx.paper-card;
+  // Everything but the avatar and the replies sits in the text column.
+  > :not(.c-comment__avatar, .c-comment__replies) {
+    grid-column: 2;
+  }
 
-  // Replies sit inside the parent card, indented behind the dashed postcard line.
+  // Spec §5/§9: one level deep, indented 48px.
   &--reply {
-    padding: vars.$spacer * 0.5 0 vars.$spacer * 0.5 vars.$spacer;
-    background: transparent;
-    border: 0;
-    border-inline-start: 1px dashed var(--rule-card);
-    border-radius: 0;
-    box-shadow: none;
+    margin-inline-start: 3rem;
   }
 
   // Linked comment: orange wash and outline that fade out; with reduced motion they stay until the class goes.
@@ -24,7 +23,7 @@
     position: relative;
     outline: 2px solid var(--orange-500);
     outline-offset: 2px;
-    animation: c-comment-card-outline 3.5s ease-out forwards;
+    animation: c-comment-outline 3.5s ease-out forwards;
 
     &::after {
       content: "";
@@ -33,7 +32,7 @@
       border-radius: inherit;
       background: color-mix(in srgb, var(--orange-500) 25%, transparent);
       pointer-events: none;
-      animation: c-comment-card-wash 3.5s ease-out forwards;
+      animation: c-comment-wash 3.5s ease-out forwards;
     }
 
     @include butler-mx.dark-mode-class {
@@ -51,13 +50,27 @@
     }
   }
 
+  &__avatar {
+    grid-row: span 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--orange-500) 16%, transparent);
+    color: var(--color-accent-text);
+    font-weight: 700;
+  }
+
   &__meta {
     display: flex;
-    flex-wrap: wrap;
-    gap: vars.$spacer * 0.5;
-    align-items: baseline;
-    font-size: 0.8rem;
-    color: var(--color-muted);
+    flex-direction: column;
+    line-height: 1.25;
+  }
+
+  &__name {
+    color: var(--color-ink-strong);
   }
 
   &__permalink {
@@ -69,17 +82,31 @@
       text-decoration: underline dashed;
       text-underline-offset: 3px;
     }
-  }
 
-  &__name {
-    color: var(--color-body);
-    font-size: 1rem;
+    &:focus-visible {
+      outline: 2px dashed var(--orange-400);
+      outline-offset: 2px;
+    }
   }
 
   &__text {
     margin: 0;
+    line-height: 1.5;
     white-space: pre-line;
     overflow-wrap: anywhere;
+
+    // Long comments (spec proposal): 8 lines until „Weiterlesen“.
+    &.is-clamped {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 8;
+      line-clamp: 8;
+      overflow: hidden;
+    }
+  }
+
+  &__more {
+    justify-self: start;
   }
 
   &__placeholder {
@@ -91,27 +118,10 @@
   &__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: vars.$spacer;
+    gap: 0.75rem;
     align-items: center;
+    margin-inline-start: -0.625rem;
     font-size: 0.85rem;
-  }
-
-  &__vote {
-    display: inline-flex;
-    align-items: center;
-    gap: vars.$spacer * 0.25;
-  }
-
-  &__vote-button {
-    justify-content: center;
-    min-inline-size: 2.75rem;
-    padding-inline: vars.$spacer * 0.5;
-  }
-
-  &__score {
-    min-inline-size: 1.5ch;
-    text-align: center;
-    font-variant-numeric: tabular-nums;
   }
 
   &__menu {
@@ -153,18 +163,18 @@
   }
 
   &__replies {
-    display: grid;
-    gap: vars.$spacer * 0.5;
-    margin-inline-start: vars.$spacer * 0.5;
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
   }
 }
 
-@keyframes c-comment-card-wash {
+@keyframes c-comment-wash {
   to {
     opacity: 0;
   }
 }
-@keyframes c-comment-card-outline {
+@keyframes c-comment-outline {
   to {
     outline-color: transparent;
   }

@@ -44,3 +44,15 @@
     color: var(--success);
   }
 }
+
+// Title + sentence inside a box: bold line over the text.
+:where(.c-state__body) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  flex: 1;
+
+  b {
+    color: var(--color-ink-strong);
+  }
+}

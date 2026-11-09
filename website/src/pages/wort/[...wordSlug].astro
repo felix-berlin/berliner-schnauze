@@ -9,6 +9,7 @@ import WordImages from '@components/word/WordImages.astro';
 import { getImage } from 'astro:assets';
 import { toWordImages } from '@utils/wordImages.ts';
 import WordHero from '@components/word/WordHero.astro';
+import WordOfflineBanner from '@components/word/WordOfflineBanner.vue';
 import WordLearnMore from '@components/word/WordLearnMore.astro';
 import WordComments from '@components/comments/WordComments.vue';
 import WordFeedbackCard from '@components/word-feedback/WordFeedbackCard.vue';
@@ -228,6 +229,8 @@ const schemaJson = () => {
   <Fragment slot='head'>
     <script set:html={schemaJson()} type='application/ld+json' />
   </Fragment>
+
+  <WordOfflineBanner client:load />
 
   <nav class='c-page-topbar' aria-label='Brotkrümelpfad'>
     <Breadcrumbs indexText='Start' linkTextFormat='capitalized' truncated={true}>

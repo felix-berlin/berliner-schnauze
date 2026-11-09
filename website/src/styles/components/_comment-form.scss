@@ -63,7 +63,24 @@
   &__button {
     --padding: #{vars.$spacer * 0.5 vars.$spacer};
 
-    min-block-size: 44px;
+    flex: 1 1 auto;
+    min-block-size: 3rem;
+
+    // Busy and offline keep the focus (no :disabled); the look says it is locked.
+    &[aria-disabled="true"] {
+      opacity: 0.55;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    &[aria-busy="true"] {
+      cursor: progress;
+    }
+
+    &:focus-visible {
+      outline: 2px dashed var(--orange-400);
+      outline-offset: 2px;
+    }
   }
 
   // Shortcut hint only where a hardware keyboard is likely.

@@ -7,15 +7,6 @@ vi.mock("astro:env/client", () => ({ TURNSTILE_SITE_KEY: "k" }));
 vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify: vi.fn() }));
 vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));
 
-// virtua needs real layout, which jsdom lacks
-vi.mock("virtua/vue", () => ({
-  WindowVirtualizer: {
-    methods: { scrollToIndex: () => {} },
-    props: ["data"],
-    template: '<ul><li v-for="item in data" :key="item.id"><slot :item="item" /></li></ul>',
-  },
-}));
-
 const { fetchMock } = vi.hoisted(() => ({ fetchMock: vi.fn() }));
 vi.stubGlobal("fetch", fetchMock);
 
@@ -34,7 +25,7 @@ describe("WordComments", () => {
     await flushPromises();
     expect(wrapper.text()).toContain("Hier hat noch keener wat jesacht. Fang du doch an!");
     expect(wrapper.text()).toContain("(0)");
-    expect(wrapper.find("[aria-pressed=true]").text()).toBe("Beste");
+    expect(wrapper.find("[role=group][aria-label=Sortierung]").exists()).toBe(false);
   });
 
   it("no empty state while another page is still to come", async () => {
@@ -134,6 +125,22 @@ describe("WordComments", () => {
 
   const page = (body: object) => ({ json: async () => body, ok: true, status: 200 });
   const empty = { comments: [], hasMore: false, total: 0 };
+  const card = (id: number, replies: object[] = []) => ({
+    authorName: "Icke",
+    createdAt: new Date().toISOString(),
+    downvotes: 0,
+    edited: false,
+    id,
+    myVote: 0,
+    parentId: null,
+    removalReason: null,
+    replies,
+    state: "visible",
+    text: `Text ${id}`,
+    upvotes: 0,
+  });
+  const many = (n: number, hasMore = false) =>
+    page({ comments: Array.from({ length: n }, (_, i) => card(i + 1)), hasMore, total: n });
   const resetSpy = vi.fn();
   const TurnStileStub = { emits: ["token"], methods: { reset: resetSpy }, template: "<div />" };
 
@@ -144,7 +151,7 @@ describe("WordComments", () => {
   });
 
   it("„Neueste“ reloads sorted by date", async () => {
-    fetchMock.mockResolvedValue(page(empty));
+    fetchMock.mockResolvedValue(many(2));
     const wrapper = mount(WordComments, {
       global: { stubs: { TurnStile: true } },
       props: { wordId: 7 },
@@ -165,6 +172,7 @@ describe("WordComments", () => {
       global: { stubs: { TurnStile: TurnStileStub } },
       props: { wordId: 7 },
     });
+    await wrapper.find(".c-word-comments__write").trigger("click");
     await wrapper.find("form").trigger("focusin");
     await flushPromises();
     const submit = wrapper.findComponent(CommentForm).props("submit") as (v: {
@@ -211,32 +219,110 @@ describe("WordComments", () => {
     });
     await flushPromises();
     expect(wrapper.findComponent(TurnStileStub).exists()).toBe(false);
-    await wrapper.find(".c-comment-card__reply").trigger("click");
+    await wrapper.find(".c-comment__reply").trigger("click");
     expect(wrapper.findComponent(TurnStileStub).exists()).toBe(true);
   });
 
-  it("loads the next page when the end of the list scrolls into view", async () => {
-    let fire!: (entries: { isIntersecting: boolean }[]) => void;
-    vi.stubGlobal(
-      "IntersectionObserver",
-      class {
-        constructor(cb: typeof fire) {
-          fire = cb;
-        }
-        disconnect() {}
-        observe() {}
-        unobserve() {}
-      },
+  it("shows three comments and „Alle n Kommentare zeigen“, then ten more per click", async () => {
+    fetchMock.mockResolvedValue(many(25));
+    const wrapper = mount(WordComments, {
+      global: { stubs: { TurnStile: true } },
+      props: { wordId: 7 },
+    });
+    await flushPromises();
+    const items = () => wrapper.findAll(".c-word-comments__item").length;
+    const more = () => wrapper.find(".c-word-comments__more");
+    expect(items()).toBe(3);
+    expect(more().text()).toBe("Alle 25 Kommentare zeigen");
+    await more().trigger("click");
+    expect(items()).toBe(10);
+    expect(more().text()).toBe("Weitere Kommentare zeigen");
+    await more().trigger("click");
+    await more().trigger("click");
+    expect(items()).toBe(25);
+    expect(more().exists()).toBe(false);
+  });
+
+  it("three comments or fewer show no „Alle zeigen“", async () => {
+    fetchMock.mockResolvedValue(many(3));
+    const wrapper = mount(WordComments, {
+      global: { stubs: { TurnStile: true } },
+      props: { wordId: 7 },
+    });
+    await flushPromises();
+    expect(wrapper.findAll(".c-word-comments__item")).toHaveLength(3);
+    expect(wrapper.find(".c-word-comments__more").exists()).toBe(false);
+  });
+
+  it("asks for the next page when the shown slice outgrows the loaded comments", async () => {
+    fetchMock.mockResolvedValue(many(4, true));
+    const wrapper = mount(WordComments, {
+      global: { stubs: { TurnStile: true } },
+      props: { wordId: 7 },
+    });
+    await flushPromises();
+    await wrapper.find(".c-word-comments__more").trigger("click"); // limit 10 > 4 loaded, more exist
+    await flushPromises();
+    expect(fetchMock.mock.calls.at(-1)![0]).toContain("page=2");
+  });
+
+  it("„Kommentar schreiben“ opens the form with the focus in the textarea; offline it only locks", async () => {
+    fetchMock.mockResolvedValue(page(empty));
+    const wrapper = mount(WordComments, {
+      attachTo: document.body,
+      global: { stubs: { TurnStile: true } },
+      props: { wordId: 7 },
+    });
+    await flushPromises();
+    expect(wrapper.find("form").exists()).toBe(false);
+    await wrapper.find(".c-word-comments__write").trigger("click");
+    expect(wrapper.find("form").exists()).toBe(true);
+    expect(document.activeElement).toBe(wrapper.find("textarea").element);
+    wrapper.unmount();
+
+    const online = vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
+    const offline = mount(WordComments, {
+      global: { stubs: { TurnStile: true } },
+      props: { wordId: 7 },
+    });
+    await flushPromises();
+    const write = offline.find(".c-word-comments__write");
+    expect(write.attributes("aria-disabled")).toBe("true");
+    expect(write.attributes("disabled")).toBeUndefined();
+    expect(offline.find(`#${write.attributes("aria-describedby")}`).text()).toContain(
+      "Du bist offline.",
     );
-    fetchMock.mockResolvedValue(page({ comments: [], hasMore: true, total: 3 }));
-    mount(WordComments, { global: { stubs: { TurnStile: true } }, props: { wordId: 7 } });
+    await write.trigger("click");
+    expect(offline.find("form").exists()).toBe(false);
+    online.mockRestore();
+  });
+
+  it("after a sent comment the form closes, the success box shows and the button gets the focus back", async () => {
+    fetchMock.mockResolvedValue(page(empty));
+    const wrapper = mount(WordComments, {
+      attachTo: document.body,
+      global: { stubs: { TurnStile: TurnStileStub } },
+      props: { wordId: 7 },
+    });
     await flushPromises();
-    fire([{ isIntersecting: false }]);
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-    fire([{ isIntersecting: true }]);
+    await wrapper.find(".c-word-comments__write").trigger("click");
     await flushPromises();
-    expect(fetchMock).toHaveBeenCalledTimes(2);
-    expect(fetchMock.mock.calls[1]![0]).toContain("page=2");
+    wrapper.findComponent(TurnStileStub).vm.$emit("token", "tok");
+    fetchMock.mockResolvedValueOnce({
+      json: async () => ({ editKey: "k".repeat(43), pending: true }),
+      ok: true,
+      status: 201,
+    });
+    await wrapper.find("textarea").setValue("Na sowat");
+    await wrapper.find("form").trigger("submit");
+    await flushPromises();
+    expect(wrapper.find("form").exists()).toBe(false);
+    const box = wrapper.find(".c-state--success");
+    expect(box.attributes("role")).toBe("status");
+    expect(box.text()).toContain("Danke, is anjekommen!");
+    expect(box.text()).toContain("Dein Kommentar erscheint, sobald wa ihn jesehen haben.");
+    expect(document.activeElement).toBe(wrapper.find(".c-word-comments__write").element);
+    wrapper.unmount();
   });
 
   it("ignores other hashes and clicks that are not comment links", async () => {

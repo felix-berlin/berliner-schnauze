@@ -1,21 +1,24 @@
 <template>
   <article
     :id="`kommentar-${comment.id}`"
-    class="c-comment-card"
+    class="c-comment"
     :class="{
-      'c-comment-card--reply': comment.parentId,
+      'c-comment--reply': comment.parentId,
       'is-highlighted': ctx.highlighted.value === comment.id,
     }"
   >
-    <header class="c-comment-card__meta">
-      <strong class="c-comment-card__name">{{ comment.authorName }}</strong>
-      <a class="c-comment-card__permalink" :href="`#kommentar-${comment.id}`">
-        <time :datetime="comment.createdAt">{{ relativeTime }}</time>
-      </a>
-      <span v-if="comment.edited && comment.state === 'visible'">(bearbeitet)</span>
+    <span class="c-comment__avatar" aria-hidden="true">{{ initial }}</span>
+    <header class="c-comment__meta">
+      <b class="c-comment__name">{{ comment.authorName }}</b>
+      <span class="t-small">
+        <a class="c-comment__permalink" :href="`#kommentar-${comment.id}`">
+          <time :datetime="comment.createdAt">{{ relativeTime }}</time>
+        </a>
+        <template v-if="comment.edited && comment.state === 'visible'"> · (bearbeitet)</template>
+      </span>
     </header>
 
-    <p v-if="comment.state !== 'visible'" class="c-comment-card__placeholder">
+    <p v-if="comment.state !== 'visible'" class="c-comment__placeholder">
       {{ placeholder }}
     </p>
 
@@ -29,35 +32,42 @@
         :submit="submitEdit"
         @cancel="mode = null"
       />
-      <p v-else class="c-comment-card__text">{{ comment.text }}</p>
+      <template v-else>
+        <p
+          :id="`${uid}-text`"
+          class="c-comment__text"
+          :class="{ 'is-clamped': long && !expanded }"
+        >
+          {{ comment.text }}
+        </p>
+        <!-- Proposal in the spec (§9, long comments): cut at about 600 characters to 8 lines. -->
+        <button
+          v-if="long"
+          class="c-textlink c-comment__more"
+          type="button"
+          :aria-controls="`${uid}-text`"
+          :aria-expanded="expanded"
+          @click="expanded = !expanded"
+        >
+          {{ expanded ? "Weniger anzeigen" : "Weiterlesen" }}
+        </button>
+      </template>
 
-      <div class="c-comment-card__actions">
-        <span class="c-comment-card__vote">
-          <button
-            class="c-choice c-comment-card__vote-button"
-            type="button"
-            aria-label="Hochwählen"
-            :aria-pressed="comment.myVote === 1"
-            :disabled="pending"
-            @click="vote(1)"
-          >
-            <IconUp aria-hidden="true" />
-          </button>
-          <span class="c-comment-card__score">{{ comment.upvotes - comment.downvotes }}</span>
-          <button
-            class="c-choice c-comment-card__vote-button"
-            type="button"
-            aria-label="Runterwählen"
-            :aria-pressed="comment.myVote === -1"
-            :disabled="pending"
-            @click="vote(-1)"
-          >
-            <IconDown aria-hidden="true" />
-          </button>
-        </span>
+      <div class="c-comment__actions">
+        <button
+          class="c-reaction c-comment__helpful"
+          type="button"
+          :aria-label="`Hilfreich, ${comment.upvotes}`"
+          :aria-pressed="comment.myVote === 1"
+          :aria-disabled="!ctx.online.value"
+          @click="vote"
+        >
+          <IconHelpful aria-hidden="true" width="15" height="15" />
+          <b>{{ comment.upvotes }}</b>
+        </button>
         <button
           v-if="parentVisible"
-          class="c-link c-comment-card__reply"
+          class="c-textlink c-comment__reply"
           type="button"
           @click="toggle('reply')"
         >
@@ -66,12 +76,12 @@
         <DropdownPopover
           :name="`comment-${comment.id}`"
           placement="bottom-end"
-          class="c-comment-card__menu c-dropdown--theme-menu"
+          class="c-comment__menu c-dropdown--theme-menu"
         >
           <template #default="{ triggerProps }">
             <button
               v-bind="triggerProps"
-              class="c-icon-button c-comment-card__menu-button"
+              class="c-icon-button c-comment__menu-button"
               type="button"
               aria-label="Weitere Aktionen"
             >
@@ -82,7 +92,7 @@
             <button
               v-for="action in menu"
               :key="action.label"
-              class="c-dropdown__item c-comment-card__menu-item"
+              class="c-dropdown__item c-comment__menu-item"
               type="button"
               :popovertarget="`dropdown-comment-${comment.id}`"
               popovertargetaction="hide"
@@ -103,25 +113,25 @@
         @cancel="mode = null"
       />
 
-      <p v-if="reported" class="c-comment-card__thanks">Danke, wir kieken drüber.</p>
+      <p v-if="reported" class="c-comment__thanks">Danke, wir kieken drüber.</p>
       <form
         v-else-if="mode === 'report'"
-        class="c-comment-card__report"
+        class="c-comment__report"
         @submit.prevent="submitReport"
       >
         <label class="c-label" :for="`${uid}-reason`">Wat stimmt nich? (optional)</label>
-        <div class="c-comment-card__report-row">
+        <div class="c-comment__report-row">
           <input
             :id="`${uid}-reason`"
             v-model="reason"
-            class="c-input c-comment-card__report-input"
+            class="c-input c-comment__report-input"
             type="text"
             maxlength="300"
             placeholder="z. B. Spam, beleidigend"
           />
-          <div class="c-comment-card__report-actions">
+          <div class="c-comment__report-actions">
             <button
-              class="c-button c-button--primary c-comment-card__report-button"
+              class="c-button c-button--primary c-comment__report-button"
               type="submit"
               :disabled="reporting"
               :aria-busy="reporting"
@@ -136,7 +146,7 @@
       </form>
     </template>
 
-    <div v-if="comment.replies.length" class="c-comment-card__replies">
+    <div v-if="comment.replies.length" class="c-comment__replies">
       <CommentCard
         v-for="r in comment.replies"
         :key="r.id"
@@ -158,8 +168,7 @@ import { trackEvent } from "@utils/analytics";
 import { useClipboard } from "@vueuse/core";
 import { computed, defineAsyncComponent, inject, ref, useId } from "vue";
 
-const IconUp = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-up"));
-const IconDown = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-down"));
+const IconHelpful = defineAsyncComponent(() => import("virtual:icons/lucide/thumbs-up"));
 const IconMore = defineAsyncComponent(() => import("virtual:icons/lucide/ellipsis"));
 
 const { comment, parentVisible = true } = defineProps<{
@@ -174,6 +183,11 @@ const mode = ref<"edit" | "reply" | "report" | null>(null);
 const reason = ref("");
 const reported = ref(false);
 const reporting = ref(false);
+const initial = computed(() => comment.authorName.trim().charAt(0).toUpperCase());
+// Proposal (spec): long comments are cut to 8 lines from about 600 characters.
+const LONG = 600;
+const long = computed(() => (comment.text?.length ?? 0) > LONG);
+const expanded = ref(false);
 
 const pending = computed(() => ctx.busy.value.has(comment.id));
 const toggle = (m: "edit" | "reply" | "report"): void => {
@@ -210,8 +224,10 @@ const copyLink = async (): Promise<void> => {
   createToastNotify({ message: "Link is kopiert.", status: "success" });
 };
 
-const vote = async (value: -1 | 1): Promise<void> => {
-  if (await ctx.vote(comment.id, comment.myVote === value ? 0 : value))
+// „Hilfreich“ toggles one up-vote. aria-disabled (not :disabled) keeps the focus on the button; offline does nothing.
+const vote = async (): Promise<void> => {
+  if (pending.value || !ctx.online.value) return;
+  if (await ctx.vote(comment.id, comment.myVote === 1 ? 0 : 1))
     trackEvent("Comments", "Vote", String(ctx.wordId));
 };
 
@@ -267,5 +283,5 @@ const submitReport = async (): Promise<void> => {
 </script>
 
 <style lang="scss">
-@use "@styles/components/comment-card";
+@use "@styles/components/comment";
 </style>
