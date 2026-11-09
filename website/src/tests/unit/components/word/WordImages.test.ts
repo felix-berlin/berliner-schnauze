@@ -48,11 +48,12 @@ describe("WordImages.astro", () => {
     expect(result).toContain("Erfahre mehr über dieses Wort");
   });
 
-  it("loads only the first strip image eagerly (mobile LCP), all hero images lazily", async () => {
-    const hero = await render({ images: [image(1), image(2)], placement: "hero" });
-    const strip = await render({ images: [image(1), image(2)], placement: "strip" });
-    expect(hero).not.toContain('loading="eager"');
-    expect(strip.match(/loading="eager"/g)).toHaveLength(1);
-    expect(strip.match(/fetchpriority="high"/g)).toHaveLength(1);
+  it("loads every image lazily in both placements", async () => {
+    // The media-scoped preload of the first image needs the Imagor srcset, which the container has no service for: checked in the browser sweep.
+    for (const placement of ["hero", "strip"]) {
+      const html = await render({ images: [image(1), image(2)], placement });
+      expect(html).not.toContain('loading="eager"');
+      expect(html.match(/loading="lazy"/g)).toHaveLength(2);
+    }
   });
 });

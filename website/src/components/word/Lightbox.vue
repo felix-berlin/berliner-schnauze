@@ -50,7 +50,8 @@ const step = (by: number) => {
 };
 
 // The buttons are server-rendered by WordImages.astro (before hydration they do nothing, the page stays usable).
-useEventListener(document, "click", (event) => {
+// No target argument: defaults to window (click bubbles up), safe during SSR where `document` does not exist.
+useEventListener("click", (event) => {
   const button = (event.target as Element).closest<HTMLElement>("[data-lightbox-index]");
   if (!button) return;
   opener = button;

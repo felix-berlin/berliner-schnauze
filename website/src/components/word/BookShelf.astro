@@ -23,10 +23,10 @@ const hostOf = (href?: string | null) => {
 const isWebUrl = (href?: string | null) => /^https?:\/\//i.test(href ?? '') && hostOf(href) !== '';
 const books = allBooks.filter((b) => isWebUrl(b.href)).slice(0, 3);
 
-// Cover (3:4, object-fit: contain) is 64px wide once .c-word-main is >= 30rem (about 520px viewport, see _book-shelf.scss);
+// Cover (3:4, object-fit: contain) is 64px wide once .c-word-main is >= 30rem (about 540px viewport incl. a classic scrollbar, see _book-shelf.scss);
 // below that it is height-bound in the 64%-wide card, about 38vw. Widths cover 1x/2x of both.
 const COVER_WIDTHS = [64, 128, 192, 320];
-const COVER_SIZES = '(min-width: 520px) 64px, 38vw';
+const COVER_SIZES = '(min-width: 540px) 64px, 38vw';
 
 // By hostname: "amazon." in a path or query must not count.
 const isAmazonLink = (href?: string | null) => /^(.+\.)?(amazon\.(de|com|co\.uk|fr|it|es|nl|pl|se|com\.be|com\.tr|ae|sa|in|co\.jp|com\.au|ca|com\.br|com\.mx|sg|eg|cn)|amzn\.(to|eu)|a\.co)$/i.test(hostOf(href));
