@@ -7,7 +7,7 @@ interface ScrollSpyOptions {
   onActivate?: (link: HTMLAnchorElement, nav: HTMLElement) => void;
 }
 
-/** Smallest height (px) of the observed band in rootMarginBelowHeader: on short viewports (landscape phones) the header offset plus the bottom ratio would squeeze the band below this, even to nothing. */
+/** Minimum band height (px): on short viewports the header offset would squeeze the band to nothing. */
 const MIN_BAND = 60;
 
 /**

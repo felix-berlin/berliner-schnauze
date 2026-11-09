@@ -148,7 +148,7 @@ export const loadFeedback = (wordId: number): Promise<void> => {
   })());
 };
 
-export type SendOptions = {
+type SendOptions = {
   /** Replaces the generic text when the server sent no reason of its own. */
   fallbackMessage?: string;
   /** The caller shows the failure itself (inline via $sendError), so no toast. */

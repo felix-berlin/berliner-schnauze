@@ -153,14 +153,17 @@ let doneTimer: ReturnType<typeof setTimeout> | undefined;
 onBeforeUnmount(() => clearTimeout(doneTimer));
 
 /** Icon becomes a check and the label "…kopiert" for 2s; no toast, a live region speaks it. */
-const markDone = (what: "link" | "word"): void => {
-  done.value = what;
-  announcement.value = what === "link" ? "Link kopiert" : "Wort kopiert";
+const announce = (message: string, ms: number): void => {
+  announcement.value = message;
   clearTimeout(doneTimer);
   doneTimer = setTimeout(() => {
     done.value = null;
     announcement.value = "";
-  }, 2000);
+  }, ms);
+};
+const markDone = (what: "link" | "word"): void => {
+  done.value = what;
+  announce(what === "link" ? "Link kopiert" : "Wort kopiert", 2000);
 };
 
 const items = (): HTMLElement[] =>
@@ -197,19 +200,14 @@ const COPY_FAILED = "Kopieren hat nich jeklappt";
 
 /** Tells the user a copy failed: live region in the word menu, toast in the list menu. */
 const failed = (): void => {
-  if (variant === "word") {
-    announcement.value = COPY_FAILED;
-    clearTimeout(doneTimer);
-    doneTimer = setTimeout(() => (announcement.value = ""), 4000);
-  } else createToastNotify({ message: COPY_FAILED, status: "error" });
+  if (variant === "word") announce(COPY_FAILED, 4000);
+  else createToastNotify({ message: COPY_FAILED, status: "error" });
 };
 
-/**
- * Copies via VueUse. Its copy() falls back to the legacy path on its own, so it rarely throws;
- * a throw (or an unsupported clipboard) is reported and shown instead of "kopiert".
- */
+/** copy() swallows Clipboard API errors and without any clipboard support it does nothing: both count as failed, never as "kopiert". */
 const copyText = async (value: string): Promise<boolean> => {
   try {
+    if (!clipBoardIsSupported.value) throw new Error("Clipboard not supported");
     await copy(value);
     return true;
   } catch (error) {

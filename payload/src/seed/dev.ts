@@ -13,13 +13,10 @@ export function assertDevDatabase(url: string | undefined): void {
   const parsed = url && URL.canParse(url) ? new URL(url) : undefined;
   const raw = parsed?.pathname.slice(1) ?? "";
   // The driver decodes the path (`bsw_x%5Fe2e` is `bsw_x_e2e`): check the decoded name; a malformed escape stays raw and fails the prefix check.
-  const name = (() => {
-    try {
-      return decodeURIComponent(raw);
-    } catch {
-      return raw;
-    }
-  })();
+  let name = raw;
+  try {
+    name = decodeURIComponent(raw);
+  } catch {}
   if (
     !parsed ||
     !LOCAL_DB_HOSTS.has(parsed.hostname) ||

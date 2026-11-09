@@ -1,5 +1,5 @@
 /** How many meanings are visible before the "Alle n Bedeutungen zeigen" toggle. */
-export const MEANINGS_VISIBLE = 5;
+const MEANINGS_VISIBLE = 5;
 
 /** Shows the first `limit` meanings; the rest sits behind "Alle {n} Bedeutungen zeigen". */
 export const splitMeanings = (

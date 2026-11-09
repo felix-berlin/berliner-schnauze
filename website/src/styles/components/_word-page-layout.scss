@@ -25,7 +25,7 @@
   // The site header is still sticky, so the bar sits below it; a header that hides on scroll would reset this to 0.
   --word-tabbar-top: var(--site-header-height);
   // Anchor jumps land below header + tab bar; shared by every scroll-margin on the page.
-  --word-anchor-offset: calc(var(--word-tabbar-top, 0px) + 56px);
+  --word-anchor-offset: calc(var(--word-tabbar-top) + 56px);
 
   @include mx.breakpoint("word") {
     display: grid;

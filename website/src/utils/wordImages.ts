@@ -3,8 +3,8 @@ import type { SiteMedia } from "@services/payload/words.ts";
 import { escapeHtml } from "payload-app/lexical-html";
 
 /** Dimensions assumed for a media entry without them (the CMS did not store any): a 4:3 landscape. */
-export const FALLBACK_IMAGE_WIDTH = 800;
-export const FALLBACK_IMAGE_HEIGHT = 600;
+const FALLBACK_IMAGE_WIDTH = 800;
+const FALLBACK_IMAGE_HEIGHT = 600;
 
 export interface WordImage {
   alt: string;
