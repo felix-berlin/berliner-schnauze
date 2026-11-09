@@ -219,7 +219,15 @@ test.describe("prefers-reduced-motion", () => {
       await expect(dialog).toBeVisible({ timeout: 500 });
     }).toPass();
     expect(await dialog.evaluate((el) => parseFloat(getComputedStyle(el).transitionDuration))).toBeLessThan(0.001); // the global reduced-motion rule uses 0.00001s
-    expect(await page.evaluate(() => document.getAnimations().filter((a) => a.playState === "running").length)).toBe(0);
+    // The global reduced-motion rule shrinks durations to 0.00001s: such an animation may still read "running" for
+    // a frame (WebKit does for ~20 at once), it is not motion. Anything with a real duration is.
+    const moving = await page.evaluate(() =>
+      document
+        .getAnimations()
+        .filter((a) => a.playState === "running" && Number(a.effect?.getTiming().duration ?? 0) > 1)
+        .map((a) => (a as CSSAnimation).animationName ?? a.id),
+    );
+    expect(moving).toEqual([]);
   });
 
   test("with motion allowed the page does scroll smoothly", async ({ browser }) => {

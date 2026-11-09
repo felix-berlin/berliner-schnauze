@@ -28,6 +28,7 @@ const joinList = (items: string[]): string =>
   items.length > 1 ? `${items.slice(0, -1).join(", ")} & ${items.at(-1)}` : (items[0] ?? "");
 
 const DESCRIPTION_MAX = 160;
+const DICTIONARY_LINE = "Berlinerisch-Wörterbuch der Berliner Schnauze.";
 const TITLE_MAX = 70;
 
 /** What an entry has, so its SEO title and description only promise that. */
@@ -58,7 +59,8 @@ export const wordSeoDescription = (word: WordSeoFacts): string => {
   if (!translations.length) return `${berlinerisch} im Berlinerisch-Wörterbuch der Berliner Schnauze.${features}`;
   const lead = `${berlinerisch} heißt auf Berlinerisch: `;
   for (let count = translations.length; count >= 1; count--) {
-    for (const suffix of [features, ""]) {
+    // The closing line is true for every entry; it lifts short descriptions toward the length a snippet can use.
+    for (const suffix of [`${features} ${DICTIONARY_LINE}`, features, ""]) {
       const text = `${lead}${translations.slice(0, count).join(", ")}.${suffix}`;
       if (text.length <= DESCRIPTION_MAX) return text;
     }

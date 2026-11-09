@@ -12,12 +12,20 @@ describe("wordSeoDescription", () => {
 
   it("names only the parts the entry has", () => {
     expect(wordSeoDescription(base)).toBe(
-      "anmachen heißt auf Berlinerisch: jemanden anflirten, sich jemandem nähern.",
+      "anmachen heißt auf Berlinerisch: jemanden anflirten, sich jemandem nähern. Berlinerisch-Wörterbuch der Berliner Schnauze.",
     );
     expect(wordSeoDescription({ ...base, hasAudio: true })).toContain("Mit Aussprache.");
     expect(wordSeoDescription({ ...base, hasEtymology: true, hasAudio: true, hasExamples: true })).toContain(
       "Mit Etymologie, Aussprache & Beispielsätzen.",
     );
+  });
+
+  it("closes with the dictionary line only while it fits", () => {
+    const short = wordSeoDescription({ berlinerisch: "x", translations: ["kurz"] });
+    expect(short).toBe("x heißt auf Berlinerisch: kurz. Berlinerisch-Wörterbuch der Berliner Schnauze.");
+    const tight = wordSeoDescription({ berlinerisch: "x", translations: ["a".repeat(120)] });
+    expect(tight).not.toContain("Wörterbuch der");
+    expect(tight.length).toBeLessThanOrEqual(160);
   });
 
   it("stays within 160 characters, dropping the last meanings before the parts, never mid-meaning", () => {

@@ -131,7 +131,8 @@ const ogImage = seo.opengraphImage
         width: firstImage.width ? String(firstImage.width) : undefined,
       }
     : {
-        alt: berlinerisch,
+        // The generated card shows the word and its first meaning: say both.
+        alt: translations[0] ? `${berlinerisch} auf Berlinerisch: ${translations[0]}` : berlinerisch,
         height: '630',
         sourceUrl: generatedOgImageUrl,
         width: '1200',
