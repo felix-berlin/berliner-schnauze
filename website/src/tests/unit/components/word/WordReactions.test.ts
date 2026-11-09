@@ -32,18 +32,48 @@ describe("WordReactions", () => {
     store.sendFeedback.mockResolvedValue(true);
   });
 
-  it("renders the group with Like and Dislike, icons and counts, loads on mount", async () => {
+  it("rests with Like only: icon, count, loads on mount (Spec §9, no Dislike without a set one)", async () => {
     $feedback.set(state(128));
     const w = await mountIt();
-    const [like, dislike] = buttons(w);
+    expect(buttons(w)).toHaveLength(1);
+    const like = buttons(w)[0];
     expect(w.classes()).toContain("c-reaction-group");
-    expect(dislike.classes()).toContain("c-reaction-group__more");
     expect(like.attributes("aria-label")).toBe("Jefällt ma, 128");
-    expect(dislike.attributes("aria-label")).toBe("Nee, 3");
     expect(like.find('[data-testid="icon-lucide-thumbs-up"]').exists()).toBe(true);
-    expect(dislike.find('[data-testid="icon-lucide-thumbs-down"]').exists()).toBe(true);
     expect(like.text()).toBe("128");
+    expect(w.find(".c-reaction-group__more").exists()).toBe(false);
     expect(store.loadFeedback).toHaveBeenCalledWith(7);
+  });
+
+  it("shows a pressed Dislike next to Like once it is set", async () => {
+    $feedback.set(state(128, "dislike"));
+    const w = await mountIt();
+    const [like, dislike] = buttons(w);
+    expect(like.attributes("aria-pressed")).toBe("false");
+    expect(dislike.classes()).toContain("c-reaction-group__more");
+    expect(dislike.attributes("aria-pressed")).toBe("true");
+    expect(dislike.attributes("aria-label")).toBe("Nee, 3");
+    expect(dislike.find('[data-testid="icon-lucide-thumbs-down"]').exists()).toBe(true);
+  });
+
+  it("taking Dislike back sends reaction null, removes the button and hands the focus to Like", async () => {
+    $feedback.set(state(5, "dislike"));
+    store.sendFeedback.mockImplementation(async () => {
+      $feedback.set(state(5, null, 2));
+      return true;
+    });
+    const w = mount(WordReactions, { attachTo: document.body, props: { wordId: 7 } });
+    await flushPromises();
+    await buttons(w)[1].trigger("click");
+    await flushPromises();
+    expect(store.sendFeedback).toHaveBeenCalledWith(
+      7,
+      { reaction: null },
+      "Ditt hat nich jeklappt.",
+    );
+    expect(buttons(w)).toHaveLength(1);
+    expect(document.activeElement).toBe(buttons(w)[0].element);
+    w.unmount();
   });
 
   it("shows a dash and no number in the label before the state loaded", async () => {
@@ -91,16 +121,16 @@ describe("WordReactions", () => {
     expect(buttons(w)[0].attributes("aria-pressed")).toBe("false");
   });
 
-  it("switching Like to Dislike moves the count in one step (exclusive)", async () => {
-    $feedback.set(state(5, "like", 3));
+  it("switching from Dislike to Like moves the count in one step (exclusive)", async () => {
+    $feedback.set(state(5, "dislike", 3));
     let resolve!: (v: boolean) => void;
     store.sendFeedback.mockReturnValue(new Promise<boolean>((r) => (resolve = r)));
     const w = await mountIt();
-    await buttons(w)[1].trigger("click");
-    expect(buttons(w)[0].text()).toBe("4");
-    expect(buttons(w)[0].attributes("aria-pressed")).toBe("false");
-    expect(buttons(w)[1].text()).toBe("4");
-    expect(buttons(w)[1].attributes("aria-pressed")).toBe("true");
+    await buttons(w)[0].trigger("click");
+    expect(buttons(w)[0].text()).toBe("6");
+    expect(buttons(w)[0].attributes("aria-pressed")).toBe("true");
+    // Optimistically the Dislike is gone and counted off.
+    expect(buttons(w)).toHaveLength(1);
     resolve(false);
   });
 
@@ -108,7 +138,7 @@ describe("WordReactions", () => {
     $feedback.set(state(5, "like"));
     const w = await mountIt();
     expect(buttons(w)[0].attributes("aria-pressed")).toBe("true");
-    expect(buttons(w)[1].attributes("aria-pressed")).toBe("false");
+    expect(buttons(w)).toHaveLength(1);
     await buttons(w)[0].trigger("click");
     expect(store.sendFeedback).toHaveBeenCalledWith(
       7,
@@ -121,11 +151,11 @@ describe("WordReactions", () => {
   it("retries loading before sending when the GET failed", async () => {
     const w = await mountIt();
     store.loadFeedback.mockClear();
-    await buttons(w)[1].trigger("click");
+    await buttons(w)[0].trigger("click");
     expect(store.loadFeedback).toHaveBeenCalledWith(7);
     expect(store.sendFeedback).toHaveBeenCalledWith(
       7,
-      { reaction: "dislike" },
+      { reaction: "like" },
       "Ditt hat nich jeklappt.",
     );
   });
@@ -138,7 +168,7 @@ describe("WordReactions", () => {
     await buttons(w)[0].trigger("click");
     expect(buttons(w)[0].attributes("aria-disabled")).toBe("true");
     expect(buttons(w)[0].attributes("disabled")).toBeUndefined();
-    await buttons(w)[1].trigger("click");
+    await buttons(w)[0].trigger("click");
     expect(store.sendFeedback).toHaveBeenCalledTimes(1);
     resolve(true);
   });

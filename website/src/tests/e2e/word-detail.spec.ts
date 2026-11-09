@@ -140,6 +140,17 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await expect(verwandteWorte.getByRole("link").first()).toHaveAttribute("href", /^\/wort\//);
   });
 
+  test("Buchkarten: mobil Cover oben, ab 808px kompakt mit 64px-Cover links (ballast-der-republik)", async ({ page }) => {
+    const book = () => page.locator("#buecher a.c-book").first();
+    await page.setViewportSize({ height: 800, width: 390 });
+    await page.goto("/wort/ballast-der-republik");
+    await expect(book()).toHaveCSS("display", "flex");
+    await page.setViewportSize({ height: 800, width: 1280 });
+    await expect(book()).toHaveCSS("display", "grid");
+    expect((await book().evaluate((el) => getComputedStyle(el).gridTemplateColumns)).startsWith("64px ")).toBe(true);
+    await expect(book().locator(".c-book__cover")).toHaveCSS("width", "64px");
+  });
+
   test("Bücher, Umfeld und Und nu? (ballast-der-republik)", async ({ page }) => {
     await page.goto("/wort/ballast-der-republik");
 
@@ -230,7 +241,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
   });
 
   test.describe("Hero v3", () => {
-    test("Bedeutungen als Liste, Wortart-Badge, Kategorie-Link (anmachen)", async ({ page }) => {
+    test("Bedeutungen als Liste, Wortart-Badge, Themen-Zeile (anmachen)", async ({ page }) => {
       await page.setViewportSize({ height: 800, width: 1280 });
       await page.goto("/wort/anmachen");
 
@@ -242,7 +253,9 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
         "sich jemandem forsch nähern",
       ]);
       await expect(hero.locator(".c-badge").first()).toHaveText(/\S/);
-      await expect(hero.locator('a[href^="/themen/"]').first()).toBeVisible();
+      await expect(hero.locator('.c-themes a[href^="/themen/"]').first()).toBeVisible();
+      await expect(hero.locator(".c-themes .t-label")).toHaveText(/^Themen?$/);
+      await expect(hero.locator('.c-word-hero__badges a[href^="/themen/"]')).toHaveCount(0);
     });
 
     test("einzelne Bedeutung als Absatz (wa)", async ({ page }) => {
@@ -253,37 +266,49 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await expect(hero.locator("ol.c-meanings")).toHaveCount(0);
     });
 
-    test("Tab-Reihenfolge: Like, Menü, Trend-Badge, Kategorie", async ({ page }) => {
+    test("Tab-Reihenfolge: Like, Menü, Trend-Badge, Themen", async ({ page }) => {
       await page.setViewportSize({ height: 800, width: 1280 });
       await page.goto("/wort/anmachen");
       const hero = page.locator("#bedeutung");
       await expect(hero.getByRole("button", { name: /^Jefällt ma/ })).toBeVisible();
 
       await hero.getByRole("button", { name: /^Jefällt ma/ }).focus();
-      // Focus on the group reveals Dislike, which is part of the order (Spec §14).
-      await page.keyboard.press("Tab");
-      await expect(hero.getByRole("button", { name: /^Nee/ })).toBeFocused();
+      // Dislike is only in the order once set (Spec §14, v3.1), so Like is followed by ⋮.
       await page.keyboard.press("Tab");
       await expect(hero.getByRole("button", { name: "Weitere Aktionen" })).toBeFocused();
-      // anmachen is trending: the badge row starts with the trend badge (Spec §5), then the category.
+      // anmachen is trending: the badge row starts with the trend badge (Spec §5), then the Themen row below it.
       await page.keyboard.press("Tab");
       await expect(hero.locator('a[href="#n-trend"]')).toBeFocused();
       await page.keyboard.press("Tab");
-      await expect(hero.locator('a[href^="/themen/"]').first()).toBeFocused();
+      await expect(hero.locator('.c-themes a[href^="/themen/"]').first()).toBeFocused();
     });
 
-    test("Desktop: Dislike erscheint erst bei Hover auf die Gruppe", async ({ page }) => {
+    test("Dislike nicht per Hover, sondern im ⋮-Menü: setzen und zurücknehmen", async ({ page }) => {
       await page.setViewportSize({ height: 800, width: 1280 });
       await page.goto("/wort/anmachen");
       const hero = page.locator("#bedeutung");
       const like = hero.getByRole("button", { name: /^Jefällt ma/ });
       const dislike = hero.getByRole("button", { name: /^Nee/ });
+      const trigger = hero.getByRole("button", { name: "Weitere Aktionen" });
       await expect(like).toBeVisible();
-      await expect(dislike).toBeHidden();
+      // The islands hydrate after load: a click before would hit plain server markup.
+      await expect(hero.locator("astro-island[ssr]")).toHaveCount(0);
+      await expect(dislike).toHaveCount(0);
       await like.hover();
+      await expect(dislike).toHaveCount(0);
+
+      await trigger.click();
+      const item = page.getByRole("menuitemcheckbox", { name: "Jefällt ma nich" });
+      await expect(item).toHaveAttribute("aria-checked", "false");
+      await item.click();
       await expect(dislike).toBeVisible();
-      await page.mouse.move(5, 400);
-      await expect(dislike).toBeHidden();
+      await expect(dislike).toHaveAttribute("aria-pressed", "true");
+
+      await trigger.click();
+      const undo = page.getByRole("menuitemcheckbox", { name: "Doch nich – zurücknehmen" });
+      await expect(undo).toHaveAttribute("aria-checked", "true");
+      await undo.click();
+      await expect(dislike).toHaveCount(0);
     });
 
     test("Touch: Dislike bleibt versteckt", async ({ browser, browserName }) => {
@@ -298,7 +323,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await page.goto("/wort/anmachen");
       const hero = page.locator("#bedeutung");
       await expect(hero.getByRole("button", { name: /^Jefällt ma/ })).toBeVisible();
-      await expect(hero.getByRole("button", { name: /^Nee/ })).toBeHidden();
+      await expect(hero.getByRole("button", { name: /^Nee/ })).toHaveCount(0);
       await context.close();
     });
 

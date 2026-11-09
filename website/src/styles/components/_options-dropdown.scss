@@ -62,10 +62,17 @@
       outline-offset: -2px;
     }
 
-    &[data-done="true"] {
+    &[data-done="true"],
+    &[aria-checked="true"] {
       color: var(--color-accent-text);
       font-weight: 700;
     }
+  }
+
+  &__separator {
+    display: block;
+    margin: 0.25rem 0.5rem;
+    border-block-start: 1px dashed var(--rule-inner);
   }
 
   @media (prefers-reduced-motion: reduce) {
