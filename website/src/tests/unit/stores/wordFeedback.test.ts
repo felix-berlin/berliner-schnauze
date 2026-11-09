@@ -6,6 +6,7 @@ vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify: toast }));
 import {
   $feedback,
   $profile,
+  $sendError,
   answerUsage,
   deleteAllFeedback,
   loadFeedback,
@@ -231,6 +232,22 @@ describe("sendFeedback", () => {
     );
     expect(await sendFeedback(1, { usage: "say" }, undefined, true)).toBe(false);
     expect(toast).not.toHaveBeenCalled();
+  });
+  it("a silent 429 hands the server text to $sendError instead of a toast", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        json: async () => ({ error: "Jenug jestimmt für heute." }),
+        ok: false,
+        status: 429,
+      }),
+    );
+    expect(await sendFeedback(1, { usage: "say" }, undefined, true)).toBe(false);
+    expect($sendError.get()).toBe("Jenug jestimmt für heute.");
+    expect(toast).not.toHaveBeenCalled();
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(ok()));
+    expect(await sendFeedback(1, { usage: "say" }, undefined, true)).toBe(true);
+    expect($sendError.get()).toBeNull();
   });
   it("non-ok response counts as failure", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ json: async () => ({}), ok: false }));

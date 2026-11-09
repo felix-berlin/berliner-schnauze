@@ -33,9 +33,10 @@
             <b>Ditt hat nich jeklappt.</b>
             <span>
               {{
-                failed.usage
+                (failed.usage && sendError) ||
+                (failed.usage
                   ? "Deine Stimme is nich anjekommen."
-                  : "Die Stimmen sind nich anjekommen."
+                  : "Die Stimmen sind nich anjekommen.")
               }}
               <button
                 :aria-describedby="!online ? 'word-feedback-offline' : undefined"
@@ -271,6 +272,7 @@ import { useStore } from "@nanostores/vue";
 import {
   $feedback,
   $profile,
+  $sendError,
   loadFeedback,
   nextStep,
   answerUsage,
@@ -353,6 +355,7 @@ const CHOICES: Record<
 
 const online = useOnline();
 const feedback = useStore($feedback);
+const sendError = useStore($sendError);
 const profile = useStore($profile);
 const remember = useStore($remember);
 
@@ -442,10 +445,11 @@ const ready = async () => {
 
 const answerUsageStep = async (usage: Usage) => {
   if (pending.value || !online.value) return;
-  failedUsage.value = null;
+  // failedUsage stays set until the result: the alert holds the focused retry button and must not unmount meanwhile.
   pending.value = true;
   try {
     if (!(await ready())) {
+      $sendError.set(null); // a stale server reason belongs to an older vote
       failedUsage.value = usage;
       return;
     }
@@ -455,6 +459,7 @@ const answerUsageStep = async (usage: Usage) => {
     trackEvent("Word Feedback", "usage", usage);
     // silent: the inline alert is the one channel for a failed vote, the store must not toast it too.
     const ok = await answerUsage(props.wordId, usage, true);
+    if (ok) failedUsage.value = null;
     if (ok && first) {
       // `current` is already "done" here, so name the step we come from.
       go(nextStep($profile.get()) === "done" ? "done" : "results", "usage");
@@ -509,6 +514,8 @@ const answerProfile = async (key: ProfileStep, value: string | null) => {
       const next = { ...$profile.get(), ...patch } as Profile;
       // The sent null only clears the server row; for the profile the new area's locality is "not asked yet".
       if (key === "area") delete next.locality;
+      // Same for the half a new area drops: a null key would make nextStep skip the question for good.
+      if (dropsHalf) delete next.half;
       $profile.set(next);
       go(nextStep($profile.get()));
     } else picked.value = before;

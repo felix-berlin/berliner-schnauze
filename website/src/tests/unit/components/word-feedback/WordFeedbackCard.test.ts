@@ -16,7 +16,7 @@ vi.mock("@stores/wordFeedback.ts", async () => {
 const track = vi.hoisted(() => vi.fn());
 vi.mock("@utils/analytics", () => ({ trackEvent: track }));
 
-import { $feedback, $profile } from "@stores/wordFeedback.ts";
+import { $feedback, $profile, $sendError } from "@stores/wordFeedback.ts";
 
 const state = (over: Record<string, unknown> = {}) =>
   ({
@@ -46,6 +46,7 @@ describe("WordFeedbackCard", () => {
     vi.clearAllMocks();
     $feedback.set(state());
     $profile.set({});
+    $sendError.set(null);
     store.loadFeedback.mockImplementation(async () => {});
     store.sendFeedback.mockResolvedValue(true);
     store.answerUsage.mockResolvedValue(true);
@@ -109,6 +110,35 @@ describe("WordFeedbackCard", () => {
     expect(w.text()).toContain("Danke für deine Stimme!");
   });
 
+  it("keeps the alert and the focus on the retry button while the retry is sent and fails again", async () => {
+    store.answerUsage.mockResolvedValueOnce(false);
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    const retryButton = w.findAll("button").find((b) => b.text().includes("Nochmal versuchen"))!;
+    (retryButton.element as HTMLButtonElement).focus();
+    let resolve!: (v: boolean) => void;
+    store.answerUsage.mockReturnValueOnce(new Promise<boolean>((r) => (resolve = r)));
+    await retryButton.trigger("click");
+    // Pending: the alert is still mounted, so the focus did not fall back to body.
+    expect(document.activeElement).toBe(retryButton.element);
+    resolve(false);
+    await flushPromises();
+    expect(document.activeElement).toBe(retryButton.element);
+    expect(w.find('.c-state--error[role="alert"]').exists()).toBe(true);
+    w.unmount();
+  });
+
+  it("shows the server's reason (daily cap) inline when a silent vote fails", async () => {
+    store.answerUsage.mockImplementationOnce(async () => {
+      $sendError.set("Jenug jestimmt für heute.");
+      return false;
+    });
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    expect(w.find('.c-state--error[role="alert"]').text()).toContain("Jenug jestimmt für heute.");
+    expect(w.find('.c-state--error[role="alert"]').text()).not.toContain("nich anjekommen");
+  });
+
   it("offline locks the tiles with aria-disabled and sends nothing", async () => {
     const online = vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
     const w = await mountIt();
@@ -126,7 +156,7 @@ describe("WordFeedbackCard", () => {
     online.mockRestore();
   });
 
-  it("keeps focus on the retry button, and offline it sends nothing and points to the banner", async () => {
+  it("keeps focus on the retry button while offline: it sends nothing and points to the banner", async () => {
     store.answerUsage.mockResolvedValueOnce(false);
     const w = await mountIt();
     await click(w, "Kenn ick");
@@ -460,7 +490,20 @@ describe("WordFeedbackCard", () => {
     await click(w, "Klar, los");
     await click(w, "Woanders");
     expect(store.sendFeedback).toHaveBeenLastCalledWith(7, { area: "elsewhere", half: null });
-    expect($profile.get().half).toBeNull();
+    // Absent = "not asked yet": a null key would skip the half question for good.
+    expect($profile.get()).not.toHaveProperty("half");
+  });
+
+  it("Woanders, Zurück, then a Berlin Bezirk asks the half again", async () => {
+    $profile.set({ half: "east", origin: "grewUp" });
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    await click(w, "Klar, los");
+    await click(w, "Woanders");
+    await click(w, "← Zurück");
+    await click(w, "Pankow");
+    await click(w, "überspringen");
+    expect(w.text()).toContain("In welcher Hälfte?");
   });
 
   it("Zujezogen, unter 10 Jahren skips the half", async () => {

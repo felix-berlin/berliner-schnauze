@@ -28,6 +28,8 @@ export type Profile = {
 };
 
 export const $feedback = atom<WordFeedbackState | null>(null);
+/** The reason of the last failed silent send (server text, e.g. the daily cap); null while none failed. */
+export const $sendError = atom<string | null>(null);
 
 const FIELDS = {
   age: AGES,
@@ -151,6 +153,7 @@ export const sendFeedback = async (
   silent = false,
 ): Promise<boolean> => {
   const seq = ++sent;
+  if (silent) $sendError.set(null);
   try {
     const res = await fetch(ENDPOINT, {
       body: JSON.stringify({ word: wordId, ...patch }),
@@ -161,7 +164,8 @@ export const sendFeedback = async (
       // The server says why (daily cap, rejected input, stored but not counted): a generic "try again" can be wrong.
       const { error } = (await res.json().catch(() => ({}))) as { error?: string };
       console.error(`[word-feedback] send ${wordId} failed: ${res.status}`, error);
-      if (!silent)
+      if (silent) $sendError.set(error ?? null);
+      else
         createToastNotify({
           message: error ?? fallbackMessage,
           status: res.status === 429 ? "warning" : "error",
