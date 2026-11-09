@@ -4,6 +4,7 @@ import { describe, expect, it, vi, beforeAll } from "vitest";
 import { createAstroRender } from "../../helpers";
 
 vi.mock("@styles/components/_word-hero.scss", () => ({}));
+vi.mock("@styles/components/_word-themes.scss", () => ({}));
 
 const makeWord = (overrides: Record<string, unknown> = {}) => ({
   alternativeWords: [],
@@ -63,15 +64,26 @@ describe("WordHero.astro", () => {
     expect(result).not.toContain("c-badge");
   });
 
-  it("links the Themen as category links", async () => {
+  it("puts the Themen in their own row after the badges, not among them", async () => {
     const result = await render({
+      pos: "Nomen",
       word: makeWord({ themen: [{ id: 1, name: "Essen", slug: "essen" }] }),
     });
     expect(result).toContain('href="/themen/essen"');
-    expect(result).toContain("c-word-hero__category");
+    expect(result).toContain("c-themes");
+    const badges = result.slice(
+      result.indexOf("c-word-hero__badges"),
+      result.indexOf("c-themes"),
+    );
+    expect(badges).not.toContain("/themen/essen");
+    expect(result.indexOf("c-word-hero__badges")).toBeLessThan(result.indexOf("c-themes"));
   });
 
-  it("puts actions before the badges so focus runs Like, menu, category", async () => {
+  it("renders no Themen row for a word without Themen", async () => {
+    expect(await render({ word: makeWord() })).not.toContain("c-themes");
+  });
+
+  it("puts actions before the badges so focus runs Like, menu, badges, Themen", async () => {
     const result = await render({
       pos: "Nomen",
       word: makeWord({ themen: [{ id: 1, name: "Essen", slug: "essen" }] }),

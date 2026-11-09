@@ -126,7 +126,7 @@ test.describe("tab order (real Tab presses)", () => {
       }
       if (el.matches('a[href="#n-trend"]')) return "trend";
       if (el.closest(".c-trend")) return "trendbox";
-      if (el.closest(".c-word-hero__badges")) return "kategorie";
+      if (el.closest(".c-themes")) return "themen";
       if (el.closest(".c-word-audio")) return "audio";
       if (el.closest(".c-word-images")) return "bilder";
       if (el.closest("#sagste-det-noch")) return "umfrage";
@@ -146,22 +146,22 @@ test.describe("tab order (real Tab presses)", () => {
     return seen;
   };
 
-  test("390px: Tabs, Like, ⋮, Trend, Kategorie, Trend-Box, Audio, Umfrage (anmachen)", async ({ page }) => {
-    // Spec §14 lists Like, ⋮, Kategorie, Trend-Box. The trend badge sits between ⋮ and the category because DOM order
-    // is the visual order (§5 and the mock: badge row trend, type, category); reordering it by tabindex or CSS order
-    // would break WCAG 1.3.2 / 2.4.3 and a link would be hidden from keyboard users if it were skipped.
-    expect(await walk(page, WORDS.full, 390)).toEqual(["tabs", "like", "menu", "trend", "kategorie", "trendbox", "audio", "umfrage"]);
+  test("390px: Tabs, Like, ⋮, Trend, Themen, Trend-Box, Audio, Umfrage (anmachen)", async ({ page }) => {
+    // Spec §14 (v3.1) lists Like, ⋮, Themen-Links, Trend-Link. The trend badge sits between ⋮ and the Themen because DOM
+    // order is the visual order (§5 and the mock: the badge row comes first, the Themen row sits below it); reordering
+    // it by tabindex or CSS order would break WCAG 1.3.2 / 2.4.3 and a link would be hidden from keyboard users if skipped.
+    expect(await walk(page, WORDS.full, 390)).toEqual(["tabs", "like", "menu", "trend", "themen", "trendbox", "audio", "umfrage"]);
   });
 
   test("1280px: Seitenleiste instead of Tabs (anmachen)", async ({ page }) => {
-    expect(await walk(page, WORDS.full, 1280)).toEqual(["sidebar", "like", "menu", "trend", "kategorie", "trendbox", "audio", "umfrage"]);
+    expect(await walk(page, WORDS.full, 1280)).toEqual(["sidebar", "like", "menu", "trend", "themen", "trendbox", "audio", "umfrage"]);
   });
 
   // Spec deviation (§14 wants Audio -> Bilder): the images come first in the DOM (strip below 808px, hero column from
   // 808px), which is their visual position (§5, mock). Reordering with tabindex/order would break WCAG 1.3.2 / 2.4.3.
   // No word of the e2e seed has both audio and images, so only Bilder -> Umfrage is asserted.
   test("390px: Bilder before the poll (akademiebusen)", async ({ page }) => {
-    expect(await walk(page, "akademiebusen", 390)).toEqual(["tabs", "like", "menu", "kategorie", "bilder", "umfrage"]);
+    expect(await walk(page, "akademiebusen", 390)).toEqual(["tabs", "like", "menu", "themen", "bilder", "umfrage"]);
   });
 });
 
