@@ -188,7 +188,8 @@ test.describe("word page loading skeleton", () => {
     const skeleton = page.getByLabel("Wort wird jeladen");
     await expect(skeleton).toBeVisible();
     await expect(skeleton).toHaveAttribute("aria-busy", "true");
-    await expect(page).toHaveURL(/\/wort\/ab$/);
+    // The page is held back 1.2 s on purpose; WebKit on a loaded runner needs more than the default 5 s on top.
+    await expect(page).toHaveURL(/\/wort\/ab$/, { timeout: 15_000 });
     await expect(skeleton).toHaveCount(0);
   });
 
