@@ -70,7 +70,7 @@ describe("BookShelf.astro", () => {
       expect(result).not.toContain("Bei Amazon ansehen");
       expect(result).not.toContain("Bezahlte Links zu Amazon.de.");
     }
-    for (const href of ["https://www.amazon.de/dp/X", "https://amzn.to/abc"]) {
+    for (const href of ["https://www.amazon.de/dp/X", "https://www.amazon.cn/dp/X", "https://amzn.to/abc"]) {
       expect(await render({ books: [book({ href })], disclaimers: [] })).toContain("Bei Amazon ansehen");
     }
   });

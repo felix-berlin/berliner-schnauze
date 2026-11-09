@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { initScrollSpy } from "@utils/scrollSpy";
+import { initScrollSpy, rootMarginBelowHeader } from "@utils/scrollSpy";
 import { onMounted, useTemplateRef } from "vue";
 
 defineProps<{ sections: { id: string; label: string }[] }>();
@@ -25,7 +25,7 @@ onMounted(() => {
       link.setAttribute("aria-current", "true");
       bar.scrollLeft = link.offsetLeft - bar.offsetWidth / 2 + link.offsetWidth / 2;
     },
-    rootMargin: "-56px 0px -70% 0px",
+    rootMargin: rootMarginBelowHeader(64),
   });
 });
 </script>

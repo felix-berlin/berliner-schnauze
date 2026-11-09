@@ -7,6 +7,16 @@ interface ScrollSpyOptions {
   onActivate?: (link: HTMLAnchorElement, nav: HTMLElement) => void;
 }
 
+/**
+ * rootMargin for a page whose sticky header (--site-header-height, JS-updated) covers the top of the viewport: the
+ * observed band starts `offset` px below it. Anchors land at header + 56px (scroll-margin), so an offset of 64 keeps
+ * the section that was just jumped to inside the band and the one above it (ending at the landing line) outside.
+ */
+export const rootMarginBelowHeader = (offset: number, bottom = "-70%"): string => {
+  const header = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--site-header-height"));
+  return `-${Math.round((Number.isFinite(header) ? header : 60) + offset)}px 0px ${bottom} 0px`;
+};
+
 // One observer per nav: re-running init after a View Transitions navigation must drop the
 // previous page's observer, otherwise it keeps observing detached sections.
 const observers = new Map<string, IntersectionObserver>();

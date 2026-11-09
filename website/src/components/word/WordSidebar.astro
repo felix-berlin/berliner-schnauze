@@ -23,7 +23,7 @@ const { word, posLabel, sections } = Astro.props;
 </aside>
 
 <script>
-  import { initScrollSpy } from '@utils/scrollSpy';
+  import { initScrollSpy, rootMarginBelowHeader } from '@utils/scrollSpy';
 
   function initSidebarNav() {
     initScrollSpy({
@@ -31,7 +31,7 @@ const { word, posLabel, sections } = Astro.props;
       getSectionId: (link) => link.getAttribute('href')?.slice(1),
       linkSelector: '.c-word-sidebar__link',
       navSelector: '.c-word-sidebar',
-      rootMargin: '-10% 0px -80% 0px',
+      rootMargin: rootMarginBelowHeader(64),
     });
   }
 

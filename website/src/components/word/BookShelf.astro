@@ -24,7 +24,7 @@ const hostOf = (href?: string | null) => {
   }
 };
 // By hostname: "amazon." in a path or query must not count.
-const isAmazonLink = (href?: string | null) => /^(.+\.)?(amazon\.(de|com|co\.uk|fr|it|es|nl|pl|se|com\.be|com\.tr|ae|sa|in|co\.jp|com\.au|ca|com\.br|com\.mx|sg|eg)|amzn\.(to|eu)|a\.co)$/i.test(hostOf(href));
+const isAmazonLink = (href?: string | null) => /^(.+\.)?(amazon\.(de|com|co\.uk|fr|it|es|nl|pl|se|com\.be|com\.tr|ae|sa|in|co\.jp|com\.au|ca|com\.br|com\.mx|sg|eg|cn)|amzn\.(to|eu)|a\.co)$/i.test(hostOf(href));
 const hasAmazon = books.some((b) => isAmazonLink(b.href));
 const ctaFor = (href?: string | null) =>
   isAmazonLink(href) ? 'Bei Amazon ansehen' : `Bei ${hostOf(href)} ansehen`;

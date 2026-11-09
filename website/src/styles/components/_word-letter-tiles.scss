@@ -1,3 +1,4 @@
+@use "@styles/mixins" as mx;
 // Letter tiles of the quantitative-linguistics card (docs/design/wortseite/SPEC.md §5, mock: .c-letters).
 .c-letters {
   display: flex;
@@ -41,7 +42,7 @@
       position: relative;
     }
 
-    @media (width >= 808px) {
+    @include mx.breakpoint("word") {
       max-inline-size: 64px;
       block-size: 72px;
       font-size: 1.6rem;

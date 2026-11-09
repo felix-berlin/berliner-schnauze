@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { initScrollSpy } from "@utils/scrollSpy";
+import { initScrollSpy, rootMarginBelowHeader } from "@utils/scrollSpy";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("initScrollSpy", () => {
@@ -205,5 +205,18 @@ describe("initScrollSpy", () => {
     const first = intersectionObserverMock.mock.results[0].value;
     initScrollSpy(options);
     expect(first.disconnect).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("rootMarginBelowHeader", () => {
+  it("starts the band below the sticky header plus the offset", () => {
+    document.documentElement.style.setProperty("--site-header-height", "73px");
+    expect(rootMarginBelowHeader(64)).toBe("-137px 0px -70% 0px");
+    expect(rootMarginBelowHeader(64, "-80%")).toBe("-137px 0px -80% 0px");
+  });
+
+  it("falls back to 60px without the variable", () => {
+    document.documentElement.style.removeProperty("--site-header-height");
+    expect(rootMarginBelowHeader(64)).toBe("-124px 0px -70% 0px");
   });
 });
