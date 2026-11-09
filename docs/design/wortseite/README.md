@@ -1,6 +1,6 @@
 # Wortseite v3
 
-Implemented: the word page (`website/src/pages/wort/[...wordSlug].astro` and the components named in the "Word page v3" bullet of `website/CLAUDE.md`) follows `SPEC.md` (v3.1, 9 Nov 2026: poll starts directly, Dislike in the ⋮ menu, Themen row, compact book cards from 808px). Header, footer, the index pages and spec §15 are out of scope; the header's hide-on-scroll (§3, §16.4) is not built, the tab bar sticks below the header via `--word-tabbar-top`.
+Implemented: the word page (`website/src/pages/wort/[...wordSlug].astro` and the components named in the "Word page v3" bullet of `website/CLAUDE.md`) follows `SPEC.md` (v3.1, second version, 9 Nov 2026: poll starts directly, like and dislike always side by side on the word and on comments, comment ⋯ menu and Strg+Enter, Themen row, compact book cards from 808px). Header, footer, the index pages and spec §15 are out of scope; the header's hide-on-scroll (§3, §16.4) is not built, the tab bar sticks below the header via `--word-tabbar-top`.
 
 `design/` holds the design hand-off, kept as reference only (not served, not imported):
 

@@ -22,6 +22,9 @@ a{color:inherit}a:hover{color:var(--color-accent-text)}
 .bs-n .c-word-hero__title{overflow-wrap:anywhere;hyphens:auto}
 .c-choice[aria-disabled="true"]{opacity:.55;cursor:not-allowed;box-shadow:none;border-style:dotted}
 .bs-theme + .bs-theme::before{content:"·";margin-right:.5rem;color:var(--color-muted)}
+.bs-submitrow .c-button--primary{flex:1 1 100%}
+.bs-kbdhint{display:none}
+.bs-kbd{font:inherit;font-size:.7rem;font-weight:700;padding:.125rem .375rem;border:1px solid var(--rule-card);border-radius:var(--radius-xxs);background:var(--surface-chip);color:var(--color-ink-strong)}
 /*desktop*/
 </style>
 </helmet>
@@ -55,9 +58,9 @@ a{color:inherit}a:hover{color:var(--color-accent-text)}
 <sc-if value="{{hasThemes}}" hint-placeholder-val="{{true}}"><p class="bs-themes t-small" style="margin: -0.125rem 0 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 0.5rem;"><span class="t-label" style="font-size: 0.7rem;">{{themesLabel}}</span><sc-for list="{{themes}}" as="th" hint-placeholder-count="3"><span class="bs-theme"><a class="c-textlink c-textlink--inline" href="#">{{th}}</a></span></sc-for></p></sc-if>
 </div>
 <span style="display: flex; align-items: center; margin: -0.5rem -0.5rem 0 0;">
-<span class="c-reaction-group">
+<span class="c-reaction-group" role="group" aria-label="Wie findste ditt Wort?" style="gap: 0.25rem;">
 <button class="c-reaction" aria-pressed="{{liked}}" onClick="{{toggleLike}}" aria-label="Jefällt ma, {{likes}}" style="padding: 0 0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v12"></path><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path></svg><b>{{likes}}</b></button>
-<sc-if value="{{showDislike}}" hint-placeholder-val="{{false}}"><button class="c-reaction c-reaction-group__more" aria-pressed="{{disliked}}" onClick="{{toggleDislike}}" aria-label="Nee, {{dislikes}}" style="padding: 0 0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 14V2"></path><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"></path></svg><b>{{dislikes}}</b></button></sc-if>
+<button class="c-reaction" aria-pressed="{{disliked}}" onClick="{{toggleDislike}}" aria-label="Nee, {{dislikes}}" style="padding: 0 0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 14V2"></path><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"></path></svg><b>{{dislikes}}</b></button>
 </span>
 <span style="position: relative; display: inline-flex;">
 <button class="c-icon-button" aria-label="Weitere Aktionen" aria-haspopup="menu" aria-expanded="{{menuOpen}}" onClick="{{toggleMenu}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button>
@@ -66,8 +69,6 @@ a{color:inherit}a:hover{color:var(--color-accent-text)}
 <button role="menuitem" class="c-menu__item" onClick="{{shareWord}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg><span>Wort teilen</span></button>
 <button role="menuitem" class="c-menu__item" data-done="{{linkDone}}" onClick="{{copyLink}}"><sc-if value="{{linkIdle}}" hint-placeholder-val="{{true}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></sc-if><sc-if value="{{linkDone}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></sc-if><span>{{linkLabel}}</span></button>
 <button role="menuitem" class="c-menu__item" data-done="{{wordDone}}" onClick="{{copyWord}}"><sc-if value="{{wordIdle}}" hint-placeholder-val="{{true}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></sc-if><sc-if value="{{wordDone}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></sc-if><span>{{wordLabel}}</span></button>
-<span role="separator" style="display: block; margin: 0.25rem 0.5rem; border-top: 1px dashed var(--rule-inner);"></span>
-<button role="menuitemcheckbox" class="c-menu__item" aria-checked="{{disliked}}" onClick="{{menuDislike}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 14V2"></path><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"></path></svg><span>{{dislikeLabel}}</span></button>
 </div>
 </sc-if>
 </span>
@@ -292,18 +293,64 @@ a{color:inherit}a:hover{color:var(--color-accent-text)}
 <sc-if value="{{hasComments}}" hint-placeholder-val="{{false}}">
 <ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1.25rem;">
 <sc-for list="{{commentList}}" as="cm" hint-placeholder-count="3">
-<li style="{{cm.rowStyle}}">
+<li id="{{cm.anchor}}" style="{{cm.rowStyle}}">
+<sc-if value="{{cm.isDeleted}}" hint-placeholder-val="{{false}}"><p class="t-small" role="status" style="margin: 0; font-style: italic;">Du hast deinen Kommentar jelöscht.</p></sc-if>
+<sc-if value="{{cm.isVisible}}" hint-placeholder-val="{{true}}">
 <article style="display: flex; flex-direction: column; gap: 0.375rem;">
 <header style="display: flex; align-items: center; gap: 0.625rem;">
 <span aria-hidden="true" style="{{cm.avatarStyle}}">{{cm.initial}}</span>
 <span style="display: flex; flex-direction: column; line-height: 1.25;"><b style="color: var(--color-ink-strong);">{{cm.name}}</b><span class="t-small">{{cm.meta}}</span></span>
 </header>
-<p style="margin: 0; line-height: 1.5;">{{cm.text}}</p>
+<sc-if value="{{cm.showText}}" hint-placeholder-val="{{true}}"><p style="margin: 0; line-height: 1.5;">{{cm.text}}</p></sc-if>
+
+<sc-if value="{{cm.isEditing}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 0.5rem;">
+<label class="t-label" for="{{cm.editId}}">Kommentar bearbeiten</label>
+<textarea id="{{cm.editId}}" class="c-field" rows="3" maxlength="1000">{{cm.text}}</textarea>
+<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem;"><button class="c-choice" aria-pressed="true" onClick="{{cm.saveEdit}}">Speichern</button><button class="c-textlink" onClick="{{cm.cancel}}">Abbrechen</button></span>
+</div>
+</sc-if>
+
+<sc-if value="{{cm.isConfirmDelete}}" hint-placeholder-val="{{false}}">
+<div class="c-state c-state--error" role="alertdialog" aria-labelledby="{{cm.delId}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg><span class="c-state__body"><b id="{{cm.delId}}">Kommentar wirklich löschen?</b><span>Dit kann man nich rückgängig machen.</span><span style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; margin-top: 0.375rem;"><button class="c-choice" onClick="{{cm.confirmDelete}}">Ja, löschen</button><button class="c-textlink" onClick="{{cm.cancel}}">Abbrechen</button></span></span></div>
+</sc-if>
+
+<sc-if value="{{cm.isReporting}}" hint-placeholder-val="{{false}}">
+<div role="group" aria-labelledby="{{cm.repId}}" style="display: flex; flex-direction: column; gap: 0.625rem; padding: 0.875rem 1rem; background: var(--surface-chip); border-radius: var(--radius-sm);">
+<p id="{{cm.repId}}" style="margin: 0; font-weight: 700; color: var(--color-ink-strong);">Wat is mit dem Kommentar?</p>
+<div class="c-choice-group" style="gap: 0.375rem;"><sc-for list="{{cm.reasons}}" as="rs" hint-placeholder-count="4"><button class="c-choice" aria-pressed="{{rs.on}}" onClick="{{rs.pick}}" style="font-size: 0.9rem; padding: 0 0.75rem;">{{rs.label}}</button></sc-for></div>
+<label class="t-small" for="{{cm.repNoteId}}">Magste dit kurz erklären? (optional)</label>
+<textarea id="{{cm.repNoteId}}" class="c-field" rows="2" maxlength="300"></textarea>
+<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem;"><button class="c-choice" aria-disabled="{{cm.reportOff}}" onClick="{{cm.sendReport}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><path d="M4 22v-7"></path></svg>Melden</button><button class="c-textlink" onClick="{{cm.cancel}}">Abbrechen</button></span>
+</div>
+</sc-if>
+
+<sc-if value="{{cm.isReported}}" hint-placeholder-val="{{false}}">
+<div class="c-state c-state--done" role="status"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span class="c-state__body"><b>Danke, is jemeldet.</b><span>Wir kieken uns den Kommentar an. Bis dahin bleibt er sichtbar.</span></span></div>
+</sc-if>
+
 <div style="display: flex; align-items: center; gap: 0.75rem; margin-left: -0.75rem;">
-<button class="c-reaction" aria-pressed="{{cm.liked}}" onClick="{{cm.toggle}}" aria-label="Hilfreich, {{cm.votes}}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v12"></path><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path></svg><b>{{cm.votes}}</b></button>
+<span class="c-reaction-group" role="group" aria-label="Kommentar bewerten" style="gap: 0.25rem;"><button class="c-reaction" aria-pressed="{{cm.liked}}" onClick="{{cm.toggle}}" aria-label="Hilfreich, {{cm.votes}}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v12"></path><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path></svg><b>{{cm.votes}}</b></button><button class="c-reaction" aria-pressed="{{cm.disliked}}" onClick="{{cm.toggleDown}}" aria-label="Nich hilfreich, {{cm.downs}}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 14V2"></path><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"></path></svg><b>{{cm.downs}}</b></button></span>
 <button class="c-textlink" style="font-size: 0.85rem;">Antworten</button>
+<span class="c-menu-anchor" style="margin-left: auto;">
+<button class="c-icon-button" aria-label="{{cm.menuAria}}" aria-haspopup="menu" aria-expanded="{{cm.menuOpen}}" onClick="{{cm.toggleMenu}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
+<sc-if value="{{cm.menuOpen}}" hint-placeholder-val="{{false}}">
+<div role="menu" aria-label="{{cm.menuAria}}" class="c-menu" style="min-width: 190px;">
+<button role="menuitem" class="c-menu__item" data-done="{{cm.linkDone}}" onClick="{{cm.copyLink}}"><sc-if value="{{cm.linkIdle}}" hint-placeholder-val="{{true}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></sc-if><sc-if value="{{cm.linkDone}}" hint-placeholder-val="{{false}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></sc-if><span>{{cm.linkLabel}}</span></button>
+<sc-if value="{{cm.own}}" hint-placeholder-val="{{false}}">
+<button role="menuitem" class="c-menu__item" onClick="{{cm.startEdit}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.17 6.81a1 1 0 0 0-3.99-3.99L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z"></path><path d="m15 5 4 4"></path></svg><span>Bearbeiten</span></button>
+<button role="menuitem" class="c-menu__item" onClick="{{cm.askDelete}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg><span>Löschen</span></button>
+</sc-if>
+<sc-if value="{{cm.notOwn}}" hint-placeholder-val="{{true}}">
+<span role="separator" style="display: block; margin: 0.25rem 0.5rem; border-top: 1px dashed var(--rule-inner);"></span>
+<button role="menuitem" class="c-menu__item" aria-disabled="{{cm.reportedFlag}}" onClick="{{cm.startReport}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><path d="M4 22v-7"></path></svg><span>{{cm.reportLabel}}</span></button>
+</sc-if>
+</div>
+</sc-if>
+</span>
 </div>
 </article>
+</sc-if>
 </li>
 </sc-for>
 </ol>
@@ -326,8 +373,8 @@ a{color:inherit}a:hover{color:var(--color-accent-text)}
 <span id="n-name-hint" class="t-small">Leer jelassen? Dann kriegste ’n Berliner Namen, z. B. „Anonyme Schrippe“.</span>
 </div>
 <sc-if value="{{commentFailed}}" hint-placeholder-val="{{false}}"><div class="c-state c-state--error" role="alert"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg><span class="c-state__body"><b>Ditt hat nich jeklappt.</b><span>Dein Kommentar is nich rausjegangen. Dein Text bleibt stehen – versuch’s gleich nochmal.</span></span></div></sc-if>
-<button class="c-button c-button--primary" type="button" onClick="{{submitComment}}" style="width: 100%; height: 48px;">{{submitLabel}}</button>
-<p class="t-small" style="margin: 0;">Dein Kommentar wird öffentlich angezeigt. Was wir dabei speichern, steht in der <a class="c-textlink c-textlink--inline" href="#">Datenschutzerklärung</a>.</p>
+<div class="bs-submitrow" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem;"><button class="c-button c-button--primary" type="button" onClick="{{submitComment}}" style="height: 48px; padding: 0 1.5rem;">{{submitLabel}}</button><span class="bs-kbdhint t-small" style="align-items: center; gap: 0.375rem;"><kbd class="bs-kbd">Strg</kbd><kbd class="bs-kbd">Enter</kbd>zum Abschicken</span></div>
+<p class="t-small" style="margin: 0;">Mit dem Abschicken wird dein Kommentar öffentlich angezeigt. Was wir dabei speichern, steht in der <a class="c-textlink c-textlink--inline" href="#">Datenschutzerklärung</a>.</p>
 </form>
 </sc-if>
 </div>
@@ -457,25 +504,50 @@ class Component extends DCLogic {
   }
   extras(d) {
     const { sort, allComments, cLikes } = this.state;
+    const cDis = this.state.cDis || {};
+    const score = (c) => c.votes + (cLikes[c.id] ? 1 : 0) - c.downs - (cDis[c.id] ? 1 : 0);
     const raw = (this.props.comments || this.props.word === 'lang') ? [
-      { id: 'a', name: 'Kiez-Kalle', when: 'vor 2 Tagen', ago: 2, where: 'Pankow', text: 'Sag ick jeden Tach, meene Oma hat det schon so jesacht.', votes: 12 },
-      { id: 'b', name: 'Anonyme Schrippe', when: 'vor 5 Stunden', ago: 0.2, where: '', text: 'Kenn ick nur aus\'m Fernsehen – is det wirklich noch jebräuchlich?', votes: 4 },
-      { id: 'c', name: 'Spree-Sabine', when: 'vor 1 Woche', ago: 7, where: 'Neukölln', text: 'Bei uns im Kiez sagt man dazu ooch manchmal anders, aber die Bedeutung stimmt.', votes: 7 },
-      { id: 'd', name: 'Ostkreuz-Olli', when: 'vor 3 Wochen', ago: 21, where: '', text: 'Jutes Beispiel oben, hab ick so ooch schon jehört.', votes: 1 }
+      { id: 'a', name: 'Kiez-Kalle', when: 'vor 2 Tagen', ago: 2, where: 'Pankow', text: 'Sag ick jeden Tach, meene Oma hat det schon so jesacht.', votes: 12, downs: 1 },
+      { id: 'b', name: 'Anonyme Schrippe', when: 'vor 5 Stunden', ago: 0.2, where: '', text: 'Kenn ick nur aus\'m Fernsehen – is det wirklich noch jebräuchlich?', votes: 4, downs: 0 },
+      { id: 'c', name: 'Spree-Sabine', when: 'vor 1 Woche', ago: 7, where: 'Neukölln', text: 'Bei uns im Kiez sagt man dazu ooch manchmal anders, aber die Bedeutung stimmt.', votes: 7, downs: 2 },
+      { id: 'd', name: 'Ostkreuz-Olli', when: 'vor 3 Wochen', ago: 21, where: '', text: 'Jutes Beispiel oben, hab ick so ooch schon jehört.', votes: 1, downs: 3 }
     ] : [];
+    if (raw.length && this.props.word !== 'lang') raw.unshift({ id: 'me', own: true, name: 'Anonyme Currywurst', when: 'jetzt', ago: 0, where: '', text: 'Dicke Ansage – sag ick ooch so.', votes: 0, downs: 0 });
     if (this.props.word === 'lang') {
       const names = ['Kiez-Kalle', 'Anonyme Schrippe', 'Spree-Sabine', 'Ostkreuz-Olli', 'Wedding-Wanda', 'Mauerpark-Micha', 'Anonyme Bulette', 'Tempelhof-Tine', 'Späti-Sven', 'Kreuzberg-Kemal'];
-      for (let k = raw.length; k < 20; k++) raw.push({ id: 'x' + k, name: names[k % names.length], when: 'vor ' + (k + 1) + ' Tagen', ago: k + 1, where: k % 3 ? '' : 'Lichtenberg', text: k === 4 ? 'Ick hab da ma ’ne janz lange Jeschichte zu: Meine Tante Erna saß jeden Abend uff ihrm Platz am Fenster, hat die janze Straße im Blick jehabt und wusste immer als Erste, wer mit wem und warum. Dit war ihr Rinnsteinschwalbenbeobachtungsposten, so hat Opa dit jenannt, und die janze Familie hat jelacht. Heute sitz ick da.' : 'Kommentar Nummer ' + (k + 1) + ' – jenau so kenn ick dit ooch.', votes: 20 - k });
+      for (let k = raw.length; k < 20; k++) raw.push({ id: 'x' + k, name: names[k % names.length], when: 'vor ' + (k + 1) + ' Tagen', ago: k + 1, where: k % 3 ? '' : 'Lichtenberg', text: k === 4 ? 'Ick hab da ma ’ne janz lange Jeschichte zu: Meine Tante Erna saß jeden Abend uff ihrm Platz am Fenster, hat die janze Straße im Blick jehabt und wusste immer als Erste, wer mit wem und warum. Dit war ihr Rinnsteinschwalbenbeobachtungsposten, so hat Opa dit jenannt, und die janze Familie hat jelacht. Heute sitz ick da.' : 'Kommentar Nummer ' + (k + 1) + ' – jenau so kenn ick dit ooch.', votes: 20 - k, downs: k % 4 });
     }
-    const sorted = raw.slice().sort((x, y) => sort === 'beste' ? (y.votes + (cLikes[y.id] ? 1 : 0)) - (x.votes + (cLikes[x.id] ? 1 : 0)) : x.ago - y.ago);
+    const sorted = raw.slice().sort((x, y) => (y.own ? 1 : 0) - (x.own ? 1 : 0) || (sort === 'beste' ? score(y) - score(x) : x.ago - y.ago));
+    const cMode = this.state.cMode || {}, cMenu = this.state.cMenu, cCopied = this.state.cCopied, cRep = this.state.cRep || {};
+    const setMode = (id, m) => this.setState({ cMode: { ...cMode, [id]: m }, cMenu: null });
     const shown = allComments ? sorted : sorted.slice(0, 3);
     const commentList = shown.map((c, i) => ({
       ...c,
       initial: c.name.charAt(0),
-      meta: c.when + (c.where ? ' · ' + c.where : ''),
+      meta: c.when + (c.where ? ' · ' + c.where : '') + (cMode[c.id] === 'edited' ? ' · bearbeitet' : ''),
+      anchor: 'kommentar-' + c.id, editId: 'edit-' + c.id, delId: 'del-' + c.id, repId: 'rep-' + c.id, repNoteId: 'repnote-' + c.id,
+      own: !!c.own, notOwn: !c.own,
+      isDeleted: cMode[c.id] === 'deleted', isVisible: cMode[c.id] !== 'deleted',
+      isEditing: cMode[c.id] === 'edit', showText: cMode[c.id] !== 'edit',
+      isConfirmDelete: cMode[c.id] === 'delete', isReporting: cMode[c.id] === 'report', isReported: cMode[c.id] === 'reported',
+      menuOpen: cMenu === c.id, menuAria: 'Weitere Aktionen zum Kommentar von ' + c.name,
+      toggleMenu: () => this.setState({ cMenu: cMenu === c.id ? null : c.id, cCopied: null }),
+      linkDone: cCopied === c.id, linkIdle: cCopied !== c.id, linkLabel: cCopied === c.id ? 'Link kopiert' : 'Link kopieren',
+      copyLink: () => this.setState({ cCopied: c.id }),
+      startEdit: () => setMode(c.id, 'edit'), saveEdit: () => setMode(c.id, 'edited'),
+      askDelete: () => setMode(c.id, 'delete'), confirmDelete: () => setMode(c.id, 'deleted'),
+      startReport: () => { if (cMode[c.id] !== 'reported') setMode(c.id, 'report'); },
+      cancel: () => setMode(c.id, null),
+      reasons: ['Spam oder Werbung', 'Beleidigend', 'Falsch oder irreführend', 'Wat anderet'].map((label) => ({ label, on: cRep[c.id] === label ? 'true' : 'false', pick: () => this.setState({ cRep: { ...cRep, [c.id]: label } }) })),
+      reportOff: cRep[c.id] ? 'false' : 'true',
+      sendReport: () => { if (cRep[c.id]) setMode(c.id, 'reported'); },
+      reportedFlag: cMode[c.id] === 'reported' ? 'true' : 'false', reportLabel: cMode[c.id] === 'reported' ? 'Schon jemeldet' : 'Melden',
       liked: !!cLikes[c.id],
       votes: c.votes + (cLikes[c.id] ? 1 : 0),
-      toggle: () => this.setState({ cLikes: { ...cLikes, [c.id]: !cLikes[c.id] } }),
+      toggle: () => this.setState({ cLikes: { ...cLikes, [c.id]: !cLikes[c.id] }, cDis: { ...cDis, [c.id]: false } }),
+      disliked: !!cDis[c.id],
+      downs: c.downs + (cDis[c.id] ? 1 : 0),
+      toggleDown: () => this.setState({ cDis: { ...cDis, [c.id]: !cDis[c.id] }, cLikes: { ...cLikes, [c.id]: false } }),
       avatarStyle: 'display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex-shrink: 0; border-radius: var(--radius-sm); font-weight: 700; color: var(--color-accent-text); background: color-mix(in srgb, var(--orange-500) 16%, transparent);',
       rowStyle: i > 0 ? 'padding-top: 1.25rem; border-top: 1px dashed var(--rule-inner);' : ''
     }));
@@ -597,7 +669,6 @@ class Component extends DCLogic {
       hasRelatedWords: relatedWords.length > 0,
       beforeNear: d.before.slice().reverse(),
       writing, notWriting: !writing,
-      showDislike: this.state.disliked,
       menuOpen: !!this.state.menuOpen,
       toggleMenu: () => this.setState({ menuOpen: !this.state.menuOpen, copied: null }),
       shareWord: () => this.setState({ menuOpen: false }),
@@ -613,13 +684,11 @@ class Component extends DCLogic {
       lb: lbImg,
       closeLightbox: () => this.setState({ lightbox: -1 }),
       liked, disliked,
-      likes: liked ? 1 : 0,
-      dislikes: disliked ? 1 : 0,
+      likes: 12 + (liked ? 1 : 0),
+      dislikes: 3 + (disliked ? 1 : 0),
       toggleLike: () => this.setState({ liked: !liked, disliked: false }),
       hasThemes: d.category.length > 0, themes: d.category, themesLabel: d.category.length > 1 ? 'Themen' : 'Thema',
-      toggleDislike: () => this.setState({ disliked: !disliked, liked: false }),
-      dislikeLabel: disliked ? 'Doch nich – zurücknehmen' : 'Jefällt ma nich',
-      menuDislike: () => this.setState({ disliked: !disliked, liked: false, menuOpen: false })
+      toggleDislike: () => this.setState({ disliked: !disliked, liked: false })
     };
   }
 }

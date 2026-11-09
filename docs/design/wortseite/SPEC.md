@@ -2,7 +2,7 @@
 
 Stand: 9. November 2026 · Design System „Berliner Schnauze“ v3.1 · ersetzt den Handoff vom 3. November
 
-**Neu in v3.1:** Umfrage startet direkt (keine Like-Frage, kein Zwischenschritt) · Dislike nicht mehr per Hover, sondern im ⋮-Menü · Themen in eigener Zeile unter den Badges · Buchkarten ab 808px kompakt und horizontal.
+**Neu in v3.1:** Umfrage startet direkt (keine Like-Frage, kein Zwischenschritt) · Like und Dislike immer gleichberechtigt nebeneinander (Wort und Kommentare), kein Hover-Einblenden · Kommentar-Menü ⋯ (Link kopieren, Bearbeiten, Löschen, Melden) und `Strg`+`Enter` · Themen in eigener Zeile unter den Badges · Buchkarten ab 808px kompakt und horizontal.
 
 **Referenz-Boards im Canvas „Wortseite vereinheitlichen“:**
 - **Mobile:** `Mobile v2 · alles gefixt` (Dark und Light), `Mobile v2 · mit Kommentaren & Trend`
@@ -141,8 +141,8 @@ Statisch in Astro rendern. Interaktives als Vue-Island mit `client:visible`, bzw
 | `WordHero.astro` | `.c-word-hero`, `.c-headword`, `.c-word-hero__article`, `.c-word-hero__badges`, `.c-themes` | `word, article, pos, posAuto, berolinismus, themes, meanings, same, trend?` | `h1` mit `hyphens: auto; overflow-wrap: anywhere` |
 | `WordBadges` | `.c-badge`, `--strong`, `--auto` | – | Reihenfolge: Trend → Wortart → Berolinismus. **Keine Themen in dieser Zeile** |
 | `WordThemes` | `.c-themes` | `themes: {label,url}[]` | eigene Zeile direkt unter den Badges: `.t-label` „Thema“/„Themen“ + Textlinks, getrennt durch „·“, `.75rem` muted, bricht um. Entfällt ohne Themen |
-| `WordReactions.vue` | `.c-reaction-group`, `.c-reaction`, `__more` | `likes, dislikes` | nur Like sichtbar; Dislike erscheint erst, wenn gesetzt (Abschnitt 9) |
-| `WordActionsMenu.vue` | `.c-icon-button`, `.c-menu-anchor`, `.c-menu`, `.c-menu__item` | `url, word, disliked` | Teilen, Link kopieren, Wort kopieren, Trenner, „Jefällt ma nich“ (`menuitemcheckbox`) |
+| `WordReactions.vue` | `.c-reaction-group`, `.c-reaction` | `likes, dislikes` | Daumen hoch und runter immer beide sichtbar, je mit Zahl (Abschnitt 9) |
+| `WordActionsMenu.vue` | `.c-icon-button`, `.c-menu-anchor`, `.c-menu`, `.c-menu__item` | `url, word` | Teilen, Link kopieren, Wort kopieren |
 | `WordMeanings` | `.c-meanings` (ab 2) / `p.t-em` (1) | `meanings` | ab 6 Bedeutungen einklappen: 5 zeigen + „Alle n Bedeutungen zeigen“ |
 | `WordTrendBox.astro` | `.c-trend`, `.c-trend__bars` | `rank, views, change, bars[7]` | nur wenn trending |
 | `WordAudio.vue` | `.c-choice` (`aria-pressed`) | `sources: {m?, w?}` | nur eine Stimme spielt gleichzeitig, auch über Beispiele hinweg |
@@ -153,7 +153,7 @@ Statisch in Astro rendern. Interaktives als Vue-Island mit `client:visible`, bzw
 | `LetterTiles.vue` | `.c-letters`, `.c-letters__tile` (`--fill`) | `letters: {ch, pct, vowel}[]` | Toggle „Häufigkeiten als Zahlen zeigen“ |
 | `BookShelf.astro` | `.c-shelf`, `.c-book`, `__cover`, `__title`, `__cta` | `books[≤3]` | `rel="sponsored noopener"`, Badge „Anzeige“ |
 | `WordNeighborhood.astro` | `.c-textlink--inline`, Listen | `related, before[3], after[3]` | aktuelles Wort mit Wash markiert |
-| `WordComments.vue` (Island) | `.c-comment*`, `.c-reaction`, `.c-choice`, `.c-field`, `.c-button--primary`, `.c-state` | `slug, initial` | Abschnitt 9 |
+| `WordComments.vue` (Island) | `.c-comment*`, `.c-reaction`, `.c-choice`, `.c-field`, `.c-button--primary`, `.c-state`, `.c-menu`, `.c-kbd` | `slug, initial, currentUserToken` | Abschnitt 9 und 9a |
 | `NextLinks.astro` | `.c-next-link` | – | Ooch im Trend · Zufälliges Wort · Wort-Index · Wort vorschlagen |
 | `WordDates` | `.t-small` | `created, edited` | „Wort erstellt am {created} · Bearbeitet am {edited}“ |
 
@@ -164,7 +164,7 @@ Statisch in Astro rendern. Interaktives als Vue-Island mit `client:visible`, bzw
 | Primary | `.c-button--primary` | orange-600, weiße 700 | höchstens **1 pro Ansicht**: „Abschicken“ |
 | Auswahl | `.c-choice` | transparent, 1px solid `--control-border` | Antworten, Audio, Sortierung, „Kommentar schreiben“, Bezirk |
 | Umfrage-Kachel | `.c-choice.c-choice--tile` | wie Auswahl, Grund `--surface-chip`, 72px hoch | nur die 3 Abstimmungs-Antworten |
-| Reaktion | `.c-reaction` | randlos, muted | Daumen hoch/runter, „hilfreich“ |
+| Reaktion | `.c-reaction` | randlos, muted | Daumen hoch/runter bei Wort und Kommentaren, immer als Paar |
 | Icon-Button | `.c-icon-button` | randlos, 44 × 44 | ⋮, Lightbox schließen |
 | Textlink | `.c-textlink` (`--inline`) | muted, gestrichelt unterstrichen | alles Sekundäre: „Stimme ändern“, „Alle 4 Kommentare zeigen“, „Antworten“ |
 
@@ -226,9 +226,10 @@ type WordClass = 'Nomen' | 'Verb' | 'Adjektiv' | 'Adverb' | 'Pronomen' | 'Präpo
 | Trend-Kasten | `Trendet jerade` · `Platz {n} diese Woche` · `{views} Aufrufe in 7 Tagen · {change} zur Vorwoche` · `Alle Trend-Wörter ansehen →` |
 | Audio | `Anhören` · `Männlich` / `Weiblich` (spielend: Stop-Icon) |
 | Bilder | Caption `Foto: {credit}` · `Erfahre mehr über dieses Wort ↗` |
-| Reaktion | aria: `Jefällt ma, {n}` / `Nee, {n}` |
+| Reaktion Wort | Gruppe `Wie findste ditt Wort?` · aria `Jefällt ma, {n}` / `Nee, {n}` |
+| Reaktion Kommentar | Gruppe `Kommentar bewerten` · aria `Hilfreich, {n}` / `Nich hilfreich, {n}` |
 | Themen | Label `Thema` / `Themen` |
-| Menü | `Wort teilen` · `Link kopieren` → `Link kopiert` · `Wort kopieren` → `Wort kopiert` · `Jefällt ma nich` → `Doch nich – zurücknehmen` |
+| Menü | `Wort teilen` · `Link kopieren` → `Link kopiert` · `Wort kopieren` → `Wort kopiert` |
 | Etymologie-Footer | `Quelle` / `Quellen` |
 | Grammatik-Label | `Wortart (NLP-Analyse)` |
 | Kacheln-Legende | `Füllhöhe = wie häufig der Buchstabe im Deutschen vorkommt. Orange = Vokal, grau = Konsonant.` |
@@ -237,7 +238,11 @@ type WordClass = 'Nomen' | 'Verb' | 'Adjektiv' | 'Adverb' | 'Pronomen' | 'Präpo
 | Bücher | `Ooch als Buch zu haben, wa?` · `Anzeige` · `Für Berliner & solche, die es werden wollen – zum Nachschlagen, Rätseln und Verschenken.` · `Bei Amazon ansehen ↗` · `Bezahlte Links zu Amazon.de. Kaufst du darüber, kriegen wa ’ne kleine Provision – für dich bleibt der Preis gleich.` |
 | Umfeld | `Lexikalisches Umfeld` · `Verwandte Wörter` · Nachbarn |
 | Kommentare | `Wat sagste dazu? ({n})` · leer: `Hier hat noch keener wat jesacht. Fang du doch an!` · `Alle {n} Kommentare zeigen` · `Antworten` · `Kommentar schreiben` |
-| Formular | `Dein Kommentar` (max. 1000, Zähler `0 / 1000`) · `Dein Name (optional)` · Placeholder `z. B. Kiez-Kalle` · Hint `Leer jelassen? Dann kriegste ’n Berliner Namen, z. B. „Anonyme Schrippe“.` · `Abschicken` / `Nochmal abschicken` · `Dein Kommentar wird öffentlich angezeigt. Was wir dabei speichern, steht in der Datenschutzerklärung.` |
+| Formular | `Dein Kommentar` (max. 1000, Zähler `0 / 1000`) · `Dein Name (optional)` · Placeholder `z. B. Kiez-Kalle` · Hint `Leer jelassen? Dann kriegste ’n Berliner Namen, z. B. „Anonyme Schrippe“.` · `Abschicken` / `Nochmal abschicken` · `Mit dem Abschicken wird dein Kommentar öffentlich angezeigt. Was wir dabei speichern, steht in der Datenschutzerklärung.` · Desktop: `Strg` `Enter` `zum Abschicken` (macOS: `⌘` `Enter`) |
+| Kommentar-Menü | `Link kopieren` → `Link kopiert` · eigene: `Bearbeiten` · `Löschen` · fremde: `Melden` → `Schon jemeldet` · aria `Weitere Aktionen zum Kommentar von {name}` |
+| Bearbeiten | `Kommentar bearbeiten` · `Speichern` · `Abbrechen` · Meta danach `· bearbeitet` |
+| Löschen | `Kommentar wirklich löschen?` · `Dit kann man nich rückgängig machen.` · `Ja, löschen` · `Abbrechen` · danach `Du hast deinen Kommentar jelöscht.` |
+| Melden | `Wat is mit dem Kommentar?` · `Spam oder Werbung` · `Beleidigend` · `Falsch oder irreführend` · `Wat anderet` · `Magste dit kurz erklären? (optional)` · `Melden` · `Abbrechen` · Erfolg `Danke, is jemeldet.` `Wir kieken uns den Kommentar an. Bis dahin bleibt er sichtbar.` |
 | Erfolg Kommentar | `Danke, is anjekommen!` · `Dein Kommentar erscheint, sobald wa ihn jesehen haben.` |
 | Fehler Kommentar | `Ditt hat nich jeklappt.` · `Dein Kommentar is nich rausjegangen. Dein Text bleibt stehen – versuch’s gleich nochmal.` |
 | Offline-Banner | `Du bist offline.` · `Du siehst die jespeicherte Version. Abstimmen und Kommentieren jeht wieder, sobald du Netz hast.` |
@@ -270,12 +275,9 @@ Die Copy der Umfrage steht in Abschnitt 10.
 | | gesperrt | `aria-disabled="true"`: Deckkraft .55, Rand gepunktet, kein Glow, Klick ohne Wirkung. Nicht `disabled`, damit das Element fokussierbar bleibt und der Grund vorgelesen werden kann |
 | `.c-reaction` | Hover | Rand gestrichelt `--rule-card`, Text ink-strong |
 | | gedrückt | Text accent, Grund orange-500 15% |
-| Like/Dislike (Hero) | Ruhe (alle Geräte) | Nur Like ist sichtbar. **Kein Hover-Einblenden** – dabei hat man leicht Dislike statt Like getroffen |
-| | Dislike setzen | ⋮-Menü → „Jefällt ma nich“. Menü schließt, neben Like erscheint der gedrückte Dislike-Button (`c-pop` .2s) |
-| | Dislike zurücknehmen | Klick auf den sichtbaren Dislike-Button oder Menü-Eintrag „Doch nich – zurücknehmen“; der Button verschwindet wieder |
+| Like/Dislike (Hero und Kommentare) | Ruhe | **Beide immer sichtbar, gleichberechtigt**: Daumen hoch + Zahl, Daumen runter + Zahl, `gap: .25rem`, gleiche Größe und Farbe. Kein Hover-Einblenden, nichts im Menü versteckt |
 | | Klick | Like und Dislike schließen sich aus; nochmal klicken nimmt zurück. Zähler optimistisch ±1. Bei Fehler zurückrollen + Toast „Ditt hat nich jeklappt.“ |
 | ⋮-Menü | offen | `aria-expanded="true"`, Button mit gestricheltem Rand |
-| | Jefällt ma nich | `role="menuitemcheckbox"`, `aria-checked`; gesetzt = accent 700 |
 | | Link/Wort kopieren | Icon wird zu ✓, Label zu „Link kopiert“ bzw. „Wort kopiert“, `data-done="true"` (accent, 700). Nach 2s zurück. **Kein** extra Toast |
 | | Wort teilen | `navigator.share({title, url})`; ohne Web-Share-API wird stattdessen der Link kopiert |
 | Audio | Klick | spielt (Icon ▶ → ■, `aria-pressed="true"`); ein zweiter Klick stoppt. Startet eine andere Stimme, stoppt die erste. Am Ende zurück auf idle |
@@ -286,10 +288,25 @@ Die Copy der Umfrage steht in Abschnitt 10.
 | Tabs | Klick | Smooth-Scroll zum Anker (`prefers-reduced-motion` → sofort). Aktiver Tab per Scroll-Spy |
 | Kommentare | ≥ 2 | Sortierung „Beste“ / „Neueste“ (`.c-choice`, klein) erscheint im Kartenkopf |
 | | > 3 | 3 zeigen + „Alle n Kommentare zeigen“ |
-| | „hilfreich“ | `.c-reaction`, toggelt ±1 |
+| | Bewerten | Daumen hoch („hilfreich“) und runter („nich hilfreich“) wie beim Wort; „Beste“ sortiert nach hoch minus runter |
 | | „Kommentar schreiben“ | klappt das Formular auf, Fokus ins Textfeld |
 | | Abschicken | Primary zeigt während des Requests Busy (`aria-busy`, Text bleibt, Doppelklick gesperrt). Erfolg: Formular zu, Erfolgsbox oberhalb des Buttons. Fehler: Fehlerbox über dem Button, Text bleibt, Button heißt „Nochmal abschicken“ |
 | Antworten | – | eine Ebene tief, eingerückt 48px (`.c-comment--reply`) |
+| Formular | `Strg`/`⌘` + `Enter` | schickt ab wie der Button. Hinweis mit `.c-kbd` nur ab 808px und bei `hover: hover`; mobil ist der Button volle Breite |
+
+### 9a. Kommentar-Aktionen (⋯ pro Kommentar)
+
+`.c-icon-button` mit ⋯ rechts in der Aktionszeile (nach Daumen und „Antworten“), öffnet `.c-menu`.
+
+| Eintrag | Für | Verhalten |
+|---|---|---|
+| Link kopieren | alle | kopiert `/wort/{slug}#kommentar-{id}`; Icon → ✓, Label → „Link kopiert“, 2s. Jeder Kommentar hat `id="kommentar-{id}"`; beim Aufruf mit Anker hinscrollen und den Kommentar 2s mit 14%-Wash hervorheben |
+| Bearbeiten | eigener Kommentar | Text wird an Ort und Stelle zum Textfeld (vorbefüllt, max. 1000). „Speichern“ (`.c-choice` gedrückt, kein zweiter Primary) / „Abbrechen“. Danach Meta „· bearbeitet“. Zeitfenster: offener Punkt |
+| Löschen | eigener Kommentar | Inline-Bestätigung `.c-state--error` (`role="alertdialog"`, Fokus auf „Ja, löschen“), kein Modal. Danach Platzhalter „Du hast deinen Kommentar jelöscht.“ (`role="status"`) bis zum Neuladen; Zähler −1 |
+| Melden | fremde Kommentare | Inline-Panel auf `--surface-chip`: Grund als `.c-choice` (Pflicht), Notiz optional (max. 300). „Melden“ ist `aria-disabled`, bis ein Grund gewählt ist. Danach `.c-state--done`; der Kommentar bleibt sichtbar, der Eintrag heißt „Schon jemeldet“ (`aria-disabled`). Einmal pro Gerät und Kommentar |
+
+- **„Eigener Kommentar“:** erkannt über ein Token im Browser (localStorage oder Cookie) aus der Antwort beim Abschicken, weil Kommentare ohne Login sind. Der eigene, frische Kommentar steht für den Autor oben angepinnt.
+- Nur eine Aktion pro Kommentar ist gleichzeitig offen; das Menü schließt, sobald ein Eintrag gewählt ist. Esc schließt Menü und Panels.
 
 ### Seitenweite Zustände
 
@@ -350,7 +367,7 @@ Die Umfrage startet direkt: Nach der Stimme kommen sofort die Ergebnis-Balken (m
 | 808–999px | Seitenleiste links. Bilder im Hero unter den Bedeutungen. 2-Spalten-Blöcke aktiv |
 | ≥ 1000px | Hero 2-spaltig mit Bildern rechts (`grid-row: 1 / span 3`) |
 | `hover: none` | Hover-Effekte nur über `@media (hover: hover)` |
-| `prefers-reduced-motion` | kein Shimmer, kein Kachel-Kippen, kein Smooth-Scroll, kein `c-pop` |
+| `prefers-reduced-motion` | kein Shimmer, kein Kachel-Kippen, kein Smooth-Scroll |
 
 ---
 
@@ -376,7 +393,6 @@ Die Umfrage startet direkt: Nach der Stimme kommen sofort die Ergebnis-Balken (m
 | Element | Auslöser | Animation | Dauer | Easing |
 |---|---|---|---|---|
 | Bedienelemente (Rand, Glow, Grund) | Hover | `border-style` solid → dashed, Glow ein | 300ms | ease (DS-Standard) |
-| Dislike-Button | Dislike gesetzt | `c-pop`: opacity 0→1, `translate -6px → 0` | 200ms | ease-out |
 | Umfrage-Icon | Hover Kachel | `rotate(-8deg) scale(1.08)`, Farbe orange-400 → 300 | 300ms | ease |
 | Menü-Eintrag | Hover/Fokus | Grund-Wash ein | 200ms | ease |
 | Chip-Link Pfeil | Hover | „→“ fährt ein | 150ms | ease |
@@ -390,14 +406,14 @@ Alles respektiert `prefers-reduced-motion: reduce`.
 
 ## 14. Barrierefreiheit
 
-**Fokus-Reihenfolge:** Tabs bzw. Seitenleiste → Like (→ Dislike, wenn gesetzt) → ⋮ → Themen-Links → „Selbe Bedeutung wie“ → Trend-Link → Audio → Bilder → Umfrage → Karten in DOM-Reihenfolge → Kommentare → „Und nu?“.
+**Fokus-Reihenfolge:** Tabs bzw. Seitenleiste → Like → Dislike → ⋮ → Themen-Links → „Selbe Bedeutung wie“ → Trend-Link → Audio → Bilder → Umfrage → Karten in DOM-Reihenfolge → Kommentare → „Und nu?“.
 
 **Fokusring:** `outline: 2px dashed var(--orange-400); outline-offset: 2px` auf allen Bedienelementen. Nie entfernen.
 
 **ARIA:**
 - Tab-Leiste: `<nav aria-label="Inhalt der Wortseite">`, aktiver Link mit `aria-current="true"`. Bewusst keine `role="tablist"`, denn es sind Anker-Links.
-- Reaktionen: `aria-pressed`, `aria-label` mit Zahl („Jefällt ma, 12“).
-- ⋮: `aria-haspopup="menu"`, `aria-expanded`, `aria-label="Weitere Aktionen"`; Liste `role="menu"`, Einträge `role="menuitem"`, Dislike `role="menuitemcheckbox"` + `aria-checked`, Trenner `role="separator"`.
+- Reaktionen: Gruppe `role="group"` mit `aria-label`; Buttons `aria-pressed`, `aria-label` mit Zahl („Jefällt ma, 12“).
+- ⋮: `aria-haspopup="menu"`, `aria-expanded`, `aria-label="Weitere Aktionen"`; Liste `role="menu"`, Einträge `role="menuitem"`.
 - Themen: `<p>` mit Label, Links mit Text; das „·“ kommt per CSS und wird nicht vorgelesen.
 - Audio-Gruppe: `role="group" aria-labelledby` → „Anhören“; Buttons mit `aria-pressed`.
 - Bilder: Button `aria-label="Bild {i} von {n} vergrößern: {alt}"`. `<img alt="">` im Button, weil der Button-Text schon beschreibt.
@@ -447,10 +463,11 @@ Volle Specs folgen mit der Index-Seite. Boards: Seite „v3 · Header, Footer & 
 
 ## 16. Offene Punkte (Produktentscheidungen)
 
-1. **Trend-Metrik:** Aufrufe in 7 Tagen oder Wachstum zur Vorwoche? Wie viele Plätze bekommen das Badge? Vorschlag: Top 10.
-2. **„In welcher Hälfte?“:** Wird es auch bei „Zujezogen, über 10 Jahre her“ gefragt? Aktuell ja.
-3. **Header-Verhalten:** ein- und ausblenden beim Scrollen (Empfehlung) oder statisch?
-4. **Kommentare:** Moderation vor Veröffentlichung? Der Text „sobald wa ihn jesehen haben“ geht davon aus.
+1. **Kommentare bearbeiten:** unbegrenzt oder nur z. B. 15 Minuten nach dem Abschicken? Und ab wie vielen Meldungen wird ein Kommentar automatisch ausgeblendet?
+2. **Trend-Metrik:** Aufrufe in 7 Tagen oder Wachstum zur Vorwoche? Wie viele Plätze bekommen das Badge? Vorschlag: Top 10.
+3. **„In welcher Hälfte?“:** Wird es auch bei „Zujezogen, über 10 Jahre her“ gefragt? Aktuell ja.
+4. **Header-Verhalten:** ein- und ausblenden beim Scrollen (Empfehlung) oder statisch?
+5. **Kommentare:** Moderation vor Veröffentlichung? Der Text „sobald wa ihn jesehen haben“ geht davon aus.
 
 ---
 

@@ -90,6 +90,8 @@ css = '''
 .bs-d .c-section-card__body{padding:0 1.5rem 1.5rem}
 .bs-d .c-section-card__footer{padding:.75rem 1.5rem}
 .bs-d .c-word-hero{padding:2rem !important}
+.bs-d .bs-kbdhint{display:inline-flex}
+.bs-d .bs-submitrow .c-button--primary{flex:0 0 auto}
 @media (max-width:1000px){.bs-hero.c-word-hero{grid-template-columns:1fr}.bs-hero > .bs-heroimg{grid-column:1;grid-row:auto}}
 @media (max-width:807px){.bs-d{display:flex;flex-direction:column}.c-sidebar{position:static !important}.bs-2col,.bs-d #n-umfeld .c-section-card__body{grid-template-columns:1fr}}
 '''

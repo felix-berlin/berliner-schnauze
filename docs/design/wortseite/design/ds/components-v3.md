@@ -1,4 +1,4 @@
-# Berliner Schnauze DS — Wortseiten-Kanon (v2 + v3)
+# Berliner Schnauze DS — Wortseiten-Kanon (v2 + v3.1)
 
 ## Word-page canon (v2 — the reference for everything)
 
@@ -25,6 +25,8 @@ The mobile-first word page (v2) added parts the canon did not have. They are in 
 - **States** — `.c-skeleton`, `.c-state--error|offline|done`, `.c-empty`. Every interactive block ships all five.
 - **Type** — `.t-label` 0.75 · body 1 · `.t-em` 1.25 · `.t-small` 0.75 · `.c-band` (Berliner 1.6rem, page-level bands only). Headings: h1 headword, h2 card or band, h3 inside a card.
 - **Chips** — `.c-badge` lost its border; `.c-badge--strong` for Trend only. `.c-tag` is a borderless 16% orange wash.
+- **Themen** — categories are not badges: they get their own muted row under the badges (`.c-themes`, label „Thema/Themen“, links separated by ·).
+- **Reactions** — like and dislike are always shown side by side with equal weight, on the word and on comments (see Reaction).
 - **Orange budget** — fills only for the selected choice, the primary button and the Trend badge. Washes (14–16%) for pressed reactions, tags, avatars and the trend box. Everything else is ink, body or muted.
 - **Layout** — mobile: tab bar, single column, images as a strip below the hero. Desktop (≥ 1000px): `.c-sidebar` + one content column (max 1160px), images in the hero's right column.
 
@@ -54,12 +56,14 @@ Poll tile: the big answer button of the „Sagste det noch?“ poll. It is a `.c
 
 ## Reaction
 
-Reaction: the quiet thumb used for word likes, the poll's „Und jefällt dir ditt Wort?“ and „hilfreich“ on comments.
+Reaction: the quiet thumbs for rating a word and rating a comment.
 
 - `.c-reaction`: no border at rest, dashed `--rule-card` border on hover, muted icon. 44×44 minimum.
 - Pressed: `aria-pressed="true"` gives accent text on a 15% orange wash. Never a solid fill — reactions are not the primary action.
-- `.c-reaction-group` wraps like plus dislike. Desktop: only like is shown; hovering or focusing the group reveals the dislike (`.c-reaction-group__more`, slides in 0.2s). Touch: dislike shows once the reader has disliked, and is reachable from the ⋮ menu.
-- Counts sit inside the button as a `<span>`.
+- **Like and dislike are equal:** always both visible, side by side in a `.c-reaction-group` (`role="group"`, gap .25rem), each with its count. No hover-reveal (people hit dislike by mistake), nothing hidden in a menu.
+- They exclude each other; clicking the pressed one again takes it back.
+- Word hero: „Jefällt ma, n“ / „Nee, n“. Comments: „Hilfreich, n“ / „Nich hilfreich, n“. „Beste“ sorts by up minus down.
+- The poll does not ask for a reaction; it starts with its own question.
 
 ## Menu
 
@@ -93,6 +97,7 @@ Tab bar: sticky, horizontally scrolling in-page nav for the word page below 808p
 Book card: affiliate recommendations on the word page. Built to be inviting (cover, title, a clear CTA) and honest (always labelled).
 
 - `.c-shelf`: horizontal snap scroller on mobile (cards 64% wide so the next one peeks), 3-column grid from 808px.
+- From 808px the card turns compact and horizontal: 64px cover (3:4) left, text right, CTA without rule. A full-width cover in a 300px column was taller than the whole hero.
 - `.c-book`: `--surface-paper` with paper shadow, glow on hover. Inside: `.c-book__cover` (3:4), `.c-book__title`, a `.t-small` format line, `.c-book__cta` („Bei Amazon ansehen ↗“, accent 700, dashed top rule).
 - The section heading carries a `.c-badge` „Anzeige“. Links get `rel="sponsored noopener"`.
 - Max three books; hide the section when there are none.
@@ -112,10 +117,18 @@ Comment: one entry in the Kommentare section.
 
 - `.c-comment-list` > `.c-comment`: grid of a 36px avatar column and content; entries separated by dashed `--rule-inner`.
 - `.c-comment__avatar`: initial on a 16% orange wash, 4px radius (no circles in this system).
-- `.c-comment__meta`: name in ink 700, then relative date, 0.75rem muted.
-- `.c-comment__actions`: a `.c-reaction` „hilfreich · N“ and a `.c-textlink` „Antworten“.
+- `.c-comment__meta`: name in ink 700, then relative date („jetzt“, „vor 2 Tagen“), optional Kiez, and „· bearbeitet“ after an edit; 0.75rem muted.
+- `.c-comment__actions`: like/dislike pair (`.c-reaction-group`, „Hilfreich, n“ / „Nich hilfreich, n“), `.c-textlink` „Antworten“, and a `.c-icon-button` ⋯ pushed right that opens a `.c-menu`:
+  - everyone: „Link kopieren“ (→ „Link kopiert“ with check, anchor `#kommentar-<id>`)
+  - own comment: „Bearbeiten“, „Löschen“
+  - others' comments: separator, „Melden“ (→ „Schon jemeldet“, `aria-disabled`)
+- Bearbeiten: the text turns into a `.c-field` textarea in place with „Speichern“ (`.c-choice`, pressed) and „Abbrechen“ (text link).
+- Löschen: inline `.c-state--error` `role="alertdialog"` „Kommentar wirklich löschen?“ with „Ja, löschen“ / „Abbrechen“. No modal. Afterwards the author sees „Du hast deinen Kommentar jelöscht.“ until reload.
+- Melden: inline panel on `--surface-chip`: „Wat is mit dem Kommentar?“, reasons as `.c-choice` (Spam oder Werbung · Beleidigend · Falsch oder irreführend · Wat anderet), optional note, „Melden“ enabled once a reason is picked. Done: `.c-state--done` „Danke, is jemeldet.“ The comment stays visible.
+- The author's own fresh comment is pinned on top for them.
 - `.c-comment--reply`: indented 48px, one level only.
-- Show 3, then „Alle N Kommentare zeigen“ (text link). Sort tabs (`.c-choice`) appear from 2 comments.
+- Show 3, then „Alle N Kommentare zeigen“ (text link). Sort (`.c-choice`) „Beste“ (up minus down) / „Neueste“ appears from 2 comments.
+- Form: Desktop shows `.c-kbd` „Strg“ + „Enter“ „zum Abschicken“ (⌘ on macOS) next to the primary button; hidden on touch.
 
 ## ImageStrip
 
