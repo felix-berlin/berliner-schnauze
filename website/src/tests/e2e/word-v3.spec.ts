@@ -147,7 +147,7 @@ test.describe("tab order (real Tab presses)", () => {
   };
 
   test("390px: Tabs, Like, ⋮, Trend, Themen, Trend-Box, Audio, Umfrage (anmachen)", async ({ page }) => {
-    // Spec §14 (v3.1) lists Like, ⋮, Themen-Links, Trend-Link. The trend badge sits between ⋮ and the Themen because DOM
+    // Spec §14 (v3.1b) lists Like, Dislike (both are a "like" stop here, repeats collapse), ⋮, Themen-Links, Trend-Link. The trend badge sits between ⋮ and the Themen because DOM
     // order is the visual order (§5 and the mock: the badge row comes first, the Themen row sits below it); reordering
     // it by tabindex or CSS order would break WCAG 1.3.2 / 2.4.3 and a link would be hidden from keyboard users if skipped.
     expect(await walk(page, WORDS.full, 390)).toEqual(["tabs", "like", "menu", "trend", "themen", "trendbox", "audio", "umfrage"]);

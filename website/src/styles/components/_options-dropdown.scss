@@ -69,12 +69,6 @@
     }
   }
 
-  &__separator {
-    display: block;
-    margin: 0.25rem 0.5rem;
-    border-block-start: 1px dashed var(--rule-inner);
-  }
-
   @media (prefers-reduced-motion: reduce) {
     &__item {
       transition-duration: 0ms;

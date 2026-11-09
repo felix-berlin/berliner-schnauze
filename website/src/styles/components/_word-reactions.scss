@@ -1,7 +1,8 @@
-// Like/Dislike group in the hero (docs/design/wortseite/SPEC.md §9, v3.1). Base look: _reaction.scss.
+// Like and Dislike side by side, equal weight (docs/design/wortseite/SPEC.md §9, v3.1b). Base look: _reaction.scss.
 .c-reaction-group {
   display: inline-flex;
   align-items: center;
+  gap: 0.25rem;
 
   .c-reaction {
     padding-inline: 0.5rem;
@@ -11,31 +12,8 @@
     }
   }
 
-  // Rests hidden (v-if): Dislike shows once set, via the ⋮ menu (Spec §9).
-  &__more {
-    animation: c-pop 0.2s ease-out;
-  }
-
   &__count {
     min-inline-size: 1.5ch; // the count arriving does not shift the row
     font-variant-numeric: tabular-nums;
-  }
-}
-
-@keyframes c-pop {
-  from {
-    opacity: 0;
-    translate: -6px 0;
-  }
-
-  to {
-    opacity: 1;
-    translate: 0 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .c-reaction-group__more {
-    animation: none !important;
   }
 }

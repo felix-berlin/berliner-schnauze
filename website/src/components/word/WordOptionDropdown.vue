@@ -56,19 +56,6 @@
           <Copy v-else width="18" height="18" aria-hidden="true" />
           <span>{{ done === "word" ? "Wort kopiert" : "Wort kopieren" }}</span>
         </button>
-        <template v-if="wordId !== undefined">
-          <span class="c-word-menu__separator" role="separator" />
-          <button
-            :aria-checked="disliked"
-            class="c-word-menu__item"
-            role="menuitemcheckbox"
-            type="button"
-            @click="toggleDislike"
-          >
-            <ThumbsDown width="18" height="18" aria-hidden="true" />
-            <span>{{ disliked ? "Doch nich – zurücknehmen" : "Jefällt ma nich" }}</span>
-          </button>
-        </template>
       </div>
     </template>
   </DropdownPopover>
@@ -136,21 +123,17 @@
 
 <script setup lang="ts">
 import DropdownPopover from "@components/DropdownPopover.vue";
-import { useStore } from "@nanostores/vue";
 import { createToastNotify } from "@stores/toastNotify.ts";
-import { $feedback, loadFeedback } from "@stores/wordFeedback.ts";
 import { trackEvent } from "@utils/analytics";
 import { routeToWord } from "@utils/helpers.ts";
 import { reportWord } from "@utils/wordPulse.ts";
-import { toggleReaction } from "@utils/wordReaction.ts";
 import { useClipboard, useShare } from "@vueuse/core";
 import { SITE_URL } from "astro:env/client";
 import Copy from "virtual:icons/lucide/copy";
 import Link from "virtual:icons/lucide/link";
 import Share2 from "virtual:icons/lucide/share-2";
-import ThumbsDown from "virtual:icons/lucide/thumbs-down";
 import Check from "virtual:icons/lucide/check";
-import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, ref } from "vue";
+import { defineAsyncComponent, onBeforeUnmount, ref } from "vue";
 
 interface WordProps {
   berlinerisch: string;
@@ -163,17 +146,6 @@ interface WordProps {
 const { berlinerisch, slug, variant = "list", wordId } = defineProps<WordProps>();
 
 const menuEl = ref<HTMLElement | null>(null);
-// The same store as the hero thumbs, so the menu and the pressed Dislike button always agree (no wordId = draft: no entry).
-const feedback = useStore($feedback);
-const disliked = computed(() => feedback.value?.mine?.reaction === "dislike");
-onMounted(() => {
-  if (variant === "word" && wordId !== undefined) loadFeedback(wordId);
-});
-const toggleDislike = async (): Promise<void> => {
-  // Closes first, the popover returns the focus to the trigger; the button appears or goes next to Like.
-  menuEl.value?.closest<HTMLElement>("[popover]")?.hidePopover();
-  if (wordId !== undefined) await toggleReaction(wordId, "dislike");
-};
 const done = ref<"link" | "word" | null>(null);
 const announcement = ref("");
 let doneTimer: ReturnType<typeof setTimeout> | undefined;
@@ -192,7 +164,7 @@ const markDone = (what: "link" | "word"): void => {
 
 const items = (): HTMLElement[] =>
   Array.from(
-    menuEl.value?.querySelectorAll<HTMLElement>('[role="menuitem"], [role="menuitemcheckbox"]') ??
+    menuEl.value?.querySelectorAll<HTMLElement>('[role="menuitem"]') ??
       [],
   );
 

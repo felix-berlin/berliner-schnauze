@@ -273,7 +273,9 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await expect(hero.getByRole("button", { name: /^Jefällt ma/ })).toBeVisible();
 
       await hero.getByRole("button", { name: /^Jefällt ma/ }).focus();
-      // Dislike is only in the order once set (Spec §14, v3.1), so Like is followed by ⋮.
+      // Like and Dislike are both always there (Spec §14, v3.1b): Like -> Dislike -> ⋮.
+      await page.keyboard.press("Tab");
+      await expect(hero.getByRole("button", { name: /^Nee/ })).toBeFocused();
       await page.keyboard.press("Tab");
       await expect(hero.getByRole("button", { name: "Weitere Aktionen" })).toBeFocused();
       // anmachen is trending: the badge row starts with the trend badge (Spec §5), then the Themen row below it.
@@ -283,35 +285,31 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await expect(hero.locator('.c-themes a[href^="/themen/"]').first()).toBeFocused();
     });
 
-    test("Dislike nicht per Hover, sondern im ⋮-Menü: setzen und zurücknehmen", async ({ page }) => {
+    test("Like und Dislike immer beide sichtbar: setzen und zurücknehmen", async ({ page }) => {
       await page.setViewportSize({ height: 800, width: 1280 });
       await page.goto("/wort/anmachen");
       const hero = page.locator("#bedeutung");
       const like = hero.getByRole("button", { name: /^Jefällt ma/ });
       const dislike = hero.getByRole("button", { name: /^Nee/ });
-      const trigger = hero.getByRole("button", { name: "Weitere Aktionen" });
+      await expect(hero.getByRole("group", { name: "Wie findste ditt Wort?" })).toBeVisible();
       await expect(like).toBeVisible();
+      await expect(dislike).toBeVisible();
       // The islands hydrate after load: a click before would hit plain server markup.
       await expect(hero.locator("astro-island[ssr]")).toHaveCount(0);
-      await expect(dislike).toHaveCount(0);
-      await like.hover();
-      await expect(dislike).toHaveCount(0);
+      await expect(dislike).toHaveAttribute("aria-pressed", "false");
 
-      await trigger.click();
-      const item = page.getByRole("menuitemcheckbox", { name: "Jefällt ma nich" });
-      await expect(item).toHaveAttribute("aria-checked", "false");
-      await item.click();
-      await expect(dislike).toBeVisible();
+      await dislike.click();
       await expect(dislike).toHaveAttribute("aria-pressed", "true");
+      await expect(like).toHaveAttribute("aria-pressed", "false");
+      await dislike.click();
+      await expect(dislike).toHaveAttribute("aria-pressed", "false");
 
-      await trigger.click();
-      const undo = page.getByRole("menuitemcheckbox", { name: "Doch nich – zurücknehmen" });
-      await expect(undo).toHaveAttribute("aria-checked", "true");
-      await undo.click();
-      await expect(dislike).toHaveCount(0);
+      // The ⋮ menu holds no Dislike entry any more.
+      await hero.getByRole("button", { name: "Weitere Aktionen" }).click();
+      await expect(page.getByRole("menuitemcheckbox")).toHaveCount(0);
     });
 
-    test("Touch: Dislike bleibt versteckt", async ({ browser, browserName }) => {
+    test("Touch: Like und Dislike sind beide sichtbar", async ({ browser, browserName }) => {
       test.skip(browserName !== "chromium", "isMobile is not available in Firefox");
       const context = await browser.newContext({
         baseURL: test.info().project.use.baseURL,
@@ -323,7 +321,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await page.goto("/wort/anmachen");
       const hero = page.locator("#bedeutung");
       await expect(hero.getByRole("button", { name: /^Jefällt ma/ })).toBeVisible();
-      await expect(hero.getByRole("button", { name: /^Nee/ })).toHaveCount(0);
+      await expect(hero.getByRole("button", { name: /^Nee/ })).toBeVisible();
       await context.close();
     });
 

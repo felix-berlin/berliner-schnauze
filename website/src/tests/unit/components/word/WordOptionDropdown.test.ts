@@ -29,13 +29,6 @@ vi.mock("@stores/toastNotify.ts", () => ({
 
 vi.mock("@utils/wordPulse.ts", () => ({ reportWord: vi.fn() }));
 
-vi.mock("@stores/wordFeedback.ts", async () => {
-  const actual =
-    await vi.importActual<typeof import("@stores/wordFeedback.ts")>("@stores/wordFeedback.ts");
-  return { ...actual, loadFeedback: vi.fn().mockResolvedValue(undefined) };
-});
-vi.mock("@utils/wordReaction.ts", () => ({ toggleReaction: vi.fn().mockResolvedValue(true) }));
-
 vi.mock("@utils/analytics", () => ({
   trackEvent: vi.fn(),
 }));
@@ -429,40 +422,18 @@ describe("WordOptionDropdown.vue", () => {
       expect(document.activeElement).toBe(items[1].element);
       await wrapper.find('[role="menu"]').trigger("keydown", { key: "ArrowUp" });
       await wrapper.find('[role="menu"]').trigger("keydown", { key: "ArrowUp" });
-      // wraps to the last entry, the Dislike checkbox
-      expect(document.activeElement).toBe(wrapper.find('[role="menuitemcheckbox"]').element);
+      // wraps to the last entry, "Wort kopieren"
+      expect(document.activeElement).toBe(items.at(-1)!.element);
       wrapper.unmount();
     });
 
-    it("ends with a separator and the Dislike checkbox, unchecked by default", async () => {
-      const { $feedback } = await import("@stores/wordFeedback.ts");
-      $feedback.set(null);
+    it("holds only share, copy link and copy word: no Dislike entry, no separator", async () => {
       const wrapper = await mountWord();
-      const children = Array.from(wrapper.find('[role="menu"]').element.children);
-      expect(children.at(-2)?.getAttribute("role")).toBe("separator");
-      const box = wrapper.find('[role="menuitemcheckbox"]');
-      expect(box.element).toBe(children.at(-1));
-      expect(box.text()).toBe("Jefällt ma nich");
-      expect(box.attributes("aria-checked")).toBe("false");
-      wrapper.unmount();
-    });
-
-    it("shows the set Dislike as checked with the take-back text and toggles through the shared helper", async () => {
-      const { $feedback } = await import("@stores/wordFeedback.ts");
-      const { toggleReaction } = await import("@utils/wordReaction.ts");
-      $feedback.set({ mine: { reaction: "dislike" }, totals: { dislike: 1, like: 0 } } as never);
-      const wrapper = await mountWord();
-      const box = wrapper.find('[role="menuitemcheckbox"]');
-      expect(box.attributes("aria-checked")).toBe("true");
-      expect(box.text()).toBe("Doch nich – zurücknehmen");
-      await box.trigger("click");
-      expect(vi.mocked(toggleReaction)).toHaveBeenCalledWith(5, "dislike");
-      $feedback.set(null);
-      wrapper.unmount();
-    });
-
-    it("has no Dislike entry for a draft (no wordId)", async () => {
-      const wrapper = await mountWord({ wordId: undefined });
+      expect(wrapper.findAll('[role="menuitem"]').map((i) => i.text())).toEqual([
+        "Wort teilen",
+        "Link kopieren",
+        "Wort kopieren",
+      ]);
       expect(wrapper.find('[role="menuitemcheckbox"]').exists()).toBe(false);
       expect(wrapper.find('[role="separator"]').exists()).toBe(false);
       wrapper.unmount();

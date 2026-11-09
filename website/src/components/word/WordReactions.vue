@@ -1,7 +1,6 @@
 <template>
-  <div class="c-reaction-group">
+  <div aria-label="Wie findste ditt Wort?" class="c-reaction-group" role="group">
     <button
-      ref="likeButton"
       :aria-disabled="pending"
       :aria-label="label('Jefällt ma', 'like')"
       :aria-pressed="current === 'like'"
@@ -12,13 +11,11 @@
       <ThumbsUp aria-hidden="true" height="18" width="18" />
       <b class="c-reaction__count">{{ count("like") }}</b>
     </button>
-    <!-- Rests hidden: Dislike is set from the ⋮ menu and only shows once set (Spec §9). -->
     <button
-      v-if="current === 'dislike'"
       :aria-disabled="pending"
       :aria-label="label('Nee', 'dislike')"
-      aria-pressed="true"
-      class="c-reaction c-reaction-group__more"
+      :aria-pressed="current === 'dislike'"
+      class="c-reaction"
       type="button"
       @click="vote('dislike')"
     >
@@ -34,7 +31,7 @@ import { $feedback, loadFeedback } from "@stores/wordFeedback.ts";
 import { toggleReaction, type Reaction } from "@utils/wordReaction.ts";
 import ThumbsDown from "virtual:icons/lucide/thumbs-down";
 import ThumbsUp from "virtual:icons/lucide/thumbs-up";
-import { computed, nextTick, onMounted, ref, useTemplateRef } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 const props = defineProps<{ wordId: number }>();
 
@@ -44,7 +41,6 @@ const stored = computed<Reaction | null>(() => feedback.value?.mine?.reaction ??
 const optimistic = ref<{ reaction: Reaction | null } | null>(null);
 const current = computed(() => (optimistic.value ? optimistic.value.reaction : stored.value));
 const pending = ref(false);
-const likeButton = useTemplateRef<HTMLButtonElement>("likeButton");
 
 onMounted(() => loadFeedback(props.wordId));
 
@@ -66,8 +62,6 @@ const vote = async (reaction: Reaction) => {
     if (!feedback.value) await loadFeedback(props.wordId);
     const active = stored.value === reaction;
     optimistic.value = { reaction: active ? null : reaction };
-    // Taking Dislike back removes the button that holds the focus: Like gets it.
-    if (active && reaction === "dislike") nextTick(() => likeButton.value?.focus());
     await toggleReaction(props.wordId, reaction);
   } finally {
     // Success: the store now holds the answer. Failure: it still holds the old one.
