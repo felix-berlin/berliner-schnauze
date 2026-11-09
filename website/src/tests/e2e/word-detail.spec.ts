@@ -247,7 +247,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
 
       const hero = page.locator("#bedeutung");
       await expect(hero.locator("h1 dfn")).toHaveText("anmachen");
-      await expect(hero.locator(".t-label")).toHaveText("Bedeutungen");
+      await expect(hero.locator("p.t-label")).toHaveText("Bedeutungen");
       await expect(hero.locator("ol.c-meanings li")).toHaveText([
         "einschalten",
         "sich jemandem forsch nähern",
