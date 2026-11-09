@@ -280,7 +280,7 @@ export async function seedDev(payload: Payload): Promise<void> {
     else
       await payload.create({
         collection: "word-stats",
-        data: { day, views, word: word.id },
+        data: { audio: 0, clicks: 0, day, shares: 0, views, word: word.id },
         depth: 0,
       });
   }

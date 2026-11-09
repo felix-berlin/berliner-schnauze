@@ -250,7 +250,7 @@ export async function seedE2e(payload: Payload): Promise<void> {
     for (const [day, views] of rows) {
       const { docs } = await payload.find({ collection: "word-stats", depth: 0, limit: 1, where: { day: { equals: day }, word: { equals: word } } });
       if (docs[0]) await payload.update({ collection: "word-stats", data: { views }, depth: 0, id: docs[0].id });
-      else await payload.create({ collection: "word-stats", data: { day, views, word }, depth: 0 });
+      else await payload.create({ collection: "word-stats", data: { audio: 0, clicks: 0, day, shares: 0, views, word }, depth: 0 });
     }
   }
 
