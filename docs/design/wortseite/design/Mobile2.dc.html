@@ -21,6 +21,7 @@ a{color:inherit}a:hover{color:var(--color-accent-text)}
 .bs-n .c-section-card__title{font-size:1.25rem}
 .bs-n .c-word-hero__title{overflow-wrap:anywhere;hyphens:auto}
 .c-choice[aria-disabled="true"]{opacity:.55;cursor:not-allowed;box-shadow:none;border-style:dotted}
+.bs-theme + .bs-theme::before{content:"·";margin-right:.5rem;color:var(--color-muted)}
 /*desktop*/
 </style>
 </helmet>
@@ -50,11 +51,11 @@ a{color:inherit}a:hover{color:var(--color-accent-text)}
 <sc-if value="{{isTrending}}" hint-placeholder-val="{{false}}"><a href="#n-trend" class="c-badge c-badge--strong"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: currentColor;"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>Im Trend · Platz {{trend.rank}}</a></sc-if>
 <span class="{{posCls}}" style="border-color: transparent; outline: none;">{{posLabel}}</span>
 <sc-if value="{{d.berolinismus}}" hint-placeholder-val="{{true}}"><span class="c-badge">Berolinismus</span></sc-if>
-<sc-if value="{{d.category}}" hint-placeholder-val="{{true}}"><a class="c-textlink c-textlink--inline t-small" href="#" style="display: inline-flex; align-items: center; min-height: 32px;">{{d.category}}</a></sc-if>
 </div>
+<sc-if value="{{hasThemes}}" hint-placeholder-val="{{true}}"><p class="bs-themes t-small" style="margin: -0.125rem 0 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 0.5rem;"><span class="t-label" style="font-size: 0.7rem;">{{themesLabel}}</span><sc-for list="{{themes}}" as="th" hint-placeholder-count="3"><span class="bs-theme"><a class="c-textlink c-textlink--inline" href="#">{{th}}</a></span></sc-for></p></sc-if>
 </div>
 <span style="display: flex; align-items: center; margin: -0.5rem -0.5rem 0 0;">
-<span class="c-reaction-group" onMouseEnter="{{likeEnter}}" onMouseLeave="{{likeLeave}}" onFocus="{{likeEnter}}" onBlur="{{likeLeave}}">
+<span class="c-reaction-group">
 <button class="c-reaction" aria-pressed="{{liked}}" onClick="{{toggleLike}}" aria-label="Jefällt ma, {{likes}}" style="padding: 0 0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v12"></path><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path></svg><b>{{likes}}</b></button>
 <sc-if value="{{showDislike}}" hint-placeholder-val="{{false}}"><button class="c-reaction c-reaction-group__more" aria-pressed="{{disliked}}" onClick="{{toggleDislike}}" aria-label="Nee, {{dislikes}}" style="padding: 0 0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 14V2"></path><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"></path></svg><b>{{dislikes}}</b></button></sc-if>
 </span>
@@ -65,6 +66,8 @@ a{color:inherit}a:hover{color:var(--color-accent-text)}
 <button role="menuitem" class="c-menu__item" onClick="{{shareWord}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg><span>Wort teilen</span></button>
 <button role="menuitem" class="c-menu__item" data-done="{{linkDone}}" onClick="{{copyLink}}"><sc-if value="{{linkIdle}}" hint-placeholder-val="{{true}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></sc-if><sc-if value="{{linkDone}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></sc-if><span>{{linkLabel}}</span></button>
 <button role="menuitem" class="c-menu__item" data-done="{{wordDone}}" onClick="{{copyWord}}"><sc-if value="{{wordIdle}}" hint-placeholder-val="{{true}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></sc-if><sc-if value="{{wordDone}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></sc-if><span>{{wordLabel}}</span></button>
+<span role="separator" style="display: block; margin: 0.25rem 0.5rem; border-top: 1px dashed var(--rule-inner);"></span>
+<button role="menuitemcheckbox" class="c-menu__item" aria-checked="{{disliked}}" onClick="{{menuDislike}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 14V2"></path><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"></path></svg><span>{{dislikeLabel}}</span></button>
 </div>
 </sc-if>
 </span>
@@ -121,7 +124,7 @@ a{color:inherit}a:hover{color:var(--color-accent-text)}
 </section>
 </sc-if>
 
-<div id="n-umfrage" style="scroll-margin-top: 56px;"><dc-import name="Poll" theme="{{theme}}" embedded="{{yes}}" optin="{{yes}}" status="{{pollStatus}}" hint-size="100%,300px"></dc-import>
+<div id="n-umfrage" style="scroll-margin-top: 56px;"><dc-import name="Poll" theme="{{theme}}" embedded="{{yes}}" status="{{pollStatus}}" hint-size="100%,300px"></dc-import>
 
 </div>
 
@@ -371,7 +374,7 @@ class Component extends DCLogic {
   words() {
     return {
       testwort: {
-        word: 'testwort', article: ', der', pos: 'Nomen', posAuto: false, berolinismus: true, category: 'Testkategorie', audio: true,
+        word: 'testwort', article: ', der', pos: 'Nomen', posAuto: false, berolinismus: true, category: ['Alltag & Wohnen', 'Berlin & Orte', 'Essen & Trinken'], audio: true,
         meanings: ['Prüfwort', 'Beispielwort'], same: 'testwörtchen',
         origin: 'Bedeutung seit dem 19. Jahrhundert gebräuchlich.', sources: ['Testquelle 1', 'Testquelle 2'],
         examples: [
@@ -389,7 +392,7 @@ class Component extends DCLogic {
         images: [{ src: '', alt: 'Testbild 1', credit: '' }, { src: '', alt: 'Testbild 2', credit: '' }]
       },
       akademiebusen: {
-        word: 'Akademiebusen', article: ', der', pos: 'Nomen', posAuto: false, berolinismus: true, category: 'Berliner Orte & Spitznamen', audio: false,
+        word: 'Akademiebusen', article: ', der', pos: 'Nomen', posAuto: false, berolinismus: true, category: ['Berlin & Orte'], audio: false,
         meanings: ['die Isothermischen Kugellabore in Berlin-Adlershof'], same: 'Adlershofer Busen',
         origin: '', sources: [], examples: [],
         syllables: ['Aka', 'de', 'mie', 'bu', 'sen'], parts: ['Akademie', 'Busen'],
@@ -406,7 +409,7 @@ class Component extends DCLogic {
         ]
       },
       lang: {
-        word: 'Rinnsteinschwalbenbeobachtungsposten', article: ', der', pos: 'Nomen', posAuto: false, berolinismus: true, category: 'Grenzfall: langes Wort', audio: true,
+        word: 'Rinnsteinschwalbenbeobachtungsposten', article: ', der', pos: 'Nomen', posAuto: false, berolinismus: true, category: ['Alltag & Wohnen', 'Berlin & Orte', 'Menschen & Typen', 'Redewendungen', 'Grenzfälle'], audio: true,
         meanings: ['Bank vor der Eckkneipe', 'Platz am Fenster mit Blick auf die Straße', 'scherzhaft für Hausmeisterloge', 'Stammplatz von Nachbarn, die alles mitkriegen', 'Ort, von dem aus Klatsch verbreitet wird', 'Balkon im Erdgeschoss', 'Wartebank an der Haltestelle', 'Ecke vorm Späti', 'Hocker am Hauseingang', 'übertragen: neugierige Person'],
         same: 'Fensterkissen',
         origin: 'Zusammengesetzt aus „Rinnstein“, „Schwalbe“ (spöttisch für Spatz) und „Beobachtungsposten“; Grenzfall für sehr lange Komposita.', sources: ['Testquelle 1'],
@@ -422,7 +425,7 @@ class Component extends DCLogic {
         images: [{ src: '', alt: 'Testbild 1', credit: 'Beispiel' }, { src: '', alt: 'Testbild 2', credit: '' }, { src: '', alt: 'Testbild 3', credit: '' }]
       },
       leer: {
-        word: 'Kiekste', article: '', pos: 'Verb', posAuto: true, berolinismus: false, category: '', audio: false,
+        word: 'Kiekste', article: '', pos: 'Verb', posAuto: true, berolinismus: false, category: [], audio: false,
         meanings: ['schaust du'], same: '',
         origin: '', sources: [], examples: [],
         syllables: ['Kiek', 'ste'], parts: [],
@@ -436,7 +439,7 @@ class Component extends DCLogic {
         images: []
       },
       abnotam: {
-        word: 'Ab Notam', article: '', pos: 'Präposition', posAuto: true, berolinismus: false, category: '', audio: false,
+        word: 'Ab Notam', article: '', pos: 'Präposition', posAuto: true, berolinismus: false, category: [], audio: false,
         meanings: ['sich (etwas) merken'], same: '',
         origin: 'Von lateinisch „ad notam“ (zur Kenntnis).', sources: ['Der richtige Berliner in Wörtern und Redensarten / Meyer, Hans'],
         examples: [{ text: 'Det wer’k mir ab Notam nehmen.', explanation: 'das werde ich mir merken', audio: false }],
@@ -594,9 +597,7 @@ class Component extends DCLogic {
       hasRelatedWords: relatedWords.length > 0,
       beforeNear: d.before.slice().reverse(),
       writing, notWriting: !writing,
-      showDislike: (this.isDesktop() && !!this.state.hoverLike) || this.state.disliked,
-      likeEnter: () => { if (this.isDesktop() && !this.state.hoverLike) this.setState({ hoverLike: true }); },
-      likeLeave: () => { if (this.state.hoverLike) this.setState({ hoverLike: false }); },
+      showDislike: this.state.disliked,
       menuOpen: !!this.state.menuOpen,
       toggleMenu: () => this.setState({ menuOpen: !this.state.menuOpen, copied: null }),
       shareWord: () => this.setState({ menuOpen: false }),
@@ -615,7 +616,10 @@ class Component extends DCLogic {
       likes: liked ? 1 : 0,
       dislikes: disliked ? 1 : 0,
       toggleLike: () => this.setState({ liked: !liked, disliked: false }),
-      toggleDislike: () => this.setState({ disliked: !disliked, liked: false })
+      hasThemes: d.category.length > 0, themes: d.category, themesLabel: d.category.length > 1 ? 'Themen' : 'Thema',
+      toggleDislike: () => this.setState({ disliked: !disliked, liked: false }),
+      dislikeLabel: disliked ? 'Doch nich – zurücknehmen' : 'Jefällt ma nich',
+      menuDislike: () => this.setState({ disliked: !disliked, liked: false, menuOpen: false })
     };
   }
 }

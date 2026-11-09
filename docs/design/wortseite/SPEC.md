@@ -1,6 +1,8 @@
 # Handoff Spec: Wortseite v3 (`/wort/<slug>`)
 
-Stand: 8. November 2026 · Design System „Berliner Schnauze“ v3 · ersetzt den Handoff vom 3. November
+Stand: 9. November 2026 · Design System „Berliner Schnauze“ v3.1 · ersetzt den Handoff vom 3. November
+
+**Neu in v3.1:** Umfrage startet direkt (keine Like-Frage, kein Zwischenschritt) · Dislike nicht mehr per Hover, sondern im ⋮-Menü · Themen in eigener Zeile unter den Badges · Buchkarten ab 808px kompakt und horizontal.
 
 **Referenz-Boards im Canvas „Wortseite vereinheitlichen“:**
 - **Mobile:** `Mobile v2 · alles gefixt` (Dark und Light), `Mobile v2 · mit Kommentaren & Trend`
@@ -30,7 +32,7 @@ Ein Block ohne Daten wird komplett weggelassen: keine leere Karte und kein Platz
 | # | Block | ID (Anker) | Wird gezeigt, wenn | Überschrift |
 |---|---|---|---|---|
 | 0 | Tab-Leiste (mobil) / Seitenleiste (Desktop) | – | immer | – |
-| 1 | Hero: Wort, Artikel, Badges, Reaktion, ⋮-Menü, Bedeutungen | `n-bedeutung` | immer | **h1** = Wort |
+| 1 | Hero: Wort, Artikel, Badges, Themen-Zeile, Reaktion, ⋮-Menü, Bedeutungen | `n-bedeutung` | immer | **h1** = Wort |
 | 2 | Trend-Kasten | `n-trend` | Wort ist in den Top 10 der Woche | – (`.t-label`) |
 | 3 | Anhören (Männlich / Weiblich) | – | `audio` vorhanden | – (`.t-label`) |
 | 4 | Bilder (Strip mobil, im Hero ab 1000px) | – | `images.length > 0` | – (`aria-label="Bilder"`) |
@@ -66,7 +68,7 @@ Ein Block ohne Daten wird komplett weggelassen: keine leere Karte und kein Platz
 | Headword | `clamp(2rem, 11cqi, 2.75rem)` | `clamp(2.5rem, 6cqi, 3.75rem)` | wie 808 |
 | Orthographie + Grammatik | untereinander | `.bs-2col` nebeneinander (`1fr 1fr`, `gap: 1rem`) | wie 808 |
 | Buchstaben-Kacheln | 44 × 52px, Schrift 1.15rem | 64 × 72px, Schrift 1.6rem | wie 808 |
-| Bücher | `.c-shelf` horizontal, Karten 64% (nächste lugt rein) | 3-spaltiges Grid | wie 808 |
+| Bücher | `.c-shelf` horizontal, Karten 64% (nächste lugt rein), Cover 5:4 oben | 3-spaltiges Grid, **kompakte Karte**: `grid-template-columns: 64px minmax(0,1fr)`, Cover 64px (3:4) links ohne Titel, Text rechts, Padding `.875rem`, CTA ohne Linie | wie 808 |
 | Umfeld | untereinander | 2 Spalten (Verwandte / Nachbarn), `gap: 2rem` | wie 808 |
 | „Und nu?“ | gestapelt | 3 Spalten | wie 808 |
 | Section-Card | Header `.875rem 1rem`, Body `0 1rem 1rem`, Footer `.75rem 1rem` | Header `1rem 1.5rem`, Body `0 1.5rem 1.5rem`, Footer `.75rem 1.5rem` | wie 808 |
@@ -136,15 +138,16 @@ Statisch in Astro rendern. Interaktives als Vue-Island mit `client:visible`, bzw
 | `WordPage.astro` | `.c-word-page`, `.c-word-main` | `word: Word` | Raster, Reihenfolge laut Abschnitt 2 |
 | `WordTabBar.vue` (Island) | `.c-tabbar`, `.c-tabbar__tab` | `sections: {id,label}[]` | Scroll-Spy (IntersectionObserver), aktiver Tab scrollt sich in Sicht |
 | `WordSidebar.astro` (+ Spy-Island) | `.c-sidebar`, `__word`, `__link.is-active` | `word, posLabel, sections` | Desktop-Ersatz der Tab-Leiste |
-| `WordHero.astro` | `.c-word-hero`, `.c-headword`, `.c-word-hero__article`, `.c-word-hero__badges` | `word, article, pos, posAuto, berolinismus, category, meanings, same, trend?` | `h1` mit `hyphens: auto; overflow-wrap: anywhere` |
-| `WordBadges` | `.c-badge`, `--strong`, `--auto` | – | Reihenfolge: Trend → Wortart → Berolinismus → Kategorie-Link |
-| `WordReactions.vue` | `.c-reaction-group`, `.c-reaction`, `__more` | `likes, dislikes` | Abschnitt 9 |
-| `WordActionsMenu.vue` | `.c-icon-button`, `.c-menu-anchor`, `.c-menu`, `.c-menu__item` | `url, word` | Teilen, Link kopieren, Wort kopieren |
+| `WordHero.astro` | `.c-word-hero`, `.c-headword`, `.c-word-hero__article`, `.c-word-hero__badges`, `.c-themes` | `word, article, pos, posAuto, berolinismus, themes, meanings, same, trend?` | `h1` mit `hyphens: auto; overflow-wrap: anywhere` |
+| `WordBadges` | `.c-badge`, `--strong`, `--auto` | – | Reihenfolge: Trend → Wortart → Berolinismus. **Keine Themen in dieser Zeile** |
+| `WordThemes` | `.c-themes` | `themes: {label,url}[]` | eigene Zeile direkt unter den Badges: `.t-label` „Thema“/„Themen“ + Textlinks, getrennt durch „·“, `.75rem` muted, bricht um. Entfällt ohne Themen |
+| `WordReactions.vue` | `.c-reaction-group`, `.c-reaction`, `__more` | `likes, dislikes` | nur Like sichtbar; Dislike erscheint erst, wenn gesetzt (Abschnitt 9) |
+| `WordActionsMenu.vue` | `.c-icon-button`, `.c-menu-anchor`, `.c-menu`, `.c-menu__item` | `url, word, disliked` | Teilen, Link kopieren, Wort kopieren, Trenner, „Jefällt ma nich“ (`menuitemcheckbox`) |
 | `WordMeanings` | `.c-meanings` (ab 2) / `p.t-em` (1) | `meanings` | ab 6 Bedeutungen einklappen: 5 zeigen + „Alle n Bedeutungen zeigen“ |
 | `WordTrendBox.astro` | `.c-trend`, `.c-trend__bars` | `rank, views, change, bars[7]` | nur wenn trending |
 | `WordAudio.vue` | `.c-choice` (`aria-pressed`) | `sources: {m?, w?}` | nur eine Stimme spielt gleichzeitig, auch über Beispiele hinweg |
 | `WordImages.vue` + `Lightbox.vue` | `.c-image-strip`, `__btn`, `.c-lightbox` | `images: {src, alt, credit, link?}[]` | Credit ist Pflicht |
-| `WordPoll.vue` (Island) | `.c-choice--tile`, `.c-choice`, `.c-reaction`, `.c-infotext`, `.c-state` | `slug, optin, status` | Abschnitt 10 |
+| `WordPoll.vue` (Island) | `.c-choice--tile`, `.c-choice`, `.c-infotext`, `.c-state` | `slug, status` | Abschnitt 10 |
 | `SectionCard.astro` | `.c-section-card`, `__header`, `__title`, `__body`, `__footer` | `id, title, level: 2/3` | Slot für Body und Footer |
 | `WordAnalysis.astro` | `.c-band` + 4 × SectionCard | – | Orthographie, Grammatik, Quantitative Linguistik, Phonologie |
 | `LetterTiles.vue` | `.c-letters`, `.c-letters__tile` (`--fill`) | `letters: {ch, pct, vowel}[]` | Toggle „Häufigkeiten als Zahlen zeigen“ |
@@ -158,7 +161,7 @@ Statisch in Astro rendern. Interaktives als Vue-Island mit `client:visible`, bzw
 
 | Stil | Klasse | Ruhezustand | Wofür |
 |---|---|---|---|
-| Primary | `.c-button--primary` | orange-600, weiße 700 | höchstens **1 pro Ansicht**: „Abschicken“, „Klar, los jeht’s →“ |
+| Primary | `.c-button--primary` | orange-600, weiße 700 | höchstens **1 pro Ansicht**: „Abschicken“ |
 | Auswahl | `.c-choice` | transparent, 1px solid `--control-border` | Antworten, Audio, Sortierung, „Kommentar schreiben“, Bezirk |
 | Umfrage-Kachel | `.c-choice.c-choice--tile` | wie Auswahl, Grund `--surface-chip`, 72px hoch | nur die 3 Abstimmungs-Antworten |
 | Reaktion | `.c-reaction` | randlos, muted | Daumen hoch/runter, „hilfreich“ |
@@ -181,7 +184,7 @@ interface Word {
   pos: WordClass               // EIN Feld für Badge UND Grammatik (s. Abschnitt 8)
   posAuto: boolean             // true = NLP-geraten → .c-badge--auto + Label „Nomen (geraten)“
   berolinismus: boolean
-  category?: { label: string; url: string }
+  themes: { label: string; url: string }[]   // 0..n, z. B. Alltag & Wohnen, Berlin & Orte
   audio?: { m?: string; w?: string }      // Datei-URLs
   meanings: string[]           // ≥ 1
   same?: { label: string; url: string }   // „Selbe Bedeutung wie …“
@@ -224,7 +227,8 @@ type WordClass = 'Nomen' | 'Verb' | 'Adjektiv' | 'Adverb' | 'Pronomen' | 'Präpo
 | Audio | `Anhören` · `Männlich` / `Weiblich` (spielend: Stop-Icon) |
 | Bilder | Caption `Foto: {credit}` · `Erfahre mehr über dieses Wort ↗` |
 | Reaktion | aria: `Jefällt ma, {n}` / `Nee, {n}` |
-| Menü | `Wort teilen` · `Link kopieren` → `Link kopiert` · `Wort kopieren` → `Wort kopiert` |
+| Themen | Label `Thema` / `Themen` |
+| Menü | `Wort teilen` · `Link kopieren` → `Link kopiert` · `Wort kopieren` → `Wort kopiert` · `Jefällt ma nich` → `Doch nich – zurücknehmen` |
 | Etymologie-Footer | `Quelle` / `Quellen` |
 | Grammatik-Label | `Wortart (NLP-Analyse)` |
 | Kacheln-Legende | `Füllhöhe = wie häufig der Buchstabe im Deutschen vorkommt. Orange = Vokal, grau = Konsonant.` |
@@ -266,10 +270,12 @@ Die Copy der Umfrage steht in Abschnitt 10.
 | | gesperrt | `aria-disabled="true"`: Deckkraft .55, Rand gepunktet, kein Glow, Klick ohne Wirkung. Nicht `disabled`, damit das Element fokussierbar bleibt und der Grund vorgelesen werden kann |
 | `.c-reaction` | Hover | Rand gestrichelt `--rule-card`, Text ink-strong |
 | | gedrückt | Text accent, Grund orange-500 15% |
-| Like/Dislike (Hero) | Desktop (`hover: hover`) | Nur Like ist sichtbar. Hover oder Fokus auf der Gruppe blendet Dislike ein (`c-pop` .2s). Verlässt der Zeiger die Gruppe, verschwindet Dislike, außer es ist gedrückt |
-| | Touch | Dislike ist nur sichtbar, wenn bereits gedrückt. Sonst ist es über das ⋮-Menü erreichbar (offener Punkt, Abschnitt 16) |
+| Like/Dislike (Hero) | Ruhe (alle Geräte) | Nur Like ist sichtbar. **Kein Hover-Einblenden** – dabei hat man leicht Dislike statt Like getroffen |
+| | Dislike setzen | ⋮-Menü → „Jefällt ma nich“. Menü schließt, neben Like erscheint der gedrückte Dislike-Button (`c-pop` .2s) |
+| | Dislike zurücknehmen | Klick auf den sichtbaren Dislike-Button oder Menü-Eintrag „Doch nich – zurücknehmen“; der Button verschwindet wieder |
 | | Klick | Like und Dislike schließen sich aus; nochmal klicken nimmt zurück. Zähler optimistisch ±1. Bei Fehler zurückrollen + Toast „Ditt hat nich jeklappt.“ |
 | ⋮-Menü | offen | `aria-expanded="true"`, Button mit gestricheltem Rand |
+| | Jefällt ma nich | `role="menuitemcheckbox"`, `aria-checked`; gesetzt = accent 700 |
 | | Link/Wort kopieren | Icon wird zu ✓, Label zu „Link kopiert“ bzw. „Wort kopiert“, `data-done="true"` (accent, 700). Nach 2s zurück. **Kein** extra Toast |
 | | Wort teilen | `navigator.share({title, url})`; ohne Web-Share-API wird stattdessen der Link kopiert |
 | Audio | Klick | spielt (Icon ▶ → ■, `aria-pressed="true"`); ein zweiter Klick stoppt. Startet eine andere Stimme, stoppt die erste. Am Ende zurück auf idle |
@@ -313,11 +319,12 @@ Die Copy der Umfrage steht in Abschnitt 10.
 
 Ein Klick auf eine Kachel ist die Stimme. Es gibt keinen Bestätigungs-Button.
 
-**Schritte:** `vote → results → bezirk → kiez → herkunft → haelfte → alter → done`
+**Schritte:** `vote → bezirk → kiez → herkunft → haelfte → alter → done`
+
+Die Umfrage startet direkt: Nach der Stimme kommen sofort die Ergebnis-Balken (mit „· deine Antwort“) und darunter die erste Frage. Es gibt **keine** Like-Frage und keinen Zwischenschritt „Willste noch mehr helfen?“. Zurück zur Stimme geht es über `← Zurück`.
 
 | Schritt | Frage | Optionen | Wird übersprungen, wenn |
 |---|---|---|---|
-| results | `Danke für deine Stimme!` + Balken mit „· deine Antwort“ + `Und jefällt dir ditt Wort?` (👍/👎 als `.c-reaction`, **dieselben Daten wie die Hero-Reaktion**) + `Willste noch mehr helfen? Mit 5 kurzen Fragen zu dir erforschen wa, wo und von wem det Berlinerische heute jesprochen wird.` + [`Klar, los jeht’s →`] (Primary) + `Stimme ändern` (Textlink) | – | Opt-in-Variante aus |
 | bezirk | `Wo wohnste?` | SVG-Karte der 12 Bezirke + Fläche „Woanders“ (= Brandenburg-Rahmen); Umschalter `Lieber aus ner Liste wählen` / `Lieber auf der Karte wählen` | – |
 | kiez | `Welcher Kiez?` | Ortsteile des Bezirks (z. B. Pankow: Prenzlauer Berg, Weißensee, …) | „Woanders“ |
 | herkunft | `Uffjewachsen oder zujezogen?` | Hier uffjewachsen · Zujezogen, über 10 Jahre her · Zujezogen, unter 10 Jahren | – |
@@ -331,7 +338,7 @@ Ein Klick auf eine Kachel ist die Stimme. Es gibt keinen Bestätigungs-Button.
   - Überschrift: `Warum so ville Fragen?`
   - Text: „Weil wa hier zusammen forschen: Wie klingt det Berlinerische heute, wo wird’s noch jesprochen und von wem? Jede Antwort hilft uns, den Berliner Metrolekt besser zu verstehen – dafür brauchen wa ’n paar Angaben von dir: wo de wohnst, ob de hier uffjewachsen bist und wie alt de bist. Mach mit, so weit de willst – jede Frage kannste überspringen.“
 - **Karten-Credit:** `Karte: Geoportal Berlin / ALKIS Berlin Bezirke`
-- **Speichern:** Stimme pro Wort und Gerät; Profilangaben einmal pro Gerät. Wer ein Profil hat, sieht die Schritte nach `results` nicht mehr.
+- **Speichern:** Stimme pro Wort und Gerät; Profilangaben einmal pro Gerät. Wer schon ein Profil hat, sieht nach der Stimme nur die Ergebnisse und „Danke fürs Mitmachen!“.
 
 ---
 
@@ -342,7 +349,7 @@ Ein Klick auf eine Kachel ist die Stimme. Es gibt keinen Bestätigungs-Button.
 | < 808px | Tab-Leiste statt Seitenleiste. Bilder als Strip unter dem Hero. Alles einspaltig, horizontale Scroller (Bilder, Bücher) ohne Scrollbar, mit Snap |
 | 808–999px | Seitenleiste links. Bilder im Hero unter den Bedeutungen. 2-Spalten-Blöcke aktiv |
 | ≥ 1000px | Hero 2-spaltig mit Bildern rechts (`grid-row: 1 / span 3`) |
-| `hover: none` | Dislike nicht per Hover; Hover-Effekte nur über `@media (hover: hover)` |
+| `hover: none` | Hover-Effekte nur über `@media (hover: hover)` |
 | `prefers-reduced-motion` | kein Shimmer, kein Kachel-Kippen, kein Smooth-Scroll, kein `c-pop` |
 
 ---
@@ -369,7 +376,7 @@ Ein Klick auf eine Kachel ist die Stimme. Es gibt keinen Bestätigungs-Button.
 | Element | Auslöser | Animation | Dauer | Easing |
 |---|---|---|---|---|
 | Bedienelemente (Rand, Glow, Grund) | Hover | `border-style` solid → dashed, Glow ein | 300ms | ease (DS-Standard) |
-| Dislike-Button | Hover Like-Gruppe | `c-pop`: opacity 0→1, `translate -6px → 0` | 200ms | ease-out |
+| Dislike-Button | Dislike gesetzt | `c-pop`: opacity 0→1, `translate -6px → 0` | 200ms | ease-out |
 | Umfrage-Icon | Hover Kachel | `rotate(-8deg) scale(1.08)`, Farbe orange-400 → 300 | 300ms | ease |
 | Menü-Eintrag | Hover/Fokus | Grund-Wash ein | 200ms | ease |
 | Chip-Link Pfeil | Hover | „→“ fährt ein | 150ms | ease |
@@ -383,14 +390,15 @@ Alles respektiert `prefers-reduced-motion: reduce`.
 
 ## 14. Barrierefreiheit
 
-**Fokus-Reihenfolge:** Tabs bzw. Seitenleiste → Like (→ Dislike) → ⋮ → Kategorie-Link → „Selbe Bedeutung wie“ → Trend-Link → Audio → Bilder → Umfrage → Karten in DOM-Reihenfolge → Kommentare → „Und nu?“.
+**Fokus-Reihenfolge:** Tabs bzw. Seitenleiste → Like (→ Dislike, wenn gesetzt) → ⋮ → Themen-Links → „Selbe Bedeutung wie“ → Trend-Link → Audio → Bilder → Umfrage → Karten in DOM-Reihenfolge → Kommentare → „Und nu?“.
 
 **Fokusring:** `outline: 2px dashed var(--orange-400); outline-offset: 2px` auf allen Bedienelementen. Nie entfernen.
 
 **ARIA:**
 - Tab-Leiste: `<nav aria-label="Inhalt der Wortseite">`, aktiver Link mit `aria-current="true"`. Bewusst keine `role="tablist"`, denn es sind Anker-Links.
 - Reaktionen: `aria-pressed`, `aria-label` mit Zahl („Jefällt ma, 12“).
-- ⋮: `aria-haspopup="menu"`, `aria-expanded`, `aria-label="Weitere Aktionen"`; Liste `role="menu"`, Einträge `role="menuitem"`.
+- ⋮: `aria-haspopup="menu"`, `aria-expanded`, `aria-label="Weitere Aktionen"`; Liste `role="menu"`, Einträge `role="menuitem"`, Dislike `role="menuitemcheckbox"` + `aria-checked`, Trenner `role="separator"`.
+- Themen: `<p>` mit Label, Links mit Text; das „·“ kommt per CSS und wird nicht vorgelesen.
 - Audio-Gruppe: `role="group" aria-labelledby` → „Anhören“; Buttons mit `aria-pressed`.
 - Bilder: Button `aria-label="Bild {i} von {n} vergrößern: {alt}"`. `<img alt="">` im Button, weil der Button-Text schon beschreibt.
 - Trend-Balken: `aria-hidden="true"`, die Zahlen stehen im Text.
@@ -403,11 +411,10 @@ Alles respektiert `prefers-reduced-motion: reduce`.
 - Menü: Enter/Space öffnet, ↑/↓ bewegt, Esc schließt und gibt den Fokus an ⋮ zurück, Tab schließt.
 - Lightbox: Esc schließt, ←/→ blättert, Fokus ist gefangen und kehrt zum Thumbnail zurück.
 - Bezirkskarte: Jede Fläche ist ein fokussierbares `<a>` bzw. `<button>` mit Namen; die Listenansicht ist die gleichwertige Alternative.
-- Like-Gruppe: Fokus auf Like blendet Dislike ein (Desktop).
 
 **Ansagen:**
 - Kopieren: Live-Region `polite` „Link kopiert“.
-- Stimme abgegeben: Fokus auf „Danke für deine Stimme!“ (h3, `tabindex="-1"`).
+- Stimme abgegeben: Fokus auf die erste Frage „Wo wohnste?“ (h3, `tabindex="-1"`), Live-Region `polite` „Stimme jezählt“.
 - Schrittwechsel: Fokus auf die neue Frage.
 
 **Kontrast:** Alle Textfarben erreichen mindestens 4.5:1 in beiden Themes (Tokens oben). Rot und Grün kommen nur als Streifen bzw. Icon vor, nie als Text.
@@ -441,11 +448,9 @@ Volle Specs folgen mit der Index-Seite. Boards: Seite „v3 · Header, Footer & 
 ## 16. Offene Punkte (Produktentscheidungen)
 
 1. **Trend-Metrik:** Aufrufe in 7 Tagen oder Wachstum zur Vorwoche? Wie viele Plätze bekommen das Badge? Vorschlag: Top 10.
-2. **Dislike auf Touch:** im ⋮-Menü oder per Long-Press? Vorschlag: Menü-Eintrag „Gefällt mir nicht“.
-3. **„In welcher Hälfte?“:** Wird es auch bei „Zujezogen, über 10 Jahre her“ gefragt? Aktuell ja.
-4. **Header-Verhalten:** ein- und ausblenden beim Scrollen (Empfehlung) oder statisch?
-5. **Reaktion im Hero und in der Umfrage** teilen sich einen Store. Klären, ob die Umfrage-Reaktion nach der Stimme überhaupt nötig ist.
-6. **Kommentare:** Moderation vor Veröffentlichung? Der Text „sobald wa ihn jesehen haben“ geht davon aus.
+2. **„In welcher Hälfte?“:** Wird es auch bei „Zujezogen, über 10 Jahre her“ gefragt? Aktuell ja.
+3. **Header-Verhalten:** ein- und ausblenden beim Scrollen (Empfehlung) oder statisch?
+4. **Kommentare:** Moderation vor Veröffentlichung? Der Text „sobald wa ihn jesehen haben“ geht davon aus.
 
 ---
 

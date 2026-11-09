@@ -78,7 +78,11 @@ css = '''
 .bs-heroimg .c-image-strip__btn{box-shadow:var(--paper-lift)}
 .bs-2col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start}
 .bs-d .c-shelf{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));overflow:visible}
-.bs-d .c-book{flex:none}
+.bs-d .c-book{flex:none;display:grid;grid-template-columns:64px minmax(0,1fr);grid-auto-rows:min-content;column-gap:1rem;row-gap:.25rem;align-content:start;padding:.875rem}
+.bs-d .c-book > :first-child{grid-row:1 / span 5;width:64px;aspect-ratio:3 / 4 !important;padding:0 !important}
+.bs-d .c-book > :first-child > span{display:none}
+.bs-d .c-book > :not(:first-child){grid-column:2}
+.bs-d .c-book > :last-child{margin-top:.25rem !important;min-height:32px !important}
 .bs-d #n-umfeld .c-section-card__body{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
 .bs-d nav[aria-labelledby="n-weiter"]{display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem !important}
 .bs-d nav[aria-labelledby="n-weiter"] > h2,.bs-d nav[aria-labelledby="n-weiter"] > sc-if,.bs-d nav[aria-labelledby="n-weiter"] > div{grid-column:1/-1}
