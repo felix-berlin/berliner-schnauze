@@ -126,6 +126,7 @@ import DropdownPopover from "@components/DropdownPopover.vue";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
 import { routeToWord } from "@utils/helpers.ts";
+import { reportError } from "@utils/reportError.ts";
 import { reportWord } from "@utils/wordPulse.ts";
 import { useClipboard, useShare } from "@vueuse/core";
 import { SITE_URL } from "astro:env/client";
@@ -192,25 +193,56 @@ const EllipsisVertical = defineAsyncComponent(
 const { copied, copy, isSupported: clipBoardIsSupported, text } = useClipboard();
 const { isSupported: shareIsSupported, share } = useShare();
 
+const COPY_FAILED = "Kopieren hat nich jeklappt";
+
+/** Tells the user a copy failed: live region in the word menu, toast in the list menu. */
+const failed = (): void => {
+  if (variant === "word") {
+    announcement.value = COPY_FAILED;
+    clearTimeout(doneTimer);
+    doneTimer = setTimeout(() => (announcement.value = ""), 4000);
+  } else createToastNotify({ message: COPY_FAILED, status: "error" });
+};
+
+/**
+ * Copies via VueUse. Its copy() falls back to the legacy path on its own, so it rarely throws;
+ * a throw (or an unsupported clipboard) is reported and shown instead of "kopiert".
+ */
+const copyText = async (value: string): Promise<boolean> => {
+  try {
+    await copy(value);
+    return true;
+  } catch (error) {
+    reportError(error);
+    failed();
+    return false;
+  }
+};
+
 /**
  * Share the word
  *
  * @param   {string}  slug
  *
- * @return  {void}
+ * @return  {Promise<void>}
  */
-const shareWord = (slug: string): void => {
+const shareWord = async (slug: string): Promise<void> => {
   const shareData = {
     text: `Lerne mehr über das Berliner Wort: ${slug}`,
     title: `${slug} - Berliner Schnauze`,
     url: routeToWord(slug),
   };
 
-  share(shareData)
-    .then(() => {
-      if (wordId !== undefined) reportWord(wordId, "share");
-    })
-    .catch((err) => err);
+  try {
+    await share(shareData);
+  } catch (error) {
+    // The user dismissed the share sheet: not an error, nothing was shared.
+    if (error instanceof DOMException && error.name === "AbortError") return;
+    reportError(error);
+    await copyWordPageUrlToClipboard(slug);
+    return;
+  }
+  if (wordId !== undefined) reportWord(wordId, "share");
   if (variant === "list") createToastNotify({ message: "Wort geteilt", status: "success" });
 
   trackEvent("Word Share", "Word shared", `Word: ${slug}`);
@@ -218,7 +250,7 @@ const shareWord = (slug: string): void => {
 
 /** Word page menu: share where the browser can, otherwise copy the link instead. */
 const shareOrCopy = async (): Promise<void> => {
-  if (shareIsSupported.value) shareWord(slug ?? "");
+  if (shareIsSupported.value) await shareWord(slug ?? "");
   else await copyWordPageUrlToClipboard(slug ?? "");
 };
 
@@ -230,10 +262,10 @@ const copyWord = () => copyNameToClipboard(berlinerisch ?? "");
  *
  * @param   {string}  slug
  *
- * @return  {void}
+ * @return  {Promise<void>}
  */
 const copyWordPageUrlToClipboard = async (slug: string): Promise<void> => {
-  await copy(SITE_URL + routeToWord(slug));
+  if (!(await copyText(SITE_URL + routeToWord(slug)))) return;
   if (variant === "word") markDone("link");
   else createToastNotify({ message: "Link kopiert", status: "success" });
 
@@ -245,10 +277,10 @@ const copyWordPageUrlToClipboard = async (slug: string): Promise<void> => {
  *
  * @param   {string}  name
  *
- * @return  {void}
+ * @return  {Promise<void>}
  */
 const copyNameToClipboard = async (name: string): Promise<void> => {
-  await copy(name);
+  if (!(await copyText(name))) return;
   if (variant === "word") markDone("word");
   else createToastNotify({ message: "Wort kopiert", status: "success" });
 

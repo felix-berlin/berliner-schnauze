@@ -18,6 +18,6 @@ export const toggleReaction = async (wordId: number, reaction: Reaction): Promis
   return sendFeedback(
     wordId,
     active ? { reaction: null } : { reaction, ...parseProfile($profile.get()) },
-    "Ditt hat nich jeklappt.",
+    { fallbackMessage: "Ditt hat nich jeklappt." },
   );
 };

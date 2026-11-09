@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("astro:env/client", () => ({ TURNSTILE_SITE_KEY: "k" }));
 vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify: vi.fn() }));
+vi.mock("@utils/reportError.ts", () => ({ reportError: vi.fn() }));
 vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));
 
 const { fetchMock } = vi.hoisted(() => ({ fetchMock: vi.fn() }));
@@ -149,7 +150,7 @@ describe("WordComments", () => {
   const many = (n: number, hasMore = false) =>
     page({ comments: Array.from({ length: n }, (_, i) => card(i + 1)), hasMore, total: n });
   const resetSpy = vi.fn();
-  const TurnStileStub = { emits: ["token"], methods: { reset: resetSpy }, template: "<div />" };
+  const TurnStileStub = { emits: ["token", "error"], methods: { reset: resetSpy }, template: "<div />" };
 
   afterEach(() => {
     fetchMock.mockReset();
@@ -205,6 +206,37 @@ describe("WordComments", () => {
     expect(await submit({ authorName: "", text: "Na sowat" })).toBe(true);
     expect(resetSpy).toHaveBeenCalledTimes(2);
     expect(trackEvent).toHaveBeenCalledWith("Comments", "Post", "7");
+  });
+
+  it("reports the Turnstile error code once per failure run", async () => {
+    const { reportError } = await import("@utils/reportError.ts");
+    vi.mocked(reportError).mockClear();
+    const comment = {
+      authorName: "Det",
+      createdAt: "2026-01-01T00:00:00.000Z",
+      downvotes: 0,
+      edited: false,
+      id: 1,
+      myVote: 0,
+      parentId: null,
+      removalReason: null,
+      replies: [],
+      state: "visible",
+      text: "kiek ma",
+      upvotes: 0,
+    };
+    fetchMock.mockResolvedValue(page({ comments: [comment], hasMore: false, total: 1 }));
+    const wrapper = mount(WordComments, {
+      global: { stubs: { TurnStile: TurnStileStub } },
+      props: { wordId: 7 },
+    });
+    await flushPromises();
+    await wrapper.find(".c-comment__reply").trigger("click");
+    const widget = wrapper.findComponent(TurnStileStub);
+    widget.vm.$emit("error", "110200");
+    widget.vm.$emit("error", "110200");
+    expect(reportError).toHaveBeenCalledTimes(1);
+    expect(String(vi.mocked(reportError).mock.calls[0][0])).toContain("110200");
   });
 
   it("mounts the captcha when a reply form opens, without any field focus", async () => {

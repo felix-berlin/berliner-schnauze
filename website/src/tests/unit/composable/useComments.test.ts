@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
 
 vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify: vi.fn() }));
+vi.mock("@utils/reportError.ts", () => ({ reportError: vi.fn() }));
 
 const { fetchMock } = vi.hoisted(() => ({ fetchMock: vi.fn() }));
 vi.stubGlobal("fetch", fetchMock);
@@ -339,6 +340,22 @@ describe("useComments", () => {
       Promise.resolve({ json: () => Promise.reject(new Error("no json")), ok: true, status: 200 }),
     );
     expect(await useComments(7).report(1, "", "tok")).toBe(false);
+  });
+
+  it("reports a 5xx and a non-JSON answer, but not a plain 4xx or a 429", async () => {
+    const { reportError } = await import("@utils/reportError.ts");
+    vi.mocked(reportError).mockClear();
+    fetchMock
+      .mockReturnValueOnce(answer({ error: "Kaputt" }, 400))
+      .mockReturnValueOnce(answer({}, 429))
+      .mockReturnValueOnce(answer({ error: "boom" }, 503))
+      .mockReturnValueOnce(
+        Promise.resolve({ json: () => Promise.reject(new Error("html")), ok: false, status: 400 }),
+      );
+    const c = useComments(7);
+    for (let i = 0; i < 4; i++) await c.report(1, "", "tok");
+    expect(reportError).toHaveBeenCalledTimes(2);
+    expect(String(vi.mocked(reportError).mock.calls[0][0])).toContain("503");
   });
 
   it("survives malformed localStorage", () => {

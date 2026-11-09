@@ -108,7 +108,7 @@
             appearance="interaction-only"
             :site-key="TURNSTILE_SITE_KEY"
             @token="onToken"
-            @error="captchaFailed = true"
+            @error="onCaptchaError"
           />
         </div>
       </div>
@@ -123,6 +123,7 @@ import TurnStile from "@components/TurnStile.vue";
 import { commentsKey, useComments, type CommentsContext } from "@composables/useComments.ts";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
+import { reportError } from "@utils/reportError.ts";
 import { captchaWaitToast } from "@utils/captchaToast.ts";
 import { useElementSize, useEventListener, useOnline, useTimeoutFn } from "@vueuse/core";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
@@ -173,6 +174,11 @@ const startWriting = (): void => {
 const token = ref("");
 // The check cannot run (script blocked, bad site key): waiting would never help.
 const captchaFailed = ref(false);
+// Reported once per failure run (the widget may emit again); a token resets it.
+const onCaptchaError = (code: string): void => {
+  if (!captchaFailed.value) reportError(new Error(`[comments] Turnstile error: ${code}`));
+  captchaFailed.value = true;
+};
 const onToken = (value: string): void => {
   token.value = value;
   if (value) captchaFailed.value = false;

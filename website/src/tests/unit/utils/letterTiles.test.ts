@@ -30,7 +30,7 @@ describe("toLetterTiles", () => {
     expect(toLetterTiles("Ab Notam-x 1", freq).map((t) => t.ch).join("")).toBe("AbNotamx");
   });
 
-  it("gives a letter without a known frequency pct 0", () => {
-    expect(toLetterTiles("q", freq)).toEqual([{ ch: "q", pct: 0, vowel: false }]);
+  it("gives a letter without a known frequency pct null", () => {
+    expect(toLetterTiles("q", freq)).toEqual([{ ch: "q", pct: null, vowel: false }]);
   });
 });

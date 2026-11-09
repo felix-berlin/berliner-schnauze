@@ -2,8 +2,8 @@ import { isVowelChar, LETTER_RE } from "payload-app/word-derived";
 
 export interface LetterTile {
   ch: string;
-  /** Fill height 0-100: how common the letter is in German (0 = no known frequency). */
-  pct: number;
+  /** Fill height 8-100: how common the letter is in German; null = no known frequency. */
+  pct: null | number;
   vowel: boolean;
 }
 
@@ -23,7 +23,7 @@ export const toLetterTiles = (word: string, freq: Record<string, number>): Lette
         ch,
         pct: percent
           ? Math.min(100, Math.max(MIN_FILL, Math.round((percent / FULL_TILE_PERCENT) * 100)))
-          : 0,
+          : null,
         vowel: isVowelChar(lower),
       };
     });

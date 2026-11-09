@@ -42,6 +42,7 @@ const mountCard = (
   comment: Partial<PublicComment>,
   canEdit = false,
   reportedIds: number[] = [],
+  attach = false,
 ) => {
   const ctx = {
     armCaptcha: vi.fn(),
@@ -66,6 +67,7 @@ const mountCard = (
   return {
     ctx,
     wrapper: mount(CommentCard, {
+      attachTo: attach ? document.body : undefined,
       global: { provide: { [commentsKey as symbol]: ctx } },
       props: { comment: { ...base, ...comment } },
     }),
@@ -430,6 +432,47 @@ describe("CommentCard", () => {
     const placeholder = wrapper.find(".c-comment__placeholder");
     expect(placeholder.text()).toBe("Du hast deinen Kommentar jelöscht.");
     expect(placeholder.attributes("role")).toBe("status");
+  });
+
+  describe("focus after a panel closes (WCAG 2.4.3)", () => {
+    const menuButton = (w: VueWrapper) => w.find(".c-comment__menu-button").element;
+
+    it("Abbrechen of the delete confirm and Esc hand the focus back to the ⋯ button", async () => {
+      const { wrapper } = mountCard({ id: 99 }, true, [], true);
+      await (await openMenu(wrapper)).find((b) => b.text() === "Löschen")!.trigger("click");
+      await wrapper.find('[role="alertdialog"] button.c-link').trigger("click");
+      await flushPromises();
+      expect(document.activeElement).toBe(menuButton(wrapper));
+      await (await openMenu(wrapper)).find((b) => b.text() === "Löschen")!.trigger("click");
+      await wrapper.find('[role="alertdialog"]').trigger("keydown", { key: "Escape" });
+      await flushPromises();
+      expect(document.activeElement).toBe(menuButton(wrapper));
+      wrapper.unmount();
+    });
+
+    it("Abbrechen of the report panel returns the focus to the ⋯ button", async () => {
+      const { wrapper } = mountCard({}, false, [], true);
+      await openReport(wrapper);
+      await wrapper.find(".c-comment__report button.c-link").trigger("click");
+      await flushPromises();
+      expect(document.activeElement).toBe(menuButton(wrapper));
+      wrapper.unmount();
+    });
+
+    it("after a successful delete the placeholder (tabindex -1) takes the focus", async () => {
+      const { ctx, wrapper } = mountCard({ id: 99 }, true, [], true);
+      ctx.remove.mockImplementation(async () => {
+        await wrapper.setProps({ comment: { ...base, id: 99, state: "removed", text: null } });
+        return true;
+      });
+      await (await openMenu(wrapper)).find((b) => b.text() === "Löschen")!.trigger("click");
+      await wrapper.find('[role="alertdialog"] button.c-choice').trigger("click");
+      await flushPromises();
+      const placeholder = wrapper.find(".c-comment__placeholder");
+      expect(placeholder.attributes("tabindex")).toBe("-1");
+      expect(document.activeElement).toBe(placeholder.element);
+      wrapper.unmount();
+    });
   });
 
   it("report: no token sends nothing, a refused report keeps the form", async () => {

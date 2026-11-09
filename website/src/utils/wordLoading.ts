@@ -14,7 +14,11 @@ export const skeletonHtml = (): string =>
   `${bar("c-skeleton--line")}${bar("c-skeleton--line", "inline-size:80%")}</div>` +
   `${bar("c-word-skeleton__audio")}${bar("c-word-skeleton__audio")}${card()}${card()}</div>`;
 
-export const initWordLoading = (): void => {
+let teardown: (() => void) | undefined;
+
+/** Registers the listeners once: a second call replaces the first. Returns the cleanup. */
+export const initWordLoading = (): (() => void) => {
+  teardown?.();
   let timer: ReturnType<typeof setTimeout> | undefined;
   let shown: HTMLElement | undefined;
   const clear = (): void => {
@@ -22,9 +26,9 @@ export const initWordLoading = (): void => {
     shown?.remove();
     shown = undefined;
   };
-  document.addEventListener("astro:before-preparation", (event) => {
+  const onBefore = (event: Event & { formData?: unknown; to?: URL }): void => {
     clear();
-    if (event.formData || !event.to.pathname.startsWith("/wort/")) return;
+    if (event.formData || !event.to?.pathname.startsWith("/wort/")) return;
     timer = setTimeout(() => {
       const el = document.createElement("div");
       el.className = "c-word-skeleton-layer";
@@ -32,7 +36,15 @@ export const initWordLoading = (): void => {
       document.body.append(el);
       shown = el;
     }, SKELETON_DELAY_MS);
-  });
+  };
+  document.addEventListener("astro:before-preparation", onBefore);
   // The old page (and the layer with it) is gone after the swap; this also stops a timer that came too late.
   document.addEventListener("astro:after-swap", clear);
+  teardown = () => {
+    clear();
+    document.removeEventListener("astro:before-preparation", onBefore);
+    document.removeEventListener("astro:after-swap", clear);
+    teardown = undefined;
+  };
+  return teardown;
 };

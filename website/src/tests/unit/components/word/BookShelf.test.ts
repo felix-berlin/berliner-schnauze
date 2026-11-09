@@ -39,6 +39,16 @@ describe("BookShelf.astro", () => {
     expect(result).toContain("Icke &amp; Berlin");
   });
 
+  it("skips a book whose link has no parseable host", async () => {
+    const result = await render({
+      books: [book({ href: "https://", title: "Kaputt" }), book({ title: "Heil" })],
+      disclaimers,
+    });
+    expect(result).not.toContain("Kaputt");
+    expect(result).not.toContain("Bei  ansehen");
+    expect(result).toContain("Heil");
+  });
+
   it("appends only the matching CMS partner statement", async () => {
     const amazon = await render({ books: [book()], disclaimers });
     expect(amazon).toContain("Als Amazon-Partner");

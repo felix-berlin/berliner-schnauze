@@ -4,7 +4,10 @@ export function dedupeRelated<T extends { slug: string }>(related: T[], exclude:
   return related.filter((w) => !skip.has(w.slug));
 }
 
-interface NeighborhoodInput<R extends { berlinerisch: string; slug: string }, N extends { berlinerisch: string }> {
+export interface NeighborhoodInput<
+  R extends { berlinerisch: string; slug: string },
+  N extends { berlinerisch: string },
+> {
   word: string;
   related: R[];
   before: N[];

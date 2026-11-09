@@ -1,5 +1,6 @@
 import { ttl } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
+import { reportError } from "@utils/reportError.ts";
 import { buildTrends, TREND_DAYS, TREND_TOP, type WordTrend } from "@utils/wordTrend.ts";
 import { berlinDay, trending } from "payload-app/word-stats";
 
@@ -31,7 +32,7 @@ export const getWordTrend = async (wordId: number): Promise<WordTrend | undefine
   try {
     return (await getTop()).get(wordId);
   } catch (error) {
-    console.error("[word-trend] failed:", error);
+    reportError(error);
     return undefined;
   }
 };

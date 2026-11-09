@@ -7,7 +7,7 @@
         :key="i"
         class="c-letters__tile"
         :class="{ 'is-vowel': tile.vowel }"
-        :style="{ '--fill': `${tile.pct}%` }"
+        :style="{ '--fill': `${tile.pct ?? 0}%` }"
       >
         <span>{{ tile.ch }}</span>
       </li>

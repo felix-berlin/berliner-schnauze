@@ -21,10 +21,12 @@
 
     <p
       v-if="comment.state !== 'visible'"
+      ref="placeholder"
       class="c-comment__placeholder"
+      tabindex="-1"
       :role="deleted ? 'status' : undefined"
     >
-      {{ placeholder }}
+      {{ placeholderText }}
     </p>
 
     <template v-else>
@@ -36,7 +38,7 @@
         :show-name="false"
         :initial-text="comment.text ?? ''"
         :submit="submitEdit"
-        @cancel="mode = null"
+        @cancel="closePanel"
       />
       <template v-else>
         <p :id="`${uid}-text`" class="c-comment__text" :class="{ 'is-clamped': long && !expanded }">
@@ -96,6 +98,7 @@
           <template #default="{ triggerProps }">
             <button
               v-bind="triggerProps"
+              ref="menuButton"
               class="c-icon-button c-comment__menu-button"
               type="button"
               :aria-label="`Weitere Aktionen zum Kommentar von ${comment.authorName}`"
@@ -158,7 +161,7 @@
         :initial-text="`@${comment.authorName} `"
         :captcha-ready="!!ctx.token.value"
         :submit="submitReply"
-        @cancel="mode = null"
+        @cancel="closePanel"
       />
 
       <div
@@ -181,7 +184,7 @@
             >
               Ja, löschen
             </button>
-            <button class="c-link" type="button" @click="mode = null">Abbrechen</button>
+            <button class="c-link" type="button" @click="closePanel">Abbrechen</button>
           </span>
         </span>
       </div>
@@ -218,7 +221,7 @@
           >
             {{ reporting ? "Wird jemeldet …" : "Melden" }}
           </button>
-          <button class="c-link" type="button" :disabled="reporting" @click="mode = null">
+          <button class="c-link" type="button" :disabled="reporting" @click="closePanel">
             Abbrechen
           </button>
         </div>
@@ -248,6 +251,7 @@ import {
   REPORT_REASONS,
   reportText,
   type CommentMenuEntry,
+  type ReportReason,
 } from "@utils/commentMenu.ts";
 import { useClipboard } from "@vueuse/core";
 import Check from "virtual:icons/lucide/check";
@@ -282,7 +286,7 @@ const ctx = inject(commentsKey)!;
 const uid = useId();
 // One action open per comment at a time (spec §9a).
 const mode = ref<"delete" | "edit" | "reply" | "report" | null>(null);
-const reason = ref("");
+const reason = ref<ReportReason | "">("");
 const note = ref("");
 const sentReport = ref(false);
 const reporting = ref(false);
@@ -290,6 +294,8 @@ const deleting = ref(false);
 // The author deleted it in this session: the placeholder speaks to them until the page reloads.
 const deleted = ref(false);
 const confirmButton = useTemplateRef<HTMLButtonElement>("confirmButton");
+const menuButton = useTemplateRef<HTMLButtonElement>("menuButton");
+const placeholder = useTemplateRef<HTMLElement>("placeholder");
 const reported = computed(() => ctx.isReported(comment.id));
 const initial = computed(() => comment.authorName.trim().charAt(0).toUpperCase());
 // Proposal (spec): long comments are cut to 8 lines from about 600 characters.
@@ -310,14 +316,19 @@ const open = (entry: CommentMenuEntry): void => {
     void nextTick(() => confirmButton.value?.focus());
   }
 };
+// Closing a panel removes the element that had the focus: hand it back to the ⋯ trigger (WCAG 2.4.3).
+const closePanel = (): void => {
+  mode.value = null;
+  void nextTick(() => menuButton.value?.focus());
+};
 // Esc closes the open panel (the menu closes itself); the parent card of a reply stays as it is.
 const onEsc = (event: KeyboardEvent): void => {
   if (!mode.value) return;
-  mode.value = null;
+  closePanel();
   event.stopPropagation();
 };
 
-const placeholder = computed(() =>
+const placeholderText = computed(() =>
   deleted.value
     ? "Du hast deinen Kommentar jelöscht."
     : comment.state === "reviewing"
@@ -388,13 +399,17 @@ const confirmDelete = async (): Promise<void> => {
     if (!(await ctx.remove(comment.id))) return;
     deleted.value = true;
     mode.value = null;
+    // The card is now a placeholder without a menu: the focus goes there.
+    void nextTick(() => placeholder.value?.focus());
   } finally {
     deleting.value = false;
   }
 };
 
 const entries = computed(() =>
-  commentMenuEntries({ editable: ctx.canEdit(comment.id), own: ctx.isOwn(comment.id) }),
+  commentMenuEntries(
+    ctx.isOwn(comment.id) ? { editable: ctx.canEdit(comment.id), own: true } : { own: false },
+  ),
 );
 
 const submitReport = async (): Promise<void> => {
@@ -408,7 +423,7 @@ const submitReport = async (): Promise<void> => {
     ctx.resetCaptcha();
     if (!ok) return;
     sentReport.value = true;
-    mode.value = null;
+    closePanel();
     trackEvent("Comments", "Report", String(ctx.wordId));
   } finally {
     reporting.value = false;

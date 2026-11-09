@@ -1,5 +1,7 @@
 import type { AudioRow } from "@services/payload/words.ts";
 
+import { createToastNotify } from "@stores/toastNotify.ts";
+import { reportError } from "@utils/reportError.ts";
 import { reportWord } from "@utils/wordPulse.ts";
 import { ref } from "vue";
 
@@ -7,13 +9,23 @@ import { ref } from "vue";
 let audio: HTMLAudioElement | undefined;
 const current = ref<string | null>(null);
 
+const broken = (src: string | undefined, error: unknown, code?: number): void => {
+  reportError(new Error(`[voice] playback failed: ${src} (code ${code ?? "none"})`, { cause: error }));
+  createToastNotify({ message: "Die Aufnahme lässt sich nich abspielen.", status: "error" });
+};
+
 const player = (): HTMLAudioElement => {
   if (!audio) {
     audio = new Audio();
     audio.preload = "none"; // nothing is fetched before the first click
-    const idle = () => (current.value = null);
-    audio.addEventListener("ended", idle);
-    audio.addEventListener("error", idle);
+    audio.addEventListener("ended", () => (current.value = null));
+    audio.addEventListener("error", () => {
+      current.value = null;
+      const code = audio?.error?.code;
+      // MEDIA_ERR_ABORTED: the load was cut off by a newer click, not a broken file.
+      if (code === 1) return;
+      broken(audio?.currentSrc || audio?.src, audio?.error ?? undefined, code);
+    });
   }
   return audio;
 };
@@ -37,9 +49,13 @@ export const toggleVoice = async (key: string, src: string, wordId?: number): Pr
   try {
     await el.play();
     if (wordId !== undefined) reportWord(wordId, "audio");
-  } catch {
+  } catch (error) {
     // A newer click (or the error event) may already have taken over.
     if (current.value === key) current.value = null;
+    const name = error instanceof DOMException ? error.name : "";
+    // AbortError: interrupted by a newer click. NotSupportedError: the error event reports the broken file.
+    if (name === "AbortError" || name === "NotSupportedError") return;
+    broken(src, error, el.error?.code);
   }
 };
 

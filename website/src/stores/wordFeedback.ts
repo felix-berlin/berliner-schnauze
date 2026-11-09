@@ -39,6 +39,9 @@ const FIELDS = {
   origin: ORIGINS,
 } as const;
 
+/** Areas outside Berlin: no localities, and the East/West half is not asked (nor kept). */
+const OUTSIDE_BERLIN = new Set<string>(["brandenburg", "elsewhere"]);
+
 export const parseProfile = (raw: unknown): Profile => {
   if (typeof raw !== "object" || raw === null) return {};
   const out: Record<string, string | null> = {};
@@ -49,8 +52,9 @@ export const parseProfile = (raw: unknown): Profile => {
   }
   // The API rejects a locality outside the area sent with it.
   if (out.locality && LOCALITY_AREA[out.locality as Locality] !== out.area) delete out.locality;
-  // The API rejects a half without origin grewUp; a stale one would fail every vote.
-  if (out.half && out.origin !== "grewUp") delete out.half;
+  // The API rejects a half without origin grewUp; a stale one would fail every vote. nextStep never asks
+  // for one outside Berlin, so a stale half there is dropped too.
+  if (out.half && (out.origin !== "grewUp" || OUTSIDE_BERLIN.has(out.area ?? ""))) delete out.half;
   return out as Profile;
 };
 
@@ -106,7 +110,7 @@ export const nextStep = (
     return "locality";
   if (!("origin" in profile)) return "origin";
   // Woanders (outside Berlin) is not asked for the East/West half.
-  const woanders = profile.area === "brandenburg" || profile.area === "elsewhere";
+  const woanders = OUTSIDE_BERLIN.has(profile.area ?? "");
   if (profile.origin === "grewUp" && !woanders && !("half" in profile)) return "half";
   if (!("age" in profile)) return "age";
   return "done";
@@ -144,16 +148,29 @@ export const loadFeedback = (wordId: number): Promise<void> => {
   })());
 };
 
+export type SendOptions = {
+  /** Replaces the generic text when the server sent no reason of its own. */
+  fallbackMessage?: string;
+  /** The caller shows the failure itself (inline via $sendError), so no toast. */
+  silent?: boolean;
+};
+
 export const sendFeedback = async (
   wordId: number,
   patch: Partial<MyFeedback>,
-  /** Replaces the generic text when the server sent no reason of its own. */
-  fallbackMessage = "Hat nich jeklappt, versuch's nochma.",
-  /** The caller shows the failure itself (inline), so no toast. */
-  silent = false,
+  { fallbackMessage = "Hat nich jeklappt, versuch's nochma.", silent = false }: SendOptions = {},
 ): Promise<boolean> => {
   const seq = ++sent;
-  if (silent) $sendError.set(null);
+  $sendError.set(null);
+  const fail = (message: string | null, status?: number) => {
+    if (silent) $sendError.set(message);
+    else
+      createToastNotify({
+        message: message ?? fallbackMessage,
+        status: status === 429 ? "warning" : "error",
+      });
+    return false;
+  };
   try {
     const res = await fetch(ENDPOINT, {
       body: JSON.stringify({ word: wordId, ...patch }),
@@ -164,17 +181,19 @@ export const sendFeedback = async (
       // The server says why (daily cap, rejected input, stored but not counted): a generic "try again" can be wrong.
       const { error } = (await res.json().catch(() => ({}))) as { error?: string };
       console.error(`[word-feedback] send ${wordId} failed: ${res.status}`, error);
-      if (silent) $sendError.set(error ?? null);
-      else
-        createToastNotify({
-          message: error ?? fallbackMessage,
-          status: res.status === 429 ? "warning" : "error",
-        });
-      return false;
+      return fail(error ?? null, res.status);
     }
-    const state = (await res.json()) as WordFeedbackState;
+    // A 2xx with an unreadable body still stored the answer: it is no failed vote, the state just stays as is.
+    const state = (await res.json().catch((error) => {
+      console.error(`[word-feedback] send ${wordId}: unreadable response body`, error);
+      return null;
+    })) as WordFeedbackState | null;
     // The user may have navigated to another word while the PATCH was in flight; a failed GET left no word set.
-    if ((loadedFor === wordId || (loadedFor === null && failedFor === wordId)) && seq > applied) {
+    if (
+      state &&
+      (loadedFor === wordId || (loadedFor === null && failedFor === wordId)) &&
+      seq > applied
+    ) {
       loadedFor = wordId;
       applied = seq;
       stateVersion++;
@@ -183,13 +202,12 @@ export const sendFeedback = async (
     return true;
   } catch (error) {
     console.error(`[word-feedback] send ${wordId} failed:`, error);
-    if (!silent) createToastNotify({ message: fallbackMessage, status: "error" });
-    return false;
+    return fail(null);
   }
 };
 
 export const answerUsage = (wordId: number, usage: Usage, silent = false): Promise<boolean> =>
-  sendFeedback(wordId, { usage, ...parseProfile($profile.get()) }, undefined, silent);
+  sendFeedback(wordId, { usage, ...parseProfile($profile.get()) }, { silent });
 
 /** Deletes every answer tied to this browser (all words) and forgets the stored profile. */
 export const deleteAllFeedback = async (wordId: number): Promise<boolean> => {

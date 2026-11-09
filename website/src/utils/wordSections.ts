@@ -30,7 +30,7 @@ interface WordSectionFacts {
 
 /** Tabs and sidebar links of the word page, in page order (Spec §2); only sections that render. */
 export function buildWordSections({
-  hasOrigin,
+  hasOrigin: withOrigin, // renamed: the exported hasOrigin() above would be shadowed
   hasExamples,
   hasNeighborhood,
   draft,
@@ -38,7 +38,7 @@ export function buildWordSections({
   const all: (WordSection & { show: boolean })[] = [
     { id: "bedeutung", label: "Bedeutung", show: true },
     { id: "sagste-det-noch", label: "Umfrage", show: !draft },
-    { id: "etymologie", label: "Etymologie", show: hasOrigin },
+    { id: "etymologie", label: "Etymologie", show: withOrigin },
     { id: "beispiele", label: "Beispiele", show: hasExamples },
     { id: "analyse", label: "Analyse", show: true },
     { id: "verwandte-worte", label: "Umfeld", show: hasNeighborhood },

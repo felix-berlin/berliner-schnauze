@@ -71,7 +71,7 @@ describe("WordReactions", () => {
     expect(store.sendFeedback).toHaveBeenCalledWith(
       7,
       { reaction: null },
-      "Ditt hat nich jeklappt.",
+      { fallbackMessage: "Ditt hat nich jeklappt." },
     );
     expect(buttons(w)).toHaveLength(2);
     expect(buttons(w)[1].attributes("aria-pressed")).toBe("false");
@@ -92,7 +92,7 @@ describe("WordReactions", () => {
     expect(store.sendFeedback).toHaveBeenCalledWith(
       7,
       { area: "pankow", reaction: "like" },
-      "Ditt hat nich jeklappt.",
+      { fallbackMessage: "Ditt hat nich jeklappt." },
     );
     expect(track).toHaveBeenCalledWith("Word Feedback", "reaction", "like");
   });
@@ -145,7 +145,7 @@ describe("WordReactions", () => {
     expect(store.sendFeedback).toHaveBeenCalledWith(
       7,
       { reaction: null },
-      "Ditt hat nich jeklappt.",
+      { fallbackMessage: "Ditt hat nich jeklappt." },
     );
     expect(track).toHaveBeenCalledWith("Word Feedback", "reaction", "none");
   });
@@ -158,7 +158,7 @@ describe("WordReactions", () => {
     expect(store.sendFeedback).toHaveBeenCalledWith(
       7,
       { reaction: "like" },
-      "Ditt hat nich jeklappt.",
+      { fallbackMessage: "Ditt hat nich jeklappt." },
     );
   });
 

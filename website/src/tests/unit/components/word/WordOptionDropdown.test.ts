@@ -1,4 +1,4 @@
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick, ref } from "vue";
 
@@ -26,6 +26,8 @@ vi.mock("@vueuse/core", async (importOriginal) => {
 vi.mock("@stores/toastNotify.ts", () => ({
   createToastNotify: vi.fn(),
 }));
+
+vi.mock("@utils/reportError.ts", () => ({ reportError: vi.fn() }));
 
 vi.mock("@utils/wordPulse.ts", () => ({ reportWord: vi.fn() }));
 
@@ -292,25 +294,91 @@ describe("WordOptionDropdown.vue", () => {
     expect(copyMock).toHaveBeenCalledWith("");
   });
 
-  it("share rejection is caught silently by .catch handler (covers line 98 catch lambda)", async () => {
-    const { useShare } = await import("@vueuse/core");
-    const shareMock = vi.fn().mockRejectedValue(new DOMException("AbortError", "AbortError"));
+  it("an AbortError (share sheet dismissed) is ignored: no toast, no report, no copy", async () => {
+    const { useShare, useClipboard } = await import("@vueuse/core");
+    const copyMock = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(useClipboard).mockReturnValueOnce({
+      copied: ref(false),
+      copy: copyMock,
+      isSupported: ref(true),
+      text: ref(""),
+    });
     vi.mocked(useShare).mockReturnValueOnce({
-      isSupported: { value: true } as ReturnType<typeof useShare>["isSupported"],
-      share: shareMock,
+      isSupported: ref(true),
+      share: vi.fn().mockRejectedValue(new DOMException("dismissed", "AbortError")),
     });
     const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
     const wrapper = mount(WordOptionDropdown, {
       props: { berlinerisch: "Schnauze", slug: "schnauze" },
     });
-    // Click share — share() rejects; the .catch((err) => err) must not throw
     await wrapper.find("[aria-label='Wort teilen']").trigger("click");
-    await nextTick();
-    // If the catch handler works, no unhandled rejection occurs and the toast still fires
+    await flushPromises();
     const { createToastNotify } = await import("@stores/toastNotify.ts");
-    expect(vi.mocked(createToastNotify)).toHaveBeenCalledWith(
+    const { reportError } = await import("@utils/reportError.ts");
+    expect(createToastNotify).not.toHaveBeenCalled();
+    expect(reportError).not.toHaveBeenCalled();
+    expect(copyMock).not.toHaveBeenCalled();
+  });
+
+  it("another share error is reported and falls back to copying the link, no success toast for the share", async () => {
+    const { useShare, useClipboard } = await import("@vueuse/core");
+    const copyMock = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(useClipboard).mockReturnValueOnce({
+      copied: ref(false),
+      copy: copyMock,
+      isSupported: ref(true),
+      text: ref(""),
+    });
+    const boom = new DOMException("denied", "NotAllowedError");
+    vi.mocked(useShare).mockReturnValueOnce({
+      isSupported: ref(true),
+      share: vi.fn().mockRejectedValue(boom),
+    });
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: "schnauze" },
+    });
+    await wrapper.find("[aria-label='Wort teilen']").trigger("click");
+    await flushPromises();
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    const { reportError } = await import("@utils/reportError.ts");
+    expect(reportError).toHaveBeenCalledWith(boom);
+    expect(copyMock).toHaveBeenCalledWith("https://berliner-schnauze.wtf/wort/schnauze");
+    expect(createToastNotify).not.toHaveBeenCalledWith(
       expect.objectContaining({ message: "Wort geteilt" }),
     );
+    expect(createToastNotify).toHaveBeenCalledWith(
+      expect.objectContaining({ message: "Link kopiert" }),
+    );
+  });
+
+  it("a failing copy is reported and toasts the error instead of 'kopiert'", async () => {
+    const { useClipboard } = await import("@vueuse/core");
+    const boom = new Error("denied");
+    vi.mocked(useClipboard).mockReturnValueOnce({
+      copied: ref(false),
+      copy: vi.fn().mockRejectedValue(boom),
+      isSupported: ref(true),
+      text: ref(""),
+    });
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: "schnauze" },
+    });
+    await wrapper.find("[aria-label='Wort kopieren']").trigger("click");
+    await flushPromises();
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    const { reportError } = await import("@utils/reportError.ts");
+    const { trackEvent } = await import("@utils/analytics");
+    expect(reportError).toHaveBeenCalledWith(boom);
+    expect(createToastNotify).toHaveBeenCalledWith({
+      message: "Kopieren hat nich jeklappt",
+      status: "error",
+    });
+    expect(createToastNotify).not.toHaveBeenCalledWith(
+      expect.objectContaining({ message: "Wort kopiert" }),
+    );
+    expect(trackEvent).not.toHaveBeenCalled();
   });
 
   it("reports the share for the word when a wordId is given", async () => {
@@ -363,6 +431,24 @@ describe("WordOptionDropdown.vue", () => {
       expect(items()[1].attributes("data-done")).toBe("false");
       expect(wrapper.find('[aria-live="polite"]').text()).toBe("");
       vi.useRealTimers();
+      wrapper.unmount();
+    });
+
+    it("a failing copy is announced in the live region, with no toast and no check state", async () => {
+      const { useClipboard } = await import("@vueuse/core");
+      vi.mocked(useClipboard).mockReturnValueOnce({
+        copied: ref(false),
+        copy: vi.fn().mockRejectedValue(new Error("denied")),
+        isSupported: ref(true),
+        text: ref(""),
+      });
+      const wrapper = await mountWord();
+      await wrapper.findAll('[role="menuitem"]')[1].trigger("click");
+      await flushPromises();
+      expect(wrapper.find('[aria-live="polite"]').text()).toBe("Kopieren hat nich jeklappt");
+      expect(wrapper.findAll('[role="menuitem"]')[1].attributes("data-done")).toBe("false");
+      const { createToastNotify } = await import("@stores/toastNotify.ts");
+      expect(vi.mocked(createToastNotify)).not.toHaveBeenCalled();
       wrapper.unmount();
     });
 

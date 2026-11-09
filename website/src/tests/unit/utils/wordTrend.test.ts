@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { buildTrends, formatChange } from "@utils/wordTrend.ts";
+import { buildTrends, formatChange, percentChange } from "@utils/wordTrend.ts";
 
 const TODAY = "2026-11-08";
 const ranked = (n: number) => Array.from({ length: n }, (_, i) => ({ views: 100 - i, word: i + 1 }));
@@ -31,17 +31,18 @@ describe("buildTrends", () => {
       { day: "2026-10-25", views: 99, word: 1 }, // older than 14 days: ignored
     ];
     // views 100 vs previous 100 -> ±0 %
-    expect(buildTrends(ranked(1), rows, TODAY).get(1)?.change).toBe("±0 %");
+    expect(buildTrends(ranked(1), rows, TODAY).get(1)?.change).toBe(0);
   });
 });
 
-describe("formatChange", () => {
+describe("percentChange / formatChange", () => {
   it.each([
-    [112, 100, "+12 %"],
-    [50, 100, "−50 %"],
-    [100, 100, "±0 %"],
-    [10, 0, ""],
-  ])("%i vs %i gives %s", (views, previous, expected) => {
-    expect(formatChange(views, previous)).toBe(expected);
+    [112, 100, 12, "+12 %"],
+    [50, 100, -50, "−50 %"],
+    [100, 100, 0, "±0 %"],
+    [10, 0, null, ""],
+  ])("%i vs %i gives %s", (views, previous, pct, text) => {
+    expect(percentChange(views, previous)).toBe(pct);
+    expect(formatChange(pct)).toBe(text);
   });
 });

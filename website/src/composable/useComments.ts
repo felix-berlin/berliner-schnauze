@@ -19,19 +19,21 @@ const json = (body: unknown) => ({
 
 /**
  * Runs a request; null (plus a toast) when it failed. 429 keeps the input, the caller decides what else.
- * `onFail`: no failure toast; the reason (429 text, the server's message) goes to the caller, whose form shows it in
- * its own error box (one announcement channel). The generic text is not passed on: the box already says it.
+ * `onFail`: no failure toast; the reason goes to the caller, whose form shows it in its own error box (one
+ * announcement channel). `undefined` = no specific reason, the box says the generic text itself.
  */
 const GENERIC = "Dit hat leider nich geklappt.";
 const call = async <T>(
   url: string,
   init?: RequestInit,
   notFound?: string,
-  onFail?: (reason: string) => void,
+  onFail?: (reason: string | undefined) => void,
 ): Promise<null | T> => {
-  const toast = (n: Parameters<typeof createToastNotify>[0]): void => {
-    if (!onFail) createToastNotify(n);
-    else if (n.message !== GENERIC) onFail(n.message);
+  /** `reason` undefined = generic. */
+  const fail = (reason: string | undefined, status: "error" | "warning"): null => {
+    if (onFail) onFail(reason);
+    else createToastNotify({ message: reason ?? GENERIC, status });
+    return null;
   };
   try {
     const res = await fetch(url, init);
@@ -39,28 +41,21 @@ const call = async <T>(
       createToastNotify({ message: notFound, status: "info" });
       return null;
     }
-    if (res.status === 429) {
-      toast({
-        message: "Ma langsam, Keule – versuch's gleich nochmal.",
-        status: "warning",
-      });
-      return null;
-    }
+    if (res.status === 429)
+      return fail("Ma langsam, Keule – versuch's gleich nochmal.", "warning");
     const body = (await res.json().catch(() => null)) as (T & { error?: string }) | null;
     // A 2xx without a JSON body is a failure too: the caller would treat `{}` as done.
     if (!res.ok || !body) {
-      toast({
-        message: body?.error || GENERIC,
-        status: "error",
-      });
-      return null;
+      // 4xx with a message is the user's problem; a server error or a non-JSON answer is ours.
+      if (res.status >= 500 || !body)
+        reportError(new Error(`[comments] ${init?.method ?? "GET"} ${url} -> ${res.status}`));
+      return fail(body?.error || undefined, "error");
     }
     return body;
   } catch (error) {
     // fetch() rejects with a TypeError when offline; anything else is a bug worth reporting.
     if (!(error instanceof TypeError)) reportError(error);
-    toast({ message: GENERIC, status: "error" });
-    return null;
+    return fail(undefined, "error");
   }
 };
 
@@ -179,7 +174,7 @@ export const useComments = (wordId: number) => {
       API,
       { ...json({ ...input, turnstileToken, wordId }), method: "POST" },
       undefined,
-      (reason) => (failReason.value = reason),
+      (reason) => (failReason.value = reason ?? ""),
     );
     if (!data) return "error";
     if (data.comment) {
@@ -203,7 +198,7 @@ export const useComments = (wordId: number) => {
       `${API}/${id}`,
       { ...json({ editKey: keys.value[id]?.key, text }), method: "PATCH" },
       undefined,
-      (reason) => (failReason.value = reason),
+      (reason) => (failReason.value = reason ?? ""),
     );
     const target = find(id);
     if (!data || !target) return data ? "ok" : "error";
