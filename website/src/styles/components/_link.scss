@@ -14,7 +14,7 @@
   text-underline-position: from-font;
   cursor: pointer;
 
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled, [aria-disabled="true"]) {
     color: var(--color-accent-text);
   }
 
@@ -25,6 +25,12 @@
 
   &:disabled {
     cursor: progress;
+  }
+
+  // Locked but still focusable (like .c-choice), so the reason can be read out.
+  &[aria-disabled="true"] {
+    opacity: 0.55;
+    cursor: not-allowed;
   }
 }
 

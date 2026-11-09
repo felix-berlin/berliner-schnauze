@@ -49,6 +49,8 @@ const open = async (page: Page) => {
   await page.goto(WORD);
   const card = page.locator("#kommentare");
   await card.scrollIntoViewIfNeeded();
+  // Server-rendered first: a click or focus check before it hydrated does nothing.
+  await expect(card.locator("astro-island").first()).not.toHaveAttribute("ssr", "");
   return card;
 };
 

@@ -14,6 +14,8 @@ test.describe("word feedback", () => {
 
     const card = page.locator("#sagste-det-noch");
     await card.scrollIntoViewIfNeeded();
+    // The island is server-rendered first: a click before it hydrated does nothing.
+    await expect(card.locator("astro-island")).not.toHaveAttribute("ssr", "");
     await expect(card.getByRole("heading", { name: "Sagste det noch?" })).toBeVisible();
 
     // One click on a tile is the vote: no confirm button, the results show the own answer.
@@ -62,6 +64,7 @@ test.describe("word feedback", () => {
     await page.goto("/wort/wa");
     const wa = page.locator("#sagste-det-noch");
     await wa.scrollIntoViewIfNeeded();
+    await expect(wa.locator("astro-island")).not.toHaveAttribute("ssr", "");
     await wa.getByRole("button", { name: "Sag ick selbst" }).click();
     await expect(wa.getByText(/\d+ Stimmen?/).first()).toBeVisible();
     const props = await page.locator("astro-island[props*='wordId']").first().getAttribute("props");
