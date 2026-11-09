@@ -319,6 +319,44 @@ describe("CommentCard", () => {
     expect(writeText).toHaveBeenCalledWith(`${location.origin}${location.pathname}#kommentar-4`);
   });
 
+  it("link copy shows „Link kopiert“ for 2 s, then resets the label and closes the menu", async () => {
+    const { wrapper } = mountCard({ id: 4 }, false, [], true);
+    const panel = document.getElementById("dropdown-comment-4")!;
+    panel.hidePopover = vi.fn();
+    const copy = (await openMenu(wrapper)).find((b) => b.text() === "Link kopieren")!;
+    vi.useFakeTimers();
+    await copy.trigger("click");
+    await vi.advanceTimersByTimeAsync(1999);
+    expect(wrapper.find(".c-comment__menu-item").text()).toBe("Link kopiert");
+    expect(panel.hidePopover).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(1);
+    expect(wrapper.find(".c-comment__menu-item").text()).toBe("Link kopieren");
+    expect(panel.hidePopover).toHaveBeenCalledTimes(1);
+    vi.useRealTimers();
+    wrapper.unmount();
+  });
+
+  it("Esc with no panel open is left alone for the parent card", async () => {
+    const { wrapper } = mountCard({});
+    const event = new KeyboardEvent("keydown", { bubbles: true, cancelable: true, key: "Escape" });
+    const stop = vi.spyOn(event, "stopPropagation");
+    wrapper.element.dispatchEvent(event);
+    expect(stop).not.toHaveBeenCalled();
+  });
+
+  it("a refused delete keeps the comment and the confirm, so it can be retried", async () => {
+    const { ctx, wrapper } = mountCard({ id: 99 }, true);
+    ctx.remove.mockResolvedValueOnce(false);
+    await (await openMenu(wrapper)).find((b) => b.text() === "Löschen")!.trigger("click");
+    await wrapper.find('[role="alertdialog"] button.c-choice').trigger("click");
+    await flushPromises();
+    expect(wrapper.find('[role="alertdialog"]').exists()).toBe(true);
+    expect(wrapper.find(".c-comment__placeholder").exists()).toBe(false);
+    await wrapper.find('[role="alertdialog"] button.c-choice').trigger("click");
+    await flushPromises();
+    expect(ctx.remove).toHaveBeenCalledTimes(2);
+  });
+
   it("marks the linked comment as highlighted", () => {
     const { ctx, wrapper } = mountCard({ id: 4 });
     expect(wrapper.classes()).not.toContain("is-highlighted");

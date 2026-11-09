@@ -56,3 +56,10 @@
     color: var(--color-ink-strong);
   }
 }
+
+// A retry button in a state box is a control, not running text: 44px hit area (WCAG 2.5.8), the look stays a text link.
+.c-state__body button.c-textlink {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+}

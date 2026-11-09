@@ -87,4 +87,74 @@ describe("useVoicePlayer", () => {
     FakeAudio.last.dispatchEvent(new Event("error"));
     expect(m.reportError).not.toHaveBeenCalled();
   });
+
+  it("a second click on the playing key pauses and clears it without playing again", async () => {
+    const m = await load();
+    const key = m.newVoiceKey();
+    await m.toggleVoice(key, "/a.mp3");
+    await m.toggleVoice(key, "/a.mp3");
+    expect(FakeAudio.last.pause).toHaveBeenCalledTimes(1);
+    expect(FakeAudio.last.play).toHaveBeenCalledTimes(1);
+    expect(m.isVoicePlaying(key)).toBe(false);
+  });
+
+  it("a NotSupportedError from play() is left to the error event", async () => {
+    const m = await load();
+    await m.toggleVoice(m.newVoiceKey(), "/a.mp3");
+    FakeAudio.last.play.mockRejectedValueOnce(new DOMException("x", "NotSupportedError"));
+    await m.toggleVoice(m.newVoiceKey(), "/b.mp3");
+    expect(m.reportError).not.toHaveBeenCalled();
+    expect(m.createToastNotify).not.toHaveBeenCalled();
+  });
+
+  it("an ended track clears the playing key", async () => {
+    const m = await load();
+    const key = m.newVoiceKey();
+    await m.toggleVoice(key, "/a.mp3");
+    FakeAudio.last.dispatchEvent(new Event("ended"));
+    expect(m.isVoicePlaying(key)).toBe(false);
+  });
+
+  it("an error event without a code or currentSrc falls back to src and code none", async () => {
+    const m = await load();
+    await m.toggleVoice(m.newVoiceKey(), "/x.mp3");
+    FakeAudio.last.dispatchEvent(new Event("error"));
+    const message = String(vi.mocked(m.reportError).mock.calls[0][0]);
+    expect(message).toContain("/x.mp3");
+    expect(message).toContain("code none");
+  });
+
+  it("maps payload rows to one url per voice and tolerates missing rows", async () => {
+    const m = await load();
+    const rows = [
+      { audio: { url: "/w.mp3" }, gender: "female" },
+      { audio: { url: "/m.mp3" }, gender: "male" },
+    ] as never;
+    expect(m.voiceSources(rows)).toEqual({ m: "/m.mp3", w: "/w.mp3" });
+    expect(m.voiceSources()).toEqual({ m: undefined, w: undefined });
+  });
+
+  it("a plain Error from play() is reported with the file's error code", async () => {
+    const m = await load();
+    await m.toggleVoice(m.newVoiceKey(), "/a.mp3");
+    FakeAudio.last.error = { code: 3 };
+    FakeAudio.last.play.mockRejectedValueOnce(new Error("plain"));
+    await m.toggleVoice(m.newVoiceKey(), "/b.mp3");
+    expect(String(vi.mocked(m.reportError).mock.calls[0][0])).toContain("code 3");
+  });
+
+  it("a rejected play() does not clear a newer click that already took over", async () => {
+    const m = await load();
+    await m.toggleVoice(m.newVoiceKey(), "/a.mp3");
+    let rejectFirst!: (e: unknown) => void;
+    FakeAudio.last.play.mockReturnValueOnce(new Promise((_, reject) => (rejectFirst = reject)));
+    const first = m.newVoiceKey();
+    const second = m.newVoiceKey();
+    const pending = m.toggleVoice(first, "/b.mp3");
+    await m.toggleVoice(second, "/c.mp3");
+    rejectFirst(new DOMException("x", "AbortError"));
+    await pending;
+    expect(m.isVoicePlaying(second)).toBe(true);
+    expect(m.isVoicePlaying(first)).toBe(false);
+  });
 });

@@ -208,6 +208,84 @@ describe("WordComments", () => {
     expect(trackEvent).toHaveBeenCalledWith("Comments", "Post", "7");
   });
 
+  it("a failed page load shows the error with a retry that loads again", async () => {
+    fetchMock.mockResolvedValue({ json: async () => ({}), ok: false, status: 500 });
+    const wrapper = mount(WordComments, {
+      global: { stubs: { TurnStile: true } },
+      props: { wordId: 7 },
+    });
+    await flushPromises();
+    const alert = wrapper.find('[role="alert"]');
+    expect(alert.text()).toContain("Die Kommentare wollten grad nich laden.");
+    const calls = fetchMock.mock.calls.length;
+    fetchMock.mockResolvedValue(many(1));
+    await alert.find("button").trigger("click");
+    await flushPromises();
+    expect(fetchMock.mock.calls.length).toBeGreaterThan(calls);
+    expect(wrapper.find('[role="alert"]').exists()).toBe(false);
+    expect(wrapper.text()).toContain("Text 1");
+  });
+
+  it("a stuck captcha makes a new comment report „stuck“ until a real token arrives; an empty token does not clear it", async () => {
+    fetchMock.mockResolvedValue(page(empty));
+    const wrapper = mount(WordComments, {
+      global: { stubs: { TurnStile: TurnStileStub } },
+      props: { wordId: 7 },
+    });
+    await wrapper.find(".c-word-comments__write").trigger("click");
+    await wrapper.find("form").trigger("focusin");
+    await flushPromises();
+    const submit = wrapper.findComponent(CommentForm).props("submit") as (v: {
+      authorName: string;
+      text: string;
+    }) => Promise<unknown>;
+    const widget = wrapper.findComponent(TurnStileStub);
+    widget.vm.$emit("error", "600010");
+    expect(await submit({ authorName: "", text: "Na sowat" })).toBe("stuck");
+    widget.vm.$emit("token", "");
+    expect(await submit({ authorName: "", text: "Na sowat" })).toBe("stuck");
+    widget.vm.$emit("token", "tok");
+    expect(await submit({ authorName: "", text: "Na sowat" })).not.toBe("stuck");
+  });
+
+  it("the shared context hands out the token, or toasts why there is none (stuck vs. still running)", async () => {
+    const { commentsKey } = await import("@composables/useComments.ts");
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    vi.mocked(createToastNotify).mockClear();
+    fetchMock.mockResolvedValue(page(empty));
+    const wrapper = mount(WordComments, {
+      global: { stubs: { TurnStile: TurnStileStub } },
+      props: { wordId: 7 },
+    });
+    await flushPromises();
+    const ctx = (wrapper.vm.$ as unknown as { provides: Record<symbol, { takeToken: (q?: boolean) => string | null }> })
+      .provides[commentsKey as symbol];
+    expect(ctx.takeToken()).toBeNull();
+    expect(createToastNotify).toHaveBeenCalledWith(expect.objectContaining({ status: "warning" }));
+    expect(ctx.takeToken(true)).toBeNull();
+    expect(createToastNotify).toHaveBeenCalledTimes(1);
+    await wrapper.find(".c-word-comments__write").trigger("click");
+    await wrapper.find("form").trigger("focusin");
+    await flushPromises();
+    const widget = wrapper.findComponent(TurnStileStub);
+    widget.vm.$emit("error", "600010");
+    ctx.takeToken();
+    expect(createToastNotify).toHaveBeenLastCalledWith(expect.objectContaining({ status: "error" }));
+    widget.vm.$emit("token", "tok");
+    expect(ctx.takeToken()).toBe("tok");
+  });
+
+  it("focus outside a form does not load the captcha", async () => {
+    fetchMock.mockResolvedValue(page(empty));
+    const wrapper = mount(WordComments, {
+      global: { stubs: { TurnStile: TurnStileStub } },
+      props: { wordId: 7 },
+    });
+    await flushPromises();
+    await wrapper.find(".c-word-comments__write").trigger("focusin");
+    expect(wrapper.findComponent(TurnStileStub).exists()).toBe(false);
+  });
+
   it("reports the Turnstile error code once per failure run", async () => {
     const { reportError } = await import("@utils/reportError.ts");
     vi.mocked(reportError).mockClear();

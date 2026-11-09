@@ -214,7 +214,8 @@ test.describe("prefers-reduced-motion", () => {
     const opener = page.getByRole("region", { name: "Bilder" }).getByRole("button", { name: /vergrößern/ }).first();
     const dialog = page.getByRole("dialog", { name: "Bildansicht" });
     await expect(async () => {
-      await opener.click({ timeout: 1000 });
+      // A slow retry must not click through an already open dialog.
+      if ((await page.locator("dialog.c-lightbox[open]").count()) === 0) await opener.click({ timeout: 1000 });
       await expect(dialog).toBeVisible({ timeout: 500 });
     }).toPass();
     expect(await dialog.evaluate((el) => parseFloat(getComputedStyle(el).transitionDuration))).toBeLessThan(0.001); // the global reduced-motion rule uses 0.00001s
