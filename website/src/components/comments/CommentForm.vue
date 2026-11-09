@@ -58,27 +58,36 @@
       Du bist offline. Abschicken jeht wieder, sobald du Netz hast.
     </p>
     <div class="c-comment-form__actions">
+      <!-- Edit: "Speichern" is a pressed choice, the spec allows one primary per view (the new-comment button). -->
       <button
-        class="c-button c-button--primary c-comment-form__button"
+        :class="
+          edit
+            ? 'c-choice c-comment-form__save'
+            : 'c-button c-button--primary c-comment-form__button'
+        "
         type="submit"
+        :aria-pressed="edit ? true : undefined"
         :aria-busy="sending"
         :aria-disabled="sending || !online"
         :aria-describedby="online ? undefined : `${uid}-offline`"
       >
-        {{ failed ? "Nochmal abschicken" : "Abschicken" }}
+        {{ edit ? "Speichern" : failed ? "Nochmal abschicken" : "Abschicken" }}
       </button>
       <button v-if="cancellable" class="c-link" type="button" @click="emit('cancel')">
         Abbrechen
       </button>
-      <span class="c-shortcut c-comment-form__kbd" aria-hidden="true">
-        <kbd class="c-shortcut__key">{{ modKey }}</kbd>
-        <kbd class="c-shortcut__key">Enter</kbd>
-        <span class="c-shortcut__text">zum Abschicken</span>
+      <span v-if="!edit" class="c-comment-form__kbd" aria-hidden="true">
+        <kbd class="c-kbd">{{ modKey }}</kbd>
+        <kbd class="c-kbd">Enter</kbd>
+        zum Abschicken
       </span>
     </div>
-    <p class="c-comment-form__privacy t-small">
-      Dein Kommentar wird öffentlich angezeigt. Was wir dabei speichern, steht in der
-      <a class="c-textlink c-textlink--inline" href="/datenschutz#5-kommentare-abstimmungen-und-meldungen"
+    <p v-if="!edit" class="c-comment-form__privacy t-small">
+      Mit dem Abschicken wird dein Kommentar öffentlich angezeigt. Was wir dabei speichern, steht in
+      der
+      <a
+        class="c-textlink c-textlink--inline"
+        href="/datenschutz#5-kommentare-abstimmungen-und-meldungen"
         >Datenschutzerklärung</a
       >.
     </p>
@@ -89,12 +98,12 @@
 /** true = stored, false = failed, {error} = failed with a reason, "wait"/"stuck" = nothing sent, captcha not ready. */
 export type SubmitResult = { error: string } | "stuck" | "wait" | boolean;
 
+import { captchaWaitToast } from "@utils/captchaToast.ts";
 import { useOnline } from "@vueuse/core";
 import { COMMENT_MAX, COMMENT_MIN, NAME_MAX } from "payload-app/comments";
-import { computed, onMounted, ref, useId, useTemplateRef, watch } from "vue";
 import CircleAlert from "virtual:icons/lucide/circle-alert";
 import Hourglass from "virtual:icons/lucide/hourglass";
-import { captchaWaitToast } from "@utils/captchaToast.ts";
+import { computed, onMounted, ref, useId, useTemplateRef, watch } from "vue";
 
 // The counter becomes a live region from here, so a screen reader hears the limit coming, not every keystroke.
 const LIVE_FROM = 900;
@@ -110,6 +119,7 @@ onMounted(() => {
 const {
   cancellable = false,
   captchaReady = true,
+  edit = false,
   focusOnMount = false,
   initialText = "",
   label = "Dein Kommentar",
@@ -119,6 +129,8 @@ const {
   cancellable?: boolean;
   /** False while the captcha check still runs; a shown "wait" status clears once it turns true. */
   captchaReady?: boolean;
+  /** Editing an own comment: "Speichern" as a pressed choice, no shortcut hint, no privacy line. */
+  edit?: boolean;
   /** Puts the focus into the textarea when the form opens. */
   focusOnMount?: boolean;
   initialText?: string;
@@ -187,6 +199,5 @@ const onSubmit = async (): Promise<void> => {
 </script>
 
 <style lang="scss">
-@use "@styles/components/shortcut";
 @use "@styles/components/comment-form";
 </style>

@@ -76,6 +76,55 @@ describe("CommentForm", () => {
     expect(submit).toHaveBeenCalledTimes(2);
   });
 
+  it("Ctrl+Enter is locked like the button: empty text, pending send, offline", async () => {
+    let done!: (v: boolean) => void;
+    const submit = vi.fn(() => new Promise<boolean>((r) => (done = r)));
+    const wrapper = mount(CommentForm, { props: { submit } });
+    const area = wrapper.find("textarea");
+    await area.trigger("keydown", { ctrlKey: true, key: "Enter" }); // empty
+    expect(submit).not.toHaveBeenCalled();
+    await area.setValue("Hallo Welt");
+    await area.trigger("keydown", { ctrlKey: true, key: "Enter" });
+    await area.trigger("keydown", { ctrlKey: true, key: "Enter" }); // pending
+    expect(submit).toHaveBeenCalledTimes(1);
+    done(true);
+    await flushPromises();
+  });
+
+  it("Ctrl+Enter without a captcha token shows the same wait status as the button", async () => {
+    const submit = vi.fn(async () => "wait" as const);
+    const wrapper = mount(CommentForm, { props: { submit } });
+    await wrapper.find("textarea").setValue("Hallo Welt");
+    await wrapper.find("textarea").trigger("keydown", { ctrlKey: true, key: "Enter" });
+    await flushPromises();
+    expect(wrapper.find("[role=status]").exists()).toBe(true);
+    expect(wrapper.find("[role=alert]").exists()).toBe(false);
+  });
+
+  it("shows the spec privacy sentence and the shortcut hint with .c-kbd", () => {
+    const wrapper = mount(CommentForm, { props: { submit: vi.fn() } });
+    expect(wrapper.find(".c-comment-form__privacy").text()).toContain(
+      "Mit dem Abschicken wird dein Kommentar öffentlich angezeigt.",
+    );
+    expect(wrapper.findAll(".c-comment-form__kbd .c-kbd").map((k) => k.text())).toEqual([
+      "Strg",
+      "Enter",
+    ]);
+    expect(wrapper.find(".c-comment-form__kbd").text()).toContain("zum Abschicken");
+  });
+
+  it("edit: „Speichern“ is a pressed choice, no primary button, no hint", () => {
+    const wrapper = mount(CommentForm, {
+      props: { cancellable: true, edit: true, submit: vi.fn() },
+    });
+    const save = wrapper.find("button[type=submit]");
+    expect(save.text()).toBe("Speichern");
+    expect(save.classes()).toContain("c-choice");
+    expect(save.attributes("aria-pressed")).toBe("true");
+    expect(wrapper.find(".c-button--primary").exists()).toBe(false);
+    expect(wrapper.find(".c-comment-form__kbd").exists()).toBe(false);
+  });
+
   it("shows a busy state while sending and blocks a second submit", async () => {
     let done!: (v: boolean) => void;
     const submit = vi.fn(() => new Promise<boolean>((r) => (done = r)));
@@ -218,13 +267,13 @@ describe("CommentForm", () => {
   it("shows ⌘ on Apple devices and Strg elsewhere", async () => {
     expect(
       mount(CommentForm, { props: { submit: vi.fn() } })
-        .find(".c-shortcut__key")
+        .find(".c-kbd")
         .text(),
     ).toBe("Strg");
     const ua = vi.spyOn(navigator, "userAgent", "get").mockReturnValue("Mozilla/5.0 (Macintosh)");
     const wrapper = mount(CommentForm, { props: { submit: vi.fn() } });
     await flushPromises();
-    expect(wrapper.find(".c-shortcut__key").text()).toBe("⌘");
+    expect(wrapper.find(".c-kbd").text()).toBe("⌘");
     ua.mockRestore();
   });
 });
