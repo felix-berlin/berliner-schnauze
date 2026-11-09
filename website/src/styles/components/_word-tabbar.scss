@@ -1,6 +1,6 @@
 @use "@styles/variables" as vars;
 @use "@sass-butler/mixins" as butler-mx;
-@use "@sass-butler/functions" as butler-fn;
+@use "@styles/mixins" as mx;
 
 // Mobile counterpart of .c-word-sidebar; both list the same sections.
 .c-word-tabbar {
@@ -10,13 +10,13 @@
   display: flex;
   overflow-x: auto;
   scrollbar-width: none;
-  // Full-bleed: cancels the 20px side padding of .u-max-body-width (mock: nav sits outside the page padding).
-  margin-inline: -20px;
+  // Full-bleed: cancels the --page-gutter side padding of .u-max-body-width (mock: nav sits outside the page padding).
+  margin-inline: calc(-1 * var(--page-gutter));
   padding-inline: 0.5rem;
   background: var(--surface-paper);
   box-shadow: vars.$paper-lift;
 
-  @media (width > butler-fn.px-to-rem(807)) {
+  @include mx.breakpoint("word") {
     display: none;
   }
 
@@ -39,11 +39,6 @@
     &[aria-current="true"] {
       color: var(--color-ink-strong);
       border-block-end-color: var(--orange-600);
-    }
-
-    &:focus-visible {
-      outline: 2px dashed var(--orange-400);
-      outline-offset: 2px;
     }
   }
 }

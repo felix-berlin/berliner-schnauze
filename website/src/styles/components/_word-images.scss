@@ -36,11 +36,6 @@
     border-radius: var(--radius-sm);
     overflow: hidden;
 
-    &:focus-visible {
-      outline: 2px dashed var(--orange-400);
-      outline-offset: 2px;
-    }
-
     img {
       display: block;
       inline-size: 100%;
@@ -73,6 +68,7 @@
 
   &--hero {
     display: none;
+    container: hero-images / inline-size;
 
     @include mx.breakpoint("word") {
       display: flex;
@@ -93,6 +89,11 @@
 
         > figure:not(:first-child) figcaption {
           display: none;
+        }
+
+        // Narrow image column: two tiles per row instead of three slivers.
+        @container hero-images (inline-size < 18rem) {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
 

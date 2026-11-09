@@ -1,5 +1,3 @@
-@use "@styles/mixins" as mx;
-
 // Band "Sprachliche Analyse" (docs/design/wortseite/SPEC.md §2 8a-8d, mock: #n-analyse).
 .c-word-analysis {
   display: flex;
@@ -7,16 +5,12 @@
   gap: 1rem;
   padding-block-start: 1rem;
 
-  // Orthographie + Grammatik: stacked, side by side from the word breakpoint (808px viewport, as the mock).
+  // Orthographie + Grammatik: side by side once the column fits two 18rem cards.
   &__pair {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
     gap: 1rem;
     align-items: start;
-
-    @include mx.breakpoint("word") {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
   }
 
   // Labelled block inside a card (no boxes in boxes).
@@ -107,7 +101,7 @@
     padding: 0.125rem 0.625rem;
     font-size: 0.8rem;
     color: var(--color-body);
-    background: color-mix(in srgb, var(--orange-500) 16%, transparent);
+    background: var(--surface-wash);
     border-radius: var(--radius-sm);
   }
 

@@ -10,20 +10,18 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 1.5rem;
   align-items: start;
-  padding: 1.5rem 1.25rem;
+  // Padding grows with the main column (cqi here is .c-word-main, the hero is its own container).
+  padding-block: clamp(1.5rem, 1rem + 2cqi, 2rem);
+  padding-inline: clamp(1.25rem, 0.5rem + 3cqi, 2rem);
   background: var(--surface-hero);
   border: 1px dashed var(--rule-card);
   border-radius: var(--radius-sm);
   box-shadow: var(--paper-lift);
 
-  @include mx.breakpoint("word") {
-    padding: 2rem;
-  }
-
   // Image column (Task "Bilder"): only with images, otherwise the 38% would stay empty.
   &--has-images {
-    // Raw 1000px: the spec's own two-column breakpoint (SPEC.md §3), not a key of the breakpoint map (md is 1024).
-    @media (width >= 1000px) {
+    // Spec two-column breakpoint (SPEC.md §3: about a 1000px viewport) as the width of the main column: 45.5rem = 728px.
+    @container word-main (inline-size >= 45.5rem) {
       grid-template-columns: minmax(0, 1fr) minmax(220px, 38%);
       column-gap: 2rem;
 
@@ -55,7 +53,7 @@
     min-inline-size: 0;
     margin: 0;
     font-family: vars.$berlin;
-    font-size: clamp(2rem, 11cqi, 2.75rem);
+    font-size: clamp(2rem, 1rem + 6cqi, 3.75rem);
     font-weight: 700;
     line-height: 1.1;
     color: var(--color-ink-strong);
@@ -63,9 +61,6 @@
     hyphens: auto;
     overflow-wrap: anywhere;
 
-    @include mx.breakpoint("word") {
-      font-size: clamp(2.5rem, 6cqi, 3.75rem);
-    }
     @include butler-mx.dark-mode-class {
       color: var(--orange-300);
     }
@@ -147,19 +142,9 @@
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    padding: 0.25rem 0.6rem;
     border: 1px solid transparent;
-    border-radius: var(--radius-sm);
-    background: var(--surface-badge);
-    color: var(--color-ink-strong);
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
 
-    @include butler-mx.dark-mode-class {
-      color: var(--orange-200);
-    }
+    @include mx.badge-wash;
   }
 
   &__wotd-badge svg {

@@ -60,7 +60,7 @@
     img {
       display: block;
       max-inline-size: 100%;
-      max-block-size: 75vh;
+      max-block-size: 75dvh;
       border-radius: var(--radius-sm);
     }
 
@@ -90,14 +90,21 @@
   .c-icon-button {
     color: var(--lightbox-ink);
 
-    &:hover {
-      border-color: currentcolor;
+    @media (hover: hover) {
+      &:hover {
+        border-color: currentcolor;
+      }
     }
   }
 
   a {
     color: inherit;
   }
+}
+
+// Reserve the scrollbar track so locking the scroll does not shift the page sideways.
+html {
+  scrollbar-gutter: stable;
 }
 
 body:has(.c-lightbox[open]) {

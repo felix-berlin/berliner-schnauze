@@ -8,7 +8,7 @@
   background: color-mix(in srgb, var(--orange-500) 14%, var(--surface-paper));
   border-radius: var(--radius-sm);
   box-shadow: var(--paper-lift);
-  scroll-margin-block-start: calc(var(--word-tabbar-top, 0px) + 56px);
+  scroll-margin-block-start: var(--word-anchor-offset);
 
   &__text {
     display: flex;
@@ -33,10 +33,10 @@
     display: flex;
     align-items: flex-end;
     gap: 3px;
-    height: 44px;
+    block-size: 44px;
 
     > span {
-      width: 8px;
+      inline-size: 8px;
       background: color-mix(in srgb, var(--orange-500) 45%, transparent);
       border-radius: 1px;
 
@@ -50,6 +50,6 @@
     grid-column: 1 / -1;
     display: inline-flex;
     align-items: center;
-    min-height: 44px;
+    min-block-size: 44px;
   }
 }

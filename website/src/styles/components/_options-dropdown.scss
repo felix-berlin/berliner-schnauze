@@ -53,12 +53,11 @@
 
     &:hover,
     &:focus-visible {
-      background: color-mix(in srgb, var(--orange-500) 14%, transparent);
+      background: var(--surface-wash);
       color: var(--color-ink-strong);
     }
 
     &:focus-visible {
-      outline: 2px dashed var(--orange-400);
       outline-offset: -2px;
     }
 

@@ -14,7 +14,10 @@ interface Props {
 const { images, placement, learnMore, class: className } = Astro.props;
 const hero = placement === 'hero';
 const widths = hero ? [220, 330, 440, 660] : [320, 480, 640, 800];
+// The hero copy sits in the image column once .c-word-main is >= 45.5rem wide (about a 1000px viewport, see _word-hero.scss); below that the 70vw/380px split mirrors it.
 const sizes = hero ? '(max-width: 999px) 70vw, 380px' : '82vw';
+// Both copies are in the HTML and CSS hides one. The strip's first image is the mobile LCP (eager, high priority); a lazy image in a display:none hero is not fetched on mobile and loads once the hero shows. Cost: desktop also fetches the hidden strip's first image.
+const isLcp = (i: number) => !hero && i === 0;
 ---
 
 <section class:list={['c-word-images', `c-word-images--${placement}`, className]} aria-label='Bilder'>
@@ -32,7 +35,8 @@ const sizes = hero ? '(max-width: 999px) 70vw, 380px' : '82vw';
               alt=''
               format='webp'
               height={image.height}
-              loading={hero && i === 0 ? 'eager' : 'lazy'}
+              fetchpriority={isLcp(i) ? 'high' : undefined}
+              loading={isLcp(i) ? 'eager' : 'lazy'}
               sizes={sizes}
               src={image.src}
               width={image.width}

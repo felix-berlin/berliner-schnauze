@@ -1,12 +1,10 @@
-@use "@styles/mixins" as mx;
-
 // Lexical neighbourhood (docs/design/wortseite/SPEC.md §3/§5, mock #n-umfeld).
 .c-neighborhood {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 
-  @include mx.breakpoint("word") {
+  @container word-main (inline-size >= 30rem) {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2rem;
@@ -43,11 +41,6 @@
     span {
       color: var(--color-muted);
     }
-
-    &:focus-visible {
-      outline: 2px dashed var(--orange-400);
-      outline-offset: 2px;
-    }
   }
 
   // The current word: 14 % wash, no box.
@@ -58,7 +51,7 @@
     min-block-size: 44px;
     margin-inline: -0.5rem;
     padding-inline: 0.5rem;
-    background: color-mix(in srgb, var(--orange-500) 14%, transparent);
+    background: var(--surface-wash);
     border-radius: var(--radius-sm);
     color: var(--color-accent-text);
     font-weight: 700;

@@ -89,7 +89,7 @@
   &__bar-track {
     grid-column: 1 / -1;
     block-size: 6px;
-    border-radius: var(--radius-xxs, 2px);
+    border-radius: var(--radius-xxs);
     background: var(--surface-chip);
     overflow: hidden;
   }

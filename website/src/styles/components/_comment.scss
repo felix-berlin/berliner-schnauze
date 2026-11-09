@@ -30,7 +30,7 @@
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      background: color-mix(in srgb, var(--orange-500) 14%, transparent);
+      background: var(--surface-wash);
       pointer-events: none;
       animation: c-comment-wash 2s ease-out forwards;
     }
@@ -52,7 +52,7 @@
     inline-size: 2.25rem;
     block-size: 2.25rem;
     border-radius: var(--radius-sm);
-    background: color-mix(in srgb, var(--orange-500) 16%, transparent);
+    background: var(--surface-wash);
     color: var(--color-accent-text);
     font-weight: 700;
   }
@@ -75,11 +75,6 @@
       color: var(--color-accent-text);
       text-decoration: underline dashed;
       text-underline-offset: 3px;
-    }
-
-    &:focus-visible {
-      outline: 2px dashed var(--orange-400);
-      outline-offset: 2px;
     }
   }
 

@@ -14,13 +14,10 @@
   text-underline-position: from-font;
   cursor: pointer;
 
-  &:hover:not(:disabled, [aria-disabled="true"]) {
-    color: var(--color-accent-text);
-  }
-
-  &:focus-visible {
-    outline: 2px dashed var(--orange-400);
-    outline-offset: 2px;
+  @media (hover: hover) {
+    &:hover:not(:disabled, [aria-disabled="true"]) {
+      color: var(--color-accent-text);
+    }
   }
 
   &:disabled {

@@ -3,6 +3,7 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-comment-form {
+  container: comment-form / inline-size;
   display: grid;
   gap: vars.$spacer * 0.75;
 
@@ -72,8 +73,8 @@
     flex: 1 1 auto;
     min-block-size: 3rem;
 
-    // Desktop: the button keeps its width, the shortcut hint sits next to it (full width below 808px).
-    @include mx.breakpoint("word") {
+    // Wide form: the button keeps its width, the shortcut hint sits next to it (full width when narrow).
+    @container comment-form (inline-size >= 30rem) {
       flex: 0 0 auto;
     }
 
@@ -86,11 +87,6 @@
 
     &[aria-busy="true"] {
       cursor: progress;
-    }
-
-    &:focus-visible {
-      outline: 2px dashed var(--orange-400);
-      outline-offset: 2px;
     }
   }
 

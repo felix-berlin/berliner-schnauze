@@ -1,5 +1,4 @@
 @use "@styles/mixins" as mx;
-@use "@sass-butler/mixins" as butler-mx;
 
 // Book shelf (docs/design/wortseite/SPEC.md §3/§5, mock #n-buecher, ds bundle .c-shelf/.c-book).
 .c-book-shelf {
@@ -7,7 +6,6 @@
   flex-direction: column;
   gap: 0.75rem;
   padding-block-start: 1rem;
-  scroll-margin-block-start: calc(var(--word-tabbar-top, 0px) + 56px);
 
   &__head {
     display: flex;
@@ -18,18 +16,8 @@
     // Ad label: borderless wash, not a solid orange surface (Spec §8.2/§8.4).
     .c-badge {
       flex-shrink: 0;
-      padding: 0.25rem 0.6rem;
-      border-radius: var(--radius-sm);
-      background: var(--surface-badge);
-      color: var(--color-ink-strong);
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
 
-      @include butler-mx.dark-mode-class {
-        color: var(--orange-200);
-      }
+      @include mx.badge-wash;
     }
   }
 
@@ -56,9 +44,9 @@
   scrollbar-width: none;
   list-style: none;
 
-  @include mx.breakpoint("word") {
+  @container word-main (inline-size >= 30rem) {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr));
     overflow: visible;
     margin: 0;
     padding: 0.25rem 0 0.5rem;
@@ -69,7 +57,7 @@
     flex: 0 0 64%;
     scroll-snap-align: start;
 
-    @include mx.breakpoint("word") {
+    @container word-main (inline-size >= 30rem) {
       flex: none;
     }
   }
@@ -88,8 +76,8 @@
   text-decoration: none;
   transition: box-shadow 0.3s;
 
-  // From 808px the card is compact and horizontal (Spec §5 v3.1): cover left, text right.
-  @include mx.breakpoint("word") {
+  // In a wide column the card is compact and horizontal (Spec §5 v3.1): cover left, text right.
+  @container word-main (inline-size >= 30rem) {
     display: grid;
     grid-template-columns: 64px minmax(0, 1fr);
     grid-auto-rows: min-content;
@@ -111,11 +99,6 @@
     }
   }
 
-  &:focus-visible {
-    outline: 2px dashed var(--orange-400);
-    outline-offset: 2px;
-  }
-
   &__cover {
     display: flex;
     align-items: center;
@@ -126,7 +109,7 @@
     border-radius: var(--radius-xxs);
     color: var(--color-muted);
 
-    @include mx.breakpoint("word") {
+    @container word-main (inline-size >= 30rem) {
       grid-row: 1 / span 4;
       inline-size: 64px;
       aspect-ratio: 3 / 4;
@@ -138,8 +121,8 @@
     }
 
     img {
-      width: 100%;
-      height: 100%;
+      inline-size: 100%;
+      block-size: 100%;
       object-fit: contain;
     }
   }
@@ -148,7 +131,7 @@
   &__tag {
     align-self: flex-start;
     padding: 0.125rem 0.625rem;
-    background: color-mix(in srgb, var(--orange-500) 16%, transparent);
+    background: var(--surface-wash);
     border-radius: var(--radius-sm);
     color: var(--color-body);
     font-size: 0.75rem;
@@ -157,6 +140,7 @@
   &__title {
     color: var(--color-ink-strong);
     line-height: 1.3;
+    overflow-wrap: anywhere;
   }
 
   &__cta {
@@ -171,7 +155,7 @@
     font-weight: 700;
 
     // The compact card has no rule above the call to action.
-    @include mx.breakpoint("word") {
+    @container word-main (inline-size >= 30rem) {
       min-block-size: 32px;
       margin-block-start: 0.25rem;
       border: 0;

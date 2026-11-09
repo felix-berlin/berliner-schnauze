@@ -48,10 +48,11 @@ describe("WordImages.astro", () => {
     expect(result).toContain("Erfahre mehr über dieses Wort");
   });
 
-  it("loads lazily except the first hero image", async () => {
+  it("loads only the first strip image eagerly (mobile LCP), all hero images lazily", async () => {
     const hero = await render({ images: [image(1), image(2)], placement: "hero" });
     const strip = await render({ images: [image(1), image(2)], placement: "strip" });
-    expect(hero.match(/loading="eager"/g)).toHaveLength(1);
-    expect(strip).not.toContain('loading="eager"');
+    expect(hero).not.toContain('loading="eager"');
+    expect(strip.match(/loading="eager"/g)).toHaveLength(1);
+    expect(strip.match(/fetchpriority="high"/g)).toHaveLength(1);
   });
 });

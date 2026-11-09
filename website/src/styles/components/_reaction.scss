@@ -26,13 +26,8 @@
   }
 
   &[aria-pressed="true"] {
-    background: color-mix(in srgb, var(--orange-500) 15%, transparent);
+    background: var(--surface-wash);
     color: var(--color-accent-text);
-  }
-
-  &:focus-visible {
-    outline: 2px dashed var(--orange-400);
-    outline-offset: 2px;
   }
 
   &[aria-disabled="true"] {

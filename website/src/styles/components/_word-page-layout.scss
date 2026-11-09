@@ -1,6 +1,6 @@
 @use "@styles/variables" as vars;
 @use "@sass-butler/mixins" as butler-mx;
-@use "@sass-butler/functions" as butler-fn;
+@use "@styles/mixins" as mx;
 
 // ── Page layout containers ────────────────────────────────────────────────────
 
@@ -18,18 +18,16 @@
 }
 
 .c-word-page {
-  container-type: inline-size;
-  container-name: word-page;
   display: flex;
   flex-direction: column;
   gap: vars.$spacer;
   padding-block-end: vars.$spacer * 3;
   // The site header is still sticky, so the bar sits below it; a header that hides on scroll would reset this to 0.
   --word-tabbar-top: var(--site-header-height);
+  // Anchor jumps land below header + tab bar; shared by every scroll-margin on the page.
+  --word-anchor-offset: calc(var(--word-tabbar-top, 0px) + 56px);
 
-  // A container cannot query its own size — media query needed here.
-  // Children still use @container word-page correctly.
-  @media (width > butler-fn.px-to-rem(807)) {
+  @include mx.breakpoint("word") {
     display: grid;
     grid-template-columns: 200px minmax(0, 1fr);
     gap: 2rem;
@@ -55,7 +53,7 @@
   #navigation,
   #kommentare
 ) {
-  scroll-margin-block-start: calc(var(--word-tabbar-top, 0px) + 56px);
+  scroll-margin-block-start: var(--word-anchor-offset);
 }
 
 .c-word-main {
@@ -65,7 +63,7 @@
   flex-direction: column;
   gap: vars.$spacer;
 
-  @media (width > butler-fn.px-to-rem(807)) {
+  @include mx.breakpoint("word") {
     gap: 1.25rem;
   }
 
@@ -74,7 +72,7 @@
     flex-direction: column;
     gap: vars.$spacer;
 
-    @media (width > butler-fn.px-to-rem(807)) {
+    @include mx.breakpoint("word") {
       gap: 1.25rem;
     }
   }
