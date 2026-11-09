@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-import { initScrollSpy, rootMarginBelowHeader } from "@utils/scrollSpy";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { initHeaderScrollSpy, initScrollSpy, rootMarginBelowHeader } from "@utils/scrollSpy";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("initScrollSpy", () => {
   let observeMock: ReturnType<typeof vi.fn>;
@@ -209,14 +209,63 @@ describe("initScrollSpy", () => {
 });
 
 describe("rootMarginBelowHeader", () => {
+  afterEach(() => vi.unstubAllGlobals());
+  const height = (h: number) => vi.stubGlobal("innerHeight", h);
+
   it("starts the band below the sticky header plus the offset", () => {
+    height(900);
     document.documentElement.style.setProperty("--site-header-height", "73px");
-    expect(rootMarginBelowHeader(64)).toBe("-137px 0px -70% 0px");
-    expect(rootMarginBelowHeader(64, "-80%")).toBe("-137px 0px -80% 0px");
+    expect(rootMarginBelowHeader(64)).toBe("-137px 0px -630px 0px");
+    expect(rootMarginBelowHeader(64, 0.8)).toBe("-137px 0px -703px 0px");
   });
 
   it("falls back to 60px without the variable", () => {
+    height(900);
     document.documentElement.style.removeProperty("--site-header-height");
-    expect(rootMarginBelowHeader(64)).toBe("-124px 0px -70% 0px");
+    expect(rootMarginBelowHeader(64)).toBe("-124px 0px -630px 0px");
+  });
+
+  it("keeps a band of at least 60px on a landscape phone (390px high)", () => {
+    height(390);
+    document.documentElement.style.setProperty("--site-header-height", "60px");
+    const [top, , bottom] = rootMarginBelowHeader(64).split(" ").map((v) => parseInt(v, 10));
+    expect(390 + top + bottom).toBe(60); // top and bottom are negative
+    // the plain 70% bottom would have left a negative band: 390 - 124 - 273
+    expect(bottom).toBe(-206);
+  });
+
+  it("never gives a negative margin when the header alone fills the viewport", () => {
+    height(100);
+    document.documentElement.style.setProperty("--site-header-height", "60px");
+    expect(rootMarginBelowHeader(64)).toBe("-124px 0px -0px 0px");
+  });
+});
+
+describe("initHeaderScrollSpy", () => {
+  it("re-initializes with a fresh margin on resize and stops afterwards", () => {
+    const margins: string[] = [];
+    vi.stubGlobal(
+      "IntersectionObserver",
+      vi.fn(function (_cb: unknown, opts: { rootMargin: string }) {
+        margins.push(opts.rootMargin);
+        return { disconnect: vi.fn(), observe: vi.fn() };
+      }),
+    );
+    document.body.innerHTML = `<nav class="nav"><a href="#a">A</a></nav><section id="a"></section>`;
+    document.documentElement.style.setProperty("--site-header-height", "60px");
+    vi.stubGlobal("innerHeight", 900);
+    const stop = initHeaderScrollSpy({
+      activeClass: "is-active",
+      getSectionId: (l) => l.getAttribute("href")?.slice(1),
+      linkSelector: "a",
+      navSelector: ".nav",
+    });
+    vi.stubGlobal("innerHeight", 390);
+    window.dispatchEvent(new Event("resize"));
+    expect(margins).toEqual(["-124px 0px -630px 0px", "-124px 0px -206px 0px"]);
+    stop();
+    window.dispatchEvent(new Event("resize"));
+    expect(margins).toHaveLength(2);
+    vi.unstubAllGlobals();
   });
 });

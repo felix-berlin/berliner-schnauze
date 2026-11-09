@@ -7,15 +7,17 @@
 </template>
 
 <script setup lang="ts">
-import { initScrollSpy, rootMarginBelowHeader } from "@utils/scrollSpy";
-import { onMounted, useTemplateRef } from "vue";
+import { initHeaderScrollSpy } from "@utils/scrollSpy";
+import { onBeforeUnmount, onMounted, useTemplateRef } from "vue";
 
 defineProps<{ sections: { id: string; label: string }[] }>();
 
 const nav = useTemplateRef<HTMLElement>("nav");
 
+let stopSpy: (() => void) | undefined;
+onBeforeUnmount(() => stopSpy?.());
 onMounted(() => {
-  initScrollSpy({
+  stopSpy = initHeaderScrollSpy({
     activeClass: "is-active",
     getSectionId: (link) => link.getAttribute("href")?.slice(1),
     linkSelector: ".c-word-tabbar__tab",
@@ -25,7 +27,6 @@ onMounted(() => {
       link.setAttribute("aria-current", "true");
       bar.scrollLeft = link.offsetLeft - bar.offsetWidth / 2 + link.offsetWidth / 2;
     },
-    rootMargin: rootMarginBelowHeader(64),
   });
 });
 </script>
