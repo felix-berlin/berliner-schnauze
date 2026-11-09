@@ -25,8 +25,8 @@ const settle = async (page: Page, slug: string, width: number) => {
     }
   });
   await page.locator("#kommentare").getByRole("heading", { level: 2 }).waitFor();
-  // No "networkidle": it never settled on this page in the first run (cause not investigated).
-  await page.waitForTimeout(400);
+  // No "networkidle": it never settled on this page in the first run (cause not investigated). Hydrated islands lose `ssr`.
+  await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
   await page.evaluate(() => window.scrollTo({ behavior: "instant", top: 0 }));
 };
 
@@ -246,7 +246,8 @@ test.describe("draft preview (existing preview cookie flow)", () => {
         await new Promise((r) => setTimeout(r, 60));
       }
     });
-    await page.waitForTimeout(400);
+    // Every island hydrated (and so has fired its mount requests) before the "no requests" assertion below.
+    await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
 
     await expect(page.locator("#n-trend")).toHaveCount(0);
     await expect(page.locator(".c-badge--strong")).toHaveCount(0);

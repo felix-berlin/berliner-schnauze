@@ -189,4 +189,4 @@ The consumer provides short text. Classes are in `bundle.css`.
 - `.c-badge--auto`: dashed inner outline; marks a value that is not confirmed („Verb (geraten)").
 - `.c-tag`: 0.8rem, no border, 16% orange wash, `--color-body` text. For grammar values (Nominativ, Singular, feminin).
 - The word type in the hero badge and in the Grammatik card come from the same field and must read the same.
-- Don't invent a fourth chip: links to other words are `.c-chip-link` (see RelatedWords).
+- Don't invent a fourth chip: links to other words are `.c-chip-link` (see WordNeighborhood).

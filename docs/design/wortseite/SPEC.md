@@ -10,7 +10,7 @@ Stand: 9. November 2026 · Design System „Berliner Schnauze“ v3.1 · ersetzt
 - **Seite „v3 · Zustände & Grenzfälle“:** Laden, Offline, Fehler, langes Wort, minimales Wort
 - **Seite „v3 · Header, Footer & Index“:** `Wortseite komplett · Mobile / Desktop`
 
-**Mitgeliefert in `design/`:** die Artboards als HTML (Markup und Logik zum Nachschlagen) und `bundle.css` mit allen `c-*`-Klassen. Siehe Abschnitt 17.
+**Mitgeliefert in `design/`:** die Artboards als HTML (Markup und Logik zum Nachschlagen) und `design/ds/components/bundle.css` mit allen `c-*`-Klassen. Siehe Abschnitt 17.
 
 ---
 
@@ -83,7 +83,7 @@ Ein Block ohne Daten wird komplett weggelassen: keine leere Karte und kein Platz
 
 ## 4. Design Tokens
 
-Quelle: `tokens.json` und `colors_and_type.css`. Im Code nur Tokens verwenden, keine Hex-Werte.
+Quelle: `design/ds/tokens.css` und `design/ds/colors_and_type.css`. Im Code nur Tokens verwenden, keine Hex-Werte.
 
 | Token | Light | Dark | Verwendung |
 |---|---|---|---|
@@ -125,7 +125,7 @@ Es gibt nur diese Größen neben dem Headword.
 | `.t-label` | .75rem / 700 / uppercase / .04em | muted | Zeilen-Labels („Bedeutung“, „Anhören“, „Silbentrennung“) |
 | `.t-small` | .75rem / 1.5 | muted | Meta, Captions, Quellen, Fußzeilen |
 
-**Überschriften-Ebenen:** h1 = Wort · h2 = Sektion oder Band · h3 = Karte innerhalb von „Sprachliche Analyse“. Die optische Größe kommt von der Klasse, nicht von der Ebene.
+**Überschriften-Ebenen:** h1 = Wort · h2 = Sektion oder Band · h3 = Karte innerhalb von „Sprachliche Analyse“, dazu die Umfragefrage in der Feedback-Karte (sonst kein h3). Die optische Größe kommt von der Klasse, nicht von der Ebene.
 
 ---
 
@@ -408,7 +408,7 @@ Alles respektiert `prefers-reduced-motion: reduce`.
 
 **Fokus-Reihenfolge:** Tabs bzw. Seitenleiste → Like → Dislike → ⋮ → Themen-Links → „Selbe Bedeutung wie“ → Trend-Link → Audio → Bilder → Umfrage → Karten in DOM-Reihenfolge → Kommentare → „Und nu?“.
 
-**Fokusring:** `outline: 2px dashed var(--orange-400); outline-offset: 2px` auf allen Bedienelementen. Nie entfernen.
+**Fokusring:** `outline: 2px dashed var(--focus-ring); outline-offset: 2px` auf allen Bedienelementen. Nie entfernen. `--focus-ring` ist orange-600 im Light Mode und orange-400 im Dark Mode: orange-400 hat auf hellen Flächen nur ca. 2,6:1 Kontrast, WCAG 1.4.11 verlangt 3:1 (die Mocks nutzen noch orange-400).
 
 **ARIA:**
 - Tab-Leiste: `<nav aria-label="Inhalt der Wortseite">`, aktiver Link mit `aria-current="true"`. Bewusst keine `role="tablist"`, denn es sind Anker-Links.
@@ -473,6 +473,8 @@ Volle Specs folgen mit der Index-Seite. Boards: Seite „v3 · Header, Footer & 
 
 ## 17. Dateien
 
+Layout der Handoff-ZIP (`wortseite-v3-handoff/`); im Repo liegt der Inhalt unter `docs/design/wortseite/` (ohne den Wurzelordner, `ds/` unter `design/ds/`), siehe dortige README.
+
 ```
 wortseite-v3-handoff/
 ├── SPEC.md                        ← dieses Dokument
@@ -480,7 +482,6 @@ wortseite-v3-handoff/
 │   ├── Mobile2.dc.html            ← Master (390px): Markup, Daten, Logik; Props theme/word/comments/trending/status
 │   ├── Desktop3.dc.html           ← Desktop, 2 Spalten, Bilder im Hero (aus Mobile2 generiert)
 │   ├── Poll.dc.html               ← Umfrage inkl. Bezirkskarte (SVG) und Schrittlogik
-│   ├── Header.dc.html, Footer.dc.html
 │   └── generate-desktop.py        ← zeigt exakt, was Desktop gegenüber Mobil ändert
 └── ds/
     ├── components/bundle.css      ← DS v3: alle c-*-Klassen (inkl. t-label/t-em/t-small)

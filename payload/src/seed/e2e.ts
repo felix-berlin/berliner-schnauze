@@ -28,8 +28,13 @@ export function assertLocalDatabase(url: string | undefined): void {
 }
 
 /** Every slug/path the seed writes, so a test can remove exactly this data again from a shared database. */
+const IMAGE_COUNT = 4;
+const imagePath = (i: number) => (i === 0 ? "e2e/galerie.png" : `e2e/galerie-${i + 1}.png`);
+const VOICES = [["male", "stimme-m"], ["female", "stimme-w"]] as const;
+
 export const SEEDED = {
-  media: ["e2e/galerie.png", "e2e/stimme-m.wav", "e2e/stimme-w.wav"],
+  // Built from the same constants the seeding loops use, so cleanup cannot drift from what is created.
+  media: [...Array.from({ length: IMAGE_COUNT }, (_, i) => imagePath(i)), ...VOICES.map(([, name]) => `e2e/${name}.wav`)],
   pages: ["datenschutz", "impressum"],
   posts: ["berlinerisch-fuer-anfaenger"],
 };
@@ -169,7 +174,7 @@ export async function seedE2e(payload: Payload): Promise<void> {
     { alt: "Drittes Testbild", caption: "Credit: Erfundene_Person", description: null },
     { alt: "Viertes Testbild", caption: null, description: null },
   ].entries()) {
-    const wpPath = i === 0 ? "e2e/galerie.png" : `e2e/galerie-${i + 1}.png`;
+    const wpPath = imagePath(i);
     const found = await payload.find({ collection: "media", depth: 0, limit: 1, where: { wpPath: { equals: wpPath } } });
     imageMedia.push(
       found.docs[0]
@@ -181,7 +186,7 @@ export async function seedE2e(payload: Payload): Promise<void> {
 
   // Two voices: one silent WAV each.
   const voiceMedia = new Map<"female" | "male", number>();
-  for (const [gender, name] of [["male", "stimme-m"], ["female", "stimme-w"]] as const) {
+  for (const [gender, name] of VOICES) {
     const wpPath = `e2e/${name}.wav`;
     const found = await payload.find({ collection: "media", depth: 0, limit: 1, where: { wpPath: { equals: wpPath } } });
     const doc =

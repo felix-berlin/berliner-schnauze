@@ -7,7 +7,7 @@ interface ScrollSpyOptions {
   onActivate?: (link: HTMLAnchorElement, nav: HTMLElement) => void;
 }
 
-/** Smallest height (px) of the observed band: below ~460px viewports the plain 20%..30% band would be empty. */
+/** Smallest height (px) of the observed band in rootMarginBelowHeader: on short viewports (landscape phones) the header offset plus the bottom ratio would squeeze the band below this, even to nothing. */
 const MIN_BAND = 60;
 
 /**

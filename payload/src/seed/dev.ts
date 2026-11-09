@@ -11,7 +11,15 @@ import { berlinDay } from "../lib/wordStats";
 /** Only a worktree's own dev database (`bsw_<workspace>`): not prod, not the throwaway e2e/smoke/test databases. */
 export function assertDevDatabase(url: string | undefined): void {
   const parsed = url && URL.canParse(url) ? new URL(url) : undefined;
-  const name = parsed?.pathname.slice(1) ?? "";
+  const raw = parsed?.pathname.slice(1) ?? "";
+  // The driver decodes the path (`bsw_x%5Fe2e` is `bsw_x_e2e`): check the decoded name; a malformed escape stays raw and fails the prefix check.
+  const name = (() => {
+    try {
+      return decodeURIComponent(raw);
+    } catch {
+      return raw;
+    }
+  })();
   if (
     !parsed ||
     !LOCAL_DB_HOSTS.has(parsed.hostname) ||
