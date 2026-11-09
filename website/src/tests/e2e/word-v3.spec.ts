@@ -231,6 +231,16 @@ test.describe("prefers-reduced-motion", () => {
   });
 });
 
+test("at 320px the headword keeps its own line and the actions sit below it", async ({ page }) => {
+  await page.setViewportSize({ height: 700, width: 320 });
+  await page.goto(`/wort/${WORDS.full}`);
+  const title = await page.locator(".c-word-hero__title").boundingBox();
+  const actions = await page.locator(".c-word-hero__actions").boundingBox();
+  // Beside the three 44px actions the headword was squeezed to about 60px and broke into syllables.
+  expect(title!.width).toBeGreaterThan(200);
+  expect(actions!.y).toBeGreaterThan(title!.y + title!.height - 1);
+});
+
 test.describe("draft preview (existing preview cookie flow)", () => {
   test("shows no vote, comment, pulse or trend", async ({ browserName, page }) => {
     // api/preview sets a Secure cookie in the production build; WebKit drops it over http://localhost.
