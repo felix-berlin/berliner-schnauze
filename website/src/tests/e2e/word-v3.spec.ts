@@ -78,16 +78,18 @@ for (const [kind, slug] of Object.entries(WORDS)) {
 
       test("every visible control is at least 44x44", async ({ page }) => {
         await settle(page, slug, width);
+        // Without the root the sweep below would check nothing and pass.
+        await expect(page.locator(".c-word-page")).toHaveCount(1);
         const small = await page.evaluate(() => {
           const controls = 'a[href], button, input:not([type="hidden"]), select, textarea, summary, [role="button"], [role="tab"]';
-          const root = document.querySelector(".c-word-page");
+          const root = document.querySelector(".c-word-page")!;
           const pseudo = (el: Element, which: "::before" | "::after") => {
             const s = getComputedStyle(el, which);
             return s.content === "none" || s.position !== "absolute"
               ? { h: 0, w: 0 }
               : { h: parseFloat(s.height) || 0, w: parseFloat(s.width) || 0 };
           };
-          return [...(root?.querySelectorAll<HTMLElement>(controls) ?? [])]
+          return [...(root.querySelectorAll<HTMLElement>(controls))]
             .filter((el) => el.getClientRects().length && getComputedStyle(el).visibility !== "hidden")
             .map((el) => {
               const r = el.getBoundingClientRect();
@@ -95,12 +97,13 @@ for (const [kind, slug] of Object.entries(WORDS)) {
               const a = pseudo(el, "::after");
               return {
                 h: Math.max(r.height, b.h, a.h),
-                inline: el.matches("a") && !!el.closest("p, li, dd, figcaption, footer") && getComputedStyle(el).display === "inline",
+                inline: el.matches("a") && !!el.closest("p, dd, figcaption") && getComputedStyle(el).display === "inline",
                 name: `${el.tagName.toLowerCase()}.${el.className} "${(el.textContent ?? "").trim().slice(0, 30)}"`,
                 w: Math.max(r.width, b.w, a.w),
               };
             })
-            // Allow-list: an inline link inside a running sentence is exempt (WCAG 2.5.8 inline exception).
+            // Allow-list: only an inline link inside running text (p, dd, figcaption) is exempt (WCAG 2.5.8 inline
+            // exception). Any other exception needs its own selector here with a reason.
             .filter((c) => !c.inline && (c.w < 44 || c.h < 44))
             .map((c) => `${c.name} ${Math.round(c.w)}x${Math.round(c.h)}`);
         });
@@ -144,8 +147,9 @@ test.describe("tab order (real Tab presses)", () => {
   };
 
   test("390px: Tabs, Like, ⋮, Trend, Kategorie, Trend-Box, Audio, Umfrage (anmachen)", async ({ page }) => {
-    // Spec §14 lists Like, ⋮, Kategorie. The trend badge sits between ⋮ and the category because the badge row is
-    // one DOM block in the mock's order (trend, type, category); skipping it would hide a link from keyboard users.
+    // Spec §14 lists Like, ⋮, Kategorie, Trend-Box. The trend badge sits between ⋮ and the category because DOM order
+    // is the visual order (§5 and the mock: badge row trend, type, category); reordering it by tabindex or CSS order
+    // would break WCAG 1.3.2 / 2.4.3 and a link would be hidden from keyboard users if it were skipped.
     expect(await walk(page, WORDS.full, 390)).toEqual(["tabs", "like", "menu", "trend", "kategorie", "trendbox", "audio", "umfrage"]);
   });
 
@@ -153,6 +157,9 @@ test.describe("tab order (real Tab presses)", () => {
     expect(await walk(page, WORDS.full, 1280)).toEqual(["sidebar", "like", "menu", "trend", "kategorie", "trendbox", "audio", "umfrage"]);
   });
 
+  // Spec deviation (§14 wants Audio -> Bilder): the images come first in the DOM (strip below 808px, hero column from
+  // 808px), which is their visual position (§5, mock). Reordering with tabindex/order would break WCAG 1.3.2 / 2.4.3.
+  // No word of the e2e seed has both audio and images, so only Bilder -> Umfrage is asserted.
   test("390px: Bilder before the poll (akademiebusen)", async ({ page }) => {
     expect(await walk(page, "akademiebusen", 390)).toEqual(["tabs", "like", "menu", "kategorie", "bilder", "umfrage"]);
   });

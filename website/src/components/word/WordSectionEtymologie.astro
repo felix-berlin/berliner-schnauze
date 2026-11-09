@@ -28,7 +28,7 @@ const sources = (word.sources ?? [])
         <span class='t-label'>{sources.length === 1 ? 'Quelle' : 'Quellen'}</span>
         {sources.map((source) =>
           source.url ? (
-            <a class='c-textlink c-textlink--inline c-word-origin__source' href={source.url} rel='noopener'>
+            <a class='c-textlink c-word-origin__source' href={source.url} rel='noopener'>
               {source.label}
             </a>
           ) : (
