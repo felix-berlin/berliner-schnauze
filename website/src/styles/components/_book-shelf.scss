@@ -88,6 +88,20 @@
   text-decoration: none;
   transition: box-shadow 0.3s;
 
+  // From 808px the card is compact and horizontal (Spec §5 v3.1): cover left, text right.
+  @include mx.breakpoint("word") {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    grid-auto-rows: min-content;
+    column-gap: 1rem;
+    row-gap: 0.25rem;
+    padding: 0.875rem;
+
+    > :not(.c-book__cover) {
+      grid-column: 2;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
@@ -106,11 +120,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 5 / 4; // mobile: wide cover on top (Spec §5)
     overflow: hidden;
     background: var(--surface-chip);
     border-radius: var(--radius-xxs);
     color: var(--color-muted);
+
+    @include mx.breakpoint("word") {
+      grid-row: 1 / span 4;
+      inline-size: 64px;
+      aspect-ratio: 3 / 4;
+      align-self: start;
+    }
 
     picture {
       display: contents;
@@ -148,5 +169,12 @@
     color: var(--color-accent-text);
     font-size: 0.85rem;
     font-weight: 700;
+
+    // The compact card has no rule above the call to action.
+    @include mx.breakpoint("word") {
+      min-block-size: 32px;
+      margin-block-start: 0.25rem;
+      border: 0;
+    }
   }
 }
