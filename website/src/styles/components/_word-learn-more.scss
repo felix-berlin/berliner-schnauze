@@ -5,6 +5,8 @@
   &__learn-more {
     &-link {
       display: flex;
+      align-items: center;
+      min-block-size: 44px; // touch target (Spec §8.6)
       gap: vars.$spacer * 0.2;
       font-size: var(--size-font, 0.9rem);
       margin-block-start: 2.5rem;

@@ -62,7 +62,9 @@
   }
 
   &__link {
-    display: block;
+    display: flex;
+    align-items: center;
+    min-block-size: 44px; // touch target (Spec §8.6)
     font-size: 0.8rem;
     font-weight: 600;
     color: color-mix(in srgb, var(--blue) 80%, white);
