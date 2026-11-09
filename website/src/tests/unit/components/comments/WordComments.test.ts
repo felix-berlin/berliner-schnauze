@@ -178,7 +178,7 @@ describe("WordComments", () => {
     const submit = wrapper.findComponent(CommentForm).props("submit") as (v: {
       authorName: string;
       text: string;
-    }) => Promise<boolean>;
+    }) => Promise<unknown>;
     // no token yet: nothing sent, the form says "wait" itself, no toast on top
     vi.mocked(createToastNotify).mockClear();
     expect(await submit({ authorName: "", text: "Na sowat" })).toBe("wait");

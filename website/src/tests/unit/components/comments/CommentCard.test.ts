@@ -310,7 +310,7 @@ describe("CommentCard", () => {
     await (await openMenu(wrapper)).find((b) => b.text() === "Bearbeiten")!.trigger("click");
     const form = () => wrapper.findComponent(CommentForm);
     expect(form().props("initialText")).toBe("Hallo");
-    const submit = form().props("submit") as (v: { text: string }) => Promise<boolean>;
+    const submit = form().props("submit") as (v: { text: string }) => Promise<unknown>;
     ctx.edit.mockResolvedValueOnce("error");
     expect(await submit({ text: "Neu jeschrieben" })).toEqual({ error: "" });
     expect(form().exists()).toBe(true);
@@ -366,7 +366,7 @@ describe("CommentCard", () => {
     const submit = wrapper.findComponent(CommentForm).props("submit") as (v: {
       authorName: string;
       text: string;
-    }) => Promise<boolean>;
+    }) => Promise<unknown>;
     await submit({ authorName: "", text: "Jenau so" });
     expect(ctx.post).toHaveBeenCalledWith({ authorName: "", parentId: 4, text: "Jenau so" }, "tok");
   });

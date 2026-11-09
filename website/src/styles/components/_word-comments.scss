@@ -27,14 +27,20 @@
       margin-inline-start: -1px;
     }
 
-    // Looks 36px, hits 44px: the invisible band reaches 4px beyond the border box above and below (44px total) (layout and focus ring unchanged).
+    // Looks 36px, hits 44px: the invisible band reaches 4px beyond the border box above and below (36 + 2 x 4 = 44;
+    // the band is positioned from the padding box, hence the extra border width). It only covers header padding.
     position: relative;
 
     &::before {
       content: "";
       position: absolute;
-      inset-block: -0.3125rem;
+      inset-block: calc(-0.25rem - 1px);
       inset-inline: 0;
+    }
+
+    // The ring sits 2px outside the chip; a later neighbour (positioned) must not paint over it.
+    &:focus-visible {
+      z-index: 1;
     }
   }
 

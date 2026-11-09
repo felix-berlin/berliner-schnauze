@@ -109,6 +109,7 @@ onMounted(() => {
 
 const {
   cancellable = false,
+  captchaReady = true,
   focusOnMount = false,
   initialText = "",
   label = "Dein Kommentar",
@@ -116,6 +117,8 @@ const {
   submit,
 } = defineProps<{
   cancellable?: boolean;
+  /** False while the captcha check still runs; a shown "wait" status clears once it turns true. */
+  captchaReady?: boolean;
   /** Puts the focus into the textarea when the form opens. */
   focusOnMount?: boolean;
   initialText?: string;
@@ -144,7 +147,15 @@ const over = computed(() => text.value.length > COMMENT_MAX);
 // Same minimum as the server (`COMMENT_MIN`); the error deliberately doesn't name it.
 const ready = computed(() => text.value.trim().length >= COMMENT_MIN && !over.value);
 
+// The wait is over (token there) or the visitor keeps typing: the status has done its job.
+watch(
+  () => captchaReady,
+  (ready) => {
+    if (ready) waiting.value = "";
+  },
+);
 watch(text, () => {
+  waiting.value = "";
   if (error.value && ready.value) error.value = "";
 });
 

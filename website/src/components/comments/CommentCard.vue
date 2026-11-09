@@ -109,6 +109,7 @@
         cancellable
         label="Deine Antwort"
         :initial-text="`@${comment.authorName} `"
+        :captcha-ready="!!ctx.token.value"
         :submit="submitReply"
         @cancel="mode = null"
       />

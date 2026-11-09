@@ -129,6 +129,23 @@ describe("CommentForm", () => {
     expect(wrapper.find("[role=status]").exists()).toBe(false);
   });
 
+  it("the wait status clears when the token arrives or the text is edited", async () => {
+    const submit = vi.fn(async () => "wait" as const);
+    const wrapper = mount(CommentForm, { props: { captchaReady: false, submit } });
+    const status = () => wrapper.find("[role=status]").exists();
+    await wrapper.find("textarea").setValue("Hallo Welt");
+    await wrapper.find("form").trigger("submit");
+    await flushPromises();
+    expect(status()).toBe(true);
+    await wrapper.setProps({ captchaReady: true });
+    expect(status()).toBe(false);
+    await wrapper.find("form").trigger("submit");
+    await flushPromises();
+    expect(status()).toBe(true);
+    await wrapper.find("textarea").setValue("Hallo Welt, noch was");
+    expect(status()).toBe(false);
+  });
+
   it("a stuck captcha says so in the status box", async () => {
     const wrapper = mount(CommentForm, { props: { submit: vi.fn(async () => "stuck" as const) } });
     await wrapper.find("textarea").setValue("Hallo Welt");

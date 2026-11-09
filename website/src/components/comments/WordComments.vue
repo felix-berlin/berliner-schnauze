@@ -90,7 +90,7 @@
           Du bist offline. Kommentieren jeht wieder, sobald du Netz hast.
         </p>
       </template>
-      <CommentForm v-else focus-on-mount :submit="submitNew" />
+      <CommentForm v-else focus-on-mount :captcha-ready="!!token" :submit="submitNew" />
 
       <div class="c-word-comments__captcha">
         <p v-show="captchaSize.height.value > 0" class="c-word-comments__captcha-text t-small">
