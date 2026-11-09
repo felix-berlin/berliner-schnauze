@@ -2,6 +2,63 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.11.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.10.0...v4.11.0) (2026-11-09)
+
+
+### Bug Fixes
+
+* **dev:** decode the db name in the seed guard, derive seeded media and refresh the word page docs ([92e1ee8](https://github.com/felix-berlin/berliner-schnauze/commit/92e1ee843b5414f1f2a4f7b51dd036d9fe7d6030))
+* **dev:** set all word-stats counters in the dev and e2e seeds ([e53df93](https://github.com/felix-berlin/berliner-schnauze/commit/e53df9302b35b2ebe25182c7bb673d7488d397e2))
+* **seo:** longer word descriptions, a descriptive og image alt and no h2 for footer link lists ([884c7a7](https://github.com/felix-berlin/berliner-schnauze/commit/884c7a7d29666ff735ab4f7f37f5cbe440b97501))
+* **seo:** quote the first example in word descriptions, trim meanings, describe the publisher and drop dead speakable and wrong audio type ([1582474](https://github.com/felix-berlin/berliner-schnauze/commit/1582474b29b017d84ea67136e3c55bc0dfb556e8))
+* **word:** 44px hit area for theme links and scope the meanings label in e2e ([b97a224](https://github.com/felix-berlin/berliner-schnauze/commit/b97a2248a31468f2f7091a37f1195a1001d9dc30))
+* **word:** 44px retry buttons in state boxes, test the voice, menu and comment error paths ([02db9cf](https://github.com/felix-berlin/berliner-schnauze/commit/02db9cf84fb182653ff393ed71097f68c526519b))
+* **word:** 44px source links, stricter 44px sweep, document tab-order deviation ([dc5a747](https://github.com/felix-berlin/berliner-schnauze/commit/dc5a747ef40596f90d67755f231bacfcd4f8c7e1))
+* **word:** 44px touch targets for sidebar, category and learn-more links ([15a0e23](https://github.com/felix-berlin/berliner-schnauze/commit/15a0e23937cda4a494ee05414c4705ec2d431a2b))
+* **word:** amazon host check and shelf spacing ([b4b7245](https://github.com/felix-berlin/berliner-schnauze/commit/b4b7245e5511bc705d636eace66d025ecb16a9f6))
+* **word:** comment captcha channel, error reasons and touch targets ([1003bd7](https://github.com/felix-berlin/berliner-schnauze/commit/1003bd7308d66db1b8a695b98e5207c9acaf5eca))
+* **word:** comment sort chip stacking and wait status ([9867a83](https://github.com/felix-berlin/berliner-schnauze/commit/9867a836774f580d53f8039d97e0828b6125c44a))
+* **word:** full-bleed mobile tab bar and pulse click target ([cdb9847](https://github.com/felix-berlin/berliner-schnauze/commit/cdb98471f08dfcace6d780cda104387cdaecfafd))
+* **word:** keep poll focus on failed votes and drop the half with Woanders ([af26016](https://github.com/felix-berlin/berliner-schnauze/commit/af26016547a543816f66f1a77aca90c18c15864c))
+* **word:** keep retry focus, show server reason inline, ask the half again after Woanders ([89c04fd](https://github.com/felix-berlin/berliner-schnauze/commit/89c04fd2abda741f826d53046bc22869ed1c7cec))
+* **word:** keep the dashed outline on the guessed word type badge ([383acf4](https://github.com/felix-berlin/berliner-schnauze/commit/383acf40b538d0d297b1ea53ac2f51eae16ea9f8))
+* **word:** keep the scroll-spy band non-empty on short viewports and re-init on resize ([9ceb6d1](https://github.com/felix-berlin/berliner-schnauze/commit/9ceb6d16cc356796439e2dbdf1fad5ff323fee24))
+* **word:** letter tiles target always exists, four frequency labels, drop dead helper ([f77ef7f](https://github.com/felix-berlin/berliner-schnauze/commit/f77ef7fdf695825ca6d18f0cdd2127f74d983626))
+* **word:** lightbox overlay token and focus rings ([a538dfd](https://github.com/felix-berlin/berliner-schnauze/commit/a538dfd1c9d967a78acb580f237db8cf0ec60043))
+* **word:** lightbox tokens, breakpoints and tracking ([05cde04](https://github.com/felix-berlin/berliner-schnauze/commit/05cde0471d6405620565d676fc852037d70ef1a1))
+* **word:** lock style for aria-disabled text links, wait for island hydration in e2e ([828ba71](https://github.com/felix-berlin/berliner-schnauze/commit/828ba719b1d154ec57a1d90c752779a131e57447))
+* **word:** next-links copy, book note, focus ring and section visibility ([936537c](https://github.com/felix-berlin/berliner-schnauze/commit/936537ccdcd9739b9cb045f28180f5fe76bab8b2))
+* **word:** no hover glow on aria-disabled controls ([92e90cc](https://github.com/felix-berlin/berliner-schnauze/commit/92e90cc2d30da3f36c184acde45461c740bae955))
+* **word:** put the hero actions under the headword in narrow containers ([86f2f8f](https://github.com/felix-berlin/berliner-schnauze/commit/86f2f8f966d174d971f23b3960de05d4f8aae464))
+* **word:** render the lightbox on the server, preload only the visible first image and size book covers ([9b7291e](https://github.com/felix-berlin/berliner-schnauze/commit/9b7291e5c6df7a70b9a55aab6660848f45aaeced))
+* **word:** reset pulse stats in the e2e seed ([20d70cc](https://github.com/felix-berlin/berliner-schnauze/commit/20d70ccff2811b4db23aad35e1a7e134546edf27))
+* **word:** scroll-spy below the sticky header, word breakpoint key, amazon.cn ([5e10ffd](https://github.com/felix-berlin/berliner-schnauze/commit/5e10ffdab622de90fee182fcd54c958502c3b98e))
+* **word:** speakable selectors, SectionCard test and cleanup ([d650b93](https://github.com/felix-berlin/berliner-schnauze/commit/d650b936ce67ff2998ab8e325720f59dece62809))
+* **word:** surface share, copy, audio and comment errors, keep focus in comment panels and type trends ([4ca3cff](https://github.com/felix-berlin/berliner-schnauze/commit/4ca3cffcfa30cb97f1e2fac5c9e8741a6d82bd07))
+* **word:** trend badge order, touch targets and robust e2e ([54cc0b3](https://github.com/felix-berlin/berliner-schnauze/commit/54cc0b3d3f2f8cd4d4433cebaa5a2a8a275f4851))
+
+
+### Features
+
+* **dev:** add dev-only testwort seed with every word field ([a619d78](https://github.com/felix-berlin/berliner-schnauze/commit/a619d78ac0981b0644c4b13c92a19c2cce1305ae))
+* **word:** compact horizontal book cards from 808px ([b80dd8e](https://github.com/felix-berlin/berliner-schnauze/commit/b80dd8e653ada5e557ceffd68eedadbd907249d9))
+* **word:** hint Strg+Enter in the comment form with .c-kbd ([2f3820c](https://github.com/felix-berlin/berliner-schnauze/commit/2f3820c8d1fed4f6fedec13ed7f6ee54899e95aa))
+* **word:** move dislike from hover into the actions menu ([c78baa8](https://github.com/felix-berlin/berliner-schnauze/commit/c78baa899f649ffd91c525a7cda791c0dd430560))
+* **word:** rate comments up and down and add the comment menu ([018c339](https://github.com/felix-berlin/berliner-schnauze/commit/018c339c7749648cfa12dc79bc86d7d711e8b187))
+* **word:** show like and dislike side by side again ([761c13c](https://github.com/felix-berlin/berliner-schnauze/commit/761c13c236212136d334461d472f97cdc83f0cf5))
+* **word:** show themes in their own row below the hero badges ([12b3f1f](https://github.com/felix-berlin/berliner-schnauze/commit/12b3f1f8204694546242673c38a31e1db8c66354))
+* **word:** start the poll directly after the vote ([4c12042](https://github.com/felix-berlin/berliner-schnauze/commit/4c120421d0a8d55f5fdecd34a4d8ff5ed7f26ab9))
+* **word:** trend box and badge ([7a5c6d4](https://github.com/felix-berlin/berliner-schnauze/commit/7a5c6d440495014b761adc2ad435e623e48cf7b6))
+* **word:** v3 audio buttons ([a70e4a3](https://github.com/felix-berlin/berliner-schnauze/commit/a70e4a350f8a93cd217c4213423714da3d673ade))
+* **word:** v3 books, neighbourhood and next links ([49a215c](https://github.com/felix-berlin/berliner-schnauze/commit/49a215ceb967b33b498bfeedbcc0e3e6fd5a07dc))
+* **word:** v3 comments and page states ([26ff7c4](https://github.com/felix-berlin/berliner-schnauze/commit/26ff7c4c7f5a880d476b9be0003e1ccc821b4fcb))
+* **word:** v3 etymology and examples cards ([9dc57a2](https://github.com/felix-berlin/berliner-schnauze/commit/9dc57a28240aa4b4db8d8aa2e208e996796c7e0f))
+* **word:** v3 hero with meanings, badges and reactions ([6464702](https://github.com/felix-berlin/berliner-schnauze/commit/6464702549ae3f2775443a72e5294cd6045be04a))
+* **word:** v3 image strip and lightbox ([a58196d](https://github.com/felix-berlin/berliner-schnauze/commit/a58196d2f151578d5a9d5c32617c8f9bd85fef36))
+* **word:** v3 language analysis band ([7d5e13a](https://github.com/felix-berlin/berliner-schnauze/commit/7d5e13acc1362b01b35a0da3b26ec781a13a9b18))
+* **word:** v3 page shell with tab bar and anchors ([9c01c46](https://github.com/felix-berlin/berliner-schnauze/commit/9c01c467acc5e811e312361ebfdb814cfe37a9f1))
+* **word:** v3 poll ([6f915a5](https://github.com/felix-berlin/berliner-schnauze/commit/6f915a54b4b11452279912b3ac8d7d42a56d884c))
+
 # [4.10.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.9.1...v4.10.0) (2026-11-07)
 
 
