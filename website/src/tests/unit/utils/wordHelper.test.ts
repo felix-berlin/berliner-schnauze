@@ -3,7 +3,6 @@ import type { WordRef } from "@utils/wordHelper.ts";
 import {
   alphabeticNeighbors,
   capitalizeFirstLetter,
-  coloredConsonantsAndVowels,
   countLetters,
   createWikimediaFileList,
   findAnagrams,
@@ -23,40 +22,6 @@ const mockFetch = vi.mocked(fetchWikimediaAPI);
 function makeWord(id: number | string, berlinerisch: string | null = "test"): WordRef {
   return { berlinerisch, id } as unknown as WordRef;
 }
-
-// ---------------------------------------------------------------------------
-
-describe("coloredConsonantsAndVowels", () => {
-  it("returns empty string for empty input", () => {
-    expect(coloredConsonantsAndVowels("")).toBe("");
-  });
-
-  it("wraps vowel in is-vowel span", () => {
-    expect(coloredConsonantsAndVowels("a")).toBe('<span class="is-vowel">a</span>');
-  });
-
-  it("wraps consonant in is-consonant span", () => {
-    expect(coloredConsonantsAndVowels("b")).toBe('<span class="is-consonant">b</span>');
-  });
-
-  it("treats uppercase vowel as vowel", () => {
-    const result = coloredConsonantsAndVowels("A");
-    expect(result).toContain('class="is-vowel"');
-    expect(result).toContain(">A<");
-  });
-
-  it("treats umlauts as vowels", () => {
-    expect(coloredConsonantsAndVowels("ö")).toContain('class="is-vowel"');
-    expect(coloredConsonantsAndVowels("ä")).toContain('class="is-vowel"');
-    expect(coloredConsonantsAndVowels("ü")).toContain('class="is-vowel"');
-  });
-
-  it("produces correct span sequence for a two-letter word", () => {
-    expect(coloredConsonantsAndVowels("ab")).toBe(
-      '<span class="is-vowel">a</span><span class="is-consonant">b</span>',
-    );
-  });
-});
 
 // ---------------------------------------------------------------------------
 

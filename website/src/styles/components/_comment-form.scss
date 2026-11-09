@@ -1,13 +1,20 @@
 @use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-comment-form {
+  container: comment-form / inline-size;
   display: grid;
   gap: vars.$spacer * 0.75;
 
   &__row {
     display: grid;
     gap: vars.$spacer * 0.25;
+  }
+
+  // Why it failed (429 / server message), under the Spec sentence inside the error box.
+  &__reason {
+    color: var(--color-muted);
   }
 
   &__hint {
@@ -63,25 +70,60 @@
   &__button {
     --padding: #{vars.$spacer * 0.5 vars.$spacer};
 
-    min-block-size: 44px;
+    flex: 1 1 auto;
+    min-block-size: 3rem;
+
+    // Wide form: the button keeps its width, the shortcut hint sits next to it (full width when narrow).
+    @container comment-form (inline-size >= 30rem) {
+      flex: 0 0 auto;
+    }
+
+    // Busy and offline keep the focus (no :disabled); the look says it is locked.
+    &[aria-disabled="true"] {
+      opacity: 0.55;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    &[aria-busy="true"] {
+      cursor: progress;
+    }
   }
 
-  // Shortcut hint only where a hardware keyboard is likely.
+  &__save {
+    min-block-size: 2.75rem;
+
+    &[aria-disabled="true"] {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+  }
+
+  // Shortcut hint from 808px and only where a hardware keyboard is likely (spec §9).
   &__kbd {
+    display: none;
+    gap: 0.375rem;
+    align-items: center;
     margin-inline-start: auto;
     font-size: 0.75rem;
     color: var(--color-muted);
 
-    &.c-shortcut {
-      display: none;
-
-      @media (hover: hover) and (pointer: fine) {
+    @include mx.breakpoint("word") {
+      @media (hover: hover) {
         display: inline-flex;
       }
     }
-
-    .c-shortcut__key {
-      padding-inline: 0.35em;
-    }
   }
+}
+
+// Keyboard hint (spec: .c-kbd).
+:where(.c-kbd) {
+  padding: 0.125rem 0.375rem;
+  border: 1px solid var(--rule-card);
+  border-radius: var(--radius-xxs);
+  background: var(--surface-chip);
+  color: var(--color-ink-strong);
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
 }

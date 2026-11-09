@@ -1,25 +1,8 @@
-@use "@styles/variables" as vars;
+// Dates line (Spec §7): one muted .t-small paragraph, no rule.
+.c-single-word__footer {
+  margin-block-start: 1rem;
 
-.c-single-word {
-  &__footer {
-    display: flex;
-    flex-direction: var(--direction-flex, column);
-    gap: var(--spacing, #{vars.$spacer * 0.5});
-    border-block-start: 1px dashed var(--new-blue-200);
-    padding-block-start: vars.$spacer * 1.5;
-
-    @container word-main (inline-size >= 34rem) {
-      --spacing: #{vars.$spacer * 2};
-      --direction-flex: row;
-
-      justify-content: flex-end;
-    }
-  }
-
-  &__created,
-  &__modified {
+  p {
     margin: 0;
-    font-size: 0.8rem;
-    color: var(--color-muted);
   }
 }

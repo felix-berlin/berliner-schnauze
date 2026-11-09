@@ -6,6 +6,7 @@ vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify: toast }));
 import {
   $feedback,
   $profile,
+  $sendError,
   answerUsage,
   deleteAllFeedback,
   loadFeedback,
@@ -55,6 +56,13 @@ describe("parseProfile", () => {
       area: "pankow",
       locality: null,
     });
+  });
+  it("drops a stale half for areas outside Berlin even with origin grewUp", () => {
+    for (const area of ["brandenburg", "elsewhere"])
+      expect(parseProfile({ area, half: "east", origin: "grewUp" })).toEqual({
+        area,
+        origin: "grewUp",
+      });
   });
   it("keeps null as skipped", () => expect(parseProfile({ area: null })).toEqual({ area: null }));
   it("treats malformed input as empty", () => {
@@ -120,6 +128,9 @@ describe("nextStep", () => {
     [{ area: "elsewhere" }, "origin"],
     [{ area: "pankow", locality: null, origin: "grewUp" }, "half"],
     [{ area: null, origin: "movedOver10" }, "age"],
+    // Woanders: no half question, even for someone who grew up there.
+    [{ area: "elsewhere", origin: "grewUp" }, "age"],
+    [{ area: "brandenburg", origin: "grewUp" }, "age"],
     [{ age: null, area: null, origin: null }, "done"],
   ] as const)("%j -> %s", (p, step) => expect(nextStep(p)).toBe(step));
 });
@@ -203,6 +214,70 @@ describe("sendFeedback", () => {
     expect(toast).toHaveBeenCalledWith(
       expect.objectContaining({ message: "Hat nich jeklappt, versuch's nochma." }),
     );
+  });
+  it("a caller's fallback message replaces the generic one, the server's reason still wins", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("down")));
+    await sendFeedback(1, { reaction: "like" }, { fallbackMessage: "Ditt hat nich jeklappt." });
+    expect(toast).toHaveBeenLastCalledWith(
+      expect.objectContaining({ message: "Ditt hat nich jeklappt." }),
+    );
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValue({ json: async () => ({ error: "Zu oft." }), ok: false, status: 429 }),
+    );
+    await sendFeedback(1, { reaction: "like" }, { fallbackMessage: "Ditt hat nich jeklappt." });
+    expect(toast).toHaveBeenLastCalledWith(expect.objectContaining({ message: "Zu oft." }));
+  });
+  it("silent callers get the failure back without a toast, on both failure paths", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("down")));
+    expect(await sendFeedback(1, { usage: "say" }, { silent: true })).toBe(false);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({ json: async () => ({ error: "Zu oft." }), ok: false, status: 429 }),
+    );
+    expect(await sendFeedback(1, { usage: "say" }, { silent: true })).toBe(false);
+    expect(toast).not.toHaveBeenCalled();
+  });
+  it("a silent 429 hands the server text to $sendError instead of a toast", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        json: async () => ({ error: "Jenug jestimmt für heute." }),
+        ok: false,
+        status: 429,
+      }),
+    );
+    expect(await sendFeedback(1, { usage: "say" }, { silent: true })).toBe(false);
+    expect($sendError.get()).toBe("Jenug jestimmt für heute.");
+    expect(toast).not.toHaveBeenCalled();
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(ok()));
+    expect(await sendFeedback(1, { usage: "say" }, { silent: true })).toBe(true);
+    expect($sendError.get()).toBeNull();
+  });
+  it("a silent network error sets $sendError and every call resets it first", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("down")));
+    expect(await sendFeedback(1, { usage: "say" }, { silent: true })).toBe(false);
+    expect($sendError.get()).toBeNull(); // no server reason: the caller shows its own generic text
+    $sendError.set("old");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(ok()));
+    await sendFeedback(1, { reaction: "like" }); // a non-silent call resets it as well
+    expect($sendError.get()).toBeNull();
+  });
+  it("a 2xx with an unreadable body is not a failed vote and does not toast", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        json: async () => {
+          throw new SyntaxError("bad");
+        },
+        ok: true,
+        status: 200,
+      }),
+    );
+    expect(await sendFeedback(1, { reaction: "like" })).toBe(true);
+    expect(toast).not.toHaveBeenCalled();
   });
   it("non-ok response counts as failure", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ json: async () => ({}), ok: false }));

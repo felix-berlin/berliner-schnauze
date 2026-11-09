@@ -33,6 +33,22 @@ html {
   --rule-card: var(--grey-100);
   --rule-inner: var(--orange-200);
   --shadow-hover-glow: 0 0 12px 0 color-mix(in srgb, var(--orange-500) 60%, white);
+  // v3 surfaces and ink (Spec §4). --danger, --success, --gold come from vars.$all-colors.
+  --color-ink-strong: var(--new-blue-400);
+  --surface-hero: color-mix(in srgb, var(--orange-100) 30%, white);
+  --surface-sheet: white;
+  --surface-paper: var(--white-100);
+  --surface-badge: color-mix(in srgb, var(--orange-200) 60%, white);
+  --surface-wash: color-mix(in srgb, var(--orange-500) 15%, transparent);
+  // Focus ring (WCAG 1.4.11 3:1): orange-600 on light grounds, orange-400 on the dark blue. Deviates from SPEC.md orange-400.
+  --focus-ring: var(--orange-600);
+  // Lightbox ground: dark in both themes, so these are not redefined under .dark.
+  --overlay-base: black;
+  --overlay-ink: var(--white-100);
+  --paper-lift: #{vars.$paper-lift};
+  --radius-sm: #{vars.$radius-sm};
+  --radius-xs: #{vars.$radius-xs};
+  --radius-xxs: #{vars.$radius-xxs};
 
   color-scheme: light;
 
@@ -51,6 +67,12 @@ html {
     --rule-card: color-mix(in srgb, var(--orange-300) 25%, transparent);
     --rule-inner: color-mix(in srgb, var(--orange-300) 30%, transparent);
     --shadow-hover-glow: 0 0 12px 0 var(--orange-500);
+    --color-ink-strong: var(--white-100);
+    --surface-hero: var(--new-blue-400);
+    --surface-sheet: var(--new-blue-400);
+    --surface-paper: var(--new-blue-400);
+    --surface-badge: color-mix(in srgb, var(--new-blue-400) 80%, black);
+    --focus-ring: var(--orange-400);
 
     color-scheme: dark;
   }

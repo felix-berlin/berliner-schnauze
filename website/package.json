@@ -55,7 +55,6 @@
     "natural": "^8.2.6",
     "payload": "3.93.0",
     "payload-app": "workspace:*",
-    "photoswipe": "^5.4.4",
     "virtua": "^0.54.2",
     "vite-plugin-pwa": "^2.0.0",
     "vue": "^3.5.45",

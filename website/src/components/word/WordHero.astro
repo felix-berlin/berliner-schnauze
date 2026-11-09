@@ -1,43 +1,85 @@
 ---
 import '@styles/components/_word-hero.scss';
-import '@styles/components/_word-themen.scss';
-import AudioPlayerList from '@components/AudioPlayerList.vue';
 import BadgeTag from '@components/BadgeTag.vue';
 import IsWordOfTheDay from '@components/word/IsWordOfTheDay.vue';
+import WordMeanings from '@components/word/WordMeanings.vue';
 import WordOptionDropdown from '@components/word/WordOptionDropdown.vue';
-import WordFeedbackThumbs from '@components/word-feedback/WordFeedbackThumbs.vue';
+import WordImages from '@components/word/WordImages.astro';
+import WordReactions from '@components/word/WordReactions.vue';
+import WordThemes from '@components/word/WordThemes.astro';
 import TooltipPopover from '@components/TooltipPopover.vue';
-import Tag from '~icons/lucide/tag';
 import { routeToWord } from '@utils/helpers';
+import { posBadge } from '@utils/wordPos';
+import type { WordImage } from '@utils/wordImages.ts';
+import type { WordTrend } from '@utils/wordTrend.ts';
+import TrendingUp from '~icons/lucide/trending-up';
 import type { SiteWord } from '@services/payload/words.ts';
 
 interface Props {
   word: SiteWord;
-  wortartLabel: string | undefined;
-  /** The label is the automatic guess, not an editor's choice. */
-  wortartAuto?: boolean;
+  /** Same word type as sidebar and grammar card, without the "(geraten)" suffix. */
+  pos?: string | undefined;
+  /** The word type is the automatic guess, not an editor's choice. */
+  posAuto?: boolean;
+  meanings?: string[];
   /** A draft preview has no public votes. */
   draft?: boolean;
+  trend?: Pick<WordTrend, 'rank'> | undefined;
+  images?: WordImage[];
+  learnMore?: string | null | undefined;
 }
 
-const { word, wortartLabel, wortartAuto = false, draft = false } = Astro.props;
-const { themen } = word;
+const { word, pos, posAuto = false, meanings = [], draft = false, trend, images = [], learnMore } = Astro.props;
+const themes = word.themen.map((thema) => ({ label: thema.name, url: `/themen/${thema.slug}` }));
+const badge = pos ? posBadge(pos, posAuto) : undefined;
+const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(Boolean).join(', ');
 ---
 
 <header
-  class='c-word-hero'
+  id='bedeutung'
+  class:list={['c-word-hero', { 'c-word-hero--has-images': images.length > 0 }]}
   data-track-content
   data-content-name='Word Hero'
   data-content-piece={word.berlinerisch}
   data-content-target={routeToWord(word.slug)}
 >
-  <div class='c-word-hero__left'>
+  <div class='c-word-hero__head'>
     <h1 class='c-word-hero__title'>
-      <dfn>{word.berlinerisch}</dfn>{word.article && (
+      <dfn class='c-headword'>{word.berlinerisch}</dfn>{word.article && (
         <span class='c-word-hero__word-article'>, {word.article}</span>
       )}
     </h1>
+    {/* Before the badges in the DOM: focus order is Like, ⋮, then the badge row and the themes (Spec §14). */}
+    <div class='c-word-hero__actions'>
+      {!draft && <WordReactions client:idle wordId={word.id} />}
+      <WordOptionDropdown
+        berlinerisch={word.berlinerisch}
+        client:load
+        slug={word.slug}
+        variant='word'
+        wordId={draft ? undefined : word.id}
+      />
+    </div>
     <div class='c-word-hero__badges'>
+      {/* Spec §5 order: trend, word type, Berolinismus; the themes sit in their own row below (the §14 focus order lists the themes before the trend link; the visual order wins). */}
+      {
+        trend && (
+          <a href='#n-trend' class='c-badge c-badge--strong c-word-hero__trend-badge'>
+            <TrendingUp width='12' height='12' aria-hidden='true' />
+            Im Trend · Platz {trend.rank}
+          </a>
+        )
+      }
+      {
+        badge && (
+          <span
+            class:list={['c-badge', { 'c-badge--auto': badge.auto }]}
+            title={badge.auto ? 'Automatisch erkannt, kann abweichen' : undefined}
+          >
+            {badge.text}
+          </span>
+        )
+      }
       {
         word.berolinismus && (
           <TooltipPopover client:only='vue'>
@@ -55,54 +97,27 @@ const { themen } = word;
           </TooltipPopover>
         )
       }
-      {
-        wortartLabel && (
-          <span
-            class:list={['c-word-hero__wortart-badge', { 'c-word-hero__wortart-badge--auto': wortartAuto }]}
-            title={wortartAuto ? 'Automatisch erkannt, kann abweichen' : undefined}
-          >
-            {wortartLabel}
-            {wortartAuto && ' (automatisch)'}
-          </span>
-        )
-      }
       <IsWordOfTheDay
         client:only='vue'
         variant='badge'
         word={word.berlinerisch}
         slug={word.slug}
       />
-      {
-        word.berlinerischAudio.length > 0 && (
-          <AudioPlayerList
-            audio={word.berlinerischAudio}
-            client:only='vue'
-            isType='berlinerisch'
-            wordId={draft ? undefined : word.id}
-          />
-        )
-      }
     </div>
-    {
-      themen.length > 0 && (
-        <div class='c-word-themen'>
-          {themen.map((thema) => (
-            <a href={`/themen/${thema.slug}`} class='c-word-themen__badge'>
-              <Tag height='12' width='12' />
-              {thema.name}
-            </a>
-          ))}
-        </div>
-      )
-    }
-    {!draft && <WordFeedbackThumbs client:idle wordId={word.id} />}
+    <WordThemes themes={themes} />
   </div>
-  <div class='c-word-hero__right'>
-    <WordOptionDropdown
-      berlinerisch={word.berlinerisch}
-      client:load
-      slug={word.slug}
-      wordId={draft ? undefined : word.id}
-    />
-  </div>
+  {
+    (meanings.length > 0 || same) && (
+      <div class='c-word-hero__meaning'>
+        {meanings.length > 0 && <WordMeanings client:idle meanings={meanings} />}
+        {same && (
+          <p class='c-word-hero__same'>
+            Selbe Bedeutung wie <span>{same}</span>
+          </p>
+        )}
+      </div>
+    )
+  }
+  {/* From 808px the images live here (right column from 1000px); below, the page renders the strip under the hero. */}
+  {images.length > 0 && <WordImages class='c-word-hero__images' images={images} learnMore={learnMore} placement='hero' />}
 </header>

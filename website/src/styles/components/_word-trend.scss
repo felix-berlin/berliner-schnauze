@@ -1,0 +1,55 @@
+// Trend box (docs/design/wortseite/SPEC.md §2/§5, mock: Mobile2/Desktop3 #n-trend, ds bundle.css .c-trend).
+.c-trend {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 0.25rem 1rem;
+  padding: 0.875rem 1rem;
+  background: color-mix(in srgb, var(--orange-500) 14%, var(--surface-paper));
+  border-radius: var(--radius-sm);
+  box-shadow: var(--paper-lift);
+  scroll-margin-block-start: var(--word-anchor-offset);
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  &__label {
+    color: var(--color-accent-text);
+  }
+
+  &__rank,
+  &__meta {
+    margin: 0;
+  }
+
+  &__rank {
+    color: var(--color-ink-strong);
+  }
+
+  &__bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    block-size: 44px;
+
+    > span {
+      inline-size: 8px;
+      background: color-mix(in srgb, var(--orange-500) 45%, transparent);
+      border-radius: 1px;
+
+      &:last-child {
+        background: var(--orange-600);
+      }
+    }
+  }
+
+  &__link {
+    grid-column: 1 / -1;
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+  }
+}

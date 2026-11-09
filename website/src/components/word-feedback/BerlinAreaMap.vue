@@ -5,7 +5,7 @@
       :open="mapOpen"
       @toggle="mapOpen = ($event.target as HTMLDetailsElement).open"
     >
-      <summary class="c-link">Karte anzeigen</summary>
+      <summary class="c-textlink">Lieber auf der Karte wählen</summary>
       <svg
         ref="group"
         class="c-berlin-area-map__svg"
@@ -74,7 +74,7 @@
       :open="listOpen"
       @toggle="listOpen = ($event.target as HTMLDetailsElement).open"
     >
-      <summary class="c-link">Lieber aus ner Liste wählen</summary>
+      <summary class="c-textlink">Lieber aus ner Liste wählen</summary>
       <div class="c-berlin-area-map__list-items">
         <button
           v-for="a in LIST"

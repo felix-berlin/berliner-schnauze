@@ -12,6 +12,8 @@ test.describe("Wort-Sidebar-Navigation (c-word-sidebar)", () => {
     page,
   }) => {
     await dismissToasts(page);
+    // The sidebar only exists from 808px; phone projects start below it.
+    await page.setViewportSize({ height: 800, width: 1280 });
     await page.goto("/wort/anmachen");
 
     // A marker that only survives if the page is NOT reloaded.
@@ -19,10 +21,10 @@ test.describe("Wort-Sidebar-Navigation (c-word-sidebar)", () => {
       (window as unknown as { __noReloadMarker?: boolean }).__noReloadMarker = true;
     });
 
-    await page.locator(".c-word-sidebar__link[href='#phonologie']").click();
+    await page.locator(".c-word-sidebar__link[href='#analyse']").click();
 
-    await expect(page).toHaveURL(/#phonologie$/);
-    await expect(page.locator("#phonologie")).toBeInViewport();
+    await expect(page).toHaveURL(/#analyse$/);
+    await expect(page.locator("#analyse")).toBeInViewport();
 
     const markerSurvived = await page.evaluate(
       () => (window as unknown as { __noReloadMarker?: boolean }).__noReloadMarker === true,
@@ -31,6 +33,6 @@ test.describe("Wort-Sidebar-Navigation (c-word-sidebar)", () => {
 
     // The scroll must stick — no bounce back to the top afterwards.
     await page.waitForTimeout(500);
-    await expect(page.locator("#phonologie")).toBeInViewport();
+    await expect(page.locator("#analyse")).toBeInViewport();
   });
 });

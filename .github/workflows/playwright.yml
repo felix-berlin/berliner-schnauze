@@ -227,6 +227,9 @@ jobs:
 
       - name: Run Playwright tests (shard ${{ matrix.shard }}/4)
         timeout-minutes: 8
+        # word-v3.spec.ts signs a draft preview token with the same secret as the server.
+        env:
+          PAYLOAD_SECRET: e2e-secret
         run: pnpm exec playwright test --shard=${{ matrix.shard }}/4
 
       # Traces/screenshots/console logs can contain secrets — this repo is public,

@@ -16,7 +16,7 @@ vi.mock("@stores/wordFeedback.ts", async () => {
 const track = vi.hoisted(() => vi.fn());
 vi.mock("@utils/analytics", () => ({ trackEvent: track }));
 
-import { $feedback, $profile } from "@stores/wordFeedback.ts";
+import { $feedback, $profile, $sendError } from "@stores/wordFeedback.ts";
 
 const state = (over: Record<string, unknown> = {}) =>
   ({
@@ -46,6 +46,7 @@ describe("WordFeedbackCard", () => {
     vi.clearAllMocks();
     $feedback.set(state());
     $profile.set({});
+    $sendError.set(null);
     store.loadFeedback.mockImplementation(async () => {});
     store.sendFeedback.mockResolvedValue(true);
     store.answerUsage.mockResolvedValue(true);
@@ -54,11 +55,14 @@ describe("WordFeedbackCard", () => {
   it("starts with the three usage buttons only and loads the state", async () => {
     const w = await mountIt();
     expect(w.text()).toContain("Sagste det noch?");
-    expect(w.findAll("button").map((b) => b.text())).toEqual([
+    expect(w.findAll("button.c-choice--tile").map((b) => b.find("b").text())).toEqual([
       "Sag ick selbst",
       "Kenn ick",
       "Nie jehört",
     ]);
+    expect(w.findAll("button")).toHaveLength(3);
+    expect(w.text()).toContain("Is dit Wort bei dir noch im Einsatz?");
+    expect(w.text()).toContain("Kommt mir regelmäßig übern Mund");
     // The results stay hidden until the own vote; only the header counts.
     expect(w.find(".c-word-feedback-card__bars").exists()).toBe(false);
     expect(w.text()).not.toContain("%");
@@ -66,11 +70,21 @@ describe("WordFeedbackCard", () => {
     expect(store.loadFeedback).toHaveBeenCalledWith(7);
   });
 
-  it("shows bars and the area step after a usage answer", async () => {
+  it("one click is the vote: the results with the own answer marked and the first question follow at once", async () => {
     const w = await mountIt();
     await click(w, "Kenn ick");
-    expect(store.answerUsage).toHaveBeenCalledWith(7, "know");
+    expect(store.answerUsage).toHaveBeenCalledWith(7, "know", true);
+    expect(w.text()).toContain("Kenn ick · deine Antwort");
+    expect(w.text()).not.toContain("Sag ick selbst · deine Antwort");
     expect(w.text()).toContain("Wo wohnste?");
+    // v3.1: no intermediate step, no like question, no "more help" call.
+    expect(w.text()).not.toContain("Danke für deine Stimme!");
+    expect(w.text()).not.toContain("Und jefällt dir ditt Wort?");
+    expect(w.text()).not.toContain("Willste noch mehr helfen?");
+    expect(w.text()).not.toContain("Klar, los");
+    expect(w.find(".c-reaction").exists()).toBe(false);
+    expect(w.find('[role="status"]').text()).toBe("Stimme jezählt");
+    expect(w.find("button.c-choice--tile").exists()).toBe(false);
     expect(w.text()).toContain("10 Stimmen");
     expect(w.text()).toContain("50 %");
     expect(track).toHaveBeenCalledWith("Word Feedback", "usage", "know");
@@ -86,13 +100,87 @@ describe("WordFeedbackCard", () => {
     expect(w.text()).toContain("Wo wohnste?");
   });
 
-  it("stays on usage when the send fails", async () => {
-    store.answerUsage.mockResolvedValue(false);
+  it("a failed vote shows the error state and Nochmal versuchen resends the same answer", async () => {
+    store.answerUsage.mockResolvedValueOnce(false);
     const w = await mountIt();
     await click(w, "Kenn ick");
     expect(w.text()).not.toContain("Wo wohnste?");
+    expect(w.find('[role="status"]').text()).toBe("");
     // Rolled back: the unsaved choice is not shown as pressed.
     expect(w.find('[aria-pressed="true"]').exists()).toBe(false);
+    expect(w.find('.c-state--error[role="alert"]').text()).toContain("Nochmal versuchen");
+    await click(w, "Nochmal versuchen");
+    expect(store.answerUsage).toHaveBeenCalledTimes(2);
+    expect(store.answerUsage).toHaveBeenLastCalledWith(7, "know", true);
+    expect(w.find(".c-state--error").exists()).toBe(false);
+    expect(w.text()).toContain("Wo wohnste?");
+  });
+
+  it("keeps the alert and the focus on the retry button while the retry is sent and fails again", async () => {
+    store.answerUsage.mockResolvedValueOnce(false);
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    const retryButton = w.findAll("button").find((b) => b.text().includes("Nochmal versuchen"))!;
+    (retryButton.element as HTMLButtonElement).focus();
+    let resolve!: (v: boolean) => void;
+    store.answerUsage.mockReturnValueOnce(new Promise<boolean>((r) => (resolve = r)));
+    await retryButton.trigger("click");
+    // Pending: the alert is still mounted, so the focus did not fall back to body.
+    expect(document.activeElement).toBe(retryButton.element);
+    resolve(false);
+    await flushPromises();
+    expect(document.activeElement).toBe(retryButton.element);
+    expect(w.find('.c-state--error[role="alert"]').exists()).toBe(true);
+    w.unmount();
+  });
+
+  it("shows the server's reason (daily cap) inline when a silent vote fails", async () => {
+    store.answerUsage.mockImplementationOnce(async () => {
+      $sendError.set("Jenug jestimmt für heute.");
+      return false;
+    });
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    expect(w.find('.c-state--error[role="alert"]').text()).toContain("Jenug jestimmt für heute.");
+    expect(w.find('.c-state--error[role="alert"]').text()).not.toContain("nich anjekommen");
+  });
+
+  it("offline locks the tiles with aria-disabled and sends nothing", async () => {
+    const online = vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
+    const w = await mountIt();
+    window.dispatchEvent(new Event("offline"));
+    await flushPromises();
+    const tiles = w.findAll("button.c-choice--tile");
+    expect(tiles.every((t) => t.attributes("aria-disabled") === "true")).toBe(true);
+    expect(w.find(".c-state--offline").text()).toContain("Du bist offline.");
+    await tiles[0].trigger("click");
+    expect(store.answerUsage).not.toHaveBeenCalled();
+    online.mockReturnValue(true);
+    window.dispatchEvent(new Event("online"));
+    await flushPromises();
+    expect(w.find(".c-state--offline").exists()).toBe(false);
+    online.mockRestore();
+  });
+
+  it("keeps focus on the retry button while offline: it sends nothing and points to the banner", async () => {
+    store.answerUsage.mockResolvedValueOnce(false);
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    const retryButton = w.findAll("button").find((b) => b.text().includes("Nochmal versuchen"))!;
+    (retryButton.element as HTMLButtonElement).focus();
+    const online = vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
+    window.dispatchEvent(new Event("offline"));
+    await flushPromises();
+    expect(retryButton.attributes("disabled")).toBeUndefined();
+    expect(retryButton.attributes("aria-disabled")).toBe("true");
+    expect(retryButton.attributes("aria-describedby")).toBe("word-feedback-offline");
+    expect(document.getElementById("word-feedback-offline")).not.toBeNull();
+    expect(document.activeElement).toBe(retryButton.element);
+    store.answerUsage.mockClear();
+    await retryButton.trigger("click");
+    expect(store.answerUsage).not.toHaveBeenCalled();
+    online.mockRestore();
+    w.unmount();
   });
 
   it("retries a failed load on the first answer and does not send without state", async () => {
@@ -102,7 +190,7 @@ describe("WordFeedbackCard", () => {
     await click(w, "Kenn ick");
     expect(store.loadFeedback).toHaveBeenCalledWith(7);
     expect(store.sendFeedback).not.toHaveBeenCalled();
-    expect(w.find('[role="alert"]').exists()).toBe(true);
+    expect(w.find('.c-state--error[role="alert"]').exists()).toBe(true);
   });
 
   it("disables the answers while a request is pending", async () => {
@@ -110,7 +198,7 @@ describe("WordFeedbackCard", () => {
     store.answerUsage.mockReturnValue(new Promise<boolean>((r) => (resolve = r)));
     const w = await mountIt();
     await w.findAll("button")[0].trigger("click");
-    expect(w.findAll("button").every((b) => b.attributes("disabled") !== undefined)).toBe(true);
+    expect(w.findAll("button").every((b) => b.attributes("aria-disabled") === "true")).toBe(true);
     resolve(true);
     await flushPromises();
   });
@@ -258,22 +346,31 @@ describe("WordFeedbackCard", () => {
     $profile.set({ area: "pankow", origin: "grewUp" });
     const w = await mountIt();
     await click(w, "Sag ick selbst");
-    expect(store.answerUsage).toHaveBeenCalledWith(7, "say");
+    expect(store.answerUsage).toHaveBeenCalledWith(7, "say", true);
     expect(store.sendFeedback).not.toHaveBeenCalled();
   });
 
-  it("starts in the done state for an answered word, usage still clickable", async () => {
+  it("an answered word without a profile starts on the results and the first question, Zurück shows the tiles", async () => {
     $feedback.set(state({ mine: { usage: "say" } }));
     const w = await mountIt();
-    expect(w.text()).toContain("Angaben ändern");
-    expect(w.findAll("button")[0].attributes("aria-pressed")).toBe("true");
+    expect(w.text()).toContain("Wo wohnste?");
+    expect(w.text()).toContain("Sag ick selbst · deine Antwort");
+    await click(w, "← Zurück");
     await click(w, "Nie jehört");
-    expect(store.answerUsage).toHaveBeenCalledWith(7, "never");
+    expect(store.answerUsage).toHaveBeenCalledWith(7, "never", true);
+  });
+
+  it("an answered word with a profile starts in done and shows no further questions", async () => {
+    $feedback.set(state({ mine: { age: "30-39", usage: "say" } }));
+    const w = await mountIt();
+    expect(w.text()).toContain("Danke fürs Mitmachen!");
+    expect(w.text()).toContain("Sag ick selbst · deine Antwort");
+    expect(w.text()).not.toContain("Wo wohnste?");
   });
 
   it("Angaben ändern clears the profile and asks for the area", async () => {
     $profile.set({ age: "30-39", area: null, half: null, origin: "movedOver10" });
-    $feedback.set(state({ mine: { usage: "say" } }));
+    $feedback.set(state({ mine: { age: "30-39", usage: "say" } }));
     const w = await mountIt();
     await click(w, "Angaben ändern");
     expect($profile.get()).toEqual({});
@@ -288,7 +385,7 @@ describe("WordFeedbackCard", () => {
   });
 
   it("Stimme zurückziehen sends usage null and shows the usage buttons again", async () => {
-    $feedback.set(state({ mine: { usage: "say" } }));
+    $feedback.set(state({ mine: { area: "pankow", usage: "say" } }));
     store.sendFeedback.mockImplementation(async () => {
       $feedback.set(state({ mine: { usage: null } }));
       return true;
@@ -314,7 +411,7 @@ describe("WordFeedbackCard", () => {
   });
 
   it("Alle meine Antworten löschen asks first and then deletes through the store", async () => {
-    $feedback.set(state({ mine: { usage: "say" } }));
+    $feedback.set(state({ mine: { area: "pankow", usage: "say" } }));
     store.deleteAllFeedback.mockResolvedValue(true);
     const confirm = vi
       .spyOn(window, "confirm")
@@ -334,7 +431,8 @@ describe("WordFeedbackCard", () => {
     await click(w, "Kenn ick");
     await flushPromises();
     expect(document.activeElement?.tagName).toBe("H3");
-    expect(document.activeElement?.textContent).toBe("Wo wohnste?");
+    expect(document.activeElement?.textContent?.trim()).toBe("Wo wohnste?");
+    expect(document.activeElement?.getAttribute("tabindex")).toBe("-1");
     w.unmount();
   });
 
@@ -355,13 +453,73 @@ describe("WordFeedbackCard", () => {
     w.unmount();
   });
 
-  it("clears a failed usage re-vote back to the saved choice", async () => {
+  it("a failed usage re-vote leaves no tile pressed", async () => {
     $feedback.set(state({ mine: { usage: "say" } }));
     store.answerUsage.mockResolvedValue(false);
     const w = await mountIt();
+    await click(w, "← Zurück");
     await click(w, "Nie jehört");
-    expect(w.findAll("button")[0].attributes("aria-pressed")).toBe("true");
-    expect(w.findAll("button")[2].attributes("aria-pressed")).toBe("false");
+    expect(w.find('button.c-choice--tile[aria-pressed="true"]').exists()).toBe(false);
+    expect(w.find(".c-state--error").exists()).toBe(true);
+  });
+
+  it("Woanders skips the Kiez and the half even for someone who grew up there", async () => {
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    await click(w, "Woanders");
+    expect(w.text()).toContain("Uffjewachsen oder zujezogen?");
+    await click(w, "Hier uffjewachsen");
+    expect(w.text()).toContain("Wie alt biste?");
+    expect(w.text()).not.toContain("In welcher Hälfte?");
+    expect(eyebrow(w)).toBe("Schritt 4 von 4");
+  });
+
+  it("Woanders drops a half answered before Zurück, on the server and in the stored profile", async () => {
+    $profile.set({ half: "east", origin: "grewUp" });
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    await click(w, "Woanders");
+    expect(store.sendFeedback).toHaveBeenLastCalledWith(7, { area: "elsewhere", half: null });
+    // Absent = "not asked yet": a null key would skip the half question for good.
+    expect($profile.get()).not.toHaveProperty("half");
+  });
+
+  it("Woanders, Zurück, then a Berlin Bezirk asks the half again", async () => {
+    $profile.set({ half: "east", origin: "grewUp" });
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    await click(w, "Woanders");
+    await click(w, "← Zurück");
+    await click(w, "Pankow");
+    await click(w, "überspringen");
+    expect(w.text()).toContain("In welcher Hälfte?");
+  });
+
+  it("Zujezogen, unter 10 Jahren skips the half", async () => {
+    $profile.set({ area: null });
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    await click(w, "Zujezogen, unter 10 Jahren");
+    expect(w.text()).toContain("Wie alt biste?");
+    expect(w.text()).not.toContain("In welcher Hälfte?");
+  });
+
+  it("the progress has six segments labelled with the step, skipped ones do not count", async () => {
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    await click(w, "Woanders");
+    const bar = w.find(".c-word-feedback-card__segments");
+    expect(bar.findAll(".c-word-feedback-card__segment")).toHaveLength(6);
+    expect(bar.attributes("aria-label")).toBe("Schritt 3 von 4");
+    expect(bar.findAll(".is-skipped")).toHaveLength(2);
+  });
+
+  it("Zurück from the first profile step returns to the vote", async () => {
+    const w = await mountIt();
+    await click(w, "Kenn ick");
+    await click(w, "← Zurück");
+    expect(w.findAll("button.c-choice--tile")).toHaveLength(3);
+    expect(w.find('[role="status"]').text()).toBe("");
   });
 
   it.each([
@@ -430,13 +588,16 @@ describe("WordFeedbackCard", () => {
       expect(w.findAll(".c-word-feedback-card__bar.is-mine")).toHaveLength(1);
     });
 
-    it("offers no back link on the first question of an edit, then one after an answer", async () => {
-      $feedback.set(state({ mine: { usage: "say" } }));
+    it("offers a back link on every profile question, on the first one it leads to the vote (Spec §10)", async () => {
+      $feedback.set(state({ mine: { age: "30-39", usage: "say" } }));
       const w = await mountIt();
       await click(w, "Angaben ändern");
-      expect(w.text()).not.toContain("← Zurück");
+      expect(w.text()).toContain("← Zurück");
       await click(w, "Pankow");
       expect(w.text()).toContain("← Zurück");
+      await click(w, "← Zurück");
+      await click(w, "← Zurück");
+      expect(w.findAll("button.c-choice--tile")).toHaveLength(3);
     });
 
     it("goes back over a step the answers made irrelevant, without sending", async () => {
@@ -457,28 +618,6 @@ describe("WordFeedbackCard", () => {
       expect(w.find("h3").text()).toBe("Uffjewachsen oder zujezogen?");
       await click(w, "← Zurück");
       expect(w.find("h3").text()).toBe("Wo wohnste?");
-    });
-
-    it("going back to the vote withdraws it", async () => {
-      const w = await mountIt();
-      await click(w, "Kenn ick");
-      await click(w, "← Zurück");
-      expect(store.sendFeedback).toHaveBeenLastCalledWith(7, { usage: null });
-      expect(w.findAll("button").map((b) => b.text())).toEqual([
-        "Sag ick selbst",
-        "Kenn ick",
-        "Nie jehört",
-      ]);
-      expect(w.find('[aria-pressed="true"]').exists()).toBe(false);
-    });
-
-    it("stays on the step when withdrawing the vote fails", async () => {
-      const w = await mountIt();
-      await click(w, "Kenn ick");
-      store.sendFeedback.mockResolvedValue(false);
-      await click(w, "← Zurück");
-      expect(w.find("h3").text()).toBe("Wo wohnste?");
-      expect(w.text()).toContain("← Zurück");
     });
 
     it("re-picking the same area clears the locality and shows no stale pressed button", async () => {
@@ -526,7 +665,7 @@ describe("WordFeedbackCard", () => {
   describe("reset and load", () => {
     it("Angaben ändern clears the stored profile on the server, not the vote", async () => {
       $profile.set({ age: "30-39", area: null, half: null, origin: "movedOver10" });
-      $feedback.set(state({ mine: { usage: "say" } }));
+      $feedback.set(state({ mine: { age: "30-39", usage: "say" } }));
       const w = await mountIt();
       await click(w, "Angaben ändern");
       expect(store.sendFeedback).toHaveBeenCalledWith(7, {
@@ -541,7 +680,7 @@ describe("WordFeedbackCard", () => {
 
     it("keeps the profile when clearing it on the server fails", async () => {
       $profile.set({ age: "30-39", area: null, half: null, origin: "movedOver10" });
-      $feedback.set(state({ mine: { usage: "say" } }));
+      $feedback.set(state({ mine: { age: "30-39", usage: "say" } }));
       store.sendFeedback.mockResolvedValue(false);
       const w = await mountIt();
       await click(w, "Angaben ändern");
@@ -555,7 +694,7 @@ describe("WordFeedbackCard", () => {
       expect(w.find('[role="alert"]').exists()).toBe(true);
     });
 
-    it("labels the usage group and keeps the live region on the results only", async () => {
+    it("labels the usage group and keeps the results live region on the results only", async () => {
       const w = await mountIt();
       expect(w.find('[role="group"]').attributes("aria-labelledby")).toBe("word-feedback-title");
       await click(w, "Kenn ick");
@@ -569,7 +708,7 @@ describe("WordFeedbackCard", () => {
     const w = await mountIt();
     await click(w, "Kenn ick");
     expect(w.find(".c-word-feedback-card__step").classes()).toContain("is-entering");
-    $feedback.set(state({ mine: { usage: "say" } }));
+    $feedback.set(state({ mine: { age: "30-39", usage: "say" } }));
     const again = await mountIt();
     expect(again.find(".c-word-feedback-card__done").classes()).not.toContain("is-entering");
   });

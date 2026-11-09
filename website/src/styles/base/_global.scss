@@ -10,3 +10,9 @@
   outline: 2px solid var(--color-accent-text);
   outline-offset: 2px;
 }
+
+// Word page and lightbox: one dashed ring for all components (SPEC.md §8); single overrides only change offset.
+:where(.c-word-page, .c-lightbox) :focus-visible {
+  outline: 2px dashed var(--focus-ring);
+  outline-offset: 2px;
+}

@@ -37,13 +37,19 @@ describe("WordPageFooter.astro", () => {
     expect(result).toContain('datetime="2024-06-20T10:30:00.000Z"');
   });
 
-  it("renders both dates when both are provided", async () => {
+  it("renders both dates in one line with the Spec separator", async () => {
     const result = await render({
       modifiedAt: "2024-06-20T10:30:00.000Z",
       publishedAt: "2024-01-15T12:00:00.000Z",
     });
     expect(result).toContain("Wort erstellt am");
     expect(result).toContain("Bearbeitet am");
+    expect(result).toMatch(/<\/span>\s*·\s*<span/);
+    expect(result).toContain("t-small");
+  });
+
+  it("renders no paragraph without dates", async () => {
+    expect(await render({})).not.toContain("<p");
   });
 
   it("does not render publishedAt element when publishedAt is null", async () => {

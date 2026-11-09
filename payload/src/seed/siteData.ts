@@ -192,7 +192,7 @@ export const affiliate = {
     {
       "title": "Langenscheidt Lilliput Berlinerisch",
       "description": "~5.000 Stichwörter, Berlinerisch ↔ Hochdeutsch",
-      "href": "https://amzn.to/4xR4Bc3",
+      "href": "https://www.amazon.de/dp/EXAMPLE0001",
       "imageUrl": "https://m.media-amazon.com/images/I/41+kWR+0HCL._SL160_.jpg",
       "imageAlt": null,
       "badge": "Wörterbuch",
@@ -201,7 +201,7 @@ export const affiliate = {
     {
       "title": "Berlinerisch: Watt denn, icke?",
       "description": "Mit typischen Berliner Sprüchen & Sprachgeschichte",
-      "href": "https://amzn.to/4oSsOuf",
+      "href": "https://www.amazon.de/dp/EXAMPLE0002",
       "imageUrl": "https://m.media-amazon.com/images/I/61GIlaMv1iL._SL160_.jpg",
       "imageAlt": null,
       "badge": "Nachschlagewerk",
@@ -210,7 +210,7 @@ export const affiliate = {
     {
       "title": "Da kiekste, wa?! Dialekt-Quiz",
       "description": "50 typische Berliner Begriffe als Kartenspiel",
-      "href": "https://amzn.to/4vzMQMP",
+      "href": "https://www.amazon.de/dp/EXAMPLE0003",
       "imageUrl": "https://m.media-amazon.com/images/I/71NffJVrOJL._SL160_.jpg",
       "imageAlt": null,
       "badge": "Geschenk",

@@ -1,0 +1,76 @@
+---
+import '@styles/components/_word-images.scss';
+import { getImage, Image } from 'astro:assets';
+import type { WordImage } from '@utils/wordImages.ts';
+
+interface Props {
+  images: WordImage[];
+  /** strip: below the hero (< 808px). hero: inside the hero (from 808px). Both are in the page, CSS shows one. */
+  placement: 'strip' | 'hero';
+  learnMore?: string | null | undefined;
+  class?: string;
+}
+
+const { images, placement, learnMore, class: className } = Astro.props;
+const hero = placement === 'hero';
+const widths = hero ? [220, 330, 440, 660] : [320, 480, 640, 800];
+// The hero copy sits in the image column once .c-word-main is >= 45.5rem wide (about a 1000px viewport, see _word-hero.scss); below that the 70vw/380px split mirrors it.
+const sizes = hero ? '(max-width: 999px) 70vw, 380px' : '82vw';
+// Both copies are in the HTML and CSS hides one. Every <img> is lazy (a lazy image in a display:none copy is never fetched),
+// the visible copy's first image is the LCP candidate: a media-scoped preload fetches it early on its own viewport only.
+const first = images[0];
+const preload = first
+  ? await getImage({ format: 'webp', height: first.height, sizes, src: first.src, width: first.width, widths })
+  : undefined;
+// Must match the CSS switch (mx.breakpoint("word") = 808px).
+const preloadMedia = hero ? '(min-width: 808px)' : '(max-width: 807.98px)';
+---
+
+{preload?.srcSet.attribute && (
+  <link rel='preload' as='image' imagesrcset={preload.srcSet.attribute} imagesizes={sizes} media={preloadMedia} fetchpriority='high' />
+)}
+
+<section class:list={['c-word-images', `c-word-images--${placement}`, className]} aria-label='Bilder'>
+  <div class:list={['c-image-strip', { 'c-image-strip--single': images.length === 1 }]}>
+    {
+      images.map((image, i) => (
+        <figure>
+          <button
+            class='c-image-strip__btn'
+            type='button'
+            data-lightbox-index={i}
+            aria-label={`Bild ${i + 1} von ${images.length} vergrößern: ${image.alt}`}
+          >
+            <Image
+              alt=''
+              format='webp'
+              height={image.height}
+              loading='lazy'
+              sizes={sizes}
+              src={image.src}
+              width={image.width}
+              widths={widths}
+            />
+          </button>
+          {image.credit && (
+            <figcaption class='t-small'>
+              Foto: <Fragment set:html={image.credit} />
+            </figcaption>
+          )}
+        </figure>
+      ))
+    }
+  </div>
+  {
+    learnMore && (
+      <a
+        class='c-textlink c-textlink--inline t-small c-word-images__more'
+        href={learnMore}
+        rel='noopener noreferrer'
+        target='_blank'
+      >
+        Erfahre mehr über dieses Wort ↗
+      </a>
+    )
+  }
+</section>

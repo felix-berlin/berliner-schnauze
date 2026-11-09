@@ -12,12 +12,36 @@ describe("wordSeoDescription", () => {
 
   it("names only the parts the entry has", () => {
     expect(wordSeoDescription(base)).toBe(
-      "anmachen heißt auf Berlinerisch: jemanden anflirten, sich jemandem nähern.",
+      "anmachen heißt auf Berlinerisch: jemanden anflirten, sich jemandem nähern. Berlinerisch-Wörterbuch der Berliner Schnauze.",
     );
     expect(wordSeoDescription({ ...base, hasAudio: true })).toContain("Mit Aussprache.");
     expect(wordSeoDescription({ ...base, hasEtymology: true, hasAudio: true, hasExamples: true })).toContain(
       "Mit Etymologie, Aussprache & Beispielsätzen.",
     );
+  });
+
+  it("quotes the first example sentence when it fits, else falls back to the parts", () => {
+    const withExample = { ...base, example: "Der hat mir ordentlich anjemacht.", hasExamples: true };
+    expect(wordSeoDescription(withExample)).toBe(
+      "anmachen heißt auf Berlinerisch: jemanden anflirten, sich jemandem nähern. Beispiel: „Der hat mir ordentlich anjemacht.“ Mit Beispielsätzen.",
+    );
+    const tooLong = wordSeoDescription({ ...withExample, example: "x".repeat(200) });
+    expect(tooLong).not.toContain("Beispiel:");
+    expect(tooLong.length).toBeLessThanOrEqual(160);
+    expect(wordSeoDescription({ ...base, example: "  " })).not.toContain("Beispiel:");
+    expect(wordSeoDescription({ ...base, example: "Dit passt" })).toContain("„Dit passt“.");
+  });
+
+  it("trims the meanings it joins", () => {
+    expect(wordSeoDescription({ berlinerisch: "aalen", translations: ["sich rekeln "] })).toContain("sich rekeln.");
+  });
+
+  it("closes with the dictionary line only while it fits", () => {
+    const short = wordSeoDescription({ berlinerisch: "x", translations: ["kurz"] });
+    expect(short).toBe("x heißt auf Berlinerisch: kurz. Berlinerisch-Wörterbuch der Berliner Schnauze.");
+    const tight = wordSeoDescription({ berlinerisch: "x", translations: ["a".repeat(120)] });
+    expect(tight).not.toContain("Wörterbuch der");
+    expect(tight.length).toBeLessThanOrEqual(160);
   });
 
   it("stays within 160 characters, dropping the last meanings before the parts, never mid-meaning", () => {

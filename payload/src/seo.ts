@@ -20,6 +20,7 @@ type SeoDoc = Partial<Page & Post & Theman & Word>;
 /** What the entry has, for the generated title and description. */
 const wordFacts = (berlinerisch: string, d: SeoDoc): WordSeoFacts => ({
   berlinerisch,
+  example: (d.examples ?? []).find((e) => e.example)?.example,
   hasAudio: (d.berlinerischAudio?.length ?? 0) > 0,
   hasEtymology: hasLexicalText(d.infoText),
   hasExamples: (d.examples ?? []).some((e) => e.example),

@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
 
 vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify: vi.fn() }));
+vi.mock("@utils/reportError.ts", () => ({ reportError: vi.fn() }));
 
 const { fetchMock } = vi.hoisted(() => ({ fetchMock: vi.fn() }));
 vi.stubGlobal("fetch", fetchMock);
@@ -105,10 +106,27 @@ describe("useComments", () => {
     expect(c.isOwn(1)).toBe(false);
   });
 
-  it("answers 429 with a warning toast and reports the error", async () => {
+  it("answers 429 with an error result (reason: see failReason)", async () => {
     fetchMock.mockReturnValueOnce(answer("Too many", 429));
     const c = useComments(7);
     expect(await c.post({ authorName: "", text: "Hallo" }, "tok")).toBe("error");
+  });
+
+  it("post and edit failures are silent and hand the reason to failReason", async () => {
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    const toast = vi.mocked(createToastNotify);
+    toast.mockClear();
+    const c = useComments(7);
+    fetchMock.mockReturnValueOnce(answer("Too many", 429));
+    expect(await c.post({ authorName: "", text: "Hallo" }, "tok")).toBe("error");
+    expect(c.failReason.value).toBe("Ma langsam, Keule – versuch's gleich nochmal.");
+    fetchMock.mockReturnValueOnce(answer({ error: "Zu kurz" }, 400));
+    expect(await c.post({ authorName: "", text: "Hallo" }, "tok")).toBe("error");
+    expect(c.failReason.value).toBe("Zu kurz");
+    fetchMock.mockReturnValueOnce(Promise.reject(new TypeError("Failed to fetch")));
+    expect(await c.edit(1, "neu")).toBe("error");
+    expect(c.failReason.value).toBe(""); // generic: the box already says it
+    expect(toast).not.toHaveBeenCalled();
   });
 
   it("does not duplicate an own post when the next page repeats it", async () => {
@@ -211,6 +229,31 @@ describe("useComments", () => {
     ]);
   });
 
+  it("a sent report is remembered per device and comment, a refused one is not", async () => {
+    fetchMock.mockReturnValueOnce(answer({ ok: true }, 201));
+    const c = useComments(7);
+    expect(c.isReported(1)).toBe(false);
+    await c.report(1, "Beleidigend", "tok");
+    expect(c.isReported(1)).toBe(true);
+    expect(c.isReported(2)).toBe(false);
+    expect(JSON.parse(localStorage.getItem("bs-reported-comments")!)).toEqual([1]);
+    fetchMock.mockReturnValueOnce(answer({ error: "x" }, 502));
+    await c.report(2, "Spam", "tok");
+    expect(c.isReported(2)).toBe(false);
+  });
+
+  it("a down-vote sends -1 and takes the server counts (up and down)", async () => {
+    fetchMock.mockReturnValueOnce(answer({ downvotes: 3, myVote: -1, upvotes: 1 }));
+    const c = useComments(7);
+    c.comments.value = [comment(1)];
+    expect(await c.vote(1, -1)).toBe(true);
+    expect(JSON.parse((fetchMock.mock.calls[0]![1] as { body: string }).body)).toEqual({
+      commentId: 1,
+      value: -1,
+    });
+    expect(c.comments.value[0]).toMatchObject({ downvotes: 3, myVote: -1, upvotes: 1 });
+  });
+
   it("report is true when the server accepts it", async () => {
     fetchMock.mockReturnValueOnce(answer({ ok: true }, 201));
     expect(await useComments(7).report(1, "Spam", "tok")).toBe(true);
@@ -297,6 +340,22 @@ describe("useComments", () => {
       Promise.resolve({ json: () => Promise.reject(new Error("no json")), ok: true, status: 200 }),
     );
     expect(await useComments(7).report(1, "", "tok")).toBe(false);
+  });
+
+  it("reports a 5xx and a non-JSON answer, but not a plain 4xx or a 429", async () => {
+    const { reportError } = await import("@utils/reportError.ts");
+    vi.mocked(reportError).mockClear();
+    fetchMock
+      .mockReturnValueOnce(answer({ error: "Kaputt" }, 400))
+      .mockReturnValueOnce(answer({}, 429))
+      .mockReturnValueOnce(answer({ error: "boom" }, 503))
+      .mockReturnValueOnce(
+        Promise.resolve({ json: () => Promise.reject(new Error("html")), ok: false, status: 400 }),
+      );
+    const c = useComments(7);
+    for (let i = 0; i < 4; i++) await c.report(1, "", "tok");
+    expect(reportError).toHaveBeenCalledTimes(2);
+    expect(String(vi.mocked(reportError).mock.calls[0][0])).toContain("503");
   });
 
   it("survives malformed localStorage", () => {

@@ -1,0 +1,250 @@
+/* ============================================================
+   Berliner Schnauze — Word-page canon components
+   Source of truth: the /wort/<slug> page (word-hero, section-card,
+   sidebar, related words). Every other surface should reuse these
+   classes instead of inventing its own card/badge/button styles.
+   ============================================================ */
+
+/* ---------- Primitives ---------- */
+.c-eyebrow{font-family:var(--font-body);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--color-muted)}
+.c-paper{background:var(--surface-paper);border:1px dashed var(--rule-card);border-radius:var(--radius-sm);box-shadow:var(--paper-lift)}
+.c-rule{border:0;border-block-start:1px dashed var(--rule-inner);margin:0}
+
+/* ---------- Button (square, dashed-on-hover + glow) ---------- */
+.c-button{cursor:pointer;font:inherit;letter-spacing:inherit;padding:.25rem .5rem;background-color:var(--control-bg);border:1px solid var(--control-border);color:var(--control-color);border-radius:0;display:inline-flex;align-items:center;justify-content:center;gap:.25rem;transition:background-color .3s,border-color .3s,color .3s,box-shadow .3s}
+.c-button:hover:not(:disabled){border-style:dashed;box-shadow:var(--shadow-hover-glow)}
+.c-button--primary{background-color:var(--orange-600);color:var(--white-100);border-color:var(--orange-600);font-weight:700}
+.c-button--primary:hover:not(:disabled){border-color:var(--yellow-500)}
+.c-button--filter.is-active,.c-button--filter:hover:not(:disabled){border-color:var(--yellow-500);border-style:dashed;background-color:var(--orange-500);color:#000}
+.c-button--control{border-radius:var(--radius-sm);height:36px;padding:0 .75rem}
+.c-button:disabled{background-color:transparent;color:var(--color-muted);border-color:var(--color-muted);border-style:dotted;cursor:not-allowed;box-shadow:none}
+
+/* ---------- Badge (metadata chip) ---------- */
+.c-badge{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--font-body);font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:.25rem .6rem;border-radius:var(--radius-sm);background:var(--surface-badge);border:1px solid transparent;color:var(--color-ink-strong);text-decoration:none}
+.c-badge--strong{background:var(--orange-600);color:var(--white-100)}
+a.c-badge:hover{box-shadow:var(--shadow-hover-glow)}
+.c-badge--auto{outline:1px dashed currentColor;outline-offset:-3px}
+.c-badge svg{color:var(--orange-500);flex-shrink:0}
+html.dark .c-badge:not(.c-badge--strong),[data-theme="dark"] .c-badge:not(.c-badge--strong){color:var(--orange-200)}
+
+/* ---------- Tag (grammar, lighter than badge) ---------- */
+.c-tag{display:inline-block;background:color-mix(in srgb,var(--orange-500) 16%,transparent);border:0;border-radius:var(--radius-sm);padding:.125rem .625rem;font-size:.8rem;color:var(--color-body)}
+
+/* ---------- Chip link (related words, anagrams) ---------- */
+.c-chip-link{display:inline-flex;align-items:center;padding:.375rem .875rem;background:var(--orange-200);border:1px dashed var(--orange-300);border-radius:var(--radius-xs);font-family:var(--font-body);font-size:.9rem;text-decoration:none;color:var(--color-ink-strong);transition:border-color .15s,color .15s,background-color .15s}
+.c-chip-link::after{content:"→";font-size:.8em;max-width:0;overflow:hidden;opacity:0;translate:-4px 0;transition:opacity .15s,translate .15s}
+.c-chip-link:hover{background:var(--orange-300);border-color:var(--orange-500);border-style:solid;color:var(--orange-700)}
+.c-chip-link:hover::after{opacity:1;max-width:1.5em;margin-inline-start:.35rem;translate:0 0}
+html.dark .c-chip-link,[data-theme="dark"] .c-chip-link{background:var(--surface-tag);border-color:var(--grey-100);color:var(--color-body)}
+html.dark .c-chip-link:hover,[data-theme="dark"] .c-chip-link:hover{border-color:var(--orange-400);color:var(--orange-300)}
+.c-chip-list{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:.625rem}
+
+/* ---------- Word hero ---------- */
+.c-word-hero{background:var(--surface-hero);border:1px dashed var(--rule-card);border-radius:var(--radius-sm);box-shadow:var(--paper-lift);padding:1.25rem 1.5rem;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:1rem;container-type:inline-size}
+.c-word-hero__left{display:flex;flex-direction:column;gap:1rem;flex:1;min-inline-size:200px}
+.c-word-hero__right{display:flex;gap:.5rem;flex-shrink:0}
+.c-word-hero__title{font-family:var(--font-body);font-size:clamp(2rem,5cqi,3.75rem);font-weight:700;color:var(--color-ink-strong);margin:0;line-height:1.1;text-wrap:balance}
+html.dark .c-word-hero__title,[data-theme="dark"] .c-word-hero__title{color:var(--orange-300)}
+.c-word-hero__article{font-weight:400;color:var(--grey-100);font-size:.6em;margin-inline-end:.25em}
+html.dark .c-word-hero__article,[data-theme="dark"] .c-word-hero__article{color:color-mix(in srgb,var(--orange-200) 70%,transparent)}
+.c-word-hero__badges{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem}
+.c-headword{display:inline-block;position:relative;font-style:normal}
+.c-headword::after{content:"";position:absolute;inset-inline:0;inset-block-end:-.1em;height:2px;background:repeating-linear-gradient(to right,var(--rule-dash) 0,var(--rule-dash) 5px,transparent 5px,transparent 9px)}
+
+/* ---------- Section card ---------- */
+.c-section-list{counter-reset:section-num;display:flex;flex-direction:column;gap:1rem}
+.c-section-card{counter-increment:section-num;background:var(--surface-sheet);border:1px dashed var(--rule-card);border-radius:var(--radius-sm) var(--radius-sm) 0 0;box-shadow:var(--paper-lift)}
+.c-section-card--unnumbered{counter-increment:none}
+.c-section-card--unnumbered .c-section-card__num::before{content:"—"}
+.c-section-card__header{display:flex;align-items:baseline;gap:.625rem;padding:.75rem 1.25rem;border-block-end:1px dashed var(--rule-inner)}
+.c-section-card__num{font-size:.65rem;font-weight:700;color:var(--orange-500);letter-spacing:.05em;flex-shrink:0}
+.c-section-card__num::before{content:counter(section-num,decimal-leading-zero)}
+.c-section-card__title{font-family:var(--font-body);font-weight:700;font-size:1.25rem;margin:0;color:var(--color-ink-strong)}
+.c-section-card__body{padding:1rem 1.25rem;overflow-wrap:break-word}
+.c-section-card__body :where(p,li){font-size:1rem;line-height:1.5}
+.c-section-card__body h3{font-family:var(--font-body);font-size:1.1rem;font-weight:700;margin:1.55em 0 .75em;color:var(--color-ink-strong)}
+.c-section-card__body > :first-child{margin-block-start:0}
+.c-section-card__footer{display:flex;align-items:baseline;flex-wrap:wrap;gap:.375rem .75rem;padding:.625rem 1.25rem;border-block-start:1px dashed var(--rule-inner);font-size:.8rem;color:var(--color-muted)}
+
+/* ---------- Content blocks inside section cards ---------- */
+.c-infotext{padding:.75rem 1rem;border-inline-start:3px solid var(--orange-300);background:var(--surface-callout);border-radius:0 var(--radius-sm) var(--radius-sm) 0}
+.c-stat-row{display:flex;gap:.75rem;flex-wrap:wrap}
+.c-stat-box{flex:1;min-width:80px;padding:.625rem .875rem;border-radius:var(--radius-sm);background:var(--surface-chip);border:1px dashed var(--orange-200)}
+html.dark .c-stat-box,[data-theme="dark"] .c-stat-box{border-color:var(--grey-100)}
+.c-stat-box__label{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--color-muted)}
+.c-stat-box__value{font-size:1.25rem;font-weight:800;color:var(--color-ink-strong)}
+.c-dl{display:grid;grid-template-columns:max-content 1fr;column-gap:1rem;row-gap:.375rem;margin:0;align-items:baseline}
+.c-dl dt{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--color-muted);white-space:nowrap;padding-block-start:.15em}
+.c-dl dd{margin:0}
+.c-meanings{list-style:none;padding:0;margin:0;counter-reset:meaning;display:flex;flex-direction:column;gap:.3em}
+.c-meanings li{counter-increment:meaning;display:grid;grid-template-columns:1.4em 1fr;gap:.3em;align-items:baseline;font-size:1.125rem;line-height:1.45}
+.c-meanings li::before{content:counter(meaning) ".";color:var(--orange-500);font-size:.7em;font-weight:700}
+html.dark .c-meanings li::before,[data-theme="dark"] .c-meanings li::before{color:var(--orange-300)}
+.c-example{display:flex;gap:1rem;padding:1.5rem 5%;margin:0}
+.c-example__quote{font-family:var(--font-display);font-size:3rem;line-height:.8;color:var(--grey-200);flex:0 0 auto}
+html.dark .c-example__quote,[data-theme="dark"] .c-example__quote{color:var(--orange-300)}
+.c-example__text{font-style:italic;font-size:clamp(1.5rem,4cqi,2.2rem);margin:0;line-height:1.25}
+.c-example__explanation{font-size:1rem;font-style:normal;margin-block-start:.5rem;color:var(--color-muted)}
+
+/* ---------- Sidebar (in-page nav) ---------- */
+.c-sidebar{display:flex;flex-direction:column;background:var(--surface-paper);border:1px dashed var(--rule-card);border-radius:var(--radius-sm)}
+.c-sidebar__word{padding:.75rem;border-block-end:1px dashed var(--rule-card)}
+.c-sidebar__word-title{font-family:var(--font-body);font-size:1.1rem;font-weight:700;color:var(--color-ink-strong);margin:0;line-height:1.1}
+.c-sidebar__word-subtitle{font-size:.75rem;color:var(--color-muted);margin:.2rem 0 0}
+.c-sidebar__group-label{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--color-muted);padding-inline:.75rem;margin:.5rem 0 .2rem}
+.c-sidebar__nav{display:flex;flex-direction:column;padding-block:.5rem}
+.c-sidebar__link{display:block;font-size:.8rem;font-weight:600;color:color-mix(in srgb,var(--blue) 80%,white);padding:.35rem .75rem;border-inline-start:3px solid transparent;text-decoration:none;transition:color .15s,background-color .15s,border-color .15s}
+.c-sidebar__link:hover{color:var(--color-ink-strong);background:color-mix(in srgb,var(--orange-300) 12%,transparent)}
+.c-sidebar__link.is-active{color:var(--color-ink-strong);background:color-mix(in srgb,var(--orange-300) 18%,transparent);border-inline-start-color:var(--orange-600)}
+html.dark .c-sidebar__link,[data-theme="dark"] .c-sidebar__link{color:color-mix(in srgb,var(--orange-100) 80%,transparent)}
+html.dark .c-sidebar__link:hover,html.dark .c-sidebar__link.is-active,[data-theme="dark"] .c-sidebar__link:hover,[data-theme="dark"] .c-sidebar__link.is-active{color:var(--orange-200)}
+
+/* ---------- Page layout ---------- */
+.c-word-page{display:grid;grid-template-columns:200px minmax(0,1fr);gap:2rem;align-items:start}
+.c-word-page > .c-sidebar{position:sticky;top:1rem}
+.c-word-main{display:flex;flex-direction:column;gap:1rem;container-type:inline-size}
+@media (max-width:807px){.c-word-page{display:flex;flex-direction:column;gap:1rem}}
+
+/* ============================================================
+   v3 — word-page v2 parts (mobile-first). Rules:
+   · ONE filled control per view: .c-button--primary or a selected .c-choice.
+   · Everything else is quiet: transparent ground, border only on hover.
+   · Touch targets ≥ 44px. Focus = 2px dashed orange-400 outline.
+   ============================================================ */
+
+/* ---------- Type scale (3 steps besides body) ---------- */
+.t-label{margin:0;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--color-muted)}
+.t-em{font-size:1.25rem;line-height:1.35;color:var(--color-ink-strong)}
+.t-small{font-size:.75rem;line-height:1.5;color:var(--color-muted)}
+.c-band{margin:0;font-family:var(--font-display);font-weight:400;font-size:1.6rem;line-height:1.2;color:var(--color-ink-strong)}
+
+/* ---------- Shared focus ring ---------- */
+:where(.c-choice,.c-reaction,.c-icon-button,.c-textlink,.c-tabbar__tab,.c-menu__item,.c-book,.c-next-link,.c-image-strip__btn,.c-field,.c-letters__tile):focus-visible{outline:2px dashed var(--orange-400);outline-offset:2px}
+
+/* ---------- Text link (secondary action without a box) ---------- */
+.c-textlink{font:inherit;letter-spacing:inherit;background:none;border:0;padding:0;min-height:44px;display:inline-flex;align-items:center;color:var(--color-muted);cursor:pointer;text-decoration:underline dashed from-font;text-underline-position:from-font}
+.c-textlink:hover{color:var(--color-accent-text)}
+a.c-textlink--inline,.c-textlink--inline{min-height:0;display:inline;color:inherit}
+
+/* ---------- Choice (Auswahl: answers, audio, filters) ---------- */
+.c-choice{font:inherit;letter-spacing:inherit;display:inline-flex;align-items:center;justify-content:center;gap:.4rem;min-height:44px;padding:0 1rem;background:transparent;color:var(--color-body);border:1px solid var(--control-border);border-radius:0;cursor:pointer;transition:background-color .3s,box-shadow .3s,border-color .3s}
+.c-choice:hover:not(:disabled){border-style:dashed;box-shadow:var(--shadow-hover-glow)}
+.c-choice[aria-pressed="true"],.c-choice[aria-checked="true"]{background:var(--orange-600);border-color:var(--orange-600);color:var(--white-100);font-weight:700}
+.c-choice:disabled{color:var(--color-muted);border-style:dotted;cursor:not-allowed}
+.c-choice-group{display:flex;flex-wrap:wrap;gap:.5rem}
+
+/* ---------- Poll tile (big Choice with icon + hint) ---------- */
+.c-choice--tile{justify-content:flex-start;gap:.875rem;min-height:72px;padding:.75rem 1rem;text-align:left;background:var(--surface-chip);width:100%}
+.c-choice__icon{display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex-shrink:0;color:var(--orange-400);border:1px dashed var(--rule-card);border-radius:var(--radius-sm);transition:color .3s,border-color .3s,transform .3s}
+.c-choice--tile:hover .c-choice__icon{color:var(--orange-300);border-color:var(--orange-400);transform:rotate(-8deg) scale(1.08)}
+.c-choice--tile[aria-pressed="true"] .c-choice__icon{color:var(--white-100);border-color:currentColor}
+.c-choice__text{display:flex;flex-direction:column;gap:.125rem}
+.c-choice__text b{color:inherit;font-size:1rem}
+.c-choice__text span{font-size:.75rem;color:var(--color-muted)}
+.c-choice--tile:not([aria-pressed="true"]) .c-choice__text b{color:var(--color-ink-strong)}
+.c-choice--tile[aria-pressed="true"] .c-choice__text span{color:inherit;opacity:.9}
+
+/* ---------- Reaction (like / dislike) ----------
+   Like and dislike are always shown side by side, equal weight, .25rem apart.
+   Never reveal one on hover. */
+.c-reaction{font:inherit;letter-spacing:inherit;display:inline-flex;align-items:center;gap:.375rem;min-width:44px;min-height:44px;padding:0 .625rem;background:transparent;border:1px dashed transparent;border-radius:var(--radius-sm);color:var(--color-muted);cursor:pointer;transition:color .3s,border-color .3s,background-color .3s}
+.c-reaction:hover{color:var(--color-ink-strong);border-color:var(--rule-card)}
+.c-reaction[aria-pressed="true"]{color:var(--color-accent-text);background:color-mix(in srgb,var(--orange-500) 15%,transparent)}
+.c-reaction-group{display:inline-flex;align-items:center;gap:.25rem}
+.c-reaction-group__more{animation:c-pop .2s ease-out}
+@keyframes c-pop{from{opacity:0;translate:-6px 0}to{opacity:1;translate:0 0}}
+
+/* ---------- Icon button + Menu (⋮ overflow) ---------- */
+.c-icon-button{font:inherit;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;background:transparent;border:1px dashed transparent;border-radius:var(--radius-sm);color:var(--color-muted);cursor:pointer}
+.c-icon-button:hover,.c-icon-button[aria-expanded="true"]{border-color:var(--rule-card);color:var(--color-ink-strong)}
+.c-menu-anchor{position:relative;display:inline-flex}
+.c-menu{position:absolute;top:calc(100% + 6px);right:0;z-index:5;min-width:210px;display:flex;flex-direction:column;gap:2px;margin:0;padding:.375rem;list-style:none;background:var(--surface-sheet);border:1px dashed var(--rule-card);border-radius:var(--radius-sm);box-shadow:var(--paper-lift)}
+.c-menu__item{font:inherit;letter-spacing:inherit;display:flex;align-items:center;gap:.75rem;width:100%;min-height:44px;padding:0 .75rem;background:transparent;border:0;border-radius:var(--radius-xs);color:var(--color-body);text-align:left;white-space:nowrap;cursor:pointer;text-decoration:none;transition:background-color .2s,color .2s}
+.c-menu__item svg{color:var(--orange-400);flex-shrink:0}
+.c-menu__item:hover,.c-menu__item:focus-visible{background:color-mix(in srgb,var(--orange-500) 14%,transparent);color:var(--color-ink-strong)}
+.c-menu__item[aria-checked="true"],.c-menu__item[data-done="true"]{color:var(--color-accent-text);font-weight:700}
+
+/* ---------- Tab bar (mobile in-page nav; desktop uses .c-sidebar) ---------- */
+.c-tabbar{position:sticky;top:0;z-index:4;display:flex;overflow-x:auto;scrollbar-width:none;background:var(--surface-sheet);border-block-end:1px dashed var(--rule-card)}
+.c-tabbar__tab{display:flex;align-items:center;min-height:48px;padding:0 .875rem;white-space:nowrap;font-size:.85rem;font-weight:700;text-decoration:none;color:var(--color-muted);border-block-end:3px solid transparent}
+.c-tabbar__tab:hover{color:var(--color-ink-strong)}
+.c-tabbar__tab[aria-current="true"]{color:var(--color-ink-strong);border-block-end-color:var(--orange-600)}
+
+/* ---------- Field (text input / textarea) ---------- */
+.c-field{box-sizing:border-box;width:100%;font:inherit;letter-spacing:inherit;color:var(--color-body);background:var(--surface-chip);border:1px solid var(--control-border);border-radius:0;padding:.625rem .75rem;min-height:44px}
+.c-field[aria-invalid="true"]{border-color:var(--danger);border-style:dashed}
+
+/* ---------- Image strip + Lightbox ---------- */
+.c-image-strip{display:flex;gap:.75rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0;padding:0}
+.c-image-strip > figure{flex:0 0 82%;scroll-snap-align:start;margin:0;display:flex;flex-direction:column;gap:.375rem}
+.c-image-strip__btn{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in;border-radius:var(--radius-sm);overflow:hidden}
+.c-image-strip__btn img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.c-lightbox{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;padding:1rem;background:color-mix(in srgb,#000 82%,transparent);backdrop-filter:blur(4px);color:#fff}
+.c-lightbox img{max-width:100%;max-height:75vh;border-radius:var(--radius-sm)}
+.c-lightbox__bar{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:960px;font-size:.8rem}
+.c-lightbox .c-icon-button{color:#fff}
+.c-lightbox .c-icon-button:hover{border-color:currentColor}
+
+/* ---------- Book card (affiliate, label „Anzeige“ is mandatory) ---------- */
+.c-shelf{display:flex;gap:.75rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:.25rem .125rem .5rem;margin:0;list-style:none}
+.c-book{flex:0 0 64%;scroll-snap-align:start;display:flex;flex-direction:column;gap:.5rem;padding:.625rem .625rem .25rem;text-decoration:none;color:var(--color-body);background:var(--surface-paper);box-shadow:var(--paper-lift);border-radius:var(--radius-sm);transition:box-shadow .3s}
+.c-book:hover{box-shadow:var(--shadow-hover-glow);color:var(--color-body)}
+.c-book__cover{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;background:var(--surface-chip);border-radius:var(--radius-xxs)}
+.c-book__title{font-weight:700;color:var(--color-ink-strong);line-height:1.25}
+.c-book__cta{display:flex;align-items:center;min-height:44px;font-size:.85rem;font-weight:700;color:var(--color-accent-text);border-block-start:1px dashed var(--rule-inner)}
+@media (min-width:808px){.c-shelf{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));overflow:visible}.c-book{flex:none;display:grid;grid-template-columns:64px minmax(0,1fr);grid-auto-rows:min-content;column-gap:1rem;row-gap:.25rem;padding:.875rem}.c-book__cover{grid-row:1 / span 4;width:64px}.c-book > :not(.c-book__cover){grid-column:2}.c-book__cta{min-height:32px;border:0;margin-top:.25rem}}
+
+/* ---------- Trend box ---------- */
+.c-trend{display:grid;grid-template-columns:1fr auto;align-items:end;gap:.25rem 1rem;padding:.875rem 1rem;background:color-mix(in srgb,var(--orange-500) 14%,var(--surface-paper));border-radius:var(--radius-sm);box-shadow:var(--paper-lift)}
+.c-trend__bars{display:flex;align-items:flex-end;gap:3px;height:44px}
+.c-trend__bars > span{width:8px;background:color-mix(in srgb,var(--orange-500) 45%,transparent);border-radius:1px}
+.c-trend__bars > span:last-child{background:var(--orange-600)}
+.c-trend > :last-child{grid-column:1/-1}
+
+/* ---------- Comment ---------- */
+.c-comment-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.c-comment{display:grid;grid-template-columns:36px 1fr;gap:.25rem .75rem;padding:.875rem 0;border-block-start:1px dashed var(--rule-inner)}
+.c-comment:first-child{border-block-start:0}
+.c-comment__avatar{grid-row:span 3;display:flex;align-items:center;justify-content:center;width:36px;height:36px;font-weight:700;color:var(--color-accent-text);background:color-mix(in srgb,var(--orange-500) 16%,transparent);border-radius:var(--radius-sm)}
+.c-comment__meta{font-size:.75rem;color:var(--color-muted)}
+.c-comment__meta b{color:var(--color-ink-strong);font-size:.875rem}
+.c-comment__text{margin:0;line-height:1.5}
+.c-comment__actions{display:flex;align-items:center;gap:.5rem;margin-inline-start:-.625rem}
+.c-comment--reply{margin-inline-start:48px}
+
+/* ---------- Letter tiles (quantitative linguistics) ---------- */
+.c-letters{display:flex;flex-wrap:wrap;gap:4px;margin:0;padding:0;list-style:none}
+.c-letters__tile{position:relative;flex:1 1 0;min-width:28px;max-width:44px;height:52px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:1.15rem;font-weight:700;color:var(--color-ink-strong);background:var(--surface-chip);border-radius:var(--radius-xxs)}
+.c-letters__tile::before{content:"";position:absolute;inset-inline:0;inset-block-end:0;height:var(--fill,0%);background:color-mix(in srgb,var(--orange-500) 28%,transparent)}
+.c-letters__tile > span{position:relative}
+@media (min-width:808px){.c-letters__tile{max-width:64px;height:72px;font-size:1.6rem}}
+
+/* ---------- „Und nu?“ next links ---------- */
+.c-next-link{display:grid;grid-template-columns:1.5rem 1fr auto;align-items:center;gap:.75rem;min-height:60px;padding:0 1rem;text-decoration:none;background:var(--surface-paper);box-shadow:var(--paper-lift);border-radius:var(--radius-sm);color:var(--color-ink-strong)}
+.c-next-link svg{color:var(--orange-400)}
+.c-next-link:hover{box-shadow:var(--shadow-hover-glow);color:var(--color-ink-strong)}
+
+/* ---------- States: skeleton · inline error · offline · done ---------- */
+.c-skeleton{display:block;border-radius:var(--radius-xxs);background:linear-gradient(90deg,var(--surface-chip) 0%,color-mix(in srgb,var(--orange-300) 18%,var(--surface-chip)) 50%,var(--surface-chip) 100%);background-size:200% 100%;animation:c-shimmer 1.4s linear infinite}
+.c-skeleton--line{height:.9em;margin-block:.35em}
+.c-skeleton--title{height:2.25rem;width:60%}
+@keyframes c-shimmer{to{background-position:-200% 0}}
+.c-state{display:flex;gap:.75rem;align-items:flex-start;padding:.75rem 1rem;border-radius:0 var(--radius-sm) var(--radius-sm) 0;border-inline-start:3px solid var(--color-muted);background:var(--surface-chip);font-size:.9rem;line-height:1.45}
+.c-state > svg{flex-shrink:0;margin-block-start:.15em;color:var(--color-muted)}
+.c-state__body{display:flex;flex-direction:column;gap:.125rem;flex:1}
+.c-state__body b{color:var(--color-ink-strong)}
+.c-state--error{border-inline-start-color:var(--danger)}
+.c-state--error > svg{color:var(--danger)}
+.c-state--offline{border-inline-start-style:dashed}
+.c-state--done{border-inline-start-color:var(--success)}
+.c-state--done > svg{color:var(--success)}
+.c-empty{display:flex;flex-direction:column;align-items:center;gap:.5rem;padding:1.5rem 1rem;text-align:center;color:var(--color-muted)}
+.c-empty b{font-family:var(--font-display);font-weight:400;font-size:1.25rem;color:var(--color-ink-strong)}
+@media (prefers-reduced-motion:reduce){.c-skeleton,.c-reaction-group__more{animation:none}.c-choice__icon{transition:none}.c-choice--tile:hover .c-choice__icon{transform:none}}
+
+/* ---------- Themes row (word hero) ---------- */
+.c-themes{margin:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .5rem;font-size:.75rem;color:var(--color-muted)}
+.c-themes > a + a::before{content:"·";display:inline-block;margin-right:.5rem;color:var(--color-muted);text-decoration:none}
+
+/* ---------- Keyboard hint ---------- */
+.c-kbd{font:inherit;font-size:.7rem;font-weight:700;padding:.125rem .375rem;border:1px solid var(--rule-card);border-radius:var(--radius-xxs);background:var(--surface-chip);color:var(--color-ink-strong)}
