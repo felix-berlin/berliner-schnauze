@@ -29,7 +29,7 @@ const { words, trending = false } = Astro.props;
     )}
     <RandomWordButton class='c-next-link' words={words}>
       <Shuffle aria-hidden='true' height='18' width='18' />
-      <span class='c-next-link__text'><b>Zufälliges Wort</b><span class='t-small'>Lass dich überraschen</span></span>
+      <span class='c-next-link__text'><b>Zufälliges Wort</b>{' '}<span class='t-small'>Lass dich überraschen</span></span>
       <span aria-hidden='true' class='c-next-link__arrow'>→</span>
     </RandomWordButton>
     <a class='c-next-link' href='/wort'>

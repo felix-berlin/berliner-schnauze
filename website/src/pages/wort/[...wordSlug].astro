@@ -75,6 +75,7 @@ const dateModified = word.contentModifiedAt ?? null;
 
 const wordSeoFacts = {
   berlinerisch,
+  example: word.examples.find((e) => e.example)?.example,
   hasAudio: word.berlinerischAudio.length > 0,
   hasEtymology: word.hasInfoText,
   hasExamples: word.examples.some((e) => e.example),
@@ -168,10 +169,21 @@ const schemaJson = () => {
       disambiguatingDescription: `Berliner Dialektwort, ${word.article}`,
     }),
     identifier: canonicalUrl(Astro.url.pathname, Astro.site),
-    publisher: { '@id': `${Astro.site}#organization` },
+    // Described here, not only referenced: Google does not resolve an @id that another page defines.
+    publisher: {
+      '@id': `${Astro.site}#organization`,
+      '@type': 'Organization',
+      name: 'Berliner Schnauze',
+      url: String(Astro.site),
+    },
     speakable: {
       '@type': 'SpeakableSpecification',
-      cssSelector: ['.c-word-hero__title', '.c-word-meanings .t-em', '.c-word-examples__text'],
+      cssSelector: [
+        '.c-word-hero__title',
+        '.c-word-meanings .t-em',
+        // Only rendered with examples: a selector that matches nothing is noise.
+        ...(exampleComments.length > 0 ? ['.c-word-examples__text'] : []),
+      ],
     },
     ...(firstImage && {
       image: {
@@ -201,7 +213,7 @@ const schemaJson = () => {
         '@type': 'AudioObject',
         contentUrl: firstAudio.audio.url,
         description: `Berliner Aussprache von „${berlinerisch}"`,
-        encodingFormat: 'audio/mpeg',
+        encodingFormat: firstAudio.audio.mimeType || undefined,
         inLanguage: 'de-DE',
         name: `Aussprache: ${berlinerisch}`,
       },
