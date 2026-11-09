@@ -21,27 +21,6 @@ export {
 /** Minimal word shape for cross-word helpers; a `SiteWord` from fetchAllWords satisfies it. */
 export type WordRef = { berlinerisch: string; id: number; slug: string };
 
-/**
- * Returns the word with vowels and consonants colored.
- *
- * @param   {string}  word  [word description]
- *
- * @return  {string}        [return description]
- */
-export const coloredConsonantsAndVowels = (word: string): string => {
-  let html = "";
-
-  for (const char of word) {
-    if (isVowelChar(char.toLowerCase())) {
-      html += `<span class="is-vowel">${char}</span>`; // Vowels
-    } else {
-      html += `<span class="is-consonant">${char}</span>`; // Consonants
-    }
-  }
-
-  return html;
-};
-
 // Soundex compare() is exact code equality, so — like findAnagrams — we can bucket by
 // code once per array instead of running compare() against all ~6000 words on every page.
 const soundexIndexCache = new WeakMap<WordRef[], Map<string, WordRef[]>>();
@@ -181,8 +160,8 @@ const frequencyLabel = (pct: number): string => {
   if (pct > 10) return "sehr häufig";
   if (pct > 5) return "häufig";
   if (pct > 2) return "gelegentlich";
-  if (pct > 1) return "selten";
-  return "sehr selten";
+  // Spec §10 knows four labels, so everything at or below 1 % stays "selten".
+  return "selten";
 };
 
 export const letterFrequency = (

@@ -21,9 +21,9 @@ describe("letterFrequency", () => {
     expect(result[0]?.label).toBe("sehr häufig");
   });
 
-  it("assigns 'sehr selten' label for x", () => {
+  it("maps the rarest letters (x) to 'selten', the Spec has no fifth label", () => {
     const result = letterFrequency("x");
-    expect(result[0]?.label).toBe("sehr selten");
+    expect(result[0]?.label).toBe("selten");
   });
 
   it("skips unknown characters (numbers, spaces)", () => {

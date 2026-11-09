@@ -24,7 +24,7 @@
     >
       {{ open ? "Häufigkeiten ausblenden" : "Häufigkeiten als Zahlen zeigen" }}
     </button>
-    <ul v-if="open" id="letter-frequencies" class="c-letter-tiles__freq">
+    <ul v-show="open" id="letter-frequencies" class="c-letter-tiles__freq">
       <li v-for="f in frequencies" :key="f.char">
         <b>{{ f.char }}</b>
         <span>{{ percent(f.percent) }} · {{ f.label }}</span>
