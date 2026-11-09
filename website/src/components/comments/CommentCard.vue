@@ -6,6 +6,7 @@
       'c-comment--reply': comment.parentId,
       'is-highlighted': ctx.highlighted.value === comment.id,
     }"
+    @keydown.esc="onEsc"
   >
     <span class="c-comment__avatar" aria-hidden="true">{{ initial }}</span>
     <header class="c-comment__meta">
@@ -14,11 +15,15 @@
         <a class="c-comment__permalink" :href="`#kommentar-${comment.id}`">
           <time :datetime="comment.createdAt">{{ relativeTime }}</time>
         </a>
-        <template v-if="comment.edited && comment.state === 'visible'"> · (bearbeitet)</template>
+        <template v-if="comment.edited && comment.state === 'visible'"> · bearbeitet</template>
       </span>
     </header>
 
-    <p v-if="comment.state !== 'visible'" class="c-comment__placeholder">
+    <p
+      v-if="comment.state !== 'visible'"
+      class="c-comment__placeholder"
+      :role="deleted ? 'status' : undefined"
+    >
       {{ placeholder }}
     </p>
 
@@ -26,6 +31,7 @@
       <CommentForm
         v-if="mode === 'edit'"
         cancellable
+        edit
         label="Kommentar bearbeiten"
         :show-name="false"
         :initial-text="comment.text ?? ''"
@@ -33,11 +39,7 @@
         @cancel="mode = null"
       />
       <template v-else>
-        <p
-          :id="`${uid}-text`"
-          class="c-comment__text"
-          :class="{ 'is-clamped': long && !expanded }"
-        >
+        <p :id="`${uid}-text`" class="c-comment__text" :class="{ 'is-clamped': long && !expanded }">
           {{ comment.text }}
         </p>
         <!-- Proposal in the spec (§9, long comments): cut at about 600 characters to 8 lines. -->
@@ -54,17 +56,30 @@
       </template>
 
       <div class="c-comment__actions">
-        <button
-          class="c-reaction c-comment__helpful"
-          type="button"
-          :aria-label="`Hilfreich, ${comment.upvotes}`"
-          :aria-pressed="comment.myVote === 1"
-          :aria-disabled="!ctx.online.value || pending"
-          @click="vote"
-        >
-          <IconHelpful aria-hidden="true" width="15" height="15" />
-          <b>{{ comment.upvotes }}</b>
-        </button>
+        <div aria-label="Kommentar bewerten" class="c-reaction-group" role="group">
+          <button
+            class="c-reaction c-comment__helpful"
+            type="button"
+            :aria-label="`Hilfreich, ${comment.upvotes}`"
+            :aria-pressed="comment.myVote === 1"
+            :aria-disabled="!ctx.online.value || pending"
+            @click="vote(1)"
+          >
+            <IconUp aria-hidden="true" width="15" height="15" />
+            <b>{{ comment.upvotes }}</b>
+          </button>
+          <button
+            class="c-reaction c-comment__unhelpful"
+            type="button"
+            :aria-label="`Nich hilfreich, ${comment.downvotes}`"
+            :aria-pressed="comment.myVote === -1"
+            :aria-disabled="!ctx.online.value || pending"
+            @click="vote(-1)"
+          >
+            <IconDown aria-hidden="true" width="15" height="15" />
+            <b>{{ comment.downvotes }}</b>
+          </button>
+        </div>
         <button
           v-if="parentVisible"
           class="c-textlink c-comment__reply"
@@ -83,23 +98,55 @@
               v-bind="triggerProps"
               class="c-icon-button c-comment__menu-button"
               type="button"
-              aria-label="Weitere Aktionen"
+              :aria-label="`Weitere Aktionen zum Kommentar von ${comment.authorName}`"
             >
               <IconMore aria-hidden="true" />
             </button>
+            <span aria-live="polite" class="u-sr-only" role="status">{{
+              copied ? "Link kopiert" : ""
+            }}</span>
           </template>
           <template #panel>
-            <button
-              v-for="action in menu"
-              :key="action.label"
-              class="c-dropdown__item c-comment__menu-item"
-              type="button"
-              :popovertarget="`dropdown-comment-${comment.id}`"
-              popovertargetaction="hide"
-              @click="action.run"
-            >
-              {{ action.label }}
-            </button>
+            <template v-for="entry in entries" :key="entry">
+              <button
+                v-if="entry === 'copy'"
+                class="c-dropdown__item c-comment__menu-item"
+                :data-done="copied"
+                type="button"
+                @click="copyLink"
+              >
+                <Check v-if="copied" aria-hidden="true" width="16" height="16" />
+                <IconLink v-else aria-hidden="true" width="16" height="16" />
+                {{ copied ? "Link kopiert" : "Link kopieren" }}
+              </button>
+              <button
+                v-else-if="entry === 'report' && reported"
+                aria-disabled="true"
+                class="c-dropdown__item c-comment__menu-item"
+                type="button"
+              >
+                <Check aria-hidden="true" width="16" height="16" />
+                Schon jemeldet
+              </button>
+              <button
+                v-else
+                class="c-dropdown__item c-comment__menu-item"
+                type="button"
+                :popovertarget="`dropdown-comment-${comment.id}`"
+                popovertargetaction="hide"
+                @click="open(entry)"
+              >
+                <IconFlag v-if="entry === 'report'" aria-hidden="true" width="16" height="16" />
+                <IconPencil
+                  v-else-if="entry === 'edit'"
+                  aria-hidden="true"
+                  width="16"
+                  height="16"
+                />
+                <IconTrash v-else aria-hidden="true" width="16" height="16" />
+                {{ LABELS[entry] }}
+              </button>
+            </template>
           </template>
         </DropdownPopover>
       </div>
@@ -114,35 +161,66 @@
         @cancel="mode = null"
       />
 
-      <p v-if="reported" class="c-comment__thanks">Danke, wir kieken drüber.</p>
-      <form
-        v-else-if="mode === 'report'"
-        class="c-comment__report"
-        @submit.prevent="submitReport"
+      <div
+        v-if="mode === 'delete'"
+        class="c-state c-state--error c-comment__confirm"
+        role="alertdialog"
+        :aria-labelledby="`${uid}-delete`"
       >
-        <label class="c-label" :for="`${uid}-reason`">Wat stimmt nich? (optional)</label>
-        <div class="c-comment__report-row">
-          <input
-            :id="`${uid}-reason`"
-            v-model="reason"
-            class="c-input c-comment__report-input"
-            type="text"
-            maxlength="300"
-            placeholder="z. B. Spam, beleidigend"
-          />
-          <div class="c-comment__report-actions">
+        <CircleAlert aria-hidden="true" height="18" width="18" />
+        <span class="c-state__body">
+          <b :id="`${uid}-delete`">Kommentar wirklich löschen?</b>
+          <span>Dit kann man nich rückgängig machen.</span>
+          <span class="c-comment__panel-actions">
             <button
-              class="c-button c-button--primary c-comment__report-button"
-              type="submit"
-              :disabled="reporting"
-              :aria-busy="reporting"
+              ref="confirmButton"
+              class="c-choice"
+              type="button"
+              :aria-disabled="deleting"
+              @click="confirmDelete"
             >
-              {{ reporting ? "Wird jemeldet …" : "Melden" }}
+              Ja, löschen
             </button>
-            <button class="c-link" type="button" :disabled="reporting" @click="mode = null">
-              Abbrechen
-            </button>
-          </div>
+            <button class="c-link" type="button" @click="mode = null">Abbrechen</button>
+          </span>
+        </span>
+      </div>
+
+      <div v-if="sentReport" class="c-state c-state--done" role="status">
+        <Check aria-hidden="true" height="18" width="18" />
+        <span class="c-state__body">
+          <b>Danke, is jemeldet.</b>
+          <span>Wir kieken uns den Kommentar an. Bis dahin bleibt er sichtbar.</span>
+        </span>
+      </div>
+      <form v-else-if="mode === 'report'" class="c-comment__report" @submit.prevent="submitReport">
+        <b :id="`${uid}-report`">Wat is mit dem Kommentar?</b>
+        <div :aria-labelledby="`${uid}-report`" class="c-choice-group" role="group">
+          <button
+            v-for="r in REPORT_REASONS"
+            :key="r"
+            class="c-choice"
+            type="button"
+            :aria-pressed="reason === r"
+            @click="reason = r"
+          >
+            {{ r }}
+          </button>
+        </div>
+        <label class="c-label" :for="`${uid}-note`">Magste dit kurz erklären? (optional)</label>
+        <textarea :id="`${uid}-note`" v-model="note" class="c-textarea" maxlength="300" rows="2" />
+        <div class="c-comment__panel-actions">
+          <button
+            class="c-button c-button--primary c-comment__report-button"
+            type="submit"
+            :aria-disabled="!reason || reporting"
+            :aria-busy="reporting"
+          >
+            {{ reporting ? "Wird jemeldet …" : "Melden" }}
+          </button>
+          <button class="c-link" type="button" :disabled="reporting" @click="mode = null">
+            Abbrechen
+          </button>
         </div>
       </form>
     </template>
@@ -164,13 +242,35 @@ import type { PublicComment } from "@utils/commentSchema.ts";
 import CommentForm, { type SubmitResult } from "@components/comments/CommentForm.vue";
 import DropdownPopover from "@components/DropdownPopover.vue";
 import { commentsKey } from "@composables/useComments.ts";
-import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
+import {
+  commentMenuEntries,
+  REPORT_REASONS,
+  reportText,
+  type CommentMenuEntry,
+} from "@utils/commentMenu.ts";
 import { useClipboard } from "@vueuse/core";
-import { computed, defineAsyncComponent, inject, ref, useId } from "vue";
+import Check from "virtual:icons/lucide/check";
+import CircleAlert from "virtual:icons/lucide/circle-alert";
+import IconFlag from "virtual:icons/lucide/flag";
+import IconLink from "virtual:icons/lucide/link";
+import IconPencil from "virtual:icons/lucide/pencil";
+import IconDown from "virtual:icons/lucide/thumbs-down";
+import IconUp from "virtual:icons/lucide/thumbs-up";
+import IconTrash from "virtual:icons/lucide/trash-2";
+import {
+  computed,
+  defineAsyncComponent,
+  inject,
+  nextTick,
+  onBeforeUnmount,
+  ref,
+  useId,
+  useTemplateRef,
+} from "vue";
 
-const IconHelpful = defineAsyncComponent(() => import("virtual:icons/lucide/thumbs-up"));
 const IconMore = defineAsyncComponent(() => import("virtual:icons/lucide/ellipsis"));
+const LABELS = { delete: "Löschen", edit: "Bearbeiten", report: "Melden" } as const;
 
 const { comment, parentVisible = true } = defineProps<{
   comment: PublicComment;
@@ -180,10 +280,17 @@ const { comment, parentVisible = true } = defineProps<{
 
 const ctx = inject(commentsKey)!;
 const uid = useId();
-const mode = ref<"edit" | "reply" | "report" | null>(null);
+// One action open per comment at a time (spec §9a).
+const mode = ref<"delete" | "edit" | "reply" | "report" | null>(null);
 const reason = ref("");
-const reported = ref(false);
+const note = ref("");
+const sentReport = ref(false);
 const reporting = ref(false);
+const deleting = ref(false);
+// The author deleted it in this session: the placeholder speaks to them until the page reloads.
+const deleted = ref(false);
+const confirmButton = useTemplateRef<HTMLButtonElement>("confirmButton");
+const reported = computed(() => ctx.isReported(comment.id));
 const initial = computed(() => comment.authorName.trim().charAt(0).toUpperCase());
 // Proposal (spec): long comments are cut to 8 lines from about 600 characters.
 const LONG = 600;
@@ -193,16 +300,31 @@ const expanded = ref(false);
 const pending = computed(() => ctx.busy.value.has(comment.id));
 const toggle = (m: "edit" | "reply" | "report"): void => {
   mode.value = mode.value === m ? null : m;
-  // Report has an optional reason, so the form can be submitted without focusing a field (Safari never focuses buttons).
-  if (mode.value && m !== "edit") ctx.armCaptcha();
+  // The report button can be pressed without focusing a field (Safari never focuses buttons), so arm the captcha.
+  if (mode.value && (m === "reply" || m === "report")) ctx.armCaptcha();
+};
+const open = (entry: CommentMenuEntry): void => {
+  if (entry === "report" || entry === "edit") toggle(entry);
+  else if (entry === "delete") {
+    mode.value = "delete";
+    void nextTick(() => confirmButton.value?.focus());
+  }
+};
+// Esc closes the open panel (the menu closes itself); the parent card of a reply stays as it is.
+const onEsc = (event: KeyboardEvent): void => {
+  if (!mode.value) return;
+  mode.value = null;
+  event.stopPropagation();
 };
 
 const placeholder = computed(() =>
-  comment.state === "reviewing"
-    ? "Wird geprüft"
-    : comment.removalReason
-      ? `Kommentar entfernt: ${comment.removalReason}`
-      : "Kommentar entfernt",
+  deleted.value
+    ? "Du hast deinen Kommentar jelöscht."
+    : comment.state === "reviewing"
+      ? "Wird geprüft"
+      : comment.removalReason
+        ? `Kommentar entfernt: ${comment.removalReason}`
+        : "Kommentar entfernt",
 );
 
 const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
@@ -219,16 +341,26 @@ const relativeTime = computed(() => {
   return rtf.format(unit === "second" ? 0 : Math.round(seconds / size), unit);
 });
 
+// „Link kopieren“: icon turns into a check and the label into „Link kopiert“ for 2s, then the menu closes.
 const { copy } = useClipboard();
+const copied = ref(false);
+let copiedTimer: ReturnType<typeof setTimeout> | undefined;
+onBeforeUnmount(() => clearTimeout(copiedTimer));
 const copyLink = async (): Promise<void> => {
-  await copy(`${location.href.split("#")[0]}#kommentar-${comment.id}`);
-  createToastNotify({ message: "Link is kopiert.", status: "success" });
+  await copy(`${location.origin}${location.pathname}#kommentar-${comment.id}`);
+  copied.value = true;
+  clearTimeout(copiedTimer);
+  copiedTimer = setTimeout(() => {
+    copied.value = false;
+    document.getElementById(`dropdown-comment-${comment.id}`)?.hidePopover?.();
+  }, 2000);
 };
 
-// „Hilfreich“ toggles one up-vote. aria-disabled (not :disabled) keeps the focus on the button; offline does nothing.
-const vote = async (): Promise<void> => {
+// Up and down exclude each other; the pressed one again takes the vote back. aria-disabled (not :disabled) keeps
+// the focus on the button; offline does nothing.
+const vote = async (value: -1 | 1): Promise<void> => {
   if (pending.value || !ctx.online.value) return;
-  if (await ctx.vote(comment.id, comment.myVote === 1 ? 0 : 1))
+  if (await ctx.vote(comment.id, comment.myVote === value ? 0 : value))
     trackEvent("Comments", "Vote", String(ctx.wordId));
 };
 
@@ -249,32 +381,33 @@ const submitEdit = async (v: { text: string }): Promise<SubmitResult> => {
   return ok || { error: ctx.failReason.value };
 };
 
-const onRemove = (): void => {
-  void ctx.remove(comment.id);
+const confirmDelete = async (): Promise<void> => {
+  if (deleting.value) return;
+  deleting.value = true;
+  try {
+    if (!(await ctx.remove(comment.id))) return;
+    deleted.value = true;
+    mode.value = null;
+  } finally {
+    deleting.value = false;
+  }
 };
 
-// Secondary actions behind „…“; votes and „Antworten“ stay on the card.
-const menu = computed(() => [
-  ...(ctx.isOwn(comment.id) ? [] : [{ label: "Melden", run: () => toggle("report") }]),
-  { label: "Link kopieren", run: () => void copyLink() },
-  ...(ctx.canEdit(comment.id)
-    ? [
-        { label: "Bearbeiten", run: () => toggle("edit") },
-        { label: "Löschen", run: onRemove },
-      ]
-    : []),
-]);
+const entries = computed(() =>
+  commentMenuEntries({ editable: ctx.canEdit(comment.id), own: ctx.isOwn(comment.id) }),
+);
 
 const submitReport = async (): Promise<void> => {
-  if (reporting.value) return;
+  // aria-disabled, not :disabled: the button stays focusable until a reason is picked.
+  if (reporting.value || !reason.value) return;
   const token = ctx.takeToken();
   if (!token) return;
   reporting.value = true;
   try {
-    const ok = await ctx.report(comment.id, reason.value.trim(), token);
+    const ok = await ctx.report(comment.id, reportText(reason.value, note.value), token);
     ctx.resetCaptcha();
     if (!ok) return;
-    reported.value = true;
+    sentReport.value = true;
     mode.value = null;
     trackEvent("Comments", "Report", String(ctx.wordId));
   } finally {

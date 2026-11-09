@@ -18,27 +18,21 @@
     margin-inline-start: 3rem;
   }
 
-  // Linked comment: orange wash and outline that fade out; with reduced motion they stay until the class goes.
+  // Linked comment: 14% orange wash and outline that fade out within 2s (spec §9a); with reduced motion they stay until the class goes.
   &.is-highlighted {
     position: relative;
     outline: 2px solid var(--orange-500);
     outline-offset: 2px;
-    animation: c-comment-outline 3.5s ease-out forwards;
+    animation: c-comment-outline 2s ease-out forwards;
 
     &::after {
       content: "";
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      background: color-mix(in srgb, var(--orange-500) 25%, transparent);
+      background: color-mix(in srgb, var(--orange-500) 14%, transparent);
       pointer-events: none;
-      animation: c-comment-wash 3.5s ease-out forwards;
-    }
-
-    @include butler-mx.dark-mode-class {
-      &::after {
-        background: color-mix(in srgb, var(--orange-500) 35%, transparent);
-      }
+      animation: c-comment-wash 2s ease-out forwards;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -128,38 +122,38 @@
     margin-inline-start: auto;
   }
 
-  // Compact inline report form: label above, field + actions on one row when there is room.
-  &__report {
-    display: grid;
-    gap: vars.$spacer * 0.25;
+  &__menu-item[aria-disabled="true"] {
+    opacity: 0.55;
+    cursor: default;
   }
 
-  &__report-row {
+  // Inline panels (spec §9a): report on --surface-chip, delete confirmation as .c-state--error.
+  &__report {
+    display: grid;
+    gap: vars.$spacer * 0.5;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--surface-chip);
+  }
+
+  &__panel-actions {
     display: flex;
     flex-wrap: wrap;
     gap: vars.$spacer * 0.5;
-  }
-
-  &__report-input {
-    flex: 1 1 14rem;
-    min-inline-size: 0;
-  }
-
-  &__report-actions {
-    display: flex;
-    gap: vars.$spacer * 0.5;
+    align-items: center;
+    margin-block-start: 0.25rem;
   }
 
   &__report-button {
     --padding: #{vars.$spacer * 0.5 vars.$spacer};
 
     min-block-size: 44px;
-  }
 
-  &__thanks {
-    margin: 0;
-    font-size: 0.85rem;
-    color: var(--color-muted);
+    &[aria-disabled="true"] {
+      opacity: 0.55;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
   }
 
   &__replies {

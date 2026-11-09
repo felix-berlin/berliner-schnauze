@@ -37,7 +37,7 @@
   }
 }
 
-:where(.c-state--success) {
+:where(.c-state--success, .c-state--done) {
   border-inline-start-color: var(--success);
 
   > svg {

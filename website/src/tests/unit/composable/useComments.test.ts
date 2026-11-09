@@ -228,6 +228,31 @@ describe("useComments", () => {
     ]);
   });
 
+  it("a sent report is remembered per device and comment, a refused one is not", async () => {
+    fetchMock.mockReturnValueOnce(answer({ ok: true }, 201));
+    const c = useComments(7);
+    expect(c.isReported(1)).toBe(false);
+    await c.report(1, "Beleidigend", "tok");
+    expect(c.isReported(1)).toBe(true);
+    expect(c.isReported(2)).toBe(false);
+    expect(JSON.parse(localStorage.getItem("bs-reported-comments")!)).toEqual([1]);
+    fetchMock.mockReturnValueOnce(answer({ error: "x" }, 502));
+    await c.report(2, "Spam", "tok");
+    expect(c.isReported(2)).toBe(false);
+  });
+
+  it("a down-vote sends -1 and takes the server counts (up and down)", async () => {
+    fetchMock.mockReturnValueOnce(answer({ downvotes: 3, myVote: -1, upvotes: 1 }));
+    const c = useComments(7);
+    c.comments.value = [comment(1)];
+    expect(await c.vote(1, -1)).toBe(true);
+    expect(JSON.parse((fetchMock.mock.calls[0]![1] as { body: string }).body)).toEqual({
+      commentId: 1,
+      value: -1,
+    });
+    expect(c.comments.value[0]).toMatchObject({ downvotes: 3, myVote: -1, upvotes: 1 });
+  });
+
   it("report is true when the server accepts it", async () => {
     fetchMock.mockReturnValueOnce(answer({ ok: true }, 201));
     expect(await useComments(7).report(1, "Spam", "tok")).toBe(true);

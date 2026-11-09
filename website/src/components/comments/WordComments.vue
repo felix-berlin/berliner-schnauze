@@ -53,7 +53,11 @@
         {{ expanded ? "Weitere Kommentare zeigen" : `Alle ${ctx.total.value} Kommentare zeigen` }}
       </button>
 
-      <div v-if="ctx.failed.value && !ctx.loading.value" class="c-state c-state--error" role="alert">
+      <div
+        v-if="ctx.failed.value && !ctx.loading.value"
+        class="c-state c-state--error"
+        role="alert"
+      >
         <CircleAlert aria-hidden="true" height="18" width="18" />
         <span class="c-state__body">
           <b>Die Kommentare wollten grad nich laden.</b>
@@ -118,14 +122,14 @@ import CommentForm, { type SubmitResult } from "@components/comments/CommentForm
 import TurnStile from "@components/TurnStile.vue";
 import { commentsKey, useComments, type CommentsContext } from "@composables/useComments.ts";
 import { createToastNotify } from "@stores/toastNotify.ts";
-import { captchaWaitToast } from "@utils/captchaToast.ts";
 import { trackEvent } from "@utils/analytics";
+import { captchaWaitToast } from "@utils/captchaToast.ts";
 import { useElementSize, useEventListener, useOnline, useTimeoutFn } from "@vueuse/core";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
-import { computed, nextTick, onMounted, provide, ref, useTemplateRef, watch } from "vue";
 import Check from "virtual:icons/lucide/check";
 import CircleAlert from "virtual:icons/lucide/circle-alert";
 import PenLine from "virtual:icons/lucide/pen-line";
+import { computed, nextTick, onMounted, provide, ref, useTemplateRef, watch } from "vue";
 
 const { wordId } = defineProps<{ wordId: number }>();
 
@@ -217,7 +221,7 @@ const submitNew = async (v: { authorName: string; text: string }): Promise<Submi
 };
 
 // #kommentar-<id>: load the thread if needed, scroll to the card, highlight it for a few seconds.
-const clearHighlight = useTimeoutFn(() => (comments.highlighted.value = null), 4000, {
+const clearHighlight = useTimeoutFn(() => (comments.highlighted.value = null), 2000, {
   immediate: false,
 });
 const focusHash = async (hash = location.hash): Promise<void> => {

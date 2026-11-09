@@ -74,9 +74,16 @@ describe("WordComments", () => {
       expect(wrapper.find("#kommentar-42.is-highlighted").exists()).toBe(true),
     );
     expect(wrapper.text()).toContain("Verlinkt");
+    // The wash lasts 2 s (spec §9a), then the class goes.
+    await vi.waitFor(
+      () => expect(wrapper.find("#kommentar-42.is-highlighted").exists()).toBe(false),
+      {
+        timeout: 3500,
+      },
+    );
     wrapper.unmount();
     location.hash = "";
-  });
+  }, 8000);
 
   // The ClientRouter moves same-page hash links with pushState: no hashchange fires.
   it("highlights a card when its timestamp link is clicked", async () => {

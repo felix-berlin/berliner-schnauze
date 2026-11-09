@@ -38,7 +38,11 @@ const openMenu = async (wrapper: VueWrapper) => {
   return wrapper.findAll(".c-comment__menu-item");
 };
 
-const mountCard = (comment: Partial<PublicComment>, canEdit = false) => {
+const mountCard = (
+  comment: Partial<PublicComment>,
+  canEdit = false,
+  reportedIds: number[] = [],
+) => {
   const ctx = {
     armCaptcha: vi.fn(),
     busy: ref(new Set<number>()),
@@ -48,6 +52,7 @@ const mountCard = (comment: Partial<PublicComment>, canEdit = false) => {
     failReason: ref(""),
     highlighted: ref<null | number>(null),
     isOwn: (id: number) => id === 99,
+    isReported: (id: number) => reportedIds.includes(id),
     online: ref(true),
     post: vi.fn(async () => "ok"),
     remove: vi.fn(async () => true),
@@ -68,25 +73,30 @@ const mountCard = (comment: Partial<PublicComment>, canEdit = false) => {
 };
 
 describe("CommentCard", () => {
-  it("keeps „hilfreich“ and „Antworten“ on the card, the rest behind „…“", async () => {
+  it("keeps the thumbs pair and „Antworten“ on the card, the rest behind „⋯“", async () => {
     const { wrapper } = mountCard({});
-    expect(wrapper.find(".c-reaction.c-comment__helpful").exists()).toBe(true);
+    const group = wrapper.find('[role="group"]');
+    expect(group.attributes("aria-label")).toBe("Kommentar bewerten");
+    expect(group.classes()).toContain("c-reaction-group");
+    expect(group.findAll(".c-reaction")).toHaveLength(2);
     expect(wrapper.find(".c-comment__reply").exists()).toBe(true);
-    expect(wrapper.find('[aria-label="Weitere Aktionen"]').exists()).toBe(true);
+    expect(
+      wrapper.find('[aria-label="Weitere Aktionen zum Kommentar von Anonymer Berliner"]').exists(),
+    ).toBe(true);
     expect(wrapper.findAll(".c-comment__menu-item")).toHaveLength(0);
   });
 
-  it("menu: others' comment = Melden + Link; own comment in edit window = Link + Bearbeiten + Löschen", async () => {
+  it("menu: others' comment = Link + Melden; own comment in edit window = Link + Bearbeiten + Löschen", async () => {
     const labels = async (id: number, canEdit: boolean) =>
       (await openMenu(mountCard({ id }, canEdit).wrapper)).map((b) => b.text());
-    expect(await labels(1, false)).toEqual(["Melden", "Link kopieren"]);
+    expect(await labels(1, false)).toEqual(["Link kopieren", "Melden"]);
     expect(await labels(99, true)).toEqual(["Link kopieren", "Bearbeiten", "Löschen"]);
     expect(await labels(99, false)).toEqual(["Link kopieren"]);
   });
 
   it("placeholders have no menu", () => {
     const { wrapper } = mountCard({ state: "removed", text: null });
-    expect(wrapper.find('[aria-label="Weitere Aktionen"]').exists()).toBe(false);
+    expect(wrapper.find('[aria-label^="Weitere Aktionen"]').exists()).toBe(false);
   });
 
   it("renders text as text (no HTML)", () => {
@@ -145,6 +155,26 @@ describe("CommentCard", () => {
     expect(other.ctx.vote).toHaveBeenCalledWith(1, 1);
   });
 
+  it("„nich hilfreich“ shows the downvotes and is pressed only for myVote -1", () => {
+    const pressed = (myVote: number) =>
+      mountCard({ downvotes: 2, myVote }).wrapper.find(".c-comment__unhelpful");
+    expect(pressed(-1).attributes("aria-pressed")).toBe("true");
+    expect(pressed(1).attributes("aria-pressed")).toBe("false");
+    expect(pressed(0).attributes("aria-label")).toBe("Nich hilfreich, 2");
+    expect(pressed(0).text()).toBe("2");
+  });
+
+  it("„nich hilfreich“ sets -1, switches from an up-vote and takes itself back", async () => {
+    const click = async (myVote: number) => {
+      const { ctx, wrapper } = mountCard({ myVote });
+      await wrapper.find(".c-comment__unhelpful").trigger("click");
+      return ctx.vote;
+    };
+    expect(await click(0)).toHaveBeenCalledWith(1, -1);
+    expect(await click(1)).toHaveBeenCalledWith(1, -1);
+    expect(await click(-1)).toHaveBeenCalledWith(1, 0);
+  });
+
   it("offline: „hilfreich“ is aria-disabled, stays a focusable button and sends nothing", async () => {
     const { ctx, wrapper } = mountCard({});
     ctx.online.value = false;
@@ -170,43 +200,91 @@ describe("CommentCard", () => {
   });
 
   it("short comments have no „Weiterlesen“", () => {
-    expect(mountCard({ text: "x".repeat(600) }).wrapper.find(".c-comment__more").exists()).toBe(
-      false,
+    expect(
+      mountCard({ text: "x".repeat(600) })
+        .wrapper.find(".c-comment__more")
+        .exists(),
+    ).toBe(false);
+  });
+
+  const openReport = async (wrapper: VueWrapper) =>
+    (await openMenu(wrapper)).find((b) => b.text() === "Melden")!.trigger("click");
+  const pick = (wrapper: VueWrapper, reason: string) =>
+    wrapper
+      .findAll(".c-comment__report .c-choice")
+      .find((b) => b.text() === reason)!
+      .trigger("click");
+
+  it("report panel: reasons as choices, „Melden“ stays aria-disabled until one is picked", async () => {
+    const { ctx, wrapper } = mountCard({});
+    await openReport(wrapper);
+    expect(wrapper.text()).toContain("Wat is mit dem Kommentar?");
+    expect(wrapper.findAll(".c-comment__report .c-choice").map((b) => b.text())).toEqual([
+      "Spam oder Werbung",
+      "Beleidigend",
+      "Falsch oder irreführend",
+      "Wat anderet",
+    ]);
+    const submit = wrapper.find(".c-comment__report button[type=submit]");
+    expect(submit.attributes("aria-disabled")).toBe("true");
+    await wrapper.find(".c-comment__report").trigger("submit");
+    expect(ctx.report).not.toHaveBeenCalled();
+    await pick(wrapper, "Beleidigend");
+    expect(submit.attributes("aria-disabled")).toBe("false");
+    expect(wrapper.findAll(".c-comment__report .c-choice")[1].attributes("aria-pressed")).toBe(
+      "true",
     );
   });
 
-  it("report submit is disabled while pending and sends once", async () => {
+  it("report submit is locked while pending and sends once", async () => {
     const { ctx, wrapper } = mountCard({});
     let done!: (v: boolean) => void;
     ctx.report.mockReturnValue(new Promise<boolean>((r) => (done = r)));
-    await (await openMenu(wrapper)).find((b) => b.text() === "Melden")!.trigger("click");
+    await openReport(wrapper);
+    await pick(wrapper, "Spam oder Werbung");
     const form = wrapper.find(".c-comment__report");
     await form.trigger("submit");
     await form.trigger("submit");
     expect(ctx.report).toHaveBeenCalledTimes(1);
-    expect(form.find("button").attributes("disabled")).toBeDefined();
-    expect(form.find("button").attributes("aria-busy")).toBe("true");
-    expect(form.find("button").text()).toBe("Wird jemeldet …");
+    const submit = form.find("button[type=submit]");
+    expect(submit.attributes("aria-busy")).toBe("true");
+    expect(submit.text()).toBe("Wird jemeldet …");
     done(true);
   });
 
-  it("report form sends the trimmed reason and „Abbrechen“ closes it", async () => {
+  it("report sends „Grund – Notiz“, shows the done box and the entry becomes „Schon jemeldet“", async () => {
     const { ctx, wrapper } = mountCard({});
-    const openReport = async () =>
-      (await openMenu(wrapper)).find((b) => b.text() === "Melden")!.trigger("click");
-    await openReport();
-    const buttons = () => wrapper.findAll(".c-comment__report button").map((b) => b.text());
-    expect(buttons()).toEqual(["Melden", "Abbrechen"]);
-    await wrapper.find(".c-comment__report button[type=button]").trigger("click");
-    expect(wrapper.find(".c-comment__report").exists()).toBe(false);
-    expect(ctx.report).not.toHaveBeenCalled();
-
-    await openReport();
-    await wrapper.find(".c-comment__report input").setValue("  Spam  ");
+    await openReport(wrapper);
+    await pick(wrapper, "Wat anderet");
+    await wrapper.find(".c-comment__report textarea").setValue("  Kein Bezug  ");
     await wrapper.find(".c-comment__report").trigger("submit");
     await flushPromises();
-    expect(ctx.report).toHaveBeenCalledWith(1, "Spam", "tok");
-    expect(wrapper.text()).toContain("Danke, wir kieken drüber.");
+    expect(ctx.report).toHaveBeenCalledWith(1, "Wat anderet – Kein Bezug", "tok");
+    const done = wrapper.find(".c-state--done");
+    expect(done.attributes("role")).toBe("status");
+    expect(done.text()).toContain("Danke, is jemeldet.");
+    expect(done.text()).toContain("Bis dahin bleibt er sichtbar.");
+    expect(wrapper.text()).toContain("Hallo"); // stays visible
+  });
+
+  it("an already reported comment shows a disabled „Schon jemeldet“ and no report panel", async () => {
+    const { wrapper } = mountCard({}, false, [1]);
+    const items = await openMenu(wrapper);
+    expect(items.map((b) => b.text())).toEqual(["Link kopieren", "Schon jemeldet"]);
+    expect(items[1].attributes("aria-disabled")).toBe("true");
+    await items[1].trigger("click");
+    expect(wrapper.find(".c-comment__report").exists()).toBe(false);
+  });
+
+  it("„Abbrechen“ and Esc close the report panel without sending", async () => {
+    const { ctx, wrapper } = mountCard({});
+    await openReport(wrapper);
+    await wrapper.find(".c-comment__report button.c-link").trigger("click");
+    expect(wrapper.find(".c-comment__report").exists()).toBe(false);
+    await openReport(wrapper);
+    await wrapper.find(".c-comment__report").trigger("keydown", { key: "Escape" });
+    expect(wrapper.find(".c-comment__report").exists()).toBe(false);
+    expect(ctx.report).not.toHaveBeenCalled();
   });
 
   it("hides „Antworten“ on a reply under a placeholder", () => {
@@ -224,7 +302,6 @@ describe("CommentCard", () => {
   });
 
   it("has an anchor id, a permalink and a link copy action", async () => {
-    const { createToastNotify } = await import("@stores/toastNotify.ts");
     const { wrapper } = mountCard({
       id: 4,
       replies: [{ ...base, id: 5, parentId: 4 }],
@@ -234,8 +311,10 @@ describe("CommentCard", () => {
     expect(wrapper.find("a.c-comment__permalink").attributes("href")).toBe("#kommentar-4");
     const copy = (await openMenu(wrapper)).find((b) => b.text() === "Link kopieren")!;
     await copy.trigger("click");
-    await vi.waitFor(() => expect(createToastNotify).toHaveBeenCalled());
-    expect(writeText).toHaveBeenCalledWith(`${location.href.split("#")[0]}#kommentar-4`);
+    await vi.waitFor(() =>
+      expect(wrapper.find(".c-comment__menu-item").text()).toBe("Link kopiert"),
+    );
+    expect(writeText).toHaveBeenCalledWith(`${location.origin}${location.pathname}#kommentar-4`);
   });
 
   it("marks the linked comment as highlighted", () => {
@@ -306,7 +385,7 @@ describe("CommentCard", () => {
 
   it("edit: „Bearbeiten“ opens the form with the text, success closes it, an error keeps it", async () => {
     const { ctx, wrapper } = mountCard({ edited: true, id: 99 }, true);
-    expect(wrapper.text()).toContain("(bearbeitet)");
+    expect(wrapper.find(".c-comment__meta").text()).toContain("· bearbeitet");
     await (await openMenu(wrapper)).find((b) => b.text() === "Bearbeiten")!.trigger("click");
     const form = () => wrapper.findComponent(CommentForm);
     expect(form().props("initialText")).toBe("Hallo");
@@ -328,15 +407,35 @@ describe("CommentCard", () => {
     expect(wrapper.find(".c-comment__text").exists()).toBe(true);
   });
 
-  it("„Löschen“ removes the own comment", async () => {
+  it("„Löschen“ asks inline first (alertdialog, focus on „Ja, löschen“), „Abbrechen“ keeps the comment", async () => {
     const { ctx, wrapper } = mountCard({ id: 99 }, true);
     await (await openMenu(wrapper)).find((b) => b.text() === "Löschen")!.trigger("click");
+    expect(ctx.remove).not.toHaveBeenCalled();
+    const dialog = wrapper.find('[role="alertdialog"]');
+    expect(dialog.classes()).toContain("c-state--error");
+    expect(dialog.text()).toContain("Kommentar wirklich löschen?");
+    expect(dialog.text()).toContain("Dit kann man nich rückgängig machen.");
+    await dialog.find("button.c-link").trigger("click");
+    expect(wrapper.find('[role="alertdialog"]').exists()).toBe(false);
+    expect(ctx.remove).not.toHaveBeenCalled();
+  });
+
+  it("„Ja, löschen“ removes the comment and leaves the author a status placeholder", async () => {
+    const { ctx, wrapper } = mountCard({ id: 99 }, true);
+    await (await openMenu(wrapper)).find((b) => b.text() === "Löschen")!.trigger("click");
+    await wrapper.find('[role="alertdialog"] button.c-choice').trigger("click");
+    await flushPromises();
     expect(ctx.remove).toHaveBeenCalledWith(99);
+    await wrapper.setProps({ comment: { ...base, id: 99, state: "removed", text: null } });
+    const placeholder = wrapper.find(".c-comment__placeholder");
+    expect(placeholder.text()).toBe("Du hast deinen Kommentar jelöscht.");
+    expect(placeholder.attributes("role")).toBe("status");
   });
 
   it("report: no token sends nothing, a refused report keeps the form", async () => {
     const { ctx, wrapper } = mountCard({});
-    await (await openMenu(wrapper)).find((b) => b.text() === "Melden")!.trigger("click");
+    await openReport(wrapper);
+    await pick(wrapper, "Beleidigend");
     ctx.takeToken = () => null as unknown as string;
     await wrapper.find(".c-comment__report").trigger("submit");
     expect(ctx.report).not.toHaveBeenCalled();

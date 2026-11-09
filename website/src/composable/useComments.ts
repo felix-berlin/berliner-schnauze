@@ -239,13 +239,21 @@ export const useComments = (wordId: number) => {
     return Boolean(data);
   };
 
-  const report = async (id: number, reason: string, turnstileToken: string): Promise<boolean> =>
-    Boolean(
+  // One report per device and comment (spec §9a): remembered in the browser, the server answers repeats alike.
+  const reportedIds = useLocalStorage<number[]>("bs-reported-comments", []);
+  if (!Array.isArray(reportedIds.value)) reportedIds.value = [];
+  const isReported = (id: number): boolean => reportedIds.value.includes(id);
+
+  const report = async (id: number, reason: string, turnstileToken: string): Promise<boolean> => {
+    const ok = Boolean(
       await call("/api/comment-reports", {
         ...json({ commentId: id, reason, turnstileToken }),
         method: "POST",
       }),
     );
+    if (ok && !isReported(id)) reportedIds.value = [id, ...reportedIds.value].slice(0, 200);
+    return ok;
+  };
 
   return {
     busy,
@@ -257,6 +265,7 @@ export const useComments = (wordId: number) => {
     hasMore,
     highlighted,
     isOwn,
+    isReported,
     loadMore,
     loaded,
     loading,

@@ -55,16 +55,50 @@ const open = async (page: Page) => {
 };
 
 test.describe("word comments", () => {
+  test("every comment has thumbs up and down as a pair and a ⋯ menu with its link", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 800, width: 1280 });
+    await mockList(page, [comment(1, { downvotes: 2 })]);
+    const card = await open(page);
+    const group = card.getByRole("group", { name: "Kommentar bewerten" });
+    await expect(group.getByRole("button", { name: "Hilfreich, 1" })).toBeVisible();
+    await expect(group.getByRole("button", { name: "Nich hilfreich, 2" })).toBeVisible();
+    await card
+      .getByRole("button", { name: "Weitere Aktionen zum Kommentar von Kiez-Kalle 1" })
+      .click();
+    await expect(page.getByRole("button", { name: "Link kopieren" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Melden" })).toBeVisible();
+  });
+
+  test("Strg+Enter shows its hint from 808px on hover devices and is hidden below", async ({
+    page,
+  }) => {
+    await mockList(page, []);
+    await stubTurnstile(page);
+    await page.setViewportSize({ height: 800, width: 1280 });
+    const card = await open(page);
+    await card.getByRole("button", { name: "Kommentar schreiben" }).click();
+    await expect(card.locator(".c-comment-form__kbd")).toBeVisible();
+    await page.setViewportSize({ height: 800, width: 390 });
+    await expect(card.locator(".c-comment-form__kbd")).toBeHidden();
+  });
+
   test("a word without comments shows the empty copy and no sort", async ({ page }) => {
     await mockList(page, []);
     const card = await open(page);
     await expect(card.getByRole("heading", { name: "Wat sagste dazu? (0)" })).toBeVisible();
-    await expect(card.getByText("Hier hat noch keener wat jesacht. Fang du doch an!")).toBeVisible();
+    await expect(
+      card.getByText("Hier hat noch keener wat jesacht. Fang du doch an!"),
+    ).toBeVisible();
     await expect(card.getByRole("group", { name: "Sortierung" })).toHaveCount(0);
   });
 
   test("four comments show three plus „Alle 4 Kommentare zeigen“", async ({ page }) => {
-    await mockList(page, [1, 2, 3, 4].map((id) => comment(id)));
+    await mockList(
+      page,
+      [1, 2, 3, 4].map((id) => comment(id)),
+    );
     const card = await open(page);
     await expect(card.getByRole("heading", { name: "Wat sagste dazu? (4)" })).toBeVisible();
     await expect(card.getByRole("group", { name: "Sortierung" })).toBeVisible();
