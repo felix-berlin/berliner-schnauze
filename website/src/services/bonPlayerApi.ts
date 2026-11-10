@@ -51,7 +51,6 @@ export function applyPlayerStats(stats: PlayerStats): void {
 export const playerLink = (code: string): string =>
   `${location.origin}/games/berliner-oder-nicht#code=${code}`;
 
-/** Reads and removes the code the inline script in berliner-oder-nicht.astro took from the link. */
 /** Like takeRedeemCode, but leaves the code for BonPlayerCode to redeem. */
 export function hasRedeemCode(): boolean {
   try {
@@ -61,6 +60,7 @@ export function hasRedeemCode(): boolean {
   }
 }
 
+/** Reads and removes the code the inline script in berliner-oder-nicht.astro took from the link. */
 export function takeRedeemCode(): string | undefined {
   try {
     const code = sessionStorage.getItem("bonRedeem") ?? undefined;

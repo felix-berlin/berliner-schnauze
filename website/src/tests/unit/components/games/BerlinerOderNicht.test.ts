@@ -1,12 +1,13 @@
 import BerlinerOderNicht from "@components/games/BerlinerOderNicht.vue";
 import { $bonStats } from "@stores/bonStats";
-import { mount } from "@vue/test-utils";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { enableAutoUnmount, mount } from "@vue/test-utils";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick, ref } from "vue";
 
-const { mockAdvance, mockAnswer, mockRetry, mockStart, mockVibrate } = vi.hoisted(() => ({
+const { mockAdvance, mockAnswer, mockEnd, mockRetry, mockStart, mockVibrate } = vi.hoisted(() => ({
   mockAdvance: vi.fn(),
   mockAnswer: vi.fn(),
+  mockEnd: vi.fn(),
   mockRetry: vi.fn(),
   mockStart: vi.fn(),
   mockVibrate: vi.fn(),
@@ -24,6 +25,7 @@ vi.mock("@composables/useBon", () => ({
     bestStreak: ref(0),
     card,
     cardInStack: ref(1),
+    end: mockEnd,
     history: ref([]),
     last,
     lives: ref(3),
@@ -49,18 +51,22 @@ vi.mock("@components/games/BonPlayerCode.vue", () => ({
 }));
 vi.mock("@components/ConfettiEffect.vue", () => ({ default: { template: "<i />" } }));
 vi.mock("@components/games/BonHUD.vue", () => ({
-  default: { template: "<div class='mock-hud' />" },
+  default: { props: ["playerLabel"], template: "<div class='mock-hud'>{{ playerLabel }}</div>" },
 }));
 vi.mock("@components/games/BonResult.vue", () => ({
   default: { template: "<div class='mock-result' />" },
 }));
 vi.mock("@components/games/BonCard.vue", () => ({
   default: {
-    emits: ["answer"],
-    props: ["word", "isFirstCard"],
-    template: "<button class='mock-card' @click=\"$emit('answer', true)\">{{ word }}</button>",
+    emits: ["answer", "end"],
+    props: ["word", "showSwipeHint", "locked"],
+    template:
+      "<div><button class='mock-card' @click=\"$emit('answer', true)\">{{ word }}</button><b class='mock-hint'>{{ showSwipeHint }}</b><i class='mock-end' @click=\"$emit('end')\" /></div>",
   },
 }));
+
+// Each mount registers a document key listener; leaked ones would answer twice.
+enableAutoUnmount(afterEach);
 
 describe("BerlinerOderNicht", () => {
   beforeEach(() => {
@@ -131,5 +137,73 @@ describe("BerlinerOderNicht", () => {
     phase.value = "over";
     await nextTick();
     expect(wrapper.find(".mock-result").exists()).toBe(true);
+  });
+
+  describe("play", () => {
+    const key = (k: string, target: EventTarget = document.body) =>
+      target.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: k }));
+
+    beforeEach(() => {
+      phase.value = "play";
+      card.value = { id: "1", word: "Quatsch" };
+    });
+
+    it("labels the player, falling back to Anonym", async () => {
+      expect(mount(BerlinerOderNicht).find(".mock-hud").text()).toBe("Anonym");
+      $bonStats.setKey("playerName", "Berta");
+      expect(mount(BerlinerOderNicht).find(".mock-hud").text()).toBe("Berta");
+    });
+
+    it("hints the swipe on the very first card until the intro is seen", () => {
+      expect(mount(BerlinerOderNicht).find(".mock-hint").text()).toBe("true");
+      $bonStats.setKey("hasSeenIntro", true);
+      expect(mount(BerlinerOderNicht).find(".mock-hint").text()).toBe("false");
+    });
+
+    it.each([
+      ["ArrowLeft", false],
+      ["ArrowRight", true],
+    ])("answers with %s", (name, real) => {
+      mount(BerlinerOderNicht);
+      key(name);
+      expect(mockAnswer.mock.calls).toEqual([[real]]);
+    });
+
+    it("ignores keys outside play, in text fields, with modifiers and after unmount", async () => {
+      const wrapper = mount(BerlinerOderNicht, { attachTo: document.body });
+      const input = document.createElement("input");
+      document.body.append(input);
+      key("ArrowLeft", input);
+      input.dispatchEvent(
+        new KeyboardEvent("keydown", { altKey: true, bubbles: true, key: "ArrowLeft" }),
+      );
+      phase.value = "feedback";
+      await nextTick();
+      key("ArrowLeft");
+      phase.value = "play";
+      await nextTick();
+      wrapper.unmount();
+      key("ArrowRight");
+      expect(mockAnswer).not.toHaveBeenCalled();
+      input.remove();
+    });
+
+    it("locks after an answer until the phase moves on", async () => {
+      mount(BerlinerOderNicht);
+      key("ArrowRight");
+      key("ArrowRight");
+      expect(mockAnswer).toHaveBeenCalledOnce();
+      phase.value = "feedback";
+      await nextTick();
+      phase.value = "play";
+      await nextTick();
+      key("ArrowLeft");
+      expect(mockAnswer).toHaveBeenCalledTimes(2);
+    });
+
+    it("ends the game from the card", async () => {
+      await mount(BerlinerOderNicht).find(".mock-end").trigger("click");
+      expect(mockEnd).toHaveBeenCalledOnce();
+    });
   });
 });

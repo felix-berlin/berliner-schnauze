@@ -79,26 +79,27 @@
   }
 
   // The card styles are scoped to the word page; here the sheet surface comes from the DS tokens.
-  &__rules {
+  // Doubled class so these beat the later-loaded .c-section-card rules.
+  & &__rules {
     align-self: start;
     background: var(--surface-sheet);
     border-color: var(--rule-card);
     border-radius: var(--radius-sm);
 
-    :where(.c-section-card__header) {
+    .c-section-card__header {
       padding: 0.875rem 1rem;
     }
 
-    :where(.c-section-card__body) {
+    .c-section-card__body {
       padding: 0 1rem 1rem;
     }
 
     @include mx.breakpoint("word") {
-      :where(.c-section-card__header) {
+      .c-section-card__header {
         padding: 1rem 1.5rem;
       }
 
-      :where(.c-section-card__body) {
+      .c-section-card__body {
         padding: 0 1.5rem 1.5rem;
       }
     }

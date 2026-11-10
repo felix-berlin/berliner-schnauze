@@ -89,10 +89,7 @@
             <span>
               <b>Serie zahlt sich aus.</b><br />
               <span class="t-small">10 Punkte pro richtije Antwort, mal Multiplikator:</span>
-              <span
-                class="c-bon-intro__track"
-                aria-label="ab 3 richtigen in Folge ×2, ab 6 ×3, ab 10 ×5"
-              >
+              <span class="c-bon-intro__track">
                 <span>×1</span><span>ab 3 · ×2</span><span>ab 6 · ×3</span><span>ab 10 · ×5</span>
               </span>
             </span>

@@ -17,19 +17,18 @@
           :score="score"
           :streak="streak"
           :multiplier="multiplier"
-          :is-highscore="score > previousHighScore"
-          :player-name="stats.playerName || undefined"
+          :player-label="stats.playerName || 'Anonym'"
         />
         <BonCard
           v-if="phase === 'play' && card"
           :key="`${stack}-${cardInStack}`"
           :word="card.word"
-          :card-number="cardInStack"
-          :is-shaking="false"
-          :last-answer-correct="null"
-          :is-real="null"
-          :is-first-card="stack === 1 && cardInStack === 1 && !stats.hasSeenIntro"
+          :card-in-stack="cardInStack"
+          :stack="stack"
+          :show-swipe-hint="stack === 1 && cardInStack === 1 && !stats.hasSeenIntro"
+          :locked="locked"
           @answer="onAnswer"
+          @end="end"
         />
         <div v-else-if="last" class="c-berliner-oder-nicht__note">
           <p>{{ last.correct ? "Richtig!" : "Falsch." }} „{{ last.word }}“</p>
@@ -76,8 +75,8 @@ import { useBon } from "@composables/useBon";
 import { useStore } from "@nanostores/vue";
 import { hasRedeemCode } from "@services/bonPlayerApi.ts";
 import { $bonStats } from "@stores/bonStats";
-import { useOnline, useVibrate } from "@vueuse/core";
-import { watch } from "vue";
+import { useEventListener, useOnline, useVibrate } from "@vueuse/core";
+import { ref, watch } from "vue";
 
 const {
   advance,
@@ -85,6 +84,7 @@ const {
   bestStreak,
   card,
   cardInStack,
+  end,
   history,
   last,
   lives,
@@ -109,10 +109,30 @@ function onStart() {
   void start();
 }
 
+// Closed from the first answer until the game is back in play (the card is gone meanwhile).
+const locked = ref(false);
+
 function onAnswer(guessedReal: boolean) {
+  if (locked.value) return;
+  locked.value = true;
   if (!stats.value.hasSeenIntro) $bonStats.setKey("hasSeenIntro", true);
   void answer(guessedReal);
 }
+
+// Registered with VueUse: removed on unmount, so arrow keys only work while the game is mounted.
+useEventListener(document, "keydown", (e: KeyboardEvent) => {
+  if (phase.value !== "play" || !card.value || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) {
+    return;
+  }
+  const el = e.target as HTMLElement | null;
+  if (el?.closest("input, textarea, select, [contenteditable]")) return;
+  if (e.key === "ArrowLeft") onAnswer(false);
+  else if (e.key === "ArrowRight") onAnswer(true);
+});
+
+watch(phase, (p) => {
+  if (p === "play") locked.value = false;
+});
 
 watch(last, (entry) => {
   if (entry) vibrate(entry.correct ? [50] : [80, 60, 80]);

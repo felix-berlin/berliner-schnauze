@@ -1,297 +1,116 @@
 import BonCard from "@components/games/BonCard.vue";
 import { mount } from "@vue/test-utils";
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
 
-const mockSwipeState = vi.hoisted(() => ({
-  distanceX: { value: 0 } as { value: number },
-  isSwiping: { value: false } as { value: boolean },
-  keyHandlers: new Map<string, () => void>(),
-  onSwipeEndCallback: null as ((e: PointerEvent, dir: string) => void) | null,
-  startHintTimer: vi.fn(),
-  vibrateCallback: vi.fn(),
-}));
+const base = { cardInStack: 4, locked: false, showSwipeHint: false, stack: 2, word: "Schnauze" };
+const WIDTH = 400;
 
-vi.mock("@vueuse/core", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@vueuse/core")>();
-  const { ref } = await import("vue");
-  const isSwiping = ref(false);
-  const distanceX = ref(0);
-  // expose refs so tests can mutate them
-  Object.defineProperty(mockSwipeState, "isSwiping", { configurable: true, get: () => isSwiping });
-  Object.defineProperty(mockSwipeState, "distanceX", { configurable: true, get: () => distanceX });
-  return {
-    ...actual,
-    onKeyStroke: vi.fn((key: string, handler: () => void) => {
-      mockSwipeState.keyHandlers.set(key, handler);
-    }),
-    usePointerSwipe: vi.fn((_, opts) => {
-      mockSwipeState.onSwipeEndCallback = opts.onSwipeEnd;
-      return { distanceX, isSwiping };
-    }),
-    useTimeoutFn: vi.fn(() => ({ start: mockSwipeState.startHintTimer })),
-    useVibrate: vi.fn(() => ({ vibrate: mockSwipeState.vibrateCallback })),
-  };
-});
+function card(props: Partial<typeof base> = {}) {
+  const wrapper = mount(BonCard, { props: { ...base, ...props } });
+  const el = wrapper.find(".c-bon-card__card").element as HTMLElement;
+  el.getBoundingClientRect = () => ({ width: WIDTH }) as DOMRect;
+  return wrapper;
+}
 
-const defaultProps = {
-  cardNumber: 1,
-  isReal: null,
-  isShaking: false,
-  lastAnswerCorrect: null,
-  word: "Schnauze",
-};
+// jsdom has no PointerEvent, so a MouseEvent under the pointer event name stands in.
+function fire(target: { element: Element }, type: string, clientX: number) {
+  const event = new MouseEvent(type, { bubbles: true, clientX });
+  Object.assign(event, { pointerId: 1 });
+  target.element.dispatchEvent(event);
+}
+
+/** Drags the card by dx px, taking `ms` milliseconds, and releases it. */
+async function drag(wrapper: ReturnType<typeof card>, dx: number, ms: number) {
+  const target = wrapper.find(".c-bon-card__card");
+  fire(target, "pointerdown", 200);
+  vi.advanceTimersByTime(ms);
+  fire(target, "pointermove", 200 + dx);
+  fire(target, "pointerup", 200 + dx);
+}
 
 describe("BonCard.vue", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    mockSwipeState.keyHandlers.clear();
-    mockSwipeState.onSwipeEndCallback = null;
-    mockSwipeState.isSwiping.value = false;
-    mockSwipeState.distanceX.value = 0;
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
+
+  it("renders the word as h2, the label and the progress", () => {
+    const wrapper = card();
+    expect(wrapper.find("h2").text()).toBe("Schnauze");
+    expect(wrapper.text()).toContain("Berlinerisch oder nich?");
+    expect(wrapper.text()).toContain("Karte 4 von 20 · Stapel 2");
   });
 
-  it("renders the word", () => {
-    const wrapper = mount(BonCard, { props: defaultProps });
-    expect(wrapper.find(".c-bon-card__word").text()).toBe("Schnauze");
+  it("has two answer buttons with shortcuts and emits on click", async () => {
+    const wrapper = card();
+    const [nee, ja] = wrapper.findAll("button");
+    expect(nee.text()).toContain("Nee, nich Berlinerisch");
+    expect(nee.attributes("aria-keyshortcuts")).toBe("ArrowLeft");
+    expect(ja.text()).toContain("Ja, Berlinerisch");
+    expect(ja.attributes("aria-keyshortcuts")).toBe("ArrowRight");
+    await nee.trigger("click");
+    await ja.trigger("click");
+    expect(wrapper.emitted("answer")).toEqual([[false], [true]]);
   });
 
-  it("renders card number", () => {
-    const wrapper = mount(BonCard, { props: { ...defaultProps, cardNumber: 3 } });
-    expect(wrapper.find(".c-bon-card__progress").text()).toContain("3");
+  it("explains swipe and keys once each, and offers to end the game", () => {
+    const wrapper = card();
+    expect(wrapper.text()).toContain("Jeht ooch mit Wischen.");
+    expect(wrapper.text()).toContain("Jeht ooch mit den Pfeiltasten.");
+    expect(wrapper.find("button.c-textlink").text()).toBe("Spiel beenden");
   });
 
-  it("emits answer true when ja button clicked", async () => {
-    const wrapper = mount(BonCard, { props: defaultProps });
-    await wrapper.find(".c-bon-card__btn--yes").trigger("click");
-    expect(wrapper.emitted("answer")?.[0]).toEqual([true]);
+  it("emits end when the end link is used", async () => {
+    const wrapper = card();
+    await wrapper.find("button.c-textlink").trigger("click");
+    expect(wrapper.emitted("end")).toHaveLength(1);
   });
 
-  it("emits answer false when nee button clicked", async () => {
-    const wrapper = mount(BonCard, { props: defaultProps });
-    await wrapper.find(".c-bon-card__btn--no").trigger("click");
-    expect(wrapper.emitted("answer")?.[0]).toEqual([false]);
+  it("answers after a drag over 30 % of the width, right = Ja, left = Nee", async () => {
+    const wrapper = card();
+    await drag(wrapper, WIDTH * 0.3 + 1, 1000);
+    await drag(wrapper, -(WIDTH * 0.3 + 1), 1000);
+    expect(wrapper.emitted("answer")).toEqual([[true], [false]]);
   });
 
-  it("buttons are disabled when disabled prop is true", () => {
-    const wrapper = mount(BonCard, { props: { ...defaultProps, disabled: true } });
-    const buttons = wrapper.findAll("button");
-    buttons.forEach((btn) => expect(btn.attributes("disabled")).toBeDefined());
+  it("answers after a fast flick under 30 % (> 0.5 px/ms)", async () => {
+    const wrapper = card();
+    await drag(wrapper, 60, 100);
+    expect(wrapper.emitted("answer")).toEqual([[true]]);
   });
 
-  it("does not show overlay when not shaking", () => {
-    const wrapper = mount(BonCard, {
-      props: { ...defaultProps, isReal: true, isShaking: false, lastAnswerCorrect: false },
-    });
-    expect(wrapper.find(".c-bon-card__overlay").exists()).toBe(false);
+  it("springs back without emitting below the thresholds", async () => {
+    const wrapper = card();
+    await drag(wrapper, 60, 1000);
+    expect(wrapper.emitted("answer")).toBeUndefined();
+    expect(wrapper.find<HTMLElement>(".c-bon-card__card").element.style.transform).toBe("");
   });
 
-  it("shows overlay when shaking and lastAnswerCorrect is false", () => {
-    const wrapper = mount(BonCard, {
-      props: { ...defaultProps, isReal: true, isShaking: true, lastAnswerCorrect: false },
-    });
-    expect(wrapper.find(".c-bon-card__overlay").exists()).toBe(true);
+  it("rotates with the drag, at most 14 degrees, and shows the overlay", async () => {
+    const wrapper = card();
+    const target = wrapper.find(".c-bon-card__card");
+    fire(target, "pointerdown", 200);
+    fire(target, "pointermove", 600);
+    await nextTick();
+    expect((target.element as HTMLElement).style.transform).toContain("rotate(14deg)");
+    expect(wrapper.find(".c-bon-card__overlay--ja").attributes("aria-hidden")).toBe("true");
   });
 
-  it("overlay text says echtes Berlinerisch when isReal is true", () => {
-    const wrapper = mount(BonCard, {
-      props: { ...defaultProps, isReal: true, isShaking: true, lastAnswerCorrect: false },
-    });
-    expect(wrapper.find(".c-bon-card__overlay").text()).toContain("echtes Berlinerisch");
+  it("does nothing while locked", async () => {
+    const wrapper = card({ locked: true });
+    for (const b of wrapper.findAll(".c-bon-card__answers button")) await b.trigger("click");
+    await drag(wrapper, 300, 100);
+    expect(wrapper.emitted("answer")).toBeUndefined();
+    expect(wrapper.findAll(".c-bon-card__answers button")[0].attributes("aria-disabled")).toBe(
+      "true",
+    );
   });
 
-  it("overlay text says erfunden when isReal is false", () => {
-    const wrapper = mount(BonCard, {
-      props: { ...defaultProps, isReal: false, isShaking: true, lastAnswerCorrect: false },
-    });
-    expect(wrapper.find(".c-bon-card__overlay").text()).toContain("erfunden");
-  });
-
-  it("wrong answer on a real word with a translation reveals the meaning", () => {
-    const wrapper = mount(BonCard, {
-      props: {
-        ...defaultProps,
-        isReal: true,
-        isShaking: true,
-        lastAnswerCorrect: false,
-        translation: "fauler Mensch",
-        word: "Aas",
-      },
-    });
-    const meaning = wrapper.find(".c-bon-card__overlay-meaning");
-    expect(meaning.exists()).toBe(true);
-    expect(meaning.text()).toContain("Aas");
-    expect(meaning.text()).toContain("fauler Mensch");
-  });
-
-  it("wrong answer on a real word without a translation shows the verdict but no meaning", () => {
-    const wrapper = mount(BonCard, {
-      props: {
-        ...defaultProps,
-        isReal: true,
-        isShaking: true,
-        lastAnswerCorrect: false,
-        translation: null,
-      },
-    });
-    expect(wrapper.find(".c-bon-card__overlay").text()).toContain("echtes Berlinerisch");
-    expect(wrapper.find(".c-bon-card__overlay-meaning").exists()).toBe(false);
-  });
-
-  it("wrong answer on a fake word never shows a meaning", () => {
-    const wrapper = mount(BonCard, {
-      props: {
-        ...defaultProps,
-        isReal: false,
-        isShaking: true,
-        lastAnswerCorrect: false,
-        translation: "irrelevant",
-      },
-    });
-    expect(wrapper.find(".c-bon-card__overlay").text()).toContain("erfunden");
-    expect(wrapper.find(".c-bon-card__overlay-meaning").exists()).toBe(false);
-  });
-
-  it("nee button has correct aria-label", () => {
-    const wrapper = mount(BonCard, { props: { ...defaultProps, word: "Kiez" } });
-    expect(wrapper.find(".c-bon-card__btn--no").attributes("aria-label")).toContain("Kiez");
-  });
-
-  it("ja button has correct aria-label", () => {
-    const wrapper = mount(BonCard, { props: { ...defaultProps, word: "Kiez" } });
-    expect(wrapper.find(".c-bon-card__btn--yes").attributes("aria-label")).toContain("Kiez");
-  });
-
-  it("exposes focus method", () => {
-    const wrapper = mount(BonCard, { props: defaultProps });
-    expect(typeof (wrapper.vm as { focus?: () => void }).focus).toBe("function");
-  });
-
-  it("focus() calls focus on neeButtonRef when button is mounted (covers line 97 ?. non-null branch)", () => {
-    const wrapper = mount(BonCard, { attachTo: document.body, props: defaultProps });
-    const focusSpy = vi.spyOn(wrapper.find(".c-bon-card__btn--no").element, "focus");
-    (wrapper.vm as { focus: () => void }).focus();
-    expect(focusSpy).toHaveBeenCalledOnce();
-    wrapper.unmount();
-  });
-
-  it("shows swipe hint on first card", async () => {
-    const wrapper = mount(BonCard, { props: { ...defaultProps, isFirstCard: true } });
+  it("renders the swipe hint only when asked, and drops it after 3 s", async () => {
+    expect(card().find(".c-bon-card__swipe-hint").exists()).toBe(false);
+    const wrapper = card({ showSwipeHint: true });
+    expect(wrapper.find(".c-bon-card__swipe-hint").exists()).toBe(true);
+    vi.advanceTimersByTime(3100);
     await wrapper.vm.$nextTick();
-    expect(wrapper.find(".c-bon-card__swipe-hint").exists()).toBe(true);
-  });
-
-  it("does not show swipe hint on non-first card", () => {
-    const wrapper = mount(BonCard, { props: { ...defaultProps, isFirstCard: false } });
-    expect(wrapper.find(".c-bon-card__swipe-hint").exists()).toBe(false);
-  });
-
-  it("starts hint timer on mount when isFirstCard is true", () => {
-    mount(BonCard, { props: { ...defaultProps, isFirstCard: true } });
-    expect(mockSwipeState.startHintTimer).toHaveBeenCalledTimes(1);
-  });
-
-  it("does not start hint timer when isFirstCard is false", () => {
-    mount(BonCard, { props: { ...defaultProps, isFirstCard: false } });
-    expect(mockSwipeState.startHintTimer).not.toHaveBeenCalled();
-  });
-
-  it("onSwipeEnd right emits answer true and vibrates", () => {
-    const wrapper = mount(BonCard, { props: defaultProps });
-    mockSwipeState.onSwipeEndCallback?.(new PointerEvent("pointerup"), "right");
-    expect(mockSwipeState.vibrateCallback).toHaveBeenCalledWith([20]);
-    expect(wrapper.emitted("answer")?.[0]).toEqual([true]);
-  });
-
-  it("onSwipeEnd left emits answer false and vibrates", () => {
-    const wrapper = mount(BonCard, { props: defaultProps });
-    mockSwipeState.onSwipeEndCallback?.(new PointerEvent("pointerup"), "left");
-    expect(mockSwipeState.vibrateCallback).toHaveBeenCalledWith([20]);
-    expect(wrapper.emitted("answer")?.[0]).toEqual([false]);
-  });
-
-  it("onSwipeEnd does nothing when disabled", () => {
-    const wrapper = mount(BonCard, { props: { ...defaultProps, disabled: true } });
-    mockSwipeState.onSwipeEndCallback?.(new PointerEvent("pointerup"), "right");
-    expect(mockSwipeState.vibrateCallback).not.toHaveBeenCalled();
-    expect(wrapper.emitted("answer")).toBeUndefined();
-  });
-
-  it("onSwipeEnd with unknown direction does nothing", () => {
-    const wrapper = mount(BonCard, { props: defaultProps });
-    mockSwipeState.onSwipeEndCallback?.(new PointerEvent("pointerup"), "up");
-    expect(mockSwipeState.vibrateCallback).not.toHaveBeenCalled();
-    expect(wrapper.emitted("answer")).toBeUndefined();
-  });
-
-  it("isSwiping watcher hides swipe hint when swiping starts", async () => {
-    const wrapper = mount(BonCard, { props: { ...defaultProps, isFirstCard: true } });
-    expect(wrapper.find(".c-bon-card__swipe-hint").exists()).toBe(true);
-    mockSwipeState.isSwiping.value = true;
-    await nextTick();
-    expect(wrapper.find(".c-bon-card__swipe-hint").exists()).toBe(false);
-  });
-
-  it("dragCardStyle is empty when not swiping", () => {
-    const wrapper = mount(BonCard, { props: defaultProps });
-    const card = wrapper.find(".c-bon-card__card");
-    expect(card.attributes("style") ?? "").toBe("");
-  });
-
-  it("dragCardStyle applies transform when swiping", async () => {
-    const wrapper = mount(BonCard, { props: defaultProps });
-    mockSwipeState.isSwiping.value = true;
-    mockSwipeState.distanceX.value = -60; // x = +60 (right)
-    await nextTick();
-    const style = wrapper.find(".c-bon-card__card").attributes("style") ?? "";
-    expect(style).toContain("translateX");
-  });
-
-  it("dragCardStyle applies left-side style when dragging left", async () => {
-    const wrapper = mount(BonCard, { props: defaultProps });
-    mockSwipeState.isSwiping.value = true;
-    mockSwipeState.distanceX.value = 60; // x = -60 (left)
-    await nextTick();
-    const style = wrapper.find(".c-bon-card__card").attributes("style") ?? "";
-    expect(style).toContain("translateX");
-  });
-
-  it("ArrowRight key emits answer true", () => {
-    const wrapper = mount(BonCard, { props: defaultProps });
-    mockSwipeState.keyHandlers.get("ArrowRight")?.();
-    expect(wrapper.emitted("answer")?.[0]).toEqual([true]);
-  });
-
-  it("ArrowLeft key emits answer false", () => {
-    const wrapper = mount(BonCard, { props: defaultProps });
-    mockSwipeState.keyHandlers.get("ArrowLeft")?.();
-    expect(wrapper.emitted("answer")?.[0]).toEqual([false]);
-  });
-
-  it("ArrowRight key does nothing when disabled", () => {
-    const wrapper = mount(BonCard, { props: { ...defaultProps, disabled: true } });
-    mockSwipeState.keyHandlers.get("ArrowRight")?.();
-    expect(wrapper.emitted("answer")).toBeUndefined();
-  });
-
-  it("ArrowLeft key does nothing when disabled", () => {
-    const wrapper = mount(BonCard, { props: { ...defaultProps, disabled: true } });
-    mockSwipeState.keyHandlers.get("ArrowLeft")?.();
-    expect(wrapper.emitted("answer")).toBeUndefined();
-  });
-
-  it("useTimeoutFn callback sets showSwipeHint to false (covers line 114)", async () => {
-    const vueuse = await import("@vueuse/core");
-    let capturedTimerCallback: (() => void) | null = null;
-    vi.mocked(vueuse.useTimeoutFn).mockImplementationOnce((fn: (...args: unknown[]) => unknown) => {
-      capturedTimerCallback = fn as () => void;
-      return { start: mockSwipeState.startHintTimer } as ReturnType<typeof vueuse.useTimeoutFn>;
-    });
-    const wrapper = mount(BonCard, { props: { ...defaultProps, isFirstCard: true } });
-    expect(capturedTimerCallback).not.toBeNull();
-    expect(wrapper.find(".c-bon-card__swipe-hint").exists()).toBe(true);
-    capturedTimerCallback!();
-    await nextTick();
     expect(wrapper.find(".c-bon-card__swipe-hint").exists()).toBe(false);
   });
 });
