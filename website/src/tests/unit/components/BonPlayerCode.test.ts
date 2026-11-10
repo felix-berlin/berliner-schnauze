@@ -112,7 +112,9 @@ describe("BonPlayerCode", () => {
     await w.get("[data-test=get]").trigger("click");
     await flushPromises();
     expect(document.activeElement).toBe(w.get("[data-test=code]").element);
-    expect(w.get("[data-test=link-hint]").text()).toBe("Klappt der Link nich, tipp den Code einfach ein.");
+    expect(w.get("[data-test=link-hint]").text()).toBe(
+      "Klappt der Link nich, tipp den Code einfach ein.",
+    );
     w.unmount();
   });
 
@@ -125,7 +127,9 @@ describe("BonPlayerCode", () => {
     await flushPromises();
     await w.findAll("button")[0].trigger("click");
     await flushPromises();
-    expect(writeText).toHaveBeenCalledWith("http://x/games/berliner-oder-nicht#code=K7QD-M2X9-ZT4B");
+    expect(writeText).toHaveBeenCalledWith(
+      "http://x/games/berliner-oder-nicht#code=K7QD-M2X9-ZT4B",
+    );
     expect(w.get("[data-test=status]").text()).toContain("kopiert");
   });
 
@@ -150,5 +154,11 @@ describe("BonPlayerCode", () => {
     await w.get("[data-test=back]").trigger("click");
     expect(w.find("[data-test=get]").exists()).toBe(true);
     expect(w.get("[data-test=error]").text()).toBe("");
+  });
+
+  it("starts in the redeem form with mode=redeem", () => {
+    const w = mount(BonPlayerCode, { props: { mode: "redeem" } });
+    expect(w.find("input").exists()).toBe(true);
+    expect(w.find("[data-test=get]").exists()).toBe(false);
   });
 });

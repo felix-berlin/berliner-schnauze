@@ -55,8 +55,6 @@
 </template>
 
 <script setup lang="ts">
-import type { BonCard } from "@composables/useBon";
-
 import { useStore } from "@nanostores/vue";
 import { $bonStats } from "@stores/bonStats";
 import { trackEvent } from "@utils/analytics";
@@ -78,7 +76,7 @@ const props = defineProps<{
   correctAnswers: number;
   isNewHighScore: boolean;
   allTimeHighScore: number;
-  lastCard: BonCard | null;
+  lastCard: { word: string; isReal: boolean; translation?: string; slug?: string } | null;
 }>();
 
 const emit = defineEmits<{

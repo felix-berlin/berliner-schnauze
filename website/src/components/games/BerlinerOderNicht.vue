@@ -1,327 +1,122 @@
 <template>
   <div class="c-berliner-oder-nicht">
-    <!-- Screen reader live regions -->
-    <div role="status" aria-live="polite" aria-atomic="true" class="u-sr-only">
-      {{ announcement }}
-    </div>
-    <div role="alert" aria-live="assertive" aria-atomic="true" class="u-sr-only">
-      {{ urgentAnnouncement }}
-    </div>
+    <BonIntro
+      v-if="phase === 'intro'"
+      :high-score="stats.highScore"
+      :offline="!isOnline"
+      :link-redeem="linkRedeem"
+      @start="onStart"
+    />
 
-    <!-- Idle -->
-    <div v-if="phase === 'idle'" class="c-berliner-oder-nicht__idle">
-      <h1 class="c-berliner-oder-nicht__idle-title">Berliner<br />oder nicht?</h1>
-      <p class="c-berliner-oder-nicht__idle-description">
-        Echtes Berlinerisch oder erfunden? Swipe oder klick — du hast 3 Leben!
-      </p>
-      <p class="c-berliner-oder-nicht__idle-hint">
-        Tipp: Manche Wörter sind starke Abkürzungen für 'ne Redewendung — nich imma zu wörtlich
-        nehmen.
-      </p>
-      <button
-        v-if="playerName && !isEditingName"
-        class="c-berliner-oder-nicht__player-badge"
-        :aria-label="`Name bearbeiten: ${playerName}`"
-        @click="isEditingName = true"
-      >
-        <UserIcon width="13" height="13" aria-hidden="true" />
-        {{ playerName }}
-        <PencilIcon width="11" height="11" aria-hidden="true" />
-      </button>
-      <template v-else>
-        <label for="bon-player-name" class="u-sr-only">Dein Name (optional)</label>
-        <input
-          id="bon-player-name"
-          ref="nameInputRef"
-          v-model="localName"
-          type="text"
-          placeholder="Dein Name (optional)"
-          class="c-berliner-oder-nicht__name-input"
-          maxlength="32"
-          autocomplete="nickname"
-          @blur="saveName"
-          @keydown.enter="saveName"
+    <div v-else class="c-berliner-oder-nicht__game">
+      <h1 v-if="phase !== 'over'" class="u-sr-only">Berliner oder nicht? – Spiel läuft</h1>
+
+      <template v-if="phase === 'play' || phase === 'feedback'">
+        <BonHUD
+          :lives="lives"
+          :score="score"
+          :streak="streak"
+          :multiplier="multiplier"
+          :is-highscore="score > previousHighScore"
+          :player-name="stats.playerName || undefined"
         />
-      </template>
-      <BonPlayerCode />
-      <dl v-if="allTimeHighScore > 0" class="c-berliner-oder-nicht__idle-prev-stats">
-        <div class="c-berliner-oder-nicht__idle-prev-stats-item">
-          <dt>Highscore</dt>
-          <dd class="c-berliner-oder-nicht__idle-stat-value">{{ allTimeHighScore }}</dd>
-        </div>
-        <div class="c-berliner-oder-nicht__idle-prev-stats-item">
-          <dt>Best Streak</dt>
-          <dd class="c-berliner-oder-nicht__idle-stat-value">{{ allTimeBestStreak }}</dd>
-        </div>
-      </dl>
-      <button
-        v-if="hasSavedGame"
-        class="c-berliner-oder-nicht__resume-btn"
-        :disabled="!isReady"
-        @click="resumeGame"
-      >
-        Weiterspielen
-      </button>
-      <button class="c-berliner-oder-nicht__start-btn" :disabled="!isReady" @click="startGame">
-        {{ isReady ? (hasSavedGame ? "Neu starten" : "Spielen") : "Laden…" }}
-      </button>
-    </div>
-
-    <!-- Playing -->
-    <template v-if="phase === 'playing'">
-      <BonHUD
-        :lives="lives"
-        :score="score"
-        :streak="streak"
-        :multiplier="multiplier"
-        :is-highscore="score > allTimeHighScore"
-        :player-name="stats.playerName || undefined"
-      />
-      <Transition :name="cardTransitionName" mode="out-in">
         <BonCard
-          v-if="currentCard"
-          ref="bonCardRef"
-          :key="cardNumber"
-          :word="currentCard.word"
-          :card-number="cardNumber"
-          :is-shaking="isShaking"
-          :last-answer-correct="lastAnswerCorrect"
-          :is-real="currentCard.isReal"
-          :translation="currentCard.translation"
-          :is-first-card="cardNumber === 1 && !stats.hasSeenIntro"
-          :disabled="isAnswering"
+          v-if="phase === 'play' && card"
+          :key="`${stack}-${cardInStack}`"
+          :word="card.word"
+          :card-number="cardInStack"
+          :is-shaking="false"
+          :last-answer-correct="null"
+          :is-real="null"
+          :is-first-card="stack === 1 && cardInStack === 1 && !stats.hasSeenIntro"
           @answer="onAnswer"
         />
-      </Transition>
-    </template>
+        <div v-else-if="last" class="c-berliner-oder-nicht__note">
+          <p>{{ last.correct ? "Richtig!" : "Falsch." }} „{{ last.word }}“</p>
+          <p v-if="last.isReal && last.translation">= {{ last.translation }}</p>
+          <button class="c-button c-button--primary" type="button" @click="advance">Weiter</button>
+        </div>
+      </template>
 
-    <!-- Result -->
-    <template v-if="phase === 'result'">
-      <ConfettiEffect v-if="isNewHighScore" />
-      <BonResult
-        ref="bonResultRef"
-        :score="score"
-        :best-streak="bestStreak"
-        :total-answered="totalAnswered"
-        :correct-answers="correctAnswers"
-        :is-new-high-score="isNewHighScore"
-        :all-time-high-score="allTimeHighScore"
-        :last-card="lastCard"
-        @restart="startGame"
-      />
-    </template>
+      <p v-else-if="phase === 'loading'" class="c-berliner-oder-nicht__note" role="status">
+        Lädt …
+      </p>
+
+      <div v-else-if="phase === 'error'" class="c-berliner-oder-nicht__note" role="alert">
+        <p>Das hat nich jeklappt.</p>
+        <button class="c-button c-button--primary" type="button" @click="retry">
+          Nochmal versuchen
+        </button>
+      </div>
+
+      <template v-else-if="phase === 'over'">
+        <ConfettiEffect v-if="score > previousHighScore" />
+        <BonResult
+          :score="score"
+          :best-streak="bestStreak"
+          :total-answered="history.length"
+          :correct-answers="history.filter((e) => e.correct).length"
+          :is-new-high-score="score > previousHighScore"
+          :all-time-high-score="stats.highScore"
+          :last-card="last"
+          @restart="start"
+        />
+      </template>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import ConfettiEffect from "@components/ConfettiEffect.vue";
-import { useStore } from "@nanostores/vue";
-import { useTimeoutFn, useVibrate } from "@vueuse/core";
-import { computed, defineAsyncComponent, nextTick, onMounted, ref, watch } from "vue";
-
-const UserIcon = defineAsyncComponent(() => import("virtual:icons/lucide/user"));
-const PencilIcon = defineAsyncComponent(() => import("virtual:icons/lucide/pencil"));
 import BonCard from "@components/games/BonCard.vue";
 import BonHUD from "@components/games/BonHUD.vue";
-import BonPlayerCode from "@components/games/BonPlayerCode.vue";
+import BonIntro from "@components/games/BonIntro.vue";
 import BonResult from "@components/games/BonResult.vue";
-import { useBon, type BonCard as BonCardData } from "@composables/useBon";
-import { fetchSearchIndex } from "@services/searchIndex.ts";
+import { useBon } from "@composables/useBon";
+import { useStore } from "@nanostores/vue";
+import { hasRedeemCode } from "@services/bonPlayerApi.ts";
 import { $bonStats } from "@stores/bonStats";
-import { $savedBon } from "@stores/savedBon";
-
-import { fakeWords } from "@/data/fakeWords";
+import { useOnline, useVibrate } from "@vueuse/core";
+import { watch } from "vue";
 
 const {
+  advance,
   answer,
   bestStreak,
-  correctAnswers,
-  currentCard,
-  init,
-  isNewHighScore,
-  isReady,
-  lastAnswerCorrect,
-  lastCard,
+  card,
+  cardInStack,
+  history,
+  last,
   lives,
   multiplier,
-  nextCard,
   phase,
-  resumeGame: _resumeGame,
+  previousHighScore,
+  retry,
   score,
-  startGame: _startGame,
+  stack,
+  start,
   streak,
-  totalAnswered,
 } = useBon();
 
 const stats = useStore($bonStats);
-const allTimeHighScore = computed(() => stats.value.highScore);
-const allTimeBestStreak = computed(() => stats.value.bestStreak);
-const playerName = computed(() => stats.value.playerName ?? "");
-const localName = ref(stats.value.playerName ?? "");
-
-const isEditingName = ref(false);
-const nameInputRef = ref<HTMLInputElement | null>(null);
-
-function saveName() {
-  $bonStats.setKey("playerName", localName.value);
-  isEditingName.value = false;
-}
-
-watch(isEditingName, async (editing) => {
-  if (!editing) return;
-  localName.value = stats.value.playerName ?? "";
-  await nextTick();
-  nameInputRef.value?.focus();
-  nameInputRef.value?.select();
-});
-
-const savedBon = useStore($savedBon);
-const hasSavedGame = computed(() => savedBon.value?.phase === "playing");
-
-// Animation state
-const exitDirection = ref<"left" | "right" | null>(null);
-const isShaking = ref(false);
-const isAnswering = ref(false);
-const cardNumber = ref(1);
-
-// Component refs for focus management
-const bonCardRef = ref<InstanceType<typeof BonCard> | null>(null);
-const bonResultRef = ref<InstanceType<typeof BonResult> | null>(null);
-
-// Screen reader announcements
-const announcement = ref("");
-const urgentAnnouncement = ref("");
-
-watch(score, (newScore) => {
-  if (phase.value !== "playing") return;
-  announcement.value = `Score: ${newScore}`;
-});
-
-watch(streak, (newStreak) => {
-  if (phase.value !== "playing" || newStreak === 0) return;
-  announcement.value =
-    multiplier.value > 1
-      ? `Streak: ${newStreak}, ${multiplier.value}× Multiplikator`
-      : `Streak: ${newStreak}`;
-});
-
-watch(lives, (newLives, oldLives) => {
-  if (phase.value !== "playing" || newLives >= oldLives) return;
-  urgentAnnouncement.value = `${newLives} von 3 Leben verbleibend`;
-});
-
-watch(phase, async (newPhase) => {
-  if (newPhase === "playing") {
-    announcement.value = "Spiel gestartet";
-    await nextTick();
-    bonCardRef.value?.focus();
-    return;
-  }
-  if (newPhase === "result") {
-    urgentAnnouncement.value = isNewHighScore.value ? "Game Over – Neuer Highscore!" : "Game Over";
-    await nextTick();
-    bonResultRef.value?.focus();
-  }
-});
-
+const isOnline = useOnline();
+// Peeked, not taken: BonPlayerCode inside the intro redeems the code itself.
+const linkRedeem = hasRedeemCode();
 const { vibrate } = useVibrate();
 
-// Give the player longer to read the revealed meaning on a wrong real word;
-// a bare "War erfunden!" verdict (fakes) needs only the short shake window.
-const WRONG_SHAKE_MS = 1200;
-const WRONG_REVEAL_MS = 2500;
-const wrongPauseDuration = computed(() =>
-  currentCard.value?.isReal && currentCard.value?.translation ? WRONG_REVEAL_MS : WRONG_SHAKE_MS,
-);
-
-const { start: startShakeTimer } = useTimeoutFn(
-  () => {
-    isShaking.value = false;
-    isAnswering.value = false;
-    nextCard();
-    cardNumber.value++;
-  },
-  wrongPauseDuration,
-  { immediate: false },
-);
-
-const { start: startAnswerCooldown } = useTimeoutFn(
-  () => {
-    isAnswering.value = false;
-  },
-  350,
-  { immediate: false },
-);
-
-const cardTransitionName = computed(() => {
-  if (exitDirection.value === "right") return "c-bon-card-right";
-  if (exitDirection.value === "left") return "c-bon-card-left";
-  return "c-bon-card-neutral";
-});
-
-onMounted(async () => {
-  try {
-    const realWords: BonCardData[] = (await fetchSearchIndex())
-      .filter(
-        (r) => r.wordProperties.berlinerisch?.trim() && r.wordProperties.translations?.[0]?.trim(),
-      )
-      .map((r) => ({
-        isReal: true,
-        slug: r.slug,
-        translation: r.wordProperties.translations?.[0] ?? undefined,
-        word: r.wordProperties.berlinerisch,
-      }));
-
-    init(realWords, fakeWords);
-  } catch (err) {
-    console.error("[BerlinerOderNicht] Failed to load words:", err);
-  }
-});
-
-function resetAnimationState() {
-  cardNumber.value = 1;
-  exitDirection.value = null;
-  isShaking.value = false;
-  isAnswering.value = false;
-}
-
-function startGame() {
-  resetAnimationState();
-  _startGame();
-}
-
-function resumeGame() {
-  resetAnimationState();
-  _resumeGame();
+// BonIntro has already written the name to $bonStats, which start() reads.
+function onStart() {
+  void start();
 }
 
 function onAnswer(guessedReal: boolean) {
-  if (isAnswering.value) return;
-  const card = currentCard.value;
-  if (!card) return;
-
   if (!stats.value.hasSeenIntro) $bonStats.setKey("hasSeenIntro", true);
-  isAnswering.value = true;
-  const correct = card.isReal === guessedReal;
-  answer(guessedReal);
-
-  if (phase.value === "result") return;
-
-  if (!correct) {
-    vibrate([80, 60, 80]);
-    isShaking.value = true;
-    startShakeTimer();
-    return;
-  }
-
-  vibrate([50]);
-  exitDirection.value = guessedReal ? "right" : "left";
-  nextTick(() => {
-    nextCard();
-    cardNumber.value++;
-    startAnswerCooldown();
-  });
+  void answer(guessedReal);
 }
+
+watch(last, (entry) => {
+  if (entry) vibrate(entry.correct ? [50] : [80, 60, 80]);
+});
 </script>
 
 <style lang="scss">

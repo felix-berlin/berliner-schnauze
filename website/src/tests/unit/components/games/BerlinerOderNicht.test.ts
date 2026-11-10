@@ -1,630 +1,135 @@
-import { useStore } from "@nanostores/vue";
+import BerlinerOderNicht from "@components/games/BerlinerOderNicht.vue";
+import { $bonStats } from "@stores/bonStats";
 import { mount } from "@vue/test-utils";
-import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { ref, nextTick } from "vue";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { nextTick, ref } from "vue";
 
-const {
-  mockInit,
-  mockStartGame,
-  mockResumeGame,
-  mockAnswer,
-  mockNextCard,
-  mockStartShake,
-  mockStartCooldown,
-  mockVibrate,
-  mockFetchSearchIndex,
-} = vi.hoisted(() => ({
+const { mockAdvance, mockAnswer, mockRetry, mockStart, mockVibrate } = vi.hoisted(() => ({
+  mockAdvance: vi.fn(),
   mockAnswer: vi.fn(),
-  mockFetchSearchIndex: vi.fn(),
-  mockInit: vi.fn(),
-  mockNextCard: vi.fn(),
-  mockResumeGame: vi.fn(),
-  mockStartCooldown: vi.fn(),
-  mockStartGame: vi.fn(),
-  mockStartShake: vi.fn(),
+  mockRetry: vi.fn(),
+  mockStart: vi.fn(),
   mockVibrate: vi.fn(),
 }));
 
-const mockPhase = ref("idle");
-const mockCurrentCard = ref<{ word: string; isReal: boolean } | null>(null);
-const mockIsReady = ref(true);
-const mockIsNewHighScore = ref(false);
-const mockScore = ref(0);
-const mockLives = ref(3);
-const mockStreak = ref(0);
-const mockMultiplier = ref(1);
+const online = ref(true);
+const phase = ref("intro");
+const card = ref<{ id: string; word: string } | null>(null);
+const last = ref<Record<string, unknown> | null>(null);
 
 vi.mock("@composables/useBon", () => ({
-  useBon: vi.fn(() => ({
+  useBon: () => ({
+    advance: mockAdvance,
     answer: mockAnswer,
     bestStreak: ref(0),
-    correctAnswers: ref(0),
-    currentCard: mockCurrentCard,
-    init: mockInit,
-    isNewHighScore: mockIsNewHighScore,
-    isReady: mockIsReady,
-    lastAnswerCorrect: ref(null),
-    lastCard: ref(null),
-    lives: mockLives,
-    multiplier: mockMultiplier,
-    nextCard: mockNextCard,
-    phase: mockPhase,
-    resumeGame: mockResumeGame,
-    score: mockScore,
-    startGame: mockStartGame,
-    streak: mockStreak,
-    totalAnswered: ref(0),
-  })),
+    card,
+    cardInStack: ref(1),
+    history: ref([]),
+    last,
+    lives: ref(3),
+    multiplier: ref(1),
+    phase,
+    previousHighScore: ref(0),
+    retry: mockRetry,
+    score: ref(0),
+    stack: ref(1),
+    start: mockStart,
+    streak: ref(0),
+  }),
 }));
 
-vi.mock("@stores/bonStats", () => ({
-  $bonStats: { setKey: vi.fn() },
+vi.mock("@vueuse/core", async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useOnline: () => online,
+  useVibrate: () => ({ vibrate: mockVibrate }),
 }));
 
-vi.mock("@services/searchIndex.ts", () => ({
-  fetchSearchIndex: mockFetchSearchIndex,
+vi.mock("@components/games/BonPlayerCode.vue", () => ({
+  default: { template: "<section class='mock-code' />" },
 }));
-
-vi.mock("@stores/savedBon", () => ({
-  $savedBon: {},
+vi.mock("@components/ConfettiEffect.vue", () => ({ default: { template: "<i />" } }));
+vi.mock("@components/games/BonHUD.vue", () => ({
+  default: { template: "<div class='mock-hud' />" },
 }));
-
-vi.mock("@nanostores/vue", () => ({
-  useStore: vi.fn(),
+vi.mock("@components/games/BonResult.vue", () => ({
+  default: { template: "<div class='mock-result' />" },
 }));
-
-vi.mock("@/data/fakeWords", () => ({
-  fakeWords: [{ isReal: false, word: "Quatsch" }],
-}));
-
-vi.mock("@components/ConfettiEffect.vue", () => ({
-  default: { template: "<div class='mock-confetti' />" },
-}));
-
 vi.mock("@components/games/BonCard.vue", () => ({
   default: {
     emits: ["answer"],
-    expose: ["focus"],
-    name: "BonCard",
-    props: [
-      "word",
-      "cardNumber",
-      "isShaking",
-      "lastAnswerCorrect",
-      "isReal",
-      "isFirstCard",
-      "disabled",
-    ],
-    setup: () => ({ focus: vi.fn() }),
-    template: "<div class='mock-bon-card'>{{ word }}</div>",
+    props: ["word", "isFirstCard"],
+    template: "<button class='mock-card' @click=\"$emit('answer', true)\">{{ word }}</button>",
   },
 }));
 
-vi.mock("@components/games/BonHUD.vue", () => ({
-  default: {
-    props: ["lives", "score", "streak", "multiplier", "isHighscore", "playerName"],
-    template: "<div class='mock-bon-hud' />",
-  },
-}));
-
-vi.mock("@components/games/BonResult.vue", () => ({
-  default: {
-    emits: ["restart"],
-    expose: ["focus"],
-    name: "BonResult",
-    props: [
-      "score",
-      "bestStreak",
-      "totalAnswered",
-      "correctAnswers",
-      "isNewHighScore",
-      "allTimeHighScore",
-      "lastCard",
-    ],
-    setup: () => ({ focus: vi.fn() }),
-    template: "<div class='mock-bon-result' />",
-  },
-}));
-
-vi.mock("@vueuse/core", async (importOriginal) => {
-  const actual = await importOriginal<Record<string, unknown>>();
-  return {
-    ...actual,
-    useTimeoutFn: vi.fn((_, delay?: number) =>
-      delay === 350 ? { start: mockStartCooldown } : { start: mockStartShake },
-    ),
-    useVibrate: vi.fn(() => ({ vibrate: mockVibrate })),
-  };
-});
-
-const defaultStats = { bestStreak: 0, hasSeenIntro: false, highScore: 0, playerName: "" };
-
-function setupMocks(statsOverride = {}, savedBon: unknown = null) {
-  // mockReset clears the once-queue so we start fresh each call
-  vi.mocked(useStore).mockReset();
-  vi.mocked(useStore)
-    .mockReturnValueOnce(ref({ ...defaultStats, ...statsOverride }))
-    .mockReturnValueOnce(ref(savedBon));
-}
-
-// rebuilt in Task 3 of docs/superpowers/plans/2026-11-10-bon-redesign.md
-// The component import is dropped: it still pulls in the removed $savedBon store.
-const BerlinerOderNicht = {} as never;
-// oxlint-disable-next-line vitest/no-disabled-tests
-describe.skip("BerlinerOderNicht.vue", () => {
+describe("BerlinerOderNicht", () => {
   beforeEach(() => {
-    vi.useFakeTimers();
-    mockPhase.value = "idle";
-    mockCurrentCard.value = null;
-    mockIsReady.value = true;
-    mockIsNewHighScore.value = false;
-    mockScore.value = 0;
-    mockLives.value = 3;
-    mockStreak.value = 0;
-    mockInit.mockClear();
-    mockStartGame.mockClear();
-    mockResumeGame.mockClear();
-    mockAnswer.mockClear();
-    mockNextCard.mockClear();
-    mockStartShake.mockClear();
-    mockStartCooldown.mockClear();
-    mockVibrate.mockClear();
-
-    mockFetchSearchIndex.mockReset().mockResolvedValue([]);
-
-    setupMocks();
+    vi.clearAllMocks();
+    phase.value = "intro";
+    card.value = null;
+    last.value = null;
+    online.value = true;
+    $bonStats.setKey("hasSeenIntro", false);
+    $bonStats.setKey("playerName", "");
+    sessionStorage.clear();
   });
 
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
-  it("renders .c-berliner-oder-nicht container", () => {
+  it("shows the intro first and starts the game from it", async () => {
     const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".c-berliner-oder-nicht").exists()).toBe(true);
+    expect(wrapper.find("h1.c-band").text()).toBe("Berliner oder nicht?");
+    await wrapper.find("form").trigger("submit");
+    expect(mockStart).toHaveBeenCalledOnce();
   });
 
-  it("renders idle phase by default", () => {
+  it("passes offline to the intro and does not start", async () => {
+    online.value = false;
     const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".c-berliner-oder-nicht__idle").exists()).toBe(true);
+    expect(wrapper.find(".c-state--offline").exists()).toBe(true);
+    await wrapper.find("form").trigger("submit");
+    expect(mockStart).not.toHaveBeenCalled();
   });
 
-  it("shows 'Spielen' when ready and no saved game", () => {
+  it("peeks the link code without consuming it", () => {
+    sessionStorage.setItem("bonRedeem", "ABCD-EFGH-JKLM");
     const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".c-berliner-oder-nicht__start-btn").text()).toBe("Spielen");
+    expect(wrapper.find(".c-bon-intro__main").element.firstElementChild?.className).toBe(
+      "mock-code",
+    );
+    expect(sessionStorage.getItem("bonRedeem")).toBe("ABCD-EFGH-JKLM");
   });
 
-  it("shows 'Laden…' when not ready", () => {
-    mockIsReady.value = false;
+  it("plays: shows the card, marks the intro as seen and answers", async () => {
+    phase.value = "play";
+    card.value = { id: "1", word: "Quatsch" };
     const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".c-berliner-oder-nicht__start-btn").text()).toBe("Laden…");
-  });
-
-  it("shows 'Neu starten' when saved game exists", () => {
-    setupMocks({}, { phase: "playing" });
-    const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".c-berliner-oder-nicht__start-btn").text()).toBe("Neu starten");
-  });
-
-  it("shows name input when playerName is empty", () => {
-    const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find("#bon-player-name").exists()).toBe(true);
-  });
-
-  it("shows player badge when playerName is set", () => {
-    setupMocks({ playerName: "Felix" });
-    const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".c-berliner-oder-nicht__player-badge").text()).toContain("Felix");
-  });
-
-  it("hides name input when playerName is set", () => {
-    setupMocks({ playerName: "Felix" });
-    const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find("#bon-player-name").exists()).toBe(false);
-  });
-
-  it("shows idle stats when highScore > 0", () => {
-    setupMocks({ bestStreak: 5, highScore: 42 });
-    const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".c-berliner-oder-nicht__idle-prev-stats").exists()).toBe(true);
-    expect(wrapper.text()).toContain("42");
-  });
-
-  it("hides idle stats when highScore is 0", () => {
-    const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".c-berliner-oder-nicht__idle-prev-stats").exists()).toBe(false);
-  });
-
-  it("shows resume button when hasSavedGame", () => {
-    setupMocks({}, { phase: "playing" });
-    const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".c-berliner-oder-nicht__resume-btn").exists()).toBe(true);
-  });
-
-  it("hides resume button when no saved game", () => {
-    const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".c-berliner-oder-nicht__resume-btn").exists()).toBe(false);
-  });
-
-  it("clicking start button calls startGame", async () => {
-    const wrapper = mount(BerlinerOderNicht);
-    await wrapper.find(".c-berliner-oder-nicht__start-btn").trigger("click");
-    expect(mockStartGame).toHaveBeenCalled();
-  });
-
-  it("clicking resume button calls resumeGame", async () => {
-    setupMocks({}, { phase: "playing" });
-    const wrapper = mount(BerlinerOderNicht);
-    await wrapper.find(".c-berliner-oder-nicht__resume-btn").trigger("click");
-    expect(mockResumeGame).toHaveBeenCalled();
-  });
-
-  it("renders BonHUD and BonCard in playing phase", () => {
-    mockPhase.value = "playing";
-    mockCurrentCard.value = { isReal: true, word: "Kiez" };
-    const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".mock-bon-hud").exists()).toBe(true);
-    expect(wrapper.find(".mock-bon-card").exists()).toBe(true);
-  });
-
-  it("renders BonCard with correct word in playing phase", () => {
-    mockPhase.value = "playing";
-    mockCurrentCard.value = { isReal: true, word: "Schnauze" };
-    const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".mock-bon-card").text()).toBe("Schnauze");
-  });
-
-  it("renders BonResult in result phase", () => {
-    mockPhase.value = "result";
-    const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".mock-bon-result").exists()).toBe(true);
-  });
-
-  it("renders confetti in result phase when isNewHighScore", () => {
-    mockPhase.value = "result";
-    mockIsNewHighScore.value = true;
-    const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".mock-confetti").exists()).toBe(true);
-  });
-
-  it("does not show confetti when not a new highscore", () => {
-    mockPhase.value = "result";
-    mockIsNewHighScore.value = false;
-    const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".mock-confetti").exists()).toBe(false);
-  });
-
-  it("has screen reader live regions", () => {
-    const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find("[role='status']").exists()).toBe(true);
-    expect(wrapper.find("[role='alert']").exists()).toBe(true);
-  });
-
-  it("calls init after successful fetch on mount", async () => {
-    mockFetchSearchIndex.mockResolvedValue([
-      {
-        slug: "kiez",
-        wordProperties: { berlinerisch: "Kiez", translations: ["Neighborhood"] },
-      },
-    ]);
-    mount(BerlinerOderNicht);
-    await vi.runAllTimersAsync();
-    expect(mockInit).toHaveBeenCalled();
-  });
-
-  it("logs error when fetch fails on mount", async () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    mockFetchSearchIndex.mockRejectedValue(new Error("search index fetch failed"));
-    mount(BerlinerOderNicht);
-    await vi.runAllTimersAsync();
-    expect(consoleSpy).toHaveBeenCalled();
-    consoleSpy.mockRestore();
-  });
-
-  it("score watcher updates announcement in playing phase", async () => {
-    mockPhase.value = "playing";
-    const wrapper = mount(BerlinerOderNicht);
-    mockScore.value = 10;
-    await nextTick();
-    expect(wrapper.find("[role='status']").text()).toBe("Score: 10");
-  });
-
-  it("score watcher does not update announcement when not playing", async () => {
-    const wrapper = mount(BerlinerOderNicht);
-    mockScore.value = 10;
-    await nextTick();
-    expect(wrapper.find("[role='status']").text()).toBe("");
-  });
-
-  it("streak watcher updates announcement with multiplier > 1", async () => {
-    mockPhase.value = "playing";
-    mockMultiplier.value = 2;
-    const wrapper = mount(BerlinerOderNicht);
-    mockStreak.value = 3;
-    await nextTick();
-    expect(wrapper.find("[role='status']").text()).toContain("2×");
-  });
-
-  it("streak watcher updates announcement without multiplier when multiplier is 1", async () => {
-    mockPhase.value = "playing";
-    mockMultiplier.value = 1;
-    const wrapper = mount(BerlinerOderNicht);
-    mockStreak.value = 3;
-    await nextTick();
-    expect(wrapper.find("[role='status']").text()).toBe("Streak: 3");
-  });
-
-  it("streak watcher does nothing when streak is 0", async () => {
-    mockPhase.value = "playing";
-    const wrapper = mount(BerlinerOderNicht);
-    const before = wrapper.find("[role='status']").text();
-    mockStreak.value = 0;
-    await nextTick();
-    expect(wrapper.find("[role='status']").text()).toBe(before);
-  });
-
-  it("lives watcher sets urgentAnnouncement when lives decrease in playing phase", async () => {
-    mockPhase.value = "playing";
-    const wrapper = mount(BerlinerOderNicht);
-    mockLives.value = 2;
-    await nextTick();
-    expect(wrapper.find("[role='alert']").text()).toContain("2 von 3 Leben");
-  });
-
-  it("lives watcher does nothing when lives increase", async () => {
-    mockPhase.value = "playing";
-    mockLives.value = 2;
-    const wrapper = mount(BerlinerOderNicht);
-    mockLives.value = 3;
-    await nextTick();
-    expect(wrapper.find("[role='alert']").text()).toBe("");
-  });
-
-  it("phase watcher announces game started when phase becomes playing", async () => {
-    const wrapper = mount(BerlinerOderNicht);
-    mockPhase.value = "playing";
-    await nextTick();
-    expect(wrapper.find("[role='status']").text()).toContain("Spiel gestartet");
-  });
-
-  it("phase watcher announces game over when phase becomes result", async () => {
-    mockPhase.value = "playing";
-    const wrapper = mount(BerlinerOderNicht);
-    mockPhase.value = "result";
-    await nextTick();
-    expect(wrapper.find("[role='alert']").text()).toContain("Game Over");
-  });
-
-  it("phase watcher announces new highscore when isNewHighScore", async () => {
-    mockPhase.value = "playing";
-    mockIsNewHighScore.value = true;
-    const wrapper = mount(BerlinerOderNicht);
-    mockPhase.value = "result";
-    await nextTick();
-    expect(wrapper.find("[role='alert']").text()).toContain("Neuer Highscore");
-  });
-
-  it("onAnswer correct guess calls answer and nextCard", async () => {
-    mockPhase.value = "playing";
-    mockCurrentCard.value = { isReal: true, word: "Kiez" };
-    setupMocks({ hasSeenIntro: true });
-    const wrapper = mount(BerlinerOderNicht);
-    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", true);
-    await nextTick();
+    expect(wrapper.find(".mock-hud").exists()).toBe(true);
+    await wrapper.find(".mock-card").trigger("click");
+    expect($bonStats.get().hasSeenIntro).toBe(true);
     expect(mockAnswer).toHaveBeenCalledWith(true);
-    expect(mockNextCard).toHaveBeenCalled();
-    expect(mockVibrate).toHaveBeenCalledWith([50]);
   });
 
-  it("onAnswer incorrect guess shakes card and starts shake timer", async () => {
-    mockPhase.value = "playing";
-    mockCurrentCard.value = { isReal: true, word: "Kiez" };
-    setupMocks({ hasSeenIntro: true });
-    const wrapper = mount(BerlinerOderNicht);
-    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", false);
-    await nextTick();
-    expect(mockAnswer).toHaveBeenCalledWith(false);
-    expect(mockVibrate).toHaveBeenCalledWith([80, 60, 80]);
-    expect(mockStartShake).toHaveBeenCalled();
-    expect(wrapper.findComponent({ name: "BonCard" }).props("isShaking")).toBe(true);
-  });
-
-  it("onAnswer does nothing when isAnswering is true", async () => {
-    mockPhase.value = "playing";
-    mockCurrentCard.value = { isReal: true, word: "Kiez" };
-    setupMocks({ hasSeenIntro: true });
-    const wrapper = mount(BerlinerOderNicht);
-    const bonCard = wrapper.findComponent({ name: "BonCard" });
-    await bonCard.vm.$emit("answer", true); // sets isAnswering = true
-    const callsBefore = mockAnswer.mock.calls.length;
-    await bonCard.vm.$emit("answer", false); // early return — isAnswering is still true
-    expect(mockAnswer.mock.calls.length).toBe(callsBefore);
-  });
-
-  it("onAnswer returns early when phase becomes result after answer()", async () => {
-    mockPhase.value = "playing";
-    mockCurrentCard.value = { isReal: false, word: "Kiez" };
-    setupMocks({ hasSeenIntro: true });
-    // Make answer() transition to result phase
-    mockAnswer.mockImplementation(() => {
-      mockPhase.value = "result";
-    });
-    const wrapper = mount(BerlinerOderNicht);
-    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", false);
-    await nextTick();
-    expect(mockNextCard).not.toHaveBeenCalled();
-    mockAnswer.mockReset();
-  });
-
-  it("onAnswer sets hasSeenIntro when not yet seen", async () => {
-    const { $bonStats } = await import("@stores/bonStats");
-    mockPhase.value = "playing";
-    mockCurrentCard.value = { isReal: true, word: "Kiez" };
-    setupMocks({ hasSeenIntro: false }); // not seen
-    const wrapper = mount(BerlinerOderNicht);
-    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", true);
-    expect($bonStats.setKey).toHaveBeenCalledWith("hasSeenIntro", true);
-  });
-
-  it("clicking player badge enables name editing", async () => {
-    setupMocks({ playerName: "Felix" });
-    const wrapper = mount(BerlinerOderNicht);
-    await wrapper.find(".c-berliner-oder-nicht__player-badge").trigger("click");
-    await nextTick();
-    expect(wrapper.find("#bon-player-name").exists()).toBe(true);
-  });
-
-  it("saveName saves localName to store on input blur", async () => {
-    const { $bonStats } = await import("@stores/bonStats");
-    const wrapper = mount(BerlinerOderNicht, { attachTo: document.body });
-    const input = wrapper.find("#bon-player-name");
-    await input.setValue("Luise");
-    await input.trigger("blur");
-    expect($bonStats.setKey).toHaveBeenCalledWith("playerName", "Luise");
-    wrapper.unmount();
-  });
-
-  it("BonResult restart event calls startGame", async () => {
-    mockPhase.value = "result";
-    const wrapper = mount(BerlinerOderNicht);
-    await wrapper.findComponent({ name: "BonResult" }).vm.$emit("restart");
-    expect(mockStartGame).toHaveBeenCalled();
-  });
-
-  it("shake timer callback resets shaking state and calls nextCard (covers lines 216-219)", async () => {
-    const { useTimeoutFn } = await import("@vueuse/core");
-    let capturedShakeFn: (() => void) | null = null;
-    vi.mocked(useTimeoutFn)
-      .mockImplementationOnce((fn: (...args: unknown[]) => unknown) => {
-        capturedShakeFn = fn as () => void;
-        return { start: mockStartShake } as ReturnType<typeof useTimeoutFn>;
-      })
-      .mockImplementationOnce(
-        () => ({ start: mockStartCooldown }) as ReturnType<typeof useTimeoutFn>,
-      );
-
-    mockPhase.value = "playing";
-    mockCurrentCard.value = { isReal: true, word: "Kiez" };
-    setupMocks({ hasSeenIntro: true });
-    const wrapper = mount(BerlinerOderNicht);
-
-    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", false);
-    await nextTick();
-    expect(wrapper.findComponent({ name: "BonCard" }).props("isShaking")).toBe(true);
-    expect(capturedShakeFn).not.toBeNull();
-
-    capturedShakeFn!();
-    await nextTick();
-    expect(wrapper.findComponent({ name: "BonCard" }).props("isShaking")).toBe(false);
-    expect(mockNextCard).toHaveBeenCalled();
-  });
-
-  it("cooldown timer callback resets isAnswering (covers line 223)", async () => {
-    const { useTimeoutFn } = await import("@vueuse/core");
-    let capturedCooldownFn: (() => void) | null = null;
-    vi.mocked(useTimeoutFn)
-      .mockImplementationOnce(() => ({ start: mockStartShake }) as ReturnType<typeof useTimeoutFn>)
-      .mockImplementationOnce((fn: (...args: unknown[]) => unknown) => {
-        capturedCooldownFn = fn as () => void;
-        return { start: mockStartCooldown } as ReturnType<typeof useTimeoutFn>;
-      });
-
-    mockPhase.value = "playing";
-    mockCurrentCard.value = { isReal: true, word: "Kiez" };
-    setupMocks({ hasSeenIntro: true });
-    const wrapper = mount(BerlinerOderNicht);
-
-    // Correct answer → startAnswerCooldown() is called inside a nextTick
-    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", true);
-    await nextTick();
-    expect(capturedCooldownFn).not.toBeNull();
-
-    // isAnswering is still true → second answer is blocked
-    mockAnswer.mockClear();
-    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", true);
-    expect(mockAnswer).not.toHaveBeenCalled();
-
-    // Fire the cooldown → isAnswering = false
-    capturedCooldownFn!();
-    await nextTick();
-
-    // Now a new answer goes through
-    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", true);
-    expect(mockAnswer).toHaveBeenCalled();
-  });
-
-  it("playerName computed uses empty string fallback when playerName is null (covers lines 146-147 ?? right branch)", () => {
-    setupMocks({ playerName: null as unknown as string });
-    const wrapper = mount(BerlinerOderNicht);
-    // playerName ?? '' → '' (falsy) → badge hidden, input shown
-    expect(wrapper.find("#bon-player-name").exists()).toBe(true);
-  });
-
-  it("isEditingName watcher returns early when editing becomes false (covers line 158 true branch)", async () => {
-    setupMocks({ playerName: "Felix" });
-    const wrapper = mount(BerlinerOderNicht, { attachTo: document.body });
-    await wrapper.find(".c-berliner-oder-nicht__player-badge").trigger("click");
-    await nextTick(); // watcher fires with editing=true
-    await wrapper.find("#bon-player-name").trigger("blur"); // saveName → isEditingName=false
-    await nextTick(); // watcher fires with editing=false → early return
-    expect(wrapper.find(".c-berliner-oder-nicht__player-badge").exists()).toBe(true);
-    wrapper.unmount();
-  });
-
-  it("isEditingName watcher ?? right branch when playerName is null before watcher fires (covers line 159)", async () => {
-    const statsRef = ref({ ...defaultStats, playerName: "Felix" });
-    vi.mocked(useStore).mockReset();
-    vi.mocked(useStore).mockReturnValueOnce(statsRef).mockReturnValueOnce(ref(null));
-    const wrapper = mount(BerlinerOderNicht, { attachTo: document.body });
-    // Synchronously click — schedules watcher but does not flush it yet
-    wrapper.find(".c-berliner-oder-nicht__player-badge").element.click();
-    // Null out playerName before the watcher fires
-    statsRef.value = { ...defaultStats, playerName: null as unknown as string };
-    // Flush: watcher fires with editing=true, reads stats.value.playerName (null) → null ?? '' → right branch
-    await nextTick();
-    const input = wrapper.find<HTMLInputElement>("#bon-player-name");
-    expect(input.element.value).toBe("");
-    wrapper.unmount();
-  });
-
-  it("onAnswer returns early when currentCard is null (covers line 275 true branch)", () => {
-    mockPhase.value = "playing";
-    mockCurrentCard.value = { isReal: true, word: "Kiez" };
-    setupMocks({ hasSeenIntro: true });
-    const wrapper = mount(BerlinerOderNicht);
-    const bonCard = wrapper.findComponent({ name: "BonCard" });
-    // Synchronously null the card — BonCard still in DOM until nextTick
-    mockCurrentCard.value = null;
-    // Emit without await — onAnswer reads currentCard.value===null → early return
-    bonCard.vm.$emit("answer", true);
-    expect(mockAnswer).not.toHaveBeenCalled();
-  });
-
-  it("onAnswer correct guess on fake word sets exitDirection=left (covers lines 228/292)", async () => {
-    mockPhase.value = "playing";
-    mockCurrentCard.value = { isReal: false, word: "Quatsch" };
-    setupMocks({ hasSeenIntro: true });
-    const wrapper = mount(BerlinerOderNicht);
-    // guessedReal=false, card.isReal=false → correct=true → exitDirection='left'
-    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", false);
-    await nextTick();
-    expect(mockVibrate).toHaveBeenCalledWith([50]);
-    expect(mockNextCard).toHaveBeenCalled();
-  });
-
-  it("onMounted does not offer a word without translation", async () => {
-    mockFetchSearchIndex.mockResolvedValue([
-      { slug: "schnauze", wordProperties: { berlinerisch: "Schnauze", translations: [] } },
-      { slug: "blank", wordProperties: { berlinerisch: "Blank", translations: ["  "] } },
-      { slug: "blank2", wordProperties: { berlinerisch: "  ", translations: ["x"] } },
-      { slug: "kiez", wordProperties: { berlinerisch: "Kiez", translations: ["Viertel"] } },
-    ]);
+  it("vibrates by correctness when an answer lands", async () => {
     mount(BerlinerOderNicht);
-    await vi.runAllTimersAsync();
-    const [realWords] = mockInit.mock.calls[mockInit.mock.calls.length - 1] as [
-      { word: string }[],
-      unknown,
-    ];
-    expect(realWords.map((w) => w.word)).toEqual(["Kiez"]);
+    last.value = { correct: true, isReal: true, word: "a" };
+    await nextTick();
+    expect(mockVibrate).toHaveBeenLastCalledWith([50]);
+    last.value = { correct: false, isReal: false, word: "b" };
+    await nextTick();
+    expect(mockVibrate).toHaveBeenLastCalledWith([80, 60, 80]);
+  });
+
+  it("feedback offers advance, error offers retry, over shows the result", async () => {
+    phase.value = "feedback";
+    last.value = { correct: true, isReal: true, translation: "Unsinn", word: "Quatsch" };
+    const wrapper = mount(BerlinerOderNicht);
+    await wrapper.find("button").trigger("click");
+    expect(mockAdvance).toHaveBeenCalledOnce();
+    phase.value = "error";
+    await nextTick();
+    await wrapper.find("button").trigger("click");
+    expect(mockRetry).toHaveBeenCalledOnce();
+    phase.value = "over";
+    await nextTick();
+    expect(wrapper.find(".mock-result").exists()).toBe(true);
   });
 });

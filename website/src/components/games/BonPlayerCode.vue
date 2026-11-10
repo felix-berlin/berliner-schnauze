@@ -30,7 +30,13 @@
         </button>
       </div>
       <!-- eslint-disable-next-line vue/no-v-html -- SVG generated locally from our own link -->
-      <div v-if="qrSvg" class="c-bon-player-code__qr" role="img" aria-label="QR-Code mit deinem Spielerlink" v-html="qrSvg" />
+      <div
+        v-if="qrSvg"
+        class="c-bon-player-code__qr"
+        role="img"
+        aria-label="QR-Code mit deinem Spielerlink"
+        v-html="qrSvg"
+      />
     </template>
 
     <template v-else-if="state === 'redeem'">
@@ -94,7 +100,11 @@ import {
 } from "@services/bonPlayerApi.ts";
 import { nextTick, onMounted, ref } from "vue";
 
-const state = ref<"none" | "code" | "redeem" | "success">("none");
+const props = defineProps<{ mode?: "none" | "redeem" }>();
+
+const state = ref<"none" | "code" | "redeem" | "success">(
+  props.mode === "redeem" ? "redeem" : "none",
+);
 const code = ref("");
 const input = ref("");
 const error = ref("");
@@ -180,6 +190,8 @@ onMounted(() => {
     state.value = "redeem";
     input.value = stored; // the link and storage no longer hold it, so a failed redeem must stay retryable
     void redeem(stored);
+  } else if (props.mode === "redeem") {
+    void focusOn("input");
   }
 });
 </script>
