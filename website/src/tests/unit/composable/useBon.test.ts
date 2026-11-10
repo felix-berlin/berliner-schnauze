@@ -256,6 +256,48 @@ describe("useBon", () => {
     expect(bon.phase.value).toBe("over");
   });
 
+  it("an empty next reply is an error and retry asks again", async () => {
+    // the silent card-15 prefetch and the blocking request both get an empty stack
+    vi.mocked(api.nextCards).mockResolvedValueOnce([]).mockResolvedValueOnce([]);
+    const bon = await started();
+    await play(bon, 19);
+    await bon.answer(true);
+    await bon.advance();
+    expect(bon.phase.value).toBe("error");
+    bon.retry();
+    await vi.waitFor(() => expect(bon.phase.value).toBe("play"));
+    expect(api.nextCards).toHaveBeenCalledTimes(3);
+    expect(bon.stack.value).toBe(2);
+  });
+
+  it("a failed restart cannot finish the previous game", async () => {
+    const bon = await started();
+    vi.mocked(api.startRun).mockRejectedValueOnce(new Error("down"));
+    await bon.start();
+    await bon.end();
+    expect(api.finishRun).not.toHaveBeenCalled();
+  });
+
+  it("end() during an answer that is the third mistake is no early end", async () => {
+    const bon = await started();
+    let release!: (r: api.AnswerReply) => void;
+    vi.mocked(api.answerCard).mockReturnValue(new Promise((r) => (release = r)));
+    const answering = bon.answer(true);
+    const ending = bon.end();
+    release(reply(false, 0, true));
+    await Promise.all([answering, ending]);
+    expect(bon.endedEarly.value).toBe(false);
+    expect(bon.phase.value).toBe("over");
+  });
+
+  it("a rejecting finishRun still ends the game", async () => {
+    vi.mocked(api.finishRun).mockRejectedValue(new Error("x"));
+    const bon = await started();
+    await bon.end();
+    expect(bon.phase.value).toBe("over");
+    expect(bon.result.value).toBeUndefined();
+  });
+
   it("an empty card reply is an error", async () => {
     vi.mocked(api.startRun).mockResolvedValue({ cards: [], token: "tok" });
     const bon = await started();

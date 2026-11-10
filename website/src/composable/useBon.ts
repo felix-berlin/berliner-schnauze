@@ -51,6 +51,7 @@ export function useBon() {
   let prefetch: Promise<void> | undefined;
   let gameOver = false;
   let busy = false;
+  let ending = false;
   // Bumped by start(): replies of an earlier game must not touch the current one.
   let gen = 0;
   let retryFn: () => void = () => {};
@@ -69,11 +70,13 @@ export function useBon() {
 
   function loadNext(): Promise<void> {
     const g = gen;
-    prefetch ??= queued(() => nextCards(token)).then(
+    prefetch ??= queued(async () => {
+      const c = await nextCards(token);
+      if (c.length === 0) throw new Error("empty stack");
+      return c;
+    }).then(
       (c) => {
-        if (g !== gen) return;
-        if (c.length === 0) throw new Error("empty stack");
-        upcoming = c;
+        if (g === gen) upcoming = c;
       },
       (error) => {
         if (g === gen) prefetch = undefined;
@@ -102,7 +105,8 @@ export function useBon() {
     result.value = undefined;
     endedEarly.value = false;
     upcoming = prefetch = undefined;
-    gameOver = busy = false;
+    token = "";
+    gameOver = busy = ending = false;
     chain = Promise.resolve();
     phase.value = "loading";
     try {
@@ -146,10 +150,10 @@ export function useBon() {
         word: entry.word,
       };
       history.value.push(last.value);
-      if (!endedEarly.value) phase.value = "feedback";
+      if (!ending) phase.value = "feedback";
     } catch {
       // Once the run is being finished the answer is moot.
-      if (g === gen && !endedEarly.value) {
+      if (g === gen && !ending) {
         fail(() => {
           phase.value = "play";
           void answer(real);
@@ -164,9 +168,11 @@ export function useBon() {
     const g = gen;
     phase.value = "loading";
     const name = $bonStats.get().playerName;
-    const res = await queued(() => finishRun(token, name || undefined));
+    const res = await queued(() => finishRun(token, name || undefined)).catch(() => undefined);
     if (g !== gen) return;
     result.value = res;
+    // Decided after the queue settled: an in-flight answer may have been the third mistake.
+    endedEarly.value = !gameOver;
     const stats = $bonStats.get();
     $bonStats.setKey("totalGamesPlayed", stats.totalGamesPlayed + 1);
     $bonStats.setKey(
@@ -219,8 +225,7 @@ export function useBon() {
 
   async function end() {
     if (!token || ["intro", "over", "loading"].includes(phase.value)) return;
-    // After the third mistake this is the normal end, not an early one.
-    if (!gameOver) endedEarly.value = true;
+    ending = true;
     await finish();
   }
 
