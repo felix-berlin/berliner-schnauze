@@ -182,4 +182,14 @@ describe("BonFeedback.vue", () => {
       .text();
     expect(text).toBe("Richtig! Plus 20 Punkte.");
   });
+
+  it("resumes after a touch swipe inside the lock window", () => {
+    const wrapper = fb(wrong);
+    fire(wrapper, "pointerdown", 10);
+    vi.advanceTimersByTime(100);
+    fire(wrapper, "pointerup", 110);
+    expect(wrapper.emitted("next")).toBeUndefined();
+    vi.advanceTimersByTime(1200);
+    expect(wrapper.emitted("next")).toHaveLength(1);
+  });
 });

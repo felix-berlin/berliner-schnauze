@@ -14,8 +14,8 @@
           `c-bon-feedback__card--${last.correct ? 'right' : 'wrong'}`,
         ]"
         @click="go(true)"
-        @pointerenter="pause"
-        @pointerleave="resume"
+        @pointerenter="onEnter"
+        @pointerleave="onLeave"
         @pointerdown="onDown"
         @pointerup="onUp"
         @pointercancel="resume"
@@ -150,10 +150,17 @@ let done = false;
 let shownAt = 0;
 let timer: ReturnType<typeof setTimeout> | undefined;
 let downX: number | undefined;
+let hovering = false;
 
 // Pointer input in the lock window is dropped without latching, so the timer still runs out.
 function go(fromPointer = false) {
-  if (done || (fromPointer && Date.now() - shownAt < LOCK_MS)) return;
+  if (done) return;
+  if (fromPointer && Date.now() - shownAt < LOCK_MS) {
+    // A pointerdown may have paused the timer; a touch release fires no pointerleave.
+    downX = undefined;
+    if (paused.value && !hovering) resume();
+    return;
+  }
   done = true;
   clearTimeout(timer);
   emit("next");
@@ -175,11 +182,21 @@ function pause() {
 }
 
 function resume() {
-  if (done) return;
+  if (done || !paused.value) return;
   paused.value = false;
   barMs.value = RESUME_MS;
   run.value++;
   arm(RESUME_MS);
+}
+
+function onEnter(e: PointerEvent) {
+  hovering = e.pointerType === "mouse";
+  pause();
+}
+
+function onLeave() {
+  hovering = false;
+  resume();
 }
 
 function onDown(e: PointerEvent) {
