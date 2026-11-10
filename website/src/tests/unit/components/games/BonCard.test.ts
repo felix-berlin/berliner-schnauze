@@ -3,6 +3,12 @@ import { mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
 
+const { mockTrack } = vi.hoisted(() => ({ mockTrack: vi.fn() }));
+vi.mock("@utils/analytics", async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  trackContentImpressionsWithinNode: mockTrack,
+}));
+
 const base = { cardInStack: 4, locked: false, showSwipeHint: false, stack: 2, word: "Schnauze" };
 const WIDTH = 400;
 
@@ -57,6 +63,14 @@ describe("BonCard.vue", () => {
     expect(wrapper.text()).toContain("Jeht ooch mit Wischen.");
     expect(wrapper.text()).toContain("Jeht ooch mit den Pfeiltasten.");
     expect(wrapper.find("button.c-textlink").text()).toBe("Spiel beenden");
+  });
+
+  it("tracks an impression again when the word changes without remounting", async () => {
+    const wrapper = card();
+    mockTrack.mockClear();
+    await wrapper.setProps({ word: "Kiez" });
+    await nextTick();
+    expect(mockTrack).toHaveBeenCalledOnce();
   });
 
   it("emits end when the end link is used", async () => {

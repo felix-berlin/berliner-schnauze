@@ -83,8 +83,9 @@
 
 <script setup lang="ts">
 import { useContentTracking } from "@composables/useContentTracking";
+import { trackContentImpressionsWithinNode } from "@utils/analytics";
 import { useTimeoutFn } from "@vueuse/core";
-import { computed, defineAsyncComponent, onMounted, ref } from "vue";
+import { computed, defineAsyncComponent, nextTick, onMounted, ref, watch } from "vue";
 
 const HandIcon = defineAsyncComponent(() => import("virtual:icons/lucide/hand"));
 
@@ -104,6 +105,15 @@ const emit = defineEmits<{
 const root = ref<HTMLElement | null>(null);
 const cardRef = ref<HTMLElement | null>(null);
 useContentTracking(root);
+// The card persists across words (focus stays), so each new word is tracked again; the first one
+// is covered by useContentTracking.
+watch(
+  () => props.word,
+  async () => {
+    await nextTick();
+    if (root.value) trackContentImpressionsWithinNode(root.value);
+  },
+);
 
 // Swipe thresholds (Spec §10): 30 % of the card width, or a flick faster than 0.5 px/ms.
 const DISTANCE = 0.3;

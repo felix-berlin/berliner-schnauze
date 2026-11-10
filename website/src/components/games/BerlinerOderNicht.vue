@@ -30,7 +30,7 @@
           @end="end"
         >
           <template v-if="phase === 'feedback' && last" #feedback>
-            <BonFeedback :last="last" :game-over="lives === 0" :lives="lives" @next="onNext" />
+            <BonFeedback :last="last" :game-over="lives === 0" :lives="lives" @next="advance" />
           </template>
         </BonCard>
       </template>
@@ -127,6 +127,7 @@ function onAnswer(guessedReal: boolean) {
   void answer(guessedReal);
 }
 
+// Keys only: BonFeedback drops early taps itself, without latching its own timer.
 function onNext() {
   if (!nextLocked.value) void advance();
 }

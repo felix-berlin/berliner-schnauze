@@ -167,7 +167,7 @@
 
 @keyframes c-bon-feedback-timer {
   from {
-    transform: scaleX(1);
+    transform: scaleX(var(--bar-from, 1));
   }
 
   to {

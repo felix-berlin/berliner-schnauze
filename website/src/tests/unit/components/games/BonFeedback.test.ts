@@ -89,11 +89,13 @@ describe("BonFeedback.vue", () => {
 
   it("goes on at once on click or swipe, and only once", async () => {
     const clicked = fb(right);
+    vi.advanceTimersByTime(250);
     await clicked.find(".c-bon-feedback__card").trigger("click");
     vi.advanceTimersByTime(5000);
     expect(clicked.emitted("next")).toHaveLength(1);
 
     const swiped = fb(right);
+    vi.advanceTimersByTime(250);
     fire(swiped, "pointerdown", 10);
     fire(swiped, "pointerup", 120);
     await swiped.find(".c-bon-feedback__card").trigger("click");
@@ -146,5 +148,38 @@ describe("BonFeedback.vue", () => {
       w.find<HTMLElement>(".c-bon-feedback__timer").element.style.animationDuration;
     expect(bar(fb(right))).toBe("900ms");
     expect(bar(fb(wrong))).toBe("2500ms");
+  });
+
+  it("drops a tap in the first 250 ms without losing the timer, accepts one later", async () => {
+    const early = fb(wrong);
+    vi.advanceTimersByTime(100);
+    await early.find(".c-bon-feedback__card").trigger("click");
+    expect(early.emitted("next")).toBeUndefined();
+    vi.advanceTimersByTime(2400);
+    expect(early.emitted("next")).toHaveLength(1);
+
+    const late = fb(wrong);
+    vi.advanceTimersByTime(100);
+    await late.find(".c-bon-feedback__card").trigger("click");
+    vi.advanceTimersByTime(150);
+    await late.find(".c-bon-feedback__card").trigger("click");
+    expect(late.emitted("next")).toHaveLength(1);
+  });
+
+  it("restarts the bar over the 1200 ms grace period after a pause", async () => {
+    const wrapper = fb(wrong);
+    fire(wrapper, "pointerenter");
+    fire(wrapper, "pointerleave");
+    await nextTick();
+    expect(
+      wrapper.find<HTMLElement>(".c-bon-feedback__timer").element.style.animationDuration,
+    ).toBe("1200ms");
+  });
+
+  it("has no double space in the status text without a translation", () => {
+    const text = fb({ ...right, translation: undefined })
+      .find("[role=status]")
+      .text();
+    expect(text).toBe("Richtig! Plus 20 Punkte.");
   });
 });

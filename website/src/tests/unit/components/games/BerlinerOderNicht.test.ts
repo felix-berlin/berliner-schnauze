@@ -17,6 +17,7 @@ const online = ref(true);
 const phase = ref("intro");
 const card = ref<{ id: string; word: string } | null>(null);
 const last = ref<Record<string, unknown> | null>(null);
+const lives = ref(3);
 
 vi.mock("@composables/useBon", () => ({
   useBon: () => ({
@@ -28,7 +29,7 @@ vi.mock("@composables/useBon", () => ({
     end: mockEnd,
     history: ref([]),
     last,
-    lives: ref(3),
+    lives,
     multiplier: ref(1),
     phase,
     previousHighScore: ref(0),
@@ -81,6 +82,7 @@ describe("BerlinerOderNicht", () => {
     phase.value = "intro";
     card.value = null;
     last.value = null;
+    lives.value = 3;
     online.value = true;
     $bonStats.setKey("hasSeenIntro", false);
     $bonStats.setKey("playerName", "");
@@ -153,14 +155,22 @@ describe("BerlinerOderNicht", () => {
     });
     afterEach(() => vi.useRealTimers());
 
-    it("shows BonFeedback in the card slot and advances on next after the input lock", async () => {
+    it("advances on next at once: BonFeedback owns the tap lock, a dropped emit would stick", async () => {
       const wrapper = mount(BerlinerOderNicht);
       await nextTick();
       await wrapper.find(".mock-feedback").trigger("click");
-      expect(mockAdvance).not.toHaveBeenCalled();
-      vi.advanceTimersByTime(250);
-      await wrapper.find(".mock-feedback").trigger("click");
       expect(mockAdvance).toHaveBeenCalledOnce();
+    });
+
+    it("keeps focus on the pressed answer button through the feedback", async () => {
+      phase.value = "play";
+      const wrapper = mount(BerlinerOderNicht, { attachTo: document.body });
+      const button = wrapper.find<HTMLButtonElement>(".mock-card").element;
+      button.focus();
+      await wrapper.find(".mock-card").trigger("click");
+      phase.value = "feedback";
+      await nextTick();
+      expect(document.activeElement).toBe(button);
     });
 
     it.each(["ArrowLeft", "ArrowRight", "Enter", " "])("%s advances after the lock", async (k) => {
@@ -185,8 +195,10 @@ describe("BerlinerOderNicht", () => {
       link.remove();
     });
 
-    it("passes game over when no lives are left", () => {
+    it("passes game over only when no lives are left", () => {
       expect(mount(BerlinerOderNicht).find(".mock-feedback").text()).toBe("false");
+      lives.value = 0;
+      expect(mount(BerlinerOderNicht).find(".mock-feedback").text()).toBe("true");
     });
   });
 

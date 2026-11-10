@@ -13,7 +13,7 @@
           'c-bon-feedback__card',
           `c-bon-feedback__card--${last.correct ? 'right' : 'wrong'}`,
         ]"
-        @click="go"
+        @click="go(true)"
         @pointerenter="pause"
         @pointerleave="resume"
         @pointerdown="onDown"
@@ -60,9 +60,12 @@
         </a>
 
         <span
+          :key="run"
+          ref="bar"
           class="c-bon-feedback__timer"
           :style="{
-            animationDuration: `${standing}ms`,
+            '--bar-from': barFrom,
+            animationDuration: `${barMs}ms`,
             animationPlayState: paused ? 'paused' : 'running',
           }"
           aria-hidden="true"
@@ -92,6 +95,8 @@ const RIGHT_MS = 900;
 const WRONG_MS = 2500;
 const RESUME_MS = 1200;
 const SWIPE_PX = 20;
+// A tap right after the card appears is a leftover of the answer gesture (Spec §7 input lock).
+const LOCK_MS = 250;
 
 const standing = props.last.correct && !props.gameOver ? RIGHT_MS : WRONG_MS;
 // The card flies out to the side the player answered.
@@ -124,23 +129,31 @@ const summary = computed(() => {
     : category === "hochdeutsch"
       ? `${word} is Hochdeutsch.`
       : `${word} is erfunden.`;
-  if (correct) return `Richtig! ${what ?? ""} Plus ${props.last.points} Punkte.`;
+  if (correct)
+    return ["Richtig!", what, `Plus ${props.last.points} Punkte.`].filter(Boolean).join(" ");
   const left =
     props.lives === undefined
       ? ""
       : props.lives > 0
         ? ` Noch ${props.lives} Leben.`
         : " Keine Leben mehr.";
-  return `Daneben! ${isReal ? (what ?? "") : verdict}${left}`;
+  return ["Daneben!", isReal ? what : verdict, left.trim()].filter(Boolean).join(" ");
 });
 
 const paused = ref(false);
+// The bar restarts (from its current scale) whenever the timer is re-armed, so both agree.
+const bar = ref<HTMLElement | null>(null);
+const run = ref(0);
+const barFrom = ref(1);
+const barMs = ref(standing);
 let done = false;
+let shownAt = 0;
 let timer: ReturnType<typeof setTimeout> | undefined;
 let downX: number | undefined;
 
-function go() {
-  if (done) return;
+// Pointer input in the lock window is dropped without latching, so the timer still runs out.
+function go(fromPointer = false) {
+  if (done || (fromPointer && Date.now() - shownAt < LOCK_MS)) return;
   done = true;
   clearTimeout(timer);
   emit("next");
@@ -154,12 +167,18 @@ function arm(ms: number) {
 // WCAG 2.2.1: the time limit can be stopped; afterwards a short grace period runs.
 function pause() {
   clearTimeout(timer);
+  if (!paused.value && bar.value && typeof DOMMatrixReadOnly !== "undefined") {
+    const m = getComputedStyle(bar.value).transform;
+    barFrom.value = m && m !== "none" ? new DOMMatrixReadOnly(m).a : barFrom.value;
+  }
   paused.value = true;
 }
 
 function resume() {
   if (done) return;
   paused.value = false;
+  barMs.value = RESUME_MS;
+  run.value++;
   arm(RESUME_MS);
 }
 
@@ -169,13 +188,16 @@ function onDown(e: PointerEvent) {
 }
 
 function onUp(e: PointerEvent) {
-  if (downX !== undefined && Math.abs(e.clientX - downX) >= SWIPE_PX) return go();
+  if (downX !== undefined && Math.abs(e.clientX - downX) >= SWIPE_PX) return go(true);
   downX = undefined;
   // A mouse is still hovering: stays paused until it leaves.
   if (e.pointerType !== "mouse") resume();
 }
 
-onMounted(() => arm(standing));
+onMounted(() => {
+  shownAt = Date.now();
+  arm(standing);
+});
 onBeforeUnmount(() => clearTimeout(timer));
 </script>
 
