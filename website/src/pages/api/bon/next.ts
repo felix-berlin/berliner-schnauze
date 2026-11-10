@@ -1,22 +1,27 @@
 import type { APIRoute } from "astro";
 
-import { findGame } from "@services/bonGame.ts";
+import { busyGames, findGame, wrongAnswers } from "@services/bonGame.ts";
 import { loadPool } from "@services/bonPool.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { reply } from "@utils/apiReply.ts";
 import { dealBatch, toPublic } from "@utils/bonDeck.ts";
 import { nextSchema } from "@utils/bonSchema.ts";
+import { LIVES } from "payload-app/bon-rules";
 
 const MAX_BATCHES = 20; // BATCH_SIZE × MAX_BATCHES must stay ≤ 400 cards (one answer each)
 
 export const POST: APIRoute = async ({ request }) => {
   const input = nextSchema.safeParse(await request.json().catch(() => undefined));
   if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
+  const { token } = input.data;
 
+  if (busyGames.has(token)) return reply({ error: "Moment, ick bin noch dran." }, 409);
+  busyGames.add(token);
   try {
     const payload = await getPayloadClient();
-    const game = await findGame(payload, input.data.token);
+    const game = await findGame(payload, token);
     if (game?.status !== "playing") return reply({ error: "Spiel nich jefunden." }, 404);
+    if (wrongAnswers(game.cards) >= LIVES) return reply({ error: "Dett Spiel is vorbei." }, 409);
     if (game.batches.length >= MAX_BATCHES)
       return reply({ error: "Jenug Karten für een Spiel." }, 400);
 
@@ -35,5 +40,7 @@ export const POST: APIRoute = async ({ request }) => {
   } catch (error) {
     console.error("[bon] next failed:", error);
     return reply({ error: "Die Karten wollten leider nich kommen." }, 502);
+  } finally {
+    busyGames.delete(token);
   }
 };

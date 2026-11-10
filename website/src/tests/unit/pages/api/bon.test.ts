@@ -439,6 +439,46 @@ describe("POST /api/bon/answer", () => {
   });
 });
 
+describe("POST /api/bon/next with answer", () => {
+  it("a parallel answer and next: the answer survives, the loser gets 409", async () => {
+    const { token } = await newGame("v-1");
+    const update = db.api.update.getMockImplementation()!;
+    let release!: () => void;
+    const gate = new Promise<void>((r) => (release = r));
+    db.api.update.mockImplementationOnce(async (args) => {
+      await gate;
+      return update(args);
+    });
+    const first = answer({ card: "0", real: !dealt(token)[0].isReal, token });
+    await vi.waitFor(() => expect(db.api.update).toHaveBeenCalledOnce());
+    expect((await next(token)).status).toBe(409);
+    release();
+    expect((await first).status).toBe(200);
+    expect(dealt(token)).toHaveLength(20);
+    expect(dealt(token)[0].answer).toBeDefined();
+    expect((await next(token)).status).toBe(200); // released
+    expect(dealt(token)[0].answer).toBeDefined();
+  });
+
+  it("next while an answer is in flight started first: answer waits no more, next first keeps answers", async () => {
+    const { token } = await newGame("v-1");
+    await play(token, 2, 0);
+    pool.loadPool.mockImplementationOnce(async () => {
+      expect((await answer({ card: "2", real: true, token })).status).toBe(409);
+      return pool.make(60, 60);
+    });
+    expect((await next(token)).status).toBe(200);
+    expect(dealt(token).filter((c) => c.answer !== undefined)).toHaveLength(2);
+  });
+
+  it("409 after the third wrong answer, nothing dealt", async () => {
+    const { token } = await newGame("v-1");
+    await play(token, 0, 3);
+    expect((await next(token)).status).toBe(409);
+    expect(dealt(token)).toHaveLength(20);
+  });
+});
+
 describe("POST /api/bon/finish", () => {
   it("scores a 12-right-then-3-wrong run, stores it and ranks it first", async () => {
     const { token } = await newGame("v-1");

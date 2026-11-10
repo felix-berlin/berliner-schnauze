@@ -32,7 +32,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
 
     const { batches, cards } = game;
     const now = Date.now();
-    const guesses = cards.filter((c) => c.answer !== undefined).map((c) => c.answer!);
+    const guesses = cards.map((c) => c.answer).filter((a): a is boolean => a !== undefined);
     const rejected = (reason: string) => {
       console.warn("[bon] finish rejected:", reason, { answers: guesses.length, id: game.id });
       return reply(INVALID, 400);

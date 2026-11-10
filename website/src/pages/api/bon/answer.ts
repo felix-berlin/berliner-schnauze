@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 
-import { findGame } from "@services/bonGame.ts";
+import { busyGames, findGame, wrongAnswers } from "@services/bonGame.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { reply } from "@utils/apiReply.ts";
 import { answerSchema } from "@utils/bonSchema.ts";
@@ -9,18 +9,14 @@ import { LIVES } from "payload-app/bon-rules";
 const NOT_FOUND = { error: "Spiel nich jefunden." };
 const WRONG_CARD = { error: "Die Karte jibt's jetzt nich." };
 
-// Two parallel answers would both pass the position check; serialize per token.
-// shortcut: in memory, one process; a second web container would need a DB-level conditional update.
-const answering = new Set<string>();
-
 /** Reveals the answer to the next unanswered card only. Timing is checked in `finish`, so a fast honest player never breaks mid-game. */
 export const POST: APIRoute = async ({ request }) => {
   const input = answerSchema.safeParse(await request.json().catch(() => undefined));
   if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
   const { card, real, token } = input.data;
 
-  if (answering.has(token)) return reply(WRONG_CARD, 409);
-  answering.add(token);
+  if (busyGames.has(token)) return reply(WRONG_CARD, 409);
+  busyGames.add(token);
   try {
     const payload = await getPayloadClient();
     const game = await findGame(payload, token);
@@ -28,7 +24,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     const { cards } = game;
     const position = cards.findIndex((c) => c.answer === undefined);
-    const wrongBefore = cards.filter((c) => c.answer !== undefined && c.answer !== c.isReal).length;
+    const wrongBefore = wrongAnswers(cards);
     if (position < 0 || String(position) !== card || wrongBefore >= LIVES)
       return reply(WRONG_CARD, 409);
 
@@ -38,12 +34,10 @@ export const POST: APIRoute = async ({ request }) => {
       collection: "bon-games",
       data: {
         cards: cards.map((c, i) =>
-          i === position
-            ? Object.assign(c, {
-                answer: real,
-                answeredAt: Date.now(),
-              })
-            : c,
+          i === position ? Object.assign(c, {
+	answer: real,
+	answeredAt: Date.now()
+}) : c,
         ),
       },
       depth: 0,
@@ -66,6 +60,6 @@ export const POST: APIRoute = async ({ request }) => {
     console.error("[bon] answer failed:", error);
     return reply({ error: "Die Antwort wollte leider nich ankommen." }, 502);
   } finally {
-    answering.delete(token);
+    busyGames.delete(token);
   }
 };
