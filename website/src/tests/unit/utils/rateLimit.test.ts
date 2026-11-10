@@ -76,6 +76,15 @@ describe("rateLimit", () => {
     expect(rateLimited(client, next, 0)).toBe(0);
   });
 
+  it("limits bon answer to 450 per 10 min on POST", () => {
+    expect(rateLimitRule("/api/bon/answer", "POST")).toEqual({
+      max: 450,
+      method: "POST",
+      prefix: "/api/bon/answer",
+      windowMs: 10 * 60_000,
+    });
+  });
+
   it("limits the bon player code endpoints to 10 per 10 min on POST", () => {
     for (const path of ["/api/bon/player", "/api/bon/redeem"]) {
       const rule = rateLimitRule(path, "POST")!;

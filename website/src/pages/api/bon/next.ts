@@ -1,24 +1,21 @@
 import type { APIRoute } from "astro";
 
-import { bonVisitor, findGame } from "@services/bonGame.ts";
+import { findGame } from "@services/bonGame.ts";
 import { loadPool } from "@services/bonPool.ts";
 import { getPayloadClient } from "@services/payload.ts";
-import { visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";
 import { dealBatch, toPublic } from "@utils/bonDeck.ts";
 import { nextSchema } from "@utils/bonSchema.ts";
 
-const MAX_BATCHES = 20; // BATCH_SIZE × MAX_BATCHES must stay ≤ the .max(400) answers in finishSchema
+const MAX_BATCHES = 20; // BATCH_SIZE × MAX_BATCHES must stay ≤ 400 cards (one answer each)
 
-export const POST: APIRoute = async ({ cookies, request }) => {
+export const POST: APIRoute = async ({ request }) => {
   const input = nextSchema.safeParse(await request.json().catch(() => undefined));
   if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
-  const cookie = visitorId(cookies, false);
-  if (!cookie) return reply({ error: "Spiel nich jefunden." }, 404);
 
   try {
     const payload = await getPayloadClient();
-    const game = await findGame(payload, input.data.token, bonVisitor(cookie));
+    const game = await findGame(payload, input.data.token);
     if (game?.status !== "playing") return reply({ error: "Spiel nich jefunden." }, 404);
     if (game.batches.length >= MAX_BATCHES)
       return reply({ error: "Jenug Karten für een Spiel." }, 400);

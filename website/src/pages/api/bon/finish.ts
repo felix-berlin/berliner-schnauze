@@ -20,7 +20,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
   if (!cookie) return reply({ error: "Ohne Cookie jibt's keen Ranking." }, 400);
   const input = finishSchema.safeParse(await request.json().catch(() => undefined));
   if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
-  const { answers, playerName, token } = input.data;
+  const { playerName, token } = input.data;
 
   if (finishing.has(token)) return reply(DONE, 409);
   finishing.add(token);
@@ -32,19 +32,17 @@ export const POST: APIRoute = async ({ cookies, request }) => {
 
     const { batches, cards } = game;
     const now = Date.now();
-    // Each answer names the public id (position) of its card; that also rules out reordered, duplicated and undealt ones.
+    const guesses = cards.filter((c) => c.answer !== undefined).map((c) => c.answer!);
     const rejected = (reason: string) => {
-      console.warn("[bon] finish rejected:", reason, { answers: answers.length, id: game.id });
+      console.warn("[bon] finish rejected:", reason, { answers: guesses.length, id: game.id });
       return reply(INVALID, 400);
     };
-    if (answers.length > cards.length || answers.some((a, i) => a.card !== String(i)))
-      return rejected("answers do not match the dealt cards");
     const result = verifyRun(
       cards.map((c) => c.isReal),
-      answers.map((a) => a.real),
+      guesses,
     );
     if (!result) return rejected("run does not end at the third wrong answer");
-    if (batches.length === 0 || !plausibleTiming(batches, answers.length, now))
+    if (batches.length === 0 || !plausibleTiming(batches, guesses.length, now))
       return rejected("implausible timing");
 
     // Still conditional on "playing", so a finish after a completed one changes nothing.

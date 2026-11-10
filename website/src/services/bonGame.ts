@@ -10,15 +10,15 @@ type Client = Awaited<ReturnType<typeof getPayloadClient>>;
 export const bonVisitor = (cookie: string) =>
   createHash("sha256").update(`bon-game:${cookie}`).digest("hex");
 
-/** The visitor's game for a token, any status; `bon-games` is login-only, so default overrideAccess. */
-export const findGame = async (payload: Client, token: string, visitor: string) => {
+/** The game for a token (and the visitor, when given), any status; `bon-games` is login-only, so default overrideAccess. */
+export const findGame = async (payload: Client, token: string, visitor?: string) => {
   const game = (
     await payload.find({
       collection: "bon-games",
       depth: 0,
       limit: 1,
       pagination: false,
-      where: { token: { equals: token }, visitor: { equals: visitor } },
+      where: { token: { equals: token }, ...(visitor && { visitor: { equals: visitor } }) },
     })
   ).docs[0];
   if (game && !(Array.isArray(game.batches) && Array.isArray(game.cards)))

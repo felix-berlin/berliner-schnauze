@@ -51,7 +51,8 @@ const db = vi.hoisted(() => {
       const gone = t.filter((r) => matches(r, where));
       for (const r of gone) {
         t.splice(t.indexOf(r), 1);
-        if (collection === "bon-players") for (const g of rows) if (g.player === r.id) delete g.player;
+        if (collection === "bon-players")
+          for (const g of rows) if (g.player === r.id) delete g.player;
       }
       return { docs: gone, errors: [] };
     }),
@@ -93,7 +94,8 @@ const db = vi.hoisted(() => {
     rows.length = 0;
     players.length = 0;
     nextId = 1;
-    for (const [name, fn] of Object.entries(api)) fn.mockReset().mockImplementation(originals[name]);
+    for (const [name, fn] of Object.entries(api))
+      fn.mockReset().mockImplementation(originals[name]);
   };
   return { api, players, reset, rows, uniqueViolation };
 });
@@ -124,14 +126,15 @@ vi.mock("@services/bonPool.ts", () => ({ loadPool: pool.loadPool }));
 import type { DealtCard } from "@utils/bonDeck.ts";
 import type { APIContext } from "astro";
 
+import { bonCodeHash } from "@services/bonPlayer.ts";
 import { createHash } from "node:crypto";
 
+import { POST as ANSWER } from "@/pages/api/bon/answer.ts";
 import { POST as FINISH } from "@/pages/api/bon/finish.ts";
 import { POST as NEXT } from "@/pages/api/bon/next.ts";
 import { POST as PLAYER } from "@/pages/api/bon/player.ts";
 import { POST as REDEEM } from "@/pages/api/bon/redeem.ts";
 import { POST as START } from "@/pages/api/bon/start.ts";
-import { bonCodeHash } from "@services/bonPlayer.ts";
 
 const T0 = Date.UTC(2026, 10, 5, 12);
 const HOUR = 60 * 60_000;
@@ -156,14 +159,21 @@ const hashed = (cookie: string) => createHash("sha256").update(`bon-game:${cooki
 const start = (cookie?: string) => START(ctx(undefined, cookie));
 const next = (token: string, cookie?: string) => NEXT(ctx({ token }, cookie));
 const finish = (body: unknown, cookie?: string) => FINISH(ctx(body, cookie));
+const answer = (body: unknown, cookie?: string) => ANSWER(ctx(body, cookie));
 const row = (token: string) => db.rows.find((r) => r.token === token)!;
 const dealt = (token: string) => row(token).cards as DealtCard[];
 
-/** `correct` right answers, then three wrong ones, on the dealt cards in order (public id = position). */
-const run = (token: string, correct: number, wrong = 3) =>
-  dealt(token)
-    .slice(0, correct + wrong)
-    .map((c, i) => ({ card: String(i), real: i < correct ? c.isReal : !c.isReal }));
+/** Answers the dealt cards in order through the route: `correct` right ones, then `wrong` wrong ones. */
+const play = async (token: string, correct: number, wrong = 3, cookie?: string) => {
+  const cards = dealt(token);
+  for (let i = 0; i < correct + wrong; i++) {
+    const res = await answer(
+      { card: String(i), real: i < correct ? cards[i].isReal : !cards[i].isReal, token },
+      cookie,
+    );
+    expect(res.status).toBe(200);
+  }
+};
 const positions = (from: number, n: number) =>
   Array.from({ length: n }, (_, i) => String(from + i));
 
@@ -178,8 +188,9 @@ const newGame = async (cookie = "v-1") => {
 /** Starts and finishes a game with `correct` right answers, after enough time. */
 const playedGame = async (correct: number, cookie = "v-1") => {
   const { token } = await newGame(cookie);
+  await play(token, correct);
   later(60_000);
-  return finish({ answers: run(token, correct), token }, cookie);
+  return finish({ token }, cookie);
 };
 
 beforeEach(() => {
@@ -295,12 +306,15 @@ describe("POST /api/bon/next", () => {
     ]);
   });
 
-  it("404 for another visitor, without a cookie, for a finished or unknown game", async () => {
+  it("finds the game by token alone, cookie or not", async () => {
     const { token } = await newGame("v-1");
-    expect((await next(token, "v-2")).status).toBe(404);
-    db.api.find.mockClear();
-    expect((await next(token)).status).toBe(404);
-    expect(db.api.find).not.toHaveBeenCalled();
+    expect((await next(token)).status).toBe(200);
+    expect((await next(token, "v-2")).status).toBe(200);
+    expect(dealt(token)).toHaveLength(60);
+  });
+
+  it("404 for a finished or unknown game", async () => {
+    const { token } = await newGame("v-1");
     expect((await next("0".repeat(64), "v-1")).status).toBe(404);
     row(token).status = "finished";
     expect((await next(token, "v-1")).status).toBe(404);
@@ -330,11 +344,107 @@ describe("POST /api/bon/next", () => {
   });
 });
 
+describe("POST /api/bon/answer", () => {
+  const right = (token: string, i: number) => dealt(token)[i].isReal;
+
+  it("reveals only the answered card and stores the answer", async () => {
+    const { cards, token } = await newGame("v-1");
+    for (const c of cards) expect(Object.keys(c).sort()).toEqual(["id", "word"]);
+    const card = dealt(token)[0];
+    const res = await answer({ card: "0", real: !card.isReal, token }, "v-1");
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({
+      correct: false,
+      gameOver: false,
+      isReal: card.isReal,
+      lives: 2,
+      ...(card.translation && { translation: card.translation }),
+      ...(card.slug && { slug: card.slug }),
+      ...(card.category && { category: card.category }),
+    });
+    expect(dealt(token)[0]).toMatchObject({ answer: !card.isReal, answeredAt: T0 });
+    expect(dealt(token)[1].answer).toBeUndefined();
+  });
+
+  it("returns slug and category of the card kinds", async () => {
+    const { token } = await newGame("v-1");
+    row(token).cards = dealt(token).map((c) =>
+      c.isReal ? Object.assign(c, { slug: "wort" }) : Object.assign(c, { category: "invented" }),
+    );
+    const bodies = [];
+    for (let i = 0; i < 20; i++)
+      bodies.push(await (await answer({ card: String(i), real: right(token, i), token })).json());
+    const realBodies = bodies.filter((b) => b.isReal);
+    const fakeBodies = bodies.filter((b) => !b.isReal);
+    expect(realBodies.length + fakeBodies.length).toBe(20);
+    expect(realBodies.every((b) => b.slug === "wort" && typeof b.translation === "string")).toBe(
+      true,
+    );
+    expect(fakeBodies.every((b) => b.category === "invented" && !("translation" in b))).toBe(true);
+  });
+
+  it("rejects any position but the next unanswered one", async () => {
+    const { token } = await newGame("v-1");
+    expect((await answer({ card: "1", real: true, token })).status).toBe(409);
+    expect((await answer({ card: "0", real: right(token, 0), token })).status).toBe(200);
+    expect((await answer({ card: "0", real: right(token, 0), token })).status).toBe(409);
+    expect((await answer({ card: "1", real: right(token, 1), token })).status).toBe(200);
+  });
+
+  it("rejects after the third wrong answer, gameOver on the third", async () => {
+    const { token } = await newGame("v-1");
+    const replies = [];
+    for (let i = 0; i < 3; i++)
+      replies.push(await (await answer({ card: String(i), real: !right(token, i), token })).json());
+    expect(replies.map((r) => r.lives)).toEqual([2, 1, 0]);
+    expect(replies.map((r) => r.gameOver)).toEqual([false, false, true]);
+    expect((await answer({ card: "3", real: right(token, 3), token })).status).toBe(409);
+  });
+
+  it("works without the visitor cookie", async () => {
+    const { token } = await newGame("v-1");
+    expect((await answer({ card: "0", real: true, token })).status).toBe(200);
+  });
+
+  it("does not check timing", async () => {
+    const { token } = await newGame("v-1");
+    for (let i = 0; i < 5; i++)
+      expect((await answer({ card: String(i), real: right(token, i), token })).status).toBe(200);
+  });
+
+  it("404 for an unknown or finished game, 400 on invalid input", async () => {
+    const { token } = await newGame("v-1");
+    expect((await answer({ card: "0", real: true, token: "0".repeat(64) })).status).toBe(404);
+    expect((await answer({ card: "0", real: true, token: "nope" })).status).toBe(400);
+    expect((await answer({ card: "0", token })).status).toBe(400);
+    expect((await answer({ card: "0", extra: 1, real: true, token })).status).toBe(400);
+    row(token).status = "finished";
+    expect((await answer({ card: "0", real: true, token })).status).toBe(404);
+  });
+
+  it("a parallel answer for the same token gets 409", async () => {
+    const { token } = await newGame("v-1");
+    const update = db.api.update.getMockImplementation()!;
+    let release!: () => void;
+    const gate = new Promise<void>((r) => (release = r));
+    db.api.update.mockImplementationOnce(async (args) => {
+      await gate;
+      return update(args);
+    });
+    const first = answer({ card: "0", real: true, token });
+    await vi.waitFor(() => expect(db.api.update).toHaveBeenCalledOnce());
+    expect((await answer({ card: "0", real: true, token })).status).toBe(409);
+    release();
+    expect((await first).status).toBe(200);
+  });
+});
+
 describe("POST /api/bon/finish", () => {
   it("scores a 12-right-then-3-wrong run, stores it and ranks it first", async () => {
     const { token } = await newGame("v-1");
+    await play(token, 12);
     later(60_000);
-    const res = await finish({ answers: run(token, 12), playerName: "  Kalle  ", token }, "v-1");
+    const res = await finish({ playerName: "  Kalle  ", token }, "v-1");
     expect(res.status).toBe(200);
     const body = await res.json();
     // streak 1-2: 10 each, 3-5: 20, 6-9: 30, 10-12: 50
@@ -367,8 +477,10 @@ describe("POST /api/bon/finish", () => {
 
   it("the same token finished twice: the second is refused, one row ranked", async () => {
     const { token } = await newGame("v-1");
+    await play(token, 4);
     later(60_000);
-    const body = { answers: run(token, 4), token };
+    db.api.update.mockClear();
+    const body = { token };
     expect((await finish(body, "v-1")).status).toBe(200);
     expect((await finish(body, "v-1")).status).toBe(409);
     expect(
@@ -379,8 +491,10 @@ describe("POST /api/bon/finish", () => {
 
   it("two finishes racing: only the conditional update wins", async () => {
     const { token } = await newGame("v-1");
+    await play(token, 4);
     later(60_000);
-    const body = { answers: run(token, 4), token };
+    db.api.update.mockClear();
+    const body = { token };
     const statuses = (await Promise.all([finish(body, "v-1"), finish(body, "v-1")])).map(
       (r) => r.status,
     );
@@ -393,8 +507,10 @@ describe("POST /api/bon/finish", () => {
 
   it("a second finish while the first is still running gets 409", async () => {
     const { token } = await newGame("v-1");
+    await play(token, 4);
     later(60_000);
-    const body = { answers: run(token, 4), token };
+    db.api.update.mockClear();
+    const body = { token };
     const update = db.api.update.getMockImplementation()!;
     let release!: () => void;
     const gate = new Promise<void>((r) => (release = r));
@@ -413,78 +529,76 @@ describe("POST /api/bon/finish", () => {
 
   it("404 for a token started by another visitor cookie, or an unknown token", async () => {
     const { token } = await newGame("v-1");
+    await play(token, 4);
     later(60_000);
-    expect((await finish({ answers: run(token, 4), token }, "v-2")).status).toBe(404);
-    expect((await finish({ answers: run(token, 4), token: "a".repeat(64) }, "v-1")).status).toBe(
-      404,
-    );
+    expect((await finish({ token }, "v-2")).status).toBe(404);
+    expect((await finish({ token: "a".repeat(64) }, "v-1")).status).toBe(404);
     expect(row(token).status).toBe("playing");
   });
 
   it("400 without a visitor cookie, before any lookup", async () => {
     const { token } = await newGame("v-1");
+    await play(token, 4);
     later(60_000);
     db.api.find.mockClear();
-    const res = await finish({ answers: run(token, 4), token });
+    const res = await finish({ token });
     expect(res.status).toBe(400);
     expect(typeof (await res.json()).error).toBe("string");
     expect(db.api.find).not.toHaveBeenCalled();
   });
 
-  it.each([
-    [
-      "a card that was never dealt",
-      (a: { card: string }[]) => [{ ...a[0], card: "999" }, ...a.slice(1)],
-    ],
-    ["swapped order", (a: { card: string }[]) => [a[1], a[0], ...a.slice(2)]],
-    ["a duplicated card", (a: { card: string }[]) => [a[0], a[0], ...a.slice(2)]],
-    [
-      "more answers than dealt cards",
-      (a: { card: string; real: boolean }[]) => [...a, ...Array.from({ length: 20 }, () => a[0])],
-    ],
-    ["two wrong answers only", () => "two-wrong"],
-    ["an answer after the third wrong one", () => "after-third"],
-  ] as const)("400 Ungültiges Spiel on %s, no solution leaked", async (_, change) => {
+  it("scores the stored answers: the verifyRun result", async () => {
     const { token } = await newGame("v-1");
+    await play(token, 4);
     later(60_000);
-    const base = run(token, 4);
-    const changed = change(base as { card: string; real: boolean }[]);
-    const answers =
-      changed === "two-wrong"
-        ? run(token, 4, 2)
-        : changed === "after-third"
-          ? run(token, 4, 4)
-          : changed;
-    const res = await finish({ answers, token }, "v-1");
+    const body = await (await finish({ token }, "v-1")).json();
+    expect(body).toMatchObject({
+      bestStreak: 4,
+      correctAnswers: 4,
+      score: 2 * 10 + 2 * 20,
+      totalAnswered: 7,
+    });
+  });
+
+  it("400 Ungültiges Spiel before the third wrong answer, no solution leaked", async () => {
+    const { token } = await newGame("v-1");
+    await play(token, 4, 2);
+    later(60_000);
+    const res = await finish({ token }, "v-1");
     expect(res.status).toBe(400);
     const text = await res.text();
     expect(JSON.parse(text)).toEqual({ error: "Ungültiges Spiel" });
     expect(text).not.toContain("isReal");
-    expect(text).not.toContain("übersetzung");
     expect(row(token).status).toBe("playing");
   });
 
-  it("400 on an oversized answer list, without loading the game", async () => {
+  it("400 for a game without any answer", async () => {
     const { token } = await newGame("v-1");
-    db.api.find.mockClear();
-    const answers = Array.from({ length: 401 }, () => ({ card: "r1", real: true }));
-    expect((await finish({ answers, token }, "v-1")).status).toBe(400);
-    expect(db.api.find).not.toHaveBeenCalled();
+    later(60_000);
+    expect((await finish({ token }, "v-1")).status).toBe(400);
+  });
+
+  it("400 on the old answers field", async () => {
+    const { token } = await newGame("v-1");
+    await play(token, 4);
+    later(60_000);
+    expect((await finish({ answers: [], token }, "v-1")).status).toBe(400);
   });
 
   it("400 when the answers came faster than 700 ms per card", async () => {
     const { token } = await newGame("v-1");
+    await play(token, 12);
     later(15 * 700 - 1);
-    expect((await finish({ answers: run(token, 12), token }, "v-1")).status).toBe(400);
+    expect((await finish({ token }, "v-1")).status).toBe(400);
     later(1);
-    expect((await finish({ answers: run(token, 12), token }, "v-1")).status).toBe(200);
+    expect((await finish({ token }, "v-1")).status).toBe(200);
   });
 
   it("400 for a game without any batch", async () => {
     const { token } = await newGame("v-1");
     row(token).batches = [];
     later(60_000);
-    expect((await finish({ answers: run(token, 4), token }, "v-1")).status).toBe(400);
+    expect((await finish({ token }, "v-1")).status).toBe(400);
   });
 
   it.each([
@@ -495,8 +609,9 @@ describe("POST /api/bon/finish", () => {
     ["25 chars", "a".repeat(25)],
   ])("400 on a playerName with %s", async (_, playerName) => {
     const { token } = await newGame("v-1");
+    await play(token, 4);
     later(60_000);
-    expect((await finish({ answers: run(token, 4), playerName, token }, "v-1")).status).toBe(400);
+    expect((await finish({ playerName, token }, "v-1")).status).toBe(400);
     expect(row(token).status).toBe("playing");
   });
 
@@ -506,17 +621,19 @@ describe("POST /api/bon/finish", () => {
     ["empty", ""],
   ])("a playerName %s is stored as Anonym", async (_, playerName) => {
     const { token } = await newGame("v-1");
+    await play(token, 4);
     later(60_000);
-    expect((await finish({ answers: run(token, 4), playerName, token }, "v-1")).status).toBe(200);
+    expect((await finish({ playerName, token }, "v-1")).status).toBe(200);
     expect(row(token).playerName).toBe("Anonym");
   });
 
   it("returns the stored result without a rank when only the rank count fails", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     const { token } = await newGame("v-1");
+    await play(token, 4);
     later(60_000);
     db.api.count.mockRejectedValueOnce(new Error("count down"));
-    const res = await finish({ answers: run(token, 4), token }, "v-1");
+    const res = await finish({ token }, "v-1");
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.score).toEqual(expect.any(Number));
@@ -644,6 +761,7 @@ describe("POST /api/bon/player claim failures", () => {
   it("a parallel call for the same visitor gets 409 and one player; the guard is released", async () => {
     await playedGame(2, "v-1");
     set.mockClear();
+    db.api.update.mockClear();
     const update = db.api.update.getMockImplementation()!;
     let release!: () => void;
     const gate = new Promise<void>((r) => (release = r));
@@ -652,7 +770,7 @@ describe("POST /api/bon/player claim failures", () => {
       return update(args);
     });
     const first = player(undefined, "v-1");
-    await vi.waitFor(() => expect(db.api.update).toHaveBeenCalledTimes(2)); // game finish + claim
+    await vi.waitFor(() => expect(db.api.update).toHaveBeenCalledOnce()); // the claim
     expect((await player(undefined, "v-1")).status).toBe(409);
     release();
     expect((await first).status).toBe(200);
@@ -724,10 +842,9 @@ describe("bon identity in start and finish", () => {
     const { token } = await (
       await START(ctx(undefined, "v-1", { bon_player: "ABCD-EFGH-JKMN" }))
     ).json();
+    await play(token, 4);
     later(60_000);
-    const res = await FINISH(
-      ctx({ answers: run(token, 4), playerName: "Berta", token }, "v-1"),
-    );
+    const res = await FINISH(ctx({ playerName: "Berta", token }, "v-1"));
     expect(res.status).toBe(200);
     expect(db.players[0].name).toBe("Berta");
 
@@ -735,13 +852,12 @@ describe("bon identity in start and finish", () => {
     const second = await (
       await START(ctx(undefined, "v-1", { bon_player: "ABCD-EFGH-JKMN" }))
     ).json();
+    await play(second.token, 4);
     later(60_000);
     const update = db.api.update.getMockImplementation()!;
     db.api.update.mockImplementationOnce(update); // the game itself
     db.api.update.mockRejectedValueOnce(new Error("name down"));
-    const failed = await FINISH(
-      ctx({ answers: run(second.token, 4), playerName: "Zed", token: second.token }, "v-1"),
-    );
+    const failed = await FINISH(ctx({ playerName: "Zed", token: second.token }, "v-1"));
     expect(failed.status).toBe(200);
     expect(db.players[0].name).toBe("Berta");
   });

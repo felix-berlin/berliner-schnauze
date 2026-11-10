@@ -59,12 +59,25 @@ describe("toPublic", () => {
   });
 });
 
+describe("toPublic with solution fields", () => {
+  it("still gives only id and word", () => {
+    const card = {
+      ...pool.real[0],
+      answer: true,
+      answeredAt: 1,
+      category: "invented",
+      slug: "kiez",
+    } as DealtCard;
+    expect(toPublic(card, 3)).toEqual({ id: "3", word: card.word });
+  });
+});
+
 describe("loadPool", () => {
   beforeEach(() => {
     getPayload.mockResolvedValue({ find });
     find.mockResolvedValue({
       docs: [
-        { berlinerisch: "Kiez", id: 1, translations: [{ translation: "Viertel" }] },
+        { berlinerisch: "Kiez", id: 1, slug: "kiez", translations: [{ translation: "Viertel" }] },
         { berlinerisch: "Ohne", id: 2, translations: [] },
         { berlinerisch: "Leer", id: 3, translations: [{ translation: "" }] },
         { berlinerisch: "", id: 4, translations: [{ translation: "x" }] },
@@ -77,9 +90,11 @@ describe("loadPool", () => {
   it("keeps only words with a name and a translation, and adds the fake words", async () => {
     const { loadPool } = await import("@services/bonPool.ts");
     const { real, fake } = await loadPool();
-    expect(real).toEqual([{ id: "r1", isReal: true, translation: "Viertel", word: "Kiez" }]);
+    expect(real).toEqual([
+      { id: "r1", isReal: true, slug: "kiez", translation: "Viertel", word: "Kiez" },
+    ]);
     expect(fake.length).toBeGreaterThan(0);
-    expect(fake[0]).toMatchObject({ id: "f0", isReal: false });
+    expect(fake[0]).toMatchObject({ category: "invented", id: "f0", isReal: false });
     expect(find).toHaveBeenCalledWith(
       expect.objectContaining({ collection: "words", depth: 0, pagination: false }),
     );

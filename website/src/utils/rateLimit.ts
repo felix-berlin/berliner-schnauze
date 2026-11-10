@@ -17,9 +17,10 @@ const RULES: Rule[] = [
   { max: 10, method: "POST", prefix: "/api/comment-reports", windowMs: 60 * 60_000 },
   // PATCH is capped per IP and word inside the route.
   { max: 60, method: "GET", prefix: "/api/word-feedback", windowMs: 60_000 },
-  // A game is one start, a next per 20 cards and one finish.
+  // A game is one start, a next per 20 cards, an answer per card and one finish.
   { max: 20, method: "POST", prefix: "/api/bon/start", windowMs: 10 * 60_000 },
   { max: 60, method: "POST", prefix: "/api/bon/next", windowMs: 10 * 60_000 },
+  { max: 450, method: "POST", prefix: "/api/bon/answer", windowMs: 10 * 60_000 },
   { max: 20, method: "POST", prefix: "/api/bon/finish", windowMs: 10 * 60_000 },
   { max: 10, method: "POST", prefix: "/api/bon/player", windowMs: 10 * 60_000 },
   { max: 10, method: "POST", prefix: "/api/bon/redeem", windowMs: 10 * 60_000 },

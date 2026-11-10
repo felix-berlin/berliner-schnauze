@@ -1,4 +1,14 @@
-export type DealtCard = { id: string; word: string; isReal: boolean; translation?: string };
+export type DealtCard = {
+  id: string;
+  word: string;
+  isReal: boolean;
+  translation?: string;
+  slug?: string;
+  category?: "invented" | "hochdeutsch";
+  /** Set by the answer route only: the player's guess and when it came in. */
+  answer?: boolean;
+  answeredAt?: number;
+};
 
 export const BATCH_SIZE = 20;
 const MIN_REAL = 10;
