@@ -22,7 +22,7 @@
 - Alphabet (31 chars, no `0 O 1 I L`): `ABCDEFGHJKMNPQRSTUVWXYZ23456789`. Input is normalized: uppercased, spaces and dashes removed, regrouped.
 - No IPs stored; rate limits per IP in memory via `website/src/utils/rateLimit.ts`.
 - New collection: `authenticatedOnly` access + a Forbidden entry in `payload/tests/access.test.ts`. Migration is additive (nullable relation, new table), `down` uses `IF EXISTS` (`.claude/rules/` Payload migration rules).
-- User-facing errors in German, Berlin tone, like the existing BON routes. Redeem failure: `"Den Code kenn ick nich."`. No cookie when creating: `"Ohne Cookie jibt's keen Spielercode."`.
+- User-facing errors in German, Berlin tone, like the existing BON routes. Redeem failure: `"Den Code kenn ick nich."`. Without a visitor cookie the player is still created (nothing to claim); there is no cookie error.
 - The link is `/games/berliner-oder-nicht#code=<CODE>`. The fragment is removed from the URL before Matomo can send a page view.
 - Redeem and stats apply to `$bonStats` only where the server has data (see Task 4).
 
@@ -31,7 +31,7 @@
 - Wrong, empty, over-long or malformed code at redeem → `404`/`400`, no cookie set, no stack trace.
 - Redeem hammered from one IP → `429` before the DB is queried (brute-force defence).
 - "Spielercode holen" twice, in two browsers, or with a stale `bon_player` cookie whose player no longer exists → same code for a valid cookie; a stale cookie is treated as no cookie.
-- Creating a code when the visitor cookie is missing → clear error, no player row.
+- Creating a code when the visitor cookie is missing → the player is still created (nothing to claim), no error.
 - Existing games of the browser are not lost on first code; games of another visitor are not claimed.
 - Fragment link opened twice or with garbage after `#code=` → no crash, fragment gone from the address bar.
 - Redeeming on a browser with local results while the server has none must not zero the local highscore.
@@ -140,3 +140,4 @@
 - Rate limit is in memory per instance and resets on restart; at ~59 bits that is accepted (spec).
 - Whoever has the code (or the link) owns the player: name and results, nothing else.
 - A player can be created without any game (no visitor cookie needed); bounded only by the 10 per 10 min per-IP limit on POST /api/bon/player.
+- The link/QR flow may lose the `#code=` fragment behind the Anubis challenge redirect on a fresh phone (inferred, not tested on a device); the UI shows a hint to type the code instead.
