@@ -9,6 +9,10 @@ const api = vi.hoisted(() => ({
   takeRedeemCode: vi.fn(),
 }));
 vi.mock("@services/bonPlayerApi.ts", () => api);
+// The lazy chunk fails to load; no other test here asks for a QR code.
+vi.mock("uqr", () => {
+  throw new Error("chunk failed");
+});
 
 import BonPlayerCode from "@components/games/BonPlayerCode.vue";
 
@@ -77,5 +81,74 @@ describe("BonPlayerCode", () => {
     expect(api.redeemPlayerCode).toHaveBeenCalledTimes(1);
     resolve(stats);
     await flushPromises();
+  });
+
+  it("prefills the input and shows the error when a stored link code fails to redeem", async () => {
+    api.takeRedeemCode.mockReturnValue("K7QD-M2X9-ZT4B");
+    api.redeemPlayerCode.mockRejectedValue(new Error("Zu viele Versuche."));
+    const w = mount(BonPlayerCode);
+    await flushPromises();
+    expect((w.get("input").element as HTMLInputElement).value).toBe("K7QD-M2X9-ZT4B");
+    expect(w.get("[data-test=error]").text()).toContain("Zu viele Versuche.");
+  });
+
+  it("announces success in the persistent live region and focuses it", async () => {
+    api.redeemPlayerCode.mockResolvedValue(stats);
+    const w = mount(BonPlayerCode, { attachTo: document.body });
+    const region = w.get("[data-test=status]").element;
+    await w.get("[data-test=show-redeem]").trigger("click");
+    await w.get("input").setValue("K7QD");
+    await w.get("form").trigger("submit");
+    await flushPromises();
+    expect(w.get("[data-test=status]").element).toBe(region);
+    expect(region.textContent).toContain("Berta");
+    expect(document.activeElement).toBe(region);
+    w.unmount();
+  });
+
+  it("focuses the code after Spielercode holen and shows the type-it hint", async () => {
+    api.createPlayerCode.mockResolvedValue("K7QD-M2X9-ZT4B");
+    const w = mount(BonPlayerCode, { attachTo: document.body });
+    await w.get("[data-test=get]").trigger("click");
+    await flushPromises();
+    expect(document.activeElement).toBe(w.get("[data-test=code]").element);
+    expect(w.get("[data-test=link-hint]").text()).toBe("Klappt der Link nich, tipp den Code einfach ein.");
+    w.unmount();
+  });
+
+  it("says the link is copied in the live region", async () => {
+    api.createPlayerCode.mockResolvedValue("K7QD-M2X9-ZT4B");
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText } });
+    const w = mount(BonPlayerCode);
+    await w.get("[data-test=get]").trigger("click");
+    await flushPromises();
+    await w.findAll("button")[0].trigger("click");
+    await flushPromises();
+    expect(writeText).toHaveBeenCalledWith("http://x/games/berliner-oder-nicht#code=K7QD-M2X9-ZT4B");
+    expect(w.get("[data-test=status]").text()).toContain("kopiert");
+  });
+
+  it("shows a German error when the QR library fails to load", async () => {
+    api.createPlayerCode.mockResolvedValue("K7QD-M2X9-ZT4B");
+    const w = mount(BonPlayerCode);
+    await w.get("[data-test=get]").trigger("click");
+    await flushPromises();
+    await w.findAll("button")[1].trigger("click");
+    await flushPromises();
+    expect(w.get("[data-test=error]").text()).toBe("Den QR-Code kriegen wa jerade nich hin.");
+  });
+
+  it("goes back from the redeem form and clears the error", async () => {
+    api.redeemPlayerCode.mockRejectedValue(new Error("Nö."));
+    const w = mount(BonPlayerCode);
+    await w.get("[data-test=show-redeem]").trigger("click");
+    await w.get("input").setValue("K7QD");
+    await w.get("form").trigger("submit");
+    await flushPromises();
+    expect(w.get("[data-test=error]").text()).toBe("Nö.");
+    await w.get("[data-test=back]").trigger("click");
+    expect(w.find("[data-test=get]").exists()).toBe(true);
+    expect(w.get("[data-test=error]").text()).toBe("");
   });
 });

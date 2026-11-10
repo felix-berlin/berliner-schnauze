@@ -573,7 +573,9 @@ describe("WordOptionDropdown.vue", () => {
       await flushPromises();
       const { reportError } = await import("@utils/reportError.ts");
       expect(copyMock).not.toHaveBeenCalled();
-      expect(reportError).toHaveBeenCalledWith(expect.objectContaining({ message: "Clipboard not supported" }));
+      expect(reportError).toHaveBeenCalledWith(
+        expect.objectContaining({ message: "Clipboard not supported" }),
+      );
       expect(wrapper.find('[aria-live="polite"]').text()).toBe("Kopieren hat nich jeklappt");
       wrapper.unmount();
     });

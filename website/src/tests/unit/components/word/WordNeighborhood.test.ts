@@ -23,14 +23,24 @@ describe("WordNeighborhood.astro", () => {
   });
 
   it("drops excluded related words", async () => {
-    const result = await render({ ...base, exclude: ["kiez"], related: [ref("kiez"), ref("molle")] });
+    const result = await render({
+      ...base,
+      exclude: ["kiez"],
+      related: [ref("kiez"), ref("molle")],
+    });
     expect(result).toContain('id="verwandte"');
     expect(result).toContain(">molle<");
     expect(result).not.toContain(">kiez<");
   });
 
   it("renders nothing when nothing is left", async () => {
-    const result = await render({ ...base, after: [], before: [], exclude: ["kiez"], related: [ref("kiez")] });
+    const result = await render({
+      ...base,
+      after: [],
+      before: [],
+      exclude: ["kiez"],
+      related: [ref("kiez")],
+    });
     expect(result).not.toContain("verwandte-worte");
   });
 });

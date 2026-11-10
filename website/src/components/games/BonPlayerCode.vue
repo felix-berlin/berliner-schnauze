@@ -1,22 +1,29 @@
 <template>
-  <section class="c-bon-player-code" aria-labelledby="bon-player-code-title">
+  <section ref="root" class="c-bon-player-code" aria-labelledby="bon-player-code-title">
     <h2 id="bon-player-code-title" class="c-bon-player-code__title">Spielercode</h2>
 
-    <template v-if="state === 'success' && result">
-      <p class="c-bon-player-code__success" role="status">
-        Willkomm'n zurück, {{ result.playerName || "Spieler" }}!
-        <span v-if="result.gamesPlayed > 0">Bestes Ergebnis: {{ result.highScore }}</span>
-      </p>
-    </template>
+    <!-- Persistent live regions: screen readers only announce changes to existing ones. -->
+    <p
+      class="c-bon-player-code__success"
+      role="status"
+      aria-live="polite"
+      tabindex="-1"
+      data-test="status"
+    >
+      {{ status }}
+    </p>
 
-    <template v-else-if="state === 'code' && code">
-      <p class="c-bon-player-code__code" data-test="code">{{ code }}</p>
+    <template v-if="state === 'code' && code">
+      <p class="c-bon-player-code__code" tabindex="-1" data-test="code">{{ code }}</p>
       <p class="c-bon-player-code__hint">
         Wer diesen Code hat, kann deinen Namen und deine Ergebnisse nutzen. Schreib ihn dir auf.
       </p>
+      <p class="c-bon-player-code__hint" data-test="link-hint">
+        Klappt der Link nich, tipp den Code einfach ein.
+      </p>
       <div class="c-bon-player-code__actions">
         <button class="c-bon-player-code__btn" type="button" @click="copyLink">
-          {{ copied ? "Kopiert!" : "Link kopieren" }}
+          Link kopieren
         </button>
         <button class="c-bon-player-code__btn" type="button" @click="toggleQr">
           {{ qrSvg ? "QR-Code verstecken" : "QR-Code zeigen" }}
@@ -42,10 +49,13 @@
         <button class="c-bon-player-code__btn" type="submit" :disabled="pending || !input.trim()">
           Weiterspielen
         </button>
+        <button class="c-bon-player-code__btn" type="button" data-test="back" @click="back">
+          Zurück
+        </button>
       </form>
     </template>
 
-    <template v-else>
+    <template v-else-if="state === 'none'">
       <p class="c-bon-player-code__hint">
         Mit 'nem Spielercode spielst du auf anderen Geräten weita.
       </p>
@@ -63,14 +73,14 @@
           class="c-bon-player-code__btn"
           type="button"
           data-test="show-redeem"
-          @click="state = 'redeem'"
+          @click="showRedeem"
         >
           Ick hab schon een Code
         </button>
       </div>
     </template>
 
-    <p v-if="error" class="c-bon-player-code__error" role="alert">{{ error }}</p>
+    <p class="c-bon-player-code__error" role="alert" data-test="error">{{ error }}</p>
   </section>
 </template>
 
@@ -81,18 +91,34 @@ import {
   playerLink,
   redeemPlayerCode,
   takeRedeemCode,
-  type PlayerStats,
 } from "@services/bonPlayerApi.ts";
-import { onMounted, ref } from "vue";
+import { nextTick, onMounted, ref } from "vue";
 
 const state = ref<"none" | "code" | "redeem" | "success">("none");
 const code = ref("");
 const input = ref("");
 const error = ref("");
 const pending = ref(false);
-const result = ref<PlayerStats>();
 const qrSvg = ref("");
-const copied = ref(false);
+const status = ref("");
+const root = ref<HTMLElement>();
+
+// The focused button vanishes with its state, so move focus to the new state's first element.
+async function focusOn(selector: string) {
+  await nextTick();
+  root.value?.querySelector<HTMLElement>(selector)?.focus();
+}
+
+function showRedeem() {
+  state.value = "redeem";
+  void focusOn("input");
+}
+
+function back() {
+  state.value = "none";
+  error.value = "";
+  void focusOn("[data-test=get]");
+}
 
 async function run(action: () => Promise<void>) {
   if (pending.value) return;
@@ -111,14 +137,18 @@ const getCode = () =>
   run(async () => {
     code.value = await createPlayerCode();
     state.value = "code";
+    void focusOn("[data-test=code]");
   });
 
 const redeem = (value: string) =>
   run(async () => {
     const stats = await redeemPlayerCode(value);
     applyPlayerStats(stats);
-    result.value = stats;
     state.value = "success";
+    status.value = `Willkomm'n zurück, ${stats.playerName || "Spieler"}!${
+      stats.gamesPlayed > 0 ? ` Bestes Ergebnis: ${stats.highScore}` : ""
+    }`;
+    void focusOn("[data-test=status]");
   });
 
 async function toggleQr() {
@@ -126,15 +156,19 @@ async function toggleQr() {
     qrSvg.value = "";
     return;
   }
-  const { renderSVG } = await import("uqr");
-  qrSvg.value = renderSVG(playerLink(code.value));
+  try {
+    const { renderSVG } = await import("uqr");
+    qrSvg.value = renderSVG(playerLink(code.value));
+  } catch {
+    error.value = "Den QR-Code kriegen wa jerade nich hin.";
+  }
 }
 
 async function copyLink() {
   try {
     await navigator.clipboard.writeText(playerLink(code.value));
-    copied.value = true;
-    setTimeout(() => (copied.value = false), 2000);
+    status.value = "Link kopiert!";
+    setTimeout(() => (status.value = ""), 2000);
   } catch {
     error.value = "Kopieren hat nich jeklappt, nimm den Code von Hand.";
   }
@@ -144,6 +178,7 @@ onMounted(() => {
   const stored = takeRedeemCode();
   if (stored) {
     state.value = "redeem";
+    input.value = stored; // the link and storage no longer hold it, so a failed redeem must stay retryable
     void redeem(stored);
   }
 });

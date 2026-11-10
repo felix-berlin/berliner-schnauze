@@ -71,10 +71,7 @@ describe("WordHero.astro", () => {
     });
     expect(result).toContain('href="/themen/essen"');
     expect(result).toContain("c-themes");
-    const badges = result.slice(
-      result.indexOf("c-word-hero__badges"),
-      result.indexOf("c-themes"),
-    );
+    const badges = result.slice(result.indexOf("c-word-hero__badges"), result.indexOf("c-themes"));
     expect(badges).not.toContain("/themen/essen");
     expect(result.indexOf("c-word-hero__badges")).toBeLessThan(result.indexOf("c-themes"));
   });
@@ -91,12 +88,16 @@ describe("WordHero.astro", () => {
     expect(result.indexOf("c-word-hero__actions")).toBeLessThan(
       result.indexOf("c-word-hero__badges"),
     );
-    expect(result.indexOf("c-word-hero__title")).toBeLessThan(result.indexOf("c-word-hero__actions"));
+    expect(result.indexOf("c-word-hero__title")).toBeLessThan(
+      result.indexOf("c-word-hero__actions"),
+    );
   });
 
   it("shows the alternative words as 'Selbe Bedeutung wie'", async () => {
     const result = await render({
-      word: makeWord({ alternativeWords: [{ alternativeWord: "Kiez" }, { alternativeWord: "Kietz" }] }),
+      word: makeWord({
+        alternativeWords: [{ alternativeWord: "Kiez" }, { alternativeWord: "Kietz" }],
+      }),
     });
     expect(result).toContain("Selbe Bedeutung wie");
     expect(result).toContain("Kiez, Kietz");

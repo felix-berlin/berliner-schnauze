@@ -6,7 +6,13 @@ const reportWord = vi.hoisted(() => vi.fn());
 vi.mock("@utils/wordPulse.ts", () => ({ reportWord }));
 
 // One fake element per `new Audio()`; the shared player must create exactly one.
-const audios: { listeners: Record<string, () => void>; src: string; play: ReturnType<typeof vi.fn>; pause: ReturnType<typeof vi.fn>; preload: string }[] = [];
+const audios: {
+  listeners: Record<string, () => void>;
+  src: string;
+  play: ReturnType<typeof vi.fn>;
+  pause: ReturnType<typeof vi.fn>;
+  preload: string;
+}[] = [];
 
 beforeEach(() => {
   vi.resetModules();

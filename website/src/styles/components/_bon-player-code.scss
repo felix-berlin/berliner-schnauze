@@ -1,6 +1,7 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-bon-player-code {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,6 +35,15 @@
   &__success {
     margin: 0;
     font-weight: 700;
+  }
+
+  // Live regions stay in the DOM while empty; take them out of the flow (and the gap) then.
+  &__success:empty,
+  &__error:empty {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
 
   &__actions,
