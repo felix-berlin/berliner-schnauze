@@ -30,7 +30,7 @@ Die Wortlisten in den Mocks sind Platzhalter. Die Namen in den Mocks sind erfund
 
 ## 1. Überblick
 
-Ein Wischspiel: Ist das Wort echtes Berlinerisch oder erfunden? Gespielt wird mobil mit einer Hand, in kurzen Runden. Die Gestaltung folgt drei Zielen:
+Ein Wischspiel: Ist das Wort echtes Berlinerisch – oder erfunden oder Hochdeutsch? Gespielt wird mobil mit einer Hand, in kurzen Runden. Die Gestaltung folgt drei Zielen:
 
 1. **Fluss.** Pro Karte gibt es genau eine Aktion, also Wischen, Tippen oder eine Pfeiltaste. Einen „Weiter“-Button gibt es nicht.
 2. **Lernen.** Bei einem Fehler bleibt die Lösung länger stehen. Am Ende listet „Deine Runde“ alle Wörter mit Links zu den Wortseiten. Das bringt auch interne Links für SEO.
@@ -279,7 +279,7 @@ Radius maximal `--radius-sm` (4px). Es gibt **keine Pillen** und keine runden Bu
 
 ## 12. Spielercode
 
-Format `BÄR-4KQ-9ZT-M2X`, ohne verwechselbare Zeichen. **Abweichung (Umsetzung):** Der Code bleibt der ausgelieferte `XXXX-XXXX-XXXX` (12 Zeichen aus `CODE_ALPHABET` in `payload/src/lib/bonPlayer.ts`); überall, wo hier `BÄR-…` steht, gilt dieses Format. Der Code verbindet einen Browser wieder mit demselben Spieler, also Name und Ergebnissen. Ein laufendes Spiel wandert nicht mit. Er gilt nur fürs Spiel. Das Besucher-Cookie für Kommentare und Stimmen bleibt unberührt.
+Format `4KQ9-ZTM2-XHRB`, ohne verwechselbare Zeichen. **Abweichung (Umsetzung):** Der Code bleibt der ausgelieferte `XXXX-XXXX-XXXX` (12 Zeichen aus `CODE_ALPHABET` in `payload/src/lib/bonPlayer.ts`); überall, wo hier `BÄR-…` steht, gilt dieses Format. Der Code verbindet einen Browser wieder mit demselben Spieler, also Name und Ergebnissen. Ein laufendes Spiel wandert nicht mit. Er gilt nur fürs Spiel. Das Besucher-Cookie für Kommentare und Stimmen bleibt unberührt.
 
 **Wo:**
 - Ergebnis: Karte unter „Hier stehste“.
@@ -303,7 +303,7 @@ Format `BÄR-4KQ-9ZT-M2X`, ohne verwechselbare Zeichen. **Abweichung (Umsetzung)
 
 **Normalisierung der Eingabe:** Großschreiben. Leerzeichen, Bindestriche und Unterstriche entfernen. Dann gegen das Format prüfen. Danach erst den Server fragen. **Abweichung (Umsetzung):** Die Ä/AE-Regel und die Präfix-Normalisierung (`BÄR`) entfallen, der Code hat kein Präfix.
 
-**Link:** `…/games/berliner-oder-nicht#code=XXXX-XXXX-XXXX` (Handoff: `…/spiele/berliner-oder-nicht#code=BÄR-4KQ-9ZT-M2X`). Der Code steht im `#`-Teil und landet so nicht in Logs, Referrern oder Matomo. **Nach dem Einlösen** den Hash mit `history.replaceState` entfernen, damit er nicht im Verlauf, in Lesezeichen oder beim Teilen weiterwandert.
+**Link:** `…/games/berliner-oder-nicht#code=4KQ9-ZTM2-XHRB` (Handoff: `…/spiele/berliner-oder-nicht#code=BÄR-4KQ-9ZT-M2X`). Der Code steht im `#`-Teil und landet so nicht in Logs, Referrern oder Matomo. **Nach dem Einlösen** den Hash mit `history.replaceState` entfernen, damit er nicht im Verlauf, in Lesezeichen oder beim Teilen weiterwandert.
 
 ---
 
@@ -363,7 +363,7 @@ function vt(update: () => void, dir: string) {
 ## 15. Barrierefreiheit
 
 - **Fokus-Reihenfolge Spiel:** Kopfzeile (nur lesbar) → Karte → „Nee“ → „Ja“ → „Spiel beenden“. Nach jeder Antwort bleibt der Fokus auf dem gewählten Antwort-Button bzw. dessen Position. Kein Fokus-Sprung zur Rückmeldung, die Ansage läuft über `role="status"`.
-- **Ansagen:** Rückmeldung als `role="status"`, z. B. „Richtig! Knorke heißt großartig. Plus 20 Punkte.“ bzw. „Daneben! Dit Wort is erfunden. Noch 1 Leben.“ Punkte über `aria-live="polite"`. Fehler als `role="alert"`.
+- **Ansagen:** Rückmeldung als `role="status"`, z. B. „Richtig! Knorke heißt großartig. Plus 20 Punkte.“ bzw. „Daneben! Dit Wort is erfunden. Noch 1 Leben.“ bzw. „Daneben! Dit is Hochdeutsch, keen Berlinerisch. Noch 1 Leben.“ Punkte über `aria-live="polite"`. Fehler als `role="alert"`.
 - **Tastatur:**
   - ← und → antworten.
   - Während der Rückmeldung führen ←/→/Enter/Leertaste weiter.
