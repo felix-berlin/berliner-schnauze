@@ -25,9 +25,7 @@ async function post<T>(url: string, body?: unknown): Promise<T> {
   } catch {
     throw new Error(FALLBACK_ERROR);
   }
-  const data = (await res.json().catch(() => undefined)) as
-    | (T & { error?: string })
-    | undefined;
+  const data = (await res.json().catch(() => undefined)) as (T & { error?: string }) | undefined;
   if (!res.ok || !data) throw new Error(data?.error ?? FALLBACK_ERROR);
   return data;
 }

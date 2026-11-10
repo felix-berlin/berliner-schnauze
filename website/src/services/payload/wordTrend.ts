@@ -7,7 +7,12 @@ import { berlinDay, trending } from "payload-app/word-stats";
 const load = async (): Promise<Map<number, WordTrend>> => {
   const payload = await getPayloadClient();
   const today = berlinDay();
-  const ranked = await trending(payload, { days: TREND_DAYS, limit: TREND_TOP, today, type: "viewed" });
+  const ranked = await trending(payload, {
+    days: TREND_DAYS,
+    limit: TREND_TOP,
+    today,
+    type: "viewed",
+  });
   if (!ranked.length) return new Map();
   const since = new Date(Date.parse(`${today}T00:00:00Z`) - (2 * TREND_DAYS - 1) * 864e5)
     .toISOString()
@@ -17,7 +22,10 @@ const load = async (): Promise<Map<number, WordTrend>> => {
     depth: 0,
     pagination: false,
     select: { day: true, views: true, word: true },
-    where: { day: { greater_than_equal: since, less_than_equal: today }, word: { in: ranked.map((r) => r.word) } },
+    where: {
+      day: { greater_than_equal: since, less_than_equal: today },
+      word: { in: ranked.map((r) => r.word) },
+    },
   });
   const rows = docs.flatMap((d) =>
     typeof d.word === "number" ? [{ day: d.day, views: d.views, word: d.word }] : [],

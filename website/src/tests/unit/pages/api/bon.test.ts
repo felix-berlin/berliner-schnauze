@@ -56,7 +56,7 @@ const db = vi.hoisted(() => {
       }
       return { docs: gone, errors: [] };
     }),
-    find: vi.fn(async ({ collection, where }: { collection: string; where: Where }) => ({
+    find: vi.fn(async ({ collection, where }: { collection: string; select?: Row; where: Where }) => ({
       docs: table(collection)
         .filter((r) => matches(r, where))
         .map((r) => structuredClone(r)),
@@ -900,6 +900,39 @@ describe("bon identity in start and finish", () => {
     const failed = await FINISH(ctx({ playerName: "Zed", token: second.token }, "v-1"));
     expect(failed.status).toBe(200);
     expect(db.players[0].name).toBe("Berta");
+  });
+
+  it("an Anonym finish keeps the stored name, a real name replaces it", async () => {
+    seedPlayer();
+    db.players[0].name = "Berta";
+    const first = await (
+      await START(ctx(undefined, "v-1", { bon_player: "ABCD-EFGH-JKMN" }))
+    ).json();
+    await play(first.token, 4);
+    later(60_000);
+    await FINISH(ctx({ token: first.token }, "v-1"));
+    expect(db.players[0].name).toBe("Berta");
+
+    const second = await (
+      await START(ctx(undefined, "v-1", { bon_player: "ABCD-EFGH-JKMN" }))
+    ).json();
+    await play(second.token, 4);
+    later(60_000);
+    await FINISH(ctx({ playerName: "Ede", token: second.token }, "v-1"));
+    expect(db.players[0].name).toBe("Ede");
+  });
+
+  it("redeem selects only the columns the stats need", async () => {
+    const code = await (async () => {
+      await playedGame(5, "v-1");
+      set.mockClear();
+      await player(undefined, "v-1");
+      return set.mock.calls[0][1] as string;
+    })();
+    db.api.find.mockClear();
+    await redeem({ code });
+    const call = db.api.find.mock.calls.find(([a]) => a.collection === "bon-games")![0];
+    expect(call.select).toEqual({ bestStreak: true, score: true });
   });
 
   it("finish without a player cookie does not touch bon-players", async () => {

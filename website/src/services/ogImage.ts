@@ -4,7 +4,10 @@ import { resolve } from "node:path";
 import { Worker } from "node:worker_threads";
 
 type OgOptions = Parameters<typeof generateOpenGraphImage>[0];
-type Pending = { reject: (error: Error) => void; resolve: (image: Uint8Array<ArrayBuffer>) => void };
+type Pending = {
+  reject: (error: Error) => void;
+  resolve: (image: Uint8Array<ArrayBuffer>) => void;
+};
 
 /** The worker exits after this long without a render, and canvaskit's memory goes with it. */
 const IDLE_MS = 30_000;

@@ -50,6 +50,7 @@ export const playerStats = async (payload: Client, id: number) => {
     depth: 0,
     limit: 0,
     pagination: false,
+    select: { bestStreak: true, score: true },
     where: { player: { equals: id }, status: { equals: "finished" } },
   });
   return {

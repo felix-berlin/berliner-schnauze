@@ -1,8 +1,8 @@
 import type { APIRoute } from "astro";
 
 import { bonVisitor } from "@services/bonGame.ts";
-import { loadPool } from "@services/bonPool.ts";
 import { playerFromCookie } from "@services/bonPlayer.ts";
+import { loadPool } from "@services/bonPool.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";

@@ -54,7 +54,8 @@ export const POST: APIRoute = async ({ cookies, request }) => {
     if (docs.length === 0) return reply(DONE, 409);
 
     // The name follows the player's latest game; a failure must not hide the stored result.
-    if (game.player != null)
+    // A game without a name must not replace a name the player already chose.
+    if (game.player != null && playerName !== "Anonym")
       await payload
         .update({
           collection: "bon-players",
