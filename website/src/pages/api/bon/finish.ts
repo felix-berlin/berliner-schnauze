@@ -57,6 +57,17 @@ export const POST: APIRoute = async ({ cookies, request }) => {
     if (errors.length > 0) throw new Error(`update failed: ${errors[0].message}`);
     if (docs.length === 0) return reply(DONE, 409);
 
+    // The name follows the player's latest game; a failure must not hide the stored result.
+    if (game.player != null)
+      await payload
+        .update({
+          collection: "bon-players",
+          data: { name: playerName },
+          depth: 0,
+          id: typeof game.player === "object" ? game.player.id : game.player,
+        })
+        .catch((error: unknown) => console.error("[bon] player name update failed:", error));
+
     const finished = { status: { equals: "finished" } } as const;
     // The result is stored; a failed rank lookup must not hide it.
     const ranking = await Promise.all([

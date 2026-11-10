@@ -3,6 +3,8 @@ import { z } from "zod";
 
 const token = z.string().regex(/^[0-9a-f]{64}$/);
 
+export const redeemSchema = z.strictObject({ code: z.string().max(40) });
+
 export const nextSchema = z.strictObject({ token });
 
 /** The finish body. 400 answers bound the work per request; the route checks them against the dealt cards. */

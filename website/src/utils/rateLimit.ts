@@ -21,6 +21,8 @@ const RULES: Rule[] = [
   { max: 20, method: "POST", prefix: "/api/bon/start", windowMs: 10 * 60_000 },
   { max: 60, method: "POST", prefix: "/api/bon/next", windowMs: 10 * 60_000 },
   { max: 20, method: "POST", prefix: "/api/bon/finish", windowMs: 10 * 60_000 },
+  { max: 10, method: "POST", prefix: "/api/bon/player", windowMs: 10 * 60_000 },
+  { max: 10, method: "POST", prefix: "/api/bon/redeem", windowMs: 10 * 60_000 },
   // A daily cap per IP lives in the route.
   { max: 60, method: "POST", prefix: "/api/word-pulse", windowMs: 60_000 },
   { max: 60, method: "GET", prefix: "/api/trending", windowMs: 60_000 },

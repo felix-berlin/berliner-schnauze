@@ -6,11 +6,13 @@ const db = vi.hoisted(() => {
   type Row = Record<string, unknown> & { id: number };
   type Where = Record<string, Record<string, unknown>>;
   const rows: Row[] = [];
+  const players: Row[] = [];
   let nextId = 1;
   const ops: Record<string, (a: unknown, b: unknown) => boolean> = {
     equals: (a, b) => a === b,
+    exists: (a, b) => (a != null) === b,
     greater_than: (a, b) => typeof a === "number" && a > (b as number),
-    less_than: (a, b) => typeof a === "string" && a < (b as string), // ISO dates
+    less_than: (a, b) => typeof a === "string" && a < (b as string), // ISO dates,
   };
   const matches = (row: Row, where: Where) =>
     Object.entries(where).every(([field, cond]) => {
@@ -21,12 +23,13 @@ const db = vi.hoisted(() => {
       return ops[op](row[field], value);
     });
   const table = (collection: string) => {
+    if (collection === "bon-players") return players;
     if (collection !== "bon-games") throw new Error(`fake: unexpected collection ${collection}`);
     return rows;
   };
-  const uniqueViolation = () =>
+  const uniqueViolation = (path = "token") =>
     Object.assign(new Error("The following field is invalid"), {
-      data: { errors: [{ message: "Value must be unique", path: "token" }] },
+      data: { errors: [{ message: "Value must be unique", path }] },
       name: "ValidationError",
       status: 400,
     });
@@ -36,7 +39,9 @@ const db = vi.hoisted(() => {
     })),
     create: vi.fn(async ({ collection, data }: { collection: string; data: Row }) => {
       const t = table(collection);
-      if (t.some((r) => r.token === data.token)) throw uniqueViolation();
+      if (collection === "bon-players") {
+        if (t.some((r) => r.codeHash === data.codeHash)) throw uniqueViolation("code_hash");
+      } else if (t.some((r) => r.token === data.token)) throw uniqueViolation();
       const row = { ...data, createdAt: new Date().toISOString(), id: nextId++ };
       t.push(row);
       return structuredClone(row);
@@ -79,10 +84,11 @@ const db = vi.hoisted(() => {
   };
   const reset = () => {
     rows.length = 0;
+    players.length = 0;
     nextId = 1;
     for (const fn of Object.values(api)) fn.mockClear();
   };
-  return { api, reset, rows, uniqueViolation };
+  return { api, players, reset, rows, uniqueViolation };
 });
 
 const pool = vi.hoisted(() => ({
@@ -115,15 +121,24 @@ import { createHash } from "node:crypto";
 
 import { POST as FINISH } from "@/pages/api/bon/finish.ts";
 import { POST as NEXT } from "@/pages/api/bon/next.ts";
+import { POST as PLAYER } from "@/pages/api/bon/player.ts";
+import { POST as REDEEM } from "@/pages/api/bon/redeem.ts";
 import { POST as START } from "@/pages/api/bon/start.ts";
+import { bonCodeHash } from "@services/bonPlayer.ts";
 
 const T0 = Date.UTC(2026, 10, 5, 12);
 const HOUR = 60 * 60_000;
 const set = vi.fn();
-const ctx = (body: unknown, cookie?: string) =>
+const ctx = (body: unknown, cookie?: string, others: Record<string, string> = {}) =>
   ({
     clientAddress: "10.0.0.1",
-    cookies: { get: () => (cookie ? { value: cookie } : undefined), set },
+    cookies: {
+      get: (name: string) => {
+        const value = { ...(cookie ? { bs_visitor: cookie } : {}), ...others }[name];
+        return value ? { value } : undefined;
+      },
+      set,
+    },
     request: new Request("https://berliner-schnauze.wtf/api/bon", {
       body: body === undefined ? undefined : JSON.stringify(body),
       method: "POST",
@@ -500,5 +515,171 @@ describe("POST /api/bon/finish", () => {
     expect(body.score).toEqual(expect.any(Number));
     expect(body).not.toHaveProperty("rank");
     expect(row(token).status).toBe("finished");
+  });
+});
+
+const CODE = /^[A-HJKMNP-Z2-9]{4}-[A-HJKMNP-Z2-9]{4}-[A-HJKMNP-Z2-9]{4}$/;
+const player = (body: unknown, cookie?: string, code?: string) =>
+  PLAYER(ctx(body, cookie, code ? { bon_player: code } : {}));
+const redeem = (body: unknown, cookie?: string) => REDEEM(ctx(body, cookie));
+const seedPlayer = (code = "ABCD-EFGH-JKMN", name = "Kalle") =>
+  db.players.push({ codeHash: bonCodeHash(code), id: 50, name });
+
+describe("POST /api/bon/player", () => {
+  it("returns the cookie's code and creates no row", async () => {
+    seedPlayer();
+    const res = await player(undefined, "v-1", "ABCD-EFGH-JKMN");
+    expect(await res.json()).toEqual({ code: "ABCD-EFGH-JKMN" });
+    expect(db.players).toHaveLength(1);
+    expect(db.api.create).not.toHaveBeenCalled();
+  });
+
+  it("creates a hashed player, sets the cookie and returns the code", async () => {
+    const res = await player(undefined, "v-1");
+    const { code } = await res.json();
+    expect(code).toMatch(CODE);
+    expect(db.players).toHaveLength(1);
+    expect(db.players[0].codeHash).toBe(bonCodeHash(code));
+    expect(JSON.stringify(db.players)).not.toContain(code);
+    expect(set).toHaveBeenCalledWith(
+      "bon_player",
+      code,
+      expect.objectContaining({ httpOnly: true, maxAge: 31536000, path: "/api/", sameSite: "lax" }),
+    );
+  });
+
+  it("claims the visitor's games, not another visitor's", async () => {
+    await playedGame(2, "v-1");
+    await playedGame(2, "v-1");
+    await playedGame(2, "v-2");
+    await player(undefined, "v-1");
+    const id = db.players[0].id;
+    expect(db.rows.filter((r) => r.player === id)).toHaveLength(2);
+    expect(db.rows.find((r) => r.visitor === hashed("v-2"))!.player).toBeUndefined();
+  });
+
+  it("without a visitor cookie still creates the player, claims nothing, sets only the player cookie", async () => {
+    await playedGame(2, "v-1");
+    set.mockClear();
+    const res = await player(undefined);
+    expect(res.status).toBe(200);
+    expect(db.players).toHaveLength(1);
+    expect(db.rows[0].player).toBeUndefined();
+    expect(set).toHaveBeenCalledOnce();
+    expect(set.mock.calls[0][0]).toBe("bon_player");
+  });
+
+  it("treats a stale or malformed bon_player cookie as no cookie", async () => {
+    for (const bad of ["ABCD-EFGH-JKMN", "garbage", "x".repeat(10_000)]) {
+      db.players.length = 0;
+      const res = await player(undefined, "v-1", bad);
+      expect(res.status).toBe(200);
+      expect((await res.json()).code).not.toBe(bad);
+      expect(db.players).toHaveLength(1);
+    }
+  });
+
+  it("retries once on a duplicate code hash, then 502", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    db.api.create.mockRejectedValueOnce(db.uniqueViolation("code_hash"));
+    expect((await player(undefined, "v-1")).status).toBe(200);
+    expect(db.players).toHaveLength(1);
+    db.api.create.mockRejectedValue(db.uniqueViolation("code_hash"));
+    expect((await player(undefined, "v-1")).status).toBe(502);
+    db.api.create.mockReset();
+  });
+});
+
+describe("POST /api/bon/redeem", () => {
+  const withGame = async () => {
+    // answers worth 80: 2x10 + 3x20; the player claims the finished game afterwards
+    await playedGame(5, "v-1");
+    set.mockClear();
+    await player(undefined, "v-1");
+    const code = set.mock.calls[0][1] as string;
+    set.mockClear();
+    return code;
+  };
+
+  it("returns the stats for the code, also loosely typed, and sets the canonical cookie", async () => {
+    const code = await withGame();
+    set.mockClear();
+    const loose = code.toLowerCase().replaceAll("-", " ");
+    for (const input of [code, loose]) {
+      const res = await redeem({ code: input });
+      expect(res.status).toBe(200);
+      expect(await res.json()).toEqual({
+        bestStreak: 5,
+        gamesPlayed: 1,
+        highScore: 80,
+        playerName: "Anonym",
+      });
+      expect(set).toHaveBeenLastCalledWith("bon_player", code, expect.any(Object));
+    }
+  });
+
+  it.each([
+    ["a wrong code", "AAAA-AAAA-AAAA"],
+    ["an empty string", ""],
+    ["10 000 chars", "a".repeat(10_000)],
+  ])("refuses %s without a cookie", async (_, code) => {
+    await withGame();
+    set.mockClear();
+    expect([400, 404]).toContain((await redeem({ code })).status);
+    expect(set).not.toHaveBeenCalled();
+  });
+
+  it("does not read or set the visitor cookie", async () => {
+    const code = await withGame();
+    set.mockClear();
+    const c = ctx({ code });
+    const get = vi.spyOn(c.cookies, "get");
+    await REDEEM(c);
+    expect(get).not.toHaveBeenCalledWith("bs_visitor");
+    expect(set.mock.calls.every((a) => a[0] === "bon_player")).toBe(true);
+  });
+});
+
+describe("bon identity in start and finish", () => {
+  it("start stores the player of a valid bon_player cookie", async () => {
+    seedPlayer();
+    const res = await START(ctx(undefined, "v-1", { bon_player: "ABCD-EFGH-JKMN" }));
+    const { token } = await res.json();
+    expect(row(token).player).toBe(50);
+  });
+
+  it("finish writes playerName to the player, a failure there never changes the response", async () => {
+    seedPlayer();
+    const { token } = await (
+      await START(ctx(undefined, "v-1", { bon_player: "ABCD-EFGH-JKMN" }))
+    ).json();
+    later(60_000);
+    const res = await FINISH(
+      ctx({ answers: run(token, 4), playerName: "Berta", token }, "v-1"),
+    );
+    expect(res.status).toBe(200);
+    expect(db.players[0].name).toBe("Berta");
+
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    const second = await (
+      await START(ctx(undefined, "v-1", { bon_player: "ABCD-EFGH-JKMN" }))
+    ).json();
+    later(60_000);
+    const update = db.api.update.getMockImplementation()!;
+    db.api.update.mockImplementation(async (args) => {
+      if (args.collection === "bon-players") throw new Error("name down");
+      return update(args);
+    });
+    const failed = await FINISH(
+      ctx({ answers: run(second.token, 4), playerName: "Zed", token: second.token }, "v-1"),
+    );
+    expect(failed.status).toBe(200);
+    expect(db.players[0].name).toBe("Berta");
+  });
+
+  it("finish without a player cookie does not touch bon-players", async () => {
+    seedPlayer();
+    await playedGame(4, "v-1");
+    expect(db.players[0].name).toBe("Kalle");
   });
 });

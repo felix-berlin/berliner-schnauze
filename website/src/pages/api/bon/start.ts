@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 
 import { bonVisitor } from "@services/bonGame.ts";
 import { loadPool } from "@services/bonPool.ts";
+import { playerFromCookie } from "@services/bonPlayer.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";
@@ -31,12 +32,14 @@ export const POST: APIRoute = async ({ cookies }) => {
         if (errors.length > 0) console.error("[bon] cleanup failed for some games:", errors);
       })
       .catch((error: unknown) => console.error("[bon] cleanup failed:", error));
+    const player = await playerFromCookie(payload, cookies);
     const cards = dealBatch(await loadPool(), new Set());
     const game = await payload.create({
       collection: "bon-games",
       data: {
         batches: [{ issuedAt: Date.now(), start: 0 }],
         cards,
+        ...(player && { player: player.id }),
         status: "playing",
         token: randomBytes(32).toString("hex"),
         visitor,

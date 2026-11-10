@@ -76,6 +76,16 @@ describe("rateLimit", () => {
     expect(rateLimited(client, next, 0)).toBe(0);
   });
 
+  it("limits the bon player code endpoints to 10 per 10 min on POST", () => {
+    for (const path of ["/api/bon/player", "/api/bon/redeem"]) {
+      const rule = rateLimitRule(path, "POST")!;
+      expect(rule).toMatchObject({ max: 10, windowMs: 10 * 60_000 });
+      expect(rateLimitRule(path, "GET")).toBeUndefined();
+      for (let i = 0; i < rule.max; i++) expect(rateLimited(`t-${path}`, rule, 0)).toBe(0);
+      expect(rateLimited(`t-${path}`, rule, 0)).toBeGreaterThan(0);
+    }
+  });
+
   it("takes the last forwarded-for entry, else the socket address", () => {
     expect(clientIp("1.1.1.1, 2.2.2.2 ", "9.9.9.9")).toBe("2.2.2.2");
     expect(clientIp(null, "9.9.9.9")).toBe("9.9.9.9");
