@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Footer</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/berliner-schnauze/tokens.css">
+<link rel="stylesheet" href="ds/berliner-schnauze/colors_and_type.css">
+<link rel="stylesheet" href="ds/berliner-schnauze/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.bs-f a{color:inherit}
+.bs-f__group h2{margin:0 0 .25rem}
+.bs-f__group ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.bs-f__group a{display:flex;align-items:center;min-height:40px;text-decoration:underline dashed from-font;text-underline-position:from-font;text-decoration-color:transparent;transition:text-decoration-color .2s}
+.bs-f__group a:hover{text-decoration-color:currentColor;color:var(--color-accent-text)}
+.bs-f__bear{display:block;filter:drop-shadow(0 0 25px rgb(255 255 255 / 20%))}
+[data-theme="dark"] .bs-f__bear{mix-blend-mode:lighten;filter:invert(1)}
+.bs-f__end{background:var(--red-berlin-700);color:#fff}
+.bs-f__end a{text-decoration:underline dashed from-font;text-underline-position:from-font}
+.bs-f__end a:hover{color:#fff}
+.bs-f a:focus-visible{outline:2px dashed var(--orange-400);outline-offset:2px}
+.bs-f__end a:focus-visible{outline-color:#fff}
+</style>
+</helmet>
+<footer class="bs-f" data-theme="{{theme}}" style="font-family: var(--font-body); letter-spacing: 1px; color: var(--color-body);">
+
+<div style="{{farewellStyle}}">
+<img class="bs-f__bear" src="ds/berliner-schnauze/assets/bear-walking.png" alt="Ein Bär, der durch die Stadt läuft" style="{{bearStyle}}">
+<p style="{{farewellTextStyle}}">Knorke, ditt du mich hier unten besuchst.</p>
+</div>
+
+<div style="background: var(--surface-paper); box-shadow: var(--paper-lift);">
+<div style="{{groundStyle}}">
+
+<section class="bs-f__group" aria-labelledby="f-app" style="{{appStyle}}">
+<h2 id="f-app" class="c-band" style="font-size: 1.25rem;">Installiere die App</h2>
+<p style="margin: 0 0 0.75rem; color: var(--color-muted); line-height: 1.5;">Mit der Berliner Schnauze App bleibst du immer informiert, ob online oder offline.</p>
+<button class="c-choice" style="align-self: flex-start;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path><path d="M12 15V3"></path></svg>App installieren</button>
+</section>
+
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="4">
+<nav class="bs-f__group" aria-label="{{g.title}}">
+<h2 class="t-label">{{g.title}}</h2>
+<ul><sc-for list="{{g.links}}" as="l" hint-placeholder-count="3"><li><a href="#">{{l}}</a></li></sc-for></ul>
+</nav>
+</sc-for>
+
+</div>
+</div>
+
+<div class="bs-f__end">
+<div style="{{endStyle}}">
+<a href="#">Version 4.12.0</a>
+<span>Ein Projekt von <a href="#">Webshaped / Felix Scholze</a></span>
+<span>Hergestellt mit 🐻-Kräften in Berlin</span>
+</div>
+</div>
+
+</footer>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"size":{"editor":"enum","options":["mobile","desktop"],"default":"mobile"},"$preview":{"width":390,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const d = this.props.size === 'desktop';
+    const wrap = d ? 'box-sizing: border-box; max-width: 1160px; margin: 0 auto; padding-inline: 24px;' : 'box-sizing: border-box; padding-inline: 1rem;';
+    return {
+      theme: this.props.theme ?? 'dark',
+      farewellStyle: wrap + ' display: flex; align-items: center; gap: ' + (d ? '3rem' : '1rem') + '; padding-top: ' + (d ? '4rem' : '2.5rem') + ';',
+      bearStyle: 'width: ' + (d ? '320px' : '44%') + '; height: auto; flex-shrink: 0;',
+      farewellTextStyle: 'margin: 0; font-family: var(--font-display); font-weight: 400; letter-spacing: 0; line-height: 1.15; color: var(--color-ink-strong); font-size: ' + (d ? '2.75rem' : '1.4rem') + ';',
+      groundStyle: wrap + ' display: grid; grid-template-columns: ' + (d ? '1.6fr repeat(4, 1fr)' : '1fr 1fr') + '; gap: ' + (d ? '2rem' : '1.75rem 1rem') + '; padding-block: ' + (d ? '2.5rem' : '1.75rem') + ';',
+      appStyle: 'display: flex; flex-direction: column;' + (d ? '' : ' grid-column: 1 / -1; padding-bottom: 1.25rem; border-bottom: 1px dashed var(--rule-inner);'),
+      endStyle: wrap + ' display: flex; flex-wrap: wrap; align-items: center; justify-content: ' + (d ? 'flex-start' : 'center') + '; gap: 0.25rem 1.5rem; padding-block: 0.75rem; font-size: 0.8rem; text-align: center;',
+      groups: [
+        { title: 'Seiten', links: ['Wort-Index', 'Im Trend', 'Wort vorschlagen', 'Changelog'] },
+        { title: 'Unterstützen', links: ['GitHub Sponsors', 'Ko-fi', 'PayPal'] },
+        { title: 'Social Media', links: ['GitHub', 'Mastodon', 'Facebook'] },
+        { title: 'Rechtliches', links: ['Impressum', 'Datenschutz', 'Fehler melden'] }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
