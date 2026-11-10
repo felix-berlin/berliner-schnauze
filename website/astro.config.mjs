@@ -1,7 +1,7 @@
 import node from "@astrojs/node";
 import vue from "@astrojs/vue";
 import codecovplugin from "@codecov/astro-plugin";
-import { sentryVitePlugin } from "@sentry/vite-plugin";
+import sentry from "@sentry/astro";
 import AstroPWA from "@vite-pwa/astro";
 import matomo from "astro-matomo";
 import { defineConfig, envField, fontProviders } from "astro/config";
@@ -304,6 +304,16 @@ export default defineConfig({
   },
   compressHTML: true,
   integrations: [
+    // Server SDK + source map upload. The client SDK stays our own lazy init (src/plugins/sentryBrowser.ts): with
+    // enabled.client the integration would inject an eager one. Source maps only for CI deploy builds.
+    sentry({
+      enabled: { client: false, server: true },
+      org: SENTRY_ORG,
+      project: SENTRY_PROJECT,
+      authToken: SENTRY_AUTH_TOKEN,
+      sourcemaps: { disable: !uploadsArtifacts, filesToDeleteAfterUpload: ["dist/**/*.map"] },
+      bundleSizeOptimizations: { excludeDebugStatements: true },
+    }),
     vue({
       appEntrypoint: "/src/pages/_app",
       // devtools: {
@@ -319,7 +329,12 @@ export default defineConfig({
       disableCookies: true,
       // After Anubis' challenge document.referrer is its host, not the real source (Matomo >= 4.12). The same host
       // must also be listed under Websites > Excluded referrers in Matomo.
-      preInitCommands: [["setExcludedReferrers", ["anubis.berliner-schnauze.wtf"]]],
+      // No access to resolution/plugins (also drops the cookieless config_id) and no campaign parameters (privacy policy, section "Reichweitenmessung").
+      preInitCommands: [
+        ["setExcludedReferrers", ["anubis.berliner-schnauze.wtf"]],
+        ["disableBrowserFeatureDetection"],
+        ["disableCampaignParameters"],
+      ],
       partytown: false,
       viewTransition: {
         contentElement: "main",
@@ -543,7 +558,11 @@ export default defineConfig({
         // Production only: dev keeps deps external, where the real plugin loads fine.
         ...(import.meta.env.DEV
           ? {}
-          : { "@payloadcms/plugin-mcp": fileURLToPath(new URL("./src/lib/payloadMcpStub.ts", import.meta.url)) }),
+          : {
+              "@payloadcms/plugin-mcp": fileURLToPath(
+                new URL("./src/lib/payloadMcpStub.ts", import.meta.url),
+              ),
+            }),
       },
     },
 
@@ -591,22 +610,6 @@ export default defineConfig({
           }
         },
       }), // chooses the compiler automatically
-      ...(!uploadsArtifacts
-        ? []
-        : [
-            sentryVitePlugin({
-              authToken: SENTRY_AUTH_TOKEN,
-              org: SENTRY_ORG,
-              project: SENTRY_PROJECT,
-              sourcemaps: {
-                filesToDeleteAfterUpload: ["dist/**/*.map"],
-              },
-              bundleSizeOptimizations: {
-                excludeDebugStatements: true,
-              },
-              debug: false,
-            }),
-          ]),
       visualizerPlugin,
     ],
 
@@ -631,7 +634,7 @@ export default defineConfig({
     },
 
     build: {
-      sourcemap: uploadsArtifacts, // only needed for sentryVitePlugin (~9s), which is skipped for local and e2e builds
+      sourcemap: uploadsArtifacts, // only needed for the Sentry source map upload (~9s), which is skipped for local and e2e builds
       target: "esnext",
       cssMinify: "esbuild",
       rolldownOptions: {

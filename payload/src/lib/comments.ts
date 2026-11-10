@@ -4,6 +4,16 @@ export const COMMENT_MAX = 1000;
 export const NAME_MAX = 50;
 export const EDIT_WINDOW_MS = 5 * 60_000;
 
+/** What a self-delete and the retention job leave of a comment; the retention job also clears `removalReason`. */
+export const SELF_DELETED = {
+  authorName: null,
+  authorTag: null,
+  editKeyHash: null,
+  pseudonym: null,
+  status: "deleted",
+  text: "[gelöscht]",
+} as const;
+
 export type CommentStatus = "published" | "pending" | "hidden" | "removed" | "deleted";
 
 // scheme, `www.`, or `label.tld` (letters-only TLD of 2-24): not `z.B.` or `1.5`

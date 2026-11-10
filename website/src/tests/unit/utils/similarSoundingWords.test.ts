@@ -17,11 +17,7 @@ describe("similarSoundingWords", () => {
 
     const expected = allWords.filter(
       (w) =>
-        w.id !== currentWord.id &&
-        new SoundEx().compare(
-          w.berlinerisch,
-          currentWord.berlinerisch,
-        ),
+        w.id !== currentWord.id && new SoundEx().compare(w.berlinerisch, currentWord.berlinerisch),
     );
     expect(expected).toHaveLength(1);
     expect(result).toEqual(expected);

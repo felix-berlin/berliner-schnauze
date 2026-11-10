@@ -44,7 +44,7 @@ describe("ScrollToTop.vue", () => {
   };
 
   it("should not show the button initially", () => {
-    const wrapper = mount(ScrollToTop);
+    const wrapper = mount(ScrollToTop, { attachTo: document.body });
     expect(wrapper.find("button").isVisible()).toBe(false);
   });
 
@@ -59,7 +59,7 @@ describe("ScrollToTop.vue", () => {
   });
 
   it("marks the button as close to the end only while the footer is in view", async () => {
-    const wrapper = mount(ScrollToTop);
+    const wrapper = mount(ScrollToTop, { attachTo: document.body });
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     const [docStartCallback, footerCallback] = intersectionObserverMock.mock.calls.map(

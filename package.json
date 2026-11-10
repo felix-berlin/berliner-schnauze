@@ -1,6 +1,6 @@
 {
   "name": "berliner-schnauze",
-  "version": "4.7.0",
+  "version": "4.11.0",
   "private": true,
   "homepage": "https://berliner-schnauze.wtf",
   "bugs": {
@@ -56,13 +56,13 @@
     "anki:push:sandbox": "infisical run -- env POLAR_SANDBOX=true .venv-anki/bin/python scripts/upload_anki_to_polar.py --version $npm_package_version-dev"
   },
   "devDependencies": {
-    "@infisical/cli": "^0.44.3",
+    "@infisical/cli": "^0.45.2",
     "@semantic-release/changelog": "^7.0.0",
     "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^11.0.1",
-    "oxfmt": "^0.74.0",
-    "oxlint": "^1.89.0",
-    "oxlint-tsgolint": "^7.0.2004",
+    "oxfmt": "^0.76.0",
+    "oxlint": "^1.91.0",
+    "oxlint-tsgolint": "^7.0.2006",
     "semantic-release": "^25.0.9"
   },
   "engines": {

@@ -52,7 +52,9 @@ describe("middleware", () => {
   });
 
   it("adds a charset to a bare text/html response and leaves other types alone", async () => {
-    const html = await run(async () => new Response("x", { headers: { "Content-Type": "text/html" } }));
+    const html = await run(
+      async () => new Response("x", { headers: { "Content-Type": "text/html" } }),
+    );
     expect(html.headers.get("Content-Type")).toBe("text/html; charset=utf-8");
     const json = await run(async () => Response.json({}));
     expect(json.headers.get("Content-Type")).toBe("application/json");

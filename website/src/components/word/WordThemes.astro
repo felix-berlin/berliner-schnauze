@@ -1,0 +1,22 @@
+---
+import '@styles/components/_word-themes.scss';
+
+interface Props {
+  themes: { label: string; url: string }[];
+}
+
+const { themes } = Astro.props;
+---
+
+{
+  themes.length > 0 && (
+    <p class='c-themes'>
+      <span class='t-label'>{themes.length > 1 ? 'Themen' : 'Thema'}</span>
+      {themes.map((thema) => (
+        <a href={thema.url} class='c-textlink c-textlink--inline'>
+          {thema.label}
+        </a>
+      ))}
+    </p>
+  )
+}

@@ -1,0 +1,33 @@
+// Themes row under the hero badges (docs/design/wortseite/SPEC.md §5, v3.1). The "·" is CSS only, so it is not read out.
+.c-themes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.5rem;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+
+  // Flex items are blockified, so the inline-link exception of WCAG 2.5.8 does not apply: 44px hit area, look unchanged.
+  > a {
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset-block-start: 50%;
+      inset-inline-start: 0;
+      block-size: 2.75rem;
+      inline-size: max(100%, 2.75rem);
+      transform: translateY(-50%);
+    }
+  }
+
+  > a + a::before {
+    content: "·";
+    display: inline-block;
+    margin-inline-end: 0.5rem;
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+}

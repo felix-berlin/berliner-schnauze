@@ -42,43 +42,40 @@ describe("WordSectionEtymologie.astro", () => {
     expect(result).toContain("Berliner Ausdruck");
   });
 
-  it("renders section when translations are present", async () => {
-    const result = await render({
-      word: makeWord({
-        translations: [{ translation: "Mund" }],
-      }),
-    });
-    expect(result).toContain("Etymologie");
-    expect(result).toContain("Bedeutung");
-    expect(result).toContain("Mund");
-  });
-
-  it("renders section when alternativeWords are present", async () => {
+  it("renders nothing for a word with only meanings and alternatives (the hero owns them)", async () => {
     const result = await render({
       word: makeWord({
         alternativeWords: [{ alternativeWord: "Fresse" }],
+        translations: [{ translation: "Mund" }],
       }),
     });
-    expect(result).toContain("Etymologie");
-    expect(result).toContain("Selbe Bedeutung wie");
-    expect(result).toContain("Fresse");
+    expect(result).not.toContain("Etymologie");
+    expect(result).not.toContain("Mund");
   });
 
-  it("renders multiple translations", async () => {
+  it("does not repeat meanings or alternatives next to the origin", async () => {
     const result = await render({
       word: makeWord({
-        translations: [{ translation: "Mund" }, { translation: "Maul" }],
+        alternativeWords: [{ alternativeWord: "Fresse" }],
+        infoTextHtml: "<p>Herkunft</p>",
+        translations: [{ translation: "Mund" }],
       }),
     });
-    expect(result).toContain("Mund");
-    expect(result).toContain("Maul");
+    expect(result).toContain("Herkunft");
+    expect(result).not.toContain("Mund");
+    expect(result).not.toContain("Selbe Bedeutung");
   });
 
-  it("renders the section number element", async () => {
-    const result = await render({
-      word: makeWord({ infoTextHtml: "Test" }),
-    });
-    expect(result).toContain("c-section-card__num");
+  it("renders only the sources footer for a word without origin text", async () => {
+    const result = await render({ word: makeWord({ sources: ["Meyer"] }) });
+    expect(result).toContain("Quelle");
+    expect(result).not.toContain("Quellen");
+    expect(result).not.toContain("c-section-card__body");
+  });
+
+  it("omits the footer without sources", async () => {
+    const result = await render({ word: makeWord({ infoTextHtml: "<p>Info</p>" }) });
+    expect(result).not.toContain("c-section-card__footer");
   });
 
   it("renders aria-labelledby heading-etymologie", async () => {
@@ -86,12 +83,6 @@ describe("WordSectionEtymologie.astro", () => {
       word: makeWord({ infoTextHtml: "Test" }),
     });
     expect(result).toContain("heading-etymologie");
-  });
-
-  it("renders no stray 0 when there are neither translations nor alternatives", async () => {
-    const result = await render({ word: makeWord({ infoTextHtml: "<p>Info</p>" }) });
-    expect(result).toContain("Info");
-    expect(result).not.toMatch(/>\s*0\s*</);
   });
 
   it("lists the sources and links a source given as 'Label : url'", async () => {

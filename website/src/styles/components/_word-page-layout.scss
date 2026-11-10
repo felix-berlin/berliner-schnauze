@@ -1,6 +1,6 @@
 @use "@styles/variables" as vars;
 @use "@sass-butler/mixins" as butler-mx;
-@use "@sass-butler/functions" as butler-fn;
+@use "@styles/mixins" as mx;
 
 // ── Page layout containers ────────────────────────────────────────────────────
 
@@ -18,20 +18,42 @@
 }
 
 .c-word-page {
-  container-type: inline-size;
-  container-name: word-page;
   display: flex;
   flex-direction: column;
   gap: vars.$spacer;
+  padding-block-end: vars.$spacer * 3;
+  // The site header is still sticky, so the bar sits below it; a header that hides on scroll would reset this to 0.
+  --word-tabbar-top: var(--site-header-height);
+  // Anchor jumps land below header + tab bar; shared by every scroll-margin on the page.
+  --word-anchor-offset: calc(var(--word-tabbar-top) + 56px);
 
-  // A container cannot query its own size — media query needed here.
-  // Children still use @container word-page correctly.
-  @media (width > butler-fn.px-to-rem(807)) {
+  @include mx.breakpoint("word") {
     display: grid;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 200px minmax(0, 1fr);
     gap: 2rem;
     align-items: start;
   }
+}
+
+// Anchors of the tab bar and sidebar, plus the inner Analyse ids.
+:is(
+  #bedeutung,
+  #sagste-det-noch,
+  #etymologie,
+  #beispiele,
+  #analyse,
+  #orthographie,
+  #linguistik,
+  #grammatik,
+  #phonologie,
+  #anagramme,
+  #buecher,
+  #verwandte-worte,
+  #verwandte,
+  #navigation,
+  #kommentare
+) {
+  scroll-margin-block-start: var(--word-anchor-offset);
 }
 
 .c-word-main {
@@ -41,31 +63,21 @@
   flex-direction: column;
   gap: vars.$spacer;
 
+  @include mx.breakpoint("word") {
+    gap: 1.25rem;
+  }
+
   &__content {
     display: flex;
     flex-direction: column;
     gap: vars.$spacer;
-  }
 
-  // Gallery layout uses word-page container (self-query of word-main is not possible).
-  // 60rem = ~200px sidebar + 2rem gap + 1fr content + 280px gallery column.
-  &--with-gallery {
-    @container word-page (inline-size >= 60rem) {
-      display: grid;
-      grid-template-columns: 1fr 280px;
-      grid-template-areas:
-        "hero hero"
-        "content gallery";
-      gap: vars.$spacer;
-      align-items: start;
-
-      .c-word-hero {
-        grid-area: hero;
-      }
-
-      .c-word-main__content {
-        grid-area: content;
-      }
+    @include mx.breakpoint("word") {
+      gap: 1.25rem;
     }
   }
+}
+
+.c-word-offline {
+  margin-block-end: 1rem;
 }

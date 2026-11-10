@@ -1,87 +1,136 @@
 <template>
-  <section class="c-word-comments" aria-labelledby="word-comments-title" @click="onLinkClick">
-    <header class="c-word-comments__header">
-      <h2 id="word-comments-title" class="c-word-comments__title">
-        Wat sagste dazu? <span class="c-word-comments__count">({{ ctx.total.value }})</span>
+  <section
+    class="c-section-card c-section-card--unnumbered c-word-comments"
+    aria-labelledby="word-comments-title"
+    @click="onLinkClick"
+    @focusin="onFocusIn"
+  >
+    <div class="c-section-card__header c-word-comments__header">
+      <span class="c-section-card__num" />
+      <h2 id="word-comments-title" class="c-section-card__title">
+        Wat sagste dazu?
+        <span v-if="ctx.loaded.value" class="c-word-comments__count">({{ ctx.total.value }})</span>
       </h2>
-      <div class="c-word-comments__sort" role="group" aria-label="Sortierung">
+      <div
+        v-if="ctx.total.value >= 2"
+        class="c-word-comments__sort"
+        role="group"
+        aria-label="Sortierung"
+      >
         <button
           v-for="option in SORTS"
           :key="option.value"
           type="button"
-          class="c-choice"
+          class="c-choice c-word-comments__sort-button"
           :aria-pressed="ctx.sort.value === option.value"
           @click="ctx.sort.value = option.value"
         >
           {{ option.label }}
         </button>
       </div>
-    </header>
-
-    <CommentForm :submit="submitNew" />
-
-    <div class="c-word-comments__captcha">
-      <p v-show="captchaSize.height.value > 0" class="c-word-comments__captcha-text">
-        Kurz jucken, ob de 'n echter Berliner bist
-      </p>
-      <div ref="captcha">
-        <TurnStile
-          ref="turnstile"
-          wrapper-id="commentsTurnstile"
-          appearance="interaction-only"
-          :site-key="TURNSTILE_SITE_KEY"
-          @token="onToken"
-          @error="captchaFailed = true"
-        />
-      </div>
     </div>
 
-    <p
-      v-if="ctx.loaded.value && !ctx.comments.value.length && !ctx.hasMore.value"
-      class="c-word-comments__empty"
-    >
-      Hier hat noch keener wat jesacht. Fang du doch an!
-    </p>
+    <div class="c-section-card__body c-word-comments__body">
+      <p
+        v-if="ctx.loaded.value && !ctx.comments.value.length && !ctx.hasMore.value"
+        class="c-word-comments__empty"
+      >
+        Hier hat noch keener wat jesacht. Fang du doch an!
+      </p>
 
-    <WindowVirtualizer
-      v-else-if="ctx.comments.value.length"
-      ref="list"
-      v-slot="{ item }"
-      :data="ctx.comments.value"
-      class="c-word-comments__list"
-      as="ul"
-      item="li"
-    >
-      <div :key="item.id" class="c-word-comments__item"><CommentCard :comment="item" /></div>
-    </WindowVirtualizer>
+      <ol v-else-if="shown.length" class="c-word-comments__list">
+        <li v-for="item in shown" :key="item.id" class="c-word-comments__item">
+          <CommentCard :comment="item" />
+        </li>
+      </ol>
 
-    <p v-if="ctx.failed.value && !ctx.loading.value" class="c-word-comments__empty" role="alert">
-      Die Kommentare wollten grad nich laden.
-      <button type="button" class="c-link c-word-comments__retry" @click="ctx.loadMore()">
-        Nochmal versuchen
+      <button
+        v-if="canShowMore"
+        type="button"
+        class="c-textlink c-word-comments__more"
+        @click="showMore"
+      >
+        {{ expanded ? "Weitere Kommentare zeigen" : `Alle ${ctx.total.value} Kommentare zeigen` }}
       </button>
-    </p>
 
-    <div ref="sentinel" class="c-word-comments__sentinel" aria-hidden="true" />
+      <div
+        v-if="ctx.failed.value && !ctx.loading.value"
+        class="c-state c-state--error"
+        role="alert"
+      >
+        <CircleAlert aria-hidden="true" height="18" width="18" />
+        <span class="c-state__body">
+          <b>Die Kommentare wollten grad nich laden.</b>
+          <span>
+            <button type="button" class="c-textlink c-textlink--inline" @click="ctx.loadMore()">
+              Nochmal versuchen
+            </button>
+          </span>
+        </span>
+      </div>
+
+      <div v-if="sent" class="c-state c-state--success" role="status">
+        <Check aria-hidden="true" height="18" width="18" />
+        <span class="c-state__body">
+          <b>Danke, is anjekommen!</b>
+          <span>Dein Kommentar erscheint, sobald wa ihn jesehen haben.</span>
+        </span>
+      </div>
+
+      <template v-if="!writing">
+        <button
+          ref="writeButton"
+          type="button"
+          class="c-choice c-word-comments__write"
+          aria-expanded="false"
+          :aria-disabled="!ctx.online.value"
+          :aria-describedby="ctx.online.value ? undefined : 'word-comments-offline'"
+          @click="startWriting"
+        >
+          <PenLine aria-hidden="true" height="15" width="15" />
+          Kommentar schreiben
+        </button>
+        <p v-if="!ctx.online.value" id="word-comments-offline" class="t-small">
+          Du bist offline. Kommentieren jeht wieder, sobald du Netz hast.
+        </p>
+      </template>
+      <CommentForm v-else focus-on-mount :captcha-ready="!!token" :submit="submitNew" />
+
+      <div class="c-word-comments__captcha">
+        <p v-show="captchaSize.height.value > 0" class="c-word-comments__captcha-text t-small">
+          Kurz jucken, ob de 'n echter Berliner bist
+        </p>
+        <div ref="captcha">
+          <TurnStile
+            v-if="captchaOn"
+            ref="turnstile"
+            wrapper-id="commentsTurnstile"
+            appearance="interaction-only"
+            :site-key="TURNSTILE_SITE_KEY"
+            @token="onToken"
+            @error="onCaptchaError"
+          />
+        </div>
+      </div>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
 import CommentCard from "@components/comments/CommentCard.vue";
-import CommentForm from "@components/comments/CommentForm.vue";
+import CommentForm, { type SubmitResult } from "@components/comments/CommentForm.vue";
 import TurnStile from "@components/TurnStile.vue";
 import { commentsKey, useComments, type CommentsContext } from "@composables/useComments.ts";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
-import {
-  useElementSize,
-  useEventListener,
-  useIntersectionObserver,
-  useTimeoutFn,
-} from "@vueuse/core";
+import { reportError } from "@utils/reportError.ts";
+import { captchaWaitToast } from "@utils/captchaToast.ts";
+import { useElementSize, useEventListener, useOnline, useTimeoutFn } from "@vueuse/core";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
-import { WindowVirtualizer } from "virtua/vue";
-import { nextTick, onMounted, provide, ref, useTemplateRef } from "vue";
+import Check from "virtual:icons/lucide/check";
+import CircleAlert from "virtual:icons/lucide/circle-alert";
+import PenLine from "virtual:icons/lucide/pen-line";
+import { computed, nextTick, onMounted, provide, ref, useTemplateRef, watch } from "vue";
 
 const { wordId } = defineProps<{ wordId: number }>();
 
@@ -91,29 +140,67 @@ const SORTS = [
 ] as const;
 
 const comments = useComments(wordId);
+const online = useOnline();
+
+// Spec §9: 3 comments first, „Alle n zeigen“ opens up to 10, then 10 more per click.
+const FIRST = 3;
+const STEP = 10;
+const limit = ref(FIRST);
+const expanded = computed(() => limit.value > FIRST);
+const shown = computed(() => comments.comments.value.slice(0, limit.value));
+const canShowMore = computed(
+  () => comments.comments.value.length > limit.value || (expanded.value && comments.hasMore.value),
+);
+const showMore = (): void => {
+  limit.value = expanded.value ? limit.value + STEP : STEP;
+};
+// The loaded page (20) can run out before the visitor does.
+watch(limit, (n) => {
+  if (n > comments.comments.value.length && comments.hasMore.value) void comments.loadMore();
+});
+// A new sort starts at three again.
+watch(comments.sort, () => (limit.value = FIRST));
+
+const writing = ref(false);
+const sent = ref(false);
+const writeButton = useTemplateRef<HTMLButtonElement>("writeButton");
+// aria-disabled instead of :disabled keeps the button focusable, so the reason (offline) can be read out.
+const startWriting = (): void => {
+  if (!online.value) return;
+  sent.value = false;
+  writing.value = true;
+};
 // A token works once; the widget issues the next one after reset().
 const token = ref("");
 // The check cannot run (script blocked, bad site key): waiting would never help.
 const captchaFailed = ref(false);
+// Reported once per failure run (the widget may emit again); a token resets it.
+const onCaptchaError = (code: string): void => {
+  if (!captchaFailed.value) reportError(new Error(`[comments] Turnstile error: ${code}`));
+  captchaFailed.value = true;
+};
 const onToken = (value: string): void => {
   token.value = value;
   if (value) captchaFailed.value = false;
 };
+// Cloudflare's script loads on the first focus inside any form of this section, or when a reply/report form opens
+// (privacy policy, "Spam-Schutz").
+const captchaOn = ref(false);
+const onFocusIn = (e: FocusEvent): void => {
+  if ((e.target as Element).closest("form")) captchaOn.value = true;
+};
 const turnstile = useTemplateRef<{ reset: () => void }>("turnstile");
 const ctx: CommentsContext = {
   ...comments,
+  armCaptcha: () => {
+    captchaOn.value = true;
+  },
+  captchaFailed,
+  online,
   resetCaptcha: () => turnstile.value?.reset(),
-  takeToken: () => {
+  takeToken: (quiet = false) => {
     if (token.value) return token.value;
-    createToastNotify(
-      captchaFailed.value
-        ? {
-            message:
-              "Die Prüfung, ob de 'n Mensch bist, klemmt. Lad die Seite neu oder mach den Blocker kurz aus.",
-            status: "error",
-          }
-        : { message: "Moment noch, ick prüf dich kurz.", status: "warning" },
-    );
+    if (!quiet) createToastNotify(captchaWaitToast(captchaFailed.value));
     return null;
   },
   token,
@@ -124,30 +211,23 @@ provide(commentsKey, ctx);
 const captcha = useTemplateRef<HTMLElement>("captcha");
 const captchaSize = useElementSize(captcha);
 
-const submitNew = async (v: { authorName: string; text: string }): Promise<boolean> => {
-  const t = ctx.takeToken();
-  if (!t) return false;
+const submitNew = async (v: { authorName: string; text: string }): Promise<SubmitResult> => {
+  const t = ctx.takeToken(true);
+  if (!t) return captchaFailed.value ? "stuck" : "wait"; // nothing was sent: the form says why, no toast
   const result = await comments.post(v, t);
   ctx.resetCaptcha();
-  if (result !== "error") trackEvent("Comments", "Post", String(wordId));
-  return result !== "error";
+  if (result === "error") return { error: comments.failReason.value };
+  trackEvent("Comments", "Post", String(wordId));
+  // The form closes, the success box says it; the focus goes back to the button that opened it.
+  writing.value = false;
+  sent.value = true;
+  await nextTick();
+  writeButton.value?.focus();
+  return true;
 };
 
-const sentinel = useTemplateRef<HTMLElement>("sentinel");
-useIntersectionObserver(
-  sentinel,
-  ([entry]) => {
-    if (entry?.isIntersecting && comments.hasMore.value && !comments.loading.value)
-      void comments.loadMore();
-  },
-  { rootMargin: "400px" },
-);
-
 // #kommentar-<id>: load the thread if needed, scroll to the card, highlight it for a few seconds.
-const list = useTemplateRef<{ scrollToIndex: (i: number, o?: { align: "center" }) => void }>(
-  "list",
-);
-const clearHighlight = useTimeoutFn(() => (comments.highlighted.value = null), 4000, {
+const clearHighlight = useTimeoutFn(() => (comments.highlighted.value = null), 2000, {
   immediate: false,
 });
 const focusHash = async (hash = location.hash): Promise<void> => {
@@ -156,8 +236,8 @@ const focusHash = async (hash = location.hash): Promise<void> => {
   const index = comments.comments.value.findIndex(
     (c) => c.id === id || c.replies.some((r) => r.id === id),
   );
+  limit.value = Math.max(limit.value, index + 1); // the card must be in the shown slice
   await nextTick();
-  list.value?.scrollToIndex(index, { align: "center" }); // renders the card if the list skipped it
   // Restart the highlight (the CSS animation) when the same link is opened again.
   comments.highlighted.value = null;
   await nextTick();

@@ -46,6 +46,50 @@
     }
   }
 
+  // Word page (SPEC §3/§5): numbers and the header rule are gone, paddings follow the main column width.
+  .c-word-main & {
+    background: var(--surface-sheet);
+    border-color: var(--rule-card);
+
+    // :where() keeps the nested selectors flat: one class above the base rules.
+    :where(.c-section-card__num) {
+      display: none;
+    }
+
+    :where(.c-section-card__header) {
+      padding: 0.875rem 1rem;
+      border-block-end: 0;
+
+      @container word-main (inline-size >= 36rem) {
+        padding: 1rem 1.5rem;
+      }
+    }
+
+    :where(.c-section-card__body) {
+      padding: 0 1rem 1rem;
+
+      @container word-main (inline-size >= 36rem) {
+        padding: 0 1.5rem 1.5rem;
+      }
+    }
+
+    :where(.c-section-card__footer) {
+      padding: 0.75rem 1rem;
+
+      @container word-main (inline-size >= 36rem) {
+        padding: 0.75rem 1.5rem;
+      }
+    }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.375rem 0.75rem;
+    border-block-start: 1px dashed var(--rule-inner);
+  }
+
   &__title {
     color: var(--new-blue-400);
 
@@ -78,128 +122,6 @@
       @include butler-mx.dark-mode-class {
         color: var(--color-body);
       }
-    }
-  }
-
-  &__infotext {
-    padding: 0.75rem 1rem;
-
-    @include mx.side-stripe;
-
-    &:not(:first-child) {
-      margin-block-start: vars.$spacer;
-    }
-  }
-
-  &__stat-row {
-    display: flex;
-    gap: vars.$spacer * 0.75;
-    flex-wrap: wrap;
-    margin-block-end: vars.$spacer;
-  }
-
-  &__stat-box {
-    border-radius: 4px;
-    padding: 0.625rem 0.875rem;
-    flex: 1;
-    min-width: 80px;
-
-    @include mx.paper-chip;
-  }
-
-  &__stat-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-muted);
-  }
-
-  &__stat-value {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: var(--new-blue-400);
-
-    @include butler-mx.dark-mode-class {
-      color: var(--white-100);
-    }
-
-    &--vowels {
-      color: #435e6b;
-
-      @include butler-mx.dark-mode-class {
-        color: #cfc536;
-      }
-    }
-
-    &--consonants {
-      color: var(--color-accent-text);
-    }
-  }
-
-  &__cv-legend {
-    display: flex;
-    gap: vars.$spacer;
-    margin-block-start: 0.5rem;
-    font-size: 0.8rem;
-  }
-
-  &__cv-legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-
-    &::before {
-      content: "●" / "";
-      font-size: 0.6rem;
-    }
-
-    &--vowel {
-      color: #435e6b;
-
-      @include butler-mx.dark-mode-class {
-        color: #cfc536;
-      }
-    }
-
-    &--consonant {
-      color: var(--color-accent-text);
-    }
-  }
-
-  &__grammar-label {
-    margin-block-end: vars.$spacer * 0.75;
-
-    @include mx.eyebrow(0.7rem, 0.08em);
-  }
-
-  &__grammar-entry {
-    margin-block-end: 0.875rem;
-  }
-
-  &__grammar-word {
-    font-weight: 700;
-    font-size: 1rem;
-    padding-block-end: 0.25rem;
-    border-block-end: 1px dashed var(--orange-200);
-    margin-block-end: 0.5rem;
-  }
-
-  &__grammar-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem vars.$spacer * 0.5;
-  }
-
-  &__grammar-tag {
-    background: color-mix(in srgb, var(--orange-100) 80%, white);
-    border: 1px solid var(--orange-200);
-    border-radius: 4px;
-    padding: 0.125rem 0.625rem;
-    font-size: 0.8rem;
-
-    @include butler-mx.dark-mode-class {
-      background: color-mix(in srgb, var(--new-blue-400) 70%, black);
-      border-color: var(--orange-600);
     }
   }
 }

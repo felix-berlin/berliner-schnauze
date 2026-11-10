@@ -16,7 +16,11 @@ import * as migration_20261101_210000_clear_legacy_word_meta from './20261101_21
 import * as migration_20261101_234120_mcp_api_keys from './20261101_234120_mcp_api_keys';
 import * as migration_20261103_130124_suggestions_similar_words from './20261103_130124_suggestions_similar_words';
 import * as migration_20261103_163400_word_feedback from './20261103_163400_word_feedback';
-import * as migration_20261105_110449_bon_games from './20261105_110449_bon_games';
+import * as migration_20261105_112655_word_stats from './20261105_112655_word_stats';
+import * as migration_20261106_142557_retention_task from './20261106_142557_retention_task';
+import * as migration_20261106_150000_hash_visitor_ids from './20261106_150000_hash_visitor_ids';
+import * as migration_20261106_165028_feedback_visitor_nullable from './20261106_165028_feedback_visitor_nullable';
+import * as migration_20261110_212112_bon_games from './20261110_212112_bon_games';
 
 export const migrations = [
   {
@@ -110,8 +114,28 @@ export const migrations = [
     name: '20261103_163400_word_feedback',
   },
   {
-    up: migration_20261105_110449_bon_games.up,
-    down: migration_20261105_110449_bon_games.down,
-    name: '20261105_110449_bon_games'
+    up: migration_20261105_112655_word_stats.up,
+    down: migration_20261105_112655_word_stats.down,
+    name: '20261105_112655_word_stats',
+  },
+  {
+    up: migration_20261106_142557_retention_task.up,
+    down: migration_20261106_142557_retention_task.down,
+    name: '20261106_142557_retention_task',
+  },
+  {
+    up: migration_20261106_150000_hash_visitor_ids.up,
+    down: migration_20261106_150000_hash_visitor_ids.down,
+    name: '20261106_150000_hash_visitor_ids',
+  },
+  {
+    up: migration_20261106_165028_feedback_visitor_nullable.up,
+    down: migration_20261106_165028_feedback_visitor_nullable.down,
+    name: '20261106_165028_feedback_visitor_nullable',
+  },
+  {
+    up: migration_20261110_212112_bon_games.up,
+    down: migration_20261110_212112_bon_games.down,
+    name: '20261110_212112_bon_games'
   },
 ];

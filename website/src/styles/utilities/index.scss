@@ -18,6 +18,8 @@
 .u-max-body-width {
   $spacing-outer: 20px;
 
+  --page-gutter: #{$spacing-outer};
+
   max-inline-size: vars.$body-max-width + $spacing-outer;
   margin: 0 auto;
   padding: 0 $spacing-outer;

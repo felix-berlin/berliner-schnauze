@@ -15,12 +15,13 @@ const audioRows = (name: string): Field => ({
   fields: [gender, { name: "audio", type: "upload", relationTo: "media" }],
 });
 
-/** comments.word and word_feedback.word_id are required (not-null FK): take the word's comments and feedback along. Top-level comments first, their hook removes the replies. */
+/** comments.word, word_feedback.word_id and word_stats.word_id are required (not-null FK): take the word's comments, feedback and daily stats along. Top-level comments first, their hook removes the replies. */
 const deleteComments: CollectionBeforeDeleteHook = async ({ id, req }) => {
   // A bulk delete reports per-document failures in `errors` instead of throwing: a row left behind would only
   // surface later as an opaque not-null FK error on the word delete.
   const removed = [
     await req.payload.delete({ collection: "word-feedback", where: { word: { equals: id } }, req }),
+    await req.payload.delete({ collection: "word-stats", where: { word: { equals: id } }, req }),
     await req.payload.delete({
       collection: "comments",
       where: { word: { equals: id }, parent: { exists: false } },
@@ -30,7 +31,7 @@ const deleteComments: CollectionBeforeDeleteHook = async ({ id, req }) => {
   const failed = removed.flatMap((r) => r.errors ?? []);
   if (failed.length)
     throw new Error(
-      `Could not remove the word's feedback/comments: ${failed.map((e) => e.message).join("; ")}`,
+      `Could not remove the word's feedback/stats/comments: ${failed.map((e) => e.message).join("; ")}`,
     );
 };
 

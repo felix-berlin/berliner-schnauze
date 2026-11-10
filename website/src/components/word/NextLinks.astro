@@ -1,0 +1,46 @@
+---
+import '@styles/components/_next-links.scss';
+import RandomWordButton from '@components/RandomWordButton.vue';
+import type { WordRef } from '@utils/wordHelper';
+import ArrowDownAZ from '~icons/lucide/arrow-down-a-z';
+import Plus from '~icons/lucide/plus';
+import Shuffle from '~icons/lucide/shuffle';
+import TrendingUp from '~icons/lucide/trending-up';
+
+interface Props {
+  words: WordRef[];
+  /** The word is in this week's top 10: the trend link only makes sense then (as in the trend box). */
+  trending?: boolean;
+}
+
+const { words, trending = false } = Astro.props;
+---
+
+<nav class='c-next-links' aria-labelledby='n-weiter'>
+  <h2 class='c-band' id='n-weiter'>Und nu?</h2>
+  <div class='c-next-links__grid'>
+    {/* No trending page exists yet: like the trend box link, this goes to the word index. */}
+    {trending && (
+      <a class='c-next-link' href='/wort'>
+        <TrendingUp aria-hidden='true' height='18' width='18' />
+        <span class='c-next-link__text'><b>Ooch im Trend</b></span>
+        <span aria-hidden='true' class='c-next-link__arrow'>→</span>
+      </a>
+    )}
+    <RandomWordButton class='c-next-link' words={words}>
+      <Shuffle aria-hidden='true' height='18' width='18' />
+      <span class='c-next-link__text'><b>Zufälliges Wort</b>{' '}<span class='t-small'>Lass dich überraschen</span></span>
+      <span aria-hidden='true' class='c-next-link__arrow'>→</span>
+    </RandomWordButton>
+    <a class='c-next-link' href='/wort'>
+      <ArrowDownAZ aria-hidden='true' height='18' width='18' />
+      <span class='c-next-link__text'><b>Wort-Index</b><span class='t-small'>Alle Wörter von A bis Z</span></span>
+      <span aria-hidden='true' class='c-next-link__arrow'>→</span>
+    </a>
+    <a class='c-next-link' href='/wort-vorschlagen'>
+      <Plus aria-hidden='true' height='18' width='18' />
+      <span class='c-next-link__text'><b>Wort vorschlagen</b><span class='t-small'>Fehlt dir ’n Wort? Her damit!</span></span>
+      <span aria-hidden='true' class='c-next-link__arrow'>→</span>
+    </a>
+  </div>
+</nav>

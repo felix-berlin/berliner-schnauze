@@ -1,0 +1,17 @@
+@use "@sass-butler/mixins" as butler-mx;
+
+// Borderless wash badge of the word page (Spec §8.2/§8.4): hero badges and the book shelf ad label.
+@mixin badge-wash {
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-badge);
+  color: var(--color-ink-strong);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+
+  @include butler-mx.dark-mode-class {
+    color: var(--orange-200);
+  }
+}

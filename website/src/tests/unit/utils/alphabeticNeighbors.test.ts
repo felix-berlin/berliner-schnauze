@@ -1,7 +1,7 @@
+import type { WordRef } from "@utils/wordHelper";
+
 import { alphabeticNeighbors } from "@utils/wordHelper";
 import { describe, it, expect } from "vitest";
-
-import type { WordRef } from "@utils/wordHelper";
 
 const makeWord = (berlinerisch: string, id: string): WordRef =>
   ({

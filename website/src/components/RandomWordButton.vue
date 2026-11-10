@@ -8,7 +8,7 @@
     data-content-piece="Zufälliges Wort"
     :data-content-target="routeToWord(randomElement(words).slug)"
   >
-    <Dices /> <span>zufälliges Wort</span>
+    <slot><Dices /> <span>zufälliges Wort</span></slot>
   </a>
 </template>
 
@@ -20,11 +20,11 @@ import { randomElement, routeToWord } from "@utils/helpers.ts";
 import Dices from "virtual:icons/lucide/dices";
 import { ref } from "vue";
 
-interface RelatedWordsProps {
+interface RandomWordButtonProps {
   words: WordRef[];
 }
 
-const { words } = defineProps<RelatedWordsProps>();
+const { words } = defineProps<RandomWordButtonProps>();
 
 const root = ref<HTMLAnchorElement | null>(null);
 useContentTracking(root);

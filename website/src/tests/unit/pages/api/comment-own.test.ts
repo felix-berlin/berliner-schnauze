@@ -48,7 +48,10 @@ describe("PATCH /api/comments/:id", () => {
     const res = await call(PATCH, { editKey: KEY, text: "neu jeschrieben" });
     expect(res.status).toBe(200);
     const body = await res.json();
-    expect(body).toMatchObject({ comment: { edited: true, id: 9, text: "neu jeschrieben" }, pending: false });
+    expect(body).toMatchObject({
+      comment: { edited: true, id: 9, text: "neu jeschrieben" },
+      pending: false,
+    });
     expect(JSON.stringify(body)).not.toContain(hash(KEY));
     const arg = update.mock.calls[0][0];
     expect(arg.data).toEqual({ text: "neu jeschrieben" });
@@ -114,7 +117,16 @@ describe("DELETE /api/comments/:id", () => {
     const res = await call(DELETE, { editKey: KEY });
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ deleted: true });
-    expect(update.mock.calls[0][0]).toMatchObject({ data: { authorName: null, status: "deleted", text: "[gelöscht]" }, id: 9 });
+    expect(update.mock.calls[0][0]).toMatchObject({
+      data: {
+        authorName: null,
+        authorTag: null,
+        editKeyHash: null,
+        status: "deleted",
+        text: "[gelöscht]",
+      },
+      id: 9,
+    });
   });
 
   it("403 wrong key or after the window", async () => {
@@ -129,11 +141,13 @@ describe("own comment edge cases", () => {
   it("400 without an id, 403 when the stored hash is missing", async () => {
     const noId = await PATCH({
       params: {},
-      request: new Request("https://x.test/api/comments", { body: JSON.stringify({ editKey: KEY, text: "neu jeschrieben" }), method: "POST" }),
+      request: new Request("https://x.test/api/comments", {
+        body: JSON.stringify({ editKey: KEY, text: "neu jeschrieben" }),
+        method: "POST",
+      }),
     } as unknown as APIContext);
     expect(noId.status).toBe(400);
     findByID.mockResolvedValue(stored({ editKeyHash: null }));
     expect((await call(DELETE, { editKey: KEY })).status).toBe(403);
   });
 });
-

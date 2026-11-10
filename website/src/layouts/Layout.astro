@@ -58,8 +58,11 @@ const {
 
 <script>
   import { initHistoryNavigationFallback } from '@utils/historyNavigationFallback';
+  import { initWordLoading } from '@utils/wordLoading';
 
   // Intentionally NOT wrapped in astro:page-load: the popstate listener must
   // attach exactly once per tab session, not re-attach on every transition.
   initHistoryNavigationFallback();
+  // Same for the word page loading skeleton: one pair of listeners per tab session.
+  initWordLoading();
 </script>

@@ -103,6 +103,7 @@ export interface Config {
     'comment-votes': CommentVote;
     'comment-reports': CommentReport;
     'word-feedback': WordFeedback;
+    'word-stats': WordStat;
     'bon-games': BonGame;
     redirects: Redirect;
     'payload-mcp-api-keys': PayloadMcpApiKey;
@@ -126,6 +127,7 @@ export interface Config {
     'comment-votes': CommentVotesSelect<false> | CommentVotesSelect<true>;
     'comment-reports': CommentReportsSelect<false> | CommentReportsSelect<true>;
     'word-feedback': WordFeedbackSelect<false> | WordFeedbackSelect<true>;
+    'word-stats': WordStatsSelect<false> | WordStatsSelect<true>;
     'bon-games': BonGamesSelect<false> | BonGamesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'payload-mcp-api-keys': PayloadMcpApiKeysSelect<false> | PayloadMcpApiKeysSelect<true>;
@@ -145,6 +147,7 @@ export interface Config {
     company: Company;
     home: Home;
     anki: Anki;
+    'payload-jobs-stats': PayloadJobsStat;
   };
   globalsSelect: {
     navigation: NavigationSelect<false> | NavigationSelect<true>;
@@ -152,6 +155,7 @@ export interface Config {
     company: CompanySelect<false> | CompanySelect<true>;
     home: HomeSelect<false> | HomeSelect<true>;
     anki: AnkiSelect<false> | AnkiSelect<true>;
+    'payload-jobs-stats': PayloadJobsStatsSelect<false> | PayloadJobsStatsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -161,6 +165,7 @@ export interface Config {
   user: User | PayloadMcpApiKey;
   jobs: {
     tasks: {
+      retention: TaskRetention;
       schedulePublish: TaskSchedulePublish;
       inline: {
         input: unknown;
@@ -543,7 +548,7 @@ export interface CommentReport {
 export interface WordFeedback {
   id: number;
   word: number | Word;
-  visitor: string;
+  visitor?: string | null;
   reaction?: ('like' | 'dislike') | null;
   usage?: ('say' | 'know' | 'never') | null;
   area?:
@@ -670,6 +675,19 @@ export interface WordFeedback {
   age?: ('u20' | '20-29' | '30-39' | '40-49' | '50-59' | '60-69' | '70-79' | '80plus') | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "word-stats".
+ */
+export interface WordStat {
+  id: number;
+  word: number | Word;
+  day: string;
+  views: number;
+  audio: number;
+  shares: number;
+  clicks: number;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -868,7 +886,7 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'schedulePublish';
+        taskSlug: 'inline' | 'retention' | 'schedulePublish';
         taskID: string;
         input?:
           | {
@@ -901,10 +919,19 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'schedulePublish') | null;
+  taskSlug?: ('inline' | 'retention' | 'schedulePublish') | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
+  meta?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -962,6 +989,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'word-feedback';
         value: number | WordFeedback;
+      } | null)
+    | ({
+        relationTo: 'word-stats';
+        value: number | WordStat;
       } | null)
     | ({
         relationTo: 'bon-games';
@@ -1296,6 +1327,18 @@ export interface WordFeedbackSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "word-stats_select".
+ */
+export interface WordStatsSelect<T extends boolean = true> {
+  word?: T;
+  day?: T;
+  views?: T;
+  audio?: T;
+  shares?: T;
+  clicks?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "bon-games_select".
  */
 export interface BonGamesSelect<T extends boolean = true> {
@@ -1394,6 +1437,7 @@ export interface PayloadJobsSelect<T extends boolean = true> {
   queue?: T;
   waitUntil?: T;
   processing?: T;
+  meta?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1613,6 +1657,24 @@ export interface Anki {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs-stats".
+ */
+export interface PayloadJobsStat {
+  id: number;
+  stats?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "navigation_select".
  */
 export interface NavigationSelect<T extends boolean = true> {
@@ -1760,6 +1822,16 @@ export interface AnkiSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs-stats_select".
+ */
+export interface PayloadJobsStatsSelect<T extends boolean = true> {
+  stats?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "collections_widget".
  */
 export interface CollectionsWidget {
@@ -1767,6 +1839,14 @@ export interface CollectionsWidget {
     [k: string]: unknown;
   };
   width: 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskRetention".
+ */
+export interface TaskRetention {
+  input?: unknown;
+  output?: unknown;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -4,33 +4,39 @@ import '@styles/objects/_word.scss';
 import '@styles/components/_word-page-layout.scss';
 import '@styles/plugins/astro-breadcrumbs.scss';
 
-import RandomWordButton from '@components/RandomWordButton.vue';
-import RelatedWords from '@components/RelatedWords.vue';
-import WordAnagrams from '@components/word/WordAnagrams.astro';
-import WordGalleryCol from '@components/word/WordGalleryCol.astro';
+import Lightbox from '@components/word/Lightbox.vue';
+import WordImages from '@components/word/WordImages.astro';
+import { getImage } from 'astro:assets';
+import { toWordImages } from '@utils/wordImages.ts';
 import WordHero from '@components/word/WordHero.astro';
+import WordOfflineBanner from '@components/word/WordOfflineBanner.vue';
 import WordLearnMore from '@components/word/WordLearnMore.astro';
 import WordComments from '@components/comments/WordComments.vue';
 import WordFeedbackCard from '@components/word-feedback/WordFeedbackCard.vue';
 import WordPageFooter from '@components/word/WordPageFooter.astro';
+import WordAudio from '@components/word/WordAudio.vue';
+import WordTrendBox from '@components/word/WordTrendBox.astro';
 import WordSectionBeispiele from '@components/word/WordSectionBeispiele.astro';
 import WordSectionEtymologie from '@components/word/WordSectionEtymologie.astro';
-import WordSectionGrammatik from '@components/word/WordSectionGrammatik.astro';
-import WordSectionLinguistik from '@components/word/WordSectionLinguistik.astro';
-import WordSectionNachbarn from '@components/word/WordSectionNachbarn.astro';
-import WordSectionOrthographie from '@components/word/WordSectionOrthographie.astro';
-import WordSectionPhonologie from '@components/word/WordSectionPhonologie.astro';
-import WordSectionVerwandteWorte from '@components/word/WordSectionVerwandteWorte.astro';
-import BookRecommendations from '@components/word/BookRecommendations.astro';
+import BookShelf from '@components/word/BookShelf.astro';
+import NextLinks from '@components/word/NextLinks.astro';
+import WordNeighborhood from '@components/word/WordNeighborhood.astro';
+import WordAnalysis from '@components/word/WordAnalysis.astro';
 import WordSidebar from '@components/word/WordSidebar.astro';
+import WordTabBar from '@components/word/WordTabBar.vue';
 import Layout from '@layouts/Layout.astro';
 import { fetchAffiliateData } from '@services/payload/site.ts';
 import { fetchDraftWord, fetchWordBySlug, translationTexts } from '@services/payload/words.ts';
+import { voiceSources } from '@composables/useVoicePlayer.ts';
+import { getWordTrend } from '@services/payload/wordTrend.ts';
 import { fetchWordRefs, toWordRef } from '@services/payload/wordRefs.ts';
 import { metaToSeo } from '@services/payload/seo.ts';
 import { previewDraft } from '@services/preview.ts';
 import { escapeHtml } from 'payload-app/lexical-html';
 import { seoData, canonicalUrl } from '@utils/helpers.ts';
+import { buildWordSections, hasOrigin } from '@utils/wordSections.ts';
+import { hasNeighborhood } from '@utils/wordNeighborhood.ts';
+import { resolvePos } from '@utils/wordPos.ts';
 import {
   alphabeticNeighbors,
   findAnagrams,
@@ -48,6 +54,8 @@ const draft = await previewDraft(Astro, 'words', wordSlug, fetchDraftWord);
 const word = draft ?? (wordSlug ? await fetchWordBySlug(wordSlug) : undefined);
 if (!word) return Astro.rewrite('/404');
 
+// Top 10 of the week; a draft preview has no public numbers.
+const trend = draft ? undefined : await getWordTrend(word.id);
 const wordRef = toWordRef(word);
 const wordRefs = await fetchWordRefs();
 
@@ -67,6 +75,7 @@ const dateModified = word.contentModifiedAt ?? null;
 
 const wordSeoFacts = {
   berlinerisch,
+  example: word.examples.find((e) => e.example)?.example,
   hasAudio: word.berlinerischAudio.length > 0,
   hasEtymology: word.hasInfoText,
   hasExamples: word.examples.some((e) => e.example),
@@ -77,22 +86,37 @@ const wordPageTitle = wordSeoTitle(wordSeoFacts);
 
 const wordTags = word.derived.nlpTags;
 
-const hasImages = word.images.length > 0;
-const hasAnagrams = anagramsResult.length > 0;
-const hasOrthographie = berlinerisch.length > 0;
-const hasLinguistik = berlinerisch.length > 0;
-const hasPhonologie = soundingWordsResult.length > 0 || similarSpellingResult.length > 0;
-const hasNeighbors =
-  alphabeticNeighborsResult.before.length > 0 || alphabeticNeighborsResult.after.length > 0;
-const hasRelatedWords = word.relatedWords.length > 0;
+const wordImages = toWordImages(word.images, word.berlinerisch);
+const hasImages = wordImages.length > 0;
+// Large version for the lightbox (the strip/hero sizes come from WordImages).
+const lightboxImages = await Promise.all(
+  wordImages.map(async ({ alt, credit, height, src, width }) => {
+    const target = Math.min(1600, width); // never upscale a smaller source
+    return { alt, credit, src: (await getImage({ format: 'webp', height: Math.round((target * height) / width), src, width: target })).src };
+  }),
+);
 const { books: affiliateBooks, disclaimers: affiliateDisclaimers } = await fetchAffiliateData();
 // An editor-set word type wins; otherwise the automatic guess, marked as such in the hero.
-const editorialWortart = word.wordTypes[0]?.name;
-const wortartLabel: string | undefined =
-  editorialWortart ?? (wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined);
-const wortartAuto = !editorialWortart;
+const wordPos = resolvePos(word.wordTypes[0]?.name, wordTags);
+
+const neighborhood = {
+  after: alphabeticNeighborsResult.after,
+  before: alphabeticNeighborsResult.before,
+  // Already in the analysis band: not repeated in the Umfeld card.
+  exclude: [...soundingWordsResult, ...similarSpellingResult].map((w) => w.slug),
+  related: word.relatedWords,
+  word: berlinerisch,
+};
+
+const sections = buildWordSections({
+  draft: !!draft,
+  hasExamples: wordSeoFacts.hasExamples,
+  hasNeighborhood: hasNeighborhood(neighborhood),
+  hasOrigin: hasOrigin(word),
+});
 
 const firstImage = word.images[0];
+const voices = voiceSources(word.berlinerischAudio);
 const firstAudio = word.berlinerischAudio[0];
 const seo = metaToSeo(word.meta, 'article');
 
@@ -108,7 +132,8 @@ const ogImage = seo.opengraphImage
         width: firstImage.width ? String(firstImage.width) : undefined,
       }
     : {
-        alt: berlinerisch,
+        // The generated card shows the word and its first meaning: say both.
+        alt: translations[0] ? `${berlinerisch} auf Berlinerisch: ${translations[0]}` : berlinerisch,
         height: '630',
         sourceUrl: generatedOgImageUrl,
         width: '1200',
@@ -144,10 +169,21 @@ const schemaJson = () => {
       disambiguatingDescription: `Berliner Dialektwort, ${word.article}`,
     }),
     identifier: canonicalUrl(Astro.url.pathname, Astro.site),
-    publisher: { '@id': `${Astro.site}#organization` },
+    // Described here, not only referenced: Google does not resolve an @id that another page defines.
+    publisher: {
+      '@id': `${Astro.site}#organization`,
+      '@type': 'Organization',
+      name: 'Berliner Schnauze',
+      url: String(Astro.site),
+    },
     speakable: {
       '@type': 'SpeakableSpecification',
-      cssSelector: ['.c-word-hero__title', '.c-single-word__translation-item', '.c-single-word__example'],
+      cssSelector: [
+        '.c-word-hero__title',
+        '.c-word-meanings .t-em',
+        // Only rendered with examples: a selector that matches nothing is noise.
+        ...(exampleComments.length > 0 ? ['.c-word-examples__text'] : []),
+      ],
     },
     ...(firstImage && {
       image: {
@@ -177,7 +213,7 @@ const schemaJson = () => {
         '@type': 'AudioObject',
         contentUrl: firstAudio.audio.url,
         description: `Berliner Aussprache von „${berlinerisch}"`,
-        encodingFormat: 'audio/mpeg',
+        encodingFormat: firstAudio.audio.mimeType || undefined,
         inLanguage: 'de-DE',
         name: `Aussprache: ${berlinerisch}`,
       },
@@ -207,31 +243,30 @@ const schemaJson = () => {
     <script set:html={schemaJson()} type='application/ld+json' />
   </Fragment>
 
+  <WordOfflineBanner client:load />
+
   <nav class='c-page-topbar' aria-label='Brotkrümelpfad'>
     <Breadcrumbs indexText='Start' linkTextFormat='capitalized' truncated={true}>
       <ChevronRight height='20' slot='separator' width='20' />
     </Breadcrumbs>
   </nav>
 
-  <article class='c-word-page'>
-    <WordSidebar
-      hasAnagrams={hasAnagrams}
-      hasLinguistik={hasLinguistik}
-      hasNeighbors={hasNeighbors}
-      hasOrthographie={hasOrthographie}
-      hasPhonologie={hasPhonologie}
-      hasRelatedWords={hasRelatedWords}
-      word={word}
-      wordTags={wordTags}
-    />
+  <article class='c-word-page' data-pulse-word={draft ? undefined : word.id}>
+    <WordTabBar client:load sections={sections} />
+    <WordSidebar posLabel={wordPos?.pos} sections={sections} word={word} />
 
-    <div class:list={['c-word-main', hasImages && 'c-word-main--with-gallery']}>
-      <WordHero word={word} wortartLabel={wortartLabel} wortartAuto={wortartAuto} draft={!!draft} />
+    <div class='c-word-main'>
+      <WordHero images={wordImages} learnMore={word.learnMore} word={word} pos={wordPos?.pos} posAuto={wordPos?.auto} meanings={translations} draft={!!draft} trend={trend} />
+
+      {hasImages && <WordImages images={wordImages} learnMore={word.learnMore} placement='strip' />}
+      {/* Only the lightbox needs JS: the strip is server-rendered, its buttons open the dialog once this hydrates. */}
+      {hasImages && <Lightbox client:idle images={lightboxImages} />}
 
       <div class='c-word-main__content'>
-        <WordSectionEtymologie word={word} />
+        {trend && <WordTrendBox {...trend} />}
 
-        <WordSectionBeispiele examples={word.examples} />
+        {/* client:visible: the row sits right under the hero, but nothing needs JS before a click and the buttons are server-rendered. */}
+        {(voices.m || voices.w) && <WordAudio client:visible sources={voices} wordId={draft ? undefined : word.id} />}
 
         {!draft && (
           <div id='sagste-det-noch'>
@@ -239,53 +274,57 @@ const schemaJson = () => {
           </div>
         )}
 
-        <WordSectionOrthographie
+        <WordSectionEtymologie word={word} />
+
+        <WordSectionBeispiele examples={word.examples} />
+
+        <WordAnalysis
           allWords={wordRefs}
+          anagrams={anagramsResult}
           parts={word.derived.decomposition ?? []}
-          word={berlinerisch}
-        />
-
-        <WordSectionLinguistik word={berlinerisch} />
-
-        <WordSectionGrammatik wordTags={wordTags} />
-
-        <WordSectionPhonologie
-          soundingWords={soundingWordsResult}
+          pos={wordPos?.pos}
           similarSpelling={similarSpellingResult}
-        />
-
-        <WordAnagrams anagrams={anagramsResult} />
-
-        <WordSectionNachbarn neighbors={alphabeticNeighborsResult} />
-
-        <WordSectionVerwandteWorte
-          relatedWords={word.relatedWords}
-          currentWord={berlinerisch}
+          soundingWords={soundingWordsResult}
+          word={berlinerisch}
+          wordTags={wordTags}
         />
 
         {!hasImages && word.learnMore && <WordLearnMore learnMore={word.learnMore} />}
 
-        <BookRecommendations books={affiliateBooks} disclaimers={affiliateDisclaimers} />
+        <BookShelf books={affiliateBooks} disclaimers={affiliateDisclaimers} />
+
+        <WordNeighborhood {...neighborhood} />
+
+        {!draft && (
+          <div id='kommentare'>
+            <WordComments client:visible wordId={word.id} />
+          </div>
+        )}
+
+        <NextLinks trending={!!trend} words={wordRefs} />
+
+        <WordPageFooter publishedAt={word.publishedAt} modifiedAt={word.contentModifiedAt} />
       </div>
 
-      {hasImages && <WordGalleryCol images={word.images} learnMore={word.learnMore} />}
     </div>
   </article>
 
-  {!draft && (
-    <div id='kommentare'>
-      <WordComments client:visible wordId={word.id} />
-    </div>
-  )}
-
-  <WordPageFooter publishedAt={word.publishedAt} modifiedAt={word.contentModifiedAt} />
-
-  <RelatedWords words={wordRefs} currentWord={berlinerisch}>
-    <li>
-      <RandomWordButton class:list='c-related-words__word is-random' words={wordRefs} />
-    </li>
-  </RelatedWords>
 </Layout>
+
+<script>
+  import { reportWord } from '@utils/wordPulse.ts';
+
+  // Draft previews carry no data-pulse-word and are never reported. The #verwandte list
+  // (WordNeighborhood) is replaced on every navigation, so its listener cannot pile up.
+  document.addEventListener('astro:page-load', () => {
+    const id = Number(document.querySelector<HTMLElement>('[data-pulse-word]')?.dataset.pulseWord);
+    if (!id) return;
+    reportWord(id, 'view');
+    document.getElementById('verwandte')?.addEventListener('click', (e) => {
+      if ((e.target as Element).closest('a')) reportWord(id, 'click');
+    });
+  });
+</script>
 
 <script>
   // The comments island hydrates only when visible; a comment link brings it into view, it then scrolls to the card.

@@ -159,7 +159,9 @@ describe("makeOramaSearchIndex — stored derived fields", () => {
   });
 
   it("prefers the editor-set word types over the automatic ones", () => {
-    const result = makeOramaSearchIndex(makeWord({ derived, wordTypes: [{ id: 1, name: "Nomen" }] }));
+    const result = makeOramaSearchIndex(
+      makeWord({ derived, wordTypes: [{ id: 1, name: "Nomen" }] }),
+    );
     expect(result.berlinerischWordTypes).toEqual(["Nomen"]);
   });
 

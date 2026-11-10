@@ -4,6 +4,9 @@ packages:
 
 overrides:
   "@vitejs/plugin-vue": "^6.0.7"
+  # dedupe picked the 2.0.0-beta for @astrojs/check's wasm peers; its bridge crashes astro check on exit
+  "@emnapi/core": "1.11.3"
+  "@emnapi/runtime": "1.11.3"
 
 allowBuilds:
   "@infisical/cli": true

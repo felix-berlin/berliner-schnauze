@@ -33,11 +33,18 @@ describe("WordSectionBeispiele.astro", () => {
     expect(result).toContain("Det is keen Zufall.");
   });
 
-  it("renders the section number element", async () => {
+  it("renders each example with its explanation and no audio group without audio", async () => {
     const result = await render({
-      examples: [{ example: "Det is keen Zufall.", exampleAudio: [] }],
+      examples: [
+        { example: "Zweet Satz.", exampleAudio: [], exampleExplanation: "Und noch eene." },
+        { example: "Dritter Satz.", exampleAudio: [] },
+      ],
     });
-    expect(result).toContain("c-section-card__num");
+    expect(result).toContain("Zweet Satz.");
+    expect(result).toContain("– Und noch eene.");
+    expect(result.match(/<li/g)).toHaveLength(2);
+    expect(result).not.toContain("c-voice-buttons");
+    expect(result).not.toContain("anhören");
   });
 
   it("renders aria-labelledby heading-beispiele", async () => {

@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
+import { SELF_DELETED } from "payload-app/comments";
 import { getThread, hashEditKey, toPublic, visitorId } from "@services/payload/comments.ts";
 import { orNull, positiveInt, reply } from "@utils/apiReply.ts";
 import { commentEditSchema } from "@utils/commentSchema.ts";
@@ -65,7 +66,7 @@ export const PATCH = own(
 );
 export const DELETE = own(
   deleteSchema,
-  () => ({ authorName: null, pseudonym: null, status: "deleted", text: "[gelöscht]" }),
+  () => ({ ...SELF_DELETED }),
   () => reply({ deleted: true }, 200),
 );
 

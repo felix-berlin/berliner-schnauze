@@ -36,12 +36,14 @@ if [ -f "$dump" ]; then
   pnpm --filter payload-app migrate
   # Login data of the production users never lands on a dev machine: hashes, API keys, sessions, MCP keys.
   # The user rows stay (posts, pages and the company global point at them); scripts/orca-setup.sh adds the fixed dev admin.
-  echo "== strip login data"
+  echo "== strip login data and feedback answers"
   psql_admin -d "$build" -c "
     UPDATE users SET hash = NULL, salt = NULL, api_key = NULL, api_key_index = NULL, enable_a_p_i_key = false,
       reset_password_token = NULL, reset_password_expiration = NULL, login_attempts = 0, lock_until = NULL;
+    -- Profile answers (Ortsteil, age, origin) with a visitor hash stay out of dev databases. word_feedback is in the
+    -- same TRUNCATE as the lock tables: payload_locked_documents_rels has a foreign key to it.
     TRUNCATE users_sessions, payload_mcp_api_keys, payload_preferences_rels, payload_preferences,
-      payload_locked_documents_rels, payload_locked_documents RESTART IDENTITY;"
+      payload_locked_documents_rels, payload_locked_documents, word_feedback RESTART IDENTITY;"
 else
   echo "!! no backup at $dump: building the template from the invented e2e data (no real words, images or audio)" >&2
   pnpm --filter payload-app migrate

@@ -17,41 +17,50 @@ const json = (body: unknown) => ({
   headers: { "Content-Type": "application/json" },
 });
 
-/** Runs a request; null (plus a toast) when it failed. 429 keeps the input, the caller decides what else. */
-const call = async <T>(url: string, init?: RequestInit, notFound?: string): Promise<null | T> => {
+/**
+ * Runs a request; null (plus a toast) when it failed. 429 keeps the input, the caller decides what else.
+ * `onFail`: no failure toast; the reason goes to the caller, whose form shows it in its own error box (one
+ * announcement channel). `undefined` = no specific reason, the box says the generic text itself.
+ */
+const GENERIC = "Dit hat leider nich geklappt.";
+const call = async <T>(
+  url: string,
+  init?: RequestInit,
+  notFound?: string,
+  onFail?: (reason: string | undefined) => void,
+): Promise<null | T> => {
+  /** `reason` undefined = generic. */
+  const fail = (reason: string | undefined, status: "error" | "warning"): null => {
+    if (onFail) onFail(reason);
+    else createToastNotify({ message: reason ?? GENERIC, status });
+    return null;
+  };
   try {
     const res = await fetch(url, init);
     if (res.status === 404 && notFound) {
       createToastNotify({ message: notFound, status: "info" });
       return null;
     }
-    if (res.status === 429) {
-      createToastNotify({
-        message: "Ma langsam, Keule – versuch's gleich nochmal.",
-        status: "warning",
-      });
-      return null;
-    }
+    if (res.status === 429)
+      return fail("Ma langsam, Keule – versuch's gleich nochmal.", "warning");
     const body = (await res.json().catch(() => null)) as (T & { error?: string }) | null;
     // A 2xx without a JSON body is a failure too: the caller would treat `{}` as done.
     if (!res.ok || !body) {
-      createToastNotify({
-        message: body?.error || "Dit hat leider nich geklappt.",
-        status: "error",
-      });
-      return null;
+      // 4xx with a message is the user's problem; a server error or a non-JSON answer is ours.
+      if (res.status >= 500 || !body)
+        reportError(new Error(`[comments] ${init?.method ?? "GET"} ${url} -> ${res.status}`));
+      return fail(body?.error || undefined, "error");
     }
     return body;
   } catch (error) {
     // fetch() rejects with a TypeError when offline; anything else is a bug worth reporting.
     if (!(error instanceof TypeError)) reportError(error);
-    createToastNotify({ message: "Dit hat leider nich geklappt.", status: "error" });
-    return null;
+    return fail(undefined, "error");
   }
 };
 
-const told = (pending: boolean): PostResult => {
-  if (pending)
+const told = (pending: boolean, quiet = false): PostResult => {
+  if (pending && !quiet)
     createToastNotify({
       message: "Dein Kommentar hat 'nen Link, den kieken wir uns erst an.",
       status: "info",
@@ -68,6 +77,8 @@ export const useComments = (wordId: number) => {
   const loaded = ref(false);
   /** The last page failed to load; the list offers a retry instead of waiting for a scroll that never comes. */
   const failed = ref(false);
+  /** Why the last post/edit failed (429 or the server's message), "" when only the generic text applies. */
+  const failReason = ref("");
   const busy = ref(new Set<number>());
   /** The comment a link points at; its card shows the highlight. */
   const highlighted = ref<null | number>(null);
@@ -158,10 +169,13 @@ export const useComments = (wordId: number) => {
   });
 
   const post = async (input: Input, turnstileToken: string): Promise<PostResult> => {
-    const data = await call<{ comment?: PublicComment; editKey: string; pending: boolean }>(API, {
-      ...json({ ...input, turnstileToken, wordId }),
-      method: "POST",
-    });
+    failReason.value = "";
+    const data = await call<{ comment?: PublicComment; editKey: string; pending: boolean }>(
+      API,
+      { ...json({ ...input, turnstileToken, wordId }), method: "POST" },
+      undefined,
+      (reason) => (failReason.value = reason ?? ""),
+    );
     if (!data) return "error";
     if (data.comment) {
       keys.value = {
@@ -175,14 +189,17 @@ export const useComments = (wordId: number) => {
       else comments.value.unshift(data.comment);
       total.value += 1;
     }
-    return told(data.pending);
+    return told(data.pending, !input.parentId); // a new comment: the success box says it
   };
 
   const edit = async (id: number, text: string): Promise<PostResult> => {
-    const data = await call<{ comment?: PublicComment; pending: boolean }>(`${API}/${id}`, {
-      ...json({ editKey: keys.value[id]?.key, text }),
-      method: "PATCH",
-    });
+    failReason.value = "";
+    const data = await call<{ comment?: PublicComment; pending: boolean }>(
+      `${API}/${id}`,
+      { ...json({ editKey: keys.value[id]?.key, text }), method: "PATCH" },
+      undefined,
+      (reason) => (failReason.value = reason ?? ""),
+    );
     const target = find(id);
     if (!data || !target) return data ? "ok" : "error";
     if (data.comment) Object.assign(target, { ...data.comment, replies: target.replies });
@@ -217,23 +234,33 @@ export const useComments = (wordId: number) => {
     return Boolean(data);
   };
 
-  const report = async (id: number, reason: string, turnstileToken: string): Promise<boolean> =>
-    Boolean(
+  // One report per device and comment (spec §9a): remembered in the browser, the server answers repeats alike.
+  const reportedIds = useLocalStorage<number[]>("bs-reported-comments", []);
+  if (!Array.isArray(reportedIds.value)) reportedIds.value = [];
+  const isReported = (id: number): boolean => reportedIds.value.includes(id);
+
+  const report = async (id: number, reason: string, turnstileToken: string): Promise<boolean> => {
+    const ok = Boolean(
       await call("/api/comment-reports", {
         ...json({ commentId: id, reason, turnstileToken }),
         method: "POST",
       }),
     );
+    if (ok && !isReported(id)) reportedIds.value = [id, ...reportedIds.value].slice(0, 200);
+    return ok;
+  };
 
   return {
     busy,
     canEdit,
     comments,
     edit,
+    failReason,
     failed,
     hasMore,
     highlighted,
     isOwn,
+    isReported,
     loadMore,
     loaded,
     loading,
@@ -249,10 +276,16 @@ export const useComments = (wordId: number) => {
 };
 
 export type CommentsContext = ReturnType<typeof useComments> & {
+  /** Browser connectivity: votes and writing lock (aria-disabled) while it is false. */
+  online: Ref<boolean>;
+  /** Mounts the Turnstile widget; called when a reply/report form opens, before any field is focused. */
+  armCaptcha: () => void;
   /** Re-issues the shared captcha token after it was spent. */
   resetCaptcha: () => void;
-  /** The current captcha token, or null (with a toast) while the check is still running. */
-  takeToken: () => null | string;
+  /** The captcha check cannot run (blocked script, bad key): waiting would never help. */
+  captchaFailed: Ref<boolean>;
+  /** The current captcha token, or null while the check runs (a toast, unless `quiet`: the form says it itself). */
+  takeToken: (quiet?: boolean) => null | string;
   token: Ref<string>;
 };
 

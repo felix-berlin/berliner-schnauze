@@ -1,38 +1,41 @@
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 
+// The card is a .c-section-card (header, body); this adds the poll's own parts.
 .c-word-feedback-card {
-  @include mx.paper-card;
-
-  display: grid;
-  gap: vars.$spacer;
-  padding: vars.$spacer * 1.25;
-  margin-block: vars.$spacer * 2;
-
-  &__header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: vars.$spacer * 0.25 vars.$spacer;
-  }
-
-  &__title {
-    @include mx.paper-card-title;
-
-    margin: 0;
+  &__body {
+    display: grid;
+    gap: 1.25rem;
   }
 
   &__count {
+    margin-inline-start: auto;
+    color: var(--color-muted);
+    font-size: 0.8rem;
+  }
+
+  &__lead {
+    margin: 0;
+    color: var(--color-ink-strong);
+    font-size: 1.05rem;
+  }
+
+  &__teaser {
     margin: 0;
     color: var(--color-muted);
     font-size: 0.8rem;
   }
 
+  &__tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr));
+    gap: 0.5rem;
+  }
+
   &__options {
     display: flex;
     flex-wrap: wrap;
-    gap: vars.$spacer * 0.5;
+    gap: 0.5rem;
   }
 
   // Answer grids: as many columns as fit, each at least --min wide, buttons left-aligned.
@@ -65,14 +68,14 @@
 
   &__bars {
     display: grid;
-    gap: 0.5rem;
+    gap: 0.625rem;
   }
 
   &__bar {
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: 0.15rem 0.75rem;
-    font-size: 0.875rem;
+    gap: 0.25rem 1rem;
+    font-size: 0.9rem;
 
     &.is-mine .c-word-feedback-card__bar-label {
       font-weight: 700;
@@ -85,9 +88,8 @@
 
   &__bar-track {
     grid-column: 1 / -1;
-    grid-row: 2;
     block-size: 6px;
-    border-radius: var(--radius-xxs, 2px);
+    border-radius: var(--radius-xxs);
     background: var(--surface-chip);
     overflow: hidden;
   }
@@ -100,12 +102,15 @@
 
   &__bar-value {
     color: var(--color-muted);
+    font-size: 0.8rem;
     font-variant-numeric: tabular-nums;
   }
 
   &__step {
     display: grid;
-    gap: vars.$spacer * 0.75;
+    gap: 0.625rem;
+    padding-block-start: 1rem;
+    border-block-start: 1px dashed var(--rule-inner);
   }
 
   // Short fade + slide in from the direction of travel; the old step is gone at once, so nothing waits.
@@ -123,21 +128,21 @@
   &__progress {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: vars.$spacer * 0.5 vars.$spacer;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
   }
 
-  // Always six segments: done / current / open, a skipped optional step is a dashed line.
+  // Always six segments: done / current / open, a step that does not apply is a dashed line.
   &__segments {
     display: flex;
-    flex: 1 1 8rem;
     gap: 4px;
-    max-inline-size: 16rem;
   }
 
   &__segment {
     flex: 1;
     block-size: 4px;
+    border-radius: 1px;
     background: var(--rule-inner);
 
     &.is-done {
@@ -152,7 +157,7 @@
       background: none;
       border-block-start: 1px dashed var(--rule-card);
       block-size: 0;
-      align-self: center;
+      margin-block-start: 2px;
     }
   }
 
@@ -160,46 +165,65 @@
     @include mx.eyebrow;
   }
 
-  // Same face as the other cards' titles, set as a smaller uppercase label (text-transform only: the source text stays).
-  &__question {
-    @include mx.paper-card-title;
-
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+  &__body &__question {
+    margin: 0;
+    color: var(--color-ink-strong);
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 700;
   }
 
   &__why {
     display: grid;
-    gap: 0.5rem;
-    padding: vars.$spacer * 0.75 vars.$spacer;
-    background: var(--surface-callout);
-    font-size: 0.875rem;
+    gap: 0.25rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
 
-    p {
-      margin: 0;
+    b {
+      color: var(--color-ink-strong);
     }
   }
 
+  &__why-note {
+    color: var(--color-muted);
+  }
+
   &__why-link {
-    justify-self: start;
     padding-inline-start: 0;
   }
 
   &__footer {
     display: flex;
     align-items: center;
-    gap: vars.$spacer;
-    padding-block-start: vars.$spacer * 0.25;
-    border-block-start: 1px dashed var(--rule-inner);
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 1.25rem 0.75rem;
   }
 
   &__skip {
     margin-inline-start: auto;
   }
 
-  &__thanks {
+  &__privacy {
+    display: grid;
+    gap: vars.$spacer * 0.25;
+    color: var(--color-muted);
+    font-size: 0.8rem;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  &__remember {
+    display: flex;
+    align-items: baseline;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__done-title {
     margin: 0;
+    color: var(--color-ink-strong);
   }
 
   &__compare {
@@ -212,12 +236,6 @@
     display: grid;
     justify-items: start;
     gap: vars.$spacer * 0.5;
-  }
-
-  &__error {
-    margin: 0;
-    color: color-mix(in srgb, var(--danger) 75%, black);
-    font-size: 0.875rem;
   }
 }
 

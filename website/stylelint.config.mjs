@@ -34,5 +34,7 @@ export default {
     "custom-property-pattern": "^(_?[a-z][a-z0-9]*)(-[a-z0-9]+)*$",
     "value-keyword-case": null,
     "declaration-block-no-redundant-longhand-properties": null,
+    // stylelint 18 rule cannot parse SCSS expressions ($var math, interpolation); shortcut: off until stylelint-config-recommended-scss supports 18.
+    "value-no-invalid": null,
   },
 };

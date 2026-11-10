@@ -1,6 +1,7 @@
 <template>
   <form
     ref="root"
+    @focusin.once="captchaOn = true"
     class="c-suggest-word-form c-form"
     novalidate
     data-track-content
@@ -66,7 +67,12 @@
       </Transition>
     </button>
 
-    <TurnStile :site-key="TURNSTILE_SITE_KEY" @token="turnstileToken = $event" />
+    <TurnStile
+      v-if="captchaOn"
+      :site-key="TURNSTILE_SITE_KEY"
+      @token="onToken"
+      @error="captchaFailed = true"
+    />
   </form>
 </template>
 
@@ -74,6 +80,7 @@
 import TurnStile from "@components/TurnStile.vue";
 import { useContentTracking } from "@composables/useContentTracking";
 import { createToastNotify } from "@stores/toastNotify.ts";
+import { captchaWaitToast } from "@utils/captchaToast.ts";
 import { trackEvent } from "@utils/analytics";
 import { type SuggestWord, suggestWordSchema } from "@utils/suggestWordSchema.ts";
 import { useTimeoutFn } from "@vueuse/core";
@@ -126,6 +133,14 @@ const form = reactive<SuggestWord>({ ...emptyForm(), berlinerWord });
 const errors = ref<Partial<Record<FieldName, string>>>({});
 // The token is checked by the server; a token works once, so the widget is reset after every send.
 const turnstileToken = ref("");
+// Cloudflare's script loads only once the form is used (privacy policy, "Spam-Schutz").
+const captchaOn = ref(false);
+// The check cannot run (script blocked, bad site key): waiting would never help.
+const captchaFailed = ref(false);
+const onToken = (value: string): void => {
+  turnstileToken.value = value;
+  if (value) captchaFailed.value = false;
+};
 const isSending = ref(false);
 
 const root = ref<HTMLFormElement | null>(null);
@@ -146,7 +161,11 @@ const onSubmit = async (): Promise<void> => {
     return;
   }
   errors.value = {};
-  if (!turnstileToken.value || isSending.value) return;
+  if (!turnstileToken.value) {
+    createToastNotify(captchaWaitToast(captchaFailed.value));
+    return;
+  }
+  if (isSending.value) return;
 
   isSending.value = true;
   // undefined = sent; otherwise the server's message, if it gave one

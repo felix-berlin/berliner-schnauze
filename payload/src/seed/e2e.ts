@@ -8,9 +8,10 @@ import type { Word } from "../payload-types";
 
 import { affiliate, company, navigation } from "./siteData";
 import { LOCAL_DB_HOSTS } from "../lib/localDb";
+import { berlinDay } from "../lib/wordStats";
 
 /** Slugs the e2e specs navigate to directly. */
-export const E2E_WORD_SLUGS = ["aasen", "akademiebusen", "alex", "alsche", "anmachen", "ballast-der-republik", "schale", "wa"] as const;
+export const E2E_WORD_SLUGS = ["aasen", "akademiebusen", "alex", "alsche", "anmachen", "ballast-der-republik", "bildeins", "bildzwei", "schale", "wa"] as const;
 
 /** The seed writes invented words: never let it near a real database. */
 export function assertLocalDatabase(url: string | undefined): void {
@@ -27,8 +28,13 @@ export function assertLocalDatabase(url: string | undefined): void {
 }
 
 /** Every slug/path the seed writes, so a test can remove exactly this data again from a shared database. */
+const IMAGE_COUNT = 4;
+const imagePath = (i: number) => (i === 0 ? "e2e/galerie.png" : `e2e/galerie-${i + 1}.png`);
+const VOICES = [["male", "stimme-m"], ["female", "stimme-w"]] as const;
+
 export const SEEDED = {
-  media: ["e2e/galerie.png"],
+  // Built from the same constants the seeding loops use, so cleanup cannot drift from what is created.
+  media: [...Array.from({ length: IMAGE_COUNT }, (_, i) => imagePath(i)), ...VOICES.map(([, name]) => `e2e/${name}.wav`)],
   pages: ["datenschutz", "impressum"],
   posts: ["berlinerisch-fuer-anfaenger"],
 };
@@ -48,10 +54,13 @@ const THEMEN = [
 
 type SeedWord = {
   alternativeWords?: string[];
+  /** Voices of the word itself; `exampleVoices` on the first example. */
+  voices?: ("female" | "male")[];
   berlinerisch: string;
   berolinismus?: boolean;
-  examples?: { example: string; explanation?: string }[];
-  images?: boolean;
+  examples?: { example: string; explanation?: string; voices?: ("female" | "male")[] }[];
+  /** How many of the four seed images (see above) the word shows. */
+  images?: number;
   infoText?: string;
   learnMore?: string;
   related?: string[];
@@ -62,17 +71,20 @@ type SeedWord = {
 };
 
 const WORDS: SeedWord[] = [
-  { berlinerisch: "aasen", infoText: "Erfundener Infotext: das Verb ist im Beispieldatensatz nur für die Tests da.", slug: "aasen", themen: ["alltag-wohnen"], translations: ["verschwenden", "vergeuden"], alternativeWords: ["veraasen"], examples: [{ example: "Aase nich so mit dem Wasser.", explanation: "Verschwende das Wasser nicht." }] },
+  { berlinerisch: "aasen", voices: ["male"], infoText: "Erfundener Infotext: das Verb ist im Beispieldatensatz nur für die Tests da.", slug: "aasen", themen: ["alltag-wohnen"], translations: ["verschwenden", "vergeuden"], alternativeWords: ["veraasen"], examples: [{ example: "Aase nich so mit dem Wasser.", explanation: "Verschwende das Wasser nicht." }] },
   { berlinerisch: "ab", slug: "ab", themen: ["bewegung-gehen"], translations: ["weg"] },
-  { berlinerisch: "Akademiebusen", images: true, slug: "akademiebusen", themen: ["kleidung-aussehen"], translations: ["Zierfransen am Kleid"] },
+  { berlinerisch: "Akademiebusen", images: 4, slug: "akademiebusen", themen: ["kleidung-aussehen"], translations: ["Zierfransen am Kleid"] },
+  { berlinerisch: "Bildeins", images: 1, learnMore: "https://example.org/mehr", slug: "bildeins", translations: ["Testwort mit einem Bild"] },
+  { berlinerisch: "Bildzwei", images: 2, slug: "bildzwei", translations: ["Testwort mit zwei Bildern"] },
   { berlinerisch: "Alex", berolinismus: true, slug: "alex", themen: ["berlin-orte"], translations: ["Kurzform für den Alexanderplatz"] },
   { berlinerisch: "Alsche", slug: "alsche", translations: ["Testwort für Anagramme"] },
   { berlinerisch: "schale", slug: "schale", themen: ["essen-trinken"], translations: ["flaches Gefäß"] },
   {
     alternativeWords: ["anknipsen"],
     berlinerisch: "anmachen",
+    voices: ["male", "female"],
     examples: [
-      { example: "Mach ma det Licht an.", explanation: "Schalte das Licht ein." },
+      { example: "Mach ma det Licht an.", explanation: "Schalte das Licht ein.", voices: ["male", "female"] },
       { example: "Der hat mich anjemacht.", explanation: "Er hat mich forsch angesprochen." },
     ],
     learnMore: "https://example.org/anmachen",
@@ -85,6 +97,8 @@ const WORDS: SeedWord[] = [
   { berlinerisch: "anmachn", slug: "anmachn", themen: ["beziehungen-soziales"], translations: ["Kurzform von anmachen"] },
   { berlinerisch: "Ballast der Republik", related: ["aasen", "alex"], slug: "ballast-der-republik", themen: ["berlin-orte"], translations: ["Spitzname für ein Gebäude"] },
   { berlinerisch: "wa", slug: "wa", translations: ["nicht wahr"] },
+  // 36 letters and six meanings: long-word and many-meanings edge cases (invented).
+  { berlinerisch: "Rinnsteinschwalbenbeobachtungsposten", slug: "rinnsteinschwalbenbeobachtungsposten", translations: ["Testbedeutung eins", "Testbedeutung zwei", "Testbedeutung drei", "Testbedeutung vier", "Testbedeutung fünf", "Testbedeutung sechs"] },
   { berlinerisch: "Anmache", slug: "anmache", themen: ["beziehungen-soziales"], translations: ["plumpe Annäherung", "Versuch, sich jemandem zu nähern"] },
   { berlinerisch: "Anmacher", slug: "anmacher", themen: ["beziehungen-soziales"], translations: ["wer sich aufdringlich nähern will"] },
   { berlinerisch: "Bordstein", slug: "bordstein", themen: ["berlin-orte"], translations: ["Kante der Straße"] },
@@ -118,6 +132,25 @@ const lexical = (...children: unknown[]) => ({ root: { children, direction: "ltr
 // 1x1 PNG
 const PNG = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==", "base64");
 
+// 0.3 s of silence (8 kHz, 8 bit mono WAV): a real, playable audio file for the voice buttons.
+const WAV = (() => {
+  const data = Buffer.alloc(2400, 128);
+  const head = Buffer.alloc(44);
+  head.write("RIFF", 0);
+  head.writeUInt32LE(36 + data.length, 4);
+  head.write("WAVEfmt ", 8);
+  head.writeUInt32LE(16, 16);
+  head.writeUInt16LE(1, 20);
+  head.writeUInt16LE(1, 22);
+  head.writeUInt32LE(8000, 24);
+  head.writeUInt32LE(8000, 28);
+  head.writeUInt16LE(1, 32);
+  head.writeUInt16LE(8, 34);
+  head.write("data", 36);
+  head.writeUInt32LE(data.length, 40);
+  return Buffer.concat([head, data]);
+})();
+
 /** `find` by `where`, then `update` or `create`: the seed can run any number of times. */
 async function upsert(payload: Payload, collection: "themen" | "words" | "posts" | "pages", where: Record<string, unknown>, data: Record<string, unknown>): Promise<{ id: number }> {
   // `draft` only for collections with drafts (strictDraftTypes); the union of slugs is too wide to type the calls.
@@ -128,18 +161,44 @@ async function upsert(payload: Payload, collection: "themen" | "words" | "posts"
 }
 
 export async function seedE2e(payload: Payload): Promise<void> {
-  // Media: one image for the gallery and the post.
-  const media = await (async () => {
-    const found = await payload.find({ collection: "media", depth: 0, limit: 1, where: { wpPath: { equals: "e2e/galerie.png" } } });
-    return (
-      found.docs[0] ??
-      payload.create({
-        collection: "media",
-        data: { alt: "Testbild", caption: "Ein Testbild", wpPath: "e2e/galerie.png" },
-        file: { data: PNG, mimetype: "image/png", name: "galerie.png", size: PNG.length },
-      })
+  // Media: four images for the word page and the post. Credits follow the CMS convention (description = attribution,
+  // caption = fallback): plain, with a link, caption only, none.
+  const imageMedia: { id: number }[] = [];
+  for (const [i, data] of [
+    { alt: "Testbild", caption: "Ein Testbild", description: lexical(paragraph("Erfundene Attribution: Beispielfoto, CC BY 4.0")) },
+    {
+      alt: "Zweites Testbild",
+      caption: "Ein zweites Testbild",
+      description: lexical({ children: [text("Erfundene Attribution: "), { children: [text("Beispielquelle")], direction: "ltr", fields: { linkType: "custom", newTab: true, url: "https://example.org/quelle" }, format: "", indent: 0, type: "link", version: 3 }], direction: "ltr", format: "", indent: 0, textFormat: 0, type: "paragraph", version: 1 }),
+    },
+    { alt: "Drittes Testbild", caption: "Credit: Erfundene_Person", description: null },
+    { alt: "Viertes Testbild", caption: null, description: null },
+  ].entries()) {
+    const wpPath = imagePath(i);
+    const found = await payload.find({ collection: "media", depth: 0, limit: 1, where: { wpPath: { equals: wpPath } } });
+    imageMedia.push(
+      found.docs[0]
+        ? await payload.update({ collection: "media", data, depth: 0, id: found.docs[0].id })
+        : await payload.create({ collection: "media", data: { ...data, wpPath }, file: { data: PNG, mimetype: "image/png", name: wpPath.slice(4), size: PNG.length } }),
     );
-  })();
+  }
+  const media = imageMedia[0]!;
+
+  // Two voices: one silent WAV each.
+  const voiceMedia = new Map<"female" | "male", number>();
+  for (const [gender, name] of VOICES) {
+    const wpPath = `e2e/${name}.wav`;
+    const found = await payload.find({ collection: "media", depth: 0, limit: 1, where: { wpPath: { equals: wpPath } } });
+    const doc =
+      found.docs[0] ??
+      (await payload.create({
+        collection: "media",
+        data: { alt: `Stimme ${gender}`, wpPath },
+        file: { data: WAV, mimetype: "audio/wav", name: `${name}.wav`, size: WAV.length },
+      }));
+    voiceMedia.set(gender, doc.id);
+  }
+  const audioRows = (voices: ("female" | "male")[] = []) => voices.map((gender) => ({ audio: voiceMedia.get(gender)!, gender }));
 
   const themaIds = new Map<string, number>();
   for (const [slug, name] of THEMEN) {
@@ -153,9 +212,10 @@ export async function seedE2e(payload: Payload): Promise<void> {
       _status: "published",
       alternativeWords: (w.alternativeWords ?? []).map((alternativeWord) => ({ alternativeWord })),
       berlinerisch: w.berlinerisch,
+      berlinerischAudio: audioRows(w.voices),
       berolinismus: w.berolinismus ?? false,
-      examples: (w.examples ?? []).map((e) => ({ example: e.example, exampleExplanation: e.explanation })),
-      images: w.images ? [media.id] : [],
+      examples: (w.examples ?? []).map((e) => ({ example: e.example, exampleAudio: audioRows(e.voices), exampleExplanation: e.explanation })),
+      images: imageMedia.slice(0, w.images ?? 0).map((m) => m.id),
       infoText: w.infoText ? lexical(paragraph(w.infoText)) : null,
       learnMore: w.learnMore ?? null,
       publishedAt: "2025-01-01T00:00:00.000Z",
@@ -169,6 +229,29 @@ export async function seedE2e(payload: Payload): Promise<void> {
   // Second pass: related words need every id.
   for (const w of WORDS.filter((x) => x.related)) {
     await payload.update({ collection: "words", data: { relatedWords: w.related!.map((s) => wordIds.get(s)!) }, depth: 0, draft: false, id: wordIds.get(w.slug)! });
+  }
+
+  // Invented views for the trend box: alex is #1 of the week (47 views, +370 % to the week before), anmachen #2, aasen #3 (12), eight fillers (10) behind.
+  const STATS: [string, number[], number][] = [
+    ["alex", [3, 5, 4, 8, 6, 9, 12], 10],
+    ["anmachen", [1, 2, 3, 3, 4, 3, 4], 20],
+    ["aasen", [1, 2, 1, 3, 2, 1, 2], 2],
+    // Eight fillers with 10 views each: with them "wa" (a few views from the pulse tests) is outside the top 10.
+    ...["kiez", "kneipe", "bolle", "bulette", "bammel", "ulk", "zille", "stulle"].map((s): [string, number[], number] => [s, [2, 1, 2, 1, 1, 2, 1], 0]),
+  ];
+  // Pulse views of earlier e2e runs pile up on words outside STATS (e.g. "wa") and push them into the top 10: start from zero.
+  await payload.delete({ collection: "word-stats", depth: 0, where: { id: { exists: true } } });
+  const today = Date.parse(`${berlinDay()}T00:00:00Z`);
+  const dayOf = (back: number) => new Date(today - back * 864e5).toISOString().slice(0, 10);
+  for (const [slug, week, before] of STATS) {
+    const word = wordIds.get(slug)!;
+    // Last 7 days oldest first, then the previous week as one row on its first day.
+    const rows = [...week.map((views, i) => [dayOf(6 - i), views] as const), [dayOf(10), before] as const];
+    for (const [day, views] of rows) {
+      const { docs } = await payload.find({ collection: "word-stats", depth: 0, limit: 1, where: { day: { equals: day }, word: { equals: word } } });
+      if (docs[0]) await payload.update({ collection: "word-stats", data: { views }, depth: 0, id: docs[0].id });
+      else await payload.create({ collection: "word-stats", data: { audio: 0, clicks: 0, day, shares: 0, views, word }, depth: 0 });
+    }
   }
 
   await upsert(payload, "posts", { slug: { equals: "berlinerisch-fuer-anfaenger" } }, {
