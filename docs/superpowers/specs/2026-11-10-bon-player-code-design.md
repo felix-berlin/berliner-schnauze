@@ -50,7 +50,7 @@ Neu: Ein **Spielercode** verbindet einen Browser wieder mit demselben Spieler. E
 
 Der Code ist ein Pseudonym wie das Cookie, nur über Geräte hinweg. Gespeichert werden: Hash des Codes, die Zuordnung zu den Spielen, Anzeigename, Ergebnisse, Zeitstempel. Keine IPs.
 
-Mein Call (zu prüfen): Der Spielercode führt einen **eigenen Spieler** ein, getrennt vom Besucher-Cookie. Der Code verknüpft also nur BON-Spiele, nicht Kommentare, Stimmen, Feedback. Sonst würde ein Code, den jemand teilt, auch die Kommentare seiner Gerätenutzung verknüpfen. Die Datenschutzerklärung (CMS-Seite) braucht einen kurzen Absatz dazu.
+Mein Call (zu prüfen): Der Spielercode führt einen **eigenen Spieler** ein, getrennt vom Besucher-Cookie. Der Code verknüpft also nur BON-Spiele, nicht Kommentare, Stimmen, Feedback. Sonst würde ein Code, den jemand teilt, auch die Kommentare seiner Gerätenutzung verknüpfen. Die Datenschutzerklärung (CMS-Seite) braucht einen kurzen Absatz dazu. Der Absatz dazu muss in die Datenschutzerklärung im CMS; das ist nicht Teil des Codes dieses Repos.
 
 ## Wie es aussieht (Skizze für das Design)
 
@@ -84,8 +84,10 @@ Platz in der Oberfläche: Ergebnisseite und Spielstart (genaue Stelle entscheide
 Aus dem Builder-Check (alle von mir entschieden, bitte prüfen):
 
 - **Zuordnung alter Spiele:** Die Spiel-Zeilen behalten ihren BON-eigenen Besucher-Hash (`bonVisitor`, eigenes Präfix `bon-game:`, ist mit keiner anderen Collection verknüpfbar) und bekommen zusätzlich eine Spieler-ID. Beim ersten Code werden die Zeilen dieses Hashs auf den Spieler gesetzt. Neue Spiele tragen beides. Rang, Highscore und „bisherige Spiele" suchen über die Spieler-ID, solange eine da ist.
-- **Laufende Identität:** Nach dem Einlösen setzt der Server ein eigenes httpOnly-Cookie mit einer zufälligen Spieler-ID (nicht mit dem Code). Start und Ende nehmen das Spieler-Cookie, wenn es da ist, sonst das Besucher-Cookie wie bisher.
-- **Mehrere Codes:** Ein Spieler kann mehrere Code-Hashes haben. Jeder Druck auf „Spielercode holen" erzeugt einen neuen gültigen Code. Der Klartext wird nur direkt nach dem Erzeugen angezeigt und als Komfort in localStorage dieses Browsers gemerkt; ist er dort noch da, wird derselbe Code erneut gezeigt statt eines neuen. Auf einem Gerät, das nur eingelöst hat, gibt der Knopf einen neuen Code aus. Alte Codes bleiben gültig (kein Widerruf).
+- **Laufende Identität:** Nach dem Einlösen setzt der Server das httpOnly-Cookie `bon_player` (lax, Pfad `/api/`, ein Jahr). Es enthält den Code selbst, nicht eine zufällige Spieler-ID; die Datenbank kennt nur den Hash (`sha256("bon-code:" + code)`). Start und Ende nehmen das Spieler-Cookie, wenn es da ist, sonst das Besucher-Cookie wie bisher.
+- **Ein Code pro Spieler:** Es gibt genau einen Code. „Spielercode holen" mit gültigem Spieler-Cookie zeigt denselben Code erneut, auf jedem Browser, der das Cookie hat (auch nach dem Einlösen). Es gibt keine Kopie in localStorage und keinen zweiten Code. Kein Widerruf.
+- **Erzeugen ohne Besucher-Cookie:** `POST /api/bon/player` braucht das Besucher-Cookie nicht und legt den Spieler immer an; Spiele des Browsers werden nur übernommen, wenn ein Besucher-Cookie da ist. Schlägt die Übernahme fehl, wird der neue Spieler gelöscht und die Antwort ist 502; ein paralleler Aufruf für denselben Besucher bekommt 409.
+- **„Anonym" und Statistik:** Der Server speichert bei jedem Spielende den Namen, „Anonym" ohne Namen. Der Client behandelt „Anonym" als keinen Namen und übernimmt Highscore und beste Serie des Servers nur, wenn `gamesPlayed > 0`.
 - **Name:** Der Name gehört zum Spieler und wird bei jedem Spielende aktualisiert (wie bisher aus dem Spielende-Request). Beim Einlösen überschreibt der Client Name und besten Score in `$bonStats` mit den Werten des Servers.
 - **Link und Fragment:** Ein kleines Client-Skript auf der Spielseite liest `#code=`, ruft das Einlösen auf und entfernt das Fragment danach per `history.replaceState`. Der Builder prüft, dass Matomo keinen Seitenaufruf mit dem Fragment sendet (zum Beispiel Tracker erst nach dem Entfernen starten oder die URL bereinigen).
 - **Rate-Limit:** Wie beim Rest per IP im Speicher. Der Builder prüft, ob hinter Traefik die echte Client-IP ankommt (wie bei `word-feedback`). Pro Instanz und nach Neustart zurückgesetzt; bei 59 Bit hingenommen.

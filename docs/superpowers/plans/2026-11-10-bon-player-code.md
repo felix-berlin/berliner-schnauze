@@ -139,3 +139,4 @@
 - The game client does not yet call `/api/bon/start|next|finish` (frontend ticket of the first spec), so until then a redeemed player has no server results: `gamesPlayed` is `0` and local stats are kept.
 - Rate limit is in memory per instance and resets on restart; at ~59 bits that is accepted (spec).
 - Whoever has the code (or the link) owns the player: name and results, nothing else.
+- A player can be created without any game (no visitor cookie needed); bounded only by the 10 per 10 min per-IP limit on POST /api/bon/player.
