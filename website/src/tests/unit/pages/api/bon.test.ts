@@ -49,7 +49,10 @@ const db = vi.hoisted(() => {
     delete: vi.fn(async ({ collection, where }: { collection: string; where: Where }) => {
       const t = table(collection);
       const gone = t.filter((r) => matches(r, where));
-      for (const r of gone) t.splice(t.indexOf(r), 1);
+      for (const r of gone) {
+        t.splice(t.indexOf(r), 1);
+        if (collection === "bon-players") for (const g of rows) if (g.player === r.id) delete g.player;
+      }
       return { docs: gone, errors: [] };
     }),
     find: vi.fn(async ({ collection, where }: { collection: string; where: Where }) => ({
@@ -82,11 +85,15 @@ const db = vi.hoisted(() => {
       },
     ),
   };
+  // mockReset + the original body, so a test's override never leaks into the next one.
+  const originals = Object.fromEntries(
+    Object.entries(api).map(([name, fn]) => [name, fn.getMockImplementation()!]),
+  ) as Record<string, (...args: never[]) => unknown>;
   const reset = () => {
     rows.length = 0;
     players.length = 0;
     nextId = 1;
-    for (const fn of Object.values(api)) fn.mockClear();
+    for (const [name, fn] of Object.entries(api)) fn.mockReset().mockImplementation(originals[name]);
   };
   return { api, players, reset, rows, uniqueViolation };
 });
@@ -584,9 +591,73 @@ describe("POST /api/bon/player", () => {
     db.api.create.mockRejectedValueOnce(db.uniqueViolation("code_hash"));
     expect((await player(undefined, "v-1")).status).toBe(200);
     expect(db.players).toHaveLength(1);
-    db.api.create.mockRejectedValue(db.uniqueViolation("code_hash"));
+    db.api.create.mockRejectedValueOnce(db.uniqueViolation("code_hash"));
+    db.api.create.mockRejectedValueOnce(db.uniqueViolation("code_hash"));
     expect((await player(undefined, "v-1")).status).toBe(502);
-    db.api.create.mockReset();
+  });
+});
+
+describe("POST /api/bon/player claim failures", () => {
+  const unclaimed = async () => {
+    await playedGame(2, "v-1");
+    await playedGame(2, "v-1");
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    set.mockClear();
+  };
+  const failed = () => {
+    expect(db.players).toHaveLength(0);
+    expect(set).not.toHaveBeenCalled();
+    expect(db.rows.every((r) => r.player === undefined)).toBe(true);
+  };
+
+  it("502, deletes the player and releases the games when the claim reports errors", async () => {
+    await unclaimed();
+    db.api.update.mockImplementationOnce(async ({ where }) => {
+      // one game claimed, the other failed
+      db.rows[0].player = db.players[0].id;
+      expect(where).toBeDefined();
+      return { docs: [], errors: [{ message: "row down" }] };
+    });
+    expect((await player(undefined, "v-1")).status).toBe(502);
+    failed();
+  });
+
+  it("502, deletes the player and releases the games when the claim throws", async () => {
+    await unclaimed();
+    db.api.update.mockImplementationOnce(async () => {
+      db.rows[0].player = db.players[0].id;
+      throw new Error("update down");
+    });
+    expect((await player(undefined, "v-1")).status).toBe(502);
+    failed();
+  });
+
+  it("still answers 502 when the cleanup delete fails too", async () => {
+    await unclaimed();
+    db.api.update.mockRejectedValueOnce(new Error("update down"));
+    db.api.delete.mockRejectedValueOnce(new Error("delete down"));
+    expect((await player(undefined, "v-1")).status).toBe(502);
+    expect(set).not.toHaveBeenCalled();
+    expect(console.error).toHaveBeenCalledWith("[bon] player cleanup failed:", expect.any(Error));
+  });
+
+  it("a parallel call for the same visitor gets 409 and one player; the guard is released", async () => {
+    await playedGame(2, "v-1");
+    set.mockClear();
+    const update = db.api.update.getMockImplementation()!;
+    let release!: () => void;
+    const gate = new Promise<void>((r) => (release = r));
+    db.api.update.mockImplementationOnce(async (args) => {
+      await gate;
+      return update(args);
+    });
+    const first = player(undefined, "v-1");
+    await vi.waitFor(() => expect(db.api.update).toHaveBeenCalledTimes(2)); // game finish + claim
+    expect((await player(undefined, "v-1")).status).toBe(409);
+    release();
+    expect((await first).status).toBe(200);
+    expect(db.players).toHaveLength(1);
+    expect((await player(undefined, "v-1")).status).toBe(200); // released
   });
 });
 
@@ -666,10 +737,8 @@ describe("bon identity in start and finish", () => {
     ).json();
     later(60_000);
     const update = db.api.update.getMockImplementation()!;
-    db.api.update.mockImplementation(async (args) => {
-      if (args.collection === "bon-players") throw new Error("name down");
-      return update(args);
-    });
+    db.api.update.mockImplementationOnce(update); // the game itself
+    db.api.update.mockRejectedValueOnce(new Error("name down"));
     const failed = await FINISH(
       ctx({ answers: run(second.token, 4), playerName: "Zed", token: second.token }, "v-1"),
     );
