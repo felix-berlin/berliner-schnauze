@@ -12,6 +12,7 @@
     "./comments": "./src/lib/comments.ts",
     "./word-feedback": "./src/lib/wordFeedback.ts",
     "./bon-rules": "./src/lib/bonRules.ts",
+    "./bon-player": "./src/lib/bonPlayer.ts",
     "./word-stats": "./src/lib/wordStats.ts",
     "./lexical-html": "./src/lib/lexicalHtml.ts",
     "./routes": "./src/lib/routes.ts",
