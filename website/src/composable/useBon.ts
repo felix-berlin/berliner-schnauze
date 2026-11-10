@@ -51,6 +51,8 @@ export function useBon() {
   let prefetch: Promise<void> | undefined;
   let gameOver = false;
   let busy = false;
+  // Bumped by start(): replies of an earlier game must not touch the current one.
+  let gen = 0;
   let retryFn: () => void = () => {};
   // The server rejects overlapping calls of one game (409), so every call goes through this chain.
   let chain: Promise<unknown> = Promise.resolve();
@@ -66,12 +68,15 @@ export function useBon() {
   }
 
   function loadNext(): Promise<void> {
+    const g = gen;
     prefetch ??= queued(() => nextCards(token)).then(
       (c) => {
+        if (g !== gen) return;
+        if (c.length === 0) throw new Error("empty stack");
         upcoming = c;
       },
       (error) => {
-        prefetch = undefined;
+        if (g === gen) prefetch = undefined;
         throw error;
       },
     );
@@ -87,6 +92,7 @@ export function useBon() {
   }
 
   async function start() {
+    const g = ++gen;
     previousHighScore.value = $bonStats.get().highScore;
     lives.value = LIVES;
     score.value = streak.value = bestStreak.value = 0;
@@ -101,21 +107,26 @@ export function useBon() {
     phase.value = "loading";
     try {
       const run = await startRun();
+      if (g !== gen) return;
+      if (run.cards.length === 0) throw new Error("empty stack");
       token = run.token;
       cards = run.cards;
       stack.value = 1;
       showCard(1);
       trackEvent("Game", "Game Started", LABEL);
     } catch {
-      fail(start);
+      if (g === gen) fail(start);
     }
   }
 
   async function answer(real: boolean) {
     if (phase.value !== "play" || busy || !card.value) return;
     busy = true;
+    const g = gen;
+    const entry = card.value;
     try {
-      const reply = await queued(() => answerCard(token, card.value!.id, real));
+      const reply = await queued(() => answerCard(token, entry.id, real));
+      if (g !== gen) return;
       streak.value = reply.correct ? streak.value + 1 : 0;
       multiplier.value = computeMultiplier(streak.value);
       bestStreak.value = Math.max(bestStreak.value, streak.value);
@@ -132,24 +143,30 @@ export function useBon() {
         points,
         slug,
         translation,
-        word: card.value.word,
+        word: entry.word,
       };
       history.value.push(last.value);
       if (!endedEarly.value) phase.value = "feedback";
     } catch {
-      fail(() => {
-        phase.value = "play";
-        void answer(real);
-      });
+      // Once the run is being finished the answer is moot.
+      if (g === gen && !endedEarly.value) {
+        fail(() => {
+          phase.value = "play";
+          void answer(real);
+        });
+      }
     } finally {
-      busy = false;
+      if (g === gen) busy = false;
     }
   }
 
   async function finish() {
+    const g = gen;
     phase.value = "loading";
     const name = $bonStats.get().playerName;
-    result.value = await finishRun(token, name || undefined);
+    const res = await queued(() => finishRun(token, name || undefined));
+    if (g !== gen) return;
+    result.value = res;
     const stats = $bonStats.get();
     $bonStats.setKey("totalGamesPlayed", stats.totalGamesPlayed + 1);
     $bonStats.setKey(
@@ -172,29 +189,38 @@ export function useBon() {
   async function advance() {
     if (phase.value !== "feedback") return;
     if (gameOver) return finish();
+    const g = gen;
     if (cardInStack.value < cards.length) return showCard(cardInStack.value + 1);
     if (!upcoming) {
       phase.value = "loading";
       try {
         await loadNext();
       } catch {
+        if (g !== gen) return;
         return fail(() => {
           phase.value = "feedback";
           void advance();
         });
       }
     }
+    if (g !== gen) return;
     cards = upcoming!;
     upcoming = prefetch = undefined;
     stack.value++;
     showCard(1);
   }
 
-  const retry = () => retryFn();
+  function retry() {
+    if (phase.value !== "error") return;
+    const run = retryFn;
+    retryFn = () => {};
+    run();
+  }
 
   async function end() {
-    if (phase.value === "intro" || phase.value === "over" || phase.value === "loading") return;
-    endedEarly.value = true;
+    if (!token || ["intro", "over", "loading"].includes(phase.value)) return;
+    // After the third mistake this is the normal end, not an early one.
+    if (!gameOver) endedEarly.value = true;
     await finish();
   }
 

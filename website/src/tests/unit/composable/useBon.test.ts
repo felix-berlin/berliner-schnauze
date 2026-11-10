@@ -116,23 +116,6 @@ describe("useBon", () => {
     expect(bon.phase.value).toBe("play");
   });
 
-  it("stack switch without prefetch shows loading", async () => {
-    const bon = await started();
-    await play(bon, 19);
-    await bon.answer(true);
-    let release!: (c: api.PublicCard[]) => void;
-    vi.mocked(api.nextCards).mockReset();
-    vi.mocked(api.nextCards).mockReturnValue(new Promise((r) => (release = r)));
-    // the prefetch at card 15 already failed to be there: simulate by a fresh bon without it
-    const advancing = bon.advance();
-    expect(["loading", "play"]).toContain(bon.phase.value);
-    release(stack(20));
-    await advancing;
-    expect(bon.phase.value).toBe("play");
-    expect(bon.stack.value).toBe(2);
-    expect(bon.cardInStack.value).toBe(1);
-  });
-
   it("shows loading when the prefetch failed and the stack ran out", async () => {
     vi.mocked(api.nextCards).mockRejectedValueOnce(new Error("x"));
     const bon = await started();
@@ -218,6 +201,78 @@ describe("useBon", () => {
     await answering;
     expect(api.answerCard).toHaveBeenCalledTimes(15);
     expect(bon.phase.value).toBe("feedback");
+  });
+
+  it("end() while an answer is in flight finishes after it and stays over", async () => {
+    const bon = await started();
+    let release!: (r: api.AnswerReply) => void;
+    vi.mocked(api.answerCard).mockReturnValue(new Promise((r) => (release = r)));
+    const answering = bon.answer(true);
+    const ending = bon.end();
+    await Promise.resolve();
+    expect(api.finishRun).not.toHaveBeenCalled();
+    release(reply(true));
+    await Promise.all([answering, ending]);
+    expect(api.finishRun).toHaveBeenCalledTimes(1);
+    expect(bon.phase.value).toBe("over");
+    expect(bon.history.value).toHaveLength(1);
+  });
+
+  it("a late failing answer does not pull an ended game back to error", async () => {
+    const bon = await started();
+    let fail!: (e: Error) => void;
+    vi.mocked(api.answerCard).mockReturnValue(new Promise((_, rej) => (fail = rej)));
+    const answering = bon.answer(true);
+    const ending = bon.end();
+    fail(new Error("x"));
+    await Promise.all([answering, ending]);
+    expect(bon.phase.value).toBe("over");
+  });
+
+  it("end() while the prefetch is in flight waits for it", async () => {
+    const bon = await started();
+    await play(bon, 13);
+    let releaseNext!: (c: api.PublicCard[]) => void;
+    vi.mocked(api.nextCards).mockReturnValue(new Promise((r) => (releaseNext = r)));
+    await play(bon, 1);
+    const ending = bon.end();
+    await Promise.resolve();
+    expect(api.finishRun).not.toHaveBeenCalled();
+    releaseNext(stack(20));
+    await ending;
+    expect(api.finishRun).toHaveBeenCalledTimes(1);
+    expect(bon.phase.value).toBe("over");
+  });
+
+  it("end() after the third mistake is no early end; end() without a game counts nothing", async () => {
+    const idle = useBon();
+    await idle.end();
+    expect($bonStats.get().totalGamesPlayed).toBe(0);
+    vi.mocked(api.answerCard).mockResolvedValue(reply(false, 0, true));
+    const bon = await started();
+    await bon.answer(true);
+    await bon.end();
+    expect(bon.endedEarly.value).toBe(false);
+    expect(bon.phase.value).toBe("over");
+  });
+
+  it("an empty card reply is an error", async () => {
+    vi.mocked(api.startRun).mockResolvedValue({ cards: [], token: "tok" });
+    const bon = await started();
+    expect(bon.phase.value).toBe("error");
+  });
+
+  it("a stale reply of a previous game does not leak into a new one", async () => {
+    const bon = await started();
+    let release!: (r: api.AnswerReply) => void;
+    vi.mocked(api.answerCard).mockReturnValue(new Promise((r) => (release = r)));
+    const stale = bon.answer(true);
+    await bon.start();
+    release(reply(true));
+    await stale;
+    expect(bon.phase.value).toBe("play");
+    expect(bon.score.value).toBe(0);
+    expect(bon.history.value).toHaveLength(0);
   });
 
   it("end() early marks endedEarly and survives a rejected finish", async () => {
