@@ -43,6 +43,7 @@
           @keydown.enter="saveName"
         />
       </template>
+      <BonPlayerCode />
       <dl v-if="allTimeHighScore > 0" class="c-berliner-oder-nicht__idle-prev-stats">
         <div class="c-berliner-oder-nicht__idle-prev-stats-item">
           <dt>Highscore</dt>
@@ -122,6 +123,7 @@ const UserIcon = defineAsyncComponent(() => import("virtual:icons/lucide/user"))
 const PencilIcon = defineAsyncComponent(() => import("virtual:icons/lucide/pencil"));
 import BonCard from "@components/games/BonCard.vue";
 import BonHUD from "@components/games/BonHUD.vue";
+import BonPlayerCode from "@components/games/BonPlayerCode.vue";
 import BonResult from "@components/games/BonResult.vue";
 import { useBon, type BonCard as BonCardData } from "@composables/useBon";
 import { fetchSearchIndex } from "@services/searchIndex.ts";
