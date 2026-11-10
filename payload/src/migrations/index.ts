@@ -21,6 +21,7 @@ import * as migration_20261106_142557_retention_task from './20261106_142557_ret
 import * as migration_20261106_150000_hash_visitor_ids from './20261106_150000_hash_visitor_ids';
 import * as migration_20261106_165028_feedback_visitor_nullable from './20261106_165028_feedback_visitor_nullable';
 import * as migration_20261110_212112_bon_games from './20261110_212112_bon_games';
+import * as migration_20261110_215311_bon_players from './20261110_215311_bon_players';
 
 export const migrations = [
   {
@@ -136,6 +137,11 @@ export const migrations = [
   {
     up: migration_20261110_212112_bon_games.up,
     down: migration_20261110_212112_bon_games.down,
-    name: '20261110_212112_bon_games'
+    name: '20261110_212112_bon_games',
+  },
+  {
+    up: migration_20261110_215311_bon_players.up,
+    down: migration_20261110_215311_bon_players.down,
+    name: '20261110_215311_bon_players'
   },
 ];

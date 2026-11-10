@@ -32,6 +32,18 @@ describe("bon-games", () => {
     expect(err.name).toBe("ValidationError");
   });
 
+  it("accepts a player and saves without one", async () => {
+    const player = await payload.create({
+      collection: "bon-players",
+      data: { codeHash: "game-player" } as never,
+    });
+    const doc = await row({ player: player.id });
+    expect(typeof doc.player === "object" ? doc.player?.id : doc.player).toBe(player.id);
+    expect((await row()).player ?? null).toBeNull();
+    await payload.delete({ collection: "bon-games", where: { visitor: { like: "v" } } });
+    await payload.delete({ collection: "bon-players", where: { id: { equals: player.id } } });
+  });
+
   it("denies reading without a user", async () => {
     await expect(payload.find({ collection: "bon-games", overrideAccess: false })).rejects.toThrow(
       /not allowed|forbidden/i,

@@ -30,6 +30,7 @@ export const BonGames: CollectionConfig = {
       required: true,
       admin: { description: "{ issuedAt: number, start: number }[]" },
     },
+    { name: "player", type: "relationship", relationTo: "bon-players", index: true },
     { name: "playerName", type: "text" },
     { name: "score", type: "number" },
     { name: "bestStreak", type: "number" },

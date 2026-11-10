@@ -105,6 +105,7 @@ export interface Config {
     'word-feedback': WordFeedback;
     'word-stats': WordStat;
     'bon-games': BonGame;
+    'bon-players': BonPlayer;
     redirects: Redirect;
     'payload-mcp-api-keys': PayloadMcpApiKey;
     'payload-kv': PayloadKv;
@@ -129,6 +130,7 @@ export interface Config {
     'word-feedback': WordFeedbackSelect<false> | WordFeedbackSelect<true>;
     'word-stats': WordStatsSelect<false> | WordStatsSelect<true>;
     'bon-games': BonGamesSelect<false> | BonGamesSelect<true>;
+    'bon-players': BonPlayersSelect<false> | BonPlayersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'payload-mcp-api-keys': PayloadMcpApiKeysSelect<false> | PayloadMcpApiKeysSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -722,12 +724,24 @@ export interface BonGame {
     | number
     | boolean
     | null;
+  player?: (number | null) | BonPlayer;
   playerName?: string | null;
   score?: number | null;
   bestStreak?: number | null;
   totalAnswered?: number | null;
   correctAnswers?: number | null;
   finishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bon-players".
+ */
+export interface BonPlayer {
+  id: number;
+  name?: string | null;
+  codeHash: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -997,6 +1011,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'bon-games';
         value: number | BonGame;
+      } | null)
+    | ({
+        relationTo: 'bon-players';
+        value: number | BonPlayer;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1347,12 +1365,23 @@ export interface BonGamesSelect<T extends boolean = true> {
   status?: T;
   cards?: T;
   batches?: T;
+  player?: T;
   playerName?: T;
   score?: T;
   bestStreak?: T;
   totalAnswered?: T;
   correctAnswers?: T;
   finishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bon-players_select".
+ */
+export interface BonPlayersSelect<T extends boolean = true> {
+  name?: T;
+  codeHash?: T;
   updatedAt?: T;
   createdAt?: T;
 }
