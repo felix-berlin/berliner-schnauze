@@ -20,8 +20,7 @@
           :player-label="stats.playerName || 'Anonym'"
         />
         <BonCard
-          v-if="phase === 'play' && card"
-          :key="`${stack}-${cardInStack}`"
+          v-if="card"
           :word="card.word"
           :card-in-stack="cardInStack"
           :stack="stack"
@@ -29,12 +28,11 @@
           :locked="locked"
           @answer="onAnswer"
           @end="end"
-        />
-        <div v-else-if="last" class="c-berliner-oder-nicht__note">
-          <p>{{ last.correct ? "Richtig!" : "Falsch." }} „{{ last.word }}“</p>
-          <p v-if="last.isReal && last.translation">= {{ last.translation }}</p>
-          <button class="c-button c-button--primary" type="button" @click="advance">Weiter</button>
-        </div>
+        >
+          <template v-if="phase === 'feedback' && last" #feedback>
+            <BonFeedback :last="last" :game-over="lives === 0" :lives="lives" @next="onNext" />
+          </template>
+        </BonCard>
       </template>
 
       <p v-else-if="phase === 'loading'" class="c-berliner-oder-nicht__note" role="status">
@@ -68,6 +66,7 @@
 <script setup lang="ts">
 import ConfettiEffect from "@components/ConfettiEffect.vue";
 import BonCard from "@components/games/BonCard.vue";
+import BonFeedback from "@components/games/BonFeedback.vue";
 import BonHUD from "@components/games/BonHUD.vue";
 import BonIntro from "@components/games/BonIntro.vue";
 import BonResult from "@components/games/BonResult.vue";
@@ -75,7 +74,7 @@ import { useBon } from "@composables/useBon";
 import { useStore } from "@nanostores/vue";
 import { hasRedeemCode } from "@services/bonPlayerApi.ts";
 import { $bonStats } from "@stores/bonStats";
-import { useEventListener, useOnline, useVibrate } from "@vueuse/core";
+import { useEventListener, useOnline, useTimeoutFn, useVibrate } from "@vueuse/core";
 import { ref, watch } from "vue";
 
 const {
@@ -109,8 +108,17 @@ function onStart() {
   void start();
 }
 
-// Closed from the first answer until the game is back in play (the card is gone meanwhile).
+// Spec §7 input lock: answers stay closed from the first answer until 250 ms after the next card
+// is up; "next" stays closed for 250 ms after the feedback appears (a double swipe must not skip it).
+const LOCK_MS = 250;
 const locked = ref(false);
+const nextLocked = ref(false);
+const { start: unlockAnswers } = useTimeoutFn(() => (locked.value = false), LOCK_MS, {
+  immediate: false,
+});
+const { start: unlockNext } = useTimeoutFn(() => (nextLocked.value = false), LOCK_MS, {
+  immediate: false,
+});
 
 function onAnswer(guessedReal: boolean) {
   if (locked.value) return;
@@ -119,20 +127,39 @@ function onAnswer(guessedReal: boolean) {
   void answer(guessedReal);
 }
 
-// Registered with VueUse: removed on unmount, so arrow keys only work while the game is mounted.
+function onNext() {
+  if (!nextLocked.value) void advance();
+}
+
+// Registered with VueUse: removed on unmount, so keys only work while the game is mounted.
 useEventListener(document, "keydown", (e: KeyboardEvent) => {
-  if (phase.value !== "play" || !card.value || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) {
-    return;
-  }
+  const inFeedback = phase.value === "feedback";
+  if (!(inFeedback || (phase.value === "play" && card.value))) return;
+  if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
   const el = e.target as HTMLElement | null;
   if (el?.closest("input, textarea, select, [contenteditable]")) return;
-  if (e.key === "ArrowLeft") onAnswer(false);
+  if (inFeedback) {
+    // Links and the end link keep their own Enter/Space.
+    const own = ["Enter", " "].includes(e.key) && el?.closest("a, .c-textlink");
+    if (!own && ["ArrowLeft", "ArrowRight", "Enter", " "].includes(e.key)) {
+      e.preventDefault();
+      onNext();
+    }
+  } else if (e.key === "ArrowLeft") onAnswer(false);
   else if (e.key === "ArrowRight") onAnswer(true);
 });
 
-watch(phase, (p) => {
-  if (p === "play") locked.value = false;
-});
+watch(
+  phase,
+  (p) => {
+    if (p === "play") unlockAnswers();
+    else if (p === "feedback") {
+      nextLocked.value = true;
+      unlockNext();
+    }
+  },
+  { immediate: true },
+);
 
 watch(last, (entry) => {
   if (entry) vibrate(entry.correct ? [50] : [80, 60, 80]);

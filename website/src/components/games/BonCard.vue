@@ -7,44 +7,47 @@
     :data-content-piece="word"
     data-content-target="javascript:answer"
   >
-    <section
-      ref="cardRef"
-      aria-labelledby="bon-word"
-      aria-describedby="bon-question"
-      :class="['c-bon-card__card', hint && 'c-bon-card__card--intro']"
-      :style="dragStyle"
-      @pointerdown="onDown"
-      @pointermove="onMove"
-      @pointerup="onUp"
-      @pointercancel="reset"
-    >
-      <p id="bon-question" class="t-label c-bon-card__label">Berlinerisch oder nich?</p>
-      <h2 id="bon-word" class="c-bon-card__word">
-        <span class="c-headword">{{ word }}</span>
-      </h2>
-      <p class="t-small c-bon-card__progress">
-        Karte {{ cardInStack }} von 20 · Stapel {{ stack }}
-      </p>
-
-      <span
-        class="c-bon-card__overlay c-bon-card__overlay--nee"
-        :style="overlay(-1)"
-        aria-hidden="true"
+    <!-- Feedback takes the card's place; the answer buttons stay, so focus stays put (Spec §15). -->
+    <slot name="feedback">
+      <section
+        ref="cardRef"
+        aria-labelledby="bon-word"
+        aria-describedby="bon-question"
+        :class="['c-bon-card__card', hint && 'c-bon-card__card--intro']"
+        :style="dragStyle"
+        @pointerdown="onDown"
+        @pointermove="onMove"
+        @pointerup="onUp"
+        @pointercancel="reset"
       >
-        ← Nee
-      </span>
-      <span
-        class="c-bon-card__overlay c-bon-card__overlay--ja"
-        :style="overlay(1)"
-        aria-hidden="true"
-      >
-        Ja →
-      </span>
+        <p id="bon-question" class="t-label c-bon-card__label">Berlinerisch oder nich?</p>
+        <h2 id="bon-word" class="c-bon-card__word">
+          <span class="c-headword">{{ word }}</span>
+        </h2>
+        <p class="t-small c-bon-card__progress">
+          Karte {{ cardInStack }} von 20 · Stapel {{ stack }}
+        </p>
 
-      <div v-if="hint" class="c-bon-card__swipe-hint" aria-hidden="true">
-        <HandIcon class="c-bon-card__swipe-hint-icon" width="32" height="32" />
-      </div>
-    </section>
+        <span
+          class="c-bon-card__overlay c-bon-card__overlay--nee"
+          :style="overlay(-1)"
+          aria-hidden="true"
+        >
+          ← Nee
+        </span>
+        <span
+          class="c-bon-card__overlay c-bon-card__overlay--ja"
+          :style="overlay(1)"
+          aria-hidden="true"
+        >
+          Ja →
+        </span>
+
+        <div v-if="hint" class="c-bon-card__swipe-hint" aria-hidden="true">
+          <HandIcon class="c-bon-card__swipe-hint-icon" width="32" height="32" />
+        </div>
+      </section>
+    </slot>
 
     <div class="c-bon-card__answers">
       <button
@@ -67,8 +70,10 @@
       </button>
     </div>
 
-    <p class="t-small c-bon-card__how c-bon-card__how--touch">Jeht ooch mit Wischen.</p>
-    <p class="t-small c-bon-card__how c-bon-card__how--keys">Jeht ooch mit den Pfeiltasten.</p>
+    <template v-if="!$slots.feedback">
+      <p class="t-small c-bon-card__how c-bon-card__how--touch">Jeht ooch mit Wischen.</p>
+      <p class="t-small c-bon-card__how c-bon-card__how--keys">Jeht ooch mit den Pfeiltasten.</p>
+    </template>
 
     <button class="c-textlink c-bon-card__end" type="button" @click="emit('end')">
       Spiel beenden

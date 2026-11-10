@@ -56,12 +56,19 @@ vi.mock("@components/games/BonHUD.vue", () => ({
 vi.mock("@components/games/BonResult.vue", () => ({
   default: { template: "<div class='mock-result' />" },
 }));
+vi.mock("@components/games/BonFeedback.vue", () => ({
+  default: {
+    emits: ["next"],
+    props: ["last", "gameOver", "lives"],
+    template: "<button class='mock-feedback' @click=\"$emit('next')\">{{ gameOver }}</button>",
+  },
+}));
 vi.mock("@components/games/BonCard.vue", () => ({
   default: {
     emits: ["answer", "end"],
     props: ["word", "showSwipeHint", "locked"],
     template:
-      "<div><button class='mock-card' @click=\"$emit('answer', true)\">{{ word }}</button><b class='mock-hint'>{{ showSwipeHint }}</b><i class='mock-end' @click=\"$emit('end')\" /></div>",
+      "<div><slot name='feedback' /><button class='mock-card' @click=\"$emit('answer', true)\">{{ word }}</button><b class='mock-hint'>{{ showSwipeHint }}</b><i class='mock-end' @click=\"$emit('end')\" /></div>",
   },
 }));
 
@@ -124,14 +131,9 @@ describe("BerlinerOderNicht", () => {
     expect(mockVibrate).toHaveBeenLastCalledWith([80, 60, 80]);
   });
 
-  it("feedback offers advance, error offers retry, over shows the result", async () => {
-    phase.value = "feedback";
-    last.value = { correct: true, isReal: true, translation: "Unsinn", word: "Quatsch" };
-    const wrapper = mount(BerlinerOderNicht);
-    await wrapper.find("button").trigger("click");
-    expect(mockAdvance).toHaveBeenCalledOnce();
+  it("error offers retry, over shows the result", async () => {
     phase.value = "error";
-    await nextTick();
+    const wrapper = mount(BerlinerOderNicht);
     await wrapper.find("button").trigger("click");
     expect(mockRetry).toHaveBeenCalledOnce();
     phase.value = "over";
@@ -139,14 +141,65 @@ describe("BerlinerOderNicht", () => {
     expect(wrapper.find(".mock-result").exists()).toBe(true);
   });
 
+  describe("feedback", () => {
+    const key = (k: string, init: KeyboardEventInit = {}, target: EventTarget = document.body) =>
+      target.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: k, ...init }));
+
+    beforeEach(() => {
+      vi.useFakeTimers();
+      card.value = { id: "1", word: "Quatsch" };
+      last.value = { correct: true, isReal: true, word: "Quatsch" };
+      phase.value = "feedback";
+    });
+    afterEach(() => vi.useRealTimers());
+
+    it("shows BonFeedback in the card slot and advances on next after the input lock", async () => {
+      const wrapper = mount(BerlinerOderNicht);
+      await nextTick();
+      await wrapper.find(".mock-feedback").trigger("click");
+      expect(mockAdvance).not.toHaveBeenCalled();
+      vi.advanceTimersByTime(250);
+      await wrapper.find(".mock-feedback").trigger("click");
+      expect(mockAdvance).toHaveBeenCalledOnce();
+    });
+
+    it.each(["ArrowLeft", "ArrowRight", "Enter", " "])("%s advances after the lock", async (k) => {
+      mount(BerlinerOderNicht);
+      await nextTick();
+      key(k);
+      expect(mockAdvance).not.toHaveBeenCalled();
+      vi.advanceTimersByTime(250);
+      key(k);
+      expect(mockAdvance).toHaveBeenCalledOnce();
+    });
+
+    it("leaves Enter on a link alone and ignores modifiers", async () => {
+      mount(BerlinerOderNicht, { attachTo: document.body });
+      await nextTick();
+      vi.advanceTimersByTime(250);
+      const link = document.createElement("a");
+      document.body.append(link);
+      key("Enter", {}, link);
+      key("ArrowRight", { shiftKey: true });
+      expect(mockAdvance).not.toHaveBeenCalled();
+      link.remove();
+    });
+
+    it("passes game over when no lives are left", () => {
+      expect(mount(BerlinerOderNicht).find(".mock-feedback").text()).toBe("false");
+    });
+  });
+
   describe("play", () => {
     const key = (k: string, target: EventTarget = document.body) =>
       target.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: k }));
 
     beforeEach(() => {
+      vi.useFakeTimers();
       phase.value = "play";
       card.value = { id: "1", word: "Quatsch" };
     });
+    afterEach(() => vi.useRealTimers());
 
     it("labels the player, falling back to Anonym", async () => {
       expect(mount(BerlinerOderNicht).find(".mock-hud").text()).toBe("Anonym");
@@ -188,7 +241,7 @@ describe("BerlinerOderNicht", () => {
       input.remove();
     });
 
-    it("locks after an answer until the phase moves on", async () => {
+    it("locks after an answer until 250 ms after the next card", async () => {
       mount(BerlinerOderNicht);
       key("ArrowRight");
       key("ArrowRight");
@@ -197,6 +250,9 @@ describe("BerlinerOderNicht", () => {
       await nextTick();
       phase.value = "play";
       await nextTick();
+      key("ArrowLeft");
+      expect(mockAnswer).toHaveBeenCalledOnce();
+      vi.advanceTimersByTime(250);
       key("ArrowLeft");
       expect(mockAnswer).toHaveBeenCalledTimes(2);
     });
