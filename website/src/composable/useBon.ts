@@ -1,35 +1,22 @@
+import type { FinishResult, PublicCard } from "@services/bonGameApi";
+
+import { answerCard, finishRun, nextCards, startRun } from "@services/bonGameApi";
 import { $bonStats } from "@stores/bonStats";
-import { $savedBon } from "@stores/savedBon";
-import { createToastNotify } from "@stores/toastNotify";
 import { trackEvent } from "@utils/analytics";
-import { shuffle } from "@utils/helpers";
-import { ref, computed } from "vue";
+import { ref } from "vue";
 
-import type { FakeWord } from "@/data/fakeWords";
-
-export interface BonCard {
+export type RoundEntry = {
   word: string;
+  correct: boolean;
   isReal: boolean;
-  slug?: string;
   translation?: string;
-}
-
-interface BonState {
-  phase: "idle" | "playing" | "result";
-  lives: number;
-  score: number;
-  streak: number;
-  bestStreak: number;
+  slug?: string;
+  category?: "invented" | "hochdeutsch";
+  points: number;
   multiplier: number;
-  totalAnswered: number;
-  correctAnswers: number;
-  currentCard: BonCard | null;
-  deck: BonCard[];
-  lastAnswerCorrect: boolean | null;
-  lastCard: BonCard | null;
-}
+};
 
-// --- Pure helpers (exported for testing) ---
+export type BonPhase = "intro" | "play" | "feedback" | "loading" | "error" | "over";
 
 export function computeMultiplier(streak: number): number {
   if (streak >= 10) return 5;
@@ -38,237 +25,198 @@ export function computeMultiplier(streak: number): number {
   return 1;
 }
 
-const DECK_SIZE = 20;
-
-const initialState = (): BonState => ({
-  bestStreak: 0,
-  correctAnswers: 0,
-  currentCard: null,
-  deck: [],
-  lastAnswerCorrect: null,
-  lastCard: null,
-  lives: 3,
-  multiplier: 1,
-  phase: "idle",
-  score: 0,
-  streak: 0,
-  totalAnswered: 0,
-});
-
-// Draw n cards from queue without repeating; refills by reshuffling source when empty
-function drawFromQueue(queue: BonCard[], source: BonCard[], n: number): BonCard[] {
-  const result: BonCard[] = [];
-  for (let i = 0; i < n; i++) {
-    if (queue.length === 0) queue.push(...shuffle(source));
-    if (queue.length === 0) break;
-    result.push(queue.shift()!);
-  }
-  return result;
-}
-
-// --- Composable ---
+const LIVES = 3;
+const PREFETCH_AT = 15;
+const LABEL = "berliner-oder-nicht";
 
 export function useBon() {
-  const state = ref<BonState>(initialState());
-  const isReady = ref(false);
+  const phase = ref<BonPhase>("intro");
+  const lives = ref(LIVES);
+  const score = ref(0);
+  const streak = ref(0);
+  const bestStreak = ref(0);
+  const multiplier = ref(1);
+  const card = ref<PublicCard | null>(null);
+  const cardInStack = ref(0);
+  const stack = ref(0);
+  const history = ref<RoundEntry[]>([]);
+  const last = ref<RoundEntry | null>(null);
+  const result = ref<FinishResult | undefined>();
+  const endedEarly = ref(false);
+  const previousHighScore = ref(0);
 
-  // Exposed reactive slices
-  const phase = computed(() => state.value.phase);
-  const lives = computed(() => state.value.lives);
-  const score = computed(() => state.value.score);
-  const streak = computed(() => state.value.streak);
-  const bestStreak = computed(() => state.value.bestStreak);
-  const multiplier = computed(() => state.value.multiplier);
-  const totalAnswered = computed(() => state.value.totalAnswered);
-  const correctAnswers = computed(() => state.value.correctAnswers);
-  const currentCard = computed(() => state.value.currentCard);
-  const lastAnswerCorrect = computed(() => state.value.lastAnswerCorrect);
-  const lastCard = computed(() => state.value.lastCard);
+  let token = "";
+  let cards: PublicCard[] = [];
+  let upcoming: PublicCard[] | undefined;
+  let prefetch: Promise<void> | undefined;
+  let gameOver = false;
+  let busy = false;
+  let retryFn: () => void = () => {};
+  // The server rejects overlapping calls of one game (409), so every call goes through this chain.
+  let chain: Promise<unknown> = Promise.resolve();
+  const queued = <T>(fn: () => Promise<T>): Promise<T> => {
+    const run = chain.then(fn);
+    chain = run.catch(() => {});
+    return run;
+  };
 
-  let _realWords: BonCard[] = [];
-  let _fakeSource: BonCard[] = [];
-  // Persistent queues — cycle through all words before repeating
-  let _realQueue: BonCard[] = [];
-  let _fakeQueue: BonCard[] = [];
-
-  function init(realWords: BonCard[], fakeWords: FakeWord[]) {
-    _realWords = realWords;
-    _fakeSource = fakeWords.map((f) => ({ isReal: false as const, word: f.word }));
-    _realQueue = shuffle(realWords);
-    _fakeQueue = shuffle(_fakeSource);
-    isReady.value = true;
+  function fail(retry: () => void) {
+    retryFn = retry;
+    phase.value = "error";
   }
 
-  // Variable split: 50–75% real (10–15 cards), rest fake
-  function _makeQueuedDeck(): BonCard[] {
-    const realCount = Math.floor(Math.random() * 6) + 10; // 10..15
-    const fakeCount = DECK_SIZE - realCount;
-    const real = drawFromQueue(_realQueue, _realWords, realCount);
-    const fake = drawFromQueue(_fakeQueue, _fakeSource, fakeCount);
-    return shuffle([...real, ...fake]);
+  function loadNext(): Promise<void> {
+    prefetch ??= queued(() => nextCards(token)).then(
+      (c) => {
+        upcoming = c;
+      },
+      (error) => {
+        prefetch = undefined;
+        throw error;
+      },
+    );
+    return prefetch;
   }
 
-  function startGame() {
-    if (!isReady.value) return;
-    _realQueue = shuffle(_realWords);
-    _fakeQueue = shuffle(_fakeSource);
-    _clearStorage();
-    state.value = { ...initialState(), deck: _makeQueuedDeck(), phase: "playing" };
-    nextCard();
-    trackEvent("Game", "Game Started", "berliner-oder-nicht");
+  function showCard(index: number) {
+    cardInStack.value = index;
+    card.value = cards[index - 1];
+    phase.value = "play";
+    // Silent: a failed prefetch is requested again when the stack runs out.
+    if (index === PREFETCH_AT) loadNext().catch(() => {});
   }
 
-  function nextCard() {
-    if (state.value.deck.length === 0) {
-      state.value.deck = _makeQueuedDeck();
+  async function start() {
+    previousHighScore.value = $bonStats.get().highScore;
+    lives.value = LIVES;
+    score.value = streak.value = bestStreak.value = 0;
+    multiplier.value = 1;
+    history.value = [];
+    last.value = null;
+    result.value = undefined;
+    endedEarly.value = false;
+    upcoming = prefetch = undefined;
+    gameOver = busy = false;
+    chain = Promise.resolve();
+    phase.value = "loading";
+    try {
+      const run = await startRun();
+      token = run.token;
+      cards = run.cards;
+      stack.value = 1;
+      showCard(1);
+      trackEvent("Game", "Game Started", LABEL);
+    } catch {
+      fail(start);
     }
-    const [next, ...rest] = state.value.deck;
-    state.value.deck = rest;
-    state.value.currentCard = next ?? null;
   }
 
-  function _saveToStorage() {
-    if (state.value.phase !== "playing" || !state.value.currentCard) return;
-    $savedBon.set({
-      bestStreak: state.value.bestStreak,
-      correctAnswers: state.value.correctAnswers,
-      currentCard: state.value.currentCard,
-      deck: state.value.deck,
-      fakeQueue: [..._fakeQueue],
-      lastAnswerCorrect: state.value.lastAnswerCorrect,
-      lastCard: state.value.lastCard,
-      lives: state.value.lives,
-      multiplier: state.value.multiplier,
-      phase: "playing",
-      realQueue: [..._realQueue],
-      score: state.value.score,
-      streak: state.value.streak,
-      totalAnswered: state.value.totalAnswered,
-    });
+  async function answer(real: boolean) {
+    if (phase.value !== "play" || busy || !card.value) return;
+    busy = true;
+    try {
+      const reply = await queued(() => answerCard(token, card.value!.id, real));
+      streak.value = reply.correct ? streak.value + 1 : 0;
+      multiplier.value = computeMultiplier(streak.value);
+      bestStreak.value = Math.max(bestStreak.value, streak.value);
+      const points = reply.correct ? 10 * multiplier.value : 0;
+      score.value += points;
+      lives.value = reply.lives;
+      gameOver = reply.gameOver;
+      const { correct, category, isReal, slug, translation } = reply;
+      last.value = {
+        category,
+        correct,
+        isReal,
+        multiplier: multiplier.value,
+        points,
+        slug,
+        translation,
+        word: card.value.word,
+      };
+      history.value.push(last.value);
+      if (!endedEarly.value) phase.value = "feedback";
+    } catch {
+      fail(() => {
+        phase.value = "play";
+        void answer(real);
+      });
+    } finally {
+      busy = false;
+    }
   }
 
-  function _clearStorage() {
-    $savedBon.set(null);
+  async function finish() {
+    phase.value = "loading";
+    const name = $bonStats.get().playerName;
+    result.value = await finishRun(token, name || undefined);
+    const stats = $bonStats.get();
+    $bonStats.setKey("totalGamesPlayed", stats.totalGamesPlayed + 1);
+    $bonStats.setKey(
+      "totalCorrect",
+      stats.totalCorrect + history.value.filter((e) => e.correct).length,
+    );
+    $bonStats.setKey("totalAnswered", stats.totalAnswered + history.value.length);
+    if (score.value > stats.highScore) {
+      $bonStats.setKey("highScore", score.value);
+      trackEvent("Game", "New Highscore", LABEL, score.value);
+    }
+    if (bestStreak.value > stats.bestStreak) {
+      $bonStats.setKey("bestStreak", bestStreak.value);
+      trackEvent("Game", "New Best Streak", LABEL, bestStreak.value);
+    }
+    trackEvent("Game", "Game Over", LABEL, score.value);
+    phase.value = "over";
   }
 
-  function answer(guessedReal: boolean) {
-    const card = state.value.currentCard;
-    if (!card || state.value.phase !== "playing") return;
-
-    const correct = card.isReal === guessedReal;
-    state.value.lastCard = card;
-    state.value.lastAnswerCorrect = correct;
-    state.value.totalAnswered++;
-
-    if (correct) {
-      state.value.correctAnswers++;
-      state.value.streak++;
-      state.value.multiplier = computeMultiplier(state.value.streak);
-      if (state.value.streak > state.value.bestStreak) {
-        state.value.bestStreak = state.value.streak;
-      }
-      state.value.score += 10 * state.value.multiplier;
-
-      if (card.isReal && card.translation) {
-        // Delay one rAF so the card transition has already claimed its GPU
-        // compositor layer. Without this, both the card exit/entry animation and
-        // the toast entry animation start in the same frame, causing a one-frame
-        // flash on mobile (compositor contention).
-        requestAnimationFrame(() => {
-          createToastNotify({
-            message: `„${card.word}" = ${card.translation}`,
-            status: "success",
-            timeout: 3000,
-          });
+  async function advance() {
+    if (phase.value !== "feedback") return;
+    if (gameOver) return finish();
+    if (cardInStack.value < cards.length) return showCard(cardInStack.value + 1);
+    if (!upcoming) {
+      phase.value = "loading";
+      try {
+        await loadNext();
+      } catch {
+        return fail(() => {
+          phase.value = "feedback";
+          void advance();
         });
       }
-      _saveToStorage();
-      return;
     }
-    state.value.streak = 0;
-    state.value.multiplier = 1;
-    state.value.lives--;
-
-    if (state.value.lives <= 0) {
-      _endGame();
-    } else {
-      _saveToStorage();
-    }
+    cards = upcoming!;
+    upcoming = prefetch = undefined;
+    stack.value++;
+    showCard(1);
   }
 
-  function _endGame() {
-    _clearStorage();
-    state.value.phase = "result";
-    const stats = $bonStats.get();
-    const isNewHighScore = state.value.score > stats.highScore;
-    const isNewBestStreak = state.value.bestStreak > stats.bestStreak;
+  const retry = () => retryFn();
 
-    $bonStats.setKey("totalGamesPlayed", stats.totalGamesPlayed + 1);
-    $bonStats.setKey("totalCorrect", stats.totalCorrect + state.value.correctAnswers);
-    $bonStats.setKey("totalAnswered", stats.totalAnswered + state.value.totalAnswered);
-
-    if (isNewHighScore) {
-      $bonStats.setKey("highScore", state.value.score);
-      trackEvent("Game", "New Highscore", "berliner-oder-nicht", state.value.score);
-    }
-    if (isNewBestStreak) {
-      $bonStats.setKey("bestStreak", state.value.bestStreak);
-      trackEvent("Game", "New Best Streak", "berliner-oder-nicht", state.value.bestStreak);
-    }
-
-    trackEvent("Game", "Game Over", "berliner-oder-nicht", state.value.score);
-  }
-
-  const isNewHighScore = computed(() => {
-    const stats = $bonStats.get();
-    return (
-      state.value.phase === "result" &&
-      state.value.score >= stats.highScore &&
-      state.value.score > 0
-    );
-  });
-
-  function resumeGame() {
-    if (_realWords.length === 0) return;
-    const saved = $savedBon.get();
-    if (!saved || saved.phase !== "playing") return;
-    state.value = {
-      bestStreak: saved.bestStreak,
-      correctAnswers: saved.correctAnswers,
-      currentCard: saved.currentCard,
-      deck: saved.deck,
-      lastAnswerCorrect: saved.lastAnswerCorrect,
-      lastCard: saved.lastCard,
-      lives: saved.lives,
-      multiplier: saved.multiplier,
-      phase: "playing",
-      score: saved.score,
-      streak: saved.streak,
-      totalAnswered: saved.totalAnswered,
-    };
-    _realQueue = [...saved.realQueue];
-    _fakeQueue = [...saved.fakeQueue];
-    trackEvent("Game", "Game Resumed", "berliner-oder-nicht");
+  async function end() {
+    if (phase.value === "intro" || phase.value === "over" || phase.value === "loading") return;
+    endedEarly.value = true;
+    await finish();
   }
 
   return {
+    advance,
     answer,
     bestStreak,
-    correctAnswers,
-    currentCard,
-    init,
-    isNewHighScore,
-    isReady,
-    lastAnswerCorrect,
-    lastCard,
+    card,
+    cardInStack,
+    end,
+    endedEarly,
+    history,
+    last,
     lives,
     multiplier,
-    nextCard,
     phase,
-    resumeGame,
+    previousHighScore,
+    result,
+    retry,
     score,
-    startGame,
+    stack,
+    start,
     streak,
-    totalAnswered,
   };
 }

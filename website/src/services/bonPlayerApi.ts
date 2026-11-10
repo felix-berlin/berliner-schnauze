@@ -9,7 +9,7 @@ export interface PlayerStats {
 
 const FALLBACK_ERROR = "Das hat leida nich jeklappt. Versuch's jleich nochma.";
 
-async function post<T>(url: string, body?: unknown): Promise<T> {
+export async function post<T>(url: string, body?: unknown): Promise<T> {
   let res: Response;
   try {
     res = await fetch(
