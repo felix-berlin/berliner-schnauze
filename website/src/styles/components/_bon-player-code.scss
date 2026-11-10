@@ -83,7 +83,7 @@
   &__qr {
     width: 12rem;
     padding: 0.5rem;
-    background: #fff; // QR needs a light quiet zone in dark mode too
+    background: var(--white-100); // QR needs a light quiet zone in dark mode too
     border-radius: 0.5rem;
 
     svg {

@@ -95,6 +95,7 @@ const qrSvg = ref("");
 const copied = ref(false);
 
 async function run(action: () => Promise<void>) {
+  if (pending.value) return;
   pending.value = true;
   error.value = "";
   try {

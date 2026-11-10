@@ -57,4 +57,25 @@ describe("BonPlayerCode", () => {
     expect(api.redeemPlayerCode).toHaveBeenCalledWith("K7QD-M2X9-ZT4B");
     expect(w.text()).toContain("Berta");
   });
+
+  it("disables the buttons and ignores a second submit while pending", async () => {
+    let resolve!: (v: typeof stats) => void;
+    api.redeemPlayerCode.mockReturnValue(new Promise((r) => (resolve = r)));
+    api.createPlayerCode.mockReturnValue(new Promise(() => {}));
+    const w = mount(BonPlayerCode);
+    await w.get("[data-test=get]").trigger("click");
+    expect(w.get("[data-test=get]").attributes("disabled")).toBeDefined();
+    await w.get("[data-test=get]").trigger("click");
+    expect(api.createPlayerCode).toHaveBeenCalledTimes(1);
+
+    const w2 = mount(BonPlayerCode);
+    await w2.get("[data-test=show-redeem]").trigger("click");
+    await w2.get("input").setValue("K7QD");
+    await w2.get("form").trigger("submit");
+    expect(w2.get("form button").attributes("disabled")).toBeDefined();
+    await w2.get("form").trigger("submit");
+    expect(api.redeemPlayerCode).toHaveBeenCalledTimes(1);
+    resolve(stats);
+    await flushPromises();
+  });
 });
