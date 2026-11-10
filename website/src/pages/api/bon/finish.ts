@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 
-import { bonVisitor, findGame } from "@services/bonGame.ts";
+import { bonVisitor, busyGames, findGame } from "@services/bonGame.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";
@@ -10,9 +10,7 @@ import { plausibleTiming, verifyRun } from "payload-app/bon-rules";
 const INVALID = { error: "Ungültiges Spiel" };
 const DONE = { error: "Dett Spiel is schon jewertet." };
 
-// Payload's update({ where }) finds, then updates per doc, so its status condition alone is no lock.
-// shortcut: in memory, one process; a second web container would need a DB-level conditional update.
-const finishing = new Set<string>();
+// Payload's update({ where }) finds, then updates per doc, so its status condition alone is no lock; busyGames (shared with next/answer) is.
 
 export const POST: APIRoute = async ({ cookies, request }) => {
   // A client with blocked cookies plays, but never ranks.
@@ -22,8 +20,8 @@ export const POST: APIRoute = async ({ cookies, request }) => {
   if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
   const { playerName, token } = input.data;
 
-  if (finishing.has(token)) return reply(DONE, 409);
-  finishing.add(token);
+  if (busyGames.has(token)) return reply(DONE, 409);
+  busyGames.add(token);
   try {
     const payload = await getPayloadClient();
     const game = await findGame(payload, token, bonVisitor(cookie));
@@ -90,6 +88,6 @@ export const POST: APIRoute = async ({ cookies, request }) => {
     console.error("[bon] finish failed:", error);
     return reply({ error: "Dett Ergebnis konnte nich jespeichert werden." }, 502);
   } finally {
-    finishing.delete(token);
+    busyGames.delete(token);
   }
 };

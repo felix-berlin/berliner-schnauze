@@ -26,7 +26,7 @@ export const POST: APIRoute = async ({ request }) => {
       return reply({ error: "Jenug Karten für een Spiel." }, 400);
 
     const cards = dealBatch(await loadPool(), new Set(game.cards.map((c) => c.id)));
-    // shortcut: two parallel nexts hand out the same positions with different words and only one batch is stored, so answers to the lost batch are scored against other words. Answers are still scored against the stored cards; the client must keep at most one next in flight.
+    // shortcut: busyGames serializes next and answer in this process only; a second web container would need a DB-level conditional update.
     await payload.update({
       collection: "bon-games",
       data: {

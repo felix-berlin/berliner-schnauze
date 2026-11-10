@@ -33,12 +33,7 @@ export const POST: APIRoute = async ({ request }) => {
     await payload.update({
       collection: "bon-games",
       data: {
-        cards: cards.map((c, i) =>
-          i === position ? Object.assign(c, {
-	answer: real,
-	answeredAt: Date.now()
-}) : c,
-        ),
+        cards: cards.with(position, { ...dealt, answer: real, answeredAt: Date.now() }),
       },
       depth: 0,
       id: game.id,
