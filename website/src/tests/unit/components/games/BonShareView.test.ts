@@ -73,6 +73,38 @@ describe("BonShareView.vue", () => {
     expect(wrapper.text()).not.toContain("H1tler");
   });
 
+  // The app strips format characters on rename and finish, so a name that still holds them is hand-made.
+  it.each(["‮izaN", "⁧izaN⁩", "‮DfA"])(
+    "shows no name with bidi controls from the link (%j)",
+    async (playerName) => {
+      const { useUrlSearchParams } = await import("@vueuse/core");
+      const { decodeShareHash } = await import("@utils/bonShare");
+      vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<
+        typeof useUrlSearchParams
+      >);
+      vi.mocked(decodeShareHash).mockReturnValueOnce({ ...samplePayload, playerName });
+
+      const wrapper = mount(BonShareView);
+      expect(wrapper.find("h1").text()).toBe("Spielergebnis");
+      expect(wrapper.text()).not.toContain("izaN");
+      expect(wrapper.text()).not.toContain("DfA");
+      expect(wrapper.attributes("data-content-piece")).toBe("Score 120");
+    },
+  );
+
+  it("keeps a name with an emoji ZWJ sequence", async () => {
+    const { useUrlSearchParams } = await import("@vueuse/core");
+    const { decodeShareHash } = await import("@utils/bonShare");
+    vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<
+      typeof useUrlSearchParams
+    >);
+    const playerName = "👨‍👩‍👧 Kalle";
+    vi.mocked(decodeShareHash).mockReturnValueOnce({ ...samplePayload, playerName });
+
+    const wrapper = mount(BonShareView);
+    expect(wrapper.find("h1").text()).toBe(`${playerName}s Spielergebnis`);
+  });
+
   it("computes accuracy percent correctly", async () => {
     const { useUrlSearchParams } = await import("@vueuse/core");
     vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<

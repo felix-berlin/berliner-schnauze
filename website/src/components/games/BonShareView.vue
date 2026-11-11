@@ -54,7 +54,7 @@ import { useContentTracking } from "@composables/useContentTracking";
 import { accuracyPercent as toAccuracyPercent, decodeShareHash } from "@utils/bonShare";
 import { formattedDate as formatDate } from "@utils/helpers";
 import { useUrlSearchParams } from "@vueuse/core";
-import { isOffensiveName } from "payload-app/bon-names";
+import { isOffensiveName, visibleName } from "payload-app/bon-names";
 import { computed, ref } from "vue";
 
 const root = ref<HTMLElement | null>(null);
@@ -64,8 +64,10 @@ const params = useUrlSearchParams("history");
 const payload = computed<BonSharePayload | null>(() => {
   const r = params.r;
   const decoded = r ? decodeShareHash(Array.isArray(r) ? r[0] : r) : null;
-  // The link is anyone's to write: an offensive name shows as no name.
-  return decoded?.playerName && isOffensiveName(decoded.playerName)
+  // The link is anyone's to write: an offensive name shows as no name. The app strips format characters before a name is
+  // stored, so one that still holds them is hand-made ("\u202EizaN" renders as "Nazi") and shows as no name too.
+  const name = decoded?.playerName;
+  return name && (visibleName(name) !== name || isOffensiveName(name))
     ? { ...decoded, playerName: undefined }
     : decoded;
 });
