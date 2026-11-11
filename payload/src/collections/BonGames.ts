@@ -43,7 +43,10 @@ export const BonGames: CollectionConfig = {
       name: "cards",
       type: "json",
       required: true,
-      admin: { description: "{ id, word, isReal, translation? }[] in dealt order" },
+      admin: {
+        description:
+          "{ id, word, isReal, translation?, slug?, category?, answer?, answeredAt? }[] in dealt order; answer and answeredAt are set by the answer route",
+      },
     },
     {
       name: "batches",

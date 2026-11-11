@@ -74,10 +74,15 @@ export type RankedEntry = {
   finishedAt: string;
 };
 
+// A full tie falls back to the id, so the order never depends on the input order.
 const better = (a: RankInput, b: RankInput) =>
-  a.score !== b.score ? a.score > b.score : a.finishedAt < b.finishedAt;
+  a.score !== b.score
+    ? a.score > b.score
+    : a.finishedAt !== b.finishedAt
+      ? a.finishedAt < b.finishedAt
+      : a.id < b.id;
 
-/** Best game per identity, sorted by score desc then finishedAt asc; ranks are consecutive, ties get no shared rank. */
+/** Best game per identity, sorted by score desc, then finishedAt asc, then id asc; ranks are consecutive, ties get no shared rank. */
 export function rankGames(games: RankInput[]): RankedEntry[] {
   const best = new Map<string, RankInput>();
   for (const g of games) {
@@ -85,7 +90,7 @@ export function rankGames(games: RankInput[]): RankedEntry[] {
     if (!cur || better(g, cur)) best.set(g.identity, g);
   }
   return [...best.values()]
-    .sort((a, b) => (better(a, b) ? -1 : 1))
+    .sort((a, b) => (a.id === b.id ? 0 : better(a, b) ? -1 : 1))
     .map((g, i) => {
       const entry: RankedEntry = {
         accuracy: g.totalAnswered ? Math.round((g.correctAnswers / g.totalAnswered) * 100) : 0,
