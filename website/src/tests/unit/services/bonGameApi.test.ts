@@ -34,10 +34,15 @@ describe("bonGameApi", () => {
     expect(await finishRun("t", "Ede")).toEqual(r);
   });
 
-  it("finishRun returns undefined on 4xx and never throws", async () => {
-    respond({ error: "x" }, 400);
-    expect(await finishRun("t")).toBeUndefined();
+  it("finishRun throws the server's message with its status, a network failure without one", async () => {
+    respond({ error: "Ohne Cookie jibt's keen Ranking." }, 400);
+    await expect(finishRun("t")).rejects.toMatchObject({
+      message: "Ohne Cookie jibt's keen Ranking.",
+      status: 400,
+    });
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("net")));
-    expect(await finishRun("t")).toBeUndefined();
+    const error = await finishRun("t").catch((e: unknown) => e);
+    expect(error).toBeInstanceOf(Error);
+    expect((error as { status?: number }).status).toBeUndefined();
   });
 });

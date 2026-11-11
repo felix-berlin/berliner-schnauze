@@ -163,6 +163,7 @@ import {
 } from "@services/bonPlayerApi.ts";
 import { $bonStats } from "@stores/bonStats";
 import { normalizeCode } from "@utils/bonPlayerCode.ts";
+import { ANONYM } from "payload-app/bon-names";
 import CheckIcon from "virtual:icons/lucide/check";
 import CircleAlertIcon from "virtual:icons/lucide/circle-alert";
 import { computed, nextTick, onMounted, ref } from "vue";
@@ -250,7 +251,7 @@ async function run(action: () => Promise<void>) {
 const getCode = () =>
   run(async () => {
     code.value = await createPlayerCode();
-    name.value = $bonStats.get().playerName || "Anonym";
+    name.value = $bonStats.get().playerName || ANONYM;
     state.value = "code";
     void focusOn("[data-test=code]");
   });
@@ -278,7 +279,7 @@ async function redeem(value: string) {
     state.value = "success";
     // "Anonym" is no name to greet.
     welcomeName.value =
-      stats.playerName && stats.playerName !== "Anonym" ? stats.playerName : "Spieler";
+      stats.playerName && stats.playerName !== ANONYM ? stats.playerName : "Spieler";
     bestScore.value = stats.gamesPlayed > 0 ? stats.highScore : 0;
     status.value = "";
     void focusOn("[data-test=status]");
@@ -287,7 +288,7 @@ async function redeem(value: string) {
     const message = e instanceof Error ? e.message : String(e);
     if (httpStatus === 429) {
       locked.value = true;
-      fail("Zu ville Versuche.", "Mach ma Pause und probier’s in 15 Minuten nochmal.");
+      fail("Zu ville Versuche.", "Mach ma Pause und probier’s in 10 Minuten nochmal.");
     } else if (httpStatus === 404) {
       wrong.value = true;
       fail(message, WRONG_HINT);

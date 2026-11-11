@@ -12,8 +12,8 @@
         <p class="t-em c-bon-result__why">
           {{ endedEarly ? "Du hast dit Spiel beendet." : "Drei Fehler – dit Spiel is vorbei." }}
         </p>
-        <!-- No rank mostly means no cookie: then a rename finds no game and would only fail. -->
-        <BonName v-if="result?.rank" :name="shownName || 'Anonym'" :tag="tag" @saved="onSaved" />
+        <!-- Only a stored result has a game a rename can find. -->
+        <BonName v-if="result" :name="shownName || 'Anonym'" :tag="tag" @saved="onSaved" />
       </header>
 
       <dl class="c-bon-result__stats">
@@ -28,8 +28,15 @@
             {{
               ranked
                 ? `von ${ranked.totalGames} Spielen insgesamt · besser als ${beaten} %`
-                : "Platzierung jerade nich da"
+                : finishError
+                  ? `Nich in der Rangliste: ${finishError.message}`
+                  : "Platzierung jerade nich da"
             }}
+          </dd>
+          <dd v-if="finishError?.retryable">
+            <button class="c-choice" type="button" @click="emit('retryFinish')">
+              Nochmal speichern
+            </button>
           </dd>
         </div>
         <div class="c-bon-result__stat">
@@ -54,6 +61,9 @@
           {{ copied ? "Text kopiert" : "Ergebnis teilen" }}
         </button>
       </div>
+      <p v-if="shareFailed" class="t-small" role="alert">
+        Teilen hat nich jeklappt – versuch’s nochmal.
+      </p>
 
       <p class="t-small">Dein Rekord: {{ record }} Punkte · gespeichert auf diesem Jerät</p>
 
@@ -108,7 +118,7 @@
 </template>
 
 <script setup lang="ts">
-import type { RoundEntry } from "@composables/useBon";
+import type { BonError, RoundEntry } from "@composables/useBon";
 import type { FinishResult } from "@services/bonGameApi";
 import type { PublicEntry } from "@services/bonLeaderboardApi";
 import type { PlayerName } from "@services/bonPlayerApi.ts";
@@ -121,11 +131,11 @@ import { fetchLeaderboard } from "@services/bonLeaderboardApi";
 import { trackEvent } from "@utils/analytics";
 import { accuracyPercent, buildShareUrl } from "@utils/bonShare";
 import { routeToWord } from "@utils/helpers";
-import { cleanName } from "payload-app/bon-names";
+import { ANONYM, cleanName } from "payload-app/bon-names";
 import CheckIcon from "virtual:icons/lucide/check";
 import TrophyIcon from "virtual:icons/lucide/trophy";
 import XIcon from "virtual:icons/lucide/x";
-import { computed, nextTick, onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 
 const props = defineProps<{
   result?: FinishResult;
@@ -136,6 +146,7 @@ const props = defineProps<{
   playerName: string;
   tag?: string;
   endedEarly: boolean;
+  finishError?: BonError;
 }>();
 
 // A rename on this page wins over the prop until the parent hands the same name down.
@@ -143,10 +154,11 @@ const renamed = ref<string>();
 const currentName = computed(() => renamed.value ?? props.playerName);
 const shownName = computed(() => currentName.value.trim() && cleanName(currentName.value.trim()));
 
-const emit = defineEmits<{ restart: [] }>();
+const emit = defineEmits<{ restart: []; retryFinish: [] }>();
 
 const titleRef = ref<HTMLHeadingElement | null>(null);
 const copied = ref(false);
+const shareFailed = ref(false);
 
 // Moving focus to the heading makes screen readers announce the result.
 onMounted(() => nextTick(() => titleRef.value?.focus()));
@@ -167,9 +179,11 @@ async function loadAround() {
   }
 }
 onMounted(loadAround);
+// A retried save brings the rank later.
+watch(() => props.result, loadAround);
 
 function onSaved({ name }: PlayerName) {
-  renamed.value = name === "Anonym" ? "" : name;
+  renamed.value = name === ANONYM ? "" : name;
   void loadAround();
 }
 
@@ -190,6 +204,7 @@ const beaten = computed(() =>
 
 async function share() {
   trackEvent("Game", "Result Shared", "berliner-oder-nicht");
+  shareFailed.value = false;
   const url =
     window.location.origin +
     buildShareUrl({
@@ -208,8 +223,9 @@ async function share() {
       await navigator.clipboard.writeText(text);
       copied.value = true;
     }
-  } catch {
-    // Dismissed share sheet or blocked clipboard: nothing to report.
+  } catch (error) {
+    // A dismissed share sheet is no failure; a blocked clipboard is.
+    if ((error as Error).name !== "AbortError") shareFailed.value = true;
   }
 }
 </script>

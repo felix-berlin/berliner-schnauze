@@ -3,7 +3,6 @@ import { useBon, computeMultiplier } from "@composables/useBon";
 import * as api from "@services/bonGameApi";
 import { $bonStats } from "@stores/bonStats";
 import { trackEvent } from "@utils/analytics";
-import { computeMultiplier as serverMultiplier } from "payload-app/bon-rules";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@services/bonGameApi");
@@ -60,9 +59,6 @@ describe("computeMultiplier", () => {
     [10, 5],
     [20, 5],
   ])("streak %i gives %i", (s, m) => expect(computeMultiplier(s)).toBe(m));
-  it("agrees with the server rules for streaks 0-25", () => {
-    for (let s = 0; s <= 25; s++) expect(serverMultiplier(s)).toBe(computeMultiplier(s));
-  });
 });
 
 describe("useBon", () => {
@@ -298,12 +294,48 @@ describe("useBon", () => {
     expect(bon.phase.value).toBe("over");
   });
 
-  it("a rejecting finishRun still ends the game", async () => {
-    vi.mocked(api.finishRun).mockRejectedValue(new Error("x"));
+  it("a rejecting finishRun still ends the game, and a retry can store it", async () => {
+    vi.mocked(api.finishRun).mockRejectedValueOnce(
+      Object.assign(new Error("weg"), { status: 502 }),
+    );
     const bon = await started();
     await bon.end();
     expect(bon.phase.value).toBe("over");
     expect(bon.result.value).toBeUndefined();
+    expect(bon.finishError.value).toEqual({ message: "weg", retryable: true });
+    expect(trackEvent).toHaveBeenCalledWith("Game", "Finish Failed", "berliner-oder-nicht", 502);
+    await bon.retryFinish();
+    expect(bon.result.value).toEqual(FINISH);
+    expect(bon.finishError.value).toBeUndefined();
+  });
+
+  it("a refused finish (4xx) cannot be retried", async () => {
+    vi.mocked(api.finishRun).mockRejectedValue(
+      Object.assign(new Error("Ohne Cookie jibt's keen Ranking."), { status: 400 }),
+    );
+    const bon = await started();
+    await bon.end();
+    expect(bon.finishError.value).toEqual({
+      message: "Ohne Cookie jibt's keen Ranking.",
+      retryable: false,
+    });
+    await bon.retryFinish();
+    expect(api.finishRun).toHaveBeenCalledTimes(1);
+  });
+
+  it("a game the server no longer knows offers a new game, not the same call", async () => {
+    const bon = await started();
+    vi.mocked(api.answerCard).mockRejectedValueOnce(
+      Object.assign(new Error("Spiel nich jefunden."), { status: 404 }),
+    );
+    await bon.answer(true);
+    expect(bon.phase.value).toBe("error");
+    expect(bon.error.value).toEqual({ message: "Spiel nich jefunden.", retryable: false });
+    bon.retry();
+    await vi.waitFor(() => expect(bon.phase.value).toBe("play"));
+    expect(api.startRun).toHaveBeenCalledTimes(2);
+    expect(api.answerCard).toHaveBeenCalledTimes(1);
+    expect(bon.error.value).toBeUndefined();
   });
 
   it("an empty card reply is an error", async () => {

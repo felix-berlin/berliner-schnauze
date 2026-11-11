@@ -30,14 +30,6 @@ export const nextCards = async (token: string): Promise<PublicCard[]> =>
 export const answerCard = (token: string, card: string, real: boolean): Promise<AnswerReply> =>
   post("/api/bon/answer", { card, real, token });
 
-/** Never throws: a failed finish only costs the ranking, not the result screen. */
-export async function finishRun(
-  token: string,
-  playerName?: string,
-): Promise<FinishResult | undefined> {
-  try {
-    return await post<FinishResult>("/api/bon/finish", { playerName, token });
-  } catch {
-    return undefined;
-  }
-}
+/** Throws the server's message with its `status` (none for a network failure), like `post`. */
+export const finishRun = (token: string, playerName?: string): Promise<FinishResult> =>
+  post<FinishResult>("/api/bon/finish", { playerName, token });

@@ -146,6 +146,7 @@
             >
               Mehr laden
             </button>
+            <span v-if="moreError" class="t-small" role="alert">{{ moreError }}</span>
           </div>
         </template>
       </section>
@@ -274,6 +275,7 @@ const redeeming = ref(false);
 const player = ref<PlayerName>();
 const reporting = ref(false);
 const reportError = ref("");
+const moreError = ref("");
 const reported = ref<number[]>(readReported());
 
 function readReported(): number[] {
@@ -349,6 +351,7 @@ async function more(): Promise<void> {
   }
   const mine = request;
   loadingMore.value = true;
+  moreError.value = "";
   try {
     const data = await fetchLeaderboard(period.value, entries.value.length, PAGE);
     if (mine === request) {
@@ -357,7 +360,7 @@ async function more(): Promise<void> {
       if (!data.entries.length) total.value = entries.value.length;
     }
   } catch {
-    reportError.value = "Die Rangliste is jerade nich zu kriegen.";
+    if (mine === request) moreError.value = "Die Rangliste is jerade nich zu kriegen.";
   } finally {
     loadingMore.value = false;
   }
@@ -413,7 +416,9 @@ function relativeDay(iso: string): string {
 async function loadPlayer(): Promise<void> {
   try {
     player.value = await fetchPlayerName();
-  } catch {
+  } catch (error) {
+    // The board works without the own name; only the rename editor stays out.
+    console.warn("[bon] own name not loaded:", error);
     player.value = undefined;
   }
 }

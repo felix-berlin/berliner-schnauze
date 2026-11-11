@@ -1,4 +1,5 @@
 import { $bonStats } from "@stores/bonStats";
+import { ANONYM } from "payload-app/bon-names";
 
 export interface PlayerStats {
   playerName: string;
@@ -38,8 +39,8 @@ export const redeemPlayerCode = (code: string): Promise<PlayerStats> =>
 
 /** The server's results win, but only when it has any; an empty server never wipes local ones. */
 export function applyPlayerStats(stats: PlayerStats): void {
-  // The server stores "Anonym" for unnamed players.
-  if (stats.playerName && stats.playerName !== "Anonym") {
+  // The server sends "Anonym" for unnamed players.
+  if (stats.playerName && stats.playerName !== ANONYM) {
     $bonStats.setKey("playerName", stats.playerName);
   }
   if (stats.gamesPlayed > 0) {
@@ -65,7 +66,7 @@ export const renamePlayer = (name: string): Promise<PlayerName> =>
 
 /** Keeps the local name in step with the server; "Anonym" is stored as empty. */
 export const rememberName = (name: string): void =>
-  $bonStats.setKey("playerName", name === "Anonym" ? "" : name);
+  $bonStats.setKey("playerName", name === ANONYM ? "" : name);
 
 export const playerLink = (code: string): string =>
   `${location.origin}/games/berliner-oder-nicht#code=${code}`;
@@ -79,7 +80,7 @@ export function hasRedeemCode(): boolean {
   }
 }
 
-/** Reads and removes the code the inline script in berliner-oder-nicht.astro took from the link. */
+/** Reads and removes the code the head script (BON_FRAGMENT_SCRIPT in utils/bonFragment.ts) took from the link. */
 export function takeRedeemCode(): string | undefined {
   try {
     const code = sessionStorage.getItem("bonRedeem") ?? undefined;

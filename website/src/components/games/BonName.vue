@@ -68,6 +68,7 @@
 
 <script setup lang="ts">
 import { renamePlayer, rememberName, type PlayerName } from "@services/bonPlayerApi.ts";
+import { ANONYM } from "payload-app/bon-names";
 import CheckIcon from "virtual:icons/lucide/check";
 import AlertIcon from "virtual:icons/lucide/circle-alert";
 import { nextTick, onBeforeUnmount, ref, watch } from "vue";
@@ -101,7 +102,7 @@ const link = ref<HTMLButtonElement>();
 let timer: ReturnType<typeof setTimeout> | undefined;
 
 async function edit() {
-  draft.value = shown.value.name === "Anonym" ? "" : shown.value.name;
+  draft.value = shown.value.name === ANONYM ? "" : shown.value.name;
   error.value = undefined;
   justSaved.value = false;
   editing.value = true;

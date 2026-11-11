@@ -245,6 +245,25 @@ describe("BonLeaderboard", () => {
     expect(w.text()).toContain("Platz 1–50 von 340");
   });
 
+  it("a failed Mehr laden shows its error at the button, gone after the next try works", async () => {
+    const w = await mountBoard();
+    const more = () =>
+      w
+        .findAll("button")
+        .find((b) => b.text() === "Mehr laden")!
+        .trigger("click");
+    fetchMock.mockRejectedValueOnce(new Error("x"));
+    await more();
+    await flushPromises();
+    expect(w.find(".c-bon-leaderboard__footer [role='alert']").text()).toBe(
+      "Die Rangliste is jerade nich zu kriegen.",
+    );
+    fetchMock.mockResolvedValue(reply({ entries: rows(26, 50) }));
+    await more();
+    await flushPromises();
+    expect(w.find("[role='alert']").exists()).toBe(false);
+  });
+
   it("mobile: Mehr laden first shows the loaded rows, then fetches", async () => {
     desktop.value = false;
     const w = await mountBoard();

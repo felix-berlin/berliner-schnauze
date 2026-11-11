@@ -106,9 +106,9 @@ describe("BonResult", () => {
       expect(wrapper.find(".c-bon-name").text()).toContain("#K7QX");
     });
 
-    it("is missing without a rank: a rename could not reach the game", () => {
+    it("shows for a stored result without a rank, is missing when nothing was stored", () => {
       const wrapper = mountResult({ result: { ...props.result, rank: undefined } });
-      expect(wrapper.find(".c-bon-name").exists()).toBe(false);
+      expect(wrapper.find(".c-bon-name").exists()).toBe(true);
       expect(mountResult({ result: undefined }).find(".c-bon-name").exists()).toBe(false);
     });
 
@@ -241,12 +241,50 @@ describe("BonResult", () => {
       expect(writeText.mock.calls[0][0]).toContain(text);
     });
 
+    it("says so when the clipboard is blocked, not when the share sheet is dismissed", async () => {
+      vi.stubGlobal("navigator", {
+        clipboard: {
+          writeText: vi.fn().mockRejectedValue(new DOMException("no", "NotAllowedError")),
+        },
+      });
+      const blocked = mountResult();
+      await blocked.find("button.c-choice").trigger("click");
+      await vi.waitFor(() => expect(blocked.find("[role=alert]").exists()).toBe(true));
+      vi.stubGlobal("navigator", {
+        share: vi.fn().mockRejectedValue(new DOMException("no", "AbortError")),
+      });
+      const dismissed = mountResult();
+      await dismissed.find("button.c-choice").trigger("click");
+      await flushPromises();
+      expect(dismissed.find("[role=alert]").exists()).toBe(false);
+    });
+
     it("leaves out the rank when there is none", async () => {
       const writeText = vi.fn().mockResolvedValue(undefined);
       vi.stubGlobal("navigator", { clipboard: { writeText } });
       await mountResult({ result: undefined }).find("button.c-choice").trigger("click");
       expect(writeText.mock.calls[0][0]).toContain("jeschafft. Schaffste mehr?");
     });
+  });
+
+  it("a failed save names the reason and offers a retry only when it can work", async () => {
+    const retryable = mountResult({
+      finishError: { message: "Dett Ergebnis konnte nich jespeichert werden.", retryable: true },
+      result: undefined,
+    });
+    expect(retryable.text()).toContain(
+      "Nich in der Rangliste: Dett Ergebnis konnte nich jespeichert werden.",
+    );
+    const button = retryable.findAll("button").find((b) => b.text() === "Nochmal speichern")!;
+    await button.trigger("click");
+    expect(retryable.emitted("retryFinish")).toHaveLength(1);
+
+    const refused = mountResult({
+      finishError: { message: "Ohne Cookie jibt's keen Ranking.", retryable: false },
+      result: undefined,
+    });
+    expect(refused.text()).toContain("Ohne Cookie jibt's keen Ranking.");
+    expect(refused.findAll("button").some((b) => b.text() === "Nochmal speichern")).toBe(false);
   });
 
   it("restarts from the primary button", async () => {

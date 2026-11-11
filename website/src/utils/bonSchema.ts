@@ -1,4 +1,4 @@
-import { cleanName, visibleName as visible } from "payload-app/bon-names";
+import { ANONYM, cleanName, visibleName as visible } from "payload-app/bon-names";
 import { containsLink } from "payload-app/comments";
 import { z } from "zod";
 
@@ -18,7 +18,7 @@ export const renameSchema = z.strictObject({
     .overwrite(visible)
     .trim()
     .max(24)
-    .transform((v) => (!v || containsLink(v) ? "Anonym" : v)),
+    .transform((v) => (!v || containsLink(v) ? ANONYM : v)),
 });
 
 /** The finish body; the answers are the ones stored by `answer`. */
@@ -30,6 +30,6 @@ export const finishSchema = z.strictObject({
     .max(24)
     .optional()
     // A name that reads as a link ("Anna.Berlin") counts as no name; refusing it would lose the whole result.
-    .transform((v) => cleanName(!v || containsLink(v) ? "Anonym" : v)),
+    .transform((v) => cleanName(!v || containsLink(v) ? ANONYM : v)),
   token,
 });

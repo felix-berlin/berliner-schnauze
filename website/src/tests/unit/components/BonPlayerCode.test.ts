@@ -277,7 +277,7 @@ describe("3b locked", () => {
     await submit(w, CODE);
     expect(w.get("[data-test=error]").text()).toContain("Zu ville Versuche.");
     expect(w.get("[data-test=error]").text()).toContain(
-      "Mach ma Pause und probier’s in 15 Minuten nochmal.",
+      "Mach ma Pause und probier’s in 10 Minuten nochmal.",
     );
     expect(w.get("[data-test=submit]").attributes("aria-disabled")).toBe("true");
     await w.get("form").trigger("submit");

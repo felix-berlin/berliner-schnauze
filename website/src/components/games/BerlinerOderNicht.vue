@@ -70,13 +70,16 @@
           <AlertIcon width="18" height="18" aria-hidden="true" />
           <span class="c-state__body">
             <b>Ditt hat nich jeklappt.</b>
-            <span>
+            <span v-if="error?.retryable !== false">
               Die Karten wollten leider nich kommen. Deine Punkte und Leben bleiben – versuch’s
               gleich nochmal.
             </span>
+            <span v-else>{{ error.message }} Dit Spiel jeht nich weiter.</span>
           </span>
         </div>
-        <button class="c-choice" type="button" @click="retry">Nochmal versuchen</button>
+        <button class="c-choice" type="button" @click="retry">
+          {{ error?.retryable === false ? "Neues Spiel" : "Nochmal versuchen" }}
+        </button>
       </div>
 
       <template v-else-if="view === 'over'">
@@ -89,7 +92,9 @@
           :player-name="stats.playerName"
           :tag="tag"
           :ended-early="endedEarly"
+          :finish-error="finishError"
           @restart="start"
+          @retry-finish="retryFinish"
         />
       </template>
     </div>
@@ -108,7 +113,7 @@ import { hasRedeemCode } from "@services/bonPlayerApi.ts";
 import { $bonStats } from "@stores/bonStats";
 import { vt } from "@utils/viewTransition";
 import { useEventListener, useOnline, useTimeoutFn, useVibrate } from "@vueuse/core";
-import { cleanName } from "payload-app/bon-names";
+import { ANONYM, cleanName } from "payload-app/bon-names";
 import AlertIcon from "virtual:icons/lucide/circle-alert";
 import { computed, ref, watch } from "vue";
 
@@ -120,6 +125,8 @@ const {
   cardInStack,
   end,
   endedEarly,
+  error,
+  finishError,
   finishing,
   history,
   last,
@@ -129,6 +136,7 @@ const {
   previousHighScore,
   result,
   retry,
+  retryFinish,
   score,
   stack,
   start,
@@ -140,7 +148,7 @@ const stats = useStore($bonStats);
 // An offensive local name must not show up here either; nameless players are told apart by the tag.
 const playerLabel = computed(() => {
   const name = cleanName(stats.value.playerName.trim());
-  return name && name !== "Anonym" ? name : `Anonym${tag.value ? ` #${tag.value}` : ""}`;
+  return name && name !== ANONYM ? name : `${ANONYM}${tag.value ? ` #${tag.value}` : ""}`;
 });
 const isOnline = useOnline();
 // Peeked, not taken: BonPlayerCode inside the intro redeems the code itself.

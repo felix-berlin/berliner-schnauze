@@ -3,7 +3,10 @@ import type { FinishResult, PublicCard } from "@services/bonGameApi";
 import { answerCard, finishRun, nextCards, startRun } from "@services/bonGameApi";
 import { $bonStats } from "@stores/bonStats";
 import { trackEvent } from "@utils/analytics";
+import { computeMultiplier, LIVES } from "payload-app/bon-rules";
 import { ref } from "vue";
+
+export { computeMultiplier };
 
 export type RoundEntry = {
   word: string;
@@ -18,20 +21,24 @@ export type RoundEntry = {
 
 export type BonPhase = "intro" | "play" | "feedback" | "loading" | "error" | "over";
 
-export function computeMultiplier(streak: number): number {
-  if (streak >= 10) return 5;
-  if (streak >= 6) return 3;
-  if (streak >= 3) return 2;
-  return 1;
-}
-
-const LIVES = 3;
 const PREFETCH_AT = 15;
 const LABEL = "berliner-oder-nicht";
 // Spec §7/§13 input locks = the animation: feedback flip-in is done 140 + 340 ms after it
 // mounts, the next card has risen after 320 ms.
 export const FEEDBACK_LOCK_MS = 480;
 export const CARD_LOCK_MS = 320;
+
+/** A failed call as the screens show it: the server's words, and whether the same call can succeed again. */
+export type BonError = { message: string; retryable: boolean };
+
+const toBonError = (error: unknown): BonError => {
+  const status = (error as { status?: number }).status;
+  return {
+    message: error instanceof Error ? error.message : String(error),
+    // A network failure (no status), a server error or a rate limit pass; a 4xx (game gone, over, deck cap) does not.
+    retryable: status === undefined || status >= 500 || status === 429,
+  };
+};
 
 export function useBon() {
   const phase = ref<BonPhase>("intro");
@@ -46,6 +53,9 @@ export function useBon() {
   const history = ref<RoundEntry[]>([]);
   const last = ref<RoundEntry | null>(null);
   const result = ref<FinishResult | undefined>();
+  // Set when the result could not be stored; `result` then stays empty.
+  const finishError = ref<BonError>();
+  const error = ref<BonError>();
   const endedEarly = ref(false);
   // The 4-character suffix of the nameless "Anonym #TAG", as the leaderboard shows it.
   const tag = ref("");
@@ -71,8 +81,10 @@ export function useBon() {
     return run;
   };
 
-  function fail(retry: () => void) {
-    retryFn = retry;
+  function fail(retry: () => void, cause: unknown) {
+    error.value = toBonError(cause);
+    // A call that cannot succeed again leaves only a new game.
+    retryFn = error.value.retryable ? retry : () => void start();
     phase.value = "error";
   }
 
@@ -110,7 +122,7 @@ export function useBon() {
     multiplier.value = 1;
     history.value = [];
     last.value = null;
-    result.value = undefined;
+    result.value = finishError.value = error.value = undefined;
     endedEarly.value = false;
     finishing.value = false;
     upcoming = prefetch = undefined;
@@ -128,8 +140,8 @@ export function useBon() {
       stack.value = 1;
       showCard(1);
       trackEvent("Game", "Game Started", LABEL);
-    } catch {
-      if (g === gen) fail(start);
+    } catch (e) {
+      if (g === gen) fail(start, e);
     }
   }
 
@@ -161,13 +173,13 @@ export function useBon() {
       };
       history.value.push(last.value);
       if (!ending) phase.value = "feedback";
-    } catch {
+    } catch (e) {
       // Once the run is being finished the answer is moot.
       if (g === gen && !ending) {
         fail(() => {
           phase.value = "play";
           void answer(real);
-        });
+        }, e);
       }
     } finally {
       if (g === gen) busy = false;
@@ -179,10 +191,8 @@ export function useBon() {
     // Before the phase: the screen holds the game view while finishing (it morphs into the result).
     finishing.value = true;
     phase.value = "loading";
-    const name = $bonStats.get().playerName;
-    const res = await queued(() => finishRun(token, name || undefined)).catch(() => undefined);
+    await saveResult();
     if (g !== gen) return;
-    result.value = res;
     // Decided after the queue settled: an in-flight answer may have been the third mistake.
     endedEarly.value = !gameOver;
     const stats = $bonStats.get();
@@ -204,6 +214,28 @@ export function useBon() {
     phase.value = "over";
   }
 
+  /** Stores the run; a failure costs the ranking, not the result screen. */
+  async function saveResult() {
+    const g = gen;
+    const name = $bonStats.get().playerName;
+    try {
+      const res = await queued(() => finishRun(token, name || undefined));
+      if (g !== gen) return;
+      result.value = res;
+      finishError.value = undefined;
+    } catch (e) {
+      if (g !== gen) return;
+      finishError.value = toBonError(e);
+      trackEvent("Game", "Finish Failed", LABEL, (e as { status?: number }).status ?? 0);
+    }
+  }
+
+  /** Tries to store a run again after a retryable failure, from the result screen. */
+  async function retryFinish() {
+    if (phase.value !== "over" || !finishError.value?.retryable) return;
+    await saveResult();
+  }
+
   async function advance() {
     if (phase.value !== "feedback") return;
     if (gameOver) return finish();
@@ -213,12 +245,12 @@ export function useBon() {
       phase.value = "loading";
       try {
         await loadNext();
-      } catch {
+      } catch (e) {
         if (g !== gen) return;
         return fail(() => {
           phase.value = "feedback";
           void advance();
-        });
+        }, e);
       }
     }
     if (g !== gen) return;
@@ -249,6 +281,8 @@ export function useBon() {
     cardInStack,
     end,
     endedEarly,
+    error,
+    finishError,
     finishing,
     history,
     last,
@@ -258,6 +292,7 @@ export function useBon() {
     previousHighScore,
     result,
     retry,
+    retryFinish,
     score,
     stack,
     start,
