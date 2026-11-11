@@ -11,6 +11,11 @@ vi.mock("@vueuse/core", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@vueuse/core")>()),
   useMediaQuery: vi.fn(() => desktop),
 }));
+const settled = vi.hoisted(() => ({ gate: undefined as Promise<void> | undefined }));
+vi.mock("@utils/viewTransition", () => ({
+  navigationSettled: () => settled.gate ?? Promise.resolve(),
+  vt: (update: () => void) => update(),
+}));
 vi.mock("@services/bonLeaderboardApi", () => ({ fetchLeaderboard: vi.fn(), reportName: vi.fn() }));
 vi.mock("@components/games/BonPlayerCode.vue", () => ({
   default: {
@@ -75,6 +80,7 @@ describe("BonLeaderboard", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     desktop.value = true;
+    settled.gate = undefined;
     localStorage.clear();
     Element.prototype.scrollIntoView = vi.fn();
   });
@@ -89,6 +95,18 @@ describe("BonLeaderboard", () => {
     expect(buttons.map((b) => b.text())).toEqual(["Diese Woche", "Diesen Monat", "Allzeit"]);
     expect(buttons.map((b) => b.attributes("aria-pressed"))).toEqual(["true", "false", "false"]);
     expect(fetchMock).toHaveBeenCalledWith("week", 0, 25);
+  });
+
+  it("keeps the skeleton while the navigation transition plays, then shows the rows", async () => {
+    let release!: () => void;
+    settled.gate = new Promise<void>((r) => (release = r));
+    const w = await mountBoard();
+    expect(w.find(".c-bon-leaderboard__skeleton").exists()).toBe(true);
+    expect(w.find("ol").exists()).toBe(false);
+    release();
+    await flushPromises();
+    expect(w.find(".c-bon-leaderboard__skeleton").exists()).toBe(false);
+    expect(w.find("ol").exists()).toBe(true);
   });
 
   it("uses the singular for one game", async () => {

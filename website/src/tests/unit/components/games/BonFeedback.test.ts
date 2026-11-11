@@ -1,6 +1,7 @@
 import type { RoundEntry } from "@composables/useBon";
 
 import BonFeedback from "@components/games/BonFeedback.vue";
+import { FEEDBACK_LOCK_MS } from "@composables/useBon";
 import { mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
@@ -89,13 +90,13 @@ describe("BonFeedback.vue", () => {
 
   it("goes on at once on click or swipe, and only once", async () => {
     const clicked = fb(right);
-    vi.advanceTimersByTime(480);
+    vi.advanceTimersByTime(FEEDBACK_LOCK_MS);
     await clicked.find(".c-bon-feedback__card").trigger("click");
     vi.advanceTimersByTime(5000);
     expect(clicked.emitted("next")).toHaveLength(1);
 
     const swiped = fb(right);
-    vi.advanceTimersByTime(480);
+    vi.advanceTimersByTime(FEEDBACK_LOCK_MS);
     fire(swiped, "pointerdown", 10);
     fire(swiped, "pointerup", 120);
     await swiped.find(".c-bon-feedback__card").trigger("click");
@@ -150,7 +151,7 @@ describe("BonFeedback.vue", () => {
     expect(bar(fb(wrong))).toBe("2500ms");
   });
 
-  it("drops a tap in the first 480 ms (the flip animation) without losing the timer, accepts one later", async () => {
+  it("drops a tap in the lock window (the flip animation) without losing the timer, accepts one later", async () => {
     const early = fb(wrong);
     vi.advanceTimersByTime(100);
     await early.find(".c-bon-feedback__card").trigger("click");
@@ -161,7 +162,7 @@ describe("BonFeedback.vue", () => {
     const late = fb(wrong);
     vi.advanceTimersByTime(100);
     await late.find(".c-bon-feedback__card").trigger("click");
-    vi.advanceTimersByTime(400);
+    vi.advanceTimersByTime(FEEDBACK_LOCK_MS - 100 + 20);
     await late.find(".c-bon-feedback__card").trigger("click");
     expect(late.emitted("next")).toHaveLength(1);
   });

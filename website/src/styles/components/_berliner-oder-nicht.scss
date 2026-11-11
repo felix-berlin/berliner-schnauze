@@ -4,6 +4,8 @@
 .c-berliner-oder-nicht {
   box-sizing: border-box;
   padding: 1.5rem 1rem 3rem;
+  // The answered card flies out past the viewport edge (and stays there, hidden); that must not scroll the page sideways.
+  overflow-x: clip;
 
   @include mx.breakpoint("word") {
     max-width: 1060px;

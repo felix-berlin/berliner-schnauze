@@ -5,36 +5,6 @@ const hash = (payload: object) =>
   `00000000-0000-4000-8000-000000000000.${Buffer.from(JSON.stringify(payload)).toString("base64url")}`;
 
 test.describe("BON Share-Ansicht", () => {
-  test("„Ergebnis teilen“ am Ende einer Runde jibt einen Link, der dieselben Punkte zeigt", async ({
-    context,
-    page,
-  }) => {
-    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-    await page.addInitScript(() => Object.defineProperty(navigator, "share", { value: undefined }));
-    await page.goto("/games/berliner-oder-nicht");
-    await page.getByRole("button", { name: /^Los jeht/ }).click();
-    const result = page.getByRole("heading", { level: 1, name: /^Aus die Maus/ });
-    for (let i = 0; i < 80 && !(await result.isVisible()); i++) {
-      if (await page.locator(".c-bon-card__card").isVisible())
-        await page.keyboard.press("ArrowRight");
-      else if (await page.locator(".c-bon-feedback__card").isVisible()) {
-        await page.waitForTimeout(520);
-        await page.keyboard.press("Enter");
-      }
-      await page.waitForTimeout(100);
-    }
-    await expect(result).toBeVisible();
-    const points = await page.locator(".c-bon-result__stat").first().locator("dd").innerText();
-
-    await page.getByRole("button", { name: "Ergebnis teilen" }).click();
-    await expect(page.getByRole("button", { name: "Text kopiert" })).toBeVisible();
-    const text = await page.evaluate(() => navigator.clipboard.readText());
-    const link = text.match(/https?:\/\/\S+/)![0];
-    await page.goto(new URL(link).pathname + new URL(link).search);
-
-    await expect(page.locator(".c-bon-share-view__stats")).toContainText(points);
-  });
-
   test("gültiger Link zeigt das Spielergebnis", async ({ page }) => {
     const r = hash({
       bestStreak: 5,

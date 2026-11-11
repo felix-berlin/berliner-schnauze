@@ -237,7 +237,7 @@ import type { LeaderboardReply, Period, PublicEntry } from "@services/bonLeaderb
 
 import BonPlayerCode from "@components/games/BonPlayerCode.vue";
 import { fetchLeaderboard, reportName } from "@services/bonLeaderboardApi";
-import { vt } from "@utils/viewTransition";
+import { navigationSettled, vt } from "@utils/viewTransition";
 import { useMediaQuery } from "@vueuse/core";
 import AlertIcon from "virtual:icons/lucide/circle-alert";
 import { computed, onMounted, ref } from "vue";
@@ -318,13 +318,8 @@ async function load(keepList = false): Promise<void> {
   try {
     const data = await fetchLeaderboard(asked, 0, PAGE);
     if (mine !== request) return;
-    // The morph from the result lands on the skeleton row; a view transition ends the moment its
-    // landing spot goes away, so the rows wait for it (Spec §13, `bon-me`).
-    await Promise.all(
-      (document.getAnimations?.() ?? [])
-        .filter((a) => (a.effect as KeyframeEffect | null)?.pseudoElement)
-        .map((a) => a.finished.catch(() => {})),
-    );
+    // The morph from the result lands on the skeleton row; the rows wait until it is over (Spec §13, `bon-me`).
+    await navigationSettled();
     if (mine !== request) return;
     const apply = () => {
       entries.value = data.entries;
