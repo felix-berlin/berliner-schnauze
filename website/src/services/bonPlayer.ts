@@ -4,6 +4,7 @@ import type { AstroCookies } from "astro";
 import { bonVisitor } from "@services/bonGame.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { createHash } from "node:crypto";
+import { displayName } from "payload-app/bon-names";
 import { normalizeCode } from "payload-app/bon-player";
 
 type Client = Awaited<ReturnType<typeof getPayloadClient>>;
@@ -27,7 +28,8 @@ export const findPlayer = async (payload: Client, input: string) => {
       where: { codeHash: { equals: bonCodeHash(code) } },
     })
   ).docs[0];
-  return player && { code, id: player.id, name: player.name || "Anonym" };
+  // The name as it may leave the server: an old row can still hold bidi controls.
+  return player && { code, id: player.id, name: displayName({ playerName: player.name }) };
 };
 
 /** A missing, malformed or unknown cookie is no player. */

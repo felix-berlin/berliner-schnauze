@@ -267,7 +267,10 @@ export const isOffensiveName = (name: string): boolean => nameCategory(name) !==
 
 export const cleanName = (name: string): string => (isOffensiveName(name) ? "Anonym" : name);
 
-/** The name to show: hidden or reported often enough counts as no name. */
+/** Format characters (bidi overrides, zero-width) removed: "\u202EizaN" renders as "Nazi". ZWJ stays for emoji sequences. */
+export const visibleName = (name: string): string => name.replace(/(?!\u200D)\p{Cf}/gu, "");
+
+/** The name to show: hidden or reported often enough counts as no name; a stored name is cleaned again on the way out (rows from before a filter change). */
 export const displayName = (game: {
   playerName?: string | null;
   nameHidden?: boolean | null;
@@ -275,4 +278,4 @@ export const displayName = (game: {
 }): string =>
   game.nameHidden || (game.nameReports ?? 0) >= NAME_REPORT_LIMIT
     ? "Anonym"
-    : game.playerName || "Anonym";
+    : cleanName(visibleName(game.playerName ?? "") || "Anonym");

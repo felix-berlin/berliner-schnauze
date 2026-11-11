@@ -1,12 +1,10 @@
-import { cleanName } from "payload-app/bon-names";
+import { cleanName, visibleName as visible } from "payload-app/bon-names";
 import { containsLink } from "payload-app/comments";
 import { z } from "zod";
 
 const token = z.string().regex(/^[0-9a-f]{64}$/);
 
-// Format characters (bidi overrides, zero-width) out before the filter and storing: "\u202EizaN" renders as "Nazi".
-// ZWJ stays for emoji sequences.
-const visible = (v: string) => v.replace(/(?!\u200D)\p{Cf}/gu, "");
+// Format characters out before the filter and storing (`visibleName`).
 
 export const redeemSchema = z.strictObject({ code: z.string().max(40) });
 

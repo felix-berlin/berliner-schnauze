@@ -14,7 +14,7 @@ import { visitorId } from "@services/payload/comments.ts";
 import { isUniqueViolation, reply } from "@utils/apiReply.ts";
 import { renameSchema } from "@utils/bonSchema.ts";
 import { rateLimitedBy } from "@utils/rateLimit.ts";
-import { displayName, cleanName, nameCategory } from "payload-app/bon-names";
+import { displayName, nameCategory } from "payload-app/bon-names";
 import { generateCode } from "payload-app/bon-player";
 import { bonTag } from "payload-app/bon-ranking";
 
@@ -110,7 +110,7 @@ export const GET: APIRoute = async ({ cookies }) => {
     ).docs;
     if (!latest && who.playerId === undefined)
       return reply({ error: "Du hast noch nich jespielt." }, 404);
-    const name = cleanName(latest ? displayName(latest) : who.playerName || "Anonym");
+    const name = displayName(latest ?? { playerName: who.playerName });
     return reply(named(name, who.identity), 200);
   } catch (error) {
     console.error("[bon] player read failed:", error);

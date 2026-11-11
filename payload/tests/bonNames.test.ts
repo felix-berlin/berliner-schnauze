@@ -6,7 +6,10 @@ import {
   isOffensiveName,
   nameCategory,
   NAME_REPORT_LIMIT,
+  visibleName,
 } from "../src/lib/bonNames";
+
+const BIDI = /[\u202A-\u202E\u2066-\u2069\u200E\u200F\u061C]/;
 
 describe("isOffensiveName", () => {
   it("catches leetspeak, spacing, case and umlauts", () => {
@@ -246,5 +249,23 @@ describe("displayName", () => {
   it("treats missing values as a plain name, and a missing name as Anonym", () => {
     expect(displayName({ playerName: "Kalle" })).toBe("Kalle");
     expect(displayName({ playerName: null })).toBe("Anonym");
+  });
+
+  it("strips bidi controls from a stored name, then applies the filter", () => {
+    expect(displayName({ playerName: "\u202EizaN" })).toBe("izaN");
+    expect(displayName({ playerName: "H\u202Eitler" })).toBe("Anonym");
+    expect(displayName({ playerName: "\u202E" })).toBe("Anonym");
+    expect(displayName({ playerName: "Heil Adolf" })).toBe("Anonym");
+    for (const n of ["\u202EizaN", "\u2067izaN\u2069", "\u200EKalle\u200F", "\u061CKalle"])
+      expect(displayName({ playerName: n })).not.toMatch(BIDI);
+  });
+});
+
+describe("visibleName", () => {
+  it("drops format characters but keeps ZWJ for emoji sequences", () => {
+    expect(visibleName("\u202EizaN")).toBe("izaN");
+    expect(visibleName("\u2067izaN\u2069")).toBe("izaN");
+    expect(visibleName("Ka\u200Blle\u200E")).toBe("Kalle");
+    expect(visibleName("👨\u200D👩\u200D👧 Kalle")).toBe("👨\u200D👩\u200D👧 Kalle");
   });
 });

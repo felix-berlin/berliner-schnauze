@@ -172,6 +172,8 @@ import { POST as START } from "@/pages/api/bon/start.ts";
 
 const T0 = Date.UTC(2026, 10, 5, 12);
 const HOUR = 60 * 60_000;
+// Bidi controls a stored name must not carry out of the server.
+const BIDI = /[\u202A-\u202E\u2066-\u2069\u200E\u200F\u061C]/;
 const set = vi.fn();
 const ctx = (body: unknown, cookie?: string, others: Record<string, string> = {}) =>
   ({
@@ -967,6 +969,14 @@ describe("POST /api/bon/redeem", () => {
     }
   });
 
+  it("strips bidi controls from a stored player name", async () => {
+    const code = await withGame();
+    db.players[0].name = "\u202EizaN";
+    const body = await (await redeem({ code })).json();
+    expect(body).toMatchObject({ playerName: "izaN" });
+    expect(JSON.stringify(body)).not.toMatch(BIDI);
+  });
+
   it.each([
     ["a wrong code", "AAAA-AAAA-AAAA"],
     ["an empty string", ""],
@@ -1405,6 +1415,18 @@ describe("PATCH and GET /api/bon/player", () => {
       name: "Kiez-Kalle",
       tag: bonTag("p:3"),
     });
+  });
+
+  // Rows written before names were stripped can still hold bidi controls; none may leave the server.
+  it("GET strips bidi controls from a stored game name and a stored player name", async () => {
+    game({ playerName: "\u202EizaN", visitor: hashed("v-sb") });
+    const fromGame = JSON.stringify(await (await get("v-sb")).json());
+    expect(fromGame).toContain("izaN");
+    expect(fromGame).not.toMatch(BIDI);
+    const c = code(4, "\u2067Kalle\u2069");
+    const fromPlayer = await (await get("v-1", c)).json();
+    expect(fromPlayer).toMatchObject({ name: "Kalle" });
+    expect(JSON.stringify(fromPlayer)).not.toMatch(BIDI);
   });
 
   it("GET: 404 without identity, and for a visitor with no finished game", async () => {
