@@ -61,6 +61,16 @@ describe("API calls", () => {
     await expect(redeemPlayerCode("X")).rejects.toThrow("Den Code kenn ick nich.");
   });
 
+  it.each([404, 429])("puts the HTTP status %i on the thrown error", async (status) => {
+    respond({ error: "Nö." }, status);
+    await expect(redeemPlayerCode("X")).rejects.toMatchObject({ status });
+  });
+
+  it("puts the status on the fallback error too", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("Zu viele", { status: 429 })));
+    await expect(redeemPlayerCode("X")).rejects.toMatchObject({ status: 429 });
+  });
+
   it("falls back to a generic text without a body", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("nope", { status: 500 })));
     await expect(createPlayerCode()).rejects.toThrow(/jeklappt|nich/i);
