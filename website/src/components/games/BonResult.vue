@@ -110,6 +110,7 @@ import type { FinishResult } from "@services/bonGameApi";
 import BonPlayerCode from "@components/games/BonPlayerCode.vue";
 import { computeMultiplier } from "@composables/useBon";
 import { trackEvent } from "@utils/analytics";
+import { cleanName } from "payload-app/bon-names";
 import { accuracyPercent, buildShareUrl } from "@utils/bonShare";
 import { routeToWord } from "@utils/helpers";
 import CheckIcon from "virtual:icons/lucide/check";
@@ -158,7 +159,7 @@ async function share() {
       bestStreak: props.bestStreak,
       correctAnswers: correct.value,
       date: new Date().toISOString(),
-      playerName: props.playerName.trim() || undefined,
+      playerName: cleanName(props.playerName.trim()) || undefined,
       score: props.score,
       totalAnswered: props.history.length,
     });

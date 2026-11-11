@@ -25,12 +25,41 @@
             id="bon-name"
             v-model="name"
             class="c-input"
+            :aria-invalid="problem ? 'true' : undefined"
             type="text"
             maxlength="24"
             placeholder="Anonym"
             autocomplete="nickname"
-            aria-describedby="bon-name-hint"
+            :aria-describedby="problem ? 'bon-name-problem bon-name-hint' : 'bon-name-hint'"
+            @input="problem = undefined"
           />
+          <div
+            v-if="problem === 'far-right'"
+            id="bon-name-problem"
+            class="c-state c-state--error"
+            role="alert"
+          >
+            <AlertIcon width="18" height="18" aria-hidden="true" />
+            <span class="c-state__body">
+              <b>Rechtsextreme Namen jibt’s hier nich.</b>
+              <span>Willst du raus aus der rechten Szene? Such dir Hilfe:</span>
+              <a
+                class="c-textlink c-bon-intro__exit"
+                href="https://www.exit-deutschland.de/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >EXIT-Deutschland</a
+              >
+            </span>
+          </div>
+          <span
+            v-else-if="problem === 'offensive'"
+            id="bon-name-problem"
+            class="t-small"
+            role="alert"
+          >
+            Den Namen nehmen wir nich. Such dir ’n anderen aus.
+          </span>
           <span id="bon-name-hint" class="t-small">
             Steht neben deiner Platzierung. Leer jelassen = „Anonym“ mit Kennung, z. B. „Anonym
             #K7QX“. Max. 24 Zeichen.
@@ -106,6 +135,8 @@
 <script setup lang="ts">
 import BonPlayerCode from "@components/games/BonPlayerCode.vue";
 import { $bonStats } from "@stores/bonStats";
+import { nameCategory, type NameCategory } from "payload-app/bon-names";
+import AlertIcon from "virtual:icons/lucide/circle-alert";
 import FlameIcon from "virtual:icons/lucide/flame";
 import HeartIcon from "virtual:icons/lucide/heart";
 import RowsIcon from "virtual:icons/lucide/rows-2";
@@ -117,10 +148,14 @@ const emit = defineEmits<{ start: [name: string] }>();
 
 const name = ref($bonStats.get().playerName ?? "");
 const redeeming = ref(false);
+const problem = ref<NameCategory>();
 
 function start() {
   if (props.offline) return;
   const trimmed = name.value.trim().slice(0, 24);
+  // The server cleans names too (finish); this keeps one out of the local state and the share link.
+  problem.value = nameCategory(trimmed);
+  if (problem.value) return;
   $bonStats.setKey("playerName", trimmed);
   emit("start", trimmed);
 }

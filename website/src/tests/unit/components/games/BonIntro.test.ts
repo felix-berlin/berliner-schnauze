@@ -45,6 +45,46 @@ describe("BonIntro", () => {
     expect(wrapper.emitted("start")).toEqual([["x".repeat(24)]]);
   });
 
+  it("far-right name: shows the alert with the EXIT-Deutschland link and stores nothing", async () => {
+    const wrapper = mountIntro({});
+    await wrapper.find("input").setValue("Nazi123");
+    await wrapper.find("form").trigger("submit");
+    const alert = wrapper.find("[role=alert]");
+    expect(alert.text()).toContain("Rechtsextreme Namen jibt’s hier nich.");
+    const link = alert.find("a.c-textlink");
+    expect(link.attributes()).toMatchObject({
+      href: "https://www.exit-deutschland.de/",
+      rel: "noopener noreferrer",
+      target: "_blank",
+    });
+    expect(link.text()).toBe("EXIT-Deutschland");
+    expect(wrapper.find("input").attributes("aria-invalid")).toBe("true");
+    expect(wrapper.find("input").attributes("aria-describedby")).toContain("bon-name-problem");
+    expect($bonStats.get().playerName).toBe("");
+    expect(wrapper.emitted("start")).toBeUndefined();
+    await wrapper.find("input").setValue("Berta");
+    expect(wrapper.find("[role=alert]").exists()).toBe(false);
+  });
+
+  it("insult: shows the short error and stores nothing", async () => {
+    const wrapper = mountIntro({});
+    await wrapper.find("input").setValue("Arschloch");
+    await wrapper.find("form").trigger("submit");
+    expect(wrapper.find("[role=alert]").text()).toBe("Den Namen nehmen wir nich. Such dir ’n anderen aus.");
+    expect(wrapper.find("a[href*=exit-deutschland]").exists()).toBe(false);
+    expect($bonStats.get().playerName).toBe("");
+    expect(wrapper.emitted("start")).toBeUndefined();
+  });
+
+  it("a normal name is stored and started", async () => {
+    const wrapper = mountIntro({});
+    await wrapper.find("input").setValue("Marschall");
+    await wrapper.find("form").trigger("submit");
+    expect($bonStats.get().playerName).toBe("Marschall");
+    expect(wrapper.emitted("start")).toEqual([["Marschall"]]);
+    expect(wrapper.find("[role=alert]").exists()).toBe(false);
+  });
+
   it("offline: shows the notice and starts nothing", async () => {
     const wrapper = mountIntro({ offline: true });
     expect(wrapper.find(".c-state--offline").text()).toContain("Du bist offline.");

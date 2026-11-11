@@ -1,6 +1,7 @@
 import type { RoundEntry } from "@composables/useBon";
 
 import BonResult from "@components/games/BonResult.vue";
+import { buildShareUrl } from "@utils/bonShare";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -124,6 +125,12 @@ describe("BonResult", () => {
       expect(share.mock.calls[0][0].text).toBe(
         `${text}${window.location.origin}/games/berliner-oder-nicht/share?r=abc`,
       );
+    });
+
+    it("builds the share link with the cleaned name", async () => {
+      vi.stubGlobal("navigator", { share: vi.fn().mockResolvedValue(undefined) });
+      await mountResult({ playerName: "Heil Hitler" }).find("button.c-choice").trigger("click");
+      expect(buildShareUrl).toHaveBeenLastCalledWith(expect.objectContaining({ playerName: "Anonym" }));
     });
 
     it("copies the text otherwise and says so", async () => {
