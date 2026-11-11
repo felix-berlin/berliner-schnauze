@@ -51,7 +51,7 @@ const props = {
     rank: 12,
     score: 150,
     totalAnswered: 3,
-    totalGames: 400,
+    totalPlayers: 400,
   },
   score: 150,
 };
@@ -188,10 +188,10 @@ describe("BonResult", () => {
       ).toEqual(["Punkte", "Platz", "Trefferquote", "Beste Serie"]);
     });
 
-    it("shows rank and the share of games beaten", () => {
+    it("shows the week rank and the share of players beaten", () => {
       const s = stat(mountResult(), "Platz");
       expect(s.find("dd").text()).toBe("12");
-      expect(s.text()).toContain("von 400 Spielen insgesamt · besser als 97 %");
+      expect(s.text()).toContain("von 400 Spielern diese Woche · besser als 97 %");
     });
 
     it("falls back without a rank", () => {

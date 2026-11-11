@@ -143,7 +143,11 @@ vi.mock("@services/payload.ts", async (importOriginal) => ({
 }));
 vi.mock("@services/bonRanking.ts", async (importOriginal) => {
   const real = await importOriginal<typeof import("@services/bonRanking.ts")>();
-  return { ...real, invalidateRanking: vi.fn(real.invalidateRanking) };
+  return {
+    ...real,
+    invalidateRanking: vi.fn(real.invalidateRanking),
+    loadRanking: vi.fn(real.loadRanking),
+  };
 });
 vi.mock("@services/bonPool.ts", () => ({ loadPool: pool.loadPool }));
 // The ranking's 60 s cache would carry rows from one test into the next.
@@ -153,7 +157,7 @@ import type { DealtCard } from "@utils/bonDeck.ts";
 import type { APIContext } from "astro";
 
 import { bonCodeHash } from "@services/bonPlayer.ts";
-import { invalidateRanking } from "@services/bonRanking.ts";
+import { invalidateRanking, loadRanking } from "@services/bonRanking.ts";
 import { resetRateLimits } from "@utils/rateLimit.ts";
 import { createHash } from "node:crypto";
 import { bonTag } from "payload-app/bon-ranking";
@@ -629,7 +633,7 @@ describe("POST /api/bon/finish", () => {
       rank: 1,
       score: 2 * 10 + 3 * 20 + 4 * 30 + 3 * 50,
       totalAnswered: 15,
-      totalGames: 1,
+      totalPlayers: 1,
     });
     expect(row(token)).toMatchObject({
       bestStreak: 12,
@@ -642,12 +646,34 @@ describe("POST /api/bon/finish", () => {
     });
   });
 
-  it("a lower score ranks 2 of 2, an equal score shares rank 1", async () => {
+  it("ranks like the week's leaderboard: a lower score 2 of 2, an equal later score behind", async () => {
     await playedGame(12);
     const lower = await (await playedGame(2, "v-2")).json();
-    expect(lower).toMatchObject({ rank: 2, score: 20, totalGames: 2 });
+    expect(lower).toMatchObject({ rank: 2, score: 20, totalPlayers: 2 });
     const tie = await (await playedGame(12, "v-3")).json();
-    expect(tie).toMatchObject({ rank: 1, score: 350, totalGames: 3 });
+    expect(tie).toMatchObject({ rank: 2, score: 350, totalPlayers: 3 });
+    expect(loadRanking).toHaveBeenLastCalledWith("week");
+  });
+
+  it("counts a player once: their best game this week, not every game", async () => {
+    for (let i = 0; i < 3; i++) await playedGame(12, "v-strong");
+    const mine = await (await playedGame(4, "v-1")).json();
+    expect(mine).toMatchObject({ rank: 2, totalPlayers: 2 });
+    // A weaker second game keeps the place of the player's best.
+    const again = await (await playedGame(2, "v-1")).json();
+    expect(again).toMatchObject({ rank: 2, totalPlayers: 2 });
+  });
+
+  it("ignores games from before this week", async () => {
+    db.rows.push({
+      finishedAt: new Date(T0 - 8 * 24 * HOUR).toISOString(),
+      id: 900,
+      playerName: "Alt",
+      score: 9999,
+      status: "finished",
+      visitor: hashed("v-old"),
+    });
+    expect(await (await playedGame(2)).json()).toMatchObject({ rank: 1, totalPlayers: 1 });
   });
 
   it("the same token finished twice: the second is refused, one row ranked", async () => {
@@ -832,7 +858,7 @@ describe("POST /api/bon/finish", () => {
     const { token } = await newGame("v-1");
     await play(token, 4);
     later(60_000);
-    db.api.count.mockRejectedValueOnce(new Error("count down"));
+    vi.mocked(loadRanking).mockRejectedValueOnce(new Error("ranking down"));
     const res = await finish({ token }, "v-1");
     expect(res.status).toBe(200);
     const body = await res.json();

@@ -17,8 +17,9 @@ export type FinishResult = {
   bestStreak: number;
   totalAnswered: number;
   correctAnswers: number;
+  /** Place in this week's leaderboard (best game per player), and how many players it has. */
   rank?: number;
-  totalGames?: number;
+  totalPlayers?: number;
 };
 
 export const startRun = (): Promise<{ token: string; cards: PublicCard[]; tag: string }> =>

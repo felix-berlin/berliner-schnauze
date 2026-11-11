@@ -2,7 +2,7 @@ import type { FinishResult } from "@services/bonGameApi.ts";
 import type { APIRoute } from "astro";
 
 import { bonVisitor, busyGames, findGame } from "@services/bonGame.ts";
-import { invalidateRanking } from "@services/bonRanking.ts";
+import { invalidateRanking, loadRanking } from "@services/bonRanking.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";
@@ -96,23 +96,19 @@ export const POST: APIRoute = async ({ cookies, request }) => {
         })
         .catch((error: unknown) => console.error("[bon] player name update failed:", error));
 
-    const finished = { status: { equals: "finished" } } as const;
+    // The same place the week's leaderboard shows: the identity's best game this week, among players.
     // The result is stored; a failed rank lookup must not hide it.
-    const ranking = await Promise.all([
-      payload.count({
-        collection: "bon-games",
-        where: { ...finished, score: { greater_than: result.score } },
-      }),
-      payload.count({ collection: "bon-games", where: finished }),
-    ]).catch((error: unknown) => {
+    const identity = playerId === undefined ? `v:${game.visitor}` : `p:${playerId}`;
+    const week = await loadRanking("week").catch((error: unknown) => {
       console.error("[bon] rank lookup failed:", error);
       return undefined;
     });
+    const mine = week?.find((e) => e.identity === identity);
     return reply(
       {
         ...result,
-        rank: ranking && ranking[0].totalDocs + 1,
-        totalGames: ranking && ranking[1].totalDocs,
+        rank: mine?.rank,
+        totalPlayers: mine && week!.length,
       } satisfies FinishResult,
       200,
     );

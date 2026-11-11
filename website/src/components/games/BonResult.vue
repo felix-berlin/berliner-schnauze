@@ -27,7 +27,7 @@
           <dd class="t-small c-bon-result__note">
             {{
               ranked
-                ? `von ${ranked.totalGames} Spielen insgesamt · besser als ${beaten} %`
+                ? `von ${ranked.totalPlayers} Spielern diese Woche · besser als ${beaten} %`
                 : finishError
                   ? `Nich in der Rangliste: ${finishError.message}`
                   : "Platzierung jerade nich da"
@@ -193,12 +193,14 @@ const record = computed(() => Math.max(props.score, props.previousHighScore));
 const correct = computed(() => props.history.filter((e) => e.correct).length);
 const accuracy = computed(() => accuracyPercent(correct.value, props.history.length));
 const ranked = computed(() => {
-  const { rank, totalGames } = props.result ?? {};
-  return rank && totalGames ? { rank, totalGames } : undefined;
+  const { rank, totalPlayers } = props.result ?? {};
+  return rank && totalPlayers ? { rank, totalPlayers } : undefined;
 });
 const beaten = computed(() =>
   ranked.value
-    ? Math.round(((ranked.value.totalGames - ranked.value.rank) / ranked.value.totalGames) * 100)
+    ? Math.round(
+        ((ranked.value.totalPlayers - ranked.value.rank) / ranked.value.totalPlayers) * 100,
+      )
     : 0,
 );
 
