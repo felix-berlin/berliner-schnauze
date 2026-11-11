@@ -77,6 +77,14 @@ describe("useBon", () => {
     expect(trackEvent).toHaveBeenCalledWith("Game", "Game Started", "berliner-oder-nicht");
   });
 
+  it("keeps the tag the start call returned", async () => {
+    vi.mocked(api.startRun).mockResolvedValue({ cards: stack(0), tag: "K7QX", token: "tok" });
+    const bon = useBon();
+    expect(bon.tag.value).toBe("");
+    await bon.start();
+    expect(bon.tag.value).toBe("K7QX");
+  });
+
   it("answer goes to feedback with points", async () => {
     const bon = await started();
     await play(bon, 2);
