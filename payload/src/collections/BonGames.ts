@@ -60,7 +60,9 @@ export const BonGames: CollectionConfig = {
       name: "nameReports",
       type: "number",
       defaultValue: 0,
-      admin: { description: "Reports of the name; from 3 on it shows as Anonym" },
+      admin: {
+        description: `Reports of the name; from ${NAME_REPORT_LIMIT} on it shows as Anonym`,
+      },
     },
     {
       name: "nameHidden",

@@ -20,7 +20,7 @@ export function generateCode(): string {
   return chars.replace(/(.{4})(?=.)/g, "$1-");
 }
 
-/** Canonical `XXXX-XXXX-XXXX` or undefined; accepts any case, spaces or dashes between groups. */
+/** Canonical `XXXX-XXXX-XXXX` or undefined; accepts any case, whitespace and dashes (not underscores, unlike the client copy); at most 64 characters. */
 export function normalizeCode(input: string): string | undefined {
   if (input.length > 64) return undefined;
   const raw = input.toUpperCase().replace(/[\s-]/g, "");

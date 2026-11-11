@@ -1,4 +1,5 @@
-// Client copy of the code format in payload/src/lib/bonPlayer.ts (that module imports node:crypto); the server normalizes again.
+// Client copy of the code format in payload/src/lib/bonPlayer.ts (that module imports node:crypto). It also strips underscores
+// (SPEC §12), the server does not; it only ever gets the normalized code and normalizes again.
 // No I, L, O, 0, 1: look-alikes are left out. 31 characters.
 export const CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 

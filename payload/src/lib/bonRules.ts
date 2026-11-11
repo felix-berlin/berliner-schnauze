@@ -1,4 +1,5 @@
-// Pure BON game rules, shared by the API routes; the client copy of the multiplier and scoring lives in website/src/composable/useBon.ts; lives and timing are server-only.
+// Pure BON game rules (payload-app/bon-rules), shared by the API routes and imported by the client (useBon.ts) for
+// LIVES and computeMultiplier, so no imports beyond plain TS here; the timing check runs on the server only.
 export const LIVES = 3;
 export const MIN_MS_PER_ANSWER = 700;
 
