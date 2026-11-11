@@ -1,0 +1,207 @@
+@use "@styles/mixins" as mx;
+@use "section-card";
+
+// Result screen (docs/design/bon/SPEC.md §9): one column on mobile, from the word breakpoint two equal columns.
+.c-bon-result {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @include mx.breakpoint("word") {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    min-width: 0;
+
+    > p {
+      margin: 0;
+    }
+
+    // The code card is built for the centred share view; here it sits in the left column.
+    .c-bon-player-code {
+      align-items: flex-start;
+      max-width: none;
+      margin-block: 0;
+      text-align: start;
+    }
+  }
+
+  &__head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  &__title {
+    font-size: 2.25rem;
+    line-height: 1.05;
+
+    &:focus-visible {
+      outline-offset: 4px;
+    }
+
+    @include mx.breakpoint("word") {
+      font-size: 3.25rem;
+    }
+  }
+
+  &__why {
+    margin: 0;
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin: 0;
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+    padding: 0.75rem 1rem;
+    background: var(--surface-chip);
+    border-radius: var(--radius-sm);
+
+    dd {
+      margin: 0;
+    }
+  }
+
+  &__value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--color-ink-strong);
+  }
+
+  &__note {
+    overflow-wrap: anywhere;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  // Doubled class so these beat the later-loaded .c-section-card rules (same pattern as the start screen).
+  & &__round {
+    background: var(--surface-sheet);
+    border-color: var(--rule-card);
+    border-radius: var(--radius-sm);
+
+    .c-section-card__header {
+      padding: 0.875rem 1rem;
+      border-block-end: 0;
+    }
+
+    .c-section-card__body {
+      padding: 0 1rem 0.5rem;
+    }
+
+    .c-section-card__footer {
+      padding: 0.75rem 1rem;
+    }
+
+    @include mx.breakpoint("word") {
+      .c-section-card__header {
+        padding: 1rem 1.5rem;
+      }
+
+      .c-section-card__body {
+        padding: 0 1.5rem 0.5rem;
+      }
+
+      .c-section-card__footer {
+        padding: 0.75rem 1.5rem;
+      }
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 0.75rem;
+    align-items: start;
+    padding-block: 0.625rem;
+    border-block-start: 1px dashed var(--rule-inner);
+
+    &:first-child {
+      border-block-start: 0;
+    }
+  }
+
+  // Colour only on the icon; the aria-label carries the meaning.
+  &__mark {
+    margin-block-start: 0.1rem;
+
+    &--ok {
+      color: var(--success);
+    }
+
+    &--no {
+      color: var(--danger);
+    }
+  }
+
+  &__word {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.5rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
+
+    b {
+      font-weight: 700;
+      color: var(--color-ink-strong);
+    }
+
+    > .t-small {
+      flex-basis: 100%;
+    }
+  }
+
+  // A global link reset flattens .c-textlink here; restore the dashed underline.
+  &__link,
+  & &__round .c-section-card__footer a {
+    text-decoration: underline dashed from-font;
+    text-underline-position: from-font;
+  }
+
+  &__fake {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    color: var(--color-muted);
+
+    b {
+      color: inherit;
+    }
+  }
+}

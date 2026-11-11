@@ -1,126 +1,181 @@
 <template>
   <div class="c-bon-result">
-    <h2 ref="titleRef" tabindex="-1" class="c-bon-result__title">
-      {{ stats.playerName ? `Game Over, ${stats.playerName}` : "Game Over" }}
-    </h2>
+    <div class="c-bon-result__main">
+      <header class="c-bon-result__head">
+        <span v-if="isRecord" class="c-badge c-badge--strong c-bon-result__badge">
+          <TrophyIcon width="16" height="16" aria-hidden="true" />
+          Neuer Rekord!
+        </span>
+        <h1 ref="titleRef" tabindex="-1" class="c-band c-bon-result__title">
+          {{ playerName ? `Aus die Maus, ${playerName}!` : "Aus die Maus!" }}
+        </h1>
+        <p class="t-em c-bon-result__why">
+          {{ endedEarly ? "Du hast dit Spiel beendet." : "Drei Fehler – dit Spiel is vorbei." }}
+        </p>
+      </header>
 
-    <dl class="c-bon-result__stats">
-      <div class="c-bon-result__stat">
-        <dt class="c-bon-result__stat-label">Score</dt>
-        <dd class="c-bon-result__stat-value">{{ score }}</dd>
-      </div>
-      <div class="c-bon-result__stat">
-        <dt class="c-bon-result__stat-label">Best Streak</dt>
-        <dd class="c-bon-result__stat-value">{{ bestStreak }}</dd>
-      </div>
-      <div class="c-bon-result__stat">
-        <dt class="c-bon-result__stat-label">Genauigkeit</dt>
-        <dd class="c-bon-result__stat-value">{{ accuracyPercent }}%</dd>
-      </div>
-      <div :class="['c-bon-result__stat', isNewHighScore && 'c-bon-result__stat--highlight']">
-        <dt class="c-bon-result__stat-label">Highscore</dt>
-        <dd class="c-bon-result__stat-value">
-          <TrophyIcon v-if="isNewHighScore" width="18" height="18" aria-hidden="true" />
-          {{ isNewHighScore ? "Neuer Highscore!" : allTimeHighScore }}
-        </dd>
-      </div>
-    </dl>
+      <dl class="c-bon-result__stats">
+        <div class="c-bon-result__stat">
+          <dt class="t-label">Punkte</dt>
+          <dd class="c-bon-result__value">{{ score }}</dd>
+        </div>
+        <div class="c-bon-result__stat">
+          <dt class="t-label">Platz</dt>
+          <dd class="c-bon-result__value">{{ ranked ? ranked.rank : "–" }}</dd>
+          <dd class="t-small c-bon-result__note">
+            {{
+              ranked
+                ? `von ${ranked.totalGames} Spielen · besser als ${beaten} %`
+                : "Platzierung jerade nich da"
+            }}
+          </dd>
+        </div>
+        <div class="c-bon-result__stat">
+          <dt class="t-label">Trefferquote</dt>
+          <dd class="c-bon-result__value">{{ accuracy }}%</dd>
+          <dd class="t-small c-bon-result__note">{{ correct }} von {{ history.length }} richtig</dd>
+        </div>
+        <div class="c-bon-result__stat">
+          <dt class="t-label">Beste Serie</dt>
+          <dd class="c-bon-result__value">{{ bestStreak }}</dd>
+          <dd class="t-small c-bon-result__note">
+            in Folge richtig · bis ×{{ computeMultiplier(bestStreak) }}
+          </dd>
+        </div>
+      </dl>
 
-    <p v-if="lastCard?.isReal && lastCard.translation" class="c-bon-result__word-meaning">
-      „{{ lastCard.word }}“ = {{ lastCard.translation }}
-    </p>
+      <div class="c-bon-result__actions">
+        <button class="c-button c-button--primary" type="button" @click="emit('restart')">
+          Nochmal spielen
+        </button>
+        <button class="c-choice" type="button" aria-live="polite" @click="share">
+          {{ copied ? "Text kopiert" : "Ergebnis teilen" }}
+        </button>
+      </div>
 
-    <a
-      v-if="lastCard?.isReal && lastCard.slug"
-      :href="routeToWord(lastCard.slug)"
-      class="c-bon-result__word-link"
-      @click="trackWordExplored"
-    >
-      <LightbulbIcon width="16" height="16" aria-hidden="true" />
-      <span>„{{ lastCard.word }}" erkunden</span>
-      <ExternalLinkIcon width="16" height="16" aria-hidden="true" />
-    </a>
+      <p class="t-small">Dein Rekord: {{ record }} Punkte · gespeichert auf diesem Jerät</p>
 
-    <div class="c-bon-result__actions">
-      <button v-if="canShare" class="c-bon-result__share-btn" @click="share">
-        <Share2Icon width="18" height="18" aria-hidden="true" />
-        Teilen
-      </button>
-      <button class="c-bon-result__restart-btn" @click="emit('restart')">
-        <RefreshCwIcon width="18" height="18" aria-hidden="true" />
-        Nochmal
-      </button>
+      <BonPlayerCode />
     </div>
+
+    <section class="c-section-card c-bon-result__round" aria-labelledby="bon-round-title">
+      <div class="c-section-card__header">
+        <h2 id="bon-round-title" class="c-section-card__title">Deine Runde</h2>
+      </div>
+      <div class="c-section-card__body">
+        <ol class="c-bon-result__list">
+          <li v-for="(e, i) in history" :key="i" class="c-bon-result__row">
+            <component
+              :is="e.correct ? CheckIcon : XIcon"
+              :class="`c-bon-result__mark c-bon-result__mark--${e.correct ? 'ok' : 'no'}`"
+              role="img"
+              :aria-label="e.correct ? 'richtig' : 'falsch'"
+              width="20"
+              height="20"
+            />
+            <span class="c-bon-result__word">
+              <a
+                v-if="e.isReal && e.slug"
+                :href="routeToWord(e.slug)"
+                class="c-textlink c-textlink--inline c-bon-result__link"
+              >
+                <b>{{ e.word }}</b> <span aria-hidden="true">→</span>
+              </a>
+              <template v-else-if="e.isReal">
+                <b>{{ e.word }}</b>
+              </template>
+              <span v-else class="c-bon-result__fake">
+                <s v-if="e.category === 'invented'">{{ e.word }}</s>
+                <b v-else>{{ e.word }}</b>
+                <span v-if="e.category" class="t-small">
+                  {{ e.category === "invented" ? "erfunden" : "Hochdeutsch" }}
+                </span>
+              </span>
+              <span v-if="e.translation" class="t-small">{{ e.translation }}</span>
+            </span>
+          </li>
+        </ol>
+      </div>
+      <div class="c-section-card__footer">
+        <a class="c-textlink" href="/">Alle Wörter im Wort-Index</a>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useStore } from "@nanostores/vue";
-import { $bonStats } from "@stores/bonStats";
-import { trackEvent } from "@utils/analytics";
-import { accuracyPercent as toAccuracyPercent, buildShareUrl } from "@utils/bonShare";
-import { routeToWord } from "@utils/helpers";
-import { useShare } from "@vueuse/core";
-import { computed, defineAsyncComponent, ref } from "vue";
+import type { RoundEntry } from "@composables/useBon";
+import type { FinishResult } from "@services/bonGameApi";
 
-const TrophyIcon = defineAsyncComponent(() => import("virtual:icons/lucide/trophy"));
-const LightbulbIcon = defineAsyncComponent(() => import("virtual:icons/lucide/lightbulb"));
-const ExternalLinkIcon = defineAsyncComponent(() => import("virtual:icons/lucide/external-link"));
-const Share2Icon = defineAsyncComponent(() => import("virtual:icons/lucide/share-2"));
-const RefreshCwIcon = defineAsyncComponent(() => import("virtual:icons/lucide/refresh-cw"));
+import BonPlayerCode from "@components/games/BonPlayerCode.vue";
+import { computeMultiplier } from "@composables/useBon";
+import { trackEvent } from "@utils/analytics";
+import { accuracyPercent, buildShareUrl } from "@utils/bonShare";
+import { routeToWord } from "@utils/helpers";
+import CheckIcon from "virtual:icons/lucide/check";
+import TrophyIcon from "virtual:icons/lucide/trophy";
+import XIcon from "virtual:icons/lucide/x";
+import { computed, nextTick, onMounted, ref } from "vue";
 
 const props = defineProps<{
+  result?: FinishResult;
+  history: RoundEntry[];
   score: number;
   bestStreak: number;
-  totalAnswered: number;
-  correctAnswers: number;
-  isNewHighScore: boolean;
-  allTimeHighScore: number;
-  lastCard: { word: string; isReal: boolean; translation?: string; slug?: string } | null;
+  previousHighScore: number;
+  playerName: string;
+  endedEarly: boolean;
 }>();
 
-const emit = defineEmits<{
-  restart: [];
-}>();
+const emit = defineEmits<{ restart: [] }>();
 
 const titleRef = ref<HTMLHeadingElement | null>(null);
+const copied = ref(false);
 
-defineExpose({
-  focus: () => titleRef.value?.focus(),
+// Moving focus to the heading makes screen readers announce the result.
+onMounted(() => nextTick(() => titleRef.value?.focus()));
+
+const isRecord = computed(() => props.score > props.previousHighScore);
+// $bonStats only catches up after the phase flips, so the new record is derived here.
+const record = computed(() => Math.max(props.score, props.previousHighScore));
+const correct = computed(() => props.history.filter((e) => e.correct).length);
+const accuracy = computed(() => accuracyPercent(correct.value, props.history.length));
+const ranked = computed(() => {
+  const { rank, totalGames } = props.result ?? {};
+  return rank && totalGames ? { rank, totalGames } : undefined;
 });
-
-const accuracyPercent = computed(() =>
-  toAccuracyPercent(props.correctAnswers, props.totalAnswered),
+const beaten = computed(() =>
+  ranked.value
+    ? Math.round(((ranked.value.totalGames - ranked.value.rank) / ranked.value.totalGames) * 100)
+    : 0,
 );
 
-const stats = useStore($bonStats);
-const { share: _share, isSupported: canShare } = useShare();
-
-function trackWordExplored() {
-  trackEvent("Game", "Word Explored", "berliner-oder-nicht");
-}
-
-function share() {
+async function share() {
   trackEvent("Game", "Result Shared", "berliner-oder-nicht");
-  const playerName = stats.value.playerName?.trim() || undefined;
-  const url = buildShareUrl({
-    bestStreak: props.bestStreak,
-    correctAnswers: props.correctAnswers,
-    date: new Date().toISOString(),
-    playerName,
-    score: props.score,
-    totalAnswered: props.totalAnswered,
-  });
-  _share({
-    text: playerName
-      ? `${playerName} hat ${props.score} Punkte bei „Berliner oder nicht?" 🐻`
-      : `Ich hab ${props.score} Punkte bei „Berliner oder nicht?" 🐻`,
-    title: "Berliner oder nicht?",
-    url: `${window.location.origin}${url}`,
-  }).catch(() => {});
+  const url =
+    window.location.origin +
+    buildShareUrl({
+      bestStreak: props.bestStreak,
+      correctAnswers: correct.value,
+      date: new Date().toISOString(),
+      playerName: props.playerName.trim() || undefined,
+      score: props.score,
+      totalAnswered: props.history.length,
+    });
+  const place = ranked.value ? ` – Platz ${ranked.value.rank}` : "";
+  const text = `Ick hab ${props.score} Punkte bei ‚Berliner oder nicht?‘ jeschafft${place}. Schaffste mehr? ${url}`;
+  try {
+    if (navigator.share) await navigator.share({ text, title: "Berliner oder nicht?" });
+    else {
+      await navigator.clipboard.writeText(text);
+      copied.value = true;
+    }
+  } catch {
+    // Dismissed share sheet or blocked clipboard: nothing to report.
+  }
 }
 </script>
 
 <style lang="scss">
-@use "@styles/components/berliner-oder-nicht";
+@use "@styles/components/bon-result";
 </style>

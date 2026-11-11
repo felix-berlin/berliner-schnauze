@@ -8,7 +8,13 @@
       @start="onStart"
     />
 
-    <div v-else class="c-berliner-oder-nicht__game">
+    <div
+      v-else
+      :class="[
+        'c-berliner-oder-nicht__game',
+        phase === 'over' && 'c-berliner-oder-nicht__game--wide',
+      ]"
+    >
       <h1 v-if="phase !== 'over'" class="u-sr-only">Berliner oder nicht? – Spiel läuft</h1>
 
       <template v-if="phase === 'play' || phase === 'feedback'">
@@ -35,27 +41,52 @@
         </BonCard>
       </template>
 
-      <p v-else-if="phase === 'loading'" class="c-berliner-oder-nicht__note" role="status">
-        Lädt …
-      </p>
+      <div v-else-if="phase === 'loading'" class="c-bon-card">
+        <section class="c-bon-card__card" aria-busy="true">
+          <p class="t-small" role="status">
+            {{
+              stack > 0
+                ? `Stapel ${stack} jeschafft – neue Karten werden jemischt …`
+                : "Karten werden jemischt …"
+            }}
+          </p>
+          <span class="c-skeleton c-skeleton--title" aria-hidden="true" />
+          <span class="c-skeleton c-skeleton--line" aria-hidden="true" />
+        </section>
+        <div class="c-bon-card__answers">
+          <button class="c-choice" type="button" aria-disabled="true">
+            <span aria-hidden="true">←</span> Nee, nich Berlinerisch
+          </button>
+          <button class="c-choice" type="button" aria-disabled="true">
+            Ja, Berlinerisch <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
 
-      <div v-else-if="phase === 'error'" class="c-berliner-oder-nicht__note" role="alert">
-        <p>Das hat nich jeklappt.</p>
-        <button class="c-button c-button--primary" type="button" @click="retry">
-          Nochmal versuchen
-        </button>
+      <div v-else-if="phase === 'error'" class="c-bon-error">
+        <div class="c-state c-state--error" role="alert">
+          <AlertIcon width="18" height="18" aria-hidden="true" />
+          <span class="c-state__body">
+            <b>Ditt hat nich jeklappt.</b>
+            <span>
+              Die Karten wollten leider nich kommen. Deine Punkte und Leben bleiben – versuch’s
+              gleich nochmal.
+            </span>
+          </span>
+        </div>
+        <button class="c-choice" type="button" @click="retry">Nochmal versuchen</button>
       </div>
 
       <template v-else-if="phase === 'over'">
         <ConfettiEffect v-if="score > previousHighScore" />
         <BonResult
+          :result="result"
+          :history="history"
           :score="score"
           :best-streak="bestStreak"
-          :total-answered="history.length"
-          :correct-answers="history.filter((e) => e.correct).length"
-          :is-new-high-score="score > previousHighScore"
-          :all-time-high-score="stats.highScore"
-          :last-card="last"
+          :previous-high-score="previousHighScore"
+          :player-name="stats.playerName"
+          :ended-early="endedEarly"
           @restart="start"
         />
       </template>
@@ -75,6 +106,7 @@ import { useStore } from "@nanostores/vue";
 import { hasRedeemCode } from "@services/bonPlayerApi.ts";
 import { $bonStats } from "@stores/bonStats";
 import { useEventListener, useOnline, useTimeoutFn, useVibrate } from "@vueuse/core";
+import AlertIcon from "virtual:icons/lucide/circle-alert";
 import { ref, watch } from "vue";
 
 const {
@@ -84,12 +116,14 @@ const {
   card,
   cardInStack,
   end,
+  endedEarly,
   history,
   last,
   lives,
   multiplier,
   phase,
   previousHighScore,
+  result,
   retry,
   score,
   stack,

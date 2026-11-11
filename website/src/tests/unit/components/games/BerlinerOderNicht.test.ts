@@ -18,6 +18,10 @@ const phase = ref("intro");
 const card = ref<{ id: string; word: string } | null>(null);
 const last = ref<Record<string, unknown> | null>(null);
 const lives = ref(3);
+const stack = ref(1);
+const history = ref<Record<string, unknown>[]>([]);
+const endedEarly = ref(false);
+const previousHighScore = ref(0);
 
 vi.mock("@composables/useBon", () => ({
   useBon: () => ({
@@ -27,15 +31,17 @@ vi.mock("@composables/useBon", () => ({
     card,
     cardInStack: ref(1),
     end: mockEnd,
-    history: ref([]),
+    endedEarly,
+    history,
     last,
     lives,
     multiplier: ref(1),
     phase,
-    previousHighScore: ref(0),
+    previousHighScore,
+    result: ref({ rank: 3 }),
     retry: mockRetry,
     score: ref(0),
-    stack: ref(1),
+    stack,
     start: mockStart,
     streak: ref(0),
   }),
@@ -55,7 +61,12 @@ vi.mock("@components/games/BonHUD.vue", () => ({
   default: { props: ["playerLabel"], template: "<div class='mock-hud'>{{ playerLabel }}</div>" },
 }));
 vi.mock("@components/games/BonResult.vue", () => ({
-  default: { template: "<div class='mock-result' />" },
+  default: {
+    emits: ["restart"],
+    props: ["result", "history", "endedEarly", "playerName", "previousHighScore", "score"],
+    template:
+      "<div class='mock-result' :data-name='playerName' :data-early='endedEarly' :data-rank='result?.rank' :data-n='history.length' @click=\"$emit('restart')\" />",
+  },
 }));
 vi.mock("@components/games/BonFeedback.vue", () => ({
   default: {
@@ -83,6 +94,10 @@ describe("BerlinerOderNicht", () => {
     card.value = null;
     last.value = null;
     lives.value = 3;
+    stack.value = 1;
+    history.value = [];
+    endedEarly.value = false;
+    previousHighScore.value = 0;
     online.value = true;
     $bonStats.setKey("hasSeenIntro", false);
     $bonStats.setKey("playerName", "");
@@ -133,14 +148,61 @@ describe("BerlinerOderNicht", () => {
     expect(mockVibrate).toHaveBeenLastCalledWith([80, 60, 80]);
   });
 
-  it("error offers retry, over shows the result", async () => {
-    phase.value = "error";
-    const wrapper = mount(BerlinerOderNicht);
-    await wrapper.find("button").trigger("click");
-    expect(mockRetry).toHaveBeenCalledOnce();
-    phase.value = "over";
-    await nextTick();
-    expect(wrapper.find(".mock-result").exists()).toBe(true);
+  describe("loading", () => {
+    it("shows a card skeleton naming the finished stack, answers locked", () => {
+      phase.value = "loading";
+      stack.value = 2;
+      const wrapper = mount(BerlinerOderNicht);
+      expect(wrapper.find(".c-skeleton").exists()).toBe(true);
+      expect(wrapper.find("[role=status]").text()).toBe(
+        "Stapel 2 jeschafft – neue Karten werden jemischt …",
+      );
+      const buttons = wrapper.findAll("button.c-choice");
+      expect(buttons).toHaveLength(2);
+      buttons.forEach((b) => expect(b.attributes("aria-disabled")).toBe("true"));
+    });
+
+    it("does not claim a finished stack before the first one", () => {
+      phase.value = "loading";
+      stack.value = 0;
+      expect(mount(BerlinerOderNicht).find("[role=status]").text()).toBe(
+        "Karten werden jemischt …",
+      );
+    });
+  });
+
+  describe("error", () => {
+    it("explains in an alert and retries", async () => {
+      phase.value = "error";
+      const wrapper = mount(BerlinerOderNicht);
+      const alert = wrapper.find(".c-state--error");
+      expect(alert.attributes("role")).toBe("alert");
+      expect(alert.text()).toContain("Ditt hat nich jeklappt.");
+      expect(alert.text()).toContain(
+        "Die Karten wollten leider nich kommen. Deine Punkte und Leben bleiben – versuch’s gleich nochmal.",
+      );
+      await wrapper.find("button.c-choice").trigger("click");
+      expect(mockRetry).toHaveBeenCalledOnce();
+    });
+  });
+
+  describe("over", () => {
+    it("hands the run to the result and restarts from it", async () => {
+      phase.value = "over";
+      endedEarly.value = true;
+      history.value = [{ correct: true }];
+      $bonStats.setKey("playerName", "Berta");
+      const wrapper = mount(BerlinerOderNicht);
+      const r = wrapper.find(".mock-result");
+      expect(r.attributes()).toMatchObject({
+        "data-early": "true",
+        "data-n": "1",
+        "data-name": "Berta",
+        "data-rank": "3",
+      });
+      await r.trigger("click");
+      expect(mockStart).toHaveBeenCalledOnce();
+    });
   });
 
   describe("feedback", () => {
