@@ -97,6 +97,7 @@ const FAR_RIGHT: string[] = [
   "iiiweg",
   "dieheimat",
   "dierechte",
+  "heiladolf",
 ];
 const ALLOWED: string[] = [
   "marsch",
@@ -144,6 +145,7 @@ const FAR_RIGHT_WHOLE = new Set([
   "afd",
   "npd",
   "afdler",
+  "afdlerin",
   "ss",
   "hh",
   "sh",
@@ -152,11 +154,13 @@ const FAR_RIGHT_WHOLE = new Set([
   "dereweg",
   "deriiiweg",
 ]);
+const CODE_1488 = /(?<!\d)1488(?!\d)/;
+const CODE_444 = /(?<!\d)444(?!\d)/;
 // Number codes and codes with a letter prefix, on the raw name. Digits next to a digit never match (1988).
 const FAR_RIGHT_CODES = [
   /(?<!\d)88(?!\d)/, // HH; also 14/88 and 14 88
-  /(?<!\d)1488(?!\d)/,
-  /(?<!\d)444(?!\d)/,
+  CODE_1488,
+  CODE_444,
   /(?<!\d)198(?!\d)/,
   /(?<!\d)168\s*:\s*1(?!\d)/,
   /(?<![\p{L}\d])(c|ah)\s?18(?!\d)/iu, // C18, AH18; a bare 18 is an age
@@ -187,15 +191,26 @@ const SMALL_CAPS = Object.fromEntries(
   Array.from(SMALL_CAPS_FROM, (c, i) => [c, SMALL_CAPS_TO[i]!]),
 );
 
+/** The ASCII digit of any Unicode decimal digit ("٨" → "8"): Unicode assigns them only in runs of 10 from 0 to 9. */
+const asciiDigit = (cp: number): string => {
+  let zero = cp;
+  while (/\p{Nd}/u.test(String.fromCodePoint(zero - 1))) zero--;
+  return String((cp - zero) % 10);
+};
+
 /** Compatibility forms to plain ones (fullwidth, math bold, Ⅲ), no invisible characters or accents, look-alikes as Latin. */
 const prep = (name: string): string =>
   Array.from(
-    // Braille blank and Hangul fillers are letters/symbols to Unicode but render empty.
-    name.normalize("NFKD").replace(/[\p{Cf}\p{M}\u2800\u3164\u115F\u1160\uFFA0]/gu, ""),
+    name
+      .normalize("NFKD")
+      .replace(/[\p{Cf}\p{M}]/gu, "")
+      // Braille blank and Hangul fillers are letters/symbols to Unicode but render as a space.
+      .replace(/[\u2800\u3164\u115F\u1160\uFFA0]/gu, " "),
     (c) => {
       const cp = c.codePointAt(0)!;
       // Regional Indicator Symbols U+1F1E6-1F1FF are A-Z.
       if (cp >= 0x1f1e6 && cp <= 0x1f1ff) return String.fromCharCode(97 + cp - 0x1f1e6);
+      if (cp > 0x7f && /\p{Nd}/u.test(c)) return asciiDigit(cp);
       return SMALL_CAPS[c] ?? LOOKALIKE[c] ?? LOOKALIKE[c.toUpperCase()] ?? c;
     },
   )
@@ -216,6 +231,8 @@ export const nameCategory = (raw: string): NameCategory | undefined => {
   const whole = normalize(name);
   // Without leet, so "AfD2025" and "NPDler" yield afd/npd; two-letter codes only as real words ("Sh1ne").
   const letters = name.split(/[^\p{L}]+/u).filter((w) => w.length > 2);
+  // Split at anything but letters and digits, so "Heil,Adolf" or "Heil(Adolf)" count as two words.
+  const tokens = name.split(/[^\p{L}\d]+/u).map(normalize).filter(Boolean);
   // A run of single digits with separators between them, not touching another digit group on either side ("8.8", "1 4 8 8"; not "1 98", "8.8.1990").
   const codes = [
     name,
@@ -231,12 +248,12 @@ export const nameCategory = (raw: string): NameCategory | undefined => {
     .join("");
   if (
     FAR_RIGHT_CODES.some((re) => codes.some((c) => re.test(c))) ||
-    [FAR_RIGHT_CODES[1]!, FAR_RIGHT_CODES[2]!].some((re) => re.test(joined)) ||
+    [CODE_1488, CODE_444].some((re) => re.test(joined)) ||
     FAR_RIGHT.some((w) => rest.includes(w)) ||
     FAR_RIGHT_WHOLE.has(whole) ||
     [...words, ...letters].some((w) => w !== "heil" && FAR_RIGHT_WHOLE.has(w)) ||
     // "Hubertus Heil" passes, "Heil Adolf" does not
-    words.slice(0, -1).includes("heil") ||
+    [words, tokens].some((ws) => ws.slice(0, -1).includes("heil")) ||
     letters.some((w) => w.startsWith("npd"))
   )
     return "far-right";

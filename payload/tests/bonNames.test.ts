@@ -190,8 +190,29 @@ describe("isOffensiveName bypasses and false positives", () => {
       "Hıtler", // Turkish dotless ı
       "Nazı",
       "AfDler",
+      "AfDlerin",
     ])
       expect([n, nameCategory(n)]).toEqual([n, "far-right"]);
+  });
+
+  it("catches Heil before any separator or a blank-rendering filler", () => {
+    for (const n of [
+      "Heil,Adolf",
+      "Heil!Adolf",
+      "Heil+Adolf",
+      "Heil|Adolf",
+      "Heil(Adolf)",
+      "Heil;AH",
+      "HeilAdolf",
+      "HeilㅤAdolf", // hangul filler
+      "Heil⠀Adolf", // braille blank
+      "Naㅤzi",
+      "٨٨", // Arabic-Indic 88
+      "८८", // Devanagari 88
+    ])
+      expect([n, nameCategory(n)]).toEqual([n, "far-right"]);
+    for (const n of ["Hubertus Heil", "Heilmann", "Hubertus,Heil"])
+      expect([n, nameCategory(n)]).toEqual([n, undefined]);
   });
 });
 
