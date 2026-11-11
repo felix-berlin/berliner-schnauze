@@ -1096,6 +1096,8 @@ describe("GET /api/bon/leaderboard", () => {
   });
 });
 
+const row0 = (id: number) => db.rows.find((r) => r.id === id)!;
+
 describe("POST /api/bon/report-name", () => {
   const report = (body: unknown, cookie?: string) => REPORT(ctx(body, cookie));
   const board = async () =>
@@ -1148,4 +1150,3 @@ describe("POST /api/bon/report-name", () => {
     expect((await report({ id: 8 })).status).toBe(400);
   });
 });
-const row0 = (id: number) => db.rows.find((r) => r.id === id)!;

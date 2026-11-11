@@ -2,34 +2,39 @@
 
 export const NAME_REPORT_LIMIT = 3;
 
-// Short and German-focused on purpose; matched as substrings of the normalized name, so every entry must stay
-// clear of common names (false positives become "Anonym"). Extend from reports, not from guesses.
-const BLOCKED: string[] = [
+// Short and German-focused on purpose. SUBSTRINGS are unambiguous enough to match inside any name; WORDS are short
+// or risky (Marschall, Nazim, Thure, Heilmann) and only match a whole word or the whole collapsed name ("A r s c h").
+// Extend from reports, not from guesses.
+const SUBSTRINGS: string[] = [
   "hitler",
-  "heil",
-  "nazi",
   "siegheil",
-  "fick",
   "fuck",
   "fotze",
   "votze",
-  "hure",
-  "nutte",
+  "hurensohn",
   "schlampe",
   "wichser",
-  "arsch",
   "scheiss",
-  "spast",
   "behindert",
-  "neger",
   "nigger",
-  "nigga",
-  "kanake",
   "schwuchtel",
   "bitch",
+];
+const WORDS = new Set([
+  "heil",
+  "nazi",
+  "fick",
+  "hure",
+  "huren",
+  "nutte",
+  "arsch",
+  "spast",
+  "neger",
+  "nigga",
+  "kanake",
   "cunt",
   "shit",
-];
+]);
 
 const LEET: Record<string, string> = {
   "0": "o",
@@ -51,9 +56,15 @@ const normalize = (name: string): string =>
     .replace(/[013457@$]/g, (c) => LEET[c]!)
     .replace(/[^a-z]/g, "");
 
-export const isOffensiveName = (name: string): boolean =>
-  // 88 = HH (Heil Hitler); checked before the digits are dropped.
-  name.includes("88") || BLOCKED.some((word) => normalize(name).includes(word));
+export const isOffensiveName = (name: string): boolean => {
+  // A standalone 88 is the code for HH; 1988 is a year. Checked before the digits are dropped.
+  if (/(?<!\d)88(?!\d)/.test(name)) return true;
+  const words = name.split(/[\s._-]+/).map(normalize);
+  const whole = normalize(name);
+  return (
+    SUBSTRINGS.some((w) => whole.includes(w)) || WORDS.has(whole) || words.some((w) => WORDS.has(w))
+  );
+};
 
 export const cleanName = (name: string): string => (isOffensiveName(name) ? "Anonym" : name);
 

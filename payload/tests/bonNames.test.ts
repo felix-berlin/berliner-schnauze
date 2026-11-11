@@ -4,12 +4,37 @@ import { cleanName, displayName, isOffensiveName, NAME_REPORT_LIMIT } from "../s
 
 describe("isOffensiveName", () => {
   it("catches leetspeak, spacing, case and umlauts", () => {
-    for (const n of ["H1tler", "A r s c h", "FICK", "Sch3iß3", "Heil Hitler", "Kalle88", "n@zi"])
+    for (const n of [
+      "H1tler",
+      "A r s c h",
+      "FICK",
+      "Sch3iß3",
+      "Heil Hitler",
+      "Kalle88",
+      "n@zi",
+      "Tim 88",
+      "Du Arsch",
+    ])
       expect([n, isOffensiveName(n)]).toEqual([n, true]);
   });
 
   it("lets common names through", () => {
-    for (const n of ["Klaus", "Schnitzel", "Anonym", "Hannelore", "Ingo", "Jürgen", "Berta"])
+    for (const n of [
+      "Klaus",
+      "Schnitzel",
+      "Anonym",
+      "Hannelore",
+      "Ingo",
+      "Jürgen",
+      "Berta",
+      "Marschall",
+      "Nazim",
+      "Thure",
+      "Heilmann",
+      "Fickert",
+      "Jahrgang 1988",
+      "Mike1988",
+    ])
       expect([n, isOffensiveName(n)]).toEqual([n, false]);
   });
 });
