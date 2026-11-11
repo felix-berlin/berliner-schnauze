@@ -40,6 +40,7 @@
 ### Task 1: Server — `GET`/`PATCH /api/bon/player`, `finish` takes the player's name, report key follows the name
 
 **Files:**
+
 - Modify: `website/src/services/bonPlayer.ts` (identity helper)
 - Modify: `website/src/pages/api/bon/player.ts` (add `GET`, `PATCH`)
 - Modify: `website/src/pages/api/bon/leaderboard.ts` (use the identity helper, no behavior change)
@@ -50,6 +51,7 @@
 - Test: `website/src/tests/unit/pages/api/bon.test.ts`
 
 **Interfaces:**
+
 - Produces: `bonIdentity(payload: Client, cookies: AstroCookies): Promise<{ identity: string; playerId?: number; visitor?: string; playerName?: string } | undefined>` in `bonPlayer.ts` (`identity` = `p:<id>` or `v:<hash>`; `playerName` = raw `bon-players.name` for code players; no cookie is set).
 - Produces: `renameSchema = z.strictObject({ name: z.string() })` whose output is the cleaned name: trimmed, `max(24)` (400 above), empty or link-like → `"Anonym"`. Filter is NOT in the schema (the route needs 422, not 400).
 - Produces HTTP: `GET /api/bon/player` → 200 `{ name: string; tag?: string }` | 404 `{ error }`; `PATCH /api/bon/player` body `{ name }` → 200 `{ name; tag? }` | 400 | 404 | 422 | 429 `{ error }` | 502.
@@ -83,6 +85,7 @@
 ### Task 2: `BonName.vue` and its client API
 
 **Files:**
+
 - Create: `website/src/components/games/BonName.vue`
 - Create: `website/src/styles/components/_bon-name.scss`
 - Modify: `website/src/services/bonPlayerApi.ts`
@@ -90,6 +93,7 @@
 - Test: `website/src/tests/unit/components/games/BonName.test.ts`, `website/src/tests/unit/services/bonPlayerApi.test.ts`
 
 **Interfaces:**
+
 - Consumes: Task 1 HTTP routes.
 - Produces in `bonPlayerApi.ts`:
   - `type PlayerName = { name: string; tag?: string }`
@@ -120,6 +124,7 @@
 ### Task 3: Wire `BonName` into start, result and leaderboard
 
 **Files:**
+
 - Modify: `website/src/components/games/BonIntro.vue` (known player → `BonName` instead of the field)
 - Modify: `website/src/components/games/BonResult.vue` (below the title; reload placement on `saved`)
 - Modify: `website/src/components/games/BerlinerOderNicht.vue` (only if needed to pass name/tag)
@@ -128,6 +133,7 @@
 - Test: `BonIntro.test.ts`, `BonResult.test.ts`, `BonLeaderboard.test.ts` in `website/src/tests/unit/components/games/`
 
 **Interfaces:**
+
 - Consumes: `fetchPlayerName`, `rememberName`, `PlayerName`, `BonName` (props `name`, `tag?`; emits `saved`) from Task 2.
 
 - [ ] **Step 1: Write the failing tests.**
@@ -145,12 +151,14 @@
 ### Task 4: Name filter rest and report dedupe
 
 **Files:**
+
 - Modify: `payload/src/lib/bonNames.ts` (`prep`, number-code merge)
 - Modify: `website/src/pages/api/bon/report-name.ts` (/64 key, set cap)
 - Modify: `website/src/utils/rateLimit.ts` (new `networkKey`)
 - Test: `payload/tests/bonNames.test.ts`, `website/src/tests/unit/pages/api/bon.test.ts`, `website/src/tests/unit/utils/rateLimit.test.ts` (create if missing)
 
 **Interfaces:**
+
 - Produces: `networkKey(ip: string): string` in `rateLimit.ts` — IPv4 unchanged; IPv4-mapped `::ffff:a.b.c.d` → `a.b.c.d`; IPv6 → its first four hextets, expanded and lowercased (`2001:db8::1` and `2001:0DB8:0:0:ffff::2` → `2001:0db8:0000:0000`).
 
 - [ ] **Step 1: Write the failing tests.**
@@ -166,7 +174,7 @@
   - Number codes: replace today's `name.replace(/(?<=\d)\s+(?=\d)/g, "")` copy by a merge of **maximal runs of single digits** separated by non-letter, non-digit characters (so `8.8`, `1 4 8 8` merge; `1 98`, `8.8.1990`, `14.08.` do not):
     ```ts
     // A run of single digits with separators between them, not touching another digit group on either side.
-    /(?<!\d[^\p{L}\d]*)\d(?:[^\p{L}\d]+\d)+(?![^\p{L}\d]*\d)/gu  // replace each match by its digits only
+    /(?<!\d[^\p{L}\d]*)\d(?:[^\p{L}\d]+\d)+(?![^\p{L}\d]*\d)/gu; // replace each match by its digits only
     ```
   - `report-name.ts`: hash `networkKey(clientIp(...))` instead of the raw IP; `REPORTED_CAP = 50_000`, on insert beyond it delete the oldest (`reported.values().next().value`), comment `shortcut: in memory, oldest dropped first; a flood can make old reports count again`.
 - [ ] **Step 4: Run, expect PASS** (same commands), plus `scripts/with-env.sh pnpm cms:test`.
@@ -177,6 +185,7 @@
 ### Task 5: E2E, spec and docs
 
 **Files:**
+
 - Modify: `website/src/tests/e2e/bon-game.spec.ts`
 - Modify: `docs/design/bon/SPEC.md`
 - Modify: `website/CLAUDE.md` (Bon paragraph)
