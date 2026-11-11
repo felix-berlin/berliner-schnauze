@@ -80,11 +80,3 @@
     color: var(--color-ink-strong);
   }
 }
-
-// The transition runs from the result page, so the timing lives here only.
-@media (prefers-reduced-motion: no-preference) {
-  ::view-transition-group(bon-me) {
-    animation-duration: 500ms;
-    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-}

@@ -25,6 +25,8 @@ const finishing = ref(false);
 const previousHighScore = ref(0);
 
 vi.mock("@composables/useBon", () => ({
+  CARD_LOCK_MS: 320,
+  FEEDBACK_LOCK_MS: 480,
   useBon: () => ({
     advance: mockAdvance,
     answer: mockAnswer,
@@ -251,7 +253,7 @@ describe("BerlinerOderNicht", () => {
       await nextTick();
       key(k);
       expect(mockAdvance).not.toHaveBeenCalled();
-      vi.advanceTimersByTime(250);
+      vi.advanceTimersByTime(480);
       key(k);
       expect(mockAdvance).toHaveBeenCalledOnce();
     });
@@ -259,7 +261,7 @@ describe("BerlinerOderNicht", () => {
     it("leaves Enter on a link alone and ignores modifiers", async () => {
       mount(BerlinerOderNicht, { attachTo: document.body });
       await nextTick();
-      vi.advanceTimersByTime(250);
+      vi.advanceTimersByTime(480);
       const link = document.createElement("a");
       document.body.append(link);
       key("Enter", {}, link);
@@ -331,7 +333,7 @@ describe("BerlinerOderNicht", () => {
       input.remove();
     });
 
-    it("locks after an answer until 250 ms after the next card", async () => {
+    it("locks after an answer until the next card has risen (320 ms)", async () => {
       mount(BerlinerOderNicht);
       key("ArrowRight");
       key("ArrowRight");
@@ -342,9 +344,35 @@ describe("BerlinerOderNicht", () => {
       await nextTick();
       key("ArrowLeft");
       expect(mockAnswer).toHaveBeenCalledOnce();
-      vi.advanceTimersByTime(250);
+      vi.advanceTimersByTime(320);
       key("ArrowLeft");
       expect(mockAnswer).toHaveBeenCalledTimes(2);
+    });
+
+    it("keeps the intro up while the first cards load, then shows the card", async () => {
+      phase.value = "intro";
+      const wrapper = mount(BerlinerOderNicht);
+      phase.value = "loading";
+      await nextTick();
+      expect(wrapper.find(".c-bon-intro").exists()).toBe(true);
+      card.value = { id: "0", word: "Kiez" };
+      phase.value = "play";
+      await nextTick();
+      expect(wrapper.find(".c-bon-intro").exists()).toBe(false);
+      expect(wrapper.find(".mock-card").exists()).toBe(true);
+    });
+
+    it("keeps the game up while a run is finished, then shows the result", async () => {
+      card.value = { id: "0", word: "Kiez" };
+      phase.value = "play";
+      const wrapper = mount(BerlinerOderNicht);
+      finishing.value = true;
+      phase.value = "loading";
+      await nextTick();
+      expect(wrapper.find(".mock-card").exists()).toBe(true);
+      phase.value = "over";
+      await nextTick();
+      expect(wrapper.find(".mock-result").exists()).toBe(true);
     });
 
     it("ends the game from the card", async () => {

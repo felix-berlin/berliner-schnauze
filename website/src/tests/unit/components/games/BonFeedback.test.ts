@@ -89,13 +89,13 @@ describe("BonFeedback.vue", () => {
 
   it("goes on at once on click or swipe, and only once", async () => {
     const clicked = fb(right);
-    vi.advanceTimersByTime(250);
+    vi.advanceTimersByTime(480);
     await clicked.find(".c-bon-feedback__card").trigger("click");
     vi.advanceTimersByTime(5000);
     expect(clicked.emitted("next")).toHaveLength(1);
 
     const swiped = fb(right);
-    vi.advanceTimersByTime(250);
+    vi.advanceTimersByTime(480);
     fire(swiped, "pointerdown", 10);
     fire(swiped, "pointerup", 120);
     await swiped.find(".c-bon-feedback__card").trigger("click");
@@ -150,7 +150,7 @@ describe("BonFeedback.vue", () => {
     expect(bar(fb(wrong))).toBe("2500ms");
   });
 
-  it("drops a tap in the first 250 ms without losing the timer, accepts one later", async () => {
+  it("drops a tap in the first 480 ms (the flip animation) without losing the timer, accepts one later", async () => {
     const early = fb(wrong);
     vi.advanceTimersByTime(100);
     await early.find(".c-bon-feedback__card").trigger("click");
@@ -161,7 +161,7 @@ describe("BonFeedback.vue", () => {
     const late = fb(wrong);
     vi.advanceTimersByTime(100);
     await late.find(".c-bon-feedback__card").trigger("click");
-    vi.advanceTimersByTime(150);
+    vi.advanceTimersByTime(400);
     await late.find(".c-bon-feedback__card").trigger("click");
     expect(late.emitted("next")).toHaveLength(1);
   });

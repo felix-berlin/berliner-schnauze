@@ -69,6 +69,8 @@
   }
 
   &__cta {
+    // Morphs into the first card (docs/design/bon/SPEC.md §13).
+    view-transition-name: bon-card;
     height: 52px;
     padding: 0 2rem;
     font-size: 1.05rem;

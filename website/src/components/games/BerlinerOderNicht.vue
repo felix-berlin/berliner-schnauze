@@ -1,7 +1,7 @@
 <template>
   <div class="c-berliner-oder-nicht">
     <BonIntro
-      v-if="phase === 'intro'"
+      v-if="view === 'intro'"
       :high-score="stats.highScore"
       :offline="!isOnline"
       :link-redeem="linkRedeem"
@@ -12,12 +12,12 @@
       v-else
       :class="[
         'c-berliner-oder-nicht__game',
-        phase === 'over' && 'c-berliner-oder-nicht__game--wide',
+        view === 'over' && 'c-berliner-oder-nicht__game--wide',
       ]"
     >
-      <h1 v-if="phase !== 'over'" class="u-sr-only">Berliner oder nicht? – Spiel läuft</h1>
+      <h1 v-if="view !== 'over'" class="u-sr-only">Berliner oder nicht? – Spiel läuft</h1>
 
-      <template v-if="phase === 'play' || phase === 'feedback'">
+      <template v-if="view === 'play' || view === 'feedback'">
         <BonHUD
           :lives="lives"
           :score="score"
@@ -35,13 +35,13 @@
           @answer="onAnswer"
           @end="end"
         >
-          <template v-if="phase === 'feedback' && last" #feedback>
+          <template v-if="view === 'feedback' && last" #feedback>
             <BonFeedback :last="last" :game-over="lives === 0" :lives="lives" @next="advance" />
           </template>
         </BonCard>
       </template>
 
-      <div v-else-if="phase === 'loading'" class="c-bon-card">
+      <div v-else-if="view === 'loading'" class="c-bon-card">
         <section class="c-bon-card__card" aria-busy="true">
           <p class="t-small" role="status">
             {{
@@ -65,7 +65,7 @@
         </div>
       </div>
 
-      <div v-else-if="phase === 'error'" class="c-bon-error">
+      <div v-else-if="view === 'error'" class="c-bon-error">
         <div class="c-state c-state--error" role="alert">
           <AlertIcon width="18" height="18" aria-hidden="true" />
           <span class="c-state__body">
@@ -79,7 +79,7 @@
         <button class="c-choice" type="button" @click="retry">Nochmal versuchen</button>
       </div>
 
-      <template v-else-if="phase === 'over'">
+      <template v-else-if="view === 'over'">
         <ConfettiEffect v-if="score > previousHighScore" />
         <BonResult
           :result="result"
@@ -103,13 +103,14 @@ import BonFeedback from "@components/games/BonFeedback.vue";
 import BonHUD from "@components/games/BonHUD.vue";
 import BonIntro from "@components/games/BonIntro.vue";
 import BonResult from "@components/games/BonResult.vue";
-import { useBon } from "@composables/useBon";
+import { CARD_LOCK_MS, FEEDBACK_LOCK_MS, useBon } from "@composables/useBon";
 import { useStore } from "@nanostores/vue";
 import { hasRedeemCode } from "@services/bonPlayerApi.ts";
 import { $bonStats } from "@stores/bonStats";
+import { vt } from "@utils/viewTransition";
 import { useEventListener, useOnline, useTimeoutFn, useVibrate } from "@vueuse/core";
-import AlertIcon from "virtual:icons/lucide/circle-alert";
 import { cleanName } from "payload-app/bon-names";
+import AlertIcon from "virtual:icons/lucide/circle-alert";
 import { computed, ref, watch } from "vue";
 
 const {
@@ -152,17 +153,42 @@ function onStart() {
   void start();
 }
 
-// Spec §7 input lock: answers stay closed from the first answer until 250 ms after the next card
-// is up; "next" stays closed for 250 ms after the feedback appears (a double swipe must not skip it).
-const LOCK_MS = 250;
+// Spec §7 input lock, as long as the animation (§13): answers stay closed from the first answer
+// until the next card has risen; "next" stays closed while the feedback flies out and flips in.
 const locked = ref(false);
 const nextLocked = ref(false);
-const { start: unlockAnswers } = useTimeoutFn(() => (locked.value = false), LOCK_MS, {
+const { start: unlockAnswers } = useTimeoutFn(() => (locked.value = false), CARD_LOCK_MS, {
   immediate: false,
 });
-const { start: unlockNext } = useTimeoutFn(() => (nextLocked.value = false), LOCK_MS, {
+const { start: unlockNext } = useTimeoutFn(() => (nextLocked.value = false), FEEDBACK_LOCK_MS, {
   immediate: false,
 });
+
+// What the screen shows. It follows `phase`, but intro and the game stay up while the first
+// cards or the result load, so "Los jeht's" and the HUD score can morph (Spec §13).
+const view = ref(phase.value);
+watch(
+  phase,
+  (p) => {
+    const was = view.value;
+    if (
+      p === "loading" &&
+      (was === "intro" || (finishing.value && ["play", "feedback"].includes(was)))
+    )
+      return;
+    const dir =
+      p === "over"
+        ? "over"
+        : p === "play" && was === "intro"
+          ? "start"
+          : p === "play" && was === "feedback"
+            ? "next"
+            : undefined;
+    if (dir) vt(() => (view.value = p), dir);
+    else view.value = p;
+  },
+  { flush: "sync" },
+);
 
 function onAnswer(guessedReal: boolean) {
   if (locked.value) return;

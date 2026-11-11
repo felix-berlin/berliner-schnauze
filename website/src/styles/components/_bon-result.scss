@@ -84,6 +84,11 @@
     }
   }
 
+  // The score morphs from the HUD (docs/design/bon/SPEC.md §13).
+  &__stat:first-child &__value {
+    view-transition-name: bon-score;
+  }
+
   &__value {
     font-size: 1.75rem;
     font-weight: 700;
@@ -203,5 +208,31 @@
     b {
       color: inherit;
     }
+  }
+}
+
+// The result fades in tile by tile, +60 ms each (Spec §13); the first tile morphs instead.
+@media (prefers-reduced-motion: no-preference) {
+  .c-bon-result__badge,
+  .c-bon-result__stat:nth-child(n + 2),
+  .c-bon-result__round {
+    animation: c-bon-result-in 350ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  @for $i from 2 through 4 {
+    .c-bon-result__stat:nth-child(#{$i}) {
+      animation-delay: ($i - 1) * 60ms;
+    }
+  }
+
+  .c-bon-result__round {
+    animation-delay: 300ms;
+  }
+}
+
+@keyframes c-bon-result-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
   }
 }

@@ -28,6 +28,10 @@ export function computeMultiplier(streak: number): number {
 const LIVES = 3;
 const PREFETCH_AT = 15;
 const LABEL = "berliner-oder-nicht";
+// Spec §7/§13 input locks = the animation: feedback flip-in is done 140 + 340 ms after it
+// mounts, the next card has risen after 320 ms.
+export const FEEDBACK_LOCK_MS = 480;
+export const CARD_LOCK_MS = 320;
 
 export function useBon() {
   const phase = ref<BonPhase>("intro");
@@ -172,8 +176,9 @@ export function useBon() {
 
   async function finish() {
     const g = gen;
-    phase.value = "loading";
+    // Before the phase: the screen holds the game view while finishing (it morphs into the result).
     finishing.value = true;
+    phase.value = "loading";
     const name = $bonStats.get().playerName;
     const res = await queued(() => finishRun(token, name || undefined)).catch(() => undefined);
     if (g !== gen) return;

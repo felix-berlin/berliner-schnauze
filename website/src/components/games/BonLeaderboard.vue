@@ -24,7 +24,7 @@
 
     <div class="c-bon-leaderboard__body">
       <section
-        class="c-section-card c-bon-leaderboard__card"
+        class="c-section-card c-bon-leaderboard__card c-bon-leaderboard__main"
         aria-labelledby="bon-leaderboard-title"
       >
         <h2 id="bon-leaderboard-title" class="u-sr-only">{{ periodTitle }}</h2>
@@ -57,7 +57,7 @@
 
         <div v-else-if="!entries.length" class="c-bon-leaderboard__empty">
           <b>{{
-            period === "week"
+            listed === "week"
               ? "Diese Woche hat noch keener jespielt."
               : "Noch keene Spiele in dem Zeitraum."
           }}</b>
@@ -237,6 +237,7 @@ import type { LeaderboardReply, Period, PublicEntry } from "@services/bonLeaderb
 
 import BonPlayerCode from "@components/games/BonPlayerCode.vue";
 import { fetchLeaderboard, reportName } from "@services/bonLeaderboardApi";
+import { vt } from "@utils/viewTransition";
 import { useMediaQuery } from "@vueuse/core";
 import AlertIcon from "virtual:icons/lucide/circle-alert";
 import { computed, onMounted, ref } from "vue";
@@ -258,6 +259,8 @@ type Item = { gap: true } | { gap?: false; entry: PublicEntry };
 const isDesktop = useMediaQuery("(min-width: 808px)");
 
 const period = ref<Period>("week");
+// The period the list shows: it trails `period` while a switch is loading behind the old list.
+const listed = ref<Period>("week");
 const status = ref<"loading" | "ready" | "error">("loading");
 const entries = ref<PublicEntry[]>([]);
 const total = ref(0);
@@ -279,7 +282,7 @@ function readReported(): number[] {
 }
 
 const fmt = (n: number) => n.toLocaleString("de-DE");
-const current = computed(() => PERIODS.find((p) => p.id === period.value)!);
+const current = computed(() => PERIODS.find((p) => p.id === listed.value)!);
 const periodTitle = computed(() => `Rangliste ${current.value.label}`);
 const totalLabel = computed(() => {
   if (status.value !== "ready") return "";
@@ -308,17 +311,32 @@ const items = computed<Item[]>(() => {
 
 // Latest request wins: a slow reply of the period the visitor left must not overwrite the list.
 let request = 0;
-async function load(): Promise<void> {
+async function load(keepList = false): Promise<void> {
   const mine = ++request;
-  status.value = "loading";
-  expanded.value = false;
+  const asked = period.value;
+  if (!keepList) status.value = "loading";
   try {
-    const data = await fetchLeaderboard(period.value, 0, PAGE);
+    const data = await fetchLeaderboard(asked, 0, PAGE);
     if (mine !== request) return;
-    entries.value = data.entries;
-    total.value = data.total;
-    me.value = data.me;
-    status.value = "ready";
+    // The morph from the result lands on the skeleton row; a view transition ends the moment its
+    // landing spot goes away, so the rows wait for it (Spec §13, `bon-me`).
+    await Promise.all(
+      (document.getAnimations?.() ?? [])
+        .filter((a) => (a.effect as KeyframeEffect | null)?.pseudoElement)
+        .map((a) => a.finished.catch(() => {})),
+    );
+    if (mine !== request) return;
+    const apply = () => {
+      entries.value = data.entries;
+      total.value = data.total;
+      me.value = data.me;
+      listed.value = asked;
+      expanded.value = false;
+      status.value = "ready";
+    };
+    // A period switch keeps the old list up and swaps it in a transition (Spec §13).
+    if (keepList) vt(apply, "period");
+    else apply();
   } catch {
     if (mine === request) status.value = "error";
   }
@@ -349,7 +367,7 @@ async function more(): Promise<void> {
 function pick(next: Period): void {
   if (next === period.value) return;
   period.value = next;
-  void load();
+  void load(status.value === "ready" && entries.value.length > 0);
 }
 
 function redeemed(): void {

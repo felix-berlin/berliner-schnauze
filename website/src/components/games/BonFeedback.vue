@@ -86,6 +86,7 @@
 <script setup lang="ts">
 import type { RoundEntry } from "@composables/useBon";
 
+import { FEEDBACK_LOCK_MS } from "@composables/useBon";
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
 const props = defineProps<{ last: RoundEntry; gameOver: boolean; lives?: number }>();
@@ -95,8 +96,8 @@ const RIGHT_MS = 900;
 const WRONG_MS = 2500;
 const RESUME_MS = 1200;
 const SWIPE_PX = 20;
-// A tap right after the card appears is a leftover of the answer gesture (Spec §7 input lock).
-const LOCK_MS = 250;
+// A tap while the card flies out and flips in is a leftover of the answer gesture (Spec §7 input lock).
+const LOCK_MS = FEEDBACK_LOCK_MS;
 
 const standing = props.last.correct && !props.gameOver ? RIGHT_MS : WRONG_MS;
 // The card flies out to the side the player answered.

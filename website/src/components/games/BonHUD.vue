@@ -1,7 +1,12 @@
 <template>
   <div class="c-bon-hud">
     <div class="c-bon-hud__row">
-      <span class="c-bon-hud__lives" role="img" :aria-label="`Noch ${lives} Leben von 3`">
+      <span
+        :key="hit"
+        :class="['c-bon-hud__lives', hit > 0 && 'c-bon-hud__lives--hit']"
+        role="img"
+        :aria-label="`Noch ${lives} Leben von 3`"
+      >
         <svg
           v-for="i in 3"
           :key="i"
@@ -22,7 +27,9 @@
       </span>
 
       <span class="c-bon-hud__score" aria-live="polite">
-        <b class="c-bon-hud__points">{{ score }}</b>
+        <b :key="gain" :class="['c-bon-hud__points', gain > 0 && 'c-bon-hud__points--gain']">{{
+          score
+        }}</b>
         <span class="t-label">Punkte · {{ playerLabel }}</span>
       </span>
 
@@ -52,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent } from "vue";
+import { computed, defineAsyncComponent, ref, watch } from "vue";
 
 const FlameIcon = defineAsyncComponent(() => import("virtual:icons/lucide/flame"));
 
@@ -71,6 +78,18 @@ const props = defineProps<{
   multiplier: number;
   playerLabel: string;
 }>();
+
+// Counters that re-key the element, so its CSS animation (pop, wobble) restarts on every change.
+const gain = ref(0);
+const hit = ref(0);
+watch(
+  () => props.score,
+  (now, was) => now > was && gain.value++,
+);
+watch(
+  () => props.lives,
+  (now, was) => now < was && hit.value++,
+);
 
 const current = computed(() => [1, 2, 3, 5].indexOf(props.multiplier));
 

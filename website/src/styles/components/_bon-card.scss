@@ -26,6 +26,7 @@
     touch-action: pan-y;
     user-select: none;
     cursor: grab;
+    view-transition-name: bon-card;
     // Spring back; the inline style of an active drag sets transition: none.
     transition: transform 200ms ease-out;
 
