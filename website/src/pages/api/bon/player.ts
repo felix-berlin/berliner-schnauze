@@ -140,24 +140,23 @@ export const PATCH: APIRoute = async ({ cookies, request }) => {
       where: gamesOf(who),
     });
     const norm = (v: string | null | undefined) => (v ?? "").trim().toLowerCase();
-    await Promise.all(
-      docs.map((g) =>
-        payload.update({
-          collection: "bon-games",
-          // Reports belong to the old name; the same name again must not bring a hidden one back.
-          data:
-            norm(g.playerName) === norm(name)
-              ? { playerName: name }
-              : { nameHidden: false, nameReports: 0, playerName: name },
-          depth: 0,
-          id: g.id,
-        }),
-      ),
-    );
+    // One at a time, not a burst per game. The rename already counted above; a retry after a failure rewrites the same values.
+    for (const g of docs)
+      await payload.update({
+        collection: "bon-games",
+        // Reports belong to the old name; the same name again must not bring a hidden one back.
+        data:
+          norm(g.playerName) === norm(name)
+            ? { playerName: name }
+            : { nameHidden: false, nameReports: 0, playerName: name },
+        depth: 0,
+        id: g.id,
+      });
     if (who.playerId !== undefined)
       await payload.update({
         collection: "bon-players",
-        data: { name: name === "Anonym" ? "" : name },
+        // "Anonym" stored literally: finish takes a non-empty stored name over the one a device sends.
+        data: { name },
         depth: 0,
         id: who.playerId,
       });

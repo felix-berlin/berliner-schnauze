@@ -36,6 +36,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
           ? game.player.id
           : game.player;
     // A code player's name lives on the player, so a game on another device cannot bring back an old name.
+    // Race: a rename that lands after this read leaves this one game with the old name.
     const storedName =
       playerId === undefined
         ? undefined

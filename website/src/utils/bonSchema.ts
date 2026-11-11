@@ -4,6 +4,10 @@ import { z } from "zod";
 
 const token = z.string().regex(/^[0-9a-f]{64}$/);
 
+// Format characters (bidi overrides, zero-width) out before the filter and storing: "\u202EizaN" renders as "Nazi".
+// ZWJ stays for emoji sequences.
+const visible = (v: string) => v.replace(/(?!\u200D)\p{Cf}/gu, "");
+
 export const redeemSchema = z.strictObject({ code: z.string().max(40) });
 
 export const nextSchema = z.strictObject({ token });
@@ -14,6 +18,7 @@ export const answerSchema = z.strictObject({ card: z.string().max(20), real: z.b
 export const renameSchema = z.strictObject({
   name: z
     .string()
+    .overwrite(visible)
     .trim()
     .max(24)
     .transform((v) => (!v || containsLink(v) ? "Anonym" : v)),
@@ -23,6 +28,7 @@ export const renameSchema = z.strictObject({
 export const finishSchema = z.strictObject({
   playerName: z
     .string()
+    .overwrite(visible)
     .trim()
     .max(24)
     .optional()

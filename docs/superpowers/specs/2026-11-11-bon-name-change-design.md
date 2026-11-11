@@ -63,7 +63,7 @@ Liefert den aktuellen Namen zur Anzeige im Start-Intro (wo es noch kein Spiel gi
 4. Schreiben:
    - alle `bon-games` der Identität, genau wie die Rangliste sie zuordnet: `player = id` bzw. `visitor = hash` **und kein `player`** (eigene Wahl: von einem Spieler mit Code übernommene Besucher-Spiele gehören nicht mehr dem Besucher), Status egal: `playerName = name`;
    - Meldungen zurücksetzen (`nameReports = 0`, `nameHidden = false`) **nur in Spielen, deren gespeicherter Name sich tatsächlich ändert** (Vergleich getrimmt, ohne Groß/Klein). Eigene Wahl: Wer denselben Namen nochmal speichert, holt einen ausgeblendeten Namen nicht zurück. Ein Umweg A → B → A bleibt möglich, begrenzt durch das Tageslimit; der Filter bleibt die eigentliche Schranke.
-   - bei Spieler mit Code zusätzlich `bon-players.name = name` („Anonym“ wird dort als leer gespeichert, so wie `playerFromCookie` es heute liest).
+   - bei Spieler mit Code zusätzlich `bon-players.name = name` („Anonym“ wird dort wörtlich gespeichert, damit `finish` es als gewählten Namen nimmt und ein anderes Gerät den alten Namen nicht zurückbringt; `playerFromCookie` und GET lesen es als anonym).
    - Fehler beim Schreiben → 502 (Client zeigt „Netzfehler“).
 5. Ranglisten-Cache für alle Zeiträume leeren (dieselbe Invalidierung wie nach `finish`).
 6. Antwort `{ name, tag? }` wie bei GET.

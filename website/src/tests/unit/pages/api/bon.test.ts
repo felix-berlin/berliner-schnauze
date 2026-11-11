@@ -579,6 +579,19 @@ describe("POST /api/bon/finish", () => {
     expect(row(token).playerName).toBe("Anonym");
   });
 
+  it.each([
+    ["\u202EizaN", "izaN"],
+    ["\u202EDfA", "DfA"],
+    ["\u2067izaN\u2069", "izaN"],
+    ["Kalle\u200F", "Kalle"],
+  ])("strips bidi controls from %j before the filter and storing", async (playerName, stored) => {
+    const { token } = await newGame("v-1");
+    await play(token, 4);
+    later(60_000);
+    expect((await finish({ playerName, token }, "v-1")).status).toBe(200);
+    expect(row(token).playerName).toBe(stored);
+  });
+
   it.each(["Anna.Berlin", "http://x", "www.x.de", "evil.com"])(
     "stores Anonym for %s, a name that reads as a link, instead of refusing the finish",
     async (playerName) => {
@@ -1339,7 +1352,17 @@ describe("PATCH and GET /api/bon/player", () => {
     game({ player: 7 });
     const res = await patch("  ", "v-1", c);
     expect(await res.json()).toEqual({ name: "Anonym", tag: bonTag("p:7") });
-    expect(db.players[0].name).toBe("");
+    // Stored literally, so a finish on another device does not bring the old name back.
+    expect(db.players[0].name).toBe("Anonym");
+  });
+
+  it("strips bidi controls before the filter and storing", async () => {
+    game({ visitor: hashed("v-bidi") });
+    const res = await patch("\u202EizaN", "v-bidi");
+    expect(res.status).toBe(200);
+    expect(await res.json()).toMatchObject({ name: "izaN" });
+    expect(db.rows[0].playerName).toBe("izaN");
+    expect((await patch("\u2067Nazi\u2069", "v-bidi")).status).toBe(422);
   });
 
   it("502 when the update fails", async () => {
@@ -1407,6 +1430,12 @@ describe("finish takes the code player's name", () => {
     const token = await finishAs("Kiez-Kalle", "Alt");
     expect(row(token).playerName).toBe("Kiez-Kalle");
     expect(db.players[0].name).toBe("Kiez-Kalle");
+  });
+
+  it("a code player renamed to Anonym stays Anonym, the row unchanged", async () => {
+    const token = await finishAs("Anonym", "Alt");
+    expect(row(token).playerName).toBe("Anonym");
+    expect(db.players[0].name).toBe("Anonym");
   });
 
   it("a code player with an empty row name keeps the sent name", async () => {
