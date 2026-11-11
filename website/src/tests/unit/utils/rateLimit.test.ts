@@ -105,6 +105,16 @@ describe("rateLimit", () => {
     }
   });
 
+  it("limits bon name reports to 10 per 10 min on POST", () => {
+    expect(rateLimitRule("/api/bon/report-name", "POST")).toEqual({
+      max: 10,
+      method: "POST",
+      prefix: "/api/bon/report-name",
+      windowMs: 10 * 60_000,
+    });
+    expect(rateLimitRule("/api/bon/report-name", "GET")).toBeUndefined();
+  });
+
   it("takes the last forwarded-for entry, else the socket address", () => {
     expect(clientIp("1.1.1.1, 2.2.2.2 ", "9.9.9.9")).toBe("2.2.2.2");
     expect(clientIp(null, "9.9.9.9")).toBe("9.9.9.9");

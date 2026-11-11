@@ -1,5 +1,6 @@
 import { ttl } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
+import { displayName } from "payload-app/bon-names";
 import { periodStart, rankGames, type Period, type RankedEntry } from "payload-app/bon-ranking";
 
 // shortcut: whole period in memory, move to SQL (DISTINCT ON) when bon_games grows past ~50k rows.
@@ -14,6 +15,8 @@ const load = (period: Period) => async (): Promise<RankedEntry[]> => {
       bestStreak: true,
       correctAnswers: true,
       finishedAt: true,
+      nameHidden: true,
+      nameReports: true,
       player: true,
       playerName: true,
       score: true,
@@ -39,8 +42,8 @@ const load = (period: Period) => async (): Promise<RankedEntry[]> => {
                 g.player != null
                   ? `p:${typeof g.player === "object" ? g.player.id : g.player}`
                   : `v:${g.visitor}`,
-              // displayName() comes with the name rules; until then the stored name is shown as is.
-              name: g.playerName || "Anonym",
+              // Before the tag is derived: a hidden name becomes Anonym and so gets one.
+              name: displayName(g),
               score: g.score ?? 0,
               totalAnswered: g.totalAnswered ?? 0,
             },

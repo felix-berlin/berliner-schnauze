@@ -140,6 +140,7 @@ import { GET as LEADERBOARD } from "@/pages/api/bon/leaderboard.ts";
 import { POST as NEXT } from "@/pages/api/bon/next.ts";
 import { POST as PLAYER } from "@/pages/api/bon/player.ts";
 import { POST as REDEEM } from "@/pages/api/bon/redeem.ts";
+import { POST as REPORT } from "@/pages/api/bon/report-name.ts";
 import { POST as START } from "@/pages/api/bon/start.ts";
 
 const T0 = Date.UTC(2026, 10, 5, 12);
@@ -486,6 +487,14 @@ describe("POST /api/bon/next with answer", () => {
 });
 
 describe("POST /api/bon/finish", () => {
+  it("stores Anonym for an offensive name", async () => {
+    const { token } = await newGame("v-1");
+    await play(token, 4);
+    later(60_000);
+    expect((await finish({ playerName: "H1tler", token }, "v-1")).status).toBe(200);
+    expect(row(token).playerName).toBe("Anonym");
+  });
+
   it("scores a 12-right-then-3-wrong run, stores it and ranks it first", async () => {
     const { token } = await newGame("v-1");
     await play(token, 12);
@@ -1086,3 +1095,57 @@ describe("GET /api/bon/leaderboard", () => {
     for (let i = 0; i < 3; i++) expect(text).not.toContain(hashed(`v-${i}`));
   });
 });
+
+describe("POST /api/bon/report-name", () => {
+  const report = (body: unknown, cookie?: string) => REPORT(ctx(body, cookie));
+  const board = async () =>
+    (await (
+      await LEADERBOARD({
+        clientAddress: "10.0.0.1",
+        cookies: { get: () => undefined, set },
+        url: new URL("https://berliner-schnauze.wtf/api/bon/leaderboard?period=all"),
+      } as unknown as APIContext)
+    ).json()) as { entries: { name: string; tag?: string }[] };
+  const finished = (id: number, extra: Record<string, unknown> = {}) =>
+    db.rows.push({
+      finishedAt: new Date(T0 - HOUR).toISOString(),
+      id,
+      playerName: "Kalle",
+      score: 100,
+      status: "finished",
+      visitor: hashed(`other-${id}`),
+      ...extra,
+    });
+
+  it("204, and the name is Anonym with a tag on the leaderboard after 3 visitors", async () => {
+    finished(7);
+    expect((await board()).entries[0]).toMatchObject({ name: "Kalle" });
+    for (const v of ["a", "b"]) expect((await report({ id: 7 }, v)).status).toBe(204);
+    expect((await board()).entries[0].name).toBe("Kalle");
+    expect((await report({ id: 7 }, "c")).status).toBe(204);
+    const [entry] = (await board()).entries;
+    expect(entry.name).toBe("Anonym");
+    expect(entry.tag).toMatch(/^[A-Z2-9]{4}$/);
+    expect(row0(7).nameReports).toBe(3);
+  });
+
+  it("counts one visitor once per game", async () => {
+    finished(7);
+    for (let i = 0; i < 4; i++) expect((await report({ id: 7 }, "same")).status).toBe(204);
+    expect(row0(7).nameReports).toBe(1);
+  });
+
+  it("a hidden name shows as Anonym at once", async () => {
+    finished(7, { nameHidden: true });
+    expect((await board()).entries[0]).toMatchObject({ name: "Anonym" });
+  });
+
+  it("404 for an unknown or unfinished game, 400 for bad input or no cookie", async () => {
+    finished(8, { status: "playing" });
+    expect((await report({ id: 99 }, "a")).status).toBe(404);
+    expect((await report({ id: 8 }, "a")).status).toBe(404);
+    expect((await report({ id: "x" }, "a")).status).toBe(400);
+    expect((await report({ id: 8 })).status).toBe(400);
+  });
+});
+const row0 = (id: number) => db.rows.find((r) => r.id === id)!;

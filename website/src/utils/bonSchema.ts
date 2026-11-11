@@ -1,3 +1,4 @@
+import { cleanName } from "payload-app/bon-names";
 import { containsLink } from "payload-app/comments";
 import { z } from "zod";
 
@@ -17,6 +18,6 @@ export const finishSchema = z.strictObject({
     .max(24)
     .refine((v) => !containsLink(v), "no links")
     .optional()
-    .transform((v) => v || "Anonym"),
+    .transform((v) => cleanName(v || "Anonym")),
   token,
 });

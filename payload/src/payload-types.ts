@@ -726,6 +726,14 @@ export interface BonGame {
     | null;
   player?: (number | null) | BonPlayer;
   playerName?: string | null;
+  /**
+   * Reports of the name; from 3 on it shows as Anonym
+   */
+  nameReports?: number | null;
+  /**
+   * Show the name as Anonym
+   */
+  nameHidden?: boolean | null;
   score?: number | null;
   bestStreak?: number | null;
   totalAnswered?: number | null;
@@ -1367,6 +1375,8 @@ export interface BonGamesSelect<T extends boolean = true> {
   batches?: T;
   player?: T;
   playerName?: T;
+  nameReports?: T;
+  nameHidden?: T;
   score?: T;
   bestStreak?: T;
   totalAnswered?: T;

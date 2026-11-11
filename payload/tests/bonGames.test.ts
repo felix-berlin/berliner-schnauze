@@ -1,6 +1,6 @@
 import type { Payload } from "payload";
 
-import { afterEach, beforeAll, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { getTestPayload } from "./helpers/payload";
 
@@ -42,6 +42,22 @@ describe("bon-games", () => {
     expect((await row()).player ?? null).toBeNull();
     await payload.delete({ collection: "bon-games", where: { visitor: { like: "v" } } });
     await payload.delete({ collection: "bon-players", where: { id: { equals: player.id } } });
+  });
+
+  it("defaults the name flags and mails the editors once, when the reports reach 3", async () => {
+    process.env.SUGGEST_MAIL_TO = "editors@example.com";
+    const send = vi.spyOn(payload, "sendEmail").mockResolvedValue(undefined as never);
+    const doc = await row({ playerName: "Kalle" });
+    expect(doc).toMatchObject({ nameHidden: false, nameReports: 0 });
+    const report = (n: number) =>
+      payload.update({ collection: "bon-games", data: { nameReports: n }, id: doc.id });
+    await report(2);
+    expect(send).not.toHaveBeenCalled();
+    await report(3);
+    await report(4);
+    expect(send).toHaveBeenCalledOnce();
+    expect(send.mock.calls[0][0].text).toContain("Name: Kalle");
+    send.mockRestore();
   });
 
   it("denies reading without a user", async () => {
