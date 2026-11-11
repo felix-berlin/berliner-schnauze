@@ -209,6 +209,14 @@ describe("3 redeem", () => {
     expect(w.text()).toContain("Willkommen zurück, Berta!");
   });
 
+  it.each(["Anonym", ""])("welcomes a player named %j as Spieler", async (playerName) => {
+    api.redeemPlayerCode.mockResolvedValue({ ...stats, playerName });
+    const w = mount(BonPlayerCode);
+    await w.get("[data-test=show-redeem]").trigger("click");
+    await submit(w, CODE);
+    expect(w.text()).toContain("Willkommen zurück, Spieler!");
+  });
+
   it("rejects a malformed code without asking the server", async () => {
     const w = mount(BonPlayerCode, { props: { mode: "redeem" } });
     await submit(w, "K7QD-M2X9");

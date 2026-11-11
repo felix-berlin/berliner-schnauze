@@ -276,7 +276,9 @@ async function redeem(value: string) {
     const stats = await redeemPlayerCode(canonical);
     applyPlayerStats(stats);
     state.value = "success";
-    welcomeName.value = stats.playerName || "Spieler";
+    // "Anonym" is no name to greet.
+    welcomeName.value =
+      stats.playerName && stats.playerName !== "Anonym" ? stats.playerName : "Spieler";
     bestScore.value = stats.gamesPlayed > 0 ? stats.highScore : 0;
     status.value = "";
     void focusOn("[data-test=status]");
