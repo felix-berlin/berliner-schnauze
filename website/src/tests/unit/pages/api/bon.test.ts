@@ -231,6 +231,7 @@ beforeEach(() => {
   vi.useFakeTimers({ toFake: ["Date"] });
   vi.setSystemTime(T0);
   db.reset();
+  reported.clear();
   set.mockReset();
   pool.loadPool.mockReset().mockResolvedValue(pool.make(60, 60));
 });

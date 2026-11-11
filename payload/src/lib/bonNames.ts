@@ -7,7 +7,7 @@ export const NAME_REPORT_LIMIT = 3;
 // INSULTS and FAR_RIGHT (substrings) match anywhere ("Arschloch", "Nazi123", "xXNaziXx"); ALLOWED real names/words that contain one are removed
 // first ("Marschall", "Nazim"). FAR_RIGHT_WHOLE entries are too short or too common to match inside a name and only match a whole
 // normalized word, a letters-only word ("AfD2025") or the whole collapsed name ("A f D", "SS"); "heil" only the whole name
-// ("Hubertus Heil" is a name). FAR_RIGHT_CODES run on the prepped name, also with the spaces between digits removed ("8 8").
+// ("Hubertus Heil" is a name). FAR_RIGHT_CODES run on the prepped name, also with a run of single digits merged ("8 8", "8.8"), and 1488/444 also with any separators between digits removed ("148 8", "4 44").
 // Insults: curated from de.txt of LDNOOBWV2 (https://github.com/LDNOOBWV2/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words_V2,
 // CC0 1.0); dropped what is no insult or hits names/words by substring (horst, homo, depp, möse, titte, schwanz ...).
 // Far-right: parties, groups, persons and codes (rule: bon-redesign SPEC §16). A bare 18 is an age and stays allowed.
@@ -223,12 +223,15 @@ export const nameCategory = (raw: string): NameCategory | undefined => {
       m.replace(/\D/g, ""),
     ),
   ];
+  // Every separator between digits removed: only for 1488 and 444, so "1 98" or "8.8.1990" stay free.
+  const joined = name.replace(/(?<=\d)[^\p{L}\d]+(?=\d)/gu, "");
   // Allowed words are cut out per word, so "Nazi Arsch" cannot lose letters across the gap.
   const rest = words
     .map((w) => (ALLOWED_WHOLE.has(w) ? "" : ALLOWED.reduce((n, a) => n.replaceAll(a, ""), w)))
     .join("");
   if (
     FAR_RIGHT_CODES.some((re) => codes.some((c) => re.test(c))) ||
+    [FAR_RIGHT_CODES[1]!, FAR_RIGHT_CODES[2]!].some((re) => re.test(joined)) ||
     FAR_RIGHT.some((w) => rest.includes(w)) ||
     FAR_RIGHT_WHOLE.has(whole) ||
     [...words, ...letters].some((w) => w !== "heil" && FAR_RIGHT_WHOLE.has(w)) ||

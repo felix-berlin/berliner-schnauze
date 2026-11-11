@@ -8,7 +8,7 @@ import { z } from "zod";
 
 const schema = z.strictObject({ id: z.number().int().positive() });
 
-// Keyed on the hashed client IP (and the game's name), not the cookie: a cookie is free to forge, so three of them could hide any name.
+// Keyed on the hashed client network (the IP, for IPv6 its /64) and the game's name, not the cookie: a cookie is free to forge, so three of them could hide any name.
 // shortcut: in memory, one process, lost on restart; a second web container would need a DB-level unique table.
 export const REPORTED_CAP = 50_000;
 export const reported = new Set<string>();

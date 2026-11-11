@@ -130,6 +130,12 @@ describe("isOffensiveName bypasses and false positives", () => {
       "8\u28008", // braille blank
       "8\u31648", // hangul filler
       "14 88",
+      "14 8 8",
+      "Max 14 8 8",
+      "1 488",
+      "148 8",
+      "4 44",
+      "44 4",
     ])
       expect([n, nameCategory(n)]).toEqual([n, "far-right"]);
     expect(nameCategory("\u13AArsch")).toBe("offensive"); // Cherokee A
@@ -158,6 +164,9 @@ describe("isOffensiveName bypasses and false positives", () => {
       "14.08.",
       "Tim 18",
       "Jahrgang 1988",
+      "Geb. 8.8.90",
+      "08.08.",
+      "Raum 1.4",
     ])
       expect([n, nameCategory(n)]).toEqual([n, undefined]);
   });
