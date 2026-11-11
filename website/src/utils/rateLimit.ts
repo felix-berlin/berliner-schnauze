@@ -33,7 +33,7 @@ const RULES: Rule[] = [
   { max: 60, method: "GET", prefix: "/api/trending", windowMs: 60_000 },
 ];
 
-// ponytail: in memory, one process; a second web container would need a shared store.
+// shortcut: in memory, one process; a second web container would need a shared store.
 const hits = new Map<string, { count: number; resetAt: number }>();
 
 /** The rule for a request, if its route is limited. */
@@ -58,6 +58,15 @@ export const rateLimited = (client: string, rule: Rule, now = Date.now()): numbe
 /** Per-client cap on an arbitrary key (e.g. one comment), for limits the path-based RULES can't express. */
 export const rateLimitedBy = (client: string, key: string, max: number, windowMs: number) =>
   rateLimited(client, { key, max, prefix: "", windowMs });
+
+/** Takes back one hit counted by rateLimitedBy, for a request that failed on our side. */
+export const refundHit = (client: string, key: string): void => {
+  const hit = hits.get(`${key} ${client}`);
+  if (hit && hit.count > 0) hit.count--;
+};
+
+/** Test-only: forget every counter. */
+export const resetRateLimits = (): void => hits.clear();
 
 let loggedSource = false;
 

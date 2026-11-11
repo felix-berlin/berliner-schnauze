@@ -33,8 +33,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
       })
     ).docs;
     if (!game) return reply({ error: "Spiel nich jefunden." }, 404);
-    // The name is in the key, so a renamed game (reports reset) can be reported again.
-    // Per IPv6 /64 and the name as trimmed lowercase: a case-only rename keeps its reports.
+    // The name is in the key, so a renamed game (reports reset) can be reported again; trimmed lowercase, so a case-only rename keeps its reports.
     const network = networkKey(clientIp(request.headers.get("x-forwarded-for"), clientAddress));
     key = sha256(`bon-report:${network}:${id}:${(game.playerName ?? "").trim().toLowerCase()}`);
     // A repeat answers like the first.

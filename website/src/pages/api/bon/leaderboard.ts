@@ -1,3 +1,4 @@
+import type { LeaderboardReply } from "@services/bonLeaderboardApi.ts";
 import type { APIRoute } from "astro";
 import type { RankedEntry } from "payload-app/bon-ranking";
 
@@ -53,7 +54,7 @@ export const GET: APIRoute = async ({ cookies, url }) => {
           },
         }),
         total: ranking.length,
-      },
+      } satisfies LeaderboardReply,
       200,
     );
   } catch (error) {

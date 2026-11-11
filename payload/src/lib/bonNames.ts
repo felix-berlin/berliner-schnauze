@@ -1,16 +1,19 @@
 // Pure BON name rules (payload-app/bon-names): the filter for new names and the report limit for shown ones.
 
 export const NAME_REPORT_LIMIT = 3;
+/** The name of a player without one, or with a refused or hidden one. */
+export const ANONYM = "Anonym";
 
 // Matching runs on the name after `prep` (compatibility forms, invisible characters and look-alike letters folded to Latin),
 // mostly collapsed and normalized (see `normalize`).
 // INSULTS and FAR_RIGHT (substrings) match anywhere ("Arschloch", "Nazi123", "xXNaziXx"); ALLOWED real names/words that contain one are removed
 // first ("Marschall", "Nazim"). FAR_RIGHT_WHOLE entries are too short or too common to match inside a name and only match a whole
-// normalized word, a letters-only word ("AfD2025") or the whole collapsed name ("A f D", "SS"); "heil" only the whole name
-// or right before a HEIL_TARGETS word ("Hubertus Heil", "Heil, Hubertus" are names). FAR_RIGHT_CODES run on the prepped name, also with a run of single digits merged ("8 8", "8.8"), and 1488/444 also with any separators between digits removed ("148 8", "4 44").
+// normalized word, a letters-only word ("AfD2025") or the whole collapsed name ("A f D", "SS"); "heil" only as the whole name
+// or as a token (also glued, "Hei1" or spaced "H e i l") followed by a HEIL_TARGETS word, see there ("Hubertus Heil",
+// "Heil, Hubertus" are names). FAR_RIGHT_CODES run on the prepped name, also with a run of single digits merged ("8 8", "8.8"), and 1488/444 also with any separators between digits removed ("148 8", "4 44").
 // Insults: curated from de.txt of LDNOOBWV2 (https://github.com/LDNOOBWV2/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words_V2,
 // CC0 1.0); dropped what is no insult or hits names/words by substring (horst, homo, depp, möse, titte, schwanz ...).
-// Far-right: parties, groups, persons and codes (rule: bon-redesign SPEC §16). A bare 18 is an age and stays allowed.
+// Far-right: parties, groups, persons and codes (rule: docs/design/bon/SPEC.md §16.7). A bare 18 is an age and stays allowed.
 // Extend from reports, not from guesses.
 const INSULTS: string[] = [
   "arsch",
@@ -132,7 +135,7 @@ const ALLOWED: string[] = [
   "bergfuhrer",
   "stadtfuhrer",
   "zugfuhrer",
-  // "Die Heimat"/"Die Rechte" are phrases; words that merely start with them are fine
+  // "Die Heimat"/"Die Rechte" are phrases; these listed words that start with them are fine
   "dieheimatlos",
   "dieheimatstadt",
   "dierechtesten",
@@ -212,7 +215,7 @@ const HEIL_ARTICLES = new Set([
 ]);
 const CODE_1488 = /(?<!\d)1488(?!\d)/;
 const CODE_444 = /(?<!\d)444(?!\d)/;
-// Number codes and codes with a letter prefix, on the raw name. Digits next to a digit never match (1988).
+// Number codes and codes with a letter prefix, on the prepped name and its merged-digit copy (see `codes`). Digits next to a digit never match (1988).
 const FAR_RIGHT_CODES = [
   /(?<!\d)88(?!\d)/, // HH; also 14/88 and 14 88
   CODE_1488,
@@ -335,7 +338,7 @@ export const nameCategory = (raw: string): NameCategory | undefined => {
 
 export const isOffensiveName = (name: string): boolean => nameCategory(name) !== undefined;
 
-export const cleanName = (name: string): string => (isOffensiveName(name) ? "Anonym" : name);
+export const cleanName = (name: string): string => (isOffensiveName(name) ? ANONYM : name);
 
 /** Format characters (bidi overrides, zero-width) removed: "\u202EizaN" renders as "Nazi". ZWJ stays for emoji sequences. */
 export const visibleName = (name: string): string => name.replace(/(?!\u200D)\p{Cf}/gu, "");
@@ -347,5 +350,5 @@ export const displayName = (game: {
   nameReports?: number | null;
 }): string =>
   game.nameHidden || (game.nameReports ?? 0) >= NAME_REPORT_LIMIT
-    ? "Anonym"
-    : cleanName(visibleName(game.playerName ?? "") || "Anonym");
+    ? ANONYM
+    : cleanName(visibleName(game.playerName ?? "") || ANONYM);

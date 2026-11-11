@@ -13,7 +13,7 @@ import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { isUniqueViolation, reply } from "@utils/apiReply.ts";
 import { renameSchema } from "@utils/bonSchema.ts";
-import { rateLimitedBy } from "@utils/rateLimit.ts";
+import { rateLimitedBy, refundHit } from "@utils/rateLimit.ts";
 import { displayName, nameCategory } from "payload-app/bon-names";
 import { generateCode } from "payload-app/bon-player";
 import { bonTag } from "payload-app/bon-ranking";
@@ -132,36 +132,45 @@ export const PATCH: APIRoute = async ({ cookies, request }) => {
     if (rateLimitedBy(who.identity, "bon-rename", 5, DAY) > 0)
       return reply({ error: "Heute jenug umjetauft – morjen wieder." }, 429);
 
-    const { docs } = await payload.find({
-      collection: "bon-games",
-      depth: 0,
-      pagination: false,
-      select: { nameHidden: true, nameReports: true, playerName: true },
-      where: gamesOf(who),
-    });
-    const norm = (v: string | null | undefined) => (v ?? "").trim().toLowerCase();
-    // One at a time, not a burst per game. The rename already counted above; a retry after a failure rewrites the same values.
-    for (const g of docs)
-      // oxlint-disable-next-line no-await-in-loop -- one game at a time keeps the DB load flat
-      await payload.update({
+    try {
+      const { docs } = await payload.find({
         collection: "bon-games",
-        // Reports belong to the old name; the same name again must not bring a hidden one back.
-        data:
-          norm(g.playerName) === norm(name)
-            ? { playerName: name }
-            : { nameHidden: false, nameReports: 0, playerName: name },
         depth: 0,
-        id: g.id,
+        pagination: false,
+        select: { nameHidden: true, nameReports: true, playerName: true },
+        // Only finished games: a playing one gets its name at finish, and a write here could undo an answer in flight.
+        where: { and: [gamesOf(who), { status: { equals: "finished" } }] },
       });
-    if (who.playerId !== undefined)
-      await payload.update({
-        collection: "bon-players",
-        // "Anonym" stored literally: finish takes a non-empty stored name over the one a device sends.
-        data: { name },
-        depth: 0,
-        id: who.playerId,
-      });
-    invalidateRanking();
+      const norm = (v: string | null | undefined) => (v ?? "").trim().toLowerCase();
+      // One at a time, not a burst per game. A retry after a failure rewrites the same values.
+      for (const g of docs)
+        // oxlint-disable-next-line no-await-in-loop -- one game at a time keeps the DB load flat
+        await payload.update({
+          collection: "bon-games",
+          // Reports belong to the old name; the same name again must not bring a hidden one back.
+          data:
+            norm(g.playerName) === norm(name)
+              ? { playerName: name }
+              : { nameHidden: false, nameReports: 0, playerName: name },
+          depth: 0,
+          id: g.id,
+        });
+      if (who.playerId !== undefined)
+        await payload.update({
+          collection: "bon-players",
+          // "Anonym" stored literally: finish takes a non-empty stored name over the one a device sends.
+          data: { name },
+          depth: 0,
+          id: who.playerId,
+        });
+    } catch (error) {
+      // Our failure, not the player's: the retry must not cost another rename.
+      refundHit(who.identity, "bon-rename");
+      throw error;
+    } finally {
+      // Even a partial rename changed some rows.
+      invalidateRanking();
+    }
     return reply(named(name, who.identity), 200);
   } catch (error) {
     console.error("[bon] rename failed:", error);

@@ -1,3 +1,4 @@
+import type { FinishResult } from "@services/bonGameApi.ts";
 import type { APIRoute } from "astro";
 
 import { bonVisitor, busyGames, findGame } from "@services/bonGame.ts";
@@ -6,12 +7,11 @@ import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";
 import { finishSchema } from "@utils/bonSchema.ts";
+import { ANONYM } from "payload-app/bon-names";
 import { plausibleTiming, verifyRun } from "payload-app/bon-rules";
 
 const INVALID = { error: "Ungültiges Spiel" };
 const DONE = { error: "Dett Spiel is schon jewertet." };
-
-// Payload's update({ where }) finds, then updates per doc, so its status condition alone is no lock; busyGames (shared with next/answer) is.
 
 export const POST: APIRoute = async ({ cookies, request }) => {
   // A client with blocked cookies plays, but never ranks.
@@ -21,6 +21,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
   if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
   const { playerName: sentName, token } = input.data;
 
+  // Payload's update({ where }) finds, then updates per doc, so its status condition alone is no lock; busyGames (shared with next/answer) is.
   if (busyGames.has(token)) return reply(DONE, 409);
   busyGames.add(token);
   try {
@@ -37,6 +38,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
           : game.player;
     // A code player's name lives on the player, so a game on another device cannot bring back an old name.
     // Race: a rename that lands after this read leaves this one game with the old name.
+    let lookupFailed = false;
     const storedName =
       playerId === undefined
         ? undefined
@@ -51,6 +53,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
             .then((r) => r.docs[0]?.name || undefined)
             .catch((error: unknown) => {
               console.error("[bon] player name lookup failed:", error);
+              lookupFailed = true;
               return undefined;
             });
     const playerName = storedName ?? sentName;
@@ -66,7 +69,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
       cards.map((c) => c.isReal),
       guesses,
     );
-    if (!result) return rejected("run does not end at the third wrong answer");
+    if (!result) return rejected("run does not end at the last life");
     if (batches.length === 0 || !plausibleTiming(batches, guesses.length, now))
       return rejected("implausible timing");
 
@@ -82,8 +85,8 @@ export const POST: APIRoute = async ({ cookies, request }) => {
     invalidateRanking();
 
     // The name follows the player's latest game; a failure must not hide the stored result.
-    // A game without a name must not replace a name the player already chose.
-    if (playerId !== undefined && !storedName && playerName !== "Anonym")
+    // A game without a name, or a failed lookup, must not replace a name the player already chose.
+    if (playerId !== undefined && !lookupFailed && !storedName && playerName !== ANONYM)
       await payload
         .update({
           collection: "bon-players",
@@ -110,7 +113,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
         ...result,
         rank: ranking && ranking[0].totalDocs + 1,
         totalGames: ranking && ranking[1].totalDocs,
-      },
+      } satisfies FinishResult,
       200,
     );
   } catch (error) {

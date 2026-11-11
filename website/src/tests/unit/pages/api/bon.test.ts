@@ -154,6 +154,7 @@ import type { APIContext } from "astro";
 
 import { bonCodeHash } from "@services/bonPlayer.ts";
 import { invalidateRanking } from "@services/bonRanking.ts";
+import { resetRateLimits } from "@utils/rateLimit.ts";
 import { createHash } from "node:crypto";
 import { bonTag } from "payload-app/bon-ranking";
 
@@ -234,6 +235,7 @@ beforeEach(() => {
   vi.setSystemTime(T0);
   db.reset();
   reported.clear();
+  resetRateLimits();
   set.mockReset();
   pool.loadPool.mockReset().mockResolvedValue(pool.make(60, 60));
 });
@@ -486,6 +488,14 @@ describe("POST /api/bon/answer", () => {
   it("works without the visitor cookie", async () => {
     const { token } = await newGame("v-1");
     expect((await answer({ card: "0", real: true, token })).status).toBe(200);
+  });
+
+  it("409 for a card past the dealt ones, before next deals it; nothing stored", async () => {
+    const { token } = await newGame("v-1");
+    await play(token, 20, 0);
+    const res = await answer({ card: "20", real: true, token }, "v-1");
+    expect(res.status).toBe(409);
+    expect(dealt(token)).toHaveLength(20);
   });
 
   it("does not check timing", async () => {
@@ -759,6 +769,34 @@ describe("POST /api/bon/finish", () => {
     expect((await finish({ token }, "v-1")).status).toBe(200);
   });
 
+  it("checks the time from each batch's deal, not only the first", async () => {
+    const { token } = await newGame("v-1");
+    await play(token, 20, 0);
+    later(60_000);
+    expect((await next(token, "v-1")).status).toBe(200);
+    // Three answers right after the second deal.
+    const cards = dealt(token);
+    for (let i = 20; i < 23; i++)
+      expect((await answer({ card: String(i), real: !cards[i].isReal, token }, "v-1")).status).toBe(
+        200,
+      );
+    expect((await finish({ token }, "v-1")).status).toBe(400);
+    later(3 * 700);
+    expect((await finish({ token }, "v-1")).status).toBe(200);
+  });
+
+  it("502 when the update reports errors: nothing ranked, the game still playing", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    const { token } = await newGame("v-1");
+    await play(token, 4);
+    later(60_000);
+    db.api.update.mockResolvedValueOnce({ docs: [], errors: [{ message: "db" }] });
+    vi.mocked(invalidateRanking).mockClear();
+    expect((await finish({ token }, "v-1")).status).toBe(502);
+    expect(invalidateRanking).not.toHaveBeenCalled();
+    expect(row(token).status).toBe("playing");
+  });
+
   it("400 for a game without any batch", async () => {
     const { token } = await newGame("v-1");
     row(token).batches = [];
@@ -978,13 +1016,13 @@ describe("POST /api/bon/redeem", () => {
   });
 
   it.each([
-    ["a wrong code", "AAAA-AAAA-AAAA"],
-    ["an empty string", ""],
-    ["10 000 chars", "a".repeat(10_000)],
-  ])("refuses %s without a cookie", async (_, code) => {
+    ["a wrong code", "AAAA-AAAA-AAAA", 404],
+    ["an empty string", "", 404],
+    ["10 000 chars", "a".repeat(10_000), 400],
+  ])("refuses %s without a cookie", async (_, code, status) => {
     await withGame();
     set.mockClear();
-    expect([400, 404]).toContain((await redeem({ code })).status);
+    expect((await redeem({ code })).status).toBe(status);
     expect(set).not.toHaveBeenCalled();
   });
 
@@ -1264,6 +1302,28 @@ describe("POST /api/bon/report-name", () => {
     expect(row0(7).nameReports).toBe(2);
   });
 
+  it("a failed write does not mark the report done: the same network can report again", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    finished(7);
+    db.api.update.mockRejectedValueOnce(new Error("down"));
+    expect((await report({ id: 7 }, "a", "10.0.0.9")).status).toBe(502);
+    expect((await report({ id: 7 }, "a", "10.0.0.9")).status).toBe(204);
+    expect(row0(7).nameReports).toBe(1);
+  });
+
+  it("counts by the proxy's X-Forwarded-For entry, not the client-set ones", async () => {
+    finished(7);
+    for (const v of ["x-1", "x-2", "x-3"]) {
+      const c = ctx({ id: 7 }, v);
+      c.request.headers.set("x-forwarded-for", `198.51.100.${v.at(-1)}, 10.0.0.9`);
+      // A different socket and first entry each time: only the last entry is the same.
+      expect(
+        (await REPORT({ ...c, clientAddress: `10.9.9.${v.at(-1)}` } as APIContext)).status,
+      ).toBe(204);
+    }
+    expect(row0(7).nameReports).toBe(1);
+  });
+
   it("a hidden name shows as Anonym at once", async () => {
     finished(7, { nameHidden: true });
     expect((await board()).entries[0]).toMatchObject({ name: "Anonym" });
@@ -1290,7 +1350,6 @@ describe("PATCH and GET /api/bon/player", () => {
   const patch = (name: unknown, cookie?: string, code?: string) =>
     call(PLAYER_PATCH, { name }, cookie, code);
   const get = (cookie?: string, code?: string) => call(PLAYER_GET, undefined, cookie, code);
-  // Each test uses its own identity: the rename limit lives in memory across tests.
   const code = (id: number, name = "") => {
     const c = `ABCD-EFGH-JKM${"NPQRSTUVW"[id % 9]}`;
     db.players.push({ codeHash: bonCodeHash(c), id, name });
@@ -1314,10 +1373,11 @@ describe("PATCH and GET /api/bon/player", () => {
     const res = await patch("Kiez-Kalle", "v-1", c);
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ name: "Kiez-Kalle", tag: bonTag("p:7") });
-    expect(db.rows.map((r) => r.playerName)).toEqual(["Kiez-Kalle", "Kiez-Kalle", "Alt"]);
+    // The playing game keeps its name: it gets the player's name at finish.
+    expect(db.rows.map((r) => r.playerName)).toEqual(["Kiez-Kalle", "Alt", "Alt"]);
     expect(db.players[0].name).toBe("Kiez-Kalle");
     expect(db.api.find.mock.calls.find(([a]) => a.collection === "bon-games")![0].where).toEqual({
-      player: { equals: 7 },
+      and: [{ player: { equals: 7 } }, { status: { equals: "finished" } }],
     });
     expect(invalidateRanking).toHaveBeenCalledOnce();
   });
@@ -1330,7 +1390,10 @@ describe("PATCH and GET /api/bon/player", () => {
     expect(res.status).toBe(200);
     expect(db.rows.map((r) => r.playerName)).toEqual(["Berta", "Alt", "Alt"]);
     expect(db.api.find.mock.calls[0][0].where).toEqual({
-      and: [{ visitor: { equals: hashed("v-ren") } }, { player: { exists: false } }],
+      and: [
+        { and: [{ visitor: { equals: hashed("v-ren") } }, { player: { exists: false } }] },
+        { status: { equals: "finished" } },
+      ],
     });
   });
 
@@ -1380,6 +1443,26 @@ describe("PATCH and GET /api/bon/player", () => {
     game({ visitor: hashed("v-502") });
     db.api.update.mockRejectedValueOnce(new Error("down"));
     expect((await patch("Kalle", "v-502")).status).toBe(502);
+  });
+
+  it("a failed rename drops the cached ranking and does not count against the limit", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    game({ visitor: hashed("v-refund") });
+    game({ visitor: hashed("v-refund") });
+    vi.mocked(invalidateRanking).mockClear();
+    // The first game is renamed, the second write fails: a partial rename.
+    db.api.update.mockImplementationOnce(async ({ data, id }) => {
+      Object.assign(
+        db.rows.find((r) => r.id === id)!,
+        data,
+      );
+      return {};
+    });
+    db.api.update.mockRejectedValueOnce(new Error("down"));
+    expect((await patch("Kalle", "v-refund")).status).toBe(502);
+    expect(invalidateRanking).toHaveBeenCalledOnce();
+    for (let i = 0; i < 5; i++) expect((await patch(`Name${i}`, "v-refund")).status).toBe(200);
+    expect((await patch("Name6", "v-refund")).status).toBe(429);
   });
 
   it("GET returns the latest finished game's display name", async () => {
@@ -1458,6 +1541,24 @@ describe("finish takes the code player's name", () => {
     const token = await finishAs("Anonym", "Alt");
     expect(row(token).playerName).toBe("Anonym");
     expect(db.players[0].name).toBe("Anonym");
+  });
+
+  it("a failed name lookup keeps the stored name: the sent one goes only on this game", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    seedPlayer(undefined, "Kiez-Kalle");
+    const { token } = await (
+      await START(ctx(undefined, "v-1", { bon_player: "ABCD-EFGH-JKMN" }))
+    ).json();
+    await play(token, 4);
+    later(60_000);
+    const real = db.api.find.getMockImplementation()!;
+    db.api.find.mockImplementation(async (args) =>
+      args.collection === "bon-players" ? Promise.reject(new Error("down")) : real(args),
+    );
+    const res = await FINISH(ctx({ playerName: "Alt", token }, "v-1"));
+    expect(res.status).toBe(200);
+    expect(row(token).playerName).toBe("Alt");
+    expect(db.players[0].name).toBe("Kiez-Kalle");
   });
 
   it("a code player with an empty row name keeps the sent name", async () => {

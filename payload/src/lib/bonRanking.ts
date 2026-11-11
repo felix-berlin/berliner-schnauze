@@ -1,6 +1,7 @@
 // Pure BON ranking, shared by the leaderboard route (payload-app/bon-ranking): periods, best game per pseudonym, tag.
 import { createHash } from "node:crypto";
 
+import { ANONYM } from "./bonNames";
 import { CODE_ALPHABET } from "./bonPlayer";
 
 export type Period = "week" | "month" | "all";
@@ -102,7 +103,7 @@ export function rankGames(games: RankInput[]): RankedEntry[] {
         rank: i + 1,
         score: g.score,
       };
-      if (g.name === "Anonym") entry.tag = bonTag(g.identity);
+      if (g.name === ANONYM) entry.tag = bonTag(g.identity);
       return entry;
     });
 }
