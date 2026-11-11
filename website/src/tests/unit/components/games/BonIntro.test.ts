@@ -1,6 +1,7 @@
 import BonIntro from "@components/games/BonIntro.vue";
+import { fetchPlayerName } from "@services/bonPlayerApi.ts";
 import { $bonStats } from "@stores/bonStats";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@components/games/BonPlayerCode.vue", () => ({
@@ -11,12 +12,46 @@ vi.mock("@components/games/BonPlayerCode.vue", () => ({
   },
 }));
 
+vi.mock("@services/bonPlayerApi.ts", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@services/bonPlayerApi.ts")>()),
+  fetchPlayerName: vi.fn(),
+}));
+
 const mountIntro = (props: Partial<{ highScore: number; offline: boolean; linkRedeem: boolean }>) =>
   mount(BonIntro, { props: { highScore: 0, linkRedeem: false, offline: false, ...props } });
 
 describe("BonIntro", () => {
   beforeEach(() => {
     $bonStats.setKey("playerName", "");
+    vi.mocked(fetchPlayerName).mockReset().mockResolvedValue(undefined);
+  });
+
+  describe("known player", () => {
+    it("replaces the field with the name editor and keeps the name for start", async () => {
+      vi.mocked(fetchPlayerName).mockResolvedValue({ name: "Kalle" });
+      const wrapper = mountIntro({});
+      await flushPromises();
+      expect(wrapper.find("#bon-name").exists()).toBe(false);
+      expect(wrapper.text()).toContain("Du spielst als Kalle");
+      expect($bonStats.get().playerName).toBe("Kalle");
+      await wrapper.find("form").trigger("submit");
+      expect(wrapper.emitted("start")).toEqual([["Kalle"]]);
+    });
+
+    it("keeps the field for a first-time visitor", async () => {
+      const wrapper = mountIntro({});
+      await flushPromises();
+      expect(wrapper.find("#bon-name").exists()).toBe(true);
+      expect(wrapper.text()).toContain("Dein Name (optional)");
+    });
+
+    it("keeps the field without an error when the lookup fails", async () => {
+      vi.mocked(fetchPlayerName).mockRejectedValue(new Error("down"));
+      const wrapper = mountIntro({});
+      await flushPromises();
+      expect(wrapper.find("#bon-name").exists()).toBe(true);
+      expect(wrapper.find("[role=alert]").exists()).toBe(false);
+    });
   });
 
   it("renders title, name field, start button and rules", () => {

@@ -89,10 +89,7 @@ const gamesOf = ({ playerId, visitor }: Identity): Where =>
     ? { and: [{ visitor: { equals: visitor! } }, { player: { exists: false } }] }
     : { player: { equals: playerId } };
 
-const named = (name: string, identity: string) => ({
-  name,
-  ...(name === "Anonym" && { tag: bonTag(identity) }),
-});
+const named = (name: string, identity: string) => ({ name, tag: bonTag(identity) });
 
 const DAY = 24 * 60 * 60_000;
 

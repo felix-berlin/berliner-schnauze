@@ -46,6 +46,15 @@ describe("display", () => {
   });
 });
 
+describe("tag", () => {
+  it("does not show the tag next to a real name but keeps it in the hint", async () => {
+    wrapper = mount(BonName, { attachTo: document.body, props: { name: "Kalle", tag: "K7QX" } });
+    expect(wrapper.text()).not.toContain("#K7QX");
+    await wrapper.find("button").trigger("click");
+    expect(wrapper.text()).toContain("Leer jelassen = „Anonym #K7QX“.");
+  });
+});
+
 describe("editor", () => {
   it("opens prefilled, focused and selected", async () => {
     const input = await open();

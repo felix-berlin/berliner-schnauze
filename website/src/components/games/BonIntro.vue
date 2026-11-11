@@ -17,7 +17,8 @@
       </div>
 
       <form class="c-bon-intro__form" @submit.prevent="start">
-        <div class="c-bon-intro__name">
+        <BonName v-if="known" :name="known.name" :tag="known.tag" @saved="onSaved" />
+        <div v-else class="c-bon-intro__name">
           <label for="bon-name" class="c-label">
             Dein Name <span class="c-bon-intro__optional">(optional)</span>
           </label>
@@ -136,7 +137,9 @@
 </template>
 
 <script setup lang="ts">
+import BonName from "@components/games/BonName.vue";
 import BonPlayerCode from "@components/games/BonPlayerCode.vue";
+import { fetchPlayerName, rememberName, type PlayerName } from "@services/bonPlayerApi.ts";
 import { $bonStats } from "@stores/bonStats";
 import { nameCategory, type NameCategory } from "payload-app/bon-names";
 import AlertIcon from "virtual:icons/lucide/circle-alert";
@@ -144,7 +147,7 @@ import FlameIcon from "virtual:icons/lucide/flame";
 import HeartIcon from "virtual:icons/lucide/heart";
 import RowsIcon from "virtual:icons/lucide/rows-2";
 import WifiOffIcon from "virtual:icons/lucide/wifi-off";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 const props = defineProps<{ highScore: number; offline: boolean; linkRedeem: boolean }>();
 const emit = defineEmits<{ start: [name: string] }>();
@@ -152,6 +155,25 @@ const emit = defineEmits<{ start: [name: string] }>();
 const name = ref($bonStats.get().playerName ?? "");
 const redeeming = ref(false);
 const problem = ref<NameCategory>();
+// Set once the server knows this player: the field gives way to the name editor.
+const known = ref<PlayerName>();
+
+onMounted(async () => {
+  try {
+    const player = await fetchPlayerName();
+    if (!player) return;
+    known.value = player;
+    rememberName(player.name);
+    name.value = $bonStats.get().playerName;
+  } catch {
+    // Without the name the field stays, as for a first-time visitor.
+  }
+});
+
+function onSaved(player: PlayerName) {
+  known.value = player;
+  name.value = $bonStats.get().playerName;
+}
 
 function start() {
   if (props.offline) return;

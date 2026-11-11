@@ -2,6 +2,7 @@ import type { LeaderboardReply, PublicEntry } from "@services/bonLeaderboardApi"
 
 import BonLeaderboard from "@components/games/BonLeaderboard.vue";
 import { fetchLeaderboard, reportName } from "@services/bonLeaderboardApi";
+import { fetchPlayerName } from "@services/bonPlayerApi.ts";
 import { flushPromises, mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
@@ -17,6 +18,10 @@ vi.mock("@utils/viewTransition", () => ({
   vt: (update: () => void) => update(),
 }));
 vi.mock("@services/bonLeaderboardApi", () => ({ fetchLeaderboard: vi.fn(), reportName: vi.fn() }));
+vi.mock("@services/bonPlayerApi.ts", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@services/bonPlayerApi.ts")>()),
+  fetchPlayerName: vi.fn(),
+}));
 vi.mock("@components/games/BonPlayerCode.vue", () => ({
   default: {
     emits: ["close"],
@@ -78,6 +83,7 @@ const mountBoard = async (data: LeaderboardReply = reply()) => {
 describe("BonLeaderboard", () => {
   afterEach(() => mounted.splice(0).forEach((w) => w.unmount()));
   beforeEach(() => {
+    vi.mocked(fetchPlayerName).mockReset().mockResolvedValue(undefined);
     vi.clearAllMocks();
     desktop.value = true;
     settled.gate = undefined;
@@ -179,6 +185,44 @@ describe("BonLeaderboard", () => {
     await bar.find("button").trigger("click");
     expect(Element.prototype.scrollIntoView).toHaveBeenCalled();
     expect(w.text()).toContain("Platz 1–10 von 340");
+  });
+
+  it("the Dein-Platz card holds the name editor between the links and the cookie hint", async () => {
+    vi.mocked(fetchPlayerName).mockResolvedValue({ name: "Kalle" });
+    const w = await mountBoard(withMe(40));
+    const card = w.find(".c-bon-leaderboard__me");
+    expect(card.find(".c-bon-name").text()).toContain("Du spielst als Kalle");
+    const kids = [...card.element.children].map((e) => e.className);
+    expect(kids.indexOf("c-bon-name")).toBe(kids.indexOf("c-bon-leaderboard__links") + 1);
+    expect(kids.indexOf("t-small")).toBeGreaterThan(kids.indexOf("c-bon-name"));
+  });
+
+  it("without a known name there is no editor", async () => {
+    vi.mocked(fetchPlayerName).mockResolvedValue(undefined);
+    const w = await mountBoard(withMe(40));
+    expect(w.find(".c-bon-name").exists()).toBe(false);
+  });
+
+  it("after saving, the list is fetched again", async () => {
+    vi.mocked(fetchPlayerName).mockResolvedValue({ name: "Kalle" });
+    const w = await mountBoard(withMe(40));
+    fetchMock.mockClear();
+    w.findComponent({ name: "BonName" }).vm.$emit("saved", { name: "Berta" });
+    await flushPromises();
+    expect(fetchMock).toHaveBeenCalledWith("week", 0, 25);
+    expect(w.find(".c-bon-name").text()).toContain("Berta");
+  });
+
+  it("mobile with a own row: the card comes after the list", async () => {
+    desktop.value = false;
+    const w = await mountBoard(withMe(40));
+    const aside = w.find("aside");
+    expect(aside.exists()).toBe(true);
+    expect(aside.classes()).not.toContain("c-bon-leaderboard__aside--first");
+    const main = w.find(".c-bon-leaderboard__main").element;
+    expect(
+      main.compareDocumentPosition(aside.element) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
   });
 
   it("mobile: no gap when the own row is right below the top 10", async () => {

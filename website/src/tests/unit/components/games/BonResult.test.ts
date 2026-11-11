@@ -13,6 +13,7 @@ vi.mock("@components/games/BonPlayerCode.vue", () => ({
 vi.mock("@services/bonLeaderboardApi", () => ({ fetchLeaderboard: vi.fn() }));
 vi.mock("@components/games/BonPlacement.vue", () => ({
   default: {
+    name: "BonPlacement",
     props: ["around"],
     template: "<section class='mock-placement'>{{ around.length }}</section>",
   },
@@ -87,6 +88,52 @@ describe("BonResult", () => {
       const wrapper = mountResult();
       await flushPromises();
       expect(document.activeElement).toBe(wrapper.find("h1").element);
+    });
+  });
+
+  describe("name", () => {
+    it("shows the editor below the heading with the name and tag", () => {
+      const wrapper = mountResult({ tag: "K7QX" });
+      expect(wrapper.find(".c-bon-result__head .c-bon-name").text()).toContain(
+        "Du spielst als Berta",
+      );
+      expect(wrapper.find("h1").text()).toContain("Berta");
+    });
+
+    it("offers Anonym for a nameless player, with the tag", () => {
+      const wrapper = mountResult({ playerName: "", tag: "K7QX" });
+      expect(wrapper.find(".c-bon-name").text()).toContain("Anonym");
+      expect(wrapper.find(".c-bon-name").text()).toContain("#K7QX");
+    });
+
+    it("after saving, the heading shows the new name and the placement is fetched again", async () => {
+      vi.mocked(fetchLeaderboard).mockResolvedValue({ entries: [], total: 0 });
+      const wrapper = mountResult();
+      await flushPromises();
+      vi.mocked(fetchLeaderboard).mockClear();
+      wrapper.findComponent({ name: "BonName" }).vm.$emit("saved", { name: "Kalle", tag: "K7QX" });
+      await flushPromises();
+      expect(wrapper.find("h1").text()).toContain("Kalle");
+      expect(fetchLeaderboard).toHaveBeenCalledWith("week", 0, 0);
+    });
+
+    it("a late first placement reply does not win over the second", async () => {
+      const mine = (name: string) => ({
+        entries: [],
+        me: { around: [{ isMe: true, name, rank: 12 }] },
+        total: 400,
+      });
+      let late!: (v: unknown) => void;
+      vi.mocked(fetchLeaderboard)
+        .mockReturnValueOnce(new Promise((r) => (late = r)) as never)
+        .mockResolvedValueOnce(mine("neu") as never);
+      const wrapper = mountResult();
+      wrapper.findComponent({ name: "BonName" }).vm.$emit("saved", { name: "neu" });
+      await flushPromises();
+      late(mine("alt"));
+      await flushPromises();
+      expect(wrapper.find(".mock-placement").exists()).toBe(true);
+      expect(wrapper.findComponent({ name: "BonPlacement" }).props("around")[0].name).toBe("neu");
     });
   });
 

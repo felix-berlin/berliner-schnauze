@@ -87,6 +87,7 @@
           :best-streak="bestStreak"
           :previous-high-score="previousHighScore"
           :player-name="stats.playerName"
+          :tag="tag"
           :ended-early="endedEarly"
           @restart="start"
         />

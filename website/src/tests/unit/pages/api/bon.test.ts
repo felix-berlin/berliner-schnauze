@@ -1289,7 +1289,7 @@ describe("PATCH and GET /api/bon/player", () => {
     vi.mocked(invalidateRanking).mockClear();
     const res = await patch("Kiez-Kalle", "v-1", c);
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ name: "Kiez-Kalle" });
+    expect(await res.json()).toEqual({ name: "Kiez-Kalle", tag: bonTag("p:7") });
     expect(db.rows.map((r) => r.playerName)).toEqual(["Kiez-Kalle", "Kiez-Kalle", "Alt"]);
     expect(db.players[0].name).toBe("Kiez-Kalle");
     expect(db.api.find.mock.calls.find(([a]) => a.collection === "bon-games")![0].where).toEqual({
@@ -1361,7 +1361,10 @@ describe("PATCH and GET /api/bon/player", () => {
       status: "playing",
       visitor: hashed("v-g"),
     });
-    expect(await (await get("v-g")).json()).toEqual({ name: "Neu" });
+    expect(await (await get("v-g")).json()).toEqual({
+      name: "Neu",
+      tag: bonTag(`v:${hashed("v-g")}`),
+    });
   });
 
   it("GET gives Anonym with tag when that game is hidden", async () => {
@@ -1374,7 +1377,10 @@ describe("PATCH and GET /api/bon/player", () => {
 
   it("GET: a code player without a finished game falls back to bon-players.name", async () => {
     const c = code(3, "Kiez-Kalle");
-    expect(await (await get("v-1", c)).json()).toEqual({ name: "Kiez-Kalle" });
+    expect(await (await get("v-1", c)).json()).toEqual({
+      name: "Kiez-Kalle",
+      tag: bonTag("p:3"),
+    });
   });
 
   it("GET: 404 without identity, and for a visitor with no finished game", async () => {

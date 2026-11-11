@@ -12,6 +12,7 @@
         <p class="t-em c-bon-result__why">
           {{ endedEarly ? "Du hast dit Spiel beendet." : "Drei Fehler – dit Spiel is vorbei." }}
         </p>
+        <BonName :name="shownName || 'Anonym'" :tag="tag" @saved="onSaved" />
       </header>
 
       <dl class="c-bon-result__stats">
@@ -109,7 +110,9 @@
 import type { RoundEntry } from "@composables/useBon";
 import type { FinishResult } from "@services/bonGameApi";
 import type { PublicEntry } from "@services/bonLeaderboardApi";
+import type { PlayerName } from "@services/bonPlayerApi.ts";
 
+import BonName from "@components/games/BonName.vue";
 import BonPlacement from "@components/games/BonPlacement.vue";
 import BonPlayerCode from "@components/games/BonPlayerCode.vue";
 import { computeMultiplier } from "@composables/useBon";
@@ -130,10 +133,14 @@ const props = defineProps<{
   bestStreak: number;
   previousHighScore: number;
   playerName: string;
+  tag?: string;
   endedEarly: boolean;
 }>();
 
-const shownName = computed(() => props.playerName.trim() && cleanName(props.playerName.trim()));
+// A rename on this page wins over the prop until the parent hands the same name down.
+const renamed = ref<string>();
+const currentName = computed(() => renamed.value ?? props.playerName);
+const shownName = computed(() => currentName.value.trim() && cleanName(currentName.value.trim()));
 
 const emit = defineEmits<{ restart: [] }>();
 
@@ -145,15 +152,25 @@ onMounted(() => nextTick(() => titleRef.value?.focus()));
 
 // Without a rank (no cookie, failed finish) or when the call fails, the whole block stays out.
 const around = ref<PublicEntry[]>();
-onMounted(async () => {
+// Latest request wins: a slow first reply must not bring the old name back after a rename.
+let aroundRequest = 0;
+async function loadAround() {
   if (!props.result?.rank) return;
+  const mine = ++aroundRequest;
   try {
     const data = await fetchLeaderboard("week", 0, 0);
-    if (data?.me?.around.some((e) => e.isMe)) around.value = data.me.around;
+    if (mine === aroundRequest && data?.me?.around.some((e) => e.isMe))
+      around.value = data.me.around;
   } catch {
     // The result is complete without it.
   }
-});
+}
+onMounted(loadAround);
+
+function onSaved({ name }: PlayerName) {
+  renamed.value = name === "Anonym" ? "" : name;
+  void loadAround();
+}
 
 const isRecord = computed(() => props.score > props.previousHighScore);
 // $bonStats only catches up after the phase flips, so the new record is derived here.
@@ -178,7 +195,7 @@ async function share() {
       bestStreak: props.bestStreak,
       correctAnswers: correct.value,
       date: new Date().toISOString(),
-      playerName: cleanName(props.playerName.trim()) || undefined,
+      playerName: shownName.value || undefined,
       score: props.score,
       totalAnswered: props.history.length,
     });

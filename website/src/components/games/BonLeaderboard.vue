@@ -151,7 +151,7 @@
       </section>
 
       <aside
-        v-if="status !== 'error' && status !== 'loading' && (isDesktop || !me)"
+        v-if="status !== 'error' && status !== 'loading'"
         class="c-bon-leaderboard__aside"
         :class="{ 'c-bon-leaderboard__aside--first': !me }"
       >
@@ -173,6 +173,7 @@
                 <button class="c-textlink" type="button" @click="jump">Zu mir springen</button>
                 <a class="c-textlink" :href="GAME_PATH">Nochmal spielen</a>
               </span>
+              <BonName v-if="player" :name="player.name" :tag="player.tag" @saved="onSaved" />
               <p class="t-small">
                 Gezählt wird dein bestes Spiel im Zeitraum. Erkannt wirst du an einem Cookie auf
                 diesem Jerät.
@@ -235,8 +236,10 @@
 <script setup lang="ts">
 import type { LeaderboardReply, Period, PublicEntry } from "@services/bonLeaderboardApi";
 
+import BonName from "@components/games/BonName.vue";
 import BonPlayerCode from "@components/games/BonPlayerCode.vue";
 import { fetchLeaderboard, reportName } from "@services/bonLeaderboardApi";
+import { fetchPlayerName, type PlayerName } from "@services/bonPlayerApi.ts";
 import { navigationSettled, vt } from "@utils/viewTransition";
 import { useMediaQuery } from "@vueuse/core";
 import AlertIcon from "virtual:icons/lucide/circle-alert";
@@ -268,6 +271,7 @@ const me = ref<LeaderboardReply["me"]>();
 const expanded = ref(false);
 const loadingMore = ref(false);
 const redeeming = ref(false);
+const player = ref<PlayerName>();
 const reporting = ref(false);
 const reportError = ref("");
 const reported = ref<number[]>(readReported());
@@ -405,7 +409,25 @@ function relativeDay(iso: string): string {
   return rtf.format(Math.round(days / 365), "year");
 }
 
-onMounted(load);
+// Only a failed or missing name hides the editor; the list works without it.
+async function loadPlayer(): Promise<void> {
+  try {
+    player.value = await fetchPlayerName();
+  } catch {
+    player.value = undefined;
+  }
+}
+
+// The saved name shows in every row of the list, so it is fetched again.
+function onSaved(saved: PlayerName): void {
+  player.value = saved;
+  void load(true);
+}
+
+onMounted(() => {
+  void load();
+  void loadPlayer();
+});
 </script>
 
 <style lang="scss">

@@ -3,7 +3,9 @@
     <!-- Trailing space keeps the text readable as one sentence outside the flex layout. -->
     <span class="c-bon-name__label">{{ "Du spielst als " }}</span>
     <b class="c-bon-name__name">{{ shown.name }}</b>
-    <span v-if="shown.tag" class="c-bon-name__tag">#{{ shown.tag }}</span>
+    <span v-if="shown.name === 'Anonym' && shown.tag" class="c-bon-name__tag"
+      >#{{ shown.tag }}</span
+    >
     <span v-if="justSaved" class="c-bon-name__ok" role="status">
       <CheckIcon aria-hidden="true" height="14" width="14" />Jespeichert
     </span>
