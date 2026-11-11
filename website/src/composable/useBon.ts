@@ -44,6 +44,8 @@ export function useBon() {
   const result = ref<FinishResult | undefined>();
   const endedEarly = ref(false);
   const previousHighScore = ref(0);
+  // The loading phase also covers finishing a run; the screen words the two differently.
+  const finishing = ref(false);
 
   let token = "";
   let cards: PublicCard[] = [];
@@ -104,6 +106,7 @@ export function useBon() {
     last.value = null;
     result.value = undefined;
     endedEarly.value = false;
+    finishing.value = false;
     upcoming = prefetch = undefined;
     token = "";
     gameOver = busy = ending = false;
@@ -167,6 +170,7 @@ export function useBon() {
   async function finish() {
     const g = gen;
     phase.value = "loading";
+    finishing.value = true;
     const name = $bonStats.get().playerName;
     const res = await queued(() => finishRun(token, name || undefined)).catch(() => undefined);
     if (g !== gen) return;
@@ -237,6 +241,7 @@ export function useBon() {
     cardInStack,
     end,
     endedEarly,
+    finishing,
     history,
     last,
     lives,

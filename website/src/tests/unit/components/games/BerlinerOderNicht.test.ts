@@ -21,6 +21,7 @@ const lives = ref(3);
 const stack = ref(1);
 const history = ref<Record<string, unknown>[]>([]);
 const endedEarly = ref(false);
+const finishing = ref(false);
 const previousHighScore = ref(0);
 
 vi.mock("@composables/useBon", () => ({
@@ -32,6 +33,7 @@ vi.mock("@composables/useBon", () => ({
     cardInStack: ref(1),
     end: mockEnd,
     endedEarly,
+    finishing,
     history,
     last,
     lives,
@@ -97,6 +99,7 @@ describe("BerlinerOderNicht", () => {
     stack.value = 1;
     history.value = [];
     endedEarly.value = false;
+    finishing.value = false;
     previousHighScore.value = 0;
     online.value = true;
     $bonStats.setKey("hasSeenIntro", false);
@@ -160,6 +163,13 @@ describe("BerlinerOderNicht", () => {
       const buttons = wrapper.findAll("button.c-choice");
       expect(buttons).toHaveLength(2);
       buttons.forEach((b) => expect(b.attributes("aria-disabled")).toBe("true"));
+    });
+
+    it("names the result, not a stack, while a run is being finished", () => {
+      phase.value = "loading";
+      stack.value = 2;
+      finishing.value = true;
+      expect(mount(BerlinerOderNicht).find("[role=status]").text()).toBe("Ergebnis wird jeladen …");
     });
 
     it("does not claim a finished stack before the first one", () => {

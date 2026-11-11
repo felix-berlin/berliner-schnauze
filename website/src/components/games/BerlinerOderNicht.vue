@@ -45,9 +45,11 @@
         <section class="c-bon-card__card" aria-busy="true">
           <p class="t-small" role="status">
             {{
-              stack > 0
-                ? `Stapel ${stack} jeschafft – neue Karten werden jemischt …`
-                : "Karten werden jemischt …"
+              finishing
+                ? "Ergebnis wird jeladen …"
+                : stack > 0
+                  ? `Stapel ${stack} jeschafft – neue Karten werden jemischt …`
+                  : "Karten werden jemischt …"
             }}
           </p>
           <span class="c-skeleton c-skeleton--title" aria-hidden="true" />
@@ -117,6 +119,7 @@ const {
   cardInStack,
   end,
   endedEarly,
+  finishing,
   history,
   last,
   lives,
