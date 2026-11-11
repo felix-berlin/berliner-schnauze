@@ -12,6 +12,7 @@ export interface LeaderboardReply {
   me?: { rank: number; score: number; accuracy: number; bestStreak: number; around: PublicEntry[] };
 }
 
+const REPORT_ERROR = "Die Meldung konnte leider nich jesendet werden.";
 const FALLBACK_ERROR = "Die Rangliste is jerade nich zu kriegen.";
 
 export async function fetchLeaderboard(
@@ -26,12 +27,15 @@ export async function fetchLeaderboard(
   return data;
 }
 
-/** Answers 204 without a body, so it cannot go through `post` in bonPlayerApi. */
+/** Answers 204 without a body, so it cannot go through `post` in bonPlayerApi. The status lets callers tell 404 (gone) from 429. */
 export async function reportName(id: number): Promise<void> {
   const res = await fetch("/api/bon/report-name", {
     body: JSON.stringify({ id }),
     headers: { "Content-Type": "application/json" },
     method: "POST",
   }).catch(() => undefined);
-  if (!res?.ok) throw new Error("Die Meldung konnte leider nich jesendet werden.");
+  if (!res) throw new Error(REPORT_ERROR);
+  if (res.ok) return;
+  const data = (await res.json().catch(() => undefined)) as { error?: string } | undefined;
+  throw Object.assign(new Error(data?.error ?? REPORT_ERROR), { status: res.status });
 }

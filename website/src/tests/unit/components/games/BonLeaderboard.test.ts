@@ -3,7 +3,7 @@ import type { LeaderboardReply, PublicEntry } from "@services/bonLeaderboardApi"
 import BonLeaderboard from "@components/games/BonLeaderboard.vue";
 import { fetchLeaderboard, reportName } from "@services/bonLeaderboardApi";
 import { flushPromises, mount } from "@vue/test-utils";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 const desktop = ref(true);
@@ -61,14 +61,17 @@ const withMe = (rank = 40) =>
   });
 
 const fetchMock = vi.mocked(fetchLeaderboard);
+const mounted: { unmount: () => void }[] = [];
 const mountBoard = async (data: LeaderboardReply = reply()) => {
   fetchMock.mockResolvedValue(data);
   const wrapper = mount(BonLeaderboard, { attachTo: document.body });
+  mounted.push(wrapper);
   await flushPromises();
   return wrapper;
 };
 
 describe("BonLeaderboard", () => {
+  afterEach(() => mounted.splice(0).forEach((w) => w.unmount()));
   beforeEach(() => {
     vi.clearAllMocks();
     desktop.value = true;
@@ -81,7 +84,7 @@ describe("BonLeaderboard", () => {
     expect(w.find("a.c-textlink").text()).toBe("← Berliner oder nicht?");
     expect(w.find("a.c-textlink").attributes("href")).toBe("/games/berliner-oder-nicht");
     expect(w.find("h1.c-band").text()).toBe("Rangliste");
-    expect(w.text()).toContain("340 Spiele · diese woche");
+    expect(w.text()).toContain("340 Spiele · diese Woche");
     const buttons = w.findAll(".c-choice");
     expect(buttons.map((b) => b.text())).toEqual(["Diese Woche", "Diesen Monat", "Allzeit"]);
     expect(buttons.map((b) => b.attributes("aria-pressed"))).toEqual(["true", "false", "false"]);
@@ -95,7 +98,7 @@ describe("BonLeaderboard", () => {
     expect(fetchMock).toHaveBeenLastCalledWith("month", 0, 25);
     expect(w.findAll(".c-choice")[1]!.attributes("aria-pressed")).toBe("true");
     expect(w.find("ol").attributes("aria-label")).toBe("Rangliste Diesen Monat");
-    expect(w.text()).toContain("diesen monat");
+    expect(w.text()).toContain("340 Spiele · diesen Monat");
   });
 
   it("lists rows in an ol with a hidden place, accent for 1-3, the own row marked", async () => {
@@ -227,6 +230,61 @@ describe("BonLeaderboard", () => {
     await flushPromises();
     expect(w.find("[role='alert']").text()).toContain("Meldung konnte leider nich");
     expect(w.findAll("ol button.c-textlink")).toHaveLength(25);
+  });
+
+  it("names each Melden button after its row, with the tag for Anonym", async () => {
+    const w = await mountBoard(
+      reply({ entries: [entry(1), entry(2, { name: "Anonym", tag: "K7QX" })] }),
+    );
+    await w
+      .findAll("button")
+      .find((b) => b.text() === "Namen melden")!
+      .trigger("click");
+    expect(w.findAll("ol button.c-textlink").map((b) => b.attributes("aria-label"))).toEqual([
+      "Spieler 1 melden",
+      "Anonym #K7QX melden",
+    ]);
+  });
+
+  it("a 404 settles the row: marked as reported, no alert, no retry", async () => {
+    vi.mocked(reportName).mockRejectedValue(
+      Object.assign(new Error("Spiel nich jefunden."), { status: 404 }),
+    );
+    const w = await mountBoard();
+    await w
+      .findAll("button")
+      .find((b) => b.text() === "Namen melden")!
+      .trigger("click");
+    await w.findAll("ol button.c-textlink")[0]!.trigger("click");
+    await flushPromises();
+    expect(w.find("[role='alert']").exists()).toBe(false);
+    expect(w.find("ol > li").text()).toContain("Jemeldet, danke!");
+  });
+
+  it("shows the server's text for a 429 and keeps the button", async () => {
+    vi.mocked(reportName).mockRejectedValue(
+      Object.assign(new Error("Zu viele Meldungen."), { status: 429 }),
+    );
+    const w = await mountBoard();
+    await w
+      .findAll("button")
+      .find((b) => b.text() === "Namen melden")!
+      .trigger("click");
+    await w.findAll("ol button.c-textlink")[0]!.trigger("click");
+    await flushPromises();
+    expect(w.find("[role='alert']").text()).toBe("Zu viele Meldungen.");
+    expect(w.findAll("ol button.c-textlink")).toHaveLength(25);
+  });
+
+  it("hides Mehr laden when a page comes back empty", async () => {
+    const w = await mountBoard();
+    fetchMock.mockResolvedValue(reply({ entries: [] }));
+    await w
+      .findAll("button")
+      .find((b) => b.text() === "Mehr laden")!
+      .trigger("click");
+    await flushPromises();
+    expect(w.findAll("button").some((b) => b.text() === "Mehr laden")).toBe(false);
   });
 
   it("without a cookie: hint, play link, redeem opens BonPlayerCode and reloads on close", async () => {

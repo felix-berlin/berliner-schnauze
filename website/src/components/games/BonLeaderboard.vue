@@ -115,6 +115,7 @@
                           v-else
                           class="c-textlink c-bon-leaderboard__report"
                           type="button"
+                          :aria-label="`${item.entry.name}${item.entry.tag ? ` #${item.entry.tag}` : ''} melden`"
                           @click="report(item.entry.id)"
                         >
                           Melden
@@ -245,10 +246,10 @@ const PAGE = 25;
 const MOBILE_TOP = 10;
 const REPORTED_KEY = "bs-reported-bon-names";
 const SKELETON_WIDTHS = [60, 45, 70, 52, 38, 66, 48, 58];
-const PERIODS: { id: Period; label: string }[] = [
-  { id: "week", label: "Diese Woche" },
-  { id: "month", label: "Diesen Monat" },
-  { id: "all", label: "Allzeit" },
+const PERIODS: { id: Period; label: string; meta: string }[] = [
+  { id: "week", label: "Diese Woche", meta: "diese Woche" },
+  { id: "month", label: "Diesen Monat", meta: "diesen Monat" },
+  { id: "all", label: "Allzeit", meta: "Allzeit" },
 ];
 
 type Item = { gap: true } | { gap?: false; entry: PublicEntry };
@@ -278,13 +279,11 @@ function readReported(): number[] {
 }
 
 const fmt = (n: number) => n.toLocaleString("de-DE");
-const periodLabel = computed(() => PERIODS.find((p) => p.id === period.value)!.label);
-const periodTitle = computed(() => `Rangliste ${periodLabel.value}`);
+const current = computed(() => PERIODS.find((p) => p.id === period.value)!);
+const periodTitle = computed(() => `Rangliste ${current.value.label}`);
 const totalLabel = computed(() => {
   if (status.value !== "ready") return "";
-  return total.value
-    ? `${fmt(total.value)} Spiele · ${periodLabel.value.toLowerCase()}`
-    : "Noch keene Spiele";
+  return total.value ? `${fmt(total.value)} Spiele · ${current.value.meta}` : "Noch keene Spiele";
 });
 const betterThan = computed(
   () => `${me.value ? Math.round(((total.value - me.value.rank) / total.value) * 100) : 0} %`,
@@ -333,7 +332,11 @@ async function more(): Promise<void> {
   loadingMore.value = true;
   try {
     const data = await fetchLeaderboard(period.value, entries.value.length, PAGE);
-    if (mine === request) entries.value = entries.value.concat(data.entries);
+    if (mine === request) {
+      entries.value = entries.value.concat(data.entries);
+      // An empty page although the total says more: stop offering "Mehr laden".
+      if (!data.entries.length) total.value = entries.value.length;
+    }
   } catch {
     reportError.value = "Die Rangliste is jerade nich zu kriegen.";
   } finally {
@@ -363,8 +366,11 @@ async function report(id: number): Promise<void> {
   try {
     await reportName(id);
   } catch (error) {
-    reportError.value = (error as Error).message;
-    return;
+    // 404: the game is gone, so there is nothing left to report; any other error stays retryable.
+    if ((error as { status?: number }).status !== 404) {
+      reportError.value = (error as Error).message;
+      return;
+    }
   }
   reported.value = [...reported.value, id];
   try {

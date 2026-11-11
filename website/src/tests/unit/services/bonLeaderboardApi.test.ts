@@ -34,10 +34,19 @@ describe("reportName", () => {
     expect(init?.body).toBe('{"id":7}');
   });
 
-  it("throws on 429 and on a network error", async () => {
-    stub(new Response("{}", { status: 429 }));
-    await expect(reportName(7)).rejects.toThrow("nich");
+  it.each([
+    [400, "Ohne Cookie jeht dett nich."],
+    [404, "Spiel nich jefunden."],
+    [429, "Zu viele Meldungen."],
+  ])("surfaces the server's text and status for %i", async (status, error) => {
+    stub(new Response(JSON.stringify({ error }), { status }));
+    await expect(reportName(7)).rejects.toMatchObject({ message: error, status });
+  });
+
+  it("falls back to a fixed text without a body and on a network error", async () => {
+    stub(new Response(null, { status: 429 }));
+    await expect(reportName(7)).rejects.toThrow("nich jesendet");
     stub(new Error("offline"));
-    await expect(reportName(7)).rejects.toThrow("nich");
+    await expect(reportName(7)).rejects.toThrow("nich jesendet");
   });
 });
