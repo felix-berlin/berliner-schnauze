@@ -233,6 +233,12 @@ describe("Heil", () => {
       "Heil Dirk",
       "Heil Mirko",
       "Heil Ahmed",
+      "Heil Kalle",
+      "Heil Reichert",
+      "Heilbronn",
+      "Heiligenstadt",
+      "Michael Heil",
+      "Heil Michael",
     ])
       expect([n, nameCategory(n)]).toEqual([n, undefined]);
   });
@@ -265,6 +271,18 @@ describe("Heil", () => {
       "Heil Führer",
       "Heil dir",
       "Heil 18",
+      "Heil A.H.",
+      "Heil A H",
+      "H e i l Reich",
+      "Heil 1 8",
+      "Heil dem Reich",
+      "Heil Heil",
+      "Heil Hittler",
+      "Heil Hitla",
+      "Hei1 Adolf",
+      "Heil Reichs",
+      "Heil Germanen",
+      "Heil Wodan",
     ])
       expect([n, nameCategory(n)]).toEqual([n, "far-right"]);
   });

@@ -4,8 +4,6 @@ import { z } from "zod";
 
 const token = z.string().regex(/^[0-9a-f]{64}$/);
 
-// Format characters out before the filter and storing (`visibleName`).
-
 export const redeemSchema = z.strictObject({ code: z.string().max(40) });
 
 export const nextSchema = z.strictObject({ token });
@@ -16,6 +14,7 @@ export const answerSchema = z.strictObject({ card: z.string().max(20), real: z.b
 export const renameSchema = z.strictObject({
   name: z
     .string()
+    // Format characters out before the filter and storing: "\u202EizaN" renders as "Nazi".
     .overwrite(visible)
     .trim()
     .max(24)

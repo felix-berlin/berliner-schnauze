@@ -154,20 +154,30 @@ const FAR_RIGHT_WHOLE = new Set([
   "dereweg",
   "deriiiweg",
 ]);
-// What makes "Heil" a salute when it comes right after it (any separators): "Heil Adolf", "Heil;AH", "Heil Höcke", "Heil dir".
-// Whole words only, so "Heil Dirk" or "Heil Ahmed" stay names. 88 and 18 are compared as digits.
+// What makes "Heil" a salute when it comes right after it (any separators, one HEIL_ARTICLES word allowed between):
+// "Heil Adolf", "Heil;AH", "Heil dem Reich", "Heil dir". Whole words and listed variants only, so "Heil Dirk",
+// "Heil Ahmed" or "Heil Reichert" stay names. 88 and 18 are compared as digits.
 const HEIL_TARGETS = new Set([
+  "heil",
   "adolf",
   "hitler",
+  "hittler",
+  "hitla",
+  "hitlr",
+  "hittla",
   "ah",
   "hh",
   "deutschland",
   "deutsches",
   "deutsche",
   "reich",
+  "reichs",
+  "reiches",
   "germania",
+  "germanen",
   "germanien",
   "wotan",
+  "wodan",
   "odin",
   "hocke",
   "hoecke",
@@ -182,6 +192,23 @@ const HEIL_TARGETS = new Set([
   "ss",
   "88",
   "18",
+]);
+const HEIL_ARTICLES = new Set([
+  "dem",
+  "der",
+  "den",
+  "des",
+  "die",
+  "das",
+  "unserem",
+  "unserer",
+  "unser",
+  "mein",
+  "meinem",
+  "dein",
+  "deinem",
+  "euer",
+  "eurem",
 ]);
 const CODE_1488 = /(?<!\d)1488(?!\d)/;
 const CODE_444 = /(?<!\d)444(?!\d)/;
@@ -261,8 +288,22 @@ export const nameCategory = (raw: string): NameCategory | undefined => {
   // Without leet, so "AfD2025" and "NPDler" yield afd/npd; two-letter codes only as real words ("Sh1ne").
   const letters = name.split(/[^\p{L}]+/u).filter((w) => w.length > 2);
   // Split at anything but letters and digits, so "Heil,Adolf" or "Heil(Adolf)" count as two words.
-  const tokens = name.split(/[^\p{L}\d]+/u).filter(Boolean);
+  // Runs of single characters merged back into one word: "A.H." → "ah", "1 8" → "18", "H e i l" → "heil".
+  const tokens = name
+    .split(/[^\p{L}\d]+/u)
+    .filter(Boolean)
+    .reduce<string[]>((ts, t, i, all) => {
+      if (t.length === 1 && all[i - 1]?.length === 1) ts[ts.length - 1] += t;
+      else ts.push(t);
+      return ts;
+    }, []);
   const heilTarget = (t = "") => HEIL_TARGETS.has(t) || HEIL_TARGETS.has(normalize(t));
+  // "Hei1" is Heil too: 1 for l, only here (leet reads 1 as i).
+  const isHeil = (t: string) =>
+    normalize(t) === "heil" || normalize(t.replaceAll("1", "l")) === "heil";
+  const afterHeil = (i: number) =>
+    heilTarget(tokens[i + 1]) ||
+    (HEIL_ARTICLES.has(normalize(tokens[i + 1] ?? "")) && heilTarget(tokens[i + 2]));
   // A run of single digits with separators between them, not touching another digit group on either side ("8.8", "1 4 8 8"; not "1 98", "8.8.1990").
   const codes = [
     name,
@@ -284,9 +325,7 @@ export const nameCategory = (raw: string): NameCategory | undefined => {
     [...words, ...letters].some((w) => w !== "heil" && FAR_RIGHT_WHOLE.has(w)) ||
     // "Heil Adolf" and "HeilDeutschland" are caught, "Hubertus Heil" and "Heilmann" pass
     tokens.some((t, i) =>
-      normalize(t) === "heil"
-        ? heilTarget(tokens[i + 1])
-        : normalize(t).startsWith("heil") && heilTarget(t.slice(4)),
+      isHeil(t) ? afterHeil(i) : normalize(t).startsWith("heil") && heilTarget(t.slice(4)),
     ) ||
     letters.some((w) => w.startsWith("npd"))
   )
