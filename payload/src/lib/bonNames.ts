@@ -232,7 +232,10 @@ export const nameCategory = (raw: string): NameCategory | undefined => {
   // Without leet, so "AfD2025" and "NPDler" yield afd/npd; two-letter codes only as real words ("Sh1ne").
   const letters = name.split(/[^\p{L}]+/u).filter((w) => w.length > 2);
   // Split at anything but letters and digits, so "Heil,Adolf" or "Heil(Adolf)" count as two words.
-  const tokens = name.split(/[^\p{L}\d]+/u).map(normalize).filter(Boolean);
+  const tokens = name
+    .split(/[^\p{L}\d]+/u)
+    .map(normalize)
+    .filter(Boolean);
   // A run of single digits with separators between them, not touching another digit group on either side ("8.8", "1 4 8 8"; not "1 98", "8.8.1990").
   const codes = [
     name,

@@ -142,6 +142,7 @@ export const PATCH: APIRoute = async ({ cookies, request }) => {
     const norm = (v: string | null | undefined) => (v ?? "").trim().toLowerCase();
     // One at a time, not a burst per game. The rename already counted above; a retry after a failure rewrites the same values.
     for (const g of docs)
+      // oxlint-disable-next-line no-await-in-loop -- one game at a time keeps the DB load flat
       await payload.update({
         collection: "bon-games",
         // Reports belong to the old name; the same name again must not bring a hidden one back.

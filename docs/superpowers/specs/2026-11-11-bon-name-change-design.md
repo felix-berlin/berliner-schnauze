@@ -50,6 +50,7 @@ Wie in der Rangliste (`website/src/pages/api/bon/leaderboard.ts`): Spieler mit C
 ### `GET /api/bon/player` → `{ name, tag? }`
 
 Liefert den aktuellen Namen zur Anzeige im Start-Intro (wo es noch kein Spiel gibt) und die Kennung bei „Anonym“.
+
 - Name (eigene Wahl): der `displayName` des neuesten beendeten Spiels der Identität (berücksichtigt Ausblendung und Meldungen). Bei Spieler mit Code ohne beendetes Spiel `bon-players.name`. Ohne beides 404. `bon-players.name` allein reicht nicht: Nach dem Einlösen eines Codes ist es leer, und Ausblendung gibt es nur pro Spiel.
 - Der Name geht zusätzlich durch `cleanName` (beleidigend → „Anonym“).
 - `tag` nur bei „Anonym“: `bonTag(identity)` (gleiche Identitätszeichenkette wie die Rangliste, damit „Anonym #K7QX“ überall gleich ist).
