@@ -1160,7 +1160,8 @@ describe("GET /api/bon/leaderboard", () => {
 const row0 = (id: number) => db.rows.find((r) => r.id === id)!;
 
 describe("POST /api/bon/report-name", () => {
-  const report = (body: unknown, cookie?: string) => REPORT(ctx(body, cookie));
+  const report = (body: unknown, cookie?: string, ip = `10.0.1.${cookie}`) =>
+    REPORT({ ...ctx(body, cookie), clientAddress: ip } as APIContext);
   const board = async () =>
     (await (
       await LEADERBOARD({
@@ -1196,6 +1197,15 @@ describe("POST /api/bon/report-name", () => {
     finished(7);
     for (let i = 0; i < 4; i++) expect((await report({ id: 7 }, "same")).status).toBe(204);
     expect(row0(7).nameReports).toBe(1);
+  });
+
+  it("counts one client IP once per game, whatever cookies it sends", async () => {
+    finished(7);
+    for (const v of ["forged-1", "forged-2", "forged-3"])
+      expect((await report({ id: 7 }, v, "10.0.0.9")).status).toBe(204);
+    expect(row0(7).nameReports).toBe(1);
+    expect((await report({ id: 7 }, "forged-4", "10.0.0.10")).status).toBe(204);
+    expect(row0(7).nameReports).toBe(2);
   });
 
   it("a hidden name shows as Anonym at once", async () => {

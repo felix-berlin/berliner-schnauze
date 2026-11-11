@@ -1,24 +1,25 @@
 import type { APIRoute } from "astro";
 
-import { bonVisitor } from "@services/bonGame.ts";
 import { getPayloadClient } from "@services/payload.ts";
-import { visitorId } from "@services/payload/comments.ts";
+import { sha256, visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";
+import { clientIp } from "@utils/rateLimit.ts";
 import { z } from "zod";
 
 const schema = z.strictObject({ id: z.number().int().positive() });
 
+// Keyed on the hashed client IP, not the cookie: a cookie is free to forge, so three of them could hide any name.
 // shortcut: in memory, one process, lost on restart; a second web container would need a DB-level unique table.
 const reported = new Set<string>();
 
-export const POST: APIRoute = async ({ cookies, request }) => {
+export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
   const cookie = visitorId(cookies, false);
   if (!cookie) return reply({ error: "Ohne Cookie jeht dett nich." }, 400);
   const input = schema.safeParse(await request.json().catch(() => undefined));
   if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
   const { id } = input.data;
 
-  const key = `${bonVisitor(cookie)}:${id}`;
+  const key = `${sha256(`bon-report:${clientIp(request.headers.get("x-forwarded-for"), clientAddress)}`)}:${id}`;
   try {
     const payload = await getPayloadClient();
     const [game] = (
