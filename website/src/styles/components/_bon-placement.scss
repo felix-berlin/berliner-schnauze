@@ -81,6 +81,7 @@
   }
 }
 
+// The transition runs from the result page, so the timing lives here only.
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-group(bon-me) {
     animation-duration: 500ms;

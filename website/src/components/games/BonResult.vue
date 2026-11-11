@@ -25,7 +25,7 @@
           <dd class="t-small c-bon-result__note">
             {{
               ranked
-                ? `von ${ranked.totalGames} Spielen · besser als ${beaten} %`
+                ? `von ${ranked.totalGames} Spielen insgesamt · besser als ${beaten} %`
                 : "Platzierung jerade nich da"
             }}
           </dd>
@@ -108,12 +108,12 @@
 <script setup lang="ts">
 import type { RoundEntry } from "@composables/useBon";
 import type { FinishResult } from "@services/bonGameApi";
+import type { PublicEntry } from "@services/bonLeaderboardApi";
 
 import BonPlacement from "@components/games/BonPlacement.vue";
 import BonPlayerCode from "@components/games/BonPlayerCode.vue";
 import { computeMultiplier } from "@composables/useBon";
 import { fetchLeaderboard } from "@services/bonLeaderboardApi";
-import type { PublicEntry } from "@services/bonLeaderboardApi";
 import { trackEvent } from "@utils/analytics";
 import { cleanName } from "payload-app/bon-names";
 import { accuracyPercent, buildShareUrl } from "@utils/bonShare";

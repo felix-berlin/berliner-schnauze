@@ -61,7 +61,11 @@ let caches = makeCaches();
 
 export const loadRanking = (period: Period) => caches[period]();
 
-/** A finished game must show up in the very next ranking read, not 60 s later. */
+/**
+ * A finished game must show up in the very next ranking read, not 60 s later.
+ * shortcut: each finish forces a full reload of all periods ("all" = every finished row); invalidate only
+ * week/month or debounce when bon_games grows.
+ */
 export const invalidateRanking = () => {
   caches = makeCaches();
 };

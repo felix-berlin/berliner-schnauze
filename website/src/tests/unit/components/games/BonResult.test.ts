@@ -134,7 +134,7 @@ describe("BonResult", () => {
     it("shows rank and the share of games beaten", () => {
       const s = stat(mountResult(), "Platz");
       expect(s.find("dd").text()).toBe("12");
-      expect(s.text()).toContain("von 400 Spielen · besser als 97 %");
+      expect(s.text()).toContain("von 400 Spielen insgesamt · besser als 97 %");
     });
 
     it("falls back without a rank", () => {
@@ -168,7 +168,9 @@ describe("BonResult", () => {
     it("builds the share link with the cleaned name", async () => {
       vi.stubGlobal("navigator", { share: vi.fn().mockResolvedValue(undefined) });
       await mountResult({ playerName: "Heil Hitler" }).find("button.c-choice").trigger("click");
-      expect(buildShareUrl).toHaveBeenLastCalledWith(expect.objectContaining({ playerName: "Anonym" }));
+      expect(buildShareUrl).toHaveBeenLastCalledWith(
+        expect.objectContaining({ playerName: "Anonym" }),
+      );
     });
 
     it("copies the text otherwise and says so", async () => {
