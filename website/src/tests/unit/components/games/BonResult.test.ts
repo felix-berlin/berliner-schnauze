@@ -106,6 +106,12 @@ describe("BonResult", () => {
       expect(wrapper.find(".c-bon-name").text()).toContain("#K7QX");
     });
 
+    it("is missing without a rank: a rename could not reach the game", () => {
+      const wrapper = mountResult({ result: { ...props.result, rank: undefined } });
+      expect(wrapper.find(".c-bon-name").exists()).toBe(false);
+      expect(mountResult({ result: undefined }).find(".c-bon-name").exists()).toBe(false);
+    });
+
     it("after saving, the heading shows the new name and the placement is fetched again", async () => {
       vi.mocked(fetchLeaderboard).mockResolvedValue({ entries: [], total: 0 });
       const wrapper = mountResult();

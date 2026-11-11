@@ -12,7 +12,8 @@
         <p class="t-em c-bon-result__why">
           {{ endedEarly ? "Du hast dit Spiel beendet." : "Drei Fehler – dit Spiel is vorbei." }}
         </p>
-        <BonName :name="shownName || 'Anonym'" :tag="tag" @saved="onSaved" />
+        <!-- No rank mostly means no cookie: then a rename finds no game and would only fail. -->
+        <BonName v-if="result?.rank" :name="shownName || 'Anonym'" :tag="tag" @saved="onSaved" />
       </header>
 
       <dl class="c-bon-result__stats">
