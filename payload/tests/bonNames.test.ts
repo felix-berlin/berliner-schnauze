@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { cleanName, displayName, isOffensiveName, NAME_REPORT_LIMIT } from "../src/lib/bonNames";
+import {
+  cleanName,
+  displayName,
+  isOffensiveName,
+  nameCategory,
+  NAME_REPORT_LIMIT,
+} from "../src/lib/bonNames";
 
 describe("isOffensiveName", () => {
   it("catches leetspeak, spacing, case and umlauts", () => {
@@ -14,6 +20,48 @@ describe("isOffensiveName", () => {
       "n@zi",
       "Tim 88",
       "Du Arsch",
+      "Arschloch",
+      "Arschgeige",
+      "Fickdich",
+      "Nazischwein",
+      "Spasti",
+      "xXNaziXx",
+      "Nazi123",
+      "AfD",
+      "A f D",
+      "NPD",
+      "Die Heimat",
+      "Der III. Weg",
+      "Dritter Weg",
+      "Combat 18",
+      "C18",
+      "Sieg Heil",
+      "1488",
+      "14 88",
+      "HH",
+      "Himmler",
+      "Rudolf Heß",
+      "Führer",
+      "Endsieg",
+      "Reichsbürger",
+      "Blood & Honour",
+      "Hammerskins",
+      "Junge Alternative",
+      "WPWW",
+      "Schwarze Sonne",
+      "AH18",
+      "444",
+      "168:1",
+      "198",
+      "Die Rechte",
+      "NSDAP",
+      "Volkstod",
+      "Arier",
+      "Zyklon B",
+      "Identitäre Bewegung",
+      "Kühnengruß",
+      "Vollidiot",
+      "Du Hurensohn",
     ])
       expect([n, isOffensiveName(n)]).toEqual([n, true]);
   });
@@ -34,8 +82,33 @@ describe("isOffensiveName", () => {
       "Fickert",
       "Jahrgang 1988",
       "Mike1988",
+      "Marsch",
+      "Barsch",
+      "Heimat",
+      "Tim 18",
+      "Sascha",
+      "Hassan",
+      "Christa",
+      "Dirk",
+      "Afra",
+      "Ignazio",
+      "Reiseführer",
+      "Helga",
+      "Mirko",
+      "Thorsten",
+      "Wilhelm",
+      "Ilse",
     ])
       expect([n, isOffensiveName(n)]).toEqual([n, false]);
+  });
+});
+
+describe("nameCategory", () => {
+  it("tells far-right from other insults, far-right first", () => {
+    expect(nameCategory("Heil Hitler")).toBe("far-right");
+    expect(nameCategory("Arschloch")).toBe("offensive");
+    expect(nameCategory("Nazi Arsch")).toBe("far-right");
+    expect(nameCategory("Klaus")).toBeUndefined();
   });
 });
 

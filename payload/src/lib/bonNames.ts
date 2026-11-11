@@ -2,39 +2,153 @@
 
 export const NAME_REPORT_LIMIT = 3;
 
-// Short and German-focused on purpose. SUBSTRINGS are unambiguous enough to match inside any name; WORDS are short
-// or risky (Marschall, Nazim, Thure, Heilmann) and only match a whole word or the whole collapsed name ("A r s c h").
+// Matching runs on the collapsed, normalized name (see `normalize`).
+// INSULTS and FAR_RIGHT (substrings) match anywhere ("Arschloch", "Nazi123", "xXNaziXx"); ALLOWED real names/words that contain one are removed
+// first ("Marschall", "Nazim"). FAR_RIGHT_WHOLE entries are too short or too common to match inside a name and only match a whole
+// normalized word or the whole collapsed name ("A f D", "SS"). FAR_RIGHT_CODES run on the raw name.
+// Insults: curated from de.txt of LDNOOBWV2 (https://github.com/LDNOOBWV2/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words_V2,
+// CC0 1.0); dropped what is no insult or hits names/words by substring (horst, homo, depp, möse, titte, schwanz ...).
+// Far-right: parties, groups, persons and codes (rule: bon-redesign SPEC §16). A bare 18 is an age and stays allowed.
 // Extend from reports, not from guesses.
-const SUBSTRINGS: string[] = [
-  "hitler",
-  "siegheil",
-  "fuck",
+const INSULTS: string[] = [
+  "arsch",
+  "fick",
   "fotze",
   "votze",
-  "hurensohn",
-  "schlampe",
-  "wichser",
-  "scheiss",
-  "behindert",
-  "nigger",
-  "schwuchtel",
-  "bitch",
-];
-const WORDS = new Set([
-  "heil",
-  "nazi",
-  "fick",
   "hure",
-  "huren",
+  "wichs",
+  "wixx",
+  "wixer",
+  "kacke",
+  "scheiss",
+  "schlampe",
+  "schwuchtel",
+  "schwuchtl",
   "nutte",
-  "arsch",
-  "spast",
   "neger",
+  "nigger",
   "nigga",
-  "kanake",
-  "cunt",
+  "fuck",
   "shit",
+  "bitch",
+  "cunt",
+  "spast",
+  "kanake",
+  "bastard",
+  "missgeburt",
+  "mistkerl",
+  "miststuck",
+  "drecksack",
+  "drecksau",
+  "dreckskerl",
+  "idiot",
+  "trottel",
+  "vollpfosten",
+  "dumpfbacke",
+  "kotzbrocken",
+  "schweinehund",
+  "schweinepriester",
+  "schlappschwanz",
+  "schwanzlutscher",
+  "hodensack",
+  "penis",
+  "pimmel",
+  "muschi",
+  "titten",
+  "pisser",
+  "pissnelke",
+  "verpiss",
+  "vergewaltig",
+  "padophil",
+  "porno",
+  "behindert",
+];
+// Far-right: persons, terms, parties and groups.
+const FAR_RIGHT: string[] = [
+  "hitler",
+  "himmler",
+  "goebbels",
+  "gobbels",
+  "rudolfhes",
+  "fuhrer",
+  "fuehrer",
+  "endsieg",
+  "siegheil",
+  "zyklonb",
+  "volkstod",
+  "whitepower",
+  "wpww",
+  "schwarzesonne",
+  "wolfsangel",
+  "kuhnengruss",
+  "nazi",
+  "nsdap",
+  "jungealternative",
+  "identitare",
+  "reichsburger",
+  "reichsbuerger",
+  "hammerskin",
+  "bloodandhonou",
+  "bloodhonou",
+  "dritterweg",
+  "dritteweg",
+  "iiiweg",
+  "dieheimat",
+  "dierechte",
+];
+const ALLOWED: string[] = [
+  "marsch",
+  "barsch",
+  "harsch",
+  "karsch",
+  "nazim",
+  "nazir",
+  "nazif",
+  "nazia",
+  "ignazio",
+  "thure",
+  "fickert",
+  "fickel",
+  "fickler",
+  "fickenscher",
+  "scunthorpe",
+  "shitake",
+  "schneger",
+  "muschiol",
+  "fuhrerschein",
+  "reisefuhrer",
+  "bergfuhrer",
+  "stadtfuhrer",
+  "zugfuhrer",
+  // "Die Heimat"/"Die Rechte" are phrases; words that merely start with them are fine
+  "dieheimatlos",
+  "dieheimatstadt",
+  "dierechtesten",
+];
+const FAR_RIGHT_WHOLE = new Set([
+  "heil",
+  "arier",
+  "afd",
+  "npd",
+  "ss",
+  "hh",
+  "sh",
+  "dieheimat",
+  "dierechte",
+  "dereweg",
+  "deriiiweg",
 ]);
+// Number codes and codes with a letter prefix, on the raw name. Digits next to a digit never match (1988).
+const FAR_RIGHT_CODES = [
+  /(?<!\d)88(?!\d)/, // HH; also 14/88 and 14 88
+  /(?<!\d)1488(?!\d)/,
+  /(?<!\d)444(?!\d)/,
+  /(?<!\d)198(?!\d)/,
+  /(?<!\d)168\s*:\s*1(?!\d)/,
+  /(?<![\p{L}\d])(c|ah)\s?18(?!\d)/iu, // C18, AH18; a bare 18 is an age
+  /combat\W*18(?!\d)/i,
+  /\b(b\W?&?\W?h|blood\W*(and|&)?\W*hono(u)?r)\W*28(?!\d)/i, // 28 only with B&H context
+];
 
 const LEET: Record<string, string> = {
   "0": "o",
@@ -56,15 +170,25 @@ const normalize = (name: string): string =>
     .replace(/[013457@$]/g, (c) => LEET[c]!)
     .replace(/[^a-z]/g, "");
 
-export const isOffensiveName = (name: string): boolean => {
-  // A standalone 88 is the code for HH; 1988 is a year. Checked before the digits are dropped.
-  if (/(?<!\d)88(?!\d)/.test(name)) return true;
-  const words = name.split(/[\s._-]+/).map(normalize);
+export type NameCategory = "far-right" | "offensive";
+
+/** Why a name is refused: far-right wins over a plain insult. */
+export const nameCategory = (name: string): NameCategory | undefined => {
+  const words = name.split(/[\s._&:/-]+/).map(normalize);
   const whole = normalize(name);
-  return (
-    SUBSTRINGS.some((w) => whole.includes(w)) || WORDS.has(whole) || words.some((w) => WORDS.has(w))
-  );
+  // Allowed words are cut out per word, so "Nazi Arsch" cannot lose letters across the gap.
+  const rest = words.map((w) => ALLOWED.reduce((n, a) => n.replaceAll(a, ""), w)).join("");
+  if (
+    FAR_RIGHT_CODES.some((re) => re.test(name)) ||
+    FAR_RIGHT.some((w) => rest.includes(w)) ||
+    FAR_RIGHT_WHOLE.has(whole) ||
+    words.some((w) => FAR_RIGHT_WHOLE.has(w))
+  )
+    return "far-right";
+  return INSULTS.some((w) => rest.includes(w)) ? "offensive" : undefined;
 };
+
+export const isOffensiveName = (name: string): boolean => nameCategory(name) !== undefined;
 
 export const cleanName = (name: string): string => (isOffensiveName(name) ? "Anonym" : name);
 

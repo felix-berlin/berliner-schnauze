@@ -385,6 +385,7 @@ function vt(update: () => void, dir: string) {
 4. ~~**Rangliste:** Zählt das beste Spiel im Zeitraum oder jedes Spiel einzeln? Soll die Kennung auch bei doppelten Namen erscheinen?~~ **Entschieden:** Jedes Pseudonym zählt mit seinem besten Spiel im Zeitraum (Pseudonym = Spieler, sonst Besucher; bei Gleichstand gewinnt das frühere `finishedAt`). Die Kennung erscheint nur bei „Anonym“.
 5. **Standzeiten 900 / 2.500 ms:** Startwerte, nach Tests nachjustieren.
 6. **Teilen-Text** und Pfad der Rangliste bestätigen.
+7. ~~**Namensfilter:** Fertige Bibliothek oder eigene Liste?~~ **Entschieden:** Eigener Filter ohne Abhängigkeit (`payload/src/lib/bonNames.ts`): Teilstring-Treffer auf dem normalisierten Namen (Leetspeak, Leerzeichen, Umlaute), dazu eine Erlaubt-Liste echter Namen/Wörter (Marschall, Nazim, Thure …); Beleidigungen kuratiert aus LDNOOBWV2 `de.txt` (CC0). Rechtsextreme Parteien, Gruppen, Personen, Parolen und Zahlencodes (88, 1488, 14/88, 444, 168:1, 198, C18/AH18 …) sind als Name ausgeschlossen; ein blankes „18“ bleibt erlaubt (Alter). Bei rechtsextremen Namen zeigt das Intro einen Hinweis mit Link zu EXIT-Deutschland.
 
 ---
 
