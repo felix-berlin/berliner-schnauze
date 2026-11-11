@@ -54,6 +54,7 @@ import { useContentTracking } from "@composables/useContentTracking";
 import { accuracyPercent as toAccuracyPercent, decodeShareHash } from "@utils/bonShare";
 import { formattedDate as formatDate } from "@utils/helpers";
 import { useUrlSearchParams } from "@vueuse/core";
+import { isOffensiveName } from "payload-app/bon-names";
 import { computed, ref } from "vue";
 
 const root = ref<HTMLElement | null>(null);
@@ -62,7 +63,11 @@ useContentTracking(root);
 const params = useUrlSearchParams("history");
 const payload = computed<BonSharePayload | null>(() => {
   const r = params.r;
-  return r ? decodeShareHash(Array.isArray(r) ? r[0] : r) : null;
+  const decoded = r ? decodeShareHash(Array.isArray(r) ? r[0] : r) : null;
+  // The link is anyone's to write: an offensive name shows as no name.
+  return decoded?.playerName && isOffensiveName(decoded.playerName)
+    ? { ...decoded, playerName: undefined }
+    : decoded;
 });
 
 const accuracyPercent = computed(() =>

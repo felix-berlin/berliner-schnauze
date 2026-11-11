@@ -60,6 +60,19 @@ describe("BonShareView.vue", () => {
     expect(wrapper.find("h1").text()).toBe("Spielergebnis");
   });
 
+  it("shows no offensive name from the link", async () => {
+    const { useUrlSearchParams } = await import("@vueuse/core");
+    const { decodeShareHash } = await import("@utils/bonShare");
+    vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<
+      typeof useUrlSearchParams
+    >);
+    vi.mocked(decodeShareHash).mockReturnValueOnce({ ...samplePayload, playerName: "H1tler" });
+
+    const wrapper = mount(BonShareView);
+    expect(wrapper.find("h1").text()).toBe("Spielergebnis");
+    expect(wrapper.text()).not.toContain("H1tler");
+  });
+
   it("computes accuracy percent correctly", async () => {
     const { useUrlSearchParams } = await import("@vueuse/core");
     vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<

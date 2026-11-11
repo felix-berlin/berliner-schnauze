@@ -12,7 +12,10 @@ vi.mock("@components/games/BonPlayerCode.vue", () => ({
 
 vi.mock("@services/bonLeaderboardApi", () => ({ fetchLeaderboard: vi.fn() }));
 vi.mock("@components/games/BonPlacement.vue", () => ({
-  default: { props: ["around"], template: "<section class='mock-placement'>{{ around.length }}</section>" },
+  default: {
+    props: ["around"],
+    template: "<section class='mock-placement'>{{ around.length }}</section>",
+  },
 }));
 
 vi.mock("@utils/bonShare", async (importOriginal) => ({
@@ -72,6 +75,7 @@ describe("BonResult", () => {
     it("greets by name and falls back without one", () => {
       expect(mountResult().find("h1.c-band").text()).toBe("Aus die Maus, Berta!");
       expect(mountResult({ playerName: "" }).find("h1").text()).toBe("Aus die Maus!");
+      expect(mountResult({ playerName: "H1tler" }).find("h1").text()).toBe("Aus die Maus, Anonym!");
     });
 
     it("tells why the game ended", () => {

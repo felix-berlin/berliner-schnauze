@@ -7,7 +7,7 @@
           Neuer Rekord!
         </span>
         <h1 ref="titleRef" tabindex="-1" class="c-band c-bon-result__title">
-          {{ playerName ? `Aus die Maus, ${playerName}!` : "Aus die Maus!" }}
+          {{ shownName ? `Aus die Maus, ${shownName}!` : "Aus die Maus!" }}
         </h1>
         <p class="t-em c-bon-result__why">
           {{ endedEarly ? "Du hast dit Spiel beendet." : "Drei Fehler – dit Spiel is vorbei." }}
@@ -115,9 +115,9 @@ import BonPlayerCode from "@components/games/BonPlayerCode.vue";
 import { computeMultiplier } from "@composables/useBon";
 import { fetchLeaderboard } from "@services/bonLeaderboardApi";
 import { trackEvent } from "@utils/analytics";
-import { cleanName } from "payload-app/bon-names";
 import { accuracyPercent, buildShareUrl } from "@utils/bonShare";
 import { routeToWord } from "@utils/helpers";
+import { cleanName } from "payload-app/bon-names";
 import CheckIcon from "virtual:icons/lucide/check";
 import TrophyIcon from "virtual:icons/lucide/trophy";
 import XIcon from "virtual:icons/lucide/x";
@@ -132,6 +132,8 @@ const props = defineProps<{
   playerName: string;
   endedEarly: boolean;
 }>();
+
+const shownName = computed(() => props.playerName.trim() && cleanName(props.playerName.trim()));
 
 const emit = defineEmits<{ restart: [] }>();
 
