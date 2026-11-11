@@ -58,6 +58,7 @@ describe("isOffensiveName", () => {
       "Volkstod",
       "Arier",
       "Zyklon B",
+      "Zyklon",
       "Identitäre Bewegung",
       "Kühnengruß",
       "Vollidiot",

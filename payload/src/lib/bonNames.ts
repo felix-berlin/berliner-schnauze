@@ -74,7 +74,7 @@ const FAR_RIGHT: string[] = [
   "fuehrer",
   "endsieg",
   "siegheil",
-  "zyklonb",
+  "zyklon",
   "volkstod",
   "whitepower",
   "wpww",
