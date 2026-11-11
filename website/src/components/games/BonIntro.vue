@@ -50,7 +50,7 @@
         </div>
       </form>
 
-      <BonPlayerCode v-if="redeeming" mode="redeem" />
+      <BonPlayerCode v-if="redeeming" mode="redeem" @close="redeeming = false" />
       <button
         v-else-if="!linkRedeem"
         class="c-textlink c-bon-intro__redeem"

@@ -26,7 +26,9 @@ export async function post<T>(url: string, body?: unknown): Promise<T> {
     throw new Error(FALLBACK_ERROR);
   }
   const data = (await res.json().catch(() => undefined)) as (T & { error?: string }) | undefined;
-  if (!res.ok || !data) throw new Error(data?.error ?? FALLBACK_ERROR);
+  // The status lets callers tell a lockout (429) from a wrong code (404).
+  if (!res.ok || !data)
+    throw Object.assign(new Error(data?.error ?? FALLBACK_ERROR), { status: res.status });
   return data;
 }
 
