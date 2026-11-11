@@ -1,11 +1,22 @@
 import type { APIRoute } from "astro";
+import type { Where } from "payload";
 
 import { bonVisitor } from "@services/bonGame.ts";
-import { bonCodeHash, playerFromCookie, setPlayerCookie } from "@services/bonPlayer.ts";
+import {
+  bonCodeHash,
+  bonIdentity,
+  playerFromCookie,
+  setPlayerCookie,
+} from "@services/bonPlayer.ts";
+import { invalidateRanking } from "@services/bonRanking.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { isUniqueViolation, reply } from "@utils/apiReply.ts";
+import { renameSchema } from "@utils/bonSchema.ts";
+import { rateLimitedBy } from "@utils/rateLimit.ts";
+import { displayName, cleanName, nameCategory } from "payload-app/bon-names";
 import { generateCode } from "payload-app/bon-player";
+import { bonTag } from "payload-app/bon-ranking";
 
 /** A new player with a fresh code; undefined on a code-hash collision. */
 const createPlayer = async (payload: Awaited<ReturnType<typeof getPayloadClient>>) => {
@@ -67,5 +78,96 @@ export const POST: APIRoute = async ({ cookies }) => {
     return reply({ error: "Dein Code wollte leider nich kommen." }, 502);
   } finally {
     if (guard) claiming.delete(guard);
+  }
+};
+
+type Identity = NonNullable<Awaited<ReturnType<typeof bonIdentity>>>;
+
+/** The games the ranking counts as this identity's: a player's, or a visitor's not yet claimed by a player. */
+const gamesOf = ({ playerId, visitor }: Identity): Where =>
+  playerId === undefined
+    ? { and: [{ visitor: { equals: visitor! } }, { player: { exists: false } }] }
+    : { player: { equals: playerId } };
+
+const named = (name: string, identity: string) => ({
+  name,
+  ...(name === "Anonym" && { tag: bonTag(identity) }),
+});
+
+const DAY = 24 * 60 * 60_000;
+
+export const GET: APIRoute = async ({ cookies }) => {
+  try {
+    const payload = await getPayloadClient();
+    const who = await bonIdentity(payload, cookies);
+    if (!who) return reply({ error: "Du hast noch nich jespielt." }, 404);
+    const [latest] = (
+      await payload.find({
+        collection: "bon-games",
+        depth: 0,
+        limit: 1,
+        select: { nameHidden: true, nameReports: true, playerName: true },
+        sort: "-finishedAt",
+        where: { and: [gamesOf(who), { status: { equals: "finished" } }] },
+      })
+    ).docs;
+    if (!latest && who.playerId === undefined)
+      return reply({ error: "Du hast noch nich jespielt." }, 404);
+    const name = cleanName(latest ? displayName(latest) : who.playerName || "Anonym");
+    return reply(named(name, who.identity), 200);
+  } catch (error) {
+    console.error("[bon] player read failed:", error);
+    return reply({ error: "Dein Name wollte leider nich kommen." }, 502);
+  }
+};
+
+export const PATCH: APIRoute = async ({ cookies, request }) => {
+  try {
+    const payload = await getPayloadClient();
+    const who = await bonIdentity(payload, cookies);
+    if (!who) return reply({ error: "Du hast noch nich jespielt." }, 404);
+    const input = renameSchema.safeParse(await request.json().catch(() => undefined));
+    if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
+    const { name } = input.data;
+    if (nameCategory(name)) return reply({ error: "Den Namen nehm wa nich." }, 422);
+    // Only a name that passed the filter counts, so a typo-and-retry is not punished.
+    // shortcut: in memory per Node process, a restart or second web container resets it; move to the DB if renames get abused.
+    if (rateLimitedBy(who.identity, "bon-rename", 5, DAY) > 0)
+      return reply({ error: "Heute jenug umjetauft – morjen wieder." }, 429);
+
+    const { docs } = await payload.find({
+      collection: "bon-games",
+      depth: 0,
+      pagination: false,
+      select: { nameHidden: true, nameReports: true, playerName: true },
+      where: gamesOf(who),
+    });
+    const norm = (v: string | null | undefined) => (v ?? "").trim().toLowerCase();
+    await Promise.all(
+      docs.map((g) =>
+        payload.update({
+          collection: "bon-games",
+          // Reports belong to the old name; the same name again must not bring a hidden one back.
+          data:
+            norm(g.playerName) === norm(name)
+              ? { playerName: name }
+              : { nameHidden: false, nameReports: 0, playerName: name },
+          depth: 0,
+          id: g.id,
+        }),
+      ),
+    );
+    if (who.playerId !== undefined)
+      await payload.update({
+        collection: "bon-players",
+        data: { name: name === "Anonym" ? "" : name },
+        depth: 0,
+        id: who.playerId,
+      });
+    invalidateRanking();
+    return reply(named(name, who.identity), 200);
+  } catch (error) {
+    console.error("[bon] rename failed:", error);
+    return reply({ error: "Dein Name is nich anjekommen." }, 502);
   }
 };

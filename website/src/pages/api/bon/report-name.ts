@@ -8,7 +8,7 @@ import { z } from "zod";
 
 const schema = z.strictObject({ id: z.number().int().positive() });
 
-// Keyed on the hashed client IP, not the cookie: a cookie is free to forge, so three of them could hide any name.
+// Keyed on the hashed client IP (and the game's name), not the cookie: a cookie is free to forge, so three of them could hide any name.
 // shortcut: in memory, one process, lost on restart; a second web container would need a DB-level unique table.
 const reported = new Set<string>();
 
@@ -19,7 +19,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
   if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
   const { id } = input.data;
 
-  const key = `${sha256(`bon-report:${clientIp(request.headers.get("x-forwarded-for"), clientAddress)}`)}:${id}`;
+  let key = "";
   try {
     const payload = await getPayloadClient();
     const [game] = (
@@ -27,11 +27,15 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
         collection: "bon-games",
         depth: 0,
         limit: 1,
-        select: { nameReports: true },
+        select: { nameReports: true, playerName: true },
         where: { id: { equals: id }, status: { equals: "finished" } },
       })
     ).docs;
     if (!game) return reply({ error: "Spiel nich jefunden." }, 404);
+    // The name is in the key, so a renamed game (reports reset) can be reported again.
+    key = sha256(
+      `bon-report:${clientIp(request.headers.get("x-forwarded-for"), clientAddress)}:${id}:${game.playerName ?? ""}`,
+    );
     // A repeat answers like the first.
     if (reported.has(key)) return new Response(null, { status: 204 });
     reported.add(key);

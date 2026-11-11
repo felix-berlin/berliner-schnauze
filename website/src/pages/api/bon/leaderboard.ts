@@ -1,11 +1,9 @@
 import type { APIRoute } from "astro";
 import type { RankedEntry } from "payload-app/bon-ranking";
 
-import { bonVisitor } from "@services/bonGame.ts";
-import { playerFromCookie } from "@services/bonPlayer.ts";
+import { bonIdentity } from "@services/bonPlayer.ts";
 import { loadRanking } from "@services/bonRanking.ts";
 import { getPayloadClient } from "@services/payload.ts";
-import { visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";
 import { z } from "zod";
 
@@ -34,9 +32,7 @@ export const GET: APIRoute = async ({ cookies, url }) => {
     const payload = await getPayloadClient();
     const ranking = await loadRanking(period);
     // No cookie is set here: a visitor without one simply has no "me".
-    const player = await playerFromCookie(payload, cookies);
-    const cookie = visitorId(cookies, false);
-    const identity = player ? `p:${player.id}` : cookie && `v:${bonVisitor(cookie)}`;
+    const identity = (await bonIdentity(payload, cookies))?.identity;
     const myIndex = identity ? ranking.findIndex((e) => e.identity === identity) : -1;
 
     const pub = ({ identity: id, ...entry }: RankedEntry) => ({

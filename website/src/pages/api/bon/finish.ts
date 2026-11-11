@@ -19,7 +19,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
   if (!cookie) return reply({ error: "Ohne Cookie jibt's keen Ranking." }, 400);
   const input = finishSchema.safeParse(await request.json().catch(() => undefined));
   if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
-  const { playerName, token } = input.data;
+  const { playerName: sentName, token } = input.data;
 
   if (busyGames.has(token)) return reply(DONE, 409);
   busyGames.add(token);
@@ -28,6 +28,31 @@ export const POST: APIRoute = async ({ cookies, request }) => {
     const game = await findGame(payload, token, bonVisitor(cookie));
     if (!game) return reply({ error: "Spiel nich jefunden." }, 404);
     if (game.status !== "playing") return reply(DONE, 409);
+
+    const playerId =
+      game.player == null
+        ? undefined
+        : typeof game.player === "object"
+          ? game.player.id
+          : game.player;
+    // A code player's name lives on the player, so a game on another device cannot bring back an old name.
+    const storedName =
+      playerId === undefined
+        ? undefined
+        : await payload
+            .find({
+              collection: "bon-players",
+              depth: 0,
+              limit: 1,
+              select: { name: true },
+              where: { id: { equals: playerId } },
+            })
+            .then((r) => r.docs[0]?.name || undefined)
+            .catch((error: unknown) => {
+              console.error("[bon] player name lookup failed:", error);
+              return undefined;
+            });
+    const playerName = storedName ?? sentName;
 
     const { batches, cards } = game;
     const now = Date.now();
@@ -57,13 +82,13 @@ export const POST: APIRoute = async ({ cookies, request }) => {
 
     // The name follows the player's latest game; a failure must not hide the stored result.
     // A game without a name must not replace a name the player already chose.
-    if (game.player != null && playerName !== "Anonym")
+    if (playerId !== undefined && !storedName && playerName !== "Anonym")
       await payload
         .update({
           collection: "bon-players",
           data: { name: playerName },
           depth: 0,
-          id: typeof game.player === "object" ? game.player.id : game.player,
+          id: playerId,
         })
         .catch((error: unknown) => console.error("[bon] player name update failed:", error));
 

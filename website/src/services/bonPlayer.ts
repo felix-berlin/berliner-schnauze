@@ -1,6 +1,8 @@
 import type { getPayloadClient } from "@services/payload.ts";
 import type { AstroCookies } from "astro";
 
+import { bonVisitor } from "@services/bonGame.ts";
+import { visitorId } from "@services/payload/comments.ts";
 import { createHash } from "node:crypto";
 import { normalizeCode } from "payload-app/bon-player";
 
@@ -32,6 +34,16 @@ export const findPlayer = async (payload: Client, input: string) => {
 export const playerFromCookie = (payload: Client, cookies: AstroCookies) => {
   const value = cookies.get(PLAYER_COOKIE)?.value;
   return value ? findPlayer(payload, value) : Promise.resolve(undefined);
+};
+
+/** Who is asking, as the ranking sees them; no cookie is set, so a browser without either is no one. */
+export const bonIdentity = async (payload: Client, cookies: AstroCookies) => {
+  const player = await playerFromCookie(payload, cookies);
+  if (player) return { identity: `p:${player.id}`, playerId: player.id, playerName: player.name };
+  const cookie = visitorId(cookies, false);
+  if (!cookie) return undefined;
+  const visitor = bonVisitor(cookie);
+  return { identity: `v:${visitor}`, visitor };
 };
 
 export const setPlayerCookie = (cookies: AstroCookies, code: string) =>
