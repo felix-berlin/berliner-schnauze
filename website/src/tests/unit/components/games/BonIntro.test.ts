@@ -70,7 +70,9 @@ describe("BonIntro", () => {
     const wrapper = mountIntro({});
     await wrapper.find("input").setValue("Arschloch");
     await wrapper.find("form").trigger("submit");
-    expect(wrapper.find("[role=alert]").text()).toBe("Den Namen nehmen wir nich. Such dir ’n anderen aus.");
+    expect(wrapper.find("[role=alert]").text()).toBe(
+      "Den Namen nehmen wir nich. Such dir ’n anderen aus.",
+    );
     expect(wrapper.find("a[href*=exit-deutschland]").exists()).toBe(false);
     expect($bonStats.get().playerName).toBe("");
     expect(wrapper.emitted("start")).toBeUndefined();
@@ -107,5 +109,11 @@ describe("BonIntro", () => {
       "mock-code",
     );
     expect(wrapper.find("button.c-textlink").exists()).toBe(false);
+  });
+
+  it("links to the leaderboard", () => {
+    const link = mountIntro({}).find("a.c-bon-intro__leaderboard");
+    expect(link.text()).toBe("Rangliste");
+    expect(link.attributes("href")).toBe("/games/berliner-oder-nicht/rangliste");
   });
 });

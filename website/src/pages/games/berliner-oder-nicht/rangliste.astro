@@ -1,0 +1,13 @@
+---
+import BonLeaderboard from '@components/games/BonLeaderboard.vue'
+import Layout from '@layouts/Layout.astro'
+
+const page = {
+  description: 'Die Bestenliste von Berliner oder nicht? — wer kennt den Berliner Dialekt am besten?',
+  title: 'Rangliste – Berliner oder nicht? | Berliner Schnauze',
+}
+---
+
+<Layout content={page}>
+  <BonLeaderboard client:load />
+</Layout>

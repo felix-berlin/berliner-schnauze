@@ -13,6 +13,7 @@ const STATIC_PATHS = [
   "/changelog",
   "/datenschutz",
   "/games/berliner-oder-nicht",
+  "/games/berliner-oder-nicht/rangliste",
   "/impressum",
   "/magazin",
   "/spenden",

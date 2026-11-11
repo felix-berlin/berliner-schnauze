@@ -88,6 +88,9 @@
       >
         Spielercode einlösen
       </button>
+      <a class="c-textlink c-bon-intro__leaderboard" href="/games/berliner-oder-nicht/rangliste"
+        >Rangliste</a
+      >
     </section>
 
     <aside class="c-section-card c-bon-intro__rules" aria-labelledby="bon-rules-title">
