@@ -152,6 +152,24 @@ describe("isOffensiveName bypasses and false positives", () => {
     expect(nameCategory("Heil")).toBe("far-right");
     expect(nameCategory("Heil!")).toBe("far-right");
   });
+
+  it("does not let an allowed real name or a trailing Heil shield a far-right name", () => {
+    for (const n of [
+      "Banazi",
+      "Sanazi",
+      "AnaNazi",
+      "NaziHH",
+      "Nazihitler",
+      "Heil Adolf",
+      "Heil Deutschland",
+      "Heil Höcke",
+      "Heil Wotan",
+      "Hıtler", // Turkish dotless ı
+      "Nazı",
+      "AfDler",
+    ])
+      expect([n, nameCategory(n)]).toEqual([n, "far-right"]);
+  });
 });
 
 describe("nameCategory", () => {

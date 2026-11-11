@@ -117,8 +117,6 @@ const ALLOWED: string[] = [
   "shitake",
   "schneger",
   "muschiol",
-  "nazih",
-  "anazi",
   "ignazius",
   "schure",
   "ashita",
@@ -138,11 +136,14 @@ const ALLOWED: string[] = [
   "dieheimatstadt",
   "dierechtesten",
 ];
+// Real names that contain "nazi", allowed only as a whole word: as a substring they would shield "NaziHH" or "Banazi".
+const ALLOWED_WHOLE = new Set(["nazih", "anazi", "alanazi"]);
 const FAR_RIGHT_WHOLE = new Set([
   "heil",
   "arier",
   "afd",
   "npd",
+  "afdler",
   "ss",
   "hh",
   "sh",
@@ -187,7 +188,8 @@ const prep = (name: string): string =>
   )
     .join("")
     .toLowerCase()
-    .replaceAll("ß", "ss");
+    .replaceAll("ß", "ss")
+    .replaceAll("ı", "i");
 
 const normalize = (name: string): string =>
   name.replace(/[013457@$]/g, (c) => LEET[c]!).replace(/[^a-z]/g, "");
@@ -203,12 +205,16 @@ export const nameCategory = (raw: string): NameCategory | undefined => {
   const letters = name.split(/[^\p{L}]+/u).filter((w) => w.length > 2);
   const codes = [name, name.replace(/(?<=\d)\s+(?=\d)/g, "")];
   // Allowed words are cut out per word, so "Nazi Arsch" cannot lose letters across the gap.
-  const rest = words.map((w) => ALLOWED.reduce((n, a) => n.replaceAll(a, ""), w)).join("");
+  const rest = words
+    .map((w) => (ALLOWED_WHOLE.has(w) ? "" : ALLOWED.reduce((n, a) => n.replaceAll(a, ""), w)))
+    .join("");
   if (
     FAR_RIGHT_CODES.some((re) => codes.some((c) => re.test(c))) ||
     FAR_RIGHT.some((w) => rest.includes(w)) ||
     FAR_RIGHT_WHOLE.has(whole) ||
     [...words, ...letters].some((w) => w !== "heil" && FAR_RIGHT_WHOLE.has(w)) ||
+    // "Hubertus Heil" passes, "Heil Adolf" does not
+    words.slice(0, -1).includes("heil") ||
     letters.some((w) => w.startsWith("npd"))
   )
     return "far-right";
