@@ -104,6 +104,56 @@ describe("isOffensiveName", () => {
   });
 });
 
+describe("isOffensiveName bypasses and false positives", () => {
+  it("catches look-alike letters, compatibility forms, hidden or spaced digits and party tokens", () => {
+    for (const n of [
+      "N\u0430zi", // Cyrillic а
+      "H\u0456tler", // Cyrillic і
+      "\u0391fD", // Greek Alpha
+      "\uFF2E\uFF41\uFF5A\uFF49", // fullwidth Nazi
+      "\u{1D40D}\u{1D41A}\u{1D433}\u{1D422}", // math bold Nazi
+      "\u2162. Weg", // Roman numeral III
+      "Max\uFF18\uFF18", // fullwidth 88
+      "8\u200B8", // zero-width space
+      "8 8",
+      "1 4 8 8",
+      "AfD2025",
+      "AfD4ever",
+      "Afd1",
+      "NPDler",
+    ])
+      expect([n, nameCategory(n)]).toEqual([n, "far-right"]);
+    expect(nameCategory("\u13AArsch")).toBe("offensive"); // Cherokee A
+  });
+
+  it("lets real names through that contain a listed word", () => {
+    for (const n of [
+      "Nazih",
+      "Al-Anazi",
+      "Alanazi",
+      "Ignazius",
+      "Hubertus Heil",
+      "Yamashita",
+      "Matsushita",
+      "Kinoshita",
+      "Ishita",
+      "Shitao",
+      "Schürer",
+      "Schuren",
+      "Peniston",
+      "Arschak",
+      "Afdal",
+      "Sh1ne",
+    ])
+      expect([n, nameCategory(n)]).toEqual([n, undefined]);
+  });
+
+  it("still catches Heil as the whole name", () => {
+    expect(nameCategory("Heil")).toBe("far-right");
+    expect(nameCategory("Heil!")).toBe("far-right");
+  });
+});
+
 describe("nameCategory", () => {
   it("tells far-right from other insults, far-right first", () => {
     expect(nameCategory("Heil Hitler")).toBe("far-right");
