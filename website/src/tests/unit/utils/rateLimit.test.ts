@@ -76,6 +76,16 @@ describe("rateLimit", () => {
     expect(rateLimited(client, next, 0)).toBe(0);
   });
 
+  it("limits the bon leaderboard to 60 per 10 min on GET", () => {
+    expect(rateLimitRule("/api/bon/leaderboard", "GET")).toEqual({
+      max: 60,
+      method: "GET",
+      prefix: "/api/bon/leaderboard",
+      windowMs: 10 * 60_000,
+    });
+    expect(rateLimitRule("/api/bon/leaderboard", "POST")).toBeUndefined();
+  });
+
   it("limits bon answer to 450 per 10 min on POST", () => {
     expect(rateLimitRule("/api/bon/answer", "POST")).toEqual({
       max: 450,

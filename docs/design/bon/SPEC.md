@@ -381,8 +381,8 @@ function vt(update: () => void, dir: string) {
 
 1. ~~**Multiplikator:** Gilt er schon für die Schwellen-Antwort? (Abschnitt 2)~~ **Abweichung (Umsetzung):** Geklärt: ja, die dritte richtige Antwort in Folge zählt 20 Punkte.
 2. **Neuer Spielercode:** Bleiben Geräte angemeldet, die den alten Code schon eingelöst haben? Wenn nicht, braucht 2c den Satz „Alle anderen Jeräte werden abjemeldet.“, und der Server braucht Sitzungen pro Gerät.
-3. **Spieler wechseln (3c):** Ist das alte Pseudonym danach nur noch per eigenem Code erreichbar?
-4. **Rangliste:** Zählt das beste Spiel im Zeitraum oder jedes Spiel einzeln? Soll die Kennung auch bei doppelten Namen erscheinen?
+3. ~~**Spieler wechseln (3c):** Ist das alte Pseudonym danach nur noch per eigenem Code erreichbar?~~ **Entschieden:** Ja, das alte Pseudonym ist danach nur noch über seinen eigenen Code erreichbar (so umgesetzt).
+4. ~~**Rangliste:** Zählt das beste Spiel im Zeitraum oder jedes Spiel einzeln? Soll die Kennung auch bei doppelten Namen erscheinen?~~ **Entschieden:** Jedes Pseudonym zählt mit seinem besten Spiel im Zeitraum (Pseudonym = Spieler, sonst Besucher; bei Gleichstand gewinnt das frühere `finishedAt`). Die Kennung erscheint nur bei „Anonym“.
 5. **Standzeiten 900 / 2.500 ms:** Startwerte, nach Tests nachjustieren.
 6. **Teilen-Text** und Pfad der Rangliste bestätigen.
 

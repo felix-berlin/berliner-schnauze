@@ -12,6 +12,7 @@ const db = vi.hoisted(() => {
     equals: (a, b) => a === b,
     exists: (a, b) => (a != null) === b,
     greater_than: (a, b) => typeof a === "number" && a > (b as number),
+    greater_than_equal: (a, b) => typeof a === "string" && a >= (b as string), // ISO dates
     less_than: (a, b) => typeof a === "string" && a < (b as string), // ISO dates,
   };
   const matches = (row: Row, where: Where) =>
@@ -56,11 +57,13 @@ const db = vi.hoisted(() => {
       }
       return { docs: gone, errors: [] };
     }),
-    find: vi.fn(async ({ collection, where }: { collection: string; select?: Row; where: Where }) => ({
-      docs: table(collection)
-        .filter((r) => matches(r, where))
-        .map((r) => structuredClone(r)),
-    })),
+    find: vi.fn(
+      async ({ collection, where }: { collection: string; select?: Row; where: Where }) => ({
+        docs: table(collection)
+          .filter((r) => matches(r, where))
+          .map((r) => structuredClone(r)),
+      }),
+    ),
     update: vi.fn(
       async ({
         collection,
@@ -122,6 +125,8 @@ vi.mock("@services/payload.ts", async (importOriginal) => ({
   getPayloadClient: async () => db.api,
 }));
 vi.mock("@services/bonPool.ts", () => ({ loadPool: pool.loadPool }));
+// The ranking's 60 s cache would carry rows from one test into the next.
+vi.mock("@services/cache.ts", () => ({ ttl: (_ms: number, load: () => unknown) => load }));
 
 import type { DealtCard } from "@utils/bonDeck.ts";
 import type { APIContext } from "astro";
@@ -131,6 +136,7 @@ import { createHash } from "node:crypto";
 
 import { POST as ANSWER } from "@/pages/api/bon/answer.ts";
 import { POST as FINISH } from "@/pages/api/bon/finish.ts";
+import { GET as LEADERBOARD } from "@/pages/api/bon/leaderboard.ts";
 import { POST as NEXT } from "@/pages/api/bon/next.ts";
 import { POST as PLAYER } from "@/pages/api/bon/player.ts";
 import { POST as REDEEM } from "@/pages/api/bon/redeem.ts";
@@ -939,5 +945,144 @@ describe("bon identity in start and finish", () => {
     seedPlayer();
     await playedGame(4, "v-1");
     expect(db.players[0].name).toBe("Kalle");
+  });
+});
+
+describe("POST /api/bon/start tag", () => {
+  it("returns the 4-character tag of the visitor, the same for the same cookie", async () => {
+    const a = await newGame("v-1");
+    const b = await newGame("v-1");
+    const c = await newGame("v-2");
+    expect((a as unknown as { tag: string }).tag).toMatch(/^[A-HJKMNP-Z2-9]{4}$/);
+    expect((b as unknown as { tag: string }).tag).toBe((a as unknown as { tag: string }).tag);
+    expect((c as unknown as { tag: string }).tag).not.toBe((a as unknown as { tag: string }).tag);
+  });
+});
+
+describe("GET /api/bon/leaderboard", () => {
+  type Entry = { rank: number; name: string; score: number; tag?: string; isMe?: true };
+  type Body = {
+    entries: Entry[];
+    total: number;
+    me?: { rank: number; score: number; around: Entry[] };
+  };
+  const get = (query: string, cookies: Record<string, string> = {}) =>
+    LEADERBOARD({
+      clientAddress: "10.0.0.1",
+      cookies: {
+        get: (name: string) => (cookies[name] ? { value: cookies[name] } : undefined),
+        set,
+      },
+      url: new URL(`https://berliner-schnauze.wtf/api/bon/leaderboard${query}`),
+    } as unknown as APIContext);
+  const body = async (query: string, cookies?: Record<string, string>) =>
+    (await (await get(query, cookies)).json()) as Body;
+  // Scores 100 - 10 * n for visitor n, so visitor n ranks n + 1.
+  const seed = (n: number, extra: Record<string, unknown> = {}) => {
+    for (let i = 0; i < n; i++)
+      db.rows.push({
+        bestStreak: 3,
+        correctAnswers: 6,
+        finishedAt: new Date(T0 - HOUR).toISOString(),
+        id: 100 + i,
+        playerName: i === 0 ? "Berta" : "Anonym",
+        score: 1000 - 10 * i,
+        status: "finished",
+        totalAnswered: 8,
+        visitor: hashed(`v-${i}`),
+        ...extra,
+      });
+  };
+
+  it("400 for a missing or bad period, limit or offset", async () => {
+    for (const q of [
+      "",
+      "?period=year",
+      "?period=all&limit=26",
+      "?period=all&limit=-1",
+      "?period=all&offset=x",
+    ])
+      expect((await get(q)).status).toBe(400);
+  });
+
+  it("ranks only finished games inside the period", async () => {
+    seed(2);
+    db.rows.push(
+      {
+        finishedAt: new Date(T0).toISOString(),
+        id: 1,
+        score: 9999,
+        status: "playing",
+        visitor: "x",
+      },
+      {
+        finishedAt: "2026-01-01T00:00:00.000Z",
+        id: 2,
+        playerName: "Alt",
+        score: 8888,
+        status: "finished",
+        visitor: "old",
+      },
+    );
+    expect((await body("?period=week")).entries.map((e) => e.score)).toEqual([1000, 990]);
+    expect((await body("?period=all")).entries.map((e) => e.score)).toEqual([8888, 1000, 990]);
+  });
+
+  it("slices by offset and limit and reports the total", async () => {
+    seed(30);
+    const page = await body("?period=all&offset=5&limit=3");
+    expect(page.total).toBe(30);
+    expect(page.entries.map((e) => e.rank)).toEqual([6, 7, 8]);
+    expect((await body("?period=all&limit=0")).entries).toEqual([]);
+    expect((await body("?period=all")).entries).toHaveLength(25);
+  });
+
+  it("gives each pseudonym its best game and tags only Anonym", async () => {
+    seed(1, { id: 1, playerName: "Anonym", score: 10 });
+    seed(1, { id: 2, playerName: "Anonym", score: 500 });
+    const { entries } = await body("?period=all");
+    expect(entries).toHaveLength(1);
+    expect(entries[0]).toMatchObject({ score: 500, tag: expect.stringMatching(/^[A-Z2-9]{4}$/) });
+    db.rows.length = 0;
+    seed(1);
+    expect((await body("?period=all")).entries[0]).not.toHaveProperty("tag");
+  });
+
+  it("has no me without a cookie, and sets none", async () => {
+    seed(3);
+    const res = await body("?period=all");
+    expect(res).not.toHaveProperty("me");
+    expect(set).not.toHaveBeenCalled();
+    expect(await body("?period=all", { bs_visitor: "stranger" })).not.toHaveProperty("me");
+  });
+
+  it("me.around has no rows above rank 1 and none below the last rank", async () => {
+    seed(10);
+    const first = await body("?period=all", { bs_visitor: "v-0" });
+    expect(first.me).toMatchObject({ rank: 1, score: 1000 });
+    expect(first.me!.around.map((e) => e.rank)).toEqual([1, 2, 3]);
+    const last = await body("?period=all", { bs_visitor: "v-9" });
+    expect(last.me!.around.map((e) => e.rank)).toEqual([8, 9, 10]);
+    const mid = await body("?period=all", { bs_visitor: "v-4" });
+    expect(mid.me!.around.map((e) => e.rank)).toEqual([3, 4, 5, 6, 7]);
+    expect(mid.me!.around.filter((e) => e.isMe).map((e) => e.rank)).toEqual([5]);
+    expect(mid.entries.filter((e) => e.isMe).map((e) => e.rank)).toEqual([5]);
+  });
+
+  it("uses the player of a valid code as me, over the visitor", async () => {
+    seed(3);
+    db.players.push({ codeHash: bonCodeHash("ABCD-EFGH-JKMN"), id: 50, name: "Berta" });
+    db.rows[2].player = 50;
+    const res = await body("?period=all", { bon_player: "ABCD-EFGH-JKMN", bs_visitor: "v-0" });
+    expect(res.me!.rank).toBe(3);
+  });
+
+  it("never exposes an identity, a visitor hash or a player id", async () => {
+    seed(3);
+    db.rows[0].player = 50;
+    db.players.push({ codeHash: bonCodeHash("ABCD-EFGH-JKMN"), id: 50, name: "Berta" });
+    const text = await (await get("?period=all", { bon_player: "ABCD-EFGH-JKMN" })).text();
+    expect(text).not.toMatch(/identity|visitor|player|p:50|v:/);
+    for (let i = 0; i < 3; i++) expect(text).not.toContain(hashed(`v-${i}`));
   });
 });

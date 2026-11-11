@@ -8,6 +8,7 @@ import { visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";
 import { dealBatch, toPublic } from "@utils/bonDeck.ts";
 import { randomBytes } from "node:crypto";
+import { bonTag } from "payload-app/bon-ranking";
 
 const DAY = 24 * 60 * 60_000;
 
@@ -46,7 +47,15 @@ export const POST: APIRoute = async ({ cookies }) => {
       },
       depth: 0,
     });
-    return reply({ cards: cards.map((c, i) => toPublic(c, i)), token: game.token }, 200);
+    return reply(
+      {
+        cards: cards.map((c, i) => toPublic(c, i)),
+        // Same identity string as the ranking, so the HUD tag matches the leaderboard's.
+        tag: bonTag(player ? `p:${player.id}` : `v:${visitor}`),
+        token: game.token,
+      },
+      200,
+    );
   } catch (error) {
     console.error("[bon] start failed:", error);
     return reply({ error: "Die Karten wollten leider nich kommen." }, 502);
