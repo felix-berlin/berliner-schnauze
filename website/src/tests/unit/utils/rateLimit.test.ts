@@ -99,11 +99,14 @@ describe("rateLimit", () => {
     for (const path of ["/api/bon/player", "/api/bon/redeem"]) {
       const rule = rateLimitRule(path, "POST")!;
       expect(rule).toMatchObject({ max: 10, windowMs: 10 * 60_000 });
-      // /api/bon/player has its own GET rule (name lookup), redeem none.
-      if (path === "/api/bon/redeem") expect(rateLimitRule(path, "GET")).toBeUndefined();
       for (let i = 0; i < rule.max; i++) expect(rateLimited(`t-${path}`, rule, 0)).toBe(0);
       expect(rateLimited(`t-${path}`, rule, 0)).toBeGreaterThan(0);
     }
+  });
+
+  it("gives /api/bon/player a GET rule (name lookup) but /api/bon/redeem none", () => {
+    expect(rateLimitRule("/api/bon/player", "GET")).toBeDefined();
+    expect(rateLimitRule("/api/bon/redeem", "GET")).toBeUndefined();
   });
 
   it("limits bon name reports to 10 per 10 min on POST", () => {

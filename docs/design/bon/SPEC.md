@@ -13,6 +13,7 @@ Stand: 10. November 2026 · Design System „Berliner Schnauze“ v3.1
 | `BonGame.dc.html` | Start, Spiel, Rückmeldung, Ergebnis |
 | `BonLeaderboard.dc.html` | Rangliste |
 | `BonCode.dc.html` | Spielercode |
+| `BonName.dc.html` | Spielername anzeigen und ändern |
 | `Header.dc.html`, `Footer.dc.html` | Rahmen der Seite |
 
 Gemeinsame Klassen stehen in `ds/components/bundle.css` und sind im Design System dokumentiert (`ds/components-v3.md`).
@@ -114,6 +115,7 @@ Radius maximal `--radius-sm` (4px). Es gibt **keine Pillen** und keine runden Bu
 | `BonPlacement.vue` | – | `around[5]` (eigene Zeile + je 2 darüber und darunter) | Daten fehlen noch im Endpunkt, Abschnitt 14 |
 | `BonLeaderboard.vue` | `.c-section-card`, `.c-choice` | `period`, Seite | Abschnitt 11 |
 | `BonCode.vue` | `.c-section-card`, `.c-choice`, `.c-field`, `.c-state` | `mode` | Abschnitt 12; wird auf Start, Ergebnis und Rangliste eingebunden |
+| `BonName.vue` | `.c-textlink`, `.c-field`, `.c-choice`, `.c-state` | `name, tag` | Abschnitt 12b; auf Start (bekannte Spieler), Ergebnis und Rangliste |
 
 ---
 
@@ -124,8 +126,9 @@ Radius maximal `--radius-sm` (4px). Es gibt **keine Pillen** und keine runden Bu
 - `h1.c-band` „Berliner oder nicht?“ (mobil 2.25rem, Desktop 3.25rem)
 - `.t-em` „Echtes Berlinerisch – oder erfunden oder Hochdeutsch? Wisch oder tipp – du hast 3 Leben.“
   - **Abweichung (Umsetzung):** Der Text im Handoff lautete „Echtes Berlinerisch oder erfunden? …“. Der Pool hat zwei Kategorien ohne Berlinerisch (erfunden, Hochdeutsch).
-- **Namensfeld:**
-  - Label „Dein Name (optional)“
+- **Name:**
+  - **Bekannter Spieler** (Cookie mit Pseudonym vorhanden): statt des Felds die Zeile „Du spielst als {Name} · Namen ändern“ (Abschnitt 12b).
+  - **Neuer Spieler:** Feld mit Label „Dein Name (optional)“
   - `maxlength="24"`, Placeholder „Anonym“
   - Hinweis: „Steht neben deiner Platzierung. Leer jelassen = „Anonym“ mit Kennung, z. B. „Anonym #K7QX“. Max. 24 Zeichen.“
   - Der Name wird lokal vorbefüllt, wenn er schon einmal gesetzt war.
@@ -211,6 +214,7 @@ Radius maximal `--radius-sm` (4px). Es gibt **keine Pillen** und keine runden Bu
    - Badge `.c-badge--strong` „Neuer Rekord!“ mit Pokal-Icon, nur wenn der Score größer ist als der lokale Rekord.
    - `h1.c-band`: „Aus die Maus, {Name}!“, ohne Namen „Aus die Maus!“.
    - Darunter „Drei Fehler – dit Spiel is vorbei.“
+   - Darunter „Du spielst als {Name} · Namen ändern“ (Abschnitt 12b).
 2. **Kennzahlen** als `<dl>`, 2×2-Grid, `gap: .5rem`, Flächen `--surface-chip`:
 
    | Kennzahl | Wert | Zusatzzeile |
@@ -264,8 +268,8 @@ Radius maximal `--radius-sm` (4px). Es gibt **keine Pillen** und keine runden Bu
 - **Spalten:** Desktop Platz · Name · Treffer · Serie · Wann · Punkte (Grid `3.5rem 1fr 5rem 4rem 6.5rem 5rem`). Mobil Platz · Name mit Meta-Zeile „82 % · Serie 6“ · Punkte (`2.25rem 1fr auto`).
 - **Zeilen:** 56px hoch, gestrichelte Trenner. Plätze 1–3 mit größerer Platznummer in `--color-accent-text`. Die eigene Zeile hat einen 16 %-Wash, ein kleines oranges „du“ und `aria-current="true"`.
 - **Anonyme Spieler:** „Anonym“ + `#K7QX` (klein, muted). Die Kennung besteht aus 4 Zeichen und wird per Hash aus der Pseudonym-ID abgeleitet, damit sie stabil ist und die ID nicht verrät. Zeichensatz ohne 0/O/1/I/L.
-- **Mobil:** Top 10, dann „···“, dann die eigene Zeile mit je einem Nachbarn. Eine feste Leiste unten zeigt „{rank}. Du · {score} Punkte · von {total} · besser als {pct}“ + „Zu mir“.
-- **Desktop:** 25 Zeilen. Rechts die Karte „Dein Platz“ mit Platz groß, Punkte, Meta, „Zu mir springen“ und „Nochmal spielen“. Darunter der Hinweis: „Gezählt wird dein bestes Spiel im Zeitraum. Erkannt wirst du an einem Cookie auf diesem Jerät.“
+- **Mobil:** Die Karte „Dein Platz“ (mit Namen ändern) steht unter der Liste. Top 10, dann „···“, dann die eigene Zeile mit je einem Nachbarn. Eine feste Leiste unten zeigt „{rank}. Du · {score} Punkte · von {total} · besser als {pct}“ + „Zu mir“.
+- **Desktop:** 25 Zeilen. Rechts die Karte „Dein Platz“ mit Platz groß, Punkte, Meta, „Zu mir springen“ und „Nochmal spielen“. Darunter „Du spielst als {Name} · Namen ändern“ (Abschnitt 12b) und der Hinweis: „Gezählt wird dein bestes Spiel im Zeitraum. Erkannt wirst du an einem Cookie auf diesem Jerät.“
 - **Footer:** „Platz 1–{n} von {total}“ + „Mehr laden“ (25 pro Seite).
 - **Darunter:** „Namen sind frei jewählt. Anstößige Namen blenden wa aus. Namen melden“.
 
@@ -306,6 +310,39 @@ Format `4KQ9-ZTM2-XHRB`, ohne verwechselbare Zeichen. **Abweichung (Umsetzung):*
 **Link:** `…/games/berliner-oder-nicht#code=4KQ9-ZTM2-XHRB` (Handoff: `…/spiele/berliner-oder-nicht#code=BÄR-4KQ-9ZT-M2X`). Der Code steht im `#`-Teil und landet so nicht in Logs, Referrern oder Matomo. **Nach dem Einlösen** den Hash mit `history.replaceState` entfernen, damit er nicht im Verlauf, in Lesezeichen oder beim Teilen weiterwandert.
 
 ---
+
+## 12b. Spielername ändern
+
+Der Name gehört zum Spieler (Pseudonym), nicht zu einem einzelnen Spiel. Eine Änderung gilt deshalb auch für alle bisherigen Ergebnisse in der Rangliste.
+
+**Wo:** Start (nur bekannte Spieler), Ergebnis unter dem Titel und Rangliste in der Karte „Dein Platz“. Überall dieselbe Komponente.
+
+| Zustand | Inhalt |
+|---|---|
+| Anzeige | Zeile: „Du spielst als **{Name}**“, bei Anonymen „Du spielst als **Anonym** #K7QX“. Dazu Textlink „Namen ändern“ (`aria-expanded`) |
+| Bearbeiten | Klappt an Ort und Stelle auf, auf `--surface-chip`. Label „Dein Name“ + Zähler „{n} / 24“ (`aria-live="polite"`). Feld `maxlength="24"`, `autocomplete="nickname"`, vorbefüllt, Placeholder „Anonym“, Fokus ins Feld mit markiertem Text. Hinweis: „Gilt ooch für deine bisherigen Ergebnisse in der Rangliste. Leer jelassen = „Anonym #K7QX“.“ `.c-choice` „Speichern“ + Textlink „Abbrechen“ (auch Esc). Enter speichert |
+| Speichern | Button `aria-busy="true"`, Eingabe gesperrt |
+| Abgelehnt | Der Server-Filter lehnt den Namen ab: `aria-invalid`, `.c-state--error` „Der Name jeht so nich.“ / „Bitte keene Beleidigungen oder Schimpfwörter – versuch’s mit ’nem andern.“ Feld bleibt offen |
+| Netzfehler | „Ditt hat nich jeklappt.“ / „Dein Name is nich anjekommen. Versuch’s gleich nochmal.“, Button „Nochmal speichern“ |
+| Gespeichert | Zurück zur Anzeige mit „✓ Jespeichert“ (accent, 700, `role="status"`), verschwindet nach 3 s. HUD, Titel, „Hier stehste“ und Rangliste zeigen sofort den neuen Namen |
+
+**Regeln:**
+- Leerzeichen am Anfang und Ende entfernen. Leer → „Anonym“ mit Kennung.
+- Der Filter läuft serverseitig beim Speichern, genauso beim ersten Namen im Startfeld.
+- Gleiches Feld wie beim Start: max. 24 Zeichen.
+- Höchstens 5 Änderungen pro Identität in einem 24-Stunden-Fenster, gegen Rangliste-Spam. Bei Überschreitung (429): „Heute jenug umjetauft – morjen wieder.“
+- Alte Namen werden sofort ersetzt: alle Spiele der Identität (Besucher-Spiele, die schon ein Code-Spieler übernommen hat, ausgenommen), `bon-players.name` und die Rangliste (Cache wird verworfen).
+- Gemeldete Namen können geändert werden. Die Meldungen werden nur bei einer echten Änderung (ohne Groß-/Kleinschreibung und Leerzeichen am Rand) zurückgesetzt.
+
+**Abweichung (Umsetzung):**
+- Das Limit ist ein festes 24-Stunden-Fenster pro Identität (im Speicher), nicht „pro Tag“.
+- Zusätzlich zu `PATCH /api/bon/player` gibt es `GET /api/bon/player` → `{ name, tag }`; die Komponente braucht es, um bekannte Spieler zu erkennen und den aktuellen Namen zu zeigen.
+- `tag` liefern beide Routen immer, nicht nur für „Anonym“. Angezeigt wird `#Kennung` in der Zeile nur bei „Anonym“, der Hinweis im Editor nennt sie immer.
+- 422 gibt es auch für rechtsextreme Namen, dann ohne EXIT-Hinweis (der steht nur im Intro beim ersten Namen).
+- „Namen ändern“ hat statisch `aria-expanded="false"` und wird beim Bearbeiten durch den Editor ersetzt (wie im Mock).
+
+---
+
 
 ## 13. Animation und Motion
 
@@ -356,6 +393,7 @@ function vt(update: () => void, dir: string) {
 | Persönlicher Bestwert | **fehlt**. Bis dahin `localStorage` |
 | Spielercode: erzeugen, einlösen (Rate-Limit, z. B. 5 Versuche / 15 Min.), erneuern | in Arbeit |
 | Wertung | Annahme: pro Pseudonym zählt **das beste Spiel im Zeitraum** |
+| **Name ändern** `PATCH /api/bon/player { name }` → `{ name, tag }`; 400 ohne Cookie, 404 unbekannter Spieler, 422 bei Filter-Treffer, 429 bei Limit, 502 bei Serverfehler. Dazu `GET /api/bon/player` → `{ name, tag }` (**Abweichung (Umsetzung):** Zusatz) | **vorhanden** |
 | **Namen prüfen** | **Blocker vor dem Launch der Rangliste**: Namen werden dort öffentlich. Filter beim Speichern + „Namen melden“ |
 
 ---
@@ -386,6 +424,7 @@ function vt(update: () => void, dir: string) {
 5. **Standzeiten 900 / 2.500 ms:** Startwerte, nach Tests nachjustieren.
 6. **Teilen-Text** und Pfad der Rangliste bestätigen.
 7. ~~**Namensfilter:** Fertige Bibliothek oder eigene Liste?~~ **Entschieden:** Eigener Filter ohne Abhängigkeit (`payload/src/lib/bonNames.ts`): Teilstring-Treffer auf dem normalisierten Namen (Leetspeak, Leerzeichen, Umlaute), dazu eine Erlaubt-Liste echter Namen/Wörter (Marschall, Nazim, Thure …); Beleidigungen kuratiert aus LDNOOBWV2 `de.txt` (CC0). Rechtsextreme Parteien, Gruppen, Personen, Parolen und Zahlencodes (88, 1488, 14/88, 444, 168:1, 198, C18/AH18 …) sind als Name ausgeschlossen; ein blankes „18“ bleibt erlaubt (Alter). Bei rechtsextremen Namen zeigt das Intro einen Hinweis mit Link zu EXIT-Deutschland.
+8. ~~**Namen ändern:** Limit pro Tag (Vorschlag 5)? Sollen alte Namen in der Rangliste sofort ersetzt werden (Annahme: ja)?~~ **Entschieden:** 5 pro Identität in einem 24-Stunden-Fenster; alte Namen werden sofort ersetzt; gemeldete Namen können geändert werden (Meldungen zurück nur bei echter Änderung). **Abweichung (Umsetzung):** festes 24-Stunden-Fenster statt pro Tag, zusätzliche `GET`-Route, 422 auch für rechtsextreme Namen ohne EXIT-Hinweis.
 
 ---
 
@@ -398,6 +437,8 @@ bon-handoff/
 │   ├── BonGame.dc.html        ← Start, Spiel, Rückmeldung, Ergebnis (Prop start: intro|link|spiel|richtig|falsch|stapel|fehler|vorbei|vorbeiOhneRang|offline)
 │   ├── BonLeaderboard.dc.html ← Rangliste (Props size, me, status)
 │   ├── BonCode.dc.html        ← Spielercode (Prop start: zu|keinCode|code|qr|erneuern|erneuert|einloesen|falsch|gesperrt|wechseln|erfolg|link)
+│   ├── BonName.dc.html        ← Name anzeigen/ändern (Prop start: anzeigen|bearbeiten|abgelehnt|fehler|gespeichert)
+│   ├── BonName.dc.html        ← Name anzeigen/ändern (Prop start: anzeigen|bearbeiten|abgelehnt|fehler|gespeichert)
 │   └── Header.dc.html, Footer.dc.html
 └── ds/
     ├── components/bundle.css  ← DS v3.1
