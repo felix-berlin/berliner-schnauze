@@ -91,6 +91,12 @@ describe("BonLeaderboard", () => {
     expect(fetchMock).toHaveBeenCalledWith("week", 0, 25);
   });
 
+  it("uses the singular for one game", async () => {
+    const w = await mountBoard(reply({ entries: [entry(1)], total: 1 }));
+    expect(w.text()).toContain("1 Spiel · diese Woche");
+    expect(w.text()).not.toContain("1 Spiele");
+  });
+
   it("switching the period reloads from offset 0", async () => {
     const w = await mountBoard();
     await w.findAll(".c-choice")[1]!.trigger("click");

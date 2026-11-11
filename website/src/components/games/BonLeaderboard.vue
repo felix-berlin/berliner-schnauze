@@ -283,7 +283,9 @@ const current = computed(() => PERIODS.find((p) => p.id === period.value)!);
 const periodTitle = computed(() => `Rangliste ${current.value.label}`);
 const totalLabel = computed(() => {
   if (status.value !== "ready") return "";
-  return total.value ? `${fmt(total.value)} Spiele · ${current.value.meta}` : "Noch keene Spiele";
+  return total.value
+    ? `${fmt(total.value)} ${total.value === 1 ? "Spiel" : "Spiele"} · ${current.value.meta}`
+    : "Noch keene Spiele";
 });
 const betterThan = computed(
   () => `${me.value ? Math.round(((total.value - me.value.rank) / total.value) * 100) : 0} %`,
