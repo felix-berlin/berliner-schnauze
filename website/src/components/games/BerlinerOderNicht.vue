@@ -80,7 +80,6 @@
       </div>
 
       <template v-else-if="view === 'over'">
-        <ConfettiEffect v-if="score > previousHighScore" />
         <BonResult
           :result="result"
           :history="history"
@@ -97,7 +96,6 @@
 </template>
 
 <script setup lang="ts">
-import ConfettiEffect from "@components/ConfettiEffect.vue";
 import BonCard from "@components/games/BonCard.vue";
 import BonFeedback from "@components/games/BonFeedback.vue";
 import BonHUD from "@components/games/BonHUD.vue";

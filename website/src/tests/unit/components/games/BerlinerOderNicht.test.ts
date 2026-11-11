@@ -61,7 +61,6 @@ vi.mock("@vueuse/core", async (importOriginal) => ({
 vi.mock("@components/games/BonPlayerCode.vue", () => ({
   default: { template: "<section class='mock-code' />" },
 }));
-vi.mock("@components/ConfettiEffect.vue", () => ({ default: { template: "<i />" } }));
 vi.mock("@components/games/BonHUD.vue", () => ({
   default: { props: ["playerLabel"], template: "<div class='mock-hud'>{{ playerLabel }}</div>" },
 }));
