@@ -103,7 +103,7 @@ test.describe("Berliner oder nicht (/games/berliner-oder-nicht)", () => {
     await expect(page).toHaveURL(new RegExp(`${LEADERBOARD}$`));
     await expect(page.getByRole("heading", { level: 1, name: "Rangliste" })).toBeVisible();
     await expect(page.locator('[aria-current="true"]')).toBeVisible();
-    await expect(page.getByText("E2E Kalle").first()).toBeVisible();
+    await expect(page.locator('[aria-current="true"]').getByText("E2E Kalle")).toBeVisible();
 
     await page.getByRole("button", { name: "Allzeit" }).click();
     await expect(page.getByRole("button", { name: "Allzeit" })).toHaveAttribute(

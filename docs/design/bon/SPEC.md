@@ -2,7 +2,7 @@
 
 > Verbindliche Spec für die Umsetzung. Stellen, die von der Handoff-Fassung abweichen, sind mit **Abweichung (Umsetzung):** markiert.
 
-Stand: 10. November 2026 · Design System „Berliner Schnauze“ v3.1
+Stand: 11. November 2026 · Design System „Berliner Schnauze“ v3.1
 
 **Boards:** Canvas „Wortseite vereinheitlichen“, Seite **„v3 · Berliner oder nicht?“**.
 
@@ -437,7 +437,6 @@ bon-handoff/
 │   ├── BonGame.dc.html        ← Start, Spiel, Rückmeldung, Ergebnis (Prop start: intro|link|spiel|richtig|falsch|stapel|fehler|vorbei|vorbeiOhneRang|offline)
 │   ├── BonLeaderboard.dc.html ← Rangliste (Props size, me, status)
 │   ├── BonCode.dc.html        ← Spielercode (Prop start: zu|keinCode|code|qr|erneuern|erneuert|einloesen|falsch|gesperrt|wechseln|erfolg|link)
-│   ├── BonName.dc.html        ← Name anzeigen/ändern (Prop start: anzeigen|bearbeiten|abgelehnt|fehler|gespeichert)
 │   ├── BonName.dc.html        ← Name anzeigen/ändern (Prop start: anzeigen|bearbeiten|abgelehnt|fehler|gespeichert)
 │   └── Header.dc.html, Footer.dc.html
 └── ds/
