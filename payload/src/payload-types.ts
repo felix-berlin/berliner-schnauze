@@ -701,7 +701,7 @@ export interface BonGame {
   token: string;
   status: 'playing' | 'finished';
   /**
-   * { id, word, isReal, translation? }[] in dealt order
+   * { id, word, isReal, translation?, slug?, category?, answer?, answeredAt? }[] in dealt order; answer and answeredAt are set by the answer route
    */
   cards:
     | {
