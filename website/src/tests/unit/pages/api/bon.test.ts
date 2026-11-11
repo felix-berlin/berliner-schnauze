@@ -556,6 +556,17 @@ describe("POST /api/bon/finish", () => {
     expect(row(token).playerName).toBe("Anonym");
   });
 
+  it.each(["Anna.Berlin", "http://x", "www.x.de", "evil.com"])(
+    "stores Anonym for %s, a name that reads as a link, instead of refusing the finish",
+    async (playerName) => {
+      const { token } = await newGame("v-1");
+      await play(token, 4);
+      later(60_000);
+      expect((await finish({ playerName, token }, "v-1")).status).toBe(200);
+      expect(row(token).playerName).toBe("Anonym");
+    },
+  );
+
   it("scores a 12-right-then-3-wrong run, stores it and ranks it first", async () => {
     const { token } = await newGame("v-1");
     await play(token, 12);
@@ -718,9 +729,6 @@ describe("POST /api/bon/finish", () => {
   });
 
   it.each([
-    ["a link", "http://x"],
-    ["www.", "www.x.de"],
-    ["a bare domain", "evil.com"],
     ["10 000 chars", "a".repeat(10_000)],
     ["25 chars", "a".repeat(25)],
   ])("400 on a playerName with %s", async (_, playerName) => {

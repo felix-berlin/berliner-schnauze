@@ -16,8 +16,8 @@ export const finishSchema = z.strictObject({
     .string()
     .trim()
     .max(24)
-    .refine((v) => !containsLink(v), "no links")
     .optional()
-    .transform((v) => cleanName(v || "Anonym")),
+    // A name that reads as a link ("Anna.Berlin") counts as no name; refusing it would lose the whole result.
+    .transform((v) => cleanName(!v || containsLink(v) ? "Anonym" : v)),
   token,
 });

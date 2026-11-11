@@ -12,8 +12,10 @@ export function accuracyPercent(correctAnswers: number, totalAnswered: number): 
   return totalAnswered > 0 ? Math.round((correctAnswers / totalAnswered) * 100) : 0;
 }
 
+// UTF-8 bytes, so names outside Latin-1 ("Łukasz") encode; btoa alone throws on them.
 function toBase64Url(str: string): string {
-  return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const bytes = String.fromCodePoint(...new TextEncoder().encode(str));
+  return btoa(bytes).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
 function fromBase64Url(str: string): string {
@@ -21,7 +23,14 @@ function fromBase64Url(str: string): string {
     .replace(/-/g, "+")
     .replace(/_/g, "/")
     .padEnd(str.length + ((4 - (str.length % 4)) % 4), "=");
-  return atob(padded);
+  const bytes = atob(padded);
+  try {
+    return new TextDecoder("utf-8", { fatal: true }).decode(
+      Uint8Array.from(bytes, (c) => c.charCodeAt(0)),
+    );
+  } catch {
+    return bytes; // an old link: btoa of the Latin-1 string itself
+  }
 }
 
 export function encodeShareHash(payload: BonSharePayload): string {
