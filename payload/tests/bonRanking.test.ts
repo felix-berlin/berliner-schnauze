@@ -91,7 +91,7 @@ describe("rankGames", () => {
   it("orders a full tie (score and finishedAt) by id, whatever the input order", () => {
     const tied = [3, 1, 2].map((id) => game({ id, identity: `p${id}` }));
     expect(rankGames(tied).map((e) => e.id)).toEqual([1, 2, 3]);
-    expect(rankGames(tied.toReversed()).map((e) => e.id)).toEqual([1, 2, 3]);
+    expect(rankGames([...tied].reverse()).map((e) => e.id)).toEqual([1, 2, 3]);
   });
 
   it("rounds accuracy and survives zero answers", () => {
