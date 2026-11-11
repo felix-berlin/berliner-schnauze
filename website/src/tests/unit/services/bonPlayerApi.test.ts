@@ -1,7 +1,3 @@
-// @vitest-environment jsdom
-import { $bonStats } from "@stores/bonStats";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-
 import {
   applyPlayerStats,
   createPlayerCode,
@@ -12,6 +8,9 @@ import {
   renamePlayer,
   takeRedeemCode,
 } from "@services/bonPlayerApi.ts";
+// @vitest-environment jsdom
+import { $bonStats } from "@stores/bonStats";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const respond = (body: unknown, status = 200) =>
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify(body), { status })));
@@ -42,7 +41,9 @@ describe("applyPlayerStats", () => {
 
 describe("playerLink / takeRedeemCode", () => {
   it("puts the code into the fragment", () => {
-    expect(playerLink("K7QD-M2X9-ZT4B")).toContain("/games/berliner-oder-nicht#code=K7QD-M2X9-ZT4B");
+    expect(playerLink("K7QD-M2X9-ZT4B")).toContain(
+      "/games/berliner-oder-nicht#code=K7QD-M2X9-ZT4B",
+    );
   });
 
   it("returns the stored code once", () => {

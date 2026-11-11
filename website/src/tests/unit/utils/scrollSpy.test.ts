@@ -228,7 +228,9 @@ describe("rootMarginBelowHeader", () => {
   it("keeps a band of at least 60px on a landscape phone (390px high)", () => {
     height(390);
     document.documentElement.style.setProperty("--site-header-height", "60px");
-    const [top, , bottom] = rootMarginBelowHeader(64).split(" ").map((v) => parseInt(v, 10));
+    const [top, , bottom] = rootMarginBelowHeader(64)
+      .split(" ")
+      .map((v) => parseInt(v, 10));
     expect(390 + top + bottom).toBe(60); // top and bottom are negative
     // the plain 70% bottom would have left a negative band: 390 - 124 - 273
     expect(bottom).toBe(-206);

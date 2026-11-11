@@ -20,13 +20,18 @@ export interface WordImage {
 
 /** Unwraps a single paragraph so the credit fits inline after "Foto: ". */
 const inline = (html: string): string =>
-  html.startsWith("<p>") && html.endsWith("</p>") && !html.includes("<p", 1) ? html.slice(3, -4) : html;
+  html.startsWith("<p>") && html.endsWith("</p>") && !html.includes("<p", 1)
+    ? html.slice(3, -4)
+    : html;
 
 /**
  * The CMS has no credit field: like the old gallery, the media description carries the attribution and the caption is
  * the fallback (some captions read "Credit: Name"). Neither → no credit, the page then shows no "Foto:" line.
  */
-const creditOf = ({ caption, descriptionHtml }: Pick<SiteMedia, "caption" | "descriptionHtml">): string | null => {
+const creditOf = ({
+  caption,
+  descriptionHtml,
+}: Pick<SiteMedia, "caption" | "descriptionHtml">): string | null => {
   if (descriptionHtml) return inline(descriptionHtml);
   const text = caption?.replace(/^credit:\s*/i, "").trim();
   return text ? escapeHtml(text) : null;

@@ -34,7 +34,9 @@ export const buildTrends = (
   ranked.slice(0, TREND_TOP).forEach(({ word, views }, i) => {
     const own = rows.filter((r) => r.word === word);
     const bars = last7.map((d) => own.find((r) => r.day === d)?.views ?? 0);
-    const previous = own.filter((r) => r.day < first && r.day >= prevFirst).reduce((sum, r) => sum + r.views, 0);
+    const previous = own
+      .filter((r) => r.day < first && r.day >= prevFirst)
+      .reduce((sum, r) => sum + r.views, 0);
     result.set(word, { bars, change: percentChange(views, previous), rank: i + 1, views });
   });
   return result;

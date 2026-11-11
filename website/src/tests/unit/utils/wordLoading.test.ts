@@ -4,7 +4,10 @@ import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 const navigate = (pathname: string, extra: object = {}) =>
   document.dispatchEvent(
-    Object.assign(new Event("astro:before-preparation"), { to: new URL(pathname, "http://x"), ...extra }),
+    Object.assign(new Event("astro:before-preparation"), {
+      to: new URL(pathname, "http://x"),
+      ...extra,
+    }),
   );
 const skeleton = () => document.querySelector('[aria-label="Wort wird jeladen"]');
 

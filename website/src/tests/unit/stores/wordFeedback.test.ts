@@ -235,7 +235,9 @@ describe("sendFeedback", () => {
     expect(await sendFeedback(1, { usage: "say" }, { silent: true })).toBe(false);
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({ json: async () => ({ error: "Zu oft." }), ok: false, status: 429 }),
+      vi
+        .fn()
+        .mockResolvedValue({ json: async () => ({ error: "Zu oft." }), ok: false, status: 429 }),
     );
     expect(await sendFeedback(1, { usage: "say" }, { silent: true })).toBe(false);
     expect(toast).not.toHaveBeenCalled();
