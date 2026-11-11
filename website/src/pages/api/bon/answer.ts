@@ -1,3 +1,5 @@
+import type { AnswerReply } from "@services/bonGameApi.ts";
+import type { DealtCard } from "@utils/bonDeck.ts";
 import type { APIRoute } from "astro";
 
 import { busyGames, findGame, wrongAnswers } from "@services/bonGame.ts";
@@ -23,34 +25,39 @@ export const POST: APIRoute = async ({ request }) => {
     if (game?.status !== "playing") return reply(NOT_FOUND, 404);
 
     const { cards } = game;
-    const position = cards.findIndex((c) => c.answer === undefined);
+    const open = cards.findIndex((c) => c.answer === undefined);
+    const position = open < 0 ? cards.length : open;
+    const replied = (dealt: DealtCard, wrong: number) =>
+      reply(
+        {
+          category: dealt.category,
+          correct: dealt.answer === dealt.isReal,
+          gameOver: LIVES - wrong === 0,
+          isReal: dealt.isReal,
+          lives: LIVES - wrong,
+          slug: dealt.slug,
+          translation: dealt.translation,
+        } satisfies AnswerReply,
+        200,
+      );
+    // A lost reply is asked for again: the same guess for the last answered card gets the same reply, nothing stored.
+    const last = cards[position - 1];
+    if (last && String(position - 1) === card && last.answer === real)
+      return replied(last, wrongAnswers(cards));
+
     const wrongBefore = wrongAnswers(cards);
-    if (position < 0 || String(position) !== card || wrongBefore >= LIVES)
+    if (open < 0 || String(position) !== card || wrongBefore >= LIVES)
       return reply(WRONG_CARD, 409);
 
-    const dealt = cards[position];
-    const correct = real === dealt.isReal;
+    const answered = { ...cards[position], answer: real, answeredAt: Date.now() };
+    const stored = cards.with(position, answered);
     await payload.update({
       collection: "bon-games",
-      data: {
-        cards: cards.with(position, { ...dealt, answer: real, answeredAt: Date.now() }),
-      },
+      data: { cards: stored },
       depth: 0,
       id: game.id,
     });
-    const lives = LIVES - wrongBefore - (correct ? 0 : 1);
-    return reply(
-      {
-        category: dealt.category,
-        correct,
-        gameOver: lives === 0,
-        isReal: dealt.isReal,
-        lives,
-        slug: dealt.slug,
-        translation: dealt.translation,
-      },
-      200,
-    );
+    return replied(answered, wrongAnswers(stored));
   } catch (error) {
     console.error("[bon] answer failed:", error);
     return reply({ error: "Die Antwort wollte leider nich ankommen." }, 502);

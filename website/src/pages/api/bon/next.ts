@@ -22,6 +22,11 @@ export const POST: APIRoute = async ({ request }) => {
     const game = await findGame(payload, token);
     if (game?.status !== "playing") return reply({ error: "Spiel nich jefunden." }, 404);
     if (wrongAnswers(game.cards) >= LIVES) return reply({ error: "Dett Spiel is vorbei." }, 409);
+    // A lost reply is asked for again: while none of the newest batch is answered, return it instead of dealing past it.
+    const newest = game.batches.at(-1);
+    const open = newest ? game.cards.slice(newest.start) : [];
+    if (game.batches.length > 1 && open.length > 0 && open.every((c) => c.answer === undefined))
+      return reply({ cards: open.map((c, i) => toPublic(c, newest!.start + i)) }, 200);
     if (game.batches.length >= MAX_BATCHES)
       return reply({ error: "Jenug Karten für een Spiel." }, 400);
 

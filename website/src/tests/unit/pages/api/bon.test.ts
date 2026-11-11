@@ -135,9 +135,8 @@ vi.mock("@services/cache.ts", () => ({ ttl: (_ms: number, load: () => unknown) =
 import type { DealtCard } from "@utils/bonDeck.ts";
 import type { APIContext } from "astro";
 
-import { invalidateRanking } from "@services/bonRanking.ts";
-
 import { bonCodeHash } from "@services/bonPlayer.ts";
+import { invalidateRanking } from "@services/bonRanking.ts";
 import { createHash } from "node:crypto";
 
 import { POST as ANSWER } from "@/pages/api/bon/answer.ts";
@@ -322,7 +321,28 @@ describe("POST /api/bon/next", () => {
   it("finds the game by token alone, cookie or not", async () => {
     const { token } = await newGame("v-1");
     expect((await next(token)).status).toBe(200);
+    await play(token, 21, 0); // card 20 is in the new batch, so the next call deals again
     expect((await next(token, "v-2")).status).toBe(200);
+    expect(dealt(token)).toHaveLength(60);
+  });
+
+  it("a lost reply: asked again before any card of the new batch is answered, it returns that batch", async () => {
+    const { token } = await newGame("v-1");
+    await play(token, 15, 0); // the client prefetches at card 15
+    const lost = (await (await next(token)).json()) as { cards: unknown[] };
+    const again = await next(token);
+    expect(again.status).toBe(200);
+    const text = await again.clone().text();
+    expect(text).not.toContain("isReal");
+    expect(await again.json()).toEqual(lost);
+    expect(dealt(token)).toHaveLength(40);
+    expect(row(token).batches).toHaveLength(2);
+    // the client goes on to card 20, the open position
+    for (let i = 15; i <= 20; i++)
+      expect((await answer({ card: String(i), real: dealt(token)[i].isReal, token })).status).toBe(
+        200,
+      );
+    expect((await next(token)).status).toBe(200);
     expect(dealt(token)).toHaveLength(60);
   });
 
@@ -400,8 +420,32 @@ describe("POST /api/bon/answer", () => {
     const { token } = await newGame("v-1");
     expect((await answer({ card: "1", real: true, token })).status).toBe(409);
     expect((await answer({ card: "0", real: right(token, 0), token })).status).toBe(200);
-    expect((await answer({ card: "0", real: right(token, 0), token })).status).toBe(409);
+    expect((await answer({ card: "0", real: !right(token, 0), token })).status).toBe(409);
     expect((await answer({ card: "1", real: right(token, 1), token })).status).toBe(200);
+    expect((await answer({ card: "0", real: right(token, 0), token })).status).toBe(409); // not the last
+  });
+
+  it("a lost reply: the same guess for the last answered card gets the same reply, stored once", async () => {
+    const { token } = await newGame("v-1");
+    const body = { card: "0", real: !right(token, 0), token };
+    const lost = await (await answer(body)).json();
+    const stored = structuredClone(dealt(token)[0]);
+    later(5_000);
+    const again = await answer(body);
+    expect(again.status).toBe(200);
+    expect(await again.json()).toEqual(lost);
+    expect(dealt(token)[0]).toEqual(stored); // answeredAt unchanged
+    expect(dealt(token)[1].answer).toBeUndefined();
+    expect((await answer({ card: "1", real: right(token, 1), token })).status).toBe(200);
+  });
+
+  it("a lost reply to the third mistake still replays gameOver", async () => {
+    const { token } = await newGame("v-1");
+    await play(token, 0, 2);
+    const body = { card: "2", real: !right(token, 2), token };
+    const lost = await (await answer(body)).json();
+    expect(lost).toMatchObject({ gameOver: true, lives: 0 });
+    expect(await (await answer(body)).json()).toEqual(lost);
   });
 
   it("rejects after the third wrong answer, gameOver on the third", async () => {
