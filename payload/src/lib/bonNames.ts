@@ -7,7 +7,7 @@ export const NAME_REPORT_LIMIT = 3;
 // INSULTS and FAR_RIGHT (substrings) match anywhere ("Arschloch", "Nazi123", "xXNaziXx"); ALLOWED real names/words that contain one are removed
 // first ("Marschall", "Nazim"). FAR_RIGHT_WHOLE entries are too short or too common to match inside a name and only match a whole
 // normalized word, a letters-only word ("AfD2025") or the whole collapsed name ("A f D", "SS"); "heil" only the whole name
-// ("Hubertus Heil" is a name). FAR_RIGHT_CODES run on the prepped name, also with a run of single digits merged ("8 8", "8.8"), and 1488/444 also with any separators between digits removed ("148 8", "4 44").
+// or right before a HEIL_TARGETS word ("Hubertus Heil", "Heil, Hubertus" are names). FAR_RIGHT_CODES run on the prepped name, also with a run of single digits merged ("8 8", "8.8"), and 1488/444 also with any separators between digits removed ("148 8", "4 44").
 // Insults: curated from de.txt of LDNOOBWV2 (https://github.com/LDNOOBWV2/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words_V2,
 // CC0 1.0); dropped what is no insult or hits names/words by substring (horst, homo, depp, möse, titte, schwanz ...).
 // Far-right: parties, groups, persons and codes (rule: bon-redesign SPEC §16). A bare 18 is an age and stays allowed.
@@ -154,6 +154,35 @@ const FAR_RIGHT_WHOLE = new Set([
   "dereweg",
   "deriiiweg",
 ]);
+// What makes "Heil" a salute when it comes right after it (any separators): "Heil Adolf", "Heil;AH", "Heil Höcke", "Heil dir".
+// Whole words only, so "Heil Dirk" or "Heil Ahmed" stay names. 88 and 18 are compared as digits.
+const HEIL_TARGETS = new Set([
+  "adolf",
+  "hitler",
+  "ah",
+  "hh",
+  "deutschland",
+  "deutsches",
+  "deutsche",
+  "reich",
+  "germania",
+  "germanien",
+  "wotan",
+  "odin",
+  "hocke",
+  "hoecke",
+  "fuhrer",
+  "fuehrer",
+  "mir",
+  "dir",
+  "euch",
+  "sieg",
+  "vaterland",
+  "volk",
+  "ss",
+  "88",
+  "18",
+]);
 const CODE_1488 = /(?<!\d)1488(?!\d)/;
 const CODE_444 = /(?<!\d)444(?!\d)/;
 // Number codes and codes with a letter prefix, on the raw name. Digits next to a digit never match (1988).
@@ -232,10 +261,8 @@ export const nameCategory = (raw: string): NameCategory | undefined => {
   // Without leet, so "AfD2025" and "NPDler" yield afd/npd; two-letter codes only as real words ("Sh1ne").
   const letters = name.split(/[^\p{L}]+/u).filter((w) => w.length > 2);
   // Split at anything but letters and digits, so "Heil,Adolf" or "Heil(Adolf)" count as two words.
-  const tokens = name
-    .split(/[^\p{L}\d]+/u)
-    .map(normalize)
-    .filter(Boolean);
+  const tokens = name.split(/[^\p{L}\d]+/u).filter(Boolean);
+  const heilTarget = (t = "") => HEIL_TARGETS.has(t) || HEIL_TARGETS.has(normalize(t));
   // A run of single digits with separators between them, not touching another digit group on either side ("8.8", "1 4 8 8"; not "1 98", "8.8.1990").
   const codes = [
     name,
@@ -255,8 +282,12 @@ export const nameCategory = (raw: string): NameCategory | undefined => {
     FAR_RIGHT.some((w) => rest.includes(w)) ||
     FAR_RIGHT_WHOLE.has(whole) ||
     [...words, ...letters].some((w) => w !== "heil" && FAR_RIGHT_WHOLE.has(w)) ||
-    // "Hubertus Heil" passes, "Heil Adolf" does not
-    [words, tokens].some((ws) => ws.slice(0, -1).includes("heil")) ||
+    // "Heil Adolf" and "HeilDeutschland" are caught, "Hubertus Heil" and "Heilmann" pass
+    tokens.some((t, i) =>
+      normalize(t) === "heil"
+        ? heilTarget(tokens[i + 1])
+        : normalize(t).startsWith("heil") && heilTarget(t.slice(4)),
+    ) ||
     letters.some((w) => w.startsWith("npd"))
   )
     return "far-right";

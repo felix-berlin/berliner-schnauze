@@ -219,6 +219,57 @@ describe("isOffensiveName bypasses and false positives", () => {
   });
 });
 
+describe("Heil", () => {
+  it("passes Heil as part of a real name", () => {
+    for (const n of [
+      "Hubertus Heil.",
+      "Anna Heil 2",
+      "Heil, Hubertus",
+      "Anna Heil (Mitte)",
+      "Familie Heil & Co",
+      "Heil's Bude",
+      "Heilmann",
+      "Hubertus Heil",
+      "Heil Dirk",
+      "Heil Mirko",
+      "Heil Ahmed",
+    ])
+      expect([n, nameCategory(n)]).toEqual([n, undefined]);
+  });
+
+  it("catches Heil alone or before a far-right target", () => {
+    for (const n of [
+      "Heil",
+      "Heil!",
+      "Heil Hitler",
+      "Sieg Heil",
+      "Siegheil",
+      "Heil Adolf",
+      "Heil,Adolf",
+      "Heil!Adolf",
+      "Heil+Adolf",
+      "Heil|Adolf",
+      "Heil(Adolf)",
+      "Heil;AH",
+      "HeilAdolf",
+      "HeilㅤAdolf",
+      "Heil⠀Adolf",
+      "Heil Deutschland",
+      "Heil Höcke",
+      "Heil Reich",
+      "Heil Germania",
+      "Heil Wotan",
+      "H e i l Adolf",
+      "HeilDeutschland",
+      "H3il Reich",
+      "Heil Führer",
+      "Heil dir",
+      "Heil 18",
+    ])
+      expect([n, nameCategory(n)]).toEqual([n, "far-right"]);
+  });
+});
+
 describe("nameCategory", () => {
   it("tells far-right from other insults, far-right first", () => {
     expect(nameCategory("Heil Hitler")).toBe("far-right");
