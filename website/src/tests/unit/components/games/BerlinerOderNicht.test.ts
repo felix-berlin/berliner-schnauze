@@ -46,6 +46,7 @@ vi.mock("@composables/useBon", () => ({
     stack,
     start: mockStart,
     streak: ref(0),
+    tag: ref("K7QX"),
   }),
 }));
 
@@ -285,10 +286,15 @@ describe("BerlinerOderNicht", () => {
     });
     afterEach(() => vi.useRealTimers());
 
-    it("labels the player, falling back to Anonym", async () => {
-      expect(mount(BerlinerOderNicht).find(".mock-hud").text()).toBe("Anonym");
+    it("labels the player with the name, else Anonym and the tag", async () => {
+      expect(mount(BerlinerOderNicht).find(".mock-hud").text()).toBe("Anonym #K7QX");
       $bonStats.setKey("playerName", "Berta");
       expect(mount(BerlinerOderNicht).find(".mock-hud").text()).toBe("Berta");
+    });
+
+    it("hides an offensive local name in the label", async () => {
+      $bonStats.setKey("playerName", "Heil Hitler");
+      expect(mount(BerlinerOderNicht).find(".mock-hud").text()).toBe("Anonym #K7QX");
     });
 
     it("hints the swipe on the very first card until the intro is seen", () => {

@@ -21,7 +21,7 @@ export type FinishResult = {
   totalGames?: number;
 };
 
-export const startRun = (): Promise<{ token: string; cards: PublicCard[] }> =>
+export const startRun = (): Promise<{ token: string; cards: PublicCard[]; tag: string }> =>
   post("/api/bon/start");
 
 export const nextCards = async (token: string): Promise<PublicCard[]> =>

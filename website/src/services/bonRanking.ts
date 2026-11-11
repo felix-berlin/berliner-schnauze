@@ -53,8 +53,15 @@ const load = (period: Period) => async (): Promise<RankedEntry[]> => {
   );
 };
 
-const caches = Object.fromEntries(
-  (["week", "month", "all"] as const).map((p) => [p, ttl(60_000, load(p))]),
-) as Record<Period, () => Promise<RankedEntry[]>>;
+const makeCaches = () =>
+  Object.fromEntries(
+    (["week", "month", "all"] as const).map((p) => [p, ttl(60_000, load(p))]),
+  ) as Record<Period, () => Promise<RankedEntry[]>>;
+let caches = makeCaches();
 
 export const loadRanking = (period: Period) => caches[period]();
+
+/** A finished game must show up in the very next ranking read, not 60 s later. */
+export const invalidateRanking = () => {
+  caches = makeCaches();
+};

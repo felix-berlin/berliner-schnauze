@@ -23,7 +23,7 @@
           :score="score"
           :streak="streak"
           :multiplier="multiplier"
-          :player-label="stats.playerName || 'Anonym'"
+          :player-label="playerLabel"
         />
         <BonCard
           v-if="card"
@@ -109,7 +109,8 @@ import { hasRedeemCode } from "@services/bonPlayerApi.ts";
 import { $bonStats } from "@stores/bonStats";
 import { useEventListener, useOnline, useTimeoutFn, useVibrate } from "@vueuse/core";
 import AlertIcon from "virtual:icons/lucide/circle-alert";
-import { ref, watch } from "vue";
+import { cleanName } from "payload-app/bon-names";
+import { computed, ref, watch } from "vue";
 
 const {
   advance,
@@ -132,9 +133,15 @@ const {
   stack,
   start,
   streak,
+  tag,
 } = useBon();
 
 const stats = useStore($bonStats);
+// An offensive local name must not show up here either; nameless players are told apart by the tag.
+const playerLabel = computed(() => {
+  const name = cleanName(stats.value.playerName.trim());
+  return name && name !== "Anonym" ? name : `Anonym${tag.value ? ` #${tag.value}` : ""}`;
+});
 const isOnline = useOnline();
 // Peeked, not taken: BonPlayerCode inside the intro redeems the code itself.
 const linkRedeem = hasRedeemCode();

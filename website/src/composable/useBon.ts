@@ -43,6 +43,8 @@ export function useBon() {
   const last = ref<RoundEntry | null>(null);
   const result = ref<FinishResult | undefined>();
   const endedEarly = ref(false);
+  // The 4-character suffix of the nameless "Anonym #TAG", as the leaderboard shows it.
+  const tag = ref("");
   const previousHighScore = ref(0);
   // The loading phase also covers finishing a run; the screen words the two differently.
   const finishing = ref(false);
@@ -117,6 +119,7 @@ export function useBon() {
       if (g !== gen) return;
       if (run.cards.length === 0) throw new Error("empty stack");
       token = run.token;
+      tag.value = run.tag;
       cards = run.cards;
       stack.value = 1;
       showCard(1);
@@ -254,5 +257,6 @@ export function useBon() {
     stack,
     start,
     streak,
+    tag,
   };
 }

@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 
 import { bonVisitor, busyGames, findGame } from "@services/bonGame.ts";
+import { invalidateRanking } from "@services/bonRanking.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";
@@ -52,6 +53,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
     });
     if (errors.length > 0) throw new Error(`update failed: ${errors[0].message}`);
     if (docs.length === 0) return reply(DONE, 409);
+    invalidateRanking();
 
     // The name follows the player's latest game; a failure must not hide the stored result.
     // A game without a name must not replace a name the player already chose.

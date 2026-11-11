@@ -55,6 +55,8 @@
 
       <p class="t-small">Dein Rekord: {{ record }} Punkte · gespeichert auf diesem Jerät</p>
 
+      <BonPlacement v-if="around" :around="around" />
+
       <BonPlayerCode />
     </div>
 
@@ -107,8 +109,11 @@
 import type { RoundEntry } from "@composables/useBon";
 import type { FinishResult } from "@services/bonGameApi";
 
+import BonPlacement from "@components/games/BonPlacement.vue";
 import BonPlayerCode from "@components/games/BonPlayerCode.vue";
 import { computeMultiplier } from "@composables/useBon";
+import { fetchLeaderboard } from "@services/bonLeaderboardApi";
+import type { PublicEntry } from "@services/bonLeaderboardApi";
 import { trackEvent } from "@utils/analytics";
 import { cleanName } from "payload-app/bon-names";
 import { accuracyPercent, buildShareUrl } from "@utils/bonShare";
@@ -135,6 +140,18 @@ const copied = ref(false);
 
 // Moving focus to the heading makes screen readers announce the result.
 onMounted(() => nextTick(() => titleRef.value?.focus()));
+
+// Without a rank (no cookie, failed finish) or when the call fails, the whole block stays out.
+const around = ref<PublicEntry[]>();
+onMounted(async () => {
+  if (!props.result?.rank) return;
+  try {
+    const data = await fetchLeaderboard("week", 0, 0);
+    if (data?.me?.around.some((e) => e.isMe)) around.value = data.me.around;
+  } catch {
+    // The result is complete without it.
+  }
+});
 
 const isRecord = computed(() => props.score > props.previousHighScore);
 // $bonStats only catches up after the phase flips, so the new record is derived here.

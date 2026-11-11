@@ -142,6 +142,8 @@
       background: color-mix(in srgb, var(--orange-500) 16%, transparent);
       border-radius: var(--radius-sm);
       border-block-start-color: transparent;
+      // Target of the morph from "Hier stehste" on the result.
+      view-transition-name: bon-me;
     }
 
     li:has(+ li > &--me) > & {
@@ -253,6 +255,11 @@
 
     .c-skeleton {
       block-size: 1rem;
+    }
+
+    // Landing spot of the morph from the result while the rows load (the own row takes the name over).
+    &:first-child {
+      view-transition-name: bon-me;
     }
   }
 
@@ -371,5 +378,12 @@
   &__sticky-jump {
     margin-inline-start: auto;
     white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(bon-me) {
+    animation-duration: 500ms;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 }

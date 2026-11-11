@@ -124,12 +124,18 @@ vi.mock("@services/payload.ts", async (importOriginal) => ({
   ...(await importOriginal<object>()),
   getPayloadClient: async () => db.api,
 }));
+vi.mock("@services/bonRanking.ts", async (importOriginal) => {
+  const real = await importOriginal<typeof import("@services/bonRanking.ts")>();
+  return { ...real, invalidateRanking: vi.fn(real.invalidateRanking) };
+});
 vi.mock("@services/bonPool.ts", () => ({ loadPool: pool.loadPool }));
 // The ranking's 60 s cache would carry rows from one test into the next.
 vi.mock("@services/cache.ts", () => ({ ttl: (_ms: number, load: () => unknown) => load }));
 
 import type { DealtCard } from "@utils/bonDeck.ts";
 import type { APIContext } from "astro";
+
+import { invalidateRanking } from "@services/bonRanking.ts";
 
 import { bonCodeHash } from "@services/bonPlayer.ts";
 import { createHash } from "node:crypto";
@@ -487,6 +493,17 @@ describe("POST /api/bon/next with answer", () => {
 });
 
 describe("POST /api/bon/finish", () => {
+  it("drops the cached ranking after a stored result, not after a refused one", async () => {
+    const { token } = await newGame("v-1");
+    await play(token, 4);
+    later(60_000);
+    vi.mocked(invalidateRanking).mockClear();
+    expect((await finish({ token: "0".repeat(64) }, "v-1")).status).toBe(404);
+    expect(invalidateRanking).not.toHaveBeenCalled();
+    expect((await finish({ token }, "v-1")).status).toBe(200);
+    expect(invalidateRanking).toHaveBeenCalledOnce();
+  });
+
   it("stores Anonym for an offensive name", async () => {
     const { token } = await newGame("v-1");
     await play(token, 4);

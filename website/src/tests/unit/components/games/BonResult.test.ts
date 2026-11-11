@@ -1,12 +1,18 @@
 import type { RoundEntry } from "@composables/useBon";
 
 import BonResult from "@components/games/BonResult.vue";
+import { fetchLeaderboard } from "@services/bonLeaderboardApi";
 import { buildShareUrl } from "@utils/bonShare";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@components/games/BonPlayerCode.vue", () => ({
   default: { props: ["mode"], template: "<section class='mock-code' :data-mode='mode' />" },
+}));
+
+vi.mock("@services/bonLeaderboardApi", () => ({ fetchLeaderboard: vi.fn() }));
+vi.mock("@components/games/BonPlacement.vue", () => ({
+  default: { props: ["around"], template: "<section class='mock-placement'>{{ around.length }}</section>" },
 }));
 
 vi.mock("@utils/bonShare", async (importOriginal) => ({
@@ -77,6 +83,38 @@ describe("BonResult", () => {
       const wrapper = mountResult();
       await flushPromises();
       expect(document.activeElement).toBe(wrapper.find("h1").element);
+    });
+  });
+
+  describe("placement", () => {
+    const around = [{ rank: 11 }, { isMe: true, rank: 12 }];
+    const reply = { entries: [], me: { around }, total: 400 };
+
+    it("asks for the week and shows the block behind the stats", async () => {
+      vi.mocked(fetchLeaderboard).mockResolvedValue(reply as never);
+      const wrapper = mountResult();
+      await flushPromises();
+      expect(fetchLeaderboard).toHaveBeenCalledWith("week", 0, 0);
+      expect(wrapper.find(".mock-placement").text()).toBe("2");
+    });
+
+    it("is missing without a rank, and does not ask", async () => {
+      vi.mocked(fetchLeaderboard).mockClear();
+      const wrapper = mountResult({ result: undefined });
+      await flushPromises();
+      expect(fetchLeaderboard).not.toHaveBeenCalled();
+      expect(wrapper.find(".mock-placement").exists()).toBe(false);
+    });
+
+    it("is missing when the call fails or has no own row", async () => {
+      vi.mocked(fetchLeaderboard).mockRejectedValueOnce(new Error("down"));
+      const failed = mountResult();
+      await flushPromises();
+      expect(failed.find(".mock-placement").exists()).toBe(false);
+      vi.mocked(fetchLeaderboard).mockResolvedValueOnce({ entries: [], total: 0 });
+      const empty = mountResult();
+      await flushPromises();
+      expect(empty.find(".mock-placement").exists()).toBe(false);
     });
   });
 
