@@ -167,7 +167,7 @@ import {
   POST as PLAYER,
 } from "@/pages/api/bon/player.ts";
 import { POST as REDEEM } from "@/pages/api/bon/redeem.ts";
-import { POST as REPORT } from "@/pages/api/bon/report-name.ts";
+import { POST as REPORT, REPORTED_CAP, reported } from "@/pages/api/bon/report-name.ts";
 import { POST as START } from "@/pages/api/bon/start.ts";
 
 const T0 = Date.UTC(2026, 10, 5, 12);
@@ -1426,5 +1426,35 @@ describe("report-name after a rename", () => {
     row0(7).playerName = "Berta";
     await report();
     expect(row0(7).nameReports).toBe(2);
+  });
+});
+
+describe("report-name dedupe", () => {
+  const report = (ip: string, cookie = "r-1") =>
+    REPORT({ ...ctx({ id: 7 }, cookie), clientAddress: ip } as APIContext);
+
+  it("two reports from the same /64 count once", async () => {
+    db.rows.push({ id: 7, playerName: "Kalle", status: "finished", visitor: hashed("x") });
+    await report("2001:db8::1");
+    await report("2001:db8::2", "r-2");
+    expect(row0(7).nameReports).toBe(1);
+  });
+
+  it("a case-only rename keeps the key, so the reports stay counted once", async () => {
+    db.rows.push({ id: 7, playerName: "Kalle", status: "finished", visitor: hashed("x") });
+    await report("10.0.8.8");
+    row0(7).playerName = " KALLE ";
+    await report("10.0.8.8");
+    expect(row0(7).nameReports).toBe(1);
+  });
+
+  it("the reported set drops its oldest entry beyond the cap", async () => {
+    db.rows.push({ id: 7, playerName: "Kalle", status: "finished", visitor: hashed("x") });
+    reported.clear();
+    for (let i = 0; i < REPORTED_CAP; i++) reported.add(`old-${i}`);
+    await report("10.0.9.9");
+    expect(reported.size).toBe(REPORTED_CAP);
+    expect(reported.has("old-0")).toBe(false);
+    expect(reported.has("old-1")).toBe(true);
   });
 });

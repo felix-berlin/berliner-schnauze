@@ -121,6 +121,15 @@ describe("isOffensiveName bypasses and false positives", () => {
       "AfD4ever",
       "Afd1",
       "NPDler",
+      "\u0274\u1D00\u1D22\u026A", // small-capital Nazi
+      "\u{1F1F3}\u{1F1E6}\u{1F1FF}\u{1F1EE}", // regional indicators N A Z I
+      "8.8",
+      "8-8",
+      "8_8",
+      "Max 8.8",
+      "8\u28008", // braille blank
+      "8\u31648", // hangul filler
+      "14 88",
     ])
       expect([n, nameCategory(n)]).toEqual([n, "far-right"]);
     expect(nameCategory("\u13AArsch")).toBe("offensive"); // Cherokee A
@@ -144,6 +153,11 @@ describe("isOffensiveName bypasses and false positives", () => {
       "Arschak",
       "Afdal",
       "Sh1ne",
+      "Klasse 1 98",
+      "8.8.1990",
+      "14.08.",
+      "Tim 18",
+      "Jahrgang 1988",
     ])
       expect([n, nameCategory(n)]).toEqual([n, undefined]);
   });

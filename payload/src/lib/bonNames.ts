@@ -180,11 +180,24 @@ const LOOKALIKE_FROM = "АВЕЅІЈКМНОРСТХУԀҺΑΒΕΖΗΙΚΜΝΟΡ
 const LOOKALIKE_TO = "ABESIJKMHOPCTXYDHABEZHIKMNOPTYXnvuABCDEGHKLMPSTVWZ";
 const LOOKALIKE = Object.fromEntries(Array.from(LOOKALIKE_FROM, (c, i) => [c, LOOKALIKE_TO[i]!]));
 
+// Small capitals (not folded by NFKD) to Latin; ꜰ and ꜱ are the small-capital F and S.
+const SMALL_CAPS_FROM = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘʀꜱᴛᴜᴠᴡʏᴢ";
+const SMALL_CAPS_TO = "abcdefghijklmnoprstuvwyz";
+const SMALL_CAPS = Object.fromEntries(
+  Array.from(SMALL_CAPS_FROM, (c, i) => [c, SMALL_CAPS_TO[i]!]),
+);
+
 /** Compatibility forms to plain ones (fullwidth, math bold, Ⅲ), no invisible characters or accents, look-alikes as Latin. */
 const prep = (name: string): string =>
   Array.from(
-    name.normalize("NFKD").replace(/[\p{Cf}\p{M}]/gu, ""),
-    (c) => LOOKALIKE[c] ?? LOOKALIKE[c.toUpperCase()] ?? c,
+    // Braille blank and Hangul fillers are letters/symbols to Unicode but render empty.
+    name.normalize("NFKD").replace(/[\p{Cf}\p{M}\u2800\u3164\u115F\u1160\uFFA0]/gu, ""),
+    (c) => {
+      const cp = c.codePointAt(0)!;
+      // Regional Indicator Symbols U+1F1E6-1F1FF are A-Z.
+      if (cp >= 0x1f1e6 && cp <= 0x1f1ff) return String.fromCharCode(97 + cp - 0x1f1e6);
+      return SMALL_CAPS[c] ?? LOOKALIKE[c] ?? LOOKALIKE[c.toUpperCase()] ?? c;
+    },
   )
     .join("")
     .toLowerCase()
@@ -203,7 +216,13 @@ export const nameCategory = (raw: string): NameCategory | undefined => {
   const whole = normalize(name);
   // Without leet, so "AfD2025" and "NPDler" yield afd/npd; two-letter codes only as real words ("Sh1ne").
   const letters = name.split(/[^\p{L}]+/u).filter((w) => w.length > 2);
-  const codes = [name, name.replace(/(?<=\d)\s+(?=\d)/g, "")];
+  // A run of single digits with separators between them, not touching another digit group on either side ("8.8", "1 4 8 8"; not "1 98", "8.8.1990").
+  const codes = [
+    name,
+    name.replace(/(?<!\d[^\p{L}\d]*)\d(?:[^\p{L}\d]+\d)+(?![^\p{L}\d]*\d)/gu, (m) =>
+      m.replace(/\D/g, ""),
+    ),
+  ];
   // Allowed words are cut out per word, so "Nazi Arsch" cannot lose letters across the gap.
   const rest = words
     .map((w) => (ALLOWED_WHOLE.has(w) ? "" : ALLOWED.reduce((n, a) => n.replaceAll(a, ""), w)))

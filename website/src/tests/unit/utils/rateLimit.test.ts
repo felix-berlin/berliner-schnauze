@@ -1,4 +1,4 @@
-import { clientIp, rateLimited, rateLimitRule } from "@utils/rateLimit.ts";
+import { clientIp, networkKey, rateLimited, rateLimitRule } from "@utils/rateLimit.ts";
 import { describe, expect, it } from "vitest";
 
 describe("rateLimit", () => {
@@ -119,5 +119,15 @@ describe("rateLimit", () => {
   it("takes the last forwarded-for entry, else the socket address", () => {
     expect(clientIp("1.1.1.1, 2.2.2.2 ", "9.9.9.9")).toBe("2.2.2.2");
     expect(clientIp(null, "9.9.9.9")).toBe("9.9.9.9");
+  });
+});
+
+describe("networkKey", () => {
+  it("keeps IPv4, unwraps IPv4-mapped IPv6 and cuts IPv6 to its /64", () => {
+    expect(networkKey("203.0.113.7")).toBe("203.0.113.7");
+    expect(networkKey("::ffff:203.0.113.7")).toBe("203.0.113.7");
+    expect(networkKey("2001:db8::1")).toBe("2001:0db8:0000:0000");
+    expect(networkKey("2001:0DB8:0:0:ffff::2")).toBe("2001:0db8:0000:0000");
+    expect(networkKey("2001:db8:1:2:3:4:5:6")).toBe("2001:0db8:0001:0002");
   });
 });
