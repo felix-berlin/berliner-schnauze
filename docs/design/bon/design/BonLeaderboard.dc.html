@@ -100,6 +100,7 @@ body{margin:0}
 <p style="margin: 0; display: flex; align-items: baseline; gap: 0.5rem;"><b style="font-size: 2.25rem; font-weight: 900; color: var(--color-ink-strong); line-height: 1;">{{me.rank}}.</b><span class="t-small">von {{me.total}} · besser als {{me.pct}}</span></p>
 <p style="margin: 0;"><b style="color: var(--color-ink-strong);">{{me.score}} Punkte</b> · {{me.meta}}</p>
 <span style="display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center;"><a class="c-textlink" href="#lb-me" style="font-size: 0.9rem;">Zu mir springen</a><a class="c-textlink" href="#" style="font-size: 0.9rem;">Nochmal spielen</a></span>
+<dc-import name="BonName" theme="{{theme}}" name="Kiez-Kalle" hint-size="100%,32px"></dc-import>
 <p class="t-small" style="margin: 0;">Gezählt wird dein bestes Spiel im Zeitraum. Erkannt wirst du an einem Cookie auf diesem Jerät.</p>
 </sc-if>
 <sc-if value="{{noMe}}" hint-placeholder-val="{{false}}">
@@ -162,7 +163,7 @@ class Component extends DCLogic {
       theme: this.props.theme ?? 'dark',
       isDesktop: desktop,
       colsStyle: 'grid-template-columns: ' + (desktop ? '3.5rem minmax(0,1fr) 5rem 4rem 6.5rem 5rem' : '2.25rem minmax(0,1fr) auto') + ';',
-      asideStyle: 'display: flex; flex-direction: column; gap: 1rem;' + (desktop ? '' : (hasCookie && status === 'normal' ? ' display: none;' : ' order: -1;')),
+      asideStyle: 'display: flex; flex-direction: column; gap: 1rem;' + (desktop ? '' : (hasCookie && status === 'normal' ? '' : ' order: -1;')),
       shellStyle: desktop ? 'box-sizing: border-box; max-width: 1160px; margin: 0 auto; padding: 40px 24px 96px; display: flex; flex-direction: column; gap: 1.5rem;' : 'box-sizing: border-box; padding: 1.25rem 1rem 2rem; display: flex; flex-direction: column; gap: 1.25rem;',
       bodyGrid: desktop ? 'display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 2rem; align-items: start;' : 'display: flex; flex-direction: column; gap: 1rem;',
       titleStyle: 'font-size: ' + (desktop ? '3rem' : '2.25rem') + '; line-height: 1.05;',

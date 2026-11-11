@@ -9,18 +9,14 @@ export interface PlayerStats {
 
 const FALLBACK_ERROR = "Das hat leida nich jeklappt. Versuch's jleich nochma.";
 
-export async function post<T>(url: string, body?: unknown): Promise<T> {
+async function send<T>(method: string, url: string, body?: unknown): Promise<T> {
   let res: Response;
   try {
     res = await fetch(
       url,
       body === undefined
-        ? { method: "POST" }
-        : {
-            body: JSON.stringify(body),
-            headers: { "Content-Type": "application/json" },
-            method: "POST",
-          },
+        ? { method }
+        : { body: JSON.stringify(body), headers: { "Content-Type": "application/json" }, method },
     );
   } catch {
     throw new Error(FALLBACK_ERROR);
@@ -31,6 +27,8 @@ export async function post<T>(url: string, body?: unknown): Promise<T> {
     throw Object.assign(new Error(data?.error ?? FALLBACK_ERROR), { status: res.status });
   return data;
 }
+
+export const post = <T>(url: string, body?: unknown): Promise<T> => send<T>("POST", url, body);
 
 export const createPlayerCode = async (): Promise<string> =>
   (await post<{ code: string }>("/api/bon/player")).code;
@@ -49,6 +47,25 @@ export function applyPlayerStats(stats: PlayerStats): void {
     $bonStats.setKey("bestStreak", stats.bestStreak);
   }
 }
+
+export type PlayerName = { name: string; tag?: string };
+
+/** The identity's current display name; `undefined` for a first-time visitor (404). */
+export async function fetchPlayerName(): Promise<PlayerName | undefined> {
+  try {
+    return await send<PlayerName>("GET", "/api/bon/player");
+  } catch (error) {
+    if ((error as { status?: number }).status === 404) return undefined;
+    throw error;
+  }
+}
+
+export const renamePlayer = (name: string): Promise<PlayerName> =>
+  send<PlayerName>("PATCH", "/api/bon/player", { name });
+
+/** Keeps the local name in step with the server; "Anonym" is stored as empty. */
+export const rememberName = (name: string): void =>
+  $bonStats.setKey("playerName", name === "Anonym" ? "" : name);
 
 export const playerLink = (code: string): string =>
   `${location.origin}/games/berliner-oder-nicht#code=${code}`;

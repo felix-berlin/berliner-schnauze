@@ -79,11 +79,14 @@ body{margin:0}
 <h1 id="bon-t" class="c-band" style="{{titleStyle}}">Berliner oder nicht?</h1>
 <p class="t-em" style="margin: 0;">Echtes Berlinerisch oder erfunden? Wisch oder tipp – du hast 3 Leben.</p>
 <sc-if value="{{isOffline}}" hint-placeholder-val="{{false}}"><div class="c-state c-state--offline" role="status"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path><path d="M5 12.86a10 10 0 0 1 5.17-2.69"></path><path d="M19 12.86a10 10 0 0 0-2-1.43"></path><path d="m2 2 20 20"></path></svg><span class="c-state__body"><b>Du bist offline.</b><span>Die Karten kommen vom Server – spielen jeht wieder, sobald du Netz hast.</span></span></div></sc-if>
+<sc-if value="{{newPlayer}}" hint-placeholder-val="{{false}}">
 <div style="display: flex; flex-direction: column; gap: 0.375rem; max-width: 360px;">
 <label for="bon-name" style="font-weight: 700; color: var(--color-ink-strong);">Dein Name <span style="font-weight: 400; color: var(--color-muted);">(optional)</span></label>
 <input id="bon-name" class="c-field" type="text" maxlength="24" placeholder="Anonym" value="{{name}}" aria-describedby="bon-name-h">
 <span id="bon-name-h" class="t-small">Steht neben deiner Platzierung. Leer jelassen = „Anonym“ mit Kennung, z. B. „Anonym #K7QX“. Max. 24 Zeichen.</span>
 </div>
+</sc-if>
+<sc-if value="{{knownPlayer}}" hint-placeholder-val="{{true}}"><dc-import name="BonName" theme="{{theme}}" name="{{name}}" hint-size="100%,32px"></dc-import></sc-if>
 <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem;">
 <button class="c-button c-button--primary" aria-disabled="{{offlineFlag}}" onClick="{{start}}" style="height: 52px; padding: 0 2rem; font-size: 1.05rem;">Los jeht’s</button>
 <span class="t-small">Dein Rekord: <b style="color: var(--color-ink-strong);">{{best}} Punkte</b></span>
@@ -175,6 +178,7 @@ body{margin:0}
 <sc-if value="{{isRecord}}" hint-placeholder-val="{{true}}"><span class="c-badge c-badge--strong" style="align-self: flex-start;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>Neuer Rekord!</span></sc-if>
 <h1 id="bon-over" class="c-band" style="{{titleStyle}}">{{overTitle}}</h1>
 <p style="margin: 0; color: var(--color-muted);">Drei Fehler – dit Spiel is vorbei.</p>
+<dc-import name="BonName" theme="{{theme}}" name="{{name}}" hint-size="100%,32px"></dc-import>
 </div>
 <dl style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 0;">
 <div class="bon__stat"><dt class="t-label">Punkte</dt><dd style="margin: 0;"><b>{{score}}</b></dd></div>
@@ -301,6 +305,7 @@ class Component extends DCLogic {
       overGrid: desktop ? 'display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem; align-items: start;' : 'display: flex; flex-direction: column; gap: 1.5rem;',
       titleStyle: 'font-size: ' + (desktop ? '3.25rem' : '2.25rem') + '; line-height: 1.05;',
       dir: this.dir || (this.state.last && this.state.last.right ? 'right' : 'left'), shake: ph === 'feedback' && last && !last.right ? 'true' : 'false',
+      newPlayer: !this.props.name, knownPlayer: !!this.props.name,
       fromLink: this.props.start === 'link', codePlayer: name || 'Anonym #K7QX',
       isIntro: ph === 'intro', isOffline: this.props.start === 'offline', offlineFlag: this.props.start === 'offline' ? 'true' : 'false',
       name, best: fmt(best),

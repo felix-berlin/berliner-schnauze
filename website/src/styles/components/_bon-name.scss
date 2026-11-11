@@ -1,0 +1,62 @@
+// Player name display and inline editor (docs/design/bon/SPEC.md §12b).
+.c-bon-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+  margin: 0;
+
+  &__label {
+    color: var(--color-muted);
+  }
+
+  &__name {
+    color: var(--color-ink-strong);
+  }
+
+  &__tag {
+    font-size: 0.8em;
+    color: var(--color-muted);
+  }
+
+  &__ok {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-accent-text);
+  }
+
+  &__link {
+    font-size: 0.9rem;
+  }
+
+  &__edit {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--surface-chip);
+    border-radius: var(--radius-sm);
+  }
+
+  &__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  &__field-label {
+    font-weight: 700;
+    color: var(--color-ink-strong);
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+  }
+}

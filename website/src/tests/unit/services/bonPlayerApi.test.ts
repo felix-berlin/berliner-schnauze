@@ -5,8 +5,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   applyPlayerStats,
   createPlayerCode,
+  fetchPlayerName,
   playerLink,
   redeemPlayerCode,
+  rememberName,
+  renamePlayer,
   takeRedeemCode,
 } from "@services/bonPlayerApi.ts";
 
@@ -74,5 +77,38 @@ describe("API calls", () => {
   it("falls back to a generic text without a body", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("nope", { status: 500 })));
     await expect(createPlayerCode()).rejects.toThrow(/jeklappt|nich/i);
+  });
+});
+
+describe("player name", () => {
+  it("fetchPlayerName returns the body, 404 gives undefined", async () => {
+    respond({ name: "Kalle" });
+    expect(await fetchPlayerName()).toEqual({ name: "Kalle" });
+    respond({ error: "x" }, 404);
+    expect(await fetchPlayerName()).toBeUndefined();
+    respond({ error: "x" }, 502);
+    await expect(fetchPlayerName()).rejects.toMatchObject({ status: 502 });
+  });
+
+  it("renamePlayer sends PATCH with the name", async () => {
+    respond({ name: "Kalle" });
+    await renamePlayer("Kalle");
+    expect(fetch).toHaveBeenCalledWith("/api/bon/player", {
+      body: JSON.stringify({ name: "Kalle" }),
+      headers: { "Content-Type": "application/json" },
+      method: "PATCH",
+    });
+  });
+
+  it("renamePlayer rejects with the status on a 422", async () => {
+    respond({ error: "no" }, 422);
+    await expect(renamePlayer("Arschloch")).rejects.toMatchObject({ status: 422 });
+  });
+
+  it("rememberName stores Anonym as empty", () => {
+    rememberName("Anonym");
+    expect($bonStats.get().playerName).toBe("");
+    rememberName("Kalle");
+    expect($bonStats.get().playerName).toBe("Kalle");
   });
 });
