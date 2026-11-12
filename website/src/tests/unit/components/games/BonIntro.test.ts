@@ -54,6 +54,16 @@ describe("BonIntro", () => {
     });
   });
 
+  it("keeps a name redeemed after mount instead of writing the stale field back", async () => {
+    const wrapper = mountIntro({});
+    await flushPromises();
+    $bonStats.setKey("playerName", "Kalle"); // what redeeming a player code does
+    await flushPromises();
+    await wrapper.find("form").trigger("submit");
+    expect($bonStats.get().playerName).toBe("Kalle");
+    expect(wrapper.emitted("start")).toEqual([[]]);
+  });
+
   it("renders title, name field, start button and rules", () => {
     $bonStats.setKey("playerName", "Berta");
     const wrapper = mountIntro({});

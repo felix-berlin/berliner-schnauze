@@ -143,6 +143,7 @@
 <script setup lang="ts">
 import BonName from "@components/games/BonName.vue";
 import BonPlayerCode from "@components/games/BonPlayerCode.vue";
+import { useStore } from "@nanostores/vue";
 import { fetchPlayerName, rememberName, type PlayerName } from "@services/bonPlayerApi.ts";
 import { $bonStats } from "@stores/bonStats";
 import { nameCategory, type NameCategory } from "payload-app/bon-names";
@@ -153,13 +154,19 @@ import HeartIcon from "virtual:icons/lucide/heart";
 import KeyIcon from "virtual:icons/lucide/key";
 import RowsIcon from "virtual:icons/lucide/rows-2";
 import WifiOffIcon from "virtual:icons/lucide/wifi-off";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const props = defineProps<{ highScore: number; offline: boolean; linkRedeem: boolean }>();
 // The name is in $bonStats by then; useBon.start() reads it there.
 const emit = defineEmits<{ start: [] }>();
 
 const name = ref($bonStats.get().playerName ?? "");
+const stats = useStore($bonStats);
+// A redeemed code or a rename sets the store behind the field's back; start() must not write the stale value back.
+watch(
+  () => stats.value.playerName,
+  (value) => (name.value = value),
+);
 const redeeming = ref(false);
 const problem = ref<NameCategory>();
 // Set once the server knows this player: the field gives way to the name editor.
