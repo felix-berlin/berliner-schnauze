@@ -122,6 +122,8 @@ describe("rateLimit", () => {
   it("takes the last forwarded-for entry, else the socket address", () => {
     expect(clientIp("1.1.1.1, 2.2.2.2 ", "9.9.9.9")).toBe("2.2.2.2");
     expect(clientIp(null, "9.9.9.9")).toBe("9.9.9.9");
+    // IPv6 by its /64, so a client cannot dodge a limit by rotating its interface id.
+    expect(clientIp("2001:db8::1", "9.9.9.9")).toBe("2001:0db8:0000:0000");
   });
 });
 

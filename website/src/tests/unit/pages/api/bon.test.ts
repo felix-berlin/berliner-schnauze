@@ -172,7 +172,7 @@ import {
   POST as PLAYER,
 } from "@/pages/api/bon/player.ts";
 import { POST as REDEEM } from "@/pages/api/bon/redeem.ts";
-import { POST as REPORT, REPORTED_CAP, reported } from "@/pages/api/bon/report-name.ts";
+import { POST as REPORT } from "@/pages/api/bon/report-name.ts";
 import { POST as START } from "@/pages/api/bon/start.ts";
 
 const T0 = Date.UTC(2026, 10, 5, 12);
@@ -238,7 +238,6 @@ beforeEach(() => {
   vi.useFakeTimers({ toFake: ["Date"] });
   vi.setSystemTime(T0);
   db.reset();
-  reported.clear();
   resetRateLimits();
   set.mockReset();
   pool.loadPool.mockReset().mockResolvedValue(pool.make(60, 60));
@@ -1642,13 +1641,14 @@ describe("report-name dedupe", () => {
     expect(row0(7).nameReports).toBe(1);
   });
 
-  it("the reported set drops its oldest entry beyond the cap", async () => {
+  it("the same network counts again after 30 days", async () => {
     db.rows.push({ id: 7, playerName: "Kalle", status: "finished", visitor: hashed("x") });
-    reported.clear();
-    for (let i = 0; i < REPORTED_CAP; i++) reported.add(`old-${i}`);
     await report("10.0.9.9");
-    expect(reported.size).toBe(REPORTED_CAP);
-    expect(reported.has("old-0")).toBe(false);
-    expect(reported.has("old-1")).toBe(true);
+    later(29 * 24 * 60 * 60_000);
+    await report("10.0.9.9");
+    expect(row0(7).nameReports).toBe(1);
+    later(2 * 24 * 60 * 60_000);
+    await report("10.0.9.9");
+    expect(row0(7).nameReports).toBe(2);
   });
 });

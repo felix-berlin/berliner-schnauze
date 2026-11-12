@@ -71,17 +71,19 @@ export const resetRateLimits = (): void => hits.clear();
 let loggedSource = false;
 
 /**
- * The client's IP: the last X-Forwarded-For entry, the one our reverse proxy (Traefik) appended. The
+ * The key a client is counted under (networkKey of its IP): the last X-Forwarded-For entry, the one our reverse proxy (Traefik) appended. The
  * first entries come from the client and can be anything (Astro's clientAddress takes the first). Without the
  * header, the socket address, which behind the proxy is the same for everyone.
  */
 export const clientIp = (forwardedFor: string | null, socketAddress: string): string => {
+  // An IPv6 client gets a whole /64, so it counts by network (networkKey) or every address would be a new client.
   const forwarded = forwardedFor?.split(",").at(-1)?.trim();
   if (!loggedSource) {
     loggedSource = true;
     console.info(`[rate-limit] client ip from ${forwarded ? "x-forwarded-for" : "the socket"}`);
   }
-  return forwarded || socketAddress;
+  const ip = forwarded || socketAddress;
+  return ip ? networkKey(ip) : ip;
 };
 
 /** The key a client is counted under: IPv4 as is, IPv4-mapped IPv6 as IPv4, other IPv6 by its /64 network (first four hextets). */

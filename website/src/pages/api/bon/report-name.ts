@@ -1,17 +1,17 @@
 import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
-import { sha256, visitorId } from "@services/payload/comments.ts";
+import { visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";
-import { clientIp, networkKey } from "@utils/rateLimit.ts";
+import { clientIp, rateLimitedBy, refundHit } from "@utils/rateLimit.ts";
 import { z } from "zod";
 
 const schema = z.strictObject({ id: z.number().int().positive() });
 
-// Keyed on the hashed client network (the IP, for IPv6 its /64) and the game's name, not the cookie: a cookie is free to forge, so three of them could hide any name.
+// One report per client network (clientIp: the IP, for IPv6 its /64), game and name within 30 days, not per cookie:
+// a cookie is free to forge, so three of them could hide any name.
 // shortcut: in memory, one process, lost on restart; a second web container would need a DB-level unique table.
-export const REPORTED_CAP = 50_000;
-export const reported = new Set<string>();
+const REPORT_WINDOW = 30 * 24 * 60 * 60_000;
 
 export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
   const cookie = visitorId(cookies, false);
@@ -20,6 +20,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
   if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
   const { id } = input.data;
 
+  const network = clientIp(request.headers.get("x-forwarded-for"), clientAddress);
   let key = "";
   try {
     const payload = await getPayloadClient();
@@ -34,13 +35,10 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     ).docs;
     if (!game) return reply({ error: "Spiel nich jefunden." }, 404);
     // The name is in the key, so a renamed game (reports reset) can be reported again; trimmed lowercase, so a case-only rename keeps its reports.
-    const network = networkKey(clientIp(request.headers.get("x-forwarded-for"), clientAddress));
-    key = sha256(`bon-report:${network}:${id}:${(game.playerName ?? "").trim().toLowerCase()}`);
+    key = `bon-report ${id} ${(game.playerName ?? "").trim().toLowerCase()}`;
     // A repeat answers like the first.
-    if (reported.has(key)) return new Response(null, { status: 204 });
-    reported.add(key);
-    // shortcut: in memory, oldest dropped first; a flood can make old reports count again
-    if (reported.size > REPORTED_CAP) reported.delete(reported.values().next().value!);
+    if (rateLimitedBy(network, key, 1, REPORT_WINDOW) > 0)
+      return new Response(null, { status: 204 });
     // Read-then-write: two reports at the same moment may count once; the limit then needs one more.
     await payload.update({
       collection: "bon-games",
@@ -50,7 +48,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     });
     return new Response(null, { status: 204 });
   } catch (error) {
-    reported.delete(key);
+    if (key) refundHit(network, key);
     console.error("[bon] report-name failed:", error);
     return reply({ error: "Die Meldung konnte leider nich jesendet werden." }, 502);
   }
