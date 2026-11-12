@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.12.2](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.1...v4.12.2) (2026-11-12)
+
+
+### Bug Fixes
+
+* **search:** keep the clear button clickable while its icon swaps ([23d6b52](https://github.com/felix-berlin/berliner-schnauze/commit/23d6b5260304ecc6073d517087a3081910801ef0))
+* **search:** migrate the old default sort and repair persisted filters ([a930c9b](https://github.com/felix-berlin/berliner-schnauze/commit/a930c9bb96454e6395e00cf5cdd6913630e4aaab))
+* **search:** rank exact matches first and stop filters from dropping words ([9169938](https://github.com/felix-berlin/berliner-schnauze/commit/9169938d4d2d5041460c256bfbeddab157534f8b))
+
 ## [4.12.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.0...v4.12.1) (2026-11-12)
 
 
