@@ -1,26 +1,53 @@
 @use "@styles/mixins" as mx;
+@use "section-card";
 
-// Player code card (docs/design/bon/SPEC.md §12). Left-aligned; the share view centres it itself.
-.c-bon-player-code {
+// Player code card (docs/design/bon/SPEC.md §12, mock BonCode): a section card with a key in the title.
+// Doubled class so the sheet surface beats the later-loaded .c-section-card rules (like the start screen).
+.c-bon-player-code.c-bon-player-code {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
+  box-sizing: border-box;
   inline-size: 100%;
   max-inline-size: 32rem;
   margin-block: 1rem;
+  background: var(--surface-sheet);
+  border-color: var(--rule-card);
+  border-radius: var(--radius-sm);
+}
 
-  > p,
-  &__form > p {
-    margin: 0;
-    color: var(--color-muted);
+.c-bon-player-code {
+  &__header.c-section-card__header {
+    padding: 0.875rem 1rem 0;
+    border-block-end: 0;
   }
 
   &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     margin: 0;
-    font-size: 1.25rem;
-    line-height: 1.2;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    color: var(--orange-400);
+  }
+
+  &__body.c-section-card__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem 1rem;
+
+    > p {
+      margin: 0;
+      color: var(--color-muted);
+    }
+  }
+
+  &__form > p {
+    margin: 0;
+    color: var(--color-muted);
   }
 
   &__done {

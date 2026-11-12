@@ -25,7 +25,7 @@
           <input
             id="bon-name"
             v-model="name"
-            class="c-input"
+            class="c-input c-bon-intro__input"
             :aria-invalid="problem ? 'true' : undefined"
             type="text"
             maxlength="24"
@@ -87,7 +87,8 @@
         type="button"
         @click="redeeming = true"
       >
-        Spielercode einlösen
+        <KeyIcon width="18" height="18" aria-hidden="true" />
+        <span>Spielercode einlösen</span>
       </button>
       <a class="c-textlink c-bon-intro__leaderboard" href="/games/berliner-oder-nicht/rangliste"
         >Rangliste</a
@@ -145,6 +146,7 @@ import { nameCategory, type NameCategory } from "payload-app/bon-names";
 import AlertIcon from "virtual:icons/lucide/circle-alert";
 import FlameIcon from "virtual:icons/lucide/flame";
 import HeartIcon from "virtual:icons/lucide/heart";
+import KeyIcon from "virtual:icons/lucide/key";
 import RowsIcon from "virtual:icons/lucide/rows-2";
 import WifiOffIcon from "virtual:icons/lucide/wifi-off";
 import { onMounted, ref } from "vue";

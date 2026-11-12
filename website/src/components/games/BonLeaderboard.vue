@@ -195,26 +195,28 @@
                 type="button"
                 @click="redeeming = true"
               >
-                Spielercode einlösen
+                <KeyIcon width="18" height="18" aria-hidden="true" />
+                <span>Spielercode einlösen</span>
               </button>
             </template>
           </div>
         </section>
+        <p class="t-small c-bon-leaderboard__note">
+          Namen sind frei jewählt. Anstößige Namen blenden wa aus.
+          <button
+            class="c-textlink c-textlink--inline"
+            type="button"
+            :aria-pressed="reporting ? 'true' : 'false'"
+            @click="reporting = !reporting"
+          >
+            Namen melden
+          </button>
+        </p>
+        <p v-if="reportError" class="t-small c-bon-leaderboard__note" role="alert">
+          {{ reportError }}
+        </p>
       </aside>
     </div>
-
-    <p class="t-small c-bon-leaderboard__note">
-      Namen sind frei jewählt. Anstößige Namen blenden wa aus.
-      <button
-        class="c-textlink c-textlink--inline"
-        type="button"
-        :aria-pressed="reporting ? 'true' : 'false'"
-        @click="reporting = !reporting"
-      >
-        Namen melden
-      </button>
-    </p>
-    <p v-if="reportError" class="t-small" role="alert">{{ reportError }}</p>
 
     <div
       v-if="!isDesktop && me && status === 'ready' && entries.length"
@@ -244,6 +246,7 @@ import { fetchPlayerName, type PlayerName } from "@services/bonPlayerApi.ts";
 import { navigationSettled, vt } from "@utils/viewTransition";
 import { useMediaQuery } from "@vueuse/core";
 import AlertIcon from "virtual:icons/lucide/circle-alert";
+import KeyIcon from "virtual:icons/lucide/key";
 import { computed, onMounted, ref } from "vue";
 
 const GAME_PATH = "/games/berliner-oder-nicht";

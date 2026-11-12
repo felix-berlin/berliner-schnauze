@@ -2,7 +2,7 @@
   <p v-if="!editing" class="c-bon-name">
     <!-- Trailing space keeps the text readable as one sentence outside the flex layout. -->
     <span class="c-bon-name__label">{{ "Du spielst als " }}</span>
-    <b class="c-bon-name__name">{{ shown.name }}</b>
+    <b class="c-bon-name__name" :title="shown.name">{{ shown.name }}</b>
     <span v-if="shown.name === 'Anonym' && shown.tag" class="c-bon-name__tag"
       >#{{ shown.tag }}</span
     >
@@ -31,7 +31,7 @@
       id="bon-name-input"
       ref="input"
       v-model="draft"
-      class="c-field"
+      class="c-input c-bon-name__input"
       type="text"
       maxlength="24"
       autocomplete="nickname"

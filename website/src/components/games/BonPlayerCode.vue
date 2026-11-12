@@ -1,153 +1,169 @@
 <template>
-  <section ref="root" class="c-bon-player-code" aria-labelledby="bon-player-code-title">
-    <h2 id="bon-player-code-title" class="c-bon-player-code__title">{{ title }}</h2>
-
-    <!-- Persistent live region: screen readers only announce changes to an existing one. -->
-    <div
-      :class="state === 'success' ? 'c-bon-player-code__done' : 'u-sr-only'"
-      role="status"
-      aria-live="polite"
-      tabindex="-1"
-      data-test="status"
-    >
-      <div v-if="state === 'success'" class="c-state c-state--done">
-        <CheckIcon aria-hidden="true" height="18" width="18" />
-        <span class="c-state__body">
-          <b>Willkommen zurück, {{ welcomeName }}!</b>
-          <span>{{ welcomeText }}</span>
-          <span v-if="bestScore">Bestes Ergebnis: {{ bestScore }}</span>
-        </span>
-      </div>
-      <template v-else>{{ status }}</template>
+  <section
+    ref="root"
+    class="c-section-card c-bon-player-code"
+    aria-labelledby="bon-player-code-title"
+  >
+    <div class="c-section-card__header c-bon-player-code__header">
+      <h2 id="bon-player-code-title" class="c-section-card__title c-bon-player-code__title">
+        <KeyIcon class="c-bon-player-code__icon" width="18" height="18" aria-hidden="true" />
+        {{ title }}
+      </h2>
     </div>
-
-    <template v-if="state === 'success'">
-      <button
-        v-if="mode === 'redeem'"
-        class="c-button c-button--primary"
-        type="button"
-        data-test="continue"
-        @click="emit('close')"
-      >
-        Weiterspielen
-      </button>
-    </template>
-
-    <div v-else-if="linking" class="c-bon-player-code__linking" aria-hidden="true">
-      <p>Spielercode aus dem Link wird einjelöst …</p>
-      <span class="c-skeleton c-skeleton--line" />
-      <span class="c-skeleton c-skeleton--line c-bon-player-code__short" />
-    </div>
-
-    <template v-else-if="state === 'code' && code">
-      <p
-        class="c-bon-player-code__code"
-        role="img"
-        :aria-label="spelled"
+    <div class="c-section-card__body c-bon-player-code__body">
+      <!-- Persistent live region: screen readers only announce changes to an existing one. -->
+      <div
+        :class="state === 'success' ? 'c-bon-player-code__done' : 'u-sr-only'"
+        role="status"
+        aria-live="polite"
         tabindex="-1"
-        data-test="code"
+        data-test="status"
       >
-        <span v-for="block in code.split('-')" :key="block" class="c-bon-player-code__block">{{
-          block
-        }}</span>
-      </p>
-      <div class="c-infotext c-bon-player-code__warning">
-        <b>Wer diesen Code hat, kann deinen Namen und deine Ergebnisse nutzen.</b>
-        Schreib ihn dir auf – und zeig den QR-Code nich rum.
+        <div v-if="state === 'success'" class="c-state c-state--done">
+          <CheckIcon aria-hidden="true" height="18" width="18" />
+          <span class="c-state__body">
+            <b>Willkommen zurück, {{ welcomeName }}!</b>
+            <span>{{ welcomeText }}</span>
+            <span v-if="bestScore">Bestes Ergebnis: {{ bestScore }}</span>
+          </span>
+        </div>
+        <template v-else>{{ status }}</template>
       </div>
-      <div class="c-bon-player-code__actions">
-        <button class="c-choice" type="button" data-test="copy-code" @click="copy('code')">
-          {{ copied === "code" ? "Code kopiert" : "Code kopieren" }}
-        </button>
-        <button class="c-choice" type="button" data-test="copy-link" @click="copy('link')">
-          {{ copied === "link" ? "Link kopiert" : "Link kopieren" }}
-        </button>
-        <button class="c-choice" type="button" data-test="qr-toggle" @click="toggleQr">
-          {{ qrSvg ? "QR-Code ausblenden" : "QR-Code zeigen" }}
-        </button>
-      </div>
-      <figure v-if="qrSvg" class="c-bon-player-code__figure">
-        <!-- eslint-disable-next-line vue/no-v-html -- SVG generated locally from our own link -->
-        <div
-          class="c-bon-player-code__qr"
-          role="img"
-          aria-label="QR-Code mit deinem Spielerlink"
-          data-test="qr"
-          v-html="qrSvg"
-        />
-        <figcaption class="t-small">
-          Mit dem Handy scannen – dann biste dort gleich als {{ name }} drin.
-        </figcaption>
-      </figure>
-    </template>
 
-    <form
-      v-else-if="state === 'redeem'"
-      class="c-bon-player-code__form"
-      @submit.prevent="redeem(input)"
-    >
-      <p>
-        Gib deinen Spielercode ein, dann spielste mit deinem Namen und deinen Ergebnissen weiter.
-      </p>
-      <label for="bon-player-code-input" class="c-bon-player-code__label">Spielercode</label>
-      <input
-        id="bon-player-code-input"
-        v-model="input"
-        class="c-input c-bon-player-code__input"
-        type="text"
-        placeholder="XXXX-XXXX-XXXX"
-        autocomplete="off"
-        autocapitalize="characters"
-        spellcheck="false"
-        :aria-invalid="wrong ? 'true' : undefined"
-        aria-describedby="bon-player-code-hint bon-player-code-error"
-      />
-      <span id="bon-player-code-hint" class="t-small">
-        Groß- und Kleinschreibung, Leerzeichen und Bindestriche sind egal.
-      </span>
-      <div class="c-bon-player-code__actions">
+      <template v-if="state === 'success'">
         <button
-          class="c-choice"
-          type="submit"
-          data-test="submit"
-          :disabled="pending || !input.trim()"
-          :aria-disabled="locked ? 'true' : undefined"
+          v-if="mode === 'redeem'"
+          class="c-button c-button--primary"
+          type="button"
+          data-test="continue"
+          @click="emit('close')"
         >
           Weiterspielen
         </button>
-        <button class="c-choice" type="button" data-test="back" @click="cancel">Abbrechen</button>
-      </div>
-    </form>
+      </template>
 
-    <template v-else-if="state === 'none'">
-      <p>
-        Mit ’nem Spielercode nimmste deinen Namen und deine Ergebnisse auf ein anderes Jerät mit –
-        oder holst sie zurück, wenn die Cookies weg sind.
-      </p>
-      <div class="c-bon-player-code__actions">
-        <button class="c-choice" type="button" data-test="get" :disabled="pending" @click="getCode">
-          Spielercode holen
-        </button>
-        <button class="c-textlink" type="button" data-test="show-redeem" @click="showRedeem">
-          Hab schon ’n Code
-        </button>
+      <div v-else-if="linking" class="c-bon-player-code__linking" aria-hidden="true">
+        <p>Spielercode aus dem Link wird einjelöst …</p>
+        <span class="c-skeleton c-skeleton--line" />
+        <span class="c-skeleton c-skeleton--line c-bon-player-code__short" />
       </div>
-    </template>
 
-    <!-- Persistent assertive region (also the field's error description); the box only exists with a message. -->
-    <div
-      id="bon-player-code-error"
-      class="c-bon-player-code__error"
-      aria-live="assertive"
-      aria-atomic="true"
-      data-test="error"
-    >
-      <div v-if="error" class="c-state c-state--error">
-        <CircleAlertIcon aria-hidden="true" height="18" width="18" />
-        <span class="c-state__body">
-          <b>{{ error }}</b>
-          <span v-if="errorHint">{{ errorHint }}</span>
+      <template v-else-if="state === 'code' && code">
+        <p
+          class="c-bon-player-code__code"
+          role="img"
+          :aria-label="spelled"
+          tabindex="-1"
+          data-test="code"
+        >
+          <span v-for="block in code.split('-')" :key="block" class="c-bon-player-code__block">{{
+            block
+          }}</span>
+        </p>
+        <div class="c-infotext c-bon-player-code__warning">
+          <b>Wer diesen Code hat, kann deinen Namen und deine Ergebnisse nutzen.</b>
+          Schreib ihn dir auf – und zeig den QR-Code nich rum.
+        </div>
+        <div class="c-bon-player-code__actions">
+          <button class="c-choice" type="button" data-test="copy-code" @click="copy('code')">
+            {{ copied === "code" ? "Code kopiert" : "Code kopieren" }}
+          </button>
+          <button class="c-choice" type="button" data-test="copy-link" @click="copy('link')">
+            {{ copied === "link" ? "Link kopiert" : "Link kopieren" }}
+          </button>
+          <button class="c-choice" type="button" data-test="qr-toggle" @click="toggleQr">
+            {{ qrSvg ? "QR-Code ausblenden" : "QR-Code zeigen" }}
+          </button>
+        </div>
+        <figure v-if="qrSvg" class="c-bon-player-code__figure">
+          <!-- eslint-disable-next-line vue/no-v-html -- SVG generated locally from our own link -->
+          <div
+            class="c-bon-player-code__qr"
+            role="img"
+            aria-label="QR-Code mit deinem Spielerlink"
+            data-test="qr"
+            v-html="qrSvg"
+          />
+          <figcaption class="t-small">
+            Mit dem Handy scannen – dann biste dort gleich als {{ name }} drin.
+          </figcaption>
+        </figure>
+      </template>
+
+      <form
+        v-else-if="state === 'redeem'"
+        class="c-bon-player-code__form"
+        @submit.prevent="redeem(input)"
+      >
+        <p>
+          Gib deinen Spielercode ein, dann spielste mit deinem Namen und deinen Ergebnissen weiter.
+        </p>
+        <label for="bon-player-code-input" class="c-bon-player-code__label">Spielercode</label>
+        <input
+          id="bon-player-code-input"
+          v-model="input"
+          class="c-input c-bon-player-code__input"
+          type="text"
+          placeholder="XXXX-XXXX-XXXX"
+          autocomplete="off"
+          autocapitalize="characters"
+          spellcheck="false"
+          :aria-invalid="wrong ? 'true' : undefined"
+          aria-describedby="bon-player-code-hint bon-player-code-error"
+        />
+        <span id="bon-player-code-hint" class="t-small">
+          Groß- und Kleinschreibung, Leerzeichen und Bindestriche sind egal.
         </span>
+        <div class="c-bon-player-code__actions">
+          <button
+            class="c-choice"
+            type="submit"
+            data-test="submit"
+            :disabled="pending || !input.trim()"
+            :aria-disabled="locked ? 'true' : undefined"
+          >
+            Weiterspielen
+          </button>
+          <button class="c-choice" type="button" data-test="back" @click="cancel">Abbrechen</button>
+        </div>
+      </form>
+
+      <template v-else-if="state === 'none'">
+        <p>
+          Mit ’nem Spielercode nimmste deinen Namen und deine Ergebnisse auf ein anderes Jerät mit –
+          oder holst sie zurück, wenn die Cookies weg sind.
+        </p>
+        <div class="c-bon-player-code__actions">
+          <button
+            class="c-choice"
+            type="button"
+            data-test="get"
+            :disabled="pending"
+            @click="getCode"
+          >
+            Spielercode holen
+          </button>
+          <button class="c-textlink" type="button" data-test="show-redeem" @click="showRedeem">
+            Hab schon ’n Code
+          </button>
+        </div>
+      </template>
+
+      <!-- Persistent assertive region (also the field's error description); the box only exists with a message. -->
+      <div
+        id="bon-player-code-error"
+        class="c-bon-player-code__error"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-test="error"
+      >
+        <div v-if="error" class="c-state c-state--error">
+          <CircleAlertIcon aria-hidden="true" height="18" width="18" />
+          <span class="c-state__body">
+            <b>{{ error }}</b>
+            <span v-if="errorHint">{{ errorHint }}</span>
+          </span>
+        </div>
       </div>
     </div>
   </section>
@@ -166,6 +182,7 @@ import { normalizeCode } from "@utils/bonPlayerCode.ts";
 import { ANONYM } from "payload-app/bon-names";
 import CheckIcon from "virtual:icons/lucide/check";
 import CircleAlertIcon from "virtual:icons/lucide/circle-alert";
+import KeyIcon from "virtual:icons/lucide/key";
 import { computed, nextTick, onMounted, ref } from "vue";
 
 const props = defineProps<{ mode?: "none" | "redeem" }>();

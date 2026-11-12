@@ -54,10 +54,20 @@
       </dl>
 
       <div class="c-bon-result__actions">
-        <button class="c-button c-button--primary" type="button" @click="emit('restart')">
+        <button
+          class="c-button c-button--primary c-bon-result__again"
+          type="button"
+          @click="emit('restart')"
+        >
           Nochmal spielen
         </button>
-        <button class="c-choice" type="button" aria-live="polite" @click="share">
+        <button
+          class="c-choice c-bon-result__share"
+          type="button"
+          aria-live="polite"
+          @click="share"
+        >
+          <ShareIcon width="16" height="16" aria-hidden="true" />
           {{ copied ? "Text kopiert" : "Ergebnis teilen" }}
         </button>
       </div>
@@ -78,35 +88,34 @@
       </div>
       <div class="c-section-card__body">
         <ol class="c-bon-result__list">
-          <li v-for="(e, i) in history" :key="i" class="c-bon-result__row">
+          <li v-for="(e, i) in history" :key="i">
+            <!-- Mock "Deine Runde": the whole row links a real word; mark, word over its note, arrow. -->
             <component
-              :is="e.correct ? CheckIcon : XIcon"
-              :class="`c-bon-result__mark c-bon-result__mark--${e.correct ? 'ok' : 'no'}`"
-              role="img"
-              :aria-label="e.correct ? 'richtig' : 'falsch'"
-              width="20"
-              height="20"
-            />
-            <span class="c-bon-result__word">
-              <a
-                v-if="e.isReal && e.slug"
-                :href="routeToWord(e.slug)"
-                class="c-textlink c-textlink--inline c-bon-result__link"
-              >
-                <b>{{ e.word }}</b> <span aria-hidden="true">→</span>
-              </a>
-              <template v-else-if="e.isReal">
-                <b>{{ e.word }}</b>
-              </template>
-              <span v-else class="c-bon-result__fake">
+              :is="e.isReal && e.slug ? 'a' : 'span'"
+              :href="e.isReal && e.slug ? routeToWord(e.slug) : undefined"
+              class="c-bon-result__row"
+              :class="{ 'c-bon-result__row--fake': !e.isReal }"
+            >
+              <component
+                :is="e.correct ? CheckIcon : XIcon"
+                :class="`c-bon-result__mark c-bon-result__mark--${e.correct ? 'ok' : 'no'}`"
+                role="img"
+                :aria-label="e.correct ? 'richtig' : 'falsch'"
+                width="20"
+                height="20"
+              />
+              <span class="c-bon-result__word">
                 <s v-if="e.category === 'invented'">{{ e.word }}</s>
                 <b v-else>{{ e.word }}</b>
-                <span v-if="e.category" class="t-small">
+                <span v-if="e.translation" class="t-small">{{ e.translation }}</span>
+                <span v-else-if="e.category" class="t-small">
                   {{ e.category === "invented" ? "erfunden" : "Hochdeutsch" }}
                 </span>
               </span>
-              <span v-if="e.translation" class="t-small">{{ e.translation }}</span>
-            </span>
+              <span v-if="e.isReal && e.slug" class="c-bon-result__arrow" aria-hidden="true"
+                >→</span
+              >
+            </component>
           </li>
         </ol>
       </div>
@@ -133,6 +142,7 @@ import { accuracyPercent, buildShareUrl } from "@utils/bonShare";
 import { routeToWord } from "@utils/helpers";
 import { ANONYM, cleanName } from "payload-app/bon-names";
 import CheckIcon from "virtual:icons/lucide/check";
+import ShareIcon from "virtual:icons/lucide/share-2";
 import TrophyIcon from "virtual:icons/lucide/trophy";
 import XIcon from "virtual:icons/lucide/x";
 import { computed, nextTick, onMounted, ref, watch } from "vue";

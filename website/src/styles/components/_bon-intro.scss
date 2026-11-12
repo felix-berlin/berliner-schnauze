@@ -56,6 +56,12 @@
     text-underline-position: from-font;
   }
 
+  &__input {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: 44px;
+  }
+
   &__optional {
     font-weight: 400;
     color: var(--color-muted);
@@ -88,6 +94,11 @@
   &__redeem,
   &__leaderboard {
     align-self: flex-start;
+  }
+
+  &__redeem {
+    gap: 0.375rem;
+    font-size: 0.9rem;
   }
 
   // The card styles are scoped to the word page; here the sheet surface comes from the DS tokens.

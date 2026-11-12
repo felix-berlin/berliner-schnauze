@@ -1,16 +1,26 @@
 // Player name display and inline editor (docs/design/bon/SPEC.md §12b).
+// One line (mock BonName): in a narrow column the name gives way with an ellipsis, "Namen ändern" stays beside it.
 .c-bon-name {
   display: flex;
-  flex-wrap: wrap;
   align-items: baseline;
   gap: 0.25rem 0.5rem;
+  min-inline-size: 0;
   margin: 0;
+
+  > * {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
 
   &__label {
     color: var(--color-muted);
   }
 
-  &__name {
+  & &__name {
+    flex-shrink: 1;
+    min-inline-size: 3ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
     color: var(--color-ink-strong);
   }
 
@@ -46,6 +56,13 @@
     align-items: baseline;
     justify-content: space-between;
     gap: 1rem;
+  }
+
+  // Full width and a 44px target like the DS .c-field (Spec §12b).
+  &__input {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: 44px;
   }
 
   &__field-label {
