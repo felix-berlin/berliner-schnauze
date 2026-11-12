@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.12.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.0...v4.12.1) (2026-11-12)
+
+
+### Bug Fixes
+
+* **bon:** keep the redeemed player name when starting a run ([9bece95](https://github.com/felix-berlin/berliner-schnauze/commit/9bece95ee011be2dc7e5a1ee7c0ebeb7fef7232c))
+
 # [4.12.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.11.0...v4.12.0) (2026-11-12)
 
 
