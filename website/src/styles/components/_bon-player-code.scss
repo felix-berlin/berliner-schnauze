@@ -32,6 +32,13 @@
     color: var(--orange-400);
   }
 
+  // Mock BonCode success: a full-size primary button.
+  &__continue.c-button {
+    min-block-size: 48px;
+    padding: 0 1.5rem;
+    font-size: 1rem;
+  }
+
   &__body.c-section-card__body {
     display: flex;
     flex-direction: column;
