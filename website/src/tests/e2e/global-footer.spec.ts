@@ -54,6 +54,8 @@ test.describe("Footer", () => {
 
   test("Footer-Link navigiert (Impressum)", async ({ page }) => {
     await page.goto("/");
+    // The word list replaces its skeleton and moves the footer: a click during that misses.
+    await expect(page.getByText(/\d+ Ergebnisse/)).toBeVisible();
 
     await footer(page).getByRole("link", { name: "Impressum" }).click();
 
