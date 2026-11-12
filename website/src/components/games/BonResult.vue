@@ -55,7 +55,7 @@
 
       <div class="c-bon-result__actions">
         <button
-          class="c-button c-button--primary c-bon-result__again"
+          class="c-button c-button--primary c-button--lg c-bon-result__again"
           type="button"
           @click="emit('restart')"
         >
@@ -82,7 +82,10 @@
       <BonPlayerCode />
     </div>
 
-    <section class="c-section-card c-bon-result__round" aria-labelledby="bon-round-title">
+    <section
+      class="c-section-card c-section-card--sheet c-bon-result__round"
+      aria-labelledby="bon-round-title"
+    >
       <div class="c-section-card__header">
         <h2 id="bon-round-title" class="c-section-card__title">Deine Runde</h2>
       </div>

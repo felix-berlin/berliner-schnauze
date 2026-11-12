@@ -1,12 +1,15 @@
 // Link (docs/design/wortseite/SPEC.md): text action, also on <button>. 44px hit area.
 :where(.c-link, .c-textlink) {
+  --color-link: var(--color-muted);
+  --decoration-text: underline dashed from-font;
+
   display: inline-flex;
   align-items: center;
   min-block-size: 2.75rem;
   padding: 0 0.25rem;
   border: 0;
   background: none;
-  color: var(--color-muted);
+  color: var(--color-link);
   font: inherit;
   font-size: 0.8rem;
   letter-spacing: inherit;
@@ -16,7 +19,7 @@
 
   @media (hover: hover) {
     &:hover:not(:disabled, [aria-disabled="true"]) {
-      color: var(--color-accent-text);
+      --color-link: var(--color-accent-text);
     }
   }
 
@@ -33,9 +36,11 @@
 
 // Inline in running text: no hit-area padding, inherits size and colour.
 :where(.c-textlink--inline) {
+  // currentColor as a colour value means "inherit".
+  --color-link: currentcolor;
+
   display: inline;
   min-block-size: 0;
   padding: 0;
-  color: inherit;
   font-size: inherit;
 }

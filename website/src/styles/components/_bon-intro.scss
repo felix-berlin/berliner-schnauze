@@ -47,13 +47,10 @@
     max-width: 360px;
   }
 
-  // A global link reset flattens .c-textlink on <a>; restore the dashed underline and the readable size.
   &__exit {
     align-self: flex-start;
     margin-inline-start: -0.25rem;
     font-size: 0.9rem;
-    text-decoration: underline dashed from-font;
-    text-underline-position: from-font;
   }
 
   &__input {
@@ -75,10 +72,11 @@
   }
 
   &__cta {
+    --padding: 0 2rem;
+
     // Morphs into the first card (docs/design/bon/SPEC.md §13).
     view-transition-name: bon-card;
-    height: 52px;
-    padding: 0 2rem;
+    min-block-size: 52px;
     font-size: 1.05rem;
 
     &[aria-disabled="true"] {
@@ -101,31 +99,8 @@
     font-size: 0.9rem;
   }
 
-  // The card styles are scoped to the word page; here the sheet surface comes from the DS tokens.
-  // Doubled class so these beat the later-loaded .c-section-card rules.
-  & &__rules {
+  &__rules {
     align-self: start;
-    background: var(--surface-sheet);
-    border-color: var(--rule-card);
-    border-radius: var(--radius-sm);
-
-    .c-section-card__header {
-      padding: 0.875rem 1rem;
-    }
-
-    .c-section-card__body {
-      padding: 0 1rem 1rem;
-    }
-
-    @include mx.breakpoint("word") {
-      .c-section-card__header {
-        padding: 1rem 1.5rem;
-      }
-
-      .c-section-card__body {
-        padding: 0 1.5rem 1.5rem;
-      }
-    }
   }
 
   &__rules-header {

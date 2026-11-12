@@ -4,11 +4,8 @@
   flex-direction: column;
   gap: 0.5rem;
 
-  // A global link reset flattens .c-textlink on <a>; restore the dashed underline.
-  a.c-textlink {
+  .c-textlink {
     align-self: flex-start;
-    text-decoration: underline dashed from-font;
-    text-underline-position: from-font;
   }
 
   p {

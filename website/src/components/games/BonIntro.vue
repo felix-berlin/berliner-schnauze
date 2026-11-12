@@ -68,7 +68,7 @@
         </div>
         <div class="c-bon-intro__start">
           <button
-            class="c-button c-button--primary c-bon-intro__cta"
+            class="c-button c-button--primary c-button--lg c-bon-intro__cta"
             type="submit"
             :aria-disabled="offline ? 'true' : undefined"
           >
@@ -95,7 +95,10 @@
       >
     </section>
 
-    <aside class="c-section-card c-bon-intro__rules" aria-labelledby="bon-rules-title">
+    <aside
+      class="c-section-card c-section-card--sheet c-bon-intro__rules"
+      aria-labelledby="bon-rules-title"
+    >
       <div class="c-section-card__header c-bon-intro__rules-header">
         <h2 id="bon-rules-title" class="c-section-card__title">So jeht’s</h2>
       </div>

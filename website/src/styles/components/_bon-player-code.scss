@@ -1,20 +1,14 @@
 @use "@styles/mixins" as mx;
 @use "section-card";
 
-// Player code card (docs/design/bon/SPEC.md §12, mock BonCode): a section card with a key in the title.
-// Doubled class so the sheet surface beats the later-loaded .c-section-card rules (like the start screen).
-.c-bon-player-code.c-bon-player-code {
+// Player code card (docs/design/bon/SPEC.md §12, mock BonCode): a sheet section card with a key in the title.
+.c-bon-player-code {
   position: relative;
   box-sizing: border-box;
   inline-size: 100%;
   max-inline-size: 32rem;
   margin-block: 1rem;
-  background: var(--surface-sheet);
-  border-color: var(--rule-card);
-  border-radius: var(--radius-sm);
-}
 
-.c-bon-player-code {
   &__header.c-section-card__header {
     padding: 0.875rem 1rem 0;
     border-block-end: 0;
@@ -30,13 +24,6 @@
   &__icon {
     flex-shrink: 0;
     color: var(--orange-400);
-  }
-
-  // Mock BonCode success: a full-size primary button.
-  &__continue.c-button {
-    min-block-size: 48px;
-    padding: 0 1.5rem;
-    font-size: 1rem;
   }
 
   &__body.c-section-card__body {

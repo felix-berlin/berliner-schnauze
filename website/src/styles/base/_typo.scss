@@ -19,8 +19,9 @@ button {
   letter-spacing: 1px;
 }
 
+// Components restyle links through these variables; this rule beats a zero-specificity :where() class otherwise.
 a {
-  color: inherit;
+  color: var(--color-link, inherit);
   cursor: pointer;
   text-decoration: var(--decoration-text, none);
 }

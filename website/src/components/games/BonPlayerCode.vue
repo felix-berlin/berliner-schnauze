@@ -1,7 +1,7 @@
 <template>
   <section
     ref="root"
-    class="c-section-card c-bon-player-code"
+    class="c-section-card c-section-card--sheet c-bon-player-code"
     aria-labelledby="bon-player-code-title"
   >
     <div class="c-section-card__header c-bon-player-code__header">
@@ -33,7 +33,7 @@
       <template v-if="state === 'success'">
         <button
           v-if="mode === 'redeem'"
-          class="c-button c-button--primary c-bon-player-code__continue"
+          class="c-button c-button--primary c-button--lg c-bon-player-code__continue"
           type="button"
           data-test="continue"
           @click="emit('close')"

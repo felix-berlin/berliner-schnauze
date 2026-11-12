@@ -16,12 +16,6 @@
     padding: 40px 24px 96px;
   }
 
-  // A global link reset flattens .c-textlink on <a>; restore the dashed underline.
-  a.c-textlink {
-    text-decoration: underline dashed from-font;
-    text-underline-position: from-font;
-  }
-
   &__header {
     display: flex;
     flex-direction: column;
@@ -81,13 +75,8 @@
     }
   }
 
-  // The card styles are scoped to the word page; here the sheet surface comes from the DS tokens.
-  // Doubled class so these beat the later-loaded .c-section-card rules.
-  & &__card {
+  &__card {
     min-width: 0;
-    background: var(--surface-sheet);
-    border-color: var(--rule-card);
-    border-radius: var(--radius-sm);
   }
 
   &__card-header {
@@ -279,13 +268,7 @@
   }
 
   &__play {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     align-self: flex-start;
-    height: 48px;
-    padding: 0 1.5rem;
-    text-decoration: none;
   }
 
   &__empty &__play {
@@ -337,12 +320,9 @@
     gap: 0.5rem 1rem;
     align-items: center;
 
-    // Button and link alike (Spec §11); a global reset gives the <a> body size and ink otherwise.
+    // A notch above the default link size (Spec §11).
     .c-textlink {
       font-size: 0.9rem;
-      color: var(--color-muted);
-      text-decoration: underline dashed from-font;
-      text-underline-position: from-font;
     }
   }
 

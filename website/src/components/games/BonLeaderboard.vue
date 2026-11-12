@@ -24,7 +24,7 @@
 
     <div class="c-bon-leaderboard__body">
       <section
-        class="c-section-card c-bon-leaderboard__card c-bon-leaderboard__main"
+        class="c-section-card c-section-card--sheet c-bon-leaderboard__card c-bon-leaderboard__main"
         aria-labelledby="bon-leaderboard-title"
       >
         <h2 id="bon-leaderboard-title" class="u-sr-only">{{ periodTitle }}</h2>
@@ -62,7 +62,9 @@
               : "Noch keene Spiele in dem Zeitraum."
           }}</b>
           <span>Hier könnte dein Name stehen.</span>
-          <a class="c-button c-button--primary c-bon-leaderboard__play" :href="GAME_PATH"
+          <a
+            class="c-button c-button--primary c-button--lg c-bon-leaderboard__play"
+            :href="GAME_PATH"
             >Jetzt spielen</a
           >
         </div>
@@ -156,7 +158,10 @@
         class="c-bon-leaderboard__aside"
         :class="{ 'c-bon-leaderboard__aside--first': !me }"
       >
-        <section class="c-section-card c-bon-leaderboard__card" aria-labelledby="bon-lb-me-title">
+        <section
+          class="c-section-card c-section-card--sheet c-bon-leaderboard__card"
+          aria-labelledby="bon-lb-me-title"
+        >
           <div class="c-section-card__header c-bon-leaderboard__card-header">
             <h2 id="bon-lb-me-title" class="c-section-card__title">Dein Platz</h2>
           </div>
@@ -182,7 +187,9 @@
             </template>
             <template v-else>
               <p>Du stehst hier noch nich drin. Spiel ’ne Runde, dann siehste, wo du landest.</p>
-              <a class="c-button c-button--primary c-bon-leaderboard__play" :href="GAME_PATH"
+              <a
+                class="c-button c-button--primary c-button--lg c-bon-leaderboard__play"
+                :href="GAME_PATH"
                 >Jetzt spielen</a
               >
               <p class="t-small">

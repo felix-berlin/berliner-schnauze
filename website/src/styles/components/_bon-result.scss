@@ -25,7 +25,7 @@
     }
 
     // The code card fills the left column, spaced by the column gap.
-    .c-bon-player-code.c-bon-player-code {
+    .c-bon-player-code {
       max-inline-size: none;
       margin-block: 0;
     }
@@ -112,42 +112,12 @@
   }
 
   &__again {
-    padding: 0 1.75rem;
-    font-size: 1rem;
+    --padding: 0 1.75rem;
   }
 
-  // Doubled class so these beat the later-loaded .c-section-card rules (same pattern as the start screen).
-  & &__round {
-    background: var(--surface-sheet);
-    border-color: var(--rule-card);
-    border-radius: var(--radius-sm);
-
-    .c-section-card__header {
-      padding: 0.875rem 1rem;
-      border-block-end: 0;
-    }
-
-    .c-section-card__body {
-      padding: 0 1rem 0.5rem;
-    }
-
-    .c-section-card__footer {
-      padding: 0.75rem 1rem;
-    }
-
-    @include mx.breakpoint("word") {
-      .c-section-card__header {
-        padding: 1rem 1.5rem;
-      }
-
-      .c-section-card__body {
-        padding: 0 1.5rem 0.5rem;
-      }
-
-      .c-section-card__footer {
-        padding: 0.75rem 1.5rem;
-      }
-    }
+  // The rows end in the footer's rule, so the body keeps little room below them.
+  &__round .c-section-card__body {
+    padding-block-end: 0.5rem;
   }
 
   &__list {
@@ -216,12 +186,6 @@
     s {
       color: var(--color-muted);
     }
-  }
-
-  // A global link reset flattens .c-textlink here; restore the dashed underline.
-  & &__round .c-section-card__footer a {
-    text-decoration: underline dashed from-font;
-    text-underline-position: from-font;
   }
 }
 
