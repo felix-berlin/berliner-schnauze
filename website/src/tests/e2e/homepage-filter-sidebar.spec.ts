@@ -19,7 +19,8 @@ test.describe("Filter Sidebar (/)", () => {
 
   test("Sortiere-nach-Dropdown ändert die Reihenfolge der Wortliste", async ({ page }) => {
     const sortSelect = page.getByRole("complementary").getByLabel("Sortiere nach:");
-    await expect(sortSelect.locator("option:checked")).toHaveText("Alphabetisch (A - Z)");
+    // Default: best hits first while searching, A - Z without a search term.
+    await expect(sortSelect.locator("option:checked")).toHaveText("Beste Treffer zuerst");
 
     // 2. Read and store the text of the first word link in the word list
     const wordList = page.locator(".c-word-list article a");
