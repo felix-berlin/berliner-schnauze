@@ -1,14 +1,13 @@
 // Player name display and inline editor (docs/design/bon/SPEC.md §12b).
-// One line (mock BonName): in a narrow column the name gives way with an ellipsis, "Namen ändern" stays beside it.
+// The name always shows in full; without room "Namen ändern" moves to the next line as a whole.
 .c-bon-name {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: 0.25rem 0.5rem;
-  min-inline-size: 0;
   margin: 0;
 
   > * {
-    flex-shrink: 0;
     white-space: nowrap;
   }
 
@@ -16,11 +15,10 @@
     color: var(--color-muted);
   }
 
+  // A long name without spaces breaks instead of overflowing the column.
   & &__name {
-    flex-shrink: 1;
-    min-inline-size: 3ch;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow-wrap: anywhere;
+    white-space: normal;
     color: var(--color-ink-strong);
   }
 
