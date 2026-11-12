@@ -35,7 +35,7 @@ describe("BonIntro", () => {
       expect(wrapper.text()).toContain("Du spielst als Kalle");
       expect($bonStats.get().playerName).toBe("Kalle");
       await wrapper.find("form").trigger("submit");
-      expect(wrapper.emitted("start")).toEqual([["Kalle"]]);
+      expect(wrapper.emitted("start")).toEqual([[]]);
     });
 
     it("keeps the field for a first-time visitor", async () => {
@@ -77,7 +77,7 @@ describe("BonIntro", () => {
     await wrapper.find("input").setValue(`  ${"x".repeat(30)}  `);
     await wrapper.find("form").trigger("submit");
     expect($bonStats.get().playerName).toBe("x".repeat(24));
-    expect(wrapper.emitted("start")).toEqual([["x".repeat(24)]]);
+    expect(wrapper.emitted("start")).toEqual([[]]);
   });
 
   it("far-right name: shows the alert with the EXIT-Deutschland link and stores nothing", async () => {
@@ -118,7 +118,7 @@ describe("BonIntro", () => {
     await wrapper.find("input").setValue("Marschall");
     await wrapper.find("form").trigger("submit");
     expect($bonStats.get().playerName).toBe("Marschall");
-    expect(wrapper.emitted("start")).toEqual([["Marschall"]]);
+    expect(wrapper.emitted("start")).toEqual([[]]);
     expect(wrapper.find("[role=alert]").exists()).toBe(false);
   });
 

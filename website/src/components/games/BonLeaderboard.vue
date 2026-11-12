@@ -251,7 +251,7 @@ import BonPlayerCode from "@components/games/BonPlayerCode.vue";
 import { fetchLeaderboard, reportName } from "@services/bonLeaderboardApi";
 import { fetchPlayerName, type PlayerName } from "@services/bonPlayerApi.ts";
 import { navigationSettled, vt } from "@utils/viewTransition";
-import { useMediaQuery } from "@vueuse/core";
+import { useLocalStorage, useMediaQuery } from "@vueuse/core";
 import AlertIcon from "virtual:icons/lucide/circle-alert";
 import KeyIcon from "virtual:icons/lucide/key";
 import { computed, onMounted, ref } from "vue";
@@ -259,7 +259,6 @@ import { computed, onMounted, ref } from "vue";
 const GAME_PATH = "/games/berliner-oder-nicht";
 const PAGE = 25;
 const MOBILE_TOP = 10;
-const REPORTED_KEY = "bs-reported-bon-names";
 const SKELETON_WIDTHS = [60, 45, 70, 52, 38, 66, 48, 58];
 const PERIODS: { id: Period; label: string; meta: string }[] = [
   { id: "week", label: "Diese Woche", meta: "diese Woche" },
@@ -286,16 +285,8 @@ const player = ref<PlayerName>();
 const reporting = ref(false);
 const reportError = ref("");
 const moreError = ref("");
-const reported = ref<number[]>(readReported());
-
-function readReported(): number[] {
-  try {
-    const list: unknown = JSON.parse(localStorage.getItem(REPORTED_KEY) ?? "[]");
-    return Array.isArray(list) ? list.filter((id) => typeof id === "number") : [];
-  } catch {
-    return [];
-  }
-}
+// Without storage a name can be reported again after a reload; the server counts it once.
+const reported = useLocalStorage<number[]>("bs-reported-bon-names", []);
 
 const fmt = (n: number) => n.toLocaleString("de-DE");
 const current = computed(() => PERIODS.find((p) => p.id === listed.value)!);
@@ -405,11 +396,6 @@ async function report(id: number): Promise<void> {
     }
   }
   reported.value = [...reported.value, id];
-  try {
-    localStorage.setItem(REPORTED_KEY, JSON.stringify(reported.value));
-  } catch {
-    // Without storage the name can be reported again after a reload; the server counts it once.
-  }
 }
 
 const rtf = new Intl.RelativeTimeFormat("de", { numeric: "auto" });

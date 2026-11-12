@@ -5,7 +5,7 @@
       :high-score="stats.highScore"
       :offline="!isOnline"
       :link-redeem="linkRedeem"
-      @start="onStart"
+      @start="start"
     />
 
     <div
@@ -18,12 +18,7 @@
       <h1 v-if="view !== 'over'" class="u-sr-only">Berliner oder nicht? – Spiel läuft</h1>
 
       <template v-if="view === 'play' || view === 'feedback'">
-        <BonHUD
-          :lives="lives"
-          :score="score"
-          :streak="streak"
-          :player-label="playerLabel"
-        />
+        <BonHUD :lives="lives" :score="score" :streak="streak" :player-label="playerLabel" />
         <BonCard
           v-if="card"
           :word="card.word"
@@ -152,11 +147,6 @@ const isOnline = useOnline();
 // Peeked, not taken: BonPlayerCode inside the intro redeems the code itself.
 const linkRedeem = hasRedeemCode();
 const { vibrate } = useVibrate();
-
-// BonIntro has already written the name to $bonStats, which start() reads.
-function onStart() {
-  void start();
-}
 
 // Spec §7 input lock, as long as the animation (§13): answers stay closed from the first answer
 // until the next card has risen; "next" stays closed while the feedback flies out and flips in.

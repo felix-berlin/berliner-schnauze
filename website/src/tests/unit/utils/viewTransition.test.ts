@@ -49,6 +49,20 @@ describe("vt", () => {
     await Promise.resolve();
     expect(document.documentElement.dataset.vt).toBeUndefined();
   });
+
+  it("without a direction runs the default crossfade and sets no data-vt", () => {
+    setMotion(false);
+    const start = vi.fn((cb: () => Promise<void>) => {
+      void cb();
+      return { finished: Promise.resolve() };
+    });
+    (document as unknown as { startViewTransition: unknown }).startViewTransition = start;
+    const update = vi.fn();
+    vt(update);
+    expect(start).toHaveBeenCalledOnce();
+    expect(update).toHaveBeenCalledOnce();
+    expect(document.documentElement.dataset.vt).toBeUndefined();
+  });
 });
 
 describe("navigationSettled", () => {

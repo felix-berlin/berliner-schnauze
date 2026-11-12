@@ -156,7 +156,8 @@ import WifiOffIcon from "virtual:icons/lucide/wifi-off";
 import { onMounted, ref } from "vue";
 
 const props = defineProps<{ highScore: number; offline: boolean; linkRedeem: boolean }>();
-const emit = defineEmits<{ start: [name: string] }>();
+// The name is in $bonStats by then; useBon.start() reads it there.
+const emit = defineEmits<{ start: [] }>();
 
 const name = ref($bonStats.get().playerName ?? "");
 const redeeming = ref(false);
@@ -188,7 +189,7 @@ function start() {
   problem.value = nameCategory(trimmed);
   if (problem.value) return;
   $bonStats.setKey("playerName", trimmed);
-  emit("start", trimmed);
+  emit("start");
 }
 </script>
 
