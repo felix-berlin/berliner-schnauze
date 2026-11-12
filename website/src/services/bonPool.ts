@@ -11,6 +11,7 @@ const loadReal = async (): Promise<DealtCard[]> => {
     collection: "words",
     depth: 0,
     pagination: false,
+    select: { berlinerisch: true, slug: true, translations: true },
     ...siteRead(),
   });
   return docs.flatMap((w) => {
@@ -31,14 +32,13 @@ const loadReal = async (): Promise<DealtCard[]> => {
 
 const real = ttl(60_000, loadReal);
 
+const fake: DealtCard[] = fakeWords.map((f, i) => ({
+  category: f.category,
+  id: `f${i}`,
+  isReal: false,
+  word: f.word,
+}));
+
 export async function loadPool(): Promise<{ real: DealtCard[]; fake: DealtCard[] }> {
-  return {
-    fake: fakeWords.map((f, i) => ({
-      category: f.category,
-      id: `f${i}`,
-      isReal: false,
-      word: f.word,
-    })),
-    real: await real(),
-  };
+  return { fake, real: await real() };
 }

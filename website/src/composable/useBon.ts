@@ -4,7 +4,7 @@ import { answerCard, finishRun, nextCards, startRun } from "@services/bonGameApi
 import { $bonStats } from "@stores/bonStats";
 import { trackEvent } from "@utils/analytics";
 import { computeMultiplier, LIVES } from "payload-app/bon-rules";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 export { computeMultiplier };
 
@@ -46,12 +46,12 @@ export function useBon() {
   const score = ref(0);
   const streak = ref(0);
   const bestStreak = ref(0);
-  const multiplier = ref(1);
+  const multiplier = computed(() => computeMultiplier(streak.value));
   const card = ref<PublicCard | null>(null);
   const cardInStack = ref(0);
   const stack = ref(0);
   const history = ref<RoundEntry[]>([]);
-  const last = ref<RoundEntry | null>(null);
+  const last = computed(() => history.value.at(-1) ?? null);
   const result = ref<FinishResult | undefined>();
   // Set when the result could not be stored; `result` then stays empty.
   const finishError = ref<BonError>();
@@ -119,9 +119,7 @@ export function useBon() {
     previousHighScore.value = $bonStats.get().highScore;
     lives.value = LIVES;
     score.value = streak.value = bestStreak.value = 0;
-    multiplier.value = 1;
     history.value = [];
-    last.value = null;
     result.value = finishError.value = error.value = undefined;
     endedEarly.value = false;
     finishing.value = false;
@@ -154,14 +152,13 @@ export function useBon() {
       const reply = await queued(() => answerCard(token, entry.id, real));
       if (g !== gen) return;
       streak.value = reply.correct ? streak.value + 1 : 0;
-      multiplier.value = computeMultiplier(streak.value);
       bestStreak.value = Math.max(bestStreak.value, streak.value);
       const points = reply.correct ? 10 * multiplier.value : 0;
       score.value += points;
       lives.value = reply.lives;
       gameOver = reply.gameOver;
       const { correct, category, isReal, slug, translation } = reply;
-      last.value = {
+      history.value.push({
         category,
         correct,
         isReal,
@@ -170,8 +167,7 @@ export function useBon() {
         slug,
         translation,
         word: entry.word,
-      };
-      history.value.push(last.value);
+      });
       if (!ending) phase.value = "feedback";
     } catch (e) {
       // Once the run is being finished the answer is moot.

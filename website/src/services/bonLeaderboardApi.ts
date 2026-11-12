@@ -1,5 +1,7 @@
 import type { Period, RankedEntry } from "payload-app/bon-ranking";
 
+import { send } from "@services/bonPlayerApi.ts";
+
 // Type-only: the module imports node:crypto, which the client must not bundle.
 export type { Period };
 
@@ -15,27 +17,18 @@ export interface LeaderboardReply {
 const REPORT_ERROR = "Die Meldung konnte leider nich jesendet werden.";
 const FALLBACK_ERROR = "Die Rangliste is jerade nich zu kriegen.";
 
-export async function fetchLeaderboard(
+export const fetchLeaderboard = (
   period: Period,
   offset: number,
   limit: number,
-): Promise<LeaderboardReply> {
-  const query = new URLSearchParams({ limit: String(limit), offset: String(offset), period });
-  const res = await fetch(`/api/bon/leaderboard?${query}`).catch(() => undefined);
-  const data = (await res?.json().catch(() => undefined)) as LeaderboardReply | undefined;
-  if (!res?.ok || !data) throw new Error(FALLBACK_ERROR);
-  return data;
-}
+): Promise<LeaderboardReply> =>
+  send(
+    "GET",
+    `/api/bon/leaderboard?${new URLSearchParams({ limit: String(limit), offset: String(offset), period })}`,
+    undefined,
+    FALLBACK_ERROR,
+  );
 
-/** Answers 204 without a body, so it cannot go through `post` in bonPlayerApi. The status lets callers tell 404 (gone) from 429. */
-export async function reportName(id: number): Promise<void> {
-  const res = await fetch("/api/bon/report-name", {
-    body: JSON.stringify({ id }),
-    headers: { "Content-Type": "application/json" },
-    method: "POST",
-  }).catch(() => undefined);
-  if (!res) throw new Error(REPORT_ERROR);
-  if (res.ok) return;
-  const data = (await res.json().catch(() => undefined)) as { error?: string } | undefined;
-  throw Object.assign(new Error(data?.error ?? REPORT_ERROR), { status: res.status });
-}
+/** The error's status lets callers tell 404 (gone) from 429. */
+export const reportName = (id: number): Promise<void> =>
+  send("POST", "/api/bon/report-name", { id }, REPORT_ERROR);

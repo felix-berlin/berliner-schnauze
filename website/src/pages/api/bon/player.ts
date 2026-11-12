@@ -112,12 +112,13 @@ const gamesOf = ({ playerId, visitor }: Identity): Where =>
 const named = (name: string, identity: string) => ({ name, tag: bonTag(identity) });
 
 const DAY = 24 * 60 * 60_000;
+const NOT_PLAYED = { error: "Du hast noch nich jespielt." };
 
 export const GET: APIRoute = async ({ cookies }) => {
   try {
     const payload = await getPayloadClient();
     const who = await bonIdentity(payload, cookies);
-    if (!who) return reply({ error: "Du hast noch nich jespielt." }, 404);
+    if (!who) return reply(NOT_PLAYED, 404);
     const [latest] = (
       await payload.find({
         collection: "bon-games",
@@ -128,8 +129,7 @@ export const GET: APIRoute = async ({ cookies }) => {
         where: { and: [gamesOf(who), { status: { equals: "finished" } }] },
       })
     ).docs;
-    if (!latest && who.playerId === undefined)
-      return reply({ error: "Du hast noch nich jespielt." }, 404);
+    if (!latest && who.playerId === undefined) return reply(NOT_PLAYED, 404);
     const name = displayName(latest ?? { playerName: who.playerName });
     return reply(named(name, who.identity), 200);
   } catch (error) {
@@ -142,7 +142,7 @@ export const PATCH: APIRoute = async ({ cookies, request }) => {
   try {
     const payload = await getPayloadClient();
     const who = await bonIdentity(payload, cookies);
-    if (!who) return reply({ error: "Du hast noch nich jespielt." }, 404);
+    if (!who) return reply(NOT_PLAYED, 404);
     const input = renameSchema.safeParse(await request.json().catch(() => undefined));
     if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
     const { name } = input.data;

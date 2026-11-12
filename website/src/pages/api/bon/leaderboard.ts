@@ -31,9 +31,9 @@ export const GET: APIRoute = async ({ cookies, url }) => {
   const { limit, offset, period } = query.data;
   try {
     const payload = await getPayloadClient();
-    const ranking = await loadRanking(period);
     // No cookie is set here: a visitor without one simply has no "me".
-    const identity = (await bonIdentity(payload, cookies))?.identity;
+    const [ranking, who] = await Promise.all([loadRanking(period), bonIdentity(payload, cookies)]);
+    const identity = who?.identity;
     const myIndex = identity ? ranking.findIndex((e) => e.identity === identity) : -1;
 
     const pub = ({ identity: id, ...entry }: RankedEntry) => ({

@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 
-import { bonVisitor } from "@services/bonGame.ts";
+import { bonIdentityOf, bonVisitor } from "@services/bonGame.ts";
 import { playerFromCookie } from "@services/bonPlayer.ts";
 import { loadPool } from "@services/bonPool.ts";
 import { getPayloadClient } from "@services/payload.ts";
@@ -33,8 +33,8 @@ export const POST: APIRoute = async ({ cookies }) => {
         if (errors.length > 0) console.error("[bon] cleanup failed for some games:", errors);
       })
       .catch((error: unknown) => console.error("[bon] cleanup failed:", error));
-    const player = await playerFromCookie(payload, cookies);
-    const cards = dealBatch(await loadPool(), new Set());
+    const [player, pool] = await Promise.all([playerFromCookie(payload, cookies), loadPool()]);
+    const cards = dealBatch(pool, new Set());
     const game = await payload.create({
       collection: "bon-games",
       data: {
@@ -51,7 +51,7 @@ export const POST: APIRoute = async ({ cookies }) => {
       {
         cards: cards.map((c, i) => toPublic(c, i)),
         // Same identity string as the ranking, so the HUD tag matches the leaderboard's.
-        tag: bonTag(player ? `p:${player.id}` : `v:${visitor}`),
+        tag: bonTag(bonIdentityOf(player?.id, visitor)),
         token: game.token,
       },
       200,

@@ -1,9 +1,8 @@
 import type { getPayloadClient } from "@services/payload.ts";
 import type { AstroCookies } from "astro";
 
-import { bonVisitor } from "@services/bonGame.ts";
-import { visitorId } from "@services/payload/comments.ts";
-import { createHash } from "node:crypto";
+import { bonIdentityOf, bonVisitor } from "@services/bonGame.ts";
+import { sha256, visitorId } from "@services/payload/comments.ts";
 import { displayName } from "payload-app/bon-names";
 import { normalizeCode } from "payload-app/bon-player";
 
@@ -12,8 +11,7 @@ type Client = Awaited<ReturnType<typeof getPayloadClient>>;
 export const PLAYER_COOKIE = "bon_player";
 
 /** Rows store only this hash of the code, with its own prefix so it joins nothing else. */
-export const bonCodeHash = (code: string) =>
-  createHash("sha256").update(`bon-code:${code}`).digest("hex");
+export const bonCodeHash = (code: string) => sha256(`bon-code:${code}`);
 
 /** The player for a code (any spelling), or undefined; `bon-players` is login-only, so default overrideAccess. */
 export const findPlayer = async (payload: Client, input: string) => {
@@ -41,11 +39,12 @@ export const playerFromCookie = (payload: Client, cookies: AstroCookies) => {
 /** Who is asking, as the ranking sees them; no cookie is set, so a browser without either is no one. */
 export const bonIdentity = async (payload: Client, cookies: AstroCookies) => {
   const player = await playerFromCookie(payload, cookies);
-  if (player) return { identity: `p:${player.id}`, playerId: player.id, playerName: player.name };
+  if (player)
+    return { identity: bonIdentityOf(player.id), playerId: player.id, playerName: player.name };
   const cookie = visitorId(cookies, false);
   if (!cookie) return undefined;
   const visitor = bonVisitor(cookie);
-  return { identity: `v:${visitor}`, visitor };
+  return { identity: bonIdentityOf(undefined, visitor), visitor };
 };
 
 export const setPlayerCookie = (cookies: AstroCookies, code: string) =>

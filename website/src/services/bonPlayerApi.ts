@@ -10,7 +10,13 @@ export interface PlayerStats {
 
 const FALLBACK_ERROR = "Das hat leida nich jeklappt. Versuch's jleich nochma.";
 
-async function send<T>(method: string, url: string, body?: unknown): Promise<T> {
+/** JSON request to a BON route; a 204 resolves without a value. */
+export async function send<T>(
+  method: string,
+  url: string,
+  body?: unknown,
+  fallback = FALLBACK_ERROR,
+): Promise<T> {
   let res: Response;
   try {
     res = await fetch(
@@ -20,12 +26,13 @@ async function send<T>(method: string, url: string, body?: unknown): Promise<T> 
         : { body: JSON.stringify(body), headers: { "Content-Type": "application/json" }, method },
     );
   } catch {
-    throw new Error(FALLBACK_ERROR);
+    throw new Error(fallback);
   }
+  if (res.status === 204) return undefined as T;
   const data = (await res.json().catch(() => undefined)) as (T & { error?: string }) | undefined;
   // The status lets callers tell a lockout (429) from a wrong code (404).
   if (!res.ok || !data)
-    throw Object.assign(new Error(data?.error ?? FALLBACK_ERROR), { status: res.status });
+    throw Object.assign(new Error(data?.error ?? fallback), { status: res.status });
   return data;
 }
 

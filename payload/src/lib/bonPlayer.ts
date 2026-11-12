@@ -20,10 +20,12 @@ export function generateCode(): string {
   return chars.replace(/(.{4})(?=.)/g, "$1-");
 }
 
+const CODE_PATTERN = new RegExp(`^[${CODE_ALPHABET}]{${CODE_LENGTH}}$`);
+
 /** Canonical `XXXX-XXXX-XXXX` or undefined; accepts any case, whitespace and dashes (not underscores, unlike the client copy); at most 64 characters. */
 export function normalizeCode(input: string): string | undefined {
   if (input.length > 64) return undefined;
   const raw = input.toUpperCase().replace(/[\s-]/g, "");
-  if (!new RegExp(`^[${CODE_ALPHABET}]{${CODE_LENGTH}}$`).test(raw)) return undefined;
+  if (!CODE_PATTERN.test(raw)) return undefined;
   return raw.replace(/(.{4})(?=.)/g, "$1-");
 }

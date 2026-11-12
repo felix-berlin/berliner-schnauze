@@ -1,3 +1,4 @@
+import { bonIdentityOf } from "@services/bonGame.ts";
 import { ttl } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { displayName } from "payload-app/bon-names";
@@ -37,11 +38,7 @@ const load = (period: Period) => async (): Promise<RankedEntry[]> => {
               correctAnswers: g.correctAnswers ?? 0,
               finishedAt: g.finishedAt,
               id: g.id,
-              // The pseudonym is the player when set, else the visitor; the prefix keeps the two apart.
-              identity:
-                g.player != null
-                  ? `p:${typeof g.player === "object" ? g.player.id : g.player}`
-                  : `v:${g.visitor}`,
+              identity: bonIdentityOf(g.player, g.visitor),
               // Before the tag is derived: a hidden name becomes Anonym and so gets one.
               name: displayName(g),
               score: g.score ?? 0,
