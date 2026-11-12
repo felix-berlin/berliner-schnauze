@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
 
+import { resultCount } from "./helpers";
+
 const footer = (page: import("@playwright/test").Page) => page.getByRole("contentinfo");
 
 test.describe("Footer", () => {
@@ -54,6 +56,8 @@ test.describe("Footer", () => {
 
   test("Footer-Link navigiert (Impressum)", async ({ page }) => {
     await page.goto("/");
+    // The word list replaces its skeleton and moves the footer: a click during that misses.
+    await expect(resultCount(page)).toBeVisible();
 
     await footer(page).getByRole("link", { name: "Impressum" }).click();
 

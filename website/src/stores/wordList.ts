@@ -1,7 +1,7 @@
 import type { Orama, SearchParamsFullText } from "@orama/orama";
 
 import { computedAsync } from "@nanostores/async";
-import { persistentMap } from "@nanostores/persistent";
+import { persistentAtom, persistentMap } from "@nanostores/persistent";
 import { create, insertMultiple, search } from "@orama/orama";
 import { language, stemmer } from "@orama/stemmers/german";
 import { fetchSearchIndex } from "@services/searchIndex.ts";
@@ -19,11 +19,12 @@ export type RangeFilterMinMax = {
   vowelsCount: { max: number; min: number };
 };
 
-type SortOrder = "ASC" | "DESC";
+export type SortOrder = "ASC" | "DESC";
 
 export type WordList = {
   activeLetterFilter: string;
-  activeOrderCategory: "alphabetical" | "date" | "modifiedDate";
+  /** "relevance" = best hits first while searching, alphabetical without a term. */
+  activeOrderCategory: "alphabetical" | "date" | "modifiedDate" | "relevance";
   activeThemenFilter: string[];
   activeWordTypeFilter: string[];
   alphabeticalOrder: SortOrder;
@@ -41,7 +42,7 @@ export type WordList = {
 
 const FILTER_DEFAULTS: WordList = {
   activeLetterFilter: "",
-  activeOrderCategory: "alphabetical",
+  activeOrderCategory: "relevance",
   activeThemenFilter: [],
   activeWordTypeFilter: [],
   alphabeticalOrder: "ASC",
@@ -82,11 +83,51 @@ const COUNTED_FILTERS = [
   ...(Object.keys(RANGE_FILTERS) as (keyof typeof RANGE_FILTERS)[]),
 ] as const;
 
+const SORT_BY = {
+  alphabetical: { orderKey: "alphabeticalOrder", property: "wordProperties.berlinerisch" },
+  date: { orderKey: "dateOrder", property: "dateTs" },
+  modifiedDate: { orderKey: "modifiedDateOrder", property: "modifiedTs" },
+} as const;
+
 export const $wordSearch = persistentMap<WordList>(
   "wordSearch:",
   structuredClone(FILTER_DEFAULTS),
   jsonCodec,
 );
+
+/** Set once the old default sort has been migrated in this browser. */
+const $sortMigrated = persistentAtom<string>("wordSearchSortMigrated", "");
+
+/**
+ * Repairs persisted state from older versions once per load, so readers can trust the types:
+ * unknown sort values fall back to the defaults; range values, stored as strings by the old
+ * slider and as "" by a cleared number input, become numbers or undefined. Once per browser,
+ * the old default sort (A - Z, written by every reset) becomes "relevance"; other sorts stay.
+ */
+function repairPersisted() {
+  const state = $wordSearch.get();
+  const category = state.activeOrderCategory;
+  if (category !== "relevance" && !(category in SORT_BY)) {
+    $wordSearch.setKey("activeOrderCategory", FILTER_DEFAULTS.activeOrderCategory);
+  }
+  for (const { orderKey } of Object.values(SORT_BY)) {
+    if (state[orderKey] !== "ASC" && state[orderKey] !== "DESC") {
+      $wordSearch.setKey(orderKey, FILTER_DEFAULTS[orderKey]);
+    }
+  }
+  for (const key of Object.keys(RANGE_FILTERS) as (keyof typeof RANGE_FILTERS)[]) {
+    const value: unknown = state[key];
+    const min = value === "" || value == null ? undefined : Number(value);
+    const fixed = Number.isNaN(min) ? undefined : min;
+    if (fixed !== value) $wordSearch.setKey(key, fixed);
+  }
+  if ($sortMigrated.get()) return;
+  if (category === "alphabetical" && state.alphabeticalOrder === "ASC") {
+    $wordSearch.setKey("activeOrderCategory", "relevance");
+  }
+  $sortMigrated.set("1");
+}
+if (typeof window !== "undefined") repairPersisted();
 
 export const $searchQuery = atom<string>("");
 
@@ -127,15 +168,12 @@ export const setLetterFilter = (letter: string) => {
   trackEvent("WordList", "Filter", `Letter: ${letter}`);
 };
 
-export const $setSortOrder = (
-  category: WordList["activeOrderCategory"],
-  orderName: string,
-  order: "ASC" | "DESC",
-) => {
+/** `order` is ignored for "relevance", which has none. */
+export const $setSortOrder = (category: WordList["activeOrderCategory"], order?: SortOrder) => {
   $wordSearch.setKey("activeOrderCategory", category);
-  $wordSearch.setKey(orderName as keyof WordList, order);
+  if (category !== "relevance" && order) $wordSearch.setKey(SORT_BY[category].orderKey, order);
 
-  trackEvent("WordList", "Sort Order", `${category}: ${order}`);
+  trackEvent("WordList", "Sort Order", order ? `${category}: ${order}` : category);
 };
 
 export type SearchMeta = {
@@ -199,6 +237,18 @@ const wordSchema = {
 
 let db: null | Orama<typeof wordSchema> = null;
 
+const FULL_TEXT = {
+  boost: {
+    wordComponents: 1.0,
+    "wordProperties.berlinerisch": 2.5,
+    "wordProperties.translations": 1,
+  },
+  // Only the user-facing text fields.
+  properties: ["wordComponents", "wordProperties.berlinerisch", "wordProperties.translations"],
+  threshold: 0.5,
+  tolerance: 1,
+} satisfies Partial<SearchParamsFullText<Orama<typeof wordSchema>>>;
+
 function buildWhere(wordSearch: WordList): Record<string, unknown> {
   const where: Record<string, unknown> = {};
   for (const key of BOOLEAN_FILTERS) {
@@ -220,15 +270,47 @@ function buildWhere(wordSearch: WordList): Record<string, unknown> {
   return where;
 }
 
-const SORT_BY = {
-  alphabetical: { orderKey: "alphabeticalOrder", property: "wordProperties.berlinerisch" },
-  date: { orderKey: "dateOrder", property: "dateTs" },
-  modifiedDate: { orderKey: "modifiedDateOrder", property: "modifiedTs" },
-} as const;
-
-function getSortBy(wordSearch: WordList) {
-  const { orderKey, property } = SORT_BY[wordSearch.activeOrderCategory] ?? SORT_BY.alphabetical;
+/** undefined = no Orama sort: searching with "relevance" ranks hits by matchTier, then score. */
+function getSortBy(wordSearch: WordList, term: string) {
+  const category = wordSearch.activeOrderCategory;
+  if (category === "relevance") {
+    return term ? undefined : { order: "ASC" as const, property: SORT_BY.alphabetical.property };
+  }
+  const { orderKey, property } = SORT_BY[category];
   return { order: wordSearch[orderKey], property };
+}
+
+const normalize = (text: string) => text.trim().toLocaleLowerCase("de");
+
+const parts = (text: string) =>
+  normalize(text)
+    .split(/[^\p{L}]+/u)
+    .filter(Boolean);
+
+/** True if every search word is a prefix of a word in the text: "stink fü" covers "stinkende Füße". */
+const coversTerm = (text: string, termParts: string[]) => {
+  const textParts = parts(text);
+  return termParts.every((t) => textParts.some((part) => part.startsWith(t)));
+};
+
+/**
+ * Orama scores fuzzy and stemmed hits ("Nauke", "Pauke", "Fusseln") like the real ones, so:
+ * the word itself, then words starting with the term, then words whose parts cover every
+ * search word, then entries with such a translation, then the rest; Orama's score decides
+ * within a tier. `term` must be normalized.
+ *
+ * @internal exported for tests
+ */
+export function matchTier(
+  { berlinerisch, translations }: OramaSearchIndex["wordProperties"],
+  term: string,
+  termParts = parts(term),
+) {
+  const word = normalize(berlinerisch);
+  if (word === term) return 0;
+  if (word.startsWith(term)) return 1;
+  if (coversTerm(word, termParts)) return 2;
+  return translations.some((t) => coversTerm(t, termParts)) ? 3 : 4;
 }
 
 async function initOrama(words: OramaSearchIndex[]) {
@@ -286,32 +368,33 @@ export const $oramaSearchResults = computedAsync(
 
     try {
       const where = buildWhere(wordSearch);
-      const sortBy = getSortBy(wordSearch);
+      const term = normalize(searchQuery);
+      const sortBy = getSortBy(wordSearch, term);
 
       const params: SearchParamsFullText<Orama<typeof wordSchema>> = {
-        boost: {
-          wordComponents: 1.0,
-          "wordProperties.berlinerisch": 2.5,
-          "wordProperties.translations": 1,
-        },
         limit,
-        // Only the user-facing text fields.
-        properties: [
-          "wordComponents",
-          "wordProperties.berlinerisch",
-          "wordProperties.translations",
-        ],
-        sortBy,
-        term: searchQuery,
-        threshold: 0.5,
-        tolerance: 1,
+        ...(sortBy ? { sortBy } : {}),
+        // Full-text params only with a term: on an empty term properties + threshold
+        // made Orama drop part of the multi-word entries from filtered lists.
+        ...(term ? { ...FULL_TEXT, term } : {}),
         ...(Object.keys(where).length > 0 ? { where } : {}),
       };
 
-      return db ? await search(db, params) : null;
+      if (!db) return null;
+      const results = await search(db, params);
+      if (!sortBy) {
+        // Stable sort keeps Orama's score order within a tier.
+        const termParts = parts(term);
+        const tiers = new Map(
+          results.hits.map((hit) => [hit, matchTier(hit.document.wordProperties, term, termParts)]),
+        );
+        results.hits.sort((a, b) => tiers.get(a)! - tiers.get(b)!);
+      }
+      return results;
     } catch (err) {
+      // Rethrow: status "failed" shows the reload hint instead of a fake "no results".
       console.error("[wordList] Search failed:", err);
-      return null;
+      throw err;
     }
   },
 );

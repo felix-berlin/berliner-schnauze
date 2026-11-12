@@ -1,14 +1,18 @@
 <template>
   <select
     id="sort"
-    v-model="selected"
+    :value="selected"
     name="sort"
     aria-labelledby="sort-headline"
     class="c-select"
-    @change="$setSortOrder(selected.category, `${selected.category}Order`, selected.sort)"
+    @change="onChange"
   >
     <optgroup v-for="group in options" :key="group.sortType" :label="group.sortType">
-      <option v-for="option in group.sorts" :key="option.name" :value="option">
+      <option
+        v-for="option in group.sorts"
+        :key="option.name"
+        :value="option.sort ? `${option.category}:${option.sort}` : option.category"
+      >
         {{ option.name }}
       </option>
     </optgroup>
@@ -16,12 +20,22 @@
 </template>
 
 <script setup lang="ts">
-import type { WordList } from "@stores/wordList.ts";
+import type { SortOrder, WordList } from "@stores/wordList.ts";
 
-import { $setSortOrder } from "@stores/wordList.ts";
-import { reactive, ref } from "vue";
+import { useStore } from "@nanostores/vue";
+import { $setSortOrder, $wordSearch } from "@stores/wordList.ts";
+import { computed } from "vue";
 
-const options = reactive([
+type Category = WordList["activeOrderCategory"];
+
+const options: {
+  sortType: string;
+  sorts: { category: Category; name: string; sort?: SortOrder }[];
+}[] = [
+  {
+    sortType: "Relevanz",
+    sorts: [{ category: "relevance", name: "Beste Treffer zuerst" }],
+  },
   {
     sortType: "Alphabetisch",
     sorts: [
@@ -39,25 +53,23 @@ const options = reactive([
   {
     sortType: "Änderungsdatum",
     sorts: [
-      {
-        category: "modifiedDate",
-        name: "zuletzt bearbeitet (neueste zuerst)",
-        sort: "DESC",
-      },
-      {
-        category: "modifiedDate",
-        name: "zuletzt bearbeitet (älteste zuerst)",
-        sort: "ASC",
-      },
+      { category: "modifiedDate", name: "zuletzt bearbeitet (neueste zuerst)", sort: "DESC" },
+      { category: "modifiedDate", name: "zuletzt bearbeitet (älteste zuerst)", sort: "ASC" },
     ],
   },
-]);
+];
 
-const selected = ref(options[0].sorts[0] as SelectOption);
+// The persisted sort, not a local default.
+const wordSearch = useStore($wordSearch);
+const selected = computed(() => {
+  const { activeOrderCategory: category } = wordSearch.value;
+  return category === "relevance"
+    ? category
+    : `${category}:${wordSearch.value[`${category}Order`]}`;
+});
 
-type SelectOption = {
-  category: WordList["activeOrderCategory"];
-  name: string;
-  sort: "ASC" | "DESC";
+const onChange = (event: Event) => {
+  const [category, sort] = (event.target as HTMLSelectElement).value.split(":");
+  $setSortOrder(category as Category, sort as SortOrder | undefined);
 };
 </script>

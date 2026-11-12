@@ -1,3 +1,5 @@
+import type { WordList } from "@stores/wordList.ts";
+
 import { atom, map } from "nanostores";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -12,6 +14,12 @@ const setOramaResults = (store: unknown, value: OramaResultsState) =>
   (store as { set: (v: OramaResultsState) => void }).set(value);
 
 vi.mock("@nanostores/persistent", () => ({
+  // Backed by jsdom's localStorage, so "once per browser" survives vi.resetModules().
+  persistentAtom: vi.fn((key: string, initial: string) => {
+    const store = atom(localStorage.getItem(key) ?? initial);
+    store.listen((value) => localStorage.setItem(key, value));
+    return store;
+  }),
   persistentMap: vi.fn((key: string, initial: unknown) => map(initial)),
 }));
 
@@ -68,7 +76,7 @@ describe("wordList store", () => {
       const { $wordSearch, $searchQuery } = await import("@stores/wordList.ts");
       const state = $wordSearch.get();
       expect(state.activeLetterFilter).toBe("");
-      expect(state.activeOrderCategory).toBe("alphabetical");
+      expect(state.activeOrderCategory).toBe("relevance");
       expect(state.activeWordTypeFilter).toEqual([]);
       expect(state.activeThemenFilter).toEqual([]);
       expect(state.alphabeticalOrder).toBe("ASC");
@@ -202,7 +210,7 @@ describe("wordList store", () => {
       const state = $wordSearch.get();
       expect(state.characterCount).toBeUndefined();
       expect(state.multipleMeanings).toBe(false);
-      expect(state.activeOrderCategory).toBe("alphabetical");
+      expect(state.activeOrderCategory).toBe("relevance");
       expect(state.modifiedDateOrder).toBe("ASC");
       expect($activeFilterCount.get()).toBe(0);
     });
@@ -266,7 +274,7 @@ describe("wordList store", () => {
   describe("$setSortOrder", () => {
     it("sets category and order", async () => {
       const { $wordSearch, $setSortOrder } = await import("@stores/wordList.ts");
-      $setSortOrder("date", "dateOrder", "DESC");
+      $setSortOrder("date", "DESC");
       expect($wordSearch.get().activeOrderCategory).toBe("date");
       expect($wordSearch.get().dateOrder).toBe("DESC");
     });
@@ -274,8 +282,18 @@ describe("wordList store", () => {
     it("calls trackEvent", async () => {
       const { $setSortOrder } = await import("@stores/wordList.ts");
       const { trackEvent } = await import("@utils/analytics");
-      $setSortOrder("alphabetical", "alphabeticalOrder", "ASC");
+      $setSortOrder("alphabetical", "ASC");
       expect(trackEvent).toHaveBeenCalledWith("WordList", "Sort Order", "alphabetical: ASC");
+    });
+
+    it("keeps the stored orders when switching to relevance", async () => {
+      const { $wordSearch, $setSortOrder } = await import("@stores/wordList.ts");
+      const { trackEvent } = await import("@utils/analytics");
+      $setSortOrder("date", "DESC");
+      $setSortOrder("relevance");
+      expect(trackEvent).toHaveBeenLastCalledWith("WordList", "Sort Order", "relevance");
+      expect($wordSearch.get().activeOrderCategory).toBe("relevance");
+      expect($wordSearch.get().dateOrder).toBe("DESC");
     });
   });
 
@@ -384,7 +402,7 @@ describe("wordList store", () => {
       expect(capturedCbRef.fn).toBeDefined();
       // fetch mock returns a non-array object → resultLimit = undefined → limit falls through to ?? 10
       // create mock returns undefined → db stays falsy → returns null (line 433 false branch)
-      const result = await capturedCbRef.fn!($wordSearch.get());
+      const result = await capturedCbRef.fn!($wordSearch.get(), "");
       expect(result).toBeNull();
     });
 
@@ -398,48 +416,42 @@ describe("wordList store", () => {
       } as unknown as never);
       const { $wordSearch } = await import("@stores/wordList.ts");
       expect(capturedCbRef.fn).toBeDefined();
-      const result = await capturedCbRef.fn!($wordSearch.get());
+      const result = await capturedCbRef.fn!($wordSearch.get(), "");
       expect(search).toHaveBeenCalled();
       expect(result).toBeDefined();
     });
+
+    /** Runs the search callback against a mocked Orama and returns the params it searched with. */
+    const searchParams = async (overrides: Partial<WordList> = {}, term = "") => {
+      const { create, search } = await import("@orama/orama");
+      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
+      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
+      const { $wordSearch } = await import("@stores/wordList.ts");
+      await capturedCbRef.fn!({ ...$wordSearch.get(), ...overrides }, term);
+      return vi.mocked(search).mock.calls.at(-1)?.[1];
+    };
 
     it.each([
       ["alphabetical", "alphabeticalOrder", "wordProperties.berlinerisch"],
       ["date", "dateOrder", "dateTs"],
       ["modifiedDate", "modifiedDateOrder", "modifiedTs"],
     ] as const)("sorts %s via Orama property sort", async (category, orderKey, property) => {
-      const { create, search } = await import("@orama/orama");
-      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
-      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      await capturedCbRef.fn!(
-        { ...$wordSearch.get(), activeOrderCategory: category, [orderKey]: "DESC" },
-        "",
-      );
-      expect(vi.mocked(search).mock.calls.at(-1)?.[1]).toMatchObject({
-        sortBy: { order: "DESC", property },
-      });
+      expect(
+        await searchParams({ activeOrderCategory: category, [orderKey]: "DESC" }),
+      ).toMatchObject({ sortBy: { order: "DESC", property } });
     });
 
     it("builds where clauses for boolean, range, letter, word type and themen filters", async () => {
-      const { create, search } = await import("@orama/orama");
-      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
-      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      await capturedCbRef.fn!(
-        {
-          ...$wordSearch.get(),
-          activeLetterFilter: "B",
-          activeThemenFilter: ["essen-trinken"],
-          activeWordTypeFilter: ["Verb"],
-          audioExamples: true,
-          berolinismus: true,
-          characterCount: 4,
-          syllablesCount: 0,
-        },
-        "",
-      );
-      expect(vi.mocked(search).mock.calls.at(-1)?.[1].where).toEqual({
+      const params = await searchParams({
+        activeLetterFilter: "B",
+        activeThemenFilter: ["essen-trinken"],
+        activeWordTypeFilter: ["Verb"],
+        audioExamples: true,
+        berolinismus: true,
+        characterCount: 4,
+        syllablesCount: 0,
+      });
+      expect(params?.where).toEqual({
         berlinerischWordTypes: { containsAny: ["Verb"] },
         themen: { containsAny: ["essen-trinken"] },
         wordGroup: { eq: "B" },
@@ -451,12 +463,43 @@ describe("wordList store", () => {
     });
 
     it("omits where entirely when no filter is active", async () => {
+      expect(await searchParams()).not.toHaveProperty("where");
+    });
+
+    it("sorts A - Z without a search term under relevance, whatever A - Z order is stored", async () => {
+      expect(
+        await searchParams({ activeOrderCategory: "relevance", alphabeticalOrder: "DESC" }),
+      ).toMatchObject({ sortBy: { order: "ASC", property: "wordProperties.berlinerisch" } });
+    });
+
+    it.each(["date", "modifiedDate", "alphabetical"] as const)(
+      "keeps the chosen %s sort while searching",
+      async (category) => {
+        expect(await searchParams({ activeOrderCategory: category }, "kiez")).toHaveProperty(
+          "sortBy",
+        );
+      },
+    );
+
+    it("rejects when the search throws, so the list shows the error instead of no results", async () => {
       const { create, search } = await import("@orama/orama");
       vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
-      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
+      vi.mocked(search).mockRejectedValueOnce(new Error("boom"));
+      vi.spyOn(console, "error").mockImplementation(() => {});
       const { $wordSearch } = await import("@stores/wordList.ts");
-      await capturedCbRef.fn!($wordSearch.get(), "");
-      expect(vi.mocked(search).mock.calls.at(-1)?.[1]).not.toHaveProperty("where");
+      await expect(capturedCbRef.fn!($wordSearch.get(), "kiez")).rejects.toThrow("boom");
+    });
+
+    it("sends no full-text params without a search term", async () => {
+      // properties + threshold on an empty term made Orama drop part of the multi-word entries.
+      const params = await searchParams({ activeLetterFilter: "M" }, "  ");
+      expect(params).not.toHaveProperty("threshold");
+      expect(params).not.toHaveProperty("properties");
+      expect(params).not.toHaveProperty("tolerance");
+      expect(params).toMatchObject({
+        sortBy: { order: "ASC", property: "wordProperties.berlinerisch" },
+        where: { wordGroup: { eq: "M" } },
+      });
     });
 
     it("fetches the search index only once for concurrent computations (single-flight)", async () => {
@@ -464,8 +507,8 @@ describe("wordList store", () => {
       globalThis.fetch = fetchSpy as unknown as typeof fetch;
       const { $wordSearch } = await import("@stores/wordList.ts");
       await Promise.all([
-        capturedCbRef.fn!($wordSearch.get()),
-        capturedCbRef.fn!($wordSearch.get()),
+        capturedCbRef.fn!($wordSearch.get(), ""),
+        capturedCbRef.fn!($wordSearch.get(), ""),
       ]);
       const indexCalls = fetchSpy.mock.calls.filter(([url]) => url === "/api/search/index.json");
       expect(indexCalls).toHaveLength(1);
@@ -476,7 +519,7 @@ describe("wordList store", () => {
         Promise.resolve({ ok: false, status: 500 }),
       ) as unknown as typeof fetch;
       const { $wordSearch } = await import("@stores/wordList.ts");
-      await expect(capturedCbRef.fn!($wordSearch.get())).rejects.toThrow(
+      await expect(capturedCbRef.fn!($wordSearch.get(), "")).rejects.toThrow(
         "[searchIndex] search index fetch failed: 500",
       );
 
@@ -485,7 +528,7 @@ describe("wordList store", () => {
         Promise.resolve({ json: () => Promise.resolve([]), ok: true }),
       );
       globalThis.fetch = retryFetch as unknown as typeof fetch;
-      const result = await capturedCbRef.fn!($wordSearch.get());
+      const result = await capturedCbRef.fn!($wordSearch.get(), "");
       expect(retryFetch).toHaveBeenCalledWith("/api/search/index.json");
       expect(result).toBeNull(); // create mock returns undefined → db falsy → null
 
@@ -498,5 +541,76 @@ describe("wordList store", () => {
         }),
       ) as unknown as typeof fetch;
     });
+  });
+});
+
+describe("matchTier", () => {
+  const props = (berlinerisch: string, translations: string[] = []) =>
+    ({ berlinerisch, translations }) as Parameters<
+      typeof import("@stores/wordList.ts").matchTier
+    >[0];
+
+  it.each([
+    ["Mauken", [], "mauken", 0],
+    ["Mauken", [], "mau", 1],
+    ["madig machen", [], "machen", 2],
+    ["Mantel, was nutzt mich der Mantel", [], "nutzt mantel", 2],
+    ["Mauken", ["furchtbar stinkende Füße"], "stinkende füße", 3],
+    ["Mauken", ["furchtbar stinkende Füße"], "stink fü", 3],
+    ["Nauke", ["Spottruf"], "mauken", 4],
+  ] as const)("%s %j for %s is tier %i", async (word, translations, term, tier) => {
+    const { matchTier } = await import("@stores/wordList.ts");
+    expect(matchTier(props(word, [...translations]), term)).toBe(tier);
+  });
+});
+
+describe("persisted state from older versions", () => {
+  beforeEach(() => {
+    vi.resetModules();
+    localStorage.clear();
+  });
+
+  const loadWith = async (stored: Record<string, unknown>) => {
+    const { persistentMap } = await import("@nanostores/persistent");
+    vi.mocked(persistentMap).mockImplementationOnce(((_key: string, initial: object) =>
+      map({ ...initial, ...stored })) as never);
+    return import("@stores/wordList.ts");
+  };
+
+  it("moves the old default A - Z sort to relevance once", async () => {
+    const { $wordSearch } = await loadWith({ activeOrderCategory: "alphabetical" });
+    expect($wordSearch.get().activeOrderCategory).toBe("relevance");
+
+    vi.resetModules();
+    const again = await loadWith({ activeOrderCategory: "alphabetical" });
+    expect(again.$wordSearch.get().activeOrderCategory).toBe("alphabetical");
+  });
+
+  it("keeps an explicitly chosen sort other than A - Z", async () => {
+    const { $wordSearch } = await loadWith({
+      activeOrderCategory: "alphabetical",
+      alphabeticalOrder: "DESC",
+    });
+    expect($wordSearch.get().activeOrderCategory).toBe("alphabetical");
+    vi.resetModules();
+    const date = await loadWith({ activeOrderCategory: "date", dateOrder: "DESC" });
+    expect(date.$wordSearch.get().activeOrderCategory).toBe("date");
+  });
+
+  it("resets unknown sort values and repairs range values", async () => {
+    const { $wordSearch, $activeFilterCount } = await loadWith({
+      activeOrderCategory: "foo",
+      characterCount: "",
+      dateOrder: "sideways",
+      syllablesCount: "3",
+      vowelsCount: "abc",
+    });
+    const state = $wordSearch.get();
+    expect(state.activeOrderCategory).toBe("relevance");
+    expect(state.dateOrder).toBe("ASC");
+    expect(state.characterCount).toBeUndefined();
+    expect(state.syllablesCount).toBe(3);
+    expect(state.vowelsCount).toBeUndefined();
+    expect($activeFilterCount.get()).toBe(1);
   });
 });

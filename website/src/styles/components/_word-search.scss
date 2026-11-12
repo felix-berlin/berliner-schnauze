@@ -16,6 +16,12 @@
     height: 100%;
     aspect-ratio: 1;
 
+    // The icon swaps (search ↔ x) with a fade: a click starting on the leaving icon and ending
+    // on the new one fired no click at all. The button itself is always the target.
+    > * {
+      pointer-events: none;
+    }
+
     &--right {
       order: 2;
     }

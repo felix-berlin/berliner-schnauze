@@ -1,9 +1,10 @@
+import { atom, map } from "nanostores";
 /**
  * $oramaSearchResults against the real Orama stack (only fetch, persistence and
  * analytics are mocked). Store-level logic with Orama mocked lives in
  * wordList.test.ts.
  */
-import { map } from "nanostores";
+import { getWordComponents } from "payload-app/word-derived";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // ─── static fixtures ─────────────────────────────────────────────────────────
@@ -73,6 +74,7 @@ const indexResponse = [
 // ─── module mocks ─────────────────────────────────────────────────────────────
 
 vi.mock("@nanostores/persistent", () => ({
+  persistentAtom: vi.fn((key: string, initial: unknown) => atom(initial)),
   persistentMap: vi.fn((key: string, initial: unknown) => map(initial)),
 }));
 
@@ -321,5 +323,126 @@ describe("$searchResultCount", () => {
     const { $searchResultCount } = await import("@stores/wordList.ts");
     // The store starts loading — count should be 0
     expect($searchResultCount.get()).toBe(0);
+  });
+});
+
+// ─── ranking and filters on real-world shapes ────────────────────────────────
+
+/** Minimal index entry with the suffixes the server derives. */
+const entry = (slug: string, berlinerisch: string, translations: string[]) => ({
+  berlinerischWordTypes: ["Nomen"],
+  dateTs: 1704067200,
+  modifiedTs: 1704153600,
+  slug,
+  themen: [],
+  wordComponents: getWordComponents(berlinerisch),
+  wordGroup: berlinerisch[0].toUpperCase(),
+  wordProperties: {
+    audioBerlinerisch: false,
+    audioExamples: false,
+    berlinerisch,
+    berolinismus: false,
+    characterLength: berlinerisch.length,
+    consonantsCount: 3,
+    multipleMeanings: false,
+    syllablesCount: 2,
+    translations,
+    vowelsCount: 2,
+  },
+});
+
+// Reported on prod: "Mauken" was found, but alphabetically sorted behind 27 fuzzy hits.
+const mixedIndex = [
+  entry("asche", "Asche", ["Geld"]),
+  entry("bumschekschek", "Bumschekschek", ["Musik mit Pauke und Becken"]),
+  entry("mauke", "Mauke", ["Fuß", "übelriechende Füße"]),
+  entry("mauken", "Mauken", ["furchtbar stinkende Füße"]),
+  entry("nauke", "Nauke", ["Spottruf"]),
+  entry("fusseln", "Fusseln", ["Flusen"]),
+  entry("fussbad", "Fußbad", ["Bad für die Füße"]),
+  entry("pauke", "Pauke", ["Trommel"]),
+  entry("madig-machen", "madig machen", ["schlechtreden"]),
+  entry("mantel", "Mantel, was nutzt mich der Mantel", ["Redensart"]),
+];
+
+/** Slugs of the current results; throws (so the caller's waitFor retries) until ready. */
+const ready = async () => {
+  const { $oramaSearchResults } = await import("@stores/wordList.ts");
+  const results = $oramaSearchResults.get();
+  if (results.status !== "ready") throw new Error(`search ${results.status}`);
+  return results.value?.hits.map((h) => h.document.slug) ?? [];
+};
+
+describe("search ranking and filters (real Orama)", () => {
+  beforeEach(() => {
+    vi.stubGlobal(
+      "fetch",
+      makeFetch({
+        "/api/search/index.json": Promise.resolve({
+          json: () => Promise.resolve(mixedIndex),
+          ok: true,
+        }),
+      }),
+    );
+  });
+
+  it("puts the exact word first by default while searching", async () => {
+    const { $searchQuery } = await import("@stores/wordList.ts");
+    $searchQuery.set("Mauken");
+    await vi.waitFor(async () => expect((await ready())[0]).toBe("mauken"), { timeout: 3000 });
+  });
+
+  it("ranks the exact word first regardless of case and surrounding spaces", async () => {
+    const { $searchQuery } = await import("@stores/wordList.ts");
+    $searchQuery.set("  mauke ");
+    await vi.waitFor(async () => expect((await ready())[0]).toBe("mauke"), { timeout: 3000 });
+  });
+
+  it("ranks words whose translation contains the term above fuzzy word matches", async () => {
+    const { $searchQuery } = await import("@stores/wordList.ts");
+    $searchQuery.set("Füße");
+    await vi.waitFor(
+      async () => {
+        const slugs = await ready();
+        expect(slugs.slice(0, 3).sort()).toEqual(["fussbad", "mauke", "mauken"]);
+      },
+      { timeout: 3000 },
+    );
+  });
+
+  it("ranks a translation holding every word of a multi-word search first", async () => {
+    const { $searchQuery } = await import("@stores/wordList.ts");
+    $searchQuery.set("stinkende Füße");
+    await vi.waitFor(async () => expect((await ready())[0]).toBe("mauken"), { timeout: 3000 });
+  });
+
+  it("keeps an explicitly chosen sort while searching", async () => {
+    const { $searchQuery, $setSortOrder } = await import("@stores/wordList.ts");
+    $setSortOrder("alphabetical", "DESC");
+    $searchQuery.set("Mauken");
+    await vi.waitFor(
+      async () => {
+        const slugs = await ready();
+        expect(slugs.length).toBeGreaterThan(1);
+        expect(slugs).toEqual([...slugs].sort((a, b) => b.localeCompare(a, "de")));
+      },
+      { timeout: 3000 },
+    );
+  });
+
+  it("lists every word alphabetically without a search term", async () => {
+    await vi.waitFor(ready, { timeout: 3000 });
+    expect(await ready()).toEqual([
+      "asche",
+      "bumschekschek",
+      "fussbad",
+      "fusseln",
+      "madig-machen",
+      "mantel",
+      "mauke",
+      "mauken",
+      "nauke",
+      "pauke",
+    ]);
   });
 });

@@ -110,9 +110,10 @@ Hinter der Basic-Auth-Schranke kommt man mit dem Skript durch. Es erlaubt nur le
 ```bash
 scripts/prod-curl.sh -I https://berliner-schnauze.wtf/        # nur Header
 scripts/prod-curl.sh https://berliner-schnauze.wtf/wort/aasen
+scripts/prod-curl.sh --stats -H 'Accept-Encoding: br' https://berliner-schnauze.wtf/api/search/index.json   # Header, Bytes, Zeiten
 ```
 
-Das Zugangsdatum liegt in Infisical (dev, Ordner `/agent`, Secret `PROD_BASIC_AUTH`) und wird nur zur Laufzeit eingesetzt. Es wird nie angezeigt oder gespeichert. Erlaubt sind nur `-I -i -s -S` und genau eine URL auf `berliner-schnauze.wtf`.
+Das Zugangsdatum liegt in Infisical (dev, Ordner `/agent`, Secret `PROD_BASIC_AUTH`) und wird nur zur Laufzeit eingesetzt. Es wird nie angezeigt oder gespeichert. Erlaubt sind nur lesende Zugriffe auf genau eine URL auf `berliner-schnauze.wtf`; welche Optionen und Header gehen, steht oben im Skript.
 
 ## Regeln
 
