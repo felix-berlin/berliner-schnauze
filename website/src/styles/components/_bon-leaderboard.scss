@@ -104,6 +104,8 @@
   }
 
   &__list {
+    // Only the rows change on a period switch; the card frame stays put.
+    view-transition-name: lb-list;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -354,10 +356,6 @@
     margin: 0;
   }
 
-  &__main {
-    view-transition-name: lb-list;
-  }
-
   &__sticky {
     position: sticky;
     inset-block-end: 0;
@@ -406,8 +404,8 @@
   }
 }
 
-// Motion on this page (docs/design/bon/SPEC.md §13). Period switch: the list card leaves up, the new one
-// comes in from below; `vt` sets html[data-vt], the root itself does not animate.
+// Motion on this page (docs/design/bon/SPEC.md §13). Period switch: the rows crossfade inside a still card
+// (no slide, it read as a jump; no own fade timing, it made the own row flash); `vt` sets html[data-vt], the root itself does not animate.
 @media (prefers-reduced-motion: no-preference) {
   // Morph from "Hier stehste" on the result: the pseudo elements belong to the new page, so the
   // timing has to live in this stylesheet (the result's one is gone by then).
@@ -416,29 +414,18 @@
     animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
+  // The own row only morphs in from the result; on a period switch it would fly across the fading list.
+  :root[data-vt="period"] .c-bon-leaderboard__row--me {
+    view-transition-name: none;
+  }
+
   :root[data-vt="period"]::view-transition-old(root),
   :root[data-vt="period"]::view-transition-new(root) {
     animation: none;
   }
 
-  :root[data-vt="period"]::view-transition-old(lb-list) {
-    animation: c-bon-list-out 160ms ease-in both;
-  }
-
-  :root[data-vt="period"]::view-transition-new(lb-list) {
-    animation: c-bon-list-in 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  }
-}
-
-@keyframes c-bon-list-out {
-  to {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-}
-@keyframes c-bon-list-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+  // The browser's own crossfade (in step, plus-lighter): rows that stay the same do not flicker.
+  :root[data-vt="period"]::view-transition-group(lb-list) {
+    animation-duration: 200ms;
   }
 }
