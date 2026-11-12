@@ -1,5 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 
+import { resultCount } from "./helpers";
+
 // Desktop-only: arrow-key navigation is driven by WordList.vue (onKeyStroke).
 test.use({ viewport: { height: 900, width: 1280 } });
 test.skip(({ isMobile }) => isMobile, "Keyboard navigation is desktop-only");
@@ -11,7 +13,7 @@ const activeCard = (page: Page) => page.locator(".c-word-list article.is-active"
 // "anmach" yields a small, stable result set that includes the required slug `anmachen`.
 const searchAndFocusList = async (page: Page) => {
   await page.goto("/");
-  const results = page.getByText(/^\d+ Ergebnisse$/);
+  const results = resultCount(page);
   const unfiltered = await results.textContent();
   await searchbox(page).fill("anmach");
   // The input reaches the search only after a 150 ms debounce; until then the

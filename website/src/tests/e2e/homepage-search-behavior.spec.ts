@@ -1,11 +1,12 @@
 import { test, expect, type Page } from "@playwright/test";
 
+import { resultCount } from "./helpers";
+
 // CI runs against the small invented data set of `pnpm --filter payload-app seed:e2e`:
 // assertions target its slugs (aasen, anmachen, wa, ...) and never hardcode totals.
 
 const searchbox = (page: Page) =>
   page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" });
-const resultCount = (page: Page) => page.getByText(/\d+ Ergebnisse/);
 const cards = (page: Page) => page.locator(".c-word-list article");
 const clearButton = (page: Page) => page.getByRole("button", { name: "Wortsuche löschen" });
 

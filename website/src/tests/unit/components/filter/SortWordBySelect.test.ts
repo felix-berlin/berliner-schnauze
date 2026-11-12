@@ -32,11 +32,16 @@ describe("SortWordBySelect.vue", () => {
   });
 
   it("offers relevance, alphabetical, date and modified date groups", () => {
-    const labels = mount(SortWordBySelect)
-      .findAll("optgroup")
-      .map((g) => g.attributes("label"));
+    const wrapper = mount(SortWordBySelect);
+    const labels = wrapper.findAll("optgroup").map((g) => g.attributes("label"));
     expect(labels).toEqual(["Relevanz", "Alphabetisch", "Datum", "Änderungsdatum"]);
-    expect(mount(SortWordBySelect).findAll("option")).toHaveLength(7);
+    expect(wrapper.findAll("option")).toHaveLength(7);
+  });
+
+  it("switches to relevance without an order", async () => {
+    store.setKey("activeOrderCategory", "date");
+    await mount(SortWordBySelect).find("select").setValue("relevance");
+    expect($setSortOrder).toHaveBeenCalledWith("relevance", undefined);
   });
 
   it("shows best hits first by default", () => {

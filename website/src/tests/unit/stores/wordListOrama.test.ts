@@ -1,9 +1,10 @@
+import { atom, map } from "nanostores";
 /**
  * $oramaSearchResults against the real Orama stack (only fetch, persistence and
  * analytics are mocked). Store-level logic with Orama mocked lives in
  * wordList.test.ts.
  */
-import { map } from "nanostores";
+import { getWordComponents } from "payload-app/word-derived";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // ─── static fixtures ─────────────────────────────────────────────────────────
@@ -73,6 +74,7 @@ const indexResponse = [
 // ─── module mocks ─────────────────────────────────────────────────────────────
 
 vi.mock("@nanostores/persistent", () => ({
+  persistentAtom: vi.fn((key: string, initial: unknown) => atom(initial)),
   persistentMap: vi.fn((key: string, initial: unknown) => map(initial)),
 }));
 
@@ -326,19 +328,14 @@ describe("$searchResultCount", () => {
 
 // ─── ranking and filters on real-world shapes ────────────────────────────────
 
-/** Minimal index entry; `wordComponents` are the suffixes the server derives. */
-const entry = (
-  slug: string,
-  berlinerisch: string,
-  translations: string[],
-  wordComponents: string[],
-) => ({
+/** Minimal index entry with the suffixes the server derives. */
+const entry = (slug: string, berlinerisch: string, translations: string[]) => ({
   berlinerischWordTypes: ["Nomen"],
   dateTs: 1704067200,
   modifiedTs: 1704153600,
   slug,
   themen: [],
-  wordComponents,
+  wordComponents: getWordComponents(berlinerisch),
   wordGroup: berlinerisch[0].toUpperCase(),
   wordProperties: {
     audioBerlinerisch: false,
@@ -356,16 +353,16 @@ const entry = (
 
 // Reported on prod: "Mauken" was found, but alphabetically sorted behind 27 fuzzy hits.
 const mixedIndex = [
-  entry("asche", "Asche", ["Geld"], ["sche"]),
-  entry("bumschekschek", "Bumschekschek", ["Musik mit Pauke und Becken"], ["schekschek", "schek"]),
-  entry("mauke", "Mauke", ["Fuß", "übelriechende Füße"], ["auke"]),
-  entry("mauken", "Mauken", ["furchtbar stinkende Füße"], ["auken", "uken"]),
-  entry("nauke", "Nauke", ["Spottruf"], ["auke"]),
-  entry("fusseln", "Fusseln", ["Flusen"], ["usseln", "sseln"]),
-  entry("fussbad", "Fußbad", ["Bad für die Füße"], ["ußbad", "ßbad"]),
-  entry("pauke", "Pauke", ["Trommel"], ["auke"]),
-  entry("madig-machen", "madig machen", ["schlechtreden"], ["adig", "achen", "chen"]),
-  entry("mantel", "Mantel, was nutzt mich der Mantel", ["Redensart"], ["antel", "ntel", "utzt"]),
+  entry("asche", "Asche", ["Geld"]),
+  entry("bumschekschek", "Bumschekschek", ["Musik mit Pauke und Becken"]),
+  entry("mauke", "Mauke", ["Fuß", "übelriechende Füße"]),
+  entry("mauken", "Mauken", ["furchtbar stinkende Füße"]),
+  entry("nauke", "Nauke", ["Spottruf"]),
+  entry("fusseln", "Fusseln", ["Flusen"]),
+  entry("fussbad", "Fußbad", ["Bad für die Füße"]),
+  entry("pauke", "Pauke", ["Trommel"]),
+  entry("madig-machen", "madig machen", ["schlechtreden"]),
+  entry("mantel", "Mantel, was nutzt mich der Mantel", ["Redensart"]),
 ];
 
 /** Slugs of the current results; throws (so the caller's waitFor retries) until ready. */

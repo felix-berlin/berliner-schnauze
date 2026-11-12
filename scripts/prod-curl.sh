@@ -17,8 +17,9 @@ flags=()
 url=""
 while [ $# -gt 0 ]; do
   arg="$1"; shift
+  # -I -i -s -S, also combined (-sI)
+  [[ "$arg" =~ ^-[IisS]+$ ]] && { flags+=("$arg"); continue; }
   case "$arg" in
-    -[IisS]|-[IisS][IisS]|-[IisS][IisS][IisS]|-[IisS][IisS][IisS][IisS]) flags+=("$arg") ;;
     --compressed) flags+=("$arg") ;;
     --stats)
       flags+=(-D - -o /dev/null -w '\nstatus=%{http_code} bytes=%{size_download} ttfb=%{time_starttransfer}s total=%{time_total}s\n') ;;

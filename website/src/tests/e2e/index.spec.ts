@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
 
+import { resultCount } from "./helpers";
+
 test.describe("Startseite (/)", () => {
   // Only the attributes: the bear comes from Payload media, which the e2e job has no CMS for.
   test("Hero-Bild reserviert seinen Platz (kein Layout Shift)", async ({ page }) => {
@@ -35,7 +37,7 @@ test.describe("Startseite (/)", () => {
 
     const search = page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" });
     const wordList = page.locator(".c-word-list");
-    await expect(page.getByText(/\d+ Ergebnisse/)).toBeVisible();
+    await expect(resultCount(page)).toBeVisible();
 
     await search.fill("aasen");
     await expect(wordList.getByRole("link", { exact: true, name: "aasen" })).toBeVisible();

@@ -3,6 +3,8 @@
 
 import { test, expect } from "@playwright/test";
 
+import { resultCount } from "./helpers";
+
 test.describe("Filter Sidebar (/)", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
@@ -38,13 +40,13 @@ test.describe("Filter Sidebar (/)", () => {
     page,
   }) => {
     // Content depends on the database (seed or dev data) — capture the current count instead of a fixed number.
-    const resultCount = page.getByText(/\d+ Ergebnisse/);
-    const defaultCount = await resultCount.textContent();
+    const results = resultCount(page);
+    const defaultCount = await results.textContent();
 
     // 2. Click the letter filter button with accessible name 'Filter nach Buchstabe B'
     const letterFilter = page.locator(".c-letter-filter");
     await letterFilter.getByRole("button", { name: "Filter nach Buchstabe B" }).click();
-    await expect(resultCount).not.toHaveText(defaultCount ?? "");
+    await expect(results).not.toHaveText(defaultCount ?? "");
     await expect(page.locator(".c-word-list article a").first()).toHaveAttribute(
       "href",
       /^\/wort\/b/,
@@ -52,38 +54,38 @@ test.describe("Filter Sidebar (/)", () => {
 
     // 3. Click the 'Alle' button in the same alphabet navigation
     await letterFilter.getByRole("button", { name: "Alle" }).click();
-    await expect(resultCount).toHaveText(defaultCount ?? "");
+    await expect(results).toHaveText(defaultCount ?? "");
   });
 
   test("Zurücksetzen-Button setzt aktive Filter zurück", async ({ page }) => {
-    const resultCount = page.getByText(/\d+ Ergebnisse/);
-    const defaultCount = await resultCount.textContent();
+    const results = resultCount(page);
+    const defaultCount = await results.textContent();
 
     // 2. Click the letter filter button 'Filter nach Buchstabe B'
     await page
       .locator(".c-letter-filter")
       .getByRole("button", { name: "Filter nach Buchstabe B" })
       .click();
-    await expect(resultCount).not.toHaveText(defaultCount ?? "");
+    await expect(results).not.toHaveText(defaultCount ?? "");
 
     // 3. Click the button named 'Zurücksetzen' in the sidebar
     await page.getByRole("button", { name: "Zurücksetzen" }).click();
-    await expect(resultCount).toHaveText(defaultCount ?? "");
+    await expect(results).toHaveText(defaultCount ?? "");
   });
 
   test("Berolinismus-Checkbox filtert die Wortliste", async ({ page }) => {
-    const resultCount = page.getByText(/\d+ Ergebnisse/);
-    const defaultCount = await resultCount.textContent();
+    const results = resultCount(page);
+    const defaultCount = await results.textContent();
 
     // 2. Click the checkbox with accessible name 'Berolinismus' in the sidebar
     const berolinismusCheckbox = page.getByRole("checkbox", { name: "Berolinismus" });
     await berolinismusCheckbox.click();
     await expect(berolinismusCheckbox).toBeChecked();
-    await expect(resultCount).not.toHaveText(defaultCount ?? "");
+    await expect(results).not.toHaveText(defaultCount ?? "");
 
     // 3. Click the 'Berolinismus' checkbox again
     await berolinismusCheckbox.click();
     await expect(berolinismusCheckbox).not.toBeChecked();
-    await expect(resultCount).toHaveText(defaultCount ?? "");
+    await expect(results).toHaveText(defaultCount ?? "");
   });
 });

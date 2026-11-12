@@ -1,3 +1,5 @@
+import type { WordList } from "@stores/wordList.ts";
+
 import { atom, map } from "nanostores";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -12,6 +14,12 @@ const setOramaResults = (store: unknown, value: OramaResultsState) =>
   (store as { set: (v: OramaResultsState) => void }).set(value);
 
 vi.mock("@nanostores/persistent", () => ({
+  // Backed by jsdom's localStorage, so "once per browser" survives vi.resetModules().
+  persistentAtom: vi.fn((key: string, initial: string) => {
+    const store = atom(localStorage.getItem(key) ?? initial);
+    store.listen((value) => localStorage.setItem(key, value));
+    return store;
+  }),
   persistentMap: vi.fn((key: string, initial: unknown) => map(initial)),
 }));
 
@@ -149,12 +157,6 @@ describe("wordList store", () => {
       expect($activeFilterCount.get()).toBe(0);
     });
 
-    it("does not count a range filter cleared to an empty string", async () => {
-      const { $wordSearch, $activeFilterCount } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("characterCount", "" as unknown as number);
-      expect($activeFilterCount.get()).toBe(0);
-    });
-
     it("does not count a range filter reset to undefined or null", async () => {
       const { $wordSearch, $activeFilterCount } = await import("@stores/wordList.ts");
       $wordSearch.setKey("vowelsCount", undefined);
@@ -286,8 +288,10 @@ describe("wordList store", () => {
 
     it("keeps the stored orders when switching to relevance", async () => {
       const { $wordSearch, $setSortOrder } = await import("@stores/wordList.ts");
+      const { trackEvent } = await import("@utils/analytics");
       $setSortOrder("date", "DESC");
-      $setSortOrder("relevance", "DESC");
+      $setSortOrder("relevance");
+      expect(trackEvent).toHaveBeenLastCalledWith("WordList", "Sort Order", "relevance");
       expect($wordSearch.get().activeOrderCategory).toBe("relevance");
       expect($wordSearch.get().dateOrder).toBe("DESC");
     });
@@ -417,43 +421,37 @@ describe("wordList store", () => {
       expect(result).toBeDefined();
     });
 
+    /** Runs the search callback against a mocked Orama and returns the params it searched with. */
+    const searchParams = async (overrides: Partial<WordList> = {}, term = "") => {
+      const { create, search } = await import("@orama/orama");
+      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
+      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
+      const { $wordSearch } = await import("@stores/wordList.ts");
+      await capturedCbRef.fn!({ ...$wordSearch.get(), ...overrides }, term);
+      return vi.mocked(search).mock.calls.at(-1)?.[1];
+    };
+
     it.each([
       ["alphabetical", "alphabeticalOrder", "wordProperties.berlinerisch"],
       ["date", "dateOrder", "dateTs"],
       ["modifiedDate", "modifiedDateOrder", "modifiedTs"],
     ] as const)("sorts %s via Orama property sort", async (category, orderKey, property) => {
-      const { create, search } = await import("@orama/orama");
-      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
-      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      await capturedCbRef.fn!(
-        { ...$wordSearch.get(), activeOrderCategory: category, [orderKey]: "DESC" },
-        "",
-      );
-      expect(vi.mocked(search).mock.calls.at(-1)?.[1]).toMatchObject({
-        sortBy: { order: "DESC", property },
-      });
+      expect(
+        await searchParams({ activeOrderCategory: category, [orderKey]: "DESC" }),
+      ).toMatchObject({ sortBy: { order: "DESC", property } });
     });
 
     it("builds where clauses for boolean, range, letter, word type and themen filters", async () => {
-      const { create, search } = await import("@orama/orama");
-      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
-      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      await capturedCbRef.fn!(
-        {
-          ...$wordSearch.get(),
-          activeLetterFilter: "B",
-          activeThemenFilter: ["essen-trinken"],
-          activeWordTypeFilter: ["Verb"],
-          audioExamples: true,
-          berolinismus: true,
-          characterCount: 4,
-          syllablesCount: 0,
-        },
-        "",
-      );
-      expect(vi.mocked(search).mock.calls.at(-1)?.[1].where).toEqual({
+      const params = await searchParams({
+        activeLetterFilter: "B",
+        activeThemenFilter: ["essen-trinken"],
+        activeWordTypeFilter: ["Verb"],
+        audioExamples: true,
+        berolinismus: true,
+        characterCount: 4,
+        syllablesCount: 0,
+      });
+      expect(params?.where).toEqual({
         berlinerischWordTypes: { containsAny: ["Verb"] },
         themen: { containsAny: ["essen-trinken"] },
         wordGroup: { eq: "B" },
@@ -465,37 +463,21 @@ describe("wordList store", () => {
     });
 
     it("omits where entirely when no filter is active", async () => {
-      const { create, search } = await import("@orama/orama");
-      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
-      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      await capturedCbRef.fn!($wordSearch.get(), "");
-      expect(vi.mocked(search).mock.calls.at(-1)?.[1]).not.toHaveProperty("where");
+      expect(await searchParams()).not.toHaveProperty("where");
     });
 
     it("sorts A - Z without a search term under relevance, whatever A - Z order is stored", async () => {
-      const { create, search } = await import("@orama/orama");
-      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
-      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      await capturedCbRef.fn!(
-        { ...$wordSearch.get(), activeOrderCategory: "relevance", alphabeticalOrder: "DESC" },
-        "",
-      );
-      expect(vi.mocked(search).mock.calls.at(-1)?.[1]).toMatchObject({
-        sortBy: { order: "ASC", property: "wordProperties.berlinerisch" },
-      });
+      expect(
+        await searchParams({ activeOrderCategory: "relevance", alphabeticalOrder: "DESC" }),
+      ).toMatchObject({ sortBy: { order: "ASC", property: "wordProperties.berlinerisch" } });
     });
 
     it.each(["date", "modifiedDate", "alphabetical"] as const)(
       "keeps the chosen %s sort while searching",
       async (category) => {
-        const { create, search } = await import("@orama/orama");
-        vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
-        vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
-        const { $wordSearch } = await import("@stores/wordList.ts");
-        await capturedCbRef.fn!({ ...$wordSearch.get(), activeOrderCategory: category }, "kiez");
-        expect(vi.mocked(search).mock.calls.at(-1)?.[1]).toHaveProperty("sortBy");
+        expect(await searchParams({ activeOrderCategory: category }, "kiez")).toHaveProperty(
+          "sortBy",
+        );
       },
     );
 
@@ -510,44 +492,13 @@ describe("wordList store", () => {
 
     it("sends no full-text params without a search term", async () => {
       // properties + threshold on an empty term made Orama drop part of the multi-word entries.
-      const { create, search } = await import("@orama/orama");
-      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
-      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      await capturedCbRef.fn!({ ...$wordSearch.get(), activeLetterFilter: "M" }, "  ");
-      const params = vi.mocked(search).mock.calls.at(-1)?.[1];
+      const params = await searchParams({ activeLetterFilter: "M" }, "  ");
       expect(params).not.toHaveProperty("threshold");
       expect(params).not.toHaveProperty("properties");
       expect(params).not.toHaveProperty("tolerance");
       expect(params).toMatchObject({
         sortBy: { order: "ASC", property: "wordProperties.berlinerisch" },
         where: { wordGroup: { eq: "M" } },
-      });
-    });
-
-    it("ignores a range filter cleared to an empty string", async () => {
-      const { create, search } = await import("@orama/orama");
-      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
-      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      await capturedCbRef.fn!(
-        { ...$wordSearch.get(), syllablesCount: "" as unknown as number },
-        "",
-      );
-      expect(vi.mocked(search).mock.calls.at(-1)?.[1]).not.toHaveProperty("where");
-    });
-
-    it("compares a slider value persisted as a string as a number", async () => {
-      const { create, search } = await import("@orama/orama");
-      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
-      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      await capturedCbRef.fn!(
-        { ...$wordSearch.get(), syllablesCount: "3" as unknown as number },
-        "",
-      );
-      expect(vi.mocked(search).mock.calls.at(-1)?.[1].where).toEqual({
-        "wordProperties.syllablesCount": { gte: 3 },
       });
     });
 
