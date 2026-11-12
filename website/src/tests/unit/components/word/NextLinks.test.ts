@@ -14,7 +14,8 @@ describe("NextLinks.astro", () => {
 
   it("always shows random, index and suggest tiles", async () => {
     const result = await render({ words });
-    for (const label of ["Zufälliges Wort", "Wort-Index", "Wort vorschlagen"]) expect(result).toContain(label);
+    for (const label of ["Zufälliges Wort", "Wort-Index", "Wort vorschlagen"])
+      expect(result).toContain(label);
     expect(result).not.toContain("Ooch im Trend");
   });
 

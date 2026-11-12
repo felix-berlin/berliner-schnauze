@@ -43,7 +43,11 @@ describe("WordImages.astro", () => {
   });
 
   it("renders the learn-more link", async () => {
-    const result = await render({ images: [image(1)], learnMore: "https://de.wikipedia.org/x", placement: "strip" });
+    const result = await render({
+      images: [image(1)],
+      learnMore: "https://de.wikipedia.org/x",
+      placement: "strip",
+    });
     expect(result).toContain('href="https://de.wikipedia.org/x"');
     expect(result).toContain("Erfahre mehr über dieses Wort");
   });

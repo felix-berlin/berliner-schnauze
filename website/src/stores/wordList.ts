@@ -6,8 +6,8 @@ import { create, insertMultiple, search } from "@orama/orama";
 import { language, stemmer } from "@orama/stemmers/german";
 import { fetchSearchIndex } from "@services/searchIndex.ts";
 import { trackEvent } from "@utils/analytics";
-import { useViewTransition } from "@utils/helpers.ts";
 import { jsonCodec } from "@utils/jsonCodec";
+import { vt } from "@utils/viewTransition.ts";
 import { atom, computed, onMount, task } from "nanostores";
 
 import type { OramaSearchIndex } from "@/pages/api/search/index.json";
@@ -122,7 +122,7 @@ export const $toggleWordListFilterFlyout = () => {
  * @param letter the letter to filter by
  */
 export const setLetterFilter = (letter: string) => {
-  useViewTransition(() => $wordSearch.setKey("activeLetterFilter", letter));
+  vt(() => $wordSearch.setKey("activeLetterFilter", letter));
 
   trackEvent("WordList", "Filter", `Letter: ${letter}`);
 };

@@ -1,73 +1,96 @@
 <template>
   <div class="c-bon-hud">
-    <div class="c-bon-hud__lives" :aria-label="`${lives} von ${MAX_LIVES} Leben verbleibend`">
-      <component
-        :is="HeartIcon"
-        v-for="i in MAX_LIVES"
-        :key="i"
-        :class="['c-bon-hud__life-icon', { 'c-bon-hud__life-icon--lost': i > lives }]"
-        :aria-hidden="true"
-        width="22"
-        height="22"
-      />
-    </div>
-
-    <div class="c-bon-hud__score-wrap">
+    <div class="c-bon-hud__row">
       <span
-        :class="['c-bon-hud__score', { 'c-bon-hud__score--highscore': isHighscore }]"
-        aria-hidden="true"
+        :key="hit"
+        :class="['c-bon-hud__lives', hit > 0 && 'c-bon-hud__lives--hit']"
+        role="img"
+        :aria-label="`Noch ${lives} Leben von 3`"
       >
-        {{ score }}
+        <svg
+          v-for="i in 3"
+          :key="i"
+          :class="['c-bon-hud__life', { 'c-bon-hud__life--lost': i > lives }]"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path
+            d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+          />
+        </svg>
       </span>
-      <span v-if="isHighscore" class="u-sr-only">Neuer Highscore: {{ score }}</span>
-      <span v-else class="u-sr-only">Score: {{ score }}</span>
-      <span class="c-bon-hud__score-label" aria-hidden="true">Score</span>
-      <span v-if="playerName" class="c-bon-hud__player" aria-hidden="true">{{ playerName }}</span>
+
+      <span class="c-bon-hud__score" aria-live="polite">
+        <b :key="gain" :class="['c-bon-hud__points', gain > 0 && 'c-bon-hud__points--gain']">{{
+          score
+        }}</b>
+        <span class="t-label">Punkte · {{ playerLabel }}</span>
+      </span>
+
+      <span class="c-bon-hud__streak">
+        <span class="c-bon-hud__streak-count">
+          <FlameIcon width="16" height="16" aria-hidden="true" />
+          Serie {{ streak }}
+        </span>
+        <span class="t-small">{{ next }}</span>
+      </span>
     </div>
 
-    <Transition name="c-bon-hud-streak">
-      <div v-if="streak > 0" class="c-bon-hud__streak" :aria-label="`Streak: ${streak}`">
-        <div class="c-bon-hud__streak-count" aria-hidden="true">
-          <FlameIcon width="16" height="16" aria-hidden="true" />
-          {{ streak }}
-        </div>
-        <Transition name="c-bon-hud-streak">
-          <div
-            v-if="multiplier > 1"
-            class="c-bon-hud__multiplier"
-            :aria-label="`${multiplier}× Multiplikator`"
-          >
-            <span
-              class="c-bon-hud__multiplier-badge c-bon-hud__multiplier-badge--active"
-              aria-hidden="true"
-            >
-              {{ multiplier }}×
-            </span>
-          </div>
-        </Transition>
-      </div>
-    </Transition>
+    <span class="c-bon-hud__track" role="img" :aria-label="`Multiplikator ×${MULTIPLIER_STEPS[current].mult}`">
+      <span
+        v-for="(field, i) in MULTIPLIER_LABELS"
+        :key="field"
+        :class="[
+          'c-bon-hud__field',
+          i < current && 'c-bon-hud__field--reached',
+          i === current && 'c-bon-hud__field--active',
+        ]"
+      >
+        {{ field }}
+      </span>
+    </span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from "vue";
+import { MULTIPLIER_LABELS, MULTIPLIER_STEPS, multiplierStep } from "payload-app/bon-rules";
+import { computed, defineAsyncComponent, ref, watch } from "vue";
 
-const HeartIcon = defineAsyncComponent(() => import("virtual:icons/lucide/heart"));
 const FlameIcon = defineAsyncComponent(() => import("virtual:icons/lucide/flame"));
 
-const MAX_LIVES = 3;
-
-defineProps<{
+const props = defineProps<{
   lives: number;
   score: number;
   streak: number;
-  multiplier: number;
-  isHighscore: boolean;
-  playerName?: string;
+  playerLabel: string;
 }>();
+
+// Counters that re-key the element, so its CSS animation (pop, wobble) restarts on every change.
+const gain = ref(0);
+const hit = ref(0);
+watch(
+  () => props.score,
+  (now, was) => now > was && gain.value++,
+);
+watch(
+  () => props.lives,
+  (now, was) => now < was && hit.value++,
+);
+
+const current = computed(() => multiplierStep(props.streak));
+
+const next = computed(() => {
+  const step = MULTIPLIER_STEPS[current.value + 1];
+  return step ? `noch ${step.from - props.streak} bis ×${step.mult}` : "volle Pulle: ×5";
+});
 </script>
 
 <style lang="scss">
-@use "@styles/components/berliner-oder-nicht";
+@use "@styles/components/bon-hud";
 </style>

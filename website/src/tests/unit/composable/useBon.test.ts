@@ -1,709 +1,387 @@
+// @vitest-environment jsdom
+import { useBon, computeMultiplier } from "@composables/useBon";
+import * as api from "@services/bonGameApi";
+import { $bonStats } from "@stores/bonStats";
+import { trackEvent } from "@utils/analytics";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@nanostores/persistent", () => ({
-  persistentAtom: vi.fn(() => ({
-    get: vi.fn(() => null),
-    set: vi.fn(),
-  })),
-  persistentMap: vi.fn(() => ({
-    get: vi.fn(() => ({
-      bestStreak: 0,
-      highScore: 0,
-      totalAnswered: 0,
-      totalCorrect: 0,
-      totalGamesPlayed: 0,
-    })),
-    setKey: vi.fn(),
-  })),
-}));
+vi.mock("@services/bonGameApi");
+vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));
 
-vi.mock("@stores/savedBon", () => ({
-  $savedBon: {
-    get: vi.fn(() => null),
-    set: vi.fn(),
-  },
-}));
+const stack = (from: number) =>
+  Array.from({ length: 20 }, (_, i) => ({ id: String(from + i), word: `W${from + i}` }));
+const reply = (correct: boolean, lives = 3, gameOver = false): api.AnswerReply => ({
+  correct,
+  gameOver,
+  isReal: true,
+  lives,
+  slug: "w",
+  translation: "t",
+});
+const FINISH = { bestStreak: 3, correctAnswers: 3, score: 50, totalAnswered: 3 };
 
-vi.mock("@stores/toastNotify", () => ({
-  createToastNotify: vi.fn(),
-}));
-
-vi.mock("@utils/analytics", () => ({
-  trackEvent: vi.fn(),
-}));
-
-import type { SavedBonSnapshot } from "@stores/savedBon";
-
-import { computeMultiplier, useBon, type BonCard } from "@composables/useBon";
-import { $bonStats } from "@stores/bonStats";
-import { $savedBon } from "@stores/savedBon";
-import { createToastNotify } from "@stores/toastNotify";
-import { trackEvent } from "@utils/analytics";
-
-import type { FakeWord } from "@/data/fakeWords";
-
-const makeRealWords = (n: number) =>
-  Array.from({ length: n }, (_, i) => ({
-    isReal: true as const,
-    slug: `wort-${i}`,
-    translation: `Translation ${i}`,
-    word: `Wort${i}`,
-  }));
-
-const makeFakeWords = (n: number): FakeWord[] =>
-  Array.from({ length: n }, (_, i) => ({
-    category: "invented" as const,
-    word: `Fake${i}`,
-  }));
-
-// ─── computeMultiplier ────────────────────────────────────────────────────────
-
-describe("computeMultiplier", () => {
-  it("returns 1 for streak 0", () => expect(computeMultiplier(0)).toBe(1));
-  it("returns 1 for streak 2", () => expect(computeMultiplier(2)).toBe(1));
-  it("returns 2 for streak 3", () => expect(computeMultiplier(3)).toBe(2));
-  it("returns 2 for streak 5", () => expect(computeMultiplier(5)).toBe(2));
-  it("returns 3 for streak 6", () => expect(computeMultiplier(6)).toBe(3));
-  it("returns 3 for streak 9", () => expect(computeMultiplier(9)).toBe(3));
-  it("returns 5 for streak 10", () => expect(computeMultiplier(10)).toBe(5));
-  it("returns 5 for streak 20", () => expect(computeMultiplier(20)).toBe(5));
+beforeEach(() => {
+  vi.resetAllMocks();
+  localStorage.clear();
+  $bonStats.setKey("highScore", 0);
+  $bonStats.setKey("bestStreak", 0);
+  $bonStats.setKey("totalGamesPlayed", 0);
+  $bonStats.setKey("totalCorrect", 0);
+  $bonStats.setKey("totalAnswered", 0);
+  $bonStats.setKey("playerName", "");
+  vi.mocked(api.startRun).mockResolvedValue({ cards: stack(0), token: "tok" });
+  vi.mocked(api.nextCards).mockResolvedValue(stack(20));
+  vi.mocked(api.answerCard).mockResolvedValue(reply(true));
+  vi.mocked(api.finishRun).mockResolvedValue(FINISH);
 });
 
-// ─── deck composition (_makeQueuedDeck) ──────────────────────────────────────
-
-/** Starts a game and draws the full first deck (current card + 19 more). */
-function drawFirstDeck(): BonCard[] {
-  const { init, startGame, nextCard, currentCard } = useBon();
-  init(makeRealWords(50), makeFakeWords(30));
-  startGame();
-  const cards: BonCard[] = [currentCard.value!];
-  for (let i = 0; i < 19; i++) {
-    nextCard();
-    cards.push(currentCard.value!);
+async function started() {
+  const bon = useBon();
+  await bon.start();
+  return bon;
+}
+/** Answers and advances n times. */
+async function play(bon: ReturnType<typeof useBon>, n: number, real = true) {
+  for (let i = 0; i < n; i++) {
+    await bon.answer(real);
+    await bon.advance();
   }
-  return cards;
 }
 
-describe("deck composition", () => {
-  it("real card count per deck is between 10 and 15 (50–75%)", () => {
-    for (let i = 0; i < 20; i++) {
-      const realCount = drawFirstDeck().filter((c) => c.isReal).length;
-      expect(realCount).toBeGreaterThanOrEqual(10);
-      expect(realCount).toBeLessThanOrEqual(15);
-    }
-  });
-
-  it("real cards carry slug and word, fake cards only a word", () => {
-    const deck = drawFirstDeck();
-    expect(deck.every((c) => Boolean(c.word))).toBe(true);
-    expect(deck.filter((c) => c.isReal).every((c) => c.slug !== undefined)).toBe(true);
-    expect(deck.filter((c) => !c.isReal).every((c) => c.slug === undefined)).toBe(true);
-  });
-
-  it("no duplicate words within one deck", () => {
-    expect(new Set(drawFirstDeck().map((c) => c.word)).size).toBe(20);
-  });
+describe("computeMultiplier", () => {
+  it.each([
+    [0, 1],
+    [2, 1],
+    [3, 2],
+    [5, 2],
+    [6, 3],
+    [9, 3],
+    [10, 5],
+    [20, 5],
+  ])("streak %i gives %i", (s, m) => expect(computeMultiplier(s)).toBe(m));
 });
 
-// ─── isReady guard ────────────────────────────────────────────────────────────
-
-describe("useBon — isReady guard", () => {
-  it("isReady is false before init", () => {
-    const { isReady } = useBon();
-    expect(isReady.value).toBe(false);
-  });
-
-  it("isReady is true after init", () => {
-    const { init, isReady } = useBon();
-    init(makeRealWords(15), makeFakeWords(20));
-    expect(isReady.value).toBe(true);
-  });
-
-  it("startGame before init leaves phase as idle", () => {
-    const { startGame, phase } = useBon();
-    startGame();
-    expect(phase.value).toBe("idle");
-  });
-
-  it("startGame after init sets currentCard and phase to playing", () => {
-    const { init, startGame, currentCard, phase } = useBon();
-    init(makeRealWords(15), makeFakeWords(20));
-    startGame();
-    expect(phase.value).toBe("playing");
-    expect(currentCard.value).not.toBeNull();
-  });
-});
-
-// ─── answer — guards ─────────────────────────────────────────────────────────
-
-describe("answer — guards", () => {
-  it("does nothing when phase is idle (no init)", () => {
-    const { answer, phase, score } = useBon();
-    answer(true);
-    expect(phase.value).toBe("idle");
-    expect(score.value).toBe(0);
-  });
-
-  it("does nothing when phase is idle (after init, before startGame)", () => {
-    const { init, answer, phase } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    answer(true);
-    expect(phase.value).toBe("idle");
-  });
-});
-
-// ─── answer — correct path ───────────────────────────────────────────────────
-
-describe("answer — correct path", () => {
-  beforeEach(() => vi.clearAllMocks());
-
-  it("increments score by 10 on first correct answer", () => {
-    const { init, startGame, answer, currentCard, score } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    answer(currentCard.value!.isReal);
-    expect(score.value).toBe(10);
-  });
-
-  it("increments streak", () => {
-    const { init, startGame, answer, currentCard, streak } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    answer(currentCard.value!.isReal);
-    expect(streak.value).toBe(1);
-  });
-
-  it("tracks bestStreak", () => {
-    const { init, startGame, answer, currentCard, bestStreak } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    answer(currentCard.value!.isReal);
-    expect(bestStreak.value).toBe(1);
-  });
-
-  it("increments correctAnswers", () => {
-    const { init, startGame, answer, currentCard, correctAnswers } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    answer(currentCard.value!.isReal);
-    expect(correctAnswers.value).toBe(1);
-  });
-
-  it("applies multiplier x2 at streak 3", () => {
-    const { init, startGame, answer, currentCard, score } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    // answer same card 3 times (card doesn't auto-advance in composable)
-    answer(currentCard.value!.isReal); // streak 1, mult 1 → +10 = 10
-    answer(currentCard.value!.isReal); // streak 2, mult 1 → +10 = 20
-    answer(currentCard.value!.isReal); // streak 3, mult 2 → +20 = 40
-    expect(score.value).toBe(40);
-  });
-
-  it("applies multiplier x3 at streak 6", () => {
-    const { init, startGame, answer, currentCard, score, multiplier } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    for (let i = 0; i < 6; i++) answer(currentCard.value!.isReal);
-    expect(multiplier.value).toBe(3);
-    // score: 10+10+20+20+20+30 = 110
-    expect(score.value).toBe(110);
-  });
-
-  it("applies multiplier x5 at streak 10", () => {
-    const { init, startGame, answer, currentCard, multiplier } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    for (let i = 0; i < 10; i++) answer(currentCard.value!.isReal);
-    expect(multiplier.value).toBe(5);
-  });
-
-  it("triggers toast for correct real card with translation", async () => {
-    vi.useFakeTimers();
-    try {
-      const { init, startGame, answer, currentCard, nextCard } = useBon();
-      init(makeRealWords(30), makeFakeWords(20));
-      startGame();
-      vi.mocked(createToastNotify).mockClear();
-
-      // advance to a real card (50-75% of deck is real)
-      let attempts = 0;
-      while (!currentCard.value?.isReal && attempts < 20) {
-        nextCard();
-        attempts++;
-      }
-      expect(currentCard.value?.isReal).toBe(true);
-      answer(true);
-      // createToastNotify is deferred one rAF to avoid GPU compositor contention
-      // with the card animation on mobile — flush fake timers to trigger it.
-      await vi.runAllTimersAsync();
-      expect(createToastNotify).toHaveBeenCalledWith(
-        expect.objectContaining({ status: "success" }),
-      );
-    } finally {
-      // finally — a failing assertion must not leak fake timers into other tests
-      vi.useRealTimers();
-    }
-  });
-
-  it("does NOT trigger toast for correct fake card", () => {
-    const { init, startGame, answer, currentCard, nextCard } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    vi.mocked(createToastNotify).mockClear();
-
-    // advance to a fake card
-    let attempts = 0;
-    while (currentCard.value?.isReal && attempts < 20) {
-      nextCard();
-      attempts++;
-    }
-    expect(currentCard.value?.isReal).toBe(false);
-
-    answer(false); // correctly identify as fake
-    expect(createToastNotify).not.toHaveBeenCalled();
-  });
-
-  it("saves snapshot to storage after correct answer", () => {
-    const { init, startGame, answer, currentCard } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    vi.mocked($savedBon.set).mockClear();
-    answer(currentCard.value!.isReal);
-    expect($savedBon.set).toHaveBeenCalledWith(expect.objectContaining({ phase: "playing" }));
-  });
-});
-
-// ─── answer — wrong path ─────────────────────────────────────────────────────
-
-describe("answer — wrong path", () => {
-  beforeEach(() => vi.clearAllMocks());
-
-  it("decrements lives on wrong answer", () => {
-    const { init, startGame, answer, currentCard, lives } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    answer(!currentCard.value!.isReal);
-    expect(lives.value).toBe(2);
-  });
-
-  it("resets streak to 0 on wrong answer", () => {
-    const { init, startGame, answer, currentCard, streak } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    answer(currentCard.value!.isReal); // streak → 1
-    answer(!currentCard.value!.isReal); // wrong → streak → 0
-    expect(streak.value).toBe(0);
-  });
-
-  it("resets multiplier to 1 on wrong answer", () => {
-    const { init, startGame, answer, currentCard, multiplier } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    for (let i = 0; i < 3; i++) answer(currentCard.value!.isReal); // mult → 2
-    answer(!currentCard.value!.isReal); // wrong → mult → 1
-    expect(multiplier.value).toBe(1);
-  });
-
-  it("ends game when 3 lives are lost", () => {
-    const { init, startGame, answer, currentCard, phase } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    for (let i = 0; i < 3; i++) answer(!currentCard.value!.isReal);
-    expect(phase.value).toBe("result");
-  });
-
-  it("saves snapshot when lives remain after wrong answer", () => {
-    const { init, startGame, answer, currentCard } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    vi.mocked($savedBon.set).mockClear();
-    answer(!currentCard.value!.isReal); // 1 wrong → 2 lives remain
-    expect($savedBon.set).toHaveBeenCalledWith(expect.objectContaining({ phase: "playing" }));
-  });
-
-  it("clears storage (not saves) when game ends", () => {
-    const { init, startGame, answer, currentCard } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    for (let i = 0; i < 3; i++) answer(!currentCard.value!.isReal);
-    expect($savedBon.set).toHaveBeenLastCalledWith(null);
-  });
-
-  it("increments totalAnswered on wrong answer", () => {
-    const { init, startGame, answer, currentCard, totalAnswered } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    answer(!currentCard.value!.isReal);
-    expect(totalAnswered.value).toBe(1);
-  });
-});
-
-// ─── _endGame ─────────────────────────────────────────────────────────────────
-
-describe("_endGame", () => {
-  beforeEach(() => vi.clearAllMocks());
-
-  const playUntilGameOver = (correctFirst = 0) => {
-    const game = useBon();
-    game.init(makeRealWords(30), makeFakeWords(20));
-    game.startGame();
-    for (let i = 0; i < correctFirst; i++) game.answer(game.currentCard.value!.isReal);
-    for (let i = 0; i < 3; i++) game.answer(!game.currentCard.value!.isReal);
-    return game;
-  };
-
-  it("sets phase to result", () => {
-    const { phase } = playUntilGameOver();
-    expect(phase.value).toBe("result");
-  });
-
-  it("increments totalGamesPlayed by 1", () => {
-    playUntilGameOver();
-    expect($bonStats.setKey).toHaveBeenCalledWith("totalGamesPlayed", 1);
-  });
-
-  it("updates totalCorrect", () => {
-    playUntilGameOver(2);
-    expect($bonStats.setKey).toHaveBeenCalledWith("totalCorrect", 2);
-  });
-
-  it("updates totalAnswered", () => {
-    playUntilGameOver(2); // 2 correct + 3 wrong = 5 answered
-    expect($bonStats.setKey).toHaveBeenCalledWith("totalAnswered", 5);
-  });
-
-  it("updates highScore when score beats stored highScore (0)", () => {
-    playUntilGameOver(1); // score > 0 → beats stored highScore of 0
-    expect($bonStats.setKey).toHaveBeenCalledWith("highScore", expect.any(Number));
-  });
-
-  it("does NOT update highScore when score is 0", () => {
-    playUntilGameOver(0); // no correct answers → score stays 0, not > 0
-    expect($bonStats.setKey).not.toHaveBeenCalledWith("highScore", expect.anything());
-  });
-
-  it("updates bestStreak when beaten", () => {
-    playUntilGameOver(1); // 1 correct → bestStreak becomes 1 > stored 0
-    expect($bonStats.setKey).toHaveBeenCalledWith("bestStreak", 1);
-  });
-
-  it("does NOT update bestStreak when score is 0", () => {
-    playUntilGameOver(0); // no correct answers → bestStreak stays 0, not > 0
-    expect($bonStats.setKey).not.toHaveBeenCalledWith("bestStreak", expect.anything());
-  });
-
-  it("fires game_over analytics event", () => {
-    playUntilGameOver();
-    expect(trackEvent).toHaveBeenCalledWith(
-      "Game",
-      "Game Over",
-      "berliner-oder-nicht",
-      expect.any(Number),
-    );
-  });
-
-  it("fires new_highscore analytics event when score beats stored 0", () => {
-    playUntilGameOver(1);
-    expect(trackEvent).toHaveBeenCalledWith(
-      "Game",
-      "New Highscore",
-      "berliner-oder-nicht",
-      expect.any(Number),
-    );
-  });
-
-  it("does NOT fire new_highscore event when score is 0", () => {
-    playUntilGameOver(0);
-    expect(trackEvent).not.toHaveBeenCalledWith(
-      "Game",
-      "New Highscore",
-      expect.anything(),
-      expect.anything(),
-    );
-  });
-
-  it("fires new_best_streak analytics event when best streak is beaten", () => {
-    playUntilGameOver(1); // 1 correct → bestStreak becomes 1 > stored 0
-    expect(trackEvent).toHaveBeenCalledWith(
-      "Game",
-      "New Best Streak",
-      "berliner-oder-nicht",
-      expect.any(Number),
-    );
-  });
-
-  it("does NOT fire new_best_streak event when streak is 0", () => {
-    playUntilGameOver(0); // no correct answers → bestStreak stays 0
-    expect(trackEvent).not.toHaveBeenCalledWith(
-      "Game",
-      "New Best Streak",
-      expect.anything(),
-      expect.anything(),
-    );
-  });
-});
-
-// ─── analytics — startGame / resumeGame ──────────────────────────────────────
-
-describe("analytics — startGame / resumeGame", () => {
-  beforeEach(() => vi.clearAllMocks());
-
-  it("tracks Game Started on startGame", () => {
-    const { init, startGame } = useBon();
-    init(makeRealWords(15), makeFakeWords(20));
-    startGame();
+describe("useBon", () => {
+  it("start deals the first card", async () => {
+    $bonStats.setKey("highScore", 77);
+    const bon = await started();
+    expect(bon.phase.value).toBe("play");
+    expect(bon.cardInStack.value).toBe(1);
+    expect(bon.stack.value).toBe(1);
+    expect(bon.card.value).toEqual({ id: "0", word: "W0" });
+    expect(bon.previousHighScore.value).toBe(77);
     expect(trackEvent).toHaveBeenCalledWith("Game", "Game Started", "berliner-oder-nicht");
   });
 
-  it("tracks Game Resumed on resumeGame", () => {
-    const { init, resumeGame } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-
-    const snapshot: SavedBonSnapshot = {
-      bestStreak: 5,
-      correctAnswers: 7,
-      currentCard: { isReal: true, word: "Stulle" },
-      deck: [],
-      fakeQueue: [],
-      lastAnswerCorrect: true,
-      lastCard: null,
-      lives: 2,
-      multiplier: 2,
-      phase: "playing",
-      realQueue: [],
-      score: 50,
-      streak: 3,
-      totalAnswered: 8,
-    };
-    vi.mocked($savedBon.get).mockReturnValue(snapshot);
-
-    resumeGame();
-    expect(trackEvent).toHaveBeenCalledWith("Game", "Game Resumed", "berliner-oder-nicht");
-  });
-});
-
-// ─── nextCard ─────────────────────────────────────────────────────────────────
-
-describe("nextCard", () => {
-  it("advances to a different card", () => {
-    const { init, startGame, nextCard, currentCard } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    const first = currentCard.value;
-    nextCard();
-    expect(currentCard.value).not.toStrictEqual(first);
+  it("keeps the tag the start call returned", async () => {
+    vi.mocked(api.startRun).mockResolvedValue({ cards: stack(0), tag: "K7QX", token: "tok" });
+    const bon = useBon();
+    expect(bon.tag.value).toBe("");
+    await bon.start();
+    expect(bon.tag.value).toBe("K7QX");
   });
 
-  it("refills deck when exhausted", () => {
-    const { init, startGame, nextCard, currentCard } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    for (let i = 0; i < 20; i++) nextCard();
-    expect(currentCard.value).not.toBeNull();
+  it("answer goes to feedback with points", async () => {
+    const bon = await started();
+    await play(bon, 2);
+    await bon.answer(true);
+    expect(bon.phase.value).toBe("feedback");
+    expect(api.answerCard).toHaveBeenLastCalledWith("tok", "2", true);
+    expect(bon.last.value).toMatchObject({ correct: true, multiplier: 2, points: 20, word: "W2" });
+    expect(bon.score.value).toBe(10 + 10 + 20);
+    expect(bon.history.value).toHaveLength(3);
   });
 
-  it("refills real/fake queue when cycling through all words (small pool)", () => {
-    // With only 12 real words the queue exhausts after the 1st deck draw,
-    // triggering the drawFromQueue refill branch on the 2nd _makeQueuedDeck call.
-    const { init, startGame, nextCard, currentCard } = useBon();
-    init(makeRealWords(12), makeFakeWords(20));
-    startGame();
-    // exhaust first deck (20 cards) + part of second to force queue refill
-    for (let i = 0; i < 40; i++) nextCard();
-    expect(currentCard.value).not.toBeNull();
-  });
-});
-
-describe("bestStreak not updated when new streak is lower", () => {
-  it("bestStreak stays at previous peak when later streak is shorter", () => {
-    const { init, startGame, answer, currentCard, bestStreak } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    // Build streak of 3
-    for (let i = 0; i < 3; i++) answer(currentCard.value!.isReal);
-    expect(bestStreak.value).toBe(3);
-    // Wrong answer resets streak
-    answer(!currentCard.value!.isReal);
-    // Correct again — streak is 1, bestStreak stays at 3
-    answer(currentCard.value!.isReal);
-    expect(bestStreak.value).toBe(3);
-  });
-});
-
-// ─── isNewHighScore computed ──────────────────────────────────────────────────
-
-describe("isNewHighScore", () => {
-  beforeEach(() => vi.clearAllMocks());
-
-  it("is false in idle phase", () => {
-    const { isNewHighScore } = useBon();
-    expect(isNewHighScore.value).toBe(false);
+  it("third wrong answer ends the game", async () => {
+    vi.mocked(api.answerCard).mockResolvedValue(reply(false, 0, true));
+    $bonStats.setKey("playerName", "Ede");
+    const bon = await started();
+    await bon.answer(true);
+    expect(bon.phase.value).toBe("feedback");
+    expect(api.finishRun).not.toHaveBeenCalled();
+    await bon.advance();
+    expect(bon.phase.value).toBe("over");
+    expect(api.finishRun).toHaveBeenCalledTimes(1);
+    expect(api.finishRun).toHaveBeenCalledWith("tok", "Ede");
+    expect(bon.result.value).toEqual(FINISH);
+    expect(bon.lives.value).toBe(0);
   });
 
-  it("is false in playing phase", () => {
-    const { init, startGame, isNewHighScore } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    expect(isNewHighScore.value).toBe(false);
+  it("prefetches the next stack at card 15, once, and switches without loading", async () => {
+    const bon = await started();
+    await play(bon, 13); // now on card 14
+    expect(api.nextCards).not.toHaveBeenCalled();
+    await play(bon, 1); // card 15
+    await play(bon, 6); // quick answers through card 20
+    expect(api.nextCards).toHaveBeenCalledTimes(1);
+    expect(bon.stack.value).toBe(2);
+    expect(bon.cardInStack.value).toBe(1);
+    expect(bon.card.value?.id).toBe("20");
+    expect(bon.phase.value).toBe("play");
   });
 
-  it("is true after result with positive score", () => {
-    const { init, startGame, answer, currentCard, isNewHighScore, phase } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    answer(currentCard.value!.isReal); // score > 0
-    for (let i = 0; i < 3; i++) answer(!currentCard.value!.isReal);
-    expect(phase.value).toBe("result");
-    expect(isNewHighScore.value).toBe(true); // stored highScore = 0, we scored > 0
+  it("shows loading when the prefetch failed and the stack ran out", async () => {
+    vi.mocked(api.nextCards).mockRejectedValueOnce(new Error("x"));
+    const bon = await started();
+    await play(bon, 19);
+    await bon.answer(true);
+    let release!: (c: api.PublicCard[]) => void;
+    vi.mocked(api.nextCards).mockReturnValue(new Promise((r) => (release = r)));
+    const advancing = bon.advance();
+    expect(bon.phase.value).toBe("loading");
+    release(stack(20));
+    await advancing;
+    expect(bon.phase.value).toBe("play");
+    expect(bon.stack.value).toBe(2);
+    expect(api.nextCards).toHaveBeenCalledTimes(2);
   });
 
-  it("is false after result with score 0", () => {
-    const { init, startGame, answer, currentCard, isNewHighScore, phase } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    for (let i = 0; i < 3; i++) answer(!currentCard.value!.isReal);
-    expect(phase.value).toBe("result");
-    expect(isNewHighScore.value).toBe(false); // score=0 is not > stored highScore=0
-  });
-});
-
-// ─── session persistence ──────────────────────────────────────────────────────
-
-describe("session persistence", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
+  it("a failed answer keeps the state and retry repeats the call", async () => {
+    const bon = await started();
+    await play(bon, 1);
+    vi.mocked(api.answerCard).mockRejectedValueOnce(new Error("down"));
+    await bon.answer(false);
+    expect(bon.phase.value).toBe("error");
+    expect(bon.score.value).toBe(10);
+    expect(bon.lives.value).toBe(3);
+    expect(bon.streak.value).toBe(1);
+    bon.retry();
+    await vi.waitFor(() => expect(bon.phase.value).toBe("feedback"));
+    expect(api.answerCard).toHaveBeenCalledTimes(3);
+    expect(api.answerCard).toHaveBeenLastCalledWith("tok", "1", false);
   });
 
-  it("resumeGame does nothing before init (no words loaded)", () => {
-    const { resumeGame, phase } = useBon();
-    resumeGame();
-    expect(phase.value).toBe("idle");
+  it("a failed next keeps the state and retry repeats it", async () => {
+    vi.mocked(api.nextCards).mockRejectedValue(new Error("down"));
+    const bon = await started();
+    await play(bon, 19);
+    await bon.answer(true);
+    const scoreBefore = bon.score.value;
+    await bon.advance();
+    expect(bon.phase.value).toBe("error");
+    expect(bon.score.value).toBe(scoreBefore);
+    expect(bon.lives.value).toBe(3);
+    vi.mocked(api.nextCards).mockResolvedValue(stack(20));
+    bon.retry();
+    await vi.waitFor(() => expect(bon.phase.value).toBe("play"));
+    expect(bon.stack.value).toBe(2);
   });
 
-  it("resumeGame does nothing when saved game is null", () => {
-    const { init, resumeGame, phase } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    vi.mocked($savedBon.get).mockReturnValue(null);
-    resumeGame();
-    expect(phase.value).toBe("idle");
+  it("a failed start can be retried", async () => {
+    vi.mocked(api.startRun).mockRejectedValueOnce(new Error("down"));
+    const bon = await started();
+    expect(bon.phase.value).toBe("error");
+    bon.retry();
+    await vi.waitFor(() => expect(bon.phase.value).toBe("play"));
   });
 
-  it("resumeGame restores state from snapshot", () => {
-    const { init, resumeGame, phase, score, lives, streak } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-
-    const snapshot: SavedBonSnapshot = {
-      bestStreak: 5,
-      correctAnswers: 7,
-      currentCard: { isReal: true, word: "Stulle" },
-      deck: [],
-      fakeQueue: [],
-      lastAnswerCorrect: true,
-      lastCard: null,
-      lives: 2,
-      multiplier: 2,
-      phase: "playing",
-      realQueue: [],
-      score: 50,
-      streak: 3,
-      totalAnswered: 8,
-    };
-    vi.mocked($savedBon.get).mockReturnValue(snapshot);
-
-    resumeGame();
-    expect(phase.value).toBe("playing");
-    expect(score.value).toBe(50);
-    expect(lives.value).toBe(2);
-    expect(streak.value).toBe(3);
+  it("ignores answers while one is in flight and outside play", async () => {
+    const bon = useBon();
+    await bon.answer(true);
+    expect(api.answerCard).not.toHaveBeenCalled();
+    await bon.start();
+    let release!: (r: api.AnswerReply) => void;
+    vi.mocked(api.answerCard).mockReturnValue(new Promise((r) => (release = r)));
+    const first = bon.answer(true);
+    await bon.answer(false);
+    release(reply(true));
+    await first;
+    expect(api.answerCard).toHaveBeenCalledTimes(1);
+    await bon.answer(true); // phase is feedback now
+    expect(api.answerCard).toHaveBeenCalledTimes(1);
   });
 
-  it("resumeGame restores queues from snapshot", () => {
-    const { init, resumeGame, phase } = useBon();
-    const realWords = makeRealWords(30);
-    init(realWords, makeFakeWords(20));
-
-    const snapshot: SavedBonSnapshot = {
-      bestStreak: 0,
-      correctAnswers: 0,
-      currentCard: { isReal: true, word: "Stulle" },
-      deck: [],
-      fakeQueue: [{ isReal: false, word: "FakeQueue" }],
-      lastAnswerCorrect: null,
-      lastCard: null,
-      lives: 3,
-      multiplier: 1,
-      phase: "playing",
-      realQueue: [{ isReal: true, word: "QueueWord" }],
-      score: 0,
-      streak: 0,
-      totalAnswered: 0,
-    };
-    vi.mocked($savedBon.get).mockReturnValue(snapshot);
-    resumeGame();
-    expect(phase.value).toBe("playing");
+  it("answer while prefetch is in flight waits and succeeds", async () => {
+    const bon = await started();
+    await play(bon, 13);
+    let releaseNext!: (c: api.PublicCard[]) => void;
+    vi.mocked(api.nextCards).mockReturnValue(new Promise((r) => (releaseNext = r)));
+    await play(bon, 1); // showing card 15 triggers the prefetch
+    expect(api.nextCards).toHaveBeenCalledTimes(1);
+    const answering = bon.answer(true);
+    await Promise.resolve();
+    expect(api.answerCard).toHaveBeenCalledTimes(14);
+    releaseNext(stack(20));
+    await answering;
+    expect(api.answerCard).toHaveBeenCalledTimes(15);
+    expect(bon.phase.value).toBe("feedback");
   });
 
-  it("startGame clears saved game", () => {
-    const { init, startGame } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    expect($savedBon.set).toHaveBeenCalledWith(null);
+  it("end() while an answer is in flight finishes after it and stays over", async () => {
+    const bon = await started();
+    let release!: (r: api.AnswerReply) => void;
+    vi.mocked(api.answerCard).mockReturnValue(new Promise((r) => (release = r)));
+    const answering = bon.answer(true);
+    const ending = bon.end();
+    await Promise.resolve();
+    expect(api.finishRun).not.toHaveBeenCalled();
+    release(reply(true));
+    await Promise.all([answering, ending]);
+    expect(api.finishRun).toHaveBeenCalledTimes(1);
+    expect(bon.phase.value).toBe("over");
+    expect(bon.history.value).toHaveLength(1);
   });
 
-  it("correct answer saves snapshot to storage", () => {
-    const { init, startGame, answer, currentCard } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    vi.mocked($savedBon.set).mockClear();
-    answer(currentCard.value!.isReal);
-    expect($savedBon.set).toHaveBeenCalledWith(expect.objectContaining({ phase: "playing" }));
+  it("a late failing answer does not pull an ended game back to error", async () => {
+    const bon = await started();
+    let fail!: (e: Error) => void;
+    vi.mocked(api.answerCard).mockReturnValue(new Promise((_, rej) => (fail = rej)));
+    const answering = bon.answer(true);
+    const ending = bon.end();
+    fail(new Error("x"));
+    await Promise.all([answering, ending]);
+    expect(bon.phase.value).toBe("over");
   });
 
-  it("wrong answer saves snapshot when lives remain", () => {
-    const { init, startGame, answer, currentCard, lives } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    vi.mocked($savedBon.set).mockClear();
-    answer(!currentCard.value!.isReal);
-    expect(lives.value).toBeGreaterThan(0);
-    expect($savedBon.set).toHaveBeenCalledWith(expect.objectContaining({ phase: "playing" }));
+  it("end() while the prefetch is in flight waits for it", async () => {
+    const bon = await started();
+    await play(bon, 13);
+    let releaseNext!: (c: api.PublicCard[]) => void;
+    vi.mocked(api.nextCards).mockReturnValue(new Promise((r) => (releaseNext = r)));
+    await play(bon, 1);
+    const ending = bon.end();
+    await Promise.resolve();
+    expect(api.finishRun).not.toHaveBeenCalled();
+    releaseNext(stack(20));
+    await ending;
+    expect(api.finishRun).toHaveBeenCalledTimes(1);
+    expect(bon.phase.value).toBe("over");
   });
 
-  it("game over clears saved game", () => {
-    const { init, startGame, answer, currentCard } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    for (let i = 0; i < 3; i++) answer(!currentCard.value!.isReal);
-    expect($savedBon.set).toHaveBeenLastCalledWith(null);
+  it("end() after the third mistake is no early end; end() without a game counts nothing", async () => {
+    const idle = useBon();
+    await idle.end();
+    expect($bonStats.get().totalGamesPlayed).toBe(0);
+    vi.mocked(api.answerCard).mockResolvedValue(reply(false, 0, true));
+    const bon = await started();
+    await bon.answer(true);
+    await bon.end();
+    expect(bon.endedEarly.value).toBe(false);
+    expect(bon.phase.value).toBe("over");
   });
 
-  it("lastAnswerCorrect and lastCard reflect the most recent answer", () => {
-    const { init, startGame, answer, currentCard, lastAnswerCorrect, lastCard } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    const card = currentCard.value!;
-    answer(card.isReal);
-    expect(lastAnswerCorrect.value).toBe(true);
-    expect(lastCard.value).toBe(card);
+  it("an empty next reply is an error and retry asks again", async () => {
+    // the silent card-15 prefetch and the blocking request both get an empty stack
+    vi.mocked(api.nextCards).mockResolvedValueOnce([]).mockResolvedValueOnce([]);
+    const bon = await started();
+    await play(bon, 19);
+    await bon.answer(true);
+    await bon.advance();
+    expect(bon.phase.value).toBe("error");
+    bon.retry();
+    await vi.waitFor(() => expect(bon.phase.value).toBe("play"));
+    expect(api.nextCards).toHaveBeenCalledTimes(3);
+    expect(bon.stack.value).toBe(2);
   });
 
-  it("drawFromQueue breaks when source is empty (covers line 68) and currentCard is null when deck is empty (covers line 156)", () => {
-    const { init, startGame, currentCard } = useBon();
-    // Both sources empty: drawFromQueue([],[],n) → queue stays empty → break
-    // deck ends up [] → _nextCard sets currentCard = undefined ?? null = null
-    init([], []);
-    startGame();
-    expect(currentCard.value).toBeNull();
+  it("a failed restart cannot finish the previous game", async () => {
+    const bon = await started();
+    vi.mocked(api.startRun).mockRejectedValueOnce(new Error("down"));
+    await bon.start();
+    await bon.end();
+    expect(api.finishRun).not.toHaveBeenCalled();
   });
 
-  it("_saveToStorage early-return branch: phase not playing after game over", () => {
-    const { init, startGame, answer, currentCard } = useBon();
-    init(makeRealWords(30), makeFakeWords(20));
-    startGame();
-    // Lose all lives → phase becomes result, _saveToStorage not called with set
-    for (let i = 0; i < 3; i++) answer(!currentCard.value!.isReal);
-    // After game over, $savedBon.set(null) is called, not _saveToStorage
-    expect(vi.mocked($savedBon.set)).toHaveBeenLastCalledWith(null);
+  it("end() during an answer that is the third mistake is no early end", async () => {
+    const bon = await started();
+    let release!: (r: api.AnswerReply) => void;
+    vi.mocked(api.answerCard).mockReturnValue(new Promise((r) => (release = r)));
+    const answering = bon.answer(true);
+    const ending = bon.end();
+    release(reply(false, 0, true));
+    await Promise.all([answering, ending]);
+    expect(bon.endedEarly.value).toBe(false);
+    expect(bon.phase.value).toBe("over");
+  });
+
+  it("a rejecting finishRun still ends the game, and a retry can store it", async () => {
+    vi.mocked(api.finishRun).mockRejectedValueOnce(
+      Object.assign(new Error("weg"), { status: 502 }),
+    );
+    const bon = await started();
+    await bon.end();
+    expect(bon.phase.value).toBe("over");
+    expect(bon.result.value).toBeUndefined();
+    expect(bon.finishError.value).toEqual({ message: "weg", retryable: true });
+    expect(trackEvent).toHaveBeenCalledWith("Game", "Finish Failed", "berliner-oder-nicht", 502);
+    await bon.retryFinish();
+    expect(bon.result.value).toEqual(FINISH);
+    expect(bon.finishError.value).toBeUndefined();
+  });
+
+  it("a refused finish (4xx) cannot be retried", async () => {
+    vi.mocked(api.finishRun).mockRejectedValue(
+      Object.assign(new Error("Ohne Cookie jibt's keen Ranking."), { status: 400 }),
+    );
+    const bon = await started();
+    await bon.end();
+    expect(bon.finishError.value).toEqual({
+      message: "Ohne Cookie jibt's keen Ranking.",
+      retryable: false,
+    });
+    await bon.retryFinish();
+    expect(api.finishRun).toHaveBeenCalledTimes(1);
+  });
+
+  it("a game the server no longer knows offers a new game, not the same call", async () => {
+    const bon = await started();
+    vi.mocked(api.answerCard).mockRejectedValueOnce(
+      Object.assign(new Error("Spiel nich jefunden."), { status: 404 }),
+    );
+    await bon.answer(true);
+    expect(bon.phase.value).toBe("error");
+    expect(bon.error.value).toEqual({ message: "Spiel nich jefunden.", retryable: false });
+    bon.retry();
+    await vi.waitFor(() => expect(bon.phase.value).toBe("play"));
+    expect(api.startRun).toHaveBeenCalledTimes(2);
+    expect(api.answerCard).toHaveBeenCalledTimes(1);
+    expect(bon.error.value).toBeUndefined();
+  });
+
+  it("an empty card reply is an error", async () => {
+    vi.mocked(api.startRun).mockResolvedValue({ cards: [], token: "tok" });
+    const bon = await started();
+    expect(bon.phase.value).toBe("error");
+  });
+
+  it("a stale reply of a previous game does not leak into a new one", async () => {
+    const bon = await started();
+    let release!: (r: api.AnswerReply) => void;
+    vi.mocked(api.answerCard).mockReturnValue(new Promise((r) => (release = r)));
+    const stale = bon.answer(true);
+    await bon.start();
+    release(reply(true));
+    await stale;
+    expect(bon.phase.value).toBe("play");
+    expect(bon.score.value).toBe(0);
+    expect(bon.history.value).toHaveLength(0);
+  });
+
+  it("end() early marks endedEarly and survives a rejected finish", async () => {
+    vi.mocked(api.finishRun).mockResolvedValue(undefined);
+    const bon = await started();
+    await play(bon, 2);
+    await bon.end();
+    expect(bon.endedEarly.value).toBe(true);
+    expect(bon.phase.value).toBe("over");
+    expect(bon.result.value).toBeUndefined();
+  });
+
+  it("over updates $bonStats and tracks events", async () => {
+    $bonStats.setKey("highScore", 5);
+    $bonStats.setKey("totalGamesPlayed", 1);
+    const bon = await started();
+    await play(bon, 3);
+    await bon.end();
+    expect($bonStats.get()).toMatchObject({
+      bestStreak: 3,
+      highScore: 40,
+      totalAnswered: 3,
+      totalCorrect: 3,
+      totalGamesPlayed: 2,
+    });
+    expect(trackEvent).toHaveBeenCalledWith("Game", "New Highscore", "berliner-oder-nicht", 40);
+    expect(trackEvent).toHaveBeenCalledWith("Game", "New Best Streak", "berliner-oder-nicht", 3);
+    expect(trackEvent).toHaveBeenCalledWith("Game", "Game Over", "berliner-oder-nicht", 40);
   });
 });

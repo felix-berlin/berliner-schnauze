@@ -10,6 +10,8 @@ import { fileURLToPath } from "url";
 import { CommentReports } from "./collections/CommentReports";
 import { Comments } from "./collections/Comments";
 import { CommentVotes } from "./collections/CommentVotes";
+import { BonGames } from "./collections/BonGames";
+import { BonPlayers } from "./collections/BonPlayers";
 import { Media } from "./collections/Media";
 import { Pages } from "./collections/Pages";
 import { Posts } from "./collections/Posts";
@@ -61,6 +63,8 @@ export default buildConfig({
     CommentReports,
     WordFeedback,
     WordStats,
+    BonGames,
+    BonPlayers,
   ]
     .map(withSlugRedirects)
     .map(withIndexNow),

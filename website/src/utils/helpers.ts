@@ -68,29 +68,6 @@ export const seoData = (
 };
 
 /**
- * A wrapper for startViewTransition that checks if the method exists.
- * If it doesn't exist, it will just call the callback function.
- * Users with reduced motion will also not see the transition.
- *
- * @param   {void}  fn
- *
- * @return  {void}
- */
-export const useViewTransition = (fn: () => void): void => {
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  if (!document.startViewTransition || reducedMotion) {
-    fn();
-
-    return;
-  }
-
-  document.startViewTransition(() => {
-    fn();
-  });
-};
-
-/**
  * Formats a date to a human readable string
  */
 export const formattedDate = (date?: string, locale = "de-DE") => {

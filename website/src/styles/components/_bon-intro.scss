@@ -1,0 +1,164 @@
+@use "@styles/mixins" as mx;
+@use "section-card";
+
+// Start screen (docs/design/bon/SPEC.md §6): one column on mobile, from the word breakpoint 1.1fr / 1fr.
+.c-bon-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @include mx.breakpoint("word") {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: 2.25rem;
+    line-height: 1.05;
+
+    @include mx.breakpoint("word") {
+      font-size: 3.25rem;
+    }
+  }
+
+  &__lead {
+    margin: 0;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__name {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    max-width: 360px;
+  }
+
+  &__exit {
+    align-self: flex-start;
+    margin-inline-start: -0.25rem;
+    font-size: 0.9rem;
+  }
+
+  &__input {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: 44px;
+  }
+
+  &__optional {
+    font-weight: 400;
+    color: var(--color-muted);
+  }
+
+  &__start {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+  }
+
+  &__cta {
+    --padding: 0 2rem;
+
+    // Morphs into the first card (docs/design/bon/SPEC.md §13).
+    view-transition-name: bon-card;
+    min-block-size: 52px;
+    font-size: 1.05rem;
+
+    &[aria-disabled="true"] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__record {
+    color: var(--color-ink-strong);
+  }
+
+  &__redeem,
+  &__leaderboard {
+    align-self: flex-start;
+  }
+
+  &__redeem {
+    gap: 0.375rem;
+    font-size: 0.9rem;
+  }
+
+  &__rules {
+    align-self: start;
+  }
+
+  &__rules-header {
+    border-block-end: 0;
+    padding-block-end: 0;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 0.75rem;
+      align-items: start;
+      padding-block: 0.75rem;
+      border-block-start: 1px dashed var(--rule-inner);
+
+      &:first-child {
+        border-block-start: 0;
+      }
+    }
+
+    svg {
+      color: var(--orange-400);
+    }
+
+    b {
+      color: var(--color-ink-strong);
+    }
+  }
+
+  &__track {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px;
+    margin-block-start: 0.5rem;
+
+    > span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 22px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--color-accent-text);
+      background: color-mix(in srgb, var(--orange-500) 22%, transparent);
+      border-radius: var(--radius-xxs);
+    }
+  }
+
+  &__tip {
+    margin: 0.75rem 0 0;
+    font-size: 0.8rem;
+    font-style: italic;
+  }
+}

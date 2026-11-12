@@ -77,8 +77,8 @@ vi.mock("@nanostores/persistent", () => ({
 }));
 
 vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));
-vi.mock("@utils/helpers.ts", () => ({
-  useViewTransition: vi.fn((fn: () => void) => fn()),
+vi.mock("@utils/viewTransition.ts", () => ({
+  vt: vi.fn((fn: () => void) => fn()),
 }));
 
 // ─── setup ────────────────────────────────────────────────────────────────────

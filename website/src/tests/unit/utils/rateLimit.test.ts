@@ -1,4 +1,4 @@
-import { clientIp, rateLimited, rateLimitRule } from "@utils/rateLimit.ts";
+import { clientIp, networkKey, rateLimited, rateLimitRule } from "@utils/rateLimit.ts";
 import { describe, expect, it } from "vitest";
 
 describe("rateLimit", () => {
@@ -63,8 +63,76 @@ describe("rateLimit", () => {
     expect(rateLimited(client, vote, 0)).toBeGreaterThan(0);
   });
 
+  it("limits the bon endpoints on POST, start stricter than next", () => {
+    const start = rateLimitRule("/api/bon/start", "POST")!;
+    const next = rateLimitRule("/api/bon/next", "POST")!;
+    const finish = rateLimitRule("/api/bon/finish", "POST")!;
+    expect(start.max).toBeLessThan(next.max);
+    expect(finish).toBeDefined();
+    expect(rateLimitRule("/api/bon/start", "GET")).toBeUndefined();
+    const client = "t-bon-start";
+    for (let i = 0; i < start.max; i++) expect(rateLimited(client, start, 0)).toBe(0);
+    expect(rateLimited(client, start, 0)).toBeGreaterThan(0);
+    expect(rateLimited(client, next, 0)).toBe(0);
+  });
+
+  it("limits the bon leaderboard to 60 per 10 min on GET", () => {
+    expect(rateLimitRule("/api/bon/leaderboard", "GET")).toEqual({
+      max: 60,
+      method: "GET",
+      prefix: "/api/bon/leaderboard",
+      windowMs: 10 * 60_000,
+    });
+    expect(rateLimitRule("/api/bon/leaderboard", "POST")).toBeUndefined();
+  });
+
+  it("limits bon answer to 450 per 10 min on POST", () => {
+    expect(rateLimitRule("/api/bon/answer", "POST")).toEqual({
+      max: 450,
+      method: "POST",
+      prefix: "/api/bon/answer",
+      windowMs: 10 * 60_000,
+    });
+  });
+
+  it("limits the bon player code endpoints to 10 per 10 min on POST", () => {
+    for (const path of ["/api/bon/player", "/api/bon/redeem"]) {
+      const rule = rateLimitRule(path, "POST")!;
+      expect(rule).toMatchObject({ max: 10, windowMs: 10 * 60_000 });
+      for (let i = 0; i < rule.max; i++) expect(rateLimited(`t-${path}`, rule, 0)).toBe(0);
+      expect(rateLimited(`t-${path}`, rule, 0)).toBeGreaterThan(0);
+    }
+  });
+
+  it("gives /api/bon/player a GET rule (name lookup) but /api/bon/redeem none", () => {
+    expect(rateLimitRule("/api/bon/player", "GET")).toBeDefined();
+    expect(rateLimitRule("/api/bon/redeem", "GET")).toBeUndefined();
+  });
+
+  it("limits bon name reports to 10 per 10 min on POST", () => {
+    expect(rateLimitRule("/api/bon/report-name", "POST")).toEqual({
+      max: 10,
+      method: "POST",
+      prefix: "/api/bon/report-name",
+      windowMs: 10 * 60_000,
+    });
+    expect(rateLimitRule("/api/bon/report-name", "GET")).toBeUndefined();
+  });
+
   it("takes the last forwarded-for entry, else the socket address", () => {
     expect(clientIp("1.1.1.1, 2.2.2.2 ", "9.9.9.9")).toBe("2.2.2.2");
     expect(clientIp(null, "9.9.9.9")).toBe("9.9.9.9");
+    // IPv6 by its /64, so a client cannot dodge a limit by rotating its interface id.
+    expect(clientIp("2001:db8::1", "9.9.9.9")).toBe("2001:0db8:0000:0000");
+  });
+});
+
+describe("networkKey", () => {
+  it("keeps IPv4, unwraps IPv4-mapped IPv6 and cuts IPv6 to its /64", () => {
+    expect(networkKey("203.0.113.7")).toBe("203.0.113.7");
+    expect(networkKey("::ffff:203.0.113.7")).toBe("203.0.113.7");
+    expect(networkKey("2001:db8::1")).toBe("2001:0db8:0000:0000");
+    expect(networkKey("2001:0DB8:0:0:ffff::2")).toBe("2001:0db8:0000:0000");
+    expect(networkKey("2001:db8:1:2:3:4:5:6")).toBe("2001:0db8:0001:0002");
   });
 });

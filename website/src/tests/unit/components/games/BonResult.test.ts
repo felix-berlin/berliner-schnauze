@@ -1,192 +1,363 @@
+import type { RoundEntry } from "@composables/useBon";
+
 import BonResult from "@components/games/BonResult.vue";
-import { mount } from "@vue/test-utils";
-import { useShare } from "@vueuse/core";
-import { describe, expect, it, vi } from "vitest";
-import { ref } from "vue";
+import { fetchLeaderboard } from "@services/bonLeaderboardApi";
+import { buildShareUrl } from "@utils/bonShare";
+import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const statsRef = ref({ playerName: "" });
-
-vi.mock("@nanostores/vue", () => ({
-  useStore: vi.fn(() => statsRef),
+vi.mock("@components/games/BonPlayerCode.vue", () => ({
+  default: { props: ["mode"], template: "<section class='mock-code' :data-mode='mode' />" },
 }));
 
-vi.mock("@stores/bonStats", () => ({ $bonStats: {} }));
+vi.mock("@services/bonLeaderboardApi", () => ({ fetchLeaderboard: vi.fn() }));
+vi.mock("@components/games/BonPlacement.vue", () => ({
+  default: {
+    name: "BonPlacement",
+    props: ["around"],
+    template: "<section class='mock-placement'>{{ around.length }}</section>",
+  },
+}));
 
 vi.mock("@utils/bonShare", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@utils/bonShare")>()),
   buildShareUrl: vi.fn(() => "/games/berliner-oder-nicht/share?r=abc"),
 }));
 
-vi.mock("@vueuse/core", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@vueuse/core")>();
-  return {
-    ...actual,
-    useShare: vi.fn(() => ({
-      isSupported: ref(false),
-      share: vi.fn().mockResolvedValue(undefined),
-    })),
-  };
+const entry = (over: Partial<RoundEntry>): RoundEntry => ({
+  correct: true,
+  isReal: true,
+  multiplier: 1,
+  points: 10,
+  word: "Quatsch",
+  ...over,
 });
 
-const defaultProps = {
-  allTimeHighScore: 100,
+const history: RoundEntry[] = [
+  entry({ slug: "quatsch", translation: "Unsinn", word: "Quatsch" }),
+  entry({ category: "invented", correct: false, isReal: false, points: 0, word: "Flimmerkiste" }),
+  entry({ category: "hochdeutsch", isReal: false, word: "Fernseher" }),
+];
+
+const props = {
   bestStreak: 3,
-  correctAnswers: 7,
-  isNewHighScore: false,
-  lastCard: null,
-  score: 50,
-  totalAnswered: 10,
+  endedEarly: false,
+  history,
+  playerName: "Berta",
+  previousHighScore: 100,
+  result: {
+    bestStreak: 3,
+    correctAnswers: 2,
+    rank: 12,
+    score: 150,
+    totalAnswered: 3,
+    totalPlayers: 400,
+  },
+  score: 150,
 };
 
-describe("BonResult.vue", () => {
-  it("renders Game Over title", () => {
-    statsRef.value = { playerName: "" };
-    const wrapper = mount(BonResult, { props: defaultProps });
-    expect(wrapper.find("h2").text()).toContain("Game Over");
-  });
+const mountResult = (over: Record<string, unknown> = {}) =>
+  mount(BonResult, { attachTo: document.body, props: { ...props, ...over } });
 
-  it("shows player name in title when playerName is set", () => {
-    statsRef.value = { playerName: "Felix" };
-    const wrapper = mount(BonResult, { props: defaultProps });
-    expect(wrapper.find("h2").text()).toContain("Felix");
-    statsRef.value = { playerName: "" };
-  });
+enableAutoUnmount(afterEach);
 
-  it("renders score and bestStreak values", () => {
-    statsRef.value = { playerName: "" };
-    const wrapper = mount(BonResult, { props: { ...defaultProps, bestStreak: 7, score: 99 } });
-    expect(wrapper.text()).toContain("99");
-    expect(wrapper.text()).toContain("7");
+describe("BonResult", () => {
+  beforeEach(() => {
+    vi.stubGlobal("navigator", { clipboard: undefined, share: undefined });
   });
+  afterEach(() => vi.unstubAllGlobals());
 
-  it("computes accuracy percent correctly", () => {
-    const wrapper = mount(BonResult, {
-      props: { ...defaultProps, correctAnswers: 8, totalAnswered: 10 },
+  describe("head", () => {
+    it("shows the record badge only for a score above the previous record", () => {
+      expect(mountResult().find(".c-badge--strong").text()).toBe("Neuer Rekord!");
+      expect(mountResult({ previousHighScore: 150 }).find(".c-badge--strong").exists()).toBe(false);
     });
-    expect(wrapper.text()).toContain("80%");
-  });
 
-  it("shows 0% accuracy when totalAnswered is 0", () => {
-    const wrapper = mount(BonResult, {
-      props: { ...defaultProps, correctAnswers: 0, totalAnswered: 0 },
+    it("greets by name and falls back without one", () => {
+      expect(mountResult().find("h1.c-band").text()).toBe("Aus die Maus, Berta!");
+      expect(mountResult({ playerName: "" }).find("h1").text()).toBe("Aus die Maus!");
+      expect(mountResult({ playerName: "H1tler" }).find("h1").text()).toBe("Aus die Maus, Anonym!");
     });
-    expect(wrapper.text()).toContain("0%");
-  });
 
-  it("shows new highscore highlight when isNewHighScore", () => {
-    const wrapper = mount(BonResult, {
-      props: { ...defaultProps, isNewHighScore: true },
+    it("tells why the game ended", () => {
+      expect(mountResult().text()).toContain("Drei Fehler – dit Spiel is vorbei.");
+      expect(mountResult({ endedEarly: true }).text()).toContain("Du hast dit Spiel beendet.");
     });
-    expect(wrapper.find(".c-bon-result__stat--highlight").exists()).toBe(true);
-    expect(wrapper.text()).toContain("Neuer Highscore");
-  });
 
-  it("shows allTimeHighScore when not new highscore", () => {
-    const wrapper = mount(BonResult, {
-      props: { ...defaultProps, allTimeHighScore: 200, isNewHighScore: false },
+    it("focuses the heading so the result is announced", async () => {
+      const wrapper = mountResult();
+      await flushPromises();
+      expect(document.activeElement).toBe(wrapper.find("h1").element);
     });
-    expect(wrapper.text()).toContain("200");
   });
 
-  it("shows word link when lastCard is real and has a slug", () => {
-    const wrapper = mount(BonResult, {
-      props: {
-        ...defaultProps,
-        lastCard: { isReal: true, slug: "schnauze", word: "Schnauze" },
-      },
+  describe("name", () => {
+    it("shows the editor below the heading with the name and tag", () => {
+      const wrapper = mountResult({ tag: "K7QX" });
+      expect(wrapper.find(".c-bon-result__head .c-bon-name").text()).toContain(
+        "Du spielst als Berta",
+      );
+      expect(wrapper.find("h1").text()).toContain("Berta");
     });
-    const link = wrapper.find(".c-bon-result__word-link");
-    expect(link.exists()).toBe(true);
-    expect(link.attributes("href")).toContain("schnauze");
-  });
 
-  it("does not show word link when lastCard is null", () => {
-    const wrapper = mount(BonResult, { props: { ...defaultProps, lastCard: null } });
-    expect(wrapper.find(".c-bon-result__word-link").exists()).toBe(false);
-  });
-
-  it("does not show word link when lastCard is not real", () => {
-    const wrapper = mount(BonResult, {
-      props: {
-        ...defaultProps,
-        lastCard: { isReal: false, slug: null, word: "FakeWort" },
-      },
+    it("offers Anonym for a nameless player, with the tag", () => {
+      const wrapper = mountResult({ playerName: "", tag: "K7QX" });
+      expect(wrapper.find(".c-bon-name").text()).toContain("Anonym");
+      expect(wrapper.find(".c-bon-name").text()).toContain("#K7QX");
     });
-    expect(wrapper.find(".c-bon-result__word-link").exists()).toBe(false);
-  });
 
-  it("shows word meaning when lastCard is real and has a translation", () => {
-    const wrapper = mount(BonResult, {
-      props: {
-        ...defaultProps,
-        lastCard: { isReal: true, slug: "schnauze", translation: "Mund", word: "Schnauze" },
-      },
+    it("shows for a stored result without a rank, is missing when nothing was stored", () => {
+      const wrapper = mountResult({ result: { ...props.result, rank: undefined } });
+      expect(wrapper.find(".c-bon-name").exists()).toBe(true);
+      expect(mountResult({ result: undefined }).find(".c-bon-name").exists()).toBe(false);
     });
-    const meaning = wrapper.find(".c-bon-result__word-meaning");
-    expect(meaning.exists()).toBe(true);
-    expect(meaning.text()).toBe("„Schnauze“ = Mund");
-  });
 
-  it("does not show word meaning when lastCard has no translation", () => {
-    const wrapper = mount(BonResult, {
-      props: {
-        ...defaultProps,
-        lastCard: { isReal: true, slug: "schnauze", word: "Schnauze" },
-      },
+    it("after saving, the heading shows the new name and the placement is fetched again", async () => {
+      vi.mocked(fetchLeaderboard).mockResolvedValue({ entries: [], total: 0 });
+      const wrapper = mountResult();
+      await flushPromises();
+      vi.mocked(fetchLeaderboard).mockClear();
+      wrapper.findComponent({ name: "BonName" }).vm.$emit("saved", { name: "Kalle", tag: "K7QX" });
+      await flushPromises();
+      expect(wrapper.find("h1").text()).toContain("Kalle");
+      expect(fetchLeaderboard).toHaveBeenCalledWith("week", 0, 0);
     });
-    expect(wrapper.find(".c-bon-result__word-meaning").exists()).toBe(false);
+
+    it("a late first placement reply does not win over the second", async () => {
+      const mine = (name: string) => ({
+        entries: [],
+        me: { around: [{ isMe: true, name, rank: 12 }] },
+        total: 400,
+      });
+      let late!: (v: unknown) => void;
+      vi.mocked(fetchLeaderboard)
+        .mockReturnValueOnce(new Promise((r) => (late = r)) as never)
+        .mockResolvedValueOnce(mine("neu") as never);
+      const wrapper = mountResult();
+      const name = wrapper.findComponent({ name: "BonName" });
+      name.vm.$emit("saved", { name: "alt" });
+      name.vm.$emit("saved", { name: "neu" });
+      await flushPromises();
+      late(mine("alt"));
+      await flushPromises();
+      expect(wrapper.find(".mock-placement").exists()).toBe(true);
+      expect(wrapper.findComponent({ name: "BonPlacement" }).props("around")[0].name).toBe("neu");
+    });
   });
 
-  it("emits restart when restart button clicked", async () => {
-    const wrapper = mount(BonResult, { props: defaultProps });
-    await wrapper.find(".c-bon-result__restart-btn").trigger("click");
-    expect(wrapper.emitted("restart")).toBeTruthy();
+  describe("placement", () => {
+    const around = [{ rank: 11 }, { isMe: true, rank: 12 }];
+
+    it("shows the neighbours of the finish reply without asking the leaderboard", async () => {
+      vi.mocked(fetchLeaderboard).mockClear();
+      const wrapper = mountResult({ result: { ...props.result, around } as never });
+      await flushPromises();
+      expect(fetchLeaderboard).not.toHaveBeenCalled();
+      expect(wrapper.find(".mock-placement").text()).toBe("2");
+    });
+
+    it("a retried save brings the neighbours later", async () => {
+      const wrapper = mountResult({ result: undefined });
+      expect(wrapper.find(".mock-placement").exists()).toBe(false);
+      await wrapper.setProps({ result: { ...props.result, around } as never });
+      expect(wrapper.find(".mock-placement").text()).toBe("2");
+    });
+
+    it("is missing without a rank, and does not ask", async () => {
+      vi.mocked(fetchLeaderboard).mockClear();
+      const wrapper = mountResult({ result: undefined });
+      await flushPromises();
+      expect(fetchLeaderboard).not.toHaveBeenCalled();
+      expect(wrapper.find(".mock-placement").exists()).toBe(false);
+    });
+
+    it("is missing without an own row, and a failed refresh after a rename keeps it", async () => {
+      expect(
+        mountResult({ result: { ...props.result, around: [{ rank: 11 }] } as never })
+          .find(".mock-placement")
+          .exists(),
+      ).toBe(false);
+      vi.mocked(fetchLeaderboard).mockRejectedValueOnce(new Error("down"));
+      const wrapper = mountResult({ result: { ...props.result, around } as never });
+      wrapper.findComponent({ name: "BonName" }).vm.$emit("saved", { name: "Kalle" });
+      await flushPromises();
+      expect(wrapper.find(".mock-placement").text()).toBe("2");
+    });
   });
 
-  it("does not show share button when share is not supported", () => {
-    const wrapper = mount(BonResult, { props: defaultProps });
-    expect(wrapper.find(".c-bon-result__share-btn").exists()).toBe(false);
+  describe("stats", () => {
+    const stat = (wrapper: ReturnType<typeof mountResult>, label: string) =>
+      wrapper.findAll(".c-bon-result__stat").find((s) => s.find("dt").text() === label)!;
+
+    it("lists them in a dl", () => {
+      expect(
+        mountResult()
+          .find("dl")
+          .findAll("dt")
+          .map((d) => d.text()),
+      ).toEqual(["Punkte", "Platz", "Trefferquote", "Beste Serie"]);
+    });
+
+    it("shows the week rank and the share of players beaten", () => {
+      const s = stat(mountResult(), "Platz");
+      expect(s.find("dd").text()).toBe("12");
+      expect(s.text()).toContain("von 400 Spielern diese Woche · besser als 97 %");
+    });
+
+    it("falls back without a rank", () => {
+      const s = stat(mountResult({ result: undefined }), "Platz");
+      expect(s.find("dd").text()).toBe("–");
+      expect(s.text()).toContain("Platzierung jerade nich da");
+    });
+
+    it("shows hit rate and best streak with its multiplier", () => {
+      const wrapper = mountResult();
+      expect(stat(wrapper, "Trefferquote").text()).toContain("67%");
+      expect(stat(wrapper, "Trefferquote").text()).toContain("2 von 3 richtig");
+      expect(stat(wrapper, "Beste Serie").text()).toContain("in Folge richtig · bis ×2");
+    });
   });
 
-  it("exposes focus method", () => {
-    const wrapper = mount(BonResult, { props: defaultProps });
-    expect(typeof (wrapper.vm as { focus?: () => void }).focus).toBe("function");
+  describe("share", () => {
+    const text =
+      "Ick hab 150 Punkte bei ‚Berliner oder nicht?‘ jeschafft – Platz 12. Schaffste mehr? ";
+
+    it("uses navigator.share when there is one", async () => {
+      const share = vi.fn().mockResolvedValue(undefined);
+      vi.stubGlobal("navigator", { share });
+      await mountResult().find("button.c-choice").trigger("click");
+      expect(share).toHaveBeenCalledOnce();
+      expect(share.mock.calls[0][0].text).toBe(
+        `${text}${window.location.origin}/games/berliner-oder-nicht/share?r=abc`,
+      );
+    });
+
+    it("builds the share link with the cleaned name", async () => {
+      vi.stubGlobal("navigator", { share: vi.fn().mockResolvedValue(undefined) });
+      await mountResult({ playerName: "Heil Hitler" }).find("button.c-choice").trigger("click");
+      expect(buildShareUrl).toHaveBeenLastCalledWith(
+        expect.objectContaining({ playerName: "Anonym" }),
+      );
+    });
+
+    it("copies the text otherwise and says so", async () => {
+      const writeText = vi.fn().mockResolvedValue(undefined);
+      vi.stubGlobal("navigator", { clipboard: { writeText } });
+      const wrapper = mountResult();
+      const button = wrapper.find("button.c-choice");
+      expect(button.text()).toBe("Ergebnis teilen");
+      await button.trigger("click");
+      await vi.waitFor(() => expect(button.text()).toBe("Text kopiert"));
+      expect(writeText.mock.calls[0][0]).toContain(text);
+    });
+
+    it("says so when the clipboard is blocked, not when the share sheet is dismissed", async () => {
+      vi.stubGlobal("navigator", {
+        clipboard: {
+          writeText: vi.fn().mockRejectedValue(new DOMException("no", "NotAllowedError")),
+        },
+      });
+      const blocked = mountResult();
+      await blocked.find("button.c-choice").trigger("click");
+      await vi.waitFor(() => expect(blocked.find("[role=alert]").exists()).toBe(true));
+      vi.stubGlobal("navigator", {
+        share: vi.fn().mockRejectedValue(new DOMException("no", "AbortError")),
+      });
+      const dismissed = mountResult();
+      await dismissed.find("button.c-choice").trigger("click");
+      await flushPromises();
+      expect(dismissed.find("[role=alert]").exists()).toBe(false);
+    });
+
+    it("leaves out the rank when there is none", async () => {
+      const writeText = vi.fn().mockResolvedValue(undefined);
+      vi.stubGlobal("navigator", { clipboard: { writeText } });
+      await mountResult({ result: undefined }).find("button.c-choice").trigger("click");
+      expect(writeText.mock.calls[0][0]).toContain("jeschafft. Schaffste mehr?");
+    });
   });
 
-  it("calling focus() calls focus on the h2 element (covers line 87)", () => {
-    const wrapper = mount(BonResult, { props: defaultProps });
-    const h2 = wrapper.find("h2").element;
-    const focusSpy = vi.spyOn(h2, "focus");
-    (wrapper.vm as { focus: () => void }).focus();
-    expect(focusSpy).toHaveBeenCalledOnce();
+  it("a failed save names the reason and offers a retry only when it can work", async () => {
+    const retryable = mountResult({
+      finishError: { message: "Dett Ergebnis konnte nich jespeichert werden.", retryable: true },
+      result: undefined,
+    });
+    expect(retryable.text()).toContain(
+      "Nich in der Rangliste: Dett Ergebnis konnte nich jespeichert werden.",
+    );
+    const button = retryable.findAll("button").find((b) => b.text() === "Nochmal speichern")!;
+    await button.trigger("click");
+    expect(retryable.emitted("retryFinish")).toHaveLength(1);
+
+    const refused = mountResult({
+      finishError: { message: "Ohne Cookie jibt's keen Ranking.", retryable: false },
+      result: undefined,
+    });
+    expect(refused.text()).toContain("Ohne Cookie jibt's keen Ranking.");
+    expect(refused.findAll("button").some((b) => b.text() === "Nochmal speichern")).toBe(false);
   });
 
-  it("shows share button when useShare is supported (covers lines 100-109)", async () => {
-    const mockShareFn = vi.fn().mockResolvedValue(undefined);
-    vi.mocked(useShare).mockReturnValueOnce({
-      isSupported: ref(true),
-      share: mockShareFn,
-    } as unknown as ReturnType<typeof useShare>);
-    statsRef.value = { playerName: "" };
-    const wrapper = mount(BonResult, { props: defaultProps });
-    expect(wrapper.find(".c-bon-result__share-btn").exists()).toBe(true);
-    await wrapper.find(".c-bon-result__share-btn").trigger("click");
-    expect(mockShareFn).toHaveBeenCalledOnce();
-    const callArg = mockShareFn.mock.calls[0][0];
-    expect(callArg.text).toMatch(/Ich hab/);
+  it("restarts from the primary button", async () => {
+    const wrapper = mountResult();
+    const button = wrapper.find("button.c-button--primary");
+    expect(button.text()).toBe("Nochmal spielen");
+    await button.trigger("click");
+    expect(wrapper.emitted("restart")).toHaveLength(1);
   });
 
-  it("share() uses playerName in text when set (covers playerName branch in share)", async () => {
-    const mockShareFn = vi.fn().mockResolvedValue(undefined);
-    vi.mocked(useShare).mockReturnValueOnce({
-      isSupported: ref(true),
-      share: mockShareFn,
-    } as unknown as ReturnType<typeof useShare>);
-    statsRef.value = { playerName: "Felix" };
-    const wrapper = mount(BonResult, { props: defaultProps });
-    await wrapper.find(".c-bon-result__share-btn").trigger("click");
-    const callArg = mockShareFn.mock.calls[0][0];
-    expect(callArg.text).toMatch(/Felix/);
-    statsRef.value = { playerName: "" };
+  it("shows the record on this device, never below the score", () => {
+    expect(mountResult().text()).toContain(
+      "Dein Rekord: 150 Punkte · gespeichert auf diesem Jerät",
+    );
+    expect(mountResult({ previousHighScore: 400 }).text()).toContain("Dein Rekord: 400 Punkte");
+  });
+
+  it("offers the code card in its Noch-kein-Code state, and no Hier stehste yet", () => {
+    const wrapper = mountResult();
+    expect(wrapper.find(".mock-code").attributes("data-mode")).toBeUndefined();
+    expect(wrapper.text()).not.toContain("Hier stehste");
+  });
+
+  describe("Deine Runde", () => {
+    const rows = (wrapper: ReturnType<typeof mountResult>) =>
+      wrapper.findAll(".c-bon-result__round li");
+
+    it("has one row per card in order, marked right or wrong", () => {
+      const r = rows(mountResult());
+      expect(r).toHaveLength(3);
+      expect(r.map((x) => x.find("[role=img]").attributes("aria-label"))).toEqual([
+        "richtig",
+        "falsch",
+        "richtig",
+      ]);
+      expect(r[0].text()).toContain("Quatsch");
+      expect(r[0].text()).toContain("Unsinn");
+    });
+
+    it("links real words to their page", () => {
+      const a = rows(mountResult())[0].find("a");
+      expect(a.attributes("href")).toBe("/wort/quatsch");
+      expect(a.text()).toContain("→");
+    });
+
+    it("strikes invented words and labels them, without a link", () => {
+      const row = rows(mountResult())[1];
+      expect(row.find("a").exists()).toBe(false);
+      expect(row.find("s").text()).toBe("Flimmerkiste");
+      expect(row.text()).toContain("erfunden");
+    });
+
+    it("labels Hochdeutsch words without strike or link", () => {
+      const row = rows(mountResult())[2];
+      expect(row.find("a").exists()).toBe(false);
+      expect(row.find("s").exists()).toBe(false);
+      expect(row.text()).toContain("Hochdeutsch");
+    });
+
+    it("links to the word index", () => {
+      const a = mountResult().find(".c-section-card__footer a");
+      expect(a.text()).toBe("Alle Wörter im Wort-Index");
+      expect(a.attributes("href")).toBe("/");
+    });
   });
 });

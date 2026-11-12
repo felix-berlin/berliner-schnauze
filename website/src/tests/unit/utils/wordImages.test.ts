@@ -1,6 +1,5 @@
-import { describe, expect, it } from "vitest";
-
 import { toWordImages } from "@utils/wordImages.ts";
+import { describe, expect, it } from "vitest";
 
 const media = (overrides: Record<string, unknown> = {}) => ({
   alt: "Alt",
@@ -22,7 +21,9 @@ describe("toWordImages", () => {
 
   it("keeps links of the description", () => {
     const html = '<p>A, <a href="https://example.org">CC BY</a></p>';
-    expect(toWordImages([media({ descriptionHtml: html })], "Wort")[0]?.credit).toContain("<a href=");
+    expect(toWordImages([media({ descriptionHtml: html })], "Wort")[0]?.credit).toContain(
+      "<a href=",
+    );
   });
 
   it("falls back to the caption as escaped text, without a leading Credit:", () => {

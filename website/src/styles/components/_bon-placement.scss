@@ -1,0 +1,79 @@
+// "Hier stehste" on the result (docs/design/bon/SPEC.md §9): five rows around the own place.
+.c-bon-placement {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .c-textlink {
+    align-self: flex-start;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  &__title {
+    margin: 0 0 0.25rem;
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    box-sizing: border-box;
+    min-height: 44px;
+    padding: 0 0.75rem;
+    background: var(--surface-chip);
+    border-radius: var(--radius-sm);
+    font-variant-numeric: tabular-nums;
+
+    &--me {
+      background: color-mix(in srgb, var(--orange-500) 22%, transparent);
+      // Morphs into the own row of the leaderboard, which carries the same name.
+      view-transition-name: bon-me;
+    }
+  }
+
+  &__rank {
+    font-weight: 900;
+    color: var(--color-muted);
+    text-align: right;
+  }
+
+  &__name {
+    display: flex;
+    align-items: baseline;
+    gap: 0.375rem;
+    min-width: 0;
+
+    b {
+      overflow: hidden;
+      color: var(--color-ink-strong);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  &__tag {
+    flex-shrink: 0;
+    font-size: 0.8em;
+    color: var(--color-muted);
+  }
+
+  &__score {
+    font-weight: 900;
+    color: var(--color-ink-strong);
+  }
+}

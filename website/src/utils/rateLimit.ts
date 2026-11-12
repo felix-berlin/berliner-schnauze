@@ -17,12 +17,23 @@ const RULES: Rule[] = [
   { max: 10, method: "POST", prefix: "/api/comment-reports", windowMs: 60 * 60_000 },
   // PATCH is capped per IP and word inside the route.
   { max: 60, method: "GET", prefix: "/api/word-feedback", windowMs: 60_000 },
+  // A game is one start, a next per 20 cards, an answer per card and one finish.
+  { max: 20, method: "POST", prefix: "/api/bon/start", windowMs: 10 * 60_000 },
+  { max: 60, method: "POST", prefix: "/api/bon/next", windowMs: 10 * 60_000 },
+  { max: 450, method: "POST", prefix: "/api/bon/answer", windowMs: 10 * 60_000 },
+  { max: 20, method: "POST", prefix: "/api/bon/finish", windowMs: 10 * 60_000 },
+  { max: 10, method: "POST", prefix: "/api/bon/player", windowMs: 10 * 60_000 },
+  { max: 20, method: "PATCH", prefix: "/api/bon/player", windowMs: 10 * 60_000 },
+  { max: 60, method: "GET", prefix: "/api/bon/player", windowMs: 10 * 60_000 },
+  { max: 10, method: "POST", prefix: "/api/bon/report-name", windowMs: 10 * 60_000 },
+  { max: 10, method: "POST", prefix: "/api/bon/redeem", windowMs: 10 * 60_000 },
+  { max: 60, method: "GET", prefix: "/api/bon/leaderboard", windowMs: 10 * 60_000 },
   // A daily cap per IP lives in the route.
   { max: 60, method: "POST", prefix: "/api/word-pulse", windowMs: 60_000 },
   { max: 60, method: "GET", prefix: "/api/trending", windowMs: 60_000 },
 ];
 
-// ponytail: in memory, one process; a second web container would need a shared store.
+// shortcut: in memory, one process; a second web container would need a shared store.
 const hits = new Map<string, { count: number; resetAt: number }>();
 
 /** The rule for a request, if its route is limited. */
@@ -48,18 +59,46 @@ export const rateLimited = (client: string, rule: Rule, now = Date.now()): numbe
 export const rateLimitedBy = (client: string, key: string, max: number, windowMs: number) =>
   rateLimited(client, { key, max, prefix: "", windowMs });
 
+/** Takes back one hit counted by rateLimitedBy, for a request that failed on our side. */
+export const refundHit = (client: string, key: string): void => {
+  const hit = hits.get(`${key} ${client}`);
+  if (hit && hit.count > 0) hit.count--;
+};
+
+/** Test-only: forget every counter. */
+export const resetRateLimits = (): void => hits.clear();
+
 let loggedSource = false;
 
 /**
- * The client's IP: the last X-Forwarded-For entry, the one our reverse proxy (Traefik) appended. The
+ * The key a client is counted under (networkKey of its IP): the last X-Forwarded-For entry, the one our reverse proxy (Traefik) appended. The
  * first entries come from the client and can be anything (Astro's clientAddress takes the first). Without the
  * header, the socket address, which behind the proxy is the same for everyone.
  */
 export const clientIp = (forwardedFor: string | null, socketAddress: string): string => {
+  // An IPv6 client gets a whole /64, so it counts by network (networkKey) or every address would be a new client.
   const forwarded = forwardedFor?.split(",").at(-1)?.trim();
   if (!loggedSource) {
     loggedSource = true;
     console.info(`[rate-limit] client ip from ${forwarded ? "x-forwarded-for" : "the socket"}`);
   }
-  return forwarded || socketAddress;
+  const ip = forwarded || socketAddress;
+  return ip ? networkKey(ip) : ip;
+};
+
+/** The key a client is counted under: IPv4 as is, IPv4-mapped IPv6 as IPv4, other IPv6 by its /64 network (first four hextets). */
+export const networkKey = (ip: string): string => {
+  const mapped = /^::ffff:(\d+\.\d+\.\d+\.\d+)$/i.exec(ip);
+  if (mapped) return mapped[1]!;
+  if (!ip.includes(":")) return ip;
+  const [head = "", tail = ""] = ip.toLowerCase().split("::");
+  const h = head ? head.split(":") : [];
+  const t = tail ? tail.split(":") : [];
+  const all = ip.includes("::")
+    ? [...h, ...Array(Math.max(0, 8 - h.length - t.length)).fill("0"), ...t]
+    : h;
+  return all
+    .slice(0, 4)
+    .map((x) => x.padStart(4, "0"))
+    .join(":");
 };

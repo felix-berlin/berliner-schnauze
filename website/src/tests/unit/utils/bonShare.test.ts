@@ -65,6 +65,24 @@ describe("decodeShareHash — edge cases", () => {
   });
 });
 
+describe("decodeShareHash — names outside Latin-1", () => {
+  it("round-trips Łukasz and Şeyma", () => {
+    for (const playerName of ["Łukasz", "Şeyma", "Jürgen 🐻"])
+      expect(decodeShareHash(encodeShareHash({ ...payload, playerName }))).toEqual({
+        ...payload,
+        playerName,
+      });
+  });
+
+  it("still decodes an old Latin-1 link", () => {
+    const old = btoa(JSON.stringify({ ...payload, playerName: "Jürgen" }))
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+    expect(decodeShareHash(`x.${old}`)?.playerName).toBe("Jürgen");
+  });
+});
+
 describe("buildShareUrl", () => {
   it("returns a path with the correct route and a decodable r param", () => {
     const url = buildShareUrl(payload);

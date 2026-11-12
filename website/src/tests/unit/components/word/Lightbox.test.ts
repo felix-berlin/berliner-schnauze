@@ -5,7 +5,11 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 const { trackEvent } = vi.hoisted(() => ({ trackEvent: vi.fn() }));
 vi.mock("@utils/analytics", () => ({ trackEvent }));
 
-const images = [1, 2, 3].map((i) => ({ alt: `Bild ${i}`, credit: i === 2 ? "Foto <a href='#'>X</a>" : null, src: `/${i}.jpg` }));
+const images = [1, 2, 3].map((i) => ({
+  alt: `Bild ${i}`,
+  credit: i === 2 ? "Foto <a href='#'>X</a>" : null,
+  src: `/${i}.jpg`,
+}));
 
 const setup = async () => {
   const openers = images.map((_, i) => {

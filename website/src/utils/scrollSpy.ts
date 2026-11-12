@@ -18,7 +18,9 @@ const MIN_BAND = 60;
  * (landscape phones, e.g. 844x390): the bottom margin is capped by the room left below the top margin.
  */
 export const rootMarginBelowHeader = (offset: number, bottomRatio = 0.7): string => {
-  const header = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--site-header-height"));
+  const header = parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue("--site-header-height"),
+  );
   const top = Math.round((Number.isFinite(header) ? header : 60) + offset);
   const height = window.innerHeight;
   const bottom = Math.round(Math.max(0, Math.min(height * bottomRatio, height - top - MIN_BAND)));
@@ -82,7 +84,10 @@ export function initScrollSpy({
  * initScrollSpy for a band below the sticky header: the margin is recomputed whenever the viewport or the header
  * height changes (rotation, header wrapping), which an IntersectionObserver cannot do itself. Returns a stop function.
  */
-export function initHeaderScrollSpy(options: Omit<ScrollSpyOptions, "rootMargin">, offset = 64): () => void {
+export function initHeaderScrollSpy(
+  options: Omit<ScrollSpyOptions, "rootMargin">,
+  offset = 64,
+): () => void {
   const init = () => initScrollSpy({ ...options, rootMargin: rootMarginBelowHeader(offset) });
   init();
   window.addEventListener("resize", init);

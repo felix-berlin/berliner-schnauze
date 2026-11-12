@@ -150,7 +150,11 @@ describe("WordComments", () => {
   const many = (n: number, hasMore = false) =>
     page({ comments: Array.from({ length: n }, (_, i) => card(i + 1)), hasMore, total: n });
   const resetSpy = vi.fn();
-  const TurnStileStub = { emits: ["token", "error"], methods: { reset: resetSpy }, template: "<div />" };
+  const TurnStileStub = {
+    emits: ["token", "error"],
+    methods: { reset: resetSpy },
+    template: "<div />",
+  };
 
   afterEach(() => {
     fetchMock.mockReset();
@@ -258,8 +262,11 @@ describe("WordComments", () => {
       props: { wordId: 7 },
     });
     await flushPromises();
-    const ctx = (wrapper.vm.$ as unknown as { provides: Record<symbol, { takeToken: (q?: boolean) => string | null }> })
-      .provides[commentsKey as symbol];
+    const ctx = (
+      wrapper.vm.$ as unknown as {
+        provides: Record<symbol, { takeToken: (q?: boolean) => string | null }>;
+      }
+    ).provides[commentsKey as symbol];
     expect(ctx.takeToken()).toBeNull();
     expect(createToastNotify).toHaveBeenCalledWith(expect.objectContaining({ status: "warning" }));
     expect(ctx.takeToken(true)).toBeNull();
@@ -270,7 +277,9 @@ describe("WordComments", () => {
     const widget = wrapper.findComponent(TurnStileStub);
     widget.vm.$emit("error", "600010");
     ctx.takeToken();
-    expect(createToastNotify).toHaveBeenLastCalledWith(expect.objectContaining({ status: "error" }));
+    expect(createToastNotify).toHaveBeenLastCalledWith(
+      expect.objectContaining({ status: "error" }),
+    );
     widget.vm.$emit("token", "tok");
     expect(ctx.takeToken()).toBe("tok");
   });

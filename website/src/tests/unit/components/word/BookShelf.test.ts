@@ -32,8 +32,12 @@ describe("BookShelf.astro", () => {
     expect(result).toContain('id="buecher"');
     expect(result).toContain("Ooch als Buch zu haben, wa?");
     expect(result).toContain(">Anzeige<");
-    expect(result).toContain("Für Berliner &amp; solche, die es werden wollen – zum Nachschlagen, Rätseln und Verschenken.");
-    expect(result).toContain("Bezahlte Links zu Amazon.de. Kaufst du darüber, kriegen wa ’ne kleine Provision – für dich bleibt der Preis gleich.");
+    expect(result).toContain(
+      "Für Berliner &amp; solche, die es werden wollen – zum Nachschlagen, Rätseln und Verschenken.",
+    );
+    expect(result).toContain(
+      "Bezahlte Links zu Amazon.de. Kaufst du darüber, kriegen wa ’ne kleine Provision – für dich bleibt der Preis gleich.",
+    );
     expect(result).toMatch(/rel="sponsored noopener noreferrer"/);
     expect(result).toMatch(/Bei Amazon ansehen\s*<span aria-hidden="true">↗<\/span>/);
     expect(result).toContain("Icke &amp; Berlin");
@@ -54,7 +58,10 @@ describe("BookShelf.astro", () => {
     expect(amazon).toContain("Als Amazon-Partner");
     expect(amazon).not.toContain("Thalia-Partnerlink.");
 
-    const thalia = await render({ books: [book({ href: "https://www.thalia.de/buch/1" })], disclaimers });
+    const thalia = await render({
+      books: [book({ href: "https://www.thalia.de/buch/1" })],
+      disclaimers,
+    });
     expect(thalia).toContain("Thalia-Partnerlink.");
     expect(thalia).not.toContain("Als Amazon-Partner");
     expect(thalia).toContain("Bei thalia.de ansehen");
@@ -80,13 +87,22 @@ describe("BookShelf.astro", () => {
       expect(result).not.toContain("Bei Amazon ansehen");
       expect(result).not.toContain("Bezahlte Links zu Amazon.de.");
     }
-    for (const href of ["https://www.amazon.de/dp/X", "https://www.amazon.cn/dp/X", "https://amzn.to/abc"]) {
-      expect(await render({ books: [book({ href })], disclaimers: [] })).toContain("Bei Amazon ansehen");
+    for (const href of [
+      "https://www.amazon.de/dp/X",
+      "https://www.amazon.cn/dp/X",
+      "https://amzn.to/abc",
+    ]) {
+      expect(await render({ books: [book({ href })], disclaimers: [] })).toContain(
+        "Bei Amazon ansehen",
+      );
     }
   });
 
   it("omits the note paragraph when there is nothing to say", async () => {
-    const result = await render({ books: [book({ href: "https://www.thalia.de/b" })], disclaimers: [] });
+    const result = await render({
+      books: [book({ href: "https://www.thalia.de/b" })],
+      disclaimers: [],
+    });
     expect(result).not.toContain("c-book-shelf__note");
   });
 

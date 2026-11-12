@@ -1,5 +1,5 @@
 /**
- * Tests for bonStats, savedBon, and wordSearch persistence callbacks (encode/decode).
+ * Tests for bonStats and wordSearch persistence callbacks (encode/decode).
  * These run WITHOUT mocking @nanostores/persistent so the actual module code executes.
  */
 import { describe, expect, it, beforeEach, vi } from "vitest";
@@ -62,65 +62,5 @@ describe("wordSearch — persistence decode catch branch", () => {
     localStorage.setItem("wordSearch:search", "not-json-value");
     const { $wordSearch } = await import("@stores/wordList");
     expect(() => $wordSearch.get()).not.toThrow();
-  });
-});
-
-describe("savedBon — persistence callbacks", () => {
-  it("exports $savedBon", async () => {
-    const { $savedBon } = await import("@stores/savedBon");
-    expect($savedBon).toBeDefined();
-  });
-
-  it("default value is null", async () => {
-    const { $savedBon } = await import("@stores/savedBon");
-    expect($savedBon.get()).toBeNull();
-  });
-
-  it("stores and retrieves a snapshot", async () => {
-    const { $savedBon } = await import("@stores/savedBon");
-    const snapshot = {
-      bestStreak: 4,
-      correctAnswers: 4,
-      currentCard: { isReal: true as const, word: "Schnauze" },
-      deck: [],
-      fakeQueue: [],
-      lastAnswerCorrect: true,
-      lastCard: null,
-      lives: 2,
-      multiplier: 1,
-      phase: "playing" as const,
-      realQueue: [],
-      score: 30,
-      streak: 2,
-      totalAnswered: 5,
-    };
-    $savedBon.set(snapshot);
-    const loaded = $savedBon.get();
-    expect(loaded?.score).toBe(30);
-    expect(loaded?.lives).toBe(2);
-    expect(loaded?.currentCard.word).toBe("Schnauze");
-  });
-
-  it("set(null) clears the snapshot", async () => {
-    const { $savedBon } = await import("@stores/savedBon");
-    $savedBon.set(null);
-    expect($savedBon.get()).toBeNull();
-  });
-
-  it("decode returns null and warns when localStorage contains invalid JSON", async () => {
-    vi.resetModules();
-    localStorage.clear();
-    localStorage.setItem("bonSession:", "this-is-not-json");
-    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const { $savedBon } = await import("@stores/savedBon");
-    const result = $savedBon.get();
-    // decode catch block: logs warning and returns null
-    expect(result).toBeNull();
-    expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining("[savedBon]"),
-      expect.any(String),
-      expect.any(Error),
-    );
-    warnSpy.mockRestore();
   });
 });

@@ -27,7 +27,11 @@ describe("toLetterTiles", () => {
   });
 
   it("skips spaces, hyphens and other non-letters", () => {
-    expect(toLetterTiles("Ab Notam-x 1", freq).map((t) => t.ch).join("")).toBe("AbNotamx");
+    expect(
+      toLetterTiles("Ab Notam-x 1", freq)
+        .map((t) => t.ch)
+        .join(""),
+    ).toBe("AbNotamx");
   });
 
   it("gives a letter without a known frequency pct null", () => {

@@ -1,5 +1,6 @@
 ---
 import BerlinerOderNicht from '@components/games/BerlinerOderNicht.vue';
+import { BON_FRAGMENT_SCRIPT } from '@utils/bonFragment.ts';
 import Layout from '@layouts/Layout.astro';
 import { SITE_URL } from 'astro:env/client';
 
@@ -27,9 +28,9 @@ const gameSchema = JSON.stringify({
 <Layout content={page}>
   <Fragment slot='head'>
     <script set:html={gameSchema} type='application/ld+json' />
+    {/* Classic inline script: runs while the head is parsed, before Matomo's deferred module and its first page view. */}
+    <script is:inline set:html={BON_FRAGMENT_SCRIPT} />
   </Fragment>
-
-  <h1 class='u-sr-only'>Berliner oder Nicht? — Erkenne den echten Berliner Dialekt</h1>
 
   <BerlinerOderNicht client:only='vue' />
 </Layout>

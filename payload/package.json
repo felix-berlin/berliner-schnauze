@@ -11,6 +11,10 @@
     "./word-derived": "./src/lib/wordDerived.ts",
     "./comments": "./src/lib/comments.ts",
     "./word-feedback": "./src/lib/wordFeedback.ts",
+    "./bon-rules": "./src/lib/bonRules.ts",
+    "./bon-player": "./src/lib/bonPlayer.ts",
+    "./bon-names": "./src/lib/bonNames.ts",
+    "./bon-ranking": "./src/lib/bonRanking.ts",
     "./word-stats": "./src/lib/wordStats.ts",
     "./lexical-html": "./src/lib/lexicalHtml.ts",
     "./routes": "./src/lib/routes.ts",
@@ -19,6 +23,7 @@
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
     "dev": "bash ../scripts/with-env.sh cross-env NODE_OPTIONS=--no-deprecation sh -c 'next dev -p ${CMS_PORT:-3001}'",
+    "seed:test": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seedTestword.ts",
     "dev:access": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/devAccess.ts",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",

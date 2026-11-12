@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Berliner oder nicht?</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/berliner-schnauze/tokens.css">
+<link rel="stylesheet" href="ds/berliner-schnauze/colors_and_type.css">
+<link rel="stylesheet" href="ds/berliner-schnauze/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.bon a{color:inherit}
+.bon__hud{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.5rem}
+.bon__lives{display:flex;gap:.25rem}
+.bon__score{display:flex;flex-direction:column;align-items:center;line-height:1}
+.bon__score b{font-size:2rem;font-weight:900;color:var(--color-ink-strong);font-variant-numeric:tabular-nums}
+.bon__streak{display:flex;flex-direction:column;align-items:flex-end;gap:.25rem}
+.bon__track{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
+.bon__track > span{display:flex;align-items:center;justify-content:center;height:22px;font-size:.7rem;font-weight:700;color:var(--color-muted);background:var(--surface-chip);border-radius:var(--radius-xxs)}
+.bon__track > span[data-on="true"]{color:var(--color-accent-text);background:color-mix(in srgb,var(--orange-500) 22%,transparent)}
+.bon__track > span[data-now="true"]{color:var(--white-100);background:var(--orange-600)}
+.bon__card{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;min-height:260px;padding:2rem 1.25rem;box-sizing:border-box;text-align:center;background:var(--surface-sheet);border:1px dashed var(--rule-card);border-radius:var(--radius-sm);box-shadow:var(--paper-lift);container-type:inline-size}
+.bon__word{margin:0;font-family:var(--font-body);letter-spacing:.5px;font-weight:700;font-size:clamp(2rem,12cqi,3rem);line-height:1.1;color:var(--color-ink-strong);overflow-wrap:anywhere;hyphens:auto}
+[data-theme="dark"] .bon__word{color:var(--orange-300)}
+.bon__card--right{border-style:solid;border-color:transparent;border-inline-start:4px solid var(--success)}
+.bon__card--wrong{border-style:solid;border-color:transparent;border-inline-start:4px solid var(--danger)}
+.bon__answers{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.bon__answers .c-choice{min-height:60px;font-size:1.05rem;font-weight:700}
+.bon__stat{display:flex;flex-direction:column;gap:.125rem;padding:.875rem 1rem;background:var(--surface-chip);border-radius:var(--radius-sm)}
+.bon__stat b{font-size:1.75rem;font-weight:900;line-height:1.1;color:var(--color-ink-strong);font-variant-numeric:tabular-nums}
+.bon__rules{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.bon__rules li{display:grid;grid-template-columns:28px 1fr;gap:.75rem;align-items:start;padding:.75rem 0;border-block-start:1px dashed var(--rule-inner)}
+.bon__rules li:first-child{border-block-start:0}
+.bon__rules svg{color:var(--orange-400)}
+.bon__recap{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.bon__recap li a,.bon__recap li > span{display:grid;grid-template-columns:20px minmax(0,1fr) auto;align-items:center;gap:.75rem;min-height:52px;padding:.375rem 0;box-sizing:border-box;text-decoration:none;border-block-start:1px dashed var(--rule-inner)}
+.bon__recap li:first-child a,.bon__recap li:first-child > span{border-block-start:0}
+.bon__recap a:hover b{text-decoration:underline dashed from-font}
+.bon__ok{color:var(--success)}
+.bon__no{color:var(--danger)}
+.bon__kbd{font:inherit;font-size:.7rem;font-weight:700;padding:.125rem .375rem;border:1px solid var(--rule-card);border-radius:var(--radius-xxs);background:var(--surface-chip);color:var(--color-ink-strong)}
+.bon .c-choice[aria-disabled="true"],.bon .c-button[aria-disabled="true"]{opacity:.55;cursor:not-allowed;box-shadow:none}
+.bon__timer{position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--color-muted);opacity:.5;transform-origin:left;animation-name:bon-timer;animation-timing-function:linear;animation-fill-mode:forwards}
+@keyframes bon-timer{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@media (prefers-reduced-motion:reduce){.bon__timer{display:none}}
+/* ---- Animationen (Canvas: CSS beim Einblenden; im Code: View Transitions, siehe SPEC) ---- */
+.bon__card{animation:none}
+.bon__card--in{animation:bon-rise .32s cubic-bezier(.2,.8,.2,1) both}
+.bon__ghost{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;background:var(--surface-sheet);border:1px dashed var(--rule-card);border-radius:var(--radius-sm);box-shadow:var(--paper-lift);pointer-events:none;animation:bon-fly-right .38s cubic-bezier(.4,0,1,1) forwards}
+.bon__ghost[data-dir="left"]{animation-name:bon-fly-left}
+.bon__ghost + .bon__card{animation:bon-flip-in .34s .14s cubic-bezier(.2,.8,.2,1) both}
+.bon__delta{animation:bon-pop .45s .3s cubic-bezier(.3,1.6,.5,1) both;display:inline-block}
+.bon__lives[data-shake="true"]{animation:bon-shake .4s .1s ease-in-out both}
+.bon__stat,.bon .c-badge--strong{animation:bon-rise .4s cubic-bezier(.2,.8,.2,1) both}
+.bon__stat:nth-child(2){animation-delay:.06s}.bon__stat:nth-child(3){animation-delay:.12s}.bon__stat:nth-child(4){animation-delay:.18s}
+.bon__recap li{animation:bon-rise .3s cubic-bezier(.2,.8,.2,1) both}
+@keyframes bon-fly-right{to{transform:translateX(115%) rotate(14deg);opacity:0;visibility:hidden}}
+@keyframes bon-fly-left{to{transform:translateX(-115%) rotate(-14deg);opacity:0;visibility:hidden}}
+@keyframes bon-flip-in{from{transform:perspective(800px) rotateY(-60deg) scale(.96);opacity:0}}
+@keyframes bon-rise{from{transform:translateY(16px) scale(.97);opacity:0}}
+@keyframes bon-pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.15);opacity:1}100%{transform:scale(1)}}
+@keyframes bon-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+@media (prefers-reduced-motion:reduce){.bon__card--in,.bon__ghost + .bon__card,.bon__delta,.bon__lives[data-shake="true"],.bon__stat,.bon .c-badge--strong,.bon__recap li{animation:none}.bon__ghost{display:none}}
+</style>
+</helmet>
+<div class="bon" lang="de" data-theme="{{theme}}" style="box-sizing: border-box; min-height: 100vh; font-family: var(--font-body); letter-spacing: 1px; color: var(--color-body); background-color: var(--color-background-body); background-image: radial-gradient(var(--color-gradient-body-1) 1.1px, var(--color-gradient-body-2) 1.1px); background-size: 22px 22px;">
+<main style="{{shellStyle}}">
+
+<!-- ============ INTRO ============ -->
+<sc-if value="{{isIntro}}" hint-placeholder-val="{{true}}">
+<div style="{{introGrid}}">
+<section aria-labelledby="bon-t" style="display: flex; flex-direction: column; gap: 1rem;">
+<sc-if value="{{fromLink}}" hint-placeholder-val="{{false}}"><dc-import name="BonCode" theme="{{theme}}" start="link" hint-size="100%,300px"></dc-import></sc-if>
+<p class="t-label">Spiel</p>
+<h1 id="bon-t" class="c-band" style="{{titleStyle}}">Berliner oder nicht?</h1>
+<p class="t-em" style="margin: 0;">Echtes Berlinerisch oder erfunden? Wisch oder tipp – du hast 3 Leben.</p>
+<sc-if value="{{isOffline}}" hint-placeholder-val="{{false}}"><div class="c-state c-state--offline" role="status"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path><path d="M5 12.86a10 10 0 0 1 5.17-2.69"></path><path d="M19 12.86a10 10 0 0 0-2-1.43"></path><path d="m2 2 20 20"></path></svg><span class="c-state__body"><b>Du bist offline.</b><span>Die Karten kommen vom Server – spielen jeht wieder, sobald du Netz hast.</span></span></div></sc-if>
+<sc-if value="{{newPlayer}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 0.375rem; max-width: 360px;">
+<label for="bon-name" style="font-weight: 700; color: var(--color-ink-strong);">Dein Name <span style="font-weight: 400; color: var(--color-muted);">(optional)</span></label>
+<input id="bon-name" class="c-field" type="text" maxlength="24" placeholder="Anonym" value="{{name}}" aria-describedby="bon-name-h">
+<span id="bon-name-h" class="t-small">Steht neben deiner Platzierung. Leer jelassen = „Anonym“ mit Kennung, z. B. „Anonym #K7QX“. Max. 24 Zeichen.</span>
+</div>
+</sc-if>
+<sc-if value="{{knownPlayer}}" hint-placeholder-val="{{true}}"><dc-import name="BonName" theme="{{theme}}" name="{{name}}" hint-size="100%,32px"></dc-import></sc-if>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem;">
+<button class="c-button c-button--primary" aria-disabled="{{offlineFlag}}" onClick="{{start}}" style="height: 52px; padding: 0 2rem; font-size: 1.05rem;">Los jeht’s</button>
+<span class="t-small">Dein Rekord: <b style="color: var(--color-ink-strong);">{{best}} Punkte</b></span>
+</div>
+<dc-import name="BonCode" theme="{{theme}}" start="zu" hint-size="100%,44px"></dc-import>
+</section>
+<aside class="c-section-card" aria-labelledby="bon-rules-t" style="align-self: start;">
+<div class="c-section-card__header" style="border-block-end: 0; padding-bottom: 0;"><h2 id="bon-rules-t" class="c-section-card__title">So jeht’s</h2></div>
+<div class="c-section-card__body">
+<ul class="bon__rules">
+<li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9h14"></path><path d="M5 15h14"></path><rect x="3" y="3" width="18" height="18" rx="2"></rect></svg><span><b style="color: var(--color-ink-strong);">Wort lesen, entscheiden.</b><br><span class="t-small">Nach rechts wischen oder „Ja“ = Berlinerisch. Nach links oder „Nee“ = erfunden. Am Rechner gehen auch die Pfeiltasten.</span></span></li>
+<li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg><span><b style="color: var(--color-ink-strong);">3 Leben.</b><br><span class="t-small">Beim dritten Fehler is Schluss.</span></span></li>
+<li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg><span><b style="color: var(--color-ink-strong);">Serie zahlt sich aus.</b><br><span class="t-small">10 Punkte pro richtije Antwort, mal Multiplikator:</span>
+<span class="bon__track" style="margin-top: 0.5rem;" aria-label="ab 3 richtigen in Folge ×2, ab 6 ×3, ab 10 ×5"><span data-on="true">×1</span><span data-on="true">ab 3 · ×2</span><span data-on="true">ab 6 · ×3</span><span data-on="true">ab 10 · ×5</span></span></span></li>
+</ul>
+<p class="t-small" style="margin: 0.75rem 0 0; font-style: italic;">Tipp: Manche Wörter sind Abkürzungen für ’ne Redewendung – nich imma zu wörtlich nehmen.</p>
+</div>
+</aside>
+</div>
+</sc-if>
+
+<!-- ============ PLAY / FEEDBACK / LOADING / ERROR ============ -->
+<sc-if value="{{inGame}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 1rem; max-width: 520px; margin: 0 auto;">
+<h1 style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);">Berliner oder nicht? – Spiel läuft</h1>
+
+<div class="bon__hud">
+<span class="bon__lives" data-shake="{{shake}}" role="img" aria-label="{{livesAria}}"><sc-for list="{{hearts}}" as="h" hint-placeholder-count="3"><svg width="24" height="24" viewBox="0 0 24 24" fill="{{h.fill}}" stroke="{{h.stroke}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg></sc-for></span>
+<span class="bon__score" aria-live="polite"><b>{{score}}</b><span class="t-label" style="margin-top: 0.25rem;">Punkte · {{playerLabel}}</span></span>
+<span class="bon__streak"><span style="display: flex; align-items: center; gap: 0.375rem; font-weight: 700; color: var(--color-ink-strong);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--orange-400);"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>Serie {{streak}}</span><span class="t-small">{{nextLabel}}</span></span>
+</div>
+<div class="bon__track" aria-label="{{multAria}}"><sc-for list="{{track}}" as="tk" hint-placeholder-count="4"><span data-on="{{tk.on}}" data-now="{{tk.now}}">{{tk.label}}</span></sc-for></div>
+
+<sc-if value="{{isPlay}}" hint-placeholder-val="{{true}}">
+<section class="bon__card bon__card--in" aria-labelledby="bon-word" aria-describedby="bon-q">
+<p id="bon-q" class="t-label">Berlinerisch oder erfunden?</p>
+<h2 id="bon-word" class="bon__word"><span class="c-headword">{{card.word}}</span></h2>
+<p class="t-small" style="margin: 0;">Karte {{cardNo}}</p>
+</section>
+<div class="bon__answers">
+<button class="c-choice" onClick="{{sayNo}}" aria-keyshortcuts="ArrowLeft"><span aria-hidden="true">←</span>Nee, erfunden</button>
+<button class="c-choice" onClick="{{sayYes}}" aria-keyshortcuts="ArrowRight">Ja, Berlinerisch<span aria-hidden="true">→</span></button>
+</div>
+<p class="t-small" style="margin: 0; text-align: center;">{{swipeHint}}</p>
+</sc-if>
+
+<sc-if value="{{isFeedback}}" hint-placeholder-val="{{false}}">
+<div style="position: relative;">
+<div class="bon__ghost" data-dir="{{dir}}" aria-hidden="true"><span class="bon__word" style="font-size: 2.25rem;">{{last.word}}</span></div>
+<section class="{{fbClass}}" role="status" aria-labelledby="bon-fb" onClick="{{skip}}" onMouseEnter="{{pause}}" onMouseLeave="{{resume}}" style="align-items: flex-start; text-align: left; gap: 0.5rem; cursor: pointer; overflow: hidden;">
+<span style="display: flex; align-items: center; gap: 0.5rem;">
+<sc-if value="{{last.right}}" hint-placeholder-val="{{true}}"><svg class="bon__ok" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg></sc-if>
+<sc-if value="{{last.wrong}}" hint-placeholder-val="{{false}}"><svg class="bon__no" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6"></path><path d="m9 9 6 6"></path></svg></sc-if>
+<b id="bon-fb" style="font-size: 1.25rem; color: var(--color-ink-strong);">{{last.head}}</b>
+</span>
+<sc-if value="{{last.wrong}}" hint-placeholder-val="{{false}}"><p style="margin: 0; color: var(--color-muted);">{{last.verdict}}</p></sc-if>
+<p class="bon__word" style="font-size: 1.75rem; margin-top: 0.25rem;">{{last.word}}</p>
+<sc-if value="{{last.isReal}}" hint-placeholder-val="{{true}}"><p class="t-em" style="margin: 0;">= {{last.translation}}</p></sc-if>
+<p class="bon__delta" style="margin: 0.25rem 0 0; font-weight: 700; color: var(--color-accent-text);">{{last.delta}}</p>
+<sc-if value="{{last.showLink}}" hint-placeholder-val="{{false}}"><a class="c-textlink" href="#" target="_blank" rel="noopener" style="font-size: 0.9rem;">Mehr zu „{{last.word}}“ ↗</a></sc-if>
+<span class="bon__timer" aria-hidden="true" style="{{timerStyle}}"></span>
+</section>
+</div>
+<p class="t-small" style="margin: 0; text-align: center;">{{fbHint}}</p>
+</sc-if>
+
+<sc-if value="{{isLoading}}" hint-placeholder-val="{{false}}">
+<section class="bon__card" aria-busy="true" aria-label="Neue Karten werden jemischt">
+<span class="c-skeleton" style="width: 40%; height: 0.8rem;"></span>
+<span class="c-skeleton" style="width: 70%; height: 2.5rem;"></span>
+<p class="t-small" style="margin: 0;">Stapel {{stack}} jeschafft – neue Karten werden jemischt …</p>
+</section>
+<div class="bon__answers"><button class="c-choice" aria-disabled="true">Nee, erfunden</button><button class="c-choice" aria-disabled="true">Ja, Berlinerisch</button></div>
+</sc-if>
+
+<sc-if value="{{isError}}" hint-placeholder-val="{{false}}">
+<div class="c-state c-state--error" role="alert"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg><span class="c-state__body"><b>Ditt hat nich jeklappt.</b><span>Die Karten wollten leider nich kommen. Deine Punkte und Leben bleiben – versuch’s gleich nochmal.</span><span style="margin-top: 0.5rem;"><button class="c-choice" onClick="{{retry}}">Nochmal versuchen</button></span></span></div>
+</sc-if>
+
+<button class="c-textlink" onClick="{{quit}}" style="align-self: center; font-size: 0.85rem;">Spiel beenden</button>
+</div>
+</sc-if>
+
+<!-- ============ GAME OVER ============ -->
+<sc-if value="{{isOver}}" hint-placeholder-val="{{false}}">
+<div style="{{overGrid}}">
+<section aria-labelledby="bon-over" style="display: flex; flex-direction: column; gap: 1rem;">
+<div style="display: flex; flex-direction: column; gap: 0.5rem;">
+<sc-if value="{{isRecord}}" hint-placeholder-val="{{true}}"><span class="c-badge c-badge--strong" style="align-self: flex-start;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>Neuer Rekord!</span></sc-if>
+<h1 id="bon-over" class="c-band" style="{{titleStyle}}">{{overTitle}}</h1>
+<p style="margin: 0; color: var(--color-muted);">Drei Fehler – dit Spiel is vorbei.</p>
+<dc-import name="BonName" theme="{{theme}}" name="{{name}}" hint-size="100%,32px"></dc-import>
+</div>
+<dl style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 0;">
+<div class="bon__stat"><dt class="t-label">Punkte</dt><dd style="margin: 0;"><b>{{score}}</b></dd></div>
+<div class="bon__stat"><dt class="t-label">Platz</dt><dd style="margin: 0; display: flex; flex-direction: column;">
+<sc-if value="{{hasRank}}" hint-placeholder-val="{{true}}"><b>{{rank}}</b><span class="t-small">von {{totalGames}} Spielen · besser als {{beatPct}}</span></sc-if>
+<sc-if value="{{noRank}}" hint-placeholder-val="{{false}}"><b>–</b><span class="t-small">Platzierung jerade nich da</span></sc-if>
+</dd></div>
+<div class="bon__stat"><dt class="t-label">Trefferquote</dt><dd style="margin: 0; display: flex; flex-direction: column;"><b>{{accuracy}}</b><span class="t-small">{{correct}} von {{answered}} richtig</span></dd></div>
+<div class="bon__stat"><dt class="t-label">Beste Serie</dt><dd style="margin: 0; display: flex; flex-direction: column;"><b>{{bestStreak}}</b><span class="t-small">{{bestMultLabel}}</span></dd></div>
+</dl>
+<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+<button class="c-button c-button--primary" onClick="{{again}}" style="height: 52px; padding: 0 1.75rem; flex: 1 1 auto;">Nochmal spielen</button>
+<button class="c-choice" onClick="{{share}}" style="min-height: 52px; flex: 1 1 auto;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="m8.59 13.51 6.83 3.98"></path><path d="m15.41 6.51-6.82 3.98"></path></svg>{{shareLabel}}</button>
+</div>
+<p class="t-small" style="margin: 0;">Dein Rekord: <b style="color: var(--color-ink-strong);">{{bestAfter}} Punkte</b> · gespeichert auf diesem Jerät</p>
+<sc-if value="{{hasRank}}" hint-placeholder-val="{{true}}">
+<section aria-labelledby="bon-place-t" style="display: flex; flex-direction: column; gap: 0.5rem; padding-top: 0.5rem;">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;"><h2 id="bon-place-t" class="t-label" style="font-family: var(--font-body); font-size: 0.75rem; margin: 0;">Hier stehste</h2><span class="t-small">diese Woche</span></div>
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px;">
+<sc-for list="{{around}}" as="a" hint-placeholder-count="5"><li style="{{a.style}}" aria-current="{{a.current}}"><b style="width: 2.25rem; text-align: right; font-weight: 900; color: var(--color-muted);">{{a.rank}}</b><span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--color-ink-strong); font-weight: 700;">{{a.name}}</span><b style="font-variant-numeric: tabular-nums; color: var(--color-ink-strong);">{{a.score}}</b></li></sc-for>
+</ol>
+<span class="t-small">{{gapUp}}</span>
+<a class="c-textlink" href="#" style="align-self: flex-start;">Ganze Rangliste ansehen →</a>
+</section>
+</sc-if>
+<dc-import name="BonCode" theme="{{theme}}" start="keinCode" player="{{codePlayer}}" hint-size="100%,220px"></dc-import>
+</section>
+
+<section class="c-section-card" aria-labelledby="bon-recap-t" style="{{recapStyle}}">
+<div class="c-section-card__header" style="border-block-end: 0; padding-bottom: 0; justify-content: space-between;"><h2 id="bon-recap-t" class="c-section-card__title">Deine Runde</h2><span class="t-small">{{answered}} Karten</span></div>
+<div class="c-section-card__body">
+<ul class="bon__recap">
+<sc-for list="{{recap}}" as="r" hint-placeholder-count="6">
+<li>
+<sc-if value="{{r.isReal}}" hint-placeholder-val="{{true}}"><a href="#"><span class="{{r.iconClass}}" aria-label="{{r.result}}">{{r.icon}}</span><span style="min-width: 0;"><b style="color: var(--color-ink-strong);">{{r.word}}</b><span class="t-small" style="display: block;">{{r.translation}}</span></span><span aria-hidden="true" style="color: var(--color-muted);">→</span></a></sc-if>
+<sc-if value="{{r.isFake}}" hint-placeholder-val="{{false}}"><span><span class="{{r.iconClass}}" aria-label="{{r.result}}">{{r.icon}}</span><span style="min-width: 0;"><b style="color: var(--color-muted); text-decoration: line-through;">{{r.word}}</b><span class="t-small" style="display: block;">erfunden</span></span><span></span></span></sc-if>
+</li>
+</sc-for>
+</ul>
+</div>
+<div class="c-section-card__footer"><a class="c-textlink c-textlink--inline" href="#">Alle Wörter im Wort-Index</a></div>
+</section>
+</div>
+</sc-if>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"size":{"editor":"enum","options":["mobile","desktop"],"default":"mobile"},"start":{"editor":"enum","options":["intro","link","spiel","richtig","falsch","stapel","fehler","vorbei","vorbeiOhneRang","offline"],"default":"intro"},"name":{"editor":"string","default":"Kiez-Kalle"},"$preview":{"width":390,"height":900}}'>
+class Component extends DCLogic {
+  vt(update, dir) {
+    this.dir = dir || '';
+    update();
+  }
+  deck() {
+    return [
+      ['Knorke', true, 'großartig, toll'], ['Kiezkrümel', false], ['Schrippe', true, 'Brötchen'], ['Atze', true, 'Bruder, Kumpel'],
+      ['Spreeschnecke', false], ['Plauze', true, 'Bauch'], ['Töle', true, 'Hund'], ['Brummelbude', false],
+      ['Muckefuck', true, 'Ersatzkaffee'], ['Molle', true, 'Glas Bier'], ['Pankowpuschen', false], ['Kladderadatsch', true, 'Durcheinander'],
+      ['Stulle', true, 'Scheibe Brot'], ['Schnieptröte', false], ['Rabatz', true, 'Lärm, Krawall'], ['Bulette', true, 'Frikadelle'],
+      ['Moabitter', false], ['Zappenduster', true, 'stockdunkel; aussichtslos'], ['Späti', true, 'Spätkauf, Kiosk'], ['Jwd', true, 'janz weit draußen']
+    ].map(([word, isReal, translation]) => ({ word, isReal, translation: translation || '' }));
+  }
+  mult(s) { return s >= 10 ? 5 : s >= 6 ? 3 : s >= 3 ? 2 : 1; }
+  constructor(props) {
+    super(props);
+    const d = this.deck();
+    const hist = (n, wrongAt) => d.slice(0, n).map((c, i) => ({ ...c, right: !wrongAt.includes(i) }));
+    const base = { phase: 'intro', i: 0, lives: 3, score: 0, streak: 0, bestStreak: 0, history: [], last: null, stack: 1, record: 210 };
+    const S = {
+      intro: {},
+      link: {},
+      offline: {},
+      spiel: { phase: 'play', i: 5, score: 80, streak: 5, bestStreak: 5, history: hist(5, []) },
+      richtig: { phase: 'feedback', i: 6, score: 100, streak: 6, bestStreak: 6, history: hist(6, []), last: { ...d[5], right: true, points: 30, mult: 3 } },
+      falsch: { phase: 'feedback', i: 9, lives: 1, score: 150, streak: 0, bestStreak: 6, history: hist(9, [7, 8]), last: { ...d[8], right: false } },
+      stapel: { phase: 'loading', i: 20, lives: 2, score: 290, streak: 4, bestStreak: 9, history: hist(20, [7]), stack: 1 },
+      fehler: { phase: 'error', i: 20, lives: 2, score: 290, streak: 4, bestStreak: 9, history: hist(20, [7]), stack: 1 },
+      vorbei: { phase: 'over', i: 17, lives: 0, score: 240, streak: 0, bestStreak: 6, history: hist(17, [4, 10, 16]), rank: 12, totalGames: 340 },
+      vorbeiOhneRang: { phase: 'over', i: 17, lives: 0, score: 180, streak: 0, bestStreak: 5, history: hist(17, [4, 10, 16]), rank: null, totalGames: null }
+    };
+    this.state = { ...base, ...(S[props.start ?? 'intro'] || {}) };
+  }
+  answer(sayReal) {
+    const st = this.state, d = this.deck(), card = d[st.i % d.length];
+    const right = card.isReal === sayReal;
+    const streak = right ? st.streak + 1 : 0;
+    const m = this.mult(streak), points = right ? 10 * m : 0;
+    const lives = right ? st.lives : st.lives - 1;
+    this.schedule(right ? 900 : 2500);
+    this.vt(() => this.setState({ phase: 'feedback', paused: false, fbMs: right ? 900 : 2500, last: { ...card, right, points, mult: m }, streak, bestStreak: Math.max(st.bestStreak, streak), score: st.score + points, lives, i: st.i + 1, history: [...st.history, { ...card, right }] }), sayReal ? 'right' : 'left');
+  }
+  schedule(ms) {
+    const tok = this.tok = Math.random();
+    setTimeout(() => { if (this.tok === tok) this.advance(); }, ms);
+  }
+  advance() {
+    const st = this.state;
+    this.tok = null;
+    if (st.phase !== 'feedback') return;
+    if (st.lives <= 0) { this.vt(() => this.setState({ phase: 'over', rank: 12, totalGames: 340 }), 'over'); return; }
+    if (st.i > 0 && st.i % 20 === 0) { this.setState({ phase: 'loading', stack: Math.floor(st.i / 20) }); setTimeout(() => this.setState({ phase: 'play' }), 1200); return; }
+    this.vt(() => this.setState({ phase: 'play' }), 'next');
+  }
+  renderVals() {
+    const st = this.state, d = this.deck();
+    const desktop = this.props.size === 'desktop';
+    const name = (this.props.name || '').trim();
+    const ph = st.phase;
+    const m = this.mult(st.streak);
+    const nextAt = st.streak < 3 ? 3 : st.streak < 6 ? 6 : st.streak < 10 ? 10 : null;
+    const answered = st.history.length, correct = st.history.filter((h) => h.right).length;
+    const last = st.last || { word: '', right: true };
+    const gameOver = ph === 'feedback' && st.lives <= 0;
+    const best = st.record;
+    const isRecord = st.score > best;
+    const fmt = (n) => n.toLocaleString('de-DE');
+    return {
+      theme: this.props.theme ?? 'dark',
+      isDesktop: desktop,
+      shellStyle: desktop ? 'box-sizing: border-box; max-width: 1060px; margin: 0 auto; padding: 56px 24px 96px;' : 'box-sizing: border-box; padding: 1.5rem 1rem 3rem;',
+      introGrid: desktop ? 'display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 3rem; align-items: start;' : 'display: flex; flex-direction: column; gap: 1.5rem;',
+      recapStyle: desktop ? 'align-self: start;' : 'align-self: stretch;',
+      overGrid: desktop ? 'display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem; align-items: start;' : 'display: flex; flex-direction: column; gap: 1.5rem;',
+      titleStyle: 'font-size: ' + (desktop ? '3.25rem' : '2.25rem') + '; line-height: 1.05;',
+      dir: this.dir || (this.state.last && this.state.last.right ? 'right' : 'left'), shake: ph === 'feedback' && last && !last.right ? 'true' : 'false',
+      newPlayer: !this.props.name, knownPlayer: !!this.props.name,
+      fromLink: this.props.start === 'link', codePlayer: name || 'Anonym #K7QX',
+      isIntro: ph === 'intro', isOffline: this.props.start === 'offline', offlineFlag: this.props.start === 'offline' ? 'true' : 'false',
+      name, best: fmt(best),
+      start: () => { if (this.props.start !== 'offline') this.vt(() => this.setState({ phase: 'play' }), 'start'); },
+      inGame: ['play', 'feedback', 'loading', 'error'].includes(ph),
+      isPlay: ph === 'play', isFeedback: ph === 'feedback', isLoading: ph === 'loading', isError: ph === 'error',
+      hearts: [0, 1, 2].map((k) => k < st.lives ? { fill: 'var(--danger)', stroke: 'var(--danger)' } : { fill: 'none', stroke: 'var(--color-muted)' }),
+      livesAria: 'Noch ' + st.lives + (st.lives === 1 ? ' Leben' : ' Leben') + ' von 3',
+      score: fmt(st.score), playerLabel: name || 'Anonym #K7QX',
+      streak: st.streak,
+      nextLabel: nextAt ? 'noch ' + (nextAt - st.streak) + ' bis ×' + this.mult(nextAt) : 'volle Pulle: ×5',
+      track: [[1, '×1'], [2, '×2'], [3, '×3'], [5, '×5']].map(([v, label]) => ({ label, on: m >= v ? 'true' : 'false', now: m === v ? 'true' : 'false' })),
+      multAria: 'Multiplikator jetzt ×' + m,
+      swipeHint: desktop ? 'Jeht ooch mit den Pfeiltasten.' : 'Jeht ooch mit Wischen.',
+      card: d[st.i % d.length], cardNo: (st.i % 20) + 1 + ' von 20 · Stapel ' + (Math.floor(st.i / 20) + 1),
+      sayYes: () => this.answer(true), sayNo: () => this.answer(false),
+      fbClass: 'bon__card ' + (last.right ? 'bon__card--right' : 'bon__card--wrong'),
+      last: {
+        ...last, wrong: !last.right,
+        head: last.right ? (last.mult >= 3 ? 'Knorke, weiter so!' : 'Richtig!') : 'Daneben!',
+        verdict: last.isReal ? 'Dit is echtes Berlinerisch:' : 'Dit Wort is erfunden – jibt’s nich.',
+        showLink: !last.right && last.isReal,
+        delta: last.right ? '+' + last.points + ' Punkte' + (last.mult > 1 ? ' (×' + last.mult + ')' : '') : '−1 Leben · Serie futsch',
+      },
+      skip: () => this.advance(),
+      pause: () => { if (st.phase === 'feedback' && this.tok) { this.tok = null; this.setState({ paused: true }); } },
+      resume: () => { if (st.paused) { this.setState({ paused: false, fbMs: 1200 }); this.schedule(1200); } },
+      timerStyle: 'animation-duration: ' + (st.fbMs || (last.right ? 900 : 2500)) + 'ms; animation-play-state: ' + (st.paused || !this.tok ? 'paused' : 'running') + ';',
+      fbHint: gameOver ? 'Gleich kommt dein Ergebnis – tippen für sofort.' : (last.right ? (desktop ? 'Weiter jeht’s – oder gleich die nächste Pfeiltaste.' : 'Weiter jeht’s …') : (desktop ? 'Jeht gleich weiter. Maus drauf hält an, Klick oder Pfeiltaste für sofort.' : 'Jeht gleich weiter. Tippen für sofort.')),
+      stack: st.stack,
+      retry: () => this.setState({ phase: 'play' }),
+      quit: () => this.vt(() => this.setState({ phase: 'over', rank: 12, totalGames: 340 }), 'over'),
+      isOver: ph === 'over',
+      overTitle: name ? 'Aus die Maus, ' + name + '!' : 'Aus die Maus!',
+      isRecord, bestAfter: fmt(Math.max(best, st.score)),
+      hasRank: st.rank != null, noRank: st.rank == null,
+      rank: st.rank, totalGames: st.totalGames ? fmt(st.totalGames) : '',
+      beatPct: st.rank && st.totalGames ? Math.round((st.totalGames - st.rank) / st.totalGames * 100) + ' %' : '',
+      around: [[10, 'Köpi-Klaus', 330], [11, 'Moabit-Moni', 280], [12, null, st.score], [13, 'Anonym #H9VD', 230], [14, 'Pankow-Paule', 220]].map(([rank, n, sc]) => ({ rank, name: n || ((name || 'Anonym #K7QX') + ' (du)'), score: fmt(sc), current: n ? 'false' : 'true', style: 'display: flex; align-items: center; gap: 0.75rem; min-height: 44px; padding: 0 0.75rem; border-radius: var(--radius-sm);' + (n ? ' background: var(--surface-chip);' : ' background: color-mix(in srgb, var(--orange-500) 22%, transparent);') })),
+      gapUp: 'Noch ' + (280 - st.score + 1) + ' Punkte bis Platz 11.',
+      accuracy: answered ? Math.round(correct / answered * 100) + ' %' : '–',
+      correct, answered,
+      bestStreak: st.bestStreak, bestMultLabel: 'in Folge richtig · bis ×' + this.mult(st.bestStreak),
+      shareLabel: st.shared ? 'Text kopiert' : 'Ergebnis teilen',
+      share: () => this.setState({ shared: true }),
+      again: () => this.vt(() => this.setState({ phase: 'play', i: 0, lives: 3, score: 0, streak: 0, bestStreak: 0, history: [], last: null, record: Math.max(best, st.score), shared: false }), 'start'),
+      recap: st.history.map((h) => ({ ...h, isFake: !h.isReal, icon: h.right ? '✓' : '✗', iconClass: h.right ? 'bon__ok' : 'bon__no', result: h.right ? 'richtig' : 'falsch' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

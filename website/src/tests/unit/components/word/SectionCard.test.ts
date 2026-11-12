@@ -3,10 +3,7 @@ import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, it } from "vitest";
 
 describe("SectionCard.astro", () => {
-  let render: (
-    props: Record<string, unknown>,
-    slots?: Record<string, string>,
-  ) => Promise<string>;
+  let render: (props: Record<string, unknown>, slots?: Record<string, string>) => Promise<string>;
 
   beforeAll(async () => {
     const { default: SectionCard } = await import("@components/word/SectionCard.astro");

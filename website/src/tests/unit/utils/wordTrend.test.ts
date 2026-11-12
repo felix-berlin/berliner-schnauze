@@ -1,9 +1,9 @@
+import { buildTrends, formatChange, percentChange } from "@utils/wordTrend.ts";
 import { describe, expect, it } from "vitest";
 
-import { buildTrends, formatChange, percentChange } from "@utils/wordTrend.ts";
-
 const TODAY = "2026-11-08";
-const ranked = (n: number) => Array.from({ length: n }, (_, i) => ({ views: 100 - i, word: i + 1 }));
+const ranked = (n: number) =>
+  Array.from({ length: n }, (_, i) => ({ views: 100 - i, word: i + 1 }));
 
 describe("buildTrends", () => {
   it("gives rank 3 its value", () => {

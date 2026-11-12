@@ -37,8 +37,7 @@ export const visitorId = (cookies: AstroCookies, create: boolean): string | unde
  */
 export const sha256 = (text: string): string => createHash("sha256").update(text).digest("hex");
 
-export const voterKey = (visitor: string): string =>
-  sha256(`votes:${visitor}`);
+export const voterKey = (visitor: string): string => sha256(`votes:${visitor}`);
 
 export const hashEditKey = sha256;
 

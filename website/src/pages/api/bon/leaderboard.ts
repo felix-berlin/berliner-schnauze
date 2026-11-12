@@ -1,0 +1,59 @@
+import type { LeaderboardReply } from "@services/bonLeaderboardApi.ts";
+import type { APIRoute } from "astro";
+
+import { bonIdentity } from "@services/bonPlayer.ts";
+import { aroundOf, loadRanking, toPublicEntry } from "@services/bonRanking.ts";
+import { getPayloadClient } from "@services/payload.ts";
+import { reply } from "@utils/apiReply.ts";
+import { z } from "zod";
+
+const digits = (max: number) =>
+  z
+    .string()
+    .regex(/^\d{1,6}$/)
+    .transform(Number)
+    .pipe(z.number().max(max));
+
+const querySchema = z.object({
+  limit: digits(25).default(25),
+  offset: digits(1_000_000).default(0),
+  period: z.enum(["week", "month", "all"]),
+});
+
+export const GET: APIRoute = async ({ cookies, url }) => {
+  const query = querySchema.safeParse({
+    limit: url.searchParams.get("limit") ?? undefined,
+    offset: url.searchParams.get("offset") ?? undefined,
+    period: url.searchParams.get("period"),
+  });
+  if (!query.success) return reply({ error: "Ungültige Eingabe" }, 400);
+  const { limit, offset, period } = query.data;
+  try {
+    const payload = await getPayloadClient();
+    // No cookie is set here: a visitor without one simply has no "me".
+    const [ranking, who] = await Promise.all([loadRanking(period), bonIdentity(payload, cookies)]);
+    const identity = who?.identity;
+    const myIndex = identity ? ranking.findIndex((e) => e.identity === identity) : -1;
+
+    const mine = ranking[myIndex];
+    return reply(
+      {
+        entries: ranking.slice(offset, offset + limit).map(toPublicEntry(identity)),
+        ...(mine && {
+          me: {
+            accuracy: mine.accuracy,
+            around: aroundOf(ranking, myIndex),
+            bestStreak: mine.bestStreak,
+            rank: mine.rank,
+            score: mine.score,
+          },
+        }),
+        total: ranking.length,
+      } satisfies LeaderboardReply,
+      200,
+    );
+  } catch (error) {
+    console.error("[bon] leaderboard failed:", error);
+    return reply({ error: "Die Rangliste wollte leider nich kommen." }, 502);
+  }
+};

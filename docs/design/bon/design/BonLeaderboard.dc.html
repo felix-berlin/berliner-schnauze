@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Rangliste</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/berliner-schnauze/tokens.css">
+<link rel="stylesheet" href="ds/berliner-schnauze/colors_and_type.css">
+<link rel="stylesheet" href="ds/berliner-schnauze/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.lb a{color:inherit}
+.lb__list{list-style:none;margin:0;padding:0}
+.lb__row{display:grid;align-items:center;gap:.75rem;min-height:56px;padding:.5rem .75rem;box-sizing:border-box;border-block-start:1px dashed var(--rule-inner);font-variant-numeric:tabular-nums}
+.lb__list > li:first-child .lb__row{border-block-start:0}
+.lb__head{min-height:36px;border:0;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--color-muted)}
+.lb__rank{font-weight:900;font-size:1.05rem;color:var(--color-muted);text-align:right}
+.lb__row[data-top="true"] .lb__rank{color:var(--color-accent-text);font-size:1.35rem}
+.lb__name{min-width:0;display:flex;flex-direction:column;line-height:1.3}
+.lb__name b{color:var(--color-ink-strong);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb__score{font-weight:900;font-size:1.1rem;color:var(--color-ink-strong);text-align:right}
+.lb__num{text-align:right;color:var(--color-body)}
+.lb__row[data-me="true"]{background:color-mix(in srgb,var(--orange-500) 16%,transparent);border-radius:var(--radius-sm);border-block-start-color:transparent}
+.lb__row[data-me="true"] + *{border-color:transparent}
+.lb__gap{display:flex;align-items:center;justify-content:center;min-height:32px;color:var(--color-muted);letter-spacing:.3em}
+.lb__me{position:sticky;bottom:0;z-index:3;display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:var(--surface-paper);box-shadow:0 -4px 8px rgb(0 0 0 / 12%);border-top:1px dashed var(--rule-card)}
+/* ---- Animationen ---- */
+.lb__list > li{animation:lb-in .3s cubic-bezier(.2,.8,.2,1) both}
+.lb__list > li:nth-child(2){animation-delay:.03s}.lb__list > li:nth-child(3){animation-delay:.06s}.lb__list > li:nth-child(4){animation-delay:.09s}.lb__list > li:nth-child(5){animation-delay:.12s}.lb__list > li:nth-child(n+6){animation-delay:.15s}
+.lb__me{animation:lb-up .35s .2s cubic-bezier(.2,.8,.2,1) both}
+@keyframes lb-in{from{opacity:0;transform:translateY(8px)}}
+@keyframes lb-up{from{transform:translateY(100%)}}
+@media (prefers-reduced-motion:reduce){.lb__list > li,.lb__me{animation:none}}
+</style>
+</helmet>
+<div class="lb" lang="de" data-theme="{{theme}}" style="box-sizing: border-box; min-height: 100vh; font-family: var(--font-body); letter-spacing: 1px; color: var(--color-body); background-color: var(--color-background-body); background-image: radial-gradient(var(--color-gradient-body-1) 1.1px, var(--color-gradient-body-2) 1.1px); background-size: 22px 22px;">
+<main style="{{shellStyle}}">
+
+<header style="display: flex; flex-direction: column; gap: 0.75rem;">
+<a class="c-textlink" href="#" style="align-self: flex-start; font-size: 0.85rem;">← Berliner oder nicht?</a>
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1.5rem;">
+<h1 class="c-band" style="{{titleStyle}}">Rangliste</h1>
+<span class="t-small">{{totalLabel}}</span>
+</div>
+<div class="c-choice-group" role="group" aria-label="Zeitraum">
+<sc-for list="{{periods}}" as="p" hint-placeholder-count="3"><button class="c-choice" aria-pressed="{{p.on}}" onClick="{{p.pick}}" style="min-height: 40px; padding: 0 0.875rem;">{{p.label}}</button></sc-for>
+</div>
+</header>
+
+<div style="{{bodyGrid}}">
+<section class="c-section-card" aria-labelledby="lb-t" style="min-width: 0;">
+<h2 id="lb-t" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);">{{periodTitle}}</h2>
+
+<sc-if value="{{isLoading}}" hint-placeholder-val="{{false}}">
+<div aria-busy="true" aria-label="Rangliste wird jeladen" style="display: flex; flex-direction: column; gap: 0.75rem; padding: 1rem;">
+<sc-for list="{{skel}}" as="sk" hint-placeholder-count="8"><span style="display: grid; grid-template-columns: 2rem 1fr 4rem; gap: 0.75rem; align-items: center;"><span class="c-skeleton" style="height: 1rem;"></span><span class="c-skeleton" style="{{sk}}"></span><span class="c-skeleton" style="height: 1rem;"></span></span></sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{isError}}" hint-placeholder-val="{{false}}">
+<div style="padding: 1rem;"><div class="c-state c-state--error" role="alert"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg><span class="c-state__body"><b>Ditt hat nich jeklappt.</b><span>Die Rangliste is jerade nich zu kriegen.</span><span style="margin-top: 0.5rem;"><button class="c-choice" onClick="{{retry}}">Nochmal versuchen</button></span></span></div></div>
+</sc-if>
+
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}">
+<div class="c-empty" style="padding-block: 3rem;"><b>{{emptyTitle}}</b><span>Hier könnte dein Name stehen.</span><a class="c-button c-button--primary" href="#" style="height: 48px; padding: 0 1.5rem; text-decoration: none; margin-top: 0.5rem;">Jetzt spielen</a></div>
+</sc-if>
+
+<sc-if value="{{hasRows}}" hint-placeholder-val="{{true}}">
+<div class="c-section-card__body" style="padding: 0.5rem;">
+<sc-if value="{{isDesktop}}" hint-placeholder-val="{{false}}"><div class="lb__row lb__head" aria-hidden="true" style="{{colsStyle}}"><span style="text-align: right;">Platz</span><span>Name</span><span style="text-align: right;">Treffer</span><span style="text-align: right;">Serie</span><span style="text-align: right;">Wann</span><span style="text-align: right;">Punkte</span></div></sc-if>
+<ol class="lb__list" aria-label="{{periodTitle}}">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="12">
+<li id="{{r.anchor}}">
+<sc-if value="{{r.isGap}}" hint-placeholder-val="{{false}}"><span class="lb__gap" aria-hidden="true">···</span></sc-if>
+<sc-if value="{{r.isEntry}}" hint-placeholder-val="{{true}}">
+<div class="lb__row" style="{{colsStyle}}" data-top="{{r.top}}" data-me="{{r.me}}" aria-current="{{r.current}}">
+<span class="lb__rank"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);">Platz </span>{{r.rank}}</span>
+<span class="lb__name"><span style="display: flex; align-items: baseline; gap: 0.375rem; min-width: 0;"><b>{{r.name}}</b><sc-if value="{{r.tag}}" hint-placeholder-val="{{false}}"><span class="bs-tag" style="flex-shrink: 0; font-weight: 400; font-size: 0.8em; color: var(--color-muted); font-variant-numeric: tabular-nums;">#{{r.tag}}</span></sc-if><sc-if value="{{r.isMe}}" hint-placeholder-val="{{false}}"><span style="flex-shrink: 0; font-size: 0.8em; color: var(--color-accent-text); font-weight: 700;">du</span></sc-if></span><sc-if value="{{r.showMeta}}" hint-placeholder-val="{{true}}"><span class="t-small">{{r.meta}}</span></sc-if></span>
+<sc-if value="{{isDesktop}}" hint-placeholder-val="{{false}}"><span class="lb__num">{{r.acc}}</span><span class="lb__num">{{r.streak}}</span><span class="lb__num t-small">{{r.when}}</span></sc-if>
+<span class="lb__score">{{r.score}}</span>
+</div>
+</sc-if>
+</li>
+</sc-for>
+</ol>
+</div>
+<div class="c-section-card__footer" style="justify-content: space-between;"><span>{{shownLabel}}</span><button class="c-textlink c-textlink--inline" onClick="{{more}}">Mehr laden</button></div>
+</sc-if>
+</section>
+
+<aside style="{{asideStyle}}">
+<section class="c-section-card" aria-labelledby="lb-me-t">
+<div class="c-section-card__header" style="border-block-end: 0; padding-bottom: 0;"><h2 id="lb-me-t" class="c-section-card__title">Dein Platz</h2></div>
+<div class="c-section-card__body" style="display: flex; flex-direction: column; gap: 0.75rem;">
+<sc-if value="{{hasMe}}" hint-placeholder-val="{{true}}">
+<p style="margin: 0; display: flex; align-items: baseline; gap: 0.5rem;"><b style="font-size: 2.25rem; font-weight: 900; color: var(--color-ink-strong); line-height: 1;">{{me.rank}}.</b><span class="t-small">von {{me.total}} · besser als {{me.pct}}</span></p>
+<p style="margin: 0;"><b style="color: var(--color-ink-strong);">{{me.score}} Punkte</b> · {{me.meta}}</p>
+<span style="display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center;"><a class="c-textlink" href="#lb-me" style="font-size: 0.9rem;">Zu mir springen</a><a class="c-textlink" href="#" style="font-size: 0.9rem;">Nochmal spielen</a></span>
+<dc-import name="BonName" theme="{{theme}}" name="Kiez-Kalle" hint-size="100%,32px"></dc-import>
+<p class="t-small" style="margin: 0;">Gezählt wird dein bestes Spiel im Zeitraum. Erkannt wirst du an einem Cookie auf diesem Jerät.</p>
+</sc-if>
+<sc-if value="{{noMe}}" hint-placeholder-val="{{false}}">
+<p style="margin: 0;">Du stehst hier noch nich drin. Spiel ’ne Runde, dann siehste, wo du landest.</p>
+<a class="c-button c-button--primary" href="#" style="align-self: flex-start; height: 48px; padding: 0 1.5rem; text-decoration: none;">Jetzt spielen</a>
+<p class="t-small" style="margin: 0;">Schon jespielt? Dann is der Cookie weg oder du spielst auf ’nem anderen Jerät.</p>
+<dc-import name="BonCode" theme="{{theme}}" start="zu" hint-size="100%,44px"></dc-import>
+</sc-if>
+</div>
+</section>
+<p class="t-small" style="margin: 0;">Namen sind frei jewählt. Anstößige Namen blenden wa aus. <a class="c-textlink c-textlink--inline" href="#">Namen melden</a></p>
+</aside>
+</div>
+</main>
+
+<sc-if value="{{showStickyMe}}" hint-placeholder-val="{{false}}">
+<div class="lb__me" role="region" aria-label="Dein Platz">
+<b style="font-size: 1.35rem; font-weight: 900; color: var(--color-accent-text);">{{me.rank}}.</b>
+<span style="display: flex; flex-direction: column; line-height: 1.3; min-width: 0;"><b style="color: var(--color-ink-strong);">Du · {{me.score}} Punkte</b><span class="t-small">von {{me.total}} · besser als {{me.pct}}</span></span>
+<a class="c-textlink" href="#lb-me" style="margin-left: auto; font-size: 0.85rem; white-space: nowrap;">Zu mir</a>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"size":{"editor":"enum","options":["mobile","desktop"],"default":"mobile"},"me":{"editor":"boolean","default":true},"status":{"editor":"enum","options":["normal","laden","leer","fehler"],"default":"normal"},"$preview":{"width":390,"height":1600}}'>
+class Component extends DCLogic {
+  vt(update, dir) {
+    this.dir = dir || '';
+    update();
+  }
+  constructor(props) {
+    super(props);
+    this.state = { period: 'woche', more: false };
+  }
+  entries() {
+    const names = ['Spree-Sabine', 'Mauerpark-Micha', 'Anonym', 'Tempelhof-Tine', 'Späti-Sven', 'Wedding-Wanda', 'Rixdorf-Rita', 'Ostkreuz-Olli', 'Anonym', 'Köpi-Klaus', 'Moabit-Moni', 'Kiez-Kalle', 'Anonym', 'Pankow-Paule', 'Schrippen-Schorsch', 'Bulettenbaron', 'Treptow-Trude', 'Anonym', 'Knorke-Knut', 'Lichtenberg-Lotte', 'Anonym', 'Friedrichshainer Fritze', 'Mollen-Max', 'Anonym', 'Steglitz-Steffi'];
+    const scores = [1240, 1080, 960, 870, 720, 610, 540, 470, 410, 330, 280, 240, 230, 220, 210, 190, 170, 160, 150, 140, 120, 110, 90, 70, 60];
+    const tags = ['K7QX', 'R2MP', 'H9VD', 'T4WN', 'B6ZE', 'M3CY'];
+    let t = 0;
+    return names.map((name, i) => ({ rank: i + 1, name, tag: name === 'Anonym' ? tags[t++ % tags.length] : '', score: scores[i], acc: 98 - Math.round(i * 1.4) + ' %', streak: Math.max(3, 24 - i), when: i < 3 ? 'heute' : i < 9 ? 'gestern' : 'vor ' + (2 + (i % 5)) + ' Tagen', me: i === 11 }));
+  }
+  renderVals() {
+    const st = this.state;
+    const desktop = this.props.size === 'desktop';
+    const hasCookie = this.props.me !== false;
+    const status = this.props.status ?? 'normal';
+    const all = this.entries();
+    const meE = all.find((e) => e.me);
+    const total = 340;
+    const fmt = (n) => n.toLocaleString('de-DE');
+    let rows;
+    if (desktop || st.more) rows = all.slice(0, desktop ? 25 : 25);
+    else rows = all.slice(0, 10);
+    const list = [];
+    rows.forEach((e) => list.push(e));
+    if (!desktop && !st.more && hasCookie && meE.rank > 10) { list.push({ gap: true }); all.slice(meE.rank - 2, meE.rank + 1).forEach((e) => list.push(e)); }
+    const P = { woche: 'Diese Woche', monat: 'Diesen Monat', immer: 'Allzeit' };
+    const empty = status === 'leer';
+    return {
+      theme: this.props.theme ?? 'dark',
+      isDesktop: desktop,
+      colsStyle: 'grid-template-columns: ' + (desktop ? '3.5rem minmax(0,1fr) 5rem 4rem 6.5rem 5rem' : '2.25rem minmax(0,1fr) auto') + ';',
+      asideStyle: 'display: flex; flex-direction: column; gap: 1rem;' + (desktop ? '' : (hasCookie && status === 'normal' ? '' : ' order: -1;')),
+      shellStyle: desktop ? 'box-sizing: border-box; max-width: 1160px; margin: 0 auto; padding: 40px 24px 96px; display: flex; flex-direction: column; gap: 1.5rem;' : 'box-sizing: border-box; padding: 1.25rem 1rem 2rem; display: flex; flex-direction: column; gap: 1.25rem;',
+      bodyGrid: desktop ? 'display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 2rem; align-items: start;' : 'display: flex; flex-direction: column; gap: 1rem;',
+      titleStyle: 'font-size: ' + (desktop ? '3rem' : '2.25rem') + '; line-height: 1.05;',
+      totalLabel: empty ? 'Noch keene Spiele' : fmt(total) + ' Spiele · ' + P[st.period].toLowerCase(),
+      periods: Object.entries(P).map(([id, label]) => ({ label, on: st.period === id ? 'true' : 'false', pick: () => { if (st.period !== id) this.vt(() => this.setState({ period: id }), 'period'); } })),
+      periodTitle: 'Rangliste ' + P[st.period],
+      isLoading: status === 'laden', isError: status === 'fehler', isEmpty: empty,
+      emptyTitle: st.period === 'woche' ? 'Diese Woche hat noch keener jespielt.' : 'Noch keene Spiele in dem Zeitraum.',
+      hasRows: status === 'normal',
+      retry: () => {},
+      skel: [60, 45, 70, 52, 38, 66, 48, 58].map((w) => 'width: ' + w + '%; height: 1rem;'),
+      rows: list.map((e) => e.gap ? { isGap: true, isEntry: false } : {
+        isGap: false, isEntry: true, rank: e.rank, name: e.name, tag: e.tag || '', isMe: !!(e.me && hasCookie),
+        score: fmt(e.score), acc: e.acc, streak: e.streak, when: e.when,
+        meta: e.acc + ' · Serie ' + e.streak, showMeta: !desktop,
+        top: e.rank <= 3 ? 'true' : 'false', me: e.me && hasCookie ? 'true' : 'false', current: e.me && hasCookie ? 'true' : 'false',
+        anchor: e.me && hasCookie ? 'lb-me' : 'lb-' + e.rank
+      }),
+      shownLabel: 'Platz 1–' + (desktop || st.more ? 25 : 10) + ' von ' + fmt(total),
+      more: () => this.vt(() => this.setState({ more: true }), 'more'),
+      hasMe: hasCookie && !empty, noMe: !hasCookie || empty,
+      showStickyMe: !desktop && hasCookie && status === 'normal',
+      me: { rank: meE.rank, total: fmt(total), pct: Math.round((total - meE.rank) / total * 100) + ' %', score: fmt(meE.score), meta: meE.acc + ' Treffer · Serie ' + meE.streak }
+    };
+  }
+}
+</script>
+</body>
+</html>

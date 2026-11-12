@@ -61,4 +61,7 @@ if ! scripts/with-env.sh env NODE_ENV=production pnpm --filter payload-app dev:a
   echo "!! dev admin not created (infisical login? DEV_* secrets set?). Later: scripts/with-env.sh env NODE_ENV=production pnpm --filter payload-app dev:access" >&2
 fi
 
+# Test word with every detail-page section filled (dev only, idempotent).
+scripts/with-env.sh env NODE_ENV=production pnpm --filter payload-app seed:test || echo "!! testwort not seeded (later: pnpm cms:seed-test)" >&2
+
 echo "== ready: website :$web, cms :$cms, e2e :$e2e (pnpm dev / pnpm cms:dev)"
