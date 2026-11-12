@@ -908,6 +908,20 @@ describe("POST /api/bon/player", () => {
     expect(db.rows.find((r) => r.visitor === hashed("v-2"))!.player).toBeUndefined();
   });
 
+  it("names the player after the latest claimed game, so redeem can greet with it", async () => {
+    await playedGame(2, "v-1");
+    await playedGame(2, "v-1");
+    db.rows[0].playerName = "Alt";
+    db.rows[1].playerName = "Kalle";
+    await playedGame(2, "v-2");
+    db.rows[2].playerName = "Fremd";
+    await player(undefined, "v-1");
+    expect(db.players[0].name).toBe("Kalle");
+    const { code } = await (await player(undefined, "v-3")).json();
+    expect(db.players[1].name).toBeUndefined();
+    expect((await (await redeem({ code })).json()).playerName).toBe("Anonym");
+  });
+
   it("without a visitor cookie still creates the player, claims nothing, sets only the player cookie", async () => {
     await playedGame(2, "v-1");
     set.mockClear();

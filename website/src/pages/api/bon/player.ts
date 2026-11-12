@@ -19,12 +19,15 @@ import { generateCode } from "payload-app/bon-player";
 import { bonTag } from "payload-app/bon-ranking";
 
 /** A new player with a fresh code; undefined on a code-hash collision. */
-const createPlayer = async (payload: Awaited<ReturnType<typeof getPayloadClient>>) => {
+const createPlayer = async (
+  payload: Awaited<ReturnType<typeof getPayloadClient>>,
+  name: string | undefined,
+) => {
   const code = generateCode();
   try {
     const row = await payload.create({
       collection: "bon-players",
-      data: { codeHash: bonCodeHash(code) },
+      data: { codeHash: bonCodeHash(code), name },
       depth: 0,
     });
     return { code, id: row.id };
@@ -52,7 +55,24 @@ export const POST: APIRoute = async ({ cookies }) => {
       claiming.add(visitor);
       guard = visitor;
     }
-    const created = (await createPlayer(payload)) ?? (await createPlayer(payload));
+    // The name of the latest claimed game, as a finish would have copied it; redeem greets with it.
+    const name = visitor
+      ? ((
+          await payload.find({
+            collection: "bon-games",
+            depth: 0,
+            limit: 1,
+            select: { playerName: true },
+            sort: "-finishedAt",
+            where: {
+              player: { exists: false },
+              status: { equals: "finished" },
+              visitor: { equals: visitor },
+            },
+          })
+        ).docs[0]?.playerName ?? undefined)
+      : undefined;
+    const created = (await createPlayer(payload, name)) ?? (await createPlayer(payload, name));
     if (!created) throw new Error("no unique code found");
     if (visitor) {
       try {
