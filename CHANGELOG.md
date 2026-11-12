@@ -2,6 +2,94 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.12.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.11.0...v4.12.0) (2026-11-12)
+
+
+### Bug Fixes
+
+* **bon:** block zyklon as a name ([167d67c](https://github.com/felix-berlin/berliner-schnauze/commit/167d67c6880649429a6005dad861a7348b5c1330))
+* **bon:** bound the leaderboard morph wait, stop the fly-out widening the page, cut e2e games ([57e23b6](https://github.com/felix-berlin/berliner-schnauze/commit/57e23b6e7f95b54be6da5d4c4a2ba1bc5b896d9d))
+* **bon:** break a full ranking tie by id, describe the stored card fields ([efa4969](https://github.com/felix-berlin/berliner-schnauze/commit/efa4969d251f418c98fb022e54c6d8d0bc3e9213))
+* **bon:** catch Heil before any separator, fillers as spaces, AfDlerin, non-ASCII digits ([c1f91b7](https://github.com/felix-berlin/berliner-schnauze/commit/c1f91b7d0ab809fb73cf03a0154e52a1778f06ca))
+* **bon:** catch spaced, article and variant Heil salutes ([d4b8511](https://github.com/felix-berlin/berliner-schnauze/commit/d4b851164f9f7df346be421d142fff61b2bb3c20))
+* **bon:** close name filter bypasses and spare real names ([60bb1cc](https://github.com/felix-berlin/berliner-schnauze/commit/60bb1cc074e9f88dbfcecf0a41cef9104ddc0338))
+* **bon:** close the last name filter gaps, count reports per IPv6 network ([81986d8](https://github.com/felix-berlin/berliner-schnauze/commit/81986d8ab420ec27352b05a8b34704e2c1f17beb))
+* **bon:** count name reports once per client IP, not per cookie ([03725b0](https://github.com/felix-berlin/berliner-schnauze/commit/03725b0ff7901beb86fccec9ed1c5c283f9fb052))
+* **bon:** crossfade only the rows on a period switch ([d4a9bca](https://github.com/felix-berlin/berliner-schnauze/commit/d4a9bca2d72655ddf8f1529a7d1d8b9183d57dce))
+* **bon:** drop the confetti from the game result ([0bb04ef](https://github.com/felix-berlin/berliner-schnauze/commit/0bb04efd683e4558ecfa938cf0488ec052c7d46b))
+* **bon:** filter the name in the result heading and the share view ([ed4c244](https://github.com/felix-berlin/berliner-schnauze/commit/ed4c244217843d49c101782157492a700d2e356c))
+* **bon:** harden migration down, name check and batch cap ([7c2e444](https://github.com/felix-berlin/berliner-schnauze/commit/7c2e44495180a79483f94dfd58c176e728e4c379))
+* **bon:** Heil only alone or before a far-right target ([58f44f3](https://github.com/felix-berlin/berliner-schnauze/commit/58f44f39881c087ba1f6c7542a2c76e52eaded97))
+* **bon:** hide the card solution in public ids and serialize finish ([a56db93](https://github.com/felix-berlin/berliner-schnauze/commit/a56db93f1ae9d6792697aa2949e198e7f1f6eaa5))
+* **bon:** hide the name editor on a result without rank ([6de8f8f](https://github.com/felix-berlin/berliner-schnauze/commit/6de8f8ff106583ae82f71979e81528c1208824ba))
+* **bon:** ignore whitespace-only words and translations ([dd4b4d5](https://github.com/felix-berlin/berliner-schnauze/commit/dd4b4d54e31083b1a6c4ccddc60db53a8929c061))
+* **bon:** keep a code player's name on a failed lookup, rename only finished games ([90e88c8](https://github.com/felix-berlin/berliner-schnauze/commit/90e88c882a79e4c1bbb51682963714923406bf9d))
+* **bon:** keep a stored player name over Anonym and select only needed stats ([b375ade](https://github.com/felix-berlin/berliner-schnauze/commit/b375adea3d5b9ed0c77397be757c09526c047b47))
+* **bon:** keep feedback advancing after an early tap ([15fa075](https://github.com/felix-berlin/berliner-schnauze/commit/15fa075c9f67d55f7fc68914d8f32276020ea604))
+* **bon:** keep the 1488 and 444 catches across separators, clear the report set per test ([71d1f30](https://github.com/felix-berlin/berliner-schnauze/commit/71d1f300dd691d77a75a0fd2d96aa0777ae16b51))
+* **bon:** keep the code on a failed link redeem and announce state changes ([f2090f0](https://github.com/felix-berlin/berliner-schnauze/commit/f2090f0c3fffe28ffb58ac46ff427d3774d46322))
+* **bon:** label the result rank as all-time, keep one morph timing rule ([1ed5747](https://github.com/felix-berlin/berliner-schnauze/commit/1ed574725a7bce13b1b8d17ffd80f8db0a6c5aac))
+* **bon:** make the player claim fail clean ([5f52681](https://github.com/felix-berlin/berliner-schnauze/commit/5f52681050fe86d56a04605d748959e91a05975e))
+* **bon:** match blocked names as substrings with an allow list ([3426d66](https://github.com/felix-berlin/berliner-schnauze/commit/3426d66113fcd5b0f5b7137a9b05b66fb911d9a4))
+* **bon:** match risky blocked words only as whole words ([b7ac5d0](https://github.com/felix-berlin/berliner-schnauze/commit/b7ac5d0b1f2f3682e61252410e61bbdb5a8640bd))
+* **bon:** name a new code player after the latest claimed game ([0d33736](https://github.com/felix-berlin/berliner-schnauze/commit/0d33736ed733fab723bce2df6a01fa90586fde34))
+* **bon:** point far-right names to exit help when renaming ([45bb6ab](https://github.com/felix-berlin/berliner-schnauze/commit/45bb6abac009b45ddd146eb6954fefa981eeac81))
+* **bon:** polish leaderboard meta, report errors and labels ([58a7fd5](https://github.com/felix-berlin/berliner-schnauze/commit/58a7fd5aea419d3dea0ad43a2a0d2658daeeea2f))
+* **bon:** rank a finished run like the week's leaderboard ([7b31bbe](https://github.com/felix-berlin/berliner-schnauze/commit/7b31bbead00a5e4f8996c338ff57d3b1af00481d))
+* **bon:** recover from an empty stack ([4beb4be](https://github.com/felix-berlin/berliner-schnauze/commit/4beb4be01f7a5bc7662deed2f662117cf9d7107b))
+* **bon:** replay a lost next or answer reply instead of locking the game ([0e9a428](https://github.com/felix-berlin/berliner-schnauze/commit/0e9a42897c4bc3bbe7b22e934bf1cb15e8212c35))
+* **bon:** resume feedback after a locked swipe ([729b12e](https://github.com/felix-berlin/berliner-schnauze/commit/729b12efc46c7d19cd0dd3aeca640eee1bc19b9c))
+* **bon:** serialize finish and guard stale replies ([9e271de](https://github.com/felix-berlin/berliner-schnauze/commit/9e271def897db8389bd9f4867049fbf92e873cdc))
+* **bon:** serialize next and answer per game ([ab9bbf5](https://github.com/felix-berlin/berliner-schnauze/commit/ab9bbf598a669e2f5a0c85c1224eee7cf0e8a419))
+* **bon:** share names outside Latin-1, store a link-like name as Anonym ([04d7ab8](https://github.com/felix-berlin/berliner-schnauze/commit/04d7ab8d8a3c8fa38c10d2e3b7a01e8fc21430bc))
+* **bon:** share the game lock with finish ([8d82d54](https://github.com/felix-berlin/berliner-schnauze/commit/8d82d54e5c332045f9dcd9eacbd9ecade3aef722))
+* **bon:** show no share-link name that holds bidi controls ([9cce128](https://github.com/felix-berlin/berliner-schnauze/commit/9cce12857401132d94f541abf5369693207fc38c))
+* **bon:** show the full name, wrap "Namen ändern" to the next line ([1bc2988](https://github.com/felix-berlin/berliner-schnauze/commit/1bc2988895700a8f48c24af2961ccf2786721325))
+* **bon:** show why a run was not saved and stop retrying refused calls ([77b81a7](https://github.com/felix-berlin/berliner-schnauze/commit/77b81a7287dd067762207258ff4764f5122468d7))
+* **bon:** stop real-name exceptions and a trailing Heil from shielding far-right names ([86ed41f](https://github.com/felix-berlin/berliner-schnauze/commit/86ed41f906287dffb6d35465b9bb85138ba00fbe))
+* **bon:** strip bidi controls from names, keep Anonym on the player, rename games one by one ([c32571b](https://github.com/felix-berlin/berliner-schnauze/commit/c32571baed38a511828291239afe818dbce66f78))
+* **bon:** strip bidi controls from stored names on the way out ([baf8767](https://github.com/felix-berlin/berliner-schnauze/commit/baf87676729755fd06a9c87644731e2c61965a15))
+* **bon:** strip the code fragment before validating it ([637296e](https://github.com/felix-berlin/berliner-schnauze/commit/637296e48dcc96e566926be14c52344cb3cf3ffd))
+* **bon:** surface finish and cleanup errors, keep result without rank ([bb2cee5](https://github.com/felix-berlin/berliner-schnauze/commit/bb2cee59c2522b6d6206cecf882f6e6aeceb226a))
+* **bon:** use the singular for one game in the leaderboard header ([062b3c2](https://github.com/felix-berlin/berliner-schnauze/commit/062b3c25c2afb46e69cf4c967ba0ad58e97d0fdd))
+* **bon:** welcome a player named Anonym as Spieler ([5630dbf](https://github.com/felix-berlin/berliner-schnauze/commit/5630dbfc4476531f5a2f8ec97b74b75c7cb5692c))
+* **bon:** word the loading state differently while finishing a run ([c95185a](https://github.com/felix-berlin/berliner-schnauze/commit/c95185aff209bb3f8d6fe29484bada945bd489e7))
+
+
+### Features
+
+* **bon:** add answer feedback with pausable timer ([89a0a34](https://github.com/felix-berlin/berliner-schnauze/commit/89a0a34b8b2c82c6677f47ce6df676742c99505b))
+* **bon:** add motion with view transitions and animation-long input locks ([4ab2a58](https://github.com/felix-berlin/berliner-schnauze/commit/4ab2a58bbf1f29c1ecdead185f5ee3635e5fdef3))
+* **bon:** add player code routes ([0136ea6](https://github.com/felix-berlin/berliner-schnauze/commit/0136ea6f92a8e41963ff970b79eb7fb4c41b60d3))
+* **bon:** add server-side game rules ([0c02ce1](https://github.com/felix-berlin/berliner-schnauze/commit/0c02ce17ae2c12641d27c3e767d41868f26a4579))
+* **bon:** add start, next and finish endpoints ([bfd8854](https://github.com/felix-berlin/berliner-schnauze/commit/bfd885497c5baeeca8e2f7dff5c952b4b133a08d))
+* **bon:** add the bon-games collection ([fc9b585](https://github.com/felix-berlin/berliner-schnauze/commit/fc9b5857fc020ed1e5289f096b00bb946ed4377e))
+* **bon:** add the bon-players collection ([a13a1cd](https://github.com/felix-berlin/berliner-schnauze/commit/a13a1cd9b426d5339a46da90083aebee2674f41c))
+* **bon:** add the leaderboard endpoint ([9597b28](https://github.com/felix-berlin/berliner-schnauze/commit/9597b2857abaf102377108f8d6c5a971bca35973))
+* **bon:** add the leaderboard page ([0287c26](https://github.com/felix-berlin/berliner-schnauze/commit/0287c265235d00b3674379f79830d7f48459e677))
+* **bon:** add the name display and editor ([397e8e5](https://github.com/felix-berlin/berliner-schnauze/commit/397e8e50831d005ee2d93ae7fafad6ecb68d2033))
+* **bon:** add the player code component ([347e70d](https://github.com/felix-berlin/berliner-schnauze/commit/347e70d29cab069b0074b2ca81e2376e35b53162))
+* **bon:** add the player code format ([d222826](https://github.com/felix-berlin/berliner-schnauze/commit/d22282618fe130e0aef4ebb39c0d71fa6de89c24))
+* **bon:** change the name on start, result and leaderboard ([22c86af](https://github.com/felix-berlin/berliner-schnauze/commit/22c86af9cf39cb6ba05af9d70f8d5b5e5739309b))
+* **bon:** deal card batches on the server ([13d4f17](https://github.com/felix-berlin/berliner-schnauze/commit/13d4f179bacb71a931578cdb67a4d3571046bc03))
+* **bon:** filter and report player names ([2627cf3](https://github.com/felix-berlin/berliner-schnauze/commit/2627cf358e2992645bf3c3e460167e59fc162a16))
+* **bon:** play on server-dealt cards ([136399f](https://github.com/felix-berlin/berliner-schnauze/commit/136399f0b1e9a8fb1821342aba8c3896daf4e595))
+* **bon:** point far-right names to exit help ([8b2607a](https://github.com/felix-berlin/berliner-schnauze/commit/8b2607a93b6aecedf1fd1ef77cca845c4f085789))
+* **bon:** redesign the game card and HUD ([78e9cbd](https://github.com/felix-berlin/berliner-schnauze/commit/78e9cbd6e7a92c703643014aa606c2b239742ffe))
+* **bon:** redesign the result screen ([769c7aa](https://github.com/felix-berlin/berliner-schnauze/commit/769c7aae7833eb456ab0e780e673a5463810897c))
+* **bon:** redesign the start screen ([afee468](https://github.com/felix-berlin/berliner-schnauze/commit/afee468d4c21057862e011cb44e425bd5a2469d9))
+* **bon:** rename a player through PATCH /api/bon/player ([d45f9cb](https://github.com/felix-berlin/berliner-schnauze/commit/d45f9cb9772e4fca765214045bfbcc0f4455dcd4))
+* **bon:** restyle the player code card ([a79a905](https://github.com/felix-berlin/berliner-schnauze/commit/a79a90531495bb222c32749e24a311690789a508))
+* **bon:** reveal each answer from the server ([c77c1d9](https://github.com/felix-berlin/berliner-schnauze/commit/c77c1d9f54b82ef2c294d9f1eb0b525572e747da))
+* **bon:** show the placement on the result ([321fd90](https://github.com/felix-berlin/berliner-schnauze/commit/321fd90ec766388d59607bd03a307ce2986085c6))
+* **dev:** seed a testwort with every detail-page section ([6ce2cc1](https://github.com/felix-berlin/berliner-schnauze/commit/6ce2cc1cc661c83fc053f7a8f8d10ee8940a6254))
+* **dev:** seed audio and images for the testwort ([dcc9b91](https://github.com/felix-berlin/berliner-schnauze/commit/dcc9b91d305f8db95d7f7f17423f9c1a611d0a6c))
+
+
+### Performance Improvements
+
+* **bon:** send the result's leaderboard neighbours with the finish reply ([b0071a1](https://github.com/felix-berlin/berliner-schnauze/commit/b0071a10bbb0596245e208c960b2aa3a10c41fb0))
+
 # [4.11.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.10.0...v4.11.0) (2026-11-09)
 
 
