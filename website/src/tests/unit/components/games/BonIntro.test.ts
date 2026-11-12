@@ -136,6 +136,10 @@ describe("BonIntro", () => {
     expect(wrapper.find(".mock-code").exists()).toBe(false);
     await wrapper.find("button.c-textlink").trigger("click");
     expect(wrapper.find(".mock-code").attributes("data-mode")).toBe("redeem");
+    wrapper.findComponent({ name: "BonPlayerCode" }).vm.$emit("close");
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find(".mock-code").exists()).toBe(false);
+    expect(wrapper.find("button.c-bon-intro__redeem").exists()).toBe(true);
   });
 
   it("puts the code card first in the left column when opened from a link", () => {

@@ -1652,3 +1652,70 @@ describe("report-name dedupe", () => {
     expect(row0(7).nameReports).toBe(2);
   });
 });
+
+describe("bad bodies and storage failures", () => {
+  const broken = (cookie?: string, others: Record<string, string> = {}) =>
+    ({
+      ...ctx(undefined, cookie, others),
+      request: new Request("https://berliner-schnauze.wtf/api/bon", { body: "{", method: "POST" }),
+    }) as unknown as APIContext;
+  const down = () => Object.assign(new Error("db down"));
+
+  it.each([
+    ["answer", ANSWER],
+    ["finish", FINISH],
+    ["next", NEXT],
+    ["redeem", REDEEM],
+    ["report-name", REPORT],
+  ])("%s answers 400 on a body that is no JSON", async (_, route) => {
+    expect((await route(broken("v-1"))).status).toBe(400);
+  });
+
+  it("PATCH player answers 400 on a body that is no JSON", async () => {
+    seedPlayer();
+    expect((await PLAYER_PATCH(broken("v-1", { bon_player: "ABCD-EFGH-JKMN" }))).status).toBe(400);
+  });
+
+  it("answer, redeem, leaderboard and the name read answer 502 when the database fails", async () => {
+    const { token } = await newGame();
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    db.api.find.mockRejectedValue(down());
+    expect((await answer({ card: "0", real: true, token })).status).toBe(502);
+    expect((await redeem({ code: "ABCD-EFGH-JKMN" })).status).toBe(502);
+    const board = await LEADERBOARD({
+      clientAddress: "10.0.0.1",
+      cookies: { get: () => undefined, set },
+      url: new URL("https://berliner-schnauze.wtf/api/bon/leaderboard?period=week"),
+    } as unknown as APIContext);
+    expect(board.status).toBe(502);
+    expect((await PLAYER_GET(ctx(undefined, "v-1"))).status).toBe(502);
+    expect(error).toHaveBeenCalledTimes(4);
+  });
+
+  it("a player create that fails for another reason than a code clash answers 502", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    db.api.create.mockRejectedValue(down());
+    expect((await player(undefined, "v-1")).status).toBe(502);
+  });
+
+  it("start still deals when the cleanup reports failed rows", async () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    db.api.delete.mockResolvedValueOnce({ docs: [], errors: [{ message: "locked" }] } as never);
+    expect((await start("v-1")).status).toBe(200);
+    expect(error).toHaveBeenCalledWith("[bon] cleanup failed for some games:", [
+      { message: "locked" },
+    ]);
+  });
+
+  it("finish answers 409 when another request finished the game in between", async () => {
+    const { token } = await newGame();
+    await play(token, 2);
+    later(60_000);
+    const update = db.api.update.getMockImplementation()!;
+    db.api.update.mockImplementation(async (args) =>
+      args.where ? { docs: [], errors: [] } : update(args),
+    );
+    expect((await finish({ token }, "v-1")).status).toBe(409);
+    expect(invalidateRanking).not.toHaveBeenCalled();
+  });
+});

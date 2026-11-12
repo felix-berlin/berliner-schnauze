@@ -197,6 +197,33 @@ describe("BonLeaderboard", () => {
     expect(kids.indexOf("t-small")).toBeGreaterThan(kids.indexOf("c-bon-name"));
   });
 
+  it("a failed name read keeps the list and leaves out the editor", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(fetchPlayerName).mockRejectedValue(new Error("down"));
+    const w = await mountBoard(withMe());
+    expect(warn).toHaveBeenCalledWith("[bon] own name not loaded:", expect.any(Error));
+    expect(w.findComponent({ name: "BonName" }).exists()).toBe(false);
+    expect(w.text()).toContain("Spieler 1");
+    warn.mockRestore();
+  });
+
+  it("dates older games in weeks, months and years", async () => {
+    const ago = (days: number) => new Date(Date.now() - 86_400_000 * days).toISOString();
+    const w = await mountBoard(
+      reply({
+        entries: [
+          entry(1, { finishedAt: ago(20) }),
+          entry(2, { finishedAt: ago(90) }),
+          entry(3, { finishedAt: ago(800) }),
+        ],
+        total: 3,
+      }),
+    );
+    expect(w.text()).toContain("vor 3 Wochen");
+    expect(w.text()).toContain("vor 3 Monaten");
+    expect(w.text()).toContain("vor 2 Jahren");
+  });
+
   it("without a known name there is no editor", async () => {
     vi.mocked(fetchPlayerName).mockResolvedValue(undefined);
     const w = await mountBoard(withMe(40));

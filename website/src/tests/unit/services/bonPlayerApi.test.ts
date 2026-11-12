@@ -2,6 +2,7 @@ import {
   applyPlayerStats,
   createPlayerCode,
   fetchPlayerName,
+  hasRedeemCode,
   playerLink,
   redeemPlayerCode,
   rememberName,
@@ -50,6 +51,15 @@ describe("playerLink / takeRedeemCode", () => {
     sessionStorage.setItem("bonRedeem", "K7QD-M2X9-ZT4B");
     expect(takeRedeemCode()).toBe("K7QD-M2X9-ZT4B");
     expect(takeRedeemCode()).toBeUndefined();
+  });
+
+  it("treats a blocked sessionStorage as no code", () => {
+    const blocked = vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+      throw new Error("blocked");
+    });
+    expect(hasRedeemCode()).toBe(false);
+    expect(takeRedeemCode()).toBeUndefined();
+    blocked.mockRestore();
   });
 });
 
