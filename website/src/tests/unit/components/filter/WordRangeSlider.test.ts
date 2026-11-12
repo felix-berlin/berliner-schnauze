@@ -108,6 +108,25 @@ describe("WordRangeSlider.vue", () => {
     vi.useRealTimers();
   });
 
+  it("clearing the number input removes the filter instead of storing an empty string", async () => {
+    vi.useFakeTimers();
+    const { useVModel } = await import("@nanostores/vue");
+    const rangeRef = ref<number | undefined>(undefined);
+    vi.mocked(useVModel).mockReturnValueOnce(rangeRef as ReturnType<typeof useVModel>);
+    const WordRangeSlider = (await import("@components/filter/WordRangeSlider.vue")).default;
+    const wrapper = mount(WordRangeSlider, {
+      props: { label: "Silben", rangeType: "syllablesCount" },
+    });
+    const input = wrapper.find("input[type='number']");
+    await input.setValue("3");
+    await vi.advanceTimersByTimeAsync(300);
+    expect(rangeRef.value).toBe(3);
+    await input.setValue("");
+    await vi.advanceTimersByTimeAsync(300);
+    expect(rangeRef.value).toBeUndefined();
+    vi.useRealTimers();
+  });
+
   it("getMinMax falls back to {max:0,min:0} when rangeFilterMinMax is null (covers ?? branch)", async () => {
     const { useStore } = await import("@nanostores/vue");
     vi.mocked(useStore).mockReturnValueOnce({

@@ -7,10 +7,10 @@
 #
 # Usage: scripts/prod-curl.sh [options] https://berliner-schnauze.wtf/…
 #   -I -i -s -S (also combined, e.g. -sI)   HEAD / include headers / silent / show errors
-#   -H "Name: value"   request header, names: Accept, Accept-Encoding, Accept-Language, Cache-Control,
-#                      If-Modified-Since, If-None-Match, Range (e.g. compression or ETag/304 checks)
+#   -H "Name: value"   request header, names exactly as written (case-sensitive): Accept, Accept-Encoding,
+#                      Accept-Language, Cache-Control, If-Modified-Since, If-None-Match, Range
 #   --compressed       ask for and decode a compressed body
-#   --stats            GET, print response headers + status, transferred bytes and timings, discard the body
+#   --stats            print response headers + status, transferred bytes and timings; discard the body
 set -euo pipefail
 
 flags=()
@@ -23,7 +23,8 @@ while [ $# -gt 0 ]; do
     --stats)
       flags+=(-D - -o /dev/null -w '\nstatus=%{http_code} bytes=%{size_download} ttfb=%{time_starttransfer}s total=%{time_total}s\n') ;;
     -H)
-      h="${1-}"; shift || true
+      [ $# -gt 0 ] || { echo "prod-curl.sh: -H needs a value" >&2; exit 1; }
+      h="$1"; shift
       # one line, an allowlisted name, no @file form
       [[ "$h" =~ ^(Accept|Accept-Encoding|Accept-Language|Cache-Control|If-Modified-Since|If-None-Match|Range):\ [^[:cntrl:]]*$ ]] \
         || { echo "prod-curl.sh: header not allowed: $h" >&2; exit 1; }

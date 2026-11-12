@@ -83,11 +83,58 @@ const COUNTED_FILTERS = [
   ...(Object.keys(RANGE_FILTERS) as (keyof typeof RANGE_FILTERS)[]),
 ] as const;
 
+const SORT_BY = {
+  alphabetical: { orderKey: "alphabeticalOrder", property: "wordProperties.berlinerisch" },
+  date: { orderKey: "dateOrder", property: "dateTs" },
+  modifiedDate: { orderKey: "modifiedDateOrder", property: "modifiedTs" },
+} as const;
+
+/** A range filter's minimum, or undefined: older versions stored slider values as strings
+ * and a cleared number input as "". */
+const rangeMin = (value: unknown) => {
+  const min = value === "" || value == null ? Number.NaN : Number(value);
+  return Number.isNaN(min) ? undefined : min;
+};
+
 export const $wordSearch = persistentMap<WordList>(
   "wordSearch:",
   structuredClone(FILTER_DEFAULTS),
   jsonCodec,
 );
+
+const SORT_MIGRATED_KEY = "wordSearchSortMigrated";
+
+/**
+ * Repairs persisted state from older versions once per load: unknown sort values fall back to
+ * the defaults, range values become numbers or undefined. Once per browser, the old default sort
+ * (A - Z, written by every reset) becomes "relevance"; other explicit sorts stay.
+ */
+function repairPersisted() {
+  const state = $wordSearch.get();
+  const category = state.activeOrderCategory;
+  if (category !== "relevance" && !(category in SORT_BY)) {
+    $wordSearch.setKey("activeOrderCategory", FILTER_DEFAULTS.activeOrderCategory);
+  }
+  for (const { orderKey } of Object.values(SORT_BY)) {
+    if (state[orderKey] !== "ASC" && state[orderKey] !== "DESC") {
+      $wordSearch.setKey(orderKey, FILTER_DEFAULTS[orderKey]);
+    }
+  }
+  for (const key of Object.keys(RANGE_FILTERS) as (keyof typeof RANGE_FILTERS)[]) {
+    const min = rangeMin(state[key]);
+    if (min !== state[key]) $wordSearch.setKey(key, min);
+  }
+  try {
+    if (localStorage.getItem(SORT_MIGRATED_KEY)) return;
+    if (category === "alphabetical" && state.alphabeticalOrder === "ASC") {
+      $wordSearch.setKey("activeOrderCategory", "relevance");
+    }
+    localStorage.setItem(SORT_MIGRATED_KEY, "1");
+  } catch {
+    // No storage (private mode): nothing was persisted, so nothing to migrate.
+  }
+}
+if (typeof window !== "undefined") repairPersisted();
 
 export const $searchQuery = atom<string>("");
 
@@ -96,9 +143,9 @@ export const $activeFilterCount = computed(
   (wordSearch) =>
     COUNTED_FILTERS.filter((key) => {
       const value = wordSearch[key];
-      return Array.isArray(value)
-        ? value.length > 0
-        : value != null && value !== FILTER_DEFAULTS[key];
+      if (Array.isArray(value)) return value.length > 0;
+      if (key in RANGE_FILTERS) return rangeMin(value) !== undefined;
+      return value != null && value !== FILTER_DEFAULTS[key];
     }).length,
 );
 
@@ -202,10 +249,8 @@ function buildWhere(wordSearch: WordList): Record<string, unknown> {
     if (wordSearch[key]) where[`wordProperties.${key}`] = true;
   }
   for (const [key, property] of Object.entries(RANGE_FILTERS)) {
-    const value: unknown = wordSearch[key as keyof typeof RANGE_FILTERS];
-    // Older versions stored slider values as strings and a cleared number input as "".
-    const min = value === "" || value == null ? Number.NaN : Number(value);
-    if (!Number.isNaN(min)) where[`wordProperties.${property}`] = { gte: min };
+    const min = rangeMin(wordSearch[key as keyof typeof RANGE_FILTERS]);
+    if (min !== undefined) where[`wordProperties.${property}`] = { gte: min };
   }
   if (wordSearch.activeLetterFilter) {
     where.wordGroup = { eq: wordSearch.activeLetterFilter };
@@ -219,13 +264,7 @@ function buildWhere(wordSearch: WordList): Record<string, unknown> {
   return where;
 }
 
-const SORT_BY = {
-  alphabetical: { orderKey: "alphabeticalOrder", property: "wordProperties.berlinerisch" },
-  date: { orderKey: "dateOrder", property: "dateTs" },
-  modifiedDate: { orderKey: "modifiedDateOrder", property: "modifiedTs" },
-} as const;
-
-/** undefined = keep Orama's relevance order (searching with "relevance"). */
+/** undefined = no Orama sort: searching with "relevance" ranks hits by matchTier, then score. */
 function getSortBy(wordSearch: WordList, term: string) {
   const category = wordSearch.activeOrderCategory;
   if (category === "relevance" && term) return undefined;
@@ -240,7 +279,7 @@ const parts = (text: string) =>
     .split(/[^\p{L}]+/u)
     .filter(Boolean);
 
-/** Every word of the search starts a word part of the text ("stinkende füße"). */
+/** True if every search word is a prefix of a word in the text: "stink fü" covers "stinkende Füße". */
 const coversTerm = (text: string, termParts: string[]) => {
   const textParts = parts(text);
   return termParts.every((t) => textParts.some((part) => part.startsWith(t)));
@@ -249,9 +288,12 @@ const coversTerm = (text: string, termParts: string[]) => {
 /**
  * Orama scores fuzzy and stemmed hits ("Nauke", "Pauke", "Fusseln") like the real ones, so:
  * the word itself, then words starting with the term, then words whose parts cover every
- * search word, then such translations; Orama's score decides within a tier.
+ * search word, then entries with such a translation, then the rest; Orama's score decides
+ * within a tier. `term` must be normalized.
+ *
+ * @internal exported for tests
  */
-function matchTier(
+export function matchTier(
   { berlinerisch, translations }: OramaSearchIndex["wordProperties"],
   term: string,
 ) {
@@ -358,8 +400,9 @@ export const $oramaSearchResults = computedAsync(
       }
       return results;
     } catch (err) {
+      // Rethrow: status "failed" shows the reload hint instead of a fake "no results".
       console.error("[wordList] Search failed:", err);
-      return null;
+      throw err;
     }
   },
 );

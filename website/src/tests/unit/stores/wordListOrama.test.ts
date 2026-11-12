@@ -368,12 +368,12 @@ const mixedIndex = [
   entry("mantel", "Mantel, was nutzt mich der Mantel", ["Redensart"], ["antel", "ntel", "utzt"]),
 ];
 
+/** Slugs of the current results; throws (so the caller's waitFor retries) until ready. */
 const ready = async () => {
   const { $oramaSearchResults } = await import("@stores/wordList.ts");
-  await vi.waitFor(() => expect($oramaSearchResults.get().status).toBe("ready"), {
-    timeout: 5000,
-  });
-  return $oramaSearchResults.get().value?.hits.map((h) => h.document.slug) ?? [];
+  const results = $oramaSearchResults.get();
+  if (results.status !== "ready") throw new Error(`search ${results.status}`);
+  return results.value?.hits.map((h) => h.document.slug) ?? [];
 };
 
 describe("search ranking and filters (real Orama)", () => {
@@ -392,13 +392,13 @@ describe("search ranking and filters (real Orama)", () => {
   it("puts the exact word first by default while searching", async () => {
     const { $searchQuery } = await import("@stores/wordList.ts");
     $searchQuery.set("Mauken");
-    await vi.waitFor(async () => expect((await ready())[0]).toBe("mauken"), { timeout: 5000 });
+    await vi.waitFor(async () => expect((await ready())[0]).toBe("mauken"), { timeout: 3000 });
   });
 
   it("ranks the exact word first regardless of case and surrounding spaces", async () => {
     const { $searchQuery } = await import("@stores/wordList.ts");
     $searchQuery.set("  mauke ");
-    await vi.waitFor(async () => expect((await ready())[0]).toBe("mauke"), { timeout: 5000 });
+    await vi.waitFor(async () => expect((await ready())[0]).toBe("mauke"), { timeout: 3000 });
   });
 
   it("ranks words whose translation contains the term above fuzzy word matches", async () => {
@@ -409,14 +409,14 @@ describe("search ranking and filters (real Orama)", () => {
         const slugs = await ready();
         expect(slugs.slice(0, 3).sort()).toEqual(["fussbad", "mauke", "mauken"]);
       },
-      { timeout: 4000 },
+      { timeout: 3000 },
     );
   });
 
   it("ranks a translation holding every word of a multi-word search first", async () => {
     const { $searchQuery } = await import("@stores/wordList.ts");
     $searchQuery.set("stinkende Füße");
-    await vi.waitFor(async () => expect((await ready())[0]).toBe("mauken"), { timeout: 4000 });
+    await vi.waitFor(async () => expect((await ready())[0]).toBe("mauken"), { timeout: 3000 });
   });
 
   it("keeps an explicitly chosen sort while searching", async () => {
@@ -429,11 +429,12 @@ describe("search ranking and filters (real Orama)", () => {
         expect(slugs.length).toBeGreaterThan(1);
         expect(slugs).toEqual([...slugs].sort((a, b) => b.localeCompare(a, "de")));
       },
-      { timeout: 5000 },
+      { timeout: 3000 },
     );
   });
 
   it("lists every word alphabetically without a search term", async () => {
+    await vi.waitFor(ready, { timeout: 3000 });
     expect(await ready()).toEqual([
       "asche",
       "bumschekschek",

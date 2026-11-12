@@ -58,7 +58,7 @@ const options: { sortType: string; sorts: { category: Category; name: string; so
     },
   ];
 
-// Shows the persisted sort (it used to always show A - Z after a reload).
+// The persisted sort, not a local default.
 const wordSearch = useStore($wordSearch);
 const selected = computed(() => {
   const { activeOrderCategory: category } = wordSearch.value;
