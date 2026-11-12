@@ -628,6 +628,7 @@ describe("POST /api/bon/finish", () => {
     const body = await res.json();
     // streak 1-2: 10 each, 3-5: 20, 6-9: 30, 10-12: 50
     expect(body).toEqual({
+      around: [expect.objectContaining({ isMe: true, rank: 1, score: body.score })],
       bestStreak: 12,
       correctAnswers: 12,
       rank: 1,

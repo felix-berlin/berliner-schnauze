@@ -2,7 +2,7 @@ import type { FinishResult } from "@services/bonGameApi.ts";
 import type { APIRoute } from "astro";
 
 import { bonIdentityOf, bonVisitor, findGame, withGameLock } from "@services/bonGame.ts";
-import { invalidateRanking, loadRanking } from "@services/bonRanking.ts";
+import { aroundOf, invalidateRanking, loadRanking } from "@services/bonRanking.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";
@@ -110,10 +110,13 @@ export const POST: APIRoute = async ({ cookies, request }) => {
           console.error("[bon] rank lookup failed:", error);
           return undefined;
         });
-        const mine = week?.find((e) => e.identity === identity);
+        const index = week?.findIndex((e) => e.identity === identity) ?? -1;
+        const mine = week?.[index];
         return reply(
           {
             ...result,
+            // The neighbours for "Hier stehste", so the result needs no leaderboard call.
+            around: mine && aroundOf(week!, index),
             rank: mine?.rank,
             totalPlayers: mine && week!.length,
           } satisfies FinishResult,

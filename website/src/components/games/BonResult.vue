@@ -176,24 +176,27 @@ const shareFailed = ref(false);
 // Moving focus to the heading makes screen readers announce the result.
 onMounted(() => nextTick(() => titleRef.value?.focus()));
 
-// Without a rank (no cookie, failed finish) or when the call fails, the whole block stays out.
-const around = ref<PublicEntry[]>();
+// The neighbours come with the finish reply; without a rank (no cookie, failed finish) the block stays out.
+const own = (list?: PublicEntry[]) => (list?.some((e) => e.isMe) ? list : undefined);
+const around = ref(own(props.result?.around));
+// A retried save brings the rank later.
+watch(
+  () => props.result,
+  (result) => (around.value = own(result?.around)),
+);
 // Latest request wins: a slow first reply must not bring the old name back after a rename.
 let aroundRequest = 0;
+/** After a rename the neighbours show the new name; on a failed call the old ones stay. */
 async function loadAround() {
   if (!props.result?.rank) return;
   const mine = ++aroundRequest;
   try {
     const data = await fetchLeaderboard("week", 0, 0);
-    if (mine === aroundRequest && data?.me?.around.some((e) => e.isMe))
-      around.value = data.me.around;
+    if (mine === aroundRequest && own(data?.me?.around)) around.value = data.me!.around;
   } catch {
     // The result is complete without it.
   }
 }
-onMounted(loadAround);
-// A retried save brings the rank later.
-watch(() => props.result, loadAround);
 
 function onSaved({ name }: PlayerName) {
   renamed.value = name === ANONYM ? "" : name;

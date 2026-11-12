@@ -134,7 +134,9 @@ describe("BonResult", () => {
         .mockReturnValueOnce(new Promise((r) => (late = r)) as never)
         .mockResolvedValueOnce(mine("neu") as never);
       const wrapper = mountResult();
-      wrapper.findComponent({ name: "BonName" }).vm.$emit("saved", { name: "neu" });
+      const name = wrapper.findComponent({ name: "BonName" });
+      name.vm.$emit("saved", { name: "alt" });
+      name.vm.$emit("saved", { name: "neu" });
       await flushPromises();
       late(mine("alt"));
       await flushPromises();
@@ -145,13 +147,19 @@ describe("BonResult", () => {
 
   describe("placement", () => {
     const around = [{ rank: 11 }, { isMe: true, rank: 12 }];
-    const reply = { entries: [], me: { around }, total: 400 };
 
-    it("asks for the week and shows the block behind the stats", async () => {
-      vi.mocked(fetchLeaderboard).mockResolvedValue(reply as never);
-      const wrapper = mountResult();
+    it("shows the neighbours of the finish reply without asking the leaderboard", async () => {
+      vi.mocked(fetchLeaderboard).mockClear();
+      const wrapper = mountResult({ result: { ...props.result, around } as never });
       await flushPromises();
-      expect(fetchLeaderboard).toHaveBeenCalledWith("week", 0, 0);
+      expect(fetchLeaderboard).not.toHaveBeenCalled();
+      expect(wrapper.find(".mock-placement").text()).toBe("2");
+    });
+
+    it("a retried save brings the neighbours later", async () => {
+      const wrapper = mountResult({ result: undefined });
+      expect(wrapper.find(".mock-placement").exists()).toBe(false);
+      await wrapper.setProps({ result: { ...props.result, around } as never });
       expect(wrapper.find(".mock-placement").text()).toBe("2");
     });
 
@@ -163,15 +171,17 @@ describe("BonResult", () => {
       expect(wrapper.find(".mock-placement").exists()).toBe(false);
     });
 
-    it("is missing when the call fails or has no own row", async () => {
+    it("is missing without an own row, and a failed refresh after a rename keeps it", async () => {
+      expect(
+        mountResult({ result: { ...props.result, around: [{ rank: 11 }] } as never })
+          .find(".mock-placement")
+          .exists(),
+      ).toBe(false);
       vi.mocked(fetchLeaderboard).mockRejectedValueOnce(new Error("down"));
-      const failed = mountResult();
+      const wrapper = mountResult({ result: { ...props.result, around } as never });
+      wrapper.findComponent({ name: "BonName" }).vm.$emit("saved", { name: "Kalle" });
       await flushPromises();
-      expect(failed.find(".mock-placement").exists()).toBe(false);
-      vi.mocked(fetchLeaderboard).mockResolvedValueOnce({ entries: [], total: 0 });
-      const empty = mountResult();
-      await flushPromises();
-      expect(empty.find(".mock-placement").exists()).toBe(false);
+      expect(wrapper.find(".mock-placement").text()).toBe("2");
     });
   });
 

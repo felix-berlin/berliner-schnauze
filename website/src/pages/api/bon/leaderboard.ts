@@ -1,9 +1,8 @@
 import type { LeaderboardReply } from "@services/bonLeaderboardApi.ts";
 import type { APIRoute } from "astro";
-import type { RankedEntry } from "payload-app/bon-ranking";
 
 import { bonIdentity } from "@services/bonPlayer.ts";
-import { loadRanking } from "@services/bonRanking.ts";
+import { aroundOf, loadRanking, toPublicEntry } from "@services/bonRanking.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { reply } from "@utils/apiReply.ts";
 import { z } from "zod";
@@ -36,18 +35,14 @@ export const GET: APIRoute = async ({ cookies, url }) => {
     const identity = who?.identity;
     const myIndex = identity ? ranking.findIndex((e) => e.identity === identity) : -1;
 
-    const pub = ({ identity: id, ...entry }: RankedEntry) => ({
-      ...entry,
-      ...(id === identity && { isMe: true as const }),
-    });
     const mine = ranking[myIndex];
     return reply(
       {
-        entries: ranking.slice(offset, offset + limit).map(pub),
+        entries: ranking.slice(offset, offset + limit).map(toPublicEntry(identity)),
         ...(mine && {
           me: {
             accuracy: mine.accuracy,
-            around: ranking.slice(Math.max(0, myIndex - 2), myIndex + 3).map(pub),
+            around: aroundOf(ranking, myIndex),
             bestStreak: mine.bestStreak,
             rank: mine.rank,
             score: mine.score,

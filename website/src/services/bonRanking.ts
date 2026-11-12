@@ -1,3 +1,5 @@
+import type { PublicEntry } from "@services/bonLeaderboardApi.ts";
+
 import { bonIdentityOf } from "@services/bonGame.ts";
 import { ttl } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
@@ -57,6 +59,18 @@ const makeCaches = () =>
 let caches = makeCaches();
 
 export const loadRanking = (period: Period) => caches[period]();
+
+/** An entry as the browser sees it: no identity, `isMe` on the asker's own row. */
+export const toPublicEntry =
+  (identity: string | undefined) =>
+  ({ identity: id, ...entry }: RankedEntry): PublicEntry => ({
+    ...entry,
+    ...(id === identity && { isMe: true as const }),
+  });
+
+/** The own row at `index` with up to two neighbours on each side. */
+export const aroundOf = (ranking: RankedEntry[], index: number) =>
+  ranking.slice(Math.max(0, index - 2), index + 3).map(toPublicEntry(ranking[index]!.identity));
 
 /**
  * A finished game must show up in the very next ranking read, not 60 s later.

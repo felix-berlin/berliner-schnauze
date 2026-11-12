@@ -1,3 +1,5 @@
+import type { PublicEntry } from "@services/bonLeaderboardApi.ts";
+
 import { post } from "@services/bonPlayerApi";
 
 export type PublicCard = { id: string; word: string };
@@ -20,6 +22,8 @@ export type FinishResult = {
   /** Place in this week's leaderboard (best game per player), and how many players it has. */
   rank?: number;
   totalPlayers?: number;
+  /** The own row of that week with up to two neighbours each side. */
+  around?: PublicEntry[];
 };
 
 export const startRun = (): Promise<{ token: string; cards: PublicCard[]; tag: string }> =>
