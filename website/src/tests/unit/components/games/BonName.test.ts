@@ -126,6 +126,17 @@ describe("editor", () => {
     expect((wrapper.find("input").element as HTMLInputElement).disabled).toBe(false);
   });
 
+  it("422 on a far-right name points to exit help", async () => {
+    renamePlayer.mockRejectedValue(fail(422));
+    const input = await open();
+    await input.setValue("Nazi");
+    await input.trigger("keydown", { key: "Enter" });
+    await flushPromises();
+    expect(wrapper.find("input").attributes("aria-invalid")).toBe("true");
+    expect(wrapper.text()).toContain("Rechtsextreme Namen jibt’s hier nich.");
+    expect(wrapper.get("a").attributes("href")).toBe("https://www.exit-deutschland.de/");
+  });
+
   it("429 shows the limit text", async () => {
     renamePlayer.mockRejectedValue(fail(429));
     const input = await open();

@@ -74,4 +74,9 @@
     align-items: center;
     gap: 0.5rem 1.25rem;
   }
+
+  &__exit {
+    align-self: flex-start;
+    font-size: 0.9rem;
+  }
 }

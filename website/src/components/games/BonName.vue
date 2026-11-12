@@ -37,7 +37,7 @@
       autocomplete="nickname"
       placeholder="Anonym"
       :disabled="saving"
-      :aria-invalid="error === 'rejected'"
+      :aria-invalid="error === 'rejected' || error === 'far-right'"
       aria-describedby="bon-name-hint bon-name-error"
       @input="error = undefined"
       @keydown.enter.prevent="save"
@@ -54,6 +54,14 @@
         <span class="c-state__body">
           <b>{{ texts[error][0] }}</b>
           <span v-if="texts[error][1]">{{ texts[error][1] }}</span>
+          <a
+            v-if="error === 'far-right'"
+            class="c-textlink c-bon-name__exit"
+            href="https://www.exit-deutschland.de/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >EXIT-Deutschland</a
+          >
         </span>
       </div>
     </div>
@@ -68,7 +76,7 @@
 
 <script setup lang="ts">
 import { renamePlayer, rememberName, type PlayerName } from "@services/bonPlayerApi.ts";
-import { ANONYM } from "payload-app/bon-names";
+import { ANONYM, nameCategory } from "payload-app/bon-names";
 import CheckIcon from "virtual:icons/lucide/check";
 import AlertIcon from "virtual:icons/lucide/circle-alert";
 import { nextTick, onBeforeUnmount, ref, watch } from "vue";
@@ -76,8 +84,12 @@ import { nextTick, onBeforeUnmount, ref, watch } from "vue";
 const props = defineProps<PlayerName>();
 const emit = defineEmits<{ saved: [PlayerName] }>();
 
-type Problem = "rejected" | "limit" | "net";
+type Problem = "rejected" | "far-right" | "limit" | "net";
 const texts: Record<Problem, [string, string?]> = {
+  "far-right": [
+    "Rechtsextreme Namen jibt’s hier nich.",
+    "Willst du raus aus der rechten Szene? Such dir Hilfe:",
+  ],
   limit: ["Heute jenug umjetauft – morjen wieder."],
   net: ["Ditt hat nich jeklappt.", "Dein Name is nich anjekommen. Versuch’s gleich nochmal."],
   rejected: [
@@ -136,7 +148,15 @@ async function save() {
     link.value?.focus();
   } catch (e) {
     const status = (e as { status?: number }).status;
-    error.value = status === 422 ? "rejected" : status === 429 ? "limit" : "net";
+    // The server only says 422; the same filter tells a far-right name apart for the exit hint (as on the intro).
+    error.value =
+      status === 422
+        ? nameCategory(draft.value.trim()) === "far-right"
+          ? "far-right"
+          : "rejected"
+        : status === 429
+          ? "limit"
+          : "net";
     saving.value = false;
     await nextTick();
     input.value?.focus();
