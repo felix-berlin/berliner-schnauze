@@ -195,7 +195,41 @@ jobs:
           cache-from: type=gha,scope=web
           cache-to: type=gha,mode=max,scope=web
 
-      # CMS image: built from source inside Docker (no dist/, no secrets).
+  # CMS image: built from source inside Docker (no dist/, no secrets). `next build` is heavy, so each
+  # platform builds on its own native runner (arm64 under QEMU took ~15 min); docker-cms-merge tags both.
+  docker-cms:
+    name: CMS image (${{ matrix.arch }})
+    needs: release
+    if: ${{ !cancelled() && (github.event_name == 'workflow_dispatch' || needs.release.outputs.released == 'yes') }}
+    strategy:
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-latest
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      # Same release-commit selection as the docker job.
+      - name: Checkout release ✅
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.version && format('v{0}', inputs.version) || github.ref_name }}
+          fetch-depth: ${{ inputs.version && 1 || 0 }}
+
+      - name: Switch to release commit
+        if: github.event_name == 'push'
+        run: git checkout "$(git tag --contains "$GITHUB_SHA" --sort=v:refname --list 'v*' | head -1)"
+
+      - name: Read version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
+
+      # Labels only here (the tags go on the index in docker-cms-merge).
       - name: CMS image tags
         id: meta-cms
         uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
@@ -208,14 +242,100 @@ jobs:
             type=raw,value=latest,enable=${{ github.ref_name == 'main' }}
             type=raw,value=beta,enable=${{ github.ref_name == 'beta' }}
 
-      - name: Build and push CMS image 🐳
+      - name: Login to GHCR 🔐
+        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Docker Buildx 🛠️
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
+
+      # Untagged push: only the digest is kept, docker-cms-merge puts the tags on the multi-arch index.
+      - name: Build and push CMS image by digest 🐳
+        id: build
         uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
         with:
           context: .
           file: payload/Dockerfile
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: ${{ steps.meta-cms.outputs.tags }}
+          platforms: linux/${{ matrix.arch }}
           labels: ${{ steps.meta-cms.outputs.labels }}
-          cache-from: type=gha,scope=cms
-          cache-to: type=gha,mode=max,scope=cms
+          outputs: type=image,name=ghcr.io/felix-berlin/berliner-schnauze-cms,push-by-digest=true,name-canonical=true,push=true
+          cache-from: type=gha,scope=cms-${{ matrix.arch }}
+          cache-to: type=gha,mode=max,scope=cms-${{ matrix.arch }}
+
+      - name: Export digest
+        run: |
+          mkdir -p "$RUNNER_TEMP/digests"
+          touch "$RUNNER_TEMP/digests/${DIGEST#sha256:}"
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v7
+        with:
+          name: cms-digest-${{ matrix.arch }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  docker-cms-merge:
+    name: CMS image (multi-arch tags)
+    needs: docker-cms
+    if: ${{ !cancelled() && needs.docker-cms.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout release ✅
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.version && format('v{0}', inputs.version) || github.ref_name }}
+          fetch-depth: ${{ inputs.version && 1 || 0 }}
+
+      - name: Switch to release commit
+        if: github.event_name == 'push'
+        run: git checkout "$(git tag --contains "$GITHUB_SHA" --sort=v:refname --list 'v*' | head -1)"
+
+      - name: Read version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
+
+      - name: Download digests
+        uses: actions/download-artifact@v8
+        with:
+          pattern: cms-digest-*
+          path: ${{ runner.temp }}/digests
+          merge-multiple: true
+
+      - name: CMS image tags
+        id: meta-cms
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
+        with:
+          images: ghcr.io/felix-berlin/berliner-schnauze-cms
+          flavor: latest=false
+          tags: |
+            type=semver,pattern={{version}},value=v${{ env.VERSION }}
+            type=semver,pattern={{major}}.{{minor}},value=v${{ env.VERSION }}
+            type=raw,value=latest,enable=${{ github.ref_name == 'main' }}
+            type=raw,value=beta,enable=${{ github.ref_name == 'beta' }}
+
+      - name: Login to GHCR 🔐
+        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Docker Buildx 🛠️
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
+
+      - name: Create multi-arch CMS image 🐳
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          docker buildx imagetools create \
+            $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf 'ghcr.io/felix-berlin/berliner-schnauze-cms@sha256:%s ' *)
