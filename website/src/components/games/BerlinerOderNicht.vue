@@ -22,7 +22,6 @@
           :lives="lives"
           :score="score"
           :streak="streak"
-          :multiplier="multiplier"
           :player-label="playerLabel"
         />
         <BonCard
@@ -131,7 +130,6 @@ const {
   history,
   last,
   lives,
-  multiplier,
   phase,
   previousHighScore,
   result,

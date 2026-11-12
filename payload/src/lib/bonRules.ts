@@ -3,12 +3,24 @@
 export const LIVES = 3;
 export const MIN_MS_PER_ANSWER = 700;
 
-export function computeMultiplier(streak: number): number {
-  if (streak >= 10) return 5;
-  if (streak >= 6) return 3;
-  if (streak >= 3) return 2;
-  return 1;
-}
+/** The multiplier ladder, lowest first: from this streak on, points count `mult` times. */
+export const MULTIPLIER_STEPS = [
+  { from: 0, mult: 1 },
+  { from: 3, mult: 2 },
+  { from: 6, mult: 3 },
+  { from: 10, mult: 5 },
+] as const;
+
+/** Index of the step a streak has reached. */
+export const multiplierStep = (streak: number) =>
+  MULTIPLIER_STEPS.filter((s) => streak >= s.from).length - 1;
+
+export const computeMultiplier = (streak: number) => MULTIPLIER_STEPS[multiplierStep(streak)].mult;
+
+/** "×1", "ab 3 · ×2", … as the HUD and the intro show the ladder. */
+export const MULTIPLIER_LABELS = MULTIPLIER_STEPS.map((s) =>
+  s.from ? `ab ${s.from} · ×${s.mult}` : `×${s.mult}`,
+);
 
 export type RunResult = {
   score: number;

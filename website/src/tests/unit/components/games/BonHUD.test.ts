@@ -2,7 +2,7 @@ import BonHUD from "@components/games/BonHUD.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 
-const base = { lives: 3, multiplier: 1, playerLabel: "Anonym", score: 0, streak: 0 };
+const base = { lives: 3, playerLabel: "Anonym", score: 0, streak: 0 };
 const hud = (props: Partial<typeof base> = {}) => mount(BonHUD, { props: { ...base, ...props } });
 
 describe("BonHUD.vue", () => {
@@ -25,16 +25,16 @@ describe("BonHUD.vue", () => {
     const wrapper = hud({ streak: 1 });
     expect(wrapper.text()).toContain("Serie 1");
     expect(wrapper.text()).toContain("noch 2 bis ×2");
-    expect(hud({ multiplier: 2, streak: 4 }).text()).toContain("noch 2 bis ×3");
-    expect(hud({ multiplier: 3, streak: 6 }).text()).toContain("noch 4 bis ×5");
+    expect(hud({ streak: 4 }).text()).toContain("noch 2 bis ×3");
+    expect(hud({ streak: 6 }).text()).toContain("noch 4 bis ×5");
   });
 
   it("says full throttle at ×5", () => {
-    expect(hud({ multiplier: 5, streak: 12 }).text()).toContain("volle Pulle: ×5");
+    expect(hud({ streak: 12 }).text()).toContain("volle Pulle: ×5");
   });
 
   it("marks the current multiplier field and the reached ones", () => {
-    const fields = hud({ multiplier: 3, streak: 7 }).findAll(".c-bon-hud__field");
+    const fields = hud({ streak: 7 }).findAll(".c-bon-hud__field");
     expect(fields.map((f) => f.text().split("·").pop()!.trim())).toEqual(["×1", "×2", "×3", "×5"]);
     expect(fields.map((f) => f.classes())).toEqual([
       expect.arrayContaining(["c-bon-hud__field--reached"]),

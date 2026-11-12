@@ -42,9 +42,9 @@
       </span>
     </div>
 
-    <span class="c-bon-hud__track" role="img" :aria-label="`Multiplikator ×${multiplier}`">
+    <span class="c-bon-hud__track" role="img" :aria-label="`Multiplikator ×${MULTIPLIER_STEPS[current].mult}`">
       <span
-        v-for="(field, i) in FIELDS"
+        v-for="(field, i) in MULTIPLIER_LABELS"
         :key="field"
         :class="[
           'c-bon-hud__field',
@@ -59,23 +59,15 @@
 </template>
 
 <script setup lang="ts">
+import { MULTIPLIER_LABELS, MULTIPLIER_STEPS, multiplierStep } from "payload-app/bon-rules";
 import { computed, defineAsyncComponent, ref, watch } from "vue";
 
 const FlameIcon = defineAsyncComponent(() => import("virtual:icons/lucide/flame"));
-
-// Streak thresholds of the multipliers, see computeMultiplier in useBon.
-const STEPS = [
-  { from: 3, mult: 2 },
-  { from: 6, mult: 3 },
-  { from: 10, mult: 5 },
-];
-const FIELDS = ["×1", "ab 3 · ×2", "ab 6 · ×3", "ab 10 · ×5"];
 
 const props = defineProps<{
   lives: number;
   score: number;
   streak: number;
-  multiplier: number;
   playerLabel: string;
 }>();
 
@@ -91,10 +83,10 @@ watch(
   (now, was) => now < was && hit.value++,
 );
 
-const current = computed(() => [1, 2, 3, 5].indexOf(props.multiplier));
+const current = computed(() => multiplierStep(props.streak));
 
 const next = computed(() => {
-  const step = STEPS.find((s) => props.streak < s.from);
+  const step = MULTIPLIER_STEPS[current.value + 1];
   return step ? `noch ${step.from - props.streak} bis ×${step.mult}` : "volle Pulle: ×5";
 });
 </script>

@@ -127,7 +127,7 @@
               <b>Serie zahlt sich aus.</b><br />
               <span class="t-small">10 Punkte pro richtije Antwort, mal Multiplikator:</span>
               <span class="c-bon-intro__track">
-                <span>×1</span><span>ab 3 · ×2</span><span>ab 6 · ×3</span><span>ab 10 · ×5</span>
+                <span v-for="label in MULTIPLIER_LABELS" :key="label">{{ label }}</span>
               </span>
             </span>
           </li>
@@ -146,6 +146,7 @@ import BonPlayerCode from "@components/games/BonPlayerCode.vue";
 import { fetchPlayerName, rememberName, type PlayerName } from "@services/bonPlayerApi.ts";
 import { $bonStats } from "@stores/bonStats";
 import { nameCategory, type NameCategory } from "payload-app/bon-names";
+import { MULTIPLIER_LABELS } from "payload-app/bon-rules";
 import AlertIcon from "virtual:icons/lucide/circle-alert";
 import FlameIcon from "virtual:icons/lucide/flame";
 import HeartIcon from "virtual:icons/lucide/heart";
