@@ -23,7 +23,8 @@ type SortOrder = "ASC" | "DESC";
 
 export type WordList = {
   activeLetterFilter: string;
-  activeOrderCategory: "alphabetical" | "date" | "modifiedDate";
+  /** "relevance" = best hits first while searching, alphabetical without a term. */
+  activeOrderCategory: "alphabetical" | "date" | "modifiedDate" | "relevance";
   activeThemenFilter: string[];
   activeWordTypeFilter: string[];
   alphabeticalOrder: SortOrder;
@@ -41,7 +42,7 @@ export type WordList = {
 
 const FILTER_DEFAULTS: WordList = {
   activeLetterFilter: "",
-  activeOrderCategory: "alphabetical",
+  activeOrderCategory: "relevance",
   activeThemenFilter: [],
   activeWordTypeFilter: [],
   alphabeticalOrder: "ASC",
@@ -127,13 +128,9 @@ export const setLetterFilter = (letter: string) => {
   trackEvent("WordList", "Filter", `Letter: ${letter}`);
 };
 
-export const $setSortOrder = (
-  category: WordList["activeOrderCategory"],
-  orderName: string,
-  order: "ASC" | "DESC",
-) => {
+export const $setSortOrder = (category: WordList["activeOrderCategory"], order: SortOrder) => {
   $wordSearch.setKey("activeOrderCategory", category);
-  $wordSearch.setKey(orderName as keyof WordList, order);
+  if (category !== "relevance") $wordSearch.setKey(SORT_BY[category].orderKey, order);
 
   trackEvent("WordList", "Sort Order", `${category}: ${order}`);
 };
@@ -205,8 +202,10 @@ function buildWhere(wordSearch: WordList): Record<string, unknown> {
     if (wordSearch[key]) where[`wordProperties.${key}`] = true;
   }
   for (const [key, property] of Object.entries(RANGE_FILTERS)) {
-    const value = wordSearch[key as keyof typeof RANGE_FILTERS];
-    if (value != null) where[`wordProperties.${property}`] = { gte: value };
+    const value: unknown = wordSearch[key as keyof typeof RANGE_FILTERS];
+    // Older versions stored slider values as strings and a cleared number input as "".
+    const min = value === "" || value == null ? Number.NaN : Number(value);
+    if (!Number.isNaN(min)) where[`wordProperties.${property}`] = { gte: min };
   }
   if (wordSearch.activeLetterFilter) {
     where.wordGroup = { eq: wordSearch.activeLetterFilter };
@@ -226,9 +225,42 @@ const SORT_BY = {
   modifiedDate: { orderKey: "modifiedDateOrder", property: "modifiedTs" },
 } as const;
 
-function getSortBy(wordSearch: WordList) {
-  const { orderKey, property } = SORT_BY[wordSearch.activeOrderCategory] ?? SORT_BY.alphabetical;
-  return { order: wordSearch[orderKey], property };
+/** undefined = keep Orama's relevance order (searching with "relevance"). */
+function getSortBy(wordSearch: WordList, term: string) {
+  const category = wordSearch.activeOrderCategory;
+  if (category === "relevance" && term) return undefined;
+  const { orderKey, property } = SORT_BY[category as keyof typeof SORT_BY] ?? SORT_BY.alphabetical;
+  return { order: category === "relevance" ? "ASC" : wordSearch[orderKey], property };
+}
+
+const normalize = (text: string) => text.trim().toLocaleLowerCase("de");
+
+const parts = (text: string) =>
+  normalize(text)
+    .split(/[^\p{L}]+/u)
+    .filter(Boolean);
+
+/** Every word of the search starts a word part of the text ("stinkende füße"). */
+const coversTerm = (text: string, termParts: string[]) => {
+  const textParts = parts(text);
+  return termParts.every((t) => textParts.some((part) => part.startsWith(t)));
+};
+
+/**
+ * Orama scores fuzzy and stemmed hits ("Nauke", "Pauke", "Fusseln") like the real ones, so:
+ * the word itself, then words starting with the term, then words whose parts cover every
+ * search word, then such translations; Orama's score decides within a tier.
+ */
+function matchTier(
+  { berlinerisch, translations }: OramaSearchIndex["wordProperties"],
+  term: string,
+) {
+  const word = normalize(berlinerisch);
+  if (word === term) return 0;
+  if (word.startsWith(term)) return 1;
+  const termParts = parts(term);
+  if (coversTerm(word, termParts)) return 2;
+  return translations.some((t) => coversTerm(t, termParts)) ? 3 : 4;
 }
 
 async function initOrama(words: OramaSearchIndex[]) {
@@ -286,29 +318,45 @@ export const $oramaSearchResults = computedAsync(
 
     try {
       const where = buildWhere(wordSearch);
-      const sortBy = getSortBy(wordSearch);
+      const term = normalize(searchQuery);
+      const sortBy = getSortBy(wordSearch, term);
 
       const params: SearchParamsFullText<Orama<typeof wordSchema>> = {
-        boost: {
-          wordComponents: 1.0,
-          "wordProperties.berlinerisch": 2.5,
-          "wordProperties.translations": 1,
-        },
         limit,
-        // Only the user-facing text fields.
-        properties: [
-          "wordComponents",
-          "wordProperties.berlinerisch",
-          "wordProperties.translations",
-        ],
-        sortBy,
-        term: searchQuery,
-        threshold: 0.5,
-        tolerance: 1,
+        ...(sortBy ? { sortBy } : {}),
+        // Full-text params only with a term: on an empty term properties + threshold
+        // made Orama drop part of the multi-word entries from filtered lists.
+        ...(term
+          ? {
+              boost: {
+                wordComponents: 1.0,
+                "wordProperties.berlinerisch": 2.5,
+                "wordProperties.translations": 1,
+              },
+              // Only the user-facing text fields.
+              properties: [
+                "wordComponents",
+                "wordProperties.berlinerisch",
+                "wordProperties.translations",
+              ],
+              term,
+              threshold: 0.5,
+              tolerance: 1,
+            }
+          : {}),
         ...(Object.keys(where).length > 0 ? { where } : {}),
       };
 
-      return db ? await search(db, params) : null;
+      if (!db) return null;
+      const results = await search(db, params);
+      if (!sortBy) {
+        // Stable sort keeps Orama's score order within a tier.
+        const tiers = new Map(
+          results.hits.map((hit) => [hit, matchTier(hit.document.wordProperties, term)]),
+        );
+        results.hits.sort((a, b) => tiers.get(a)! - tiers.get(b)!);
+      }
+      return results;
     } catch (err) {
       console.error("[wordList] Search failed:", err);
       return null;

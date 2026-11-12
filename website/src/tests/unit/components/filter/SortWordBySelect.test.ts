@@ -1,57 +1,58 @@
 import SortWordBySelect from "@components/filter/SortWordBySelect.vue";
-import { $setSortOrder } from "@stores/wordList.ts";
+import { $setSortOrder, $wordSearch } from "@stores/wordList.ts";
 import { mount } from "@vue/test-utils";
-import { describe, it, expect, vi } from "vitest";
+import { map } from "nanostores";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@stores/wordList.ts", () => ({
-  $setSortOrder: vi.fn(),
-}));
+vi.mock("@stores/wordList.ts", async () => {
+  const { map } = await import("nanostores");
+  return {
+    $setSortOrder: vi.fn(),
+    $wordSearch: map({
+      activeOrderCategory: "relevance",
+      alphabeticalOrder: "ASC",
+      dateOrder: "ASC",
+      modifiedDateOrder: "ASC",
+    }),
+  };
+});
+
+const store = $wordSearch as unknown as ReturnType<typeof map>;
 
 describe("SortWordBySelect.vue", () => {
-  it("renders correctly", () => {
-    const wrapper = mount(SortWordBySelect);
-    expect(wrapper.exists()).toBe(true);
+  beforeEach(() => {
+    vi.clearAllMocks();
+    store.setKey("activeOrderCategory", "relevance");
   });
 
   it("renders a select element with id=sort and name=sort", () => {
-    const wrapper = mount(SortWordBySelect);
-    const select = wrapper.find("select");
-    expect(select.exists()).toBe(true);
+    const select = mount(SortWordBySelect).find("select");
     expect(select.attributes("id")).toBe("sort");
     expect(select.attributes("name")).toBe("sort");
   });
 
-  it("renders at least 3 optgroups (Alphabetisch, Datum, Änderungsdatum)", () => {
-    const wrapper = mount(SortWordBySelect);
-    const optgroups = wrapper.findAll("optgroup");
-    expect(optgroups.length).toBeGreaterThanOrEqual(3);
-    const labels = optgroups.map((g) => g.attributes("label"));
-    expect(labels).toContain("Alphabetisch");
-    expect(labels).toContain("Datum");
-    expect(labels).toContain("Änderungsdatum");
+  it("offers relevance, alphabetical, date and modified date groups", () => {
+    const labels = mount(SortWordBySelect)
+      .findAll("optgroup")
+      .map((g) => g.attributes("label"));
+    expect(labels).toEqual(["Relevanz", "Alphabetisch", "Datum", "Änderungsdatum"]);
+    expect(mount(SortWordBySelect).findAll("option")).toHaveLength(7);
   });
 
-  it("has at least 6 options total", () => {
-    const wrapper = mount(SortWordBySelect);
-    const options = wrapper.findAll("option");
-    expect(options.length).toBeGreaterThanOrEqual(6);
+  it("shows best hits first by default", () => {
+    const select = mount(SortWordBySelect).find("select").element as HTMLSelectElement;
+    expect(select.selectedOptions[0].text.trim()).toBe("Beste Treffer zuerst");
   });
 
-  it("default selected option is Alphabetisch (A - Z)", () => {
-    const wrapper = mount(SortWordBySelect);
-    const options = wrapper.findAll("option");
-    const firstOption = options[0];
-    expect(firstOption.text()).toBe("Alphabetisch (A - Z)");
+  it("shows the persisted sort instead of the first option", () => {
+    store.setKey("activeOrderCategory", "date");
+    store.setKey("dateOrder", "DESC");
+    const select = mount(SortWordBySelect).find("select").element as HTMLSelectElement;
+    expect(select.selectedOptions[0].text.trim()).toBe("neuste zuerst");
   });
 
-  it("calls $setSortOrder when an option is selected", async () => {
-    const wrapper = mount(SortWordBySelect);
-    const select = wrapper.find("select");
-    await select.setValue({
-      category: "alphabetical",
-      name: "Alphabetisch (A - Z)",
-      sort: "ASC",
-    });
-    expect($setSortOrder).toHaveBeenCalledWith("alphabetical", "alphabeticalOrder", "ASC");
+  it("calls $setSortOrder with category and order when an option is selected", async () => {
+    await mount(SortWordBySelect).find("select").setValue("alphabetical:DESC");
+    expect($setSortOrder).toHaveBeenCalledWith("alphabetical", "DESC");
   });
 });

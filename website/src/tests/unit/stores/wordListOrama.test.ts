@@ -323,3 +323,128 @@ describe("$searchResultCount", () => {
     expect($searchResultCount.get()).toBe(0);
   });
 });
+
+// ─── ranking and filters on real-world shapes ────────────────────────────────
+
+/** Minimal index entry; `wordComponents` are the suffixes the server derives. */
+const entry = (
+  slug: string,
+  berlinerisch: string,
+  translations: string[],
+  wordComponents: string[],
+) => ({
+  berlinerischWordTypes: ["Nomen"],
+  dateTs: 1704067200,
+  modifiedTs: 1704153600,
+  slug,
+  themen: [],
+  wordComponents,
+  wordGroup: berlinerisch[0].toUpperCase(),
+  wordProperties: {
+    audioBerlinerisch: false,
+    audioExamples: false,
+    berlinerisch,
+    berolinismus: false,
+    characterLength: berlinerisch.length,
+    consonantsCount: 3,
+    multipleMeanings: false,
+    syllablesCount: 2,
+    translations,
+    vowelsCount: 2,
+  },
+});
+
+// Reported on prod: "Mauken" was found, but alphabetically sorted behind 27 fuzzy hits.
+const mixedIndex = [
+  entry("asche", "Asche", ["Geld"], ["sche"]),
+  entry("bumschekschek", "Bumschekschek", ["Musik mit Pauke und Becken"], ["schekschek", "schek"]),
+  entry("mauke", "Mauke", ["Fuß", "übelriechende Füße"], ["auke"]),
+  entry("mauken", "Mauken", ["furchtbar stinkende Füße"], ["auken", "uken"]),
+  entry("nauke", "Nauke", ["Spottruf"], ["auke"]),
+  entry("fusseln", "Fusseln", ["Flusen"], ["usseln", "sseln"]),
+  entry("fussbad", "Fußbad", ["Bad für die Füße"], ["ußbad", "ßbad"]),
+  entry("pauke", "Pauke", ["Trommel"], ["auke"]),
+  entry("madig-machen", "madig machen", ["schlechtreden"], ["adig", "achen", "chen"]),
+  entry("mantel", "Mantel, was nutzt mich der Mantel", ["Redensart"], ["antel", "ntel", "utzt"]),
+];
+
+const ready = async () => {
+  const { $oramaSearchResults } = await import("@stores/wordList.ts");
+  await vi.waitFor(() => expect($oramaSearchResults.get().status).toBe("ready"), {
+    timeout: 5000,
+  });
+  return $oramaSearchResults.get().value?.hits.map((h) => h.document.slug) ?? [];
+};
+
+describe("search ranking and filters (real Orama)", () => {
+  beforeEach(() => {
+    vi.stubGlobal(
+      "fetch",
+      makeFetch({
+        "/api/search/index.json": Promise.resolve({
+          json: () => Promise.resolve(mixedIndex),
+          ok: true,
+        }),
+      }),
+    );
+  });
+
+  it("puts the exact word first by default while searching", async () => {
+    const { $searchQuery } = await import("@stores/wordList.ts");
+    $searchQuery.set("Mauken");
+    await vi.waitFor(async () => expect((await ready())[0]).toBe("mauken"), { timeout: 5000 });
+  });
+
+  it("ranks the exact word first regardless of case and surrounding spaces", async () => {
+    const { $searchQuery } = await import("@stores/wordList.ts");
+    $searchQuery.set("  mauke ");
+    await vi.waitFor(async () => expect((await ready())[0]).toBe("mauke"), { timeout: 5000 });
+  });
+
+  it("ranks words whose translation contains the term above fuzzy word matches", async () => {
+    const { $searchQuery } = await import("@stores/wordList.ts");
+    $searchQuery.set("Füße");
+    await vi.waitFor(
+      async () => {
+        const slugs = await ready();
+        expect(slugs.slice(0, 3).sort()).toEqual(["fussbad", "mauke", "mauken"]);
+      },
+      { timeout: 4000 },
+    );
+  });
+
+  it("ranks a translation holding every word of a multi-word search first", async () => {
+    const { $searchQuery } = await import("@stores/wordList.ts");
+    $searchQuery.set("stinkende Füße");
+    await vi.waitFor(async () => expect((await ready())[0]).toBe("mauken"), { timeout: 4000 });
+  });
+
+  it("keeps an explicitly chosen sort while searching", async () => {
+    const { $searchQuery, $setSortOrder } = await import("@stores/wordList.ts");
+    $setSortOrder("alphabetical", "DESC");
+    $searchQuery.set("Mauken");
+    await vi.waitFor(
+      async () => {
+        const slugs = await ready();
+        expect(slugs.length).toBeGreaterThan(1);
+        expect(slugs).toEqual([...slugs].sort((a, b) => b.localeCompare(a, "de")));
+      },
+      { timeout: 5000 },
+    );
+  });
+
+  it("lists every word alphabetically without a search term", async () => {
+    expect(await ready()).toEqual([
+      "asche",
+      "bumschekschek",
+      "fussbad",
+      "fusseln",
+      "madig-machen",
+      "mantel",
+      "mauke",
+      "mauken",
+      "nauke",
+      "pauke",
+    ]);
+  });
+});

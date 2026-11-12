@@ -5,7 +5,7 @@
     </legend>
     <input
       :id="id"
-      v-model="rangeValue"
+      v-model.number="rangeValue"
       type="range"
       :max="getMinMax.max"
       :min="getMinMax.min"
@@ -17,7 +17,7 @@
 
     <input
       :id="`${id}-number`"
-      v-model="rangeValue"
+      v-model.number="rangeValue"
       type="number"
       :aria-label="`Anzahl der ${label}`"
       class="c-input c-input--number"
@@ -63,7 +63,8 @@ const searchMeta = useStore($searchMeta);
 // only written on slider release or after a typing pause, not per drag step.
 const rangeValue = ref(storeValue.value);
 const commit = () => {
-  storeValue.value = rangeValue.value;
+  // A cleared number input yields "", which is no filter.
+  storeValue.value = typeof rangeValue.value === "number" ? rangeValue.value : undefined;
 };
 const debouncedCommit = useDebounceFn(commit, 300);
 

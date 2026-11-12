@@ -68,7 +68,7 @@ describe("wordList store", () => {
       const { $wordSearch, $searchQuery } = await import("@stores/wordList.ts");
       const state = $wordSearch.get();
       expect(state.activeLetterFilter).toBe("");
-      expect(state.activeOrderCategory).toBe("alphabetical");
+      expect(state.activeOrderCategory).toBe("relevance");
       expect(state.activeWordTypeFilter).toEqual([]);
       expect(state.activeThemenFilter).toEqual([]);
       expect(state.alphabeticalOrder).toBe("ASC");
@@ -202,7 +202,7 @@ describe("wordList store", () => {
       const state = $wordSearch.get();
       expect(state.characterCount).toBeUndefined();
       expect(state.multipleMeanings).toBe(false);
-      expect(state.activeOrderCategory).toBe("alphabetical");
+      expect(state.activeOrderCategory).toBe("relevance");
       expect(state.modifiedDateOrder).toBe("ASC");
       expect($activeFilterCount.get()).toBe(0);
     });
@@ -266,7 +266,7 @@ describe("wordList store", () => {
   describe("$setSortOrder", () => {
     it("sets category and order", async () => {
       const { $wordSearch, $setSortOrder } = await import("@stores/wordList.ts");
-      $setSortOrder("date", "dateOrder", "DESC");
+      $setSortOrder("date", "DESC");
       expect($wordSearch.get().activeOrderCategory).toBe("date");
       expect($wordSearch.get().dateOrder).toBe("DESC");
     });
@@ -274,8 +274,16 @@ describe("wordList store", () => {
     it("calls trackEvent", async () => {
       const { $setSortOrder } = await import("@stores/wordList.ts");
       const { trackEvent } = await import("@utils/analytics");
-      $setSortOrder("alphabetical", "alphabeticalOrder", "ASC");
+      $setSortOrder("alphabetical", "ASC");
       expect(trackEvent).toHaveBeenCalledWith("WordList", "Sort Order", "alphabetical: ASC");
+    });
+
+    it("keeps the stored orders when switching to relevance", async () => {
+      const { $wordSearch, $setSortOrder } = await import("@stores/wordList.ts");
+      $setSortOrder("date", "DESC");
+      $setSortOrder("relevance", "DESC");
+      expect($wordSearch.get().activeOrderCategory).toBe("relevance");
+      expect($wordSearch.get().dateOrder).toBe("DESC");
     });
   });
 
@@ -384,7 +392,7 @@ describe("wordList store", () => {
       expect(capturedCbRef.fn).toBeDefined();
       // fetch mock returns a non-array object → resultLimit = undefined → limit falls through to ?? 10
       // create mock returns undefined → db stays falsy → returns null (line 433 false branch)
-      const result = await capturedCbRef.fn!($wordSearch.get());
+      const result = await capturedCbRef.fn!($wordSearch.get(), "");
       expect(result).toBeNull();
     });
 
@@ -398,7 +406,7 @@ describe("wordList store", () => {
       } as unknown as never);
       const { $wordSearch } = await import("@stores/wordList.ts");
       expect(capturedCbRef.fn).toBeDefined();
-      const result = await capturedCbRef.fn!($wordSearch.get());
+      const result = await capturedCbRef.fn!($wordSearch.get(), "");
       expect(search).toHaveBeenCalled();
       expect(result).toBeDefined();
     });
@@ -459,6 +467,49 @@ describe("wordList store", () => {
       expect(vi.mocked(search).mock.calls.at(-1)?.[1]).not.toHaveProperty("where");
     });
 
+    it("sends no full-text params without a search term", async () => {
+      // properties + threshold on an empty term made Orama drop ~15 % of multi-word entries.
+      const { create, search } = await import("@orama/orama");
+      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
+      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
+      const { $wordSearch } = await import("@stores/wordList.ts");
+      await capturedCbRef.fn!({ ...$wordSearch.get(), activeLetterFilter: "M" }, "  ");
+      const params = vi.mocked(search).mock.calls.at(-1)?.[1];
+      expect(params).not.toHaveProperty("threshold");
+      expect(params).not.toHaveProperty("properties");
+      expect(params).not.toHaveProperty("tolerance");
+      expect(params).toMatchObject({
+        sortBy: { order: "ASC", property: "wordProperties.berlinerisch" },
+        where: { wordGroup: { eq: "M" } },
+      });
+    });
+
+    it("ignores a range filter cleared to an empty string", async () => {
+      const { create, search } = await import("@orama/orama");
+      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
+      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
+      const { $wordSearch } = await import("@stores/wordList.ts");
+      await capturedCbRef.fn!(
+        { ...$wordSearch.get(), syllablesCount: "" as unknown as number },
+        "",
+      );
+      expect(vi.mocked(search).mock.calls.at(-1)?.[1]).not.toHaveProperty("where");
+    });
+
+    it("compares a slider value persisted as a string as a number", async () => {
+      const { create, search } = await import("@orama/orama");
+      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
+      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
+      const { $wordSearch } = await import("@stores/wordList.ts");
+      await capturedCbRef.fn!(
+        { ...$wordSearch.get(), syllablesCount: "3" as unknown as number },
+        "",
+      );
+      expect(vi.mocked(search).mock.calls.at(-1)?.[1].where).toEqual({
+        "wordProperties.syllablesCount": { gte: 3 },
+      });
+    });
+
     it("fetches the search index only once for concurrent computations (single-flight)", async () => {
       const fetchSpy = vi.fn(() => Promise.resolve({ json: () => Promise.resolve([]), ok: true }));
       globalThis.fetch = fetchSpy as unknown as typeof fetch;
@@ -485,7 +536,7 @@ describe("wordList store", () => {
         Promise.resolve({ json: () => Promise.resolve([]), ok: true }),
       );
       globalThis.fetch = retryFetch as unknown as typeof fetch;
-      const result = await capturedCbRef.fn!($wordSearch.get());
+      const result = await capturedCbRef.fn!($wordSearch.get(), "");
       expect(retryFetch).toHaveBeenCalledWith("/api/search/index.json");
       expect(result).toBeNull(); // create mock returns undefined → db falsy → null
 

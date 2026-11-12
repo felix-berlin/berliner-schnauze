@@ -89,7 +89,7 @@ describe("WordRangeSlider.vue", () => {
     await range.trigger("input");
     expect(rangeRef.value).toBeUndefined();
     await range.trigger("change");
-    expect(rangeRef.value).toBe("5");
+    expect(rangeRef.value).toBe(5);
   });
 
   it("number input writes the store after a typing pause", async () => {
