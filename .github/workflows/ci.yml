@@ -68,5 +68,11 @@ jobs:
       - name: Lint
         run: pnpm run lint
 
+      # `pnpm run lint` fixes in place; these two only check, so the gate cannot pass by self-repair.
+      - name: Design token gate
+        run: |
+          pnpm run lint:style:check
+          pnpm run tokens:check
+
       - name: Type check
         run: pnpm run typechecking

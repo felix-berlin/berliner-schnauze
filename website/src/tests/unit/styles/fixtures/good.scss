@@ -1,0 +1,29 @@
+// What `mx.component` will emit (Task 5), written out plainly so the fixture needs no mixin.
+@layer components {
+  @scope (.c-demo) to (:scope [class^="c-"], :scope [class*=" c-"], :scope [data-slot] > *) {
+    :scope {
+      --_hero-size: 3.25rem; // one-off, kept private (spec §5.6)
+
+      margin: 0;
+      padding: var(--space-4);
+      color: var(--color-text-body);
+      background: var(--color-surface-paper);
+      border: 1px solid var(--color-border-card);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-paper-lift);
+      font-size: var(--_hero-size);
+      font-family: var(--font-family-body);
+      z-index: var(--z-raised);
+      transition: opacity var(--duration-fast) var(--ease-standard);
+    }
+
+    .title {
+      margin-block-end: var(--space-2);
+      color: var(--color-text-strong);
+
+      &:hover {
+        color: var(--color-text-accent);
+      }
+    }
+  }
+}
