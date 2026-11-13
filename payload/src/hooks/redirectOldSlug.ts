@@ -1,4 +1,8 @@
-import type { CollectionAfterChangeHook, CollectionBeforeChangeHook, CollectionConfig } from "payload";
+import type {
+  CollectionAfterChangeHook,
+  CollectionBeforeChangeHook,
+  CollectionConfig,
+} from "payload";
 
 import { docPath, isRoutedCollection } from "../lib/routes";
 
@@ -7,7 +11,7 @@ export const contextKey = (id: number | string) => `publicSlug:${id}`;
 /**
  * Remembers the slug the public page has before a publishing save. `originalDoc` is the latest version: the public
  * doc when that is published (or the collection has no drafts), else a draft, and only then is the published doc
- * looked up (the collection table still holds it).
+ * looked up (the collection table still holds it), or, if it was unpublished since, its last published version.
  */
 export const rememberPublicSlug: CollectionBeforeChangeHook = async ({
   collection,
@@ -30,7 +34,20 @@ export const rememberPublicSlug: CollectionBeforeChangeHook = async ({
     req,
     select: { _status: true, slug: true },
   });
-  if (published?._status === "published") req.context[contextKey(originalDoc.id)] = published.slug;
+  if (published?._status === "published") {
+    req.context[contextKey(originalDoc.id)] = published.slug;
+    return data;
+  }
+  // Unpublished in between (published → draft → new slug → published): the last published version still had a URL.
+  const { docs } = await req.payload.findVersions({
+    collection: collection.slug as "words",
+    depth: 0,
+    limit: 1,
+    req,
+    sort: "-updatedAt",
+    where: { parent: { equals: originalDoc.id }, "version._status": { equals: "published" } },
+  });
+  if (docs[0]) req.context[contextKey(originalDoc.id)] = docs[0].version.slug;
   return data;
 };
 

@@ -1,6 +1,18 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  utimesSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const { renderOgImage, fetchWordBySlug } = vi.hoisted(() => ({
+const { renderOgImage, fetchWordBySlug, cache } = vi.hoisted(() => ({
+  cache: { dir: "" },
   fetchWordBySlug: vi.fn(),
   renderOgImage: vi.fn(),
 }));
@@ -10,7 +22,11 @@ vi.mock("@services/payload/words.ts", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@services/payload/words.ts")>()),
   fetchWordBySlug,
 }));
-vi.mock("astro:env/server", () => ({ OG_CACHE_DIR: "/data/og" }));
+vi.mock("astro:env/server", () => ({
+  get OG_CACHE_DIR() {
+    return cache.dir;
+  },
+}));
 
 import type { APIContext } from "astro";
 
@@ -20,19 +36,26 @@ const PNG = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
 const call = (wordSlug: string | undefined) =>
   GET({ params: { wordSlug } } as unknown as APIContext);
 
+const UPDATED = "2026-01-01T00:00:00.000Z";
+
 beforeEach(() => {
   vi.clearAllMocks();
+  // A fresh subdir that does not exist yet: the route creates it.
+  cache.dir = join(mkdtempSync(join(tmpdir(), "og-route-")), "og");
   renderOgImage.mockResolvedValue(PNG);
   const words = [
     {
       berlinerisch: "Wat",
       slug: "wat",
       translations: [{ translation: "was" }, { translation: "etwas" }],
+      updatedAt: UPDATED,
     },
-    { berlinerisch: "Nischt", slug: "nischt", translations: [] },
+    { berlinerisch: "Nischt", slug: "nischt", translations: [], updatedAt: UPDATED },
   ];
   fetchWordBySlug.mockImplementation(async (slug: string) => words.find((w) => w.slug === slug));
 });
+
+afterEach(() => rmSync(join(cache.dir, ".."), { force: true, recursive: true }));
 
 describe("og/[wordSlug] route", () => {
   it("renders a png with the headword as title and the translations as description", async () => {
@@ -41,8 +64,44 @@ describe("og/[wordSlug] route", () => {
     expect(res.headers.get("Content-Type")).toBe("image/png");
     expect(res.headers.get("Cache-Control")).toBe("public, max-age=86400");
     expect(renderOgImage).toHaveBeenCalledWith(
-      expect.objectContaining({ cacheDir: "/data/og", description: "was, etwas", title: "Wat" }),
+      expect.objectContaining({ cacheDir: false, description: "was, etwas", title: "Wat" }),
     );
+    expect(readFileSync(join(cache.dir, "wat.png"))).toEqual(PNG);
+  });
+
+  it("serves <slug>.png from the cache without rendering while it is newer than the word", async () => {
+    await call("wat.png");
+    renderOgImage.mockClear();
+    const res = await call("wat.png");
+    expect(renderOgImage).not.toHaveBeenCalled();
+    expect(Buffer.from(await res.arrayBuffer())).toEqual(PNG);
+    expect(res.headers.get("Cache-Control")).toBe("public, max-age=86400");
+  });
+
+  it("re-renders and overwrites the cached file once the word changed after it", async () => {
+    await call("wat.png");
+    const stale = new Date(Date.parse(UPDATED) - 1000);
+    utimesSync(join(cache.dir, "wat.png"), stale, stale);
+    renderOgImage.mockClear();
+    await call("wat.png");
+    expect(renderOgImage).toHaveBeenCalledOnce();
+    expect(existsSync(join(cache.dir, "wat.png"))).toBe(true);
+  });
+
+  it("still serves the image when the cache dir cannot be written", async () => {
+    // A file where the cache dir should be: mkdir fails like on a read-only or broken volume.
+    mkdirSync(join(cache.dir, ".."), { recursive: true });
+    writeFileSync(cache.dir, "");
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    const res = await call("wat.png");
+    expect(res.status).toBe(200);
+    expect(Buffer.from(await res.arrayBuffer())).toEqual(PNG);
+    expect(error).toHaveBeenCalledWith(
+      "[og] could not cache",
+      join(cache.dir, "wat.png"),
+      expect.anything(),
+    );
+    error.mockRestore();
   });
 
   it("omits an empty description", async () => {

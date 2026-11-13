@@ -237,11 +237,6 @@ export default defineConfig({
         context: "client",
         access: "public",
       }),
-      WIKIMEDIA_API_AUTH_TOKEN: envField.string({
-        context: "client",
-        access: "public",
-        optional: true,
-      }),
       SHOW_TEST_DATA: envField.boolean({
         context: "client",
         access: "public",

@@ -17,21 +17,20 @@ const audioRows = (name: string): Field => ({
 
 /** comments.word, word_feedback.word_id and word_stats.word_id are required (not-null FK): take the word's comments, feedback and daily stats along. Top-level comments first, their hook removes the replies. */
 const deleteComments: CollectionBeforeDeleteHook = async ({ id, req }) => {
+  const where = { word: { equals: id } };
+  // Feedback and stats have no hooks: one SQL delete each instead of one payload.delete per row (it throws on failure).
+  await req.payload.db.deleteMany({ collection: "word-feedback", where, req });
+  await req.payload.db.deleteMany({ collection: "word-stats", where, req });
   // A bulk delete reports per-document failures in `errors` instead of throwing: a row left behind would only
   // surface later as an opaque not-null FK error on the word delete.
-  const removed = [
-    await req.payload.delete({ collection: "word-feedback", where: { word: { equals: id } }, req }),
-    await req.payload.delete({ collection: "word-stats", where: { word: { equals: id } }, req }),
-    await req.payload.delete({
-      collection: "comments",
-      where: { word: { equals: id }, parent: { exists: false } },
-      req,
-    }),
-  ];
-  const failed = removed.flatMap((r) => r.errors ?? []);
-  if (failed.length)
+  const { errors } = await req.payload.delete({
+    collection: "comments",
+    where: { ...where, parent: { exists: false } },
+    req,
+  });
+  if (errors.length)
     throw new Error(
-      `Could not remove the word's feedback/stats/comments: ${failed.map((e) => e.message).join("; ")}`,
+      `Could not remove the word's comments: ${errors.map((e) => e.message).join("; ")}`,
     );
 };
 

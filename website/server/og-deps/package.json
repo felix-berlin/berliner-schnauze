@@ -1,0 +1,9 @@
+{
+  "name": "og-deps",
+  "private": true,
+  "description": "Runtime deps of the OG worker in the Docker image (website/Dockerfile). Versions must match website/package.json.",
+  "dependencies": {
+    "astro-og-canvas": "0.13.3",
+    "canvaskit-wasm": "0.42.0"
+  }
+}

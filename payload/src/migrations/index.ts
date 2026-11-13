@@ -23,6 +23,7 @@ import * as migration_20261106_165028_feedback_visitor_nullable from './20261106
 import * as migration_20261110_212112_bon_games from './20261110_212112_bon_games';
 import * as migration_20261110_215311_bon_players from './20261110_215311_bon_players';
 import * as migration_20261111_165631_bon_name_reports from './20261111_165631_bon_name_reports';
+import * as migration_20261113_120000_hash_visitor_ids_catchup from './20261113_120000_hash_visitor_ids_catchup';
 
 export const migrations = [
   {
@@ -149,5 +150,10 @@ export const migrations = [
     up: migration_20261111_165631_bon_name_reports.up,
     down: migration_20261111_165631_bon_name_reports.down,
     name: '20261111_165631_bon_name_reports'
+  },
+  {
+    up: migration_20261113_120000_hash_visitor_ids_catchup.up,
+    down: migration_20261113_120000_hash_visitor_ids_catchup.down,
+    name: '20261113_120000_hash_visitor_ids_catchup',
   },
 ];

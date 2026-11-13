@@ -9,13 +9,9 @@ import type {
 import { APIError, ValidationError } from "payload";
 
 import { authenticatedOnly } from "../access";
-import { COMMENT_MAX, containsLink, NAME_MAX } from "../lib/comments";
+import { COMMENT_MAX, containsLink, idOf, NAME_MAX } from "../lib/comments";
 import { commentAdminLink, notifyEditors } from "../lib/notifyEditors";
-
-const idOf = (rel: unknown): number | undefined =>
-  rel && typeof rel === "object"
-    ? (rel as { id: number }).id
-    : ((rel as number | undefined) ?? undefined);
+import { siteUrl } from "../lib/routes";
 
 /** Replies are one level deep: a reply to a reply goes to the top-level comment; a parent must belong to the same word. */
 const flattenParent: CollectionBeforeValidateHook = async ({ data, originalDoc, req }) => {
@@ -63,7 +59,7 @@ const applyRules: CollectionBeforeChangeHook = ({ data, operation, originalDoc, 
   return data;
 };
 
-const mailEditors: CollectionAfterChangeHook = ({ doc, operation, previousDoc, req, context }) => {
+const mailEditors: CollectionAfterChangeHook = async ({ doc, operation, previousDoc, req, context }) => {
   if (context.skipCommentHooks) return doc;
   const becamePending =
     operation === "update" &&
@@ -71,12 +67,20 @@ const mailEditors: CollectionAfterChangeHook = ({ doc, operation, previousDoc, r
     doc.status === "pending" &&
     previousDoc?.status !== "pending";
   if (operation !== "create" && !becamePending) return doc;
-  const word = typeof doc.word === "object" ? doc.word : { id: doc.word };
+  // A create carries only the word id; editors need the word itself, not its database id.
+  const word =
+    typeof doc.word === "object"
+      ? doc.word
+      : await req.payload
+          .findByID({ collection: "words", id: doc.word, depth: 0, req, select: { berlinerisch: true, slug: true } })
+          .catch(() => ({ id: doc.word }));
   const subject = becamePending
     ? "Kommentar bearbeitet, wartet auf Freigabe – Berliner Schnauze"
     : `Neuer Kommentar${doc.status === "pending" ? " (wartet auf Freigabe)" : ""} – Berliner Schnauze`;
   notifyEditors(req, subject, [
-    `Wort: ${word.id}${"slug" in word && word.slug ? ` (${word.slug})` : ""}`,
+    "berlinerisch" in word && word.berlinerisch
+      ? `Wort: ${word.berlinerisch} – ${siteUrl()}/wort/${word.slug}`
+      : `Wort: ${word.id}`,
     `Name: ${doc.authorName ?? ""}`,
     `Text: ${doc.text}`,
     "",

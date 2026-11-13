@@ -1,9 +1,14 @@
 import type { DealtCard } from "@utils/bonDeck.ts";
+import type { Where } from "payload";
 
 import { getPayloadClient } from "@services/payload.ts";
 import { sha256 } from "@services/payload/comments.ts";
 
 export type Batch = { issuedAt: number; start: number };
+
+// 20 × 20 = 400 cards, one answer each: stays below the /api/bon/answer rate limit (450 per 10 min, utils/rateLimit.ts).
+export const MAX_BATCHES = 20;
+
 type Client = Awaited<ReturnType<typeof getPayloadClient>>;
 
 // `next` and `answer` both rewrite `cards` from a read copy; serialize them per token or one erases the other's write.
@@ -30,6 +35,18 @@ export const bonIdentityOf = (
   player: number | { id: number } | null | undefined,
   visitor?: string,
 ) => (player == null ? `v:${visitor}` : `p:${typeof player === "object" ? player.id : player}`);
+
+/** The games the ranking counts as this identity's: a player's, or a visitor's not yet claimed by a player. */
+export const gamesOf = ({
+  playerId,
+  visitor,
+}: {
+  playerId?: number;
+  visitor?: string | null;
+}): Where =>
+  playerId === undefined
+    ? { and: [{ visitor: { equals: visitor! } }, { player: { exists: false } }] }
+    : { player: { equals: playerId } };
 
 export const wrongAnswers = (cards: DealtCard[]) =>
   cards.filter((c) => c.answer !== undefined && c.answer !== c.isReal).length;

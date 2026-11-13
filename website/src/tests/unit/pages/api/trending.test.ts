@@ -70,6 +70,8 @@ describe("GET /api/trending", () => {
     "type=x",
     "type=viewed&days=0",
     "type=viewed&days=366",
+    "type=viewed&days=8",
+    "type=viewed&days=365&limit=51",
     "type=viewed&days=abc",
     "type=viewed&limit=0",
     "type=viewed&limit=51",
@@ -81,21 +83,22 @@ describe("GET /api/trending", () => {
   });
 
   it("caches per type and days for 5 minutes, whatever the limit", async () => {
-    await get("type=rising&days=7&limit=5");
-    await get("type=rising&days=7&limit=6");
+    // memos live per module: every test uses its own type:days key
+    await Promise.all([get("type=rising&days=7&limit=5"), get("type=rising&days=7&limit=6")]);
     expect(trending).toHaveBeenCalledTimes(1);
-    await get("type=rising&days=8&limit=5");
+    expect((await (await get("type=rising&days=7&limit=1")).json()).items).toHaveLength(1);
+    await get("type=rising&days=365&limit=5");
     expect(trending).toHaveBeenCalledTimes(2);
     vi.advanceTimersByTime(5 * 60_000 + 1);
-    await get("type=rising&days=7&limit=5");
-    expect(trending).toHaveBeenCalledTimes(3);
+    expect((await get("type=rising&days=7&limit=5")).status).toBe(200);
+    await vi.waitFor(() => expect(trending).toHaveBeenCalledTimes(3));
   });
 
   it("502, logged and not cached, when trending throws", async () => {
     const error = vi.spyOn(console, "error").mockImplementation(() => {});
     trending.mockRejectedValueOnce(new Error("db down"));
-    expect((await get("type=engaged&days=2")).status).toBe(502);
+    expect((await get("type=engaged&days=7")).status).toBe(502);
     expect(error).toHaveBeenCalled();
-    expect((await get("type=engaged&days=2")).status).toBe(200);
+    expect((await get("type=engaged&days=7")).status).toBe(200);
   });
 });

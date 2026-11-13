@@ -185,7 +185,8 @@ const loadAllWords = async (): Promise<SiteWord[]> => {
   return words.sort(byHeadword);
 };
 
-// German collation here, not the database's: the neighbor sections depend on this order.
+// German collation here, not the database's: lists built from fetchAllWords (search index, llms.txt, Anki)
+// keep this order; the neighbour sections and the word of the day sort their own copy.
 const byHeadword = (a: SiteWord, b: SiteWord) => a.berlinerisch.localeCompare(b.berlinerisch, "de");
 
 /** The latest version of a word, draft included, for the editor's preview (never cached). */

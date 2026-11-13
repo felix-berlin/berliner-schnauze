@@ -69,6 +69,8 @@ describe("comments", () => {
     expect(send).toHaveBeenCalledOnce();
     const mail = send.mock.calls[0]![0] as { text: string };
     expect(mail.text).toContain(`/admin/collections/comments/${c.id}`);
+    expect(mail.text).toContain("Wort: Kommentartest – ");
+    expect(mail.text).toContain("/wort/comments-test-wort");
   });
 
   it("holds a comment with a link", async () => {

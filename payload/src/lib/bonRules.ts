@@ -29,8 +29,15 @@ export type RunResult = {
   correctAnswers: number;
 };
 
-/** `solutions[i]` is isReal of the i-th dealt card. Only a run ending exactly at the LIVES-th wrong guess is valid. */
-export function verifyRun(solutions: boolean[], guesses: boolean[]): RunResult | null {
+/**
+ * `solutions[i]` is isReal of the i-th dealt card. Only a run ending exactly at the LIVES-th wrong guess is valid,
+ * or, when `lastDeal` says no more cards will be dealt, one that answered every dealt card.
+ */
+export function verifyRun(
+  solutions: boolean[],
+  guesses: boolean[],
+  lastDeal = false,
+): RunResult | null {
   if (guesses.length === 0 || guesses.length > solutions.length) return null;
   let score = 0;
   let streak = 0;
@@ -49,7 +56,7 @@ export function verifyRun(solutions: boolean[], guesses: boolean[]): RunResult |
       wrong++;
     }
   }
-  if (wrong !== LIVES) return null;
+  if (wrong !== LIVES && !(lastDeal && guesses.length === solutions.length)) return null;
   return { score, bestStreak, totalAnswered: guesses.length, correctAnswers };
 }
 

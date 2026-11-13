@@ -3,10 +3,8 @@ import type { CollectionAfterChangeHook, CollectionAfterDeleteHook, PayloadReque
 
 import { sql } from "@payloadcms/db-postgres/drizzle";
 
-import { shouldAutoHide } from "../lib/comments";
+import { idOf, shouldAutoHide } from "../lib/comments";
 import { commentAdminLink, notifyEditors } from "../lib/notifyEditors";
-
-const idOf = (rel: number | { id: number }): number => (typeof rel === "object" ? rel.id : rel);
 
 /**
  * Serializes recounts of one comment: a concurrent vote/report waits here until the other transaction commits, so

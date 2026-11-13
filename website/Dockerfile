@@ -4,14 +4,14 @@
 # (its .wasm), loaded by the OG worker thread (server/og-worker.mjs). Only those are installed below.
 # Pure JS and wasm, so they are fetched once on the build platform for every target.
 FROM --platform=$BUILDPLATFORM node:26-slim@sha256:5adad64f9a1fca2d51972caa65983634c8a774eb300d72b20f7f2a0f60368072 AS og-deps
-# package.json is only read for the (exact, lockfile-matching) version, never installed (it would run the pnpm-only preinstall).
+# server/og-deps pins them with a package-lock (transitive deps too). website/package.json is only read to check
+# that its versions match, never installed (it would run the pnpm-only preinstall).
 COPY package.json /meta/package.json
 WORKDIR /deps
+COPY server/og-deps/package.json server/og-deps/package-lock.json ./
 # --legacy-peer-deps: astro-og-canvas's peer `astro` is not needed to render.
-RUN npm install --omit=dev --no-audit --no-fund --no-package-lock --ignore-scripts \
-    --legacy-peer-deps \
-    "canvaskit-wasm@$(node -p "require('/meta/package.json').dependencies['canvaskit-wasm']")" \
-    "astro-og-canvas@$(node -p "require('/meta/package.json').dependencies['astro-og-canvas']")" \
+RUN node -e "const w=require('/meta/package.json').dependencies,o=require('./package.json').dependencies;for(const n in o)if(o[n]!==w[n])throw new Error('server/og-deps: '+n+' '+o[n]+' != website '+w[n])" \
+ && npm ci --omit=dev --ignore-scripts --legacy-peer-deps --no-audit --no-fund \
  && mkdir og-cache
 
 FROM --platform=$BUILDPLATFORM node:26-slim@sha256:5adad64f9a1fca2d51972caa65983634c8a774eb300d72b20f7f2a0f60368072 AS infisical-cli

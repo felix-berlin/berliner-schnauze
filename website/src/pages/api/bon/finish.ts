@@ -1,13 +1,20 @@
 import type { FinishResult } from "@services/bonGameApi.ts";
 import type { APIRoute } from "astro";
 
-import { bonIdentityOf, bonVisitor, findGame, withGameLock } from "@services/bonGame.ts";
+import {
+  bonIdentityOf,
+  bonVisitor,
+  findGame,
+  gamesOf,
+  MAX_BATCHES,
+  withGameLock,
+} from "@services/bonGame.ts";
 import { aroundOf, invalidateRanking, loadRanking } from "@services/bonRanking.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";
 import { finishSchema } from "@utils/bonSchema.ts";
-import { ANONYM } from "payload-app/bon-names";
+import { ANONYM, NAME_REPORT_LIMIT } from "payload-app/bon-names";
 import { plausibleTiming, verifyRun } from "payload-app/bon-rules";
 
 const INVALID = { error: "Ungültiges Spiel" };
@@ -58,7 +65,31 @@ export const POST: APIRoute = async ({ cookies, request }) => {
                   lookupFailed = true;
                   return undefined;
                 });
-        const playerName = storedName ?? sentName;
+        let playerName = storedName ?? sentName;
+        // A name hidden after reports on an earlier game must not come back with fresh reports (as in the rename).
+        if (playerName && playerName !== ANONYM) {
+          const norm = (v: string | null | undefined) => (v ?? "").trim().toLowerCase();
+          const { docs: earlier } = await payload.find({
+            collection: "bon-games",
+            depth: 0,
+            pagination: false,
+            select: { nameHidden: true, nameReports: true, playerName: true },
+            where: {
+              and: [
+                gamesOf({ playerId, visitor: game.visitor }),
+                { status: { equals: "finished" } },
+              ],
+            },
+          });
+          if (
+            earlier.some(
+              (g) =>
+                (g.nameHidden || (g.nameReports ?? 0) >= NAME_REPORT_LIMIT) &&
+                norm(g.playerName) === norm(playerName),
+            )
+          )
+            playerName = ANONYM;
+        }
 
         const { batches, cards } = game;
         const now = Date.now();
@@ -67,11 +98,13 @@ export const POST: APIRoute = async ({ cookies, request }) => {
           console.warn("[bon] finish rejected:", reason, { answers: guesses.length, id: game.id });
           return reply(INVALID, 400);
         };
+        // A run that answered every card of the last batch ends there, short of the last life.
         const result = verifyRun(
           cards.map((c) => c.isReal),
           guesses,
+          batches.length === MAX_BATCHES,
         );
-        if (!result) return rejected("run does not end at the last life");
+        if (!result) return rejected("run does not end at the last life or the last card");
         if (batches.length === 0 || !plausibleTiming(batches, guesses.length, now))
           return rejected("implausible timing");
 

@@ -1,4 +1,10 @@
-import { clientIp, networkKey, rateLimited, rateLimitRule } from "@utils/rateLimit.ts";
+import {
+  clientIp,
+  networkKey,
+  rateLimited,
+  rateLimitRule,
+  resetRateLimits,
+} from "@utils/rateLimit.ts";
 import { describe, expect, it } from "vitest";
 
 describe("rateLimit", () => {
@@ -117,6 +123,20 @@ describe("rateLimit", () => {
       windowMs: 10 * 60_000,
     });
     expect(rateLimitRule("/api/bon/report-name", "GET")).toBeUndefined();
+  });
+
+  it("prunes at most once a minute and then drops the oldest clients above 100 000", () => {
+    resetRateLimits();
+    const rule = { max: 1, prefix: "/prune", windowMs: 60 * 60_000 };
+    const t = 1_000_000;
+    // 100 011 live clients; the scan at the 10 001st sets the minute
+    for (let i = 0; i <= 100_010; i++) rateLimited(`c${i}`, rule, t);
+    expect(rateLimited("c0", rule, t + 59_999)).toBeGreaterThan(0);
+    rateLimited("new", rule, t + 60_000);
+    expect(rateLimited("c0", rule, t + 60_001)).toBe(0);
+    expect(rateLimited("c10", rule, t + 60_001)).toBe(0);
+    expect(rateLimited("c11", rule, t + 60_001)).toBeGreaterThan(0);
+    resetRateLimits();
   });
 
   it("takes the last forwarded-for entry, else the socket address", () => {

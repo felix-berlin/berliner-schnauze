@@ -1,6 +1,3 @@
-import type { Word } from "payload-app";
-
-import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
 // Deep import: the package entry loads all of natural (classifiers, WordNet, ...) for this one function.
 import JaroWinklerDistance from "natural/lib/natural/distance/jaro-winkler_distance.js";
 import {
@@ -94,29 +91,6 @@ export const similarWords = (
   }
 
   return results;
-};
-
-export const createWikimediaFileList = async (wikimediaFiles: Word["wikimediaFiles"]) => {
-  if (!wikimediaFiles?.length) return [];
-
-  const results = await Promise.allSettled(
-    wikimediaFiles.map(async (file) => {
-      const img = await fetchWikimediaAPI(file?.wikimediaFile ?? "");
-      return { caption: file?.caption, description: file?.description, image: img };
-    }),
-  );
-
-  const failed = results.filter((r): r is PromiseRejectedResult => r.status === "rejected");
-  if (failed.length > 0) {
-    console.error(
-      "[wordHelper] createWikimediaFileList: failed to fetch",
-      failed.length,
-      "file(s):",
-      failed.map((f) => f.reason),
-    );
-  }
-
-  return results.flatMap((r) => (r.status === "fulfilled" ? [r.value] : []));
 };
 
 export const capitalizeFirstLetter = (word: string) => {

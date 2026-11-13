@@ -1,15 +1,12 @@
 import type { APIRoute } from "astro";
 
-import { findGame, withGameLock, wrongAnswers } from "@services/bonGame.ts";
+import { findGame, MAX_BATCHES, withGameLock, wrongAnswers } from "@services/bonGame.ts";
 import { loadPool } from "@services/bonPool.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { reply } from "@utils/apiReply.ts";
 import { dealBatch, toPublic } from "@utils/bonDeck.ts";
 import { nextSchema } from "@utils/bonSchema.ts";
 import { LIVES } from "payload-app/bon-rules";
-
-// 20 × 20 = 400 cards, one answer each: stays below the /api/bon/answer rate limit (450 per 10 min, utils/rateLimit.ts).
-const MAX_BATCHES = 20;
 
 export const POST: APIRoute = async ({ request }) => {
   const input = nextSchema.safeParse(await request.json().catch(() => undefined));

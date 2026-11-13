@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
-import type { Where } from "payload";
 
-import { bonVisitor } from "@services/bonGame.ts";
+import { bonVisitor, gamesOf } from "@services/bonGame.ts";
 import {
   bonCodeHash,
   bonIdentity,
@@ -100,14 +99,6 @@ export const POST: APIRoute = async ({ cookies }) => {
     if (guard) claiming.delete(guard);
   }
 };
-
-type Identity = NonNullable<Awaited<ReturnType<typeof bonIdentity>>>;
-
-/** The games the ranking counts as this identity's: a player's, or a visitor's not yet claimed by a player. */
-const gamesOf = ({ playerId, visitor }: Identity): Where =>
-  playerId === undefined
-    ? { and: [{ visitor: { equals: visitor! } }, { player: { exists: false } }] }
-    : { player: { equals: playerId } };
 
 const named = (name: string, identity: string) => ({ name, tag: bonTag(identity) });
 
