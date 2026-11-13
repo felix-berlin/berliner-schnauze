@@ -594,6 +594,46 @@ describe("POST /api/bon/finish", () => {
     expect(row(token).playerName).toBe("Anonym");
   });
 
+  it.each([{ nameHidden: true }, { nameReports: 3 }])(
+    "a name hidden on an earlier game (%o) comes back as Anonym, another name stays",
+    async (flags) => {
+      const first = await newGame("v-1");
+      await play(first.token, 4);
+      later(60_000);
+      expect((await finish({ playerName: "Kalle", token: first.token }, "v-1")).status).toBe(200);
+      Object.assign(row(first.token), flags);
+      const again = await newGame("v-1");
+      await play(again.token, 5);
+      later(60_000);
+      expect((await finish({ playerName: " kalle ", token: again.token }, "v-1")).status).toBe(200);
+      expect(row(again.token).playerName).toBe("Anonym");
+      const other = await newGame("v-1");
+      await play(other.token, 5);
+      later(60_000);
+      expect((await finish({ playerName: "Kalli", token: other.token }, "v-1")).status).toBe(200);
+      expect(row(other.token).playerName).toBe("Kalli");
+    },
+  );
+
+  it("ranks a run that answered all 20 batches with lives left, not one with a card open", async () => {
+    const { token } = await newGame("v-1");
+    const { fake, real } = pool.make(200, 200);
+    const all = [...real, ...fake].map((c, i) =>
+      Object.assign(c, { answer: i === 0 ? !c.isReal : c.isReal }),
+    );
+    Object.assign(row(token), {
+      batches: Array.from({ length: 20 }, (_, i) => ({ issuedAt: T0, start: i * 20 })),
+      cards: [...all.slice(0, 399), { ...all[399], answer: undefined }],
+    });
+    later(400 * 700);
+    expect((await finish({ token }, "v-1")).status).toBe(400);
+    row(token).cards = all;
+    const res = await finish({ token }, "v-1");
+    expect(res.status).toBe(200);
+    expect(await res.json()).toMatchObject({ correctAnswers: 399, totalAnswered: 400 });
+    expect(row(token).status).toBe("finished");
+  });
+
   it.each([
     ["\u202EizaN", "izaN"],
     ["\u202EDfA", "DfA"],

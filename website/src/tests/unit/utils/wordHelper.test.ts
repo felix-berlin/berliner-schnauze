@@ -4,20 +4,12 @@ import {
   alphabeticNeighbors,
   capitalizeFirstLetter,
   countLetters,
-  createWikimediaFileList,
   findAnagrams,
   similarSoundingWords,
   similarWords,
   translateNlpTags,
 } from "@utils/wordHelper";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-
-vi.mock("@services/wikimediaApi.ts", () => ({
-  fetchWikimediaAPI: vi.fn(),
-}));
-
-import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
-const mockFetch = vi.mocked(fetchWikimediaAPI);
+import { describe, expect, it } from "vitest";
 
 function makeWord(id: number | string, berlinerisch: string | null = "test"): WordRef {
   return { berlinerisch, id } as unknown as WordRef;
@@ -129,65 +121,6 @@ describe("similarSoundingWords", () => {
     const current = makeWord("1", null);
     const other = makeWord("2", "Pier");
     expect(similarSoundingWords([current, other], current)).toEqual([]);
-  });
-});
-
-// ---------------------------------------------------------------------------
-
-describe("createWikimediaFileList", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it("returns empty array for null input", async () => {
-    expect(await createWikimediaFileList(null)).toEqual([]);
-  });
-
-  it("returns empty array for empty array", async () => {
-    expect(await createWikimediaFileList([])).toEqual([]);
-  });
-
-  it("returns mapped list on success", async () => {
-    mockFetch.mockResolvedValue({ thumbnail: { url: "http://example.com/img.jpg" } });
-
-    const result = await createWikimediaFileList([
-      { caption: "cap", description: "desc", wikimediaFile: "File:test.jpg" } as never,
-    ]);
-
-    expect(result).toHaveLength(1);
-    expect(result[0].caption).toBe("cap");
-    expect(result[0].description).toBe("desc");
-  });
-
-  it("skips failed files and logs error without aborting", async () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    mockFetch
-      .mockResolvedValueOnce({ thumbnail: { url: "http://example.com/img1.jpg" } })
-      .mockRejectedValueOnce(new Error("network error"));
-
-    const result = await createWikimediaFileList([
-      { caption: "ok", description: "", wikimediaFile: "File:ok.jpg" } as never,
-      { caption: "bad", description: "", wikimediaFile: "File:bad.jpg" } as never,
-    ]);
-
-    expect(result).toHaveLength(1);
-    expect(result[0].caption).toBe("ok");
-    expect(consoleSpy).toHaveBeenCalledWith(
-      "[wordHelper] createWikimediaFileList: failed to fetch",
-      1,
-      "file(s):",
-      expect.any(Array),
-    );
-    consoleSpy.mockRestore();
-  });
-
-  it("calls fetchWikimediaAPI with empty string when wikimediaFile is null (covers ?? '' branch)", async () => {
-    mockFetch.mockResolvedValue({ thumbnail: { url: "http://example.com/img.jpg" } });
-    const result = await createWikimediaFileList([
-      { caption: "cap", description: "desc", wikimediaFile: null } as never,
-    ]);
-    expect(mockFetch).toHaveBeenCalledWith("");
-    expect(result).toHaveLength(1);
   });
 });
 

@@ -35,6 +35,8 @@ const RULES: Rule[] = [
 
 // shortcut: in memory, one process; a second web container would need a shared store.
 const hits = new Map<string, { count: number; resetAt: number }>();
+const MAX_KEYS = 100_000;
+let lastPrune = 0;
 
 /** The rule for a request, if its route is limited. */
 export const rateLimitRule = (pathname: string, method: string): Rule | undefined =>
@@ -45,7 +47,15 @@ export const rateLimitRule = (pathname: string, method: string): Rule | undefine
  * else 0.
  */
 export const rateLimited = (client: string, rule: Rule, now = Date.now()): number => {
-  if (hits.size > 10_000) for (const [key, hit] of hits) if (hit.resetAt <= now) hits.delete(key);
+  // A full scan, so at most once a minute; still too many live clients after it: the oldest go first (Map order).
+  if (hits.size > 10_000 && now - lastPrune >= 60_000) {
+    lastPrune = now;
+    for (const [key, hit] of hits) if (hit.resetAt <= now) hits.delete(key);
+    for (const key of hits.keys()) {
+      if (hits.size <= MAX_KEYS) break;
+      hits.delete(key);
+    }
+  }
   const key = `${rule.key ?? `${rule.method ?? "*"} ${rule.prefix}`} ${client}`;
   const hit = hits.get(key);
   if (!hit || hit.resetAt <= now) {
@@ -66,7 +76,10 @@ export const refundHit = (client: string, key: string): void => {
 };
 
 /** Test-only: forget every counter. */
-export const resetRateLimits = (): void => hits.clear();
+export const resetRateLimits = (): void => {
+  hits.clear();
+  lastPrune = 0;
+};
 
 let loggedSource = false;
 
