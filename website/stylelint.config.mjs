@@ -90,7 +90,7 @@ export default {
       // Not yet migrated. Only shrinks (spec §10). Keep today's rules there.
       files: [
         ...legacyFiles,
-        "src/styles/{variables,mixins}/**", // until Task 8 migrates the mixins
+        "src/styles/variables/**",
         "src/styles/tokens/_legacy-aliases.scss", // _legacy-aliases.scss names the legacy properties
         // Mixin-only files (no CSS output, so not in the legacy list); migrate with their consumers.
         "src/styles/components/_word-definition-grid.scss",

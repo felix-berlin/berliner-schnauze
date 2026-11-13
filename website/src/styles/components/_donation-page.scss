@@ -14,8 +14,10 @@
       gap: 0.5rem;
       margin: 0;
 
-      @include mx.eyebrow(0.78rem, 0.14em);
+      @include mx.eyebrow;
 
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
       color: var(--orange-400);
 
       svg {
