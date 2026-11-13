@@ -84,7 +84,8 @@
       gap: var(--space-1);
     }
 
-    &[aria-pressed="true"] {
+    // A disabled pressed filter keeps the disabled look (that rule is less specific).
+    &[aria-pressed="true"]:not(:disabled) {
       --_bg: var(--color-accent-active);
       --_color: var(--button-color, var(--color-surface-overlay));
       --_border-color: var(--_rim);

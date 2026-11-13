@@ -102,7 +102,7 @@
     }
 
     @include butler-mx.feature("motion") {
-      // Beats .c-button's `transition: all 0.3s`: snappier, and only what actually changes.
+      // Own --button-transition: snappier, and only what actually changes.
       &.c-button {
         --button-transition:
           background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease, scale 0.12s ease-out;
