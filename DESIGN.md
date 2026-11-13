@@ -21,23 +21,23 @@ typography:
     letterSpacing: "0.05em"
 components:
   button-theme:
-    backgroundColor: "{colors.ink-base}"
-    textColor: "{colors.white-100}"
-    rounded: "{rounded.none}"
+    backgroundColor: "#2b333b"
+    textColor: "#f9f9f9"
+    rounded: "0px"
     padding: "0.25rem"
   button-default:
-    backgroundColor: "{colors.currywurst-100}"
-    textColor: "{colors.ink-base}"
-    rounded: "{rounded.none}"
+    backgroundColor: "#fcead7"
+    textColor: "#2b333b"
+    rounded: "0px"
     padding: "0.25rem"
   section-card:
     backgroundColor: "#ffffff"
-    rounded: "{rounded.sm}"
+    rounded: "4px"
   badge:
-    backgroundColor: "{colors.currywurst-200}"
-    textColor: "{colors.ink-base}"
+    backgroundColor: "#fad0b0"
+    textColor: "#2b333b"
     typography: "{typography.label}"
-    rounded: "{rounded.sm}"
+    rounded: "4px"
 ---
 
 # Design System: Berliner Schnauze
