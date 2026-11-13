@@ -24,6 +24,8 @@
     "vitest:update": "vitest --update",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicons/favicon.svg",
     "supportedBrowsers": "node scripts/generate-supported-browsers.mjs",
+    "tokens:build": "node scripts/build-tokens.mjs",
+    "tokens:check": "node scripts/build-tokens.mjs --check",
     "server:build:preview": "pnpm build && pnpm server:preview"
   },
   "dependencies": {

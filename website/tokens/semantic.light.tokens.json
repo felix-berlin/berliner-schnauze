@@ -1,0 +1,214 @@
+{
+  "color": {
+    "$type": "color",
+    "text": {
+      "body": {
+        "$value": "{color.ink.base}"
+      },
+      "strong": {
+        "$value": "{color.ink.400m}"
+      },
+      "muted": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.376471, 0.4, 0.423529],
+          "hex": "#60666c"
+        }
+      },
+      "accent": {
+        "$value": "{color.orange.600}"
+      },
+      "on-accent": {
+        "$value": "{color.white.100}"
+      },
+      "on-overlay": {
+        "$value": "{color.white.100}"
+      }
+    },
+    "surface": {
+      "hero": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.996471, 0.975294, 0.952941],
+          "hex": "#fef9f3"
+        }
+      },
+      "sheet": {
+        "$value": "{color.white.pure}"
+      },
+      "paper": {
+        "$value": "{color.white.100}"
+      },
+      "chip": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.969804, 0.923137, 0.915294],
+          "hex": "#f7ebe9"
+        }
+      },
+      "callout": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.992941, 0.950588, 0.905882],
+          "hex": "#fdf2e7"
+        }
+      },
+      "badge": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.988235, 0.889412, 0.814118],
+          "hex": "#fce3d0"
+        }
+      },
+      "wash": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.811765, 0.341176, 0.211765],
+          "hex": "#cf5736",
+          "alpha": 0.15
+        }
+      },
+      "tint": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0, 0, 0],
+          "hex": "#000000",
+          "alpha": 0.1
+        }
+      },
+      "floating": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.990196, 0.907843, 0.845098],
+          "hex": "#fce7d7"
+        }
+      },
+      "overlay": {
+        "$value": "{color.black.pure}"
+      }
+    },
+    "accent": {
+      "solid": {
+        "$value": "{color.orange.600}"
+      },
+      "icon": {
+        "$value": "{color.orange.400}"
+      }
+    },
+    "border": {
+      "card": {
+        "$value": "{color.grey.100}"
+      },
+      "inner": {
+        "$value": "{color.orange.200}"
+      },
+      "control": {
+        "$value": "{color.orange.600}"
+      }
+    },
+    "control": {
+      "bg": {
+        "$value": "{color.orange.100}"
+      },
+      "text": {
+        "$value": "{color.ink.base}"
+      }
+    },
+    "focus": {
+      "ring": {
+        "$value": "{color.orange.600}"
+      }
+    },
+    "status": {
+      "danger": {
+        "$value": "{color.danger}"
+      },
+      "success": {
+        "$value": "{color.success}"
+      },
+      "gold": {
+        "$value": "{color.gold}"
+      }
+    }
+  },
+  "shadow": {
+    "$type": "shadow",
+    "paper-lift": {
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [0, 0, 0],
+            "hex": "#000000",
+            "alpha": 0.08
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0.5,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0.6,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [0, 0, 0],
+            "hex": "#000000",
+            "alpha": 0.16
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 4,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 5,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        }
+      ]
+    },
+    "hover-glow": {
+      "$value": {
+        "color": {
+          "colorSpace": "srgb",
+          "components": [0.887059, 0.604706, 0.527059],
+          "hex": "#e29a86"
+        },
+        "offsetX": {
+          "value": 0,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 0,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 12,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      }
+    }
+  }
+}

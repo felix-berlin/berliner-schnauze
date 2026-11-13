@@ -1,0 +1,216 @@
+{
+  "color": {
+    "$type": "color",
+    "text": {
+      "body": {
+        "$value": "{color.cream.500}"
+      },
+      "strong": {
+        "$value": "{color.white.100}"
+      },
+      "muted": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.709804, 0.717647, 0.67549],
+          "hex": "#b5b7ac"
+        }
+      },
+      "accent": {
+        "$value": "{color.orange.300}"
+      },
+      "on-accent": {
+        "$value": "{color.white.100}"
+      },
+      "on-overlay": {
+        "$value": "{color.white.100}"
+      }
+    },
+    "surface": {
+      "hero": {
+        "$value": "{color.ink.400m}"
+      },
+      "sheet": {
+        "$value": "{color.ink.400m}"
+      },
+      "paper": {
+        "$value": "{color.ink.400m}"
+      },
+      "chip": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.18811, 0.2112, 0.23429],
+          "hex": "#30363c"
+        }
+      },
+      "callout": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.18811, 0.2112, 0.23429],
+          "hex": "#30363c"
+        }
+      },
+      "badge": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.18811, 0.2112, 0.23429],
+          "hex": "#30363c"
+        }
+      },
+      "wash": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.811765, 0.341176, 0.211765],
+          "hex": "#cf5736",
+          "alpha": 0.15
+        }
+      },
+      "tint": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [1, 1, 1],
+          "hex": "#ffffff",
+          "alpha": 0.1
+        }
+      },
+      "floating": {
+        "$value": "{color.ink.200m}"
+      },
+      "overlay": {
+        "$value": "{color.black.pure}"
+      }
+    },
+    "accent": {
+      "solid": {
+        "$value": "{color.orange.600}"
+      },
+      "icon": {
+        "$value": "{color.orange.400}"
+      }
+    },
+    "border": {
+      "card": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.941176, 0.67451, 0.521569],
+          "hex": "#f0ac85",
+          "alpha": 0.25
+        }
+      },
+      "inner": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.941176, 0.67451, 0.521569],
+          "hex": "#f0ac85",
+          "alpha": 0.3
+        }
+      },
+      "control": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.334902, 0.36, 0.385098],
+          "hex": "#555c62"
+        }
+      }
+    },
+    "control": {
+      "bg": {
+        "$value": "{color.ink.600m}"
+      },
+      "text": {
+        "$value": "{color.cream.500}"
+      }
+    },
+    "focus": {
+      "ring": {
+        "$value": "{color.orange.400}"
+      }
+    },
+    "status": {
+      "danger": {
+        "$value": "{color.danger}"
+      },
+      "success": {
+        "$value": "{color.success}"
+      },
+      "gold": {
+        "$value": "{color.gold}"
+      }
+    }
+  },
+  "shadow": {
+    "$type": "shadow",
+    "paper-lift": {
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [0, 0, 0],
+            "hex": "#000000",
+            "alpha": 0.08
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0.5,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0.6,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [0, 0, 0],
+            "hex": "#000000",
+            "alpha": 0.16
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 4,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 5,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        }
+      ]
+    },
+    "hover-glow": {
+      "$value": {
+        "color": "{color.orange.500}",
+        "offsetX": {
+          "value": 0,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 0,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 12,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      }
+    }
+  }
+}

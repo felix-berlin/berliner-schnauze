@@ -13,5 +13,12 @@
       "unknown"
     ]
   },
-  "ignorePatterns": ["**/*.astro", "coverage", "dist", "CHANGELOG.md", "payload/src/app/(payload)/admin/importMap.js"]
+  "ignorePatterns": [
+    "**/*.astro",
+    "coverage",
+    "dist",
+    "CHANGELOG.md",
+    "payload/src/app/(payload)/admin/importMap.js",
+    "website/src/styles/tokens/_tokens.generated.scss"
+  ]
 }
