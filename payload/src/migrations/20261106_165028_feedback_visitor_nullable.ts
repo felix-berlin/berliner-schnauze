@@ -5,7 +5,5 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
    ALTER TABLE "word_feedback" ALTER COLUMN "visitor" DROP NOT NULL;`)
 }
 
-export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
-  await db.execute(sql`
-   ALTER TABLE "word_feedback" ALTER COLUMN "visitor" SET NOT NULL;`)
-}
+// No-op: once retention has nulled `visitor`, SET NOT NULL would fail; the nullable column is harmless to older code.
+export async function down(_: MigrateDownArgs): Promise<void> {}

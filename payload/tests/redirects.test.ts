@@ -86,6 +86,22 @@ describe("redirect on slug change", () => {
     expect(await redirectsFrom(OLD)).toHaveLength(1);
   });
 
+  it("redirects the last published path of a word that was unpublished before the slug change", async () => {
+    const payload = await getTestPayload();
+    const doc = await word("published");
+    await payload.update({ collection: "words", id: doc.id, data: { _status: "draft" } });
+    await payload.update({
+      collection: "words",
+      id: doc.id,
+      data: { slug: NEW, _status: "draft" },
+      draft: true,
+    });
+
+    await payload.update({ collection: "words", id: doc.id, data: { _status: "published" } });
+
+    expect(await redirectsFrom(OLD)).toHaveLength(1);
+  });
+
   it("covers collections without drafts (themen)", async () => {
     const payload = await getTestPayload();
     const thema = await payload.create({

@@ -4,6 +4,13 @@ export const COMMENT_MAX = 1000;
 export const NAME_MAX = 50;
 export const EDIT_WINDOW_MS = 5 * 60_000;
 
+/** Id of a relation value, populated (`{ id }`) or not; null for an empty one. */
+export function idOf(rel: number | { id: number }): number;
+export function idOf(rel: number | { id: number } | null | undefined): number | null;
+export function idOf(rel: number | { id: number } | null | undefined): number | null {
+  return rel == null ? null : typeof rel === "object" ? rel.id : rel;
+}
+
 /** What a self-delete and the retention job leave of a comment; the retention job also clears `removalReason`. */
 export const SELF_DELETED = {
   authorName: null,

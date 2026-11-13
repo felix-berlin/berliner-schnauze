@@ -6,6 +6,7 @@ import type { CommentStatus } from "payload-app/comments";
 import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { orNull } from "@utils/apiReply.ts";
 import { createHash } from "node:crypto";
+import { idOf } from "payload-app/comments";
 
 // The comment collections are login-only (`authenticatedOnly`), so `siteRead()` would lock the site out: comment
 // queries here and in the comment API routes keep Payload's default overrideAccess and filter `status` themselves.
@@ -40,9 +41,6 @@ export const sha256 = (text: string): string => createHash("sha256").update(text
 export const voterKey = (visitor: string): string => sha256(`votes:${visitor}`);
 
 export const hashEditKey = sha256;
-
-const idOf = (rel: number | { id: number } | null | undefined): number | null =>
-  rel == null ? null : typeof rel === "object" ? rel.id : rel;
 
 /** Maps a stored comment to what the browser may see; never carries editKeyHash or authorTag. */
 export const toPublic = (c: Comment, myVote: -1 | 0 | 1 = 0): PublicComment => {

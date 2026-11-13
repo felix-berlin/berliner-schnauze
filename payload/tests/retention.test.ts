@@ -96,6 +96,7 @@ describe("runRetention", () => {
       collection: "comment-votes",
       data: { comment: gone.id, visitor: "v", value: 1 } as never,
     });
+    const before = (await payload.findByID({ collection: "comments", id: gone.id })).updatedAt;
     await runRetention(payload, later);
     expect(
       (await payload.find({ collection: "comments", where: { id: { equals: held.id } } }))
@@ -105,9 +106,10 @@ describe("runRetention", () => {
       (await payload.find({ collection: "comment-votes", where: { comment: { equals: gone.id } } }))
         .totalDocs,
     ).toBe(0);
-    expect((await payload.findByID({ collection: "comments", id: gone.id })).status).toBe(
-      "deleted",
-    );
+    const g = await payload.findByID({ collection: "comments", id: gone.id });
+    expect(g).toMatchObject({ status: "deleted", upvotes: 0, score: 0 });
+    // Moved clock: an already deleted comment is not picked up again the next day.
+    expect(g.updatedAt > before).toBe(true);
   });
 
   it("keeps recent finished suggestions", async () => {
@@ -183,9 +185,15 @@ describe("runRetention edge cases", () => {
       collection: "comment-reports",
       data: { comment: parent.id, visitor: "v" } as never,
     });
+    expect(await payload.findByID({ collection: "comments", id: parent.id })).toMatchObject({
+      upvotes: 1,
+      reportCount: 1,
+    });
     const result = await runRetention(payload, days(200));
     expect(result.commentsScrubbed).toBeGreaterThanOrEqual(1);
     const p = await payload.findByID({ collection: "comments", id: parent.id });
+    // The "[gelöscht]" placeholder must not keep showing the old votes.
+    expect(p).toMatchObject({ upvotes: 0, downvotes: 0, score: 0, reportCount: 0 });
     for (const f of [
       "authorName",
       "pseudonym",

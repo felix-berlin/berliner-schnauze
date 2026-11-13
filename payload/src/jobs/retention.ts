@@ -77,7 +77,7 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
   let deleted = 0;
   let scrubbed = 0;
   const failures: number[] = [];
-  const purge = async (id: number, status: string | null | undefined) => {
+  const purge = async (id: number) => {
     const replies = await payload.count({
       collection: "comments",
       where: { parent: { equals: id } },
@@ -96,11 +96,18 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
       // A bulk delete reports a failing row instead of throwing: without this the comment would be blanked and never retried.
       if (errors.length) throw new Error(`retention: ${collection} of comment ${id} not deleted`);
     }
-    if (status === "deleted") return; // already blank; votes and reports are gone, nothing personal is left
+    // Also for an already "deleted" comment: zeroes its counters and moves updatedAt, so it is not picked up daily.
     await payload.update({
       collection: "comments",
       id,
-      data: { ...SELF_DELETED, removalReason: null },
+      data: {
+        ...SELF_DELETED,
+        removalReason: null,
+        upvotes: 0,
+        downvotes: 0,
+        score: 0,
+        reportCount: 0,
+      },
       context,
     });
     scrubbed++;
@@ -108,7 +115,7 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
   for (const { id, status } of stale.docs) {
     try {
       // oxlint-disable-next-line no-await-in-loop -- a few comments per run, one at a time keeps the DB load flat
-      await purge(id, status);
+      await purge(id);
     } catch (error) {
       payload.logger.error({ msg: "retention: purge failed", commentId: id, status, err: error });
       failures.push(id);

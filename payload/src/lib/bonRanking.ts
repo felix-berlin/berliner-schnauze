@@ -1,49 +1,19 @@
 // Pure BON ranking, shared by the leaderboard route (payload-app/bon-ranking): periods, best game per pseudonym, tag.
 import { createHash } from "node:crypto";
 
+import { addDays, berlinDay, dayStart } from "./berlinTime";
 import { ANONYM } from "./bonNames";
 import { CODE_ALPHABET } from "./bonPlayer";
 
 export type Period = "week" | "month" | "all";
 
-const TZ = "Europe/Berlin";
-const berlin = new Intl.DateTimeFormat("en-US", {
-  day: "numeric",
-  hour: "numeric",
-  hourCycle: "h23",
-  minute: "numeric",
-  month: "numeric",
-  second: "numeric",
-  timeZone: TZ,
-  year: "numeric",
-});
-
-/** Berlin wall clock of an instant, as numbers. */
-function wall(ms: number) {
-  const p = Object.fromEntries(berlin.formatToParts(ms).map((x) => [x.type, Number(x.value)]));
-  return {
-    day: p.day!,
-    month: p.month!,
-    year: p.year!,
-    utc: Date.UTC(p.year!, p.month! - 1, p.day!, p.hour!, p.minute!, p.second!),
-  };
-}
-
-/** The instant of 00:00 Berlin time on a calendar day (Date.UTC normalizes day overflow). */
-function berlinMidnight(year: number, month: number, day: number): Date {
-  const guess = Date.UTC(year, month, day);
-  // Offset at the guess, then again at the result: right on both sides of a DST switch.
-  const first = guess - (wall(guess).utc - Math.floor(guess / 1000) * 1000);
-  return new Date(guess - (wall(first).utc - Math.floor(first / 1000) * 1000));
-}
-
 /** Week = Monday 00:00 Berlin, month = the 1st 00:00 Berlin, all = undefined. */
 export function periodStart(period: Period, now: Date): Date | undefined {
   if (period === "all") return undefined;
-  const { day, month, year } = wall(now.getTime());
-  if (period === "month") return berlinMidnight(year, month - 1, 1);
-  const sinceMonday = (new Date(Date.UTC(year, month - 1, day)).getUTCDay() + 6) % 7;
-  return berlinMidnight(year, month - 1, day - sinceMonday);
+  const today = berlinDay(now);
+  if (period === "month") return dayStart(`${today.slice(0, 8)}01`);
+  const sinceMonday = (new Date(`${today}T00:00:00Z`).getUTCDay() + 6) % 7;
+  return dayStart(addDays(today, -sinceMonday));
 }
 
 /** shortcut: byte % 31 favors the first 8 characters of the alphabet slightly; irrelevant for a display tag. */
