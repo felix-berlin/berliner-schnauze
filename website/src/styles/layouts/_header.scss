@@ -1,45 +1,35 @@
-@use "@styles/variables" as vars;
-@use "@sass-butler/mixins" as butler-mx;
-@use "@sass-butler/functions" as butler-fn;
-
-@layer legacy {
-  .c-header {
-    background-color: var(--color-background, var(--orange-200));
-    box-shadow: vars.$paper-lift;
+// Site header (MainHeader.astro): sticky chrome bar with the logo and the menu nav. Page shell, so an
+// object; MainHeader keeps --site-header-height current for sticky offsets elsewhere.
+@layer objects {
+  .o-header {
+    background-color: var(--color-surface-chrome); // colour inventory R38
+    box-shadow: var(--shadow-paper-lift);
     position: sticky;
     inset-block-start: 0;
     inset-inline-start: 0;
-    z-index: 11000;
-    width: 100%;
+    z-index: var(--z-header);
+    inline-size: 100%;
     padding: var(--padding-y-header) 0;
+  }
 
-    @include butler-mx.dark-mode-class {
-      --color-background: var(--blue);
-    }
+  .o-header-inner {
+    display: grid;
+    grid-template-areas: "logo menu-nav";
+    grid-template-columns: 1fr max-content;
+    align-items: center;
+    gap: var(--space-6);
+  }
 
-    &__wrapper {
-      --areas-template: "logo menu-nav";
+  .o-logo {
+    grid-area: logo;
+  }
 
-      display: grid;
-      grid-template-areas: var(--areas-template);
-      grid-template-columns: var(--columns-header-inner, 1fr max-content);
-      align-items: center;
-      gap: 24px;
-    }
+  .o-logo-link {
+    --_size: clamp(1.5625rem, 1.2434rem + 1.5957vw, 2.5rem); // fluid 25px at 320 to 40px at 1260
 
-    .c-logo {
-      grid-area: logo;
-
-      &__link {
-        font-family: vars.$berliner;
-        text-decoration: none;
-        color: var(--_color, var(--blue));
-        font-size: butler-fn.fluid(25, 40, 320, 1260);
-
-        @include butler-mx.dark-mode-class {
-          --_color: var(--yellow-500);
-        }
-      }
-    }
+    font-family: var(--font-family-display);
+    text-decoration: none;
+    color: var(--color-text-body); // colour inventory R80
+    font-size: var(--_size);
   }
 }

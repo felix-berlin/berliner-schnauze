@@ -91,7 +91,7 @@ export function initHeaderScrollSpy(
   const init = () => initScrollSpy({ ...options, rootMargin: rootMarginBelowHeader(offset) });
   init();
   window.addEventListener("resize", init);
-  const header = document.querySelector(".c-header");
+  const header = document.querySelector(".js-site-header");
   const resizeObserver = header ? new ResizeObserver(init) : null;
   if (header) resizeObserver?.observe(header);
   return () => {

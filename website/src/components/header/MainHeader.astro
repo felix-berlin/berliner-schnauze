@@ -10,10 +10,10 @@ const mainMenuItems = await fetchMenu('main');
 const headerLinks = mainMenuItems.filter((item) => ['/wort', '/magazin'].includes(item.link));
 ---
 
-<header class='c-header'>
-  <div class='c-header__wrapper u-max-body-width'>
-    <div class='c-logo'>
-      <a class='c-logo__link' href='/'> Berliner Schnauze</a>
+<header class='o-header js-site-header'>
+  <div class='o-header-inner u-max-body-width'>
+    <div class='o-logo'>
+      <a class='o-logo-link' href='/'> Berliner Schnauze</a>
     </div>
 
     <div class='c-menu-nav'>
@@ -39,7 +39,7 @@ const headerLinks = mainMenuItems.filter((item) => ['/wort', '/magazin'].include
   // Runs once: the header is `transition:persist`ed, so the element (and this observer)
   // survive client-side navigations. Pages read --site-header-height for sticky offsets.
   function syncHeaderHeight() {
-    const header = document.querySelector<HTMLElement>('.c-header');
+    const header = document.querySelector<HTMLElement>('.js-site-header');
     if (!header) return;
     const h = Math.round(header.getBoundingClientRect().height);
     // View Transitions can briefly report 0 for persisted elements.
@@ -48,7 +48,7 @@ const headerLinks = mainMenuItems.filter((item) => ['/wort', '/magazin'].include
     }
   }
 
-  const siteHeader = document.querySelector<HTMLElement>('.c-header');
+  const siteHeader = document.querySelector<HTMLElement>('.js-site-header');
   if (siteHeader) {
     new ResizeObserver(syncHeaderHeight).observe(siteHeader);
   }
