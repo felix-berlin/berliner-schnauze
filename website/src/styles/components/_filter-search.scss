@@ -28,7 +28,7 @@
       grid-area: filter-toggle;
 
       @include mx.breakpoint("md") {
-        display: none;
+        --button-display: none;
       }
     }
 

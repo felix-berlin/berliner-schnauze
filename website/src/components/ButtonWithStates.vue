@@ -1,9 +1,5 @@
 <template>
-  <button
-    class="c-button"
-    :disabled="computedState === 'loading'"
-    :class="`c-button--state-${computedState}`"
-  >
+  <button class="c-button" :disabled="computedState === 'loading'" :data-state="computedState">
     <Transition name="fade" mode="out-in">
       <span :key="computedState">
         <template v-if="computedState === 'normal'">

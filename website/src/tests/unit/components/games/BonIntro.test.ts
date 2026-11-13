@@ -72,7 +72,7 @@ describe("BonIntro", () => {
     expect(input.attributes("maxlength")).toBe("24");
     expect(input.attributes("placeholder")).toBe("Anonym");
     expect((input.element as HTMLInputElement).value).toBe("Berta");
-    expect(wrapper.find("button.c-button--primary").text()).toBe("Los jeht’s");
+    expect(wrapper.find("button.c-button[data-variant~='primary']").text()).toBe("Los jeht’s");
     expect(wrapper.text()).toContain("So jeht’s");
     expect(wrapper.text()).toContain("erfunden oder Hochdeutsch");
   });
@@ -135,7 +135,7 @@ describe("BonIntro", () => {
   it("offline: shows the notice and starts nothing", async () => {
     const wrapper = mountIntro({ offline: true });
     expect(wrapper.find(".c-state--offline").text()).toContain("Du bist offline.");
-    const button = wrapper.find("button.c-button--primary");
+    const button = wrapper.find("button.c-button[data-variant~='primary']");
     expect(button.attributes("aria-disabled")).toBe("true");
     await wrapper.find("form").trigger("submit");
     expect(wrapper.emitted("start")).toBeUndefined();

@@ -73,12 +73,14 @@
     }
 
     &__cta {
-      --padding: 0 2rem;
+      --button-padding: 0 2rem;
 
       // Morphs into the first card (docs/design/bon/SPEC.md §13).
       view-transition-name: bon-card;
+
+      --button-font-size: 1.05rem;
+
       min-block-size: 52px;
-      font-size: 1.05rem;
 
       &[aria-disabled="true"] {
         opacity: 0.5;

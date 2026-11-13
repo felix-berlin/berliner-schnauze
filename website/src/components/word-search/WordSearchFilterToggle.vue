@@ -1,7 +1,8 @@
 <template>
   <button
     type="button"
-    class="c-word-search-filter-toggle c-button c-button--center-icon"
+    class="c-word-search-filter-toggle c-button"
+    data-variant="center-icon"
     aria-label="Filter öffnen"
     @click="$toggleWordListFilterFlyout"
   >

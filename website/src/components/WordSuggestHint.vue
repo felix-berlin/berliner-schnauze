@@ -13,7 +13,8 @@
     >
     <button
       type="button"
-      class="c-button c-button--center-icon c-word-suggest-hint__button"
+      class="c-button c-word-suggest-hint__button"
+      data-variant="center-icon"
       @click="openWordSuggestionModal"
     >
       <Plus width="18" height="18" />Wort hinzufügen

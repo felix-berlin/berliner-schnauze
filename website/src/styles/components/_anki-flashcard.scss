@@ -111,7 +111,8 @@
         width: 100%;
         justify-content: center;
         display: flex;
-        padding: vars.$spacer * 0.875;
+        --button-padding: #{vars.$spacer * 0.875};
+
         font-size: 1.1rem;
         font-weight: 700;
       }

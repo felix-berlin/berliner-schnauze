@@ -22,7 +22,6 @@ export default [
   "src/styles/components/_bon-result.scss",
   "src/styles/components/_bon-share-view.scss",
   "src/styles/components/_book-shelf.scss",
-  "src/styles/components/_button.scss",
   "src/styles/components/_carbon-badge.scss",
   "src/styles/components/_choice.scss",
   "src/styles/components/_color-mode-picker.scss",

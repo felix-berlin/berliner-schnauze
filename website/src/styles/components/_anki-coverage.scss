@@ -61,17 +61,14 @@
       border: 1px solid var(--orange-600);
 
       .c-button {
-        border: 0;
+        --button-border-width: 0;
+        --button-padding: #{vars.$spacer * 0.5 vars.$spacer * 1.125};
+
         font-weight: 700;
-        padding: vars.$spacer * 0.5 vars.$spacer * 1.125;
       }
 
-      .c-button.is-current {
-        --color: var(--white-100);
-
-        @include butler-mx.dark-mode-class {
-          --color: var(--white-100);
-        }
+      .c-button[aria-pressed="true"] {
+        --button-color: var(--white-100);
       }
     }
 

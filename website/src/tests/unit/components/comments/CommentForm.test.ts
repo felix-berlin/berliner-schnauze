@@ -121,7 +121,7 @@ describe("CommentForm", () => {
     expect(save.text()).toBe("Speichern");
     expect(save.classes()).toContain("c-choice");
     expect(save.attributes("aria-pressed")).toBe("true");
-    expect(wrapper.find(".c-button--primary").exists()).toBe(false);
+    expect(wrapper.find(".c-button[data-variant~='primary']").exists()).toBe(false);
     expect(wrapper.find(".c-comment-form__kbd").exists()).toBe(false);
   });
 

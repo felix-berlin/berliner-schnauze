@@ -308,7 +308,7 @@ describe("4 success", () => {
     const w = mount(BonPlayerCode, { props: { mode: "redeem" } });
     await submit(w, CODE);
     const go = w.get("[data-test=continue]");
-    expect(go.classes()).toContain("c-button--primary");
+    expect(go.attributes("data-variant")).toContain("primary");
     await go.trigger("click");
     expect(w.emitted("close")).toHaveLength(1);
   });

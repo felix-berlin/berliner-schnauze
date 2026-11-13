@@ -37,7 +37,8 @@
     <button
       v-if="showClose"
       type="button"
-      class="c-toast-notify__close c-button c-button--center-icon"
+      class="c-toast-notify__close c-button"
+      data-variant="center-icon"
       aria-label="Benachrichtigung schließen"
       @click="dismiss()"
     >

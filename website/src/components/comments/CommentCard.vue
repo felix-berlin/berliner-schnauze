@@ -214,7 +214,8 @@
         <textarea :id="`${uid}-note`" v-model="note" class="c-textarea" maxlength="300" rows="2" />
         <div class="c-comment__panel-actions">
           <button
-            class="c-button c-button--primary c-comment__report-button"
+            class="c-button c-comment__report-button"
+            data-variant="primary"
             type="submit"
             :aria-disabled="!reason || reporting"
             :aria-busy="reporting"

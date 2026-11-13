@@ -141,7 +141,7 @@
     }
 
     &__report-button {
-      --padding: #{vars.$spacer * 0.5 vars.$spacer};
+      --button-padding: #{vars.$spacer * 0.5 vars.$spacer};
 
       min-block-size: 44px;
 

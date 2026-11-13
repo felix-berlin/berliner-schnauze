@@ -56,7 +56,7 @@ describe("WordSuggestHint.vue", () => {
 
       expect(wrapper.classes()).toContain("c-word-suggest-hint");
       expect(wrapper.find("button").classes()).toContain("c-button");
-      expect(wrapper.find("button").classes()).toContain("c-button--center-icon");
+      expect(wrapper.find("button").attributes("data-variant")).toBe("center-icon");
     });
   });
 

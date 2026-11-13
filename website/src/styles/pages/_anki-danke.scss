@@ -76,26 +76,27 @@
       inline-size: 100%;
 
       .c-button {
+        --button-padding: 0.875rem 1.375rem;
+
         gap: vars.$spacer * 0.625;
-        padding: 0.875rem 1.375rem;
         font-weight: 700;
         // impeccable-disable design-system-font-size -- same size as the /anki CTAs
         font-size: 1.1rem;
       }
 
       // Secondary button: white paper instead of the site's orange-100 default (as on /anki)
-      .c-button:not(.c-button--primary) {
-        --color-background: var(--white-100);
+      .c-button:not([data-variant~="primary"]) {
+        --button-bg: var(--white-100);
 
         @include butler-mx.hover {
-          --style-border: dashed;
+          --button-border-style: dashed;
         }
         @include butler-mx.dark-mode-class {
-          --color-background: var(--new-blue-600);
+          --button-bg: var(--new-blue-600);
         }
       }
 
-      .c-button--primary {
+      .c-button[data-variant~="primary"] {
         box-shadow: vars.$paper-lift;
       }
     }

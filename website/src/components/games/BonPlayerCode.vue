@@ -33,7 +33,8 @@
       <template v-if="state === 'success'">
         <button
           v-if="mode === 'redeem'"
-          class="c-button c-button--primary c-button--lg c-bon-player-code__continue"
+          class="c-button c-bon-player-code__continue"
+          data-variant="primary lg"
           type="button"
           data-test="continue"
           @click="emit('close')"

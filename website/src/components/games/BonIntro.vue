@@ -68,7 +68,8 @@
         </div>
         <div class="c-bon-intro__start">
           <button
-            class="c-button c-button--primary c-button--lg c-bon-intro__cta"
+            class="c-button c-bon-intro__cta"
+            data-variant="primary lg"
             type="submit"
             :aria-disabled="offline ? 'true' : undefined"
           >

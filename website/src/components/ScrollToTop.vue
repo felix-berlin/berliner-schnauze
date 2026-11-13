@@ -8,7 +8,8 @@
         offset: 12,
       }"
       type="button"
-      class="c-scroll-to-top c-button c-button--center-icon"
+      class="c-scroll-to-top c-button"
+      data-variant="center-icon"
       :class="{ 'is-close-to-end': isFooterVisible }"
       :aria-label="buttonAriaLabel"
       @click="scrollToTop"

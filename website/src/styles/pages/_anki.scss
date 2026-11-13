@@ -16,21 +16,21 @@
     }
 
     // Secondary buttons: white paper instead of the site's orange-100 default.
-    .c-button:not(.c-button--primary, .c-button--filter) {
-      --color-background: var(--white-100);
+    .c-button:not([data-variant~="primary"], [data-variant~="filter"]) {
+      --button-bg: var(--white-100);
 
       font-weight: 700;
 
       @include butler-mx.hover {
-        --style-border: dashed;
+        --button-border-style: dashed;
       }
       @include butler-mx.dark-mode-class {
-        --color-background: var(--new-blue-600);
+        --button-bg: var(--new-blue-600);
       }
     }
 
     // Icon + label buttons need the gap the shared .c-button never sets.
-    .c-button--center-icon {
+    .c-button[data-variant~="center-icon"] {
       gap: vars.$spacer * 0.625;
     }
 
@@ -481,10 +481,11 @@
       gap: vars.$spacer * 0.625;
 
       .c-button {
-        display: flex;
+        --button-display: flex;
+        --button-padding: 0.875rem 1.25rem;
+
         // impeccable-disable design-system-font-size -- literal value from design handoff
         font-size: 1.05rem;
-        padding: 0.875rem 1.25rem;
       }
     }
 
@@ -599,7 +600,8 @@
       align-self: flex-start;
       // impeccable-disable design-system-font-size -- literal value from design handoff
       font-size: 1rem;
-      padding: 0.75rem 1.125rem;
+
+      --button-padding: 0.75rem 1.125rem;
     }
 
     // FAQ
@@ -641,11 +643,12 @@
 
     // Primary/secondary CTA buttons (hero + final CTA)
     &__actions .c-button {
-      padding: 0.875rem 1.375rem;
+      --button-padding: 0.875rem 1.375rem;
+
       // impeccable-disable design-system-font-size -- literal value from design handoff
       font-size: 1.1rem;
 
-      &.c-button--primary {
+      &[data-variant~="primary"] {
         box-shadow: vars.$paper-lift;
       }
     }

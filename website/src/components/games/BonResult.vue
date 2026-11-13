@@ -55,7 +55,8 @@
 
       <div class="c-bon-result__actions">
         <button
-          class="c-button c-button--primary c-button--lg c-bon-result__again"
+          class="c-button c-bon-result__again"
+          data-variant="primary lg"
           type="button"
           @click="emit('restart')"
         >

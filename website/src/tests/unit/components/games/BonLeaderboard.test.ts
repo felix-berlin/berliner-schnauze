@@ -405,7 +405,7 @@ describe("BonLeaderboard", () => {
     const w = await mountBoard();
     const aside = w.find(".c-bon-leaderboard__aside");
     expect(aside.text()).toContain("Du stehst hier noch nich drin.");
-    expect(aside.find("a.c-button--primary").text()).toBe("Jetzt spielen");
+    expect(aside.find("a.c-button[data-variant~='primary']").text()).toBe("Jetzt spielen");
     expect(aside.text()).toContain("Schon jespielt?");
     await aside
       .findAll("button")
@@ -432,7 +432,9 @@ describe("BonLeaderboard", () => {
     expect(w.text()).toContain("Hier könnte dein Name stehen.");
     expect(w.text()).toContain("Noch keene Spiele");
     expect(w.find("ol").exists()).toBe(false);
-    expect(w.findAll("a.c-button--primary").some((a) => a.text() === "Jetzt spielen")).toBe(true);
+    expect(
+      w.findAll("a.c-button[data-variant~='primary']").some((a) => a.text() === "Jetzt spielen"),
+    ).toBe(true);
   });
 
   it("loading: skeleton with 8 rows", async () => {

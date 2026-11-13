@@ -2,12 +2,13 @@
   <div class="c-confirm-dialog">
     <p class="c-confirm-dialog__message">{{ message }}</p>
     <div class="c-confirm-dialog__actions">
-      <button type="button" class="c-button c-button--center-icon" @click="emit('cancel')">
+      <button type="button" class="c-button" data-variant="center-icon" @click="emit('cancel')">
         Abbrechen
       </button>
       <button
         type="button"
-        class="c-button c-button--center-icon c-button--primary"
+        class="c-button"
+        data-variant="center-icon primary"
         @click="emit('confirm')"
       >
         Bestätigen

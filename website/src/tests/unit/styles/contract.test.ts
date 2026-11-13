@@ -187,8 +187,11 @@ describe("style layer contract", () => {
     const wrong = styleFiles.flatMap((path) => {
       const rest = body(readFileSync(path, "utf8"));
       if (rest === "") return []; // barrel: only @use/@forward
-      const found = singleBlockLayer(rest);
       const want = expectedLayer(path);
+      // mx.component emits @layer components; its shape is checked by the §7.1 test below.
+      const found = /^@include\s+mx\.component\(/.test(rest)
+        ? "components"
+        : singleBlockLayer(rest);
       return found === want ? [] : [`${rel(path)}: want @layer ${want}, found ${found ?? "none"}`];
     });
     expect(wrong).toEqual([]);

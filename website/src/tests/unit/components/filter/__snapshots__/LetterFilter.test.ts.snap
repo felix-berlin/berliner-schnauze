@@ -11,7 +11,9 @@ exports[`LetterFilter.vue > renders correctly 1`] = `
       class="c-letter-filter__list-item"
     >
       <button
-        class="c-letter-filter__button is-all c-button c-button--filter is-current"
+        aria-pressed="true"
+        class="c-letter-filter__button is-all c-button"
+        data-variant="filter"
         type="button"
       >
          Alle 
@@ -23,7 +25,9 @@ exports[`LetterFilter.vue > renders correctly 1`] = `
     >
       <button
         aria-label="Filter nach Buchstabe a"
-        class="c-letter-filter__button c-button c-button--filter"
+        aria-pressed="false"
+        class="c-letter-filter__button c-button"
+        data-variant="filter"
         title="Filter nach Buchstabe a"
         type="button"
       >
@@ -35,7 +39,9 @@ exports[`LetterFilter.vue > renders correctly 1`] = `
     >
       <button
         aria-label="Filter nach Buchstabe b"
-        class="c-letter-filter__button c-button c-button--filter"
+        aria-pressed="false"
+        class="c-letter-filter__button c-button"
+        data-variant="filter"
         title="Filter nach Buchstabe b"
         type="button"
       >
@@ -47,7 +53,9 @@ exports[`LetterFilter.vue > renders correctly 1`] = `
     >
       <button
         aria-label="Filter nach Buchstabe c"
-        class="c-letter-filter__button c-button c-button--filter"
+        aria-pressed="false"
+        class="c-letter-filter__button c-button"
+        data-variant="filter"
         title="Filter nach Buchstabe c"
         type="button"
       >

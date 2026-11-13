@@ -148,7 +148,7 @@ const { faqs, fullFeatures, liteFeatures, steps } = await fetchAnkiContent({
           {
             ANKI_DECK_FULL_CHECKOUT && (
               <a
-                class='c-button c-button--primary c-button--center-icon'
+                class='c-button' data-variant='primary center-icon'
                 href={ANKI_DECK_FULL_CHECKOUT} data-track='Click Buy Full|hero'
                 target='_blank'
                 rel='noopener'
@@ -160,7 +160,7 @@ const { faqs, fullFeatures, liteFeatures, steps } = await fetchAnkiContent({
           }
           {
             LITE_URL && (
-              <a class='c-button c-button--center-icon' href={LITE_URL} data-track='Download Lite|hero' download>
+              <a class='c-button' data-variant='center-icon' href={LITE_URL} data-track='Download Lite|hero' download>
                 <Download width='20' height='20' />
                 <span>Lite kostenlos laden</span>
               </a>
@@ -242,7 +242,7 @@ const { faqs, fullFeatures, liteFeatures, steps } = await fetchAnkiContent({
               hast.
             </p>
             <a
-              class='c-button c-button--center-icon c-anki__cta-sm'
+              class='c-button c-anki__cta-sm' data-variant='center-icon'
               href='https://apps.ankiweb.net/'
               data-track='Click Anki App|download'
               target='_blank'
@@ -304,7 +304,7 @@ const { faqs, fullFeatures, liteFeatures, steps } = await fetchAnkiContent({
           <div class='c-anki__plan-cta'>
             {
               LITE_URL ? (
-                <a class='c-button c-button--center-icon' href={LITE_URL} data-track='Download Lite|pricing' download>
+                <a class='c-button' data-variant='center-icon' href={LITE_URL} data-track='Download Lite|pricing' download>
                   <Download width='20' height='20' /><span>Lite runterladen (.apkg)</span>
                 </a>
               ) : (
@@ -333,7 +333,7 @@ const { faqs, fullFeatures, liteFeatures, steps } = await fetchAnkiContent({
             {
               ANKI_DECK_FULL_CHECKOUT ? (
                 <a
-                  class='c-button c-button--primary c-button--center-icon'
+                  class='c-button' data-variant='primary center-icon'
                   href={ANKI_DECK_FULL_CHECKOUT} data-track='Click Buy Full|pricing'
                   target='_blank'
                   rel='noopener'
@@ -423,7 +423,7 @@ const { faqs, fullFeatures, liteFeatures, steps } = await fetchAnkiContent({
           Server und viele Stunden Arbeit nach Feierabend.
         </p>
         <a
-          class='c-button c-button--center-icon c-anki__cta-sm'
+          class='c-button c-anki__cta-sm' data-variant='center-icon'
           href='https://github.com/felix-berlin/berliner-schnauze'
           data-track='Click GitHub|anki'
           target='_blank'
@@ -460,7 +460,7 @@ const { faqs, fullFeatures, liteFeatures, steps } = await fetchAnkiContent({
         {
           ANKI_DECK_FULL_CHECKOUT && (
             <a
-              class='c-button c-button--primary c-button--center-icon'
+              class='c-button' data-variant='primary center-icon'
               href={ANKI_DECK_FULL_CHECKOUT} data-track='Click Buy Full|farewell'
               target='_blank'
               rel='noopener'
@@ -472,7 +472,7 @@ const { faqs, fullFeatures, liteFeatures, steps } = await fetchAnkiContent({
         }
         {
           LITE_URL && (
-            <a class='c-button c-button--center-icon' href={LITE_URL} data-track='Download Lite|farewell' download>
+            <a class='c-button' data-variant='center-icon' href={LITE_URL} data-track='Download Lite|farewell' download>
               <Download width='20' height='20' /><span>Erst mal Lite</span>
             </a>
           )

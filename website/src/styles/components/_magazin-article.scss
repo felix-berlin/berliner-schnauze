@@ -364,7 +364,7 @@
 
       // Both actions (back link + share) read as the same button.
       .c-button {
-        --padding: #{vars.$spacer * 0.5 vars.$spacer * 0.85};
+        --button-padding: #{vars.$spacer * 0.5 vars.$spacer * 0.85};
 
         display: inline-flex;
         align-items: center;

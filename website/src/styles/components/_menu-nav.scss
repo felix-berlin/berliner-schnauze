@@ -50,7 +50,7 @@
 
   // Search trigger + menu button: one look for every header control.
   .c-header-control {
-    --padding: 0 12px 0 10px;
+    --button-padding: 0 12px 0 10px;
 
     display: inline-flex;
     align-items: center;
@@ -68,11 +68,11 @@
     }
 
     @include butler-mx.hover {
-      --style-border: dashed;
+      --button-border-style: dashed;
     }
 
     &[aria-expanded="true"] {
-      --style-border: dashed;
+      --button-border-style: dashed;
     }
 
     // Stacked icons (menu ↔ close), swapped via the button's [aria-expanded].
@@ -104,11 +104,8 @@
     @include butler-mx.feature("motion") {
       // Beats .c-button's `transition: all 0.3s`: snappier, and only what actually changes.
       &.c-button {
-        transition:
-          background-color 0.2s ease,
-          border-color 0.2s ease,
-          box-shadow 0.25s ease,
-          scale 0.12s ease-out;
+        --button-transition:
+          background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease, scale 0.12s ease-out;
       }
 
       &:active {

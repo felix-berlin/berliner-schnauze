@@ -32,7 +32,7 @@ describe("AnkiLetterCoverage", () => {
 
     await full?.trigger("click");
 
-    expect(full?.classes()).toContain("is-current");
+    expect(full?.attributes("aria-pressed")).toBe("true");
     expect(wrapper.find(".c-anki-coverage__count strong").text()).toBe("305");
     expect(fills(wrapper)).toEqual([1, 0.5]);
   });

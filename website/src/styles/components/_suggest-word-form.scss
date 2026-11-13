@@ -3,7 +3,7 @@
 @layer legacy {
   .c-suggest-word-form {
     &__button {
-      --padding: #{vars.$spacer * 0.75} #{vars.$spacer * 1.2};
+      --button-padding: #{vars.$spacer * 0.75} #{vars.$spacer * 1.2};
 
       font-size: 1.7rem;
       width: 100%;

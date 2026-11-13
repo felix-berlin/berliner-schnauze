@@ -299,7 +299,7 @@ describe("BonResult", () => {
 
   it("restarts from the primary button", async () => {
     const wrapper = mountResult();
-    const button = wrapper.find("button.c-button--primary");
+    const button = wrapper.find("button.c-button[data-variant~='primary']");
     expect(button.text()).toBe("Nochmal spielen");
     await button.trigger("click");
     expect(wrapper.emitted("restart")).toHaveLength(1);

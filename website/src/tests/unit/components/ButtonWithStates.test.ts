@@ -6,7 +6,7 @@ describe("ButtonWithStates.vue", () => {
     const ButtonWithStates = (await import("@components/ButtonWithStates.vue")).default;
     const wrapper = mount(ButtonWithStates);
     expect(wrapper.find("button").exists()).toBe(true);
-    expect(wrapper.find("button").classes()).toContain("c-button--state-normal");
+    expect(wrapper.find("button").attributes("data-state")).toBe("normal");
   });
 
   it("renders slot content in normal state", async () => {
@@ -27,16 +27,16 @@ describe("ButtonWithStates.vue", () => {
     expect(wrapper.find("button").attributes("disabled")).toBeUndefined();
   });
 
-  it("applies c-button--state-success class", async () => {
+  it("sets data-state success", async () => {
     const ButtonWithStates = (await import("@components/ButtonWithStates.vue")).default;
     const wrapper = mount(ButtonWithStates, { props: { state: "success" } });
-    expect(wrapper.find("button").classes()).toContain("c-button--state-success");
+    expect(wrapper.find("button").attributes("data-state")).toBe("success");
   });
 
-  it("applies c-button--state-error class", async () => {
+  it("sets data-state error", async () => {
     const ButtonWithStates = (await import("@components/ButtonWithStates.vue")).default;
     const wrapper = mount(ButtonWithStates, { props: { state: "error" } });
-    expect(wrapper.find("button").classes()).toContain("c-button--state-error");
+    expect(wrapper.find("button").attributes("data-state")).toBe("error");
   });
 
   it("shows loading text in loading state", async () => {
@@ -45,9 +45,9 @@ describe("ButtonWithStates.vue", () => {
     expect(wrapper.text()).toContain("Loading");
   });
 
-  it("applies c-button--state-loading class", async () => {
+  it("sets data-state loading", async () => {
     const ButtonWithStates = (await import("@components/ButtonWithStates.vue")).default;
     const wrapper = mount(ButtonWithStates, { props: { state: "loading" } });
-    expect(wrapper.find("button").classes()).toContain("c-button--state-loading");
+    expect(wrapper.find("button").attributes("data-state")).toBe("loading");
   });
 });

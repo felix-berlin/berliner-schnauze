@@ -60,11 +60,8 @@
     <div class="c-comment-form__actions">
       <!-- Edit: "Speichern" is a pressed choice, the spec allows one primary per view (the new-comment button). -->
       <button
-        :class="
-          edit
-            ? 'c-choice c-comment-form__save'
-            : 'c-button c-button--primary c-comment-form__button'
-        "
+        :class="edit ? 'c-choice c-comment-form__save' : 'c-button c-comment-form__button'"
+        :data-variant="edit ? undefined : 'primary'"
         type="submit"
         :aria-pressed="edit ? true : undefined"
         :aria-busy="sending"

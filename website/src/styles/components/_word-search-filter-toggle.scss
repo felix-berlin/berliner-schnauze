@@ -3,12 +3,12 @@
 
 @layer legacy {
   .c-word-search-filter-toggle {
-    --padding: #{vars.$spacer * 0.25 vars.$spacer * 0.8};
+    --button-padding: #{vars.$spacer * 0.25 vars.$spacer * 0.8};
 
     gap: var(--gap, vars.$spacer * 0.5);
 
     @include mx.breakpoint("md") {
-      --padding: #{vars.$spacer * 0.25 vars.$spacer};
+      --button-padding: #{vars.$spacer * 0.25 vars.$spacer};
     }
 
     &__text {

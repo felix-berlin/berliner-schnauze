@@ -46,9 +46,9 @@ describe("LetterFilter.vue", () => {
     expect(letterButtons).toHaveLength(3);
   });
 
-  it("Alle button has is-current when activeLetterFilter is empty string", () => {
+  it("Alle button is pressed when activeLetterFilter is empty string", () => {
     const allButton = wrapper.find(".c-letter-filter__button.is-all");
-    expect(allButton.classes()).toContain("is-current");
+    expect(allButton.attributes("aria-pressed")).toBe("true");
   });
 
   it("clicking Alle button calls setLetterFilter with empty string", async () => {

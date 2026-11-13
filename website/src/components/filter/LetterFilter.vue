@@ -3,8 +3,9 @@
     <ul class="c-letter-filter__list u-list-reset">
       <li class="c-letter-filter__list-item">
         <button
-          class="c-letter-filter__button is-all c-button c-button--filter"
-          :class="{ 'is-current': wordSearchStore.activeLetterFilter === '' }"
+          class="c-letter-filter__button is-all c-button"
+          data-variant="filter"
+          :aria-pressed="wordSearchStore.activeLetterFilter === ''"
           type="button"
           @click="setLetterFilter('')"
         >
@@ -19,10 +20,9 @@
         <button
           :aria-label="`Filter nach Buchstabe ${letter}`"
           type="button"
-          class="c-letter-filter__button c-button c-button--filter"
-          :class="{
-            'is-current': letter === wordSearchStore.activeLetterFilter,
-          }"
+          class="c-letter-filter__button c-button"
+          data-variant="filter"
+          :aria-pressed="letter === wordSearchStore.activeLetterFilter"
           :title="`Filter nach Buchstabe ${letter}`"
           @click="setLetterFilter(letter!)"
         >

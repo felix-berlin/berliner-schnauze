@@ -71,16 +71,18 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4375rem;
-      padding: 0.4375rem 0.8125rem;
+
+      --button-padding: 0.4375rem 0.8125rem;
+
       margin-inline-start: auto;
       font-size: 0.85rem;
       font-weight: 700;
       white-space: nowrap;
 
       &.is-copied {
-        --color-background: var(--success);
-        --color-border: var(--success);
-        --color: white;
+        --button-bg: var(--success);
+        --button-border-color: var(--success);
+        --button-color: white;
       }
     }
   }

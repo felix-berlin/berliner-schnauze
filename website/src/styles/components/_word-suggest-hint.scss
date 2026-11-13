@@ -15,10 +15,10 @@
     }
 
     &__button {
-      --padding: 0.5rem 1rem;
+      --button-padding: 0.5rem 1rem;
+      --button-display: flex;
 
       gap: vars.$spacer * 0.5;
-      display: flex;
       margin-block-start: vars.$spacer * 1;
     }
   }

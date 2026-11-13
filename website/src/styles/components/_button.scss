@@ -1,122 +1,116 @@
-@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-@mixin filter-active {
-  --color-border: var(--yellow-500);
-  --style-border: dashed;
-  --color-background: var(--orange-500);
-  --color: black;
+// Variants (space-separated in data-variant): primary, lg, center-icon, filter. A pressed filter
+// button is aria-pressed="true". Public: --button-padding, --button-bg, --button-color,
+// --button-border-color, --button-border-style, --button-border-width, --button-display,
+// --button-font-size, --button-transition.
+@include mx.component("button") {
+  :scope {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R28: one-off (hover rim of primary and filter)
+    --_rim: rgb(227 227 210);
+    --_bg: var(--button-bg, var(--color-control-bg));
+    --_color: var(--button-color, var(--color-control-text));
+    --_border-color: var(--button-border-color, var(--color-border-control));
+    --_border-style: var(--button-border-style, solid);
 
-  @include butler-mx.dark-mode-class {
-    --color: black;
-  }
-}
-
-@layer legacy {
-  .c-button {
     cursor: pointer;
-    padding: var(--padding, #{vars.$spacer * 0.25});
-    background-color: var(--color-background, var(--control-bg));
-    border: var(--width-border, 1px) var(--style-border, solid)
-      var(--color-border, var(--control-border));
-    color: var(--color, var(--control-color));
-    transition:
-      background-color 0.3s ease-in-out,
-      border-color 0.3s ease-in-out,
-      color 0.3s ease-in-out,
-      box-shadow 0.3s ease-in-out;
-
-    // Values equal the fallbacks; kept for the `.dark .c-button` specificity that modifiers rely on.
-    @include butler-mx.dark-mode-class {
-      --color-background: var(--control-bg);
-      --color: var(--control-color);
-      --color-border: var(--control-border);
-    }
+    padding: var(--button-padding, var(--space-1));
+    background-color: var(--_bg);
+    border: var(--button-border-width, 1px) var(--_border-style) var(--_border-color);
+    color: var(--_color);
+    transition: var(
+      --button-transition,
+      background-color var(--duration-base) var(--ease-standard),
+      border-color var(--duration-base) var(--ease-standard),
+      color var(--duration-base) var(--ease-standard),
+      box-shadow var(--duration-base) var(--ease-standard)
+    );
 
     // Hover: solid → dashed border plus the orange glow (DESIGN.md: the interaction signature).
     @include butler-mx.hover {
       &:not(:disabled) {
-        --style-border: dashed;
+        --_border-style: dashed;
       }
 
-      box-shadow: vars.$hover-glow;
+      box-shadow: var(--shadow-hover-glow);
+    }
+  }
+
+  // Orange call-to-action (e.g. buy buttons): body font, bold, stays orange in dark mode.
+  // accent.solid, not accent.active: white text on the lighter orange is only 3.9:1 (AA needs 4.5:1)
+  :scope[data-variant~="primary"] {
+    --_bg: var(--button-bg, var(--color-accent-solid));
+    --_color: var(--button-color, var(--color-text-on-accent));
+    --_border-color: var(--button-border-color, var(--color-accent-solid));
+
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-bold);
+
+    @include butler-mx.hover {
+      --_border-color: var(--_rim);
+    }
+  }
+
+  // Large call to action (BON screens): 48px target, centred label, also on <a>.
+  :scope[data-variant~="lg"] {
+    display: var(--button-display, inline-flex);
+    align-items: center;
+    justify-content: center;
+    padding: var(--button-padding, 0 var(--space-6));
+    min-block-size: 48px;
+    font-size: var(--button-font-size, var(--font-size-base));
+    text-decoration: none;
+  }
+
+  :scope[data-variant~="center-icon"] {
+    display: var(--button-display, inline-flex);
+    justify-content: center;
+    align-items: center;
+  }
+
+  // Inner wrapper that centres a swapped icon (search button).
+  .center {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  :scope[data-variant~="filter"] {
+    padding: var(--button-padding, var(--space-1) var(--space-2));
+    gap: var(--space-1);
+
+    > * {
+      gap: var(--space-1);
     }
 
-    // Orange call-to-action (e.g. buy buttons): body font, bold, stays orange in dark mode.
-    // orange-600, not 500: white text on 500 is only 3.9:1 (AA needs 4.5:1)
-    &--primary {
-      --color-background: var(--orange-600);
-      --color: var(--white-100);
-      --color-border: var(--orange-600);
-
-      font-family: vars.$berlin;
-      font-weight: 700;
-
-      @include butler-mx.hover {
-        --color-border: var(--yellow-500);
-      }
-      @include butler-mx.dark-mode-class {
-        --color-background: var(--orange-600);
-        --color: var(--white-100);
-        --color-border: var(--orange-600);
-      }
+    &[aria-pressed="true"] {
+      --_bg: var(--color-accent-active);
+      --_color: var(--button-color, var(--color-surface-overlay));
+      --_border-color: var(--_rim);
+      --_border-style: dashed;
     }
 
-    // Large call to action (BON screens): 48px target, centred label, also on <a>.
-    &--lg {
-      --padding: 0 1.5rem;
-
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-block-size: 48px;
-      font-size: 1rem;
-      text-decoration: none;
+    @include butler-mx.hover {
+      --_bg: var(--color-accent-active);
+      --_color: var(--button-color, var(--color-surface-overlay));
+      --_border-color: var(--_rim);
+      --_border-style: dashed;
     }
+  }
 
-    &--center-icon {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-    }
+  // Disabled: no fill, muted text, dotted border (dashed stays the hover signature). Plain
+  // colours instead of 50 % opacity, so the label stays readable (muted is AA).
+  :scope:disabled {
+    &,
+    &:hover {
+      --_bg: transparent;
+      --_color: var(--color-text-muted);
+      --_border-color: var(--color-text-muted);
+      --_border-style: dotted;
 
-    &--filter {
-      --padding: #{vars.$spacer * 0.25 vars.$spacer * 0.5};
-
-      & > *,
-      & {
-        gap: vars.$spacer * 0.25;
-      }
-
-      &.is-active,
-      &.is-current {
-        @include filter-active;
-      }
-
-      @include butler-mx.hover {
-        @include filter-active;
-      }
-    }
-
-    // Disabled: no fill, muted text, dotted border (dashed stays the hover signature). Plain
-    // colours instead of 50 % opacity, so the label stays readable (muted is AA).
-    &:disabled {
-      &,
-      &:hover {
-        --color-background: transparent;
-        --color: var(--color-muted);
-        --color-border: var(--color-muted);
-        --style-border: dotted;
-
-        cursor: not-allowed;
-        box-shadow: none;
-      }
-
-      @include butler-mx.dark-mode-class {
-        --color-background: transparent;
-        --color: var(--color-muted);
-        --color-border: var(--color-muted);
-      }
+      cursor: not-allowed;
+      box-shadow: none;
     }
   }
 }

@@ -59,7 +59,7 @@
             <span class="c-main-menu__install-text">
               Mit der App bleibst Du immer informiert, ob online oder offline.
             </span>
-            <InstallApp class="c-button--primary c-header-control c-main-menu__install-button">
+            <InstallApp class="c-header-control c-main-menu__install-button" data-variant="primary">
               <DownloadIcon aria-hidden="true" /> App installieren
             </InstallApp>
           </div>

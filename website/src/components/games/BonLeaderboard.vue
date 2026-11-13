@@ -62,9 +62,7 @@
               : "Noch keene Spiele in dem Zeitraum."
           }}</b>
           <span>Hier könnte dein Name stehen.</span>
-          <a
-            class="c-button c-button--primary c-button--lg c-bon-leaderboard__play"
-            :href="GAME_PATH"
+          <a class="c-button c-bon-leaderboard__play" data-variant="primary lg" :href="GAME_PATH"
             >Jetzt spielen</a
           >
         </div>
@@ -188,7 +186,8 @@
             <template v-else>
               <p>Du stehst hier noch nich drin. Spiel ’ne Runde, dann siehste, wo du landest.</p>
               <a
-                class="c-button c-button--primary c-button--lg c-bon-leaderboard__play"
+                class="c-button c-bon-leaderboard__play"
+                data-variant="primary lg"
                 :href="GAME_PATH"
                 >Jetzt spielen</a
               >

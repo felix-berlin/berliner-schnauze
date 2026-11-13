@@ -15,16 +15,18 @@
         <div class="c-anki-coverage__toggle">
           <button
             type="button"
-            class="c-button c-button--filter"
-            :class="{ 'is-current': plan === 'lite' }"
+            class="c-button"
+            data-variant="filter"
+            :aria-pressed="plan === 'lite'"
             @click="plan = 'lite'"
           >
             Lite
           </button>
           <button
             type="button"
-            class="c-button c-button--filter"
-            :class="{ 'is-current': plan === 'full' }"
+            class="c-button"
+            data-variant="filter"
+            :aria-pressed="plan === 'full'"
             @click="plan = 'full'"
           >
             Full

@@ -4,7 +4,8 @@
       <h2>App-Einstellungen</h2>
       <p>Du nutzt bereits die App – knorke! Hier kannst Du sie nach Deinem Jeschmack anpassen.</p>
       <a
-        class="c-button c-button--center-icon c-footer-app-section__settings-link"
+        class="c-button c-footer-app-section__settings-link"
+        data-variant="center-icon"
         href="/settings"
         @click="trackEvent('Footer', 'click', 'Open app settings')"
       >
@@ -17,14 +18,15 @@
       <h2>Installiere die App</h2>
       <p>Mit der Berliner Schnauze App bleibst Du immer informiert, ob online oder offline.</p>
       <div class="c-footer-app-section__actions">
-        <InstallApp class="c-button--center-icon">
+        <InstallApp data-variant="center-icon">
           <DownloadIcon height="16" width="16" />
           App installieren
         </InstallApp>
         <a
           v-tooltip="{ content: 'Einstellungen', placement: 'top' }"
           aria-label="Einstellungen"
-          class="c-button c-button--center-icon c-footer-app-section__settings-link c-footer-app-section__settings-link--icon-only"
+          class="c-button c-footer-app-section__settings-link c-footer-app-section__settings-link--icon-only"
+          data-variant="center-icon"
           href="/settings"
           @click="trackEvent('Footer', 'click', 'Open app settings')"
         >

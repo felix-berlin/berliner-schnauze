@@ -58,20 +58,22 @@
     }
 
     &__platform-item &__platform-link.c-button {
-      --color-background: var(--orange-100);
-      --color-border: var(--orange-600);
-      --color: var(--blue);
+      --button-bg: var(--orange-100);
+      --button-border-color: var(--orange-600);
+      --button-color: var(--blue);
 
       display: flex;
       align-items: center;
       gap: vars.$spacer * 0.8;
-      padding: 0.9375rem 1rem;
+
+      --button-padding: 0.9375rem 1rem;
+
       text-decoration: none;
 
       @include butler-mx.dark-mode-class {
-        --color-background: var(--new-blue-300);
-        --color-border: var(--orange-500);
-        --color: var(--yellow-500);
+        --button-bg: var(--new-blue-300);
+        --button-border-color: var(--orange-500);
+        --button-color: var(--yellow-500);
 
         .c-donation-page__platform-icon {
           color: var(--orange-300);
@@ -108,14 +110,14 @@
     }
 
     &__platform-item--primary &__platform-link.c-button {
-      --color-background: var(--orange-500);
-      --color-border: var(--yellow-500);
-      --style-border: dashed;
-      --color: white;
+      --button-bg: var(--orange-500);
+      --button-border-color: var(--yellow-500);
+      --button-border-style: dashed;
+      --button-color: white;
 
       // reassert over the dimmed dark-mode background/icon-color set on the base platform-link rule
       @include butler-mx.dark-mode-class {
-        --color-background: var(--orange-500);
+        --button-bg: var(--orange-500);
 
         .c-donation-page__platform-icon {
           color: white;
