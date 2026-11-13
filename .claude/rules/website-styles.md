@@ -5,11 +5,97 @@ paths:
   - "website/src/styles/**"
 ---
 
-# Styles: SCSS, BEMIT, breakpoints (website/)
+# Styles: tokens, layers, scope (website/)
 
-**Vue styles**: NOT scoped — BEMIT class naming provides isolation instead. Use `<style lang="scss">` without `scoped`. Each component owns its SCSS file at `src/styles/components/_name.scss` and loads it via `@use "@styles/components/name"` inside its own `<style>` block — not globally.
+Full design and tables: `docs/superpowers/specs/2026-11-13-design-system-design.md`. Visual language: `DESIGN.md`. Migrated = not listed in `website/stylelint.legacy-files.mjs`; migrated files follow everything below, legacy files only "Legacy files".
 
-**BEMIT naming** ([BEMIT](https://gist.github.com/stephenway/a6145d9b4430e8c55a77) — BEM with namespaces):
+## Tiers and token files
+
+- Sources (DTCG): `website/tokens/primitive.tokens.json`, `semantic.light.tokens.json`, `semantic.dark.tokens.json`. The two semantic files have identical paths.
+- Generated, never edit: `website/src/styles/tokens/_tokens.generated.scss` (`@layer tokens`; ignored by Stylelint and oxfmt). Name = path joined with `-`: `color.surface.paper` -> `--color-surface-paper`. Themed values are `light-dark()`.
+- Tier 1 primitive: raw values (`color.orange.600`, `color.ink.100`-`1000` plus `m` mixes, `color.danger|success|gold`, `space.*`, `font.*`, `radius.*`, `duration.*`, `z.*`). Never used in components.
+- Tier 2 semantic: meaning per theme (`color.surface.*`, `color.text.*`, `color.status.*`, `shadow.*`). The only colour tier components may use. Non-colour tokens (space, font, radius, duration, ease, z) are used directly.
+- Tier 3 component: custom properties inside a component. Private `--_name`, public `--<component>-name` (a parent may set it).
+- `--_` properties may hold raw lengths (one-line comment why: no token step within 0.1rem, `clamp()`, one-off width), never colours.
+
+## Semantic tokens only
+
+- Colour: only `var(--color-<semantic>)` / `var(--shadow-…)`. No hex, named colour, `rgb()`/`hsl()`/`color-mix()`, no primitive, no legacy alias (`--orange-600`, `--blue-*`, `--surface-*` ...).
+- Font size, spacing, radius, shadow, z-index, duration, font family: tokens. Value between two steps: nearer step; exactly in the middle: the smaller.
+- A colour without a semantic token: stop and report it. No primitive, no invented token, no `--_` property holding a colour.
+- No dark-mode code: `light-dark()` tokens follow `color-scheme`. No `dark-mode-class` mixin, no `.dark` selector. Only exceptions: the `color-scheme` switch in `base/_colors.scss` and `html[class~="dark"] .c-select { background-blend-mode }` in `base/_inputs.scss`.
+- Logical properties only (`inline-size`, `margin-block`, `inset-inline`); no `@media`, `@import`, `@extend`, Sass variables or `#{}` in declaration values.
+- Per-line Stylelint disables need a reason in the same comment. No `!important` outside the reduced-motion reset in `base`.
+
+## Layers
+
+Order, declared inline in `BaseHead.astro` (do not touch): `reset, tokens, vendor, base, legacy, objects, components, utilities`.
+
+- Folder decides the layer: `base/` -> base, `objects/` -> objects, `utilities/` -> utilities, migrated components -> `components` (via `mx.component`).
+- Never write `@layer` for a new style except through `mx.component`; the contract test allows only these layer names.
+- Library CSS: load with `meta.load-css` inside a layer block (`@layer vendor { @include meta.load-css(...) }`). A plain `@use` of foreign CSS lands unlayered and beats every layer; the contract test rejects foreign `@use`.
+- `legacy` holds every not yet migrated partial (each wraps its rules in `@layer legacy`). A file leaves `legacy` only when fully migrated, and is then removed from `stylelint.legacy-files.mjs`. The list only shrinks, never add to it.
+- `.vue` and `.astro` style blocks contain only `@use` (no `scoped`, no rules).
+
+## Components: `mx.component`
+
+One component = one file `src/styles/components/_<name>.scss` = exactly one block; the name matches the file:
+
+```scss
+@use "@styles/mixins" as mx;
+
+@include mx.component("section-card") {
+  :scope {
+    --_bg: var(--color-surface-sheet);
+    background: var(--_bg);
+    container: section-card / inline-size;
+  }
+  .title {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-strong);
+  }
+  :scope[data-variant="note"] {
+    border-inline-start: 3px solid var(--color-border-inner);
+  }
+}
+```
+
+- Root keeps its namespaced class `c-<name>` (`o-` objects, `u-` utilities, `js-` JS hooks, no styling). Write the root only as `:scope`: never the root class, never a top-level `&`.
+- Parts: plain lowercase-hyphen classes or bare elements (`.title`, `button`). No `__element`, `--modifier`, `.is-*`, `.has-*`. Sass nesting below a part is fine.
+- Variants: `data-variant` on the root. State: ARIA/native first (`[aria-pressed="true"]`, `:disabled`, `[open]`), else `data-state`.
+- Boundary: a component never styles a nested `c-*` component or slotted content. Every element directly wrapping a `<slot>` carries `data-slot`.
+- A parent places a child via its own layout (`grid`, `gap`) and adjusts it only through the child's public properties (`--button-bg`). No parent rule on a child's class. If that is impossible: report, do not widen the boundary.
+- JS and tests never select part classes: JS uses `js-` classes or `data-` attributes; tests use roles and text first, the `c-` root second.
+- jsdom ignores `@scope`: assert scoped styles in Playwright only.
+- Form controls (`input`, `textarea`): Safari 26.0-26.3 does not apply `@scope` rules to them (fixed in 26.4). Check them there or keep their base styling in `base/_inputs.scss`.
+- Browser floor: Firefox >= 146 (`@scope`); unsupported browsers get the notice generated from browserslist.
+
+## Responsive: container queries vs. `mx.breakpoint`
+
+- In components: the root is the container (`container: <name> / inline-size`), parts use `@container <name> (inline-size >= 30rem)`. A container query cannot style the container itself: a root whose own padding or grid must respond gets an inner wrapper part (`.inner`).
+- `@include mx.breakpoint("sm")` (`@use "@styles/mixins" as mx;`, never raw `@media`) only in `objects/` (page shell) and legacy files. Map: `src/styles/variables/_layout.scss`.
+
+## Commands (pnpm only; the style scripts exist in `website/` only, root has just `pnpm test:unit`)
+
+- `pnpm tokens:build` regenerates the token file; `pnpm tokens:check` fails when it is stale (CI runs it).
+- `pnpm lint:style:check` = Stylelint without fixing. Never use `pnpm lint` to check: it auto-fixes and modifies files.
+- `pnpm test:unit` runs the contract test (`website/src/tests/unit/styles/contract.test.ts`) and the Stylelint fixtures.
+- Visual baseline: `website/src/tests/e2e/visual-baseline.spec.ts`, local gate only (ignored in CI), chromium; run command in its header. A snapshot update must name the reason.
+- Every migrated page: light + dark check at 390px and 1280px.
+
+## Add a token
+
+1. Add the path to `primitive.tokens.json` if a new raw value is needed (`$type` on the group, `$value` on the token).
+2. Semantic token: add the same path to both `semantic.light.tokens.json` and `semantic.dark.tokens.json` (aliases `{group.token}`; a path missing in one file fails the build; one path may not exist in both tiers).
+3. `pnpm tokens:build`, then commit the JSON files and the generated file together.
+
+## Legacy files
+
+Applies only to files listed in `website/stylelint.legacy-files.mjs` (not yet migrated). Do not extend them with new features; migrate them whole instead.
+
+- Vue styles: not scoped, `<style lang="scss">` with `@use "@styles/components/name"` only; each component owns `src/styles/components/_name.scss`.
+- Every partial wraps its rules in `@layer legacy { ... }` below its `@use` lines.
+- [BEMIT](https://gist.github.com/stephenway/a6145d9b4430e8c55a77) naming:
 
 | Prefix           | Purpose                    | Example                       |
 | ---------------- | -------------------------- | ----------------------------- |
@@ -19,12 +105,9 @@ paths:
 | `.is-` / `.has-` | State                      | `.is-active`, `.has-dropdown` |
 | `.js-`           | JS hooks (no styling)      | `.js-scroll-target`           |
 
-Pattern: `.c-block__element--modifier`. Hyphens separate words within each part (`c-my-component`, not `c-myComponent`). Never use plain BEM without a namespace prefix.
+Pattern `.c-block__element--modifier`, hyphens inside each part, never plain BEM without prefix.
 
-**SCSS imports**: Use `@use "@styles/path"` — not `@import`. Global styles (base resets, typography, utilities) belong in `src/styles/app.scss`.
-
-**Breakpoints & container queries**: Never write raw `@media (width >= vars.$sm)` queries. Fixed viewport breakpoints always go through the sass-butler mixin: `@use "@styles/mixins" as mx;` then `@include mx.breakpoint("sm") { ... }` (direction defaults to `min`; pass `"max"` for a max-width query). The breakpoint map lives in `src/styles/variables/_layout.scss`. Wherever the responsive behavior is really about a component's own available space rather than the viewport, prefer a **container query**: `container-type: inline-size; container-name: x;` on the ancestor, then `@container x (inline-size >= Yrem) { ... }` on the descendant — see `src/styles/components/_word-page-layout.scss` and `_word-learn-more.scss`.
-
-**Shared SCSS**: raised cards use `@include mx.paper-card` / `mx.paper-card-title` (`src/styles/mixins/_paper-card.scss`); orange CTA = `.c-button--primary`; muted secondary text = `var(--color-muted)`. Word page controls (`docs/design/wortseite/SPEC.md`): selection = `.c-choice` (state via `aria-pressed`), text action = `.c-link`, framed-on-hover icon = `.c-icon-button`, only the submit is `.c-button--primary`. They are global and wrapped in `:where()`, so a component class overrides display/margin/padding without a specificity fight.
-
-Design rules (palette, Postcard Rule, light + dark check): `DESIGN.md` and `website/CLAUDE.md`.
+- Old palette and aliases (`var(--orange-600)`) and `butler-mx.dark-mode-class` still work here (aliases in `src/styles/tokens/_legacy-aliases.scss`).
+- Breakpoints: `mx.breakpoint`; container queries where the behaviour is about a component's own width (`_word-page-layout.scss`).
+- Shared: `mx.paper-card` / `mx.paper-card-title` (`mixins/_paper-card.scss`); `.c-button--primary` = orange CTA; `var(--color-muted)` = secondary text. Word page controls (`docs/design/wortseite/SPEC.md`): `.c-choice` (`aria-pressed`), `.c-link`, `.c-icon-button`, only the submit is `.c-button--primary`; global, wrapped in `:where()`.
+- `@use "@styles/path"`, never `@import`.

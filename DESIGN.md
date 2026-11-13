@@ -1,23 +1,7 @@
 ---
 name: Berliner Schnauze
 description: Berlin-dialect translator and lexicon — fast word lookup with a hand-stamped postcard texture
-colors:
-  currywurst-400: "#e28964"
-  currywurst-500: "#cf5736"
-  currywurst-600: "#b23b27"
-  currywurst-100: "#fcead7"
-  currywurst-200: "#fad0b0"
-  berlin-red-500: "#cf3018"
-  berlin-red-berlin-500: "#f2391d"
-  ink-base: "#2b333b"
-  grey-100: "#4e545a"
-  grey-200: "#373c40"
-  white-100: "#f9f9f9"
-  white-200: "#f5f5f5"
-  cream-500: "#e3e3d2"
-  gold-500: "#e1b125"
-  danger: "hsl(8deg 89% 53%)"
-  success: "#35a672"
+# Colour, spacing, radius: DTCG tokens in website/tokens/ (primitive.tokens.json, semantic.light|dark.tokens.json); see docs/superpowers/specs/2026-11-13-design-system-design.md
 typography:
   display:
     fontFamily: "Berliner, var(--font-berliner)"
@@ -35,18 +19,6 @@ typography:
     fontSize: "0.7rem"
     fontWeight: 700
     letterSpacing: "0.05em"
-rounded:
-  none: "0px"
-  xxs: "2px"
-  xs: "3px"
-  sm: "4px"
-spacing:
-  xs: "0.25rem"
-  sm: "0.5rem"
-  md: "0.75rem"
-  base: "1rem"
-  lg: "1.25rem"
-  xl: "1.5rem"
 components:
   button-theme:
     backgroundColor: "{colors.ink-base}"

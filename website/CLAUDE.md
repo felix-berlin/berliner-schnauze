@@ -110,6 +110,8 @@ Start it with `pnpm dev` (root or `website/`): it goes through `with-env.sh`, so
 
 ## Design Context
 
+- **Styles**: tokens, cascade layers, `@scope` components and the Stylelint gate are specified in `docs/superpowers/specs/2026-11-13-design-system-design.md`; the rules to follow live in `.claude/rules/website-styles.md`.
+
 Full strategic/visual system in `PRODUCT.md` and `DESIGN.md` at the repo root (managed by the `impeccable` skill); read `DESIGN.md` before any UI work. Voice: cheeky/schnodderig + warm/heimatlich — never generic dictionary-app neutrality. Visual north star: **"The Postcard Rule"** — a dashed-line texture is the one recurring signature. Currywurst orange is the dominant accent; Berlin Red is rare; navy-ink `#2b333b` is structural only; one shadow ("Paper Lift") for every raised surface.
 
-**Light + dark check (mandatory)**: every UI change is verified in the browser in both light and dark mode before it counts as done, and in both a desktop and a mobile width. Toggle dark in the browser with `document.documentElement.classList.toggle('dark')` (the `.dark` class drives `butler-mx.dark-mode-class`) and take a screenshot of each state.
+**Light + dark check (mandatory)**: every UI change is verified in the browser in both light and dark mode before it counts as done, and in both a desktop and a mobile width. Toggle dark in the browser with `document.documentElement.classList.toggle('dark')` (`light-dark()` tokens follow `color-scheme`, which the `.dark` class sets; legacy files still use `butler-mx.dark-mode-class`) and take a screenshot of each state.
