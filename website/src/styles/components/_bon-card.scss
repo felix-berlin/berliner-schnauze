@@ -125,10 +125,11 @@
       gap: 0.5rem;
 
       .c-choice {
-        justify-content: center;
-        min-height: 60px;
-        padding-inline: 0.5rem;
-        font-size: 1.05rem;
+        --choice-justify: center;
+        --choice-min-block-size: 60px;
+        --choice-padding-inline: 0.5rem;
+        --choice-font-size: 1.05rem;
+
         font-weight: 700;
         text-align: center;
       }

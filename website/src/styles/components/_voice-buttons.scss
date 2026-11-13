@@ -6,7 +6,7 @@
     gap: 0.5rem;
 
     &__button {
-      padding-inline: 0.75rem;
+      --choice-padding-inline: 0.75rem;
 
       // The icon set draws outlines (path or rect fill="none"); the mock has solid glyphs.
       svg :is(path, rect) {

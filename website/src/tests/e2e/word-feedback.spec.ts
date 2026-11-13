@@ -157,7 +157,7 @@ test.describe("word feedback", () => {
     await card.scrollIntoViewIfNeeded();
     await expect(card.getByRole("button", { name: "Kenn ick" })).toBeVisible();
     await context.setOffline(true);
-    const tiles = card.locator(".c-choice--tile");
+    const tiles = card.locator(".c-choice[data-variant~='tile']");
     await expect(tiles).toHaveCount(3);
     for (const tile of await tiles.all())
       await expect(tile).toHaveAttribute("aria-disabled", "true");

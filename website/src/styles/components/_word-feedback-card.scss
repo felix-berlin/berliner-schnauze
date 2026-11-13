@@ -48,7 +48,8 @@
       grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 100%), 1fr));
 
       .c-choice {
-        justify-content: flex-start;
+        --choice-justify: flex-start;
+
         overflow-wrap: anywhere;
         text-align: start;
       }

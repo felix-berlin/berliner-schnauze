@@ -20,9 +20,9 @@
     }
 
     &__sort-button {
-      min-block-size: 2.25rem;
-      padding-inline: 0.625rem;
-      font-size: 0.75rem;
+      --choice-min-block-size: 2.25rem;
+      --choice-padding-inline: 0.625rem;
+      --choice-font-size: 0.75rem;
 
       & + & {
         margin-inline-start: -1px;
@@ -77,8 +77,9 @@
     }
 
     &__write {
+      --choice-justify: center;
+
       inline-size: 100%;
-      justify-content: center;
     }
 
     &__captcha-text {

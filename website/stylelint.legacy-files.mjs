@@ -23,7 +23,6 @@ export default [
   "src/styles/components/_bon-share-view.scss",
   "src/styles/components/_book-shelf.scss",
   "src/styles/components/_carbon-badge.scss",
-  "src/styles/components/_choice.scss",
   "src/styles/components/_color-mode-picker.scss",
   "src/styles/components/_comment-form.scss",
   "src/styles/components/_comment.scss",

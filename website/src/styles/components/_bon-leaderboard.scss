@@ -50,11 +50,11 @@
       gap: 0.375rem;
 
       .c-choice {
-        min-block-size: 2.5rem;
-        padding: 0 0.625rem;
+        --choice-min-block-size: 2.5rem;
+        --choice-padding-inline: 0.625rem;
 
         @include mx.breakpoint("word") {
-          padding: 0 0.875rem;
+          --choice-padding-inline: 0.875rem;
         }
       }
 

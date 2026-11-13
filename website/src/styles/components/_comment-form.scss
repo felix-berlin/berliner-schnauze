@@ -92,7 +92,7 @@
     }
 
     &__save {
-      min-block-size: 2.75rem;
+      --choice-min-block-size: 2.75rem;
 
       &[aria-disabled="true"] {
         opacity: 0.55;

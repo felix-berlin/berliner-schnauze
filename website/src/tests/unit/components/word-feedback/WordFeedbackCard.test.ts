@@ -55,11 +55,9 @@ describe("WordFeedbackCard", () => {
   it("starts with the three usage buttons only and loads the state", async () => {
     const w = await mountIt();
     expect(w.text()).toContain("Sagste det noch?");
-    expect(w.findAll("button.c-choice--tile").map((b) => b.find("b").text())).toEqual([
-      "Sag ick selbst",
-      "Kenn ick",
-      "Nie jehört",
-    ]);
+    expect(
+      w.findAll("button.c-choice[data-variant~='tile']").map((b) => b.find("b").text()),
+    ).toEqual(["Sag ick selbst", "Kenn ick", "Nie jehört"]);
     expect(w.findAll("button")).toHaveLength(3);
     expect(w.text()).toContain("Is dit Wort bei dir noch im Einsatz?");
     expect(w.text()).toContain("Kommt mir regelmäßig übern Mund");
@@ -84,7 +82,7 @@ describe("WordFeedbackCard", () => {
     expect(w.text()).not.toContain("Klar, los");
     expect(w.find(".c-reaction").exists()).toBe(false);
     expect(w.find('[role="status"]').text()).toBe("Stimme jezählt");
-    expect(w.find("button.c-choice--tile").exists()).toBe(false);
+    expect(w.find("button.c-choice[data-variant~='tile']").exists()).toBe(false);
     expect(w.text()).toContain("10 Stimmen");
     expect(w.text()).toContain("50 %");
     expect(track).toHaveBeenCalledWith("Word Feedback", "usage", "know");
@@ -150,7 +148,7 @@ describe("WordFeedbackCard", () => {
     const w = await mountIt();
     window.dispatchEvent(new Event("offline"));
     await flushPromises();
-    const tiles = w.findAll("button.c-choice--tile");
+    const tiles = w.findAll("button.c-choice[data-variant~='tile']");
     expect(tiles.every((t) => t.attributes("aria-disabled") === "true")).toBe(true);
     expect(w.find(".c-state--offline").text()).toContain("Du bist offline.");
     await tiles[0].trigger("click");
@@ -459,7 +457,9 @@ describe("WordFeedbackCard", () => {
     const w = await mountIt();
     await click(w, "← Zurück");
     await click(w, "Nie jehört");
-    expect(w.find('button.c-choice--tile[aria-pressed="true"]').exists()).toBe(false);
+    expect(w.find("button.c-choice[data-variant~='tile'][aria-pressed='true']").exists()).toBe(
+      false,
+    );
     expect(w.find(".c-state--error").exists()).toBe(true);
   });
 
@@ -518,7 +518,7 @@ describe("WordFeedbackCard", () => {
     const w = await mountIt();
     await click(w, "Kenn ick");
     await click(w, "← Zurück");
-    expect(w.findAll("button.c-choice--tile")).toHaveLength(3);
+    expect(w.findAll("button.c-choice[data-variant~='tile']")).toHaveLength(3);
     expect(w.find('[role="status"]').text()).toBe("");
   });
 
@@ -597,7 +597,7 @@ describe("WordFeedbackCard", () => {
       expect(w.text()).toContain("← Zurück");
       await click(w, "← Zurück");
       await click(w, "← Zurück");
-      expect(w.findAll("button.c-choice--tile")).toHaveLength(3);
+      expect(w.findAll("button.c-choice[data-variant~='tile']")).toHaveLength(3);
     });
 
     it("goes back over a step the answers made irrelevant, without sending", async () => {

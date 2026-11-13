@@ -92,10 +92,11 @@
 
     // In the list on narrow screens; the standalone button belongs to the map.
     &__elsewhere {
-      display: none;
+      --choice-display: none;
+      --choice-justify: center;
+
       min-inline-size: 9rem;
       margin: 0.75rem auto 0;
-      justify-content: center;
     }
 
     &__list {
@@ -110,8 +111,9 @@
     }
 
     &__list-item {
-      justify-content: flex-start;
-      padding-block: 0.3rem;
+      --choice-justify: flex-start;
+      --choice-padding-block: 0.3rem;
+
       overflow-wrap: anywhere;
       text-align: start;
     }
@@ -141,7 +143,7 @@
       }
 
       &__elsewhere {
-        display: block;
+        --choice-display: block;
       }
 
       &__list {

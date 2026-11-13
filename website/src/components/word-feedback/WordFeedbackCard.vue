@@ -22,7 +22,12 @@
         <p ref="lead" class="c-word-feedback-card__lead" tabindex="-1">
           Is dit Wort bei dir noch im Einsatz?
         </p>
-        <div v-if="!online" id="word-feedback-offline" class="c-state c-state--offline" role="status">
+        <div
+          v-if="!online"
+          id="word-feedback-offline"
+          class="c-state c-state--offline"
+          role="status"
+        >
           <WifiOff aria-hidden="true" height="18" width="18" />
           <span class="c-state__body">
             <b>Du bist offline.</b>
@@ -58,14 +63,15 @@
             :key="o.value"
             :aria-disabled="!online || pending"
             :aria-pressed="pickedUsage === o.value"
-            class="c-choice c-choice--tile"
+            class="c-choice"
+            data-variant="tile"
             type="button"
             @click="answerUsageStep(o.value)"
           >
-            <span class="c-choice__icon" aria-hidden="true">
+            <span class="icon" aria-hidden="true">
               <component :is="o.icon" height="22" width="22" />
             </span>
-            <span class="c-choice__text">
+            <span class="text">
               <b>{{ o.label }}</b>
               <span>{{ o.hint }}</span>
             </span>
@@ -217,18 +223,8 @@
       </template>
     </div>
 
-    <footer
-      v-if="current !== 'usage' && current !== 'done'"
-      class="c-word-feedback-card__footer"
-    >
-      <button
-        class="c-textlink"
-        :disabled="pending"
-        type="button"
-        @click="back"
-      >
-        ← Zurück
-      </button>
+    <footer v-if="current !== 'usage' && current !== 'done'" class="c-word-feedback-card__footer">
+      <button class="c-textlink" :disabled="pending" type="button" @click="back">← Zurück</button>
       <button
         class="c-textlink c-word-feedback-card__skip"
         :disabled="pending"
