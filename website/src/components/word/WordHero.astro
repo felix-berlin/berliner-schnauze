@@ -64,7 +64,7 @@ const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(
       {/* Spec §5 order: trend, word type, Berolinismus; the themes sit in their own row below (the §14 focus order lists the themes before the trend link; the visual order wins). */}
       {
         trend && (
-          <a href='#n-trend' class='c-badge c-badge--strong c-word-hero__trend-badge'>
+          <a href='#n-trend' class='c-badge c-word-hero__trend-badge' data-variant='strong'>
             <TrendingUp width='12' height='12' aria-hidden='true' />
             Im Trend · Platz {trend.rank}
           </a>
@@ -73,7 +73,8 @@ const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(
       {
         badge && (
           <span
-            class:list={['c-badge', { 'c-badge--auto': badge.auto }]}
+            class='c-badge'
+            data-variant={badge.auto ? 'wash auto' : 'wash'}
             title={badge.auto ? 'Automatisch erkannt, kann abweichen' : undefined}
           >
             {badge.text}

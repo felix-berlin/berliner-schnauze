@@ -43,9 +43,9 @@
         </div>
 
         <div v-else-if="status === 'error'" class="c-bon-leaderboard__pad">
-          <div class="c-state c-state--error" role="alert">
+          <div class="c-state" data-variant="error" role="alert">
             <AlertIcon width="18" height="18" aria-hidden="true" />
-            <span class="c-state__body">
+            <span class="body">
               <b>Ditt hat nich jeklappt.</b>
               <span>Die Rangliste is jerade nich zu kriegen.</span>
               <span class="c-bon-leaderboard__retry">

@@ -264,7 +264,9 @@ describe("3a wrong code", () => {
     expect(w.get("input").attributes("aria-invalid")).toBe("true");
     const error = w.get("[data-test=error]");
     expect(error.attributes("aria-live")).toBe("assertive");
-    expect(error.get(".c-state--error").text()).toContain("Den Code kenn ick nich.");
+    expect(error.get(".c-state[data-variant~='error']").text()).toContain(
+      "Den Code kenn ick nich.",
+    );
     expect(error.text()).toContain("Guck nochmal jenau hin – vielleicht ’n Zeichen vertippt?");
     expect(w.get("input").element.value).toBe(CODE);
   });
@@ -292,7 +294,7 @@ describe("4 success", () => {
     const region = w.get("[data-test=status]").element;
     await submit(w, CODE);
     expect(w.get("[data-test=status]").element).toBe(region);
-    expect(w.get("[data-test=status] .c-state--done").text()).toContain(
+    expect(w.get("[data-test=status] .c-state[data-variant~='done']").text()).toContain(
       "Willkommen zurück, Berta!",
     );
     expect(region.textContent).toContain(

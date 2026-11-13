@@ -132,15 +132,16 @@
     }
 
     &__trend-badge {
+      --badge-padding: 0.25rem 0.6rem;
+      --badge-radius: var(--radius-sm);
+      --badge-font-size: 0.7rem;
+      --badge-font-weight: 700;
+
       position: relative;
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      padding: 0.25rem 0.6rem;
       border: 1px solid transparent;
-      border-radius: var(--radius-sm);
-      font-size: 0.7rem;
-      font-weight: 700;
       letter-spacing: 0.05em;
       text-transform: uppercase;
       text-decoration: none;
@@ -154,13 +155,16 @@
     }
 
     // Badges are borderless washes here (Spec §8.4); the global .c-badge (word index) keeps its look.
-    .c-badge:not(.c-badge--strong),
+    // The wash itself is the badge's data-variant="wash".
+    .c-badge:not([data-variant~="strong"]),
     &__wotd-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
       border: 1px solid transparent;
+    }
 
+    &__wotd-badge {
       @include mx.badge-wash;
     }
 

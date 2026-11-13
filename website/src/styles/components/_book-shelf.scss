@@ -17,8 +17,6 @@
       // Ad label: borderless wash, not a solid orange surface (Spec §8.2/§8.4).
       .c-badge {
         flex-shrink: 0;
-
-        @include mx.badge-wash;
       }
     }
 

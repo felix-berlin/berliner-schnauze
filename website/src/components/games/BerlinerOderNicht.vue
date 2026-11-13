@@ -60,9 +60,9 @@
       </div>
 
       <div v-else-if="view === 'error'" class="c-bon-error">
-        <div class="c-state c-state--error" role="alert">
+        <div class="c-state" data-variant="error" role="alert">
           <AlertIcon width="18" height="18" aria-hidden="true" />
-          <span class="c-state__body">
+          <span class="body">
             <b>Ditt hat nich jeklappt.</b>
             <span v-if="error?.retryable !== false">
               Die Karten wollten leider nich kommen. Deine Punkte und Leben bleiben – versuch’s

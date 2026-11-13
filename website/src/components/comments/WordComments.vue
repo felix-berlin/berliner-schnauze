@@ -55,11 +55,12 @@
 
       <div
         v-if="ctx.failed.value && !ctx.loading.value"
-        class="c-state c-state--error"
+        class="c-state"
+        data-variant="error"
         role="alert"
       >
         <CircleAlert aria-hidden="true" height="18" width="18" />
-        <span class="c-state__body">
+        <span class="body">
           <b>Die Kommentare wollten grad nich laden.</b>
           <span>
             <button type="button" class="c-textlink" data-variant="inline" @click="ctx.loadMore()">
@@ -69,9 +70,9 @@
         </span>
       </div>
 
-      <div v-if="sent" class="c-state c-state--success" role="status">
+      <div v-if="sent" class="c-state" data-variant="success" role="status">
         <Check aria-hidden="true" height="18" width="18" />
-        <span class="c-state__body">
+        <span class="body">
           <b>Danke, is anjekommen!</b>
           <span>Dein Kommentar erscheint, sobald wa ihn jesehen haben.</span>
         </span>

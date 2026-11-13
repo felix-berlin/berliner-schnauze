@@ -57,7 +57,9 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     const etymologie = page.locator("#etymologie");
     await expect(etymologie.locator(".c-section-card__body")).toHaveCount(0);
     await expect(etymologie.locator(".c-section-card__footer")).toContainText("Quelle");
-    await expect(etymologie.locator(".c-section-card__footer")).toContainText("Erfundene Testquelle");
+    await expect(etymologie.locator(".c-section-card__footer")).toContainText(
+      "Erfundene Testquelle",
+    );
 
     const beispiele = page.locator("#beispiele");
     await expect(beispiele.locator("li")).toHaveCount(2);
@@ -69,9 +71,12 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
 
   test.describe("Bilder", () => {
     // Only the section the viewport shows is in the accessibility tree (the other one is display: none).
-    const images = (page: import("@playwright/test").Page) => page.getByRole("region", { name: "Bilder" });
+    const images = (page: import("@playwright/test").Page) =>
+      page.getByRole("region", { name: "Bilder" });
 
-    test("vier Bilder im Hero, Credits, Lightbox per Tastatur (akademiebusen)", async ({ page }) => {
+    test("vier Bilder im Hero, Credits, Lightbox per Tastatur (akademiebusen)", async ({
+      page,
+    }) => {
       await page.setViewportSize({ height: 900, width: 1280 });
       await page.goto("/wort/akademiebusen");
       await expect(page.locator("h1 dfn")).toHaveText("Akademiebusen");
@@ -80,10 +85,15 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await expect(section.locator("img").first()).toBeVisible();
       const buttons = section.getByRole("button", { name: /vergrößern/ });
       await expect(buttons).toHaveCount(4);
-      await expect(buttons.first()).toHaveAttribute("aria-label", "Bild 1 von 4 vergrößern: Testbild");
+      await expect(buttons.first()).toHaveAttribute(
+        "aria-label",
+        "Bild 1 von 4 vergrößern: Testbild",
+      );
       // Hero: only the first image shows its caption.
       await expect(section.locator("figcaption")).toHaveCount(3);
-      await expect(section.locator("figcaption").first()).toContainText("Foto: Erfundene Attribution");
+      await expect(section.locator("figcaption").first()).toContainText(
+        "Foto: Erfundene Attribution",
+      );
       await expect(section.locator("figcaption").nth(1)).toBeHidden();
 
       const dialog = page.getByRole("dialog", { name: "Bildansicht" });
@@ -95,7 +105,10 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await expect(dialog).toContainText("1 / 4");
       await page.keyboard.press("ArrowRight");
       await expect(dialog).toContainText("2 / 4");
-      await expect(dialog.getByRole("link", { name: "Beispielquelle" })).toHaveAttribute("href", "https://example.org/quelle");
+      await expect(dialog.getByRole("link", { name: "Beispielquelle" })).toHaveAttribute(
+        "href",
+        "https://example.org/quelle",
+      );
       await page.keyboard.press("ArrowLeft");
       await page.keyboard.press("ArrowLeft");
       await expect(dialog).toContainText("4 / 4");
@@ -110,7 +123,9 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await page.goto("/wort/bildeins");
       const section = images(page);
       await expect(section.locator("figure")).toHaveCount(1);
-      await expect(section.getByRole("link", { name: /Erfahre mehr über dieses Wort/ })).toHaveAttribute("href", "https://example.org/mehr");
+      await expect(
+        section.getByRole("link", { name: /Erfahre mehr über dieses Wort/ }),
+      ).toHaveAttribute("href", "https://example.org/mehr");
     });
 
     test("zwei Bilder, Mobile-Strip statt Hero (bildzwei)", async ({ page }) => {
@@ -121,7 +136,9 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await expect(section.locator(".c-image-strip")).toBeVisible();
       await expect(section.locator("figure")).toHaveCount(2);
       // No horizontal page scroll: the strip scrolls inside itself.
-      expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+      ).toBe(true);
     });
 
     test("Wort ohne Bilder hat keinen Bilder-Bereich (alsche)", async ({ page }) => {
@@ -140,14 +157,18 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await expect(verwandteWorte.getByRole("link").first()).toHaveAttribute("href", /^\/wort\//);
   });
 
-  test("Buchkarten: mobil Cover oben, ab 808px kompakt mit 64px-Cover links (ballast-der-republik)", async ({ page }) => {
+  test("Buchkarten: mobil Cover oben, ab 808px kompakt mit 64px-Cover links (ballast-der-republik)", async ({
+    page,
+  }) => {
     const book = () => page.locator("#buecher a.c-book").first();
     await page.setViewportSize({ height: 800, width: 390 });
     await page.goto("/wort/ballast-der-republik");
     await expect(book()).toHaveCSS("display", "flex");
     await page.setViewportSize({ height: 800, width: 1280 });
     await expect(book()).toHaveCSS("display", "grid");
-    expect((await book().evaluate((el) => getComputedStyle(el).gridTemplateColumns)).startsWith("64px ")).toBe(true);
+    expect(
+      (await book().evaluate((el) => getComputedStyle(el).gridTemplateColumns)).startsWith("64px "),
+    ).toBe(true);
     await expect(book().locator(".c-book__cover")).toHaveCSS("width", "64px");
   });
 
@@ -155,7 +176,9 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await page.goto("/wort/ballast-der-republik");
 
     const buecher = page.locator("#buecher");
-    await expect(buecher.getByRole("heading", { level: 2, name: "Ooch als Buch zu haben, wa?" })).toBeVisible();
+    await expect(
+      buecher.getByRole("heading", { level: 2, name: "Ooch als Buch zu haben, wa?" }),
+    ).toBeVisible();
     await expect(buecher.getByText("Anzeige", { exact: true })).toBeVisible();
     await expect(buecher.getByText("Bezahlte Links zu Amazon.de.")).toBeVisible();
     const books = buecher.locator("a.c-book");
@@ -164,20 +187,32 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await expect(books.first()).toContainText("Bei Amazon ansehen ↗");
 
     const umfeld = page.locator("#verwandte-worte");
-    await expect(umfeld.getByRole("heading", { level: 2, name: "Lexikalisches Umfeld" })).toBeVisible();
+    await expect(
+      umfeld.getByRole("heading", { level: 2, name: "Lexikalisches Umfeld" }),
+    ).toBeVisible();
     await expect(umfeld.locator("#verwandte a").first()).toHaveAttribute("href", /^\/wort\//);
-    await expect(umfeld.locator("#navigation [aria-current=page]")).toHaveText(/Ballast der Republik/);
+    await expect(umfeld.locator("#navigation [aria-current=page]")).toHaveText(
+      /Ballast der Republik/,
+    );
 
     // The bottom random-word block is gone; "Und nu?" replaces it.
     await expect(page.getByText("Bock mehr Wörter kennen zu lernen?")).toHaveCount(0);
     const next = page.getByRole("navigation", { name: "Und nu?" });
-    await expect(next.getByRole("link", { name: /Zufälliges Wort/ })).toHaveAttribute("href", /^\/wort\//);
+    await expect(next.getByRole("link", { name: /Zufälliges Wort/ })).toHaveAttribute(
+      "href",
+      /^\/wort\//,
+    );
     await expect(next.getByRole("link", { name: /Wort-Index/ })).toHaveAttribute("href", "/wort");
-    await expect(next.getByRole("link", { name: /Wort vorschlagen/ })).toHaveAttribute("href", "/wort-vorschlagen");
+    await expect(next.getByRole("link", { name: /Wort vorschlagen/ })).toHaveAttribute(
+      "href",
+      "/wort-vorschlagen",
+    );
     await expect(page.locator(".c-single-word__footer")).toContainText("Wort erstellt am");
   });
 
-  test("kein horizontales Scrollen bei 1280px und 390px (ballast-der-republik)", async ({ page }) => {
+  test("kein horizontales Scrollen bei 1280px und 390px (ballast-der-republik)", async ({
+    page,
+  }) => {
     for (const width of [1280, 390]) {
       await page.setViewportSize({ height: 900, width });
       await page.goto("/wort/ballast-der-republik");
@@ -219,7 +254,9 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await expect(breadcrumb.getByRole("link").last()).toHaveText("Wa");
   });
 
-  test("mobile: Tab-Leiste statt Seitenleiste, Tab scrollt zum Anker (anmachen)", async ({ page }) => {
+  test("mobile: Tab-Leiste statt Seitenleiste, Tab scrollt zum Anker (anmachen)", async ({
+    page,
+  }) => {
     await page.setViewportSize({ height: 800, width: 390 });
     await page.goto("/wort/anmachen");
 
@@ -285,8 +322,14 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await expect(hero.locator('.c-themes a[href^="/themen/"]').first()).toBeFocused();
     });
 
-    test("Like und Dislike immer beide sichtbar: setzen und zurücknehmen", async ({ isMobile, page }) => {
-      test.skip(isMobile, "a phone emulation stays a phone at 1280px; the touch test below covers it");
+    test("Like und Dislike immer beide sichtbar: setzen und zurücknehmen", async ({
+      isMobile,
+      page,
+    }) => {
+      test.skip(
+        isMobile,
+        "a phone emulation stays a phone at 1280px; the touch test below covers it",
+      );
       await page.setViewportSize({ height: 800, width: 1280 });
       await page.goto("/wort/anmachen");
       const hero = page.locator("#bedeutung");
@@ -367,7 +410,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
   test("Trend-Kasten und Badge für ein Wort in den Top 10 (alex)", async ({ page }) => {
     await page.goto("/wort/alex");
 
-    const badge = page.locator(".c-word-hero .c-badge--strong");
+    const badge = page.locator(".c-word-hero .c-badge[data-variant~='strong']");
     await expect(badge).toHaveText(/Im Trend · Platz 1/);
     const box = page.locator("#n-trend");
     await expect(box).toBeVisible();
@@ -384,7 +427,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
 
     await expect(page.locator("h1 dfn")).toHaveText("wa");
     await expect(page.locator("#n-trend")).toHaveCount(0);
-    await expect(page.locator(".c-badge--strong")).toHaveCount(0);
+    await expect(page.locator(".c-badge[data-variant~='strong']")).toHaveCount(0);
   });
 
   test.describe("Audio „Anhören“", () => {
@@ -410,9 +453,14 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       });
     });
 
-    test("Wort mit beiden Stimmen: eine Stimme zugleich, auch über Beispiele hinweg (anmachen)", async ({ page }) => {
+    test("Wort mit beiden Stimmen: eine Stimme zugleich, auch über Beispiele hinweg (anmachen)", async ({
+      page,
+    }) => {
       const audioRequests: string[] = [];
-      page.on("request", (request) => /\.wav(\?|$)/.test(request.url()) && audioRequests.push(request.url()));
+      page.on(
+        "request",
+        (request) => /\.wav(\?|$)/.test(request.url()) && audioRequests.push(request.url()),
+      );
       await page.goto("/wort/anmachen");
 
       const row = page.getByRole("group", { exact: true, name: "Anhören" });
@@ -433,19 +481,28 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await female.click();
       await expect(female).toHaveAttribute("aria-pressed", "true");
       await expect(male).toHaveAttribute("aria-pressed", "false");
-      expect(await page.evaluate(() => (window as unknown as { played: string[] }).played)).toEqual([
-        expect.stringContaining("stimme-m.wav"),
-        expect.stringContaining("stimme-w.wav"),
-      ]);
+      expect(await page.evaluate(() => (window as unknown as { played: string[] }).played)).toEqual(
+        [expect.stringContaining("stimme-m.wav"), expect.stringContaining("stimme-w.wav")],
+      );
 
       const example = page.getByRole("group", { name: "Beispiel 1 anhören" });
       await example.scrollIntoViewIfNeeded();
-      await expect(page.locator("astro-island[component-url*='VoiceButtons']:not([component-url*='WordAudio'])").first()).not.toHaveAttribute("ssr", "");
+      await expect(
+        page
+          .locator("astro-island[component-url*='VoiceButtons']:not([component-url*='WordAudio'])")
+          .first(),
+      ).not.toHaveAttribute("ssr", "");
       await example.getByRole("button", { name: "Männlich" }).click();
-      await expect(example.getByRole("button", { name: "Männlich" })).toHaveAttribute("aria-pressed", "true");
+      await expect(example.getByRole("button", { name: "Männlich" })).toHaveAttribute(
+        "aria-pressed",
+        "true",
+      );
       await expect(female).toHaveAttribute("aria-pressed", "false");
       await example.getByRole("button", { name: "Männlich" }).click();
-      await expect(example.getByRole("button", { name: "Männlich" })).toHaveAttribute("aria-pressed", "false");
+      await expect(example.getByRole("button", { name: "Männlich" })).toHaveAttribute(
+        "aria-pressed",
+        "false",
+      );
       // The second example has no audio.
       await expect(page.getByRole("group", { name: "Beispiel 2 anhören" })).toHaveCount(0);
     });

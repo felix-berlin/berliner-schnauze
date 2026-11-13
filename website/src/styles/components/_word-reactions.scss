@@ -6,7 +6,7 @@
     gap: 0.25rem;
 
     .c-reaction {
-      padding-inline: 0.5rem;
+      --reaction-padding-inline: 0.5rem;
 
       &[aria-disabled="true"] {
         cursor: progress;

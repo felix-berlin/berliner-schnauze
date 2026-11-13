@@ -1,33 +1,36 @@
-@use "@sass-butler/mixins" as butler-mx;
+@use "@styles/mixins" as mx;
 
-@layer legacy {
-  .c-badge {
-    background-color: var(--color-background-badge, var(--accent));
-    color: var(--color-badge-text, var(--new-blue-400));
-    padding: 0.2em 0.5em;
-    border-radius: 0.25em;
-    font-size: 0.8rem;
-    font-weight: 600;
+// Badge. Variants: strong (the trend badge, the only solid orange badge), wash (borderless wash of
+// the word page, Spec §8.2/§8.4), auto (NLP-guessed value: dashed outline inside, text unchanged).
+// Public: --badge-padding, --badge-radius, --badge-font-size, --badge-font-weight.
+@include mx.component("badge") {
+  :scope {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R60: one-off
+    --_bg: light-dark(rgb(226 137 100), rgb(178 59 39));
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R81: one-off
+    --_color: light-dark(rgb(60 67 75), rgb(252 234 215));
+    --_padding: 0.2em 0.5em; // em: follows the badge's own font size
+    --_radius: 0.25em; // em: follows the badge's own font size
+    --_weight: 600; // no weight token between regular and bold
 
-    @include butler-mx.dark-mode-class {
-      --color-background-badge: var(--orange-600);
-      --color-badge-text: var(--orange-100);
-    }
+    background-color: var(--_bg);
+    color: var(--_color);
+    padding: var(--badge-padding, var(--_padding));
+    border-radius: var(--badge-radius, var(--_radius));
+    font-size: var(--badge-font-size, var(--font-size-sm));
+    font-weight: var(--badge-font-weight, var(--_weight));
   }
 
-  // v3 variants (docs/design/wortseite/SPEC.md §8): --strong is the trend badge, the only solid orange badge.
-  .c-badge--strong {
-    --color-background-badge: var(--orange-600);
-    --color-badge-text: var(--white-100);
-
-    @include butler-mx.dark-mode-class {
-      --color-background-badge: var(--orange-600);
-      --color-badge-text: var(--white-100);
-    }
+  :scope[data-variant~="strong"] {
+    --_bg: var(--color-accent-solid);
+    --_color: var(--color-text-on-accent);
   }
 
-  // NLP-guessed value: dashed outline inside the badge, text unchanged.
-  .c-badge--auto {
+  :scope[data-variant~="wash"] {
+    @include mx.badge-wash;
+  }
+
+  :scope[data-variant~="auto"] {
     outline: 1px dashed currentcolor;
     outline-offset: -3px;
   }

@@ -50,9 +50,9 @@
       }}“.
     </span>
     <div id="bon-name-error" aria-live="assertive">
-      <div v-if="error" class="c-state c-state--error" role="alert">
+      <div v-if="error" class="c-state" data-variant="error" role="alert">
         <AlertIcon aria-hidden="true" height="18" width="18" />
-        <span class="c-state__body">
+        <span class="body">
           <b>{{ texts[error][0] }}</b>
           <span v-if="texts[error][1]">{{ texts[error][1] }}</span>
           <a

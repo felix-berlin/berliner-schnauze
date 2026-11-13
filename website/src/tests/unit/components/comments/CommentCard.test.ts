@@ -262,7 +262,7 @@ describe("CommentCard", () => {
     await wrapper.find(".c-comment__report").trigger("submit");
     await flushPromises();
     expect(ctx.report).toHaveBeenCalledWith(1, "Wat anderet – Kein Bezug", "tok");
-    const done = wrapper.find(".c-state--done");
+    const done = wrapper.find(".c-state[data-variant~='done']");
     expect(done.attributes("role")).toBe("status");
     expect(done.text()).toContain("Danke, is jemeldet.");
     expect(done.text()).toContain("Bis dahin bleibt er sichtbar.");
@@ -452,7 +452,7 @@ describe("CommentCard", () => {
     await (await openMenu(wrapper)).find((b) => b.text() === "Löschen")!.trigger("click");
     expect(ctx.remove).not.toHaveBeenCalled();
     const dialog = wrapper.find('[role="alertdialog"]');
-    expect(dialog.classes()).toContain("c-state--error");
+    expect(dialog.attributes("data-variant")).toBe("error");
     expect(dialog.text()).toContain("Kommentar wirklich löschen?");
     expect(dialog.text()).toContain("Dit kann man nich rückgängig machen.");
     await dialog.find("button.c-link").trigger("click");

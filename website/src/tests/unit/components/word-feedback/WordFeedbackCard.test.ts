@@ -106,11 +106,13 @@ describe("WordFeedbackCard", () => {
     expect(w.find('[role="status"]').text()).toBe("");
     // Rolled back: the unsaved choice is not shown as pressed.
     expect(w.find('[aria-pressed="true"]').exists()).toBe(false);
-    expect(w.find('.c-state--error[role="alert"]').text()).toContain("Nochmal versuchen");
+    expect(w.find('.c-state[data-variant~="error"][role="alert"]').text()).toContain(
+      "Nochmal versuchen",
+    );
     await click(w, "Nochmal versuchen");
     expect(store.answerUsage).toHaveBeenCalledTimes(2);
     expect(store.answerUsage).toHaveBeenLastCalledWith(7, "know", true);
-    expect(w.find(".c-state--error").exists()).toBe(false);
+    expect(w.find(".c-state[data-variant~='error']").exists()).toBe(false);
     expect(w.text()).toContain("Wo wohnste?");
   });
 
@@ -128,7 +130,7 @@ describe("WordFeedbackCard", () => {
     resolve(false);
     await flushPromises();
     expect(document.activeElement).toBe(retryButton.element);
-    expect(w.find('.c-state--error[role="alert"]').exists()).toBe(true);
+    expect(w.find('.c-state[data-variant~="error"][role="alert"]').exists()).toBe(true);
     w.unmount();
   });
 
@@ -139,8 +141,12 @@ describe("WordFeedbackCard", () => {
     });
     const w = await mountIt();
     await click(w, "Kenn ick");
-    expect(w.find('.c-state--error[role="alert"]').text()).toContain("Jenug jestimmt für heute.");
-    expect(w.find('.c-state--error[role="alert"]').text()).not.toContain("nich anjekommen");
+    expect(w.find('.c-state[data-variant~="error"][role="alert"]').text()).toContain(
+      "Jenug jestimmt für heute.",
+    );
+    expect(w.find('.c-state[data-variant~="error"][role="alert"]').text()).not.toContain(
+      "nich anjekommen",
+    );
   });
 
   it("offline locks the tiles with aria-disabled and sends nothing", async () => {
@@ -150,13 +156,13 @@ describe("WordFeedbackCard", () => {
     await flushPromises();
     const tiles = w.findAll("button.c-choice[data-variant~='tile']");
     expect(tiles.every((t) => t.attributes("aria-disabled") === "true")).toBe(true);
-    expect(w.find(".c-state--offline").text()).toContain("Du bist offline.");
+    expect(w.find(".c-state[data-variant~='offline']").text()).toContain("Du bist offline.");
     await tiles[0].trigger("click");
     expect(store.answerUsage).not.toHaveBeenCalled();
     online.mockReturnValue(true);
     window.dispatchEvent(new Event("online"));
     await flushPromises();
-    expect(w.find(".c-state--offline").exists()).toBe(false);
+    expect(w.find(".c-state[data-variant~='offline']").exists()).toBe(false);
     online.mockRestore();
   });
 
@@ -188,7 +194,7 @@ describe("WordFeedbackCard", () => {
     await click(w, "Kenn ick");
     expect(store.loadFeedback).toHaveBeenCalledWith(7);
     expect(store.sendFeedback).not.toHaveBeenCalled();
-    expect(w.find('.c-state--error[role="alert"]').exists()).toBe(true);
+    expect(w.find('.c-state[data-variant~="error"][role="alert"]').exists()).toBe(true);
   });
 
   it("disables the answers while a request is pending", async () => {
@@ -460,7 +466,7 @@ describe("WordFeedbackCard", () => {
     expect(w.find("button.c-choice[data-variant~='tile'][aria-pressed='true']").exists()).toBe(
       false,
     );
-    expect(w.find(".c-state--error").exists()).toBe(true);
+    expect(w.find(".c-state[data-variant~='error']").exists()).toBe(true);
   });
 
   it("Woanders skips the Kiez and the half even for someone who grew up there", async () => {

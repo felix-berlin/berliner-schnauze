@@ -39,9 +39,9 @@
         Leer jelassen? Dann kriegste ’n Berliner Namen, z. B. „Anonyme Schrippe“.
       </span>
     </div>
-    <div v-if="failed" class="c-state c-state--error" role="alert">
+    <div v-if="failed" class="c-state" data-variant="error" role="alert">
       <CircleAlert aria-hidden="true" height="18" width="18" />
-      <span class="c-state__body">
+      <span class="body">
         <b>Ditt hat nich jeklappt.</b>
         <span>
           Dein Kommentar is nich rausjegangen. Dein Text bleibt stehen – versuch’s gleich nochmal.
@@ -52,7 +52,7 @@
     <!-- Nothing was sent (captcha still running): a calm status, not the error box. -->
     <div v-if="waiting" class="c-state" role="status">
       <Hourglass aria-hidden="true" height="18" width="18" />
-      <span class="c-state__body">{{ waiting }}</span>
+      <span class="body">{{ waiting }}</span>
     </div>
     <p v-if="!online" :id="`${uid}-offline`" class="c-comment-form__hint t-small">
       Du bist offline. Abschicken jeht wieder, sobald du Netz hast.

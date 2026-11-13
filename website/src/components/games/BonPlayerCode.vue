@@ -19,9 +19,9 @@
         tabindex="-1"
         data-test="status"
       >
-        <div v-if="state === 'success'" class="c-state c-state--done">
+        <div v-if="state === 'success'" class="c-state" data-variant="done">
           <CheckIcon aria-hidden="true" height="18" width="18" />
-          <span class="c-state__body">
+          <span class="body">
             <b>Willkommen zurück, {{ welcomeName }}!</b>
             <span>{{ welcomeText }}</span>
             <span v-if="bestScore">Bestes Ergebnis: {{ bestScore }}</span>
@@ -152,9 +152,9 @@
         aria-atomic="true"
         data-test="error"
       >
-        <div v-if="error" class="c-state c-state--error">
+        <div v-if="error" class="c-state" data-variant="error">
           <CircleAlertIcon aria-hidden="true" height="18" width="18" />
-          <span class="c-state__body">
+          <span class="body">
             <b>{{ error }}</b>
             <span v-if="errorHint">{{ errorHint }}</span>
           </span>

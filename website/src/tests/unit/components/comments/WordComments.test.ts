@@ -446,7 +446,7 @@ describe("WordComments", () => {
     await wrapper.find("form").trigger("submit");
     await flushPromises();
     expect(wrapper.find("form").exists()).toBe(false);
-    const box = wrapper.find(".c-state--success");
+    const box = wrapper.find(".c-state[data-variant~='success']");
     expect(box.attributes("role")).toBe("status");
     expect(box.text()).toContain("Danke, is anjekommen!");
     expect(box.text()).toContain("Dein Kommentar erscheint, sobald wa ihn jesehen haben.");

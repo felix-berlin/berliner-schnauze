@@ -25,18 +25,19 @@
         <div
           v-if="!online"
           id="word-feedback-offline"
-          class="c-state c-state--offline"
+          class="c-state"
+          data-variant="offline"
           role="status"
         >
           <WifiOff aria-hidden="true" height="18" width="18" />
-          <span class="c-state__body">
+          <span class="body">
             <b>Du bist offline.</b>
             <span>Abstimmen jeht wieder, sobald du Netz hast.</span>
           </span>
         </div>
-        <div v-if="failed" class="c-state c-state--error" role="alert">
+        <div v-if="failed" class="c-state" data-variant="error" role="alert">
           <CircleAlert aria-hidden="true" height="18" width="18" />
-          <span class="c-state__body">
+          <span class="body">
             <b>Ditt hat nich jeklappt.</b>
             <span>
               {{

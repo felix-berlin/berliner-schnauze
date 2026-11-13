@@ -150,7 +150,7 @@ describe("CommentForm", () => {
     await wrapper.find("textarea").setValue("Hallo Welt");
     await wrapper.find("form").trigger("submit");
     await flushPromises();
-    const box = wrapper.find(".c-state--error");
+    const box = wrapper.find(".c-state[data-variant~='error']");
     expect(box.attributes("role")).toBe("alert");
     expect(box.text()).toContain("Ditt hat nich jeklappt.");
     expect(box.text()).toContain("Dein Text bleibt stehen");
@@ -158,7 +158,7 @@ describe("CommentForm", () => {
     expect((wrapper.find("textarea").element as HTMLTextAreaElement).value).toBe("Hallo Welt");
     await wrapper.find("form").trigger("submit");
     await flushPromises();
-    expect(wrapper.find(".c-state--error").exists()).toBe(false);
+    expect(wrapper.find(".c-state[data-variant~='error']").exists()).toBe(false);
     expect(wrapper.find("button[type=submit]").text()).toBe("Abschicken");
   });
 
@@ -168,7 +168,7 @@ describe("CommentForm", () => {
     await wrapper.find("textarea").setValue("Hallo Welt");
     await wrapper.find("form").trigger("submit");
     await flushPromises();
-    expect(wrapper.find(".c-state--error").exists()).toBe(false);
+    expect(wrapper.find(".c-state[data-variant~='error']").exists()).toBe(false);
     expect(wrapper.find("[role=alert]").exists()).toBe(false);
     expect(wrapper.find("[role=status]").text()).toBe("Moment noch, ick prüf dich kurz.");
     expect(wrapper.find("button[type=submit]").text()).toBe("Abschicken");
@@ -201,7 +201,7 @@ describe("CommentForm", () => {
     await wrapper.find("form").trigger("submit");
     await flushPromises();
     expect(wrapper.find("[role=status]").text()).toContain("klemmt");
-    expect(wrapper.find(".c-state--error").exists()).toBe(false);
+    expect(wrapper.find(".c-state[data-variant~='error']").exists()).toBe(false);
   });
 
   it("a failure with a reason shows it under the Spec sentence, headline unchanged", async () => {
@@ -210,7 +210,7 @@ describe("CommentForm", () => {
     await wrapper.find("textarea").setValue("Hallo Welt");
     await wrapper.find("form").trigger("submit");
     await flushPromises();
-    const box = wrapper.find(".c-state--error");
+    const box = wrapper.find(".c-state[data-variant~='error']");
     expect(box.find("b").text()).toBe("Ditt hat nich jeklappt.");
     expect(box.text()).toContain("Dein Text bleibt stehen");
     expect(box.find(".c-comment-form__reason").text()).toBe(

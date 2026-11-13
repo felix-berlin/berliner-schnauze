@@ -69,8 +69,10 @@ describe("BonResult", () => {
 
   describe("head", () => {
     it("shows the record badge only for a score above the previous record", () => {
-      expect(mountResult().find(".c-badge--strong").text()).toBe("Neuer Rekord!");
-      expect(mountResult({ previousHighScore: 150 }).find(".c-badge--strong").exists()).toBe(false);
+      expect(mountResult().find(".c-badge[data-variant~='strong']").text()).toBe("Neuer Rekord!");
+      expect(
+        mountResult({ previousHighScore: 150 }).find(".c-badge[data-variant~='strong']").exists(),
+      ).toBe(false);
     });
 
     it("greets by name and falls back without one", () => {

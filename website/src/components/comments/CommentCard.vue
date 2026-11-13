@@ -166,12 +166,13 @@
 
       <div
         v-if="mode === 'delete'"
-        class="c-state c-state--error c-comment__confirm"
+        class="c-state c-comment__confirm"
+        data-variant="error"
         role="alertdialog"
         :aria-labelledby="`${uid}-delete`"
       >
         <CircleAlert aria-hidden="true" height="18" width="18" />
-        <span class="c-state__body">
+        <span class="body">
           <b :id="`${uid}-delete`">Kommentar wirklich löschen?</b>
           <span>Dit kann man nich rückgängig machen.</span>
           <span class="c-comment__panel-actions">
@@ -189,9 +190,9 @@
         </span>
       </div>
 
-      <div v-if="sentReport" class="c-state c-state--done" role="status">
+      <div v-if="sentReport" class="c-state" data-variant="done" role="status">
         <Check aria-hidden="true" height="18" width="18" />
-        <span class="c-state__body">
+        <span class="body">
           <b>Danke, is jemeldet.</b>
           <span>Wir kieken uns den Kommentar an. Bis dahin bleibt er sichtbar.</span>
         </span>

@@ -119,7 +119,7 @@ describe("BerlinerOderNicht", () => {
   it("passes offline to the intro and does not start", async () => {
     online.value = false;
     const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".c-state--offline").exists()).toBe(true);
+    expect(wrapper.find(".c-state[data-variant~='offline']").exists()).toBe(true);
     await wrapper.find("form").trigger("submit");
     expect(mockStart).not.toHaveBeenCalled();
   });
@@ -187,7 +187,7 @@ describe("BerlinerOderNicht", () => {
     it("explains in an alert and retries", async () => {
       phase.value = "error";
       const wrapper = mount(BerlinerOderNicht);
-      const alert = wrapper.find(".c-state--error");
+      const alert = wrapper.find(".c-state[data-variant~='error']");
       expect(alert.attributes("role")).toBe("alert");
       expect(alert.text()).toContain("Ditt hat nich jeklappt.");
       expect(alert.text()).toContain(

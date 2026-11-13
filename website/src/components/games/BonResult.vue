@@ -2,7 +2,7 @@
   <div class="c-bon-result">
     <div class="c-bon-result__main">
       <header class="c-bon-result__head">
-        <span v-if="isRecord" class="c-badge c-badge--strong c-bon-result__badge">
+        <span v-if="isRecord" class="c-badge c-bon-result__badge" data-variant="strong">
           <TrophyIcon width="16" height="16" aria-hidden="true" />
           Neuer Rekord!
         </span>

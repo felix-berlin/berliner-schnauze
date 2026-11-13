@@ -8,9 +8,9 @@
         Echtes Berlinerisch – oder erfunden oder Hochdeutsch? Wisch oder tipp – du hast 3 Leben.
       </p>
 
-      <div v-if="offline" class="c-state c-state--offline" role="status">
+      <div v-if="offline" class="c-state" data-variant="offline" role="status">
         <WifiOffIcon width="18" height="18" aria-hidden="true" />
-        <span class="c-state__body">
+        <span class="body">
           <b>Du bist offline.</b>
           <span>Die Karten kommen vom Server – spielen jeht wieder, sobald du Netz hast.</span>
         </span>
@@ -37,11 +37,12 @@
           <div
             v-if="problem === 'far-right'"
             id="bon-name-problem"
-            class="c-state c-state--error"
+            class="c-state"
+            data-variant="error"
             role="alert"
           >
             <AlertIcon width="18" height="18" aria-hidden="true" />
-            <span class="c-state__body">
+            <span class="body">
               <b>Rechtsextreme Namen jibt’s hier nich.</b>
               <span>Willst du raus aus der rechten Szene? Such dir Hilfe:</span>
               <a

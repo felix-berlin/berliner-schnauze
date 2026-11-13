@@ -134,7 +134,7 @@ describe("BonIntro", () => {
 
   it("offline: shows the notice and starts nothing", async () => {
     const wrapper = mountIntro({ offline: true });
-    expect(wrapper.find(".c-state--offline").text()).toContain("Du bist offline.");
+    expect(wrapper.find(".c-state[data-variant~='offline']").text()).toContain("Du bist offline.");
     const button = wrapper.find("button.c-button[data-variant~='primary']");
     expect(button.attributes("aria-disabled")).toBe("true");
     await wrapper.find("form").trigger("submit");

@@ -50,13 +50,13 @@ describe("WordHero.astro", () => {
     const result = await render({ pos: "Verb", word: makeWord() });
     expect(result).toContain("Verb");
     expect(result).not.toContain("geraten");
-    expect(result).not.toContain("c-badge--auto");
+    expect(result).not.toContain('data-variant="wash auto"');
   });
 
   it("marks a guessed word type as (geraten) with the auto badge", async () => {
     const result = await render({ pos: "Verb", posAuto: true, word: makeWord() });
     expect(result).toContain("Verb (geraten)");
-    expect(result).toContain("c-badge--auto");
+    expect(result).toContain('data-variant="wash auto"');
   });
 
   it("renders no word type badge when pos is undefined", async () => {

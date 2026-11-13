@@ -1,13 +1,14 @@
-@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 
-@layer legacy {
-  // Page band (docs/design/wortseite/SPEC.md §4): section headline outside a card, the only display-font use on the page.
-  :where(.c-band) {
+// Page band (docs/design/wortseite/SPEC.md §4): section headline outside a card, the only display-font use on the page.
+// Public: --band-font-size, --band-line-height.
+@include mx.component("band") {
+  :scope {
     margin: 0;
-    font-family: vars.$berliner;
-    font-weight: 400;
-    font-size: 1.6rem;
-    line-height: 1.2;
-    color: var(--color-ink-strong);
+    font-family: var(--font-family-display);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--band-font-size, var(--font-size-2xl));
+    line-height: var(--band-line-height, 1.2);
+    color: var(--color-text-strong);
   }
 }

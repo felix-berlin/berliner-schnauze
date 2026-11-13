@@ -1,67 +1,55 @@
-@layer legacy {
-  // Callout and page states (docs/design/wortseite/SPEC.md §8/§9). Stripe + icon carry the colour, text never does.
-  // .c-infotext is the only bordered box allowed inside a section card besides the stat surfaces.
-  :where(.c-infotext) {
-    padding: 0.75rem 1rem;
-    border-inline-start: 3px solid var(--orange-300);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    background: var(--surface-callout);
-  }
+@use "@styles/mixins" as mx;
 
-  :where(.c-state) {
+// Page states (docs/design/wortseite/SPEC.md §8/§9). Stripe + icon carry the colour, text never does.
+// Variants: offline, error, success, done. Part .body: bold line over the text.
+@include mx.component("state") {
+  :scope {
+    --_stripe: var(--color-text-muted);
+    --_icon-nudge: 0.15em; // lines the icon up with the first text line, scales with the text
+
     display: flex;
     align-items: flex-start;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    border-inline-start: 3px solid var(--color-muted);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    background: var(--surface-chip);
-    font-size: 0.9rem;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-inline-start: 3px solid var(--_stripe);
+    border-start-end-radius: var(--radius-sm);
+    border-end-end-radius: var(--radius-sm);
+    background: var(--color-surface-chip);
+    font-size: var(--font-size-md);
     line-height: 1.45;
 
     > svg {
       flex-shrink: 0;
-      margin-block-start: 0.15em;
-      color: var(--color-muted);
+      margin-block-start: var(--_icon-nudge);
+      color: var(--_stripe);
     }
   }
 
-  :where(.c-state--offline) {
+  :scope[data-variant~="offline"] {
     border-inline-start-style: dashed;
   }
 
-  :where(.c-state--error) {
-    border-inline-start-color: var(--danger);
-
-    > svg {
-      color: var(--danger);
-    }
+  :scope[data-variant~="error"] {
+    --_stripe: var(--color-status-danger);
   }
 
-  :where(.c-state--success, .c-state--done) {
-    border-inline-start-color: var(--success);
-
-    > svg {
-      color: var(--success);
-    }
+  :scope:is([data-variant~="success"], [data-variant~="done"]) {
+    --_stripe: var(--color-status-success);
   }
 
-  // Title + sentence inside a box: bold line over the text.
-  :where(.c-state__body) {
+  .body {
+    // A retry button in a state box is a control, not running text: 44px hit area (WCAG 2.5.8).
+    --textlink-display: inline-flex;
+    --textlink-min-block-size: 2.75rem;
+    --_gap: 0.125rem; // between 0 and space-1, no step within 0.1rem
+
     display: flex;
     flex-direction: column;
-    gap: 0.125rem;
+    gap: var(--_gap);
     flex: 1;
 
     b {
-      color: var(--color-ink-strong);
+      color: var(--color-text-strong);
     }
-  }
-
-  // A retry button in a state box is a control, not running text: 44px hit area (WCAG 2.5.8), the look stays a text link.
-  .c-state__body button.c-textlink {
-    display: inline-flex;
-    align-items: center;
-    min-block-size: 2.75rem;
   }
 }
