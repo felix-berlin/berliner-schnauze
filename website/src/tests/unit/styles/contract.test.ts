@@ -1,6 +1,6 @@
 // @vitest-environment node
-import { readdirSync, readFileSync, statSync } from "node:fs";
-import { join, relative } from "node:path";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { dirname, join, relative } from "node:path";
 
 import legacyFiles from "../../../../stylelint.legacy-files.mjs";
 
@@ -58,6 +58,34 @@ const singleBlockLayer = (rest: string) => {
   return null;
 };
 
+/** `@use`/`@forward` targets that cannot be resolved to a local partial, Sass built-in or project alias. */
+const foreignUses = (code: string, dir: string) =>
+  [...stripComments(code).matchAll(/@(?:use|forward)\s+["']([^"']+)["']/g)]
+    .map((m) => m[1])
+    .filter((target) => {
+      if (
+        target.startsWith("sass:") ||
+        target.startsWith("@styles/") ||
+        target.startsWith("@sass-butler/")
+      )
+        return false;
+      if (target.startsWith("@felix_berlin/sass-butler")) return false;
+      const base = join(dir, target);
+      const parts = [dirname(base), base.slice(dirname(base).length + 1)];
+      return ![
+        `${base}.scss`,
+        join(parts[0], `_${parts[1]}.scss`),
+        join(base, "_index.scss"),
+        join(base, "index.scss"),
+      ].some(existsSync);
+    });
+
+/** Style blocks of a .vue/.astro source that hold anything but @use lines; the one layer-order statement is exempt. */
+const rulesInStyleBlocks = (source: string) =>
+  [...source.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/g)].filter(
+    (m) => m[0] !== `<style is:inline>${STATEMENT}</style>` && body(m[1]) !== "",
+  );
+
 const styleFiles = walk(join(src, "styles")).filter(
   (p) =>
     p.endsWith(".scss") &&
@@ -96,6 +124,30 @@ describe("style layer contract", () => {
     expect(wrong).toEqual([]);
   });
 
+  it("lets partials @use only local files, Sass built-ins and project aliases", () => {
+    const bad = [...styleFiles, join(src, "styles/app.scss")].flatMap((path) =>
+      foreignUses(readFileSync(path, "utf8"), dirname(path)).map(
+        (t) => `${rel(path)}: @use "${t}"`,
+      ),
+    );
+    expect(bad).toEqual([]);
+    // A third-party @use would emit its CSS unlayered; it has to go through meta.load-css inside a layer.
+    expect(foreignUses('@use "astro-breadcrumbs/breadcrumbs.scss" with ($a: 1);', src)).toEqual([
+      "astro-breadcrumbs/breadcrumbs.scss",
+    ]);
+    expect(foreignUses('@use "sass:meta"; @use "@styles/variables" as vars;', src)).toEqual([]);
+  });
+
+  it("allows app.scss only @use/@forward lines and the vendor layer block", () => {
+    const check = (code: string) => {
+      const rest = body(code);
+      return rest === "" || singleBlockLayer(rest) === "vendor";
+    };
+    expect(check(readFileSync(join(src, "styles/app.scss"), "utf8"))).toBe(true);
+    expect(check('@use "base"; .rogue { color: red }')).toBe(false);
+    expect(check('@use "base"; @layer legacy { .a { color: red } }')).toBe(false);
+  });
+
   it("uses only the layer names of the spec", () => {
     const files = walk(src).filter(
       (p) => /\.(scss|css|vue|astro)$/.test(p) && !p.includes("/src/tests/"),
@@ -112,12 +164,15 @@ describe("style layer contract", () => {
   it("keeps rules out of .vue and .astro style blocks", () => {
     const bad = walk(src)
       .filter((p) => /\.(vue|astro)$/.test(p))
-      .flatMap((path) =>
-        [...readFileSync(path, "utf8").matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/g)]
-          .filter((m) => !/is:inline/.test(m[0]) && body(m[1]) !== "")
-          .map(() => rel(path)),
-      );
+      .filter((path) => rulesInStyleBlocks(readFileSync(path, "utf8")).length > 0)
+      .map(rel);
     expect(bad).toEqual([]);
+    // Only the exact layer-order statement is exempt; any other inline style counts.
+    expect(rulesInStyleBlocks("<style is:inline>.a { color: red }</style>")).toHaveLength(1);
+    expect(
+      rulesInStyleBlocks("<style is:inline>@layer base { a { color: red } }</style>"),
+    ).toHaveLength(1);
+    expect(rulesInStyleBlocks(`<style is:inline>${STATEMENT}</style>`)).toHaveLength(0);
   });
 
   it("lists only legacy files that exist", () => {

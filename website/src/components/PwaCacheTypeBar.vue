@@ -13,7 +13,7 @@
         :title="`${seg.type.toUpperCase()}: ${formatBytes(seg.sizeBytes)} (${seg.percent}%)`"
       />
     </div>
-    <ul class="c-pwa-type-bar__legend u-list-reset">
+    <ul class="c-pwa-type-bar__legend">
       <li v-for="seg in segments" :key="seg.type" class="c-pwa-type-bar__legend-item">
         <span class="c-pwa-type-bar__legend-dot" :style="{ backgroundColor: seg.color }" />
         <span class="c-pwa-type-bar__legend-type">{{ seg.type.toUpperCase() }}</span>

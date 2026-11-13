@@ -387,7 +387,9 @@ $panel-border: 1px solid var(--new-blue-200);
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem 1rem;
-      margin-block-start: 0.5rem;
+      margin: 0.5rem 0 0;
+      padding: 0;
+      list-style: none;
     }
 
     &__legend-item {

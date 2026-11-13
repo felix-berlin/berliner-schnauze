@@ -38,10 +38,14 @@ test("the layer order survives a ClientRouter navigation (spec §6/§14)", async
 
   await page.addStyleTag({
     content:
-      "@layer legacy { body { outline-color: rgb(1 1 1) } } @layer components { body { outline-color: rgb(2 2 2) } }",
+      "@layer components { body { outline-color: rgb(2 2 2) } } @layer legacy { body { outline-color: rgb(1 1 1) } } " +
+      "@layer base { body { letter-spacing: 2px } } @layer reset { body { letter-spacing: 1px } }",
   });
-  // Source order puts legacy last; only the declared layer order lets components win.
+  // Both pairs are declared in the opposite of the wanted order. components/legacy: legacy is already known from the
+  // app CSS, so that pair is only a guard. base/reset: the app CSS mentions base first, so without the inline order
+  // statement reset would win; this pair fails when the statement is missing or not honoured after the navigation.
   expect(await page.evaluate(() => getComputedStyle(document.body).outlineColor)).toBe(
     "rgb(2, 2, 2)",
   );
+  expect(await page.evaluate(() => getComputedStyle(document.body).letterSpacing)).toBe("2px");
 });
