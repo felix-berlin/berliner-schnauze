@@ -88,8 +88,23 @@ for (const size of SIZES) {
             page.locator(".c-trend"),
             page.getByText("Im Trend · Platz"),
             page.locator(".c-single-word__footer time"),
+            page.getByText(/Coding-Zeit/),
+            // Anki: Wakapi hours grow daily; the demo card shows a random word.
+            page.locator(".c-anki-dev-hours"),
+            page.locator(".c-anki-flashcard"),
           ];
           if (path === "/") await expect(wotd.locator(".c-word-of-the-day__word")).toBeVisible();
+          // Live numbers that change the layout (line wrap, badge width), not just pixels under a mask:
+          // pin their digits before the shot. Footer: Wakapi coding hours; hero: the weekly trend rank.
+          await page.evaluate(() => {
+            for (const el of document.querySelectorAll("footer p, a[href='#n-trend']")) {
+              if (!/Coding-Zeit|Platz/.test(el.textContent ?? "")) continue;
+              for (const node of el.childNodes) {
+                if (node.nodeType === Node.TEXT_NODE)
+                  node.textContent = (node.textContent ?? "").replace(/\d/g, "0");
+              }
+            }
+          });
           const name = `${path === "/" ? "home" : path.slice(1).replaceAll("/", "-")}-${size.width}-${theme}.png`;
           await expect(page).toHaveScreenshot(name, {
             fullPage: true,
