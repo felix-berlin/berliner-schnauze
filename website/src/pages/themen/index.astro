@@ -1,7 +1,7 @@
 ---
 import Layout from '@layouts/Layout.astro';
 import { fetchAllThemen } from '@services/payload/themen.ts';
-import { canonicalUrl, seoData } from '@utils/helpers.ts';
+import { canonicalUrl, seoData, jsonLd } from '@utils/helpers.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
 import { defaultOgImage } from '@utils/defaultOgImage';
@@ -23,7 +23,7 @@ const content = {
 };
 
 const itemListJson = () =>
-  JSON.stringify({
+  jsonLd({
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     itemListElement: themen.map((thema, index) => ({

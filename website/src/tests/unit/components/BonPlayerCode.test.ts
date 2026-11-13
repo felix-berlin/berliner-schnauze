@@ -315,18 +315,16 @@ describe("4 success", () => {
 });
 
 describe("5 link", () => {
-  it("shows a skeleton while the stored link code is redeemed, then the link success text", async () => {
-    let resolve!: (v: typeof stats) => void;
+  it("prefills a link code but redeems it only after a click", async () => {
     api.takeRedeemCode.mockReturnValue(CODE);
-    api.redeemPlayerCode.mockReturnValue(new Promise((r) => (resolve = r)));
+    api.redeemPlayerCode.mockResolvedValue(stats);
     const w = mount(BonPlayerCode);
     await flushPromises();
-    expect(api.redeemPlayerCode).toHaveBeenCalledWith(CODE);
-    expect(w.text()).toContain("Spielercode aus dem Link wird einjelöst …");
-    expect(w.find(".c-skeleton").exists()).toBe(true);
-    resolve(stats);
+    expect(api.redeemPlayerCode).not.toHaveBeenCalled();
+    expect(w.get("input").element.value).toBe(CODE);
+    await w.get("form").trigger("submit");
     await flushPromises();
-    expect(w.find(".c-skeleton").exists()).toBe(false);
+    expect(api.redeemPlayerCode).toHaveBeenCalledWith(CODE);
     expect(w.text()).toContain("Willkommen zurück, Berta!");
     expect(w.text()).toContain("Der Link hat dich anjemeldet.");
   });
@@ -335,6 +333,8 @@ describe("5 link", () => {
     api.takeRedeemCode.mockReturnValue(CODE);
     api.redeemPlayerCode.mockRejectedValue(failure("Zu viele Versuche.", 500));
     const w = mount(BonPlayerCode);
+    await flushPromises();
+    await w.get("form").trigger("submit");
     await flushPromises();
     expect(w.get("input").element.value).toBe(CODE);
     expect(w.get("[data-test=error]").text()).toContain("Zu viele Versuche.");

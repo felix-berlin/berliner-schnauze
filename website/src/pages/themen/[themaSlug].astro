@@ -7,7 +7,7 @@ import Layout from '@layouts/Layout.astro';
 import { fetchAllThemen } from '@services/payload/themen.ts';
 import { fetchAllWords } from '@services/payload/words.ts';
 import { metaToSeo } from '@services/payload/seo.ts';
-import { canonicalUrl, routeToWord, seoData } from '@utils/helpers.ts';
+import { canonicalUrl, routeToWord, seoData, jsonLd } from '@utils/helpers.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
 
@@ -38,7 +38,7 @@ const seoProps = seoData({
 });
 
 const itemListJson = () =>
-  JSON.stringify({
+  jsonLd({
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     itemListElement: words.map((word, index) => ({

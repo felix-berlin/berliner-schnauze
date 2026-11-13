@@ -6,7 +6,7 @@ import { fetchAllWords, translationTexts } from '@services/payload/words.ts';
 import { fetchAnkiContent } from '@services/payload/site.ts';
 import { getPolarFullDeckPrice, getPolarFullDeckPriceAmount } from '@services/polar.ts';
 import { getLiteDeckDownloadUrl } from '@services/githubRelease.ts';
-import { routeToWord, shuffle } from '@utils/helpers.ts';
+import { routeToWord, shuffle, jsonLd } from '@utils/helpers.ts';
 import { stripTags } from '@utils/article.ts';
 import Layout from '@layouts/Layout.astro';
 import { defaultOgImage } from '@utils/defaultOgImage';
@@ -73,7 +73,7 @@ const LITE_WORDS = Object.values(wordsPerLetter).reduce(
 // Ohne Preis (kein Token) kein Product-Markup.
 const productSchema =
   PRICE_AMOUNT !== undefined &&
-  JSON.stringify({
+  jsonLd({
     '@context': 'https://schema.org',
     '@type': 'Product',
     brand: { '@type': 'Brand', name: 'Berliner Schnauze' },

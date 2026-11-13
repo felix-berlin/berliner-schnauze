@@ -8,7 +8,7 @@ import ArticleShare from '@components/magazin/ArticleShare.vue';
 import { fetchAllPosts, fetchDraftPost } from '@services/payload/posts.ts';
 import { metaToSeo } from '@services/payload/seo.ts';
 import { previewDraft } from '@services/preview.ts';
-import { canonicalUrl, formattedDate, seoData } from '@utils/helpers.ts';
+import { canonicalUrl, formattedDate, seoData, jsonLd } from '@utils/helpers.ts';
 import { processArticleBlocks } from '@utils/article.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
@@ -39,7 +39,7 @@ const seoProps = seoData({
 });
 
 const articleJson = () =>
-  JSON.stringify({
+  jsonLd({
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     datePublished: post.publishedAt ?? undefined,

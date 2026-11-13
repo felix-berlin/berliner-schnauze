@@ -33,7 +33,7 @@ import { fetchWordRefs, toWordRef } from '@services/payload/wordRefs.ts';
 import { metaToSeo } from '@services/payload/seo.ts';
 import { previewDraft } from '@services/preview.ts';
 import { escapeHtml } from 'payload-app/lexical-html';
-import { seoData, canonicalUrl } from '@utils/helpers.ts';
+import { seoData, canonicalUrl, jsonLd } from '@utils/helpers.ts';
 import { buildWordSections, hasOrigin } from '@utils/wordSections.ts';
 import { hasNeighborhood } from '@utils/wordNeighborhood.ts';
 import { resolvePos } from '@utils/wordPos.ts';
@@ -157,7 +157,7 @@ const schemaJson = () => {
     .map((w) => w.alternativeWord)
     .filter((n): n is string => Boolean(n));
 
-  return JSON.stringify({
+  return jsonLd({
     '@context': 'https://schema.org',
     '@type': 'DefinedTerm',
     ...(alternateNames.length > 0 && { alternateName: alternateNames }),

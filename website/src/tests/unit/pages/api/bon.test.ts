@@ -1482,7 +1482,14 @@ describe("PATCH and GET /api/bon/player", () => {
     game({ nameReports: 1, playerName: "Old", visitor: hashed("v-rep") });
     await patch(" kalle ", "v-rep");
     expect(db.rows[0]).toMatchObject({ nameHidden: true, nameReports: 3 });
-    expect(db.rows[1]).toMatchObject({ nameHidden: false, nameReports: 0, playerName: "kalle" });
+    expect(db.rows[1]).toMatchObject({ nameReports: 0, playerName: "kalle" });
+  });
+
+  it("keeps a hidden name hidden across a rename and back (A -> B -> A)", async () => {
+    game({ nameHidden: true, nameReports: 3, playerName: "Kalle", visitor: hashed("v-aba") });
+    await patch("Berta", "v-aba");
+    await patch("Kalle", "v-aba");
+    expect(db.rows[0]).toMatchObject({ nameHidden: true, nameReports: 3, playerName: "Kalle" });
   });
 
   it("refuses an insult and a far-right name with 422 and counts neither against the limit", async () => {

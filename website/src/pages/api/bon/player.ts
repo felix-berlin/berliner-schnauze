@@ -13,7 +13,7 @@ import { visitorId } from "@services/payload/comments.ts";
 import { isUniqueViolation, reply } from "@utils/apiReply.ts";
 import { renameSchema } from "@utils/bonSchema.ts";
 import { rateLimitedBy, refundHit } from "@utils/rateLimit.ts";
-import { displayName, nameCategory } from "payload-app/bon-names";
+import { displayName, NAME_REPORT_LIMIT, nameCategory } from "payload-app/bon-names";
 import { generateCode } from "payload-app/bon-player";
 import { bonTag } from "payload-app/bon-ranking";
 
@@ -158,11 +158,14 @@ export const PATCH: APIRoute = async ({ cookies, request }) => {
         // oxlint-disable-next-line no-await-in-loop -- one game at a time keeps the DB load flat
         await payload.update({
           collection: "bon-games",
-          // Reports belong to the old name; the same name again must not bring a hidden one back.
+          // Reports below the limit belong to the old name. A hidden game stays hidden: clearing it would let
+          // A -> B -> A bring a moderated name back.
           data:
-            norm(g.playerName) === norm(name)
+            norm(g.playerName) === norm(name) ||
+            g.nameHidden ||
+            (g.nameReports ?? 0) >= NAME_REPORT_LIMIT
               ? { playerName: name }
-              : { nameHidden: false, nameReports: 0, playerName: name },
+              : { nameReports: 0, playerName: name },
           depth: 0,
           id: g.id,
         });

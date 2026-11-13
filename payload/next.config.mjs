@@ -21,6 +21,16 @@ const nextConfig = {
   outputFileTracingRoot: path.resolve(dirname, ".."),
   // The 28 MB word list of the compound decomposition (lib/decompose.ts): required at runtime, not bundled.
   serverExternalPackages: ["all-the-german-words"],
+  // The admin is never framed by another site (clickjacking of the logged-in admin).
+  headers: async () => [
+    {
+      source: "/:path*",
+      headers: [
+        { key: "Content-Security-Policy", value: "frame-ancestors 'self'" },
+        { key: "X-Frame-Options", value: "SAMEORIGIN" },
+      ],
+    },
+  ],
 };
 
 export default withPayload(nextConfig, { devBundleServerPackages: false });

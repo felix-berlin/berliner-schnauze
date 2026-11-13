@@ -172,6 +172,18 @@ describe("mcp endpoint", () => {
       expect(text(liveEdit)).toContain("nur als Entwurf");
       expect(await publishedText()).toBe(WORD);
 
+      for (const target of [
+        { id: live.id },
+        { where: JSON.stringify({ id: { equals: live.id } }) },
+      ]) {
+        const unpublish = await rpc("tools/call", `Bearer ${KEY}`, {
+          name: "updateWords",
+          arguments: { ...target, berlinerisch: `${WORD}-weg`, draft: false, _status: "draft" },
+        });
+        expect(text(unpublish)).toContain("nur als Entwurf");
+        expect(await publishedText()).toBe(WORD);
+      }
+
       const draftEdit = await rpc("tools/call", `Bearer ${KEY}`, {
         name: "updateWords",
         arguments: { id: live.id, berlinerisch: `${WORD}-entwurf`, draft: true },
