@@ -1,32 +1,46 @@
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-@layer legacy {
-  .c-modal {
+// Modal: a native <dialog> in the top layer, opened through stores/modal.ts. Variants = position
+// (center, bottom; unstyled for now). Part: .close (row that puts ModalCloseButton at the end).
+// Public: --modal-width (set inline from the width prop), --modal-block-size, --modal-max-block-size.
+// The page scroll lock is the .u-disable-scroll utility.
+@include mx.component("modal") {
+  :scope {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R47: one-off backdrop dim
+    --_backdrop: rgb(0 0 0 / 30%);
+    --_gutter: 2rem; // two space-4 gutters around the dialog
+    --_max-width: 800px; // one-off reading width
+    --_slide: 0.3s; // between duration-base and -slow, kept from the exit animation
+    --_blur: 4px;
+
     border: none;
     inset: 0;
-    background-color: var(--color-background-modal, var(--floating-color-background));
-    width: var(--width-modal, min(100% - 2rem, 800px));
-    max-height: 80svh;
+    background-color: var(--color-surface-floating);
+    inline-size: var(--modal-width, min(100% - var(--_gutter), var(--_max-width)));
+    block-size: var(--modal-block-size, auto);
+    max-block-size: var(--modal-max-block-size, 80svh);
     margin: auto;
 
-    /**
-     * Important for exit animation
-     * @see: https://developer.chrome.com/blog/entry-exit-animations?hl=de#animating_elements_to_and_from_the_top-layer
-     */
+    // Exit animation: https://developer.chrome.com/blog/entry-exit-animations#animating_elements_to_and_from_the_top-layer
     @include butler-mx.feature("motion") {
       opacity: 0;
       translate: 0 -100%;
       transition:
-        translate 0.3s,
-        opacity 0.3s,
-        display 0.3s allow-discrete,
-        overlay 0.3s allow-discrete;
+        translate var(--_slide),
+        opacity var(--_slide),
+        display var(--_slide) allow-discrete,
+        overlay var(--_slide) allow-discrete;
     }
 
     &::backdrop {
-      background-color: var(--color-backdrop-modal, rgb(0 0 0 / 30%));
-      backdrop-filter: blur(4px);
+      background-color: var(--_backdrop);
+      backdrop-filter: blur(var(--_blur));
       animation: fade-in 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+    }
+
+    &[closedby="any"]::backdrop {
+      cursor: pointer;
     }
 
     &[open] {
@@ -42,29 +56,11 @@
           opacity: 0;
         }
       }
-
-      .c-modal__close {
-        align-self: flex-end;
-
-        &.has-suffix,
-        &.has-prefix {
-          gap: 0.25rem;
-        }
-
-        &.has-suffix {
-          padding-inline-end: 0.5rem;
-        }
-      }
-    }
-
-    &.has-close-on-click-outside {
-      &::backdrop {
-        cursor: pointer;
-      }
     }
   }
 
-  .u-disable-scroll {
-    overflow: hidden !important;
+  .close {
+    display: flex;
+    justify-content: flex-end;
   }
 }

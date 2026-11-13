@@ -43,7 +43,6 @@ export default [
   "src/styles/components/_magazin-overview.scss",
   "src/styles/components/_main-menu.scss",
   "src/styles/components/_menu-nav.scss",
-  "src/styles/components/_modal.scss",
   "src/styles/components/_next-links.scss",
   "src/styles/components/_options-dropdown.scss",
   "src/styles/components/_pwa-cache.scss",

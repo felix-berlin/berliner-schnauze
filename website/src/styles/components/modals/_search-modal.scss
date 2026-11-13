@@ -1,7 +1,8 @@
 @layer legacy {
   .c-modal.c-modal--search {
-    height: 100%;
-    max-height: 90svh;
+    --modal-block-size: 100%;
+    --modal-max-block-size: 90svh;
+
     gap: 2rem;
     container: search-modal / inline-size;
 
@@ -104,6 +105,11 @@
         @container search-modal (inline-size < 650px) {
           display: none;
         }
+      }
+
+      // Was in the modal (gap 0.25rem too: the button has no public gap yet).
+      .c-modal__close.has-suffix {
+        --button-padding: var(--space-1) var(--space-2) var(--space-1) var(--space-1);
       }
 
       .c-modal__close {

@@ -27,4 +27,9 @@
     margin-inline: auto;
     padding-inline: var(--_gutter);
   }
+
+  // Page scroll lock while a modal is open (stores/modal.ts); the utilities layer outranks every component.
+  .u-disable-scroll {
+    overflow: hidden;
+  }
 }
