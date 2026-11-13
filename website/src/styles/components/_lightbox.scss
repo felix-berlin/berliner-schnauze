@@ -66,10 +66,11 @@
       }
 
       .c-icon-button {
+        --icon-button-bg: var(--lightbox-button-bg);
+
         position: absolute;
         inset-block-start: 50%;
         translate: 0 -50%;
-        background: var(--lightbox-button-bg);
 
         &:first-child {
           inset-inline-start: 0.25rem;
@@ -89,13 +90,8 @@
     }
 
     .c-icon-button {
-      color: var(--lightbox-ink);
-
-      @media (hover: hover) {
-        &:hover {
-          border-color: currentcolor;
-        }
-      }
+      --icon-button-color: var(--lightbox-ink);
+      --icon-button-hover-border: currentcolor;
     }
 
     a {
