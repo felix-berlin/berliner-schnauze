@@ -51,6 +51,11 @@
     }
 
     &__platform-list {
+      // The section card's li rule used to reach in here; it stops at its parts now.
+      > li {
+        line-height: 1.5;
+      }
+
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(215px, 100%), 1fr));
       gap: vars.$spacer * 0.75;

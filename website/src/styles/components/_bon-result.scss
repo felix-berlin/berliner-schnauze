@@ -4,6 +4,12 @@
 @layer legacy {
   // Result screen (docs/design/bon/SPEC.md §9): one column on mobile, from the word breakpoint two equal columns.
   .c-bon-result {
+    // Sheet section cards get more room from the "word" breakpoint on.
+    @include mx.breakpoint("word") {
+      --section-card-gutter: var(--space-6);
+      --section-card-header-block: var(--space-4);
+    }
+
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -120,11 +126,16 @@
     }
 
     // The rows end in the footer's rule, so the body keeps little room below them.
-    &__round .c-section-card__body {
-      padding-block-end: 0.5rem;
+    &__round {
+      --section-card-body-end: 0.5rem;
     }
 
     &__list {
+      // The section card's li rule used to reach in here; it stops at its parts now.
+      > li {
+        line-height: 1.5;
+      }
+
       display: flex;
       flex-direction: column;
       margin: 0;

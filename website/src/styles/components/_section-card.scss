@@ -1,173 +1,141 @@
-@use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
-@use "@sass-butler/mixins" as butler-mx;
 
-@layer legacy {
-  .c-word-main__content {
-    counter-reset: section-num;
-  }
+// Section card: a numbered paper card with header (.num, .title), .body and .footer.
+// Variants: unnumbered; word (word page: sheet surface, no numbers, no header rule, paddings follow
+// the word-main column); sheet (same look outside the word page, BON screens: all corners round,
+// the parent sets the paddings via --section-card-gutter / --section-card-header-block).
+// Public: --section-card-header-padding, --section-card-header-end, --section-card-body-padding,
+// --section-card-body-end, --section-card-footer-padding, --section-card-footer-align,
+// --section-card-footer-justify, --section-card-header-justify, --section-card-header-wrap,
+// --section-card-gutter, --section-card-header-block (sheet).
+// .body and .footer of SectionCard.astro wrap slotted markup (data-slot): the card does not style it.
+@include mx.component("section-card") {
+  :scope {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R83: one-off (h3 in the body)
+    --_h3: light-dark(rgb(60 67 75), rgb(227 227 210));
+    --_inline: var(--space-5);
+    --_header-block: var(--space-3);
+    --_body-start: var(--space-4);
+    --_body-end: var(--space-4);
+    --_footer-block: 0;
+    --_footer-inline: 0;
 
-  .c-section-card {
-    scroll-margin-block-start: calc(var(--site-header-height) + 1rem);
+    scroll-margin-block-start: calc(var(--site-header-height) + var(--space-4));
     counter-increment: section-num;
 
     @include mx.paper-card;
 
     // Deviations from paper-card: pure white sheet, square bottom corners.
-    background: white;
-    border-end-start-radius: 0;
-    border-end-end-radius: 0;
+    background: var(--color-text-on-active); // colour inventory R4
+    border-end-start-radius: var(--radius-none);
+    border-end-end-radius: var(--radius-none);
+  }
 
-    &--unnumbered {
-      counter-increment: none;
+  :scope[data-variant~="unnumbered"] {
+    counter-increment: none;
 
-      .c-section-card__num::before {
-        content: "—";
-      }
-    }
-
-    &__header {
-      display: flex;
-      align-items: baseline;
-      gap: 0.625rem;
-      padding-inline: 1.25rem;
-      padding-block: 0.75rem;
-      border-block-end: 1px dashed var(--orange-200);
-    }
-
-    &__num {
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: var(--orange-500);
-      letter-spacing: 0.05em;
-      flex-shrink: 0;
-
-      &::before {
-        content: counter(section-num, decimal-leading-zero);
-      }
-    }
-
-    // Word page (SPEC §3/§5): numbers and the header rule are gone, paddings follow the main column width.
-    .c-word-main & {
-      background: var(--surface-sheet);
-      border-color: var(--rule-card);
-
-      // :where() keeps the nested selectors flat: one class above the base rules.
-      :where(.c-section-card__num) {
-        display: none;
-      }
-
-      :where(.c-section-card__header) {
-        padding: 0.875rem 1rem;
-        border-block-end: 0;
-
-        @container word-main (inline-size >= 36rem) {
-          padding: 1rem 1.5rem;
-        }
-      }
-
-      :where(.c-section-card__body) {
-        padding: 0 1rem 1rem;
-
-        @container word-main (inline-size >= 36rem) {
-          padding: 0 1.5rem 1.5rem;
-        }
-      }
-
-      :where(.c-section-card__footer) {
-        padding: 0.75rem 1rem;
-
-        @container word-main (inline-size >= 36rem) {
-          padding: 0.75rem 1.5rem;
-        }
-      }
-    }
-
-    &__footer {
-      display: flex;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 0.375rem 0.75rem;
-      border-block-start: 1px dashed var(--rule-inner);
-    }
-
-    &__title {
-      color: var(--new-blue-400);
-
-      @include mx.paper-card-title;
-      @include butler-mx.dark-mode-class {
-        color: var(--white-100);
-      }
-    }
-
-    &__body {
-      padding-inline: 1.25rem;
-      padding-block: 1rem;
-      overflow-wrap: break-word;
-
-      :where(p, a, li) {
-        font-size: 1rem;
-      }
-
-      :where(li) {
-        line-height: 1.5;
-      }
-
-      h3 {
-        font-family: vars.$berlin;
-        font-size: 1.1rem;
-        font-weight: 700;
-        margin-block: 1.55em 0.75em;
-        color: var(--new-blue-400);
-
-        @include butler-mx.dark-mode-class {
-          color: var(--color-body);
-        }
-      }
+    .num::before {
+      content: "—";
     }
   }
 
-  // Sheet card outside the word page (BON screens): DS surface, no numbers, no header rule.
-  // Last in the file, so it beats the base rules above at equal specificity in every chunk that loads them.
-  .c-section-card--sheet {
-    background: var(--surface-sheet);
-    border-color: var(--rule-card);
-    border-radius: var(--radius-sm);
+  :scope:is([data-variant~="word"], [data-variant~="sheet"]) {
+    --_inline: var(--space-4);
+    --_header-block: 0.875rem; // exact middle of space-3 and space-4, kept from the mock
+    --_body-start: 0;
+    --_body-end: var(--_inline);
+    --_footer-block: var(--space-3);
+    --_footer-inline: var(--_inline);
 
-    // paper-card's dark background comes with .dark in front; match it.
-    @include butler-mx.dark-mode-class {
-      background: var(--surface-sheet);
-    }
+    background: var(--color-surface-sheet);
+    border-color: var(--color-border-card);
 
-    :where(.c-section-card__num) {
+    .num {
       display: none;
     }
 
-    :where(.c-section-card__header) {
-      padding: 0.875rem 1rem;
+    .header {
       border-block-end: 0;
     }
+  }
 
-    :where(.c-section-card__body) {
-      padding: 0 1rem 1rem;
+  // Word page (SPEC §3/§5): paddings follow the main column width.
+  @container word-main (inline-size >= 36rem) {
+    :scope[data-variant~="word"] {
+      --_inline: var(--space-6);
+      --_header-block: var(--space-4);
+    }
+  }
+
+  // Outside the word page the screen decides (BON: from the "word" breakpoint), so the parent sets the room.
+  :scope[data-variant~="sheet"] {
+    --_inline: var(--section-card-gutter, var(--space-4));
+    --_header-block: var(--section-card-header-block, 0.875rem);
+
+    border-radius: var(--radius-sm);
+  }
+
+  .header {
+    display: flex;
+    align-items: baseline;
+    justify-content: var(--section-card-header-justify, normal);
+    flex-wrap: var(--section-card-header-wrap, nowrap);
+    gap: var(--space-2);
+    padding: var(
+      --section-card-header-padding,
+      var(--_header-block) var(--_inline) var(--section-card-header-end, var(--_header-block))
+    );
+    border-block-end: 1px dashed var(--color-border-accent-soft);
+  }
+
+  .num {
+    font-size: var(--font-size-2xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent-active);
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+
+    &::before {
+      content: counter(section-num, decimal-leading-zero);
+    }
+  }
+
+  .title {
+    color: var(--color-text-strong);
+
+    @include mx.paper-card-title;
+  }
+
+  .body {
+    padding: var(
+      --section-card-body-padding,
+      var(--_body-start) var(--_inline) var(--section-card-body-end, var(--_body-end))
+    );
+    overflow-wrap: break-word;
+    font-size: var(--font-size-base);
+
+    li {
+      line-height: 1.5;
     }
 
-    :where(.c-section-card__footer) {
-      padding: 0.75rem 1rem;
+    h3 {
+      --_h3-space: 1.55em 0.75em; // em: follows the heading's own size
+
+      font-family: var(--font-family-body);
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      margin-block: var(--_h3-space);
+      color: var(--_h3);
     }
+  }
 
-    @include mx.breakpoint("word") {
-      :where(.c-section-card__header) {
-        padding: 1rem 1.5rem;
-      }
-
-      :where(.c-section-card__body) {
-        padding: 0 1.5rem 1.5rem;
-      }
-
-      :where(.c-section-card__footer) {
-        padding: 0.75rem 1.5rem;
-      }
-    }
+  .footer {
+    display: flex;
+    align-items: var(--section-card-footer-align, baseline);
+    justify-content: var(--section-card-footer-justify, normal);
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    padding: var(--section-card-footer-padding, var(--_footer-block) var(--_footer-inline));
+    border-block-start: 1px dashed var(--color-border-inner);
   }
 }

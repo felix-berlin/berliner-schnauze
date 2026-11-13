@@ -24,7 +24,8 @@
 
     <div class="c-bon-leaderboard__body">
       <section
-        class="c-section-card c-section-card--sheet c-bon-leaderboard__card c-bon-leaderboard__main"
+        class="c-section-card c-bon-leaderboard__card c-bon-leaderboard__main"
+        data-variant="sheet"
         aria-labelledby="bon-leaderboard-title"
       >
         <h2 id="bon-leaderboard-title" class="u-sr-only">{{ periodTitle }}</h2>
@@ -68,7 +69,7 @@
         </div>
 
         <template v-else>
-          <div class="c-section-card__body c-bon-leaderboard__table">
+          <div class="body">
             <div
               v-if="isDesktop"
               class="c-bon-leaderboard__row c-bon-leaderboard__row--head"
@@ -135,7 +136,7 @@
               </template>
             </ol>
           </div>
-          <div class="c-section-card__footer c-bon-leaderboard__footer">
+          <div class="footer">
             <span>Platz 1–{{ shown.length }} von {{ fmt(total) }}</span>
             <button
               v-if="shown.length < total"
@@ -158,54 +159,57 @@
         :class="{ 'c-bon-leaderboard__aside--first': !me }"
       >
         <section
-          class="c-section-card c-section-card--sheet c-bon-leaderboard__card"
+          class="c-section-card c-bon-leaderboard__card c-bon-leaderboard__me-card"
+          data-variant="sheet"
           aria-labelledby="bon-lb-me-title"
         >
-          <div class="c-section-card__header c-bon-leaderboard__card-header">
-            <h2 id="bon-lb-me-title" class="c-section-card__title">Dein Platz</h2>
+          <div class="header">
+            <h2 id="bon-lb-me-title" class="title">Dein Platz</h2>
           </div>
-          <div class="c-section-card__body c-bon-leaderboard__me">
-            <template v-if="me">
-              <p class="c-bon-leaderboard__place">
-                <b>{{ me.rank }}.</b>
-                <span class="t-small">von {{ fmt(total) }} · besser als {{ betterThan }}</span>
-              </p>
-              <p>
-                <b>{{ fmt(me.score) }} Punkte</b> · {{ me.accuracy }} % Treffer · Serie
-                {{ me.bestStreak }}
-              </p>
-              <span class="c-bon-leaderboard__links">
-                <button class="c-textlink" type="button" @click="jump">Zu mir springen</button>
-                <a class="c-textlink" :href="GAME_PATH">Nochmal spielen</a>
-              </span>
-              <BonName v-if="player" :name="player.name" :tag="player.tag" @saved="onSaved" />
-              <p class="t-small">
-                Gezählt wird dein bestes Spiel im Zeitraum. Erkannt wirst du an einem Cookie auf
-                diesem Jerät.
-              </p>
-            </template>
-            <template v-else>
-              <p>Du stehst hier noch nich drin. Spiel ’ne Runde, dann siehste, wo du landest.</p>
-              <a
-                class="c-button c-bon-leaderboard__play"
-                data-variant="primary lg"
-                :href="GAME_PATH"
-                >Jetzt spielen</a
-              >
-              <p class="t-small">
-                Schon jespielt? Dann is der Cookie weg oder du spielst auf ’nem anderen Jerät.
-              </p>
-              <BonPlayerCode v-if="redeeming" mode="redeem" @close="redeemed" />
-              <button
-                v-else
-                class="c-textlink c-bon-leaderboard__redeem"
-                type="button"
-                @click="redeeming = true"
-              >
-                <KeyIcon width="18" height="18" aria-hidden="true" />
-                <span>Spielercode einlösen</span>
-              </button>
-            </template>
+          <div class="body">
+            <div class="c-bon-leaderboard__me">
+              <template v-if="me">
+                <p class="c-bon-leaderboard__place">
+                  <b>{{ me.rank }}.</b>
+                  <span class="t-small">von {{ fmt(total) }} · besser als {{ betterThan }}</span>
+                </p>
+                <p>
+                  <b>{{ fmt(me.score) }} Punkte</b> · {{ me.accuracy }} % Treffer · Serie
+                  {{ me.bestStreak }}
+                </p>
+                <span class="c-bon-leaderboard__links">
+                  <button class="c-textlink" type="button" @click="jump">Zu mir springen</button>
+                  <a class="c-textlink" :href="GAME_PATH">Nochmal spielen</a>
+                </span>
+                <BonName v-if="player" :name="player.name" :tag="player.tag" @saved="onSaved" />
+                <p class="t-small">
+                  Gezählt wird dein bestes Spiel im Zeitraum. Erkannt wirst du an einem Cookie auf
+                  diesem Jerät.
+                </p>
+              </template>
+              <template v-else>
+                <p>Du stehst hier noch nich drin. Spiel ’ne Runde, dann siehste, wo du landest.</p>
+                <a
+                  class="c-button c-bon-leaderboard__play"
+                  data-variant="primary lg"
+                  :href="GAME_PATH"
+                  >Jetzt spielen</a
+                >
+                <p class="t-small">
+                  Schon jespielt? Dann is der Cookie weg oder du spielst auf ’nem anderen Jerät.
+                </p>
+                <BonPlayerCode v-if="redeeming" mode="redeem" @close="redeemed" />
+                <button
+                  v-else
+                  class="c-textlink c-bon-leaderboard__redeem"
+                  type="button"
+                  @click="redeeming = true"
+                >
+                  <KeyIcon width="18" height="18" aria-hidden="true" />
+                  <span>Spielercode einlösen</span>
+                </button>
+              </template>
+            </div>
           </div>
         </section>
         <p class="t-small c-bon-leaderboard__note">

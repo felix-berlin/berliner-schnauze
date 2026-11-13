@@ -4,6 +4,12 @@
 @layer legacy {
   // Start screen (docs/design/bon/SPEC.md §6): one column on mobile, from the word breakpoint 1.1fr / 1fr.
   .c-bon-intro {
+    // Sheet section cards get more room from the "word" breakpoint on.
+    @include mx.breakpoint("word") {
+      --section-card-gutter: var(--space-6);
+      --section-card-header-block: var(--space-4);
+    }
+
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -106,11 +112,6 @@
       align-self: start;
     }
 
-    &__rules-header {
-      border-block-end: 0;
-      padding-block-end: 0;
-    }
-
     &__list {
       display: flex;
       flex-direction: column;
@@ -125,6 +126,7 @@
         align-items: start;
         padding-block: 0.75rem;
         border-block-start: 1px dashed var(--rule-inner);
+        line-height: 1.5;
 
         &:first-child {
           border-block-start: 0;

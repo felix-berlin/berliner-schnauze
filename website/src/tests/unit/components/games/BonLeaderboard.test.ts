@@ -282,9 +282,10 @@ describe("BonLeaderboard", () => {
     fetchMock.mockRejectedValueOnce(new Error("x"));
     await more();
     await flushPromises();
-    expect(w.find(".c-bon-leaderboard__footer [role='alert']").text()).toBe(
-      "Die Rangliste is jerade nich zu kriegen.",
-    );
+    // At the button: the alert is its next sibling.
+    const alert = w.find("[role='alert']");
+    expect(alert.text()).toBe("Die Rangliste is jerade nich zu kriegen.");
+    expect(alert.element.previousElementSibling?.textContent?.trim()).toBe("Mehr laden");
     fetchMock.mockResolvedValue(reply({ entries: rows(26, 50) }));
     await more();
     await flushPromises();

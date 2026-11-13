@@ -4,16 +4,14 @@
 @layer legacy {
   // Player code card (docs/design/bon/SPEC.md §12, mock BonCode): a sheet section card with a key in the title.
   .c-bon-player-code {
+    --section-card-header-padding: 0.875rem 1rem 0;
+    --section-card-body-padding: 0.875rem 1rem 1rem;
+
     position: relative;
     box-sizing: border-box;
     inline-size: 100%;
     max-inline-size: 32rem;
     margin-block: 1rem;
-
-    &__header.c-section-card__header {
-      padding: 0.875rem 1rem 0;
-      border-block-end: 0;
-    }
 
     &__title {
       display: flex;
@@ -27,12 +25,11 @@
       color: var(--orange-400);
     }
 
-    &__body.c-section-card__body {
+    &__body {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       gap: 0.875rem;
-      padding: 0.875rem 1rem 1rem;
 
       > p {
         margin: 0;

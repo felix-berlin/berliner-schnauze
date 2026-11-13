@@ -49,7 +49,6 @@ export default [
   "src/styles/components/_pwa-cache.scss",
   "src/styles/components/_scroll-to-top.scss",
   "src/styles/components/_searchbar.scss",
-  "src/styles/components/_section-card.scss",
   "src/styles/components/_shortcut.scss",
   "src/styles/components/_single-loader.scss",
   "src/styles/components/_suggest-word-form.scss",

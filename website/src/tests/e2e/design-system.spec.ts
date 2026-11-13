@@ -54,3 +54,23 @@ test("the browser supports @scope (browser floor, spec §9/§14)", async ({ page
   await page.goto("/");
   expect(await page.evaluate(() => typeof CSSScopeRule !== "undefined")).toBe(true);
 });
+
+test("a card's part styles stop at its slot (Review Focus 4, spec §7.1)", async ({ page }) => {
+  await page.goto("/wort/anmachen");
+  const card = page.locator("#beispiele");
+  const sizes = await card.evaluate((section) => {
+    const slot = section.querySelector("[data-slot]");
+    const own = section.querySelector("h2, h3");
+    if (!slot || !own) throw new Error("card without slot or heading");
+    // Slotted markup that happens to reuse a part name of the card.
+    const foreign = document.createElement("span");
+    foreign.className = "title";
+    foreign.textContent = "fremd";
+    slot.append(foreign);
+    return {
+      own: getComputedStyle(own).fontSize,
+      foreign: getComputedStyle(foreign).fontSize,
+    };
+  });
+  expect(sizes.foreign).not.toBe(sizes.own);
+});

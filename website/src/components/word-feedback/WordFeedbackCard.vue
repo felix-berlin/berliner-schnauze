@@ -1,11 +1,12 @@
 <template>
   <section
-    class="c-section-card c-section-card--unnumbered c-word-feedback-card"
+    class="c-section-card c-word-feedback-card"
+    data-variant="unnumbered word"
     aria-labelledby="word-feedback-title"
   >
-    <div class="c-section-card__header">
-      <span class="c-section-card__num" />
-      <h2 id="word-feedback-title" class="c-section-card__title">Sagste det noch?</h2>
+    <div class="header">
+      <span class="num" />
+      <h2 id="word-feedback-title" class="title">Sagste det noch?</h2>
       <span v-if="feedback" class="c-word-feedback-card__count">
         {{
           totalVotes
@@ -15,214 +16,216 @@
       </span>
     </div>
 
-    <div class="c-section-card__body c-word-feedback-card__body">
-      <!-- Persistent, so the announcement works although the card swaps its content. -->
-      <p class="u-sr-only" role="status">{{ announcement }}</p>
-      <template v-if="current === 'usage'">
-        <p ref="lead" class="c-word-feedback-card__lead" tabindex="-1">
-          Is dit Wort bei dir noch im Einsatz?
-        </p>
-        <div
-          v-if="!online"
-          id="word-feedback-offline"
-          class="c-state"
-          data-variant="offline"
-          role="status"
-        >
-          <WifiOff aria-hidden="true" height="18" width="18" />
-          <span class="body">
-            <b>Du bist offline.</b>
-            <span>Abstimmen jeht wieder, sobald du Netz hast.</span>
-          </span>
-        </div>
-        <div v-if="failed" class="c-state" data-variant="error" role="alert">
-          <CircleAlert aria-hidden="true" height="18" width="18" />
-          <span class="body">
-            <b>Ditt hat nich jeklappt.</b>
-            <span>
-              {{
-                (failed.usage && sendError) ||
-                (failed.usage
-                  ? "Deine Stimme is nich anjekommen."
-                  : "Die Stimmen sind nich anjekommen.")
-              }}
-              <button
-                :aria-describedby="!online ? 'word-feedback-offline' : undefined"
-                :aria-disabled="pending || !online"
-                class="c-textlink"
-                data-variant="inline"
-                type="button"
-                @click="retry"
-              >
-                Nochmal versuchen
-              </button>
-            </span>
-          </span>
-        </div>
-        <div class="c-word-feedback-card__tiles" role="group" aria-labelledby="word-feedback-title">
-          <button
-            v-for="o in USAGE_OPTIONS"
-            :key="o.value"
-            :aria-disabled="!online || pending"
-            :aria-pressed="pickedUsage === o.value"
-            class="c-choice"
-            data-variant="tile"
-            type="button"
-            @click="answerUsageStep(o.value)"
+    <div class="body">
+      <div class="c-word-feedback-card__body">
+        <!-- Persistent, so the announcement works although the card swaps its content. -->
+        <p class="u-sr-only" role="status">{{ announcement }}</p>
+        <template v-if="current === 'usage'">
+          <p ref="lead" class="c-word-feedback-card__lead" tabindex="-1">
+            Is dit Wort bei dir noch im Einsatz?
+          </p>
+          <div
+            v-if="!online"
+            id="word-feedback-offline"
+            class="c-state"
+            data-variant="offline"
+            role="status"
           >
-            <span class="icon" aria-hidden="true">
-              <component :is="o.icon" height="22" width="22" />
+            <WifiOff aria-hidden="true" height="18" width="18" />
+            <span class="body">
+              <b>Du bist offline.</b>
+              <span>Abstimmen jeht wieder, sobald du Netz hast.</span>
             </span>
-            <span class="text">
-              <b>{{ o.label }}</b>
-              <span>{{ o.hint }}</span>
+          </div>
+          <div v-if="failed" class="c-state" data-variant="error" role="alert">
+            <CircleAlert aria-hidden="true" height="18" width="18" />
+            <span class="body">
+              <b>Ditt hat nich jeklappt.</b>
+              <span>
+                {{
+                  (failed.usage && sendError) ||
+                  (failed.usage
+                    ? "Deine Stimme is nich anjekommen."
+                    : "Die Stimmen sind nich anjekommen.")
+                }}
+                <button
+                  :aria-describedby="!online ? 'word-feedback-offline' : undefined"
+                  :aria-disabled="pending || !online"
+                  class="c-textlink"
+                  data-variant="inline"
+                  type="button"
+                  @click="retry"
+                >
+                  Nochmal versuchen
+                </button>
+              </span>
             </span>
-          </button>
-        </div>
-        <p class="c-word-feedback-card__teaser">
-          {{
-            totalVotes
-              ? `Schon ${totalVotes} ${totalVotes === 1 ? "Stimme" : "Stimmen"} – wat sagst du?`
-              : "Noch keener hat abjestimmt – mach den Anfang!"
-          }}
-        </p>
-      </template>
-
-      <template v-else>
-        <div aria-live="polite">
-          <div v-if="feedback" class="c-word-feedback-card__bars">
-            <div
-              v-for="b in bars"
-              :key="b.value"
-              class="c-word-feedback-card__bar"
-              :class="{ 'is-mine': b.value === selected.usage }"
+          </div>
+          <div class="c-word-feedback-card__tiles" role="group" aria-labelledby="word-feedback-title">
+            <button
+              v-for="o in USAGE_OPTIONS"
+              :key="o.value"
+              :aria-disabled="!online || pending"
+              :aria-pressed="pickedUsage === o.value"
+              class="c-choice"
+              data-variant="tile"
+              type="button"
+              @click="answerUsageStep(o.value)"
             >
-              <span class="c-word-feedback-card__bar-label">
-                {{ b.label }}<template v-if="b.value === selected.usage"> · deine Antwort</template>
+              <span class="icon" aria-hidden="true">
+                <component :is="o.icon" height="22" width="22" />
               </span>
-              <span class="c-word-feedback-card__bar-value">{{ b.percent }} % · {{ b.text }}</span>
-              <span class="c-word-feedback-card__bar-track" aria-hidden="true">
-                <span
-                  class="c-word-feedback-card__bar-fill"
-                  :style="{ inlineSize: `${b.percent}%` }"
-                />
+              <span class="text">
+                <b>{{ o.label }}</b>
+                <span>{{ o.hint }}</span>
               </span>
+            </button>
+          </div>
+          <p class="c-word-feedback-card__teaser">
+            {{
+              totalVotes
+                ? `Schon ${totalVotes} ${totalVotes === 1 ? "Stimme" : "Stimmen"} – wat sagst du?`
+                : "Noch keener hat abjestimmt – mach den Anfang!"
+            }}
+          </p>
+        </template>
+
+        <template v-else>
+          <div aria-live="polite">
+            <div v-if="feedback" class="c-word-feedback-card__bars">
+              <div
+                v-for="b in bars"
+                :key="b.value"
+                class="c-word-feedback-card__bar"
+                :class="{ 'is-mine': b.value === selected.usage }"
+              >
+                <span class="c-word-feedback-card__bar-label">
+                  {{ b.label }}<template v-if="b.value === selected.usage"> · deine Antwort</template>
+                </span>
+                <span class="c-word-feedback-card__bar-value">{{ b.percent }} % · {{ b.text }}</span>
+                <span class="c-word-feedback-card__bar-track" aria-hidden="true">
+                  <span
+                    class="c-word-feedback-card__bar-fill"
+                    :style="{ inlineSize: `${b.percent}%` }"
+                  />
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div
-          v-if="current !== 'done'"
-          :key="current"
-          class="c-word-feedback-card__step"
-          :class="enter"
-        >
-          <span
-            class="c-word-feedback-card__segments"
-            role="img"
-            :aria-label="`Schritt ${stepIndex + 1} von ${steps.length}`"
+          <div
+            v-if="current !== 'done'"
+            :key="current"
+            class="c-word-feedback-card__step"
+            :class="enter"
           >
             <span
-              v-for="s in segments"
-              :key="s.step"
-              class="c-word-feedback-card__segment"
-              :class="`is-${s.state}`"
-            />
-          </span>
-          <div class="c-word-feedback-card__progress">
-            <h3 ref="question" class="c-word-feedback-card__question" tabindex="-1">
-              {{ QUESTIONS[current] }}
-            </h3>
-            <span class="c-word-feedback-card__eyebrow" aria-hidden="true">
-              Schritt {{ stepIndex + 1 }} von {{ steps.length }}
-            </span>
-          </div>
-
-          <div
-            v-show="explainOpen"
-            id="word-feedback-why"
-            class="c-infotext c-word-feedback-card__why"
-          >
-            <b>Warum so ville Fragen?</b>
-            <span>
-              Weil wa hier zusammen forschen: Wie klingt det Berlinerische heute, wo wird’s noch
-              jesprochen und von wem? Jede Antwort hilft uns, den Berliner Metrolekt besser zu
-              verstehen – dafür brauchen wa ’n paar Angaben von dir: wo de wohnst, ob de hier
-              uffjewachsen bist und wie alt de bist.
-            </span>
-            <span class="c-word-feedback-card__why-note">
-              Mach mit, so weit de willst – jede Frage kannste überspringen.
-            </span>
-          </div>
-          <div>
-            <button
-              aria-controls="word-feedback-why"
-              :aria-expanded="explainOpen"
-              class="c-textlink c-word-feedback-card__why-link"
-              type="button"
-              @click="explainOpen = !explainOpen"
+              class="c-word-feedback-card__segments"
+              role="img"
+              :aria-label="`Schritt ${stepIndex + 1} von ${steps.length}`"
             >
-              Warum fragen wa dit?
-            </button>
-          </div>
+              <span
+                v-for="s in segments"
+                :key="s.step"
+                class="c-word-feedback-card__segment"
+                :class="`is-${s.state}`"
+              />
+            </span>
+            <div class="c-word-feedback-card__progress">
+              <h3 ref="question" class="c-word-feedback-card__question" tabindex="-1">
+                {{ QUESTIONS[current] }}
+              </h3>
+              <span class="c-word-feedback-card__eyebrow" aria-hidden="true">
+                Schritt {{ stepIndex + 1 }} von {{ steps.length }}
+              </span>
+            </div>
 
-          <BerlinAreaMap
-            v-if="current === 'area'"
-            :model-value="(picked.area as Area | null) ?? null"
-            @update:model-value="answerProfile('area', $event)"
-          />
-          <div
-            v-else
-            class="c-word-feedback-card__options"
-            :class="`c-word-feedback-card__options--${current}`"
-            role="group"
-            :aria-label="QUESTIONS[current]"
-          >
-            <button
-              v-for="o in choices"
-              :key="o.value"
-              :aria-pressed="picked[current] === o.value"
-              class="c-choice"
-              :disabled="pending"
-              type="button"
-              @click="answerProfile(current, o.value)"
+            <div
+              v-show="explainOpen"
+              id="word-feedback-why"
+              class="c-infotext c-word-feedback-card__why"
             >
-              {{ o.label }}
+              <b>Warum so ville Fragen?</b>
+              <span>
+                Weil wa hier zusammen forschen: Wie klingt det Berlinerische heute, wo wird’s noch
+                jesprochen und von wem? Jede Antwort hilft uns, den Berliner Metrolekt besser zu
+                verstehen – dafür brauchen wa ’n paar Angaben von dir: wo de wohnst, ob de hier
+                uffjewachsen bist und wie alt de bist.
+              </span>
+              <span class="c-word-feedback-card__why-note">
+                Mach mit, so weit de willst – jede Frage kannste überspringen.
+              </span>
+            </div>
+            <div>
+              <button
+                aria-controls="word-feedback-why"
+                :aria-expanded="explainOpen"
+                class="c-textlink c-word-feedback-card__why-link"
+                type="button"
+                @click="explainOpen = !explainOpen"
+              >
+                Warum fragen wa dit?
+              </button>
+            </div>
+
+            <BerlinAreaMap
+              v-if="current === 'area'"
+              :model-value="(picked.area as Area | null) ?? null"
+              @update:model-value="answerProfile('area', $event)"
+            />
+            <div
+              v-else
+              class="c-word-feedback-card__options"
+              :class="`c-word-feedback-card__options--${current}`"
+              role="group"
+              :aria-label="QUESTIONS[current]"
+            >
+              <button
+                v-for="o in choices"
+                :key="o.value"
+                :aria-pressed="picked[current] === o.value"
+                class="c-choice"
+                :disabled="pending"
+                type="button"
+                @click="answerProfile(current, o.value)"
+              >
+                {{ o.label }}
+              </button>
+            </div>
+          </div>
+
+          <div v-else ref="doneBox" class="c-word-feedback-card__done" :class="enter" tabindex="-1">
+            <p class="c-word-feedback-card__done-title"><strong>Danke fürs Mitmachen!</strong></p>
+            <ul v-if="rows.length" class="c-word-feedback-card__compare">
+              <li v-for="r in rows" :key="r.label">{{ r.label }}: {{ r.share }} % sagen det</li>
+            </ul>
+            <button class="c-textlink" type="button" @click="reset">Angaben ändern</button>
+            <button class="c-textlink" :disabled="pending" type="button" @click="withdraw">
+              Stimme zurückziehen
             </button>
           </div>
-        </div>
 
-        <div v-else ref="doneBox" class="c-word-feedback-card__done" :class="enter" tabindex="-1">
-          <p class="c-word-feedback-card__done-title"><strong>Danke fürs Mitmachen!</strong></p>
-          <ul v-if="rows.length" class="c-word-feedback-card__compare">
-            <li v-for="r in rows" :key="r.label">{{ r.label }}: {{ r.share }} % sagen det</li>
-          </ul>
-          <button class="c-textlink" type="button" @click="reset">Angaben ändern</button>
-          <button class="c-textlink" :disabled="pending" type="button" @click="withdraw">
-            Stimme zurückziehen
-          </button>
-        </div>
-
-        <div class="c-word-feedback-card__privacy">
-          <label class="c-word-feedback-card__remember">
-            <input
-              type="checkbox"
-              :checked="remember"
-              @change="setRemember(($event.target as HTMLInputElement).checked)"
-            />
-            Meine Angaben für weitere Wörter merken (nur in diesem Browser)
-          </label>
-          <p>
-            Wir speichern Deine Antworten ohne Namen, aber mit einer Kennung aus einem Cookie (<a
-              href="/datenschutz#7-wort-feedback"
-              >Datenschutz</a
-            >).
-            <button class="c-textlink" :disabled="pending" type="button" @click="deleteAll">
-              Alle meine Antworten löschen
-            </button>
-          </p>
-        </div>
-      </template>
+          <div class="c-word-feedback-card__privacy">
+            <label class="c-word-feedback-card__remember">
+              <input
+                type="checkbox"
+                :checked="remember"
+                @change="setRemember(($event.target as HTMLInputElement).checked)"
+              />
+              Meine Angaben für weitere Wörter merken (nur in diesem Browser)
+            </label>
+            <p>
+              Wir speichern Deine Antworten ohne Namen, aber mit einer Kennung aus einem Cookie (<a
+                href="/datenschutz#7-wort-feedback"
+                >Datenschutz</a
+              >).
+              <button class="c-textlink" :disabled="pending" type="button" @click="deleteAll">
+                Alle meine Antworten löschen
+              </button>
+            </p>
+          </div>
+        </template>
+      </div>
     </div>
 
     <footer v-if="current !== 'usage' && current !== 'done'" class="c-word-feedback-card__footer">

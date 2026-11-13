@@ -357,9 +357,10 @@ describe("BonResult", () => {
     });
 
     it("links to the word index", () => {
-      const a = mountResult().find(".c-section-card__footer a");
-      expect(a.text()).toBe("Alle Wörter im Wort-Index");
-      expect(a.attributes("href")).toBe("/");
+      const a = mountResult()
+        .findAll("a")
+        .find((link) => link.text() === "Alle Wörter im Wort-Index");
+      expect(a?.attributes("href")).toBe("/");
     });
   });
 });

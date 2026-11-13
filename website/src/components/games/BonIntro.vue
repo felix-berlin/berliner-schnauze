@@ -98,13 +98,14 @@
     </section>
 
     <aside
-      class="c-section-card c-section-card--sheet c-bon-intro__rules"
+      class="c-section-card c-bon-intro__rules"
+      data-variant="sheet"
       aria-labelledby="bon-rules-title"
     >
-      <div class="c-section-card__header c-bon-intro__rules-header">
-        <h2 id="bon-rules-title" class="c-section-card__title">So jeht’s</h2>
+      <div class="header">
+        <h2 id="bon-rules-title" class="title">So jeht’s</h2>
       </div>
-      <div class="c-section-card__body">
+      <div class="body">
         <ul class="c-bon-intro__list">
           <li>
             <RowsIcon width="22" height="22" aria-hidden="true" />

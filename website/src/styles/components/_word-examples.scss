@@ -14,6 +14,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
+      line-height: 1.5; // The section card's li rule used to reach in here; it stops at its parts now.
     }
 
     &__quote {

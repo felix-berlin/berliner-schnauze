@@ -1,6 +1,11 @@
 @layer legacy {
   // Band "Sprachliche Analyse" (docs/design/wortseite/SPEC.md §2 8a-8d, mock: #n-analyse).
   .c-word-analysis {
+    // The section card's li rule used to reach in here; it stops at its parts now.
+    li {
+      line-height: 1.5;
+    }
+
     display: flex;
     flex-direction: column;
     gap: 1rem;

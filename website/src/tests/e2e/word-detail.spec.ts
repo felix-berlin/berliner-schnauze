@@ -41,7 +41,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await expect(etymologie.getByRole("heading", { level: 2, name: "Etymologie" })).toBeVisible();
     await expect(etymologie.locator(".c-meanings")).toHaveCount(0);
     await expect(etymologie.locator(".c-word-origin")).toContainText("Erfundener Infotext");
-    await expect(etymologie.locator(".c-section-card__footer")).toHaveCount(0);
+    await expect(etymologie.locator("footer")).toHaveCount(0);
 
     const beispiele = page.locator("#beispiele");
     await expect(beispiele.locator("li")).toHaveCount(1);
@@ -55,9 +55,9 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
 
     // Sources without origin text: footer only, no body.
     const etymologie = page.locator("#etymologie");
-    await expect(etymologie.locator(".c-section-card__body")).toHaveCount(0);
-    await expect(etymologie.locator(".c-section-card__footer")).toContainText("Quelle");
-    await expect(etymologie.locator(".c-section-card__footer")).toContainText(
+    await expect(etymologie.locator("div[data-slot]")).toHaveCount(0);
+    await expect(etymologie.locator("footer")).toContainText("Quelle");
+    await expect(etymologie.locator("footer")).toContainText(
       "Erfundene Testquelle",
     );
 

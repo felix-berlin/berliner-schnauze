@@ -20,6 +20,11 @@
     }
 
     &__list {
+      // The section card's li rule used to reach in here; it stops at its parts now.
+      > li {
+        line-height: 1.5;
+      }
+
       display: flex;
       flex-direction: column;
       margin: 0;

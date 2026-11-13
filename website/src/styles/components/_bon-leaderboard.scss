@@ -4,6 +4,12 @@
 @layer legacy {
   // Leaderboard (docs/design/bon/SPEC.md §3/§11): list on mobile, from the word breakpoint table + 300px side column.
   .c-bon-leaderboard {
+    // Sheet section cards get more room from the "word" breakpoint on.
+    @include mx.breakpoint("word") {
+      --section-card-gutter: var(--space-6);
+      --section-card-header-block: var(--space-4);
+    }
+
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
@@ -80,13 +86,15 @@
       min-width: 0;
     }
 
-    &__card-header {
-      padding: 0.875rem 1rem 0;
-      border-block-end: 0;
+    &__me-card {
+      --section-card-header-padding: 0.875rem 1rem 0;
     }
 
-    &__table {
-      padding: 0.5rem;
+    &__main {
+      --section-card-body-padding: 0.5rem;
+      --section-card-footer-align: center;
+      --section-card-footer-justify: space-between;
+      --section-card-footer-padding: 0.75rem 1rem;
     }
 
     &__pad {
@@ -94,6 +102,11 @@
     }
 
     &__list {
+      // The section card's li rule used to reach in here; it stops at its parts now.
+      > li {
+        line-height: 1.5;
+      }
+
       // Only the rows change on a period switch; the card frame stays put.
       view-transition-name: lb-list;
       margin: 0;
@@ -223,14 +236,6 @@
       min-height: 32px;
       color: var(--color-muted);
       letter-spacing: 0.3em;
-    }
-
-    // The card footer padding is scoped to the word page.
-    &__footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.75rem 1rem;
     }
 
     &__skeleton {

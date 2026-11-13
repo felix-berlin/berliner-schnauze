@@ -84,13 +84,14 @@
     </div>
 
     <section
-      class="c-section-card c-section-card--sheet c-bon-result__round"
+      class="c-section-card c-bon-result__round"
+      data-variant="sheet"
       aria-labelledby="bon-round-title"
     >
-      <div class="c-section-card__header">
-        <h2 id="bon-round-title" class="c-section-card__title">Deine Runde</h2>
+      <div class="header">
+        <h2 id="bon-round-title" class="title">Deine Runde</h2>
       </div>
-      <div class="c-section-card__body">
+      <div class="body">
         <ol class="c-bon-result__list">
           <li v-for="(e, i) in history" :key="i">
             <!-- Mock "Deine Runde": the whole row links a real word; mark, word over its note, arrow. -->
@@ -123,7 +124,7 @@
           </li>
         </ol>
       </div>
-      <div class="c-section-card__footer">
+      <div class="footer">
         <a class="c-textlink" href="/">Alle Wörter im Wort-Index</a>
       </div>
     </section>

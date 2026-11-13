@@ -3,10 +3,8 @@
 @layer legacy {
   // Card chrome comes from .c-section-card (this block only adds what the comments need inside it).
   .c-word-comments {
-    &__header {
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
+    --section-card-header-justify: space-between;
+    --section-card-header-wrap: wrap;
 
     &__count {
       color: var(--color-muted);
@@ -51,7 +49,7 @@
       gap: 0.875rem;
     }
 
-    // .c-section-card__body forces p to 1rem; small print stays small (same size as the field hints).
+    // Small print stays small (same size as the field hints).
     &__body p.t-small {
       font-size: 0.8rem;
     }
@@ -62,6 +60,11 @@
     }
 
     &__list {
+      // The section card's li rule used to reach in here; it stops at its parts now.
+      > li {
+        line-height: 1.5;
+      }
+
       margin: 0;
       padding: 0;
       list-style: none;
