@@ -4,15 +4,13 @@
 // Variants: unnumbered; word (word page: sheet surface, no numbers, no header rule, paddings follow
 // the word-main column); sheet (same look outside the word page, BON screens: all corners round,
 // the parent sets the paddings via --section-card-gutter / --section-card-header-block).
-// Public: --section-card-header-padding, --section-card-header-end, --section-card-body-padding,
+// Public: --section-card-header-padding, --section-card-body-padding,
 // --section-card-body-end, --section-card-footer-padding, --section-card-footer-align,
 // --section-card-footer-justify, --section-card-header-justify, --section-card-header-wrap,
 // --section-card-gutter, --section-card-header-block (sheet).
 // .body and .footer of SectionCard.astro wrap slotted markup (data-slot): the card does not style it.
 @include mx.component("section-card") {
   :scope {
-    // stylelint-disable-next-line function-disallowed-list -- colour inventory R83: one-off (h3 in the body)
-    --_h3: light-dark(rgb(60 67 75), rgb(227 227 210));
     --_inline: var(--space-5);
     --_header-block: var(--space-3);
     --_body-start: var(--space-4);
@@ -81,10 +79,7 @@
     justify-content: var(--section-card-header-justify, normal);
     flex-wrap: var(--section-card-header-wrap, nowrap);
     gap: var(--space-2);
-    padding: var(
-      --section-card-header-padding,
-      var(--_header-block) var(--_inline) var(--section-card-header-end, var(--_header-block))
-    );
+    padding: var(--section-card-header-padding, var(--_header-block) var(--_inline));
     border-block-end: 1px dashed var(--color-border-accent-soft);
   }
 
@@ -113,20 +108,6 @@
     );
     overflow-wrap: break-word;
     font-size: var(--font-size-base);
-
-    li {
-      line-height: 1.5;
-    }
-
-    h3 {
-      --_h3-space: 1.55em 0.75em; // em: follows the heading's own size
-
-      font-family: var(--font-family-body);
-      font-size: var(--font-size-lg);
-      font-weight: var(--font-weight-bold);
-      margin-block: var(--_h3-space);
-      color: var(--_h3);
-    }
   }
 
   .footer {
