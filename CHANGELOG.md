@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.12.4](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.3...v4.12.4) (2026-11-13)
+
+
+### Bug Fixes
+
+* close audit findings in MCP, word list, JSON-LD and BON ([f4e4591](https://github.com/felix-berlin/berliner-schnauze/commit/f4e4591849bc9361af37754cbc168b3fa6a19e8f))
+
 ## [4.12.3](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.2...v4.12.3) (2026-11-13)
 
 
