@@ -32,7 +32,6 @@ export default [
   "src/styles/components/_fact-card.scss",
   "src/styles/components/_facts-grid.scss",
   "src/styles/components/_filter-search.scss",
-  "src/styles/components/_floating-label.scss",
   "src/styles/components/_footer-app-section.scss",
   "src/styles/components/_form.scss",
   "src/styles/components/_letter-filter.scss",
