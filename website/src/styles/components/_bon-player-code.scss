@@ -64,22 +64,6 @@
     inline-size: 100%;
   }
 
-  &__linking {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    inline-size: 100%;
-
-    p {
-      margin: 0 0 0.5rem;
-      color: var(--color-muted);
-    }
-  }
-
-  &__short {
-    inline-size: 60%;
-  }
-
   // Three blocks on the chip surface; select-all copies the whole code with one click.
   &__code {
     display: flex;

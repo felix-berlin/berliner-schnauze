@@ -199,4 +199,5 @@ jobs:
         # Only the base install needs this; the checkout itself was installed under the gate above.
         env:
           pnpm_config_minimum_release_age: 0
-        run: scripts/migration-upgrade-test.sh "origin/${{ github.base_ref }}"
+          BASE_REF: ${{ github.base_ref }}
+        run: scripts/migration-upgrade-test.sh "origin/$BASE_REF"

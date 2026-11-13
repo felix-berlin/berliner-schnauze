@@ -1,4 +1,4 @@
-import type { CollectionBeforeChangeHook } from "payload";
+import type { CollectionBeforeChangeHook, CollectionBeforeOperationHook } from "payload";
 
 import { APIError } from "payload";
 
@@ -16,4 +16,16 @@ export const mcpDraftOnly: CollectionBeforeChangeHook = ({ data, req }) => {
     );
   }
   return data;
+};
+
+/**
+ * An MCP update must save as a draft version: with `draft: false` plus `_status: "draft"` the beforeChange check above
+ * passes, but Payload writes the main row and so unpublishes and overwrites the live word (also in bulk via `where`).
+ * Only beforeOperation sees `args.draft`.
+ */
+export const mcpUpdateDraftOnly: CollectionBeforeOperationHook = ({ args, operation, req }) => {
+  if (req.payloadAPI === "MCP" && operation === "update" && args.draft !== true) {
+    throw new APIError('Über MCP nur als Entwurf speichern: "draft": true setzen.', 403);
+  }
+  return args;
 };

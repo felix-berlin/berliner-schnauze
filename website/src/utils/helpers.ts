@@ -85,3 +85,6 @@ export const formattedDate = (date?: string, locale = "de-DE") => {
 
 export const canonicalUrl = (pathname: string, site: URL | undefined): string =>
   new URL(pathname.replace(/\.html$/, ""), site).toString().replace(/\/$/, "");
+
+/** JSON for a `<script type="application/ld+json">` via set:html: `<` escaped so a field can't close the tag. */
+export const jsonLd = (data: unknown): string => JSON.stringify(data).replace(/</g, "\\u003c");

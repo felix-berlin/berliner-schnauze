@@ -42,12 +42,6 @@
         </button>
       </template>
 
-      <div v-else-if="linking" class="c-bon-player-code__linking" aria-hidden="true">
-        <p>Spielercode aus dem Link wird einjelöst …</p>
-        <span class="c-skeleton c-skeleton--line" />
-        <span class="c-skeleton c-skeleton--line c-bon-player-code__short" />
-      </div>
-
       <template v-else-if="state === 'code' && code">
         <p
           class="c-bon-player-code__code"
@@ -197,7 +191,6 @@ const error = ref("");
 const errorHint = ref("");
 const wrong = ref(false); // 3a: the code is wrong or malformed
 const locked = ref(false); // 3b: the server said 429; stays until the form is left
-const linking = ref(false);
 const fromLink = ref(false);
 const pending = ref(false);
 const qrSvg = ref("");
@@ -312,7 +305,6 @@ async function redeem(value: string) {
     } else fail(message);
   } finally {
     pending.value = false;
-    linking.value = false;
     if (state.value !== "success") status.value = "";
   }
 }
@@ -355,10 +347,10 @@ onMounted(() => {
   if (stored) {
     state.value = "redeem";
     fromLink.value = true;
-    linking.value = true;
-    status.value = "Spielercode aus dem Link wird einjelöst …";
-    input.value = stored; // the link and storage no longer hold it, so a failed redeem must stay retryable
-    void redeem(stored);
+    // Never redeem a link code unasked: a link from someone else would swap this browser to their player.
+    input.value = stored;
+    status.value = "Spielercode aus dem Link: drück Weiterspielen, wenn's deiner is.";
+    void focusOn("input");
   } else if (props.mode === "redeem") {
     void focusOn("input");
   }

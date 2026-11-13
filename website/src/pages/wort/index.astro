@@ -1,4 +1,5 @@
 ---
+import { jsonLd } from '@utils/helpers';
 import "@styles/objects/_word-index.scss";
 import "@styles/components/_word-group.scss";
 import "@styles/plugins/astro-breadcrumbs.scss";
@@ -41,7 +42,7 @@ const content = {
 const totalWordCount = Object.values(groupedWords).reduce((sum, words) => sum + words.length, 0);
 
 const schemaJson = () =>
-  JSON.stringify({
+  jsonLd({
     "@context": "https://schema.org",
     "@id": `${canonicalUrl('/wort', Astro.site)}#termset`,
     "@type": "DefinedTermSet",

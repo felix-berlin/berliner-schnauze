@@ -7,13 +7,13 @@ import WordOfTheDay from '@components/WordOfTheDay.vue';
 import WordSearchLink from '@components/WordSearchLink.vue';
 import Layout from '@layouts/Layout.astro';
 import { SITE_URL } from 'astro:env/client';
-import { seoData } from '@utils/helpers';
+import { seoData, jsonLd } from '@utils/helpers';
 import { Picture } from 'astro:assets';
 import { BROWN_BEAR_ROAR, defaultOgImage } from '@utils/defaultOgImage';
 import { fetchHomeFacts } from '@services/payload/site.ts';
 import '@styles/components/_facts-grid.scss';
 
-const websiteSchema = JSON.stringify({
+const websiteSchema = jsonLd({
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   description: 'Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch',
@@ -30,7 +30,7 @@ const websiteSchema = JSON.stringify({
   url: SITE_URL,
 });
 
-const organizationSchema = JSON.stringify({
+const organizationSchema = jsonLd({
   '@context': 'https://schema.org',
   '@id': `${SITE_URL}/#organization`,
   '@type': 'Organization',

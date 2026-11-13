@@ -1,4 +1,5 @@
 ---
+import { jsonLd } from '@utils/helpers';
 import BerlinerOderNicht from '@components/games/BerlinerOderNicht.vue';
 import { BON_FRAGMENT_SCRIPT } from '@utils/bonFragment.ts';
 import Layout from '@layouts/Layout.astro';
@@ -12,7 +13,7 @@ const page = {
   title: 'Berliner oder Nicht? — Erkenne den echten Berliner Dialekt | Berliner Schnauze',
 };
 
-const gameSchema = JSON.stringify({
+const gameSchema = jsonLd({
   '@context': 'https://schema.org',
   '@type': 'VideoGame',
   applicationCategory: 'Game',

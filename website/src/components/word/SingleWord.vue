@@ -27,7 +27,7 @@
 
       <dd
         class="c-word-list__translation c-word-list__translation--single-line"
-        v-html="source.wordProperties.translations.join('<span>᛫</span>')"
+        v-html="source.wordProperties.translations.map(escapeHtml).join('<span>᛫</span>')"
       />
     </dl>
     <WordOptionDropdown
@@ -37,7 +37,10 @@
       class="c-word-list__options-dropdown"
     >
       <template #after>
-        <a :href="routeToWord(source.slug)" class="c-dropdown__item c-options-dropdown__copy-button">
+        <a
+          :href="routeToWord(source.slug)"
+          class="c-dropdown__item c-options-dropdown__copy-button"
+        >
           <BookOpen width="18" height="18" class="c-options-dropdown__icon-button" />
           <span class="c-options-dropdown__copy-text">Mehr erfahren</span>
         </a>
@@ -66,8 +69,13 @@ const { highlightTerm, index, showDropdown = true, source } = defineProps<WordPr
 
 const highlighter = new Highlight({ CSSClass: "is-highlight", HTMLTag: "mark" });
 
+// Word text comes from the CMS (adopted visitor suggestions): escape before it reaches v-html.
+const escapeHtml = (text: string): string =>
+  text.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
 const highlightMatches = (text: string, term?: string): string => {
-  if (!term?.trim()) return text;
-  return highlighter.highlight(text, term).HTML;
+  const safe = escapeHtml(text);
+  if (!term?.trim()) return safe;
+  return highlighter.highlight(safe, term).HTML;
 };
 </script>

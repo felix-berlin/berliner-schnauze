@@ -78,3 +78,10 @@ dist-anki/
 .venv-anki/
 __pycache__/
 
+
+# Secrets and database dumps (scripts/dev-template.sh handles PII-bearing dumps)
+.env.local
+.env.*.local
+*.dump
+*.sql
+*.pem

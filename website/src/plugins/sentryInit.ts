@@ -11,7 +11,7 @@ Sentry.init({
     genAI: { inputs: false, outputs: false },
     httpBodies: [],
     httpHeaders: false,
-    urlQueryParams: true,
+    urlQueryParams: false, // query strings carry the preview token (/api/preview?token=) and checkout_id
     userInfo: false,
   },
 
