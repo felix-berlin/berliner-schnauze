@@ -72,5 +72,8 @@ test("a card's part styles stop at its slot (Review Focus 4, spec §7.1)", async
       foreign: getComputedStyle(foreign).fontSize,
     };
   });
+  // Positive control: the card's own title is styled (--font-size-xl = 1.25rem = 20px), so the
+  // difference below comes from the slot boundary, not from a renamed or resized title.
+  expect(sizes.own).toBe("20px");
   expect(sizes.foreign).not.toBe(sizes.own);
 });
