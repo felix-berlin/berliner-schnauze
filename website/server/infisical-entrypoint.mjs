@@ -40,14 +40,12 @@ if (infisicalEnabled) {
     );
   }
 
-  const token = infisical([
-    "login",
-    "--method=universal-auth",
-    `--client-id=${clientId}`,
-    `--client-secret=${clientSecret}`,
-    "--plain",
-    "--silent",
-  ]);
+  // Credentials via env, not argv: argv is world-readable in /proc/<pid>/cmdline.
+  const token = infisical(["login", "--method=universal-auth", "--plain", "--silent"], {
+    ...process.env,
+    INFISICAL_UNIVERSAL_AUTH_CLIENT_ID: clientId,
+    INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET: clientSecret,
+  });
   if (!token) throw new Error("Infisical Universal Auth returned an empty token");
 
   const secrets = JSON.parse(
