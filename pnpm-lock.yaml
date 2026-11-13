@@ -402,7 +402,7 @@ importers:
         specifier: ^0.45.2
         version: 0.45.2
       '@nanostores/logger':
-        specifier: ^1.1.0
+        specifier: 1.1.0
         version: 1.1.0(nanostores@1.5.5)
       '@playwright/test':
         specifier: ^1.65.0
@@ -432,10 +432,10 @@ importers:
         specifier: 5.1.0
         version: 5.1.0(vitest@5.1.0)
       '@vue/compiler-sfc':
-        specifier: ^3.5.45
+        specifier: 3.5.45
         version: 3.5.45
       '@vue/devtools-api':
-        specifier: ^8.2.1
+        specifier: 8.2.1
         version: 8.2.1
       '@vue/test-utils':
         specifier: ^2.5.1
