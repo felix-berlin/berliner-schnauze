@@ -5,7 +5,10 @@ import { test, expect, type Page } from "@playwright/test";
 // Screenshot baseline for the design-system migration (docs/superpowers/specs/2026-11-13-design-system-design.md §10,
 // wave 0): later CSS refactors must not change a pixel unless the snapshot update names the reason. Run against the
 // e2e seed database and a fresh build; a stale service worker serves old CSS, so it is blocked.
-test.skip(({ browserName }) => browserName !== "chromium", "baseline is chromium only");
+// By project, not browserName: "Mobile Chrome" is chromium too and would write untracked snapshots.
+test.beforeEach(() =>
+  test.skip(test.info().project.name !== "chromium", "baseline is the chromium project only"),
+);
 test.use({ reducedMotion: "reduce", serviceWorkers: "block" });
 
 const PAGES = [

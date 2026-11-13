@@ -1,21 +1,11 @@
 // @vitest-environment node
 import { compileString } from "sass";
 
-// Same aliases as css.preprocessorOptions in astro.config.mjs.
-const aliases: Record<string, URL> = {
-  "@sass-butler/": new URL("../../../../node_modules/@felix_berlin/sass-butler/", import.meta.url),
-  "@styles/": new URL("../../../styles/", import.meta.url),
-};
+import { sassAliasImporter } from "../../../../sass-aliases.mjs";
+
 const compile = (body: string) =>
   compileString(`@use "@styles/mixins" as mx;\n${body}`, {
-    importers: [
-      {
-        findFileUrl(url) {
-          const prefix = Object.keys(aliases).find((p) => url.startsWith(p));
-          return prefix ? new URL(url.slice(prefix.length), aliases[prefix]) : null;
-        },
-      },
-    ],
+    importers: [sassAliasImporter],
     logger: { debug() {}, warn() {} },
     quietDeps: true,
   })

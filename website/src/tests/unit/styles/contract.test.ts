@@ -108,18 +108,21 @@ const componentProblems = (code: string, name: string) => {
   const inner = rest.slice(m[0].length, end - 1);
   const problems: string[] = [];
   if (m[1] !== name) problems.push(`component name "${m[1]}", want "${name}"`);
-  // Selector preludes at nesting depth 0: a top-level `&` reaches the browser as CSS nesting inside @scope.
-  let depth = 0;
+  // A `&` in a selector with no enclosing style rule (top level, or only inside at-rules such as
+  // @container) reaches the browser as CSS nesting inside @scope; below a part Sass resolves it.
+  const stack: boolean[] = []; // per open block: true = style rule, false = at-rule
   let prelude = "";
   for (const ch of inner) {
     if (ch === "{") {
-      if (depth === 0 && /(^|,)\s*&/.test(prelude))
-        problems.push(`top-level & in "${prelude.trim()}"`);
-      depth++;
-    } else if (ch === "}") {
-      depth--;
+      const atRule = prelude.trim().startsWith("@");
+      if (!atRule && !stack.includes(true) && prelude.includes("&"))
+        problems.push(`unresolved & in "${prelude.trim()}"`);
+      stack.push(!atRule);
       prelude = "";
-    } else if (depth === 0) {
+    } else if (ch === "}") {
+      stack.pop();
+      prelude = "";
+    } else {
       prelude = ch === ";" ? "" : prelude + ch;
     }
   }
@@ -146,7 +149,10 @@ const DARK_ALLOWED = [
 ];
 const hasDarkHook = (code: string, file: string) => {
   let rest = stripComments(code);
-  for (const a of DARK_ALLOWED) if (a.file === file) rest = rest.replaceAll(a.text, "");
+  // Whole selector only: `.c-select` must not also excuse `.c-select-other`.
+  const escape = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  for (const a of DARK_ALLOWED)
+    if (a.file === file) rest = rest.replace(new RegExp(`${escape(a.text)}(?![\\w-])`, "g"), "");
   return /dark-mode-class|dark-mode-override|\.dark(?![\w-])|\[class~=["']?dark/.test(rest);
 };
 
@@ -260,6 +266,17 @@ describe("style layer contract", () => {
     expect(componentProblems(wrap(".a { color: red; } &.b { color: red; }"), "demo")).toHaveLength(
       1,
     );
+    expect(componentProblems(wrap(".parent & { color: red; }"), "demo")).toHaveLength(1);
+    expect(componentProblems(wrap(".a:not(&) { color: red; }"), "demo")).toHaveLength(1);
+    expect(
+      componentProblems(wrap("@container demo (inline-size > 1px) { & { color: red; } }"), "demo"),
+    ).toHaveLength(1);
+    expect(
+      componentProblems(
+        wrap("@container demo (inline-size > 1px) { .a { &:hover { color: red; } } }"),
+        "demo",
+      ),
+    ).toEqual([]);
     expect(componentProblems(wrap(".c-other { color: red; }"), "demo")).toHaveLength(1);
     expect(componentProblems(wrap(".card__title { color: red; }"), "demo")).toHaveLength(1);
     expect(componentProblems(wrap(".card--big { color: red; }"), "demo")).toHaveLength(1);
@@ -293,6 +310,9 @@ describe("style layer contract", () => {
     ).toBe(true);
     expect(
       hasDarkHook('html[class~="dark"] .c-other { a: b }', "src/styles/base/_inputs.scss"),
+    ).toBe(true);
+    expect(
+      hasDarkHook('html[class~="dark"] .c-select-other { a: b }', "src/styles/base/_inputs.scss"),
     ).toBe(true);
     expect(hasDarkHook(".dark-grey { a: b }", "x.scss")).toBe(false);
   });
