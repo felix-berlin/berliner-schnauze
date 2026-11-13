@@ -132,7 +132,6 @@ const close = (): void => {
   panel.value?.hidePopover();
   focusTrigger();
 };
-
 </script>
 
 <style lang="scss">

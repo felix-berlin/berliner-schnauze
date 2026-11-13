@@ -127,10 +127,10 @@ import { reportError } from "@utils/reportError.ts";
 import { reportWord } from "@utils/wordPulse.ts";
 import { useClipboard, useShare } from "@vueuse/core";
 import { SITE_URL } from "astro:env/client";
+import Check from "virtual:icons/lucide/check";
 import Copy from "virtual:icons/lucide/copy";
 import Link from "virtual:icons/lucide/link";
 import Share2 from "virtual:icons/lucide/share-2";
-import Check from "virtual:icons/lucide/check";
 import { defineAsyncComponent, onBeforeUnmount, ref } from "vue";
 
 interface WordProps {
