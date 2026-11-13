@@ -5,6 +5,8 @@
     --color-accent-icon: var(--color-orange-400);
     --color-accent-solid: var(--color-orange-600);
     --color-black-pure: #000000;
+    --color-border-accent: var(--color-orange-300);
+    --color-border-accent-soft: var(--color-orange-200);
     --color-border-card: light-dark(var(--color-grey-100), rgb(240 172 133 / 25%));
     --color-border-check: var(--color-ink-base);
     --color-border-check-disabled: color(srgb 0.931765 0.722353 0.635294);
@@ -64,13 +66,16 @@
     --color-surface-check: light-dark(color(srgb 0.996471 0.975294 0.952941), color(srgb 0.750588 0.76 0.769412));
     --color-surface-check-disabled: color(srgb 0.90902 0.629804 0.513725);
     --color-surface-chip: light-dark(color(srgb 0.969804 0.923137 0.915294), color(srgb 0.18811 0.2112 0.23429));
+    --color-surface-chrome: light-dark(var(--color-orange-200), var(--color-ink-base));
     --color-surface-field: light-dark(color(srgb 0.996471 0.975294 0.952941), var(--color-ink-600m));
     --color-surface-field-disabled: light-dark(color(srgb 0.925177 0.928 0.930823), color(srgb 0.235471 0.260647 0.278323));
     --color-surface-floating: light-dark(color(srgb 0.990196 0.907843 0.845098), var(--color-ink-200m));
     --color-surface-hero: light-dark(color(srgb 0.996471 0.975294 0.952941), var(--color-ink-400m));
+    --color-surface-inverse: var(--color-ink-200m);
     --color-surface-overlay: var(--color-black-pure);
     --color-surface-page: light-dark(rgb(252 234 215 / 5%), var(--color-ink-300m));
     --color-surface-paper: light-dark(var(--color-white-100), var(--color-ink-400m));
+    --color-surface-placeholder: light-dark(var(--color-orange-200), var(--color-ink-200m));
     --color-surface-range-track: var(--color-ink-600m);
     --color-surface-range-track-alt: var(--color-grey-200);
     --color-surface-selection: light-dark(var(--color-red-200), var(--color-ink-200));
@@ -78,8 +83,11 @@
     --color-surface-skeleton: light-dark(var(--color-white-100), var(--color-ink-300m));
     --color-surface-tint: light-dark(rgb(0 0 0 / 10%), rgb(255 255 255 / 10%));
     --color-surface-wash: rgb(207 87 54 / 15%);
+    --color-surface-wash-strong: rgb(207 87 54 / 22%);
     --color-text-accent: light-dark(var(--color-orange-600), var(--color-orange-300));
+    --color-text-badge: light-dark(var(--color-ink-400m), var(--color-orange-200));
     --color-text-body: light-dark(var(--color-ink-base), var(--color-cream-500));
+    --color-text-emphasis: light-dark(var(--color-ink-400m), var(--color-orange-300));
     --color-text-muted: light-dark(#60666c, color(srgb 0.709804 0.717647 0.67549));
     --color-text-on-accent: var(--color-white-100);
     --color-text-on-active: var(--color-white-pure);

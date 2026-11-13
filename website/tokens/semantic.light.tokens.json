@@ -26,6 +26,12 @@
       },
       "on-active": {
         "$value": "{color.white.pure}"
+      },
+      "emphasis": {
+        "$value": "{color.ink.400m}"
+      },
+      "badge": {
+        "$value": "{color.ink.400m}"
       }
     },
     "surface": {
@@ -136,6 +142,23 @@
       },
       "skeleton": {
         "$value": "{color.white.100}"
+      },
+      "placeholder": {
+        "$value": "{color.orange.200}"
+      },
+      "inverse": {
+        "$value": "{color.ink.200m}"
+      },
+      "chrome": {
+        "$value": "{color.orange.200}"
+      },
+      "wash-strong": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.811765, 0.341176, 0.211765],
+          "hex": "#cf5736",
+          "alpha": 0.22
+        }
       }
     },
     "accent": {
@@ -174,6 +197,12 @@
       },
       "fieldset": {
         "$value": "{color.grey.200}"
+      },
+      "accent": {
+        "$value": "{color.orange.300}"
+      },
+      "accent-soft": {
+        "$value": "{color.orange.200}"
       }
     },
     "control": {
