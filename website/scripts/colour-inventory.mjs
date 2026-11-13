@@ -28,7 +28,6 @@ const TASK8 = [
     "skeleton",
     "badge",
     "section-card",
-    "switch",
     "tooltip",
     "modal",
     "toast-container",
