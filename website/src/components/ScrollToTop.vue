@@ -8,9 +8,9 @@
         offset: 12,
       }"
       type="button"
-      class="c-scroll-to-top c-button"
+      class="o-scroll-to-top c-button"
       data-variant="center-icon"
-      :class="{ 'is-close-to-end': isFooterVisible }"
+      :data-state="isFooterVisible ? 'near-end' : undefined"
       :aria-label="buttonAriaLabel"
       @click="scrollToTop"
     >
@@ -70,5 +70,5 @@ useIntersectionObserver(footerGround, (entries) => {
 </script>
 
 <style lang="scss">
-@use "@styles/components/scroll-to-top";
+@use "@styles/objects/scroll-to-top";
 </style>

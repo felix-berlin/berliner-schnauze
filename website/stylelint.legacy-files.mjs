@@ -42,7 +42,6 @@ export default [
   "src/styles/components/_menu-nav.scss",
   "src/styles/components/_next-links.scss",
   "src/styles/components/_pwa-cache.scss",
-  "src/styles/components/_scroll-to-top.scss",
   "src/styles/components/_searchbar.scss",
   "src/styles/components/_shortcut.scss",
   "src/styles/components/_single-loader.scss",

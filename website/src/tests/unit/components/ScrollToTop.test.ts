@@ -72,11 +72,11 @@ describe("ScrollToTop.vue", () => {
 
     // Footer in view must not reset the scrolled state (desktop keeps the button visible).
     expect(wrapper.find("button").isVisible()).toBe(true);
-    expect(wrapper.find("button").classes()).toContain("is-close-to-end");
+    expect(wrapper.find("button").attributes("data-state")).toBe("near-end");
 
     footerCallback([{ isIntersecting: false }]);
     await wrapper.vm.$nextTick();
-    expect(wrapper.find("button").classes()).not.toContain("is-close-to-end");
+    expect(wrapper.find("button").attributes("data-state")).toBeUndefined();
   });
 
   it("tooltip is not disabled when tooltip prop is non-empty (covers line 7 ternary true branch)", async () => {
