@@ -38,7 +38,7 @@
   }
 
   // Loading card (Spec §8): the skeleton reuses the card frame; its second line needs a width in the centred flex column.
-  .c-bon-card__card .c-skeleton--line {
+  .c-bon-card__card .c-skeleton[data-variant~="line"] {
     inline-size: 40%;
   }
 

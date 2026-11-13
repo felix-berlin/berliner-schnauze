@@ -52,7 +52,6 @@ export default [
   "src/styles/components/_section-card.scss",
   "src/styles/components/_shortcut.scss",
   "src/styles/components/_single-loader.scss",
-  "src/styles/components/_skeleton.scss",
   "src/styles/components/_suggest-word-form.scss",
   "src/styles/components/_switch.scss",
   "src/styles/components/_thema-detail.scss",

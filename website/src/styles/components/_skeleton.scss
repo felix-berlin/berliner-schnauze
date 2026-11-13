@@ -1,78 +1,36 @@
-@layer legacy {
-  // Skeleton (docs/design/wortseite/SPEC.md §9): shown by WordPageLoading after 300 ms, never for cached pages.
-  // Shimmer moves background-position (1400 ms, linear); with reduced motion the bars stand still.
-  :where(.c-skeleton) {
+@use "@styles/mixins" as mx;
+
+// Skeleton (docs/design/wortseite/SPEC.md §9): shown by WordPageLoading after 300 ms, never for cached pages.
+// Shimmer moves background-position (keyframes c-shimmer in utilities/_animations.scss); with reduced
+// motion the base reset stops it. Variants: line, title.
+@include mx.component("skeleton") {
+  :scope {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R42 (merged into the one-off R41): one-off shimmer highlight
+    --_shine: light-dark(rgb(246 224 215), rgb(83 75 73));
+    --_duration: 1.4s; // slower than every duration token: the sweep reads as idle
+
     display: block;
     border-radius: var(--radius-xxs);
     background: linear-gradient(
       90deg,
-      var(--surface-chip) 0%,
-      color-mix(in srgb, var(--orange-300) 18%, var(--surface-chip)) 50%,
-      var(--surface-chip) 100%
+      var(--color-surface-chip) 0%,
+      var(--_shine) 50%,
+      var(--color-surface-chip) 100%
     );
     background-size: 200% 100%;
-    animation: c-shimmer 1.4s linear infinite;
-
-    @media (prefers-reduced-motion: reduce) {
-      animation: none;
-    }
+    animation: c-shimmer var(--_duration) linear infinite;
   }
 
-  :where(.c-skeleton--line) {
-    block-size: 0.9em;
-    margin-block: 0.35em;
+  :scope[data-variant~="line"] {
+    --_line: 0.9em; // em: one text line of the surrounding font
+    --_line-gap: 0.35em; // em: half the leading of that line
+
+    block-size: var(--_line);
+    margin-block: var(--_line-gap);
   }
 
-  :where(.c-skeleton--title) {
+  :scope[data-variant~="title"] {
     block-size: 2.25rem;
     inline-size: 60%;
-  }
-
-  @keyframes c-shimmer {
-    to {
-      background-position: -200% 0;
-    }
-  }
-
-  // Word page loading layer (utils/wordLoading.ts): covers the old page below the sticky header.
-  .c-word-skeleton-layer {
-    position: fixed;
-    inset: var(--site-header-height, 0) 0 0;
-    z-index: 5;
-    overflow: hidden;
-    background: var(--color-background-body, var(--white-100));
-  }
-
-  .c-word-skeleton {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    max-inline-size: 72rem;
-    margin-inline: auto;
-    padding: 1rem;
-  }
-
-  .c-word-skeleton__card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 1rem;
-    border: 1px dashed var(--rule-card);
-    border-radius: var(--radius-sm);
-    background: var(--surface-sheet);
-  }
-
-  .c-word-skeleton__badges {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .c-word-skeleton__badge {
-    inline-size: 5rem;
-    block-size: 1.5rem;
-  }
-
-  .c-word-skeleton__audio {
-    block-size: 2.75rem;
   }
 }

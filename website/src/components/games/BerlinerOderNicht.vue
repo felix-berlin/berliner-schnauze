@@ -46,8 +46,8 @@
                   : "Karten werden jemischt …"
             }}
           </p>
-          <span class="c-skeleton c-skeleton--title" aria-hidden="true" />
-          <span class="c-skeleton c-skeleton--line" aria-hidden="true" />
+          <span class="c-skeleton" data-variant="title" aria-hidden="true" />
+          <span class="c-skeleton" data-variant="line" aria-hidden="true" />
         </section>
         <div class="c-bon-card__answers">
           <button class="c-choice" type="button" aria-disabled="true">

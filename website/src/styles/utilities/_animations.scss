@@ -13,4 +13,9 @@
       transform: translateX(100%);
     }
   }
+  @keyframes c-shimmer {
+    to {
+      background-position: -200% 0;
+    }
+  }
 }
