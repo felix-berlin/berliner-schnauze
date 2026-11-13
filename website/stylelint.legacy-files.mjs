@@ -52,7 +52,6 @@ export default [
   "src/styles/components/_shortcut.scss",
   "src/styles/components/_single-loader.scss",
   "src/styles/components/_suggest-word-form.scss",
-  "src/styles/components/_switch.scss",
   "src/styles/components/_thema-detail.scss",
   "src/styles/components/_themen-overview.scss",
   "src/styles/components/_toast-container.scss",

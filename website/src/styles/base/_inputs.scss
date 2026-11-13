@@ -286,6 +286,47 @@
     }
   }
 
+  // Switch: a checkbox drawn as a track with a sliding thumb. Lives in base, not in an @scope component:
+  // Safari 26.0-26.3 does not apply @scope rules to input elements.
+  input[type="checkbox"].c-switch {
+    --_track-width: 34px; // px: sized around the 16px thumb and its 11px travel
+    --_track-radius: 14px;
+    --_thumb: 16px;
+    --_thumb-inset: 2px;
+    --_travel: 11px;
+    --_round: 50%; // a circle; --radius-pill would make a capsule
+    --_center: 50%;
+    --height: 22px;
+
+    inline-size: var(--_track-width);
+    border-radius: var(--_track-radius);
+    position: relative;
+
+    // Only `transform` changes, so the base checkbox transition animates the thumb.
+    &::after {
+      inset-inline-start: var(--_thumb-inset);
+      inset-block-start: var(--_center);
+      inline-size: var(--_thumb);
+      block-size: var(--_thumb);
+      background: var(--_thumb-bg, var(--color-border-check)); // colour inventory R39
+      transform: translate(var(--_thumb-x, 0), -50%);
+      border-radius: var(--_round);
+    }
+
+    &:checked {
+      --_thumb-bg: var(--color-inner-active);
+      --_thumb-x: var(--_travel);
+    }
+
+    &:disabled:not(:checked)::after {
+      opacity: 0.6;
+    }
+
+    + label {
+      margin-inline-start: var(--space-2);
+    }
+  }
+
   /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
   .c-input--radio {
   /* stylelint-enable selector-class-pattern */
