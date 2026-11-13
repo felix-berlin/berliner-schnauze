@@ -23,6 +23,9 @@
       },
       "on-overlay": {
         "$value": "{color.white.100}"
+      },
+      "on-active": {
+        "$value": "{color.white.pure}"
       }
     },
     "surface": {
@@ -77,6 +80,42 @@
       },
       "overlay": {
         "$value": "{color.black.pure}"
+      },
+      "page": {
+        "$value": "{color.ink.300m}"
+      },
+      "field": {
+        "$value": "{color.ink.600m}"
+      },
+      "field-disabled": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.235471, 0.260647, 0.278323],
+          "hex": "#3c4247"
+        }
+      },
+      "check": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.750588, 0.76, 0.769412],
+          "hex": "#bfc2c4"
+        }
+      },
+      "check-disabled": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.90902, 0.629804, 0.513725],
+          "hex": "#e8a183"
+        }
+      },
+      "range-track": {
+        "$value": "{color.ink.600m}"
+      },
+      "range-track-moz": {
+        "$value": "{color.grey.200}"
+      },
+      "selection": {
+        "$value": "{color.ink.200}"
       }
     },
     "accent": {
@@ -85,6 +124,9 @@
       },
       "icon": {
         "$value": "{color.orange.400}"
+      },
+      "active": {
+        "$value": "{color.orange.500}"
       }
     },
     "border": {
@@ -110,6 +152,22 @@
           "components": [0.334902, 0.36, 0.385098],
           "hex": "#555c62"
         }
+      },
+      "control-hover": {
+        "$value": "{color.red.200}"
+      },
+      "check": {
+        "$value": "{color.ink.base}"
+      },
+      "check-disabled": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.931765, 0.722353, 0.635294],
+          "hex": "#eeb8a2"
+        }
+      },
+      "fieldset": {
+        "$value": "{color.grey.200}"
       }
     },
     "control": {
@@ -123,6 +181,14 @@
     "focus": {
       "ring": {
         "$value": "{color.orange.400}"
+      },
+      "halo": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.698039, 0.231373, 0.152941],
+          "hex": "#b23b27",
+          "alpha": 0.3
+        }
       }
     },
     "status": {
@@ -134,6 +200,31 @@
       },
       "gold": {
         "$value": "{color.gold}"
+      }
+    },
+    "pattern": {
+      "dot": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.250434, 0.27872, 0.307006],
+          "hex": "#40474e"
+        }
+      },
+      "ground": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.168627, 0.2, 0.231373],
+          "hex": "#2b333b",
+          "alpha": 0.7
+        }
+      }
+    },
+    "scrollbar": {
+      "thumb": {
+        "$value": "{color.ink.800}"
+      },
+      "track": {
+        "$value": "{color.ink.100}"
       }
     }
   },

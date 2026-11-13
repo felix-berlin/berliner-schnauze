@@ -1,39 +1,34 @@
-@use "@styles/variables" as vars;
-@use "@sass-butler/functions" as butler-fn;
+/* stylelint-disable selector-class-pattern -- c-input--* modifiers are in Vue markup; they become type selectors with the form component migration */
 @use "@sass-butler/mixins" as butler-mx;
 
 @layer base {
-  $icon-color: #2b333b;
-  $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='#{$icon-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>";
-
   // Text fields: Berlin with the body tracking, warm paper fill, solid muted border that
   // turns dashed on hover (the button signature) and solid Currywurst with a ring on focus.
   .c-input,
   .c-textarea,
   .c-select {
-    --spacing-inner: #{vars.$spacer * 0.6} #{vars.$spacer * 0.75};
+    --_transition-duration: 200ms; // no token between --duration-fast and --duration-base
+    --spacing-inner: calc(var(--space-4) * 0.6) calc(var(--space-4) * 0.75);
     // Muted text colour: ≥3:1 against the fill in both modes (WCAG 1.4.11).
-    --color-border: var(--color-muted);
-    --color-border-hover: var(--red-200);
-    --color-border-active: var(--color-accent-text);
-    --size-font: 1rem;
-    --box-shadow-focus: 2px color-mix(in srgb, var(--orange-600) 30%, transparent);
-    --color-background: color-mix(in srgb, var(--orange-100) 30%, white);
-    --color-background-disabled: color-mix(in srgb, var(--color-muted) 12%, white);
+    --color-border: var(--color-text-muted);
+    --color-border-hover: var(--color-border-control-hover);
+    --color-border-active: var(--color-text-accent);
+    --size-font: var(--font-size-base);
+    --box-shadow-focus: 2px var(--color-focus-halo);
+    --color-background: var(--color-surface-field);
+    --color-background-disabled: var(--color-surface-field-disabled);
     --width-border: 1px;
 
-    font-family: vars.$berlin;
+    font-family: var(--font-family-body);
     font-size: var(--size-font);
     letter-spacing: 1px;
     background-color: var(--color-background);
     outline: none;
     appearance: none;
     border-radius: 0;
-    color: var(--color, var(--color-body));
-    transition: {
-      property: border-color, color, background-color, box-shadow, outline-color;
-      duration: 200ms;
-    }
+    color: var(--color, var(--color-text-body));
+    transition-property: border-color, color, background-color, box-shadow, outline-color;
+    transition-duration: var(--_transition-duration);
 
     &:not(.c-input--range) {
       border: var(--width-border) var(--style-border, solid) var(--color-border);
@@ -43,23 +38,22 @@
       padding: var(--spacing-inner);
     }
 
-    // Dark: a recessed well below the card surface; cream text at well over 4.5:1.
-    @include butler-mx.dark-mode-class {
-      --color-background: var(--new-blue-600);
-      --color-background-disabled: color-mix(in srgb, var(--color-muted) 15%, var(--new-blue-600));
-    }
-
     &:disabled {
       --color-background: var(--color-background-disabled);
       --style-border: dotted;
 
-      color: var(--color-muted);
+      color: var(--color-text-muted);
       cursor: not-allowed;
+    }
+
+    // outline: none above hides the ring on every field; keyboard focus gets it back here (text fields restyle it below).
+    &:focus-visible {
+      outline: 2px solid var(--color-focus-ring);
     }
 
     &::placeholder {
       // Muted, not body ink: reads as a hint, still ≥4.5:1 on the fill.
-      color: var(--color-placeholder, var(--color-muted));
+      color: var(--color-placeholder, var(--color-text-muted));
       opacity: 1;
     }
   }
@@ -86,8 +80,8 @@
 
     &:user-invalid,
     &[aria-invalid="true"] {
-      --color-border: var(--danger);
-      --color-border-active: var(--danger);
+      --color-border: var(--color-status-danger);
+      --color-border-active: var(--color-status-danger);
     }
   }
 
@@ -108,45 +102,40 @@
   }
 
   .c-textarea--error .c-textarea {
-    --color-border: var(--danger);
-    --color-border-active: var(--danger);
+    --color-border: var(--color-status-danger);
+    --color-border-active: var(--color-status-danger);
   }
 
   .c-input--number,
   .c-input--email,
   .c-input--tel {
-    --spacing-inner-vertical: #{vars.$spacer * 0.75};
+    --spacing-inner-vertical: var(--space-3);
     --spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
 
     padding: var(--spacing-inner-vertical) var(--spacing-inner-horizontal);
   }
 
   .c-select {
-    --spacing-inner-vertical: #{vars.$spacer};
+    --spacing-inner-vertical: var(--space-4);
     --spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
-    --size-font: 1rem;
-    --spacing-inner: #{vars.$spacer * 0.75} #{vars.$spacer * 4.5} #{vars.$spacer * 0.75}
-      #{vars.$spacer};
-    --color-background: var(--control-bg);
-    --color-border: var(--control-border);
+    --size-font: var(--font-size-base);
+    --spacing-inner: var(--space-3) calc(var(--space-4) * 4.5) var(--space-3) var(--space-4);
+    --color-background: var(--color-control-bg);
+    --color-border: var(--color-border-control);
 
     padding: var(--spacing-inner-vertical) var(--spacing-inner-horizontal);
     font-size: var(--size-font);
     font-weight: 500;
     cursor: pointer;
     background: {
-      image: url("#{butler-fn.escape-svg($icon-chevron-down)}");
+      // The SVG cannot read custom properties; its stroke is color.ink.base.
+      image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232b333b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
       repeat: no-repeat;
-      position: right vars.$spacer * 1.5 center;
+      position: right var(--space-6) center;
       size: 16px 12px;
     }
 
-    // Re-declared in dark mode: the shared .c-input/.c-select dark block above
-    // sets --color-background on the element and would otherwise win.
     @include butler-mx.dark-mode-class {
-      --color-background: var(--control-bg);
-      --color-border: var(--control-border);
-
       background-blend-mode: screen;
     }
   }
@@ -157,19 +146,22 @@
 
   .c-input--checkbox,
   .c-input--radio {
-    --color-active: var(--orange-500);
-    --color-inner-active: #fff;
-    --color-border-disabled-checked: color-mix(in srgb, var(--orange-400) 60%, white);
-    --color-background-disabled-checked: color-mix(in srgb, var(--orange-400) 80%, white);
-    --duration-transition-transform: 0.3s;
+    --_duration-short: 0.2s; // no token between --duration-fast and --duration-base
+    --_focus-shadow: 0 0 0 var(--box-shadow-focus); // box-shadow only takes tokens; the halo is a spread ring
+    --color-active: var(--color-accent-active);
+    --color-inner-active: var(--color-text-on-active);
+    --color-border-disabled-checked: var(--color-border-check-disabled);
+    --color-background-disabled-checked: var(--color-surface-check-disabled);
+    --duration-transition-transform: var(--duration-base);
     --timing-transition-transform: ease;
-    --duration-transition-opacity: 0.2s;
+    --duration-transition-opacity: var(--_duration-short);
     --cursor: pointer;
     --spacing-inner: 0;
     --height: 20px;
-    --color-border: var(--blue);
+    --color-border: var(--color-border-check);
+    --color-background: var(--color-surface-check);
 
-    height: var(--height);
+    block-size: var(--height);
     display: inline-block;
     vertical-align: top;
     position: relative;
@@ -177,13 +169,9 @@
     cursor: var(--cursor);
     border: var(--width-border) solid var(--color-border);
     transition:
-      background 0.3s,
-      border-color 0.3s,
-      box-shadow 0.2s;
-
-    @include butler-mx.dark-mode-class {
-      --color-background: color-mix(in srgb, var(--blue) 30%, white);
-    }
+      background var(--duration-base),
+      border-color var(--duration-base),
+      box-shadow var(--_duration-short);
 
     &::after {
       content: "";
@@ -199,13 +187,9 @@
     &:checked {
       --color-background: var(--color-active);
       --color-border: var(--color-active);
-      --duration-transition-opacity: 0.3s;
-      --duration-transition-transform: 0.6s;
+      --duration-transition-opacity: var(--duration-base);
+      --duration-transition-transform: var(--duration-slow);
       --timing-transition-transform: cubic-bezier(0.2, 0.85, 0.32, 1.2);
-
-      @include butler-mx.dark-mode-class {
-        --color-background: var(--color-active);
-      }
     }
 
     &:disabled {
@@ -231,11 +215,11 @@
     }
 
     &:focus {
-      box-shadow: 0 0 0 var(--box-shadow-focus);
+      box-shadow: var(--_focus-shadow);
     }
 
     &:not(.c-switch) {
-      width: 21px;
+      inline-size: 21px;
 
       &::after {
         opacity: var(--opacity, 0);
@@ -247,24 +231,31 @@
     }
 
     & + label {
+      --_font-size: 14px; // between --font-size-sm and --font-size-md
+      --_gap: 4px; // px on purpose, next to the 21px box
       --cursor: pointer;
 
-      font-size: 14px;
+      font-size: var(--_font-size);
       line-height: 21px;
       display: inline-block;
       vertical-align: top;
       cursor: var(--cursor);
-      margin-inline-start: 4px;
+      margin-inline-start: var(--_gap);
     }
   }
 
   .c-input--checkbox {
     &:not(.c-switch) {
       &::after {
-        width: 5px;
-        height: 9px;
-        inset-inline-start: 7px;
-        inset-block-start: 4px;
+        --_mark-width: 5px; // check mark drawn for the 21px box
+        --_mark-height: 9px;
+        --_mark-x: 7px;
+        --_mark-y: 4px;
+
+        inline-size: var(--_mark-width);
+        block-size: var(--_mark-height);
+        inset-inline-start: var(--_mark-x);
+        inset-block-start: var(--_mark-y);
         transform: rotate(var(--rotate, 20deg));
         border: solid var(--color-inner-active);
         border-width: 0 2px 2px 0;
@@ -277,12 +268,14 @@
   }
 
   .c-input--radio {
-    border-radius: 50%;
+    --_round: 50%; // a circle; --radius-pill would make a capsule
+
+    border-radius: var(--_round);
 
     &::after {
-      width: 19px;
-      height: 19px;
-      border-radius: 50%;
+      inline-size: 19px;
+      block-size: 19px;
+      border-radius: var(--_round);
       background: var(--color-inner-active);
       opacity: 0;
       transform: scale(var(--scale, 0.7));
@@ -294,12 +287,8 @@
   }
 
   .c-input--range {
-    $color-background-thumb: vars.$orange-500;
-    $height-track: 0.3rem;
-    $size-thumb: 1rem;
-
-    --color-background-track: var(--grey-200);
-    --color-background-thumb: var(--red-200);
+    --_round: 50%; // a circle; --radius-pill would make a capsule
+    --_thumb-offset: calc(-1 * (var(--height-track) + 0.05rem)); // centres the thumb on the track
     --height-track: 0.3rem;
     --size-thumb: 1rem;
 
@@ -307,34 +296,34 @@
     background-color: transparent; // Mozilla need this
 
     &::-webkit-slider-runnable-track {
-      background-color: var(--new-blue-600);
-      width: 100%;
-      height: $height-track;
+      background-color: var(--color-surface-range-track);
+      inline-size: 100%;
+      block-size: var(--height-track);
     }
 
     &::-moz-range-thumb {
-      background-color: $color-background-thumb;
-      width: $size-thumb;
-      height: $size-thumb;
-      margin-block-start: -($height-track + 0.05rem);
-      border-radius: 50%;
+      background-color: var(--color-accent-active);
+      inline-size: var(--size-thumb);
+      block-size: var(--size-thumb);
+      margin-block-start: var(--_thumb-offset);
+      border-radius: var(--_round);
       border-color: transparent; // Mozilla need this
       border-width: 0; // Mozilla need this
       appearance: none;
     }
 
     &::-moz-range-track {
-      background-color: vars.$grey-200;
-      width: 100%;
-      height: $height-track;
+      background-color: var(--color-surface-range-track-moz);
+      inline-size: 100%;
+      block-size: var(--height-track);
     }
 
     &::-webkit-slider-thumb {
-      background-color: $color-background-thumb;
-      width: $size-thumb;
-      height: $size-thumb;
-      margin-block-start: -($height-track + 0.05rem);
-      border-radius: 50%;
+      background-color: var(--color-accent-active);
+      inline-size: var(--size-thumb);
+      block-size: var(--size-thumb);
+      margin-block-start: var(--_thumb-offset);
+      border-radius: var(--_round);
       appearance: none;
     }
   }
@@ -346,7 +335,6 @@
       @include butler-mx.hover {
         &::file-selector-button {
           --width-border: 0;
-          --color-border-hover: var(--grey-200);
 
           border-inline-end-width: 1px;
         }
@@ -356,7 +344,7 @@
     &::file-selector-button {
       --width-border: 0;
 
-      margin-inline-end: vars.$spacer;
+      margin-inline-end: var(--space-4);
       border-inline-end-width: 1px;
       border-color: inherit;
       border-start-end-radius: 0;
@@ -365,10 +353,10 @@
   }
 
   .c-fieldset {
-    --spacing-after: #{vars.$spacer * 2};
-    --spacing-inner: #{vars.$spacer * 2};
+    --spacing-after: var(--space-8);
+    --spacing-inner: var(--space-8);
     --spacing-legend: calc(var(--spacing-inner) / 2);
-    --color-border: #{vars.$grey-200};
+    --color-border: var(--color-border-fieldset);
     --width-border: 2px;
     --style-border: solid;
 
@@ -387,7 +375,7 @@
     display: block;
 
     &:not(:last-of-type) {
-      margin-block-end: vars.$spacer;
+      margin-block-end: var(--space-4);
     }
   }
 }

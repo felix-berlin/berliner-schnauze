@@ -1,4 +1,3 @@
-@use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
@@ -9,13 +8,13 @@
   h4,
   h5,
   h6 {
-    font-family: vars.$berliner;
+    font-family: var(--font-family-display);
     font-weight: normal;
   }
 
   html,
   button {
-    font-family: vars.$berlin;
+    font-family: var(--font-family-body);
     font-weight: normal;
     letter-spacing: 1px;
   }
@@ -46,22 +45,22 @@
   // Type scale v3 (docs/design/wortseite/SPEC.md §4): the only sizes besides the headword.
   :where(.t-label) {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-muted);
+    color: var(--color-text-muted);
   }
 
   :where(.t-em) {
-    font-size: 1.25rem;
+    font-size: var(--font-size-xl);
     line-height: 1.35;
-    color: var(--color-ink-strong);
+    color: var(--color-text-strong);
   }
 
   :where(.t-small) {
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
     line-height: 1.5;
-    color: var(--color-muted);
+    color: var(--color-text-muted);
   }
 }

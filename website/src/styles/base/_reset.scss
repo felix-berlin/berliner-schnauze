@@ -11,8 +11,8 @@
   }
 
   img {
-    max-width: 100%;
-    height: auto;
+    max-inline-size: 100%;
+    block-size: auto;
     vertical-align: middle;
     font-style: italic;
     background-repeat: no-repeat;

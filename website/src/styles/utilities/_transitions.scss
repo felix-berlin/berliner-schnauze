@@ -1,7 +1,9 @@
 @layer utilities {
   .fade-enter-active,
   .fade-leave-active {
-    transition: opacity 0.5s ease-in;
+    --_fade-duration: 0.5s; // no token between --duration-base and --duration-slow
+
+    transition: opacity var(--_fade-duration) ease-in;
   }
 
   .fade-enter-from,
@@ -13,6 +15,8 @@
 
   .fade-fast-enter-active,
   .fade-fast-leave-active {
-    transition: opacity 0.2s ease-in;
+    --_fade-duration: 0.2s; // no token between --duration-fast and --duration-base
+
+    transition: opacity var(--_fade-duration) ease-in;
   }
 }

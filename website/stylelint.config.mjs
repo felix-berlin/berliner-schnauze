@@ -92,7 +92,6 @@ export default {
         ...legacyFiles,
         "src/styles/{variables,mixins}/**", // until Task 8 migrates the mixins
         "src/styles/tokens/_legacy-aliases.scss", // _legacy-aliases.scss names the legacy properties
-        "src/styles/{base,utilities}/**", // Task 4
         // Mixin-only files (no CSS output, so not in the legacy list); migrate with their consumers.
         "src/styles/components/_word-definition-grid.scss",
         "src/styles/pages/_changelog-prose.scss",

@@ -1,15 +1,16 @@
-@use "@styles/variables" as vars;
 @forward "animations";
 @forward "list";
 @forward "transitions";
 
 @layer utilities {
   .u-sr-only {
+    --_size: 1px; // the clipping technique's size, not a scale step
+
     position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
+    inline-size: var(--_size);
+    block-size: var(--_size);
     padding: 0;
-    margin: -1px;
+    margin: calc(var(--_size) * -1);
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
@@ -17,13 +18,13 @@
   }
 
   .u-max-body-width {
-    $spacing-outer: 20px;
+    --_gutter: 20px; // px on purpose: the gutter does not scale with the root font size
+    --_max-width: 1366px; // content column width, no token
+    --page-gutter: var(--_gutter);
 
-    --page-gutter: #{$spacing-outer};
-
-    max-inline-size: vars.$body-max-width + $spacing-outer;
+    max-inline-size: calc(var(--_max-width) + var(--_gutter));
     // Inline axis only: the shorthands (margin: 0 auto) used to lose to later component rules, and now outrank legacy.
     margin-inline: auto;
-    padding-inline: $spacing-outer;
+    padding-inline: var(--_gutter);
   }
 }

@@ -23,6 +23,9 @@
       },
       "on-overlay": {
         "$value": "{color.white.100}"
+      },
+      "on-active": {
+        "$value": "{color.white.pure}"
       }
     },
     "surface": {
@@ -85,6 +88,51 @@
       },
       "overlay": {
         "$value": "{color.black.pure}"
+      },
+      "page": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.988235, 0.917647, 0.843137],
+          "hex": "#fcead7",
+          "alpha": 0.05
+        }
+      },
+      "field": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.996471, 0.975294, 0.952941],
+          "hex": "#fef9f3"
+        }
+      },
+      "field-disabled": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.925177, 0.928, 0.930823],
+          "hex": "#eceded"
+        }
+      },
+      "check": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.996471, 0.975294, 0.952941],
+          "hex": "#fef9f3"
+        }
+      },
+      "check-disabled": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.90902, 0.629804, 0.513725],
+          "hex": "#e8a183"
+        }
+      },
+      "range-track": {
+        "$value": "{color.ink.600m}"
+      },
+      "range-track-moz": {
+        "$value": "{color.grey.200}"
+      },
+      "selection": {
+        "$value": "{color.red.200}"
       }
     },
     "accent": {
@@ -93,6 +141,9 @@
       },
       "icon": {
         "$value": "{color.orange.400}"
+      },
+      "active": {
+        "$value": "{color.orange.500}"
       }
     },
     "border": {
@@ -104,6 +155,22 @@
       },
       "control": {
         "$value": "{color.orange.600}"
+      },
+      "control-hover": {
+        "$value": "{color.red.200}"
+      },
+      "check": {
+        "$value": "{color.ink.base}"
+      },
+      "check-disabled": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.931765, 0.722353, 0.635294],
+          "hex": "#eeb8a2"
+        }
+      },
+      "fieldset": {
+        "$value": "{color.grey.200}"
       }
     },
     "control": {
@@ -117,6 +184,14 @@
     "focus": {
       "ring": {
         "$value": "{color.orange.600}"
+      },
+      "halo": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.698039, 0.231373, 0.152941],
+          "hex": "#b23b27",
+          "alpha": 0.3
+        }
       }
     },
     "status": {
@@ -128,6 +203,31 @@
       },
       "gold": {
         "$value": "{color.gold}"
+      }
+    },
+    "pattern": {
+      "dot": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.168627, 0.2, 0.231373],
+          "hex": "#2b333b",
+          "alpha": 0.15
+        }
+      },
+      "ground": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.998824, 0.991765, 0.984314],
+          "hex": "#fffdfb"
+        }
+      }
+    },
+    "scrollbar": {
+      "thumb": {
+        "$value": "{color.orange.400}"
+      },
+      "track": {
+        "$value": "{color.orange.200}"
       }
     }
   },
