@@ -21,6 +21,13 @@
     margin-left: 0; // bad
     width: 100%; // bad
     fill: var(--color-orange-600); // bad
+    font: 700 1.2rem/1.2 Arial, sans-serif; // bad
+    text-shadow: 0 0 2px var(--color-border-card); // bad
+    box-shadow: var(--shadow-paper-lift), 0 0 40px var(--color-border-card); // bad
+    font-family: var(--font-family-body), Arial, sans-serif; // bad
+    scroll-margin-top: 4rem; // bad
+    scroll-padding: 2rem; // bad
+    scroll-padding-left: 0; // bad
 
     @media (width >= 40rem) { // bad
       color: inherit;

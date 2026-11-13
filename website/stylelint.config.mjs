@@ -21,7 +21,8 @@ const rawLength = new RegExp(
   `${num}(?:px|r?em|ch|ex|pt|%|[sld]?v(?:h|w|min|max)|cq(?:w|h|i|b|min|max))`,
 );
 const rawTime = new RegExp(`${num}m?s(?!\\w)`);
-const notToken = /^(?!var\(|inherit$|initial$|unset$|none$|auto$)/;
+// The whole value must be tokens (a comma list of var()) or a keyword.
+const notToken = /^(?!(?:var\([^()]*\)(?:\s*,\s*var\([^()]*\))*|none|inherit|initial|unset)$)/;
 
 const strictRules = {
   "color-no-hex": true,
@@ -43,13 +44,13 @@ const strictRules = {
   "declaration-property-value-disallowed-list": {
     "/.*/": [bannedVar, /\$|#\{/],
     "font-size": [rawLength],
-    "/^(margin|padding)(-(block|inline)(-(start|end))?)?$|^(row-|column-)?gap$|^inset(-block|-inline)?(-(start|end))?$/":
+    "/^(margin|padding|scroll-margin|scroll-padding)(-(block|inline)(-(start|end))?)?$|^(row-|column-)?gap$|^inset(-block|-inline)?(-(start|end))?$/":
       [rawLength],
     "/^border(-(start|end)-(start|end))?-radius$/": [rawLength],
-    "box-shadow": [notToken],
+    "/^(box|text)-shadow$/": [notToken],
     "z-index": [/^-?\d+$/],
     "/^(transition|animation)(-duration|-delay)?$/": [rawTime],
-    "font-family": [notToken],
+    "/^font(-family)?$/": [notToken],
   },
   "property-disallowed-list": [
     "width",
@@ -62,7 +63,7 @@ const strictRules = {
     "right",
     "bottom",
     "left",
-    "/^(margin|padding)-(top|right|bottom|left)$/",
+    "/^(margin|padding|scroll-margin|scroll-padding)-(top|right|bottom|left)$/",
     "/^border-(top|right|bottom|left)(-(width|color|style))?$/",
     "/^border-(top|bottom)-(left|right)-radius$/",
   ],
@@ -90,7 +91,7 @@ export default {
       files: [
         ...legacyFiles,
         "src/styles/{variables,mixins}/**", // until Task 8 migrates the mixins
-        "src/styles/tokens/**", // _legacy-aliases.scss names the legacy properties
+        "src/styles/tokens/_legacy-aliases.scss", // _legacy-aliases.scss names the legacy properties
         "src/styles/{base,utilities}/**", // Task 4
         // Mixin-only files (no CSS output, so not in the legacy list); migrate with their consumers.
         "src/styles/components/_word-definition-grid.scss",

@@ -13,8 +13,14 @@
       box-shadow: var(--shadow-paper-lift);
       font-size: var(--_hero-size);
       font-family: var(--font-family-body);
+      text-shadow: none;
+      scroll-margin-block-start: var(--space-4);
       z-index: var(--z-raised);
       transition: opacity var(--duration-fast) var(--ease-standard);
+    }
+
+    .label {
+      font: var(--font-body);
     }
 
     .title {

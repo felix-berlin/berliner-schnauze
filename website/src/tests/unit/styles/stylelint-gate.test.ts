@@ -4,6 +4,16 @@ import stylelint from "stylelint";
 import { describe, expect, it } from "vitest";
 
 // Design system spec §11: the strict rules refuse every value that bypasses the tokens.
+const STRICT = new Set([
+  "color-no-hex",
+  "color-named",
+  "function-disallowed-list",
+  "declaration-property-value-disallowed-list",
+  "property-disallowed-list",
+  "at-rule-disallowed-list",
+  "selector-class-pattern",
+  "selector-disallowed-list",
+]);
 const website = new URL("../../../../", import.meta.url).pathname;
 
 // Lint a fixture under a path that is not ignored and not listed as legacy, so the strict rules apply.
@@ -20,7 +30,7 @@ const lintFixture = async (name: string) => {
 describe("stylelint design-token gate", () => {
   it("flags every line of bad.scss marked as a violation", async () => {
     const { code, warnings } = await lintFixture("bad");
-    const flagged = new Set(warnings.map((w) => w.line));
+    const flagged = new Set(warnings.filter((w) => STRICT.has(w.rule)).map((w) => w.line));
     const missed = code
       .split("\n")
       .flatMap((text, i) =>

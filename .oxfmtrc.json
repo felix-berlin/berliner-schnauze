@@ -15,6 +15,7 @@
   },
   "ignorePatterns": [
     "**/*.astro",
+    "website/src/tests/unit/styles/fixtures",
     "coverage",
     "dist",
     "CHANGELOG.md",
