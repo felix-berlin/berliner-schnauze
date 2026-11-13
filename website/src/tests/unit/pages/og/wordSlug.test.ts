@@ -1,4 +1,12 @@
-import { existsSync, mkdtempSync, readFileSync, rmSync, utimesSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  utimesSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -78,6 +86,22 @@ describe("og/[wordSlug] route", () => {
     await call("wat.png");
     expect(renderOgImage).toHaveBeenCalledOnce();
     expect(existsSync(join(cache.dir, "wat.png"))).toBe(true);
+  });
+
+  it("still serves the image when the cache dir cannot be written", async () => {
+    // A file where the cache dir should be: mkdir fails like on a read-only or broken volume.
+    mkdirSync(join(cache.dir, ".."), { recursive: true });
+    writeFileSync(cache.dir, "");
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    const res = await call("wat.png");
+    expect(res.status).toBe(200);
+    expect(Buffer.from(await res.arrayBuffer())).toEqual(PNG);
+    expect(error).toHaveBeenCalledWith(
+      "[og] could not cache",
+      join(cache.dir, "wat.png"),
+      expect.anything(),
+    );
+    error.mockRestore();
   });
 
   it("omits an empty description", async () => {

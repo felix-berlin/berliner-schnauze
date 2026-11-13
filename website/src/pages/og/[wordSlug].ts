@@ -72,7 +72,8 @@ const render = async (
   } catch (error) {
     // A read-only or full volume still serves the image, only uncached.
     console.error("[og] could not cache", file, error);
-    await rm(tmp, { force: true });
+    // force only ignores ENOENT; a broken dir (ENOTDIR, EACCES) must not turn the served image into a 500.
+    await rm(tmp, { force: true }).catch(() => {});
   }
   return image;
 };
