@@ -53,8 +53,6 @@ export default [
   "src/styles/components/_suggest-word-form.scss",
   "src/styles/components/_thema-detail.scss",
   "src/styles/components/_themen-overview.scss",
-  "src/styles/components/_toast-container.scss",
-  "src/styles/components/_toast-notify.scss",
   "src/styles/components/_voice-buttons.scss",
   "src/styles/components/_word-analysis.scss",
   "src/styles/components/_word-comments.scss",

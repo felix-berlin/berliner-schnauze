@@ -3,10 +3,10 @@
     ref="container"
     popover="manual"
     class="c-toast-container"
-    :class="`c-toast-container--${position}`"
+    :data-variant="position"
   >
     <TransitionGroup
-      name="c-toast-notify"
+      name="toast"
       @before-leave="onBeforeLeave"
       @after-leave="onAfterLeave"
     >
