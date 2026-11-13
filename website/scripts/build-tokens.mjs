@@ -54,8 +54,9 @@ const format = (path, { type, value }, known) => {
     case "color":
       return color(value);
     case "dimension":
-    case "duration":
       return dim(value);
+    case "duration": // a unitless 0 is invalid for <time>
+      return `${num(value.value)}${value.unit}`;
     case "number":
     case "fontWeight":
       return String(value);

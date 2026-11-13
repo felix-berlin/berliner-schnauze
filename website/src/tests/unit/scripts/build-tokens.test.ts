@@ -79,6 +79,14 @@ describe("buildTokens", () => {
     expect(css).toContain("--z-header: 100;");
     expect(css).toContain("--ease-standard: cubic-bezier(0.42, 0, 0.58, 1);");
   });
+  it("keeps the unit of a zero duration and drops it for a zero dimension", () => {
+    const i = input();
+    i.primitive.duration.base.$value.value = 0;
+    i.primitive.space[4].$value.value = 0;
+    const out = buildTokens(i);
+    expect(out).toContain("--duration-base: 0ms;");
+    expect(out).toContain("--space-4: 0;");
+  });
   it("puts light-dark() around each colour of a themed shadow", () =>
     expect(css).toMatch(/--shadow-hover-glow: 0 0 12px 0 light-dark\(.+, .+\);/));
   it("throws when a themed shadow differs in geometry", () => {
