@@ -102,9 +102,11 @@
   }
 
   .text {
+    --_hair: 1px; // below every space step
+
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: var(--_hair);
   }
 
   .title {

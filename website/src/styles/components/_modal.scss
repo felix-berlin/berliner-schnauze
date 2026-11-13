@@ -13,6 +13,7 @@
     --_max-width: 800px; // one-off reading width
     --_slide: 0.3s; // between duration-base and -slow, kept from the exit animation
     --_blur: 4px;
+    --_backdrop-in: 1s; // slower than every duration token: the dim settles after the slide
 
     border: none;
     inset: 0;
@@ -36,7 +37,7 @@
     &::backdrop {
       background-color: var(--_backdrop);
       backdrop-filter: blur(var(--_blur));
-      animation: fade-in 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+      animation: fade-in var(--_backdrop-in) cubic-bezier(0.39, 0.575, 0.565, 1) both;
     }
 
     &[closedby="any"]::backdrop {
