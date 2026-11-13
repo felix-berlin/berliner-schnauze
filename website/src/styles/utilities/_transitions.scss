@@ -1,16 +1,18 @@
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease-in;
-}
+@layer utilities {
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s ease-in;
+  }
 
-.fade-enter-from,
-.fade-leave-to,
-.fade-fast-enter-from,
-.fade-fast-leave-to {
-  opacity: 0;
-}
+  .fade-enter-from,
+  .fade-leave-to,
+  .fade-fast-enter-from,
+  .fade-fast-leave-to {
+    opacity: 0;
+  }
 
-.fade-fast-enter-active,
-.fade-fast-leave-active {
-  transition: opacity 0.2s ease-in;
+  .fade-fast-enter-active,
+  .fade-fast-leave-active {
+    transition: opacity 0.2s ease-in;
+  }
 }

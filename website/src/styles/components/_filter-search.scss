@@ -1,117 +1,119 @@
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 
-// Homepage word listing layout. What WordFilter.vue itself renders lives in _word-filter.scss.
+@layer legacy {
+  // Homepage word listing layout. What WordFilter.vue itself renders lives in _word-filter.scss.
 
-.c-filter-search {
-  display: grid;
-  grid-template-columns: [start] 1fr [end];
-  gap: vars.$spacer * 1.5 vars.$spacer * 3;
-  height: 100dvh;
-  grid-template-rows: min-content 1fr auto;
-  grid-template-areas:
-    "list-header"
-    "list"
-    "filter";
-
-  @include mx.breakpoint("md") {
-    grid-template-columns: [start] 1fr 3fr [end];
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
-      "filter list-header"
-      "filter list";
-    height: auto;
-  }
-
-  .c-word-search-filter-toggle {
-    grid-area: filter-toggle;
-
-    @include mx.breakpoint("md") {
-      display: none;
-    }
-  }
-
-  &__filter {
-    grid-area: filter;
-
-    @include mx.breakpoint("md") {
-      display: block !important;
-    }
-    @include mx.breakpoint("md", "max") {
-      max-width: var(--width-max, 100lvw);
-      position: fixed;
-      z-index: 2;
-      inset-block: 0;
-      inset-inline-start: 0;
-      height: 100%;
-      background-color: var(--color-background, var(--floating-color-background));
-      overflow-x: auto;
-      padding: calc(var(--site-header-height) + #{vars.$spacer * 1.5}) vars.$spacer * 1.5
-        vars.$spacer * 1.5;
-      display: flex;
-      flex-direction: column;
-      box-shadow: vars.$paper-lift;
-    }
-    @include mx.breakpoint("xs") {
-      --width-max: 50lvw;
-    }
-  }
-
-  &__list {
+  .c-filter-search {
     display: grid;
+    grid-template-columns: [start] 1fr [end];
+    gap: vars.$spacer * 1.5 vars.$spacer * 3;
+    height: 100dvh;
+    grid-template-rows: min-content 1fr auto;
     grid-template-areas:
-      "filter-toggle search"
-      "shortcuts shortcuts"
-      "result-count result-count"
-      "no-result no-result"
-      "suggest-hint suggest-hint";
-    gap: vars.$spacer * 1.5 vars.$spacer;
-    grid-area: list-header;
-    grid-template-columns: min-content 1fr;
+      "list-header"
+      "list"
+      "filter";
 
     @include mx.breakpoint("md") {
-      grid-template-columns: 1fr max-content;
+      grid-template-columns: [start] 1fr 3fr [end];
+      grid-template-rows: auto 1fr;
       grid-template-areas:
-        "search search"
-        "result-count shortcuts"
+        "filter list-header"
+        "filter list";
+      height: auto;
+    }
+
+    .c-word-search-filter-toggle {
+      grid-area: filter-toggle;
+
+      @include mx.breakpoint("md") {
+        display: none;
+      }
+    }
+
+    &__filter {
+      grid-area: filter;
+
+      @include mx.breakpoint("md") {
+        display: block !important;
+      }
+      @include mx.breakpoint("md", "max") {
+        max-width: var(--width-max, 100lvw);
+        position: fixed;
+        z-index: 2;
+        inset-block: 0;
+        inset-inline-start: 0;
+        height: 100%;
+        background-color: var(--color-background, var(--floating-color-background));
+        overflow-x: auto;
+        padding: calc(var(--site-header-height) + #{vars.$spacer * 1.5}) vars.$spacer * 1.5
+          vars.$spacer * 1.5;
+        display: flex;
+        flex-direction: column;
+        box-shadow: vars.$paper-lift;
+      }
+      @include mx.breakpoint("xs") {
+        --width-max: 50lvw;
+      }
+    }
+
+    &__list {
+      display: grid;
+      grid-template-areas:
+        "filter-toggle search"
+        "shortcuts shortcuts"
+        "result-count result-count"
         "no-result no-result"
         "suggest-hint suggest-hint";
+      gap: vars.$spacer * 1.5 vars.$spacer;
+      grid-area: list-header;
+      grid-template-columns: min-content 1fr;
+
+      @include mx.breakpoint("md") {
+        grid-template-columns: 1fr max-content;
+        grid-template-areas:
+          "search search"
+          "result-count shortcuts"
+          "no-result no-result"
+          "suggest-hint suggest-hint";
+      }
     }
-  }
 
-  &__shortcuts {
-    grid-area: shortcuts;
-    display: flex;
-    column-gap: vars.$spacer * 2;
-    row-gap: vars.$spacer;
-    flex-wrap: wrap;
-  }
-
-  .c-word-search-list__result-count {
-    grid-area: result-count;
-    margin: 0;
-    display: flex;
-    align-items: center;
-  }
-
-  .c-word-search-list__no-result {
-    grid-area: no-result;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin: vars.$spacer 0 vars.$spacer * 0.5;
-
-    p {
-      margin-block-end: 0;
+    &__shortcuts {
+      grid-area: shortcuts;
+      display: flex;
+      column-gap: vars.$spacer * 2;
+      row-gap: vars.$spacer;
+      flex-wrap: wrap;
     }
-  }
 
-  .c-word-list {
-    grid-area: list;
-  }
+    .c-word-search-list__result-count {
+      grid-area: result-count;
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
 
-  .c-word-search {
-    grid-area: search;
+    .c-word-search-list__no-result {
+      grid-area: no-result;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: vars.$spacer 0 vars.$spacer * 0.5;
+
+      p {
+        margin-block-end: 0;
+      }
+    }
+
+    .c-word-list {
+      grid-area: list;
+    }
+
+    .c-word-search {
+      grid-area: search;
+    }
   }
 }

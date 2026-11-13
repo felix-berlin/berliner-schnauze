@@ -1,31 +1,33 @@
 @use "@styles/variables" as vars;
 
-.c-letter-filter {
-  &__list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 45px);
-    gap: 0.8rem;
-  }
+@layer legacy {
+  .c-letter-filter {
+    &__list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 45px);
+      gap: 0.8rem;
+    }
 
-  &__list-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 1;
-  }
+    &__list-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 1;
+    }
 
-  &__button {
-    --spacing: #{vars.$spacer * 0.25};
-    --size-font: 1rem;
+    &__button {
+      --spacing: #{vars.$spacer * 0.25};
+      --size-font: 1rem;
 
-    font-size: var(--size-font);
-    padding: var(--spacing);
-    width: 100%;
-    height: 100%;
-    text-transform: var(--transform-text, uppercase);
+      font-size: var(--size-font);
+      padding: var(--spacing);
+      width: 100%;
+      height: 100%;
+      text-transform: var(--transform-text, uppercase);
 
-    &.is-all {
-      --transform-text: none;
+      &.is-all {
+        --transform-text: none;
+      }
     }
   }
 }

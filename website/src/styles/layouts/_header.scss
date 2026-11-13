@@ -2,41 +2,43 @@
 @use "@sass-butler/mixins" as butler-mx;
 @use "@sass-butler/functions" as butler-fn;
 
-.c-header {
-  background-color: var(--color-background, var(--orange-200));
-  box-shadow: vars.$paper-lift;
-  position: sticky;
-  inset-block-start: 0;
-  inset-inline-start: 0;
-  z-index: 11000;
-  width: 100%;
-  padding: var(--padding-y-header) 0;
+@layer legacy {
+  .c-header {
+    background-color: var(--color-background, var(--orange-200));
+    box-shadow: vars.$paper-lift;
+    position: sticky;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    z-index: 11000;
+    width: 100%;
+    padding: var(--padding-y-header) 0;
 
-  @include butler-mx.dark-mode-class {
-    --color-background: var(--blue);
-  }
+    @include butler-mx.dark-mode-class {
+      --color-background: var(--blue);
+    }
 
-  &__wrapper {
-    --areas-template: "logo menu-nav";
+    &__wrapper {
+      --areas-template: "logo menu-nav";
 
-    display: grid;
-    grid-template-areas: var(--areas-template);
-    grid-template-columns: var(--columns-header-inner, 1fr max-content);
-    align-items: center;
-    gap: 24px;
-  }
+      display: grid;
+      grid-template-areas: var(--areas-template);
+      grid-template-columns: var(--columns-header-inner, 1fr max-content);
+      align-items: center;
+      gap: 24px;
+    }
 
-  .c-logo {
-    grid-area: logo;
+    .c-logo {
+      grid-area: logo;
 
-    &__link {
-      font-family: vars.$berliner;
-      text-decoration: none;
-      color: var(--_color, var(--blue));
-      font-size: butler-fn.fluid(25, 40, 320, 1260);
+      &__link {
+        font-family: vars.$berliner;
+        text-decoration: none;
+        color: var(--_color, var(--blue));
+        font-size: butler-fn.fluid(25, 40, 320, 1260);
 
-      @include butler-mx.dark-mode-class {
-        --_color: var(--yellow-500);
+        @include butler-mx.dark-mode-class {
+          --_color: var(--yellow-500);
+        }
       }
     }
   }

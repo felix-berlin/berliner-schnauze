@@ -1,129 +1,131 @@
 @use "@sass-butler/mixins" as butler-mx;
 
-$edge: 20px;
+@layer legacy {
+  $edge: 20px;
 
-.c-toast-container {
-  // UA-Popover-Reset
-  inset: unset;
-  margin: 0;
-  border: none;
-  background: transparent;
-  padding: 0;
-  overflow: visible;
-  max-width: none;
-  max-height: none;
+  .c-toast-container {
+    // UA-Popover-Reset
+    inset: unset;
+    margin: 0;
+    border: none;
+    background: transparent;
+    padding: 0;
+    overflow: visible;
+    max-width: none;
+    max-height: none;
 
-  // Layout
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: max-content;
+    // Layout
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: max-content;
 
-  // Bottom: neuester Toast unten (nearest edge) via column-reverse
-  &--bottom-right,
-  &--bottom-left,
-  &--bottom-center {
-    flex-direction: column-reverse;
+    // Bottom: neuester Toast unten (nearest edge) via column-reverse
+    &--bottom-right,
+    &--bottom-left,
+    &--bottom-center {
+      flex-direction: column-reverse;
+    }
+
+    // Corner-Positioning
+    &--top-right,
+    &--top-left,
+    &--top-center {
+      // Below the sticky header, never over it (--site-header-height is kept current by MainHeader.astro).
+      inset-block-start: calc(var(--site-header-height, 60px) + #{$edge});
+    }
+
+    &--bottom-right,
+    &--bottom-left,
+    &--bottom-center {
+      inset-block-end: $edge;
+    }
+
+    &--top-right,
+    &--bottom-right {
+      inset-inline-end: $edge;
+    }
+
+    &--top-left,
+    &--bottom-left {
+      inset-inline-start: $edge;
+    }
+
+    &--top-center,
+    &--bottom-center {
+      inset-inline-start: 50%;
+      translate: -50% 0;
+    }
   }
 
-  // Corner-Positioning
-  &--top-right,
-  &--top-left,
-  &--top-center {
-    // Below the sticky header, never over it (--site-header-height is kept current by MainHeader.astro).
-    inset-block-start: calc(var(--site-header-height, 60px) + #{$edge});
-  }
-
-  &--bottom-right,
-  &--bottom-left,
-  &--bottom-center {
-    inset-block-end: $edge;
-  }
-
-  &--top-right,
-  &--bottom-right {
-    inset-inline-end: $edge;
-  }
-
-  &--top-left,
-  &--bottom-left {
-    inset-inline-start: $edge;
-  }
-
-  &--top-center,
-  &--bottom-center {
-    inset-inline-start: 50%;
-    translate: -50% 0;
-  }
-}
-
-// TransitionGroup-Animations — Leave-active braucht position: absolute
-// damit verbleibende Toasts via FLIP nahtlos nachrücken können
-.c-toast-notify-leave-active {
-  position: absolute;
-}
-
-// Basis-Leave-Zustand: Opacity immer 0 (gilt für alle Motion-Modes)
-.c-toast-notify-leave-to {
-  opacity: 0;
-}
-
-// `transform` (not `translate`): Vue's FLIP move sets an inline transform on the same element.
-@include butler-mx.feature("motion") {
-  .c-toast-notify-enter-active,
+  // TransitionGroup-Animations — Leave-active braucht position: absolute
+  // damit verbleibende Toasts via FLIP nahtlos nachrücken können
   .c-toast-notify-leave-active {
-    transition:
-      transform 0.3s ease,
-      opacity 0.3s ease;
-    will-change: transform, opacity;
+    position: absolute;
   }
 
-  .c-toast-notify-move {
-    transition: transform 0.3s ease;
-    will-change: transform;
-  }
-
-  .c-toast-notify-enter-from {
+  // Basis-Leave-Zustand: Opacity immer 0 (gilt für alle Motion-Modes)
+  .c-toast-notify-leave-to {
     opacity: 0;
   }
 
-  // Richtungs-aware Enter/Leave via Container-Modifier
-  .c-toast-container--top-right,
-  .c-toast-container--bottom-right {
-    .c-toast-notify-enter-from,
-    .c-toast-notify-leave-to {
-      transform: translateX(110%);
+  // `transform` (not `translate`): Vue's FLIP move sets an inline transform on the same element.
+  @include butler-mx.feature("motion") {
+    .c-toast-notify-enter-active,
+    .c-toast-notify-leave-active {
+      transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
+      will-change: transform, opacity;
     }
-  }
 
-  .c-toast-container--top-left,
-  .c-toast-container--bottom-left {
-    .c-toast-notify-enter-from,
-    .c-toast-notify-leave-to {
-      transform: translateX(-110%);
+    .c-toast-notify-move {
+      transition: transform 0.3s ease;
+      will-change: transform;
     }
-  }
 
-  .c-toast-container--top-center {
-    .c-toast-notify-enter-from,
-    .c-toast-notify-leave-to {
-      transform: translateY(-110%);
+    .c-toast-notify-enter-from {
+      opacity: 0;
     }
-  }
 
-  .c-toast-container--bottom-center {
-    .c-toast-notify-enter-from,
-    .c-toast-notify-leave-to {
-      transform: translateY(110%);
+    // Richtungs-aware Enter/Leave via Container-Modifier
+    .c-toast-container--top-right,
+    .c-toast-container--bottom-right {
+      .c-toast-notify-enter-from,
+      .c-toast-notify-leave-to {
+        transform: translateX(110%);
+      }
+    }
+
+    .c-toast-container--top-left,
+    .c-toast-container--bottom-left {
+      .c-toast-notify-enter-from,
+      .c-toast-notify-leave-to {
+        transform: translateX(-110%);
+      }
+    }
+
+    .c-toast-container--top-center {
+      .c-toast-notify-enter-from,
+      .c-toast-notify-leave-to {
+        transform: translateY(-110%);
+      }
+    }
+
+    .c-toast-container--bottom-center {
+      .c-toast-notify-enter-from,
+      .c-toast-notify-leave-to {
+        transform: translateY(110%);
+      }
     }
   }
-}
-@include butler-mx.feature("no-motion") {
-  .c-toast-notify-enter-active,
-  .c-toast-notify-leave-active,
-  .c-toast-notify-move {
-    transition: opacity 0.3s ease;
-    transform: none !important;
+  @include butler-mx.feature("no-motion") {
+    .c-toast-notify-enter-active,
+    .c-toast-notify-leave-active,
+    .c-toast-notify-move {
+      transition: opacity 0.3s ease;
+      transform: none !important;
+    }
   }
 }

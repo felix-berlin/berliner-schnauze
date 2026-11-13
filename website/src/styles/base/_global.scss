@@ -1,18 +1,20 @@
 @use "@styles/variables" as vars;
 
-:root {
-  --padding-y-header: #{vars.$spacer * 0.6};
-  --site-header-height: 60px; // JS-updated by MainHeader.astro
-}
+@layer base {
+  :root {
+    --padding-y-header: #{vars.$spacer * 0.6};
+    --site-header-height: 60px; // JS-updated by MainHeader.astro
+  }
 
-// Keyboard focus indicator for every interactive element; mouse clicks stay ring-free.
-:focus-visible {
-  outline: 2px solid var(--color-accent-text);
-  outline-offset: 2px;
-}
+  // Keyboard focus indicator for every interactive element; mouse clicks stay ring-free.
+  :focus-visible {
+    outline: 2px solid var(--color-accent-text);
+    outline-offset: 2px;
+  }
 
-// Word page and lightbox: one dashed ring for all components (SPEC.md §8); single overrides only change offset.
-:where(.c-word-page, .c-lightbox) :focus-visible {
-  outline: 2px dashed var(--focus-ring);
-  outline-offset: 2px;
+  // Word page and lightbox: one dashed ring for all components (SPEC.md §8); single overrides only change offset.
+  :where(.c-word-page, .c-lightbox) :focus-visible {
+    outline: 2px dashed var(--focus-ring);
+    outline-offset: 2px;
+  }
 }

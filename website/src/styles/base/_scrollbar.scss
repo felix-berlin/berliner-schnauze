@@ -1,33 +1,35 @@
-// scrollbar-color inherits, so setting it on <html> covers every scroller.
-// Chromium 121+ ignores ::-webkit-scrollbar once scrollbar-color is set.
-html {
-  --scrollbar-thumb: var(--orange-400);
-  --scrollbar-track: var(--orange-200);
+@layer base {
+  // scrollbar-color inherits, so setting it on <html> covers every scroller.
+  // Chromium 121+ ignores ::-webkit-scrollbar once scrollbar-color is set.
+  html {
+    --scrollbar-thumb: var(--orange-400);
+    --scrollbar-track: var(--orange-200);
 
-  scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 
-  &.dark {
-    --scrollbar-thumb: var(--blue-800);
-    --scrollbar-track: var(--blue-100);
-  }
-}
-
-// Fallback for Safari < 26.2 (no scrollbar-color)
-@supports not (scrollbar-color: auto) {
-  ::-webkit-scrollbar {
-    width: 8px;
+    &.dark {
+      --scrollbar-thumb: var(--blue-800);
+      --scrollbar-track: var(--blue-100);
+    }
   }
 
-  ::-webkit-scrollbar-track {
-    background-color: var(--scrollbar-track);
-  }
+  // Fallback for Safari < 26.2 (no scrollbar-color)
+  @supports not (scrollbar-color: auto) {
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
 
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--scrollbar-thumb);
-  }
+    ::-webkit-scrollbar-track {
+      background-color: var(--scrollbar-track);
+    }
 
-  ::-webkit-scrollbar-corner {
-    background: transparent;
+    ::-webkit-scrollbar-thumb {
+      background-color: var(--scrollbar-thumb);
+    }
+
+    ::-webkit-scrollbar-corner {
+      background: transparent;
+    }
   }
 }

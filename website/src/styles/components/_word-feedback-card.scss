@@ -1,247 +1,249 @@
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 
-// The card is a .c-section-card (header, body); this adds the poll's own parts.
-.c-word-feedback-card {
-  &__body {
-    display: grid;
-    gap: 1.25rem;
-  }
-
-  &__count {
-    margin-inline-start: auto;
-    color: var(--color-muted);
-    font-size: 0.8rem;
-  }
-
-  &__lead {
-    margin: 0;
-    color: var(--color-ink-strong);
-    font-size: 1.05rem;
-  }
-
-  &__teaser {
-    margin: 0;
-    color: var(--color-muted);
-    font-size: 0.8rem;
-  }
-
-  &__tiles {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr));
-    gap: 0.5rem;
-  }
-
-  &__options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  // Answer grids: as many columns as fit, each at least --min wide, buttons left-aligned.
-  &__options--locality,
-  &__options--origin,
-  &__options--half,
-  &__options--age {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 100%), 1fr));
-
-    .c-choice {
-      justify-content: flex-start;
-      overflow-wrap: anywhere;
-      text-align: start;
+@layer legacy {
+  // The card is a .c-section-card (header, body); this adds the poll's own parts.
+  .c-word-feedback-card {
+    &__body {
+      display: grid;
+      gap: 1.25rem;
     }
-  }
 
-  &__options--locality,
-  &__options--half {
-    --min: 180px;
-  }
+    &__count {
+      margin-inline-start: auto;
+      color: var(--color-muted);
+      font-size: 0.8rem;
+    }
 
-  &__options--origin {
-    --min: 240px;
-  }
+    &__lead {
+      margin: 0;
+      color: var(--color-ink-strong);
+      font-size: 1.05rem;
+    }
 
-  &__options--age {
-    --min: 96px;
-  }
+    &__teaser {
+      margin: 0;
+      color: var(--color-muted);
+      font-size: 0.8rem;
+    }
 
-  &__bars {
-    display: grid;
-    gap: 0.625rem;
-  }
+    &__tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr));
+      gap: 0.5rem;
+    }
 
-  &__bar {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 0.25rem 1rem;
-    font-size: 0.9rem;
+    &__options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
 
-    &.is-mine .c-word-feedback-card__bar-label {
+    // Answer grids: as many columns as fit, each at least --min wide, buttons left-aligned.
+    &__options--locality,
+    &__options--origin,
+    &__options--half,
+    &__options--age {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 100%), 1fr));
+
+      .c-choice {
+        justify-content: flex-start;
+        overflow-wrap: anywhere;
+        text-align: start;
+      }
+    }
+
+    &__options--locality,
+    &__options--half {
+      --min: 180px;
+    }
+
+    &__options--origin {
+      --min: 240px;
+    }
+
+    &__options--age {
+      --min: 96px;
+    }
+
+    &__bars {
+      display: grid;
+      gap: 0.625rem;
+    }
+
+    &__bar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.25rem 1rem;
+      font-size: 0.9rem;
+
+      &.is-mine .c-word-feedback-card__bar-label {
+        font-weight: 700;
+      }
+
+      &.is-mine .c-word-feedback-card__bar-fill {
+        background: var(--orange-600);
+      }
+    }
+
+    &__bar-track {
+      grid-column: 1 / -1;
+      block-size: 6px;
+      border-radius: var(--radius-xxs);
+      background: var(--surface-chip);
+      overflow: hidden;
+    }
+
+    &__bar-fill {
+      display: block;
+      block-size: 100%;
+      background: var(--orange-300);
+    }
+
+    &__bar-value {
+      color: var(--color-muted);
+      font-size: 0.8rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    &__step {
+      display: grid;
+      gap: 0.625rem;
+      padding-block-start: 1rem;
+      border-block-start: 1px dashed var(--rule-inner);
+    }
+
+    // Short fade + slide in from the direction of travel; the old step is gone at once, so nothing waits.
+    @media (prefers-reduced-motion: no-preference) {
+      &__step.is-entering,
+      &__done.is-entering {
+        animation: word-feedback-step-in 0.2s ease-out;
+
+        &.is-back {
+          --step-shift: -0.75rem;
+        }
+      }
+    }
+
+    &__progress {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.25rem 1rem;
+    }
+
+    // Always six segments: done / current / open, a step that does not apply is a dashed line.
+    &__segments {
+      display: flex;
+      gap: 4px;
+    }
+
+    &__segment {
+      flex: 1;
+      block-size: 4px;
+      border-radius: 1px;
+      background: var(--rule-inner);
+
+      &.is-done {
+        background: var(--orange-600);
+      }
+
+      &.is-current {
+        background: var(--orange-400);
+      }
+
+      &.is-skipped {
+        background: none;
+        border-block-start: 1px dashed var(--rule-card);
+        block-size: 0;
+        margin-block-start: 2px;
+      }
+    }
+
+    &__eyebrow {
+      @include mx.eyebrow;
+    }
+
+    &__body &__question {
+      margin: 0;
+      color: var(--color-ink-strong);
+      font-family: inherit;
+      font-size: 1.1rem;
       font-weight: 700;
     }
 
-    &.is-mine .c-word-feedback-card__bar-fill {
-      background: var(--orange-600);
-    }
-  }
+    &__why {
+      display: grid;
+      gap: 0.25rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
 
-  &__bar-track {
-    grid-column: 1 / -1;
-    block-size: 6px;
-    border-radius: var(--radius-xxs);
-    background: var(--surface-chip);
-    overflow: hidden;
-  }
-
-  &__bar-fill {
-    display: block;
-    block-size: 100%;
-    background: var(--orange-300);
-  }
-
-  &__bar-value {
-    color: var(--color-muted);
-    font-size: 0.8rem;
-    font-variant-numeric: tabular-nums;
-  }
-
-  &__step {
-    display: grid;
-    gap: 0.625rem;
-    padding-block-start: 1rem;
-    border-block-start: 1px dashed var(--rule-inner);
-  }
-
-  // Short fade + slide in from the direction of travel; the old step is gone at once, so nothing waits.
-  @media (prefers-reduced-motion: no-preference) {
-    &__step.is-entering,
-    &__done.is-entering {
-      animation: word-feedback-step-in 0.2s ease-out;
-
-      &.is-back {
-        --step-shift: -0.75rem;
+      b {
+        color: var(--color-ink-strong);
       }
     }
-  }
 
-  &__progress {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0.25rem 1rem;
-  }
-
-  // Always six segments: done / current / open, a step that does not apply is a dashed line.
-  &__segments {
-    display: flex;
-    gap: 4px;
-  }
-
-  &__segment {
-    flex: 1;
-    block-size: 4px;
-    border-radius: 1px;
-    background: var(--rule-inner);
-
-    &.is-done {
-      background: var(--orange-600);
+    &__why-note {
+      color: var(--color-muted);
     }
 
-    &.is-current {
-      background: var(--orange-400);
+    &__why-link {
+      padding-inline-start: 0;
     }
 
-    &.is-skipped {
-      background: none;
-      border-block-start: 1px dashed var(--rule-card);
-      block-size: 0;
-      margin-block-start: 2px;
+    &__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0 1.25rem 0.75rem;
     }
-  }
 
-  &__eyebrow {
-    @include mx.eyebrow;
-  }
+    &__skip {
+      margin-inline-start: auto;
+    }
 
-  &__body &__question {
-    margin: 0;
-    color: var(--color-ink-strong);
-    font-family: inherit;
-    font-size: 1.1rem;
-    font-weight: 700;
-  }
+    &__privacy {
+      display: grid;
+      gap: vars.$spacer * 0.25;
+      color: var(--color-muted);
+      font-size: 0.8rem;
 
-  &__why {
-    display: grid;
-    gap: 0.25rem;
-    font-size: 0.9rem;
-    line-height: 1.5;
+      p {
+        margin: 0;
+      }
+    }
 
-    b {
+    &__remember {
+      display: flex;
+      align-items: baseline;
+      gap: vars.$spacer * 0.5;
+    }
+
+    &__done-title {
+      margin: 0;
       color: var(--color-ink-strong);
     }
-  }
 
-  &__why-note {
-    color: var(--color-muted);
-  }
-
-  &__why-link {
-    padding-inline-start: 0;
-  }
-
-  &__footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0 1.25rem 0.75rem;
-  }
-
-  &__skip {
-    margin-inline-start: auto;
-  }
-
-  &__privacy {
-    display: grid;
-    gap: vars.$spacer * 0.25;
-    color: var(--color-muted);
-    font-size: 0.8rem;
-
-    p {
+    &__compare {
       margin: 0;
+      padding-inline-start: 1.1rem;
+      font-size: 0.9375rem;
+    }
+
+    &__done {
+      display: grid;
+      justify-items: start;
+      gap: vars.$spacer * 0.5;
     }
   }
 
-  &__remember {
-    display: flex;
-    align-items: baseline;
-    gap: vars.$spacer * 0.5;
-  }
-
-  &__done-title {
-    margin: 0;
-    color: var(--color-ink-strong);
-  }
-
-  &__compare {
-    margin: 0;
-    padding-inline-start: 1.1rem;
-    font-size: 0.9375rem;
-  }
-
-  &__done {
-    display: grid;
-    justify-items: start;
-    gap: vars.$spacer * 0.5;
-  }
-}
-
-@keyframes word-feedback-step-in {
-  from {
-    opacity: 0;
-    transform: translateX(var(--step-shift, 0.75rem));
+  @keyframes word-feedback-step-in {
+    from {
+      opacity: 0;
+      transform: translateX(var(--step-shift, 0.75rem));
+    }
   }
 }

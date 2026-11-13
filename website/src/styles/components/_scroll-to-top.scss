@@ -1,27 +1,29 @@
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 
-.c-scroll-to-top {
-  position: fixed;
-  inset: auto auto 10px 50%;
-  translate: -50% 0;
-  z-index: 1;
-  box-shadow: vars.$paper-lift;
+@layer legacy {
+  .c-scroll-to-top {
+    position: fixed;
+    inset: auto auto 10px 50%;
+    translate: -50% 0;
+    z-index: 1;
+    box-shadow: vars.$paper-lift;
 
-  @include mx.breakpoint("md") {
-    inset: 50% 10px auto auto;
-    translate: 0 -50%;
-  }
-
-  // Footer in view: hide so the (bottom-centered) button does not cover it.
-  &.is-close-to-end {
-    opacity: 0;
-    pointer-events: none;
-
-    // On md+ the button sits at the side and does not overlap the footer.
     @include mx.breakpoint("md") {
-      opacity: 1;
-      pointer-events: auto;
+      inset: 50% 10px auto auto;
+      translate: 0 -50%;
+    }
+
+    // Footer in view: hide so the (bottom-centered) button does not cover it.
+    &.is-close-to-end {
+      opacity: 0;
+      pointer-events: none;
+
+      // On md+ the button sits at the side and does not overlap the footer.
+      @include mx.breakpoint("md") {
+        opacity: 1;
+        pointer-events: auto;
+      }
     }
   }
 }

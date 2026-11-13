@@ -1,115 +1,117 @@
 @use "@styles/variables" as vars;
 @use "@sass-butler/mixins" as butler-mx;
 
-.c-dropdown {
-  display: inline-flex;
-
-  &__trigger {
+@layer legacy {
+  .c-dropdown {
     display: inline-flex;
-    cursor: pointer;
-    // anchor-name set via inline style (dynamic per instance)
-  }
-}
 
-.c-dropdown__panel {
-  // UA Popover reset — browsers add margin/border/padding to [popover] elements
-  margin: 0;
-  border: none;
-  background: transparent;
-  overflow: visible;
-  max-inline-size: none;
-  max-block-size: none;
-  border-radius: 6px;
-
-  // Anchor Positioning — position-anchor is set via inline style (dynamic anchor name per instance)
-  position: fixed;
-  margin-block-start: var(--c-dropdown-offset, 8px);
-  position-try-fallbacks:
-    flip-inline,
-    flip-block,
-    flip-block flip-inline;
-  position-try-order: most-block-size;
-
-  --color-background: var(--floating-color-background);
-
-  // filter: drop-shadow casts a unified shadow around the panel + arrow silhouette,
-  // avoiding the double-shadow artefact that box-shadow produces where the arrow
-  // overlaps the panel interior.
-  filter: vars.$paper-lift-drop;
-  background-color: var(--color-background);
-  padding: var(--padding, #{vars.$spacer * 0.5 vars.$spacer * 0.5});
-  color: var(--color, var(--color-body));
-
-  // Fallback for browsers without CSS Anchor Positioning (Anchor Positioning is Baseline Newly, 2026)
-  @supports not (position-area: block-end) {
-    inset-block-start: 50%;
-    inset-inline-start: 50%;
-    translate: -50% -50%;
+    &__trigger {
+      display: inline-flex;
+      cursor: pointer;
+      // anchor-name set via inline style (dynamic per instance)
+    }
   }
 
-  // Placement modifier classes
-  &--bottom-start {
-    position-area: block-end span-inline-end;
-  }
-
-  &--bottom-end {
-    position-area: block-end span-inline-start;
-  }
-
-  &--bottom {
-    position-area: block-end;
-  }
-
-  &--top-start {
-    position-area: block-start span-inline-end;
-  }
-
-  &--top-end {
-    position-area: block-start span-inline-start;
-  }
-
-  &--top {
-    position-area: block-start;
-  }
-}
-
-// Arrow element — rendered when arrow=true prop is set
-.c-dropdown__arrow {
-  --arrow-size: 8px;
-  --arrow-half: calc(var(--arrow-size) / 2);
-
-  position: absolute;
-  width: var(--arrow-size);
-  height: var(--arrow-size);
-  background: var(--color-background);
-  rotate: 45deg;
-
-  // top, left, bottom set via inline style from JS (syncArrow) so the arrow
-  // tracks the trigger center correctly even after position-try-fallbacks flip
-}
-
-// Closed panel must never intercept clicks — especially during the overlay allow-discrete
-// exit transition where the panel stays in the top layer for the duration of the animation.
-.c-dropdown__panel:not(:popover-open) {
-  pointer-events: none;
-}
-
-// Fade via @starting-style + allow-discrete (Baseline Newly Available, 2024)
-@include butler-mx.feature("motion") {
   .c-dropdown__panel {
-    opacity: 1;
-    transition:
-      opacity 0.15s ease,
-      display 0.15s allow-discrete,
-      overlay 0.15s allow-discrete;
+    // UA Popover reset — browsers add margin/border/padding to [popover] elements
+    margin: 0;
+    border: none;
+    background: transparent;
+    overflow: visible;
+    max-inline-size: none;
+    max-block-size: none;
+    border-radius: 6px;
 
-    &:not(:popover-open) {
-      opacity: 0;
+    // Anchor Positioning — position-anchor is set via inline style (dynamic anchor name per instance)
+    position: fixed;
+    margin-block-start: var(--c-dropdown-offset, 8px);
+    position-try-fallbacks:
+      flip-inline,
+      flip-block,
+      flip-block flip-inline;
+    position-try-order: most-block-size;
+
+    --color-background: var(--floating-color-background);
+
+    // filter: drop-shadow casts a unified shadow around the panel + arrow silhouette,
+    // avoiding the double-shadow artefact that box-shadow produces where the arrow
+    // overlaps the panel interior.
+    filter: vars.$paper-lift-drop;
+    background-color: var(--color-background);
+    padding: var(--padding, #{vars.$spacer * 0.5 vars.$spacer * 0.5});
+    color: var(--color, var(--color-body));
+
+    // Fallback for browsers without CSS Anchor Positioning (Anchor Positioning is Baseline Newly, 2026)
+    @supports not (position-area: block-end) {
+      inset-block-start: 50%;
+      inset-inline-start: 50%;
+      translate: -50% -50%;
     }
 
-    @starting-style {
-      &:popover-open {
+    // Placement modifier classes
+    &--bottom-start {
+      position-area: block-end span-inline-end;
+    }
+
+    &--bottom-end {
+      position-area: block-end span-inline-start;
+    }
+
+    &--bottom {
+      position-area: block-end;
+    }
+
+    &--top-start {
+      position-area: block-start span-inline-end;
+    }
+
+    &--top-end {
+      position-area: block-start span-inline-start;
+    }
+
+    &--top {
+      position-area: block-start;
+    }
+  }
+
+  // Arrow element — rendered when arrow=true prop is set
+  .c-dropdown__arrow {
+    --arrow-size: 8px;
+    --arrow-half: calc(var(--arrow-size) / 2);
+
+    position: absolute;
+    width: var(--arrow-size);
+    height: var(--arrow-size);
+    background: var(--color-background);
+    rotate: 45deg;
+
+    // top, left, bottom set via inline style from JS (syncArrow) so the arrow
+    // tracks the trigger center correctly even after position-try-fallbacks flip
+  }
+
+  // Closed panel must never intercept clicks — especially during the overlay allow-discrete
+  // exit transition where the panel stays in the top layer for the duration of the animation.
+  .c-dropdown__panel:not(:popover-open) {
+    pointer-events: none;
+  }
+
+  // Fade via @starting-style + allow-discrete (Baseline Newly Available, 2024)
+  @include butler-mx.feature("motion") {
+    .c-dropdown__panel {
+      opacity: 1;
+      transition:
+        opacity 0.15s ease,
+        display 0.15s allow-discrete,
+        overlay 0.15s allow-discrete;
+
+      &:not(:popover-open) {
         opacity: 0;
+      }
+
+      @starting-style {
+        &:popover-open {
+          opacity: 0;
+        }
       }
     }
   }

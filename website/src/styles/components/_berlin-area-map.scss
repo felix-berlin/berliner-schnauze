@@ -1,57 +1,41 @@
 @use "@styles/mixins" as mx;
 
-// List first by default (narrow); the map takes over from 28.5rem, where its labels reach 11 px.
-.c-berlin-area-map {
-  container-type: inline-size;
-  container-name: area-map;
-  display: grid;
-  gap: 0.75rem;
-  justify-items: center;
+@layer legacy {
+  // List first by default (narrow); the map takes over from 28.5rem, where its labels reach 11 px.
+  .c-berlin-area-map {
+    container-type: inline-size;
+    container-name: area-map;
+    display: grid;
+    gap: 0.75rem;
+    justify-items: center;
 
-  &__map {
-    inline-size: 100%;
-    order: 1;
-  }
-
-  &__svg {
-    display: block;
-    width: 100%;
-    height: auto;
-    margin-inline: auto;
-  }
-
-  &__area {
-    fill: var(--surface-chip);
-    stroke: var(--color-muted);
-    stroke-dasharray: 3 2;
-    stroke-width: 0.75;
-    cursor: pointer;
-    transition: fill 0.3s;
-
-    &:hover,
-    &:focus-visible {
-      fill: var(--orange-500);
+    &__map {
+      inline-size: 100%;
+      order: 1;
     }
 
-    &:focus-visible {
-      outline-offset: 1px;
+    &__svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-inline: auto;
     }
 
-    &.is-selected {
-      fill: var(--orange-600);
-      stroke: var(--color-body);
-      stroke-dasharray: none;
-    }
-
-    // After the generic rules: same specificity, later wins.
-    &--brandenburg {
-      fill: transparent;
-      stroke: var(--rule-card);
-      stroke-dasharray: 6 4;
+    &__area {
+      fill: var(--surface-chip);
+      stroke: var(--color-muted);
+      stroke-dasharray: 3 2;
+      stroke-width: 0.75;
+      cursor: pointer;
+      transition: fill 0.3s;
 
       &:hover,
       &:focus-visible {
-        fill: color-mix(in srgb, var(--orange-300) 12%, transparent);
+        fill: var(--orange-500);
+      }
+
+      &:focus-visible {
+        outline-offset: 1px;
       }
 
       &.is-selected {
@@ -59,98 +43,116 @@
         stroke: var(--color-body);
         stroke-dasharray: none;
       }
-    }
-  }
 
-  &__label {
-    fill: var(--color-body);
-    display: none;
-    font-size: 11px;
-    font-weight: 700;
-    text-anchor: middle;
-    dominant-baseline: middle;
-    pointer-events: none;
-    paint-order: stroke;
-    stroke: var(--surface-chip);
-    stroke-width: 3px;
-    stroke-linejoin: round;
+      // After the generic rules: same specificity, later wins.
+      &--brandenburg {
+        fill: transparent;
+        stroke: var(--rule-card);
+        stroke-dasharray: 6 4;
 
-    // White-100 on orange-600 (same pair as the primary button) is 5.6:1 in both modes.
-    &.is-selected {
-      fill: var(--white-100);
-      stroke: var(--orange-600);
-    }
+        &:hover,
+        &:focus-visible {
+          fill: color-mix(in srgb, var(--orange-300) 12%, transparent);
+        }
 
-    &--brandenburg {
-      text-anchor: start;
-      font-weight: 400;
-      fill: var(--color-muted);
-      stroke: none;
-    }
-  }
-
-  // In the list on narrow screens; the standalone button belongs to the map.
-  &__elsewhere {
-    display: none;
-    min-inline-size: 9rem;
-    margin: 0.75rem auto 0;
-    justify-content: center;
-  }
-
-  &__list {
-    inline-size: 100%;
-    order: 0;
-  }
-
-  &__list-items {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem;
-  }
-
-  &__list-item {
-    justify-content: flex-start;
-    padding-block: 0.3rem;
-    overflow-wrap: anywhere;
-    text-align: start;
-  }
-
-  &__credit {
-    order: 2;
-    margin: 0;
-    color: var(--color-muted);
-    font-size: 0.6875rem;
-  }
-
-  @container area-map (inline-size >= 28.5rem) {
-    &__map {
-      order: 0;
-
-      summary {
-        display: none;
+        &.is-selected {
+          fill: var(--orange-600);
+          stroke: var(--color-body);
+          stroke-dasharray: none;
+        }
       }
     }
 
-    &__svg {
-      max-inline-size: 40rem;
-    }
-
     &__label {
-      display: inline;
+      fill: var(--color-body);
+      display: none;
+      font-size: 11px;
+      font-weight: 700;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      pointer-events: none;
+      paint-order: stroke;
+      stroke: var(--surface-chip);
+      stroke-width: 3px;
+      stroke-linejoin: round;
+
+      // White-100 on orange-600 (same pair as the primary button) is 5.6:1 in both modes.
+      &.is-selected {
+        fill: var(--white-100);
+        stroke: var(--orange-600);
+      }
+
+      &--brandenburg {
+        text-anchor: start;
+        font-weight: 400;
+        fill: var(--color-muted);
+        stroke: none;
+      }
     }
 
+    // In the list on narrow screens; the standalone button belongs to the map.
     &__elsewhere {
-      display: block;
+      display: none;
+      min-inline-size: 9rem;
+      margin: 0.75rem auto 0;
+      justify-content: center;
     }
 
     &__list {
-      order: 1;
-      inline-size: min(100%, 40rem);
+      inline-size: 100%;
+      order: 0;
     }
 
     &__list-items {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem;
+    }
+
+    &__list-item {
+      justify-content: flex-start;
+      padding-block: 0.3rem;
+      overflow-wrap: anywhere;
+      text-align: start;
+    }
+
+    &__credit {
+      order: 2;
+      margin: 0;
+      color: var(--color-muted);
+      font-size: 0.6875rem;
+    }
+
+    @container area-map (inline-size >= 28.5rem) {
+      &__map {
+        order: 0;
+
+        summary {
+          display: none;
+        }
+      }
+
+      &__svg {
+        max-inline-size: 40rem;
+      }
+
+      &__label {
+        display: inline;
+      }
+
+      &__elsewhere {
+        display: block;
+      }
+
+      &__list {
+        order: 1;
+        inline-size: min(100%, 40rem);
+      }
+
+      &__list-items {
+        display: flex;
+        flex-wrap: wrap;
+      }
     }
   }
 }

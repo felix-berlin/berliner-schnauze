@@ -1,41 +1,43 @@
 @use "@sass-butler/mixins" as butler-mx;
 
-.c-toast-notify {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: var(--color, var(--color-body));
-  background-color: var(--color-background, var(--orange-300));
-  padding: 0.7rem 1.4rem;
-  max-width: min(88vw, 400px);
-
-  @include butler-mx.dark-mode-class {
-    --color: var(--color-body);
-    --color-background: var(--new-blue-600);
-
-    border: 1px solid color-mix(in srgb, var(--blue) 80%, white);
-  }
-
-  &__icon {
-    flex: 0 0 auto;
-  }
-
-  &__body {
+@layer legacy {
+  .c-toast-notify {
     display: flex;
-    flex: 1;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
+    align-items: center;
+    gap: 1rem;
+    color: var(--color, var(--color-body));
+    background-color: var(--color-background, var(--orange-300));
+    padding: 0.7rem 1.4rem;
+    max-width: min(88vw, 400px);
 
-  &__close {
-    border: none;
-  }
+    @include butler-mx.dark-mode-class {
+      --color: var(--color-body);
+      --color-background: var(--new-blue-600);
 
-  &__action {
-    --padding: 0.3rem 0.75rem;
+      border: 1px solid color-mix(in srgb, var(--blue) 80%, white);
+    }
 
-    align-self: flex-start;
-    font-size: 0.85em;
-    white-space: nowrap;
+    &__icon {
+      flex: 0 0 auto;
+    }
+
+    &__body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    &__close {
+      border: none;
+    }
+
+    &__action {
+      --padding: 0.3rem 0.75rem;
+
+      align-self: flex-start;
+      font-size: 0.85em;
+      white-space: nowrap;
+    }
   }
 }

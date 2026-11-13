@@ -1,112 +1,114 @@
-// Lightbox (mock: bundle.css .c-lightbox): native <dialog>, fade 200 ms with 4px backdrop blur.
-.c-lightbox {
-  inline-size: 100%;
-  block-size: 100%;
-  max-inline-size: none;
-  max-block-size: none;
-  margin: 0;
-  padding: 1rem;
-  border: 0;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  // Dark in both themes: the photo needs a dark ground.
-  --lightbox-scrim: color-mix(in srgb, var(--overlay-base) 82%, transparent);
-  --lightbox-button-bg: color-mix(in srgb, var(--overlay-base) 45%, transparent);
-  --lightbox-ink: var(--overlay-ink);
-
-  background: var(--lightbox-scrim);
-  backdrop-filter: blur(4px);
-  color: var(--lightbox-ink);
-  opacity: 0;
-  transition:
-    opacity 200ms ease-out,
-    display 200ms allow-discrete,
-    overlay 200ms allow-discrete;
-
-  &[open] {
-    display: flex;
-    opacity: 1;
-
-    @starting-style {
-      opacity: 0;
-    }
-  }
-
-  &::backdrop {
-    background: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-
-  &__bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+@layer legacy {
+  // Lightbox (mock: bundle.css .c-lightbox): native <dialog>, fade 200 ms with 4px backdrop blur.
+  .c-lightbox {
     inline-size: 100%;
-    max-inline-size: 960px;
-    font-size: 0.8rem;
-  }
+    block-size: 100%;
+    max-inline-size: none;
+    max-block-size: none;
+    margin: 0;
+    padding: 1rem;
+    border: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    // Dark in both themes: the photo needs a dark ground.
+    --lightbox-scrim: color-mix(in srgb, var(--overlay-base) 82%, transparent);
+    --lightbox-button-bg: color-mix(in srgb, var(--overlay-base) 45%, transparent);
+    --lightbox-ink: var(--overlay-ink);
 
-  &__stage {
-    position: relative;
-    display: grid;
-    place-items: center;
-    max-inline-size: min(100%, 960px);
+    background: var(--lightbox-scrim);
+    backdrop-filter: blur(4px);
+    color: var(--lightbox-ink);
+    opacity: 0;
+    transition:
+      opacity 200ms ease-out,
+      display 200ms allow-discrete,
+      overlay 200ms allow-discrete;
 
-    img {
-      display: block;
-      max-inline-size: 100%;
-      max-block-size: 75dvh;
-      border-radius: var(--radius-sm);
+    &[open] {
+      display: flex;
+      opacity: 1;
+
+      @starting-style {
+        opacity: 0;
+      }
+    }
+
+    &::backdrop {
+      background: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+
+    &__bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      inline-size: 100%;
+      max-inline-size: 960px;
+      font-size: 0.8rem;
+    }
+
+    &__stage {
+      position: relative;
+      display: grid;
+      place-items: center;
+      max-inline-size: min(100%, 960px);
+
+      img {
+        display: block;
+        max-inline-size: 100%;
+        max-block-size: 75dvh;
+        border-radius: var(--radius-sm);
+      }
+
+      .c-icon-button {
+        position: absolute;
+        inset-block-start: 50%;
+        translate: 0 -50%;
+        background: var(--lightbox-button-bg);
+
+        &:first-child {
+          inset-inline-start: 0.25rem;
+        }
+
+        &:last-child {
+          inset-inline-end: 0.25rem;
+        }
+      }
+    }
+
+    &__caption {
+      margin: 0;
+      font-size: 0.85rem;
+      max-inline-size: 960px;
+      text-align: center;
     }
 
     .c-icon-button {
-      position: absolute;
-      inset-block-start: 50%;
-      translate: 0 -50%;
-      background: var(--lightbox-button-bg);
+      color: var(--lightbox-ink);
 
-      &:first-child {
-        inset-inline-start: 0.25rem;
+      @media (hover: hover) {
+        &:hover {
+          border-color: currentcolor;
+        }
       }
+    }
 
-      &:last-child {
-        inset-inline-end: 0.25rem;
-      }
+    a {
+      color: inherit;
     }
   }
 
-  &__caption {
-    margin: 0;
-    font-size: 0.85rem;
-    max-inline-size: 960px;
-    text-align: center;
+  // Reserve the scrollbar track so locking the scroll does not shift the page sideways.
+  html {
+    scrollbar-gutter: stable;
   }
 
-  .c-icon-button {
-    color: var(--lightbox-ink);
-
-    @media (hover: hover) {
-      &:hover {
-        border-color: currentcolor;
-      }
-    }
+  body:has(.c-lightbox[open]) {
+    overflow: hidden;
   }
-
-  a {
-    color: inherit;
-  }
-}
-
-// Reserve the scrollbar track so locking the scroll does not shift the page sideways.
-html {
-  scrollbar-gutter: stable;
-}
-
-body:has(.c-lightbox[open]) {
-  overflow: hidden;
 }

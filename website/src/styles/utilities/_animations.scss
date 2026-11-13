@@ -1,14 +1,16 @@
-@keyframes fade-in {
-  from {
-    opacity: 0;
+@layer utilities {
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
   }
-}
-@keyframes shine {
-  from {
-    transform: translateX(-100%);
-  }
+  @keyframes shine {
+    from {
+      transform: translateX(-100%);
+    }
 
-  to {
-    transform: translateX(100%);
+    to {
+      transform: translateX(100%);
+    }
   }
 }

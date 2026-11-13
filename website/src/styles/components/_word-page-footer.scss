@@ -1,8 +1,10 @@
-// Dates line (Spec §7): one muted .t-small paragraph, no rule.
-.c-single-word__footer {
-  margin-block-start: 1rem;
+@layer legacy {
+  // Dates line (Spec §7): one muted .t-small paragraph, no rule.
+  .c-single-word__footer {
+    margin-block-start: 1rem;
 
-  p {
-    margin: 0;
+    p {
+      margin: 0;
+    }
   }
 }

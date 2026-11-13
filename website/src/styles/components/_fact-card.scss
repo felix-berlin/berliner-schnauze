@@ -2,59 +2,64 @@
 @use "@sass-butler/mixins" as butler-mx;
 @use "@sass-butler/functions" as butler-fn;
 
-/* beasties:include */
-.c-fact-card {
-  background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 20%, transparent));
-  padding-block: 1rem;
-  padding-inline: 1.5rem;
-  border: 1px solid var(--new-blue-200);
-  min-height: 160px;
-
-  @include butler-mx.dark-mode-class {
-    --color-background: rgb(0 0 0 / 10%);
-  }
-
-  &--highlighted {
-    --color-background: color-mix(in srgb, var(--orange-500) 20%, transparent);
+@layer legacy {
+  /* beasties:include */
+  .c-fact-card {
+    background-color: var(
+      --color-background,
+      color-mix(in srgb, var(--orange-100) 20%, transparent)
+    );
+    padding-block: 1rem;
+    padding-inline: 1.5rem;
+    border: 1px solid var(--new-blue-200);
+    min-height: 160px;
 
     @include butler-mx.dark-mode-class {
-      --color-background: color-mix(in srgb, var(--orange-500) 8%, transparent);
+      --color-background: rgb(0 0 0 / 10%);
     }
-  }
 
-  &__headline {
-    font-size: butler-fn.fluid(18, 24, 320, 1260);
-    line-height: 1.2;
-    margin-block-end: 0;
+    &--highlighted {
+      --color-background: color-mix(in srgb, var(--orange-500) 20%, transparent);
 
-    &::first-letter {
-      initial-letter: 2;
-      margin-inline-end: 0.25rem;
+      @include butler-mx.dark-mode-class {
+        --color-background: color-mix(in srgb, var(--orange-500) 8%, transparent);
+      }
     }
-  }
 
-  &__text {
-    margin-block-start: 1.5rem;
-    line-height: 1.5;
-  }
+    &__headline {
+      font-size: butler-fn.fluid(18, 24, 320, 1260);
+      line-height: 1.2;
+      margin-block-end: 0;
 
-  a:not(.c-fact-card__link) {
-    text-decoration: underline dashed;
-  }
+      &::first-letter {
+        initial-letter: 2;
+        margin-inline-end: 0.25rem;
+      }
+    }
 
-  &__link {
-    margin-block-start: 1.5rem;
-    display: inline-block;
-    padding-inline: 1.25rem;
-    padding-block: 0.5rem;
-    background-color: var(--orange-600);
-    color: var(--white-100);
-    font-weight: 600;
-    text-decoration: none;
-    transition: background-color 0.15s ease;
+    &__text {
+      margin-block-start: 1.5rem;
+      line-height: 1.5;
+    }
 
-    @include butler-mx.hover-focus {
-      background-color: var(--orange-700);
+    a:not(.c-fact-card__link) {
+      text-decoration: underline dashed;
+    }
+
+    &__link {
+      margin-block-start: 1.5rem;
+      display: inline-block;
+      padding-inline: 1.25rem;
+      padding-block: 0.5rem;
+      background-color: var(--orange-600);
+      color: var(--white-100);
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.15s ease;
+
+      @include butler-mx.hover-focus {
+        background-color: var(--orange-700);
+      }
     }
   }
 }

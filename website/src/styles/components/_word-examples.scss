@@ -1,43 +1,45 @@
 @use "@styles/variables" as vars;
 
-// Examples card body (mock: list without bullets, quote + explanation, then the voice choices).
-.c-word-examples {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-
-  &__item {
+@layer legacy {
+  // Examples card body (mock: list without bullets, quote + explanation, then the voice choices).
+  .c-word-examples {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-  }
+    gap: 1.5rem;
 
-  &__quote {
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
+    &__item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
 
-  // Beats the card body's `:where(p)` size, which would shrink the t-em sentence to 1rem.
-  &__quote &__text {
-    margin: 0;
-    font-size: 1.25rem;
-    font-style: italic;
-  }
+    &__quote {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
 
-  &__mark {
-    margin-inline-end: 0.25rem;
-    font-family: vars.$berliner;
-    font-style: normal;
-    color: var(--color-accent-text);
-  }
+    // Beats the card body's `:where(p)` size, which would shrink the t-em sentence to 1rem.
+    &__quote &__text {
+      margin: 0;
+      font-size: 1.25rem;
+      font-style: italic;
+    }
 
-  &__explanation {
-    margin: 0;
-    color: var(--color-muted);
+    &__mark {
+      margin-inline-end: 0.25rem;
+      font-family: vars.$berliner;
+      font-style: normal;
+      color: var(--color-accent-text);
+    }
+
+    &__explanation {
+      margin: 0;
+      color: var(--color-muted);
+    }
   }
 }

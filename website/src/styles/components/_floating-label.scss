@@ -1,28 +1,30 @@
-.c-floating-label {
-  position: relative;
+@layer legacy {
+  .c-floating-label {
+    position: relative;
 
-  &__input:focus ~ .c-floating-label__label,
-  &__input:not(:placeholder-shown) ~ .c-floating-label__label {
-    z-index: -1;
-  }
+    &__input:focus ~ .c-floating-label__label,
+    &__input:not(:placeholder-shown) ~ .c-floating-label__label {
+      z-index: -1;
+    }
 
-  &__input {
-    height: 100%;
-    width: 100%;
-  }
+    &__input {
+      height: 100%;
+      width: 100%;
+    }
 
-  &__label {
-    --size-font: inherit;
-    --position-left: var(--padding-x-input, 0);
-    --offset: 5px;
+    &__label {
+      --size-font: inherit;
+      --position-left: var(--padding-x-input, 0);
+      --offset: 5px;
 
-    position: absolute;
-    inset-inline-start: var(--position-left);
-    font-size: var(--size-font);
-    pointer-events: none; // only needed when no <label> element is used
+      position: absolute;
+      inset-inline-start: var(--position-left);
+      font-size: var(--size-font);
+      pointer-events: none; // only needed when no <label> element is used
 
-    &--bottom {
-      inset-block-start: calc(100% + var(--offset));
+      &--bottom {
+        inset-block-start: calc(100% + var(--offset));
+      }
     }
   }
 }

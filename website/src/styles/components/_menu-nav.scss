@@ -1,124 +1,126 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-.c-menu-nav {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  grid-area: menu-nav;
-  gap: 10px;
-
-  &__links {
-    display: none;
-    gap: 2px;
-
-    @include mx.breakpoint("md") {
-      display: flex;
-    }
-  }
-
-  &__link {
+@layer legacy {
+  .c-menu-nav {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    grid-area: menu-nav;
+    gap: 10px;
+
+    &__links {
+      display: none;
+      gap: 2px;
+
+      @include mx.breakpoint("md") {
+        display: flex;
+      }
+    }
+
+    &__link {
+      display: flex;
+      align-items: center;
+      height: 36px;
+      padding: 0 10px;
+      text-decoration: none;
+      border-block-end: 1px dashed transparent;
+      transition: border-color 0.3s ease-in-out;
+
+      @include butler-mx.hover {
+        border-block-end-color: currentColor;
+      }
+
+      &[aria-current="page"] {
+        border-block-end-color: currentColor;
+      }
+    }
+
+    &__divider {
+      display: none;
+      height: 22px;
+      margin-inline: 6px;
+      border-inline-start: 1px dashed var(--control-border);
+
+      @include mx.breakpoint("md") {
+        display: block;
+      }
+    }
+  }
+
+  // Search trigger + menu button: one look for every header control.
+  .c-header-control {
+    --padding: 0 12px 0 10px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     height: 36px;
-    padding: 0 10px;
-    text-decoration: none;
-    border-block-end: 1px dashed transparent;
-    transition: border-color 0.3s ease-in-out;
+    font: inherit;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    border-radius: 4px;
+
+    svg {
+      flex: none;
+      width: 20px;
+      height: 20px;
+    }
 
     @include butler-mx.hover {
-      border-block-end-color: currentColor;
+      --style-border: dashed;
     }
 
-    &[aria-current="page"] {
-      border-block-end-color: currentColor;
-    }
-  }
-
-  &__divider {
-    display: none;
-    height: 22px;
-    margin-inline: 6px;
-    border-inline-start: 1px dashed var(--control-border);
-
-    @include mx.breakpoint("md") {
-      display: block;
-    }
-  }
-}
-
-// Search trigger + menu button: one look for every header control.
-.c-header-control {
-  --padding: 0 12px 0 10px;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  height: 36px;
-  font: inherit;
-  font-size: 1rem;
-  letter-spacing: 1px;
-  border-radius: 4px;
-
-  svg {
-    flex: none;
-    width: 20px;
-    height: 20px;
-  }
-
-  @include butler-mx.hover {
-    --style-border: dashed;
-  }
-
-  &[aria-expanded="true"] {
-    --style-border: dashed;
-  }
-
-  // Stacked icons (menu ↔ close), swapped via the button's [aria-expanded].
-  &__icons {
-    display: grid;
-
-    > * {
-      grid-area: 1 / 1;
-    }
-  }
-
-  &__icon--close,
-  &[aria-expanded="true"] &__icon--menu {
-    opacity: 0;
-    rotate: -90deg;
-    scale: 0.6;
-  }
-
-  &[aria-expanded="true"] &__icon--close {
-    opacity: 1;
-    rotate: 0deg;
-    scale: 1;
-  }
-
-  &[aria-expanded="true"] &__icon--menu {
-    rotate: 90deg;
-  }
-
-  @include butler-mx.feature("motion") {
-    // Beats .c-button's `transition: all 0.3s`: snappier, and only what actually changes.
-    &.c-button {
-      transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.25s ease,
-        scale 0.12s ease-out;
+    &[aria-expanded="true"] {
+      --style-border: dashed;
     }
 
-    &:active {
-      scale: 0.96;
+    // Stacked icons (menu ↔ close), swapped via the button's [aria-expanded].
+    &__icons {
+      display: grid;
+
+      > * {
+        grid-area: 1 / 1;
+      }
     }
 
-    &__icon {
-      transition:
-        opacity 0.2s ease,
-        rotate 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
-        scale 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    &__icon--close,
+    &[aria-expanded="true"] &__icon--menu {
+      opacity: 0;
+      rotate: -90deg;
+      scale: 0.6;
+    }
+
+    &[aria-expanded="true"] &__icon--close {
+      opacity: 1;
+      rotate: 0deg;
+      scale: 1;
+    }
+
+    &[aria-expanded="true"] &__icon--menu {
+      rotate: 90deg;
+    }
+
+    @include butler-mx.feature("motion") {
+      // Beats .c-button's `transition: all 0.3s`: snappier, and only what actually changes.
+      &.c-button {
+        transition:
+          background-color 0.2s ease,
+          border-color 0.2s ease,
+          box-shadow 0.25s ease,
+          scale 0.12s ease-out;
+      }
+
+      &:active {
+        scale: 0.96;
+      }
+
+      &__icon {
+        transition:
+          opacity 0.2s ease,
+          rotate 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+          scale 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
     }
   }
 }

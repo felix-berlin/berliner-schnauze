@@ -1,28 +1,30 @@
 @use "@styles/mixins" as mx;
 
-.c-searchbar {
-  @include mx.breakpoint("md") {
-    --padding: 0 6px 0 10px;
-
-    width: 180px;
-  }
-
-  &__label,
-  &__slash-icon {
-    display: none;
-
+@layer legacy {
+  .c-searchbar {
     @include mx.breakpoint("md") {
-      display: block;
-    }
-  }
+      --padding: 0 6px 0 10px;
 
-  &__slash-icon {
-    margin-inline-start: auto;
-    padding: 3px 6px;
-    font: inherit;
-    font-size: 0.8rem;
-    line-height: 1;
-    border: 1px dashed var(--control-border);
-    border-radius: 2px;
+      width: 180px;
+    }
+
+    &__label,
+    &__slash-icon {
+      display: none;
+
+      @include mx.breakpoint("md") {
+        display: block;
+      }
+    }
+
+    &__slash-icon {
+      margin-inline-start: auto;
+      padding: 3px 6px;
+      font: inherit;
+      font-size: 0.8rem;
+      line-height: 1;
+      border: 1px dashed var(--control-border);
+      border-radius: 2px;
+    }
   }
 }

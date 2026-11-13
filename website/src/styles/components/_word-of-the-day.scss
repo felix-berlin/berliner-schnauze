@@ -2,56 +2,61 @@
 @use "@sass-butler/mixins" as butler-mx;
 @use "@sass-butler/functions" as butler-fn;
 
-.c-word-of-the-day {
-  background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 20%, transparent));
-  padding: vars.$spacer;
-  border: 1px solid var(--new-blue-200);
-  display: flex;
-  row-gap: vars.$spacer * 1.5;
-  flex-direction: column;
-
-  @include butler-mx.dark-mode-class {
-    --color-background: rgb(0 0 0 / 10%);
-  }
-
-  &__content {
-    margin: auto;
+@layer legacy {
+  .c-word-of-the-day {
+    background-color: var(
+      --color-background,
+      color-mix(in srgb, var(--orange-100) 20%, transparent)
+    );
+    padding: vars.$spacer;
+    border: 1px solid var(--new-blue-200);
     display: flex;
+    row-gap: vars.$spacer * 1.5;
     flex-direction: column;
-    align-items: center;
-  }
 
-  &__headline {
-    margin: 0;
-  }
+    @include butler-mx.dark-mode-class {
+      --color-background: rgb(0 0 0 / 10%);
+    }
 
-  &__word-wrap {
-    position: relative;
-  }
+    &__content {
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-  &__word {
-    font-family: vars.$berlin;
-    font-weight: 700;
-    font-size: butler-fn.fluid(19, 32, 320, 1260);
-    padding: 0.5rem;
-    display: block;
-    overflow-wrap: anywhere;
-  }
+    &__headline {
+      margin: 0;
+    }
 
-  &__crown-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: vars.$gold;
-  }
+    &__word-wrap {
+      position: relative;
+    }
 
-  &__divider {
-    width: 100%;
-    border: none;
-    border-block-start: 1px solid var(--primary);
-  }
+    &__word {
+      font-family: vars.$berlin;
+      font-weight: 700;
+      font-size: butler-fn.fluid(19, 32, 320, 1260);
+      padding: 0.5rem;
+      display: block;
+      overflow-wrap: anywhere;
+    }
 
-  &__update {
-    font-size: 0.8rem;
+    &__crown-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: vars.$gold;
+    }
+
+    &__divider {
+      width: 100%;
+      border: none;
+      border-block-start: 1px solid var(--primary);
+    }
+
+    &__update {
+      font-size: 0.8rem;
+    }
   }
 }

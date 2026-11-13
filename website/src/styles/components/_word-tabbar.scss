@@ -2,43 +2,45 @@
 @use "@sass-butler/mixins" as butler-mx;
 @use "@styles/mixins" as mx;
 
-// Mobile counterpart of .c-word-sidebar; both list the same sections.
-.c-word-tabbar {
-  position: sticky;
-  inset-block-start: var(--word-tabbar-top, 0);
-  z-index: 4;
-  display: flex;
-  overflow-x: auto;
-  scrollbar-width: none;
-  // Full-bleed: cancels the --page-gutter side padding of .u-max-body-width (mock: nav sits outside the page padding).
-  margin-inline: calc(-1 * var(--page-gutter));
-  padding-inline: 0.5rem;
-  background: var(--surface-paper);
-  box-shadow: vars.$paper-lift;
-
-  @include mx.breakpoint("word") {
-    display: none;
-  }
-
-  &__tab {
+@layer legacy {
+  // Mobile counterpart of .c-word-sidebar; both list the same sections.
+  .c-word-tabbar {
+    position: sticky;
+    inset-block-start: var(--word-tabbar-top, 0);
+    z-index: 4;
     display: flex;
-    align-items: center;
-    min-block-size: 48px;
-    padding-inline: 0.875rem;
-    white-space: nowrap;
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-decoration: none;
-    color: var(--color-muted);
-    border-block-end: 3px solid transparent;
+    overflow-x: auto;
+    scrollbar-width: none;
+    // Full-bleed: cancels the --page-gutter side padding of .u-max-body-width (mock: nav sits outside the page padding).
+    margin-inline: calc(-1 * var(--page-gutter));
+    padding-inline: 0.5rem;
+    background: var(--surface-paper);
+    box-shadow: vars.$paper-lift;
 
-    @include butler-mx.hover {
-      color: var(--color-ink-strong);
+    @include mx.breakpoint("word") {
+      display: none;
     }
 
-    &[aria-current="true"] {
-      color: var(--color-ink-strong);
-      border-block-end-color: var(--orange-600);
+    &__tab {
+      display: flex;
+      align-items: center;
+      min-block-size: 48px;
+      padding-inline: 0.875rem;
+      white-space: nowrap;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--color-muted);
+      border-block-end: 3px solid transparent;
+
+      @include butler-mx.hover {
+        color: var(--color-ink-strong);
+      }
+
+      &[aria-current="true"] {
+        color: var(--color-ink-strong);
+        border-block-end-color: var(--orange-600);
+      }
     }
   }
 }

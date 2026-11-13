@@ -1,76 +1,78 @@
-// Skeleton (docs/design/wortseite/SPEC.md §9): shown by WordPageLoading after 300 ms, never for cached pages.
-// Shimmer moves background-position (1400 ms, linear); with reduced motion the bars stand still.
-:where(.c-skeleton) {
-  display: block;
-  border-radius: var(--radius-xxs);
-  background: linear-gradient(
-    90deg,
-    var(--surface-chip) 0%,
-    color-mix(in srgb, var(--orange-300) 18%, var(--surface-chip)) 50%,
-    var(--surface-chip) 100%
-  );
-  background-size: 200% 100%;
-  animation: c-shimmer 1.4s linear infinite;
+@layer legacy {
+  // Skeleton (docs/design/wortseite/SPEC.md §9): shown by WordPageLoading after 300 ms, never for cached pages.
+  // Shimmer moves background-position (1400 ms, linear); with reduced motion the bars stand still.
+  :where(.c-skeleton) {
+    display: block;
+    border-radius: var(--radius-xxs);
+    background: linear-gradient(
+      90deg,
+      var(--surface-chip) 0%,
+      color-mix(in srgb, var(--orange-300) 18%, var(--surface-chip)) 50%,
+      var(--surface-chip) 100%
+    );
+    background-size: 200% 100%;
+    animation: c-shimmer 1.4s linear infinite;
 
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
   }
-}
 
-:where(.c-skeleton--line) {
-  block-size: 0.9em;
-  margin-block: 0.35em;
-}
-
-:where(.c-skeleton--title) {
-  block-size: 2.25rem;
-  inline-size: 60%;
-}
-
-@keyframes c-shimmer {
-  to {
-    background-position: -200% 0;
+  :where(.c-skeleton--line) {
+    block-size: 0.9em;
+    margin-block: 0.35em;
   }
-}
 
-// Word page loading layer (utils/wordLoading.ts): covers the old page below the sticky header.
-.c-word-skeleton-layer {
-  position: fixed;
-  inset: var(--site-header-height, 0) 0 0;
-  z-index: 5;
-  overflow: hidden;
-  background: var(--color-background-body, var(--white-100));
-}
+  :where(.c-skeleton--title) {
+    block-size: 2.25rem;
+    inline-size: 60%;
+  }
 
-.c-word-skeleton {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-inline-size: 72rem;
-  margin-inline: auto;
-  padding: 1rem;
-}
+  @keyframes c-shimmer {
+    to {
+      background-position: -200% 0;
+    }
+  }
 
-.c-word-skeleton__card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem;
-  border: 1px dashed var(--rule-card);
-  border-radius: var(--radius-sm);
-  background: var(--surface-sheet);
-}
+  // Word page loading layer (utils/wordLoading.ts): covers the old page below the sticky header.
+  .c-word-skeleton-layer {
+    position: fixed;
+    inset: var(--site-header-height, 0) 0 0;
+    z-index: 5;
+    overflow: hidden;
+    background: var(--color-background-body, var(--white-100));
+  }
 
-.c-word-skeleton__badges {
-  display: flex;
-  gap: 0.5rem;
-}
+  .c-word-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-inline-size: 72rem;
+    margin-inline: auto;
+    padding: 1rem;
+  }
 
-.c-word-skeleton__badge {
-  inline-size: 5rem;
-  block-size: 1.5rem;
-}
+  .c-word-skeleton__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 1px dashed var(--rule-card);
+    border-radius: var(--radius-sm);
+    background: var(--surface-sheet);
+  }
 
-.c-word-skeleton__audio {
-  block-size: 2.75rem;
+  .c-word-skeleton__badges {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .c-word-skeleton__badge {
+    inline-size: 5rem;
+    block-size: 1.5rem;
+  }
+
+  .c-word-skeleton__audio {
+    block-size: 2.75rem;
+  }
 }

@@ -1,7 +1,9 @@
-.o-error-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-block-size: 70dvh;
+@layer legacy {
+  .o-error-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 70dvh;
+  }
 }

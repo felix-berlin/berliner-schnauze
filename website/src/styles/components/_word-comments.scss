@@ -1,86 +1,88 @@
 @use "@styles/variables" as vars;
 
-// Card chrome comes from .c-section-card (this block only adds what the comments need inside it).
-.c-word-comments {
-  &__header {
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
-
-  &__count {
-    color: var(--color-muted);
-    font-weight: 400;
-  }
-
-  // Small connected segmented control (mock: 36px, -1px overlap).
-  &__sort {
-    display: flex;
-    margin-inline-start: auto;
-  }
-
-  &__sort-button {
-    min-block-size: 2.25rem;
-    padding-inline: 0.625rem;
-    font-size: 0.75rem;
-
-    & + & {
-      margin-inline-start: -1px;
+@layer legacy {
+  // Card chrome comes from .c-section-card (this block only adds what the comments need inside it).
+  .c-word-comments {
+    &__header {
+      justify-content: space-between;
+      flex-wrap: wrap;
     }
 
-    // Looks 36px, hits 44px: the invisible band reaches 4px beyond the border box above and below (36 + 2 x 4 = 44;
-    // the band is positioned from the padding box, hence the extra border width). It only covers header padding.
-    position: relative;
-
-    &::before {
-      content: "";
-      position: absolute;
-      inset-block: calc(-0.25rem - 1px);
-      inset-inline: 0;
+    &__count {
+      color: var(--color-muted);
+      font-weight: 400;
     }
 
-    // The ring sits 2px outside the chip; a later neighbour (positioned) must not paint over it.
-    &:focus-visible {
-      z-index: 1;
+    // Small connected segmented control (mock: 36px, -1px overlap).
+    &__sort {
+      display: flex;
+      margin-inline-start: auto;
     }
-  }
 
-  &__body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.875rem;
-  }
+    &__sort-button {
+      min-block-size: 2.25rem;
+      padding-inline: 0.625rem;
+      font-size: 0.75rem;
 
-  // .c-section-card__body forces p to 1rem; small print stays small (same size as the field hints).
-  &__body p.t-small {
-    font-size: 0.8rem;
-  }
+      & + & {
+        margin-inline-start: -1px;
+      }
 
-  &__empty {
-    margin: 0;
-    color: var(--color-muted);
-  }
+      // Looks 36px, hits 44px: the invisible band reaches 4px beyond the border box above and below (36 + 2 x 4 = 44;
+      // the band is positioned from the padding box, hence the extra border width). It only covers header padding.
+      position: relative;
 
-  &__list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
+      &::before {
+        content: "";
+        position: absolute;
+        inset-block: calc(-0.25rem - 1px);
+        inset-inline: 0;
+      }
 
-  &__item:first-child > .c-comment {
-    border-block-start: 0;
-    padding-block-start: 0;
-  }
+      // The ring sits 2px outside the chip; a later neighbour (positioned) must not paint over it.
+      &:focus-visible {
+        z-index: 1;
+      }
+    }
 
-  &__more {
-    align-self: flex-start;
-  }
+    &__body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+    }
 
-  &__write {
-    inline-size: 100%;
-    justify-content: center;
-  }
+    // .c-section-card__body forces p to 1rem; small print stays small (same size as the field hints).
+    &__body p.t-small {
+      font-size: 0.8rem;
+    }
 
-  &__captcha-text {
-    margin: 0 0 vars.$spacer * 0.5;
+    &__empty {
+      margin: 0;
+      color: var(--color-muted);
+    }
+
+    &__list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    &__item:first-child > .c-comment {
+      border-block-start: 0;
+      padding-block-start: 0;
+    }
+
+    &__more {
+      align-self: flex-start;
+    }
+
+    &__write {
+      inline-size: 100%;
+      justify-content: center;
+    }
+
+    &__captcha-text {
+      margin: 0 0 vars.$spacer * 0.5;
+    }
   }
 }

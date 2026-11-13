@@ -2,59 +2,61 @@
 @use "@styles/variables" as vars;
 @use "@sass-butler/mixins" as butler-mx;
 
-body {
-  margin: 0;
-  background-color: var(
-    --color-background-body,
-    color-mix(in srgb, var(--orange-100) 5%, transparent)
-  );
-  background-image: radial-gradient(
-    var(--color-gradient-body-1, color-mix(in srgb, var(--blue) 15%, transparent)) 1.1px,
-    var(--color-gradient-body-2, color-mix(in srgb, var(--orange-100) 10%, white)) 1.1px
-  );
-  background-size: 22px 22px;
+@layer base {
+  body {
+    margin: 0;
+    background-color: var(
+      --color-background-body,
+      color-mix(in srgb, var(--orange-100) 5%, transparent)
+    );
+    background-image: radial-gradient(
+      var(--color-gradient-body-1, color-mix(in srgb, var(--blue) 15%, transparent)) 1.1px,
+      var(--color-gradient-body-2, color-mix(in srgb, var(--orange-100) 10%, white)) 1.1px
+    );
+    background-size: 22px 22px;
 
-  @include butler-mx.dark-mode-class {
-    --color-gradient-body-1: color-mix(in srgb, var(--new-blue-400) 98%, white);
-    --color-gradient-body-2: color-mix(in srgb, var(--blue) 70%, transparent);
-    --color-background-body: var(--new-blue-300);
+    @include butler-mx.dark-mode-class {
+      --color-gradient-body-1: color-mix(in srgb, var(--new-blue-400) 98%, white);
+      --color-gradient-body-2: color-mix(in srgb, var(--blue) 70%, transparent);
+      --color-background-body: var(--new-blue-300);
+    }
   }
-}
 
-body,
-dialog {
-  color: var(--color-body);
-}
-
-html {
-  --selection-bg: #{vars.$red-200};
-  --selection-color: #{vars.$white-100};
-}
-
-html[class="dark"] {
-  --selection-bg: #{map.get(vars.$blue-shades, "blue-200")};
-}
-
-@include butler-mx.select-style(var(--selection-bg), var(--selection-color));
-
-html {
-  @include butler-mx.feature("motion") {
-    scroll-behavior: smooth;
+  body,
+  dialog {
+    color: var(--color-body);
   }
-}
 
-// Safety net: no animation or transition runs for users who opted out of motion
-@include butler-mx.feature("no-motion") {
-  *,
-  ::before,
-  ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  html {
+    --selection-bg: #{vars.$red-200};
+    --selection-color: #{vars.$white-100};
   }
-}
 
-:target {
-  scroll-margin-block-start: 100px;
+  html[class="dark"] {
+    --selection-bg: #{map.get(vars.$blue-shades, "blue-200")};
+  }
+
+  @include butler-mx.select-style(var(--selection-bg), var(--selection-color));
+
+  html {
+    @include butler-mx.feature("motion") {
+      scroll-behavior: smooth;
+    }
+  }
+
+  // Safety net: no animation or transition runs for users who opted out of motion
+  @include butler-mx.feature("no-motion") {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  :target {
+    scroll-margin-block-start: 100px;
+  }
 }

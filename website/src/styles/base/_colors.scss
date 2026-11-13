@@ -1,8 +1,10 @@
-// Colour values live in the tokens (src/styles/tokens); light-dark() follows this switch.
-html {
-  color-scheme: light;
+@layer base {
+  // Colour values live in the tokens (src/styles/tokens); light-dark() follows this switch.
+  html {
+    color-scheme: light;
 
-  &[class~="dark"] {
-    color-scheme: dark;
+    &[class~="dark"] {
+      color-scheme: dark;
+    }
   }
 }

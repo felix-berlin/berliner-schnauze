@@ -1,16 +1,18 @@
-// Origin text of the etymology card; the sources sit in the card footer.
-.c-word-origin {
-  > :first-child {
-    margin-block-start: 0;
-  }
+@layer legacy {
+  // Origin text of the etymology card; the sources sit in the card footer.
+  .c-word-origin {
+    > :first-child {
+      margin-block-start: 0;
+    }
 
-  > :last-child {
-    margin-block-end: 0;
-  }
+    > :last-child {
+      margin-block-end: 0;
+    }
 
-  &__source {
-    display: inline-flex;
-    align-items: center;
-    min-block-size: 2.75rem;
+    &__source {
+      display: inline-flex;
+      align-items: center;
+      min-block-size: 2.75rem;
+    }
   }
 }

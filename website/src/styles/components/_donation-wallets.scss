@@ -2,84 +2,86 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-.c-donation-wallets {
-  display: grid;
-  gap: vars.$spacer * 0.75;
-
-  &__card {
+@layer legacy {
+  .c-donation-wallets {
     display: grid;
-    gap: vars.$spacer * 0.5;
-    padding: vars.$spacer * 0.75;
-    border-radius: 4px;
-    container: donation-wallet-card / inline-size;
+    gap: vars.$spacer * 0.75;
 
-    @include mx.paper-chip;
-  }
+    &__card {
+      display: grid;
+      gap: vars.$spacer * 0.5;
+      padding: vars.$spacer * 0.75;
+      border-radius: 4px;
+      container: donation-wallet-card / inline-size;
 
-  &__chains {
-    display: flex;
-    flex-wrap: wrap;
-    gap: vars.$spacer * 0.25;
-  }
-
-  &__badge {
-    padding: 0.125rem 0.5rem;
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: var(--new-blue-400);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background: var(--orange-200);
-    border: 1px solid var(--orange-300);
-    border-radius: 4px;
-
-    @include butler-mx.dark-mode-class {
-      color: var(--orange-100);
-      background: var(--orange-600);
-      border-color: var(--orange-500);
+      @include mx.paper-chip;
     }
-  }
 
-  &__address-row {
-    display: flex;
-    gap: vars.$spacer * 0.5;
-    align-items: center;
-    min-width: 0;
-  }
-
-  &__address {
-    display: inline-block;
-    min-width: 0;
-    max-width: 100%;
-    overflow: hidden;
-    font-family: ui-monospace, "SF Mono", "Cascadia Mono", monospace;
-    font-size: 0.9rem;
-    letter-spacing: 0;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-
-    @container donation-wallet-card (inline-size >= 28rem) {
-      overflow: visible;
-      white-space: normal;
-      text-overflow: clip;
-      overflow-wrap: anywhere;
+    &__chains {
+      display: flex;
+      flex-wrap: wrap;
+      gap: vars.$spacer * 0.25;
     }
-  }
 
-  &__card .c-button.c-donation-wallets__copy-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4375rem;
-    padding: 0.4375rem 0.8125rem;
-    margin-inline-start: auto;
-    font-size: 0.85rem;
-    font-weight: 700;
-    white-space: nowrap;
+    &__badge {
+      padding: 0.125rem 0.5rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--new-blue-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--orange-200);
+      border: 1px solid var(--orange-300);
+      border-radius: 4px;
 
-    &.is-copied {
-      --color-background: var(--success);
-      --color-border: var(--success);
-      --color: white;
+      @include butler-mx.dark-mode-class {
+        color: var(--orange-100);
+        background: var(--orange-600);
+        border-color: var(--orange-500);
+      }
+    }
+
+    &__address-row {
+      display: flex;
+      gap: vars.$spacer * 0.5;
+      align-items: center;
+      min-width: 0;
+    }
+
+    &__address {
+      display: inline-block;
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      font-family: ui-monospace, "SF Mono", "Cascadia Mono", monospace;
+      font-size: 0.9rem;
+      letter-spacing: 0;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
+      @container donation-wallet-card (inline-size >= 28rem) {
+        overflow: visible;
+        white-space: normal;
+        text-overflow: clip;
+        overflow-wrap: anywhere;
+      }
+    }
+
+    &__card .c-button.c-donation-wallets__copy-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4375rem;
+      padding: 0.4375rem 0.8125rem;
+      margin-inline-start: auto;
+      font-size: 0.85rem;
+      font-weight: 700;
+      white-space: nowrap;
+
+      &.is-copied {
+        --color-background: var(--success);
+        --color-border: var(--success);
+        --color: white;
+      }
     }
   }
 }

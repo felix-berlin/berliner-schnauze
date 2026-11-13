@@ -2,92 +2,94 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-.c-form {
-  width: 100%;
-  max-width: 1200px;
+@layer legacy {
+  .c-form {
+    width: 100%;
+    max-width: 1200px;
 
-  &__item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    &__item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-    &:not(:last-child) {
-      margin-block-end: vars.$spacer * 1.5;
-    }
-
-    .c-form__label {
-      order: -1;
-      margin-inline-end: vars.$spacer;
-      font-weight: 700;
-    }
-
-    &.is-vertical {
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
+      &:not(:last-child) {
+        margin-block-end: vars.$spacer * 1.5;
+      }
 
       .c-form__label {
-        margin-inline-end: 0;
-        margin-block-end: vars.$spacer * 0.5;
+        order: -1;
+        margin-inline-end: vars.$spacer;
+        font-weight: 700;
       }
-    }
 
-    > * {
-      width: 100%;
-    }
+      &.is-vertical {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
 
-    input:not([type="range"]),
-    textarea,
-    select {
-      --spacing-inner: #{vars.$spacer * 0.75};
-    }
-
-    select {
-      padding-inline-end: vars.$spacer * 4;
-    }
-
-    &.has-error {
-      .c-form__input {
-        --color-border: var(--danger);
-        --color-border-active: var(--danger);
-        --color-background: color-mix(in srgb, var(--danger) 15%, white);
-
-        @include butler-mx.dark-mode-class {
-          --color-background: color-mix(in srgb, var(--danger) 20%, var(--new-blue-600));
-        }
-        @include mx.dark-mode-override {
-          --box-shadow-focus: 2px color-mix(in srgb, var(--danger) 30%, transparent);
+        .c-form__label {
+          margin-inline-end: 0;
+          margin-block-end: vars.$spacer * 0.5;
         }
       }
-    }
-  }
 
-  &__label {
-    [required] + &,
-    &.is-required {
-      &::after {
-        content: "*";
-        font-weight: 500;
-        color: var(--danger);
-        translate: 0 -0.1em;
-        display: inline-block;
+      > * {
+        width: 100%;
+      }
+
+      input:not([type="range"]),
+      textarea,
+      select {
+        --spacing-inner: #{vars.$spacer * 0.75};
+      }
+
+      select {
+        padding-inline-end: vars.$spacer * 4;
+      }
+
+      &.has-error {
+        .c-form__input {
+          --color-border: var(--danger);
+          --color-border-active: var(--danger);
+          --color-background: color-mix(in srgb, var(--danger) 15%, white);
+
+          @include butler-mx.dark-mode-class {
+            --color-background: color-mix(in srgb, var(--danger) 20%, var(--new-blue-600));
+          }
+          @include mx.dark-mode-override {
+            --box-shadow-focus: 2px color-mix(in srgb, var(--danger) 30%, transparent);
+          }
+        }
       }
     }
-  }
 
-  &__group {
-    display: flex;
-    flex-direction: column;
-    gap: vars.$spacer * 2;
-    margin-block-end: vars.$spacer * 2;
-
-    .c-form__item {
-      flex: 1;
-      margin-block-end: 0;
+    &__label {
+      [required] + &,
+      &.is-required {
+        &::after {
+          content: "*";
+          font-weight: 500;
+          color: var(--danger);
+          translate: 0 -0.1em;
+          display: inline-block;
+        }
+      }
     }
 
-    @include mx.breakpoint(md) {
-      flex-direction: row;
+    &__group {
+      display: flex;
+      flex-direction: column;
+      gap: vars.$spacer * 2;
+      margin-block-end: vars.$spacer * 2;
+
+      .c-form__item {
+        flex: 1;
+        margin-block-end: 0;
+      }
+
+      @include mx.breakpoint(md) {
+        flex-direction: row;
+      }
     }
   }
 }

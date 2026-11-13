@@ -1,104 +1,106 @@
 @use "@styles/mixins" as mx;
 
-// Word images (docs/design/wortseite/SPEC.md §3/§5; mock: Mobile2 strip, Desktop3 .bs-heroimg, bundle.css "Image strip").
-// The page renders the section twice: .c-word-images--strip below the hero (< 808px), --hero inside it (from 808px).
-.c-image-strip {
-  display: flex;
-  gap: 0.75rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  // Room for the 2px dashed focus ring (offset 2px) that overflow-x would clip; the negative margin keeps the layout.
-  margin: -0.3125rem;
-  padding: 0.3125rem;
-  scroll-padding-inline: 0.3125rem;
-
-  > figure {
-    flex: 0 0 82%;
-    scroll-snap-align: start;
-    margin: 0;
+@layer legacy {
+  // Word images (docs/design/wortseite/SPEC.md §3/§5; mock: Mobile2 strip, Desktop3 .bs-heroimg, bundle.css "Image strip").
+  // The page renders the section twice: .c-word-images--strip below the hero (< 808px), --hero inside it (from 808px).
+  .c-image-strip {
     display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-  }
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    // Room for the 2px dashed focus ring (offset 2px) that overflow-x would clip; the negative margin keeps the layout.
+    margin: -0.3125rem;
+    padding: 0.3125rem;
+    scroll-padding-inline: 0.3125rem;
 
-  &--single > figure {
-    flex-basis: 100%;
-  }
+    > figure {
+      flex: 0 0 82%;
+      scroll-snap-align: start;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
 
-  &__btn {
-    display: block;
-    inline-size: 100%;
-    padding: 0;
-    border: 0;
-    background: none;
-    cursor: zoom-in;
-    border-radius: var(--radius-sm);
-    overflow: hidden;
+    &--single > figure {
+      flex-basis: 100%;
+    }
 
-    img {
+    &__btn {
       display: block;
       inline-size: 100%;
-      block-size: auto;
-      aspect-ratio: 4 / 3; // reserves the space, no layout shift when the image arrives
-      object-fit: cover;
-    }
-  }
-}
+      padding: 0;
+      border: 0;
+      background: none;
+      cursor: zoom-in;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
 
-.c-word-images {
-  flex-direction: column;
-  gap: 0.5rem;
-
-  &__more {
-    align-self: flex-start;
-    display: inline-flex;
-    align-items: center;
-    min-block-size: 2.75rem;
-    font-size: 0.85rem;
-  }
-
-  &--strip {
-    display: flex;
-
-    @include mx.breakpoint("word") {
-      display: none;
+      img {
+        display: block;
+        inline-size: 100%;
+        block-size: auto;
+        aspect-ratio: 4 / 3; // reserves the space, no layout shift when the image arrives
+        object-fit: cover;
+      }
     }
   }
 
-  &--hero {
-    display: none;
-    container: hero-images / inline-size;
+  .c-word-images {
+    flex-direction: column;
+    gap: 0.5rem;
 
-    @include mx.breakpoint("word") {
+    &__more {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      min-block-size: 2.75rem;
+      font-size: 0.85rem;
+    }
+
+    &--strip {
       display: flex;
 
-      .c-image-strip {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 0.5rem;
-        overflow: visible;
-
-        > figure {
-          flex: none;
-        }
-
-        > figure:first-child {
-          grid-column: 1 / -1;
-        }
-
-        > figure:not(:first-child) figcaption {
-          display: none;
-        }
-
-        // Narrow image column: two tiles per row instead of three slivers.
-        @container hero-images (inline-size < 18rem) {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
+      @include mx.breakpoint("word") {
+        display: none;
       }
+    }
 
-      .c-image-strip__btn {
-        box-shadow: var(--paper-lift);
+    &--hero {
+      display: none;
+      container: hero-images / inline-size;
+
+      @include mx.breakpoint("word") {
+        display: flex;
+
+        .c-image-strip {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 0.5rem;
+          overflow: visible;
+
+          > figure {
+            flex: none;
+          }
+
+          > figure:first-child {
+            grid-column: 1 / -1;
+          }
+
+          > figure:not(:first-child) figcaption {
+            display: none;
+          }
+
+          // Narrow image column: two tiles per row instead of three slivers.
+          @container hero-images (inline-size < 18rem) {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        .c-image-strip__btn {
+          box-shadow: var(--paper-lift);
+        }
       }
     }
   }

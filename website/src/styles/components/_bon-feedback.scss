@@ -1,210 +1,212 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Answer feedback card, ghost fly-out and timer bar (docs/design/bon/SPEC.md §7, §13).
-// --success/--danger only as the 4px stripe and the icons, never as surface or text.
-.c-bon-feedback {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  &__stage {
-    position: relative;
-  }
-
-  &__card {
-    position: relative;
+@layer legacy {
+  // Answer feedback card, ghost fly-out and timer bar (docs/design/bon/SPEC.md §7, §13).
+  // --success/--danger only as the 4px stripe and the icons, never as surface or text.
+  .c-bon-feedback {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 0.5rem;
-    min-height: 260px;
-    padding: 2rem 1.25rem;
-    box-sizing: border-box;
-    overflow: hidden;
-    text-align: start;
-    cursor: pointer;
-    background: var(--surface-sheet);
-    border: 1px solid transparent;
-    border-radius: var(--radius-sm);
-    box-shadow: var(--paper-lift);
-    container-type: inline-size;
-    // The mouse wheel/scroll must still work; swipe is horizontal only.
-    touch-action: pan-y;
-    user-select: none;
-    animation: c-bon-feedback-flip 340ms cubic-bezier(0.2, 0.8, 0.2, 1) 140ms both;
-    // The next card sinks/rises through this name (docs/design/bon/SPEC.md §13).
-    view-transition-name: bon-card;
+    gap: 1rem;
 
-    &--right {
-      border-inline-start: 4px solid var(--success);
+    &__stage {
+      position: relative;
     }
 
-    &--wrong {
-      border-inline-start: 4px solid var(--danger);
+    &__card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 260px;
+      padding: 2rem 1.25rem;
+      box-sizing: border-box;
+      overflow: hidden;
+      text-align: start;
+      cursor: pointer;
+      background: var(--surface-sheet);
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      box-shadow: var(--paper-lift);
+      container-type: inline-size;
+      // The mouse wheel/scroll must still work; swipe is horizontal only.
+      touch-action: pan-y;
+      user-select: none;
+      animation: c-bon-feedback-flip 340ms cubic-bezier(0.2, 0.8, 0.2, 1) 140ms both;
+      // The next card sinks/rises through this name (docs/design/bon/SPEC.md §13).
+      view-transition-name: bon-card;
+
+      &--right {
+        border-inline-start: 4px solid var(--success);
+      }
+
+      &--wrong {
+        border-inline-start: 4px solid var(--danger);
+      }
     }
-  }
 
-  &__body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: flex-start;
+    &__body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: flex-start;
 
-    p {
+      p {
+        margin: 0;
+      }
+    }
+
+    &__head {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    &__icon--ok {
+      color: var(--success);
+    }
+
+    &__icon--no {
+      color: var(--danger);
+    }
+
+    &__title {
+      font-size: 1.25rem;
+      color: var(--color-ink-strong);
+    }
+
+    &__verdict {
+      color: var(--color-muted);
+    }
+
+    &__word {
+      margin-block-start: 0.25rem;
+      font-family: var(--font-body);
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+      color: var(--color-ink-strong);
+      overflow-wrap: anywhere;
+      hyphens: auto;
+
+      @include butler-mx.dark-mode-class {
+        color: var(--orange-300);
+      }
+    }
+
+    &__delta {
+      margin-block-start: 0.25rem;
+      font-weight: 700;
+      color: var(--color-accent-text);
+    }
+
+    &__link {
+      font-size: 0.9rem;
+    }
+
+    &__timer {
+      position: absolute;
+      inset-inline: 0;
+      inset-block-end: 0;
+      block-size: 3px;
+      background: var(--color-muted);
+      opacity: 0.5;
+      transform-origin: left;
+      animation: c-bon-feedback-timer linear forwards;
+    }
+
+    // The answered card leaves while the feedback flips in behind it.
+    &__ghost {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      font-family: var(--font-body);
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--color-ink-strong);
+      text-align: center;
+      background: var(--surface-sheet);
+      border: 1px dashed var(--rule-card);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--paper-lift);
+      pointer-events: none;
+      animation: c-bon-feedback-fly-right 380ms cubic-bezier(0.4, 0, 1, 1) forwards;
+
+      &[data-dir="left"] {
+        animation-name: c-bon-feedback-fly-left;
+      }
+
+      @include butler-mx.dark-mode-class {
+        color: var(--orange-300);
+      }
+    }
+
+    &__hint {
       margin: 0;
-    }
-  }
+      text-align: center;
 
-  &__head {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  &__icon--ok {
-    color: var(--success);
-  }
-
-  &__icon--no {
-    color: var(--danger);
-  }
-
-  &__title {
-    font-size: 1.25rem;
-    color: var(--color-ink-strong);
-  }
-
-  &__verdict {
-    color: var(--color-muted);
-  }
-
-  &__word {
-    margin-block-start: 0.25rem;
-    font-family: var(--font-body);
-    font-size: 1.75rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    line-height: 1.1;
-    color: var(--color-ink-strong);
-    overflow-wrap: anywhere;
-    hyphens: auto;
-
-    @include butler-mx.dark-mode-class {
-      color: var(--orange-300);
-    }
-  }
-
-  &__delta {
-    margin-block-start: 0.25rem;
-    font-weight: 700;
-    color: var(--color-accent-text);
-  }
-
-  &__link {
-    font-size: 0.9rem;
-  }
-
-  &__timer {
-    position: absolute;
-    inset-inline: 0;
-    inset-block-end: 0;
-    block-size: 3px;
-    background: var(--color-muted);
-    opacity: 0.5;
-    transform-origin: left;
-    animation: c-bon-feedback-timer linear forwards;
-  }
-
-  // The answered card leaves while the feedback flips in behind it.
-  &__ghost {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    font-family: var(--font-body);
-    font-size: 2.25rem;
-    font-weight: 700;
-    color: var(--color-ink-strong);
-    text-align: center;
-    background: var(--surface-sheet);
-    border: 1px dashed var(--rule-card);
-    border-radius: var(--radius-sm);
-    box-shadow: var(--paper-lift);
-    pointer-events: none;
-    animation: c-bon-feedback-fly-right 380ms cubic-bezier(0.4, 0, 1, 1) forwards;
-
-    &[data-dir="left"] {
-      animation-name: c-bon-feedback-fly-left;
-    }
-
-    @include butler-mx.dark-mode-class {
-      color: var(--orange-300);
-    }
-  }
-
-  &__hint {
-    margin: 0;
-    text-align: center;
-
-    &--keys {
-      display: none;
-    }
-
-    @include mx.breakpoint("word") {
-      &--touch {
+      &--keys {
         display: none;
       }
 
-      &--keys {
-        display: block;
+      @include mx.breakpoint("word") {
+        &--touch {
+          display: none;
+        }
+
+        &--keys {
+          display: block;
+        }
       }
     }
   }
-}
 
-@keyframes c-bon-feedback-timer {
-  from {
-    transform: scaleX(var(--bar-from, 1));
-  }
+  @keyframes c-bon-feedback-timer {
+    from {
+      transform: scaleX(var(--bar-from, 1));
+    }
 
-  to {
-    transform: scaleX(0);
+    to {
+      transform: scaleX(0);
+    }
   }
-}
-@keyframes c-bon-feedback-flip {
-  from {
-    transform: perspective(800px) rotateY(-60deg) scale(0.96);
-    opacity: 0;
+  @keyframes c-bon-feedback-flip {
+    from {
+      transform: perspective(800px) rotateY(-60deg) scale(0.96);
+      opacity: 0;
+    }
   }
-}
-@keyframes c-bon-feedback-fly-right {
-  to {
-    transform: translateX(115%) rotate(14deg);
-    opacity: 0;
-    visibility: hidden;
+  @keyframes c-bon-feedback-fly-right {
+    to {
+      transform: translateX(115%) rotate(14deg);
+      opacity: 0;
+      visibility: hidden;
+    }
   }
-}
-@keyframes c-bon-feedback-fly-left {
-  to {
-    transform: translateX(-115%) rotate(-14deg);
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
-// The standing time stays (timer in the component); only the motion goes.
-@media (prefers-reduced-motion: reduce) {
-  .c-bon-feedback__card {
-    animation: none;
+  @keyframes c-bon-feedback-fly-left {
+    to {
+      transform: translateX(-115%) rotate(-14deg);
+      opacity: 0;
+      visibility: hidden;
+    }
   }
 
-  .c-bon-feedback__ghost,
-  .c-bon-feedback__timer {
-    display: none;
+  // The standing time stays (timer in the component); only the motion goes.
+  @media (prefers-reduced-motion: reduce) {
+    .c-bon-feedback__card {
+      animation: none;
+    }
+
+    .c-bon-feedback__ghost,
+    .c-bon-feedback__timer {
+      display: none;
+    }
   }
 }

@@ -1,40 +1,42 @@
-// Male/female voice choices (docs/design/wortseite/SPEC.md §5/§9): examples use them as they are.
-.c-voice-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+@layer legacy {
+  // Male/female voice choices (docs/design/wortseite/SPEC.md §5/§9): examples use them as they are.
+  .c-voice-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 
-  &__button {
-    padding-inline: 0.75rem;
+    &__button {
+      padding-inline: 0.75rem;
 
-    // The icon set draws outlines (path or rect fill="none"); the mock has solid glyphs.
-    svg :is(path, rect) {
-      fill: currentColor;
+      // The icon set draws outlines (path or rect fill="none"); the mock has solid glyphs.
+      svg :is(path, rect) {
+        fill: currentColor;
+      }
     }
   }
-}
 
-// Word block (mock: label left, voices in an equal two-column grid).
-.c-word-audio {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding-inline: 0.25rem;
+  // Word block (mock: label left, voices in an equal two-column grid).
+  .c-word-audio {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-inline: 0.25rem;
 
-  &__label {
-    flex-shrink: 0;
-    margin: 0;
-  }
+    &__label {
+      flex-shrink: 0;
+      margin: 0;
+    }
 
-  &__voices {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
+    &__voices {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
 
-  &__voices .c-voice-buttons__button {
-    padding-inline: 0.5rem;
-    font-size: 0.9rem;
-    justify-content: center;
+    &__voices .c-voice-buttons__button {
+      padding-inline: 0.5rem;
+      font-size: 0.9rem;
+      justify-content: center;
+    }
   }
 }

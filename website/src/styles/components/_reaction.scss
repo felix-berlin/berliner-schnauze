@@ -1,41 +1,43 @@
-// Reaktion (docs/design/wortseite/SPEC.md §5/§9): thumbs up/down, "hilfreich". Borderless until hover.
-:where(.c-reaction) {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  min-inline-size: 2.75rem;
-  min-block-size: 2.75rem;
-  padding: 0 0.625rem;
-  border: 1px dashed transparent;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--color-muted);
-  font: inherit;
-  letter-spacing: inherit;
-  cursor: pointer;
-  transition:
-    color 0.3s ease-in-out,
-    border-color 0.3s ease-in-out,
-    background-color 0.3s ease-in-out;
+@layer legacy {
+  // Reaktion (docs/design/wortseite/SPEC.md §5/§9): thumbs up/down, "hilfreich". Borderless until hover.
+  :where(.c-reaction) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
+    padding: 0 0.625rem;
+    border: 1px dashed transparent;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-muted);
+    font: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+    transition:
+      color 0.3s ease-in-out,
+      border-color 0.3s ease-in-out,
+      background-color 0.3s ease-in-out;
 
-  @media (hover: hover) {
-    &:hover:not(:disabled, [aria-disabled="true"]) {
-      border-color: var(--rule-card);
-      color: var(--color-ink-strong);
+    @media (hover: hover) {
+      &:hover:not(:disabled, [aria-disabled="true"]) {
+        border-color: var(--rule-card);
+        color: var(--color-ink-strong);
+      }
     }
-  }
 
-  &[aria-pressed="true"] {
-    background: var(--surface-wash);
-    color: var(--color-accent-text);
-  }
+    &[aria-pressed="true"] {
+      background: var(--surface-wash);
+      color: var(--color-accent-text);
+    }
 
-  &[aria-disabled="true"] {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
+    &[aria-disabled="true"] {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
 
-  @media (prefers-reduced-motion: reduce) {
-    transition-duration: 0ms;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0ms;
+    }
   }
 }

@@ -1,76 +1,78 @@
 @use "@sass-butler/functions" as butler-fn;
 
-$yellow: #ffd300;
-$blue: #17d3ff;
-$pink: #ff4e91;
-$duration: 1000;
+@layer legacy {
+  $yellow: #ffd300;
+  $blue: #17d3ff;
+  $pink: #ff4e91;
+  $duration: 1000;
 
-.c-confetti {
-  position: relative;
-  overflow: hidden;
+  .c-confetti {
+    position: relative;
+    overflow: hidden;
 
-  &__wrapper {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
+    &__wrapper {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
 
-  &__piece {
-    position: absolute;
-    width: 8px;
-    height: 16px;
-    background: $yellow;
-    inset-block-start: 0;
-    opacity: 0;
+    &__piece {
+      position: absolute;
+      width: 8px;
+      height: 16px;
+      background: $yellow;
+      inset-block-start: 0;
+      opacity: 0;
 
-    // One rule per piece; ConfettiEffect.vue renders 10 by default
-    @for $i from 1 through 10 {
-      &:nth-child(#{$i}) {
-        inset-inline-start: $i * 7%;
-        rotate: #{butler-fn.random-num(-80, 80)}deg;
-        animation: make-it-rain $duration * 1ms infinite ease-out;
-        animation-delay: #{butler-fn.random-num(0, $duration * 0.5)}ms;
-        animation-duration: #{butler-fn.random-num($duration * 0.7, $duration * 1.2)}ms;
+      // One rule per piece; ConfettiEffect.vue renders 10 by default
+      @for $i from 1 through 10 {
+        &:nth-child(#{$i}) {
+          inset-inline-start: $i * 7%;
+          rotate: #{butler-fn.random-num(-80, 80)}deg;
+          animation: make-it-rain $duration * 1ms infinite ease-out;
+          animation-delay: #{butler-fn.random-num(0, $duration * 0.5)}ms;
+          animation-duration: #{butler-fn.random-num($duration * 0.7, $duration * 1.2)}ms;
+        }
+      }
+
+      &:nth-child(odd) {
+        background: $blue;
+      }
+
+      &:nth-child(even) {
+        z-index: 1;
+      }
+
+      &:nth-child(4n) {
+        width: 5px;
+        height: 12px;
+        animation-duration: $duration * 2ms;
+      }
+
+      &:nth-child(3n) {
+        width: 3px;
+        height: 10px;
+        animation-duration: $duration * 2.5ms;
+        animation-delay: $duration * 1ms;
+      }
+
+      &:nth-child(4n + 1) {
+        background: $pink;
       }
     }
-
-    &:nth-child(odd) {
-      background: $blue;
-    }
-
-    &:nth-child(even) {
-      z-index: 1;
-    }
-
-    &:nth-child(4n) {
-      width: 5px;
-      height: 12px;
-      animation-duration: $duration * 2ms;
-    }
-
-    &:nth-child(3n) {
-      width: 3px;
-      height: 10px;
-      animation-duration: $duration * 2.5ms;
-      animation-delay: $duration * 1ms;
-    }
-
-    &:nth-child(4n + 1) {
-      background: $pink;
-    }
-  }
-}
-
-@keyframes make-it-rain {
-  0% {
-    opacity: 0;
   }
 
-  50% {
-    opacity: 1;
-  }
+  @keyframes make-it-rain {
+    0% {
+      opacity: 0;
+    }
 
-  100% {
-    translate: 0 200px;
+    50% {
+      opacity: 1;
+    }
+
+    100% {
+      translate: 0 200px;
+    }
   }
 }
