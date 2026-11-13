@@ -21,7 +21,7 @@ const max = Math.max(...bars, 1);
     {bars.map((v) => <span style={`height: ${Math.max(10, Math.round((v / max) * 100))}%`} />)}
   </div>
   {/* No trending page exists yet: the word index is the closest route. */}
-  <a class='c-textlink c-textlink--inline t-small c-trend__link' href='/wort'>
+  <a class='c-textlink t-small c-trend__link' data-variant='inline' href='/wort'>
     Alle Trend-Wörter ansehen →
   </a>
 </section>

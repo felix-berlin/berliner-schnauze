@@ -48,7 +48,8 @@
               <button
                 :aria-describedby="!online ? 'word-feedback-offline' : undefined"
                 :aria-disabled="pending || !online"
-                class="c-textlink c-textlink--inline"
+                class="c-textlink"
+                data-variant="inline"
                 type="button"
                 @click="retry"
               >

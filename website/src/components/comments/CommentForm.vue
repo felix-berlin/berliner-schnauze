@@ -83,7 +83,8 @@
       Mit dem Abschicken wird dein Kommentar öffentlich angezeigt. Was wir dabei speichern, steht in
       der
       <a
-        class="c-textlink c-textlink--inline"
+        class="c-textlink"
+        data-variant="inline"
         href="/datenschutz#5-kommentare-abstimmungen-und-meldungen"
         >Datenschutzerklärung</a
       >.

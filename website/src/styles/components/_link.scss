@@ -1,26 +1,28 @@
-@layer legacy {
-  // Link (docs/design/wortseite/SPEC.md): text action, also on <button>. 44px hit area.
-  :where(.c-link, .c-textlink) {
-    --color-link: var(--color-muted);
-    --decoration-text: underline dashed from-font;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Link (docs/design/wortseite/SPEC.md): text action on a <button>. 44px hit area.
+@include mx.component("link") {
+  :scope {
+    --_color: var(--color-text-muted);
 
     display: inline-flex;
     align-items: center;
     min-block-size: 2.75rem;
-    padding: 0 0.25rem;
+    padding: 0 var(--space-1);
     border: 0;
     background: none;
-    color: var(--color-link);
+    color: var(--_color);
     font: inherit;
-    font-size: 0.8rem;
+    font-size: var(--font-size-sm);
     letter-spacing: inherit;
     text-decoration: underline dashed from-font;
     text-underline-position: from-font;
     cursor: pointer;
 
-    @media (hover: hover) {
-      &:hover:not(:disabled, [aria-disabled="true"]) {
-        --color-link: var(--color-accent-text);
+    @include butler-mx.hover {
+      &:not(:disabled, [aria-disabled="true"]) {
+        --_color: var(--color-text-accent);
       }
     }
 
@@ -33,16 +35,5 @@
       opacity: 0.55;
       cursor: not-allowed;
     }
-  }
-
-  // Inline in running text: no hit-area padding, inherits size and colour.
-  :where(.c-textlink--inline) {
-    // currentColor as a colour value means "inherit".
-    --color-link: currentcolor;
-
-    display: inline;
-    min-block-size: 0;
-    padding: 0;
-    font-size: inherit;
   }
 }

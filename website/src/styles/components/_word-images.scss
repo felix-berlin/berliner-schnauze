@@ -52,11 +52,12 @@
     gap: 0.5rem;
 
     &__more {
+      --textlink-display: inline-flex;
+      --textlink-min-block-size: 2.75rem;
+      --textlink-font-size: 0.85rem;
+
       align-self: flex-start;
-      display: inline-flex;
       align-items: center;
-      min-block-size: 2.75rem;
-      font-size: 0.85rem;
     }
 
     &--strip {

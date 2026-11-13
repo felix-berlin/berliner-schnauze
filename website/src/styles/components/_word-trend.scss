@@ -48,10 +48,11 @@
     }
 
     &__link {
+      --textlink-display: inline-flex;
+      --textlink-min-block-size: 44px;
+
       grid-column: 1 / -1;
-      display: inline-flex;
       align-items: center;
-      min-block-size: 44px;
     }
   }
 }

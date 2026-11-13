@@ -139,7 +139,8 @@
             <span>Platz 1–{{ shown.length }} von {{ fmt(total) }}</span>
             <button
               v-if="shown.length < total"
-              class="c-textlink c-textlink--inline"
+              class="c-textlink"
+              data-variant="inline"
               type="button"
               :aria-disabled="loadingMore ? 'true' : undefined"
               @click="more"
@@ -210,7 +211,8 @@
         <p class="t-small c-bon-leaderboard__note">
           Namen sind frei jewählt. Anstößige Namen blenden wa aus.
           <button
-            class="c-textlink c-textlink--inline"
+            class="c-textlink"
+            data-variant="inline"
             type="button"
             :aria-pressed="reporting ? 'true' : 'false'"
             @click="reporting = !reporting"

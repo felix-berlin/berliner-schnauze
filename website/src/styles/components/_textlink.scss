@@ -1,0 +1,54 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Text link (docs/design/wortseite/SPEC.md): link look on <a> or <button>, 44px hit area.
+// Variant inline (data-variant="inline"): in running text, no hit-area padding, inherits size
+// and colour. Public (the old :where() let parents override these): --textlink-display,
+// --textlink-min-block-size, --textlink-padding-inline, --textlink-font-size, --textlink-color, --textlink-padding-start.
+@include mx.component("textlink") {
+  :scope {
+    --_color: var(--color-text-muted);
+
+    display: var(--textlink-display, inline-flex);
+    align-items: center;
+    min-block-size: var(--textlink-min-block-size, 2.75rem);
+    padding-block: 0;
+    padding-inline: var(--textlink-padding-start, var(--textlink-padding-inline, var(--space-1)))
+      var(--textlink-padding-inline, var(--space-1));
+    border: 0;
+    background: none;
+    color: var(--textlink-color, var(--_color));
+    font: inherit;
+    font-size: var(--textlink-font-size, var(--font-size-sm));
+    letter-spacing: inherit;
+    text-decoration: underline dashed from-font;
+    text-underline-position: from-font;
+    cursor: pointer;
+
+    @include butler-mx.hover {
+      &:not(:disabled, [aria-disabled="true"]) {
+        --_color: var(--color-text-accent);
+      }
+    }
+
+    &:disabled {
+      cursor: progress;
+    }
+
+    // Locked but still focusable (like .c-choice), so the reason can be read out.
+    &[aria-disabled="true"] {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+  }
+
+  :scope[data-variant~="inline"] {
+    --_color: currentcolor;
+
+    display: var(--textlink-display, inline);
+    min-block-size: var(--textlink-min-block-size, 0);
+    padding-inline: var(--textlink-padding-start, var(--textlink-padding-inline, 0))
+      var(--textlink-padding-inline, 0);
+    font-size: var(--textlink-font-size, inherit);
+  }
+}

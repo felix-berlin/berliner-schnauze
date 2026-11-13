@@ -42,7 +42,6 @@ export default [
   "src/styles/components/_icon-button.scss",
   "src/styles/components/_letter-filter.scss",
   "src/styles/components/_lightbox.scss",
-  "src/styles/components/_link.scss",
   "src/styles/components/_magazin-article.scss",
   "src/styles/components/_magazin-overview.scss",
   "src/styles/components/_main-menu.scss",

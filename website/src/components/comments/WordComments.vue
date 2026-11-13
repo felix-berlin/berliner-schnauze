@@ -62,7 +62,7 @@
         <span class="c-state__body">
           <b>Die Kommentare wollten grad nich laden.</b>
           <span>
-            <button type="button" class="c-textlink c-textlink--inline" @click="ctx.loadMore()">
+            <button type="button" class="c-textlink" data-variant="inline" @click="ctx.loadMore()">
               Nochmal versuchen
             </button>
           </span>
@@ -123,8 +123,8 @@ import TurnStile from "@components/TurnStile.vue";
 import { commentsKey, useComments, type CommentsContext } from "@composables/useComments.ts";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
-import { reportError } from "@utils/reportError.ts";
 import { captchaWaitToast } from "@utils/captchaToast.ts";
+import { reportError } from "@utils/reportError.ts";
 import { useElementSize, useEventListener, useOnline, useTimeoutFn } from "@vueuse/core";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
 import Check from "virtual:icons/lucide/check";

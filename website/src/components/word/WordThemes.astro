@@ -13,7 +13,7 @@ const { themes } = Astro.props;
     <p class='c-themes'>
       <span class='t-label'>{themes.length > 1 ? 'Themen' : 'Thema'}</span>
       {themes.map((thema) => (
-        <a href={thema.url} class='c-textlink c-textlink--inline'>
+        <a href={thema.url} class='c-textlink' data-variant='inline'>
           {thema.label}
         </a>
       ))}

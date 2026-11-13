@@ -11,7 +11,8 @@
     </span>
     <button
       ref="link"
-      class="c-textlink c-textlink--inline c-bon-name__link"
+      class="c-textlink c-bon-name__link"
+      data-variant="inline"
       type="button"
       aria-expanded="false"
       @click="edit"

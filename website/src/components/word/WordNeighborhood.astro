@@ -29,7 +29,7 @@ const hasNeighbors = nearBefore.length > 0 || nearAfter.length > 0;
           <ul class='c-neighborhood__list' aria-labelledby='heading-verwandte'>
             {relatedShown.map((w) => (
               <li>
-                <a class='c-neighborhood__link c-textlink c-textlink--inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a>
+                <a class='c-neighborhood__link c-textlink' data-variant='inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a>
               </li>
             ))}
           </ul>
@@ -49,7 +49,7 @@ const hasNeighbors = nearBefore.length > 0 || nearAfter.length > 0;
           <ol class='c-neighborhood__list'>
             {nearBefore.map((w) => (
               <li>
-                <a class='c-neighborhood__link c-textlink c-textlink--inline' href={routeToWord(w.slug)}>
+                <a class='c-neighborhood__link c-textlink' data-variant='inline' href={routeToWord(w.slug)}>
                   <span aria-hidden='true'>↑</span>{w.berlinerisch}
                 </a>
               </li>
@@ -59,7 +59,7 @@ const hasNeighbors = nearBefore.length > 0 || nearAfter.length > 0;
             </li>
             {nearAfter.map((w) => (
               <li>
-                <a class='c-neighborhood__link c-textlink c-textlink--inline' href={routeToWord(w.slug)}>
+                <a class='c-neighborhood__link c-textlink' data-variant='inline' href={routeToWord(w.slug)}>
                   <span aria-hidden='true'>↓</span>{w.berlinerisch}
                 </a>
               </li>

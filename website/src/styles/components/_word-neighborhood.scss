@@ -28,14 +28,14 @@
     }
 
     // 44px rows: touch target (Spec §8.6).
-    // doubled class beats the (0,1,1) a.c-textlink--inline reset
     &__list &__link {
-      display: flex;
+      --textlink-display: flex;
+      --textlink-min-block-size: 44px;
+      --textlink-color: var(--color-ink-strong);
+      --textlink-font-size: 1.05rem;
+
       align-items: center;
       gap: 0.5rem;
-      min-block-size: 44px;
-      color: var(--color-ink-strong);
-      font-size: 1.05rem;
       overflow-wrap: anywhere;
 
       // the arrows mark neighbours: muted

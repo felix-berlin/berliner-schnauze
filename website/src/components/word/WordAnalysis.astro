@@ -92,7 +92,7 @@ const facts = [
                 <>
                   {i > 0 && <span aria-hidden='true'>+</span>}
                   {linked ? (
-                    <a class='c-textlink c-textlink--inline' href={routeToWord(linked.slug)}>
+                    <a class='c-textlink' data-variant='inline' href={routeToWord(linked.slug)}>
                       {capitalizeFirstLetter(part)}
                     </a>
                   ) : (
@@ -115,7 +115,7 @@ const facts = [
           <div class='t-label'>Ähnlich geschrieben</div>
           <ul class='c-word-analysis__links'>
             {similarSpelling.map((w) => (
-              <li><a class='c-textlink c-textlink--inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a></li>
+              <li><a class='c-textlink' data-variant='inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a></li>
             ))}
           </ul>
         </div>
@@ -132,7 +132,7 @@ const facts = [
           <div class='t-label'>Anagramme</div>
           <ul class='c-word-analysis__links'>
             {anagrams.map((w) => (
-              <li><a class='c-textlink c-textlink--inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a></li>
+              <li><a class='c-textlink' data-variant='inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a></li>
             ))}
           </ul>
         </div>
@@ -187,7 +187,7 @@ const facts = [
         <div class='t-label'>Ähnlich klingende Wörter</div>
         <ul class='c-word-analysis__links'>
           {soundingWords.map((w) => (
-            <li><a class='c-textlink c-textlink--inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a></li>
+            <li><a class='c-textlink' data-variant='inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a></li>
           ))}
         </ul>
       </div>
