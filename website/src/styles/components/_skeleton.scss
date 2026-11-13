@@ -6,8 +6,8 @@
 // motion the bars stand still. Variants: line, title.
 @include mx.component("skeleton") {
   :scope {
-    // stylelint-disable-next-line function-disallowed-list -- colour inventory R42 (merged into the one-off R41): one-off shimmer highlight
-    --_shine: light-dark(rgb(246 224 215), rgb(83 75 73));
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R42, merged into R41 (one-off): shimmer highlight with R41's values
+    --_shine: light-dark(rgb(243 226 222), rgb(81 70 72));
     --_duration: 1.4s; // slower than every duration token: the sweep reads as idle
 
     display: block;
