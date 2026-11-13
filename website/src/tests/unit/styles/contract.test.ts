@@ -86,6 +86,70 @@ const rulesInStyleBlocks = (source: string) =>
     (m) => m[0] !== `<style is:inline>${STATEMENT}</style>` && body(m[1]) !== "",
   );
 
+/** Offset after the `}` that closes the `{` at `open`. */
+const closeOf = (code: string, open: number) => {
+  let depth = 0;
+  for (let i = open; i < code.length; i++) {
+    if (code[i] === "{") depth++;
+    if (code[i] === "}" && --depth === 0) return i + 1;
+  }
+  return -1;
+};
+
+/** Violations of the §7.1 component rules in a migrated components/_<name>.scss. */
+const componentProblems = (code: string, name: string) => {
+  const rest = body(code);
+  if (rest === "") return []; // barrel or mixin-only partial: no CSS
+  const m = rest.match(/^@include\s+mx\.component\(\s*"([^"]+)"\s*\)\s*\{/);
+  if (!m) return ["want exactly one @include mx.component(...) block"];
+  const end = closeOf(rest, m[0].length - 1);
+  if (end === -1 || rest.slice(end).trim() !== "")
+    return ["want exactly one @include mx.component(...) block"];
+  const inner = rest.slice(m[0].length, end - 1);
+  const problems: string[] = [];
+  if (m[1] !== name) problems.push(`component name "${m[1]}", want "${name}"`);
+  // Selector preludes at nesting depth 0: a top-level `&` reaches the browser as CSS nesting inside @scope.
+  let depth = 0;
+  let prelude = "";
+  for (const ch of inner) {
+    if (ch === "{") {
+      if (depth === 0 && /(^|,)\s*&/.test(prelude))
+        problems.push(`top-level & in "${prelude.trim()}"`);
+      depth++;
+    } else if (ch === "}") {
+      depth--;
+      prelude = "";
+    } else if (depth === 0) {
+      prelude = ch === ";" ? "" : prelude + ch;
+    }
+  }
+  if (/\.c-[a-z]/.test(inner)) problems.push("a .c- selector inside the scope");
+  if (/\.[a-z][\w-]*__/.test(inner)) problems.push("a __element class");
+  if (/\.[a-z][\w-]*--/.test(inner)) problems.push("a --modifier class");
+  if (/@include\s+(?:mx|butler-mx)\.breakpoint/.test(inner))
+    problems.push("mx.breakpoint (objects only, use container queries)");
+  return problems;
+};
+
+/** Dark-mode class hooks outside legacy; each exception names its reason. */
+const DARK_ALLOWED = [
+  {
+    file: "src/styles/base/_colors.scss",
+    text: '&[class~="dark"]',
+    why: "the color-scheme switch",
+  },
+  {
+    file: "src/styles/base/_inputs.scss",
+    text: 'html[class~="dark"] .c-select',
+    why: "R9: a blend mode is no colour, light-dark() cannot do it",
+  },
+];
+const hasDarkHook = (code: string, file: string) => {
+  let rest = stripComments(code);
+  for (const a of DARK_ALLOWED) if (a.file === file) rest = rest.replaceAll(a.text, "");
+  return /dark-mode-class|dark-mode-override|\.dark(?![\w-])|\[class~=["']?dark/.test(rest);
+};
+
 const styleFiles = walk(join(src, "styles")).filter(
   (p) =>
     p.endsWith(".scss") &&
@@ -173,6 +237,64 @@ describe("style layer contract", () => {
       rulesInStyleBlocks("<style is:inline>@layer base { a { color: red } }</style>"),
     ).toHaveLength(1);
     expect(rulesInStyleBlocks(`<style is:inline>${STATEMENT}</style>`)).toHaveLength(0);
+  });
+
+  it("keeps migrated component files to one mx.component block of the §7.1 rules", () => {
+    const bad = styleFiles
+      .filter((p) => p.includes("/styles/components/") && !legacyFiles.includes(rel(p)))
+      .flatMap((path) => {
+        const name = path
+          .split("/")
+          .pop()!
+          .replace(/^_/, "")
+          .replace(/\.scss$/, "");
+        return componentProblems(readFileSync(path, "utf8"), name).map((e) => `${rel(path)}: ${e}`);
+      });
+    expect(bad).toEqual([]);
+
+    const ok =
+      '@use "@styles/mixins" as mx;\n@include mx.component("demo") { :scope { color: red; } .title { &:hover { color: blue; } } }';
+    expect(componentProblems(ok, "demo")).toEqual([]);
+    const wrap = (inner: string) => `@include mx.component("demo") { ${inner} }`;
+    expect(componentProblems(wrap("& { color: red; }"), "demo")).toHaveLength(1);
+    expect(componentProblems(wrap(".a { color: red; } &.b { color: red; }"), "demo")).toHaveLength(
+      1,
+    );
+    expect(componentProblems(wrap(".c-other { color: red; }"), "demo")).toHaveLength(1);
+    expect(componentProblems(wrap(".card__title { color: red; }"), "demo")).toHaveLength(1);
+    expect(componentProblems(wrap(".card--big { color: red; }"), "demo")).toHaveLength(1);
+    expect(
+      componentProblems(wrap("@include mx.breakpoint(md) { .a { color: red; } }"), "demo"),
+    ).toHaveLength(1);
+    expect(componentProblems(ok, "other")).toHaveLength(1);
+    expect(componentProblems(`${ok} .rogue { color: red }`, "demo")).toHaveLength(1);
+    expect(componentProblems(`${ok} @include mx.component("demo") { }`, "demo")).toHaveLength(1);
+  });
+
+  it("allows dark-mode hooks only in legacy files, bar the two named exceptions", () => {
+    const bad = styleFiles
+      .filter((p) => !legacyFiles.includes(rel(p)))
+      .filter((p) => hasDarkHook(readFileSync(p, "utf8"), rel(p)))
+      .map(rel);
+    expect(bad).toEqual([]);
+    expect(hasDarkHook("@include butler-mx.dark-mode-class { a: b }", "x.scss")).toBe(true);
+    expect(hasDarkHook("@include mx.dark-mode-override { a: b }", "x.scss")).toBe(true);
+    expect(hasDarkHook(".dark .a { a: b }", "x.scss")).toBe(true);
+    expect(hasDarkHook("html.dark .a { a: b }", "x.scss")).toBe(true);
+    expect(hasDarkHook('html[class~="dark"] .c-card { a: b }', "src/styles/base/_x.scss")).toBe(
+      true,
+    );
+    // The exception covers exactly the named selector in its file.
+    expect(
+      hasDarkHook('html[class~="dark"] .c-select { a: b }', "src/styles/base/_inputs.scss"),
+    ).toBe(false);
+    expect(
+      hasDarkHook('html[class~="dark"] .c-select { a: b }', "src/styles/base/_other.scss"),
+    ).toBe(true);
+    expect(
+      hasDarkHook('html[class~="dark"] .c-other { a: b }', "src/styles/base/_inputs.scss"),
+    ).toBe(true);
+    expect(hasDarkHook(".dark-grey { a: b }", "x.scss")).toBe(false);
   });
 
   it("lists only legacy files that exist", () => {

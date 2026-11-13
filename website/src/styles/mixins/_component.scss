@@ -1,0 +1,9 @@
+// One migrated component = one @scope block (design system spec §7.1). The lower boundary keeps a
+// component out of nested components and slotted content (`[data-slot]` wraps every <slot>).
+@mixin component($name) {
+  @layer components {
+    @scope (.c-#{$name}) to (:scope [class^="c-"], :scope [class*=" c-"], :scope [data-slot] > *) {
+      @content;
+    }
+  }
+}

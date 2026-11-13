@@ -49,3 +49,8 @@ test("the layer order survives a ClientRouter navigation (spec §6/§14)", async
   );
   expect(await page.evaluate(() => getComputedStyle(document.body).letterSpacing)).toBe("2px");
 });
+
+test("the browser supports @scope (browser floor, spec §9/§14)", async ({ page }) => {
+  await page.goto("/");
+  expect(await page.evaluate(() => typeof CSSScopeRule !== "undefined")).toBe(true);
+});
