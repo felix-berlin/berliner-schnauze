@@ -118,11 +118,6 @@
       margin-inline-start: auto;
     }
 
-    &__menu-item[aria-disabled="true"] {
-      opacity: 0.55;
-      cursor: default;
-    }
-
     // Inline panels (spec §9a): report on --surface-chip, delete confirmation as .c-state--error.
     &__report {
       display: grid;

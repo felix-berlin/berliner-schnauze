@@ -35,12 +35,12 @@ afterEach(() => {
 // Helper: dispatch a ToggleEvent on the panel element
 const openToggle = (wrapper: ReturnType<typeof mount>) =>
   wrapper
-    .find(".c-dropdown__panel")
+    .find("[popover]")
     .element.dispatchEvent(new ToggleEvent("toggle", { bubbles: false, newState: "open" }));
 
 const closeToggle = (wrapper: ReturnType<typeof mount>) =>
   wrapper
-    .find(".c-dropdown__panel")
+    .find("[popover]")
     .element.dispatchEvent(new ToggleEvent("toggle", { bubbles: false, newState: "closed" }));
 
 // Helper: mount with a default scoped slot that renders a button receiving triggerProps
@@ -57,34 +57,34 @@ const mountWithTrigger = (options: Parameters<typeof mount>[1] = {}) =>
 describe("DropdownPopover.vue", () => {
   // --- Structure ---
 
-  it("renders a .c-dropdown wrapper as the root element", () => {
+  it("renders a .c-dropdown-popover wrapper as the root element", () => {
     const wrapper = mount(DropdownPopover);
-    expect(wrapper.find(".c-dropdown").exists()).toBe(true);
+    expect(wrapper.find(".c-dropdown-popover").exists()).toBe(true);
   });
 
-  it("renders a .c-dropdown__trigger span wrapping the default slot", () => {
+  it("renders a trigger span wrapping the default slot", () => {
     const wrapper = mount(DropdownPopover, {
       slots: { default: "<span>label</span>" },
     });
-    expect(wrapper.find(".c-dropdown__trigger span").text()).toBe("label");
+    expect(wrapper.find("[data-slot] span").text()).toBe("label");
   });
 
   it("panel has popover='auto' attribute", () => {
     const wrapper = mount(DropdownPopover);
-    expect(wrapper.find(".c-dropdown__panel").attributes("popover")).toBe("auto");
+    expect(wrapper.find("[popover]").attributes("popover")).toBe("auto");
   });
 
   // --- Slot scope: triggerProps ---
 
   it("triggerProps.popovertarget matches panel id", () => {
     const wrapper = mountWithTrigger();
-    const panelId = wrapper.find(".c-dropdown__panel").attributes("id");
+    const panelId = wrapper.find("[popover]").attributes("id");
     expect(wrapper.find("[data-testid=trigger-btn]").attributes("popovertarget")).toBe(panelId);
   });
 
   it("triggerProps.aria-controls matches panel id", () => {
     const wrapper = mountWithTrigger();
-    const panelId = wrapper.find(".c-dropdown__panel").attributes("id");
+    const panelId = wrapper.find("[popover]").attributes("id");
     expect(wrapper.find("[data-testid=trigger-btn]").attributes("aria-controls")).toBe(panelId);
   });
 
@@ -132,7 +132,7 @@ describe("DropdownPopover.vue", () => {
         },
       },
     });
-    const panelId = wrapper.find(".c-dropdown__panel").attributes("id");
+    const panelId = wrapper.find("[popover]").attributes("id");
     expect(capturedPanelId).toBe(panelId);
   });
 
@@ -140,18 +140,18 @@ describe("DropdownPopover.vue", () => {
 
   it("trigger span style contains anchor-name", () => {
     const wrapper = mount(DropdownPopover);
-    expect(wrapper.find(".c-dropdown__trigger").attributes("style")).toContain("anchor-name:");
+    expect(wrapper.find("span[data-slot]").attributes("style")).toContain("anchor-name:");
   });
 
   it("panel style contains position-anchor", () => {
     const wrapper = mount(DropdownPopover);
-    expect(wrapper.find(".c-dropdown__panel").attributes("style")).toContain("position-anchor:");
+    expect(wrapper.find("[popover]").attributes("style")).toContain("position-anchor:");
   });
 
   it("anchor-name on trigger matches position-anchor on panel", () => {
     const wrapper = mount(DropdownPopover);
-    const triggerStyle = wrapper.find(".c-dropdown__trigger").attributes("style") ?? "";
-    const panelStyle = wrapper.find(".c-dropdown__panel").attributes("style") ?? "";
+    const triggerStyle = wrapper.find("span[data-slot]").attributes("style") ?? "";
+    const panelStyle = wrapper.find("[popover]").attributes("style") ?? "";
     const anchorName = triggerStyle.match(/anchor-name:\s*([^;]+)/)?.[1]?.trim();
     expect(anchorName).toBeTruthy();
     expect(panelStyle).toContain(`position-anchor: ${anchorName}`);
@@ -170,14 +170,14 @@ describe("DropdownPopover.vue", () => {
     ] as const;
     for (const placement of placements) {
       const wrapper = mount(DropdownPopover, { props: { placement } });
-      expect(wrapper.find(`.c-dropdown__panel--${placement}`).exists()).toBe(true);
+      expect(wrapper.find(`.c-dropdown-popover[data-variant='${placement}']`).exists()).toBe(true);
     }
   });
 
-  it("sets --c-dropdown-offset in panel inline style from offset prop", () => {
+  it("sets --dropdown-popover-offset in panel inline style from offset prop", () => {
     const wrapper = mount(DropdownPopover, { props: { offset: 16 } });
-    expect(wrapper.find(".c-dropdown__panel").attributes("style")).toContain(
-      "--c-dropdown-offset: 16px",
+    expect(wrapper.find("[popover]").attributes("style")).toContain(
+      "--dropdown-popover-offset: 16px",
     );
   });
 
@@ -185,18 +185,18 @@ describe("DropdownPopover.vue", () => {
 
   it("arrow element is rendered with aria-hidden once opened", async () => {
     const wrapper = mountWithTrigger();
-    expect(wrapper.find(".c-dropdown__arrow").exists()).toBe(false);
+    expect(wrapper.find("[aria-hidden='true']").exists()).toBe(false);
     openToggle(wrapper);
     await nextTick();
-    expect(wrapper.find(".c-dropdown__arrow").attributes("aria-hidden")).toBe("true");
+    expect(wrapper.find("[aria-hidden='true']").attributes("aria-hidden")).toBe("true");
   });
 
   // --- $attrs ---
 
-  it("inherited attrs land on outer .c-dropdown wrapper, not trigger span", () => {
+  it("inherited attrs land on outer .c-dropdown-popover wrapper, not trigger span", () => {
     const wrapper = mount(DropdownPopover, { attrs: { "data-custom": "yes" } });
-    expect(wrapper.find(".c-dropdown").attributes("data-custom")).toBe("yes");
-    expect(wrapper.find(".c-dropdown__trigger").attributes("data-custom")).toBeUndefined();
+    expect(wrapper.find(".c-dropdown-popover").attributes("data-custom")).toBe("yes");
+    expect(wrapper.find("span[data-slot]").attributes("data-custom")).toBeUndefined();
   });
 
   // --- close() ---
@@ -268,15 +268,15 @@ describe("DropdownPopover.vue", () => {
     // isOpen is now true — callback should invoke syncArrow without throwing
     resizeCb.fn?.();
     await nextTick();
-    expect(wrapper.find(".c-dropdown").exists()).toBe(true);
+    expect(wrapper.find(".c-dropdown-popover").exists()).toBe(true);
   });
 
   // --- arrowDynamicStyle: arrowAbove=false ternary branches (lines 92, 94) ---
 
   it("syncArrow sets arrowAbove=false when panel is below trigger", async () => {
     const wrapper = mountWithTrigger();
-    const panelEl = wrapper.find(".c-dropdown__panel").element;
-    const triggerSpan = wrapper.find(".c-dropdown__trigger").element;
+    const panelEl = wrapper.find("[popover]").element;
+    const triggerSpan = wrapper.find("span[data-slot]").element;
     vi.spyOn(panelEl, "getBoundingClientRect").mockReturnValue({
       bottom: 400,
       height: 200,
@@ -301,7 +301,7 @@ describe("DropdownPopover.vue", () => {
     } as DOMRect);
     openToggle(wrapper);
     await nextTick();
-    expect(wrapper.find(".c-dropdown__arrow").exists()).toBe(true);
+    expect(wrapper.find("[aria-hidden='true']").exists()).toBe(true);
   });
 
   // --- onToggle close: setTimeout false branch (line 137) ---
@@ -357,7 +357,7 @@ describe("DropdownPopover.vue", () => {
       attachTo: document.body,
       slots: { default: "<span>not focusable</span>" },
     });
-    const triggerEl = wrapper.find(".c-dropdown__trigger").element as HTMLElement;
+    const triggerEl = wrapper.find("span[data-slot]").element as HTMLElement;
     const focusSpy = vi.spyOn(triggerEl, "focus");
     (wrapper.vm as InstanceType<typeof DropdownPopover>).close();
     expect(mockHidePopover).toHaveBeenCalledOnce();

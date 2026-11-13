@@ -1,0 +1,68 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Word page menu (docs/design/wortseite/SPEC.md §5/§9): the list draws the sheet inside a bare
+// DropdownPopover. role="menu"; items are its .item buttons (done state: data-done / aria-checked).
+@include mx.component("word-menu") {
+  :scope {
+    --_min: 13rem; // one-off menu width
+    --_gap: 2px; // hairline between rows, below every space step
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--_gap);
+    min-inline-size: var(--_min);
+    padding: var(--space-1);
+    border: 1px dashed var(--color-border-card);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-sheet);
+    box-shadow: var(--shadow-paper-lift);
+  }
+
+  .item {
+    --_row: 2.75rem; // 44px touch target
+    --_hover-time: 0.2s; // between duration-fast and -base, kept from the mock
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    inline-size: 100%;
+    min-block-size: var(--_row);
+    padding: 0 var(--space-3);
+    border: 0;
+    border-radius: var(--radius-xs);
+    background: transparent;
+    color: var(--color-text-body);
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: start;
+    white-space: nowrap;
+    cursor: pointer;
+
+    @include butler-mx.feature("motion") {
+      transition:
+        background-color var(--_hover-time) ease,
+        color var(--_hover-time) ease;
+    }
+
+    svg {
+      flex-shrink: 0;
+      color: var(--color-accent-icon);
+    }
+
+    &:hover,
+    &:focus-visible {
+      background: var(--color-surface-wash);
+      color: var(--color-text-strong);
+    }
+
+    &:focus-visible {
+      outline-offset: -2px;
+    }
+
+    &:is([data-done="true"], [aria-checked="true"]) {
+      color: var(--color-text-accent);
+      font-weight: var(--font-weight-bold);
+    }
+  }
+}

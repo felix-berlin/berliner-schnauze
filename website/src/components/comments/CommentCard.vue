@@ -93,7 +93,8 @@
         <DropdownPopover
           :name="`comment-${comment.id}`"
           placement="bottom-end"
-          class="c-comment__menu c-dropdown--theme-menu"
+          theme="menu"
+          class="c-comment__menu"
         >
           <template #default="{ triggerProps }">
             <button
@@ -113,7 +114,7 @@
             <template v-for="entry in entries" :key="entry">
               <button
                 v-if="entry === 'copy'"
-                class="c-dropdown__item c-comment__menu-item"
+                class="c-menu-item"
                 :data-done="copied"
                 type="button"
                 @click="copyLink"
@@ -125,7 +126,7 @@
               <button
                 v-else-if="entry === 'report' && reported"
                 aria-disabled="true"
-                class="c-dropdown__item c-comment__menu-item"
+                class="c-menu-item"
                 type="button"
               >
                 <Check aria-hidden="true" width="16" height="16" />
@@ -133,7 +134,7 @@
               </button>
               <button
                 v-else
-                class="c-dropdown__item c-comment__menu-item"
+                class="c-menu-item"
                 type="button"
                 :popovertarget="`dropdown-comment-${comment.id}`"
                 popovertargetaction="hide"

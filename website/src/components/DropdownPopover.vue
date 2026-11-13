@@ -1,6 +1,6 @@
 <template>
-  <div v-bind="$attrs" class="c-dropdown">
-    <span ref="triggerEl" class="c-dropdown__trigger" :style="`anchor-name: --${panelId}`">
+  <div v-bind="$attrs" class="c-dropdown-popover" :data-variant="variant">
+    <span ref="triggerEl" class="trigger" data-slot :style="`anchor-name: --${panelId}`">
       <slot :trigger-props="triggerProps" :is-open="isOpen" :panel-id="panelId" />
     </span>
 
@@ -8,14 +8,13 @@
       ref="panel"
       :id="panelId"
       popover="auto"
-      class="c-dropdown__panel"
-      :class="`c-dropdown__panel--${placement}`"
+      class="panel"
       :style="panelStyle"
       @toggle="onToggle"
     >
       <template v-if="hasContent">
-        <span class="c-dropdown__arrow" :style="arrowDynamicStyle" aria-hidden="true" />
-        <slot name="panel" />
+        <span class="arrow" :style="arrowDynamicStyle" aria-hidden="true" />
+        <div class="content" data-slot><slot name="panel" /></div>
       </template>
     </div>
   </div>
@@ -43,9 +42,13 @@ export type DropdownPopoverProps = {
   name: string;
   offset?: number;
   placement?: PlacementValue;
+  /** menu: action menu (items are .c-menu-item); bare: the slot draws its own sheet; nav: main menu. */
+  theme?: "menu" | "bare" | "nav";
 };
 
-const { name, offset = 8, placement = "bottom-start" } = defineProps<DropdownPopoverProps>();
+const { name, offset = 8, placement = "bottom-start", theme } = defineProps<DropdownPopoverProps>();
+
+const variant = computed(() => (theme ? `${placement} ${theme}` : placement));
 
 defineOptions({ inheritAttrs: false });
 
@@ -63,9 +66,9 @@ const arrowAbove = ref(false);
 const arrowDynamicStyle = computed((): Record<string, string> => {
   if (arrowX.value === null) return {};
   return {
-    bottom: arrowAbove.value ? "calc(-1 * var(--arrow-half))" : "auto",
+    bottom: arrowAbove.value ? "calc(-1 * var(--_arrow-half))" : "auto",
     left: `${arrowX.value}px`,
-    top: arrowAbove.value ? "auto" : "calc(-1 * var(--arrow-half))",
+    top: arrowAbove.value ? "auto" : "calc(-1 * var(--_arrow-half))",
   };
 });
 
@@ -97,7 +100,7 @@ const triggerProps = computed(() => ({
 }));
 
 const panelStyle = computed(() => ({
-  "--c-dropdown-offset": `${offset}px`,
+  "--dropdown-popover-offset": `${offset}px`,
   "position-anchor": `--${panelId}`,
 }));
 
@@ -134,5 +137,5 @@ const close = (): void => {
 
 <style lang="scss">
 @use "@styles/components/dropdown-popover";
-@use "@styles/components/dropdown-popover-themes";
+@use "@styles/components/menu-item";
 </style>

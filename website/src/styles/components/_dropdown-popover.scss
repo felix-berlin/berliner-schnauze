@@ -1,108 +1,77 @@
-@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-@layer legacy {
-  .c-dropdown {
-    display: inline-flex;
+// Dropdown: a trigger (.trigger, slot) and an auto popover (.panel) placed with CSS Anchor
+// Positioning; position-anchor and --dropdown-popover-offset are set inline per instance
+// (DropdownPopover.vue). Parts: .trigger, .panel, .arrow (positioned by JS), .content (panel slot).
+// Variants (space-separated): placement (bottom-start, bottom-end, bottom, top-start, top-end, top)
+// plus a theme: menu (action menu on control colours), bare (the slot draws the sheet: word menu),
+// nav (main menu: no padding, wide, drops in from the trigger corner).
+// Public: --dropdown-popover-offset.
+@include mx.component("dropdown-popover") {
+  :scope {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R20 + R36: one-off (paper lift as a filter)
+    --_lift: drop-shadow(0 0.5px 0.6px rgb(0 0 0 / 8%)) drop-shadow(0 4px 5px rgb(0 0 0 / 16%));
+    --_bg: var(--color-surface-floating);
+    --_color: var(--color-text-body);
+    --_padding: var(--space-2);
+    --_fade: var(--duration-fast);
+    --_center: 50%;
+    --_offset: var(--dropdown-popover-offset, 8px); // 8px: the arrow's size, so its tip touches the trigger
 
-    &__trigger {
-      display: inline-flex;
-      cursor: pointer;
-      // anchor-name set via inline style (dynamic per instance)
-    }
+    display: inline-flex;
   }
 
-  .c-dropdown__panel {
-    // UA Popover reset — browsers add margin/border/padding to [popover] elements
+  :scope[data-variant~="menu"] {
+    --_bg: var(--color-control-bg);
+    --_color: var(--color-control-text);
+    --_padding: var(--space-1) 0;
+  }
+
+  .trigger {
+    display: inline-flex;
+    cursor: pointer;
+  }
+
+  .panel {
+    // UA popover reset: browsers add margin/border/padding to [popover]
     margin: 0;
     border: none;
-    background: transparent;
     overflow: visible;
     max-inline-size: none;
     max-block-size: none;
-    border-radius: 6px;
-
-    // Anchor Positioning — position-anchor is set via inline style (dynamic anchor name per instance)
+    border-radius: var(--radius-sm);
     position: fixed;
-    margin-block-start: var(--c-dropdown-offset, 8px);
+    margin-block-start: var(--_offset);
     position-try-fallbacks:
       flip-inline,
       flip-block,
       flip-block flip-inline;
     position-try-order: most-block-size;
+    // drop-shadow casts one shadow around panel + arrow (box-shadow doubles where the arrow overlaps)
+    filter: var(--_lift);
+    background-color: var(--_bg);
+    padding: var(--_padding);
+    color: var(--_color);
 
-    --color-background: var(--floating-color-background);
+    // Closed panel must never catch clicks: during the allow-discrete exit it stays in the top layer.
+    &:not(:popover-open) {
+      pointer-events: none;
+    }
 
-    // filter: drop-shadow casts a unified shadow around the panel + arrow silhouette,
-    // avoiding the double-shadow artefact that box-shadow produces where the arrow
-    // overlaps the panel interior.
-    filter: vars.$paper-lift-drop;
-    background-color: var(--color-background);
-    padding: var(--padding, #{vars.$spacer * 0.5 vars.$spacer * 0.5});
-    color: var(--color, var(--color-body));
-
-    // Fallback for browsers without CSS Anchor Positioning (Anchor Positioning is Baseline Newly, 2026)
+    // Without Anchor Positioning: centred in the viewport.
     @supports not (position-area: block-end) {
-      inset-block-start: 50%;
-      inset-inline-start: 50%;
+      inset-block-start: var(--_center);
+      inset-inline-start: var(--_center);
       translate: -50% -50%;
     }
 
-    // Placement modifier classes
-    &--bottom-start {
-      position-area: block-end span-inline-end;
-    }
-
-    &--bottom-end {
-      position-area: block-end span-inline-start;
-    }
-
-    &--bottom {
-      position-area: block-end;
-    }
-
-    &--top-start {
-      position-area: block-start span-inline-end;
-    }
-
-    &--top-end {
-      position-area: block-start span-inline-start;
-    }
-
-    &--top {
-      position-area: block-start;
-    }
-  }
-
-  // Arrow element — rendered when arrow=true prop is set
-  .c-dropdown__arrow {
-    --arrow-size: 8px;
-    --arrow-half: calc(var(--arrow-size) / 2);
-
-    position: absolute;
-    width: var(--arrow-size);
-    height: var(--arrow-size);
-    background: var(--color-background);
-    rotate: 45deg;
-
-    // top, left, bottom set via inline style from JS (syncArrow) so the arrow
-    // tracks the trigger center correctly even after position-try-fallbacks flip
-  }
-
-  // Closed panel must never intercept clicks — especially during the overlay allow-discrete
-  // exit transition where the panel stays in the top layer for the duration of the animation.
-  .c-dropdown__panel:not(:popover-open) {
-    pointer-events: none;
-  }
-
-  // Fade via @starting-style + allow-discrete (Baseline Newly Available, 2024)
-  @include butler-mx.feature("motion") {
-    .c-dropdown__panel {
+    @include butler-mx.feature("motion") {
       opacity: 1;
       transition:
-        opacity 0.15s ease,
-        display 0.15s allow-discrete,
-        overlay 0.15s allow-discrete;
+        opacity var(--_fade) ease,
+        display var(--_fade) allow-discrete,
+        overlay var(--_fade) allow-discrete;
 
       &:not(:popover-open) {
         opacity: 0;
@@ -111,6 +80,98 @@
       @starting-style {
         &:popover-open {
           opacity: 0;
+        }
+      }
+    }
+  }
+
+  :scope[data-variant~="bottom-start"] .panel {
+    position-area: block-end span-inline-end;
+  }
+
+  :scope[data-variant~="bottom-end"] .panel {
+    position-area: block-end span-inline-start;
+  }
+
+  :scope[data-variant~="bottom"] .panel {
+    position-area: block-end;
+  }
+
+  :scope[data-variant~="top-start"] .panel {
+    position-area: block-start span-inline-end;
+  }
+
+  :scope[data-variant~="top-end"] .panel {
+    position-area: block-start span-inline-start;
+  }
+
+  :scope[data-variant~="top"] .panel {
+    position-area: block-start;
+  }
+
+  // Rotated square; top/left/bottom come inline from JS (syncArrow), so it follows a flipped panel.
+  .arrow {
+    --_arrow-size: 8px;
+    --_arrow-half: calc(var(--_arrow-size) / 2);
+
+    position: absolute;
+    inline-size: var(--_arrow-size);
+    block-size: var(--_arrow-size);
+    background: var(--_bg);
+    rotate: 45deg;
+  }
+
+  :scope[data-variant~="menu"] .content {
+    --_min: 10rem; // one-off menu width
+
+    display: flex;
+    flex-direction: column;
+    min-inline-size: var(--_min);
+  }
+
+  :scope[data-variant~="bare"] {
+    .panel {
+      filter: none;
+      padding: 0;
+      background: transparent;
+    }
+
+    .arrow {
+      display: none;
+    }
+  }
+
+  :scope[data-variant~="nav"] .panel {
+    --_nav-width: min(600px, 100% - 2rem); // one-off menu width with a space-4 gutter each side
+    --_drop: translateY(-6px) scale(0.98);
+    --_open: 0.22s; // between duration-fast and -base, kept from the menu mock
+
+    inline-size: var(--_nav-width);
+    padding: 0;
+
+    // Drops in from the trigger corner: slide + scale on top of the fade. The exit stays at
+    // duration-fast to match DropdownPopover's content-unmount timeout.
+    @include butler-mx.feature("motion") {
+      transform-origin: top right;
+      transition:
+        opacity var(--_fade) ease,
+        transform var(--_fade) ease,
+        display var(--_fade) allow-discrete,
+        overlay var(--_fade) allow-discrete;
+
+      &:not(:popover-open) {
+        transform: var(--_drop);
+      }
+
+      &:popover-open {
+        transition-duration: var(--_open);
+        transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      @starting-style {
+        &:popover-open {
+          opacity: 0;
+          transform: var(--_drop);
         }
       }
     }

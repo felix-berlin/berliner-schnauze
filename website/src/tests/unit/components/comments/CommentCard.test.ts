@@ -31,11 +31,9 @@ const base: PublicComment = {
 };
 
 const openMenu = async (wrapper: VueWrapper) => {
-  wrapper
-    .find(".c-dropdown__panel")
-    .element.dispatchEvent(new ToggleEvent("toggle", { newState: "open" }));
+  wrapper.find("[popover]").element.dispatchEvent(new ToggleEvent("toggle", { newState: "open" }));
   await wrapper.vm.$nextTick();
-  return wrapper.findAll(".c-comment__menu-item");
+  return wrapper.findAll(".c-menu-item");
 };
 
 const mountCard = (
@@ -85,7 +83,7 @@ describe("CommentCard", () => {
     expect(
       wrapper.find('[aria-label="Weitere Aktionen zum Kommentar von Anonymer Berliner"]').exists(),
     ).toBe(true);
-    expect(wrapper.findAll(".c-comment__menu-item")).toHaveLength(0);
+    expect(wrapper.findAll(".c-menu-item")).toHaveLength(0);
   });
 
   it("menu: others' comment = Link + Melden; own comment in edit window = Link + Bearbeiten + Löschen", async () => {
@@ -313,9 +311,7 @@ describe("CommentCard", () => {
     expect(wrapper.find("a.c-comment__permalink").attributes("href")).toBe("#kommentar-4");
     const copy = (await openMenu(wrapper)).find((b) => b.text() === "Link kopieren")!;
     await copy.trigger("click");
-    await vi.waitFor(() =>
-      expect(wrapper.find(".c-comment__menu-item").text()).toBe("Link kopiert"),
-    );
+    await vi.waitFor(() => expect(wrapper.find(".c-menu-item").text()).toBe("Link kopiert"));
     expect(writeText).toHaveBeenCalledWith(`${location.origin}${location.pathname}#kommentar-4`);
   });
 
@@ -327,10 +323,10 @@ describe("CommentCard", () => {
     vi.useFakeTimers();
     await copy.trigger("click");
     await vi.advanceTimersByTimeAsync(1999);
-    expect(wrapper.find(".c-comment__menu-item").text()).toBe("Link kopiert");
+    expect(wrapper.find(".c-menu-item").text()).toBe("Link kopiert");
     expect(panel.hidePopover).not.toHaveBeenCalled();
     await vi.advanceTimersByTimeAsync(1);
-    expect(wrapper.find(".c-comment__menu-item").text()).toBe("Link kopieren");
+    expect(wrapper.find(".c-menu-item").text()).toBe("Link kopieren");
     expect(panel.hidePopover).toHaveBeenCalledTimes(1);
     vi.useRealTimers();
     wrapper.unmount();

@@ -1,0 +1,36 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// One entry of an action menu (DropdownPopover theme "menu": comment ⋯ menu, word options in the
+// word index): a button or link with an icon, dashed separator below. Locked: aria-disabled.
+@include mx.component("menu-item") {
+  :scope {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    padding: var(--space-2) var(--space-3);
+    border: 0;
+    border-block-end: 1px dashed var(--color-border-control);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: var(--font-size-md);
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:last-child {
+      border-block-end: 0;
+    }
+
+    &[aria-disabled="true"] {
+      opacity: 0.55;
+      cursor: default;
+    }
+
+    @include butler-mx.hover {
+      color: var(--color-text-accent);
+      text-decoration: underline dashed from-font;
+    }
+  }
+}

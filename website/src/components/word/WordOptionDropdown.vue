@@ -4,7 +4,8 @@
     :name="`word-options-${slug ?? ''}`"
     :offset="6"
     placement="bottom-end"
-    class="c-options-dropdown c-word-menu"
+    theme="bare"
+    class="c-options-dropdown"
   >
     <template #default="{ triggerProps }">
       <button
@@ -24,18 +25,18 @@
       <div
         ref="menuEl"
         aria-label="Weitere Aktionen"
-        class="c-word-menu__list"
+        class="c-word-menu"
         role="menu"
         @keydown="onMenuKeydown"
       >
-        <button class="c-word-menu__item" role="menuitem" type="button" @click="shareOrCopy">
+        <button class="item" role="menuitem" type="button" @click="shareOrCopy">
           <Share2 width="18" height="18" aria-hidden="true" />
           <span>Wort teilen</span>
         </button>
         <button
           v-if="clipBoardIsSupported"
           :data-done="done === 'link'"
-          class="c-word-menu__item"
+          class="item"
           role="menuitem"
           type="button"
           @click="copyLink"
@@ -47,7 +48,7 @@
         <button
           v-if="clipBoardIsSupported"
           :data-done="done === 'word'"
-          class="c-word-menu__item"
+          class="item"
           role="menuitem"
           type="button"
           @click="copyWord"
@@ -64,15 +65,11 @@
     v-else
     :name="`word-options-${slug ?? ''}`"
     placement="bottom-end"
-    class="c-options-dropdown c-dropdown--theme-menu"
+    theme="menu"
+    class="c-options-dropdown"
   >
     <template #default="{ triggerProps }">
-      <button
-        v-bind="triggerProps"
-        type="button"
-        aria-label="Optionen"
-        class="c-options-dropdown__options-icon c-icon-button"
-      >
+      <button v-bind="triggerProps" type="button" aria-label="Optionen" class="c-icon-button">
         <EllipsisVertical width="18" height="18" aria-hidden="true" />
       </button>
     </template>
@@ -84,36 +81,36 @@
         v-if="shareIsSupported"
         aria-label="Wort teilen"
         type="button"
-        class="c-dropdown__item c-options-dropdown__copy-button"
+        class="c-menu-item"
         @click="shareWord(slug ?? '')"
       >
-        <Share2 width="18" height="18" class="c-options-dropdown__icon-button" />
+        <Share2 width="18" height="18" aria-hidden="true" />
 
-        <span class="c-options-dropdown__copy-text">Wort teilen</span>
+        <span>Wort teilen</span>
       </button>
 
       <button
         v-if="clipBoardIsSupported"
         aria-label="Link zum Wort kopieren"
         type="button"
-        class="c-dropdown__item c-options-dropdown__copy-button"
+        class="c-menu-item"
         @click="copyWordPageUrlToClipboard(slug ?? '')"
       >
-        <Link width="18" height="18" class="c-options-dropdown__icon-button" />
+        <Link width="18" height="18" aria-hidden="true" />
 
-        <span class="c-options-dropdown__copy-text">Link kopieren</span>
+        <span>Link kopieren</span>
       </button>
 
       <button
         v-if="clipBoardIsSupported"
         aria-label="Wort kopieren"
         type="button"
-        class="c-dropdown__item c-options-dropdown__copy-button"
+        class="c-menu-item"
         @click="copyNameToClipboard(berlinerisch ?? '')"
       >
-        <Copy width="18" height="18" class="c-options-dropdown__icon-button" />
+        <Copy width="18" height="18" aria-hidden="true" />
 
-        <span class="c-options-dropdown__copy-text">Wort kopieren</span>
+        <span>Wort kopieren</span>
       </button>
 
       <slot name="after" />
@@ -167,10 +164,7 @@ const markDone = (what: "link" | "word"): void => {
 };
 
 const items = (): HTMLElement[] =>
-  Array.from(
-    menuEl.value?.querySelectorAll<HTMLElement>('[role="menuitem"]') ??
-      [],
-  );
+  Array.from(menuEl.value?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? []);
 
 const focusItem = (index: number): void => {
   const list = items();
@@ -288,4 +282,5 @@ const copyNameToClipboard = async (name: string): Promise<void> => {
 
 <style lang="scss">
 @use "@styles/components/options-dropdown";
+@use "@styles/components/word-menu";
 </style>
