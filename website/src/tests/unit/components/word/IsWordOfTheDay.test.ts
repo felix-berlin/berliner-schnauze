@@ -93,7 +93,7 @@ describe("IsWordOfTheDay.vue", () => {
     const tooltip = document.body.querySelector("[popover='manual']");
     expect(tooltip).not.toBeNull();
     expect(tooltip?.textContent).toContain("TestWord, ist das heutige Wort des Tages");
-    expect(tooltip?.className).toContain("c-tooltip__panel--bottom");
+    expect(tooltip?.dataset.variant).toBe("bottom");
     wrapper.unmount();
   });
 

@@ -160,9 +160,10 @@ function applyPanel(
 ): void {
   // textContent wipes child elements — always re-append arrow after calling this
   panel.textContent = opts.content;
-  panel.className = `c-tooltip__panel c-tooltip__panel--${opts.placement}`;
+  panel.className = "c-tooltip";
+  panel.dataset.variant = opts.placement;
   panel.style.setProperty("position-anchor", anchorName);
-  panel.style.setProperty("--c-tooltip-offset", `${opts.offset}px`);
+  panel.style.setProperty("--tooltip-offset", `${opts.offset}px`);
 }
 
 function addListeners(el: HTMLElement, state: TooltipState): void {
@@ -200,7 +201,7 @@ export const vTooltip: Directive<TooltipEl, TooltipValue> = {
     // applyPanel uses textContent which wipes children — set text first, then append arrow
     applyPanel(panel, anchorName, opts);
     const arrow = document.createElement("span");
-    arrow.className = "c-tooltip__arrow";
+    arrow.className = "arrow";
     arrow.setAttribute("aria-hidden", "true");
     panel.appendChild(arrow);
 

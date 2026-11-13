@@ -102,19 +102,19 @@ describe("vTooltip directive", () => {
   it("applies default placement class 'top'", async () => {
     const wrapper = mountWithDirective("Test");
     const panel = await showAndGetPanel(wrapper);
-    expect(panel.className).toContain("c-tooltip__panel--top");
+    expect(panel.dataset.variant).toBe("top");
   });
 
   it("applies specified placement class", async () => {
     const wrapper = mountWithDirective({ content: "Test", placement: "bottom" });
     const panel = await showAndGetPanel(wrapper);
-    expect(panel.className).toContain("c-tooltip__panel--bottom");
+    expect(panel.dataset.variant).toBe("bottom");
   });
 
-  it("sets --c-tooltip-offset from offset option", async () => {
+  it("sets --tooltip-offset from offset option", async () => {
     const wrapper = mountWithDirective({ content: "Test", offset: 16 });
     const panel = await showAndGetPanel(wrapper);
-    expect(panel.style.getPropertyValue("--c-tooltip-offset")).toBe("16px");
+    expect(panel.style.getPropertyValue("--tooltip-offset")).toBe("16px");
   });
 
   it("calls showPopover on pointerenter", async () => {

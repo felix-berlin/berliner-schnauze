@@ -1,8 +1,7 @@
 <template>
   <div
     ref="container"
-    class="c-tooltip"
-    :style="`anchor-name: --${tooltipId}`"
+    :style="`display: inline-flex; anchor-name: --${tooltipId}`"
     :aria-describedby="tooltipId"
     @pointerenter="show"
     @pointerleave="scheduleHide"
@@ -17,14 +16,14 @@
       ref="panel"
       popover="manual"
       role="tooltip"
-      class="c-tooltip__panel"
-      :class="`c-tooltip__panel--${placement}`"
-      :style="`position-anchor: --${tooltipId}; --c-tooltip-offset: ${offset}px`"
+      class="c-tooltip"
+      :data-variant="placement"
+      :style="`position-anchor: --${tooltipId}; --tooltip-offset: ${offset}px`"
       @pointerenter="cancelHide"
       @pointerleave="scheduleHide"
     >
-      <span ref="arrow" class="c-tooltip__arrow" aria-hidden="true" />
-      <slot name="tooltip">{{ content }}</slot>
+      <span ref="arrow" class="arrow" aria-hidden="true" />
+      <span data-slot><slot name="tooltip">{{ content }}</slot></span>
     </div>
   </div>
 </template>

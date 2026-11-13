@@ -11,7 +11,7 @@ let wrapper: ReturnType<typeof mount> | null = null;
 
 // Panel renders lazily (v-if="isRendered") — only exists in DOM after show() is called.
 // Component is attached to document.body so querySelector still finds it.
-const getPanel = () => document.body.querySelector<HTMLElement>(".c-tooltip__panel");
+const getPanel = () => document.body.querySelector<HTMLElement>(".c-tooltip");
 
 function mountComponent(...args: Parameters<typeof mount<typeof TooltipPopover>>) {
   const [component, options = {}] = args;
@@ -36,12 +36,12 @@ afterEach(() => {
 });
 
 describe("TooltipPopover.vue", () => {
-  it("renders default slot content inside .c-tooltip", () => {
+  it("renders default slot content inside the anchor", () => {
     const w = mountComponent(TooltipPopover, { slots: { default: "<span>Hover me</span>" } });
-    expect(w.find(".c-tooltip span").text()).toBe("Hover me");
+    expect(w.find("[aria-describedby] span").text()).toBe("Hover me");
   });
 
-  it("renders content prop inside .c-tooltip__panel", async () => {
+  it("renders content prop inside the tooltip panel", async () => {
     mountComponent(TooltipPopover, { props: { content: "Tooltip text" } });
     await showTooltip();
     expect(getPanel()?.textContent?.trim()).toBe("Tooltip text");
@@ -72,13 +72,13 @@ describe("TooltipPopover.vue", () => {
     const w = mountComponent(TooltipPopover);
     await showTooltip();
     const panelId = getPanel()?.getAttribute("id");
-    expect(w.find(".c-tooltip").attributes("aria-describedby")).toBe(panelId);
+    expect(w.find("[aria-describedby]").attributes("aria-describedby")).toBe(panelId);
   });
 
   it("anchor-name on wrapper matches position-anchor on panel", async () => {
     const w = mountComponent(TooltipPopover);
     await showTooltip();
-    const wrapperStyle = w.find(".c-tooltip").attributes("style") ?? "";
+    const wrapperStyle = w.find("[aria-describedby]").attributes("style") ?? "";
     const panelStyle = getPanel()?.getAttribute("style") ?? "";
     const anchorName = wrapperStyle.match(/anchor-name:\s*([^;]+)/)?.[1]?.trim();
     expect(anchorName).toBeTruthy();
@@ -100,7 +100,7 @@ describe("TooltipPopover.vue", () => {
       // Mount + show + unmount each iteration to avoid stale panels in body
       const w = mount(TooltipPopover, { attachTo: document.body, props: { placement } });
       await (w.vm as unknown as TooltipPopoverExposed).show();
-      expect(document.body.querySelector(`.c-tooltip__panel--${placement}`)).not.toBeNull();
+      expect(document.body.querySelector(`.c-tooltip[data-variant='${placement}']`)).not.toBeNull();
       w.unmount();
     }
     // Prevent afterEach from double-unmounting
@@ -110,18 +110,18 @@ describe("TooltipPopover.vue", () => {
   it("defaults to placement 'top' when not specified", async () => {
     mountComponent(TooltipPopover);
     await showTooltip();
-    expect(document.body.querySelector(".c-tooltip__panel--top")).not.toBeNull();
+    expect(document.body.querySelector(".c-tooltip[data-variant='top']")).not.toBeNull();
   });
 
-  it("sets --c-tooltip-offset CSS variable from offset prop", async () => {
+  it("sets --tooltip-offset CSS variable from offset prop", async () => {
     mountComponent(TooltipPopover, { props: { offset: 16 } });
     await showTooltip();
-    expect(getPanel()?.getAttribute("style")).toContain("--c-tooltip-offset: 16px");
+    expect(getPanel()?.getAttribute("style")).toContain("--tooltip-offset: 16px");
   });
 
   it("calls showPopover on pointerenter", async () => {
     const w = mountComponent(TooltipPopover);
-    await w.find(".c-tooltip").trigger("pointerenter");
+    await w.find("[aria-describedby]").trigger("pointerenter");
     expect(mockShowPopover).toHaveBeenCalledOnce();
   });
 
@@ -130,7 +130,7 @@ describe("TooltipPopover.vue", () => {
     const w = mountComponent(TooltipPopover);
     await showTooltip(); // ensure panel is rendered so hide() can call panel.value?.hidePopover()
     mockShowPopover.mockClear();
-    await w.find(".c-tooltip").trigger("pointerleave");
+    await w.find("[aria-describedby]").trigger("pointerleave");
     expect(mockHidePopover).not.toHaveBeenCalled();
     vi.advanceTimersByTime(200);
     expect(mockHidePopover).toHaveBeenCalledOnce();
@@ -138,7 +138,7 @@ describe("TooltipPopover.vue", () => {
 
   it("calls showPopover on focusin", async () => {
     const w = mountComponent(TooltipPopover);
-    await w.find(".c-tooltip").trigger("focusin");
+    await w.find("[aria-describedby]").trigger("focusin");
     expect(mockShowPopover).toHaveBeenCalledOnce();
   });
 
@@ -147,7 +147,7 @@ describe("TooltipPopover.vue", () => {
     const w = mountComponent(TooltipPopover);
     await showTooltip(); // ensure panel is rendered so hide() can call panel.value?.hidePopover()
     mockShowPopover.mockClear();
-    await w.find(".c-tooltip").trigger("focusout");
+    await w.find("[aria-describedby]").trigger("focusout");
     expect(mockHidePopover).not.toHaveBeenCalled();
     vi.advanceTimersByTime(200);
     expect(mockHidePopover).toHaveBeenCalledOnce();
@@ -193,7 +193,7 @@ describe("TooltipPopover.vue", () => {
     vi.useFakeTimers();
     const w = mountComponent(TooltipPopover);
     await showTooltip(); // panel must be in DOM for pointerenter listener to work
-    await w.find(".c-tooltip").trigger("pointerleave");
+    await w.find("[aria-describedby]").trigger("pointerleave");
     getPanel()!.dispatchEvent(new PointerEvent("pointerenter", { bubbles: true }));
     vi.advanceTimersByTime(300);
     expect(mockHidePopover).not.toHaveBeenCalled();
