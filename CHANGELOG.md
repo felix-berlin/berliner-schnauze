@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.12.3](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.2...v4.12.3) (2026-11-13)
+
+
+### Bug Fixes
+
+* **api:** harden trending, BON finish and the rate limiter ([d41cf50](https://github.com/felix-berlin/berliner-schnauze/commit/d41cf50ba1e3b13694f4ddde60d180edd01301f7))
+* **cms:** retention counters, slug redirects, catch-up hashing and readable comment mails ([dba584f](https://github.com/felix-berlin/berliner-schnauze/commit/dba584ff73308945002cba8898cc5d4e1b3bacf9))
+* **images:** serve the OG image even when its cache dir is broken ([a614a45](https://github.com/felix-berlin/berliner-schnauze/commit/a614a455cb7c579f6ec7c754cbda54792c964615))
+
 ## [4.12.2](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.1...v4.12.2) (2026-11-12)
 
 
