@@ -405,7 +405,7 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0(nanostores@1.5.5)
       '@playwright/test':
-        specifier: ^1.65.0
+        specifier: 1.65.0
         version: 1.65.0
       '@types/jsdom':
         specifier: ^30.0.0
@@ -438,7 +438,7 @@ importers:
         specifier: ^8.2.1
         version: 8.2.1
       '@vue/test-utils':
-        specifier: ^2.5.1
+        specifier: 2.5.1
         version: 2.5.1(@vue/compiler-dom@3.5.45)(@vue/server-renderer@3.5.45)(vue@3.5.45(typescript@6.0.3))
       browserslist-useragent-regexp:
         specifier: ^4.1.4
@@ -450,7 +450,7 @@ importers:
         specifier: ^3.2.1
         version: 3.2.1(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(eslint@10.10.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)
       jsdom:
-        specifier: ^31.0.0
+        specifier: 31.0.0
         version: 31.0.0
       postcss-html:
         specifier: ^2.0.0
