@@ -28,17 +28,6 @@
       gap: 0.5rem;
     }
 
-    // Buttons used to inherit the toast's --color/--color-background in light mode.
-    .c-button {
-      --button-bg: var(--orange-300);
-      --button-color: var(--color-body);
-
-      @include butler-mx.dark-mode-class {
-        --button-bg: var(--control-bg);
-        --button-color: var(--control-color);
-      }
-    }
-
     &__close {
       --button-border-width: 0;
     }

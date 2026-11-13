@@ -4,7 +4,7 @@
 // Variants (space-separated in data-variant): primary, lg, center-icon, filter. A pressed filter
 // button is aria-pressed="true". Public: --button-padding, --button-bg, --button-color,
 // --button-border-color, --button-border-style, --button-border-width, --button-display,
-// --button-font-size, --button-transition.
+// --button-font-size, --button-min-block-size, --button-transition.
 @include mx.component("button") {
   :scope {
     // stylelint-disable-next-line function-disallowed-list -- colour inventory R28: one-off (hover rim of primary and filter)
@@ -58,7 +58,7 @@
     align-items: center;
     justify-content: center;
     padding: var(--button-padding, 0 var(--space-6));
-    min-block-size: 48px;
+    min-block-size: var(--button-min-block-size, 48px);
     font-size: var(--button-font-size, var(--font-size-base));
     text-decoration: none;
   }
