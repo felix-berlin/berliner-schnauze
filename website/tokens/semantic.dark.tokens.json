@@ -111,11 +111,14 @@
       "range-track": {
         "$value": "{color.ink.600m}"
       },
-      "range-track-moz": {
+      "range-track-alt": {
         "$value": "{color.grey.200}"
       },
       "selection": {
         "$value": "{color.ink.200}"
+      },
+      "skeleton": {
+        "$value": "{color.ink.300m}"
       }
     },
     "accent": {

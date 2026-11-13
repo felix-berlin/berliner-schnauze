@@ -72,9 +72,10 @@
     --color-surface-page: light-dark(rgb(252 234 215 / 5%), var(--color-ink-300m));
     --color-surface-paper: light-dark(var(--color-white-100), var(--color-ink-400m));
     --color-surface-range-track: var(--color-ink-600m);
-    --color-surface-range-track-moz: var(--color-grey-200);
+    --color-surface-range-track-alt: var(--color-grey-200);
     --color-surface-selection: light-dark(var(--color-red-200), var(--color-ink-200));
     --color-surface-sheet: light-dark(var(--color-white-pure), var(--color-ink-400m));
+    --color-surface-skeleton: light-dark(var(--color-white-100), var(--color-ink-300m));
     --color-surface-tint: light-dark(rgb(0 0 0 / 10%), rgb(255 255 255 / 10%));
     --color-surface-wash: rgb(207 87 54 / 15%);
     --color-text-accent: light-dark(var(--color-orange-600), var(--color-orange-300));

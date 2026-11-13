@@ -10,10 +10,8 @@
     );
     background-size: 22px 22px;
 
-    // Only _skeleton.scss reads this (fallback white-100 in light); drop it when the skeleton uses a token.
-    @include butler-mx.dark-mode-class {
-      --color-background-body: var(--color-surface-page);
-    }
+    // _skeleton.scss reads this property.
+    --color-background-body: var(--color-surface-skeleton);
   }
 
   body,
