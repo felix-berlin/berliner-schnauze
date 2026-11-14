@@ -6,7 +6,7 @@
 
     color: var(--color, unset);
 
-    @each $type, $color in vars.$alert-colors {
+    @each $type in (danger, success) {
       &--#{$type} {
         --color: var(--#{$type});
       }

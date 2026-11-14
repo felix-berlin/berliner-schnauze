@@ -9,7 +9,7 @@ const card = (): string =>
 const badge = bar("", "inline-size:5rem;block-size:1.5rem");
 const audio = bar("", "block-size:2.75rem");
 
-export const skeletonHtml = (): string =>
+const SKELETON_HTML =
   `<div class="c-word-skeleton" role="status" aria-busy="true" aria-label="Wort wird jeladen">` +
   `<div class="card">${bar("title")}` +
   `<div class="badges">${badge}${badge}</div>` +
@@ -34,7 +34,7 @@ export const initWordLoading = (): (() => void) => {
     timer = setTimeout(() => {
       const el = document.createElement("div");
       el.className = "c-word-skeleton-layer";
-      el.innerHTML = skeletonHtml();
+      el.innerHTML = SKELETON_HTML;
       document.body.append(el);
       shown = el;
     }, SKELETON_DELAY_MS);

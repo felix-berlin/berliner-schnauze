@@ -5,9 +5,7 @@
 @include mx.component("infotext") {
   :scope {
     padding: var(--space-3) var(--space-4);
-    border-inline-start: 3px solid var(--color-border-accent);
-    border-start-end-radius: var(--radius-sm);
-    border-end-end-radius: var(--radius-sm);
-    background: var(--color-surface-callout);
+
+    @include mx.side-stripe;
   }
 }

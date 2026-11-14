@@ -426,9 +426,6 @@
       },
       "body": {
         "$value": "var(--font-berlin)"
-      },
-      "mono": {
-        "$value": ["ui-monospace", "SF Mono", "Cascadia Mono", "monospace"]
       }
     },
     "weight": {
@@ -514,9 +511,6 @@
     },
     "sticky": {
       "$value": 10
-    },
-    "overlay": {
-      "$value": 20
     },
     "header": {
       "$value": 100

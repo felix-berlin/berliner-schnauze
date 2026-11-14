@@ -3,17 +3,10 @@ import { readFileSync } from "node:fs";
 import stylelint from "stylelint";
 import { describe, expect, it } from "vitest";
 
+import { strictRules } from "../../../../stylelint.config.mjs";
+
 // Design system spec §11: the strict rules refuse every value that bypasses the tokens.
-const STRICT = new Set([
-  "color-no-hex",
-  "color-named",
-  "function-disallowed-list",
-  "declaration-property-value-disallowed-list",
-  "property-disallowed-list",
-  "at-rule-disallowed-list",
-  "selector-class-pattern",
-  "selector-disallowed-list",
-]);
+const STRICT = new Set(Object.keys(strictRules));
 const website = new URL("../../../../", import.meta.url).pathname;
 
 // Lint a fixture under a path that is not ignored and not listed as legacy, so the strict rules apply.

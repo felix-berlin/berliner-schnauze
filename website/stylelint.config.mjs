@@ -1,22 +1,30 @@
 import { readFileSync } from "node:fs";
 
+import { readSources, tokenNames } from "./scripts/build-tokens.mjs";
 import legacyFiles from "./stylelint.legacy-files.mjs";
 
 // Design-system gate (spec §11). Banned in `var()` of a strict file: the old palette, every
 // legacy alias (those that are not a current token) and the primitive colour tier.
-const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
-const names = (css) => [...css.matchAll(/^\s*(--[\w-]+):/gm)].map((m) => m[1]);
-const current = new Set(names(read("./src/styles/tokens/_tokens.generated.scss")));
-const legacyAliases = names(read("./src/styles/tokens/_legacy-aliases.scss")).filter(
-  (name) => !current.has(name),
+const sources = readSources();
+const current = new Set(tokenNames(sources));
+const aliasCss = readFileSync(
+  new URL("./src/styles/tokens/_legacy-aliases.scss", import.meta.url),
+  "utf8",
 );
+const legacyAliases = [...aliasCss.matchAll(/^\s*(--[\w-]+):/gm)]
+  .map((m) => m[1])
+  .filter((name) => !current.has(name));
 // Scraped by regex: an empty list means the file moved or its format changed, not "nothing to ban".
-if (current.size === 0 || legacyAliases.length === 0) {
-  throw new Error("stylelint.config.mjs: no tokens or legacy aliases found, check the scrape");
+if (legacyAliases.length === 0) {
+  throw new Error("stylelint.config.mjs: no legacy aliases found, check the scrape");
 }
+// Primitive colours: groups (--color-orange-500) and single tokens (--color-danger).
+const colors = Object.entries(sources.primitive.color).filter(([key]) => !key.startsWith("$"));
+const groups = colors.filter(([, node]) => !("$value" in node)).map(([key]) => key);
+const singles = colors.filter(([, node]) => "$value" in node).map(([key]) => key);
 const bannedVar = new RegExp(
   `var\\(\\s*(?:${legacyAliases.join("|")}|--(?:orange|blue|new-blue|white|grey|red|yellow)(?:-\\w+)?` +
-    `|--color-(?:white|black|orange|red|cream|grey|ink)-[\\w-]+|--color-(?:danger|success|gold))\\s*[,)]`,
+    `|--color-(?:${groups.join("|")})-[\\w-]+|--color-(?:${singles.join("|")}))\\s*[,)]`,
 );
 
 // A raw length or duration: number with unit, not part of a name such as --space-2.
@@ -28,7 +36,7 @@ const rawTime = new RegExp(`${num}m?s(?!\\w)`);
 // The whole value must be tokens (a comma list of var()) or a keyword.
 const notToken = /^(?!(?:var\([^()]*\)(?:\s*,\s*var\([^()]*\))*|none|inherit|initial|unset)$)/;
 
-const strictRules = {
+export const strictRules = {
   "color-no-hex": true,
   "color-named": "never",
   "function-disallowed-list": [

@@ -13,7 +13,3 @@
 import MenuIcon from "virtual:icons/lucide/menu";
 import XIcon from "virtual:icons/lucide/x";
 </script>
-
-<style lang="scss">
-@use "@styles/components/header-control";
-</style>

@@ -16,10 +16,9 @@ const resolveColor = (page: Page, name: string) =>
 
 test("a stored light choice beats a dark system setting (Review Focus 7)", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
-  await page.goto("/");
   // SetColorMode.astro reads localStorage "darkMode" ("true" | "false") before first paint.
-  await page.evaluate(() => localStorage.setItem("darkMode", "false"));
-  await page.reload();
+  await page.addInitScript(() => localStorage.setItem("darkMode", "false"));
+  await page.goto("/");
 
   await expect(page.locator("html")).not.toHaveClass(/\bdark\b/);
   // --color-text-body light value: color.ink.base (#2b333b)

@@ -47,11 +47,8 @@
     &[data-kind="head"] {
       min-block-size: 36px;
       border: 0;
-      font-size: var(--font-size-2xs);
-      font-weight: var(--font-weight-bold);
-      color: var(--color-text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
+
+      @include mx.eyebrow;
     }
 
     &[aria-current="true"] {

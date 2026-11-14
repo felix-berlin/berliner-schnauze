@@ -1,8 +1,8 @@
 // @vitest-environment node
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import buildTokens, { readSources } from "../../../../scripts/build-tokens.mjs";
+import buildTokens, { readSources, tokenNames } from "../../../../scripts/build-tokens.mjs";
 
 const generated = new URL("../../../styles/tokens/_tokens.generated.scss", import.meta.url);
 
@@ -145,14 +145,11 @@ describe("buildTokens", () => {
 
 describe("token use in the stylesheets", () => {
   const styles = new URL("../../../styles/", import.meta.url).pathname;
-  const walk = (dir: string): string[] =>
-    readdirSync(dir).flatMap((name) => {
-      const path = join(dir, name);
-      return statSync(path).isDirectory() ? walk(path) : [path];
-    });
-  const files = walk(styles).filter((p) => p.endsWith(".scss"));
+  const files = readdirSync(styles, { recursive: true, withFileTypes: true })
+    .filter((d) => d.isFile() && d.name.endsWith(".scss"))
+    .map((d) => join(d.parentPath, d.name));
   const declared = (css: string) => [...css.matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]);
-  const tokens = new Set(declared(readFileSync(generated, "utf8")));
+  const tokens = new Set(tokenNames());
   const prefixes = new Set([...tokens].map((name) => name.split("-")[2]));
 
   it("every var() of a token family names a generated token, a legacy alias or a declared property", () => {

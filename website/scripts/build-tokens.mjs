@@ -82,6 +82,9 @@ const format = (path, { type, value }, known) => {
   }
 };
 
+/** Shadow layers as one CSS value; other values pass through. */
+const layers = (v) => (Array.isArray(v) ? v.map((s) => `${s.geometry} ${s.color}`).join(", ") : v);
+
 const themed = (path, type, light, dark) => {
   const pair = (l, d) => (l === d ? l : `light-dark(${l}, ${d})`);
   if (type === "shadow" && Array.isArray(light) && Array.isArray(dark)) {
@@ -90,11 +93,10 @@ const themed = (path, type, light, dark) => {
     }
     return light.map((l, i) => `${l.geometry} ${pair(l.color, dark[i].color)}`).join(", ");
   }
-  const flat = (v) => (Array.isArray(v) ? v.map((s) => `${s.geometry} ${s.color}`).join(", ") : v);
-  if (flat(light) !== flat(dark) && type !== "color") {
+  if (layers(light) !== layers(dark) && type !== "color") {
     throw new Error(`${path}: only colours and shadows may differ between themes`);
   }
-  return pair(flat(light), flat(dark));
+  return pair(layers(light), layers(dark));
 };
 
 /** Throws on an alias cycle (a → b → a) inside one token map. */
@@ -125,10 +127,7 @@ export default function buildTokens({ primitive, light, dark }) {
   const lines = [];
   for (const theme of [themes.light, themes.dark]) checkCycles(new Map([...prim, ...theme]));
   const knownLight = new Set([...prim.keys(), ...themes.light.keys()]);
-  for (const [path, token] of prim) {
-    const v = format(path, token, prim);
-    lines.push([path, Array.isArray(v) ? v.map((s) => `${s.geometry} ${s.color}`).join(", ") : v]);
-  }
+  for (const [path, token] of prim) lines.push([path, layers(format(path, token, prim))]);
   for (const [path, token] of themes.light) {
     const l = format(path, token, knownLight);
     const d = format(path, themes.dark.get(path), knownLight);
@@ -138,6 +137,10 @@ export default function buildTokens({ primitive, light, dark }) {
   const body = lines.map(([path, v]) => `    ${cssName(path)}: ${v};`).join("\n");
   return `${HEADER}@layer tokens {\n  :root {\n${body}\n  }\n}\n`;
 }
+
+/** Custom property names the build emits (the semantic themes share one key set). */
+export const tokenNames = ({ primitive, light } = readSources()) =>
+  [...flatten(primitive).keys(), ...flatten(light).keys()].map(cssName);
 
 export const readSources = () => {
   const read = (name) =>

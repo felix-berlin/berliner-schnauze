@@ -1,7 +1,8 @@
 // @vitest-environment node
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { dirname, join, relative } from "node:path";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { basename, dirname, join, relative } from "node:path";
 
+import { sassAliases } from "../../../../sass-aliases.mjs";
 import legacyFiles from "../../../../stylelint.legacy-files.mjs";
 
 // Design system spec §6/§11: what stylelint cannot see about the cascade layers.
@@ -19,12 +20,28 @@ const STATEMENT = `@layer ${LAYERS.join(", ")};`;
 
 const website = new URL("../../../../", import.meta.url).pathname;
 const src = join(website, "src");
-const walk = (dir: string): string[] =>
-  readdirSync(dir).flatMap((name) => {
-    const path = join(dir, name);
-    return statSync(path).isDirectory() ? walk(path) : [path];
-  });
+const walk = (dir: string) =>
+  readdirSync(dir, { recursive: true, withFileTypes: true })
+    .filter((d) => d.isFile())
+    .map((d) => join(d.parentPath, d.name));
 const rel = (path: string) => relative(website, path);
+const cache = new Map<string, string>();
+const read = (path: string) => {
+  if (!cache.has(path)) cache.set(path, readFileSync(path, "utf8"));
+  return cache.get(path)!;
+};
+/** Sources outside src/tests, walked once. */
+const srcFiles = walk(src).filter((p) => !p.includes("/src/tests/"));
+
+/** Offset after the `}` that closes the `{` at `open`. */
+const closeOf = (code: string, open: number) => {
+  let depth = 0;
+  for (let i = open; i < code.length; i++) {
+    if (code[i] === "{") depth++;
+    if (code[i] === "}" && --depth === 0) return i + 1;
+  }
+  return -1;
+};
 
 const stripComments = (code: string) =>
   code.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|\s)\/\/.*$/gm, "$1");
@@ -37,11 +54,7 @@ const body = (code: string) => {
       /^(?:@(?:use|forward)\b[^;]*;|\$[\w-]+\s*:[^;]*;|@(?:mixin|function)\b[^{]*\{)/,
     );
     if (!m) return rest;
-    let end = m[0].length;
-    if (m[0].endsWith("{")) {
-      for (let depth = 1; depth > 0; end++)
-        depth += rest[end] === "{" ? 1 : rest[end] === "}" ? -1 : 0;
-    }
+    const end = m[0].endsWith("{") ? closeOf(rest, m[0].length - 1) : m[0].length;
     rest = rest.slice(end).trim();
   }
 };
@@ -50,12 +63,8 @@ const body = (code: string) => {
 const singleBlockLayer = (rest: string) => {
   const m = rest.match(/^@layer\s+([a-z]+)\s*\{/);
   if (!m) return null;
-  let depth = 0;
-  for (let i = m[0].length - 1; i < rest.length; i++) {
-    if (rest[i] === "{") depth++;
-    if (rest[i] === "}" && --depth === 0) return rest.slice(i + 1).trim() === "" ? m[1] : null;
-  }
-  return null;
+  const end = closeOf(rest, m[0].length - 1);
+  return end > 0 && rest.slice(end).trim() === "" ? m[1] : null;
 };
 
 /** `@use`/`@forward` targets that cannot be resolved to a local partial, Sass built-in or project alias. */
@@ -64,12 +73,11 @@ const foreignUses = (code: string, dir: string) =>
     .map((m) => m[1])
     .filter((target) => {
       if (
-        target.startsWith("sass:") ||
-        target.startsWith("@styles/") ||
-        target.startsWith("@sass-butler/")
+        ["sass:", "@felix_berlin/sass-butler", ...Object.keys(sassAliases)].some((p) =>
+          target.startsWith(p),
+        )
       )
         return false;
-      if (target.startsWith("@felix_berlin/sass-butler")) return false;
       const base = join(dir, target);
       const parts = [dirname(base), base.slice(dirname(base).length + 1)];
       return ![
@@ -86,46 +94,47 @@ const rulesInStyleBlocks = (source: string) =>
     (m) => m[0] !== `<style is:inline>${STATEMENT}</style>` && body(m[1]) !== "",
   );
 
-/** Offset after the `}` that closes the `{` at `open`. */
-const closeOf = (code: string, open: number) => {
-  let depth = 0;
-  for (let i = open; i < code.length; i++) {
-    if (code[i] === "{") depth++;
-    if (code[i] === "}" && --depth === 0) return i + 1;
+/** The first `@include mx.component("name") { … }` of a body: its name, inner source and end offset. */
+const componentBlock = (rest: string) => {
+  const m = rest.match(/^@include\s+mx\.component\(\s*"([^"]+)"\s*\)\s*\{/);
+  if (!m) return null;
+  const end = closeOf(rest, m[0].length - 1);
+  return { end, inner: rest.slice(m[0].length, end - 1), name: m[1] };
+};
+
+/** Preludes of the style rules with no enclosing style rule (top level, or only inside at-rules). */
+const topLevelPreludes = (inner: string) => {
+  const out: string[] = [];
+  const stack: boolean[] = []; // per open block: true = style rule, false = at-rule
+  let prelude = "";
+  for (const ch of inner) {
+    if (ch === "{") {
+      const atRule = prelude.trim().startsWith("@");
+      if (!atRule && !stack.includes(true)) out.push(prelude.trim());
+      stack.push(!atRule);
+      prelude = "";
+    } else if (ch === "}") {
+      stack.pop();
+      prelude = "";
+    } else prelude = ch === ";" ? "" : prelude + ch;
   }
-  return -1;
+  return out;
 };
 
 /** Violations of the §7.1 component rules in a migrated components/_<name>.scss. */
 const componentProblems = (code: string, name: string) => {
   const rest = body(code);
   if (rest === "") return []; // barrel or mixin-only partial: no CSS
-  const m = rest.match(/^@include\s+mx\.component\(\s*"([^"]+)"\s*\)\s*\{/);
-  if (!m) return ["want exactly one @include mx.component(...) block"];
-  const end = closeOf(rest, m[0].length - 1);
-  if (end === -1 || rest.slice(end).trim() !== "")
+  const block = componentBlock(rest);
+  if (!block || block.end === -1 || rest.slice(block.end).trim() !== "")
     return ["want exactly one @include mx.component(...) block"];
-  const inner = rest.slice(m[0].length, end - 1);
+  const { inner } = block;
   const problems: string[] = [];
-  if (m[1] !== name) problems.push(`component name "${m[1]}", want "${name}"`);
+  if (block.name !== name) problems.push(`component name "${block.name}", want "${name}"`);
   // A `&` in a selector with no enclosing style rule (top level, or only inside at-rules such as
   // @container) reaches the browser as CSS nesting inside @scope; below a part Sass resolves it.
-  const stack: boolean[] = []; // per open block: true = style rule, false = at-rule
-  let prelude = "";
-  for (const ch of inner) {
-    if (ch === "{") {
-      const atRule = prelude.trim().startsWith("@");
-      if (!atRule && !stack.includes(true) && prelude.includes("&"))
-        problems.push(`unresolved & in "${prelude.trim()}"`);
-      stack.push(!atRule);
-      prelude = "";
-    } else if (ch === "}") {
-      stack.pop();
-      prelude = "";
-    } else {
-      prelude = ch === ";" ? "" : prelude + ch;
-    }
-  }
+  for (const prelude of topLevelPreludes(inner))
+    if (prelude.includes("&")) problems.push(`unresolved & in "${prelude}"`);
   if (/\.c-[a-z]/.test(inner)) problems.push("a .c- selector inside the scope");
   if (/\.[a-z][\w-]*__/.test(inner)) problems.push("a __element class");
   if (/\.[a-z][\w-]*--/.test(inner)) problems.push("a --modifier class");
@@ -156,27 +165,13 @@ const compounds = (selector: string) => {
  * mx.component block or in at-rules there), minus those compounded with :scope (root states).
  */
 const partClasses = (code: string) => {
-  const rest = body(code);
-  const m = rest.match(/^@include\s+mx\.component\(\s*"[^"]+"\s*\)\s*\{/);
-  if (!m) return [];
-  const inner = rest.slice(m[0].length, closeOf(rest, m[0].length - 1) - 1);
+  const block = componentBlock(body(code));
+  if (!block) return [];
   const parts = new Set<string>();
-  const stack: boolean[] = [];
-  let prelude = "";
-  for (const ch of inner) {
-    if (ch === "{") {
-      const atRule = prelude.trim().startsWith("@");
-      if (!atRule && !stack.includes(true))
-        for (const c of compounds(prelude.trim()))
-          if (!c.includes(":scope"))
-            for (const [, name] of c.matchAll(/\.([a-z][\w-]*)/g)) parts.add(name);
-      stack.push(!atRule);
-      prelude = "";
-    } else if (ch === "}") {
-      stack.pop();
-      prelude = "";
-    } else prelude = ch === ";" ? "" : prelude + ch;
-  }
+  for (const prelude of topLevelPreludes(block.inner))
+    for (const c of compounds(prelude))
+      if (!c.includes(":scope"))
+        for (const [, name] of c.matchAll(/\.([a-z][\w-]*)/g)) parts.add(name);
   return [...parts];
 };
 
@@ -222,12 +217,16 @@ const hasDarkHook = (code: string, file: string) => {
   return /dark-mode-class|dark-mode-override|\.dark(?![\w-])|\[class~=["']?dark/.test(rest);
 };
 
-const styleFiles = walk(join(src, "styles")).filter(
+const styleFiles = srcFiles.filter(
   (p) =>
+    p.includes("/src/styles/") &&
     p.endsWith(".scss") &&
     !/\/styles\/(mixins|variables|tokens)\//.test(p) &&
     !p.endsWith("/app.scss"),
 );
+const migratedComponents = styleFiles
+  .filter((p) => p.includes("/styles/components/") && !legacyFiles.includes(rel(p)))
+  .map((path) => ({ name: basename(path, ".scss").slice(1), path }));
 
 const expectedLayer = (path: string) => {
   const r = relative(join(src, "styles"), path);
@@ -251,7 +250,7 @@ describe("style layer contract", () => {
 
   it("wraps every style partial in exactly one block of its layer", () => {
     const wrong = styleFiles.flatMap((path) => {
-      const rest = body(readFileSync(path, "utf8"));
+      const rest = body(read(path));
       if (rest === "") return []; // barrel: only @use/@forward
       const want = expectedLayer(path);
       // mx.component emits @layer components; its shape is checked by the §7.1 test below.
@@ -265,9 +264,7 @@ describe("style layer contract", () => {
 
   it("lets partials @use only local files, Sass built-ins and project aliases", () => {
     const bad = [...styleFiles, join(src, "styles/app.scss")].flatMap((path) =>
-      foreignUses(readFileSync(path, "utf8"), dirname(path)).map(
-        (t) => `${rel(path)}: @use "${t}"`,
-      ),
+      foreignUses(read(path), dirname(path)).map((t) => `${rel(path)}: @use "${t}"`),
     );
     expect(bad).toEqual([]);
     // A third-party @use would emit its CSS unlayered; it has to go through meta.load-css inside a layer.
@@ -288,11 +285,9 @@ describe("style layer contract", () => {
   });
 
   it("uses only the layer names of the spec", () => {
-    const files = walk(src).filter(
-      (p) => /\.(scss|css|vue|astro)$/.test(p) && !p.includes("/src/tests/"),
-    );
+    const files = srcFiles.filter((p) => /\.(scss|css|vue|astro)$/.test(p));
     const bad = files.flatMap((path) =>
-      [...stripComments(readFileSync(path, "utf8")).matchAll(/@layer\s+([^{;]+)/g)]
+      [...stripComments(read(path)).matchAll(/@layer\s+([^{;]+)/g)]
         .flatMap((m) => m[1].split(",").map((n) => n.trim()))
         .filter((name) => !LAYERS.includes(name))
         .map((name) => `${rel(path)}: ${name}`),
@@ -301,9 +296,9 @@ describe("style layer contract", () => {
   });
 
   it("keeps rules out of .vue and .astro style blocks", () => {
-    const bad = walk(src)
+    const bad = srcFiles
       .filter((p) => /\.(vue|astro)$/.test(p))
-      .filter((path) => rulesInStyleBlocks(readFileSync(path, "utf8")).length > 0)
+      .filter((path) => rulesInStyleBlocks(read(path)).length > 0)
       .map(rel);
     expect(bad).toEqual([]);
     // Only the exact layer-order statement is exempt; any other inline style counts.
@@ -315,16 +310,9 @@ describe("style layer contract", () => {
   });
 
   it("keeps migrated component files to one mx.component block of the §7.1 rules", () => {
-    const bad = styleFiles
-      .filter((p) => p.includes("/styles/components/") && !legacyFiles.includes(rel(p)))
-      .flatMap((path) => {
-        const name = path
-          .split("/")
-          .pop()!
-          .replace(/^_/, "")
-          .replace(/\.scss$/, "");
-        return componentProblems(readFileSync(path, "utf8"), name).map((e) => `${rel(path)}: ${e}`);
-      });
+    const bad = migratedComponents.flatMap(({ name, path }) =>
+      componentProblems(read(path), name).map((e) => `${rel(path)}: ${e}`),
+    );
     expect(bad).toEqual([]);
 
     const ok =
@@ -358,31 +346,17 @@ describe("style layer contract", () => {
   });
 
   it("puts every part class of a component on markup, never on the component's own root", () => {
-    const sources = walk(src).filter(
-      (p) => /\.(vue|astro|ts)$/.test(p) && !p.includes("/src/tests/"),
-    );
-    const tags = sources.flatMap((p) =>
-      p.endsWith(".ts") ? [] : tagClasses(readFileSync(p, "utf8")),
-    );
-    const used = new Set([
-      ...tags.flat(),
-      ...sources.flatMap((p) => scriptClasses(readFileSync(p, "utf8"))),
-    ]);
-    const bad = styleFiles
-      .filter((p) => p.includes("/styles/components/") && !legacyFiles.includes(rel(p)))
-      .flatMap((path) => {
-        const name = path
-          .split("/")
-          .pop()!
-          .replace(/^_/, "")
-          .replace(/\.scss$/, "");
-        const parts = partClasses(readFileSync(path, "utf8"));
-        const dead = parts.filter((c) => !used.has(c)).map((c) => `.${c} is on no element`);
-        const onRoot = parts
-          .filter((c) => tags.some((t) => t.includes(`c-${name}`) && t.includes(c)))
-          .map((c) => `.${c} sits on the c-${name} root itself`);
-        return dead.concat(onRoot).map((problem) => `${rel(path)}: ${problem}`);
-      });
+    const sources = srcFiles.filter((p) => /\.(vue|astro|ts)$/.test(p));
+    const tags = sources.flatMap((p) => (p.endsWith(".ts") ? [] : tagClasses(read(p))));
+    const used = new Set([...tags.flat(), ...sources.flatMap((p) => scriptClasses(read(p)))]);
+    const bad = migratedComponents.flatMap(({ name, path }) => {
+      const parts = partClasses(read(path));
+      const dead = parts.filter((c) => !used.has(c)).map((c) => `.${c} is on no element`);
+      const onRoot = parts
+        .filter((c) => tags.some((t) => t.includes(`c-${name}`) && t.includes(c)))
+        .map((c) => `.${c} sits on the c-${name} root itself`);
+      return dead.concat(onRoot).map((problem) => `${rel(path)}: ${problem}`);
+    });
     expect(bad).toEqual([]);
 
     const demo =
@@ -399,7 +373,7 @@ describe("style layer contract", () => {
   it("allows dark-mode hooks only in legacy files, bar the two named exceptions", () => {
     const bad = styleFiles
       .filter((p) => !legacyFiles.includes(rel(p)))
-      .filter((p) => hasDarkHook(readFileSync(p, "utf8"), rel(p)))
+      .filter((p) => hasDarkHook(read(p), rel(p)))
       .map(rel);
     expect(bad).toEqual([]);
     expect(hasDarkHook("@include butler-mx.dark-mode-class { a: b }", "x.scss")).toBe(true);
@@ -426,13 +400,6 @@ describe("style layer contract", () => {
   });
 
   it("lists only legacy files that exist", () => {
-    const missing = legacyFiles.filter((p) => {
-      try {
-        return !statSync(join(website, p)).isFile();
-      } catch {
-        return true;
-      }
-    });
-    expect(missing).toEqual([]);
+    expect(legacyFiles.filter((p) => !existsSync(join(website, p)))).toEqual([]);
   });
 });
