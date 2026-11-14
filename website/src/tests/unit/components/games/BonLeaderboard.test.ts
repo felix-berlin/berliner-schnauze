@@ -107,11 +107,11 @@ describe("BonLeaderboard", () => {
     let release!: () => void;
     settled.gate = new Promise<void>((r) => (release = r));
     const w = await mountBoard();
-    expect(w.find(".c-bon-leaderboard__skeleton").exists()).toBe(true);
+    expect(w.find('[aria-label="Rangliste wird jeladen"]').exists()).toBe(true);
     expect(w.find("ol").exists()).toBe(false);
     release();
     await flushPromises();
-    expect(w.find(".c-bon-leaderboard__skeleton").exists()).toBe(false);
+    expect(w.find('[aria-label="Rangliste wird jeladen"]').exists()).toBe(false);
     expect(w.find("ol").exists()).toBe(true);
   });
 
@@ -137,12 +137,8 @@ describe("BonLeaderboard", () => {
     const items = w.findAll("ol > li");
     expect(items).toHaveLength(25);
     expect(items[0]!.find(".u-sr-only").text()).toBe("Platz");
-    expect(items[0]!.find(".c-bon-leaderboard__rank").classes()).toContain(
-      "c-bon-leaderboard__rank--top",
-    );
-    expect(items[4]!.find(".c-bon-leaderboard__rank").classes()).not.toContain(
-      "c-bon-leaderboard__rank--top",
-    );
+    expect(items[0]!.find(".c-bon-ranking .rank").attributes("data-state")).toBe("top");
+    expect(items[4]!.find(".c-bon-ranking .rank").attributes("data-state")).toBeUndefined();
     const mine = w.find("[aria-current='true']");
     expect(mine.exists()).toBe(true);
     expect(mine.text()).toContain("du");
@@ -152,14 +148,14 @@ describe("BonLeaderboard", () => {
   it("shows anonymous rows with their tag", async () => {
     const w = await mountBoard(reply({ entries: [entry(1, { name: "Anonym", tag: "K7QX" })] }));
     expect(w.find("ol").text()).toContain("Anonym");
-    expect(w.find(".c-bon-leaderboard__tag").text()).toBe("#K7QX");
+    expect(w.find(".c-bon-ranking .tag").text()).toBe("#K7QX");
   });
 
   it("desktop: 25 rows plus the own row after a gap, the columns and the Dein-Platz card", async () => {
     const w = await mountBoard(withMe(40));
     expect(w.findAll("ol > li")).toHaveLength(25 + 1 + 3);
     expect(w.find("ol > li").text()).toContain("80 %");
-    const card = w.find(".c-bon-leaderboard__aside");
+    const card = w.find("aside");
     expect(card.text()).toContain("Dein Platz");
     expect(card.text()).toContain("40.");
     expect(card.text()).toContain("von 340 · besser als 88 %");
@@ -167,18 +163,18 @@ describe("BonLeaderboard", () => {
     expect(card.text()).toContain("Erkannt wirst du an einem Cookie auf diesem Jerät.");
     const play = card.findAll("a").find((a) => a.text() === "Nochmal spielen");
     expect(play?.attributes("href")).toBe("/games/berliner-oder-nicht");
-    expect(w.find(".c-bon-leaderboard__sticky").exists()).toBe(false);
+    expect(w.find('[role="region"][aria-label="Dein Platz"]').exists()).toBe(false);
   });
 
   it("mobile: top 10, a gap, the own row with one neighbour each side, and the fixed bar", async () => {
     desktop.value = false;
     const w = await mountBoard(withMe(40));
     const ranks = w
-      .findAll("ol > li:not(.c-bon-leaderboard__gap) .c-bon-leaderboard__rank")
+      .findAll("ol > li:not([aria-hidden]) .rank")
       .map((r) => r.text().replace("Platz", "").trim());
     expect(ranks).toEqual(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "39", "40", "41"]);
-    expect(w.find(".c-bon-leaderboard__gap").text()).toBe("···");
-    const bar = w.find(".c-bon-leaderboard__sticky");
+    expect(w.find("ol > li[aria-hidden]").text()).toBe("···");
+    const bar = w.find('[role="region"][aria-label="Dein Platz"]');
     expect(bar.text()).toContain("40.");
     expect(bar.text()).toContain("Du · 600 Punkte");
     expect(bar.text()).toContain("von 340 · besser als 88 %");
@@ -190,10 +186,10 @@ describe("BonLeaderboard", () => {
   it("the Dein-Platz card holds the name editor between the links and the cookie hint", async () => {
     vi.mocked(fetchPlayerName).mockResolvedValue({ name: "Kalle" });
     const w = await mountBoard(withMe(40));
-    const card = w.find(".c-bon-leaderboard__me");
+    const card = w.find(".c-bon-me .me");
     expect(card.find(".c-bon-name").text()).toContain("Du spielst als Kalle");
     const kids = [...card.element.children].map((e) => e.className);
-    expect(kids.indexOf("c-bon-name")).toBe(kids.indexOf("c-bon-leaderboard__links") + 1);
+    expect(kids.indexOf("c-bon-name")).toBe(kids.indexOf("links") + 1);
     expect(kids.indexOf("t-small")).toBeGreaterThan(kids.indexOf("c-bon-name"));
   });
 
@@ -245,8 +241,8 @@ describe("BonLeaderboard", () => {
     const w = await mountBoard(withMe(40));
     const aside = w.find("aside");
     expect(aside.exists()).toBe(true);
-    expect(aside.classes()).not.toContain("c-bon-leaderboard__aside--first");
-    const main = w.find(".c-bon-leaderboard__main").element;
+    expect(aside.attributes("data-state")).toBeUndefined();
+    const main = w.find(".c-bon-ranking").element;
     expect(
       main.compareDocumentPosition(aside.element) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
@@ -255,7 +251,7 @@ describe("BonLeaderboard", () => {
   it("mobile: no gap when the own row is right below the top 10", async () => {
     desktop.value = false;
     const w = await mountBoard(withMe(11));
-    expect(w.find(".c-bon-leaderboard__gap").exists()).toBe(false);
+    expect(w.find("ol > li[aria-hidden]").exists()).toBe(false);
   });
 
   it("Mehr laden appends the next 25", async () => {
@@ -404,7 +400,7 @@ describe("BonLeaderboard", () => {
 
   it("without a cookie: hint, play link, redeem opens BonPlayerCode and reloads on close", async () => {
     const w = await mountBoard();
-    const aside = w.find(".c-bon-leaderboard__aside");
+    const aside = w.find("aside");
     expect(aside.text()).toContain("Du stehst hier noch nich drin.");
     expect(aside.find("a.c-button[data-variant~='primary']").text()).toBe("Jetzt spielen");
     expect(aside.text()).toContain("Schon jespielt?");
@@ -423,8 +419,8 @@ describe("BonLeaderboard", () => {
   it("without a cookie on mobile the card sits above the list", async () => {
     desktop.value = false;
     const w = await mountBoard();
-    expect(w.find(".c-bon-leaderboard__aside--first").exists()).toBe(true);
-    expect(w.find(".c-bon-leaderboard__sticky").exists()).toBe(false);
+    expect(w.find("aside").attributes("data-state")).toBe("first");
+    expect(w.find('[role="region"][aria-label="Dein Platz"]').exists()).toBe(false);
   });
 
   it("empty: shows the text and Jetzt spielen", async () => {
@@ -441,7 +437,7 @@ describe("BonLeaderboard", () => {
   it("loading: skeleton with 8 rows", async () => {
     fetchMock.mockReturnValue(new Promise(() => {}));
     const w = mount(BonLeaderboard);
-    expect(w.findAll(".c-bon-leaderboard__skeleton-row")).toHaveLength(8);
+    expect(w.findAll('[aria-label="Rangliste wird jeladen"] > span')).toHaveLength(8);
     expect(w.find("[aria-busy='true']").exists()).toBe(true);
   });
 

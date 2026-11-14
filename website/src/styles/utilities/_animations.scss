@@ -170,4 +170,11 @@
       translate: 0 8px;
     }
   }
+
+  // BON leaderboard: the own-place bar slides up (bon-leaderboard).
+  @keyframes c-bon-leaderboard-sticky-in {
+    from {
+      translate: 0 100%;
+    }
+  }
 }

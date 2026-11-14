@@ -1,249 +1,232 @@
 <template>
   <div class="c-bon-leaderboard">
-    <header class="c-bon-leaderboard__header">
-      <a class="c-textlink c-bon-leaderboard__back" href="/games/berliner-oder-nicht">
-        ← Berliner oder nicht?
-      </a>
-      <div class="c-bon-leaderboard__titlebar">
-        <h1 class="c-band c-bon-leaderboard__title">Rangliste</h1>
-        <span class="t-small">{{ totalLabel }}</span>
-      </div>
-      <div class="c-bon-leaderboard__periods" role="group" aria-label="Zeitraum">
-        <button
-          v-for="p in PERIODS"
-          :key="p.id"
-          class="c-choice"
-          type="button"
-          :aria-pressed="p.id === period ? 'true' : 'false'"
-          @click="pick(p.id)"
-        >
-          {{ p.label }}
-        </button>
-      </div>
-    </header>
-
-    <div class="c-bon-leaderboard__body">
-      <section
-        class="c-section-card c-bon-leaderboard__card c-bon-leaderboard__main"
-        data-variant="sheet"
-        aria-labelledby="bon-leaderboard-title"
-      >
-        <h2 id="bon-leaderboard-title" class="u-sr-only">{{ periodTitle }}</h2>
-
-        <div
-          v-if="status === 'loading'"
-          class="c-bon-leaderboard__skeleton"
-          aria-busy="true"
-          aria-label="Rangliste wird jeladen"
-        >
-          <span v-for="n in 8" :key="n" class="c-bon-leaderboard__skeleton-row">
-            <span class="c-skeleton" />
-            <span class="c-skeleton" :style="{ inlineSize: `${SKELETON_WIDTHS[n - 1]}%` }" />
-            <span class="c-skeleton" />
-          </span>
+    <div class="inner">
+      <header class="header">
+        <a class="c-textlink" href="/games/berliner-oder-nicht"> ← Berliner oder nicht? </a>
+        <div class="titlebar">
+          <h1 class="c-band">Rangliste</h1>
+          <span class="t-small">{{ totalLabel }}</span>
         </div>
+        <div class="periods" role="group" aria-label="Zeitraum">
+          <button
+            v-for="p in PERIODS"
+            :key="p.id"
+            class="c-choice"
+            type="button"
+            :aria-pressed="p.id === period ? 'true' : 'false'"
+            @click="pick(p.id)"
+          >
+            {{ p.label }}
+          </button>
+        </div>
+      </header>
 
-        <div v-else-if="status === 'error'" class="c-bon-leaderboard__pad">
-          <div class="c-state" data-variant="error" role="alert">
-            <AlertIcon width="18" height="18" aria-hidden="true" />
-            <span class="body">
-              <b>Ditt hat nich jeklappt.</b>
-              <span>Die Rangliste is jerade nich zu kriegen.</span>
-              <span class="c-bon-leaderboard__retry">
-                <button class="c-choice" type="button" @click="load()">Nochmal versuchen</button>
-              </span>
+      <div class="columns">
+        <section
+          class="c-section-card c-bon-ranking"
+          :data-variant="isDesktop ? 'sheet table' : 'sheet'"
+          aria-labelledby="bon-leaderboard-title"
+        >
+          <h2 id="bon-leaderboard-title" class="u-sr-only">{{ periodTitle }}</h2>
+
+          <div
+            v-if="status === 'loading'"
+            class="skeleton"
+            aria-busy="true"
+            aria-label="Rangliste wird jeladen"
+          >
+            <span v-for="n in 8" :key="n" class="skeleton-row">
+              <span class="c-skeleton" />
+              <span class="c-skeleton" :style="{ inlineSize: `${SKELETON_WIDTHS[n - 1]}%` }" />
+              <span class="c-skeleton" />
             </span>
           </div>
-        </div>
 
-        <div v-else-if="!entries.length" class="c-bon-leaderboard__empty">
-          <b>{{
-            listed === "week"
-              ? "Diese Woche hat noch keener jespielt."
-              : "Noch keene Spiele in dem Zeitraum."
-          }}</b>
-          <span>Hier könnte dein Name stehen.</span>
-          <a class="c-button c-bon-leaderboard__play" data-variant="primary lg" :href="GAME_PATH"
-            >Jetzt spielen</a
-          >
-        </div>
-
-        <template v-else>
-          <div class="body">
-            <div
-              v-if="isDesktop"
-              class="c-bon-leaderboard__row c-bon-leaderboard__row--head"
-              aria-hidden="true"
-            >
-              <span class="c-bon-leaderboard__num">Platz</span>
-              <span>Name</span>
-              <span class="c-bon-leaderboard__num">Treffer</span>
-              <span class="c-bon-leaderboard__num">Serie</span>
-              <span class="c-bon-leaderboard__num">Wann</span>
-              <span class="c-bon-leaderboard__num">Punkte</span>
+          <div v-else-if="status === 'error'" class="pad">
+            <div class="c-state" data-variant="error" role="alert">
+              <AlertIcon width="18" height="18" aria-hidden="true" />
+              <span class="body">
+                <b>Ditt hat nich jeklappt.</b>
+                <span>Die Rangliste is jerade nich zu kriegen.</span>
+                <span class="actions">
+                  <button class="c-choice" type="button" @click="load()">Nochmal versuchen</button>
+                </span>
+              </span>
             </div>
-            <ol class="c-bon-leaderboard__list" :aria-label="periodTitle">
-              <template v-for="item in items" :key="item.gap ? 'gap' : item.entry.rank">
-                <li v-if="item.gap" class="c-bon-leaderboard__gap" aria-hidden="true">···</li>
-                <li v-else>
-                  <div
-                    class="c-bon-leaderboard__row"
-                    :class="{ 'c-bon-leaderboard__row--me': item.entry.isMe }"
-                    :aria-current="item.entry.isMe ? 'true' : undefined"
-                  >
-                    <span
-                      class="c-bon-leaderboard__rank"
-                      :class="{ 'c-bon-leaderboard__rank--top': item.entry.rank <= 3 }"
-                    >
-                      <span class="u-sr-only">Platz</span> {{ item.entry.rank }}
-                    </span>
-                    <span class="c-bon-leaderboard__name">
-                      <span class="c-bon-leaderboard__who">
-                        <b>{{ item.entry.name }}</b>
-                        <span v-if="item.entry.tag" class="c-bon-leaderboard__tag"
-                          >#{{ item.entry.tag }}</span
-                        >
-                        <span v-if="item.entry.isMe" class="c-bon-leaderboard__you">du</span>
-                      </span>
-                      <span v-if="!isDesktop" class="t-small">
-                        {{ item.entry.accuracy }} % · Serie {{ item.entry.bestStreak }}
-                      </span>
-                      <template v-if="reporting && !item.entry.isMe">
-                        <span v-if="reported.includes(item.entry.id)" class="t-small"
-                          >Jemeldet, danke!</span
-                        >
-                        <button
-                          v-else
-                          class="c-textlink c-bon-leaderboard__report"
-                          type="button"
-                          :aria-label="`${item.entry.name}${item.entry.tag ? ` #${item.entry.tag}` : ''} melden`"
-                          @click="report(item.entry.id)"
-                        >
-                          Melden
-                        </button>
-                      </template>
-                    </span>
-                    <template v-if="isDesktop">
-                      <span class="c-bon-leaderboard__num">{{ item.entry.accuracy }} %</span>
-                      <span class="c-bon-leaderboard__num">{{ item.entry.bestStreak }}</span>
-                      <span class="c-bon-leaderboard__num t-small">{{
-                        relativeDay(item.entry.finishedAt)
-                      }}</span>
-                    </template>
-                    <span class="c-bon-leaderboard__score">{{ fmt(item.entry.score) }}</span>
-                  </div>
-                </li>
-              </template>
-            </ol>
           </div>
-          <div class="footer">
-            <span>Platz 1–{{ shown.length }} von {{ fmt(total) }}</span>
+
+          <div v-else-if="!entries.length" class="empty">
+            <b>{{
+              listed === "week"
+                ? "Diese Woche hat noch keener jespielt."
+                : "Noch keene Spiele in dem Zeitraum."
+            }}</b>
+            <span>Hier könnte dein Name stehen.</span>
+            <span class="play">
+              <a class="c-button" data-variant="primary lg" :href="GAME_PATH">Jetzt spielen</a>
+            </span>
+          </div>
+
+          <template v-else>
+            <div class="body">
+              <div v-if="isDesktop" class="row" data-kind="head" aria-hidden="true">
+                <span class="num">Platz</span>
+                <span>Name</span>
+                <span class="num">Treffer</span>
+                <span class="num">Serie</span>
+                <span class="num">Wann</span>
+                <span class="num">Punkte</span>
+              </div>
+              <ol class="list" :aria-label="periodTitle">
+                <template v-for="item in items" :key="item.gap ? 'gap' : item.entry.rank">
+                  <li v-if="item.gap" class="gap" aria-hidden="true">···</li>
+                  <li v-else>
+                    <div class="row" :aria-current="item.entry.isMe ? 'true' : undefined">
+                      <span class="rank" :data-state="item.entry.rank <= 3 ? 'top' : undefined">
+                        <span class="u-sr-only">Platz</span> {{ item.entry.rank }}
+                      </span>
+                      <span class="name">
+                        <span class="who">
+                          <b>{{ item.entry.name }}</b>
+                          <span v-if="item.entry.tag" class="tag">#{{ item.entry.tag }}</span>
+                          <span v-if="item.entry.isMe" class="you">du</span>
+                        </span>
+                        <span v-if="!isDesktop" class="t-small">
+                          {{ item.entry.accuracy }} % · Serie {{ item.entry.bestStreak }}
+                        </span>
+                        <template v-if="reporting && !item.entry.isMe">
+                          <span v-if="reported.includes(item.entry.id)" class="t-small"
+                            >Jemeldet, danke!</span
+                          >
+                          <button
+                            v-else
+                            class="c-textlink"
+                            type="button"
+                            :aria-label="`${item.entry.name}${item.entry.tag ? ` #${item.entry.tag}` : ''} melden`"
+                            @click="report(item.entry.id)"
+                          >
+                            Melden
+                          </button>
+                        </template>
+                      </span>
+                      <template v-if="isDesktop">
+                        <span class="num">{{ item.entry.accuracy }} %</span>
+                        <span class="num">{{ item.entry.bestStreak }}</span>
+                        <span class="num t-small">{{ relativeDay(item.entry.finishedAt) }}</span>
+                      </template>
+                      <span class="score">{{ fmt(item.entry.score) }}</span>
+                    </div>
+                  </li>
+                </template>
+              </ol>
+            </div>
+            <div class="footer">
+              <span>Platz 1–{{ shown.length }} von {{ fmt(total) }}</span>
+              <button
+                v-if="shown.length < total"
+                class="c-textlink"
+                data-variant="inline"
+                type="button"
+                :aria-disabled="loadingMore ? 'true' : undefined"
+                @click="more"
+              >
+                Mehr laden
+              </button>
+              <span v-if="moreError" class="t-small" role="alert">{{ moreError }}</span>
+            </div>
+          </template>
+        </section>
+
+        <aside
+          v-if="status !== 'error' && status !== 'loading'"
+          class="aside"
+          :data-state="me ? undefined : 'first'"
+        >
+          <section
+            class="c-section-card c-bon-me"
+            data-variant="sheet"
+            aria-labelledby="bon-lb-me-title"
+          >
+            <div class="header">
+              <h2 id="bon-lb-me-title" class="title">Dein Platz</h2>
+            </div>
+            <div class="body">
+              <div class="me">
+                <template v-if="me">
+                  <p class="place">
+                    <b>{{ me.rank }}.</b>
+                    <span class="t-small">von {{ fmt(total) }} · besser als {{ betterThan }}</span>
+                  </p>
+                  <p>
+                    <b>{{ fmt(me.score) }} Punkte</b> · {{ me.accuracy }} % Treffer · Serie
+                    {{ me.bestStreak }}
+                  </p>
+                  <span class="links">
+                    <button class="c-textlink" type="button" @click="jump">Zu mir springen</button>
+                    <a class="c-textlink" :href="GAME_PATH">Nochmal spielen</a>
+                  </span>
+                  <BonName v-if="player" :name="player.name" :tag="player.tag" @saved="onSaved" />
+                  <p class="t-small">
+                    Gezählt wird dein bestes Spiel im Zeitraum. Erkannt wirst du an einem Cookie auf
+                    diesem Jerät.
+                  </p>
+                </template>
+                <template v-else>
+                  <p>
+                    Du stehst hier noch nich drin. Spiel ’ne Runde, dann siehste, wo du landest.
+                  </p>
+                  <span class="play">
+                    <a class="c-button" data-variant="primary lg" :href="GAME_PATH"
+                      >Jetzt spielen</a
+                    >
+                  </span>
+                  <p class="t-small">
+                    Schon jespielt? Dann is der Cookie weg oder du spielst auf ’nem anderen Jerät.
+                  </p>
+                  <BonPlayerCode v-if="redeeming" mode="redeem" @close="redeemed" />
+                  <span v-else class="redeem">
+                    <button class="c-textlink" type="button" @click="redeeming = true">
+                      <KeyIcon width="18" height="18" aria-hidden="true" />
+                      <span>Spielercode einlösen</span>
+                    </button>
+                  </span>
+                </template>
+              </div>
+            </div>
+          </section>
+          <p class="t-small note">
+            Namen sind frei jewählt. Anstößige Namen blenden wa aus.
             <button
-              v-if="shown.length < total"
               class="c-textlink"
               data-variant="inline"
               type="button"
-              :aria-disabled="loadingMore ? 'true' : undefined"
-              @click="more"
+              :aria-pressed="reporting ? 'true' : 'false'"
+              @click="reporting = !reporting"
             >
-              Mehr laden
+              Namen melden
             </button>
-            <span v-if="moreError" class="t-small" role="alert">{{ moreError }}</span>
-          </div>
-        </template>
-      </section>
+          </p>
+          <p v-if="reportError" class="t-small note" role="alert">
+            {{ reportError }}
+          </p>
+        </aside>
+      </div>
 
-      <aside
-        v-if="status !== 'error' && status !== 'loading'"
-        class="c-bon-leaderboard__aside"
-        :class="{ 'c-bon-leaderboard__aside--first': !me }"
+      <div
+        v-if="!isDesktop && me && status === 'ready' && entries.length"
+        class="sticky"
+        role="region"
+        aria-label="Dein Platz"
       >
-        <section
-          class="c-section-card c-bon-leaderboard__card c-bon-leaderboard__me-card"
-          data-variant="sheet"
-          aria-labelledby="bon-lb-me-title"
-        >
-          <div class="header">
-            <h2 id="bon-lb-me-title" class="title">Dein Platz</h2>
-          </div>
-          <div class="body">
-            <div class="c-bon-leaderboard__me">
-              <template v-if="me">
-                <p class="c-bon-leaderboard__place">
-                  <b>{{ me.rank }}.</b>
-                  <span class="t-small">von {{ fmt(total) }} · besser als {{ betterThan }}</span>
-                </p>
-                <p>
-                  <b>{{ fmt(me.score) }} Punkte</b> · {{ me.accuracy }} % Treffer · Serie
-                  {{ me.bestStreak }}
-                </p>
-                <span class="c-bon-leaderboard__links">
-                  <button class="c-textlink" type="button" @click="jump">Zu mir springen</button>
-                  <a class="c-textlink" :href="GAME_PATH">Nochmal spielen</a>
-                </span>
-                <BonName v-if="player" :name="player.name" :tag="player.tag" @saved="onSaved" />
-                <p class="t-small">
-                  Gezählt wird dein bestes Spiel im Zeitraum. Erkannt wirst du an einem Cookie auf
-                  diesem Jerät.
-                </p>
-              </template>
-              <template v-else>
-                <p>Du stehst hier noch nich drin. Spiel ’ne Runde, dann siehste, wo du landest.</p>
-                <a
-                  class="c-button c-bon-leaderboard__play"
-                  data-variant="primary lg"
-                  :href="GAME_PATH"
-                  >Jetzt spielen</a
-                >
-                <p class="t-small">
-                  Schon jespielt? Dann is der Cookie weg oder du spielst auf ’nem anderen Jerät.
-                </p>
-                <BonPlayerCode v-if="redeeming" mode="redeem" @close="redeemed" />
-                <button
-                  v-else
-                  class="c-textlink c-bon-leaderboard__redeem"
-                  type="button"
-                  @click="redeeming = true"
-                >
-                  <KeyIcon width="18" height="18" aria-hidden="true" />
-                  <span>Spielercode einlösen</span>
-                </button>
-              </template>
-            </div>
-          </div>
-        </section>
-        <p class="t-small c-bon-leaderboard__note">
-          Namen sind frei jewählt. Anstößige Namen blenden wa aus.
-          <button
-            class="c-textlink"
-            data-variant="inline"
-            type="button"
-            :aria-pressed="reporting ? 'true' : 'false'"
-            @click="reporting = !reporting"
-          >
-            Namen melden
-          </button>
-        </p>
-        <p v-if="reportError" class="t-small c-bon-leaderboard__note" role="alert">
-          {{ reportError }}
-        </p>
-      </aside>
-    </div>
-
-    <div
-      v-if="!isDesktop && me && status === 'ready' && entries.length"
-      class="c-bon-leaderboard__sticky"
-      role="region"
-      aria-label="Dein Platz"
-    >
-      <b class="c-bon-leaderboard__sticky-rank">{{ me.rank }}.</b>
-      <span class="c-bon-leaderboard__sticky-text">
-        <b>Du · {{ fmt(me.score) }} Punkte</b>
-        <span class="t-small">von {{ fmt(total) }} · besser als {{ betterThan }}</span>
-      </span>
-      <button class="c-textlink c-bon-leaderboard__sticky-jump" type="button" @click="jump">
-        Zu mir
-      </button>
+        <b class="sticky-rank">{{ me.rank }}.</b>
+        <span class="sticky-text">
+          <b>Du · {{ fmt(me.score) }} Punkte</b>
+          <span class="t-small">von {{ fmt(total) }} · besser als {{ betterThan }}</span>
+        </span>
+        <span class="sticky-jump">
+          <button class="c-textlink" type="button" @click="jump">Zu mir</button>
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -438,4 +421,7 @@ onMounted(() => {
 
 <style lang="scss">
 @use "@styles/components/bon-leaderboard";
+@use "@styles/components/bon-ranking";
+@use "@styles/components/bon-me";
+@use "@styles/objects/bon-leaderboard";
 </style>
