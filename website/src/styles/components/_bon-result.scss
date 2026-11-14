@@ -32,10 +32,8 @@
       }
 
       // The code card fills the left column, spaced by the column gap.
-      .c-bon-player-code {
-        max-inline-size: none;
-        margin-block: 0;
-      }
+      --bon-player-code-max-inline-size: none;
+      --bon-player-code-margin-block: 0;
     }
 
     &__head {

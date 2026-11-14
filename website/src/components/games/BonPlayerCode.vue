@@ -7,17 +7,17 @@
   >
     <div class="header">
       <h2 id="bon-player-code-title" class="title">
-        <span class="c-bon-player-code__title">
-          <KeyIcon class="c-bon-player-code__icon" width="18" height="18" aria-hidden="true" />
+        <span class="heading">
+          <KeyIcon class="icon" width="18" height="18" aria-hidden="true" />
           {{ title }}
         </span>
       </h2>
     </div>
     <div class="body">
-      <div class="c-bon-player-code__body">
+      <div class="content">
         <!-- Persistent live region: screen readers only announce changes to an existing one. -->
         <div
-          :class="state === 'success' ? 'c-bon-player-code__done' : 'u-sr-only'"
+          :class="state === 'success' ? 'done' : 'u-sr-only'"
           role="status"
           aria-live="polite"
           tabindex="-1"
@@ -37,7 +37,7 @@
         <template v-if="state === 'success'">
           <button
             v-if="mode === 'redeem'"
-            class="c-button c-bon-player-code__continue"
+            class="c-button"
             data-variant="primary lg"
             type="button"
             data-test="continue"
@@ -49,21 +49,23 @@
 
         <template v-else-if="state === 'code' && code">
           <p
-            class="c-bon-player-code__code"
+            class="code"
             role="img"
             :aria-label="spelled"
             tabindex="-1"
             data-test="code"
           >
-            <span v-for="block in code.split('-')" :key="block" class="c-bon-player-code__block">{{
+            <span v-for="block in code.split('-')" :key="block" class="block">{{
               block
             }}</span>
           </p>
-          <div class="c-infotext c-bon-player-code__warning">
-            <b>Wer diesen Code hat, kann deinen Namen und deine Ergebnisse nutzen.</b>
-            Schreib ihn dir auf – und zeig den QR-Code nich rum.
+          <div class="warning">
+            <div class="c-infotext">
+              <b>Wer diesen Code hat, kann deinen Namen und deine Ergebnisse nutzen.</b><br />
+              Schreib ihn dir auf – und zeig den QR-Code nich rum.
+            </div>
           </div>
-          <div class="c-bon-player-code__actions">
+          <div class="actions">
             <button class="c-choice" type="button" data-test="copy-code" @click="copy('code')">
               {{ copied === "code" ? "Code kopiert" : "Code kopieren" }}
             </button>
@@ -74,10 +76,10 @@
               {{ qrSvg ? "QR-Code ausblenden" : "QR-Code zeigen" }}
             </button>
           </div>
-          <figure v-if="qrSvg" class="c-bon-player-code__figure">
+          <figure v-if="qrSvg" class="figure">
             <!-- eslint-disable-next-line vue/no-v-html -- SVG generated locally from our own link -->
             <div
-              class="c-bon-player-code__qr"
+              class="qr"
               role="img"
               aria-label="QR-Code mit deinem Spielerlink"
               data-test="qr"
@@ -91,17 +93,17 @@
 
         <form
           v-else-if="state === 'redeem'"
-          class="c-bon-player-code__form"
+          class="form"
           @submit.prevent="redeem(input)"
         >
           <p>
             Gib deinen Spielercode ein, dann spielste mit deinem Namen und deinen Ergebnissen weiter.
           </p>
-          <label for="bon-player-code-input" class="c-bon-player-code__label">Spielercode</label>
+          <label for="bon-player-code-input" class="label">Spielercode</label>
           <input
             id="bon-player-code-input"
             v-model="input"
-            class="c-input c-bon-player-code__input"
+            class="c-input"
             type="text"
             placeholder="XXXX-XXXX-XXXX"
             autocomplete="off"
@@ -113,7 +115,7 @@
           <span id="bon-player-code-hint" class="t-small">
             Groß- und Kleinschreibung, Leerzeichen und Bindestriche sind egal.
           </span>
-          <div class="c-bon-player-code__actions">
+          <div class="actions">
             <button
               class="c-choice"
               type="submit"
@@ -132,7 +134,7 @@
             Mit ’nem Spielercode nimmste deinen Namen und deine Ergebnisse auf ein anderes Jerät mit –
             oder holst sie zurück, wenn die Cookies weg sind.
           </p>
-          <div class="c-bon-player-code__actions">
+          <div class="actions">
             <button
               class="c-choice"
               type="button"
@@ -151,7 +153,7 @@
         <!-- Persistent assertive region (also the field's error description); the box only exists with a message. -->
         <div
           id="bon-player-code-error"
-          class="c-bon-player-code__error"
+          class="error"
           aria-live="assertive"
           aria-atomic="true"
           data-test="error"

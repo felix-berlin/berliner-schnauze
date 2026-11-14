@@ -95,7 +95,19 @@
     :not(.c-input--checkbox, .c-input--radio, .c-input--range, .c-input--file, .c-input--color)
   ) {
   /* stylelint-enable selector-class-pattern */
+    // Public, inherited from a parent (the field is a c- root, so a component cannot style it):
+    // --input-inline-size, --input-max-inline-size, --input-text-align, --input-text-transform,
+    // --input-letter-spacing. The fallbacks are today's defaults.
+    inline-size: var(--input-inline-size, auto);
+    max-inline-size: var(--input-max-inline-size, none);
     min-block-size: 44px;
+    text-align: var(--input-text-align, start);
+    text-transform: var(--input-text-transform, none);
+    letter-spacing: var(--input-letter-spacing, 1px);
+
+    &::placeholder {
+      text-transform: none;
+    }
   }
 
   // A form may let the field grow with its text: --textarea-field-sizing: content plus a
