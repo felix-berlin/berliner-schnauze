@@ -1,0 +1,61 @@
+@use "@styles/mixins" as mx;
+
+// "So jeht's" on the start screen (docs/design/bon/SPEC.md §6): a sheet section card
+// (c-section-card c-bon-rules), so its parts avoid the card's names. Parts: .list (li: icon + text),
+// .track (the multiplier steps), .tip.
+@include mx.component("bon-rules") {
+  .list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: var(--space-3);
+      align-items: start;
+      padding-block: var(--space-3);
+      border-block-start: 1px dashed var(--color-border-inner);
+      line-height: 1.5;
+
+      &:first-child {
+        border-block-start: 0;
+      }
+    }
+
+    svg {
+      color: var(--color-accent-icon); // colour inventory R11
+    }
+
+    b {
+      color: var(--color-text-strong);
+    }
+  }
+
+  .track {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-1);
+    margin-block-start: var(--space-2);
+
+    > span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      block-size: 22px;
+      font-size: var(--font-size-2xs);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-accent);
+      background: var(--color-surface-wash-strong); // colour inventory R18
+      border-radius: var(--radius-xxs);
+    }
+  }
+
+  .tip {
+    margin: var(--space-3) 0 0;
+    font-size: var(--font-size-base); // the section card body used to force 1rem on its p (R12)
+    font-style: italic;
+  }
+}

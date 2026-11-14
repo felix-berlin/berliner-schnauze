@@ -149,19 +149,19 @@ describe("BonIntro", () => {
     wrapper.findComponent({ name: "BonPlayerCode" }).vm.$emit("close");
     await wrapper.vm.$nextTick();
     expect(wrapper.find(".mock-code").exists()).toBe(false);
-    expect(wrapper.find("button.c-bon-intro__redeem").exists()).toBe(true);
+    expect(wrapper.find(".c-bon-intro .redeem button").exists()).toBe(true);
   });
 
   it("puts the code card first in the left column when opened from a link", () => {
     const wrapper = mountIntro({ linkRedeem: true });
-    expect(wrapper.find(".c-bon-intro__main").element.firstElementChild?.className).toContain(
+    expect(wrapper.find(".c-bon-intro section").element.firstElementChild?.className).toContain(
       "mock-code",
     );
     expect(wrapper.find("button.c-textlink").exists()).toBe(false);
   });
 
   it("links to the leaderboard", () => {
-    const link = mountIntro({}).find("a.c-bon-intro__leaderboard");
+    const link = mountIntro({}).find('a[href$="/rangliste"]');
     expect(link.text()).toBe("Rangliste");
     expect(link.attributes("href")).toBe("/games/berliner-oder-nicht/rangliste");
   });

@@ -127,7 +127,7 @@ describe("BerlinerOderNicht", () => {
   it("peeks the link code without consuming it", () => {
     sessionStorage.setItem("bonRedeem", "ABCD-EFGH-JKLM");
     const wrapper = mount(BerlinerOderNicht);
-    expect(wrapper.find(".c-bon-intro__main").element.firstElementChild?.className).toBe(
+    expect(wrapper.find(".c-bon-intro section").element.firstElementChild?.className).toBe(
       "mock-code",
     );
     expect(sessionStorage.getItem("bonRedeem")).toBe("ABCD-EFGH-JKLM");

@@ -8,7 +8,6 @@ export default [
   "src/styles/components/_anki-flashcard.scss",
   "src/styles/components/_app-settings.scss",
   "src/styles/components/_berliner-oder-nicht.scss",
-  "src/styles/components/_bon-intro.scss",
   "src/styles/components/_bon-leaderboard.scss",
   "src/styles/components/_bon-result.scss",
   "src/styles/components/_carbon-badge.scss",
