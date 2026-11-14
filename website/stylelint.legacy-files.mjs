@@ -13,8 +13,6 @@ export default [
   "src/styles/components/_bon-hud.scss",
   "src/styles/components/_bon-intro.scss",
   "src/styles/components/_bon-leaderboard.scss",
-  "src/styles/components/_bon-name.scss",
-  "src/styles/components/_bon-placement.scss",
   "src/styles/components/_bon-player-code.scss",
   "src/styles/components/_bon-result.scss",
   "src/styles/components/_bon-share-view.scss",
