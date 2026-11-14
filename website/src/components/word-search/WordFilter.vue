@@ -140,7 +140,8 @@ const { closeOnClickOutside = true } = defineProps<{
 }>();
 
 const wordListFilter = useTemplateRef("wordListFilter");
-const { ready, start } = useTimeout(1200, { controls: true });
+// Not immediate: the reset button shows its success check only after a click, not for 1.2 s after mount.
+const { ready, start } = useTimeout(1200, { controls: true, immediate: false });
 
 const showWordListFilterFlyout = useStore($showWordListFilterFlyout);
 const searchMeta = useStore($searchMeta);
