@@ -77,3 +77,22 @@ test("a card's part styles stop at its slot (Review Focus 4, spec §7.1)", async
   expect(sizes.own).toBe("20px");
   expect(sizes.foreign).not.toBe(sizes.own);
 });
+
+test("form fields take the word page's dashed focus ring (--focus-ring-style)", async ({
+  page,
+}) => {
+  // .c-input:focus-visible outranks the word page's :where() ring, so it reads the property.
+  const focusRing = (root: string) =>
+    page.evaluate((selector) => {
+      const input = document.createElement("input");
+      input.className = "c-input";
+      document.querySelector(selector)!.append(input);
+      input.focus();
+      return getComputedStyle(input).outlineStyle;
+    }, root);
+
+  await page.goto("/wort/anmachen");
+  expect(await focusRing(".c-word-page")).toBe("dashed");
+  await page.goto("/");
+  expect(await focusRing("main")).toBe("solid");
+});

@@ -11,8 +11,13 @@
   }
 
   // Word page and lightbox: one dashed ring for all components (SPEC.md §8); single overrides only change offset.
+  // --focus-ring-style (public): form controls with their own, stronger focus rule read it too.
+  :where(.c-word-page, .c-lightbox) {
+    --focus-ring-style: dashed;
+  }
+
   :where(.c-word-page, .c-lightbox) :focus-visible {
-    outline: 2px dashed var(--color-focus-ring);
+    outline: 2px var(--focus-ring-style) var(--color-focus-ring);
     outline-offset: 2px;
   }
 }

@@ -51,7 +51,7 @@
 
     // outline: none above hides the ring on every field; keyboard focus gets it back here (text fields restyle it below).
     &:focus-visible {
-      outline: 2px solid var(--color-focus-ring);
+      outline: 2px var(--focus-ring-style, solid) var(--color-focus-ring);
     }
 
     &::placeholder {
@@ -79,7 +79,7 @@
     &:focus-visible {
       --color-border: var(--color-border-active);
 
-      outline: 2px solid var(--color-border-active);
+      outline: 2px var(--focus-ring-style, solid) var(--color-border-active);
       outline-offset: 1px;
     }
 
