@@ -1,8 +1,8 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Variants (space-separated in data-variant): primary, lg, center-icon, filter. A pressed filter
-// button is aria-pressed="true". Public: --button-padding, --button-bg, --button-color,
+// Variants (space-separated in data-variant): primary, lg, center-icon, filter, paper, raised. A
+// pressed filter button is aria-pressed="true". Public: --button-padding, --button-bg, --button-color,
 // --button-border-color, --button-border-style, --button-border-width, --button-display,
 // --button-font-size, --button-min-block-size, --button-transition, --button-flex, --button-gap.
 // Locked but focusable (busy, offline): aria-disabled="true"; aria-busy="true" shows the progress cursor.
@@ -72,6 +72,22 @@
     display: var(--button-display, inline-flex);
     justify-content: center;
     align-items: center;
+  }
+
+  // Paper secondary (Anki pages): field surface instead of the control fill, bold label.
+  :scope[data-variant~="paper"] {
+    --_bg: var(--button-bg, var(--color-surface-field)); // colour inventory R23
+
+    font-weight: var(--font-weight-bold);
+  }
+
+  // Raised call to action (Anki pages): Paper Lift at rest; hover still swaps it for the glow.
+  :scope[data-variant~="raised"] {
+    box-shadow: var(--shadow-paper-lift);
+
+    @include butler-mx.hover {
+      box-shadow: var(--shadow-hover-glow);
+    }
   }
 
   // Inner wrapper that centres a swapped icon (search button).

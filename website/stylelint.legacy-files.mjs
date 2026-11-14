@@ -3,9 +3,6 @@
 export default [
   "src/styles/components/_accordion.scss",
   "src/styles/components/_alert.scss",
-  "src/styles/components/_anki-coverage.scss",
-  "src/styles/components/_anki-dev-hours.scss",
-  "src/styles/components/_anki-flashcard.scss",
   "src/styles/components/_app-settings.scss",
   "src/styles/components/_berliner-oder-nicht.scss",
   "src/styles/components/_carbon-badge.scss",
