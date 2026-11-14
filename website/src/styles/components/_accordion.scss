@@ -1,6 +1,8 @@
 @use "@styles/variables" as vars;
 @use "@sass-butler/mixins" as butler-mx;
 
+// Public (an unset one changes nothing): --accordion-trigger-font-family, -font-weight, -font-size,
+// -padding-block; --accordion-content-font-size, -line-height, -padding-inline-end, -text-wrap.
 @layer legacy {
   .c-accordion {
     display: flex;
@@ -41,7 +43,10 @@
       align-items: center;
       justify-content: space-between;
       gap: vars.$spacer * 0.5;
-      padding: vars.$spacer * 0.75 0;
+      padding: var(--accordion-trigger-padding-block, #{vars.$spacer * 0.75}) 0;
+      font-family: var(--accordion-trigger-font-family);
+      font-weight: var(--accordion-trigger-font-weight);
+      font-size: var(--accordion-trigger-font-size);
       cursor: pointer;
       list-style: none;
 
@@ -76,6 +81,10 @@
 
     &__content {
       padding-block-end: vars.$spacer * 0.75;
+      padding-inline-end: var(--accordion-content-padding-inline-end, 0);
+      font-size: var(--accordion-content-font-size);
+      line-height: var(--accordion-content-line-height);
+      text-wrap: var(--accordion-content-text-wrap);
     }
   }
 }

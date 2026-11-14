@@ -1,0 +1,111 @@
+@use "@styles/mixins" as mx;
+
+// Text block of the Anki pages (hero copy, section headings, intro and card copy): .eyebrow,
+// .title (h1–h3), .lead, .actions (the big CTAs), .cta (one small button), .meta. Variants
+// (space-separated in data-variant): hero (h1 + hero lead), loose, narrow, sm (smaller h2),
+// card (h3 in the display font), intro (larger lead).
+@include mx.component("anki-heading") {
+  :scope {
+    --_title: clamp(2rem, 1.36rem + 3.19vw, 4rem); // fluid display size from the design handoff
+    --_title-hero: clamp(2rem, 1.36rem + 3.19vw, 4.5rem); // fluid hero headline
+    --_title-card: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem); // fluid card headline
+    --_title-sm: 2.5rem; // above the type scale (4xl is 2.25rem)
+    --_narrow: 45rem; // one-off measure of the pricing heading
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  :scope[data-variant~="loose"] {
+    gap: var(--space-4);
+  }
+
+  :scope[data-variant~="hero"] {
+    gap: var(--space-5);
+  }
+
+  :scope[data-variant~="narrow"] {
+    max-inline-size: var(--_narrow);
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-accent); // colour inventory R17
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .title {
+    font-size: var(--_title);
+    line-height: 1.05;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  :scope[data-variant~="sm"] .title {
+    font-size: var(--_title-sm);
+    line-height: 1.1;
+  }
+
+  :scope[data-variant~="hero"] .title {
+    font-family: var(--font-family-display);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--_title-hero);
+    line-height: 1.02;
+  }
+
+  :scope[data-variant~="card"] .title {
+    font-family: var(--font-family-display);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--_title-card);
+    line-height: 1.1;
+  }
+
+  .lead {
+    font-size: var(--font-size-lg);
+    line-height: 1.55;
+    max-inline-size: 42em;
+    text-wrap: pretty;
+  }
+
+  :scope[data-variant~="hero"] .lead {
+    font-size: var(--font-size-xl);
+    line-height: 1.5;
+    max-inline-size: 34em;
+  }
+
+  :scope[data-variant~="intro"] .lead {
+    font-size: var(--font-size-xl);
+  }
+
+  .actions {
+    --button-padding: var(--space-3) var(--space-5);
+    --button-font-size: var(--font-size-lg);
+    --button-gap: var(--space-2);
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .cta {
+    --button-padding: var(--space-3) var(--space-4);
+    --button-font-size: var(--font-size-base);
+    --button-gap: var(--space-2);
+
+    display: flex;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-5);
+    font-size: var(--font-size-md);
+    color: var(--color-text-muted);
+  }
+}

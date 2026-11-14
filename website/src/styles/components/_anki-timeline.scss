@@ -1,0 +1,73 @@
+@use "@styles/mixins" as mx;
+
+// Review interval card: .head (.title, .caption), then .row of six .point (.dot, .label) on a dashed .line.
+@include mx.component("anki-timeline") {
+  :scope {
+    --_line-inset: 8%; // the line starts and ends below the first and last dot
+    --_line-top: 0.6875rem; // centre of the 22px dot
+    --_dot: 1.375rem; // one-off dot size
+    --_dot-ring: 0 0 0 1px var(--color-accent-active); // colour inventory R2
+
+    @include mx.paper-card;
+
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .title {
+    @include mx.paper-card-title;
+  }
+
+  .caption {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .row {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .line {
+    position: absolute;
+    inset-inline: var(--_line-inset);
+    inset-block-start: var(--_line-top);
+    border-block-start: 2px dashed var(--color-border-accent); // colour inventory R7
+  }
+
+  .point {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    text-align: center;
+  }
+
+  // The ring punches through the dashed line in the card's own surface colour.
+  .dot {
+    inline-size: var(--_dot);
+    block-size: var(--_dot);
+    border-radius: var(--radius-pill);
+    background: var(--color-accent-active); // colour inventory R2
+    border: 3px solid var(--color-surface-paper); // colour inventory R8
+    box-shadow: var(--_dot-ring);
+  }
+
+  .label {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
+  }
+}
