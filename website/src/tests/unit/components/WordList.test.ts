@@ -91,8 +91,9 @@ const makeHit = (berlinerisch: string, slug = berlinerisch.toLowerCase()) => ({
   score: 1,
 });
 
-function fireKey(key: string, opts: KeyboardEventInit = {}) {
+function fireKey(key: string, opts: KeyboardEventInit = {}, target?: Element) {
   const e = new KeyboardEvent("keydown", { key, ...opts });
+  if (target) Object.defineProperty(e, "target", { value: target });
   const spy = vi.spyOn(e, "preventDefault");
   keyStrokeHandlers.get(key)?.(e);
   return spy;
@@ -234,6 +235,22 @@ describe("WordList.vue", () => {
     mount(WordList);
     const spy = fireKey("Enter");
     expect(spy).not.toHaveBeenCalled();
+  });
+
+  it.each(["ArrowDown", "ArrowUp", "Enter"])("%s in a filter select is left alone", (key) => {
+    mockStores({ state: "ready", value: { hits: [makeHit("a")] } });
+    mount(WordList);
+    const spy = fireKey(key, {}, document.createElement("select"));
+    expect(spy).not.toHaveBeenCalled();
+    expect(startHideActiveTimerFn).not.toHaveBeenCalled();
+  });
+
+  it("ArrowDown in the word search box still moves through the list", () => {
+    mockStores({ state: "ready", value: { hits: [makeHit("a")] } });
+    mount(WordList);
+    const input = document.createElement("input");
+    input.type = "search";
+    expect(fireKey("ArrowDown", {}, input)).toHaveBeenCalled();
   });
 
   it("Enter navigates to the active item's slug", () => {

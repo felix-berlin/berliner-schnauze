@@ -36,7 +36,7 @@ import WordListSkeleton from "@components/word-search/WordListSkeleton.vue";
 import SingleWord from "@components/word/SingleWord.vue";
 import { useStore } from "@nanostores/vue";
 import { $oramaSearchResults, $searchQuery, $searchState } from "@stores/wordList.ts";
-import { routeToWord } from "@utils/helpers.ts";
+import { isEditableTarget, routeToWord } from "@utils/helpers.ts";
 import { onKeyStroke, useTimeoutFn } from "@vueuse/core";
 import { VList, WindowVirtualizer } from "virtua/vue";
 import { computed, nextTick, ref, useTemplateRef } from "vue";
@@ -110,9 +110,13 @@ const focusActive = () => {
   });
 };
 
+// Keys from the word search box drive the list; any other field (filter selects, sliders) keeps its own keys.
+const isForeignField = (e: KeyboardEvent) =>
+  isEditableTarget(e.target) && !(e.target as Element).matches('input[type="search"]');
+
 const move = (delta: number) => (e: KeyboardEvent) => {
   const { length } = mutableOramaSearch.value;
-  if (!length) return;
+  if (!length || isForeignField(e)) return;
   showActiveWithTimeout();
   activeIndex.value = (activeIndex.value + delta + length) % length;
   focusActive();
@@ -123,7 +127,7 @@ onKeyStroke("ArrowDown", move(1));
 onKeyStroke("ArrowUp", move(-1));
 
 onKeyStroke("Enter", (e) => {
-  if (!mutableOramaSearch.value.length) return;
+  if (!mutableOramaSearch.value.length || isForeignField(e)) return;
   // Buttons/links (e.g. the options dropdown trigger) handle Enter themselves.
   if (e.target instanceof Element && e.target.closest("button, a")) return;
   const slug = mutableOramaSearch.value[activeIndex.value].document?.slug;

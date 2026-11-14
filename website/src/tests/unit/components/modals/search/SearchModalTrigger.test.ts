@@ -4,24 +4,9 @@ import { mount, flushPromises } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { ref, type Component } from "vue";
 
-const { mockWhenever, mockOnEventFired } = vi.hoisted(() => {
-  let capturedWheneverCb: (() => void) | null = null;
-  let capturedOnEventFired: ((e: KeyboardEvent) => void) | null = null;
-  return {
-    mockOnEventFired: {
-      fire: (e: KeyboardEvent) => capturedOnEventFired?.(e),
-      fn: vi.fn((opts: { onEventFired: (e: KeyboardEvent) => void }) => {
-        capturedOnEventFired = opts.onEventFired;
-      }),
-    },
-    mockWhenever: {
-      call: () => capturedWheneverCb?.(),
-      fn: vi.fn((_: unknown, cb: () => void) => {
-        capturedWheneverCb = cb;
-      }),
-    },
-  };
-});
+const { slashHandler } = vi.hoisted(() => ({
+  slashHandler: { current: null as ((e: KeyboardEvent) => void) | null },
+}));
 
 vi.mock("@stores/modal.ts", () => ({
   open: vi.fn(),
@@ -40,16 +25,19 @@ vi.mock("@vueuse/core", async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>();
   return {
     ...actual,
-    useMagicKeys: vi.fn(
-      (opts?: { onEventFired?: (e: KeyboardEvent) => void; passive?: boolean }) => {
-        if (opts?.onEventFired)
-          mockOnEventFired.fn(opts as { onEventFired: (e: KeyboardEvent) => void });
-        return { "Shift+/": ref(false) };
-      },
-    ),
-    whenever: mockWhenever.fn,
+    onKeyStroke: vi.fn((key: string, handler: (e: KeyboardEvent) => void) => {
+      if (key === "/") slashHandler.current = handler;
+    }),
   };
 });
+
+const pressSlash = (target?: Element, init: KeyboardEventInit = {}) => {
+  const event = new KeyboardEvent("keydown", { key: "/", ...init });
+  if (target) Object.defineProperty(event, "target", { value: target });
+  const preventDefault = vi.spyOn(event, "preventDefault");
+  slashHandler.current?.(event);
+  return preventDefault;
+};
 
 describe("SearchModalTrigger.vue", () => {
   beforeEach(() => {
@@ -112,16 +100,17 @@ describe("SearchModalTrigger.vue", () => {
     expect(btn.classes()).toContain("c-button");
   });
 
-  it("keyboard shortcut calls open() via whenever callback", () => {
+  it("'/' opens the search and swallows the key", () => {
     mount(SearchModalTrigger);
-    mockWhenever.call();
+    const preventDefault = pressSlash(document.body, { shiftKey: true });
     expect(modalStore.open).toHaveBeenCalledTimes(1);
+    expect(preventDefault).toHaveBeenCalled();
   });
 
   it("keyboard shortcut calls trackEvent", async () => {
     const { trackEvent } = await import("@utils/analytics");
     mount(SearchModalTrigger);
-    mockWhenever.call();
+    pressSlash(document.body);
     expect(trackEvent).toHaveBeenCalledWith(
       "Search",
       "Open Search Modal via Keyboard",
@@ -129,20 +118,26 @@ describe("SearchModalTrigger.vue", () => {
     );
   });
 
-  it("onEventFired calls preventDefault for Shift+/ keydown", () => {
+  it.each(["input", "textarea", "select"])("'/' typed into a %s stays there", (tag) => {
     mount(SearchModalTrigger);
-    const event = new KeyboardEvent("keydown", { key: "/", shiftKey: true });
-    const preventDefaultSpy = vi.spyOn(event, "preventDefault");
-    mockOnEventFired.fire(event);
-    expect(preventDefaultSpy).toHaveBeenCalled();
+    const preventDefault = pressSlash(document.createElement(tag), { shiftKey: true });
+    expect(modalStore.open).not.toHaveBeenCalled();
+    expect(preventDefault).not.toHaveBeenCalled();
   });
 
-  it("onEventFired does not call preventDefault for other keys", () => {
+  it("'/' in a contenteditable stays there", () => {
     mount(SearchModalTrigger);
-    const event = new KeyboardEvent("keydown", { key: "a" });
-    const preventDefaultSpy = vi.spyOn(event, "preventDefault");
-    mockOnEventFired.fire(event);
-    expect(preventDefaultSpy).not.toHaveBeenCalled();
+    const div = document.createElement("div");
+    div.contentEditable = "true";
+    Object.defineProperty(div, "isContentEditable", { value: true });
+    pressSlash(div);
+    expect(modalStore.open).not.toHaveBeenCalled();
+  });
+
+  it("a held '/' does not reopen the search", () => {
+    mount(SearchModalTrigger);
+    pressSlash(document.body, { repeat: true });
+    expect(modalStore.open).not.toHaveBeenCalled();
   });
 
   it("resolves the defineAsyncComponent factory for SearchModal (covers line 28 factory fn)", async () => {
