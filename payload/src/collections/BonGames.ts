@@ -9,7 +9,12 @@ export const BonGames: CollectionConfig = {
   slug: "bon-games",
   access: authenticatedOnly,
   admin: { defaultColumns: ["playerName", "score", "status", "finishedAt"] },
-  indexes: [{ fields: ["status", "score"] }, { fields: ["token"], unique: true }],
+  // status + finishedAt: the weekly ranking.
+  indexes: [
+    { fields: ["status", "score"] },
+    { fields: ["token"], unique: true },
+    { fields: ["status", "finishedAt"] },
+  ],
   hooks: {
     afterChange: [
       ({ doc, previousDoc, req }) => {
@@ -30,7 +35,8 @@ export const BonGames: CollectionConfig = {
     ],
   },
   fields: [
-    { name: "visitor", type: "text", required: true },
+    // finish, rename and the 24 h cleanup look games up by visitor.
+    { name: "visitor", type: "text", required: true, index: true },
     { name: "token", type: "text", required: true },
     {
       name: "status",
