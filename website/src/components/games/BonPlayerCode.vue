@@ -48,16 +48,8 @@
         </template>
 
         <template v-else-if="state === 'code' && code">
-          <p
-            class="code"
-            role="img"
-            :aria-label="spelled"
-            tabindex="-1"
-            data-test="code"
-          >
-            <span v-for="block in code.split('-')" :key="block" class="block">{{
-              block
-            }}</span>
+          <p class="code" role="img" :aria-label="spelled" tabindex="-1" data-test="code">
+            <span v-for="block in code.split('-')" :key="block" class="block">{{ block }}</span>
           </p>
           <div class="warning">
             <div class="c-infotext">
@@ -91,13 +83,10 @@
           </figure>
         </template>
 
-        <form
-          v-else-if="state === 'redeem'"
-          class="form"
-          @submit.prevent="redeem(input)"
-        >
+        <form v-else-if="state === 'redeem'" class="form" @submit.prevent="redeem(input)">
           <p>
-            Gib deinen Spielercode ein, dann spielste mit deinem Namen und deinen Ergebnissen weiter.
+            Gib deinen Spielercode ein, dann spielste mit deinem Namen und deinen Ergebnissen
+            weiter.
           </p>
           <label for="bon-player-code-input" class="label">Spielercode</label>
           <input
@@ -125,14 +114,16 @@
             >
               Weiterspielen
             </button>
-            <button class="c-choice" type="button" data-test="back" @click="cancel">Abbrechen</button>
+            <button class="c-choice" type="button" data-test="back" @click="cancel">
+              Abbrechen
+            </button>
           </div>
         </form>
 
         <template v-else-if="state === 'none'">
           <p>
-            Mit ’nem Spielercode nimmste deinen Namen und deine Ergebnisse auf ein anderes Jerät mit –
-            oder holst sie zurück, wenn die Cookies weg sind.
+            Mit ’nem Spielercode nimmste deinen Namen und deine Ergebnisse auf ein anderes Jerät mit
+            – oder holst sie zurück, wenn die Cookies weg sind.
           </p>
           <div class="actions">
             <button

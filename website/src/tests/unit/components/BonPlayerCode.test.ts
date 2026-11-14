@@ -80,11 +80,7 @@ describe("2 code shown", () => {
     const w = await showCode({ attachTo: document.body });
     expect(w.get("h2").text()).toBe("Dein Spielercode für Ede:");
     const code = w.get("[data-test=code]");
-    expect(code.findAll("span").map((b) => b.text())).toEqual([
-      "K7QD",
-      "M2X9",
-      "ZT4B",
-    ]);
+    expect(code.findAll("span").map((b) => b.text())).toEqual(["K7QD", "M2X9", "ZT4B"]);
     expect(code.attributes("aria-label")).toBe("K 7 Q D, M 2 X 9, Z T 4 B");
     expect(document.activeElement).toBe(code.element);
     w.unmount();

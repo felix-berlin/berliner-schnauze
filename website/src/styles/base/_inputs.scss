@@ -31,13 +31,13 @@
 
     /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
     &:not(.c-input--range) {
-    /* stylelint-enable selector-class-pattern */
+      /* stylelint-enable selector-class-pattern */
       border: var(--width-border) var(--style-border, solid) var(--color-border);
     }
 
     /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
     &:not(.c-input--file, .c-input--range) {
-    /* stylelint-enable selector-class-pattern */
+      /* stylelint-enable selector-class-pattern */
       padding: var(--spacing-inner);
     }
 
@@ -68,7 +68,7 @@
   .c-input:where(
     :not(.c-input--checkbox, .c-input--radio, .c-input--range, .c-input--file, .c-input--color)
   ) {
-  /* stylelint-enable selector-class-pattern */
+    /* stylelint-enable selector-class-pattern */
     @include butler-mx.hover {
       &:where(:not(:focus, :disabled)) {
         --style-border: dashed;
@@ -94,7 +94,7 @@
   .c-input:where(
     :not(.c-input--checkbox, .c-input--radio, .c-input--range, .c-input--file, .c-input--color)
   ) {
-  /* stylelint-enable selector-class-pattern */
+    /* stylelint-enable selector-class-pattern */
     // Public, inherited from a parent (the field is a c- root, so a component cannot style it):
     // --input-inline-size, --input-max-inline-size, --input-text-align, --input-text-transform,
     // --input-letter-spacing. The fallbacks are today's defaults.
@@ -126,7 +126,7 @@
 
   /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
   .c-textarea--error .c-textarea {
-  /* stylelint-enable selector-class-pattern */
+    /* stylelint-enable selector-class-pattern */
     --color-border: var(--color-status-danger);
     --color-border-active: var(--color-status-danger);
   }
@@ -135,7 +135,7 @@
   .c-input--number,
   .c-input--email,
   .c-input--tel {
-  /* stylelint-enable selector-class-pattern */
+    /* stylelint-enable selector-class-pattern */
     --spacing-inner-vertical: var(--space-3);
     --spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
 
@@ -161,7 +161,6 @@
       position: right var(--space-6) center;
       size: 16px 12px;
     }
-
   }
 
   // The one dark rule left: a blend mode is not a colour and the chevron is a data URI, so light-dark() cannot do it.
@@ -171,14 +170,14 @@
 
   /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
   .c-input--color {
-  /* stylelint-enable selector-class-pattern */
+    /* stylelint-enable selector-class-pattern */
     padding: 0;
   }
 
   /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
   .c-input--checkbox,
   .c-input--radio {
-  /* stylelint-enable selector-class-pattern */
+    /* stylelint-enable selector-class-pattern */
     --_duration-short: 0.2s; // no token between --duration-fast and --duration-base
     --_focus-shadow: 0 0 0 var(--box-shadow-focus); // box-shadow only takes tokens; the halo is a spread ring
     --color-active: var(--color-accent-active);
@@ -279,7 +278,7 @@
 
   /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
   .c-input--checkbox {
-  /* stylelint-enable selector-class-pattern */
+    /* stylelint-enable selector-class-pattern */
     &:not(.c-switch) {
       &::after {
         --_mark-width: 5px; // check mark drawn for the 21px box
@@ -345,7 +344,7 @@
 
   /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
   .c-input--radio {
-  /* stylelint-enable selector-class-pattern */
+    /* stylelint-enable selector-class-pattern */
     --_round: 50%; // a circle; --radius-pill would make a capsule
 
     border-radius: var(--_round);
@@ -366,7 +365,7 @@
 
   /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
   .c-input--range {
-  /* stylelint-enable selector-class-pattern */
+    /* stylelint-enable selector-class-pattern */
     --_round: 50%; // a circle; --radius-pill would make a capsule
     --_thumb-offset: calc(-1 * (var(--height-track) + 0.05rem)); // centres the thumb on the track
     --height-track: 0.3rem;
@@ -410,7 +409,7 @@
 
   /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
   .c-input--file {
-  /* stylelint-enable selector-class-pattern */
+    /* stylelint-enable selector-class-pattern */
     &:not(:disabled) {
       cursor: pointer;
 
