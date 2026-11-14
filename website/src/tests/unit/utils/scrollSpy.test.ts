@@ -123,6 +123,39 @@ describe("initScrollSpy", () => {
     expect(linkB?.classList.contains("is-active")).toBe(true);
   });
 
+  it("without activeClass adds no class but still switches the link and calls onActivate", () => {
+    document.body.innerHTML = `
+      <nav class="nav">
+        <a href="#a">A</a>
+        <a href="#b">B</a>
+      </nav>
+      <section id="a"></section>
+      <section id="b"></section>
+    `;
+    const onActivate = vi.fn();
+    initScrollSpy({
+      getSectionId: (link) => link.getAttribute("href")?.slice(1),
+      linkSelector: "a",
+      navSelector: ".nav",
+      onActivate,
+    });
+
+    const callback = getObserverCallback();
+    const nav = document.querySelector(".nav");
+    const linkA = document.querySelector('a[href="#a"]');
+    const linkB = document.querySelector('a[href="#b"]');
+
+    callback([{ boundingClientRect: { top: 0 }, isIntersecting: true, target: { id: "a" } }]);
+    callback([{ boundingClientRect: { top: 0 }, isIntersecting: true, target: { id: "b" } }]);
+
+    expect(onActivate.mock.calls).toEqual([
+      [linkA, nav],
+      [linkB, nav],
+    ]);
+    expect(linkA?.getAttribute("class")).toBeNull();
+    expect(linkB?.getAttribute("class")).toBeNull();
+  });
+
   it("ignores non-intersecting entries", () => {
     document.body.innerHTML = `
       <nav class="nav"><a href="#a">A</a></nav>
