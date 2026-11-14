@@ -97,24 +97,47 @@ test("form fields take the word page's dashed focus ring (--focus-ring-style)", 
   expect(await focusRing("main")).toBe("solid");
 });
 
-test("checkbox, radio and select on the word page take the dashed ring too", async ({ page }) => {
+test("checkbox, radio and select take the dashed ring on the word page, solid elsewhere", async ({
+  page,
+}) => {
   // The shared field rule (not the text-field one) draws their ring; it reads the same property.
+  // Reached with Tab, so :focus-visible holds in every engine (focus({ focusVisible }) does not in WebKit).
+  const controls = [
+    '<input type="checkbox" class="c-input c-input--checkbox">',
+    '<input type="radio" class="c-input c-input--radio">',
+    '<select class="c-select"><option>a</option></select>',
+  ];
+  const tabRing = async (root: string, html: string) => {
+    await page.evaluate(
+      ([selector, markup]) => {
+        const start = document.createElement("button");
+        start.id = "ring-start";
+        const holder = document.createElement("div");
+        holder.innerHTML = markup;
+        const control = holder.firstElementChild!;
+        control.id = "ring-probe";
+        document.querySelector(selector)!.prepend(start, control);
+      },
+      [root, html],
+    );
+    await page.locator("#ring-start").focus();
+    await page.keyboard.press("Tab");
+    const probe = page.locator("#ring-probe");
+    await expect(probe).toBeFocused();
+    const style = await probe.evaluate((el) => getComputedStyle(el).outlineStyle);
+    await page.evaluate(() =>
+      document.querySelectorAll("#ring-start, #ring-probe").forEach((el) => el.remove()),
+    );
+    return style;
+  };
+
   await page.goto("/wort/anmachen");
-  const styles = await page.evaluate(() => {
-    const root = document.querySelector(".o-word-page")!;
-    const make = (html: string) => {
-      const holder = document.createElement("div");
-      holder.innerHTML = html;
-      const control = holder.firstElementChild as HTMLElement;
-      root.append(control);
-      control.focus({ focusVisible: true } as FocusOptions);
-      return getComputedStyle(control).outlineStyle;
-    };
-    return [
-      make('<input type="checkbox" class="c-input c-input--checkbox">'),
-      make('<input type="radio" class="c-input c-input--radio">'),
-      make('<select class="c-select"><option>a</option></select>'),
-    ];
-  });
-  expect(styles).toEqual(["dashed", "dashed", "dashed"]);
+  const word: string[] = [];
+  for (const html of controls) word.push(await tabRing(".o-word-page", html));
+  expect(word).toEqual(["dashed", "dashed", "dashed"]);
+
+  await page.goto("/");
+  const home: string[] = [];
+  for (const html of controls) home.push(await tabRing("main", html));
+  expect(home).toEqual(["solid", "solid", "solid"]);
 });
