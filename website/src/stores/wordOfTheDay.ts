@@ -59,15 +59,9 @@ export const getWordOfTheDay = async (): Promise<void> => {
     });
 };
 
-const isCachedToday = (timestamp: number): boolean => {
-  const cached = new Date(timestamp);
-  const now = new Date();
-  return (
-    cached.getFullYear() === now.getFullYear() &&
-    cached.getMonth() === now.getMonth() &&
-    cached.getDate() === now.getDate()
-  );
-};
+/** When the cached word runs out: the server's `expires` counts to Berlin midnight, not the visitor's local one. */
+export const expiresAt = ({ timestamp, word }: Pick<WordOfTheDay, "timestamp" | "word">): number =>
+  timestamp + (word?.expires ?? 0) * 1000;
 
 // nanostores onMount callbacks run in reverse registration order (reduceRight),
 // so persistentMap's restore() hasn't populated the store yet when our callback runs.
@@ -88,9 +82,9 @@ onMount($wordOfTheDay, () => {
 
   void task(async () => {
     const timestamp = readPersisted("timestamp", 0);
-    // A word cached in an older shape has no slug: fetch it again.
-    const cachedSlug = readPersisted<Word>("word", {}).slug;
-    if (timestamp && isCachedToday(timestamp) && cachedSlug) return;
+    // A word cached in an older shape has no slug or expiry: fetch it again.
+    const word = readPersisted<Word>("word", {});
+    if (word.slug && Date.now() < expiresAt({ timestamp, word })) return;
 
     // getWordOfTheDay() handles its own errors and never rejects.
     await getWordOfTheDay();

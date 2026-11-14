@@ -65,6 +65,29 @@ describe("open", () => {
   });
 });
 
+describe("open after close", () => {
+  it("keeps the new view when reopened within the close animation", async () => {
+    const { open, close, $view, $element } = await import("@stores/modal.ts");
+    $element.set({ close: vi.fn(), showModal: vi.fn() } as unknown as HTMLDialogElement);
+    open({ view: { props: { first: true } } });
+    close();
+    open({ view: { props: { second: true } } });
+    vi.advanceTimersByTime(500);
+    expect($view.get().props).toEqual({ second: true });
+  });
+
+  it("shows the dialog once the modal island registers it", async () => {
+    const { open, $element } = await import("@stores/modal.ts");
+    $element.set(null);
+    open({});
+    await Promise.resolve();
+    await Promise.resolve();
+    const fakeDialog = { showModal: vi.fn() } as unknown as HTMLDialogElement;
+    $element.set(fakeDialog);
+    expect(fakeDialog.showModal).toHaveBeenCalledOnce();
+  });
+});
+
 // ─── close ────────────────────────────────────────────────────────────────────
 
 describe("close", () => {

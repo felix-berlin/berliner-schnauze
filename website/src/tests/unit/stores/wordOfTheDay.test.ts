@@ -61,7 +61,7 @@ describe("wordOfTheDay store", () => {
     });
   });
 
-  describe("onMount / isCachedToday", () => {
+  describe("onMount / cache expiry", () => {
     it("asks the site's own word-of-the-day endpoint", async () => {
       const { getWordOfTheDay } = await import("@stores/wordOfTheDay.ts");
       mockFetch.mockClear();
@@ -88,11 +88,11 @@ describe("wordOfTheDay store", () => {
       unsub();
     });
 
-    it("skips fetch when localStorage timestamp is from today (isCachedToday = true)", async () => {
+    it("skips fetch when localStorage timestamp is from today (before expiry)", async () => {
       localStorage.setItem("wordOfTheDay:timestamp", JSON.stringify(Date.now()));
       localStorage.setItem(
         "wordOfTheDay:word",
-        JSON.stringify({ berlinerisch: "Schnauze", slug: "schnauze" }),
+        JSON.stringify({ berlinerisch: "Schnauze", expires: 3600, slug: "schnauze" }),
       );
       const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
       mockFetch.mockClear();
@@ -102,9 +102,23 @@ describe("wordOfTheDay store", () => {
       unsub();
     });
 
-    it("fetches when localStorage timestamp is from a past day (isCachedToday = false)", async () => {
+    it("fetches when localStorage timestamp is from a past day (past expiry)", async () => {
       const yesterday = Date.now() - 24 * 60 * 60 * 1000;
       localStorage.setItem("wordOfTheDay:timestamp", JSON.stringify(yesterday));
+      const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
+      mockFetch.mockClear();
+      const unsub = $wordOfTheDay.subscribe(() => {});
+      await flushTasks();
+      expect(mockFetch).toHaveBeenCalled();
+      unsub();
+    });
+
+    it("fetches once the server's expiry has passed, even on the same local day", async () => {
+      localStorage.setItem("wordOfTheDay:timestamp", JSON.stringify(Date.now() - 2000));
+      localStorage.setItem(
+        "wordOfTheDay:word",
+        JSON.stringify({ berlinerisch: "Schnauze", expires: 1, slug: "schnauze" }),
+      );
       const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
       mockFetch.mockClear();
       const unsub = $wordOfTheDay.subscribe(() => {});
@@ -121,7 +135,7 @@ describe("wordOfTheDay store", () => {
       mockFetch.mockClear();
       const unsub = $wordOfTheDay.subscribe(() => {});
       await flushTasks();
-      // timestamp=0 → isCachedToday(0) is false → fetch is called
+      // timestamp=0 → expired → fetch is called
       expect(mockFetch).toHaveBeenCalled();
       unsub();
     });

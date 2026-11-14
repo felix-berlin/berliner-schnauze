@@ -45,6 +45,18 @@ describe("pwa service — post-update success toast", () => {
     expect(trackEvent).toHaveBeenCalledWith("App", "Update success shown", "PWA");
   });
 
+  it("still registers the service worker when sessionStorage is blocked", async () => {
+    const blocked = vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+      throw new DOMException("blocked", "SecurityError");
+    });
+
+    await import("@services/pwa");
+    blocked.mockRestore();
+
+    const { registerSW } = await import("virtual:pwa-register");
+    expect(registerSW).toHaveBeenCalledOnce();
+  });
+
   it("removes the flag from sessionStorage after showing the toast", async () => {
     sessionStorage.setItem(PWA_UPDATED_KEY, version);
 

@@ -8,7 +8,12 @@
   const DARK_CLASS = 'dark';
 
   const getPreferredDarkMode = () => {
-    const persistedValue = localStorage.getItem(STORAGE_KEY);
+    let persistedValue = null;
+    try {
+      persistedValue = localStorage.getItem(STORAGE_KEY);
+    } catch {
+      // Blocked storage: fall back to the system preference.
+    }
 
     if (persistedValue === 'true') return true;
     if (persistedValue === 'false') return false;

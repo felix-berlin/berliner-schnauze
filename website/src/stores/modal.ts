@@ -41,11 +41,24 @@ export const preventScroll = (status: boolean) => {
   document.body.classList.toggle("u-disable-scroll", status);
 };
 
+let resetTimer: ReturnType<typeof setTimeout> | undefined;
+
 export const open = (settings: ModalSettings) => {
+  // A close just before must not wipe this view when its reset timer fires.
+  clearTimeout(resetTimer);
   $props.set({ ...$props.get(), ...settings.props });
   $view.set(markRaw(settings.view ?? {}));
 
-  void nextTick(() => $element.get()?.showModal());
+  void nextTick(() => {
+    const element = $element.get();
+    if (element) return element.showModal();
+    // The modal island has not hydrated yet: show it as soon as it registers.
+    const off = $element.listen((el) => {
+      if (!el) return;
+      off();
+      el.showModal();
+    });
+  });
 };
 
 export const close = () => {
@@ -57,7 +70,8 @@ export const resetModal = () => {
   preventScroll(false);
   // Give the animation time to finish
   if (typeof window !== "undefined") {
-    setTimeout(() => {
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => {
       $view.set({});
       $props.set({ ...propsDefault });
     }, 500);
