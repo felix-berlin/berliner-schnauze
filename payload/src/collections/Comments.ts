@@ -59,7 +59,13 @@ const applyRules: CollectionBeforeChangeHook = ({ data, operation, originalDoc, 
   return data;
 };
 
-const mailEditors: CollectionAfterChangeHook = async ({ doc, operation, previousDoc, req, context }) => {
+const mailEditors: CollectionAfterChangeHook = async ({
+  doc,
+  operation,
+  previousDoc,
+  req,
+  context,
+}) => {
   if (context.skipCommentHooks) return doc;
   const becamePending =
     operation === "update" &&
@@ -72,7 +78,13 @@ const mailEditors: CollectionAfterChangeHook = async ({ doc, operation, previous
     typeof doc.word === "object"
       ? doc.word
       : await req.payload
-          .findByID({ collection: "words", id: doc.word, depth: 0, req, select: { berlinerisch: true, slug: true } })
+          .findByID({
+            collection: "words",
+            id: doc.word,
+            depth: 0,
+            req,
+            select: { berlinerisch: true, slug: true },
+          })
           .catch(() => ({ id: doc.word }));
   const subject = becamePending
     ? "Kommentar bearbeitet, wartet auf Freigabe – Berliner Schnauze"

@@ -32,10 +32,23 @@ const publicState = (req: PayloadRequest, collection: string, id: number | strin
  * A draft save can be an unpublish: the main table decides. Remembers the slug when the public doc is still published
  * before a draft save, so afterChange can tell "unpublished" from "draft of a published doc".
  */
-export const rememberWasPublic: CollectionBeforeChangeHook = async ({ collection, data, operation, originalDoc, req }) => {
-  if (operation !== "update" || !originalDoc || data._status !== "draft" || !collection.versions?.drafts) return data;
+export const rememberWasPublic: CollectionBeforeChangeHook = async ({
+  collection,
+  data,
+  operation,
+  originalDoc,
+  req,
+}) => {
+  if (
+    operation !== "update" ||
+    !originalDoc ||
+    data._status !== "draft" ||
+    !collection.versions?.drafts
+  )
+    return data;
   const published = await publicState(req, collection.slug, originalDoc.id);
-  if (published?._status === "published") req.context[wasPublicKey(originalDoc.id)] = published.slug;
+  if (published?._status === "published")
+    req.context[wasPublicKey(originalDoc.id)] = published.slug;
   return data;
 };
 

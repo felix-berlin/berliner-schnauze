@@ -37,56 +37,117 @@ describe("words", () => {
 
     it("create with flag keeps the value, without gets now", async () => {
       const payload = await getTestPayload();
-      const doc = await payload.create({ collection: "words", data: { ...base, contentModifiedAt: A }, ...keep });
+      const doc = await payload.create({
+        collection: "words",
+        data: { ...base, contentModifiedAt: A },
+        ...keep,
+      });
       expect(ms(doc.contentModifiedAt)).toBe(ms(A));
       await clean();
-      const plain = await payload.create({ collection: "words", data: { ...base, contentModifiedAt: A } });
+      const plain = await payload.create({
+        collection: "words",
+        data: { ...base, contentModifiedAt: A },
+      });
       recent(plain.contentModifiedAt);
     });
 
     it("update with flag and same value keeps it; new value is stored; absent keeps stored", async () => {
       const payload = await getTestPayload();
-      const doc = await payload.create({ collection: "words", data: { ...base, contentModifiedAt: A }, ...keep });
-      const same = await payload.update({ collection: "words", id: doc.id, data: { contentModifiedAt: A, article: "der" }, ...keep });
+      const doc = await payload.create({
+        collection: "words",
+        data: { ...base, contentModifiedAt: A },
+        ...keep,
+      });
+      const same = await payload.update({
+        collection: "words",
+        id: doc.id,
+        data: { contentModifiedAt: A, article: "der" },
+        ...keep,
+      });
       expect(ms(same.contentModifiedAt)).toBe(ms(A));
-      const next = await payload.update({ collection: "words", id: doc.id, data: { contentModifiedAt: B }, ...keep });
+      const next = await payload.update({
+        collection: "words",
+        id: doc.id,
+        data: { contentModifiedAt: B },
+        ...keep,
+      });
       expect(ms(next.contentModifiedAt)).toBe(ms(B));
-      const absent = await payload.update({ collection: "words", id: doc.id, data: { article: "die" }, ...keep });
+      const absent = await payload.update({
+        collection: "words",
+        id: doc.id,
+        data: { article: "die" },
+        ...keep,
+      });
       expect(ms(absent.contentModifiedAt)).toBe(ms(B));
     });
 
     it("update without flag becomes now even when the incoming value equals the stored one", async () => {
       const payload = await getTestPayload();
-      const doc = await payload.create({ collection: "words", data: { ...base, contentModifiedAt: A }, ...keep });
-      const upd = await payload.update({ collection: "words", id: doc.id, data: { contentModifiedAt: A } });
+      const doc = await payload.create({
+        collection: "words",
+        data: { ...base, contentModifiedAt: A },
+        ...keep,
+      });
+      const upd = await payload.update({
+        collection: "words",
+        id: doc.id,
+        data: { contentModifiedAt: A },
+      });
       recent(upd.contentModifiedAt);
     });
   });
 
   it("derives fields on create and recomputes them on update", async () => {
     const payload = await getTestPayload();
-    const doc = await payload.create({ collection: "words", data: { ...base, berlinerisch: "aasen" } });
+    const doc = await payload.create({
+      collection: "words",
+      data: { ...base, berlinerisch: "aasen" },
+    });
     expect(doc.derived?.wordGroup).toBe("A");
     expect(doc.derived?.characterLength).toBe(5);
     expect(doc.derived?.soundexCode).toBe(soundexCode("aasen"));
-    const upd = await payload.update({ collection: "words", id: doc.id, data: { berlinerisch: "Bulette" } });
+    const upd = await payload.update({
+      collection: "words",
+      id: doc.id,
+      data: { berlinerisch: "Bulette" },
+    });
     expect(upd.derived?.wordGroup).toBe("B");
-    const other = await payload.update({ collection: "words", id: doc.id, data: { article: "die" } });
+    const other = await payload.update({
+      collection: "words",
+      id: doc.id,
+      data: { article: "die" },
+    });
     expect(other.derived?.wordGroup).toBe("B");
   });
 
   it("stores the compound decomposition, empty for a non-compound", async () => {
     const payload = await getTestPayload();
-    const doc = await payload.create({ collection: "words", data: { ...base, berlinerisch: "Hodenkobold" } });
+    const doc = await payload.create({
+      collection: "words",
+      data: { ...base, berlinerisch: "Hodenkobold" },
+    });
     expect(doc.derived?.decomposition).toEqual(["hoden", "kobold"]);
-    const upd = await payload.update({ collection: "words", id: doc.id, data: { berlinerisch: "aasen" } });
+    const upd = await payload.update({
+      collection: "words",
+      id: doc.id,
+      data: { berlinerisch: "aasen" },
+    });
     expect(upd.derived?.decomposition).toEqual([]);
   });
 
   it("derives fields on draft saves", async () => {
     const payload = await getTestPayload();
-    const doc = await payload.create({ collection: "words", data: { ...base, berlinerisch: "aasen" }, draft: true });
-    const upd = await payload.update({ collection: "words", id: doc.id, data: { berlinerisch: "Ärger" }, draft: true });
+    const doc = await payload.create({
+      collection: "words",
+      data: { ...base, berlinerisch: "aasen" },
+      draft: true,
+    });
+    const upd = await payload.update({
+      collection: "words",
+      id: doc.id,
+      data: { berlinerisch: "Ärger" },
+      draft: true,
+    });
     expect(upd.derived?.wordGroup).toBe("Ä");
     const latest = await payload.findByID({ collection: "words", id: doc.id, draft: true });
     expect(latest.derived?.wordGroup).toBe("Ä");
@@ -95,7 +156,11 @@ describe("words", () => {
   it("overwrites updatedAt on update (why contentModifiedAt exists)", async () => {
     const payload = await getTestPayload();
     const doc = await payload.create({ collection: "words", data: base });
-    const upd = await payload.update({ collection: "words", id: doc.id, data: { updatedAt: "2021-02-03T04:05:06.000Z" } });
+    const upd = await payload.update({
+      collection: "words",
+      id: doc.id,
+      data: { updatedAt: "2021-02-03T04:05:06.000Z" },
+    });
     expect(upd.updatedAt).not.toBe("2021-02-03T04:05:06.000Z");
   });
 });

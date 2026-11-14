@@ -52,14 +52,14 @@ Besucher sollen auf der Startseite und bei der Suche Wörter entdecken, die sie 
 - Der Abschnitt "Entwurf" ist verbindlich, soweit Felix zugestimmt hat: Collection `word-stats`, Melden per `POST`, ein Lese-Endpunkt `GET /api/trending`. Der Bauende plant direkt die Umsetzung, ohne vorherigen Bestätigungsschritt.
 - **Astro-Routen im `website`-Paket**, nach dem Muster von `word-feedback.ts`: Zugriff auf Payload über `getPayloadClient()` (Server-Zugriff, kein Login der Besucher). Die IP für das Rate-Limit kommt aus `clientIp(...)`, wie dort. Das Limit ist großzügiger als bei den Stimmen, weil ein Besucher pro Wortseite bis zu vier Meldungen schickt.
 - **Aufrufe zählen nur Besuche der Wortseite selbst.** Wörter, die inline in Suchergebnissen oder auf der Startseite erscheinen, zählen nicht.
-- **Interaktionen:** *Audio* = Wiedergabe gestartet. *Teilen* = Teilen-Aktion ausgelöst, einschließlich Bon-Share. *Weiterklick* = Klick von einer Wortseite auf ein anderes Wort (ähnliche oder verwandte Wörter). "Kein Frontend" meint die Anzeige der Ranglisten. Die Melde-Aufrufe in den vorhandenen Wortseiten-Komponenten gehören zum Umfang.
+- **Interaktionen:** _Audio_ = Wiedergabe gestartet. _Teilen_ = Teilen-Aktion ausgelöst, einschließlich Bon-Share. _Weiterklick_ = Klick von einer Wortseite auf ein anderes Wort (ähnliche oder verwandte Wörter). "Kein Frontend" meint die Anzeige der Ranglisten. Die Melde-Aufrufe in den vorhandenen Wortseiten-Komponenten gehören zum Umfang.
 - **Reaktionen und Kommentare zählen als Interaktion** und werden live aus ihren Collections gezählt, nicht in `word-stats`.
 - **Antwortform von `/api/trending`:** Rang, Wort-Referenz, Wert des Zeitraums und bei "steigend" zusätzlich der Wert des Vergleichszeitraums und die Veränderung.
 - **Datenmenge:** Live-Aggregation über einen Index auf (Tag, Wort), dazu der kurze Cache. Eine vorberechnete Tabelle kommt erst, wenn die Messung sie nötig macht.
 
 - **Formeln ohne feste Schwellen** (die Seite hat etwa 3.000 Besucher im Monat, also ein bis zwei Aufrufe pro Wort und Monat; Felix hat zugestimmt):
-  - *Steigend* = `(jetzt − davor) / (davor + m)`, mit `m` = durchschnittliche Aufrufe eines Worts mit Aktivität im Zeitraum. Gleichstand entscheidet die Gesamtzahl der Aufrufe.
-  - *Viel Interaktion* = `(Interaktionen + k · Gesamtrate) / (Aufrufe + k)` (Bayes-Glättung), mit `k` = derselbe Durchschnitt `m` und `Gesamtrate` = Interaktionen pro Aufruf über alle Wörter.
+  - _Steigend_ = `(jetzt − davor) / (davor + m)`, mit `m` = durchschnittliche Aufrufe eines Worts mit Aktivität im Zeitraum. Gleichstand entscheidet die Gesamtzahl der Aufrufe.
+  - _Viel Interaktion_ = `(Interaktionen + k · Gesamtrate) / (Aufrufe + k)` (Bayes-Glättung), mit `k` = derselbe Durchschnitt `m` und `Gesamtrate` = Interaktionen pro Aufruf über alle Wörter.
   - Gewichte als feste Konstanten: Audio, Teilen, Weiterklick und Reaktion je 1, Kommentar 3.
   - Standardzeitraum **30 Tage**; `days` bleibt wählbar.
 

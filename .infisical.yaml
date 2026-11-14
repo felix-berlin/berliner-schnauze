@@ -1,10 +1,10 @@
 general:
-    domain: https://infisical.kasimir.dev
+  domain: https://infisical.kasimir.dev
 secrets-management:
-    project-id: cb85888f-7b32-44b7-9ce0-9b13ab4ef7ba
-    default-environment: ""
-    mappings:
-        git-branch-to-environment:
-            # Every local checkout is dev, main included: a checkout on main must never pick up the prod Matomo ID or
-            # prod database. Prod and staging are explicit (CI: env-slug, Komodo: machine identities).
-            .*: dev
+  project-id: cb85888f-7b32-44b7-9ce0-9b13ab4ef7ba
+  default-environment: ""
+  mappings:
+    git-branch-to-environment:
+      # Every local checkout is dev, main included: a checkout on main must never pick up the prod Matomo ID or
+      # prod database. Prod and staging are explicit (CI: env-slug, Komodo: machine identities).
+      .*: dev

@@ -34,8 +34,8 @@
 Create `src/tests/unit/composable/useCacheStorage.test.ts`:
 
 ```ts
-import { describe, it, expect } from "vitest";
 import { formatBytes, getBucketDisplayName } from "@composables/useCacheStorage";
+import { describe, it, expect } from "vitest";
 
 describe("formatBytes", () => {
   it('returns "0 B" for 0', () => {
@@ -164,9 +164,9 @@ git commit -m "feat: add CacheBucket type and cache helper functions"
 Append to `src/tests/unit/composable/useCacheStorage.test.ts`:
 
 ```ts
+import { useCacheStorage } from "@composables/useCacheStorage";
 import { vi, beforeEach, afterEach } from "vitest";
 import { createApp } from "vue";
-import { useCacheStorage } from "@composables/useCacheStorage";
 
 // Helper: mounts a composable inside a Vue app (needed for onMounted/onUnmounted)
 function withSetup<T>(composable: () => T): { result: T; unmount: () => void } {

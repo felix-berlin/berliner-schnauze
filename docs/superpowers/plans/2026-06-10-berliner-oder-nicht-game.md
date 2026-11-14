@@ -217,6 +217,7 @@ vi.mock("@nanostores/persistent", () => ({
 }));
 
 import { buildDeck, computeMultiplier } from "@composables/useGame";
+
 import type { FakeWord } from "@/data/fakeWords";
 
 const makeRealWords = (n: number) =>
@@ -294,10 +295,11 @@ Expected: `Error: Failed to resolve import "@composables/useGame"`
 - [ ] **Step 3: Create `src/composable/useGame.ts`**
 
 ```typescript
-import { ref, computed } from "vue";
 import { $gameStats } from "@stores/gameStats";
 import { createToastNotify } from "@stores/toastNotify";
 import { trackEvent } from "@utils/analytics";
+import { ref, computed } from "vue";
+
 import type { FakeWord } from "@/data/fakeWords";
 
 export interface GameCard {

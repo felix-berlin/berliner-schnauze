@@ -7,14 +7,10 @@
     "vowelsCount": 3,
     "nlpTags": [
       {
-        "aasen": [
-          "Adjektiv"
-        ]
+        "aasen": ["Adjektiv"]
       }
     ],
-    "wordComponents": [
-      "asen"
-    ]
+    "wordComponents": ["asen"]
   },
   {
     "berlinerisch": "wa",
@@ -24,9 +20,7 @@
     "vowelsCount": 1,
     "nlpTags": [
       {
-        "wa": [
-          "Adjektiv"
-        ]
+        "wa": ["Adjektiv"]
       }
     ],
     "wordComponents": []
@@ -39,19 +33,10 @@
     "vowelsCount": 3,
     "nlpTags": [
       {
-        "anmachen": [
-          "Verb",
-          "Präsens",
-          "Infinitiv"
-        ]
+        "anmachen": ["Verb", "Präsens", "Infinitiv"]
       }
     ],
-    "wordComponents": [
-      "nmachen",
-      "machen",
-      "achen",
-      "chen"
-    ]
+    "wordComponents": ["nmachen", "machen", "achen", "chen"]
   },
   {
     "berlinerisch": "Ballast der Republik",
@@ -61,26 +46,12 @@
     "vowelsCount": 6,
     "nlpTags": [
       {
-        "ballast": [
-          "Nomen"
-        ],
-        "der": [
-          "Artikel"
-        ],
-        "republik": [
-          "Nomen"
-        ]
+        "ballast": ["Nomen"],
+        "der": ["Artikel"],
+        "republik": ["Nomen"]
       }
     ],
-    "wordComponents": [
-      "allast",
-      "llast",
-      "last",
-      "epublik",
-      "publik",
-      "ublik",
-      "blik"
-    ]
+    "wordComponents": ["allast", "llast", "last", "epublik", "publik", "ublik", "blik"]
   },
   {
     "berlinerisch": "Ärger",
@@ -90,14 +61,10 @@
     "vowelsCount": 2,
     "nlpTags": [
       {
-        "ärger": [
-          "Nomen"
-        ]
+        "ärger": ["Nomen"]
       }
     ],
-    "wordComponents": [
-      "rger"
-    ]
+    "wordComponents": ["rger"]
   },
   {
     "berlinerisch": "Küche",
@@ -107,15 +74,10 @@
     "vowelsCount": 2,
     "nlpTags": [
       {
-        "küche": [
-          "Nomen",
-          "Weibliches Nomen"
-        ]
+        "küche": ["Nomen", "Weibliches Nomen"]
       }
     ],
-    "wordComponents": [
-      "üche"
-    ]
+    "wordComponents": ["üche"]
   },
   {
     "berlinerisch": "Öde",
@@ -125,11 +87,7 @@
     "vowelsCount": 2,
     "nlpTags": [
       {
-        "öde": [
-          "Verb",
-          "Präsens",
-          "Erste Person"
-        ]
+        "öde": ["Verb", "Präsens", "Erste Person"]
       }
     ],
     "wordComponents": []
@@ -142,16 +100,10 @@
     "vowelsCount": 3,
     "nlpTags": [
       {
-        "übermut": [
-          "Nomen"
-        ]
+        "übermut": ["Nomen"]
       }
     ],
-    "wordComponents": [
-      "bermut",
-      "ermut",
-      "rmut"
-    ]
+    "wordComponents": ["bermut", "ermut", "rmut"]
   },
   {
     "berlinerisch": "Bulette",
@@ -161,16 +113,10 @@
     "vowelsCount": 3,
     "nlpTags": [
       {
-        "bulette": [
-          "Nomen"
-        ]
+        "bulette": ["Nomen"]
       }
     ],
-    "wordComponents": [
-      "ulette",
-      "lette",
-      "ette"
-    ]
+    "wordComponents": ["ulette", "lette", "ette"]
   },
   {
     "berlinerisch": "Schrippe",
@@ -180,17 +126,10 @@
     "vowelsCount": 2,
     "nlpTags": [
       {
-        "schrippe": [
-          "Nomen"
-        ]
+        "schrippe": ["Nomen"]
       }
     ],
-    "wordComponents": [
-      "chrippe",
-      "hrippe",
-      "rippe",
-      "ippe"
-    ]
+    "wordComponents": ["chrippe", "hrippe", "rippe", "ippe"]
   },
   {
     "berlinerisch": "Stulle",
@@ -200,15 +139,10 @@
     "vowelsCount": 2,
     "nlpTags": [
       {
-        "stulle": [
-          "Nomen"
-        ]
+        "stulle": ["Nomen"]
       }
     ],
-    "wordComponents": [
-      "tulle",
-      "ulle"
-    ]
+    "wordComponents": ["tulle", "ulle"]
   },
   {
     "berlinerisch": "Kiez",
@@ -218,9 +152,7 @@
     "vowelsCount": 2,
     "nlpTags": [
       {
-        "kiez": [
-          "Nomen"
-        ]
+        "kiez": ["Nomen"]
       }
     ],
     "wordComponents": []
@@ -233,14 +165,10 @@
     "vowelsCount": 2,
     "nlpTags": [
       {
-        "molle": [
-          "Nomen"
-        ]
+        "molle": ["Nomen"]
       }
     ],
-    "wordComponents": [
-      "olle"
-    ]
+    "wordComponents": ["olle"]
   },
   {
     "berlinerisch": "Atze",
@@ -250,9 +178,7 @@
     "vowelsCount": 2,
     "nlpTags": [
       {
-        "atze": [
-          "Nomen"
-        ]
+        "atze": ["Nomen"]
       }
     ],
     "wordComponents": []
@@ -265,10 +191,7 @@
     "vowelsCount": 2,
     "nlpTags": [
       {
-        "göre": [
-          "Verb",
-          "Erste Person"
-        ]
+        "göre": ["Verb", "Erste Person"]
       }
     ],
     "wordComponents": []
@@ -281,14 +204,10 @@
     "vowelsCount": 3,
     "nlpTags": [
       {
-        "keule": [
-          "Nomen"
-        ]
+        "keule": ["Nomen"]
       }
     ],
-    "wordComponents": [
-      "eule"
-    ]
+    "wordComponents": ["eule"]
   },
   {
     "berlinerisch": "Pfannkuchen",
@@ -298,20 +217,10 @@
     "vowelsCount": 3,
     "nlpTags": [
       {
-        "pfannkuchen": [
-          "Adjektiv"
-        ]
+        "pfannkuchen": ["Adjektiv"]
       }
     ],
-    "wordComponents": [
-      "fannkuchen",
-      "annkuchen",
-      "nnkuchen",
-      "nkuchen",
-      "kuchen",
-      "uchen",
-      "chen"
-    ]
+    "wordComponents": ["fannkuchen", "annkuchen", "nnkuchen", "nkuchen", "kuchen", "uchen", "chen"]
   },
   {
     "berlinerisch": "jwd",
@@ -321,9 +230,7 @@
     "vowelsCount": 0,
     "nlpTags": [
       {
-        "jwd": [
-          "Adjektiv"
-        ]
+        "jwd": ["Adjektiv"]
       }
     ],
     "wordComponents": []
@@ -336,9 +243,7 @@
     "vowelsCount": 2,
     "nlpTags": [
       {
-        "icke": [
-          "Adjektiv"
-        ]
+        "icke": ["Adjektiv"]
       }
     ],
     "wordComponents": []
@@ -351,16 +256,10 @@
     "vowelsCount": 2,
     "nlpTags": [
       {
-        "dufte": [
-          "Verb",
-          "Präsens",
-          "Erste Person"
-        ]
+        "dufte": ["Verb", "Präsens", "Erste Person"]
       }
     ],
-    "wordComponents": [
-      "ufte"
-    ]
+    "wordComponents": ["ufte"]
   },
   {
     "berlinerisch": "knorke",
@@ -370,15 +269,10 @@
     "vowelsCount": 2,
     "nlpTags": [
       {
-        "knorke": [
-          "Adjektiv"
-        ]
+        "knorke": ["Adjektiv"]
       }
     ],
-    "wordComponents": [
-      "norke",
-      "orke"
-    ]
+    "wordComponents": ["norke", "orke"]
   },
   {
     "berlinerisch": "Späti",
@@ -388,14 +282,10 @@
     "vowelsCount": 2,
     "nlpTags": [
       {
-        "späti": [
-          "Nomen"
-        ]
+        "späti": ["Nomen"]
       }
     ],
-    "wordComponents": [
-      "päti"
-    ]
+    "wordComponents": ["päti"]
   },
   {
     "berlinerisch": "Schnauze",
@@ -405,19 +295,10 @@
     "vowelsCount": 3,
     "nlpTags": [
       {
-        "schnauze": [
-          "Verb",
-          "Präsens",
-          "Erste Person"
-        ]
+        "schnauze": ["Verb", "Präsens", "Erste Person"]
       }
     ],
-    "wordComponents": [
-      "chnauze",
-      "hnauze",
-      "nauze",
-      "auze"
-    ]
+    "wordComponents": ["chnauze", "hnauze", "nauze", "auze"]
   },
   {
     "berlinerisch": "Kodderschnauze",
@@ -427,9 +308,7 @@
     "vowelsCount": 5,
     "nlpTags": [
       {
-        "kodderschnauze": [
-          "Nomen"
-        ]
+        "kodderschnauze": ["Nomen"]
       }
     ],
     "wordComponents": [
@@ -453,10 +332,7 @@
     "vowelsCount": 5,
     "nlpTags": [
       {
-        "dreikäsehoch": [
-          "Wert",
-          "Textwert"
-        ]
+        "dreikäsehoch": ["Wert", "Textwert"]
       }
     ],
     "wordComponents": [
@@ -478,19 +354,10 @@
     "vowelsCount": 4,
     "nlpTags": [
       {
-        "hackepeter": [
-          "Nomen"
-        ]
+        "hackepeter": ["Nomen"]
       }
     ],
-    "wordComponents": [
-      "ackepeter",
-      "ckepeter",
-      "kepeter",
-      "epeter",
-      "peter",
-      "eter"
-    ]
+    "wordComponents": ["ackepeter", "ckepeter", "kepeter", "epeter", "peter", "eter"]
   },
   {
     "berlinerisch": "Mottenkiste",
@@ -500,20 +367,10 @@
     "vowelsCount": 4,
     "nlpTags": [
       {
-        "mottenkiste": [
-          "Nomen"
-        ]
+        "mottenkiste": ["Nomen"]
       }
     ],
-    "wordComponents": [
-      "ottenkiste",
-      "ttenkiste",
-      "tenkiste",
-      "enkiste",
-      "nkiste",
-      "kiste",
-      "iste"
-    ]
+    "wordComponents": ["ottenkiste", "ttenkiste", "tenkiste", "enkiste", "nkiste", "kiste", "iste"]
   },
   {
     "berlinerisch": "Großkotz",
@@ -523,17 +380,10 @@
     "vowelsCount": 2,
     "nlpTags": [
       {
-        "großkotz": [
-          "Nomen"
-        ]
+        "großkotz": ["Nomen"]
       }
     ],
-    "wordComponents": [
-      "roßkotz",
-      "oßkotz",
-      "ßkotz",
-      "kotz"
-    ]
+    "wordComponents": ["roßkotz", "oßkotz", "ßkotz", "kotz"]
   },
   {
     "berlinerisch": "Hals- und Beinbruch",
@@ -543,24 +393,12 @@
     "vowelsCount": 5,
     "nlpTags": [
       {
-        "hals": [
-          "Nomen"
-        ],
-        "und": [
-          "Konjunktion"
-        ],
-        "beinbruch": [
-          "Nomen"
-        ]
+        "hals": ["Nomen"],
+        "und": ["Konjunktion"],
+        "beinbruch": ["Nomen"]
       }
     ],
-    "wordComponents": [
-      "einbruch",
-      "inbruch",
-      "nbruch",
-      "bruch",
-      "ruch"
-    ]
+    "wordComponents": ["einbruch", "inbruch", "nbruch", "bruch", "ruch"]
   },
   {
     "berlinerisch": "Schickimicki-Laden",
@@ -570,12 +408,8 @@
     "vowelsCount": 6,
     "nlpTags": [
       {
-        "schickimicki": [
-          "Nomen"
-        ],
-        "laden": [
-          "Nomen"
-        ]
+        "schickimicki": ["Nomen"],
+        "laden": ["Nomen"]
       }
     ],
     "wordComponents": [
@@ -598,11 +432,7 @@
     "vowelsCount": 0,
     "nlpTags": [
       {
-        "08/15": [
-          "Wert",
-          "Bruchzahl",
-          "Numerischer Wert"
-        ]
+        "08/15": ["Wert", "Bruchzahl", "Numerischer Wert"]
       }
     ],
     "wordComponents": []
@@ -615,9 +445,7 @@
     "vowelsCount": 1,
     "nlpTags": [
       {
-        "a": [
-          "Präposition"
-        ]
+        "a": ["Präposition"]
       }
     ],
     "wordComponents": []
@@ -639,28 +467,12 @@
     "vowelsCount": 7,
     "nlpTags": [
       {
-        "ick": [
-          "Nomen",
-          "Pronomen"
-        ],
-        "bin": [
-          "Verb",
-          "Präsens",
-          "Erste Person"
-        ],
-        "ein": [
-          "Artikel"
-        ],
-        "berliner": [
-          "Nomen"
-        ]
+        "ick": ["Nomen", "Pronomen"],
+        "bin": ["Verb", "Präsens", "Erste Person"],
+        "ein": ["Artikel"],
+        "berliner": ["Nomen"]
       }
     ],
-    "wordComponents": [
-      "erliner",
-      "rliner",
-      "liner",
-      "iner"
-    ]
+    "wordComponents": ["erliner", "rliner", "liner", "iner"]
   }
 ]

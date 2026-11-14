@@ -11,13 +11,13 @@ Zwei `.apkg`-Decks aus den Wörtern in WordPress:
 
 ## Festlegungen
 
-| Thema           | Entscheidung                                                                                                                                                                       |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Quellen         | Alles, was aktuell in WordPress veröffentlicht ist (Option B), ohne Einträge ohne Übersetzung. Felder `sources`/`quelle` erscheinen nicht auf den Karten.                          |
-| Kartenrichtung  | Nur Berlinerisch → Deutsch. Rückrichtung ist bewusst nicht enthalten.                                                                                                              |
-| Bibliothek      | `genanki` (Python), Skript `scripts/build_anki_decks.py` (Unterstriche wie `scan_schlobinski.py`, damit es importierbar ist).                                                       |
+| Thema             | Entscheidung                                                                                                                                                                    |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Quellen           | Alles, was aktuell in WordPress veröffentlicht ist (Option B), ohne Einträge ohne Übersetzung. Felder `sources`/`quelle` erscheinen nicht auf den Karten.                       |
+| Kartenrichtung    | Nur Berlinerisch → Deutsch. Rückrichtung ist bewusst nicht enthalten.                                                                                                           |
+| Bibliothek        | `genanki` (Python), Skript `scripts/build_anki_decks.py` (Unterstriche wie `scan_schlobinski.py`, damit es importierbar ist).                                                   |
 | Verkaufsplattform | Polar (Merchant of Record, teilbarer Checkout-Link, Datei als Benefit). Lemon Squeezy wäre gleichwertig, nur der Link ändert sich. Gebühren vor der Entscheidung selbst prüfen. |
-| Website-Einbau  | Nur `<a href>` auf den Checkout-Link. Kein SDK, kein Webhook.                                                                                                                      |
+| Website-Einbau    | Nur `<a href>` auf den Checkout-Link. Kein SDK, kein Webhook.                                                                                                                   |
 
 ## Datenfluss
 

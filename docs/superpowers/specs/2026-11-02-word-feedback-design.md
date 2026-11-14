@@ -4,7 +4,7 @@ Branch `felix-berlin/user-feedback`. Mockups from the brainstorm: `.superpowers/
 
 ## Why
 
-Comments (`docs/superpowers/specs/2026-10-31-word-comments-design.md`) are free-form. The owner wants structured feedback per word that is cheap to give and adds up to data: how alive is a word today, where, among whom, and do newcomers ("Zujezogene") pick it up? Prior art: the *Atlas zur deutschen Alltagssprache* (citizen-science survey with fixed answers, mapped by region), Urban Dictionary (thumbs), DWDS (categorised error reports, not taken up here).
+Comments (`docs/superpowers/specs/2026-10-31-word-comments-design.md`) are free-form. The owner wants structured feedback per word that is cheap to give and adds up to data: how alive is a word today, where, among whom, and do newcomers ("Zujezogene") pick it up? Prior art: the _Atlas zur deutschen Alltagssprache_ (citizen-science survey with fixed answers, mapped by region), Urban Dictionary (thumbs), DWDS (categorised error reports, not taken up here).
 
 ## Goal / done when
 
@@ -40,12 +40,12 @@ and the editor sees the counts per word in the Payload admin.
 
 Steps, shown one at a time; each answer is saved immediately (no submit button). From step 2 on every step has "überspringen". A progress bar of always six segments (usage, area, locality, origin, half, age) shows the position: done and current segments are filled, steps that do not apply (locality, half) are a dashed line, and "Schritt X von N" counts only the steps that apply. From step 2 on "← Zurück" returns to the previous visited step (it skips steps the answers made irrelevant); going back to the first step withdraws the vote (`usage: null`). There is no jump navigation between steps. A fold-out "Warum fragen wa dit?" explains the questions; it is open on the area step and folded on the others.
 
-1. **Sagste det noch?** (required to start the flow): *Sag ick selbst* / *Kenn ick* / *Nie jehört*. After answering, the card shows the result bars for this word (percent per answer + total votes) and moves to step 2.
-2. **Wo wohnste?** Clickable SVG map of Berlin with real outlines: the 12 current Bezirke (areas; since 2001, so Mitte and Friedrichshain-Kreuzberg are whole again, no split along the old wall). Brandenburg is a clickable band around Berlin. Below the map a button *Woanders*.
-   - **2b**, optional and only after one of the 12 areas: **Welcher Kiez?** The localities (Ortsteile) of the chosen area as buttons, plus "überspringen". No second map. Not asked after Brandenburg, *Woanders* or a skipped area.
-3. **Uffjewachsen oder zujezogen?** *Hier uffjewachsen* / *Zujezogen, über 10 Jahre her* / *Zujezogen, unter 10 Jahren*.
-   - **3b**, only after *Hier uffjewachsen*: **In welcher Hälfte?** *Ost* / *West* / *Beides / nach der Wende*.
-4. **Wie alt biste?** *unter 20*, *20–29*, *30–39*, *40–49*, *50–59*, *60–69*, *70–79*, *80+*.
+1. **Sagste det noch?** (required to start the flow): _Sag ick selbst_ / _Kenn ick_ / _Nie jehört_. After answering, the card shows the result bars for this word (percent per answer + total votes) and moves to step 2.
+2. **Wo wohnste?** Clickable SVG map of Berlin with real outlines: the 12 current Bezirke (areas; since 2001, so Mitte and Friedrichshain-Kreuzberg are whole again, no split along the old wall). Brandenburg is a clickable band around Berlin. Below the map a button _Woanders_.
+   - **2b**, optional and only after one of the 12 areas: **Welcher Kiez?** The localities (Ortsteile) of the chosen area as buttons, plus "überspringen". No second map. Not asked after Brandenburg, _Woanders_ or a skipped area.
+3. **Uffjewachsen oder zujezogen?** _Hier uffjewachsen_ / _Zujezogen, über 10 Jahre her_ / _Zujezogen, unter 10 Jahren_.
+   - **3b**, only after _Hier uffjewachsen_: **In welcher Hälfte?** _Ost_ / _West_ / _Beides / nach der Wende_.
+4. **Wie alt biste?** _unter 20_, _20–29_, _30–39_, _40–49_, _50–59_, _60–69_, _70–79_, _80+_.
 5. **Danke**: comparison bars for this word, e.g. "Sagen's selbst: Ost-Berliner / West-Berliner / Zujezogene / in deinem Bezirk".
 
 Ost/West is asked (3b), not derived from the residence: residence-East mostly measures gentrification, upbringing is what matters for dialect.
@@ -63,17 +63,17 @@ Returning to a word already answered shows the result state with the visitor's c
 
 New collection `word-feedback` (login-only access via `authenticatedOnly`, like `comment-votes`), one row per visitor and word (unique index on `word` + `visitor`):
 
-| field | type |
-|---|---|
-| `word` | relationship → words, required |
-| `visitor` | text, required (the existing visitor cookie id) |
-| `reaction` | select `like` / `dislike`, nullable |
-| `usage` | select `say` / `know` / `never`, nullable |
-| `area` | select: the 12 Bezirke keys + `brandenburg` + `elsewhere`, nullable |
+| field      | type                                                                                          |
+| ---------- | --------------------------------------------------------------------------------------------- |
+| `word`     | relationship → words, required                                                                |
+| `visitor`  | text, required (the existing visitor cookie id)                                               |
+| `reaction` | select `like` / `dislike`, nullable                                                           |
+| `usage`    | select `say` / `know` / `never`, nullable                                                     |
+| `area`     | select: the 12 Bezirke keys + `brandenburg` + `elsewhere`, nullable                           |
 | `locality` | select: the 97 locality (Ortsteil) keys, nullable (only together with the area it belongs to) |
-| `origin` | select `grewUp` / `movedOver10` / `movedUnder10`, nullable |
-| `half` | select `east` / `west` / `both`, nullable (only with `origin = grewUp`) |
-| `age` | select of the 8 brackets, nullable |
+| `origin`   | select `grewUp` / `movedOver10` / `movedUnder10`, nullable                                    |
+| `half`     | select `east` / `west` / `both`, nullable (only with `origin = grewUp`)                       |
+| `age`      | select of the 8 brackets, nullable                                                            |
 
 **No counts are stored on `words`.** Words have `versions: { drafts: true }`, so the `commentCounts.ts` pattern (update the parent per vote) would write a word version per click, run the word hooks (`mcpDraftOnly`, derived fields, `contentModifiedAt`), risk publishing over a pending draft, and an editor saving an open word would reset the counts. Instead both the admin sidebar and the public GET count rows in `word-feedback` (indexed on `word`; a few `payload.count` / one grouped SQL query per request). If that ever gets slow, cache it with `ttl()` per word; no denormalised counters.
 

@@ -33,11 +33,24 @@ describe("posts", () => {
 
     it("create with flag keeps the value; update without flag becomes now", async () => {
       const payload = await getTestPayload();
-      const doc = await payload.create({ collection: "posts", data: { ...base, contentModifiedAt: A }, ...keep });
+      const doc = await payload.create({
+        collection: "posts",
+        data: { ...base, contentModifiedAt: A },
+        ...keep,
+      });
       expect(ms(doc.contentModifiedAt)).toBe(ms(A));
-      const kept = await payload.update({ collection: "posts", id: doc.id, data: { excerpt: "x" }, ...keep });
+      const kept = await payload.update({
+        collection: "posts",
+        id: doc.id,
+        data: { excerpt: "x" },
+        ...keep,
+      });
       expect(ms(kept.contentModifiedAt)).toBe(ms(A));
-      const upd = await payload.update({ collection: "posts", id: doc.id, data: { contentModifiedAt: A } });
+      const upd = await payload.update({
+        collection: "posts",
+        id: doc.id,
+        data: { contentModifiedAt: A },
+      });
       expect(ms(upd.contentModifiedAt)).toBeGreaterThan(Date.now() - 60_000);
     });
   });

@@ -1,16 +1,20 @@
 import { handleEndpoints } from "payload";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { wpUploadPath } from "../src/lib/wpUploadPath";
 import { findMediaRedirect } from "../src/lib/findMediaRedirect";
+import { wpUploadPath } from "../src/lib/wpUploadPath";
 import { getTestPayload } from "./helpers/payload";
 
 describe("wpUploadPath", () => {
   it("strips query and decodes", () => {
-    expect(wpUploadPath("https://cms.berliner-schnauze.wtf/wp-content/uploads/K%C3%BCche.jpg?ver=2")).toBe("Küche.jpg");
+    expect(
+      wpUploadPath("https://cms.berliner-schnauze.wtf/wp-content/uploads/K%C3%BCche.jpg?ver=2"),
+    ).toBe("Küche.jpg");
   });
   it("keeps subfolders", () => {
-    expect(wpUploadPath("https://cms.berliner-schnauze.wtf/wp-content/uploads/2023/05/a.mp3")).toBe("2023/05/a.mp3");
+    expect(wpUploadPath("https://cms.berliner-schnauze.wtf/wp-content/uploads/2023/05/a.mp3")).toBe(
+      "2023/05/a.mp3",
+    );
   });
   it("handles a bare path", () => {
     expect(wpUploadPath("/wp-content/uploads/2023/a.png")).toBe("2023/a.png");
@@ -58,6 +62,8 @@ describe("media files", () => {
       request: new Request("http://localhost/api/media/file/redirect-kueche.png"),
     });
     expect(res.status).toBe(200);
-    expect(res.headers.get("Cache-Control")).toBe("public, max-age=86400, stale-while-revalidate=604800");
+    expect(res.headers.get("Cache-Control")).toBe(
+      "public, max-age=86400, stale-while-revalidate=604800",
+    );
   });
 });

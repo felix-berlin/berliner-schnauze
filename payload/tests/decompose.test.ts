@@ -1,5 +1,6 @@
-import { decomposeCompoundWord } from "../src/lib/decompose";
 import { describe, it, expect } from "vitest";
+
+import { decomposeCompoundWord } from "../src/lib/decompose";
 
 const dict = new Set([
   "bier",

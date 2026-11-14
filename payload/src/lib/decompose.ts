@@ -5,7 +5,9 @@ import { createRequire } from "node:module";
 let germanWordsCache: Set<string> | undefined;
 const getGermanWords = (): Set<string> =>
   (germanWordsCache ??= new Set(
-    (createRequire(import.meta.url)("all-the-german-words") as string[]).map((w) => w.toLowerCase()),
+    (createRequire(import.meta.url)("all-the-german-words") as string[]).map((w) =>
+      w.toLowerCase(),
+    ),
   ));
 
 /** Splits a German compound into two dictionary words (`bierpinsel` → bier + pinsel), or null if it is none. */

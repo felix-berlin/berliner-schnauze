@@ -54,19 +54,26 @@ export const wordSeoDescription = (word: WordSeoFacts): string => {
     word.hasAudio && "Aussprache",
     word.hasExamples && "Beispielsätzen",
   ].filter((part): part is string => Boolean(part));
-  const features = parts.length
-    ? ` Mit ${joinList(parts)}.`
-    : "";
+  const features = parts.length ? ` Mit ${joinList(parts)}.` : "";
   // An entry without meanings still gets a description (a page without one is worse than a plain one).
-  if (!translations.length) return `${berlinerisch} im Berlinerisch-Wörterbuch der Berliner Schnauze.${features}`;
+  if (!translations.length)
+    return `${berlinerisch} im Berlinerisch-Wörterbuch der Berliner Schnauze.${features}`;
   const lead = `${berlinerisch} heißt auf Berlinerisch: `;
   const sentence = word.example?.replace(/\s+/g, " ").trim();
   const quoted = sentence ? ` Beispiel: „${sentence}“${/[.!?…]$/.test(sentence) ? "" : "."}` : "";
   // Best first: the entry's own example, then the parts it has plus a closing line that is true for every entry.
-  const suffixes = [...(quoted ? [`${quoted}${features}`, quoted] : []), `${features} ${DICTIONARY_LINE}`, features, ""];
+  const suffixes = [
+    ...(quoted ? [`${quoted}${features}`, quoted] : []),
+    `${features} ${DICTIONARY_LINE}`,
+    features,
+    "",
+  ];
   for (let count = translations.length; count >= 1; count--) {
     for (const suffix of suffixes) {
-      const text = `${lead}${translations.slice(0, count).map((t) => t.trim()).join(", ")}.${suffix}`;
+      const text = `${lead}${translations
+        .slice(0, count)
+        .map((t) => t.trim())
+        .join(", ")}.${suffix}`;
       if (text.length <= DESCRIPTION_MAX) return text;
     }
   }

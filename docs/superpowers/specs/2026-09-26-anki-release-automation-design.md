@@ -104,9 +104,9 @@ jobs:
       - VERSION="${GITHUB_REF_NAME#v}" (tag_name is e.g. "v3.52.0")
       - python scripts/build_anki_decks.py --version "$VERSION"
       - gh release upload "${{ github.event.release.tag_name }}" \
-          dist-anki/berlinerisch-lite-v$VERSION.apkg
+        dist-anki/berlinerisch-lite-v$VERSION.apkg
       - python scripts/upload_anki_to_polar.py \
-          dist-anki/berlinerisch-full-v$VERSION.apkg --version "$VERSION"
+        dist-anki/berlinerisch-full-v$VERSION.apkg --version "$VERSION"
 ```
 
 Triggering on `release: published` (rather than hooking into
@@ -118,6 +118,7 @@ signal — no branch-name string matching needed.
 ### D. Local dev commands (new Claude Code slash commands)
 
 `.claude/commands/anki-build.md`:
+
 - Reads `package.json` version, appends `-dev`.
 - Runs `npx infisical run -- .venv-anki/bin/python scripts/build_anki_decks.py --version "<version>-dev"`.
 - Copies the built Lite file to the fixed path
@@ -126,6 +127,7 @@ signal — no branch-name string matching needed.
   scaffolding, no longer linked from the live site (see E).
 
 `.claude/commands/anki-push-sandbox.md`:
+
 - Runs `scripts/upload_anki_to_polar.py` against the most recently built
   `dist-anki/berlinerisch-full-v*-dev.apkg` with `POLAR_SANDBOX=true` and the
   existing sandbox `POLAR_UPLOAD_TOKEN`/`ANKI_DECK_FULL_BENEFIT_ID` values
@@ -156,12 +158,12 @@ already established for `PRICE`.
 
 ## Error handling summary
 
-| Failure | Behavior |
-|---|---|
-| Polar upload fails in CI | Job fails loudly (release-blocking for that asset; the GitHub release itself already exists by the time this runs, so a failure here doesn't roll back the release — it's a distribution step, not a gate) |
-| `gh release upload` fails | Job fails loudly, same reasoning |
-| GitHub releases API unreachable at Astro build time | `LITE_URL` is `undefined`, button hidden, build still succeeds |
-| Local sandbox push fails | Command prints the error; no cleanup needed, nothing production-facing touched |
+| Failure                                             | Behavior                                                                                                                                                                                                   |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Polar upload fails in CI                            | Job fails loudly (release-blocking for that asset; the GitHub release itself already exists by the time this runs, so a failure here doesn't roll back the release — it's a distribution step, not a gate) |
+| `gh release upload` fails                           | Job fails loudly, same reasoning                                                                                                                                                                           |
+| GitHub releases API unreachable at Astro build time | `LITE_URL` is `undefined`, button hidden, build still succeeds                                                                                                                                             |
+| Local sandbox push fails                            | Command prints the error; no cleanup needed, nothing production-facing touched                                                                                                                             |
 
 ## Testing
 

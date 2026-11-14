@@ -5,11 +5,22 @@
   "sortImports": {
     "groups": [
       "type-import",
-      ["value-builtin", "value-external"],
+      [
+        "value-builtin",
+        "value-external"
+      ],
       "type-internal",
       "value-internal",
-      ["type-parent", "type-sibling", "type-index"],
-      ["value-parent", "value-sibling", "value-index"],
+      [
+        "type-parent",
+        "type-sibling",
+        "type-index"
+      ],
+      [
+        "value-parent",
+        "value-sibling",
+        "value-index"
+      ],
       "unknown"
     ]
   },
@@ -19,7 +30,12 @@
     "coverage",
     "dist",
     "CHANGELOG.md",
-    "payload/src/app/(payload)/admin/importMap.js",
-    "website/src/styles/tokens/_tokens.generated.scss"
+    "website/src/styles/tokens/_tokens.generated.scss",
+    "data",
+    "payload/src/migrations",
+    "payload/src/payload-types.ts",
+    "docs/design",
+    "pnpm-workspace.yaml",
+    "payload/src/app/(payload)"
   ]
 }

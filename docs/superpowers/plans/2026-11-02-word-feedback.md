@@ -35,6 +35,7 @@
 ### Task 1: `word-feedback` collection and shared options
 
 **Files:**
+
 - Create: `payload/src/lib/wordFeedback.ts`
 - Create: `payload/src/collections/WordFeedback.ts`
 - Modify: `payload/src/payload.config.ts` (add to `collections`), `payload/package.json` (`exports["./word-feedback"]`, same shape as `./comments`), `payload/src/astro.d.ts` only if the types mirror needs it
@@ -42,6 +43,7 @@
 - Test: `payload/tests/access.test.ts` (add `"word-feedback"` to `lockedCollections`), `payload/tests/wordFeedback.test.ts`
 
 **Interfaces:**
+
 - Produces (`payload-app/word-feedback`, no payload/next/config runtime imports):
   - `REACTIONS = ["like", "dislike"] as const`
   - `USAGES = ["say", "know", "never"] as const`
@@ -68,11 +70,13 @@
 ### Task 2: Admin counts on the word
 
 **Files:**
+
 - Create: `payload/src/components/WordFeedbackCounts.tsx` (React server component)
 - Modify: `payload/src/collections/Words.ts` (add `ui` field `feedbackCounts`, `admin.position: "sidebar"`, `admin.components.Field: "@/components/WordFeedbackCounts"` (path style as Payload's importMap expects)), `payload/src/app/(payload)/admin/importMap.js` (regenerate with `pnpm --filter payload-app payload generate:importmap`)
 - Test: `payload/tests/wordFeedback.test.ts`
 
 **Interfaces:**
+
 - Consumes: `feedbackTotals` (Task 1).
 - Renders: "Jefällt ma N · Nee N" and "Sag ick selbst N · Kenn ick N · Nie jehört N", plus a link to the `word-feedback` list filtered by this word (`/admin/collections/word-feedback?where[word][equals]=<id>`). On a new (unsaved) word it renders nothing.
 
@@ -85,10 +89,12 @@
 ### Task 3: Site API `GET`/`PATCH /api/word-feedback`
 
 **Files:**
+
 - Create: `website/src/utils/wordFeedbackSchema.ts`, `website/src/pages/api/word-feedback.ts`
 - Test: `website/src/tests/unit/pages/api/word-feedback.test.ts` (mock style of `comment-votes.test.ts`)
 
 **Interfaces:**
+
 - Consumes: Task 1 constants/helpers, `visitorId`, `clientIp`, `rateLimitedBy`, `reply`, `isUniqueViolation`, `orNull`.
 - Produces:
   - `feedbackPatchSchema` (zod): `{ word: positive int, reaction?: Reaction | null, usage?: Usage | null, area?: Area | null, origin?: Origin | null, half?: Half | null, age?: Age | null }`, strict (unknown keys rejected); refine: `half` non-null requires `origin === "grewUp"`.
@@ -96,7 +102,7 @@
   - `type WordFeedbackState = { mine: MyFeedback | null; totals: FeedbackTotals; compare: FeedbackCompare }` — the body of both GET and PATCH.
   - `GET /api/word-feedback?word=<id>`: reads cookie without creating it (`visitorId(cookies, false)`); `compare` uses `mine?.area ?? null`.
   - `PATCH /api/word-feedback` with `feedbackPatchSchema` body: creates cookie, upserts (create; on unique violation re-find and update), applies only the keys present; when `origin` is set to anything but `"grewUp"`, also sets `half: null`.
-  - Rate limits: `rateLimitedBy(ip, \`word-feedback ${word}\`, 30, DAY)` and `rateLimitedBy(ip, "word-feedback-all", 500, DAY)` → 429 "Jenug jestimmt für heute."
+  - Rate limits: `rateLimitedBy(ip, \`word-feedback ${word}\`, 30, DAY)`and`rateLimitedBy(ip, "word-feedback-all", 500, DAY)` → 429 "Jenug jestimmt für heute."
   - Word check: `payload.findByID({ collection: "words", id, depth: 0, ...siteRead() })` via `orNull`; missing → 404 "Wort nicht gefunden". Errors → 502 "Die Stimme konnte leider nicht gezählt werden."
 
 - [ ] **Step 1: Write the failing tests:**
@@ -118,10 +124,12 @@
 ### Task 4: Berlin area map component
 
 **Files:**
+
 - Create: `scripts/berlin-map/build.py` (from the spike `.superpowers/brainstorm/335196-1793630504/map-spike/split.py`, extended to emit TS), `website/src/data/berlinAreas.ts` (generated, committed), `website/src/components/word-feedback/BerlinAreaMap.vue`, `website/src/styles/components/_berlin-area-map.scss`
 - Test: `website/src/tests/unit/components/word-feedback/BerlinAreaMap.test.ts`
 
 **Interfaces:**
+
 - Produces:
   - `berlinAreas.ts`: `export const MAP_VIEWBOX: string`, `export const BERLIN_AREAS: ReadonlyArray<{ key: Exclude<Area, "brandenburg" | "elsewhere">; name: string; short: string; side: "east" | "west"; d: string; labelX: number; labelY: number }>` (12 entries; `name` full, e.g. "Wedding/Tiergarten", `short` map label, e.g. "X'berg"). Header comment: source URLs + licence line.
   - `BerlinAreaMap.vue`: props `modelValue: Area | null`; emits `update:modelValue(Area)`. Renders an SVG with a Brandenburg frame + 12 paths, each a focusable control in one `role="radiogroup"` (`aria-label="Wo wohnste?"`), `role="radio"`, `aria-checked`, `aria-label` = full name; arrow keys move between areas, Enter/Space selects. Below it a "Woanders" button emitting `"elsewhere"`. Narrow containers (`NARROW_PX`) show a list first and the map behind a `<summary>`.
@@ -135,10 +143,12 @@
 ### Task 5: Feedback store and profile
 
 **Files:**
+
 - Create: `website/src/stores/wordFeedback.ts`
 - Test: `website/src/tests/unit/stores/wordFeedback.test.ts`
 
 **Interfaces:**
+
 - Consumes: `WordFeedbackState`, `feedbackPatchSchema` types (Task 3), option arrays (Task 1).
 - Produces:
   - `$feedback = atom<WordFeedbackState | null>(null)`, `$feedbackError = atom<boolean>(false)`
@@ -156,11 +166,13 @@
 ### Task 6: Thumbs in the hero
 
 **Files:**
+
 - Create: `website/src/components/word-feedback/WordFeedbackThumbs.vue`, `website/src/styles/components/_word-feedback-thumbs.scss`
 - Modify: `website/src/components/word/WordHero.astro` (render `<WordFeedbackThumbs client:idle wordId={word.id} />` below the definition, not on drafts: pass `draft` the way the page passes it to comments)
 - Test: `website/src/tests/unit/components/word-feedback/WordFeedbackThumbs.test.ts`
 
 **Interfaces:**
+
 - Consumes: `$feedback`, `loadFeedback`, `sendFeedback` (Task 5).
 - Behaviour: two `aria-pressed` buttons with Lucide icons, label + count (`totals.like` / `totals.dislike`, count hidden until loaded); click inactive → `sendFeedback(id, { reaction, ...profile })` (spec: the stored profile also goes onto like-only rows); click active → `{ reaction: null }`; hint link "Sagste det noch? Hier abstimmen ↓" to `#sagste-det-noch`. `trackEvent("Word Feedback", "reaction", <like|dislike|none>)`.
 
@@ -171,11 +183,13 @@
 ### Task 7: "Sagste det noch?" card and page wiring
 
 **Files:**
+
 - Create: `website/src/components/word-feedback/WordFeedbackCard.vue`, `website/src/styles/components/_word-feedback-card.scss`
 - Modify: `website/src/pages/wort/[...wordSlug].astro` (after `<WordSectionBeispiele …/>`: `{!draft && <div id='sagste-det-noch'><WordFeedbackCard client:visible wordId={word.id} /></div>}`)
 - Test: `website/src/tests/unit/components/word-feedback/WordFeedbackCard.test.ts`, `website/src/tests/e2e/word-feedback.spec.ts`
 
 **Interfaces:**
+
 - Consumes: Tasks 4 and 5.
 - Behaviour: exactly one step visible; a six-segment progress bar with "Schritt X von N", "← Zurück" (history-based; back to the first step withdraws the vote) and a "Warum fragen wa dit?" fold-out; states `usage` → (result bars) → `nextStep(profile)` … → `done`. Each answer: update `$profile`, `sendFeedback`, advance only on `true`. "überspringen" sets the profile key to `null`, sends it, advances. Choosing an origin other than `grewUp` also sets `half: null` locally. Done state: usage bars (percent + "N Stimmen") and the comparison rows whose value is non-null ("Ost-Berliner", "West-Berliner", "Zujezogene", "in <area name>"), plus "Angaben ändern" (clears the stored profile on the server and `$profile`, starts at `"area"`). Revisiting an answered word starts in the done state with `mine.usage` highlighted and the usage buttons still clickable. `trackEvent("Word Feedback", <step>, <value|skip>)`.
 
@@ -189,6 +203,7 @@
 ### Task 8: Docs and privacy handoff
 
 **Files:**
+
 - Modify: `CLAUDE.md` (Architecture: one bullet for word feedback: collection, API, counts never on `words`, `payload-app/word-feedback` export; add `./word-feedback` to the `payload-app` exports list; add `word-feedback/` to the component feature groups)
 
 - [ ] **Step 1:** Update `CLAUDE.md` as above.

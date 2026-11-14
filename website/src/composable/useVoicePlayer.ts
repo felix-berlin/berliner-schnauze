@@ -10,7 +10,9 @@ let audio: HTMLAudioElement | undefined;
 const current = ref<string | null>(null);
 
 const broken = (src: string | undefined, error: unknown, code?: number): void => {
-  reportError(new Error(`[voice] playback failed: ${src} (code ${code ?? "none"})`, { cause: error }));
+  reportError(
+    new Error(`[voice] playback failed: ${src} (code ${code ?? "none"})`, { cause: error }),
+  );
   createToastNotify({ message: "Die Aufnahme lässt sich nich abspielen.", status: "error" });
 };
 

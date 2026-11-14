@@ -20,5 +20,6 @@ describe("matchKey", () => {
     ["Mausebraten", "Mausebraten"],
   ])("%s matches %s", (a, b) => expect(matchKey(a)).toBe(matchKey(b)));
 
-  it("keeps different words apart", () => expect(matchKey("Gummi")).not.toBe(matchKey("Gummiadler")));
+  it("keeps different words apart", () =>
+    expect(matchKey("Gummi")).not.toBe(matchKey("Gummiadler")));
 });

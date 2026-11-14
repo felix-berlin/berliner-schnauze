@@ -111,8 +111,8 @@ Expected: FAIL — `Cannot find module '@utils/imagor'` (file doesn't exist yet)
 - [ ] **Step 3: Implement `src/utils/imagor.ts`**
 
 ```ts
-import { createHmac } from "node:crypto";
 import { IMAGOR_HOST, IMAGOR_SECRET } from "astro:env/server";
+import { createHmac } from "node:crypto";
 
 const SIGNER_TRUNCATE = 40;
 
@@ -262,9 +262,10 @@ Expected: FAIL — `Cannot find module '@lib/imagorImageService'`.
 - [ ] **Step 3: Implement `src/lib/imagorImageService.ts`**
 
 ```ts
-import { baseService } from "astro/assets";
 import type { ExternalImageService, ImageTransform } from "astro";
+
 import { buildImagorPath, signImagorPath } from "@utils/imagor";
+import { baseService } from "astro/assets";
 
 const imagorImageService: ExternalImageService = {
   validateOptions: baseService.validateOptions,

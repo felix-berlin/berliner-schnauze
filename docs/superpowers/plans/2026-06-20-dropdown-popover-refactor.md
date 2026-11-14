@@ -61,8 +61,8 @@ Run command: `pnpm vitest run src/tests/unit/components/DropdownPopover.test.ts`
 ```typescript
 import DropdownPopover from "@components/DropdownPopover.vue";
 import { mount } from "@vue/test-utils";
-import { h, nextTick } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { h, nextTick } from "vue";
 
 const mockShowPopover = vi.fn();
 const mockHidePopover = vi.fn();

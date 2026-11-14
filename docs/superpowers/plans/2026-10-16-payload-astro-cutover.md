@@ -34,10 +34,12 @@
 ### Task 1: Spike: Payload Local API inside the Astro server
 
 **Files:**
+
 - Create: `src/services/payload.ts`, `src/pages/api/health-spike.ts` (temporary, deleted in Step 6), `src/tests/unit/services/payload.test.ts`
 - Modify: `astro.config.mjs` (env schema entries; `vite.ssr` as the spike dictates), `Dockerfile`, `.github/workflows/release.yml` (docker job) and `.dockerignore` if the spike needs `node_modules` in the image, `compose.yaml` (`web`: `depends_on: postgres`, `DATABASE_URL`)
 
 **Interfaces:**
+
 - Produces: `getPayloadClient(): Promise<Payload>` in `src/services/payload.ts`: memoizes `getPayload({ config })` (config from `payload-app`) on the promise; on rejection it clears the memo so the next call retries.
 - Produces: `mediaUrl(media: Media | number | null | undefined): string | undefined` (absolute via `PAYLOAD_SERVER_URL`; ids and null → `undefined`).
 
@@ -51,11 +53,13 @@
 ### Task 2: Words adapter and TTL memo
 
 **Files:**
+
 - Create: `src/types/cms.ts`, `src/services/cache.ts`, `src/services/payload/words.ts`, `src/tests/unit/services/payloadWords.test.ts`
 - Modify: `src/services/queries/getWords.ts` (rewritten on top of the adapter), `src/services/api.ts` (unchanged exports)
 - Delete: `src/services/devWordsCache.ts` and its use in `astro.config.mjs` (`promptRefetchWords`, `WORDS_BUILD_ID`), `limitPagesForE2e`, `E2E_REQUIRED_SLUGS`, `E2E_WORD_LIMIT` env var, the `node_modules/.cache/berliner-words` note in `CLAUDE.md`
 
 **Interfaces:**
+
 - Produces in `src/types/cms.ts`: hand-written `Word`, `ThemaNode`, `PostNode`, `SeoData` … with **exactly the fields the components read today** (copy the inferred shape of `GetAllWordsQuery` / `BerlinerWord` fragment: `id`, `slug`, `title`, `wordGroup`, `dateGmt`, `modifiedGmt`, `berlinerWordId`, `wordProperties.*` with `{ nodes }` wrappers for `relatedWords`/`images`, `berlinerischWordTypes.nodes`, `berlinerischThemen.nodes`, `seo`). This is what lets Task 9 delete the GraphQL codegen. `Word` keeps the `slug`, `translations: string[]` and `wordProperties.berlinerisch: string` guarantees of today's `Word`.
 - Produces: `ttl<T>(ms: number, load: () => Promise<T>): () => Promise<T>` in `src/services/cache.ts`. Returns the memoized value until `ms` elapse; a rejected load is **not** stored. `fetchAllWords` uses 60 s.
 - Produces: `toWord(doc: PayloadWord): Word` (pure) and `fetchAllWords(): Promise<Word[]>`, `fetchWordRefs()`, `toWordRef(word)` with today's signatures. `fetchAllWords` pages the Local API (`limit: 1000`, `depth: 2`, `sort: "berlinerisch"`, `draft: false`, `where: { _status: { equals: "published" } }`; with `SHOW_TEST_DATA` also drafts via `draft: true`). Words without `slug` are skipped with a `console.warn`, as today.
@@ -70,10 +74,12 @@
 ### Task 3: Remaining content adapters and Lexical → HTML
 
 **Files:**
+
 - Create: `src/utils/lexicalHtml.ts`, `src/services/payload/{themen,posts,pages,site}.ts`, tests `src/tests/unit/services/payload{Posts,Site}.test.ts`, `src/tests/unit/utils/lexicalHtml.test.ts`
 - Modify: `src/services/queries/{getThemen,getPosts,getPage,getMenu,getAffiliate,getCompanyFunding,getCompanySocialMedia}.ts` (bodies only, exports and result shapes stay), `src/utils/article.ts` (types from `@/types/cms`, `wpOrigin` rewrite → rewrite `PAYLOAD_SERVER_URL`-origin and the legacy `cms.berliner-schnauze.wtf` origin links)
 
 **Interfaces:**
+
 - `lexicalToHtml(state: SerializedEditorState | null | undefined): string` using `convertLexicalToHTML` from `@payloadcms/richtext-lexical/html`, with converters for `upload` (→ `<img>` with the absolute media URL and `alt`) and `quote`. Empty/null → `""`.
 - `toPostBlocks(content): ArticleBlock[]` splits the Lexical root: each `upload` child → `{ name: "core/image", order, … }` (same field names as `CoreImageBlockFields`), each `quote` → `{ name: "core/quote", … }`, runs of other children → one `{ name: "core/html", saveContent }`. This is the inverse of the import's `mapPost`, so `ArticleBlocks.astro` and `processArticleBlocks` stay unchanged.
 - `fetchMenu(name)` maps the three names (`Main Menu`, `Footer Nav 1`, `Footer Nav 2`) onto globals `navigation.main|footer1|footer2`. `fetchAffiliateData`, `fetchCompanyFunding`, `fetchCompanySocialMedia`, `fetchAllThemen`, `fetchAllPosts` (published, `sort: "-publishedAt"`), page-by-slug keep their return shapes. All wrapped in `ttl(60_000, …)`.
@@ -87,10 +93,12 @@
 ### Task 4: Word, Themen, magazine and legal pages on demand
 
 **Files:**
+
 - Modify: `src/pages/wort/[...wordSlug].astro`, `src/pages/wort/index.astro`, `src/pages/themen/[themaSlug].astro`, `src/pages/themen/index.astro`, `src/pages/magazin/[postSlug].astro`, `src/pages/magazin/index.astro`, `src/pages/[legalPages].astro`, `src/pages/index.astro`, `src/pages/games/berliner-oder-nicht.astro`, `src/utils/wordHelper.ts` (`similarSoundingWords`)
 - Create: `src/utils/cacheHeaders.ts`, `src/tests/unit/utils/cacheHeaders.test.ts`; Playwright spec additions in `src/tests/e2e/`
 
 **Interfaces:**
+
 - `setPageCache(response: Response | Astro["response"], opts?: { sMaxAge?: number }): void` sets `Cache-Control: public, max-age=0, s-maxage=<300>, stale-while-revalidate=86400` (the reverse proxy caches; the browser revalidates). Used by every on-demand page. Error responses (404/503) get `no-store`.
 - Each listed page gets `export const prerender = false`, drops `getStaticPaths`/`Astro.props`, and loads its data from `Astro.params` through the Task 2/3 fetchers. Word page: `const word = (await fetchAllWords()).find(w => w.slug === slug)`; none → `return new Response(null, { status: 404 })` (or `Astro.rewrite("/404")`); fetcher throws → 503 page with `no-store`.
 - **Similar-sounding words** come from the stored field, not an O(n²) scan: `similarSoundingWords(refs, ref)` becomes a lookup of other words with equal `derived.soundexCode` (a `fetchSimilarSounding(word)` helper doing `payload.find({ where: { "derived.soundexCode": { equals } }, limit: 20 })`). Anagrams and alphabetic neighbors stay computed from the cached `wordRefs`.
@@ -107,11 +115,13 @@
 ### Task 5: Search index, meta and sitemap on demand
 
 **Files:**
+
 - Modify: `src/pages/api/search/index.json.ts`, `src/pages/api/search/meta.json.ts`, `astro.config.mjs` (remove `@astrojs/sitemap`, `sitemapFilter` import, `getWordDates/getPostDates`), `package.json` (remove `@astrojs/sitemap`)
 - Create: `src/pages/sitemap-index.xml.ts`, `src/pages/sitemap-0.xml.ts`, `src/services/sitemap.ts`, `src/tests/unit/services/sitemap.test.ts`
 - Delete: `src/services/queries/getSitemapWordDates.ts` after moving `sitemapFilter` into `src/services/sitemap.ts`
 
 **Interfaces:**
+
 - `index.json.ts`: `prerender = false`; `makeOramaSearchIndex(word)` now assembles **stored** fields (`derived.syllablesCount|consonantsCount|vowelsCount|characterLength|wordComponents|nlpTags`) and calls no NLP/hyphenation. Output keys unchanged (PWA and Orama schema depend on them). Cache: `setPageCache` with `sMaxAge: 300`; the existing PWA StaleWhileRevalidate runtime caching stays.
 - `meta.json.ts`: `prerender = false`, same output.
 - `buildSitemapEntries(): Promise<{ loc: string; lastmod?: string }[]>`: static routes (hard-coded list kept in `src/services/sitemap.ts`: `/`, `/wort`, `/themen`, `/magazin`, `/spenden`, `/anki`, `/wort-vorschlagen`, `/changelog` and changelog versions, legal pages, BON game) + words (`/wort/<slug>`, lastmod `modifiedGmt`) + posts + themen, filtered by `sitemapFilter`. `sitemap-index.xml` lists `sitemap-0.xml`; both `prerender = false`.
@@ -126,10 +136,12 @@
 ### Task 6: OG images on demand, word of the day
 
 **Files:**
+
 - Modify: `src/pages/og/[wordSlug].ts`, `src/stores/wordOfTheDay.ts`, `astro.config.mjs` (PWA `runtimeCaching` URL pattern for word of the day, `WP_REST_API` env removal comes in Task 9)
 - Create: `src/pages/api/word-of-the-day.ts`, `src/utils/wordOfTheDay.ts`, `src/tests/unit/utils/wordOfTheDay.test.ts`, `src/tests/unit/stores/wordOfTheDay.test.ts` (adapt the existing one if present)
 
 **Interfaces:**
+
 - OG: `prerender = false`, `GET` looks the word up (404 if missing) and calls `generateOpenGraphImage({ …same options as today…, cacheDir: OG_CACHE_DIR ?? ".og-cache" })` from `astro-og-canvas`; returns `image/png` with `Cache-Control: public, max-age=31536000, immutable`. Remove the build-time `OGImageRoute`/`getStaticPaths`. Compose mounts a volume on `OG_CACHE_DIR` (Task 9).
 - `pickWordOfTheDay<T extends { slug: string }>(words: T[], date: Date): T | undefined`: deterministic per UTC day: `words.toSorted(by slug)[daysSinceEpoch(date) % words.length]`; empty list → `undefined`.
 - `GET /api/word-of-the-day` returns the **same response shape the store reads today** (snake_case `Word` from `src/stores/wordOfTheDay.ts`: `ID`, `post_name`, `berlinerisch`, `article`, `translations`, `examples`, `learn_more`, `post_date`, `post_modified`, `group`, …); `Cache-Control: public, s-maxage=3600`. The store switches from `${WP_REST_API}/berliner-schnauze/v1/word-of-the-day` to `/api/word-of-the-day`.
@@ -143,10 +155,12 @@
 ### Task 7: Suggest-word form with server-side Turnstile and SMTP
 
 **Files:**
+
 - Create: `src/pages/api/suggest-word.ts`, `src/services/suggestMail.ts`, `src/utils/suggestWordSchema.ts` (the zod schema extracted from `SuggestWordForm.vue`), `src/tests/unit/services/suggestMail.test.ts`, `src/tests/unit/pages/api/suggest-word.test.ts`
 - Modify: `src/components/SuggestWordForm.vue` (POST the validated payload plus the Turnstile token to `/api/suggest-word`, drop `@urql/core`, `SendEmailDocument`, `WP_API`), `package.json` (`nodemailer`, `@types/nodemailer`), `astro.config.mjs` (env `TURNSTILE_SECRET_KEY`, `SMTP_URL`, `SUGGEST_MAIL_TO`, server secrets), existing `SuggestWordForm` tests
 
 **Interfaces:**
+
 - `verifyTurnstile(token: string, ip?: string): Promise<boolean>`: POST `https://challenges.cloudflare.com/turnstile/v0/siteverify` with `secret`, `response`, `remoteip`; **any** network error, non-OK status or `success !== true` → `false`.
 - `sendSuggestionMail(s: Suggestion): Promise<void>`: nodemailer from `SMTP_URL`; `from` = the site address (SPF), `to` = `SUGGEST_MAIL_TO`, `replyTo` = the suggester's validated email, plain-text body.
 - `POST /api/suggest-word` (`prerender = false`): JSON body = schema fields + `turnstileToken`. 400 invalid body, 403 failed Turnstile (no mail), 502 SMTP failure, 200 `{ sent: true }`. Check order: schema first, then Turnstile, then mail.
@@ -161,11 +175,13 @@
 ### Task 8: Port the Anki build and the maintenance scripts
 
 **Files:**
+
 - Modify: `scripts/build_anki_decks.py`, `scripts/test_build_anki_decks.py`, `docs/anki/README.md`, `.github` anki workflow env (`WP_*` → `PAYLOAD_URL`, `PAYLOAD_API_KEY`)
 - Create: `scripts/lib/payload-rest.ts` (only if a kept TS script needs it)
 - Delete (default; keep one only if `package.json` scripts or docs still reference it): `scripts/lib/wp-rest.ts`, `import-words-to-wp.ts`, `import-categories-to-wp.ts`, `clear-schlobinski-fields.mjs`, `migrate-sdls-sources.ts`, `fetch-wp-words-for-scan.mjs`, `append-meyer-supplements.ts`, `assign-new-categories.ts`; port `publish-drafts.ts` and `fetch-all-words-for-audit.ts`
 
 **Interfaces:**
+
 - Python: `fetch_words(base_url: str, api_key: str) -> list[dict]` pages `GET {base}/api/words?limit=500&depth=2&where[_status][equals]=published` with `Authorization: users API-Key <key>` until `hasNextPage` is false, and returns dicts in the **shape the deck builder already consumes** (keep the deck code untouched; convert at the edge). A non-200 or missing `docs` raises (build fails, never an empty deck).
 - API key: a dedicated Payload user "anki-bot" with `enableAPIKey`, created in the admin by Felix; the key goes to Infisical/GitHub secrets.
 
@@ -178,11 +194,13 @@
 ### Task 9: CI/E2E seed, compose and WordPress removal
 
 **Files:**
+
 - Create: `payload/src/seed/e2e.ts` (script `seed:e2e`), `payload/tests/seed.test.ts`
 - Modify: `.github/workflows/*` (Playwright job: `services.postgres`, seed, build, start `node server/index.mjs`, run specs), `compose.yaml` (`web`: `depends_on: postgres`, volume `ogcache:/app/.og-cache`, `OG_CACHE_DIR`), `astro.config.mjs` (drop `WP_*` env, `E2E_WORD_LIMIT`, `isE2eBuild`), `package.json` (drop `gql:generate*`, `@urql/core`, `@graphql-codegen/*`, `vite-plugin-graphql-loader`, `predev` codegen step), `CLAUDE.md` (Commands, Architecture, Dev Words Cache, WordPress MCP Access, Environment Variables sections), `public/_headers` if connect-src changes
 - Delete: `schema.graphql`, `src/gql/`, `src/services/wpGraphqlClient.ts`, `src/services/mutations/`, graphql codegen config, `scripts/lib/wp-rest.ts` leftovers, `.mcp.json` WordPress server entry (only after Felix confirms), `WP_*` from `.env.example`
 
 **Interfaces:**
+
 - `seedE2e(payload: Payload): Promise<void>` idempotent: the slugs the specs navigate to (`aasen`, `akademiebusen`, `alex`, `alsche`, `anmachen`, `ballast-der-republik`, `schale`, `wa`) as **invented minimal entries** (headword, one translation, one example; no real dataset content, the repo is public), two themen, one post with an image block, `navigation`/`affiliate`/`company` globals, `legal` pages `datenschutz`, `impressum`. `wa` links `anmachen` via `relatedWords`.
 - Before deleting `src/gql`, confirm Task 2/3's `src/types/cms.ts` covers every type still imported from `@/gql` (`grep -rn "@/gql" src`): zero hits is the exit condition.
 
@@ -196,9 +214,11 @@
 ### Task 10: SEO diff and cutover checklist
 
 **Files:**
+
 - Create: `scripts/seo-diff.ts`, `scripts/seo-urls.txt` (50 representative public URLs: home, `/wort`, `/themen`, `/magazin`, `wa`/`anmachen`/`aasen`, 20 more words incl. one draft-free umlaut word, 3 Themen, 3 posts, legal pages), `docs/cutover-checklist.md`
 
 **Interfaces:**
+
 - `seo-diff.ts <baseUrlA> <baseUrlB> [urlList]`: for each path fetches both origins and compares `<title>`, meta description, canonical (origin-normalized), robots, `og:*`, `twitter:*`, JSON-LD (parsed, key-order independent), and status code; prints a per-URL diff, exits 1 on any difference. Exported pure `extractSeo(html: string): SeoSnapshot` for the test.
 
 - [ ] **Step 1: Write the failing test** `scripts/seo-diff.test.ts` (or under `src/tests/unit`): `extractSeo` on two HTML snippets differing only in `og:title` reports exactly that key; identical snippets yield no diff; JSON-LD with reordered keys is equal.

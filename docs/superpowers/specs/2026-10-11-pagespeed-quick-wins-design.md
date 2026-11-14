@@ -8,14 +8,14 @@ Improve the PageSpeed Insights (mobile) result of the homepage `https://berliner
 
 ## Baseline (PSI report 2026-10-11 + own trace, mobile, 4× CPU, Slow 4G)
 
-| Finding | Evidence |
-|---|---|
-| Orama index build blocks the main thread ~2.2 s | LoAF: `wordList.js` `Response.json.then`; PSI "Unattributable" 1.68 s |
-| Sentry init in `<head>` | PSI long task 481 ms, 552 ms CPU (`sentry.*.js`) |
-| CLS 0.141 on `section.c-facts-grid` | PSI culprit: web font `83d51f87989b116f.woff2` (Berliner) |
-| Hashed assets not cacheable | `curl -I /_astro/*.css` → `cache-control: public, max-age=0, must-revalidate` |
-| Footer image oversized | `c-footer__farewell-image` served 480w for 326×210 display, ~23 KiB waste |
-| Duplicate analytics | Cloudflare Web Analytics beacon (10 KiB) next to Matomo |
+| Finding                                         | Evidence                                                                      |
+| ----------------------------------------------- | ----------------------------------------------------------------------------- |
+| Orama index build blocks the main thread ~2.2 s | LoAF: `wordList.js` `Response.json.then`; PSI "Unattributable" 1.68 s         |
+| Sentry init in `<head>`                         | PSI long task 481 ms, 552 ms CPU (`sentry.*.js`)                              |
+| CLS 0.141 on `section.c-facts-grid`             | PSI culprit: web font `83d51f87989b116f.woff2` (Berliner)                     |
+| Hashed assets not cacheable                     | `curl -I /_astro/*.css` → `cache-control: public, max-age=0, must-revalidate` |
+| Footer image oversized                          | `c-footer__farewell-image` served 480w for 326×210 display, ~23 KiB waste     |
+| Duplicate analytics                             | Cloudflare Web Analytics beacon (10 KiB) next to Matomo                       |
 
 ## Out of scope
 

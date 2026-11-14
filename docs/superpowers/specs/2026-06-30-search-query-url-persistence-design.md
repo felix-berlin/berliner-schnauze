@@ -97,9 +97,9 @@ Update `resetAll` — replace `$wordSearch.setKey("search", "")` with `$searchQu
 Handles URL ↔ `$searchQuery` sync. Designed to work inside `transition:persist` components (mounts once, re-reads URL on every `astro:page-load`).
 
 ```ts
+import { useStore } from "@nanostores/vue";
 import { $searchQuery } from "@stores/wordList.ts";
 import { useDebounceFn } from "@vueuse/core";
-import { useStore } from "@nanostores/vue";
 import { watch, onBeforeUnmount } from "vue";
 
 export function useSearchQuerySync() {

@@ -60,7 +60,16 @@
   }
 
   // Anchors of the tab bar and sidebar that are no section card (c-section-card reads --word-anchor-offset itself).
-  :is(#bedeutung, #sagste-det-noch, #analyse, #anagramme, #buecher, #verwandte, #navigation, #kommentare) {
+  :is(
+    #bedeutung,
+    #sagste-det-noch,
+    #analyse,
+    #anagramme,
+    #buecher,
+    #verwandte,
+    #navigation,
+    #kommentare
+  ) {
     scroll-margin-block-start: var(--word-anchor-offset);
   }
 

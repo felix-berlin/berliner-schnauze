@@ -49,9 +49,10 @@ export interface SharePayload {
 Create `src/tests/unit/utils/gameShare.test.ts`:
 
 ```ts
-import { describe, expect, it } from "vitest";
-import { decodeShareHash, encodeShareHash } from "@utils/gameShare";
 import type { SharePayload } from "@utils/gameShare";
+
+import { decodeShareHash, encodeShareHash } from "@utils/gameShare";
+import { describe, expect, it } from "vitest";
 
 const payload: SharePayload = {
   score: 150,

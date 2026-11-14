@@ -40,7 +40,11 @@ describe("seed:dev CLI wiring", () => {
     const run = spawnSync("./node_modules/.bin/payload", ["run", "src/seed/dev.ts"], {
       cwd: new URL("..", import.meta.url),
       encoding: "utf8",
-      env: { ...env, DATABASE_URL: "postgres://u:p@db.invalid:5432/bs", NODE_OPTIONS: "--no-deprecation" },
+      env: {
+        ...env,
+        DATABASE_URL: "postgres://u:p@db.invalid:5432/bs",
+        NODE_OPTIONS: "--no-deprecation",
+      },
       timeout: 60_000,
     });
     expect(run.status).not.toBe(0);

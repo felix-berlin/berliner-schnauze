@@ -38,11 +38,13 @@
 ### Task 1: Pure game rules
 
 **Files:**
+
 - Create: `payload/src/lib/bonRules.ts`
 - Modify: `payload/package.json` (add export `./bon-rules` next to the existing `./word-feedback` export)
 - Test: `payload/tests/bonRules.test.ts`, `website/src/tests/unit/composable/useBon.test.ts` (one added test)
 
 **Interfaces:**
+
 - Produces:
   - `export const LIVES = 3`, `export const MIN_MS_PER_ANSWER = 700`
   - `export function computeMultiplier(streak: number): number`
@@ -60,11 +62,13 @@
 ### Task 2: `bon-games` collection and migration
 
 **Files:**
+
 - Create: `payload/src/collections/BonGames.ts`, `payload/src/migrations/<timestamp>_bon_games.ts` (+ `.json` snapshot, generated)
 - Modify: `payload/src/payload.config.ts` (register collection), `payload/src/migrations/index.ts` (generated), `payload/src/payload-types.ts` (regenerated)
 - Test: `payload/tests/bonGames.test.ts`
 
 **Interfaces:**
+
 - Produces: collection slug `"bon-games"`, access `authenticatedOnly` (like `WordFeedback`), fields:
   - `visitor` text required, `token` text required unique, `status` select `playing|finished` required default `playing`
   - `cards` json required: `{ id: string; word: string; isReal: boolean; translation?: string }[]` in dealt order
@@ -82,11 +86,13 @@
 ### Task 3: Deck dealing
 
 **Files:**
+
 - Create: `website/src/utils/bonDeck.ts`, `website/src/services/bonPool.ts`
 - Modify: `website/src/components/games/BerlinerOderNicht.vue`
 - Test: `website/src/tests/unit/components/games/BerlinerOderNicht.test.ts`, `website/src/tests/unit/utils/bonDeck.test.ts`
 
 **Interfaces:**
+
 - Produces (`bonDeck.ts`):
   - `export type DealtCard = { id: string; word: string; isReal: boolean; translation?: string }`
   - `export const BATCH_SIZE = 20`
@@ -104,11 +110,13 @@
 ### Task 4: API routes
 
 **Files:**
+
 - Create: `website/src/pages/api/bon/start.ts`, `next.ts`, `finish.ts`, `website/src/utils/bonSchema.ts`
 - Modify: `website/src/utils/rateLimit.ts` (rules for `/api/bon/start` POST and `/api/bon/finish` POST, per-client; values are yours, `start` stricter than `next`)
 - Test: `website/src/tests/unit/pages/api/bon.test.ts` (mock style of `word-feedback.test.ts` in the same folder)
 
 **Interfaces:**
+
 - Consumes: `verifyRun`, `plausibleTiming`, `LIVES` (Task 1); `dealBatch`, `toPublic`, `loadPool`, `BATCH_SIZE` (Task 3); collection `bon-games` (Task 2).
 - Produces (`bonSchema.ts`): `finishSchema` (zod): `{ token: string, answers: { card: string; real: boolean }[] (max 400), playerName?: string }` with the `playerName` rules from Global Constraints (transform empty/missing to `"Anonym"`).
 - Routes (all `POST`, JSON, `reply` from `@utils/apiReply.ts`, errors in the site's voice, German):
@@ -125,6 +133,7 @@
 ### Task 5: Docs, lint, full run
 
 **Files:**
+
 - Modify: `website/CLAUDE.md` (extend the **BON game** bullet: server-dealt decks, three endpoints, collection, known limits), `payload/CLAUDE.md` (one line for `bon-games` access/privacy)
 
 - [ ] **Step 1: Document** the flow, the "only complete games count" rule, the cookie/hash privacy note and the known limits from the spec (waiting bots, many pseudonyms) in the two CLAUDE.md files.

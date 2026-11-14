@@ -41,8 +41,7 @@ const call = async <T>(
       createToastNotify({ message: notFound, status: "info" });
       return null;
     }
-    if (res.status === 429)
-      return fail("Ma langsam, Keule – versuch's gleich nochmal.", "warning");
+    if (res.status === 429) return fail("Ma langsam, Keule – versuch's gleich nochmal.", "warning");
     const body = (await res.json().catch(() => null)) as (T & { error?: string }) | null;
     // A 2xx without a JSON body is a failure too: the caller would treat `{}` as done.
     if (!res.ok || !body) {

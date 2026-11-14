@@ -20,7 +20,13 @@ describe("normalizeCode", () => {
   });
 
   it("rejects malformed input", () => {
-    for (const bad of ["", "K7QD-M2X9", "K7QD-M2X9-ZT4B-AAAA", "K7QD-M2X9-ZT4O", "A".repeat(10_000)]) {
+    for (const bad of [
+      "",
+      "K7QD-M2X9",
+      "K7QD-M2X9-ZT4B-AAAA",
+      "K7QD-M2X9-ZT4O",
+      "A".repeat(10_000),
+    ]) {
       expect(normalizeCode(bad)).toBeUndefined();
     }
   });

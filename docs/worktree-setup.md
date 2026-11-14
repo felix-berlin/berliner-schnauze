@@ -26,12 +26,14 @@ Aufräumen:  bash scripts/orca-archive.sh   (löscht die Datenbank dieses Worktr
    - `DEV_MCP_KEY`: ein fester MCP-Key für lokale Datenbanken.
 
    Optional, im Ordner `/agent` desselben Environments: `PROD_BASIC_AUTH` (`benutzer:passwort`), siehe unten „Produktion lesen“.
+
 3. **Datenbank-Dump** (die echten Daten), einmalig und danach bei Bedarf erneuern:
    1. Backup aus Portabase herunterladen (kommt als `.tar.gz` mit einer `.dump`-Datei).
    2. Entpacken, die `.dump`-Datei nach `~/backups/berliner-schnauze/latest.dump` legen (oder dorthin verlinken).
    3. Vorlage bauen: `bash scripts/dev-template.sh`. Das dauert etwa eine Minute.
 
    Ohne Dump baut das Skript die Vorlage aus erfundenen Testdaten (mit Warnung). Es gibt dann keine echten Wörter, Bilder und Audios.
+
 4. **Orca** (nur wenn du Orca nutzt): Settings → Repository → Advanced → Command Source auf **„orca.yaml only“**. Das lokale Setup-Feld leer lassen. Orca fragt beim ersten Mal eventuell nach einer Freigabe für das Setup-Kommando.
 
 ## Mit Orca
@@ -74,14 +76,14 @@ git worktree remove ../mein-feature
 
 Alles, was Secrets oder die Datenbank dieses Worktrees braucht, läuft über `scripts/with-env.sh`. Es lädt die Dev-Secrets aus Infisical (immer **dev**) und danach die Werte dieses Worktrees (`.env.worktree`):
 
-| Was | Befehl |
-|---|---|
-| Website | `pnpm dev` |
-| Payload-Admin | `pnpm cms:dev` |
-| Payload-Tests | `scripts/with-env.sh pnpm cms:test` (Testdatenbank `bsw_<name>_test`) |
-| Migration | `scripts/with-env.sh env NODE_ENV=production pnpm cms:migrate` |
-| Beliebiger Befehl | `scripts/with-env.sh <befehl>` |
-| Datenbank ansehen | `docker exec -it bs-dev-postgres psql -U bs -d bsw_<name>` |
+| Was               | Befehl                                                                |
+| ----------------- | --------------------------------------------------------------------- |
+| Website           | `pnpm dev`                                                            |
+| Payload-Admin     | `pnpm cms:dev`                                                        |
+| Payload-Tests     | `scripts/with-env.sh pnpm cms:test` (Testdatenbank `bsw_<name>_test`) |
+| Migration         | `scripts/with-env.sh env NODE_ENV=production pnpm cms:migrate`        |
+| Beliebiger Befehl | `scripts/with-env.sh <befehl>`                                        |
+| Datenbank ansehen | `docker exec -it bs-dev-postgres psql -U bs -d bsw_<name>`            |
 
 `pnpm dev` und `pnpm cms:dev` benutzen `with-env.sh` schon selbst. Die Payload-Tests brauchen den Umweg, damit sie die Test-Datenbank dieses Worktrees finden. Website-Unit-Tests (`pnpm test:unit`) brauchen keine Datenbank.
 
@@ -124,13 +126,13 @@ Das Zugangsdatum liegt in Infisical (dev, Ordner `/agent`, Secret `PROD_BASIC_AU
 
 ## Wenn etwas nicht klappt
 
-| Meldung / Symptom | Ursache und Lösung |
-|---|---|
-| `Docker is not running` | Docker starten, dann `bash scripts/orca-setup.sh` im Worktree wiederholen. |
-| `dev admin not created` (Warnung, kein Abbruch) | `npx infisical login` fehlt, oder `DEV_ADMIN_EMAIL`, `DEV_ADMIN_PASSWORD`, `DEV_MCP_KEY` stehen nicht in Infisical dev (Wurzelpfad `/`). Nachholen: `scripts/with-env.sh env NODE_ENV=production pnpm --filter payload-app dev:access` |
-| `no backup at …` / Wörter fehlen | Kein Dump unter `~/backups/berliner-schnauze/latest.dump`: Dump ablegen und `bash scripts/dev-template.sh` ausführen. Neue Worktrees bekommen dann echte Daten. |
-| `refusing …only a local database` | `DATABASE_URL` zeigt nicht auf `127.0.0.1`. Ist so gewollt: der Dev-Login wird nur in lokale Datenbanken geschrieben. |
-| Port belegt | In `.env.worktree` `WEBSITE_PORT` oder `CMS_PORT` ändern (ein erneutes Setup setzt sie zurück). |
-| Datenbank `bsw_…` bleibt nach dem Löschen eines Orca-Worktrees stehen | Das Archive-Skript läuft erst, wenn `orca.yaml` auf `main` liegt. Von Hand: `docker exec bs-dev-postgres psql -U bs -d postgres -c 'DROP DATABASE "bsw_<name>" WITH (FORCE)'` |
-| Orca startet das Setup nicht | Command Source muss auf „orca.yaml only“ stehen, und die Freigabe für das Kommando muss bestätigt sein. |
-| Container-Log ansehen | `docker logs bs-dev-postgres` |
+| Meldung / Symptom                                                     | Ursache und Lösung                                                                                                                                                                                                                     |
+| --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Docker is not running`                                               | Docker starten, dann `bash scripts/orca-setup.sh` im Worktree wiederholen.                                                                                                                                                             |
+| `dev admin not created` (Warnung, kein Abbruch)                       | `npx infisical login` fehlt, oder `DEV_ADMIN_EMAIL`, `DEV_ADMIN_PASSWORD`, `DEV_MCP_KEY` stehen nicht in Infisical dev (Wurzelpfad `/`). Nachholen: `scripts/with-env.sh env NODE_ENV=production pnpm --filter payload-app dev:access` |
+| `no backup at …` / Wörter fehlen                                      | Kein Dump unter `~/backups/berliner-schnauze/latest.dump`: Dump ablegen und `bash scripts/dev-template.sh` ausführen. Neue Worktrees bekommen dann echte Daten.                                                                        |
+| `refusing …only a local database`                                     | `DATABASE_URL` zeigt nicht auf `127.0.0.1`. Ist so gewollt: der Dev-Login wird nur in lokale Datenbanken geschrieben.                                                                                                                  |
+| Port belegt                                                           | In `.env.worktree` `WEBSITE_PORT` oder `CMS_PORT` ändern (ein erneutes Setup setzt sie zurück).                                                                                                                                        |
+| Datenbank `bsw_…` bleibt nach dem Löschen eines Orca-Worktrees stehen | Das Archive-Skript läuft erst, wenn `orca.yaml` auf `main` liegt. Von Hand: `docker exec bs-dev-postgres psql -U bs -d postgres -c 'DROP DATABASE "bsw_<name>" WITH (FORCE)'`                                                          |
+| Orca startet das Setup nicht                                          | Command Source muss auf „orca.yaml only“ stehen, und die Freigabe für das Kommando muss bestätigt sein.                                                                                                                                |
+| Container-Log ansehen                                                 | `docker logs bs-dev-postgres`                                                                                                                                                                                                          |

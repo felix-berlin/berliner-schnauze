@@ -41,11 +41,13 @@
 ### Task 1: Code format (pure) and hashing
 
 **Files:**
+
 - Create: `payload/src/lib/bonPlayer.ts`
 - Modify: `payload/package.json` (exports: `"./bon-player": "./src/lib/bonPlayer.ts"`)
 - Test: `payload/tests/bonPlayer.test.ts`
 
 **Interfaces:**
+
 - Produces: `generateCode(): string` (format `XXXX-XXXX-XXXX`, every char in the alphabet), `normalizeCode(input: string): string | undefined` (canonical `XXXX-XXXX-XXXX` or `undefined`), `CODE_ALPHABET: string`.
 
 - [ ] **Step 1: Write the failing test** in `payload/tests/bonPlayer.test.ts`: `generateCode` matches `/^[A-HJKMNP-Z2-9]{4}(-[A-HJKMNP-Z2-9]{4}){2}$/`; 200 generated codes are all different; `normalizeCode("k7qd m2x9 zt4b")` and `normalizeCode(" K7QD-M2X9-ZT4B ")` both equal `"K7QD-M2X9-ZT4B"`; `normalizeCode("")`, `normalizeCode("K7QD-M2X9")`, `normalizeCode("K7QD-M2X9-ZT4B-AAAA")`, `normalizeCode("K7QD-M2X9-ZT4O")` (contains `O`) and a 10 000-char string all return `undefined`.
@@ -57,11 +59,13 @@
 ### Task 2: Collection, relation and migration
 
 **Files:**
+
 - Create: `payload/src/collections/BonPlayers.ts`, `payload/src/migrations/<timestamp>_bon_players.ts` (+ `.json`, generated)
 - Modify: `payload/src/collections/BonGames.ts`, `payload/src/payload.config.ts`, `payload/src/migrations/index.ts`, `payload/src/payload-types.ts` (generated), `payload/tests/access.test.ts`
 - Test: `payload/tests/bonGames.test.ts`, `payload/tests/bonPlayers.test.ts`
 
 **Interfaces:**
+
 - Produces: collection `bon-players` with fields `name: text`, `codeHash: text` (required, unique index); `bon-games.player`: relationship to `bon-players`, not required, indexed.
 
 - [ ] **Step 1: Write failing tests.** `bonPlayers.test.ts` (pattern of `bonGames.test.ts`): a row can be created with `codeHash`; a second row with the same `codeHash` fails with `ValidationError`; reading without a user is denied. In `bonGames.test.ts`: a game row accepts a `player` id and still saves without one. In `access.test.ts` add `"bon-players"` to `lockedCollections`.
@@ -74,11 +78,13 @@
 ### Task 3: API routes `player` and `redeem`, identity in `start` and `finish`
 
 **Files:**
+
 - Create: `website/src/services/bonPlayer.ts`, `website/src/pages/api/bon/player.ts`, `website/src/pages/api/bon/redeem.ts`
 - Modify: `website/src/pages/api/bon/start.ts`, `website/src/pages/api/bon/finish.ts`, `website/src/utils/bonSchema.ts`, `website/src/utils/rateLimit.ts`, `website/src/tests/unit/utils/rateLimit.test.ts`
 - Test: `website/src/tests/unit/pages/api/bon.test.ts` (extend the in-memory fake: accept collection `bon-players`, add the filter op `exists` with a boolean value, keep the strictness that unknown filters throw)
 
 **Interfaces:**
+
 - Produces in `services/bonPlayer.ts`:
   - `bonCodeHash(code: string): string` (`sha256("bon-code:" + code)` hex)
   - `playerFromCookie(payload: Client, cookies: AstroCookies): Promise<{ id: number; code: string; name: string } | undefined>` (reads `bon_player`, normalizes, looks up by hash; `undefined` for missing, malformed or unknown)
@@ -104,11 +110,13 @@
 ### Task 4: Client: fragment capture, API calls, component
 
 **Files:**
+
 - Create: `website/src/services/bonPlayerApi.ts`, `website/src/components/games/BonPlayerCode.vue`
 - Modify: `website/src/pages/games/berliner-oder-nicht.astro`, `website/src/components/games/BerlinerOderNicht.vue`, `website/package.json` (QR library)
 - Test: `website/src/tests/unit/services/bonPlayerApi.test.ts`, `website/src/tests/unit/components/BonPlayerCode.test.ts`
 
 **Interfaces:**
+
 - Produces in `bonPlayerApi.ts`:
   - `createPlayerCode(): Promise<string>` (POST `/api/bon/player`, throws `Error(message)` with the server's German text)
   - `redeemPlayerCode(code: string): Promise<PlayerStats>` (POST `/api/bon/redeem`)
@@ -126,6 +134,7 @@
 ### Task 5: Docs and final verification
 
 **Files:**
+
 - Modify: `docs/superpowers/specs/2026-11-10-bon-player-code-design.md` ("Mehrere Codes" call and the "Laufende Identität" bullet to match the Deviations above), `website/CLAUDE.md` or `payload/CLAUDE.md` (one line on the player code where the BON game is documented)
 
 - [ ] **Step 1:** Update the spec bullets and the CLAUDE.md line. Add to the spec's Datenschutz section that the privacy text (CMS page) needs a short paragraph on the player code; this plan does not edit CMS content.

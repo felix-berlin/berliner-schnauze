@@ -8,17 +8,31 @@ import type { Media } from "../payload-types";
 import { docPath, isRoutedCollection } from "./routes";
 
 export const escapeHtml = (value: string): string =>
-  value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+  value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 
 /**
  * Site path of an internal link's doc; "#" when the doc is not populated (query depth 0), has no page or is not
  * published (the Local API populates drafts too; a link would leak the draft's slug and 404).
  */
-const internalDocToHref = ({ linkNode }: { linkNode: { fields: { doc?: { relationTo?: string; value?: unknown } | null } } }): string => {
+const internalDocToHref = ({
+  linkNode,
+}: {
+  linkNode: { fields: { doc?: { relationTo?: string; value?: unknown } | null } };
+}): string => {
   const { relationTo, value } = linkNode.fields.doc ?? {};
-  const doc = typeof value === "object" && value ? (value as { slug?: unknown; _status?: unknown }) : undefined;
+  const doc =
+    typeof value === "object" && value
+      ? (value as { slug?: unknown; _status?: unknown })
+      : undefined;
   if (doc?._status !== undefined && doc._status !== "published") return "#";
-  return isRoutedCollection(relationTo) && typeof doc?.slug === "string" && doc.slug ? docPath(relationTo, doc.slug) : "#";
+  return isRoutedCollection(relationTo) && typeof doc?.slug === "string" && doc.slug
+    ? docPath(relationTo, doc.slug)
+    : "#";
 };
 
 const links = LinkHTMLConverter({ internalDocToHref });
@@ -55,7 +69,10 @@ export type LexicalHtmlOptions = {
 };
 
 /** Stored Lexical state -> HTML (no wrapper div). Needs uploads populated (query depth >= 1). */
-export function lexicalToHtml(state: unknown, { converters: overrides, mediaBase = process.env.PAYLOAD_SERVER_URL }: LexicalHtmlOptions = {}): string {
+export function lexicalToHtml(
+  state: unknown,
+  { converters: overrides, mediaBase = process.env.PAYLOAD_SERVER_URL }: LexicalHtmlOptions = {},
+): string {
   if (!state || typeof state !== "object" || !("root" in state)) return "";
   const converters: HTMLConvertersFunction = ({ defaultConverters }) => ({
     ...defaultConverters,

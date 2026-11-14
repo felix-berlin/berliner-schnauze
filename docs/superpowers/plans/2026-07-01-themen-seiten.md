@@ -84,11 +84,12 @@ Pattern: Copy von `PostTypeSeoFragment` in `src/services/fragments/fragments.ts:
 Pattern: Copy von `src/services/queries/getPage.ts` (einfachste Query ohne Pagination).
 
 ```typescript
+import { TaxonomySeoFragment } from "@services/fragments/fragments";
+import { Client, cacheExchange, fetchExchange } from "@urql/core";
+import { WP_API } from "astro:env/client";
+
 // src/services/queries/getThemen.ts
 import { graphql } from "@/gql/gql";
-import { TaxonomySeoFragment } from "@services/fragments/fragments";
-import { WP_API } from "astro:env/client";
-import { Client, cacheExchange, fetchExchange } from "@urql/core";
 
 const client = new Client({
   url: WP_API,

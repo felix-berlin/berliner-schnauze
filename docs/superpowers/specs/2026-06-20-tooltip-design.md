@@ -65,7 +65,14 @@ src/tests/unit/components/TooltipPopover.test.ts
 
 ```typescript
 export type TooltipPlacement =
-  "top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "right";
+  | "top"
+  | "top-start"
+  | "top-end"
+  | "bottom"
+  | "bottom-start"
+  | "bottom-end"
+  | "left"
+  | "right";
 
 export type TooltipOptions = {
   content: string;

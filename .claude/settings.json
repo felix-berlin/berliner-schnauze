@@ -1,8 +1,6 @@
 {
   "permissions": {
-    "additionalDirectories": [
-      "/home/felix/workspace/komodo/remote/hetzner/berliner-schnauze-prod"
-    ],
+    "additionalDirectories": ["/home/felix/workspace/komodo/remote/hetzner/berliner-schnauze-prod"],
     "allow": [
       "Bash(npm *)",
       "Bash(pnpm *)",

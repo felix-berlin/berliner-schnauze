@@ -4,7 +4,11 @@ import type { CollectionBeforeChangeHook, Field } from "payload";
 export const PRESERVE_CONTENT_MODIFIED_AT = "preserveContentModifiedAt";
 
 /** Payload always rewrites updatedAt on update, so the last content change lives here (sitemap lastmod). */
-export const contentModifiedAtField: Field = { name: "contentModifiedAt", type: "date", admin: { readOnly: true } };
+export const contentModifiedAtField: Field = {
+  name: "contentModifiedAt",
+  type: "date",
+  admin: { readOnly: true },
+};
 
 export const touchContentModifiedAt: CollectionBeforeChangeHook = ({ data, originalDoc, req }) => {
   if (req.context[PRESERVE_CONTENT_MODIFIED_AT] === true) {

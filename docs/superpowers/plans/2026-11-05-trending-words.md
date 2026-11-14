@@ -39,11 +39,13 @@
 ### Task 1: Berliner Tag und Ranking-Funktionen
 
 **Files:**
+
 - Create: `payload/src/lib/wordStats.ts`
 - Create: `payload/tests/wordStatsRank.test.ts`
 - Modify: `payload/package.json` (Export `"./word-stats": "./src/lib/wordStats.ts"`)
 
 **Interfaces:**
+
 - Produces:
   - `export const STAT_KINDS = ["view", "audio", "share", "click"] as const; export type StatKind = (typeof STAT_KINDS)[number];`
   - `export const berlinDay = (date?: Date) => string` (`YYYY-MM-DD`, Zone `Europe/Berlin`, Standard: jetzt).
@@ -67,6 +69,7 @@
 ### Task 2: Collection `word-stats`, Migration, atomares Zählen
 
 **Files:**
+
 - Create: `payload/src/collections/WordStats.ts`
 - Modify: `payload/src/payload.config.ts` (zur `collections`-Liste hinzufügen, wie `WordFeedback`)
 - Modify: `payload/src/lib/wordStats.ts` (Schreibfunktion)
@@ -74,6 +77,7 @@
 - Create: `payload/tests/wordStats.test.ts`
 
 **Interfaces:**
+
 - Consumes: `StatKind`, `berlinDay` aus Task 1.
 - Produces: `export const bumpWordStat = (payload: Payload, wordId: number, kind: StatKind, day?: string) => Promise<void>`
 
@@ -91,10 +95,12 @@
 ### Task 3: Aggregation `trending()`
 
 **Files:**
+
 - Modify: `payload/src/lib/wordStats.ts`
 - Create: `payload/tests/wordTrending.test.ts`
 
 **Interfaces:**
+
 - Consumes: `rankViewed`, `rankRising`, `rankEngaged`, `berlinDay`, `Counts`, `Ranked` aus Task 1; `bumpWordStat` aus Task 2.
 - Produces:
   - `export type TrendType = "viewed" | "rising" | "engaged";`
@@ -114,12 +120,14 @@
 ### Task 4: Melde-Route `POST /api/word-pulse`
 
 **Files:**
+
 - Create: `website/src/pages/api/word-pulse.ts`
 - Create: `website/src/utils/wordPulseSchema.ts`
 - Modify: `website/src/utils/rateLimit.ts` (neue Regel in `RULES`)
 - Create: `website/src/tests/unit/pages/api/word-pulse.test.ts`
 
 **Interfaces:**
+
 - Consumes: `bumpWordStat`, `STAT_KINDS`, `StatKind` aus `payload-app/word-stats`.
 - Produces: `export const wordPulseSchema` (zod: `{ word: positive int, kind: enum STAT_KINDS }`); `POST` antwortet `{ ok: true }` (200) oder `{ error }` (400/404/429/502).
 
@@ -132,11 +140,13 @@
 ### Task 5: Lese-Route `GET /api/trending`
 
 **Files:**
+
 - Create: `website/src/pages/api/trending.ts`
 - Create: `website/src/tests/unit/pages/api/trending.test.ts`
 - Modify: `payload/CLAUDE.md` (Abschnitt zu `word-stats`: Collection, Formeln, Gewichte)
 
 **Interfaces:**
+
 - Consumes: `trending`, `TrendType`, `Ranked` aus `payload-app/word-stats`; `toWordRef` aus `website/src/services/payload/words.ts`.
 - Produces: `GET /api/trending?type=viewed|rising|engaged&days=1..365&limit=1..50` → `{ items: { rank: number; word: WordRef; value: number; views: number; previous?: number }[] }`. Standard: `type` Pflicht, `days=30`, `limit=10`.
 
@@ -149,6 +159,7 @@
 ### Task 6: Browser meldet Aufrufe und Interaktionen
 
 **Files:**
+
 - Create: `website/src/utils/wordPulse.ts`
 - Create: `website/src/tests/unit/utils/wordPulse.test.ts`
 - Modify: `website/src/pages/wort/[...wordSlug].astro` (Aufruf melden, Klick auf verwandte Wörter)
@@ -157,6 +168,7 @@
 - Modify: `website/CLAUDE.md` (Hinweis auf den Reporter und die serverseitige Dedupe-Regel)
 
 **Interfaces:**
+
 - Consumes: `POST /api/word-pulse` aus Task 4; die Schlüssel `StatKind` als Literal (`"view" | "audio" | "share" | "click"`).
 - Produces: `export const reportWord = (wordId: number, kind: StatKind): void` — meldet höchstens einmal je Wort, Art und Berliner Tag.
 

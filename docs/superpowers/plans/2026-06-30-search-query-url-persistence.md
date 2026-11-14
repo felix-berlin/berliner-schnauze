@@ -299,11 +299,11 @@ git commit -m "refactor(search): extract search term from \$wordSearch into \$se
 Create `src/tests/unit/composable/useSearchQuerySync.test.ts`:
 
 ```ts
+import { useSearchQuerySync } from "@composables/useSearchQuerySync";
+import { $searchQuery } from "@stores/wordList.ts";
 import { mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { defineComponent, nextTick } from "vue";
-import { $searchQuery } from "@stores/wordList.ts";
-import { useSearchQuerySync } from "@composables/useSearchQuerySync";
 
 function mountComposable(locationSearch: string) {
   Object.defineProperty(window, "location", {
@@ -473,8 +473,8 @@ Replace the entire existing mock setup with:
 
 ```ts
 import { mount } from "@vue/test-utils";
-import { ref, nextTick } from "vue";
 import { describe, expect, it, vi, beforeEach } from "vitest";
+import { ref, nextTick } from "vue";
 
 vi.mock("@composables/useSearchQuerySync", () => ({
   useSearchQuerySync: vi.fn(),

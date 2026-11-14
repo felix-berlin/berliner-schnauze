@@ -27,7 +27,9 @@ beforeAll(async () => {
 afterAll(cleanup);
 
 const slugs = async (collection: "words" | "themen" | "posts" | "pages") =>
-  (await payload.find({ collection, depth: 0, draft: true, limit: 500, pagination: false })).docs.map((d) => (d as { slug?: string | null }).slug);
+  (
+    await payload.find({ collection, depth: 0, draft: true, limit: 500, pagination: false })
+  ).docs.map((d) => (d as { slug?: string | null }).slug);
 
 describe("seedE2e", () => {
   it("creates every word the specs navigate to, once", async () => {
@@ -37,35 +39,63 @@ describe("seedE2e", () => {
   });
 
   it("publishes the words and fills the derived fields through the save hook", async () => {
-    const { docs } = await payload.find({ collection: "words", where: { slug: { equals: "anmachen" } }, depth: 0 });
+    const { docs } = await payload.find({
+      collection: "words",
+      where: { slug: { equals: "anmachen" } },
+      depth: 0,
+    });
     expect(docs[0]._status).toBe("published");
     expect(docs[0].derived?.wordGroup).toBe("A");
     expect(docs[0].derived?.soundexCode).toBeTruthy();
   });
 
   it("links related words and marks the berolinismus", async () => {
-    const { docs } = await payload.find({ collection: "words", where: { slug: { equals: "ballast-der-republik" } }, depth: 1 });
+    const { docs } = await payload.find({
+      collection: "words",
+      where: { slug: { equals: "ballast-der-republik" } },
+      depth: 1,
+    });
     const related = (docs[0].relatedWords ?? []).map((w) => (typeof w === "object" ? w.slug : w));
     expect(related.length).toBeGreaterThan(0);
-    const alex = await payload.find({ collection: "words", where: { slug: { equals: "alex" } }, depth: 0 });
+    const alex = await payload.find({
+      collection: "words",
+      where: { slug: { equals: "alex" } },
+      depth: 0,
+    });
     expect(alex.docs[0].berolinismus).toBe(true);
   });
 
   it("gives akademiebusen a gallery image", async () => {
-    const { docs } = await payload.find({ collection: "words", where: { slug: { equals: "akademiebusen" } }, depth: 1 });
+    const { docs } = await payload.find({
+      collection: "words",
+      where: { slug: { equals: "akademiebusen" } },
+      depth: 1,
+    });
     expect(docs[0].images?.length).toBeGreaterThan(0);
   });
 
   it("has an anagram pair and a similar-sounding neighbour for the phonology specs", async () => {
     const found = await slugs("words");
     expect(found).toEqual(expect.arrayContaining(["alsche", "schale", "anmachen", "anmachn"]));
-    const { docs } = await payload.find({ collection: "words", where: { slug: { in: ["anmachen", "anmachn"] } }, depth: 0 });
+    const { docs } = await payload.find({
+      collection: "words",
+      where: { slug: { in: ["anmachen", "anmachn"] } },
+      depth: 0,
+    });
     expect(new Set(docs.map((d) => d.derived?.soundexCode)).size).toBe(1);
   });
 
   it("creates at least ten themen, a published post and the legal pages", async () => {
     expect((await slugs("themen")).length).toBeGreaterThanOrEqual(10);
-    expect((await payload.find({ collection: "posts", where: { _status: { equals: "published" } }, depth: 0 })).totalDocs).toBeGreaterThanOrEqual(1);
+    expect(
+      (
+        await payload.find({
+          collection: "posts",
+          where: { _status: { equals: "published" } },
+          depth: 0,
+        })
+      ).totalDocs,
+    ).toBeGreaterThanOrEqual(1);
     expect(await slugs("pages")).toEqual(expect.arrayContaining(["datenschutz", "impressum"]));
   });
 
@@ -85,15 +115,21 @@ describe("assertLocalDatabase", () => {
     "postgres://u:p@postgres:5432/berliner",
     "postgres://u:p@127.0.0.1:5432/berliner",
     "postgres://u:p@localhost/berliner_schnauze",
-  ])("refuses a local host with a database not named for e2e: %j (the prod compose DB is local too)", (url) => {
-    expect(() => assertLocalDatabase(url)).toThrow();
-  });
+  ])(
+    "refuses a local host with a database not named for e2e: %j (the prod compose DB is local too)",
+    (url) => {
+      expect(() => assertLocalDatabase(url)).toThrow();
+    },
+  );
 
   it("accepts the smoke database", () => {
     expect(() => assertLocalDatabase("postgres://u:p@127.0.0.1/bs_smoke")).not.toThrow();
   });
 
-  it.each(["postgres://u:p@db.prod.example/berliner_schnauze", "", "not a url"])("refuses %j: the seed writes invented words", (url) => {
-    expect(() => assertLocalDatabase(url)).toThrow();
-  });
+  it.each(["postgres://u:p@db.prod.example/berliner_schnauze", "", "not a url"])(
+    "refuses %j: the seed writes invented words",
+    (url) => {
+      expect(() => assertLocalDatabase(url)).toThrow();
+    },
+  );
 });
