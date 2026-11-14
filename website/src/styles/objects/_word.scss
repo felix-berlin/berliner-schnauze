@@ -71,7 +71,8 @@
   }
 
   .o-word-main,
-  .o-word-main-content {
+  .o-word-main-content,
+  .o-word-below-fold {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
@@ -79,6 +80,13 @@
     @include mx.breakpoint("word") {
       gap: var(--space-5);
     }
+  }
+
+  // Book shelf to next links sit below the fold on every viewport: skip their layout and paint
+  // until they come near (the remembered size takes over once they have rendered).
+  .o-word-below-fold {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 2400px;
   }
 
   .o-word-main {

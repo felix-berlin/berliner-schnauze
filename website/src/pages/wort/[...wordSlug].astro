@@ -290,17 +290,19 @@ const schemaJson = () => {
 
         {!hasImages && word.learnMore && <WordLearnMore learnMore={word.learnMore} />}
 
-        <BookShelf books={affiliateBooks} disclaimers={affiliateDisclaimers} />
+        <div class='o-word-below-fold'>
+          <BookShelf books={affiliateBooks} disclaimers={affiliateDisclaimers} />
 
-        <WordNeighborhood {...neighborhood} />
+          <WordNeighborhood {...neighborhood} />
 
-        {!draft && (
-          <div id='kommentare'>
-            <WordComments client:visible wordId={word.id} />
-          </div>
-        )}
+          {!draft && (
+            <div id='kommentare'>
+              <WordComments client:visible wordId={word.id} />
+            </div>
+          )}
 
-        <NextLinks trending={!!trend} words={wordRefs} />
+          <NextLinks trending={!!trend} words={wordRefs} />
+        </div>
 
         <WordPageFooter publishedAt={word.publishedAt} modifiedAt={word.contentModifiedAt} />
       </div>
