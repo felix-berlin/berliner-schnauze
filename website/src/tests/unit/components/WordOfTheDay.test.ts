@@ -129,16 +129,16 @@ describe("WordOfTheDay.vue", () => {
     expect(wrapper.find(".mock-confetti").exists()).toBe(false);
   });
 
-  it("shows confetti on focus", async () => {
+  it("shows confetti while the word link has focus", async () => {
     const wrapper = mountComponent();
-    await wrapper.trigger("focus");
+    await wrapper.trigger("focusin");
     expect(wrapper.find(".mock-confetti").exists()).toBe(true);
   });
 
-  it("hides confetti on blur", async () => {
+  it("hides confetti when focus leaves", async () => {
     const wrapper = mountComponent();
-    await wrapper.trigger("focus");
-    await wrapper.trigger("blur");
+    await wrapper.trigger("focusin");
+    await wrapper.trigger("focusout");
     expect(wrapper.find(".mock-confetti").exists()).toBe(false);
   });
 

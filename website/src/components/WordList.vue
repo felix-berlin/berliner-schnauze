@@ -14,7 +14,6 @@
     :data="mutableOramaSearch"
     :item-size="itemSize"
     class="c-word-list"
-    aria-live="polite"
     as="ul"
     item="li"
   >
@@ -25,7 +24,7 @@
       :highlight-term="searchQuery"
       :style="{ 'margin-bottom': singleWordGap }"
       :class="{ 'is-active': showActive && index === activeIndex }"
-      tabindex="0"
+      tabindex="-1"
       :show-dropdown="showDropdown"
     />
   </component>

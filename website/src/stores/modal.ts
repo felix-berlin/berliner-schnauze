@@ -2,6 +2,8 @@ import { atom, map } from "nanostores";
 import { markRaw, nextTick } from "vue";
 
 type ModalProps = {
+  /** The dialog's accessible name (screen readers announce it on open). */
+  ariaLabel: string;
   class: string;
   closeOnClickOutside: boolean;
   disableScroll: boolean;
@@ -23,6 +25,7 @@ type ModalSettings = {
 };
 
 const propsDefault: ModalProps = {
+  ariaLabel: "",
   class: "",
   closeOnClickOutside: true,
   disableScroll: true,

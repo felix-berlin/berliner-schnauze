@@ -37,6 +37,7 @@ const searchQuery = useStore($searchQuery);
 
 const openWordSuggestionModal = () => {
   open({
+    props: { ariaLabel: "Wort vorschlagen" },
     view: {
       component: defineAsyncComponent(() => import("@components/SuggestWordForm.vue")),
       props: {

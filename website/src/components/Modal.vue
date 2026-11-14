@@ -7,6 +7,7 @@
     :data-variant="props.position"
     :style="`--modal-width: ${props.width}`"
     aria-modal="true"
+    :aria-label="props.ariaLabel || undefined"
     :closedby="props.closeOnClickOutside ? 'any' : 'closerequest'"
     @close="resetModal"
   >

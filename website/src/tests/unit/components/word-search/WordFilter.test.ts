@@ -1,4 +1,4 @@
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
@@ -92,6 +92,41 @@ beforeEach(() => {
 });
 
 describe("WordFilter.vue", () => {
+  it("moves focus into the flyout on open and back to the opener on close", async () => {
+    const opener = document.createElement("button");
+    document.body.append(opener);
+    opener.focus();
+    const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
+    const wrapper = mount(WordFilter, { attachTo: document.body });
+
+    showFilterRef.value = true;
+    await flushPromises();
+    expect(wrapper.find("aside").element.contains(document.activeElement)).toBe(true);
+
+    showFilterRef.value = false;
+    await flushPromises();
+    expect(document.activeElement).toBe(opener);
+    wrapper.unmount();
+    opener.remove();
+  });
+
+  it("closes on Escape while open", async () => {
+    showFilterRef.value = true;
+    const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
+    const wrapper = mount(WordFilter, { attachTo: document.body });
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    expect(mockToggle).toHaveBeenCalledOnce();
+    wrapper.unmount();
+  });
+
+  it("leaves Escape alone while closed", async () => {
+    const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
+    const wrapper = mount(WordFilter, { attachTo: document.body });
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    expect(mockToggle).not.toHaveBeenCalled();
+    wrapper.unmount();
+  });
+
   it("renders an <aside> element with class c-filter-search__filter", async () => {
     const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
     const wrapper = mount(WordFilter);

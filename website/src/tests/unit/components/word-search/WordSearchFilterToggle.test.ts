@@ -3,14 +3,17 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 const activeFilterCountRef = ref(0);
+const showFlyoutRef = ref(false);
 const mockToggle = vi.fn();
+const { mockShowFlyout } = vi.hoisted(() => ({ mockShowFlyout: {} }));
 
 vi.mock("@nanostores/vue", () => ({
-  useStore: vi.fn(() => activeFilterCountRef),
+  useStore: vi.fn((store) => (store === mockShowFlyout ? showFlyoutRef : activeFilterCountRef)),
 }));
 
 vi.mock("@stores/wordList.ts", () => ({
   $activeFilterCount: {},
+  $showWordListFilterFlyout: mockShowFlyout,
   $toggleWordListFilterFlyout: mockToggle,
 }));
 
@@ -18,6 +21,18 @@ describe("WordSearchFilterToggle.vue", () => {
   beforeEach(() => {
     activeFilterCountRef.value = 0;
     mockToggle.mockClear();
+  });
+
+  it("tells whether the filter flyout is open", async () => {
+    const WordSearchFilterToggle = (
+      await import("@components/word-search/WordSearchFilterToggle.vue")
+    ).default;
+    const wrapper = mount(WordSearchFilterToggle);
+    expect(wrapper.find("button").attributes("aria-expanded")).toBe("false");
+    showFlyoutRef.value = true;
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find("button").attributes("aria-expanded")).toBe("true");
+    showFlyoutRef.value = false;
   });
 
   it("renders a button with aria-label Filter öffnen", async () => {

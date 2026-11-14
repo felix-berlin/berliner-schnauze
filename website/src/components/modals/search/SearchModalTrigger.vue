@@ -22,6 +22,7 @@ import { defineAsyncComponent } from "vue";
 const openSearchModal = () => {
   open({
     props: {
+      ariaLabel: "Wörter suchen",
       class: "c-modal--search",
       showCloseButton: false,
     },
