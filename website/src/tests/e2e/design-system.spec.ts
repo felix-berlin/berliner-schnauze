@@ -77,31 +77,14 @@ test("a card's part styles stop at its slot (Review Focus 4, spec §7.1)", async
   expect(sizes.foreign).not.toBe(sizes.own);
 });
 
-test("form fields take the word page's dashed focus ring (--focus-ring-style)", async ({
+test("one focus ring: dashed on the word page, solid elsewhere, form controls included", async ({
   page,
 }) => {
-  // .c-input:focus-visible outranks the word page's :where() ring, so it reads the property.
-  const focusRing = (root: string) =>
-    page.evaluate((selector) => {
-      const input = document.createElement("input");
-      input.className = "c-input";
-      document.querySelector(selector)!.append(input);
-      input.focus();
-      return getComputedStyle(input).outlineStyle;
-    }, root);
-
-  await page.goto("/wort/anmachen");
-  expect(await focusRing(".o-word-page")).toBe("dashed");
-  await page.goto("/");
-  expect(await focusRing("main")).toBe("solid");
-});
-
-test("checkbox, radio and select take the dashed ring on the word page, solid elsewhere", async ({
-  page,
-}) => {
-  // The shared field rule (not the text-field one) draws their ring; it reads the same property.
+  // base/_global.scss draws every ring; the word page and the fields only set --focus-ring-style/-color.
   // Reached with Tab, so :focus-visible holds in every engine (focus({ focusVisible }) does not in WebKit).
   const controls = [
+    '<button type="button">x</button>',
+    '<input class="c-input">',
     '<input type="checkbox" class="c-input c-input--checkbox">',
     '<input type="radio" class="c-input c-input--radio">',
     '<select class="c-select"><option>a</option></select>',
@@ -123,20 +106,39 @@ test("checkbox, radio and select take the dashed ring on the word page, solid el
     await page.keyboard.press("Tab");
     const probe = page.locator("#ring-probe");
     await expect(probe).toBeFocused();
-    const style = await probe.evaluate((el) => getComputedStyle(el).outlineStyle);
+    const ring = await probe.evaluate((el) => {
+      const style = getComputedStyle(el);
+      return `${style.outlineStyle} ${style.outlineWidth} ${style.outlineColor}`;
+    });
     await page.evaluate(() =>
       document.querySelectorAll("#ring-start, #ring-probe").forEach((el) => el.remove()),
     );
-    return style;
+    return ring;
+  };
+  const rings = async (root: string) => {
+    const result: string[] = [];
+    for (const html of controls) result.push(await tabRing(root, html));
+    return result;
   };
 
   await page.goto("/wort/anmachen");
-  const word: string[] = [];
-  for (const html of controls) word.push(await tabRing(".o-word-page", html));
-  expect(word).toEqual(["dashed", "dashed", "dashed"]);
+  const focus = await resolveColor(page, "--color-focus-ring");
+  // The text field draws its ring in --color-border-active (= --color-text-accent unless invalid).
+  const accent = await resolveColor(page, "--color-text-accent");
+  expect(await rings(".o-word-page")).toEqual([
+    `dashed 2px ${focus}`,
+    `dashed 2px ${accent}`,
+    `dashed 2px ${focus}`,
+    `dashed 2px ${focus}`,
+    `dashed 2px ${focus}`,
+  ]);
 
   await page.goto("/");
-  const home: string[] = [];
-  for (const html of controls) home.push(await tabRing("main", html));
-  expect(home).toEqual(["solid", "solid", "solid"]);
+  expect(await rings("main")).toEqual([
+    `solid 2px ${accent}`,
+    `solid 2px ${accent}`,
+    `solid 2px ${focus}`,
+    `solid 2px ${focus}`,
+    `solid 2px ${focus}`,
+  ]);
 });
