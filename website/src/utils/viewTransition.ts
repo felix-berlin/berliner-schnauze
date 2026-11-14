@@ -7,6 +7,21 @@ import { nextTick } from "vue";
  * transition types gets no transition at all (no morph, spec §8). Without `type` it is the default
  * crossfade.
  */
+const ignoreAbort = (error: unknown) => {
+  if (!(error instanceof DOMException && error.name === "AbortError")) throw error;
+};
+
+/**
+ * A skipped transition (a newer one started, the tab went hidden) rejects `ready` with an AbortError;
+ * that is routine, not an error. A throwing `update` rejects all three promises with the same error,
+ * so it surfaces once, through `updateCallbackDone`.
+ */
+const settle = (transition: ViewTransition): void => {
+  transition.updateCallbackDone.catch(ignoreAbort);
+  transition.ready.catch(() => {});
+  transition.finished.catch(() => {});
+};
+
 export function vt(update: () => void, type?: string): void {
   if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) {
     return update();
@@ -16,11 +31,11 @@ export function vt(update: () => void, type?: string): void {
     await nextTick();
   };
   if (!type) {
-    document.startViewTransition(run);
+    settle(document.startViewTransition(run));
     return;
   }
   if (!globalThis.CSS?.supports?.("selector(:active-view-transition-type(a))")) return update();
-  document.startViewTransition({ types: [type], update: run });
+  settle(document.startViewTransition({ types: [type], update: run }));
 }
 
 const isViewTransitionAnimation = (a: Animation) =>

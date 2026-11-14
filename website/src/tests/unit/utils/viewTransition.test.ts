@@ -13,6 +13,12 @@ describe("vt", () => {
       supports: (q: string) => supported && q.includes("view-transition-type"),
     });
 
+  const transition = (ready: Promise<void> = Promise.resolve()) => ({
+    finished: Promise.resolve(),
+    ready,
+    updateCallbackDone: Promise.resolve(),
+  });
+
   afterEach(() => {
     vi.unstubAllGlobals();
     delete (document as { startViewTransition?: unknown }).startViewTransition;
@@ -40,7 +46,7 @@ describe("vt", () => {
     setTypes(true);
     const start = vi.fn((options: { update: () => Promise<void> }) => {
       void options.update();
-      return { finished: Promise.resolve() };
+      return transition();
     });
     setStart(start);
     const update = vi.fn();
@@ -61,12 +67,23 @@ describe("vt", () => {
     expect(start).not.toHaveBeenCalled();
   });
 
+  it("a skipped transition (AbortError) raises no unhandled rejection", async () => {
+    setMotion(false);
+    const unhandled = vi.fn();
+    process.on("unhandledRejection", unhandled);
+    setStart(() => transition(Promise.reject(new DOMException("skipped", "AbortError"))));
+    vt(vi.fn());
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    process.off("unhandledRejection", unhandled);
+    expect(unhandled).not.toHaveBeenCalled();
+  });
+
   it("without a kind runs the default crossfade", () => {
     setMotion(false);
     setTypes(false);
     const start = vi.fn((cb: () => Promise<void>) => {
       void cb();
-      return { finished: Promise.resolve() };
+      return transition();
     });
     setStart(start);
     const update = vi.fn();
