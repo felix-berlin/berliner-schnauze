@@ -35,6 +35,7 @@
 
 <script setup lang="ts">
 import type { LetterTile } from "@utils/letterTiles";
+
 import { ref } from "vue";
 
 defineProps<{

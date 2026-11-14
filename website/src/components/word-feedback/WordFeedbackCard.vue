@@ -21,9 +21,7 @@
         <!-- Persistent, so the announcement works although the card swaps its content. -->
         <p class="u-sr-only" role="status">{{ announcement }}</p>
         <template v-if="current === 'usage'">
-          <p ref="lead" class="lead" tabindex="-1">
-            Is dit Wort bei dir noch im Einsatz?
-          </p>
+          <p ref="lead" class="lead" tabindex="-1">Is dit Wort bei dir noch im Einsatz?</p>
           <div
             v-if="!online"
             id="word-feedback-offline"
@@ -100,36 +98,24 @@
                 :data-state="b.value === selected.usage ? 'mine' : undefined"
               >
                 <span class="bar-label">
-                  {{ b.label }}<template v-if="b.value === selected.usage"> · deine Antwort</template>
+                  {{ b.label
+                  }}<template v-if="b.value === selected.usage"> · deine Antwort</template>
                 </span>
                 <span class="bar-value">{{ b.percent }} % · {{ b.text }}</span>
                 <span class="bar-track" aria-hidden="true">
-                  <span
-                    class="bar-fill"
-                    :style="{ inlineSize: `${b.percent}%` }"
-                  />
+                  <span class="bar-fill" :style="{ inlineSize: `${b.percent}%` }" />
                 </span>
               </div>
             </div>
           </div>
 
-          <div
-            v-if="current !== 'done'"
-            :key="current"
-            class="step"
-            :data-enter="enter"
-          >
+          <div v-if="current !== 'done'" :key="current" class="step" :data-enter="enter">
             <span
               class="segments"
               role="img"
               :aria-label="`Schritt ${stepIndex + 1} von ${steps.length}`"
             >
-              <span
-                v-for="s in segments"
-                :key="s.step"
-                class="segment"
-                :data-state="s.state"
-              />
+              <span v-for="s in segments" :key="s.step" class="segment" :data-state="s.state" />
             </span>
             <div class="progress">
               <h3 ref="question" class="question" tabindex="-1">
@@ -140,22 +126,18 @@
               </span>
             </div>
 
-            <div
-              v-show="explainOpen"
-              id="word-feedback-why"
-              class="c-infotext"
-            >
+            <div v-show="explainOpen" id="word-feedback-why" class="c-infotext">
               <div class="c-word-feedback-why">
-              <b>Warum so ville Fragen?</b>
-              <span>
-                Weil wa hier zusammen forschen: Wie klingt det Berlinerische heute, wo wird’s noch
-                jesprochen und von wem? Jede Antwort hilft uns, den Berliner Metrolekt besser zu
-                verstehen – dafür brauchen wa ’n paar Angaben von dir: wo de wohnst, ob de hier
-                uffjewachsen bist und wie alt de bist.
-              </span>
-              <span class="note">
-                Mach mit, so weit de willst – jede Frage kannste überspringen.
-              </span>
+                <b>Warum so ville Fragen?</b>
+                <span>
+                  Weil wa hier zusammen forschen: Wie klingt det Berlinerische heute, wo wird’s noch
+                  jesprochen und von wem? Jede Antwort hilft uns, den Berliner Metrolekt besser zu
+                  verstehen – dafür brauchen wa ’n paar Angaben von dir: wo de wohnst, ob de hier
+                  uffjewachsen bist und wie alt de bist.
+                </span>
+                <span class="note">
+                  Mach mit, so weit de willst – jede Frage kannste überspringen.
+                </span>
               </div>
             </div>
             <div class="why-toggle">

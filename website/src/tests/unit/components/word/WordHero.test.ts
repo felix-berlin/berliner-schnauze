@@ -38,12 +38,8 @@ describe("WordHero.astro", () => {
   });
 
   it("renders article when provided, not when absent", async () => {
-    expect(await render({ word: makeWord({ article: "die" }) })).toContain(
-      'class="article"',
-    );
-    expect(await render({ word: makeWord({ article: null }) })).not.toContain(
-      'class="article"',
-    );
+    expect(await render({ word: makeWord({ article: "die" }) })).toContain('class="article"');
+    expect(await render({ word: makeWord({ article: null }) })).not.toContain('class="article"');
   });
 
   it("renders the word type as plain badge, without suffix for an editorial value", async () => {
@@ -85,12 +81,8 @@ describe("WordHero.astro", () => {
       pos: "Nomen",
       word: makeWord({ themen: [{ id: 1, name: "Essen", slug: "essen" }] }),
     });
-    expect(result.indexOf('class="actions"')).toBeLessThan(
-      result.indexOf('class="badges"'),
-    );
-    expect(result.indexOf('class="title"')).toBeLessThan(
-      result.indexOf('class="actions"'),
-    );
+    expect(result.indexOf('class="actions"')).toBeLessThan(result.indexOf('class="badges"'));
+    expect(result.indexOf('class="title"')).toBeLessThan(result.indexOf('class="actions"'));
   });
 
   it("shows the alternative words as 'Selbe Bedeutung wie'", async () => {

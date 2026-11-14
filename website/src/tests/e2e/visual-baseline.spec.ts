@@ -107,7 +107,9 @@ for (const size of SIZES) {
           });
           // The word page's lower sections skip rendering off screen (content-visibility: auto), and a
           // full-page shot does not scroll: draw them.
-          await page.addStyleTag({ content: ".o-word-below-fold { content-visibility: visible; }" });
+          await page.addStyleTag({
+            content: ".o-word-below-fold { content-visibility: visible; }",
+          });
           const name = `${path === "/" ? "home" : path.slice(1).replaceAll("/", "-")}-${size.width}-${theme}.png`;
           await expect(page).toHaveScreenshot(name, {
             fullPage: true,

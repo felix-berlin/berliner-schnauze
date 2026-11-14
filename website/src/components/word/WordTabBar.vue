@@ -22,7 +22,9 @@ onMounted(() => {
     linkSelector: "a",
     navSelector: ".c-word-tabbar",
     onActivate: (link, bar) => {
-      nav.value?.querySelectorAll("[aria-current]").forEach((el) => el.removeAttribute("aria-current"));
+      nav.value
+        ?.querySelectorAll("[aria-current]")
+        .forEach((el) => el.removeAttribute("aria-current"));
       link.setAttribute("aria-current", "true");
       bar.scrollLeft = link.offsetLeft - bar.offsetWidth / 2 + link.offsetWidth / 2;
     },

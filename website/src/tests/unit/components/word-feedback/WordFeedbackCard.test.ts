@@ -553,9 +553,7 @@ describe("WordFeedbackCard", () => {
 
   describe("header, progress, back and explanation", () => {
     const segmentStates = (w: Awaited<ReturnType<typeof mountIt>>) =>
-      w
-        .findAll(".c-word-feedback-card .segment")
-        .map((x) => x.attributes("data-state"));
+      w.findAll(".c-word-feedback-card .segment").map((x) => x.attributes("data-state"));
 
     it("counts the votes in the header", async () => {
       const w = await mountIt();
@@ -571,14 +569,7 @@ describe("WordFeedbackCard", () => {
     it("always draws six segments and dashes the optional steps that do not apply", async () => {
       const w = await mountIt();
       await click(w, "Kenn ick");
-      expect(segmentStates(w)).toEqual([
-        "done",
-        "current",
-        "skipped",
-        "open",
-        "skipped",
-        "open",
-      ]);
+      expect(segmentStates(w)).toEqual(["done", "current", "skipped", "open", "skipped", "open"]);
       expect(eyebrow(w)).toBe("Schritt 2 von 4");
       await click(w, "Pankow");
       expect(segmentStates(w)).toHaveLength(6);

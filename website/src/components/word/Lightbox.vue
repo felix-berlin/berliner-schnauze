@@ -10,13 +10,23 @@
     <template v-if="current">
       <div class="bar">
         <span>{{ index + 1 }} / {{ images.length }}</span>
-        <button class="c-icon-button" type="button" aria-label="Bild schließen" @click="dialog?.close()">
+        <button
+          class="c-icon-button"
+          type="button"
+          aria-label="Bild schließen"
+          @click="dialog?.close()"
+        >
           <IconClose width="22" height="22" aria-hidden="true" />
         </button>
       </div>
       <div class="stage">
         <span v-if="images.length > 1" class="prev">
-          <button class="c-icon-button" type="button" aria-label="Vorheriges Bild" @click="step(-1)">
+          <button
+            class="c-icon-button"
+            type="button"
+            aria-label="Vorheriges Bild"
+            @click="step(-1)"
+          >
             <IconPrev width="24" height="24" aria-hidden="true" />
           </button>
         </span>
@@ -36,10 +46,10 @@
 <script setup lang="ts">
 import { trackEvent } from "@utils/analytics";
 import { useEventListener } from "@vueuse/core";
-import { computed, ref, useTemplateRef } from "vue";
-import IconClose from "virtual:icons/lucide/x";
-import IconNext from "virtual:icons/lucide/chevron-right";
 import IconPrev from "virtual:icons/lucide/chevron-left";
+import IconNext from "virtual:icons/lucide/chevron-right";
+import IconClose from "virtual:icons/lucide/x";
+import { computed, ref, useTemplateRef } from "vue";
 
 const props = defineProps<{ images: { alt: string; credit: string | null; src: string }[] }>();
 

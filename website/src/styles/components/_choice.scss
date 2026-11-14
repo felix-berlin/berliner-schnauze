@@ -67,7 +67,8 @@
   :scope[data-variant~="tile"] {
     inline-size: 100%;
     min-block-size: var(--choice-min-block-size, 4.5rem);
-    padding: var(--choice-padding-block, var(--space-3)) var(--choice-padding-inline, var(--space-4));
+    padding: var(--choice-padding-block, var(--space-3))
+      var(--choice-padding-inline, var(--space-4));
     justify-content: var(--choice-justify, flex-start);
     gap: var(--space-3);
     text-align: start;

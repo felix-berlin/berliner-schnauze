@@ -52,8 +52,7 @@ test.describe("word feedback", () => {
     await expect(again.getByText("Wo wohnste?")).toHaveCount(0);
 
     const like = page.getByRole("button", { name: /Jefällt ma/ });
-    const count = async () =>
-      Number((await like.locator(".count").textContent()) ?? "NaN");
+    const count = async () => Number((await like.locator(".count").textContent()) ?? "NaN");
     await expect(like.locator(".count")).toHaveText(/^\d+$/);
     const before = await count();
     await like.click();
