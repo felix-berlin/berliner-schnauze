@@ -10,6 +10,10 @@ const current = new Set(names(read("./src/styles/tokens/_tokens.generated.scss")
 const legacyAliases = names(read("./src/styles/tokens/_legacy-aliases.scss")).filter(
   (name) => !current.has(name),
 );
+// Scraped by regex: an empty list means the file moved or its format changed, not "nothing to ban".
+if (current.size === 0 || legacyAliases.length === 0) {
+  throw new Error("stylelint.config.mjs: no tokens or legacy aliases found, check the scrape");
+}
 const bannedVar = new RegExp(
   `var\\(\\s*(?:${legacyAliases.join("|")}|--(?:orange|blue|new-blue|white|grey|red|yellow)(?:-\\w+)?` +
     `|--color-(?:white|black|orange|red|cream|grey|ink)-[\\w-]+|--color-(?:danger|success|gold))\\s*[,)]`,
