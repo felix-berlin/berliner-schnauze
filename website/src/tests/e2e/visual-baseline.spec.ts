@@ -106,15 +106,18 @@ for (const size of SIZES) {
             }
           });
           // The word page's lower sections skip rendering off screen (content-visibility: auto), and a
-          // full-page shot does not scroll: draw them.
+          // full-page shot does not scroll: draw them, but keep the paint containment that auto brings,
+          // so a shadow it would clip still shows up here.
           await page.addStyleTag({
-            content: ".o-word-below-fold { content-visibility: visible; }",
+            content:
+              ".o-word-below-fold { content-visibility: visible; contain: layout style paint; }",
           });
           const name = `${path === "/" ? "home" : path.slice(1).replaceAll("/", "-")}-${size.width}-${theme}.png`;
           await expect(page).toHaveScreenshot(name, {
             fullPage: true,
             mask: timeDependent,
             maxDiffPixelRatio: 0.002,
+            threshold: 0.05,
           });
         });
       }

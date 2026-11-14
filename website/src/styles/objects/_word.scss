@@ -83,10 +83,16 @@
   }
 
   // Book shelf to next links sit below the fold on every viewport: skip their layout and paint
-  // until they come near (the remembered size takes over once they have rendered).
+  // until they come near (the remembered height takes over once they have rendered).
+  // content-visibility always contains paint at the padding box: the padding gives the cards'
+  // shadows room, the negative margin keeps the layout where it was.
   .o-word-below-fold {
+    --_shadow-room: var(--space-3);
+
+    margin: calc(-1 * var(--_shadow-room));
+    padding: var(--_shadow-room);
     content-visibility: auto;
-    contain-intrinsic-size: auto 2400px;
+    contain-intrinsic-block-size: auto 2400px;
   }
 
   .o-word-main {
