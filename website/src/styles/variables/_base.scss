@@ -9,7 +9,7 @@ $paper-lift:
 $paper-lift-drop: drop-shadow(0 0.5px 0.6px rgb(0 0 0 / 8%)) drop-shadow(0 4px 5px rgb(0 0 0 / 16%));
 
 // Hover glow for controls (DESIGN.md: dashed border + soft orange glow)
-$hover-glow: var(--shadow-hover-glow); // light + dark value: base/_colors.scss
+$hover-glow: var(--shadow-hover-glow); // light + dark value: token shadow.hover-glow (website/tokens/*.tokens.json → styles/tokens/_tokens.generated.scss)
 
 // Radius scale (DESIGN.md: never above 4px for paper UI)
 $radius-xxs: 2px;

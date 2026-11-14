@@ -1,0 +1,49 @@
+@use "@styles/mixins" as mx;
+
+// "Dein Platz" on the leaderboard (docs/design/bon/SPEC.md §11): a sheet section card
+// (c-section-card c-bon-me), so its parts avoid the card's names. Parts: .me (the body column) with
+// .place, .links, .play (wraps the CTA at its own width), .redeem.
+@include mx.component("bon-me") {
+  :scope {
+    --section-card-header-padding: var(--space-3) var(--space-4) 0;
+  }
+
+  .me {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+
+    p {
+      margin: 0;
+      font-size: var(--font-size-base); // the section card body used to force 1rem on its p (R12)
+    }
+  }
+
+  .place {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+
+    b {
+      font-size: var(--font-size-4xl);
+      font-weight: var(--font-weight-black);
+      line-height: 1;
+      color: var(--color-text-strong);
+    }
+  }
+
+  .links {
+    // A notch above the default link size (Spec §11).
+    --textlink-font-size: var(--font-size-md);
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    align-items: center;
+  }
+
+  .redeem {
+    --textlink-font-size: var(--font-size-md);
+    --textlink-gap: var(--space-1);
+  }
+}

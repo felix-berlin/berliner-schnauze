@@ -1,60 +1,62 @@
-// Lexical neighbourhood (docs/design/wortseite/SPEC.md §3/§5, mock #n-umfeld).
-.c-neighborhood {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+@use "@styles/mixins" as mx;
 
-  @container word-main (inline-size >= 30rem) {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2rem;
-    align-items: start;
-  }
-
-  &__col {
+// Lexical neighbourhood (docs/design/wortseite/SPEC.md §3/§5, mock #n-umfeld). Parts .col, .list
+// (44px textlink rows; the arrows are the links' aria-hidden marks), .current (the word itself).
+@include mx.component("word-neighborhood") {
+  :scope {
     display: flex;
     flex-direction: column;
-    gap: 0.375rem;
+    gap: var(--space-6);
+  }
+
+  @container word-main (inline-size >= 30rem) {
+    :scope {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-8);
+      align-items: start;
+    }
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
     min-inline-size: 0;
   }
 
-  &__list {
+  // 44px rows: touch target (Spec §8.6).
+  .list {
+    --textlink-display: flex;
+    --textlink-min-block-size: 2.75rem;
+    --textlink-color: var(--color-text-strong);
+    --textlink-font-size: var(--font-size-base);
+    --textlink-gap: var(--space-2);
+    --textlink-mark-color: var(--color-text-muted);
+
     display: flex;
     flex-direction: column;
     margin: 0;
     padding: 0;
     list-style: none;
-  }
-
-  // 44px rows: touch target (Spec §8.6).
-  // doubled class beats the (0,1,1) a.c-textlink--inline reset
-  &__list &__link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-block-size: 44px;
-    color: var(--color-ink-strong);
-    font-size: 1.05rem;
     overflow-wrap: anywhere;
 
-    // the arrows mark neighbours: muted
-    span {
-      color: var(--color-muted);
+    > li {
+      line-height: 1.5;
     }
   }
 
-  // The current word: 14 % wash, no box.
-  &__current {
+  // The current word: wash, no box.
+  .current {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    min-block-size: 44px;
-    margin-inline: -0.5rem;
-    padding-inline: 0.5rem;
-    background: var(--surface-wash);
+    gap: var(--space-2);
+    min-block-size: 2.75rem;
+    margin-inline: calc(-1 * var(--space-2));
+    padding-inline: var(--space-2);
     border-radius: var(--radius-sm);
-    color: var(--color-accent-text);
-    font-weight: 700;
-    overflow-wrap: anywhere;
+    background: var(--color-surface-wash);
+    color: var(--color-text-accent);
+    font-weight: var(--font-weight-bold);
   }
 }

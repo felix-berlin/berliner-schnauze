@@ -1,17 +1,16 @@
 <template>
   <p v-if="!editing" class="c-bon-name">
     <!-- Trailing space keeps the text readable as one sentence outside the flex layout. -->
-    <span class="c-bon-name__label">{{ "Du spielst als " }}</span>
-    <b class="c-bon-name__name">{{ shown.name }}</b>
-    <span v-if="shown.name === 'Anonym' && shown.tag" class="c-bon-name__tag"
-      >#{{ shown.tag }}</span
-    >
-    <span v-if="justSaved" class="c-bon-name__ok" role="status">
+    <span class="label">{{ "Du spielst als " }}</span>
+    <b class="name">{{ shown.name }}</b>
+    <span v-if="shown.name === 'Anonym' && shown.tag" class="tag">#{{ shown.tag }}</span>
+    <span v-if="justSaved" class="ok" role="status">
       <CheckIcon aria-hidden="true" height="14" width="14" />Jespeichert
     </span>
     <button
       ref="link"
-      class="c-textlink c-textlink--inline c-bon-name__link"
+      class="c-textlink"
+      data-variant="inline"
       type="button"
       aria-expanded="false"
       @click="edit"
@@ -20,18 +19,16 @@
     </button>
   </p>
 
-  <div v-else class="c-bon-name__edit" role="group" aria-labelledby="bon-name-label">
-    <span class="c-bon-name__head">
-      <label id="bon-name-label" for="bon-name-input" class="c-bon-name__field-label">
-        Dein Name
-      </label>
+  <div v-else class="c-bon-name" data-variant="edit" role="group" aria-labelledby="bon-name-label">
+    <span class="head">
+      <label id="bon-name-label" for="bon-name-input" class="field-label"> Dein Name </label>
       <span class="t-small" aria-live="polite">{{ draft.length }} / 24</span>
     </span>
     <input
       id="bon-name-input"
       ref="input"
       v-model="draft"
-      class="c-input c-bon-name__input"
+      class="c-input"
       type="text"
       maxlength="24"
       autocomplete="nickname"
@@ -48,15 +45,15 @@
         shown.tag ? ` #${shown.tag}` : ""
       }}“.
     </span>
-    <div id="bon-name-error" aria-live="assertive">
-      <div v-if="error" class="c-state c-state--error" role="alert">
+    <div id="bon-name-error" class="error" aria-live="assertive">
+      <div v-if="error" class="c-state" data-variant="error" role="alert">
         <AlertIcon aria-hidden="true" height="18" width="18" />
-        <span class="c-state__body">
+        <span class="body">
           <b>{{ texts[error][0] }}</b>
           <span v-if="texts[error][1]">{{ texts[error][1] }}</span>
           <a
             v-if="error === 'far-right'"
-            class="c-textlink c-bon-name__exit"
+            class="c-textlink"
             href="https://www.exit-deutschland.de/"
             target="_blank"
             rel="noopener noreferrer"
@@ -65,11 +62,11 @@
         </span>
       </div>
     </div>
-    <span class="c-bon-name__actions">
+    <span class="actions">
       <button class="c-choice" type="button" aria-pressed="true" :aria-busy="saving" @click="save">
         {{ error === "net" ? "Nochmal speichern" : "Speichern" }}
       </button>
-      <button class="c-textlink c-bon-name__link" type="button" @click="close">Abbrechen</button>
+      <button class="c-textlink" type="button" @click="close">Abbrechen</button>
     </span>
   </div>
 </template>

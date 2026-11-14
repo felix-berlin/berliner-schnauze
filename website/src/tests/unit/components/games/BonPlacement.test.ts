@@ -24,13 +24,12 @@ const around = [
   entry(14, 290),
 ];
 
-const place = (list: PublicEntry[] = around) =>
-  mount(BonPlacement, { props: { around: list } });
+const place = (list: PublicEntry[] = around) => mount(BonPlacement, { props: { around: list } });
 
 describe("BonPlacement", () => {
   it("lists the rows with the own one marked", () => {
     const wrapper = place();
-    const rows = wrapper.findAll(".c-bon-placement__row");
+    const rows = wrapper.findAll("li");
     expect(rows).toHaveLength(5);
     const mine = wrapper.findAll('[aria-current="true"]');
     expect(mine).toHaveLength(1);
@@ -52,7 +51,7 @@ describe("BonPlacement", () => {
     const list = [entry(1, 500, { isMe: true }), entry(2, 400), entry(3, 390)];
     const wrapper = place(list);
     expect(wrapper.text()).not.toContain("Noch ");
-    expect(wrapper.findAll(".c-bon-placement__row")).toHaveLength(3);
+    expect(wrapper.findAll("li")).toHaveLength(3);
   });
 
   it("links to the whole leaderboard", () => {

@@ -34,29 +34,25 @@ describe("WordHero.astro", () => {
 
   it("renders the berlinerisch word as headword in a dfn tag", async () => {
     const result = await render({ word: makeWord() });
-    expect(result).toMatch(/<dfn class="c-headword[^"]*">Schnauze<\/dfn>/);
+    expect(result).toMatch(/<dfn class="headword[^"]*">Schnauze<\/dfn>/);
   });
 
   it("renders article when provided, not when absent", async () => {
-    expect(await render({ word: makeWord({ article: "die" }) })).toContain(
-      "c-word-hero__word-article",
-    );
-    expect(await render({ word: makeWord({ article: null }) })).not.toContain(
-      "c-word-hero__word-article",
-    );
+    expect(await render({ word: makeWord({ article: "die" }) })).toContain('class="article"');
+    expect(await render({ word: makeWord({ article: null }) })).not.toContain('class="article"');
   });
 
   it("renders the word type as plain badge, without suffix for an editorial value", async () => {
     const result = await render({ pos: "Verb", word: makeWord() });
     expect(result).toContain("Verb");
     expect(result).not.toContain("geraten");
-    expect(result).not.toContain("c-badge--auto");
+    expect(result).not.toContain('data-variant="wash auto"');
   });
 
   it("marks a guessed word type as (geraten) with the auto badge", async () => {
     const result = await render({ pos: "Verb", posAuto: true, word: makeWord() });
     expect(result).toContain("Verb (geraten)");
-    expect(result).toContain("c-badge--auto");
+    expect(result).toContain('data-variant="wash auto"');
   });
 
   it("renders no word type badge when pos is undefined", async () => {
@@ -70,14 +66,14 @@ describe("WordHero.astro", () => {
       word: makeWord({ themen: [{ id: 1, name: "Essen", slug: "essen" }] }),
     });
     expect(result).toContain('href="/themen/essen"');
-    expect(result).toContain("c-themes");
-    const badges = result.slice(result.indexOf("c-word-hero__badges"), result.indexOf("c-themes"));
+    expect(result).toContain("c-word-themes");
+    const badges = result.slice(result.indexOf('class="badges"'), result.indexOf("c-word-themes"));
     expect(badges).not.toContain("/themen/essen");
-    expect(result.indexOf("c-word-hero__badges")).toBeLessThan(result.indexOf("c-themes"));
+    expect(result.indexOf('class="badges"')).toBeLessThan(result.indexOf("c-word-themes"));
   });
 
   it("renders no Themen row for a word without Themen", async () => {
-    expect(await render({ word: makeWord() })).not.toContain("c-themes");
+    expect(await render({ word: makeWord() })).not.toContain("c-word-themes");
   });
 
   it("puts actions before the badges so focus runs Like, menu, badges, Themen", async () => {
@@ -85,12 +81,8 @@ describe("WordHero.astro", () => {
       pos: "Nomen",
       word: makeWord({ themen: [{ id: 1, name: "Essen", slug: "essen" }] }),
     });
-    expect(result.indexOf("c-word-hero__actions")).toBeLessThan(
-      result.indexOf("c-word-hero__badges"),
-    );
-    expect(result.indexOf("c-word-hero__title")).toBeLessThan(
-      result.indexOf("c-word-hero__actions"),
-    );
+    expect(result.indexOf('class="actions"')).toBeLessThan(result.indexOf('class="badges"'));
+    expect(result.indexOf('class="title"')).toBeLessThan(result.indexOf('class="actions"'));
   });
 
   it("shows the alternative words as 'Selbe Bedeutung wie'", async () => {
@@ -104,6 +96,6 @@ describe("WordHero.astro", () => {
   });
 
   it("hides the meaning block without meanings and alternatives", async () => {
-    expect(await render({ word: makeWord() })).not.toContain("c-word-hero__meaning");
+    expect(await render({ word: makeWord() })).not.toContain('class="meaning"');
   });
 });

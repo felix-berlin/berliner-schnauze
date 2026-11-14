@@ -1,0 +1,48 @@
+// One violation per marked line (spec §11). Linted by stylelint-gate.test.ts only.
+@use "@styles/variables" as vars;
+
+@layer components {
+  .c-demo {
+    color: #fff; // bad
+    background: red; // bad
+    border-color: rgb(0 0 0 / 50%); // bad
+    outline-color: color-mix(in srgb, red, blue); // bad
+    font-size: 1.2rem; // bad
+    padding: 8px; // bad
+    border-radius: 4px; // bad
+    box-shadow: 0 0 4px black; // bad
+    z-index: 10; // bad
+    transition: opacity 200ms; // bad
+    font-family: Arial, sans-serif; // bad
+    fill: var(--orange-600); // bad
+    stroke: var(--surface-paper); // bad
+    gap: vars.$spacer; // bad
+    margin-block: #{$x}; // bad
+    margin-left: 0; // bad
+    width: 100%; // bad
+    fill: var(--color-orange-600); // bad
+    font: 700 1.2rem/1.2 Arial, sans-serif; // bad
+    text-shadow: 0 0 2px var(--color-border-card); // bad
+    box-shadow: var(--shadow-paper-lift), 0 0 40px var(--color-border-card); // bad
+    font-family: var(--font-family-body), Arial, sans-serif; // bad
+    scroll-margin-top: 4rem; // bad
+    scroll-padding: 2rem; // bad
+    scroll-padding-left: 0; // bad
+
+    @media (width >= 40rem) { // bad
+      color: inherit;
+    }
+
+    .c-a__b { // bad
+      color: inherit;
+    }
+
+    .c-a--b { // bad
+      color: inherit;
+    }
+
+    .is-open { // bad
+      color: inherit;
+    }
+  }
+}

@@ -1,0 +1,94 @@
+@use "@styles/mixins" as mx;
+
+// Lite → Full upgrade diagram: two .row (.row-head, .bar of .learned + .rest or .new), the .plus
+// step between them and the .legend (.item with a .swatch, data-kind learned or new).
+@include mx.component("anki-upgrade") {
+  :scope {
+    @include mx.paper-card;
+
+    padding: var(--space-6) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .row-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-md);
+
+    strong {
+      font-weight: var(--font-weight-bold);
+    }
+
+    span {
+      color: var(--color-text-muted);
+    }
+  }
+
+  .bar {
+    block-size: 1.75rem;
+    display: flex;
+    border: 1px solid var(--color-border-accent-soft); // colour inventory R6
+    overflow: hidden;
+  }
+
+  .learned {
+    inline-size: 10%;
+    background: var(--color-accent-active); // colour inventory R2
+  }
+
+  .rest {
+    flex: 1;
+    background: var(--color-surface-hero); // colour inventory R70
+  }
+
+  .new {
+    flex: 1;
+    background: var(--color-border-accent); // colour inventory R7
+    border-inline-start: 2px dashed var(--color-text-on-accent); // colour inventory R3
+  }
+
+  .plus {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text-accent); // colour inventory R17
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-md);
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .swatch {
+    display: inline-block;
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+  }
+
+  .swatch[data-kind="learned"] {
+    background: var(--color-accent-active); // colour inventory R2, as the bar
+  }
+
+  .swatch[data-kind="new"] {
+    background: var(--color-border-accent); // colour inventory R7, as the bar
+  }
+}

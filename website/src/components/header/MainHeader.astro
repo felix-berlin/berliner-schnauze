@@ -10,23 +10,23 @@ const mainMenuItems = await fetchMenu('main');
 const headerLinks = mainMenuItems.filter((item) => ['/wort', '/magazin'].includes(item.link));
 ---
 
-<header class='c-header'>
-  <div class='c-header__wrapper u-max-body-width'>
-    <div class='c-logo'>
-      <a class='c-logo__link' href='/'> Berliner Schnauze</a>
+<header class='o-header js-site-header'>
+  <div class='o-header-inner u-max-body-width'>
+    <div class='o-logo'>
+      <a class='o-logo-link' href='/'> Berliner Schnauze</a>
     </div>
 
     <div class='c-menu-nav'>
-      <nav class='c-menu-nav__links' aria-label='Hauptnavigation'>
+      <nav class='links' aria-label='Hauptnavigation'>
         {
           headerLinks.map((item) => (
-            <a class='c-menu-nav__link' href={item.link}>
+            <a class='link js-header-link' href={item.link}>
               {item.title}
             </a>
           ))
         }
       </nav>
-      <span class='c-menu-nav__divider' aria-hidden='true'></span>
+      <span class='divider' aria-hidden='true'></span>
 
       {!isIndex && <SearchModalTrigger client:idle />}
 
@@ -39,7 +39,7 @@ const headerLinks = mainMenuItems.filter((item) => ['/wort', '/magazin'].include
   // Runs once: the header is `transition:persist`ed, so the element (and this observer)
   // survive client-side navigations. Pages read --site-header-height for sticky offsets.
   function syncHeaderHeight() {
-    const header = document.querySelector<HTMLElement>('.c-header');
+    const header = document.querySelector<HTMLElement>('.js-site-header');
     if (!header) return;
     const h = Math.round(header.getBoundingClientRect().height);
     // View Transitions can briefly report 0 for persisted elements.
@@ -48,7 +48,7 @@ const headerLinks = mainMenuItems.filter((item) => ['/wort', '/magazin'].include
     }
   }
 
-  const siteHeader = document.querySelector<HTMLElement>('.c-header');
+  const siteHeader = document.querySelector<HTMLElement>('.js-site-header');
   if (siteHeader) {
     new ResizeObserver(syncHeaderHeight).observe(siteHeader);
   }
@@ -56,7 +56,7 @@ const headerLinks = mainMenuItems.filter((item) => ['/wort', '/magazin'].include
   // The persisted header isn't re-rendered on navigation, so mark the current section here.
   function syncCurrentLink() {
     const path = location.pathname.replace(/\/$/, '');
-    for (const link of document.querySelectorAll<HTMLAnchorElement>('.c-menu-nav__link')) {
+    for (const link of document.querySelectorAll<HTMLAnchorElement>('.js-header-link')) {
       const target = link.getAttribute('href')!;
       if (path === target || path.startsWith(target + '/'))
         link.setAttribute('aria-current', 'page');

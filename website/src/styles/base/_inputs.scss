@@ -1,387 +1,462 @@
-@use "@styles/variables" as vars;
-@use "@sass-butler/functions" as butler-fn;
 @use "@sass-butler/mixins" as butler-mx;
 
-$icon-color: #2b333b;
-$icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='#{$icon-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>";
+@layer base {
+  // Text fields: Berlin with the body tracking, warm paper fill, solid muted border that
+  // turns dashed on hover (the button signature) and solid Currywurst with a ring on focus.
+  .c-input,
+  .c-textarea,
+  .c-select {
+    --_transition-duration: 200ms; // no token between --duration-fast and --duration-base
+    --spacing-inner: calc(var(--space-4) * 0.6) calc(var(--space-4) * 0.75);
+    // Muted text colour: ≥3:1 against the fill in both modes (WCAG 1.4.11).
+    --color-border: var(--color-text-muted);
+    --color-border-hover: var(--color-border-control-hover);
+    --color-border-active: var(--color-text-accent);
+    --size-font: var(--font-size-base);
+    --box-shadow-focus: 2px var(--color-focus-halo);
+    --color-background: var(--color-surface-field);
+    --color-background-disabled: var(--color-surface-field-disabled);
+    --width-border: 1px;
 
-// Text fields: Berlin with the body tracking, warm paper fill, solid muted border that
-// turns dashed on hover (the button signature) and solid Currywurst with a ring on focus.
-.c-input,
-.c-textarea,
-.c-select {
-  --spacing-inner: #{vars.$spacer * 0.6} #{vars.$spacer * 0.75};
-  // Muted text colour: ≥3:1 against the fill in both modes (WCAG 1.4.11).
-  --color-border: var(--color-muted);
-  --color-border-hover: var(--red-200);
-  --color-border-active: var(--color-accent-text);
-  --size-font: 1rem;
-  --box-shadow-focus: 2px color-mix(in srgb, var(--orange-600) 30%, transparent);
-  --color-background: color-mix(in srgb, var(--orange-100) 30%, white);
-  --color-background-disabled: color-mix(in srgb, var(--color-muted) 12%, white);
-  --width-border: 1px;
+    font-family: var(--font-family-body);
+    font-size: var(--size-font);
+    letter-spacing: 1px;
+    background-color: var(--color-background);
+    outline: none;
+    appearance: none;
+    border-radius: 0;
+    color: var(--color, var(--color-text-body));
+    transition-property: border-color, color, background-color, box-shadow, outline-color;
+    transition-duration: var(--_transition-duration);
 
-  font-family: vars.$berlin;
-  font-size: var(--size-font);
-  letter-spacing: 1px;
-  background-color: var(--color-background);
-  outline: none;
-  appearance: none;
-  border-radius: 0;
-  color: var(--color, var(--color-body));
-  transition: {
-    property: border-color, color, background-color, box-shadow, outline-color;
-    duration: 200ms;
-  }
+    /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
+    &:not(.c-input--range) {
+      /* stylelint-enable selector-class-pattern */
+      border: var(--width-border) var(--style-border, solid) var(--color-border);
+    }
 
-  &:not(.c-input--range) {
-    border: var(--width-border) var(--style-border, solid) var(--color-border);
-  }
+    /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
+    &:not(.c-input--file, .c-input--range) {
+      /* stylelint-enable selector-class-pattern */
+      padding: var(--spacing-inner);
+    }
 
-  &:not(.c-input--file, .c-input--range) {
-    padding: var(--spacing-inner);
-  }
+    &:disabled {
+      --color-background: var(--color-background-disabled);
+      --style-border: dotted;
 
-  // Dark: a recessed well below the card surface; cream text at well over 4.5:1.
-  @include butler-mx.dark-mode-class {
-    --color-background: var(--new-blue-600);
-    --color-background-disabled: color-mix(in srgb, var(--color-muted) 15%, var(--new-blue-600));
-  }
+      color: var(--color-text-muted);
+      cursor: not-allowed;
+    }
 
-  &:disabled {
-    --color-background: var(--color-background-disabled);
-    --style-border: dotted;
+    // outline: none above hides the ring on every field; keyboard focus gets it back here (text fields restyle it below).
+    &:focus-visible {
+      outline: 2px var(--focus-ring-style, solid) var(--color-focus-ring);
+    }
 
-    color: var(--color-muted);
-    cursor: not-allowed;
-  }
-
-  &::placeholder {
-    // Muted, not body ink: reads as a hint, still ≥4.5:1 on the fill.
-    color: var(--color-placeholder, var(--color-muted));
-    opacity: 1;
-  }
-}
-
-// Shared states for the text-like fields only (no checkbox, radio, range, file or colour).
-// :where() keeps them at class + pseudo specificity, so component overrides win.
-.c-textarea,
-.c-input:where(:not(.c-input--checkbox, .c-input--radio, .c-input--range, .c-input--file, .c-input--color)) {
-  @include butler-mx.hover {
-    &:where(:not(:focus, :disabled)) {
-      --style-border: dashed;
-      --color-border: var(--color-border-active);
+    &::placeholder {
+      // Muted, not body ink: reads as a hint, still ≥4.5:1 on the fill.
+      color: var(--color-text-muted);
+      opacity: 1;
     }
   }
 
-  &:focus-visible {
-    --color-border: var(--color-border-active);
+  // Shared states for the text-like fields only (no checkbox, radio, range, file or colour).
+  // :where() keeps them at class + pseudo specificity, so component overrides win.
+  /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
+  .c-textarea,
+  .c-input:where(
+    :not(.c-input--checkbox, .c-input--radio, .c-input--range, .c-input--file, .c-input--color)
+  ) {
+    /* stylelint-enable selector-class-pattern */
+    @include butler-mx.hover {
+      &:where(:not(:focus, :disabled)) {
+        --style-border: dashed;
+        --color-border: var(--color-border-active);
+      }
+    }
 
-    outline: 2px solid var(--color-border-active);
-    outline-offset: 1px;
+    &:focus-visible {
+      --color-border: var(--color-border-active);
+
+      outline: 2px var(--focus-ring-style, solid) var(--color-border-active);
+      outline-offset: 1px;
+    }
+
+    &:user-invalid,
+    &[aria-invalid="true"] {
+      --color-border: var(--color-status-danger);
+      --color-border-active: var(--color-status-danger);
+    }
   }
 
-  &:user-invalid,
-  &[aria-invalid="true"] {
-    --color-border: var(--danger);
-    --color-border-active: var(--danger);
-  }
-}
+  /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
+  .c-input:where(
+    :not(.c-input--checkbox, .c-input--radio, .c-input--range, .c-input--file, .c-input--color)
+  ) {
+    /* stylelint-enable selector-class-pattern */
+    // Public, inherited from a parent (the field is a c- root, so a component cannot style it):
+    // --input-inline-size, --input-max-inline-size, --input-text-align, --input-text-transform,
+    // --input-letter-spacing. The fallbacks are today's defaults.
+    inline-size: var(--input-inline-size, auto);
+    max-inline-size: var(--input-max-inline-size, none);
+    min-block-size: 44px;
+    text-align: var(--input-text-align, start);
+    text-transform: var(--input-text-transform, none);
+    letter-spacing: var(--input-letter-spacing, 1px);
 
-.c-input:where(:not(.c-input--checkbox, .c-input--radio, .c-input--range, .c-input--file, .c-input--color)) {
-  min-block-size: 44px;
-}
-
-.c-textarea {
-  display: block;
-  line-height: 1.45;
-  resize: vertical;
-}
-
-.c-label {
-  font-weight: 700;
-}
-
-.c-textarea--error .c-textarea {
-  --color-border: var(--danger);
-  --color-border-active: var(--danger);
-}
-
-.c-input--number,
-.c-input--email,
-.c-input--tel {
-  --spacing-inner-vertical: #{vars.$spacer * 0.75};
-  --spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
-
-  padding: var(--spacing-inner-vertical) var(--spacing-inner-horizontal);
-}
-
-.c-select {
-  --spacing-inner-vertical: #{vars.$spacer};
-  --spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
-  --size-font: 1rem;
-  --spacing-inner: #{vars.$spacer * 0.75} #{vars.$spacer * 4.5} #{vars.$spacer * 0.75}
-    #{vars.$spacer};
-  --color-background: var(--control-bg);
-  --color-border: var(--control-border);
-
-  padding: var(--spacing-inner-vertical) var(--spacing-inner-horizontal);
-  font-size: var(--size-font);
-  font-weight: 500;
-  cursor: pointer;
-  background: {
-    image: url("#{butler-fn.escape-svg($icon-chevron-down)}");
-    repeat: no-repeat;
-    position: right vars.$spacer * 1.5 center;
-    size: 16px 12px;
+    &::placeholder {
+      text-transform: none;
+    }
   }
 
-  // Re-declared in dark mode: the shared .c-input/.c-select dark block above
-  // sets --color-background on the element and would otherwise win.
-  @include butler-mx.dark-mode-class {
-    --color-background: var(--control-bg);
-    --color-border: var(--control-border);
+  // A form may let the field grow with its text: --textarea-field-sizing: content plus a
+  // --textarea-min-block-size floor (field-sizing ignores rows).
+  .c-textarea {
+    display: block;
+    field-sizing: var(--textarea-field-sizing, fixed);
+    min-block-size: var(--textarea-min-block-size, auto);
+    line-height: 1.45;
+    resize: vertical;
+  }
 
+  .c-label {
+    font-weight: 700;
+  }
+
+  /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
+  .c-textarea--error .c-textarea {
+    /* stylelint-enable selector-class-pattern */
+    --color-border: var(--color-status-danger);
+    --color-border-active: var(--color-status-danger);
+  }
+
+  /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
+  .c-input--number,
+  .c-input--email,
+  .c-input--tel {
+    /* stylelint-enable selector-class-pattern */
+    --spacing-inner-vertical: var(--space-3);
+    --spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
+
+    padding: var(--spacing-inner-vertical) var(--spacing-inner-horizontal);
+  }
+
+  .c-select {
+    --spacing-inner-vertical: var(--space-4);
+    --spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
+    --size-font: var(--font-size-base);
+    --spacing-inner: var(--space-3) calc(var(--space-4) * 4.5) var(--space-3) var(--space-4);
+    --color-background: var(--color-control-bg);
+    --color-border: var(--color-border-control);
+
+    padding: var(--spacing-inner-vertical) var(--spacing-inner-horizontal);
+    font-size: var(--size-font);
+    font-weight: 500;
+    cursor: pointer;
+    background: {
+      // The SVG cannot read custom properties; its stroke is color.ink.base.
+      image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232b333b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      repeat: no-repeat;
+      position: right var(--space-6) center;
+      size: 16px 12px;
+    }
+  }
+
+  // The one dark rule left: a blend mode is not a colour and the chevron is a data URI, so light-dark() cannot do it.
+  html[class~="dark"] .c-select {
     background-blend-mode: screen;
   }
-}
 
-.c-input--color {
-  padding: 0;
-}
-
-.c-input--checkbox,
-.c-input--radio {
-  --color-active: var(--orange-500);
-  --color-inner-active: #fff;
-  --color-border-disabled-checked: color-mix(in srgb, var(--orange-400) 60%, white);
-  --color-background-disabled-checked: color-mix(in srgb, var(--orange-400) 80%, white);
-  --duration-transition-transform: 0.3s;
-  --timing-transition-transform: ease;
-  --duration-transition-opacity: 0.2s;
-  --cursor: pointer;
-  --spacing-inner: 0;
-  --height: 20px;
-  --color-border: var(--blue);
-
-  height: var(--height);
-  display: inline-block;
-  vertical-align: top;
-  position: relative;
-  margin: 0;
-  cursor: var(--cursor);
-  border: var(--width-border) solid var(--color-border);
-  transition:
-    background 0.3s,
-    border-color 0.3s,
-    box-shadow 0.2s;
-
-  @include butler-mx.dark-mode-class {
-    --color-background: color-mix(in srgb, var(--blue) 30%, white);
+  /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
+  .c-input--color {
+    /* stylelint-enable selector-class-pattern */
+    padding: 0;
   }
 
-  &::after {
-    content: "";
-    display: block;
-    inset-block-start: 0;
-    inset-inline-start: 0;
-    position: absolute;
+  /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
+  .c-input--checkbox,
+  .c-input--radio {
+    /* stylelint-enable selector-class-pattern */
+    --_duration-short: 0.2s; // no token between --duration-fast and --duration-base
+    --_focus-shadow: 0 0 0 var(--box-shadow-focus); // spread ring: 0 0 0 + width/colour from --box-shadow-focus
+    --color-active: var(--color-accent-active);
+    --color-inner-active: var(--color-text-on-active);
+    --color-border-disabled-checked: var(--color-border-check-disabled);
+    --color-background-disabled-checked: var(--color-surface-check-disabled);
+    --duration-transition-transform: var(--duration-base);
+    --timing-transition-transform: ease;
+    --duration-transition-opacity: var(--_duration-short);
+    --cursor: pointer;
+    --spacing-inner: 0;
+    --height: 20px;
+    --color-border: var(--color-border-check);
+    --color-background: var(--color-surface-check);
+
+    block-size: var(--height);
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    margin: 0;
+    cursor: var(--cursor);
+    border: var(--width-border) solid var(--color-border);
     transition:
-      transform var(--duration-transition-transform) var(--timing-transition-transform),
-      opacity var(--duration-transition-opacity);
-  }
+      background var(--duration-base),
+      border-color var(--duration-base),
+      box-shadow var(--_duration-short);
 
-  &:checked {
-    --color-background: var(--color-active);
-    --color-border: var(--color-active);
-    --duration-transition-opacity: 0.3s;
-    --duration-transition-transform: 0.6s;
-    --timing-transition-transform: cubic-bezier(0.2, 0.85, 0.32, 1.2);
-
-    @include butler-mx.dark-mode-class {
-      --color-background: var(--color-active);
+    &::after {
+      content: "";
+      display: block;
+      inset-block-start: 0;
+      inset-inline-start: 0;
+      position: absolute;
+      transition:
+        transform var(--duration-transition-transform) var(--timing-transition-transform),
+        opacity var(--duration-transition-opacity);
     }
-  }
-
-  &:disabled {
-    --color-background: var(--color-background-disabled);
-    --cursor: not-allowed;
-
-    opacity: 0.9;
 
     &:checked {
-      --color-background: var(--color-background-disabled-checked);
-      --color-border: var(--color-border-disabled-checked);
+      --color-background: var(--color-active);
+      --color-border: var(--color-active);
+      --duration-transition-opacity: var(--duration-base);
+      --duration-transition-transform: var(--duration-slow);
+      --timing-transition-transform: cubic-bezier(0.2, 0.85, 0.32, 1.2);
+    }
+
+    &:disabled {
+      --color-background: var(--color-background-disabled);
+      --cursor: not-allowed;
+
+      opacity: 0.9;
+
+      &:checked {
+        --color-background: var(--color-background-disabled-checked);
+        --color-border: var(--color-border-disabled-checked);
+      }
+
+      & + label {
+        --cursor: not-allowed;
+      }
+    }
+
+    @include butler-mx.hover {
+      &:not(:checked, :disabled) {
+        --color-border: var(--color-border-hover);
+      }
+    }
+
+    &:focus {
+      box-shadow: var(--_focus-shadow);
+    }
+
+    &:not(.c-switch) {
+      inline-size: 21px;
+
+      &::after {
+        opacity: var(--opacity, 0);
+      }
+
+      &:checked {
+        --opacity: 1;
+      }
     }
 
     & + label {
-      --cursor: not-allowed;
+      --_font-size: 14px; // between --font-size-sm and --font-size-md
+      --_gap: 4px; // px on purpose, next to the 21px box
+      --cursor: pointer;
+
+      font-size: var(--_font-size);
+      line-height: 21px;
+      display: inline-block;
+      vertical-align: top;
+      cursor: var(--cursor);
+      margin-inline-start: var(--_gap);
     }
   }
 
-  @include butler-mx.hover {
-    &:not(:checked, :disabled) {
-      --color-border: var(--color-border-hover);
-    }
-  }
+  /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
+  .c-input--checkbox {
+    /* stylelint-enable selector-class-pattern */
+    &:not(.c-switch) {
+      &::after {
+        --_mark-width: 5px; // check mark drawn for the 21px box
+        --_mark-height: 9px;
+        --_mark-x: 7px;
+        --_mark-y: 4px;
 
-  &:focus {
-    box-shadow: 0 0 0 var(--box-shadow-focus);
-  }
+        inline-size: var(--_mark-width);
+        block-size: var(--_mark-height);
+        inset-inline-start: var(--_mark-x);
+        inset-block-start: var(--_mark-y);
+        transform: rotate(var(--rotate, 20deg));
+        border: solid var(--color-inner-active);
+        border-width: 0 2px 2px 0;
+      }
 
-  &:not(.c-switch) {
-    width: 21px;
-
-    &::after {
-      opacity: var(--opacity, 0);
-    }
-
-    &:checked {
-      --opacity: 1;
-    }
-  }
-
-  & + label {
-    --cursor: pointer;
-
-    font-size: 14px;
-    line-height: 21px;
-    display: inline-block;
-    vertical-align: top;
-    cursor: var(--cursor);
-    margin-inline-start: 4px;
-  }
-}
-
-.c-input--checkbox {
-  &:not(.c-switch) {
-    &::after {
-      width: 5px;
-      height: 9px;
-      inset-inline-start: 7px;
-      inset-block-start: 4px;
-      transform: rotate(var(--rotate, 20deg));
-      border: solid var(--color-inner-active);
-      border-width: 0 2px 2px 0;
-    }
-
-    &:checked {
-      --rotate: 43deg;
-    }
-  }
-}
-
-.c-input--radio {
-  border-radius: 50%;
-
-  &::after {
-    width: 19px;
-    height: 19px;
-    border-radius: 50%;
-    background: var(--color-inner-active);
-    opacity: 0;
-    transform: scale(var(--scale, 0.7));
-  }
-
-  &:checked {
-    --scale: 0.5;
-  }
-}
-
-.c-input--range {
-  $color-background-thumb: vars.$orange-500;
-  $height-track: 0.3rem;
-  $size-thumb: 1rem;
-
-  --color-background-track: var(--grey-200);
-  --color-background-thumb: var(--red-200);
-  --height-track: 0.3rem;
-  --size-thumb: 1rem;
-
-  appearance: none;
-  background-color: transparent; // Mozilla need this
-
-  &::-webkit-slider-runnable-track {
-    background-color: var(--new-blue-600);
-    width: 100%;
-    height: $height-track;
-  }
-
-  &::-moz-range-thumb {
-    background-color: $color-background-thumb;
-    width: $size-thumb;
-    height: $size-thumb;
-    margin-block-start: -($height-track + 0.05rem);
-    border-radius: 50%;
-    border-color: transparent; // Mozilla need this
-    border-width: 0; // Mozilla need this
-    appearance: none;
-  }
-
-  &::-moz-range-track {
-    background-color: vars.$grey-200;
-    width: 100%;
-    height: $height-track;
-  }
-
-  &::-webkit-slider-thumb {
-    background-color: $color-background-thumb;
-    width: $size-thumb;
-    height: $size-thumb;
-    margin-block-start: -($height-track + 0.05rem);
-    border-radius: 50%;
-    appearance: none;
-  }
-}
-
-.c-input--file {
-  &:not(:disabled) {
-    cursor: pointer;
-
-    @include butler-mx.hover {
-      &::file-selector-button {
-        --width-border: 0;
-        --color-border-hover: var(--grey-200);
-
-        border-inline-end-width: 1px;
+      &:checked {
+        --rotate: 43deg;
       }
     }
   }
 
-  &::file-selector-button {
-    --width-border: 0;
+  // Switch: a checkbox drawn as a track with a sliding thumb. Lives in base, not in an @scope component:
+  // Safari 26.0-26.3 does not apply @scope rules to input elements.
+  input[type="checkbox"].c-switch {
+    --_track-width: 34px; // px: sized around the 16px thumb and its 11px travel
+    --_track-radius: 14px;
+    --_thumb: 16px;
+    --_thumb-inset: 2px;
+    --_travel: 11px;
+    --_round: 50%; // a circle; --radius-pill would make a capsule
+    --_center: 50%;
+    --height: 22px;
 
-    margin-inline-end: vars.$spacer;
-    border-inline-end-width: 1px;
-    border-color: inherit;
-    border-start-end-radius: 0;
-    border-end-end-radius: 0;
+    inline-size: var(--_track-width);
+    border-radius: var(--_track-radius);
+    position: relative;
+
+    // Only `transform` changes, so the base checkbox transition animates the thumb.
+    &::after {
+      inset-inline-start: var(--_thumb-inset);
+      inset-block-start: var(--_center);
+      inline-size: var(--_thumb);
+      block-size: var(--_thumb);
+      background: var(--_thumb-bg, var(--color-border-check)); // colour inventory R39
+      transform: translate(var(--_thumb-x, 0), -50%);
+      border-radius: var(--_round);
+    }
+
+    &:checked {
+      --_thumb-bg: var(--color-inner-active);
+      --_thumb-x: var(--_travel);
+    }
+
+    &:disabled:not(:checked)::after {
+      opacity: 0.6;
+    }
+
+    + label {
+      margin-inline-start: var(--space-2);
+    }
   }
-}
 
-.c-fieldset {
-  --spacing-after: #{vars.$spacer * 2};
-  --spacing-inner: #{vars.$spacer * 2};
-  --spacing-legend: calc(var(--spacing-inner) / 2);
-  --color-border: #{vars.$grey-200};
-  --width-border: 2px;
-  --style-border: solid;
+  /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
+  .c-input--radio {
+    /* stylelint-enable selector-class-pattern */
+    --_round: 50%; // a circle; --radius-pill would make a capsule
 
-  padding: var(--spacing-inner);
-  margin-block-end: var(--spacing-after);
-  border: var(--width-border) var(--style-border) var(--color-border);
+    border-radius: var(--_round);
 
-  legend {
-    font-weight: 600;
-    padding: 0 var(--spacing-legend);
-    margin-inline-start: calc(-1 * var(--spacing-legend));
+    &::after {
+      inline-size: 19px;
+      block-size: 19px;
+      border-radius: var(--_round);
+      background: var(--color-inner-active);
+      opacity: 0;
+      transform: scale(var(--scale, 0.7));
+    }
+
+    &:checked {
+      --scale: 0.5;
+    }
   }
-}
 
-.u-check {
-  display: block;
+  /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
+  .c-input--range {
+    /* stylelint-enable selector-class-pattern */
+    --_round: 50%; // a circle; --radius-pill would make a capsule
+    --_thumb-offset: calc(-1 * (var(--height-track) + 0.05rem)); // centres the thumb on the track
+    --height-track: 0.3rem;
+    --size-thumb: 1rem;
 
-  &:not(:last-of-type) {
-    margin-block-end: vars.$spacer;
+    appearance: none;
+    background-color: transparent; // Mozilla need this
+
+    &::-webkit-slider-runnable-track {
+      background-color: var(--color-surface-range-track);
+      inline-size: 100%;
+      block-size: var(--height-track);
+    }
+
+    &::-moz-range-thumb {
+      background-color: var(--color-accent-active);
+      inline-size: var(--size-thumb);
+      block-size: var(--size-thumb);
+      margin-block-start: var(--_thumb-offset);
+      border-radius: var(--_round);
+      border-color: transparent; // Mozilla need this
+      border-width: 0; // Mozilla need this
+      appearance: none;
+    }
+
+    &::-moz-range-track {
+      background-color: var(--color-surface-range-track-alt);
+      inline-size: 100%;
+      block-size: var(--height-track);
+    }
+
+    &::-webkit-slider-thumb {
+      background-color: var(--color-accent-active);
+      inline-size: var(--size-thumb);
+      block-size: var(--size-thumb);
+      margin-block-start: var(--_thumb-offset);
+      border-radius: var(--_round);
+      appearance: none;
+    }
+  }
+
+  /* stylelint-disable selector-class-pattern -- c-input--* modifiers are Vue markup; they become type selectors with the form component migration */
+  .c-input--file {
+    /* stylelint-enable selector-class-pattern */
+    &:not(:disabled) {
+      cursor: pointer;
+
+      @include butler-mx.hover {
+        &::file-selector-button {
+          --width-border: 0;
+
+          border-inline-end-width: 1px;
+        }
+      }
+    }
+
+    &::file-selector-button {
+      --width-border: 0;
+
+      margin-inline-end: var(--space-4);
+      border-inline-end-width: 1px;
+      border-color: inherit;
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
+    }
+  }
+
+  .c-fieldset {
+    --spacing-after: var(--space-8);
+    --spacing-inner: var(--space-8);
+    --spacing-legend: calc(var(--spacing-inner) / 2);
+    --color-border: var(--color-border-fieldset);
+    --width-border: 2px;
+    --style-border: solid;
+
+    padding: var(--spacing-inner);
+    margin-block-end: var(--spacing-after);
+    border: var(--width-border) var(--style-border) var(--color-border);
+
+    legend {
+      font-weight: 600;
+      padding: 0 var(--spacing-legend);
+      margin-inline-start: calc(-1 * var(--spacing-legend));
+    }
+  }
+
+  .u-check {
+    display: block;
+
+    &:not(:last-of-type) {
+      margin-block-end: var(--space-4);
+    }
   }
 }

@@ -1,14 +1,180 @@
-@keyframes fade-in {
-  from {
-    opacity: 0;
+@layer utilities {
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
   }
-}
-@keyframes shine {
-  from {
-    transform: translateX(-100%);
+  @keyframes shine {
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: translateX(100%);
+    }
+  }
+  @keyframes c-shimmer {
+    to {
+      background-position: -200% 0;
+    }
   }
 
-  to {
-    transform: translateX(100%);
+  // Word feedback poll: a step slides in by its own --_shift (word-feedback-card).
+  @keyframes word-feedback-step-in {
+    from {
+      opacity: 0;
+      transform: translateX(var(--_shift));
+    }
+  }
+
+  // Linked comment: wash and outline fade out (comment).
+  @keyframes comment-wash {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes comment-outline {
+    to {
+      outline-color: transparent;
+    }
+  }
+
+  // Word list loading rows pulse (word-list-skeleton).
+  @keyframes word-list-skeleton-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.55;
+    }
+  }
+
+  // Confetti pieces fall and fade (confetti).
+  @keyframes make-it-rain {
+    0% {
+      opacity: 0;
+    }
+
+    50% {
+      opacity: 1;
+    }
+
+    100% {
+      translate: 0 200px;
+    }
+  }
+
+  // BON HUD: the points pop, a lost heart wobbles (bon-hud).
+  @keyframes c-bon-hud-pop {
+    35% {
+      scale: 1.2;
+    }
+  }
+  @keyframes c-bon-hud-wobble {
+    20%,
+    60% {
+      translate: -6px;
+    }
+
+    40%,
+    80% {
+      translate: 6px;
+    }
+  }
+
+  // BON card: the intro wiggle and the swipe hand (bon-card).
+  @keyframes c-bon-card-intro {
+    0%,
+    50%,
+    100% {
+      translate: 0;
+      rotate: 0deg;
+    }
+
+    25% {
+      translate: 34px;
+      rotate: 3.5deg;
+    }
+
+    75% {
+      translate: -22px;
+      rotate: -2.5deg;
+    }
+  }
+  @keyframes c-bon-swipe-gesture {
+    0% {
+      translate: 0;
+      opacity: 0;
+    }
+
+    8%,
+    50%,
+    90% {
+      translate: 0;
+      opacity: 0.65;
+    }
+
+    33% {
+      translate: 34px;
+      opacity: 0.65;
+    }
+
+    75% {
+      translate: -22px;
+      opacity: 0.65;
+    }
+
+    100% {
+      translate: 0;
+      opacity: 0;
+    }
+  }
+
+  // BON feedback: timer bar, flip in, the answered card flies out (bon-feedback).
+  @keyframes c-bon-feedback-timer {
+    from {
+      transform: scaleX(var(--bar-from, 1));
+    }
+
+    to {
+      transform: scaleX(0);
+    }
+  }
+  @keyframes c-bon-feedback-flip {
+    from {
+      transform: perspective(800px) rotateY(-60deg) scale(0.96);
+      opacity: 0;
+    }
+  }
+  @keyframes c-bon-feedback-fly-right {
+    to {
+      transform: translateX(115%) rotate(14deg);
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  @keyframes c-bon-feedback-fly-left {
+    to {
+      transform: translateX(-115%) rotate(-14deg);
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  // BON result tiles fade in (bon-result, bon-round).
+  @keyframes c-bon-result-in {
+    from {
+      opacity: 0;
+      translate: 0 8px;
+    }
+  }
+
+  // BON leaderboard: the own-place bar slides up (bon-leaderboard).
+  @keyframes c-bon-leaderboard-sticky-in {
+    from {
+      translate: 0 100%;
+    }
   }
 }

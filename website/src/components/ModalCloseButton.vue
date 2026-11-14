@@ -1,6 +1,7 @@
 <template>
   <button
-    class="c-modal__close c-button c-button--center-icon"
+    class="c-modal__close c-button"
+    data-variant="center-icon"
     :class="{
       'has-prefix': hasPrefix,
       'has-suffix': hasSuffix,

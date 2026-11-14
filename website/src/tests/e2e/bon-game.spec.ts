@@ -3,8 +3,9 @@ import { test, expect, type Page } from "@playwright/test";
 const GAME = "/games/berliner-oder-nicht";
 const LEADERBOARD = `${GAME}/rangliste`;
 const startButton = (page: Page) => page.getByRole("button", { name: /^Los jeht/ });
-const playCard = (page: Page) => page.locator(".c-bon-card__card");
-const feedback = (page: Page) => page.locator(".c-bon-feedback__card");
+// The card is a region named by its word (aria-labelledby); the feedback card has no accessible name.
+const playCard = (page: Page) => page.locator(".c-bon-card").getByRole("region");
+const feedback = (page: Page) => page.locator(".c-bon-feedback section");
 const resultTitle = (page: Page) => page.getByRole("heading", { level: 1, name: /^Aus die Maus/ });
 // Feedback ignores input while the card flies out and flips in (Spec §7, 480 ms).
 const LOCK_MS = 520;
@@ -56,7 +57,7 @@ test.describe("Berliner oder nicht (/games/berliner-oder-nicht)", () => {
     await startButton(page).click();
     await expect(playCard(page)).toBeVisible();
     await expect(page.getByLabel("Noch 3 Leben von 3")).toBeVisible();
-    await expect(page.locator(".c-bon-card__progress")).toHaveText("Karte 1 von 20 · Stapel 1");
+    await expect(page.getByText(/^Karte \d+ von 20/)).toHaveText("Karte 1 von 20 · Stapel 1");
     await each(async () => {
       await expect(page.locator("h1")).toHaveCount(1);
       await expect(page.locator("h1")).toContainText("Spiel läuft");
@@ -86,7 +87,7 @@ test.describe("Berliner oder nicht (/games/berliner-oder-nicht)", () => {
 
     await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
     await page.evaluate(() => Object.defineProperty(navigator, "share", { value: undefined }));
-    const points = await page.locator(".c-bon-result__stat").first().locator("dd").innerText();
+    const points = await page.locator(".c-bon-result dl > div").first().locator("dd").innerText();
     await page.getByRole("button", { name: "Ergebnis teilen" }).click();
     await expect(page.getByRole("button", { name: "Text kopiert" })).toBeVisible();
     const link = (await page.evaluate(() => navigator.clipboard.readText())).match(
@@ -114,7 +115,7 @@ test.describe("Berliner oder nicht (/games/berliner-oder-nicht)", () => {
     await expect(page.locator('[aria-current="true"]')).toBeVisible();
 
     await page.goto(new URL(link).pathname + new URL(link).search);
-    await expect(page.locator(".c-bon-share-view__stats")).toContainText(points);
+    await expect(page.locator(".c-bon-share-view dl")).toContainText(points);
   });
 
   test("Spiel 2: Name im Kopf, Wischen auf 390px, Knopf, nächste Karte, reduzierte Bewegung", async ({
@@ -124,7 +125,7 @@ test.describe("Berliner oder nicht (/games/berliner-oder-nicht)", () => {
     await page.goto(GAME);
     await page.getByRole("textbox", { name: /^Dein Name/ }).fill("Testerin");
     await startButton(page).click();
-    await expect(page.locator(".c-bon-hud__score")).toContainText("Testerin");
+    await expect(page.locator(".c-bon-hud [aria-live=polite]")).toContainText("Testerin");
     await expect(page.getByRole("button", { name: /^Ja, Berlinerisch/ })).toBeVisible();
     await expect(page.getByRole("button", { name: /Nee, nich Berlinerisch/ })).toBeVisible();
 
@@ -142,7 +143,7 @@ test.describe("Berliner oder nicht (/games/berliner-oder-nicht)", () => {
 
     // It moves on by itself (0.9 s right, 2.5 s wrong), then the button answers.
     await expect(playCard(page)).toBeVisible({ timeout: 6000 });
-    await expect(page.locator(".c-bon-card__progress")).toHaveText("Karte 2 von 20 · Stapel 1");
+    await expect(page.getByText(/^Karte \d+ von 20/)).toHaveText("Karte 2 von 20 · Stapel 1");
     await page.waitForTimeout(400);
     await page.getByRole("button", { name: /^Ja, Berlinerisch/ }).click();
     await expect(feedback(page)).toBeVisible();
@@ -153,8 +154,10 @@ test.describe("Berliner oder nicht (/games/berliner-oder-nicht)", () => {
     await page.waitForTimeout(400);
     await page.keyboard.press("ArrowRight");
     await expect(feedback(page)).toBeVisible();
-    await expect(page.locator(".c-bon-feedback__ghost")).toBeHidden();
-    expect(await page.evaluate(() => document.documentElement.dataset.vt)).toBeUndefined();
+    await expect(page.locator(".c-bon-feedback .ghost")).toBeHidden();
+    expect(
+      await page.evaluate(() => document.documentElement.matches(":active-view-transition")),
+    ).toBe(false);
     expect(await feedback(page).evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
 
     await page.goto(GAME);

@@ -8,23 +8,37 @@
     @keydown="onKey"
   >
     <template v-if="current">
-      <div class="c-lightbox__bar">
+      <div class="bar">
         <span>{{ index + 1 }} / {{ images.length }}</span>
-        <button class="c-icon-button" type="button" aria-label="Bild schließen" @click="dialog?.close()">
+        <button
+          class="c-icon-button"
+          type="button"
+          aria-label="Bild schließen"
+          @click="dialog?.close()"
+        >
           <IconClose width="22" height="22" aria-hidden="true" />
         </button>
       </div>
-      <div class="c-lightbox__stage">
-        <button v-if="images.length > 1" class="c-icon-button" type="button" aria-label="Vorheriges Bild" @click="step(-1)">
-          <IconPrev width="24" height="24" aria-hidden="true" />
-        </button>
+      <div class="stage">
+        <span v-if="images.length > 1" class="prev">
+          <button
+            class="c-icon-button"
+            type="button"
+            aria-label="Vorheriges Bild"
+            @click="step(-1)"
+          >
+            <IconPrev width="24" height="24" aria-hidden="true" />
+          </button>
+        </span>
         <img :src="current.src" :alt="current.alt" />
-        <button v-if="images.length > 1" class="c-icon-button" type="button" aria-label="Nächstes Bild" @click="step(1)">
-          <IconNext width="24" height="24" aria-hidden="true" />
-        </button>
+        <span v-if="images.length > 1" class="next">
+          <button class="c-icon-button" type="button" aria-label="Nächstes Bild" @click="step(1)">
+            <IconNext width="24" height="24" aria-hidden="true" />
+          </button>
+        </span>
       </div>
       <!-- credit: CMS rich text turned to HTML by lexicalToHtml (text escaped), or escaped caption text -->
-      <p v-if="current.credit" class="c-lightbox__caption">Foto: <span v-html="current.credit" /></p>
+      <p v-if="current.credit" class="caption">Foto: <span v-html="current.credit" /></p>
     </template>
   </dialog>
 </template>
@@ -32,10 +46,10 @@
 <script setup lang="ts">
 import { trackEvent } from "@utils/analytics";
 import { useEventListener } from "@vueuse/core";
-import { computed, ref, useTemplateRef } from "vue";
-import IconClose from "virtual:icons/lucide/x";
-import IconNext from "virtual:icons/lucide/chevron-right";
 import IconPrev from "virtual:icons/lucide/chevron-left";
+import IconNext from "virtual:icons/lucide/chevron-right";
+import IconClose from "virtual:icons/lucide/x";
+import { computed, ref, useTemplateRef } from "vue";
 
 const props = defineProps<{ images: { alt: string; credit: string | null; src: string }[] }>();
 

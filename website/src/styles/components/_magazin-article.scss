@@ -2,422 +2,424 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Reading measure for prose + header/footer alignment.
-$reading-width: 68ch;
-$toc-width: 16rem;
+@layer legacy {
+  // Reading measure for prose + header/footer alignment.
+  $reading-width: 68ch;
+  $toc-width: 16rem;
 
-.o-magazin-article {
-  --anchor-offset: calc(var(--site-header-height) + 1.5rem);
+  .o-magazin-article {
+    --anchor-offset: calc(var(--site-header-height) + 1.5rem);
 
-  display: flex;
-  flex-direction: column;
-  gap: vars.$spacer * 1.5;
-}
-
-.c-magazin-article {
-  // ---------------------------------------------------------------- Header
-  &__header {
-    max-width: $reading-width;
-    width: 100%;
-    margin-inline: auto;
-    padding-block: vars.$spacer * 2 0;
-  }
-
-  &__title {
-    margin-block-end: vars.$spacer * 0.5;
-    font-size: clamp(2rem, 5vw, 3rem);
-    line-height: 1.1;
-    text-wrap: balance;
-  }
-
-  &__meta {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: vars.$spacer * 0.5;
-    font-size: 0.8rem;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    color: var(--color-muted);
+    flex-direction: column;
+    gap: vars.$spacer * 1.5;
   }
 
-  &__reading-time {
-    display: flex;
-    align-items: center;
-    gap: vars.$spacer * 0.5;
-
-    &::before {
-      content: "";
-      inline-size: 1.5rem;
-      block-size: 0;
-      border-block-start: 1px dashed currentcolor;
-      opacity: 0.7;
-    }
-  }
-
-  &__affiliate-disclosure {
-    margin-block: vars.$spacer * 0.75 0;
-    padding: vars.$spacer * 0.6 vars.$spacer * 0.85;
-    border: 1px dashed var(--grey-100);
-    border-radius: 4px;
-    font-size: 0.75rem;
-    line-height: 1.4;
-    color: var(--color-muted);
-  }
-
-  // ------------------------------------------------------- Layout + TOC
-  &__layout {
-    @include mx.breakpoint("lg") {
-      display: grid;
-      grid-template-columns: 1fr min($reading-width, 100%) 1fr;
-      column-gap: vars.$spacer * 2;
-      align-items: start;
-    }
-  }
-
-  &__main {
-    max-width: $reading-width;
-    width: 100%;
-    margin-inline: auto;
-
-    @include mx.breakpoint("lg") {
-      grid-column: 2;
-      margin-inline: 0;
-    }
-  }
-
-  // Compact index card below `lg`; a sticky margin sidebar from `lg` up.
-  &__toc {
-    width: fit-content;
-    max-width: 100%;
-    margin-inline: auto;
-    margin-block-end: vars.$spacer * 1.5;
-    padding: vars.$spacer * 0.75 vars.$spacer;
-    border: 1px dashed var(--grey-100);
-    border-radius: 4px;
-
-    @include mx.breakpoint("lg") {
-      grid-column: 1;
-      justify-self: end;
-      width: $toc-width;
-      max-width: none;
-      margin: 0;
-      position: sticky;
-      inset-block-start: var(--anchor-offset);
-      max-height: calc(100dvh - var(--anchor-offset) - 1rem);
-      overflow-y: auto;
-      border: none;
-      border-inline-end: 1px dashed var(--grey-100);
-      border-radius: 0;
-      padding: 0;
-      padding-inline-end: vars.$spacer;
-    }
-  }
-
-  &__toc-title {
-    margin: 0;
-    margin-block-end: vars.$spacer * 0.5;
-    padding-block-end: vars.$spacer * 0.4;
-    border-block-end: 1px dashed var(--orange-200);
-    font-family: vars.$berlin;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-accent-text);
-  }
-
-  &__toc-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    font-size: 0.8rem;
-    line-height: 1.3;
-  }
-
-  &__toc-link {
-    display: block;
-    padding: vars.$spacer * 0.25 vars.$spacer * 0.5;
-    color: var(--color-body);
-    text-decoration: none;
-    border-inline-start: 2px solid transparent;
-    transition:
-      color 0.15s ease,
-      border-color 0.15s ease,
-      background-color 0.15s ease;
-
-    @include butler-mx.hover {
-      color: var(--color-accent-text);
+  .c-magazin-article {
+    // ---------------------------------------------------------------- Header
+    &__header {
+      max-width: $reading-width;
+      width: 100%;
+      margin-inline: auto;
+      padding-block: vars.$spacer * 2 0;
     }
 
-    &.is-current {
-      color: var(--color-accent-text);
-      border-inline-start-color: var(--orange-500);
-      background: color-mix(in srgb, var(--orange-100) 55%, transparent);
-      font-weight: 700;
-
-      @include butler-mx.dark-mode-class {
-        background: color-mix(in srgb, var(--orange-500) 18%, transparent);
-      }
-    }
-  }
-
-  // ------------------------------------------------------------- Body
-  &__body {
-    // fragment ids sit clear of the sticky header when jumped to
-    :where([id]) {
-      scroll-margin-block-start: var(--anchor-offset);
-    }
-
-    // Lede — the opening paragraph reads a size up, calmer.
-    > p:first-of-type {
-      font-size: 1.25rem;
-      line-height: 1.6;
-      color: var(--color-body);
-    }
-
-    p {
-      line-height: 1.75;
-      margin-block-end: vars.$spacer;
-    }
-
-    :is(h2, h3, h4) {
-      font-family: vars.$berliner;
-      line-height: 1.15;
+    &__title {
+      margin-block-end: vars.$spacer * 0.5;
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.1;
       text-wrap: balance;
     }
 
-    h2 {
-      position: relative;
-      width: fit-content;
-      max-width: 100%;
-      margin-block: vars.$spacer * 2.25 vars.$spacer;
-      padding-block-end: 0.35rem;
-      font-size: clamp(1.5rem, 3.5vw, 2rem);
+    &__meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: vars.$spacer * 0.5;
+      font-size: 0.8rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+    }
 
-      // The Postcard headword underline — the system's recurring dashed stroke.
-      &::after {
+    &__reading-time {
+      display: flex;
+      align-items: center;
+      gap: vars.$spacer * 0.5;
+
+      &::before {
         content: "";
-        position: absolute;
-        inset-inline: 0;
-        inset-block-end: 0;
-        block-size: 2px;
-        background: repeating-linear-gradient(
-          to right,
-          var(--orange-300) 0,
-          var(--orange-300) 5px,
-          transparent 5px,
-          transparent 9px
-        );
+        inline-size: 1.5rem;
+        block-size: 0;
+        border-block-start: 1px dashed currentcolor;
+        opacity: 0.7;
       }
     }
 
-    h3 {
-      margin-block: vars.$spacer * 1.5 vars.$spacer * 0.5;
-      font-size: 1.25rem;
-    }
-
-    ul,
-    ol {
-      margin-block-end: vars.$spacer;
-      padding-inline-start: vars.$spacer * 1.25;
-      line-height: 1.6;
-
-      li {
-        margin-block-end: vars.$spacer * 0.35;
-      }
-    }
-
-    hr {
-      border: none;
-      border-block-start: 1px dashed var(--grey-100);
-      margin-block: vars.$spacer * 2;
-    }
-
-    // Inline content links carry the dashed underline signature.
-    a {
-      color: var(--color-accent-text);
-      text-decoration: underline dashed from-font;
-      text-underline-offset: 0.15em;
-    }
-
-    // Sponsored-link label — sits right after the link, not just the
-    // article-level notice, per-link legal disclosure. Dashed outline, not a
-    // filled badge: this fires on every sponsored link, so it stays quiet
-    // rather than competing with the orange accent used for real emphasis.
-    .c-magazin-article__sponsored-tag {
-      display: inline-block;
-      margin-inline-start: 0.35em;
-      padding: 0.05em 0.4em;
+    &__affiliate-disclosure {
+      margin-block: vars.$spacer * 0.75 0;
+      padding: vars.$spacer * 0.6 vars.$spacer * 0.85;
       border: 1px dashed var(--grey-100);
       border-radius: 4px;
-      font-family: vars.$berlin;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      text-decoration: none;
+      font-size: 0.75rem;
+      line-height: 1.4;
       color: var(--color-muted);
-      vertical-align: middle;
-      white-space: nowrap;
+    }
 
-      @include butler-mx.dark-mode-class {
-        border-color: color-mix(in srgb, var(--color-body) 35%, transparent);
+    // ------------------------------------------------------- Layout + TOC
+    &__layout {
+      @include mx.breakpoint("lg") {
+        display: grid;
+        grid-template-columns: 1fr min($reading-width, 100%) 1fr;
+        column-gap: vars.$spacer * 2;
+        align-items: start;
       }
     }
 
-    // Footnote references → small superscript markers.
-    a[href^="#quelle-"] {
-      font-size: 0.75em;
+    &__main {
+      max-width: $reading-width;
+      width: 100%;
+      margin-inline: auto;
+
+      @include mx.breakpoint("lg") {
+        grid-column: 2;
+        margin-inline: 0;
+      }
+    }
+
+    // Compact index card below `lg`; a sticky margin sidebar from `lg` up.
+    &__toc {
+      width: fit-content;
+      max-width: 100%;
+      margin-inline: auto;
+      margin-block-end: vars.$spacer * 1.5;
+      padding: vars.$spacer * 0.75 vars.$spacer;
+      border: 1px dashed var(--grey-100);
+      border-radius: 4px;
+
+      @include mx.breakpoint("lg") {
+        grid-column: 1;
+        justify-self: end;
+        width: $toc-width;
+        max-width: none;
+        margin: 0;
+        position: sticky;
+        inset-block-start: var(--anchor-offset);
+        max-height: calc(100dvh - var(--anchor-offset) - 1rem);
+        overflow-y: auto;
+        border: none;
+        border-inline-end: 1px dashed var(--grey-100);
+        border-radius: 0;
+        padding: 0;
+        padding-inline-end: vars.$spacer;
+      }
+    }
+
+    &__toc-title {
+      margin: 0;
+      margin-block-end: vars.$spacer * 0.5;
+      padding-block-end: vars.$spacer * 0.4;
+      border-block-end: 1px dashed var(--orange-200);
+      font-family: vars.$berlin;
+      font-size: 0.7rem;
       font-weight: 700;
-      vertical-align: super;
-      line-height: 0;
-      padding-inline: 0.1em;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-accent-text);
+    }
+
+    &__toc-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 0.8rem;
+      line-height: 1.3;
+    }
+
+    &__toc-link {
+      display: block;
+      padding: vars.$spacer * 0.25 vars.$spacer * 0.5;
+      color: var(--color-body);
       text-decoration: none;
+      border-inline-start: 2px solid transparent;
+      transition:
+        color 0.15s ease,
+        border-color 0.15s ease,
+        background-color 0.15s ease;
+
+      @include butler-mx.hover {
+        color: var(--color-accent-text);
+      }
+
+      &.is-current {
+        color: var(--color-accent-text);
+        border-inline-start-color: var(--orange-500);
+        background: color-mix(in srgb, var(--orange-100) 55%, transparent);
+        font-weight: 700;
+
+        @include butler-mx.dark-mode-class {
+          background: color-mix(in srgb, var(--orange-500) 18%, transparent);
+        }
+      }
+    }
+
+    // ------------------------------------------------------------- Body
+    &__body {
+      // fragment ids sit clear of the sticky header when jumped to
+      :where([id]) {
+        scroll-margin-block-start: var(--anchor-offset);
+      }
+
+      // Lede — the opening paragraph reads a size up, calmer.
+      > p:first-of-type {
+        font-size: 1.25rem;
+        line-height: 1.6;
+        color: var(--color-body);
+      }
+
+      p {
+        line-height: 1.75;
+        margin-block-end: vars.$spacer;
+      }
+
+      :is(h2, h3, h4) {
+        font-family: vars.$berliner;
+        line-height: 1.15;
+        text-wrap: balance;
+      }
+
+      h2 {
+        position: relative;
+        width: fit-content;
+        max-width: 100%;
+        margin-block: vars.$spacer * 2.25 vars.$spacer;
+        padding-block-end: 0.35rem;
+        font-size: clamp(1.5rem, 3.5vw, 2rem);
+
+        // The Postcard headword underline — the system's recurring dashed stroke.
+        &::after {
+          content: "";
+          position: absolute;
+          inset-inline: 0;
+          inset-block-end: 0;
+          block-size: 2px;
+          background: repeating-linear-gradient(
+            to right,
+            var(--orange-300) 0,
+            var(--orange-300) 5px,
+            transparent 5px,
+            transparent 9px
+          );
+        }
+      }
+
+      h3 {
+        margin-block: vars.$spacer * 1.5 vars.$spacer * 0.5;
+        font-size: 1.25rem;
+      }
+
+      ul,
+      ol {
+        margin-block-end: vars.$spacer;
+        padding-inline-start: vars.$spacer * 1.25;
+        line-height: 1.6;
+
+        li {
+          margin-block-end: vars.$spacer * 0.35;
+        }
+      }
+
+      hr {
+        border: none;
+        border-block-start: 1px dashed var(--grey-100);
+        margin-block: vars.$spacer * 2;
+      }
+
+      // Inline content links carry the dashed underline signature.
+      a {
+        color: var(--color-accent-text);
+        text-decoration: underline dashed from-font;
+        text-underline-offset: 0.15em;
+      }
+
+      // Sponsored-link label — sits right after the link, not just the
+      // article-level notice, per-link legal disclosure. Dashed outline, not a
+      // filled badge: this fires on every sponsored link, so it stays quiet
+      // rather than competing with the orange accent used for real emphasis.
+      .c-magazin-article__sponsored-tag {
+        display: inline-block;
+        margin-inline-start: 0.35em;
+        padding: 0.05em 0.4em;
+        border: 1px dashed var(--grey-100);
+        border-radius: 4px;
+        font-family: vars.$berlin;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: var(--color-muted);
+        vertical-align: middle;
+        white-space: nowrap;
+
+        @include butler-mx.dark-mode-class {
+          border-color: color-mix(in srgb, var(--color-body) 35%, transparent);
+        }
+      }
+
+      // Footnote references → small superscript markers.
+      a[href^="#quelle-"] {
+        font-size: 0.75em;
+        font-weight: 700;
+        vertical-align: super;
+        line-height: 0;
+        padding-inline: 0.1em;
+        text-decoration: none;
+
+        @include butler-mx.hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    // ------------------------------------------------------ Quellen block
+    // The one sanctioned side-stripe: the citation callout.
+    &__body ol:has(> li[id^="quelle-"]) {
+      margin-block-start: vars.$spacer;
+      padding: vars.$spacer;
+      padding-inline-start: vars.$spacer * 2.5;
+      font-size: 0.8rem;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+
+      @include mx.side-stripe;
+      @include butler-mx.dark-mode-class {
+        border-inline-start-color: var(--orange-600);
+      }
+
+      li:target {
+        background: color-mix(in srgb, var(--orange-300) 45%, transparent);
+        border-radius: 4px;
+
+        @include butler-mx.feature("motion") {
+          transition: background-color 0.6s ease-out;
+        }
+      }
+    }
+
+    &__backref {
+      margin-inline-start: 0.35em;
+      font-size: 0.9em;
+      text-decoration: none;
+      color: var(--color-accent-text);
 
       @include butler-mx.hover {
         text-decoration: underline;
       }
     }
-  }
 
-  // ------------------------------------------------------ Quellen block
-  // The one sanctioned side-stripe: the citation callout.
-  &__body ol:has(> li[id^="quelle-"]) {
-    margin-block-start: vars.$spacer;
-    padding: vars.$spacer;
-    padding-inline-start: vars.$spacer * 2.5;
-    font-size: 0.8rem;
-    line-height: 1.55;
-    overflow-wrap: anywhere;
-
-    @include mx.side-stripe;
-    @include butler-mx.dark-mode-class {
-      border-inline-start-color: var(--orange-600);
-    }
-
-    li:target {
-      background: color-mix(in srgb, var(--orange-300) 45%, transparent);
+    // ------------------------------------------------------ Quote + image
+    &__quote {
+      margin: vars.$spacer * 1.5 0;
+      padding: vars.$spacer vars.$spacer * 1.25;
+      border: 1px dashed var(--orange-300);
       border-radius: 4px;
+      font-style: italic;
 
-      @include butler-mx.feature("motion") {
-        transition: background-color 0.6s ease-out;
+      p {
+        margin: 0;
       }
     }
-  }
 
-  &__backref {
-    margin-inline-start: 0.35em;
-    font-size: 0.9em;
-    text-decoration: none;
-    color: var(--color-accent-text);
+    &__image {
+      margin-block: vars.$spacer;
+      border-radius: 4px;
+      height: auto;
 
-    @include butler-mx.hover {
-      text-decoration: underline;
+      &--featured {
+        margin-block-start: vars.$spacer * 1.5;
+        width: 100%;
+        box-shadow: vars.$paper-lift;
+      }
     }
-  }
 
-  // ------------------------------------------------------ Quote + image
-  &__quote {
-    margin: vars.$spacer * 1.5 0;
-    padding: vars.$spacer vars.$spacer * 1.25;
-    border: 1px dashed var(--orange-300);
-    border-radius: 4px;
-    font-style: italic;
-
-    p {
-      margin: 0;
-    }
-  }
-
-  &__image {
-    margin-block: vars.$spacer;
-    border-radius: 4px;
-    height: auto;
-
-    &--featured {
-      margin-block-start: vars.$spacer * 1.5;
+    // ----------------------------------------------------------- Footer
+    &__footer {
+      max-width: $reading-width;
       width: 100%;
-      box-shadow: vars.$paper-lift;
+      margin-inline: auto;
+      padding-block-start: vars.$spacer * 1.5;
+      border-block-start: 1px dashed var(--grey-100);
+      display: flex;
+      flex-direction: column;
+      gap: vars.$spacer * 2;
     }
-  }
 
-  // ----------------------------------------------------------- Footer
-  &__footer {
-    max-width: $reading-width;
-    width: 100%;
-    margin-inline: auto;
-    padding-block-start: vars.$spacer * 1.5;
-    border-block-start: 1px dashed var(--grey-100);
-    display: flex;
-    flex-direction: column;
-    gap: vars.$spacer * 2;
-  }
-
-  &__footer-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: vars.$spacer;
-
-    // Both actions (back link + share) read as the same button.
-    .c-button {
-      --padding: #{vars.$spacer * 0.5 vars.$spacer * 0.85};
-
-      display: inline-flex;
+    &__footer-actions {
+      display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: vars.$spacer * 0.4;
-    }
-  }
+      justify-content: space-between;
+      gap: vars.$spacer;
 
-  &__related-title {
-    font-size: 1.25rem;
-    margin-block-end: vars.$spacer;
-  }
+      // Both actions (back link + share) read as the same button.
+      .c-button {
+        --button-padding: #{vars.$spacer * 0.5 vars.$spacer * 0.85};
 
-  &__related-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: vars.$spacer * 0.75;
-  }
-
-  &__related-link {
-    display: flex;
-    flex-direction: column;
-    gap: vars.$spacer * 0.25;
-    padding: vars.$spacer * 0.75 vars.$spacer;
-    border: 1px dashed var(--grey-100);
-    border-radius: 4px;
-    text-decoration: none;
-    color: var(--color-body);
-    transition:
-      border-color 0.15s ease,
-      background-color 0.15s ease;
-
-    @include butler-mx.hover {
-      border-style: dashed;
-      border-color: var(--orange-500);
-      background: color-mix(in srgb, var(--orange-100) 40%, transparent);
-
-      @include butler-mx.dark-mode-class {
-        background: color-mix(in srgb, var(--orange-500) 15%, transparent);
+        display: inline-flex;
+        align-items: center;
+        gap: vars.$spacer * 0.4;
       }
     }
-  }
 
-  &__related-headline {
-    font-family: vars.$berliner;
-    font-size: 1.1rem;
-    line-height: 1.2;
-  }
+    &__related-title {
+      font-size: 1.25rem;
+      margin-block-end: vars.$spacer;
+    }
 
-  &__related-date {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    color: var(--color-muted);
+    &__related-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: vars.$spacer * 0.75;
+    }
+
+    &__related-link {
+      display: flex;
+      flex-direction: column;
+      gap: vars.$spacer * 0.25;
+      padding: vars.$spacer * 0.75 vars.$spacer;
+      border: 1px dashed var(--grey-100);
+      border-radius: 4px;
+      text-decoration: none;
+      color: var(--color-body);
+      transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease;
+
+      @include butler-mx.hover {
+        border-style: dashed;
+        border-color: var(--orange-500);
+        background: color-mix(in srgb, var(--orange-100) 40%, transparent);
+
+        @include butler-mx.dark-mode-class {
+          background: color-mix(in srgb, var(--orange-500) 15%, transparent);
+        }
+      }
+    }
+
+    &__related-headline {
+      font-family: vars.$berliner;
+      font-size: 1.1rem;
+      line-height: 1.2;
+    }
+
+    &__related-date {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-muted);
+    }
   }
 }

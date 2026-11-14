@@ -9,12 +9,14 @@ vi.mock("@utils/analytics", async (importOriginal) => ({
   trackContentImpressionsWithinNode: mockTrack,
 }));
 
+// The card section is named by its word (aria-labelledby): find it by that, not by tag or part.
+const CARD = '[aria-labelledby="bon-word"]';
 const base = { cardInStack: 4, locked: false, showSwipeHint: false, stack: 2, word: "Schnauze" };
 const WIDTH = 400;
 
 function card(props: Partial<typeof base> = {}) {
   const wrapper = mount(BonCard, { props: { ...base, ...props } });
-  const el = wrapper.find(".c-bon-card__card").element as HTMLElement;
+  const el = wrapper.find(CARD).element as HTMLElement;
   el.getBoundingClientRect = () => ({ width: WIDTH }) as DOMRect;
   return wrapper;
 }
@@ -28,7 +30,7 @@ function fire(target: { element: Element }, type: string, clientX: number) {
 
 /** Drags the card by dx px, taking `ms` milliseconds, and releases it. */
 async function drag(wrapper: ReturnType<typeof card>, dx: number, ms: number) {
-  const target = wrapper.find(".c-bon-card__card");
+  const target = wrapper.find(CARD);
   fire(target, "pointerdown", 200);
   vi.advanceTimersByTime(ms);
   fire(target, "pointermove", 200 + dx);
@@ -44,6 +46,17 @@ describe("BonCard.vue", () => {
     expect(wrapper.find("h2").text()).toBe("Schnauze");
     expect(wrapper.text()).toContain("Berlinerisch oder nich?");
     expect(wrapper.text()).toContain("Karte 4 von 20 · Stapel 2");
+  });
+
+  it("the feedback slot takes the card's place, wrapped in [data-slot]; the answers stay", () => {
+    const wrapper = mount(BonCard, {
+      props: base,
+      slots: { feedback: "<p class='fb'>Richtig!</p>" },
+    });
+    expect(wrapper.find(CARD).exists()).toBe(false);
+    expect(wrapper.find(".c-bon-card > [data-slot] > .fb").text()).toBe("Richtig!");
+    expect(wrapper.findAll(".c-choice")).toHaveLength(2);
+    expect(wrapper.text()).not.toContain("Jeht ooch");
   });
 
   it("has two answer buttons with shortcuts and emits on click", async () => {
@@ -96,35 +109,35 @@ describe("BonCard.vue", () => {
     const wrapper = card();
     await drag(wrapper, 60, 1000);
     expect(wrapper.emitted("answer")).toBeUndefined();
-    expect(wrapper.find<HTMLElement>(".c-bon-card__card").element.style.transform).toBe("");
+    expect(wrapper.find<HTMLElement>(CARD).element.style.transform).toBe("");
   });
 
   it("rotates with the drag, at most 14 degrees, and shows the overlay", async () => {
     const wrapper = card();
-    const target = wrapper.find(".c-bon-card__card");
+    const target = wrapper.find(CARD);
     fire(target, "pointerdown", 200);
     fire(target, "pointermove", 600);
     await nextTick();
     expect((target.element as HTMLElement).style.transform).toContain("rotate(14deg)");
-    expect(wrapper.find(".c-bon-card__overlay--ja").attributes("aria-hidden")).toBe("true");
+    expect(wrapper.find('[data-side="ja"]').attributes("aria-hidden")).toBe("true");
   });
 
   it("does nothing while locked", async () => {
     const wrapper = card({ locked: true });
-    for (const b of wrapper.findAll(".c-bon-card__answers button")) await b.trigger("click");
+    for (const b of wrapper.findAll("button[aria-keyshortcuts]")) await b.trigger("click");
     await drag(wrapper, 300, 100);
     expect(wrapper.emitted("answer")).toBeUndefined();
-    expect(wrapper.findAll(".c-bon-card__answers button")[0].attributes("aria-disabled")).toBe(
+    expect(wrapper.findAll("button[aria-keyshortcuts]")[0].attributes("aria-disabled")).toBe(
       "true",
     );
   });
 
   it("renders the swipe hint only when asked, and drops it after 3 s", async () => {
-    expect(card().find(".c-bon-card__swipe-hint").exists()).toBe(false);
+    expect(card().find(".c-bon-card .swipe-hint").exists()).toBe(false);
     const wrapper = card({ showSwipeHint: true });
-    expect(wrapper.find(".c-bon-card__swipe-hint").exists()).toBe(true);
+    expect(wrapper.find(".c-bon-card .swipe-hint").exists()).toBe(true);
     vi.advanceTimersByTime(3100);
     await wrapper.vm.$nextTick();
-    expect(wrapper.find(".c-bon-card__swipe-hint").exists()).toBe(false);
+    expect(wrapper.find(".c-bon-card .swipe-hint").exists()).toBe(false);
   });
 });

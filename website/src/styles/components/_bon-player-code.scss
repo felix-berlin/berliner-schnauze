@@ -1,50 +1,49 @@
 @use "@styles/mixins" as mx;
-@use "section-card";
 
-// Player code card (docs/design/bon/SPEC.md §12, mock BonCode): a sheet section card with a key in the title.
-.c-bon-player-code {
-  position: relative;
-  box-sizing: border-box;
-  inline-size: 100%;
-  max-inline-size: 32rem;
-  margin-block: 1rem;
+// Player code card (docs/design/bon/SPEC.md §12, mock BonCode): a sheet section card
+// (c-section-card c-bon-player-code) with a key in the title, so its parts avoid the card's names
+// (.header, .title, .body, .footer). Parts: .heading > .icon; .content with .done, .code of .block,
+// .warning (wraps the c-infotext), .actions, .form (.label and the field), .figure > .qr, .error.
+// Public: --bon-player-code-max-inline-size, --bon-player-code-margin-block (the result's column
+// lets it fill the column without its own margin).
+@include mx.component("bon-player-code") {
+  :scope {
+    --section-card-header-padding: var(--space-3) var(--space-4) 0;
+    --section-card-body-padding: var(--space-3) var(--space-4) var(--space-4);
+    --_block-size: var(--font-size-2xl);
 
-  &__header.c-section-card__header {
-    padding: 0.875rem 1rem 0;
-    border-block-end: 0;
+    position: relative;
+    inline-size: 100%;
+    max-inline-size: var(--bon-player-code-max-inline-size, 32rem);
+    margin-block: var(--bon-player-code-margin-block, var(--space-4));
+    container: bon-player-code / inline-size;
   }
 
-  &__title {
+  .heading {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-2);
     margin: 0;
   }
 
-  &__icon {
+  .icon {
     flex-shrink: 0;
-    color: var(--orange-400);
+    color: var(--color-accent-icon); // colour inventory R11
   }
 
-  &__body.c-section-card__body {
+  .content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.875rem;
-    padding: 0.875rem 1rem 1rem;
+    gap: var(--space-3);
 
     > p {
       margin: 0;
-      color: var(--color-muted);
+      color: var(--color-text-muted);
     }
   }
 
-  &__form > p {
-    margin: 0;
-    color: var(--color-muted);
-  }
-
-  &__done {
+  .done {
     inline-size: 100%;
 
     &:focus-visible {
@@ -53,22 +52,22 @@
   }
 
   // Live regions stay in the DOM while empty; take them out of the flow (and the gap) then.
-  &__error:empty {
+  .error:empty {
     position: absolute;
     inline-size: 1px;
     block-size: 1px;
     overflow: hidden;
   }
 
-  &__error {
+  .error {
     inline-size: 100%;
   }
 
   // Three blocks on the chip surface; select-all copies the whole code with one click.
-  &__code {
+  .code {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: var(--space-2);
     margin: 0;
     font-variant-numeric: tabular-nums;
     user-select: all;
@@ -78,78 +77,71 @@
     }
   }
 
-  &__block {
-    padding: 0.5rem 0.75rem;
+  .block {
+    padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-sm);
-    background: var(--surface-chip);
-    color: var(--color-ink-strong);
-    font-size: 1.5rem;
-    font-weight: 900;
+    background: var(--color-surface-chip);
+    color: var(--color-text-strong);
+    font-size: var(--_block-size);
+    font-weight: var(--font-weight-black);
     letter-spacing: 0.12em;
     line-height: 1.2;
+  }
 
-    @include mx.breakpoint("sm") {
-      font-size: 2rem;
+  // Wide enough for the three blocks in one row at the big size.
+  @container bon-player-code (inline-size >= 30rem) {
+    .block {
+      --_block-size: var(--font-size-3xl);
     }
   }
 
-  &__warning {
+  .warning {
     inline-size: 100%;
-
-    b {
-      display: block;
-    }
   }
 
-  &__actions {
+  .actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 
-  &__form {
+  .form {
+    --input-inline-size: 100%;
+    --input-max-inline-size: 20rem;
+    --input-text-align: center;
+    --input-text-transform: uppercase;
+    --input-letter-spacing: 0.12em;
+
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: var(--space-2);
     inline-size: 100%;
 
     > p {
-      margin-block-end: 0.5rem;
+      margin: 0 0 var(--space-2);
+      color: var(--color-text-muted);
     }
   }
 
-  &__label {
-    font-weight: 700;
+  .label {
+    font-weight: var(--font-weight-bold);
   }
 
-  &__input {
-    inline-size: 100%;
-    max-inline-size: 20rem;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-
-    &::placeholder {
-      text-transform: none;
-    }
-  }
-
-  &__figure {
+  .figure {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--space-2);
     margin: 0;
   }
 
-  // 200px with a 12px white border; black on white in dark mode too, so no theme tokens here.
-  &__qr {
-    box-sizing: border-box;
+  // 200px with a 12px white border; black on white in dark mode too.
+  .qr {
     inline-size: 200px;
-    padding: 12px;
+    padding: var(--space-3);
     border-radius: var(--radius-sm);
-    background: #fff;
+    background: var(--color-text-on-active); // colour inventory R4
 
     svg {
       display: block;

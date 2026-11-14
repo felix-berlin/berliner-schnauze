@@ -1,7 +1,17 @@
-@use "astro-breadcrumbs/breadcrumbs.scss" with (
-  $truncated: true
-);
+@use "sass:meta";
 
-.c-breadcrumbs {
-  margin-block: 20px 15px;
+@layer legacy {
+  // Library CSS: a plain @use would emit it unlayered, above every layer.
+  // stylelint-disable scss/load-partial-extension -- the package exports map only matches the full file name
+  @include meta.load-css(
+    "astro-breadcrumbs/breadcrumbs.scss",
+    $with: (
+      "truncated": true,
+    )
+  );
+  // stylelint-enable scss/load-partial-extension
+
+  .c-breadcrumbs {
+    margin-block: 20px 15px;
+  }
 }

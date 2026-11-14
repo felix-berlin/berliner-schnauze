@@ -1,247 +1,227 @@
-@use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
-// The card is a .c-section-card (header, body); this adds the poll's own parts.
-.c-word-feedback-card {
-  &__body {
-    display: grid;
-    gap: 1.25rem;
-  }
-
-  &__count {
+// "Sagste det noch?" poll. Sits on the same root as the section card (c-section-card
+// c-word-feedback-card), so its part names avoid the card's (.header, .num, .title, .body, .footer).
+// Parts: .count (header), .poll (body content: .lead, .tiles, .teaser, .bars with .bar, .step with
+// .progress/.segments/.question/.eyebrow, .options, .done, .privacy) and .steps-nav (the footer).
+// States: .bar[data-state="mine"], .segment[data-state="done|current|open|skipped"], data-enter on
+// .step/.done (forward|back) for the short slide-in.
+@include mx.component("word-feedback-card") {
+  .count {
     margin-inline-start: auto;
-    color: var(--color-muted);
-    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
   }
 
-  &__lead {
-    margin: 0;
-    color: var(--color-ink-strong);
-    font-size: 1.05rem;
-  }
-
-  &__teaser {
-    margin: 0;
-    color: var(--color-muted);
-    font-size: 0.8rem;
-  }
-
-  &__tiles {
+  .poll {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr));
-    gap: 0.5rem;
+    gap: var(--space-5);
   }
 
-  &__options {
+  .lead {
+    margin: 0;
+    color: var(--color-text-strong);
+    font-size: var(--font-size-base);
+  }
+
+  .teaser {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-base); // the section card body used to force 1rem on its p (R12)
+  }
+
+  .tiles {
+    --_min: 170px; // one-off tile width
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--_min), 100%), 1fr));
+    gap: var(--space-2);
+  }
+
+  .options {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 
-  // Answer grids: as many columns as fit, each at least --min wide, buttons left-aligned.
-  &__options--locality,
-  &__options--origin,
-  &__options--half,
-  &__options--age {
+  // Answer grids: as many columns as fit, each at least --_min wide, buttons left-aligned.
+  .options:is([data-kind="locality"], [data-kind="origin"], [data-kind="half"], [data-kind="age"]) {
+    --_min: 180px; // one-off answer width
+    --choice-justify: flex-start;
+    --choice-text-align: start;
+
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 100%), 1fr));
-
-    .c-choice {
-      justify-content: flex-start;
-      overflow-wrap: anywhere;
-      text-align: start;
-    }
+    grid-template-columns: repeat(auto-fill, minmax(min(var(--_min), 100%), 1fr));
+    overflow-wrap: anywhere;
   }
 
-  &__options--locality,
-  &__options--half {
-    --min: 180px;
+  .options[data-kind="origin"] {
+    --_min: 240px;
   }
 
-  &__options--origin {
-    --min: 240px;
+  .options[data-kind="age"] {
+    --_min: 96px;
   }
 
-  &__options--age {
-    --min: 96px;
-  }
-
-  &__bars {
+  .bars {
     display: grid;
-    gap: 0.625rem;
+    gap: var(--space-2);
   }
 
-  &__bar {
+  .bar {
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: 0.25rem 1rem;
-    font-size: 0.9rem;
+    gap: var(--space-1) var(--space-4);
+    font-size: var(--font-size-md);
 
-    &.is-mine .c-word-feedback-card__bar-label {
-      font-weight: 700;
+    &[data-state="mine"] .bar-label {
+      font-weight: var(--font-weight-bold);
     }
 
-    &.is-mine .c-word-feedback-card__bar-fill {
-      background: var(--orange-600);
+    &[data-state="mine"] .bar-fill {
+      background: var(--color-accent-solid);
     }
   }
 
-  &__bar-track {
+  .bar-track {
     grid-column: 1 / -1;
     block-size: 6px;
-    border-radius: var(--radius-xxs);
-    background: var(--surface-chip);
     overflow: hidden;
+    border-radius: var(--radius-xxs);
+    background: var(--color-surface-chip);
   }
 
-  &__bar-fill {
+  .bar-fill {
     display: block;
     block-size: 100%;
-    background: var(--orange-300);
+    background: var(--color-border-accent);
   }
 
-  &__bar-value {
-    color: var(--color-muted);
-    font-size: 0.8rem;
+  .bar-value {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
     font-variant-numeric: tabular-nums;
   }
 
-  &__step {
+  .step {
     display: grid;
-    gap: 0.625rem;
-    padding-block-start: 1rem;
-    border-block-start: 1px dashed var(--rule-inner);
+    gap: var(--space-2);
+    padding-block-start: var(--space-4);
+    border-block-start: 1px dashed var(--color-border-inner);
   }
 
-  // Short fade + slide in from the direction of travel; the old step is gone at once, so nothing waits.
-  @media (prefers-reduced-motion: no-preference) {
-    &__step.is-entering,
-    &__done.is-entering {
-      animation: word-feedback-step-in 0.2s ease-out;
+  // Short fade + slide in from the direction of travel (keyframes in utilities/_animations.scss); the
+  // old step is gone at once, so nothing waits.
+  .step,
+  .done {
+    --_shift: 0.75rem; // slide distance
 
-      &.is-back {
-        --step-shift: -0.75rem;
+    &[data-enter="back"] {
+      --_shift: -0.75rem;
+    }
+
+    @include butler-mx.feature("motion") {
+      &[data-enter] {
+        animation: word-feedback-step-in var(--duration-fast) ease-out;
       }
     }
   }
 
-  &__progress {
+  .progress {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
-    gap: 0.25rem 1rem;
+    gap: var(--space-1) var(--space-4);
   }
 
   // Always six segments: done / current / open, a step that does not apply is a dashed line.
-  &__segments {
+  .segments {
     display: flex;
-    gap: 4px;
+    gap: var(--space-1);
   }
 
-  &__segment {
+  .segment {
+    --_radius: 1px; // below radius-xxs
+    --_dash-offset: 2px; // centres the dashed line on the 4px bar
+
     flex: 1;
     block-size: 4px;
-    border-radius: 1px;
-    background: var(--rule-inner);
+    border-radius: var(--_radius);
+    background: var(--color-border-inner);
 
-    &.is-done {
-      background: var(--orange-600);
+    &[data-state="done"] {
+      background: var(--color-accent-solid);
     }
 
-    &.is-current {
-      background: var(--orange-400);
+    &[data-state="current"] {
+      background: var(--color-accent-icon);
     }
 
-    &.is-skipped {
-      background: none;
-      border-block-start: 1px dashed var(--rule-card);
+    &[data-state="skipped"] {
       block-size: 0;
-      margin-block-start: 2px;
+      margin-block-start: var(--_dash-offset);
+      border-block-start: 1px dashed var(--color-border-card);
+      background: none;
     }
   }
 
-  &__eyebrow {
+  .eyebrow {
     @include mx.eyebrow;
   }
 
-  &__body &__question {
+  .question {
     margin: 0;
-    color: var(--color-ink-strong);
+    color: var(--color-text-strong);
     font-family: inherit;
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
   }
 
-  &__why {
-    display: grid;
-    gap: 0.25rem;
-    font-size: 0.9rem;
-    line-height: 1.5;
-
-    b {
-      color: var(--color-ink-strong);
-    }
+  .why-toggle {
+    --textlink-padding-start: 0;
   }
 
-  &__why-note {
-    color: var(--color-muted);
-  }
-
-  &__why-link {
-    padding-inline-start: 0;
-  }
-
-  &__footer {
+  .steps-nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
-    padding: 0 1.25rem 0.75rem;
+    gap: var(--space-4);
+    padding: 0 var(--space-5) var(--space-3);
   }
 
-  &__skip {
-    margin-inline-start: auto;
-  }
-
-  &__privacy {
+  .privacy {
     display: grid;
-    gap: vars.$spacer * 0.25;
-    color: var(--color-muted);
-    font-size: 0.8rem;
+    gap: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
 
     p {
       margin: 0;
     }
   }
 
-  &__remember {
+  .remember {
     display: flex;
     align-items: baseline;
-    gap: vars.$spacer * 0.5;
+    gap: var(--space-2);
   }
 
-  &__done-title {
-    margin: 0;
-    color: var(--color-ink-strong);
-  }
-
-  &__compare {
-    margin: 0;
-    padding-inline-start: 1.1rem;
-    font-size: 0.9375rem;
-  }
-
-  &__done {
+  .done {
     display: grid;
     justify-items: start;
-    gap: vars.$spacer * 0.5;
+    gap: var(--space-2);
   }
-}
 
-@keyframes word-feedback-step-in {
-  from {
-    opacity: 0;
-    transform: translateX(var(--step-shift, 0.75rem));
+  .done-title {
+    margin: 0;
+    color: var(--color-text-strong);
+  }
+
+  .compare {
+    margin: 0;
+    padding-inline-start: var(--space-4);
+    font-size: var(--font-size-md);
   }
 }

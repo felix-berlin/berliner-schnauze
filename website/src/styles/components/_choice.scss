@@ -1,132 +1,169 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
 // Auswahl (docs/design/wortseite/SPEC.md): one answer out of several. State via aria-pressed.
-// :where keeps specificity at zero, so a component class can override display/margin/padding.
-:where(.c-choice) {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-block-size: 2.75rem;
-  padding: 0 1rem;
-  border: 1px solid var(--control-border);
-  border-radius: 0;
-  background: transparent;
-  color: var(--color-body);
-  font: inherit;
-  letter-spacing: inherit;
-  cursor: pointer;
-  transition:
-    background-color 0.3s ease-in-out,
-    border-color 0.3s ease-in-out,
-    box-shadow 0.3s ease-in-out;
+// Variant tile (data-variant="tile"): poll answer, a big choice on a chip ground, parts .icon and .text.
+// Variant segment: one chip of a small connected control (36px look, 44px hit band; neighbours
+// overlap by their border).
+// Public (a parent's layout knobs, the old :where() let parents override these): --choice-display,
+// --choice-justify, --choice-min-block-size, --choice-padding-block, --choice-padding-inline,
+// --choice-font-size, --choice-text-align (wrapping labels).
+@include mx.component("choice") {
+  :scope {
+    --_text-gap: 0.125rem; // between 0 and space-1, no step within 0.1rem
 
-  @media (hover: hover) {
-    &:hover:not(:disabled, [aria-disabled="true"]) {
-      border-style: dashed;
-      box-shadow: var(--shadow-hover-glow);
-    }
-  }
+    display: var(--choice-display, inline-flex);
+    align-items: center;
+    justify-content: var(--choice-justify, normal);
+    text-align: var(--choice-text-align, revert-layer);
+    gap: var(--space-2);
+    min-block-size: var(--choice-min-block-size, 2.75rem);
+    padding: var(--choice-padding-block, 0) var(--choice-padding-inline, var(--space-4));
+    border: 1px solid var(--color-border-control);
+    border-radius: var(--radius-none);
+    background: transparent;
+    color: var(--color-text-body);
+    font: inherit;
+    font-size: var(--choice-font-size, inherit);
+    letter-spacing: inherit;
+    cursor: pointer;
+    transition:
+      background-color var(--duration-base) var(--ease-standard),
+      border-color var(--duration-base) var(--ease-standard),
+      box-shadow var(--duration-base) var(--ease-standard);
 
-  &[aria-pressed="true"] {
-    border-color: var(--orange-600);
-    background: var(--orange-600);
-    color: var(--white-100);
-    font-weight: 700;
-  }
-
-  &:disabled {
-    cursor: progress;
-  }
-
-  // Dimming the pressed one would drop white-on-orange below AA.
-  &:disabled:not([aria-pressed="true"]) {
-    opacity: 0.6;
-  }
-
-  // Locked but still focusable, so the reason can be read out (Spec §9). Not :disabled.
-  &[aria-disabled="true"] {
-    border-style: dotted;
-    box-shadow: none;
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition-duration: 0ms;
-  }
-}
-
-// Poll answer: a big choice on a chip ground. Declared after .c-choice (same zero specificity),
-// the pressed state still wins because it carries an attribute selector.
-:where(.c-choice--tile) {
-  inline-size: 100%;
-  min-block-size: 4.5rem;
-  padding: 0.75rem 1rem;
-  justify-content: flex-start;
-  gap: 0.875rem;
-  text-align: start;
-  background: var(--surface-chip);
-}
-
-// Icon in a dashed square; on hover it tips and the colour softens (Spec §10/§13).
-.c-choice__icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  inline-size: 2.5rem;
-  block-size: 2.5rem;
-  border: 1px dashed var(--rule-card);
-  border-radius: var(--radius-sm);
-  color: var(--orange-400);
-  transition:
-    color 0.3s ease,
-    border-color 0.3s ease,
-    transform 0.3s ease;
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-}
-
-:where(.c-choice--tile) {
-  @media (hover: hover) {
-    &:hover:not(:disabled, [aria-disabled="true"]) .c-choice__icon {
-      border-color: var(--orange-400);
-      color: var(--orange-300);
-      transform: rotate(-8deg) scale(1.08);
-
-      @media (prefers-reduced-motion: reduce) {
-        transform: none;
+    @include butler-mx.hover {
+      &:not(:disabled, [aria-disabled="true"]) {
+        border-style: dashed;
+        box-shadow: var(--shadow-hover-glow);
       }
     }
+
+    &[aria-pressed="true"] {
+      border-color: var(--color-accent-solid);
+      background: var(--color-accent-solid);
+      color: var(--color-text-on-accent);
+      font-weight: var(--font-weight-bold);
+    }
+
+    &:disabled {
+      cursor: progress;
+    }
+
+    // Dimming the pressed one would drop white-on-orange below AA.
+    &:disabled:not([aria-pressed="true"]) {
+      opacity: 0.6;
+    }
+
+    // Locked but still focusable, so the reason can be read out (Spec §9). Not :disabled.
+    &[aria-disabled="true"] {
+      border-style: dotted;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    // Same AA reason as :disabled: the pressed one (e.g. "Speichern" while sending) keeps full opacity.
+    &[aria-disabled="true"]:not([aria-pressed="true"]) {
+      opacity: 0.55;
+    }
   }
 
-  &[aria-pressed="true"] .c-choice__icon {
-    border-color: currentcolor;
-    color: var(--white-100);
+  :scope[data-variant~="tile"] {
+    inline-size: 100%;
+    min-block-size: var(--choice-min-block-size, 4.5rem);
+    padding: var(--choice-padding-block, var(--space-3))
+      var(--choice-padding-inline, var(--space-4));
+    justify-content: var(--choice-justify, flex-start);
+    gap: var(--space-3);
+    text-align: start;
+
+    &:not([aria-pressed="true"]) {
+      background: var(--color-surface-chip);
+    }
+
+    @include butler-mx.hover {
+      &:not(:disabled, [aria-disabled="true"]) .icon {
+        border-color: var(--color-accent-icon);
+        color: var(--color-border-accent);
+
+        @include butler-mx.feature("motion") {
+          transform: rotate(-8deg) scale(1.08);
+        }
+      }
+    }
+
+    &[aria-pressed="true"] .icon {
+      border-color: currentcolor;
+      color: var(--color-text-on-accent);
+    }
+
+    &:not([aria-pressed="true"]) .text b {
+      color: var(--color-text-strong);
+    }
+
+    &[aria-pressed="true"] .text span {
+      color: inherit;
+      opacity: 0.9;
+    }
   }
-}
 
-.c-choice__text {
-  display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
+  :scope[data-variant~="segment"] {
+    --_border: 1px;
 
-  b {
-    color: inherit;
-    font-size: 1rem;
+    position: relative;
+    min-block-size: var(--choice-min-block-size, 2.25rem); // one-off: mock 36px
+    padding-inline: var(--choice-padding-inline, var(--space-2));
+    font-size: var(--choice-font-size, var(--font-size-xs));
+
+    &:not(:first-child) {
+      margin-inline-start: calc(-1 * var(--_border));
+    }
+
+    // Looks 36px, hits 44px: the invisible band reaches 4px beyond the border box above and below
+    // (36 + 2 x 4 = 44; positioned from the padding box, hence the extra border width).
+    &::before {
+      content: "";
+      position: absolute;
+      inset-block: calc(-1 * (var(--space-1) + var(--_border)));
+      inset-inline: 0;
+    }
+
+    // The ring sits 2px outside the chip; a later neighbour (positioned) must not paint over it.
+    &:focus-visible {
+      z-index: var(--z-raised);
+    }
   }
 
-  span {
-    color: var(--color-muted);
-    font-size: 0.75rem;
+  // Icon in a dashed square; on hover it tips and the colour softens (docs/design/wortseite/SPEC.md §10/§13).
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    border: 1px dashed var(--color-border-card);
+    border-radius: var(--radius-sm);
+    color: var(--color-accent-icon);
+    transition:
+      color var(--duration-base) ease,
+      border-color var(--duration-base) ease,
+      transform var(--duration-base) ease;
   }
 
-  :where(.c-choice--tile:not([aria-pressed="true"])) & b {
-    color: var(--color-ink-strong);
-  }
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--_text-gap);
 
-  :where(.c-choice--tile[aria-pressed="true"]) & span {
-    color: inherit;
-    opacity: 0.9;
+    b {
+      color: inherit;
+      font-size: var(--font-size-base);
+    }
+
+    span {
+      color: var(--color-text-muted);
+      font-size: var(--font-size-xs);
+    }
   }
 }

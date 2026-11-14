@@ -22,14 +22,14 @@ const hasNeighbors = nearBefore.length > 0 || nearAfter.length > 0;
 
 {(relatedShown.length > 0 || hasNeighbors) && (
   <SectionCard id='verwandte-worte' title='Lexikalisches Umfeld'>
-    <div class='c-neighborhood'>
+    <div class='c-word-neighborhood'>
       {relatedShown.length > 0 && (
-        <div id='verwandte' class='c-neighborhood__col'>
+        <div id='verwandte' class='col'>
           <p class='t-label' id='heading-verwandte'>Verwandte Wörter</p>
-          <ul class='c-neighborhood__list' aria-labelledby='heading-verwandte'>
+          <ul class='list' aria-labelledby='heading-verwandte'>
             {relatedShown.map((w) => (
               <li>
-                <a class='c-neighborhood__link c-textlink c-textlink--inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a>
+                <a class='c-textlink' data-variant='inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a>
               </li>
             ))}
           </ul>
@@ -38,7 +38,7 @@ const hasNeighbors = nearBefore.length > 0 || nearAfter.length > 0;
       {hasNeighbors && (
         <nav
           id='navigation'
-          class='c-neighborhood__col'
+          class='col'
           aria-labelledby='heading-navigation'
           data-track-content
           data-content-name='Alphabet Navigation'
@@ -46,20 +46,20 @@ const hasNeighbors = nearBefore.length > 0 || nearAfter.length > 0;
           data-content-target={routeToWord((nearAfter[0] ?? nearBefore[0])!.slug)}
         >
           <p class='t-label' id='heading-navigation'>Alphabetische Nachbarn</p>
-          <ol class='c-neighborhood__list'>
+          <ol class='list'>
             {nearBefore.map((w) => (
               <li>
-                <a class='c-neighborhood__link c-textlink c-textlink--inline' href={routeToWord(w.slug)}>
+                <a class='c-textlink' data-variant='inline' href={routeToWord(w.slug)}>
                   <span aria-hidden='true'>↑</span>{w.berlinerisch}
                 </a>
               </li>
             ))}
-            <li class='c-neighborhood__current' aria-current='page'>
+            <li class='current' aria-current='page'>
               <span aria-hidden='true'>●</span>{word}
             </li>
             {nearAfter.map((w) => (
               <li>
-                <a class='c-neighborhood__link c-textlink c-textlink--inline' href={routeToWord(w.slug)}>
+                <a class='c-textlink' data-variant='inline' href={routeToWord(w.slug)}>
                   <span aria-hidden='true'>↓</span>{w.berlinerisch}
                 </a>
               </li>

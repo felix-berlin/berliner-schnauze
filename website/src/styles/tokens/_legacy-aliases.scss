@@ -1,0 +1,69 @@
+// Old custom property names → tokens (spec §6). Deleted when the `legacy` layer is empty.
+@layer tokens {
+  :root {
+    // Primitives
+    --white-100: var(--color-white-100);
+    --white-200: var(--color-white-200);
+    --red-100: var(--color-red-100);
+    --red-200: var(--color-red-200);
+    --red-500: var(--color-red-500);
+    --orange-100: var(--color-orange-100);
+    --orange-200: var(--color-orange-200);
+    --orange-300: var(--color-orange-300);
+    --orange-400: var(--color-orange-400);
+    --orange-500: var(--color-orange-500);
+    --orange-600: var(--color-orange-600);
+    --orange-700: var(--color-orange-700);
+    --orange-800: var(--color-orange-800);
+    --orange-900: var(--color-orange-900);
+    --yellow-500: var(--color-cream-500);
+    --grey-100: var(--color-grey-100);
+    --grey-200: var(--color-grey-200);
+    --blue: var(--color-ink-base);
+    --blue-100: var(--color-ink-100);
+    --blue-200: var(--color-ink-200);
+    --blue-300: var(--color-ink-300);
+    --blue-400: var(--color-ink-400);
+    --blue-500: var(--color-ink-500);
+    --blue-600: var(--color-ink-600);
+    --blue-700: var(--color-ink-700);
+    --blue-800: var(--color-ink-800);
+    --blue-900: var(--color-ink-900);
+    --blue-1000: var(--color-ink-1000);
+    --new-blue-200: var(--color-ink-200m);
+    --new-blue-300: var(--color-ink-300m);
+    --new-blue-400: var(--color-ink-400m);
+    --new-blue-500: var(--color-ink-base);
+    --new-blue-600: var(--color-ink-600m);
+    --danger: var(--color-status-danger);
+    --success: var(--color-status-success);
+    --gold: var(--color-status-gold);
+
+    // No successor (spec §5.5)
+    --primary: light-dark(var(--color-ink-100), var(--color-ink-500));
+    --accent: light-dark(var(--color-orange-400), var(--color-orange-500));
+
+    // Semantic
+    --color-body: var(--color-text-body);
+    --color-ink-strong: var(--color-text-strong);
+    --color-muted: var(--color-text-muted);
+    --color-accent-text: var(--color-text-accent);
+    --floating-color-background: var(--color-surface-floating);
+    --control-bg: var(--color-control-bg);
+    --control-color: var(--color-control-text);
+    --control-border: var(--color-border-control);
+    --surface-chip: var(--color-surface-chip);
+    --surface-callout: var(--color-surface-callout);
+    --surface-hero: var(--color-surface-hero);
+    --surface-sheet: var(--color-surface-sheet);
+    --surface-paper: var(--color-surface-paper);
+    --surface-badge: var(--color-surface-badge);
+    --surface-wash: var(--color-surface-wash);
+    --rule-card: var(--color-border-card);
+    --rule-inner: var(--color-border-inner);
+    --focus-ring: var(--color-focus-ring);
+    --overlay-base: var(--color-surface-overlay);
+    --overlay-ink: var(--color-text-on-overlay);
+    --paper-lift: var(--shadow-paper-lift);
+  }
+}

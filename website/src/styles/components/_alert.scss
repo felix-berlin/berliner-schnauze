@@ -1,17 +1,19 @@
 @use "@styles/variables" as vars;
 
-.c-alert {
-  --size-font: inherit;
+@layer legacy {
+  .c-alert {
+    --size-font: inherit;
 
-  color: var(--color, unset);
+    color: var(--color, unset);
 
-  @each $type, $color in vars.$alert-colors {
-    &--#{$type} {
-      --color: var(--#{$type});
+    @each $type, $color in vars.$alert-colors {
+      &--#{$type} {
+        --color: var(--#{$type});
+      }
     }
-  }
 
-  &.c-alert--small {
-    --size-font: 0.9rem;
+    &.c-alert--small {
+      --size-font: 0.9rem;
+    }
   }
 }

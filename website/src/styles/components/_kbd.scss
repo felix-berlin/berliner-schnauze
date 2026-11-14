@@ -1,0 +1,17 @@
+@use "@styles/mixins" as mx;
+
+// Keyboard key (spec: .c-kbd), e.g. the shortcut hint of the comment form.
+@include mx.component("kbd") {
+  :scope {
+    --_pad-block: 0.125rem; // between 0 and space-1, no step within 0.1rem
+
+    padding: var(--_pad-block) var(--space-1);
+    border: 1px solid var(--color-border-card);
+    border-radius: var(--radius-xxs);
+    background: var(--color-surface-chip);
+    color: var(--color-text-strong);
+    font: inherit;
+    font-size: var(--font-size-2xs);
+    font-weight: var(--font-weight-bold);
+  }
+}

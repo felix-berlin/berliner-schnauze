@@ -1,91 +1,100 @@
-@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-.c-comment {
-  display: grid;
-  grid-template-columns: 2.25rem 1fr;
-  gap: 0.25rem 0.75rem;
-  padding: 0.875rem 0;
-  border-block-start: 1px dashed var(--rule-inner);
+// One comment (docs/design/wortseite/SPEC.md §9/§9a): avatar beside a text column, replies one
+// level deep below. Variant reply: indented 48px. State data-state="highlighted": the linked
+// comment, a wash and an outline that fade out within 2s (with reduced motion they stay until the
+// state goes). Parts: .avatar, .meta, .name, .permalink, .text (data-state="clamped"),
+// .placeholder, .actions, .menu, .report, .panel-actions, .replies.
+// Public: --comment-rule, --comment-padding-start (a list drops both on its first comment).
+@include mx.component("comment") {
+  :scope {
+    --_avatar: 2.25rem; // one-off avatar size (mock: 36px)
+    --_start: var(--comment-padding-start, var(--space-3));
 
-  // Everything but the avatar and the replies sits in the text column.
-  > :not(.c-comment__avatar, .c-comment__replies) {
-    grid-column: 2;
-  }
-
-  // Spec §5/§9: one level deep, indented 48px.
-  &--reply {
-    margin-inline-start: 3rem;
-  }
-
-  // Linked comment: 14% orange wash and outline that fade out within 2s (spec §9a); with reduced motion they stay until the class goes.
-  &.is-highlighted {
+    // Text column next to an absolutely placed avatar: a grid column would not reach the nested
+    // components (state boxes, form, links), they are outside this scope.
     position: relative;
-    outline: 2px solid var(--orange-500);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-block: var(--_start) var(--space-3);
+    padding-inline-start: calc(var(--_avatar) + var(--space-3));
+    border-block-start: var(--comment-rule, 1px dashed var(--color-border-inner));
+  }
+
+  :scope[data-variant~="reply"] {
+    margin-inline-start: var(--space-12);
+  }
+
+  :scope[data-state~="highlighted"] {
+    --_fade: 2s; // docs/design/wortseite/SPEC.md §9a, far beyond the duration tokens
+
+    outline: 2px solid var(--color-accent-active);
     outline-offset: 2px;
-    animation: c-comment-outline 2s ease-out forwards;
 
     &::after {
       content: "";
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      background: var(--surface-wash);
+      background: var(--color-surface-wash);
       pointer-events: none;
-      animation: c-comment-wash 2s ease-out forwards;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      animation: none;
+    @include butler-mx.feature("motion") {
+      animation: comment-outline var(--_fade) ease-out forwards;
 
       &::after {
-        animation: none;
+        animation: comment-wash var(--_fade) ease-out forwards;
       }
     }
   }
 
-  &__avatar {
-    grid-row: span 3;
+  .avatar {
+    position: absolute;
+    inset-block-start: var(--_start);
+    inset-inline-start: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    inline-size: 2.25rem;
-    block-size: 2.25rem;
+    inline-size: var(--_avatar);
+    block-size: var(--_avatar);
     border-radius: var(--radius-sm);
-    background: var(--surface-wash);
-    color: var(--color-accent-text);
-    font-weight: 700;
+    background: var(--color-surface-wash);
+    color: var(--color-text-accent);
+    font-weight: var(--font-weight-bold);
   }
 
-  &__meta {
+  .meta {
     display: flex;
     flex-direction: column;
     line-height: 1.25;
   }
 
-  &__name {
-    color: var(--color-ink-strong);
+  .name {
+    color: var(--color-text-strong);
   }
 
-  &__permalink {
+  .permalink {
     color: inherit;
     text-decoration: none;
 
     @include butler-mx.hover {
-      color: var(--color-accent-text);
+      color: var(--color-text-accent);
       text-decoration: underline dashed;
       text-underline-offset: 3px;
     }
   }
 
-  &__text {
+  .text {
     margin: 0;
     line-height: 1.5;
     white-space: pre-line;
     overflow-wrap: anywhere;
 
     // Long comments (spec proposal): 8 lines until „Weiterlesen“.
-    &.is-clamped {
+    &[data-state="clamped"] {
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 8;
@@ -94,77 +103,54 @@
     }
   }
 
-  &__more {
-    justify-self: start;
-  }
-
-  &__placeholder {
+  .placeholder {
     margin: 0;
     font-style: italic;
-    color: var(--color-muted);
+    color: var(--color-text-muted);
   }
 
-  &__actions {
+  .actions {
+    --textlink-place-self: initial;
+
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: var(--space-3);
     align-items: center;
-    margin-inline-start: -0.625rem;
-    font-size: 0.85rem;
+    margin-inline-start: calc(-1 * var(--space-2)); // lines the reaction labels up with the text
+    font-size: var(--font-size-sm);
   }
 
-  &__menu {
+  .menu {
     margin-inline-start: auto;
   }
 
-  &__menu-item[aria-disabled="true"] {
-    opacity: 0.55;
-    cursor: default;
-  }
+  // Inline report panel (docs/design/wortseite/SPEC.md §9a) on the chip ground; the delete confirmation is a c-state.
+  .report {
+    --button-padding: var(--space-2) var(--space-4);
+    --button-min-block-size: 2.75rem;
 
-  // Inline panels (spec §9a): report on --surface-chip, delete confirmation as .c-state--error.
-  &__report {
     display: grid;
-    gap: vars.$spacer * 0.5;
-    padding: 0.75rem 1rem;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
     border-radius: var(--radius-sm);
-    background: var(--surface-chip);
+    background: var(--color-surface-chip);
   }
 
-  &__panel-actions {
+  .panel-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: vars.$spacer * 0.5;
+    gap: var(--space-2);
     align-items: center;
-    margin-block-start: 0.25rem;
+    margin-block-start: var(--space-1);
   }
 
-  &__report-button {
-    --padding: #{vars.$spacer * 0.5 vars.$spacer};
+  .replies {
+    // Replies are their own comments with a rule each; the list's first-comment reset stops here.
+    --comment-rule: initial;
+    --comment-padding-start: initial;
 
-    min-block-size: 44px;
-
-    &[aria-disabled="true"] {
-      opacity: 0.55;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-  }
-
-  &__replies {
-    grid-column: 1 / -1;
     display: flex;
     flex-direction: column;
-  }
-}
-
-@keyframes c-comment-wash {
-  to {
-    opacity: 0;
-  }
-}
-@keyframes c-comment-outline {
-  to {
-    outline-color: transparent;
+    margin-inline-start: calc(-1 * (var(--_avatar) + var(--space-3)));
   }
 }

@@ -1,21 +1,23 @@
 @use "@styles/variables" as vars;
 
-.c-footer-app-section {
-  &__actions {
-    display: flex;
-    align-items: center;
-    gap: vars.$spacer * 0.5;
-  }
+@layer legacy {
+  .c-footer-app-section {
+    &__actions {
+      display: flex;
+      align-items: center;
+      gap: vars.$spacer * 0.5;
+    }
 
-  &__settings-link,
-  .c-install-button {
-    --padding: 0.5rem 1rem;
+    &__settings-link,
+    .c-install-button {
+      --button-padding: 0.5rem 1rem;
 
-    gap: vars.$spacer * 0.5;
-    text-decoration: none;
-  }
+      gap: vars.$spacer * 0.5;
+      text-decoration: none;
+    }
 
-  &__settings-link--icon-only {
-    --padding: 0.5rem;
+    &__settings-link--icon-only {
+      --button-padding: 0.5rem;
+    }
   }
 }

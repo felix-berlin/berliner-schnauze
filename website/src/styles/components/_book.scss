@@ -1,0 +1,107 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Book card of the shelf (ds bundle .c-book): a link with .cover, optional .tag, .title, a short
+// text and the .cta. In a wide main column the card is compact and horizontal (Spec §5 v3.1).
+@include mx.component("book") {
+  :scope {
+    --_cover: 64px; // compact cover width
+
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-2) var(--space-1);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-paper);
+    box-shadow: var(--shadow-paper-lift);
+    color: var(--color-text-body);
+    text-decoration: none;
+
+    @include butler-mx.feature("motion") {
+      transition: box-shadow var(--duration-base);
+    }
+    @include butler-mx.hover {
+      box-shadow: var(--shadow-hover-glow);
+    }
+  }
+
+  .cover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 5 / 4; // mobile: wide cover on top (Spec §5)
+    overflow: hidden;
+    border-radius: var(--radius-xxs);
+    background: var(--color-surface-chip);
+    color: var(--color-text-muted);
+
+    picture {
+      display: contents;
+    }
+
+    img {
+      inline-size: 100%;
+      block-size: 100%;
+      object-fit: contain;
+    }
+  }
+
+  // Wash tag, borderless (Spec §8.4).
+  .tag {
+    --_pad-block: 0.125rem; // below every space step
+
+    align-self: flex-start;
+    padding: var(--_pad-block) var(--space-2);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-wash);
+    color: var(--color-text-body);
+    font-size: var(--font-size-xs);
+  }
+
+  .title {
+    color: var(--color-text-strong);
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .cta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-block-size: 2.75rem;
+    margin-block-start: auto;
+    border-block-start: 1px dashed var(--color-border-inner);
+    color: var(--color-text-accent);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+  }
+
+  @container word-main (inline-size >= 30rem) {
+    :scope {
+      display: grid;
+      grid-template-columns: var(--_cover) minmax(0, 1fr);
+      grid-auto-rows: min-content;
+      gap: var(--space-1) var(--space-4);
+      padding: var(--space-3);
+
+      > :not(.cover) {
+        grid-column: 2;
+      }
+    }
+
+    .cover {
+      grid-row: 1 / span 4;
+      inline-size: var(--_cover);
+      aspect-ratio: 3 / 4;
+      align-self: start;
+    }
+
+    // The compact card has no rule above the call to action.
+    .cta {
+      min-block-size: 2rem;
+      margin-block-start: var(--space-1);
+      border: 0;
+    }
+  }
+}

@@ -1,23 +1,7 @@
 ---
 name: Berliner Schnauze
 description: Berlin-dialect translator and lexicon — fast word lookup with a hand-stamped postcard texture
-colors:
-  currywurst-400: "#e28964"
-  currywurst-500: "#cf5736"
-  currywurst-600: "#b23b27"
-  currywurst-100: "#fcead7"
-  currywurst-200: "#fad0b0"
-  berlin-red-500: "#cf3018"
-  berlin-red-berlin-500: "#f2391d"
-  ink-base: "#2b333b"
-  grey-100: "#4e545a"
-  grey-200: "#373c40"
-  white-100: "#f9f9f9"
-  white-200: "#f5f5f5"
-  cream-500: "#e3e3d2"
-  gold-500: "#e1b125"
-  danger: "hsl(8deg 89% 53%)"
-  success: "#35a672"
+# Colour, spacing, radius: DTCG tokens in website/tokens/ (primitive.tokens.json, semantic.light|dark.tokens.json); see docs/superpowers/specs/2026-11-13-design-system-design.md
 typography:
   display:
     fontFamily: "Berliner, var(--font-berliner)"
@@ -35,37 +19,25 @@ typography:
     fontSize: "0.7rem"
     fontWeight: 700
     letterSpacing: "0.05em"
-rounded:
-  none: "0px"
-  xxs: "2px"
-  xs: "3px"
-  sm: "4px"
-spacing:
-  xs: "0.25rem"
-  sm: "0.5rem"
-  md: "0.75rem"
-  base: "1rem"
-  lg: "1.25rem"
-  xl: "1.5rem"
 components:
   button-theme:
-    backgroundColor: "{colors.ink-base}"
-    textColor: "{colors.white-100}"
-    rounded: "{rounded.none}"
+    backgroundColor: "#2b333b"
+    textColor: "#f9f9f9"
+    rounded: "0px"
     padding: "0.25rem"
   button-default:
-    backgroundColor: "{colors.currywurst-100}"
-    textColor: "{colors.ink-base}"
-    rounded: "{rounded.none}"
+    backgroundColor: "#fcead7"
+    textColor: "#2b333b"
+    rounded: "0px"
     padding: "0.25rem"
   section-card:
     backgroundColor: "#ffffff"
-    rounded: "{rounded.sm}"
+    rounded: "4px"
   badge:
-    backgroundColor: "{colors.currywurst-200}"
-    textColor: "{colors.ink-base}"
+    backgroundColor: "#fad0b0"
+    textColor: "#2b333b"
     typography: "{typography.label}"
-    rounded: "{rounded.sm}"
+    rounded: "4px"
 ---
 
 # Design System: Berliner Schnauze
@@ -95,7 +67,7 @@ The palette reads as a hand-labeled dossier: warm orange annotations and a rare 
 ### Primary
 
 - **Currywurst Orange** (`#cf5736` core, ramp `#fcead7` → `#781111`): the dominant accent. Badges, borders, stat highlights, button fills, the word-of-the-day marker, the dashed underline beneath headwords. Carries most of the system's color weight.
-- **Fills behind white text use Currywurst-600** (`#b23b27`, 5.6:1): `.c-button--primary`, fact-card CTA, BON "Nee". White on `#cf5736` is only 3.9:1 and fails WCAG AA; 500 stays the accent for borders, tints and large display text. Orange accent text uses `--color-accent-text` (600 light / 300 dark).
+- **Fills behind white text use Currywurst-600** (`#b23b27`, 5.6:1): `c-button` `data-variant="primary"`, fact-card CTA, BON "Nee". White on `#cf5736` is only 3.9:1 and fails WCAG AA; 500 stays the accent for borders, tints and large display text. Orange accent text uses `--color-text-accent` (600 light / 300 dark).
 
 ### Secondary
 
@@ -103,7 +75,7 @@ The palette reads as a hand-labeled dossier: warm orange annotations and a rare 
 
 ### Neutral
 
-- **Ink Base** (`#2b333b`): the structural dark. Body text ink in light mode, and the source color for every dark-mode surface tint (`--new-blue-200` … `--new-blue-600` are `color-mix` steps off this same value). Never used as a bright UI accent — it's the paper's ink, not a highlight.
+- **Ink Base** (`#2b333b`): the structural dark. Body text ink in light mode, and the source color for every dark-mode surface tint (the `color.ink.*` primitives, `--color-ink-200m` … `--color-ink-600m`, are fixed mixes off this same value; legacy alias `--new-blue-*`). Never used as a bright UI accent — it's the paper's ink, not a highlight.
 - **Grey** (`#4e545a` / `#373c40`): secondary text, dashed border color on hero/card containers.
 - **White** (`#f9f9f9` / `#f5f5f5` / `#faf6fa`): page and card backgrounds.
 - **Cream** (`#e3e3d2`): dark-mode body text color — a warm off-white standing in for pure white, keeping dark mode from feeling stark.
@@ -169,8 +141,8 @@ The global header (`MainHeader.astro`) is a single row: wordmark · header links
 - **Main menu dropdown** (`MainMenu.vue`, `.c-main-menu`): 600px, 4px radius, Paper-Lift drop-shadow with arrow. Two columns split by a dashed rule:
   - _Entdecken_ — every CMS item that has a description becomes a card: 34×34 icon tile (3px radius, button colors), bold title, muted description. Hover: dashed border + tinted fill, 3px radius. "Neu" tag: 0.72rem, dashed border, 3px radius.
   - _Mitmachen_ / _App_ — remaining items as compact icon links with a dashed underline on hover, then the Hell / Dunkel / System segment (`ColorModePicker`: fieldset of native radios, 4px radius, inactive options dimmed, active = light orange tint; icon-only here, labelled on /settings).
-  - Install bar (only while the PWA isn't installed): dashed top rule, `c-button--primary` CTA with 4px radius.
-  - Group labels are sentence case, 0.8rem / 700 / `--color-muted` — not the uppercase Label style.
+  - Install bar (only while the PWA isn't installed): dashed top rule, `c-button` primary CTA (`data-variant="primary"`) with 4px radius.
+  - Group labels are sentence case, 0.8rem / 700 / `--color-text-muted` — not the uppercase Label style.
 - **Radius scale here:** 4px controls/panel/segment/CTA · 3px tiles, hover areas, tags · 2px `kbd`.
 
 ### Section Cards

@@ -22,13 +22,13 @@ const sources = (word.sources ?? [])
 
 {hasOrigin(word) && (
   <SectionCard id='etymologie' title='Etymologie'>
-    {word.infoTextHtml && <div class='c-word-origin' set:html={word.infoTextHtml} />}
+    {word.infoTextHtml && <div class='c-word-section-etymologie' set:html={word.infoTextHtml} />}
     {sources.length > 0 && (
       <Fragment slot='footer'>
         <span class='t-label'>{sources.length === 1 ? 'Quelle' : 'Quellen'}</span>
         {sources.map((source) =>
           source.url ? (
-            <a class='c-textlink c-word-origin__source' href={source.url} rel='noopener'>
+            <a class='c-textlink' href={source.url} rel='noopener'>
               {source.label}
             </a>
           ) : (

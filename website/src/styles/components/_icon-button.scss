@@ -1,16 +1,21 @@
-// Icon-Button (docs/design/wortseite/SPEC.md): 44x44, no frame until hover.
-:where(.c-icon-button) {
-  display: inline-grid;
-  place-items: center;
-  inline-size: 2.75rem;
-  block-size: 2.75rem;
-  padding: 0;
-  border: 1px solid transparent;
-  background: none;
-  color: var(--color-body);
-  cursor: pointer;
+@use "@styles/mixins" as mx;
 
-  &:hover {
-    border: 1px dashed var(--rule-card);
+// Icon-Button (docs/design/wortseite/SPEC.md): 44x44, no frame until hover.
+// Public: --icon-button-bg, --icon-button-color, --icon-button-hover-border.
+@include mx.component("icon-button") {
+  :scope {
+    display: inline-grid;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    padding: 0;
+    border: 1px solid transparent;
+    background: var(--icon-button-bg, none);
+    color: var(--icon-button-color, var(--color-text-body));
+    cursor: pointer;
+
+    &:hover {
+      border: 1px dashed var(--icon-button-hover-border, var(--color-border-card));
+    }
   }
 }

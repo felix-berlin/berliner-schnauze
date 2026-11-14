@@ -6,43 +6,43 @@
     data-content-piece="Navigation"
     data-content-target="#"
   >
-    <DropdownPopover name="main-menu" placement="bottom-end" :offset="13" class="c-main-menu">
+    <DropdownPopover name="main-menu" placement="bottom-end" :offset="13" theme="nav">
       <template #default="{ triggerProps }">
         <MainMenuButton v-bind="triggerProps" />
       </template>
 
       <template #panel>
-        <nav aria-label="Hauptmenü">
-          <div class="c-main-menu__columns">
-            <div v-if="discoverItems.length" class="c-main-menu__col c-main-menu__col--discover">
-              <p class="c-main-menu__label">Entdecken</p>
+        <nav class="c-main-menu" aria-label="Hauptmenü">
+          <div class="columns">
+            <div v-if="discoverItems.length" class="col discover">
+              <p class="label">Entdecken</p>
               <a
                 v-for="item in discoverItems"
                 :key="item.link"
-                class="c-main-menu__card"
+                class="card"
                 :href="item.link"
                 :rel="item.rel"
               >
-                <span class="c-main-menu__tile">
+                <span class="tile">
                   <component :is="ICONS[item.link]" v-if="ICONS[item.link]" aria-hidden="true" />
                 </span>
-                <span class="c-main-menu__text">
-                  <span class="c-main-menu__title">
+                <span class="text">
+                  <span class="title">
                     {{ item.title }}
-                    <span v-if="NEW_PATHS.has(item.link)" class="c-main-menu__tag">Neu</span>
+                    <span v-if="NEW_PATHS.has(item.link)" class="tag">Neu</span>
                   </span>
-                  <span class="c-main-menu__desc">{{ item.description }}</span>
+                  <span class="desc">{{ item.description }}</span>
                 </span>
               </a>
             </div>
 
-            <div class="c-main-menu__col">
+            <div class="col">
               <template v-for="group in linkGroups" :key="group.label">
-                <p v-if="group.items.length" class="c-main-menu__label">{{ group.label }}</p>
+                <p v-if="group.items.length" class="label">{{ group.label }}</p>
                 <a
                   v-for="item in group.items"
                   :key="item.link"
-                  class="c-main-menu__link"
+                  class="link"
                   :href="item.link"
                   :rel="item.rel"
                 >
@@ -51,17 +51,19 @@
                 </a>
               </template>
 
-              <ColorModePicker class="c-main-menu__modes" source="Main Menu" />
+              <div class="modes"><ColorModePicker source="Main Menu" /></div>
             </div>
           </div>
 
-          <div v-if="!isPwaInstalled" class="c-main-menu__install">
-            <span class="c-main-menu__install-text">
+          <div v-if="!isPwaInstalled" class="install">
+            <span class="install-text">
               Mit der App bleibst Du immer informiert, ob online oder offline.
             </span>
-            <InstallApp class="c-button--primary c-header-control c-main-menu__install-button">
-              <DownloadIcon aria-hidden="true" /> App installieren
-            </InstallApp>
+            <span class="install-action">
+              <InstallApp class="c-header-control" data-variant="primary compact">
+                <DownloadIcon aria-hidden="true" /> App installieren
+              </InstallApp>
+            </span>
           </div>
         </nav>
       </template>

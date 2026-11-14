@@ -1,0 +1,33 @@
+@use "@styles/mixins" as mx;
+
+// Placement of the scroll-to-top button (ScrollToTop.vue, a c-button): fixed, bottom-centred on small
+// screens, at the right edge from md on. Page shell, so an object. data-state="near-end": the footer
+// is in view, so the bottom-centred button steps aside.
+@layer objects {
+  .o-scroll-to-top {
+    --_edge: 10px; // px on purpose: hugs the viewport edge
+    --_center: 50%;
+
+    position: fixed;
+    inset: auto auto var(--_edge) var(--_center);
+    translate: -50% 0;
+    z-index: var(--z-raised);
+    box-shadow: var(--shadow-paper-lift);
+
+    @include mx.breakpoint("md") {
+      inset: var(--_center) var(--_edge) auto auto;
+      translate: 0 -50%;
+    }
+
+    &[data-state="near-end"] {
+      opacity: 0;
+      pointer-events: none;
+
+      // From md on the button sits at the side and does not cover the footer.
+      @include mx.breakpoint("md") {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+  }
+}

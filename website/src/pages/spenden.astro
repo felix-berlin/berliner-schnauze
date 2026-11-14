@@ -68,11 +68,11 @@ const page = {
       class='c-section-card c-donation-page__section'
       aria-labelledby='heading-plattformen'
     >
-      <div class='c-section-card__header'>
-        <span class='c-section-card__num'></span>
-        <h2 class='c-section-card__title' id='heading-plattformen'>Plattformen</h2>
+      <div class='header'>
+        <span class='num'></span>
+        <h2 class='title' id='heading-plattformen'>Plattformen</h2>
       </div>
-      <div class='c-section-card__body'>
+      <div class='body'>
         <p>Der klassische Weg — einmalig oder regelmäßig, janz wie de willst.</p>
         <ul class='c-donation-page__platform-list u-list-reset'>
           {
@@ -112,11 +112,11 @@ const page = {
     </section>
 
     <section class='c-section-card c-donation-page__section' aria-labelledby='heading-krypto'>
-      <div class='c-section-card__header'>
-        <span class='c-section-card__num'></span>
-        <h2 class='c-section-card__title' id='heading-krypto'>Krypto</h2>
+      <div class='header'>
+        <span class='num'></span>
+        <h2 class='title' id='heading-krypto'>Krypto</h2>
       </div>
-      <div class='c-section-card__body'>
+      <div class='body'>
         <p>Für die Krypto-Freunde: Adresse kopieren, Coins rüberschicken, fertich.</p>
         <DonationWallets client:visible wallets={wallets} />
       </div>

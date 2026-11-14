@@ -46,6 +46,8 @@ test.describe("Header", () => {
 
     await menuButton(page).click();
     await expect(menuButton(page)).toHaveAttribute("aria-expanded", "true");
+    // MainMenu passes :offset="13"; the panel gap must follow it, not the 8px default.
+    await expect(page.locator("#dropdown-main-menu")).toHaveCSS("margin-top", "13px");
     for (const [name, href] of [
       [/Berliner oder nicht/, "/games/berliner-oder-nicht"],
       ["Magazin", "/magazin"],

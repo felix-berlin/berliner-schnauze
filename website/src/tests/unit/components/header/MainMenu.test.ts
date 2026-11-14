@@ -54,7 +54,8 @@ describe("MainMenu.vue", () => {
 
   it("renders items with a description as discover cards", async () => {
     const wrapper = await mountMenu();
-    const cards = wrapper.findAll(".c-main-menu__card");
+    // Discover cards are the links with a title/description block (spans); plain links hold icon + text.
+    const cards = wrapper.findAll("nav a").filter((a) => a.find("span").exists());
     expect(cards.map((c) => c.attributes("href"))).toEqual(["/wort", "/anki"]);
     expect(cards[0].text()).toContain("Alle Wörter von A bis Z");
   });
@@ -64,21 +65,24 @@ describe("MainMenu.vue", () => {
     const wrapper = mount(MainMenu, {
       props: { menuItems: [{ link: "/spenden", title: "Spenden" }] },
     });
-    expect(wrapper.find(".c-main-menu__col--discover").exists()).toBe(false);
+    expect(wrapper.text()).not.toContain("Entdecken");
   });
 
   it("tags only the Anki entry as new", async () => {
     const wrapper = await mountMenu();
-    const tags = wrapper.findAll(".c-main-menu__tag");
+    const tags = wrapper.findAll("nav span").filter((t) => t.text() === "Neu");
     expect(tags).toHaveLength(1);
-    expect(wrapper.findAll(".c-main-menu__card")[1].text()).toContain("Neu");
+    expect(wrapper.find("a[href='/anki']").text()).toContain("Neu");
   });
 
   it("splits the remaining links into Mitmachen and App groups", async () => {
     const wrapper = await mountMenu();
-    const labels = wrapper.findAll(".c-main-menu__label").map((l) => l.text());
+    const labels = wrapper.findAll("nav p").map((l) => l.text());
     expect(labels).toEqual(["Entdecken", "Mitmachen", "App"]);
-    const links = wrapper.findAll(".c-main-menu__link").map((l) => l.attributes("href"));
+    const links = wrapper
+      .findAll("nav a")
+      .filter((a) => !a.find("span").exists())
+      .map((l) => l.attributes("href"));
     expect(links).toEqual(["/wort-vorschlagen", "/changelog"]);
   });
 
@@ -98,11 +102,10 @@ describe("MainMenu.vue", () => {
         ],
       },
     });
-    expect(wrapper.find(".c-main-menu__tile").element.children).toHaveLength(0);
-    expect(wrapper.find(".c-main-menu__link").text()).toBe("Auch unbekannt");
-    expect(wrapper.find(".c-main-menu__link svg, .c-main-menu__link [data-testid]").exists()).toBe(
-      false,
-    );
+    expect(wrapper.find("a[href='/unbekannt'] span").element.children).toHaveLength(0);
+    const plain = wrapper.find("a[href='/auch-unbekannt']");
+    expect(plain.text()).toBe("Auch unbekannt");
+    expect(plain.find("svg, [data-testid]").exists()).toBe(false);
   });
 
   it("renders an icon for every known menu path", async () => {
@@ -140,16 +143,16 @@ describe("MainMenu.vue", () => {
     const wrapper = await mountMenu();
     await vi.dynamicImportSettled();
     await flushPromises();
-    const button = wrapper.find(".c-main-menu__install .install-app");
+    const button = wrapper.find("nav .install-app");
     expect(button.text()).toContain("App installieren");
     expect(button.find("[data-testid='icon-lucide-download']").exists()).toBe(true);
   });
 
   it("hides the install bar once the app is installed", async () => {
     const wrapper = await mountMenu();
-    expect(wrapper.find(".c-main-menu__install").exists()).toBe(true);
+    expect(wrapper.text()).toContain("Mit der App bleibst Du");
     isPwaInstalled.set(true);
     await wrapper.vm.$nextTick();
-    expect(wrapper.find(".c-main-menu__install").exists()).toBe(false);
+    expect(wrapper.text()).not.toContain("Mit der App bleibst Du");
   });
 });

@@ -36,7 +36,7 @@
       </template>
 
       <div v-else-if="view === 'loading'" class="c-bon-card">
-        <section class="c-bon-card__card" aria-busy="true">
+        <section class="card" aria-busy="true">
           <p class="t-small" role="status">
             {{
               finishing
@@ -46,10 +46,10 @@
                   : "Karten werden jemischt …"
             }}
           </p>
-          <span class="c-skeleton c-skeleton--title" aria-hidden="true" />
-          <span class="c-skeleton c-skeleton--line" aria-hidden="true" />
+          <span class="c-skeleton" data-variant="title" aria-hidden="true" />
+          <span class="c-skeleton" data-variant="line" aria-hidden="true" />
         </section>
-        <div class="c-bon-card__answers">
+        <div class="answers">
           <button class="c-choice" type="button" aria-disabled="true">
             <span aria-hidden="true">←</span> Nee, nich Berlinerisch
           </button>
@@ -60,9 +60,9 @@
       </div>
 
       <div v-else-if="view === 'error'" class="c-bon-error">
-        <div class="c-state c-state--error" role="alert">
+        <div class="c-state" data-variant="error" role="alert">
           <AlertIcon width="18" height="18" aria-hidden="true" />
-          <span class="c-state__body">
+          <span class="body">
             <b>Ditt hat nich jeklappt.</b>
             <span v-if="error?.retryable !== false">
               Die Karten wollten leider nich kommen. Deine Punkte und Leben bleiben – versuch’s

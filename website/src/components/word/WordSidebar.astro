@@ -13,12 +13,12 @@ const { word, posLabel, sections } = Astro.props;
 ---
 
 <aside class='c-word-sidebar'>
-  <div class='c-word-sidebar__word'>
-    <p class='c-word-sidebar__word-title'>{word.berlinerisch}</p>
-    {posLabel && <p class='c-word-sidebar__word-subtitle'>{posLabel}</p>}
+  <div class='word'>
+    <p class='title'>{word.berlinerisch}</p>
+    {posLabel && <p class='subtitle'>{posLabel}</p>}
   </div>
-  <nav class='c-word-sidebar__nav' aria-label='Seitennavigation'>
-    {sections.map((section) => <a class='c-word-sidebar__link' href={`#${section.id}`}>{section.label}</a>)}
+  <nav class='nav' aria-label='Seitennavigation'>
+    {sections.map((section) => <a class='link' href={`#${section.id}`}>{section.label}</a>)}
   </nav>
 </aside>
 
@@ -30,10 +30,13 @@ const { word, posLabel, sections } = Astro.props;
   function initSidebarNav() {
     stopSpy?.();
     stopSpy = initHeaderScrollSpy({
-      activeClass: 'is-active',
       getSectionId: (link) => link.getAttribute('href')?.slice(1),
-      linkSelector: '.c-word-sidebar__link',
+      linkSelector: 'a',
       navSelector: '.c-word-sidebar',
+      onActivate: (link, sidebar) => {
+        sidebar.querySelectorAll('[aria-current]').forEach((el) => el.removeAttribute('aria-current'));
+        link.setAttribute('aria-current', 'true');
+      },
     });
   }
 

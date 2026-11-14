@@ -1,22 +1,21 @@
 <template>
   <div ref="root" class="c-berlin-area-map">
     <details
-      class="c-berlin-area-map__map"
+      class="map"
       :open="mapOpen"
       @toggle="mapOpen = ($event.target as HTMLDetailsElement).open"
     >
       <summary class="c-textlink">Lieber auf der Karte wählen</summary>
       <svg
         ref="group"
-        class="c-berlin-area-map__svg"
+        class="svg"
         :viewBox="MAP_VIEWBOX"
         role="radiogroup"
         aria-label="Wo wohnste?"
       >
         <rect
           v-bind="radio('brandenburg', 'Brandenburg')"
-          class="c-berlin-area-map__area c-berlin-area-map__area--brandenburg"
-          :class="{ 'is-selected': modelValue === 'brandenburg' }"
+          class="area"
           x="-22"
           y="-22"
           :width="MAP_W + 44"
@@ -27,13 +26,13 @@
           v-for="a in BERLIN_AREAS"
           :key="a.key"
           v-bind="radio(a.key, a.name)"
-          class="c-berlin-area-map__area"
-          :class="{ 'is-selected': modelValue === a.key }"
+          class="area"
           :d="a.d"
         />
         <text
-          class="c-berlin-area-map__label c-berlin-area-map__label--brandenburg"
-          :class="{ 'is-selected': modelValue === 'brandenburg' }"
+          class="label"
+          data-area="brandenburg"
+          :data-state="modelValue === 'brandenburg' ? 'selected' : undefined"
           x="8"
           y="-6"
           aria-hidden="true"
@@ -43,8 +42,8 @@
         <text
           v-for="a in BERLIN_AREAS"
           :key="a.key"
-          class="c-berlin-area-map__label"
-          :class="{ 'is-selected': modelValue === a.key }"
+          class="label"
+          :data-state="modelValue === a.key ? 'selected' : undefined"
           :x="a.labelX"
           :y="a.labelY"
           aria-hidden="true"
@@ -60,27 +59,29 @@
           </tspan>
         </text>
       </svg>
-      <button
-        type="button"
-        class="c-choice c-berlin-area-map__elsewhere"
-        :aria-pressed="modelValue === 'elsewhere'"
-        @click="emit('update:modelValue', 'elsewhere')"
-      >
-        Woanders
-      </button>
+      <div class="elsewhere">
+        <button
+          type="button"
+          class="c-choice"
+          :aria-pressed="modelValue === 'elsewhere'"
+          @click="emit('update:modelValue', 'elsewhere')"
+        >
+          Woanders
+        </button>
+      </div>
     </details>
     <details
-      class="c-berlin-area-map__list"
+      class="list"
       :open="listOpen"
       @toggle="listOpen = ($event.target as HTMLDetailsElement).open"
     >
       <summary class="c-textlink">Lieber aus ner Liste wählen</summary>
-      <div class="c-berlin-area-map__list-items">
+      <div class="list-items">
         <button
           v-for="a in LIST"
           :key="a.key"
           type="button"
-          class="c-choice c-berlin-area-map__list-item"
+          class="c-choice"
           :aria-pressed="modelValue === a.key"
           @click="emit('update:modelValue', a.key)"
         >
@@ -88,7 +89,7 @@
         </button>
       </div>
     </details>
-    <p class="c-berlin-area-map__credit">Karte: Geoportal Berlin / ALKIS Berlin Bezirke</p>
+    <p class="credit">Karte: Geoportal Berlin / ALKIS Berlin Bezirke</p>
   </div>
 </template>
 

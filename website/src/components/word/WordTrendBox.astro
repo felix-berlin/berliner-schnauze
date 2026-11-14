@@ -9,19 +9,21 @@ const changeText = formatChange(change);
 const max = Math.max(...bars, 1);
 ---
 
-<section id='n-trend' class='c-trend' aria-labelledby='n-trend-t'>
-  <div class='c-trend__text'>
-    <p id='n-trend-t' class='t-label c-trend__label'>Trendet jerade</p>
-    <p class='c-trend__rank'><b class='t-em'>Platz {rank}</b> diese Woche</p>
-    <p class='t-small c-trend__meta'>
+<section id='n-trend' class='c-word-trend' aria-labelledby='n-trend-t'>
+  <div class='text'>
+    <p id='n-trend-t' class='t-label label'>Trendet jerade</p>
+    <p class='rank'><b class='t-em'>Platz {rank}</b> diese Woche</p>
+    <p class='t-small meta'>
       {views.toLocaleString('de-DE')} Aufrufe in 7 Tagen{changeText && ` · ${changeText} zur Vorwoche`}
     </p>
   </div>
-  <div class='c-trend__bars' aria-hidden='true'>
+  <div class='bars' aria-hidden='true'>
     {bars.map((v) => <span style={`height: ${Math.max(10, Math.round((v / max) * 100))}%`} />)}
   </div>
   {/* No trending page exists yet: the word index is the closest route. */}
-  <a class='c-textlink c-textlink--inline t-small c-trend__link' href='/wort'>
-    Alle Trend-Wörter ansehen →
-  </a>
+  <div class='more'>
+    <a class='c-textlink t-small' data-variant='inline' href='/wort'>
+      Alle Trend-Wörter ansehen →
+    </a>
+  </div>
 </section>

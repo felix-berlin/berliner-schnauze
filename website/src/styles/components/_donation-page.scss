@@ -2,125 +2,136 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-.c-donation-page {
-  display: grid;
-  gap: vars.$spacer * 1.5;
-  padding-block-start: vars.$spacer * 2.5;
-
-  &__eyebrow {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 0;
-
-    @include mx.eyebrow(0.78rem, 0.14em);
-
-    color: var(--orange-400);
-
-    svg {
-      color: var(--gold);
-    }
-  }
-
-  &__intro {
-    max-width: 65ch;
-  }
-
-  &__reassurance {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.625rem;
-  }
-
-  &__reassurance-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4375rem;
-    padding: 0.4375rem 0.8125rem;
-    font-size: 0.85rem;
-
-    @include mx.paper-chip;
-
-    svg {
-      color: var(--orange-400);
-      flex-shrink: 0;
-    }
-  }
-
-  &__platform-list {
+@layer legacy {
+  .c-donation-page {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(215px, 100%), 1fr));
-    gap: vars.$spacer * 0.75;
-    margin-block-start: vars.$spacer;
-  }
+    gap: vars.$spacer * 1.5;
+    padding-block-start: vars.$spacer * 2.5;
 
-  &__platform-item &__platform-link.c-button {
-    --color-background: var(--orange-100);
-    --color-border: var(--orange-600);
-    --color: var(--blue);
+    &__eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0;
 
-    display: flex;
-    align-items: center;
-    gap: vars.$spacer * 0.8;
-    padding: 0.9375rem 1rem;
-    text-decoration: none;
+      @include mx.eyebrow;
 
-    @include butler-mx.dark-mode-class {
-      --color-background: var(--new-blue-300);
-      --color-border: var(--orange-500);
-      --color: var(--yellow-500);
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      color: var(--orange-400);
 
-      .c-donation-page__platform-icon {
-        color: var(--orange-300);
-      }
-    }
-  }
-
-  &__platform-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 36px;
-    height: 36px;
-    border-radius: 4px;
-    background: color-mix(in srgb, var(--orange-600) 14%, transparent);
-  }
-
-  &__platform-text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    min-width: 0;
-  }
-
-  &__platform-name {
-    font-weight: 700;
-    font-size: 1rem;
-  }
-
-  &__platform-subtitle {
-    font-size: 0.8rem;
-    color: var(--color-muted);
-  }
-
-  &__platform-item--primary &__platform-link.c-button {
-    --color-background: var(--orange-500);
-    --color-border: var(--yellow-500);
-    --style-border: dashed;
-    --color: white;
-
-    // reassert over the dimmed dark-mode background/icon-color set on the base platform-link rule
-    @include butler-mx.dark-mode-class {
-      --color-background: var(--orange-500);
-
-      .c-donation-page__platform-icon {
-        color: white;
+      svg {
+        color: var(--gold);
       }
     }
 
-    .c-donation-page__platform-subtitle {
-      color: rgb(255 255 255 / 82%);
+    &__intro {
+      max-width: 65ch;
+    }
+
+    &__reassurance {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.625rem;
+    }
+
+    &__reassurance-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4375rem;
+      padding: 0.4375rem 0.8125rem;
+      font-size: 0.85rem;
+
+      @include mx.paper-chip;
+
+      svg {
+        color: var(--orange-400);
+        flex-shrink: 0;
+      }
+    }
+
+    &__platform-list {
+      // The section card's li rule used to reach in here; it stops at its parts now.
+      > li {
+        line-height: 1.5;
+      }
+
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(215px, 100%), 1fr));
+      gap: vars.$spacer * 0.75;
+      margin-block-start: vars.$spacer;
+    }
+
+    &__platform-item &__platform-link.c-button {
+      --button-bg: var(--orange-100);
+      --button-border-color: var(--orange-600);
+      --button-color: var(--blue);
+
+      display: flex;
+      align-items: center;
+      gap: vars.$spacer * 0.8;
+
+      --button-padding: 0.9375rem 1rem;
+
+      text-decoration: none;
+
+      @include butler-mx.dark-mode-class {
+        --button-bg: var(--new-blue-300);
+        --button-border-color: var(--orange-500);
+        --button-color: var(--yellow-500);
+
+        .c-donation-page__platform-icon {
+          color: var(--orange-300);
+        }
+      }
+    }
+
+    &__platform-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+      background: color-mix(in srgb, var(--orange-600) 14%, transparent);
+    }
+
+    &__platform-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      min-width: 0;
+    }
+
+    &__platform-name {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    &__platform-subtitle {
+      font-size: 0.8rem;
+      color: var(--color-muted);
+    }
+
+    &__platform-item--primary &__platform-link.c-button {
+      --button-bg: var(--orange-500);
+      --button-border-color: var(--yellow-500);
+      --button-border-style: dashed;
+      --button-color: white;
+
+      // reassert over the dimmed dark-mode background/icon-color set on the base platform-link rule
+      @include butler-mx.dark-mode-class {
+        --button-bg: var(--orange-500);
+
+        .c-donation-page__platform-icon {
+          color: white;
+        }
+      }
+
+      .c-donation-page__platform-subtitle {
+        color: rgb(255 255 255 / 82%);
+      }
     }
   }
 }

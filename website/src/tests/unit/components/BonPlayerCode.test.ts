@@ -80,11 +80,7 @@ describe("2 code shown", () => {
     const w = await showCode({ attachTo: document.body });
     expect(w.get("h2").text()).toBe("Dein Spielercode für Ede:");
     const code = w.get("[data-test=code]");
-    expect(code.findAll(".c-bon-player-code__block").map((b) => b.text())).toEqual([
-      "K7QD",
-      "M2X9",
-      "ZT4B",
-    ]);
+    expect(code.findAll("span").map((b) => b.text())).toEqual(["K7QD", "M2X9", "ZT4B"]);
     expect(code.attributes("aria-label")).toBe("K 7 Q D, M 2 X 9, Z T 4 B");
     expect(document.activeElement).toBe(code.element);
     w.unmount();
@@ -264,7 +260,9 @@ describe("3a wrong code", () => {
     expect(w.get("input").attributes("aria-invalid")).toBe("true");
     const error = w.get("[data-test=error]");
     expect(error.attributes("aria-live")).toBe("assertive");
-    expect(error.get(".c-state--error").text()).toContain("Den Code kenn ick nich.");
+    expect(error.get(".c-state[data-variant~='error']").text()).toContain(
+      "Den Code kenn ick nich.",
+    );
     expect(error.text()).toContain("Guck nochmal jenau hin – vielleicht ’n Zeichen vertippt?");
     expect(w.get("input").element.value).toBe(CODE);
   });
@@ -292,7 +290,7 @@ describe("4 success", () => {
     const region = w.get("[data-test=status]").element;
     await submit(w, CODE);
     expect(w.get("[data-test=status]").element).toBe(region);
-    expect(w.get("[data-test=status] .c-state--done").text()).toContain(
+    expect(w.get("[data-test=status] .c-state[data-variant~='done']").text()).toContain(
       "Willkommen zurück, Berta!",
     );
     expect(region.textContent).toContain(
@@ -308,7 +306,7 @@ describe("4 success", () => {
     const w = mount(BonPlayerCode, { props: { mode: "redeem" } });
     await submit(w, CODE);
     const go = w.get("[data-test=continue]");
-    expect(go.classes()).toContain("c-button--primary");
+    expect(go.attributes("data-variant")).toContain("primary");
     await go.trigger("click");
     expect(w.emitted("close")).toHaveLength(1);
   });

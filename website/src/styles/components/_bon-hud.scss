@@ -1,127 +1,121 @@
 @use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
 // Game header (docs/design/bon/SPEC.md §7): hearts, points, streak, then the multiplier track.
-.c-bon-hud {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+// Parts: .row (.lives of .life, .score with .points, .streak with .streak-count), .track of .field.
+// States: .lives data-state="hit" (a heart was lost), .life data-state="lost", .points
+// data-state="gain", .field data-state="reached" | "active".
+@include mx.component("bon-hud") {
+  :scope {
+    // Motion timings of docs/design/bon/SPEC.md §13 (choreography, not a duration token).
+    --_wobble: 400ms;
+    --_pop: 450ms;
+    --_pop-ease: cubic-bezier(0.3, 1.6, 0.5, 1);
 
-  &__row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .row {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 
-  &__lives {
+  .lives {
     display: flex;
-    gap: 0.25rem;
+    gap: var(--space-1);
 
-    // A lost heart: wobble ±6px (Spec §13).
-    @media (prefers-reduced-motion: no-preference) {
-      &--hit {
-        animation: c-bon-hud-wobble 400ms ease-in-out;
+    // A lost heart: wobble ±6px (docs/design/bon/SPEC.md §13).
+    @include butler-mx.feature("motion") {
+      &[data-state="hit"] {
+        animation: c-bon-hud-wobble var(--_wobble) ease-in-out;
       }
     }
   }
 
   // Lost hearts stay as an outline, so colour is not the only cue.
-  &__life {
-    color: var(--danger);
+  .life {
+    color: var(--color-status-danger);
     fill: currentcolor;
 
-    &--lost {
-      color: var(--color-muted);
+    &[data-state="lost"] {
+      color: var(--color-text-muted);
       fill: none;
     }
   }
 
-  &__score {
+  .score {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.25rem;
+    gap: var(--space-1);
     line-height: 1;
   }
 
-  &__points {
-    font-size: 2rem;
-    font-weight: 900;
-    color: var(--color-ink-strong);
+  .points {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-black);
+    color: var(--color-text-strong);
     font-variant-numeric: tabular-nums;
-    // Morphs into the "Punkte" figure of the result (Spec §13).
+    // Morphs into the "Punkte" figure of the result (docs/design/bon/SPEC.md §13).
     view-transition-name: bon-score;
 
-    // A right answer: pop (Spec §13).
-    @media (prefers-reduced-motion: no-preference) {
-      &--gain {
-        animation: c-bon-hud-pop 450ms cubic-bezier(0.3, 1.6, 0.5, 1);
+    // A right answer: pop (docs/design/bon/SPEC.md §13).
+    @include butler-mx.feature("motion") {
+      &[data-state="gain"] {
+        animation: c-bon-hud-pop var(--_pop) var(--_pop-ease);
       }
     }
   }
 
-  &__streak {
+  .streak {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 0.25rem;
+    gap: var(--space-1);
     text-align: end;
   }
 
-  &__streak-count {
+  .streak-count {
     display: flex;
     align-items: center;
-    gap: 0.375rem;
-    font-weight: 700;
-    color: var(--color-ink-strong);
+    gap: var(--space-1);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
 
     svg {
-      color: var(--orange-400);
+      color: var(--color-accent-icon); // colour inventory R11
     }
   }
 
-  &__track {
+  .track {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 3px;
+    gap: var(--space-1);
   }
 
-  &__field {
+  .field {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 22px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: var(--color-muted);
-    background: var(--surface-chip);
+    block-size: 22px;
+    font-size: var(--font-size-2xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-muted);
+    background: var(--color-surface-chip);
     border-radius: var(--radius-xxs);
 
-    &--reached {
-      color: var(--color-accent-text);
-      background: color-mix(in srgb, var(--orange-500) 22%, transparent);
+    &[data-state="reached"] {
+      color: var(--color-text-accent);
+      background: var(--color-surface-wash-strong); // colour inventory R18
     }
 
-    &--active {
-      color: var(--white-100);
-      background: var(--orange-600);
+    &[data-state="active"] {
+      color: var(--color-text-on-accent); // colour inventory R3
+      background: var(--color-accent-solid); // colour inventory R1
     }
-  }
-}
-
-@keyframes c-bon-hud-pop {
-  35% {
-    scale: 1.2;
-  }
-}
-@keyframes c-bon-hud-wobble {
-  20%,
-  60% {
-    translate: -6px;
-  }
-
-  40%,
-  80% {
-    translate: 6px;
   }
 }

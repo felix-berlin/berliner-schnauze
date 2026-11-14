@@ -1,28 +1,25 @@
-.c-floating-label {
-  position: relative;
+@use "@styles/mixins" as mx;
 
-  &__input:focus ~ .c-floating-label__label,
-  &__input:not(:placeholder-shown) ~ .c-floating-label__label {
-    z-index: -1;
+// Field wrapper with an error note that floats below the control (SuggestWordForm.vue). The grid
+// stretches the slotted input/textarea to full width; the control keeps its base styling
+// (base/_inputs.scss: Safari 26.0-26.3 skips @scope rules on form controls). Part: .error.
+// While the field is focused or filled, the note steps behind it.
+@include mx.component("floating-label") {
+  :scope {
+    position: relative;
+    display: grid;
   }
 
-  &__input {
-    height: 100%;
-    width: 100%;
-  }
-
-  &__label {
-    --size-font: inherit;
-    --position-left: var(--padding-x-input, 0);
-    --offset: 5px;
+  .error {
+    --_below: calc(100% + 5px); // 5px: between space-1 and space-2, kept from the form mock
 
     position: absolute;
-    inset-inline-start: var(--position-left);
-    font-size: var(--size-font);
-    pointer-events: none; // only needed when no <label> element is used
+    inset-block-start: var(--_below);
+    inset-inline-start: var(--padding-x-input, 0);
+    pointer-events: none;
+  }
 
-    &--bottom {
-      inset-block-start: calc(100% + var(--offset));
-    }
+  :scope:has(:is(input, textarea):is(:focus, :not(:placeholder-shown))) .error {
+    z-index: var(--z-below);
   }
 }

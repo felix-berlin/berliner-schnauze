@@ -3,123 +3,125 @@
 @use "@sass-butler/functions" as butler-fn;
 @use "@sass-butler/mixins" as butler-mx;
 
-.c-word-list {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-
-  .is-highlight {
-    background: var(--orange-300);
-    color: var(--blue);
-  }
-
-  &__word {
-    padding: vars.$spacer;
-    background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 30%, white));
-    border: 1px solid var(--color-border, var(--orange-200));
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 1rem;
-    box-shadow: vars.$paper-lift;
-
-    @include butler-mx.dark-mode-class {
-      --color-background: var(--new-blue-400);
-      --color-border: var(--new-blue-200);
-    }
-
-    &.is-active {
-      outline: 2px dashed var(--color-body);
-      outline-offset: -2px;
-    }
-  }
-
-  &__header {
-    display: flex;
-    align-items: center;
+@layer legacy {
+  .c-word-list {
+    list-style-type: none;
     margin: 0;
-    row-gap: #{vars.$spacer * 1};
-    overflow: hidden;
-  }
+    padding: 0;
 
-  &__berlinerisch {
-    font: {
-      family: vars.$berlin;
-      weight: 700;
-      size: butler-fn.fluid(24, 72, 320, 1260);
+    .is-highlight {
+      background: var(--orange-300);
+      color: var(--blue);
     }
 
-    margin: 0;
-    white-space: nowrap;
+    &__word {
+      padding: vars.$spacer;
+      background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 30%, white));
+      border: 1px solid var(--color-border, var(--orange-200));
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      box-shadow: vars.$paper-lift;
 
-    a {
-      text: {
-        decoration: underline;
-        decoration-style: dashed;
-        decoration-color: transparent;
-        decoration-thickness: from-font;
-        underline-position: from-font;
+      @include butler-mx.dark-mode-class {
+        --color-background: var(--new-blue-400);
+        --color-border: var(--new-blue-200);
       }
 
-      transition: text-decoration-color 0.3s ease;
-
-      @include butler-mx.hover {
-        text-decoration-color: inherit;
-      }
-    }
-  }
-
-  &__crown {
-    display: flex;
-    position: absolute;
-    inset-block-end: calc(100% - 10px);
-    color: vars.$gold;
-  }
-
-  &__translation {
-    font-size: butler-fn.fluid(16, 20, 320, 1260);
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    span,
-    &::before {
-      margin: var(--margin, 0 #{vars.$spacer * 0.5});
-
-      @include mx.breakpoint("sm") {
-        --margin: 0 #{vars.$spacer};
+      &.is-active {
+        outline: 2px dashed var(--color-body);
+        outline-offset: -2px;
       }
     }
 
-    &::before {
-      content: "᛫";
+    &__header {
+      display: flex;
+      align-items: center;
+      margin: 0;
+      row-gap: #{vars.$spacer * 1};
+      overflow: hidden;
     }
-  }
 
-  &__options-dropdown {
-    align-self: flex-start;
-  }
-
-  &--small {
-    .c-word-list__berlinerisch {
+    &__berlinerisch {
       font: {
         family: vars.$berlin;
         weight: 700;
-        size: butler-fn.fluid(18, 24, 320, 1260);
+        size: butler-fn.fluid(24, 72, 320, 1260);
+      }
+
+      margin: 0;
+      white-space: nowrap;
+
+      a {
+        text: {
+          decoration: underline;
+          decoration-style: dashed;
+          decoration-color: transparent;
+          decoration-thickness: from-font;
+          underline-position: from-font;
+        }
+
+        transition: text-decoration-color 0.3s ease;
+
+        @include butler-mx.hover {
+          text-decoration-color: inherit;
+        }
       }
     }
-  }
 
-  &--large {
-    .c-word-list__header {
-      @include mx.breakpoint("xs", "max") {
-        flex-wrap: wrap;
+    &__crown {
+      display: flex;
+      position: absolute;
+      inset-block-end: calc(100% - 10px);
+      color: vars.$gold;
+    }
+
+    &__translation {
+      font-size: butler-fn.fluid(16, 20, 320, 1260);
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      span,
+      &::before {
+        margin: var(--margin, 0 #{vars.$spacer * 0.5});
+
+        @include mx.breakpoint("sm") {
+          --margin: 0 #{vars.$spacer};
+        }
+      }
+
+      &::before {
+        content: "᛫";
       }
     }
 
-    .c-word-list__berlinerisch {
-      @include mx.breakpoint("xs", "max") {
-        flex: 1 0 100%;
+    &__options-dropdown {
+      align-self: flex-start;
+    }
+
+    &--small {
+      .c-word-list__berlinerisch {
+        font: {
+          family: vars.$berlin;
+          weight: 700;
+          size: butler-fn.fluid(18, 24, 320, 1260);
+        }
+      }
+    }
+
+    &--large {
+      .c-word-list__header {
+        @include mx.breakpoint("xs", "max") {
+          flex-wrap: wrap;
+        }
+      }
+
+      .c-word-list__berlinerisch {
+        @include mx.breakpoint("xs", "max") {
+          flex: 1 0 100%;
+        }
       }
     }
   }

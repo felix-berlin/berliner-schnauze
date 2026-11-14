@@ -2,212 +2,163 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 // Game card, answers and swipe (docs/design/bon/SPEC.md §7, §10).
-.c-bon-card {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+// Parts: .card (data-state="hint": the intro wiggle) with .label, .word > .headword, .progress,
+// .overlay (data-side="nee" | "ja"), .swipe-hint > .swipe-hint-icon; .answers (two c-choice), .how
+// (data-input="touch" | "keys"), then .end (centres the "Spiel beenden" textlink; a wrapper, so no
+// alignment property reaches the slotted feedback). BonFeedback takes the card's place through the
+// "feedback" slot, wrapped in .feedback[data-slot].
+// Public: --bon-card-touch-display, --bon-card-keys-display (one hint per input kind; the game
+// shell switches them at the word breakpoint).
+@include mx.component("bon-card") {
+  :scope {
+    // Motion timings of docs/design/bon/SPEC.md §13 (choreography, not a duration token).
+    --_spring: 200ms;
+    --_hint: 2s;
+    --_hint-delay: 0.6s;
+    --_word-size: clamp(2rem, 12cqi, 3rem); // fluid with the card width
+    --_underline-drop: -0.1em; // em: follows the word size
 
-  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .card {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    min-height: 260px;
-    padding: 2rem 1.25rem;
-    box-sizing: border-box;
+    gap: var(--space-3);
+    min-block-size: 260px;
+    padding: var(--space-8) var(--space-5);
     text-align: center;
-    background: var(--surface-sheet);
-    border: 1px dashed var(--rule-card);
+    background: var(--color-surface-sheet);
+    border: 1px dashed var(--color-border-card);
     border-radius: var(--radius-sm);
-    box-shadow: var(--paper-lift);
+    box-shadow: var(--shadow-paper-lift);
     container-type: inline-size;
     touch-action: pan-y;
     user-select: none;
     cursor: grab;
     view-transition-name: bon-card;
+
     // Spring back; the inline style of an active drag sets transition: none.
-    transition: transform 200ms ease-out;
+    @include butler-mx.feature("motion") {
+      transition: transform var(--_spring) ease-out;
 
-    @media (prefers-reduced-motion: reduce) {
-      transition-duration: 0ms;
-    }
-  }
-
-  &__label,
-  &__progress {
-    margin: 0;
-  }
-
-  // font-body on purpose: the DS base sets every h1-h6 to the display face (Spec §4).
-  &__word {
-    margin: 0;
-    font-family: var(--font-body);
-    font-size: clamp(2rem, 12cqi, 3rem);
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: 0.5px;
-    color: var(--color-ink-strong);
-    overflow-wrap: anywhere;
-    hyphens: auto;
-
-    @include butler-mx.dark-mode-class {
-      color: var(--orange-300);
-    }
-
-    .c-headword {
-      display: inline-block;
-      position: relative;
-
-      &::after {
-        content: "";
-        position: absolute;
-        inset-inline: 0;
-        inset-block-end: -0.1em;
-        block-size: 2px;
-        background: repeating-linear-gradient(
-          to right,
-          var(--orange-300) 0,
-          var(--orange-300) 5px,
-          transparent 5px,
-          transparent 9px
-        );
+      &[data-state="hint"] {
+        animation: c-bon-card-intro var(--_hint) linear var(--_hint-delay) both;
       }
     }
   }
 
+  .label,
+  .progress {
+    margin: 0;
+  }
+
+  // font-body on purpose: the DS base sets every h1-h6 to the display face (Spec §4).
+  .word {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--_word-size);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1;
+    letter-spacing: 0.5px;
+    color: var(--color-text-emphasis); // colour inventory R16
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+
+  .headword {
+    display: inline-block;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      inset-block-end: var(--_underline-drop);
+      block-size: 2px;
+      background: repeating-linear-gradient(
+        to right,
+        var(--color-border-accent) 0,
+        var(--color-border-accent) 5px,
+        transparent 5px,
+        transparent 9px
+      ); // colour inventory R7
+    }
+  }
+
   // Drag overlays: opacity is set inline from the distance, only during the gesture.
-  &__overlay {
+  .overlay {
     position: absolute;
-    inset-block-start: 0.75rem;
-    padding: 0.25rem 0.625rem;
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--color-accent-text);
-    background: var(--surface-chip);
+    inset-block-start: var(--space-3);
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-accent);
+    background: var(--color-surface-chip);
     border-radius: var(--radius-xs);
     opacity: 0;
     pointer-events: none;
 
-    &--nee {
-      inset-inline-start: 0.75rem;
+    &[data-side="nee"] {
+      inset-inline-start: var(--space-3);
     }
 
-    &--ja {
-      inset-inline-end: 0.75rem;
+    &[data-side="ja"] {
+      inset-inline-end: var(--space-3);
     }
   }
 
-  &__swipe-hint {
+  .swipe-hint {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    padding-block-end: 1rem;
+    padding-block-end: var(--space-4);
     pointer-events: none;
   }
 
-  &__swipe-hint-icon {
-    color: var(--color-muted);
-    animation: c-bon-swipe-gesture 2s linear 0.6s both;
-  }
+  .swipe-hint-icon {
+    color: var(--color-text-muted);
 
-  &__card--intro {
-    animation: c-bon-card-intro 2s linear 0.6s both;
-  }
-
-  &__answers {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-
-    .c-choice {
-      justify-content: center;
-      min-height: 60px;
-      padding-inline: 0.5rem;
-      font-size: 1.05rem;
-      font-weight: 700;
-      text-align: center;
+    @include butler-mx.feature("motion") {
+      animation: c-bon-swipe-gesture var(--_hint) linear var(--_hint-delay) both;
     }
   }
 
-  // One hint per input kind: swipe on touch widths, arrow keys from the word breakpoint.
-  &__how {
+  .answers {
+    --choice-justify: center;
+    --choice-min-block-size: 60px;
+    --choice-padding-inline: var(--space-2);
+    --choice-font-size: var(--font-size-base);
+    --choice-text-align: center;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+    font-weight: var(--font-weight-bold); // the choices inherit the font
+  }
+
+  .how {
     margin: 0;
     text-align: center;
 
-    &--keys {
-      display: none;
+    &[data-input="touch"] {
+      display: var(--bon-card-touch-display, block);
     }
 
-    @include mx.breakpoint("word") {
-      &--touch {
-        display: none;
-      }
-
-      &--keys {
-        display: block;
-      }
+    &[data-input="keys"] {
+      display: var(--bon-card-keys-display, none);
     }
   }
 
-  &__end {
-    align-self: center;
-  }
-}
-
-@keyframes c-bon-card-intro {
-  0%,
-  50%,
-  100% {
-    translate: 0;
-    rotate: 0deg;
-  }
-
-  25% {
-    translate: 34px;
-    rotate: 3.5deg;
-  }
-
-  75% {
-    translate: -22px;
-    rotate: -2.5deg;
-  }
-}
-@keyframes c-bon-swipe-gesture {
-  0% {
-    translate: 0;
-    opacity: 0;
-  }
-
-  8%,
-  50%,
-  90% {
-    translate: 0;
-    opacity: 0.65;
-  }
-
-  33% {
-    translate: 34px;
-    opacity: 0.65;
-  }
-
-  75% {
-    translate: -22px;
-    opacity: 0.65;
-  }
-
-  100% {
-    translate: 0;
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .c-bon-card__card--intro,
-  .c-bon-card__swipe-hint-icon {
-    animation: none;
+  .end {
+    display: flex;
+    justify-content: center;
   }
 }

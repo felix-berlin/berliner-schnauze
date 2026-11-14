@@ -27,14 +27,14 @@ describe("SectionCard.astro", () => {
 
   it("renders body and footer slots", async () => {
     const html = await render(props, { default: "<p>Body</p>", footer: "Quelle" });
-    expect(html).toContain('<div class="c-section-card__body"><p>Body</p></div>');
-    expect(html).toContain("c-section-card__footer");
+    expect(html).toContain('<div class="body" data-slot><p>Body</p></div>');
+    expect(html).toMatch(/<footer[^>]*>Quelle<\/footer>/);
   });
 
   it("omits an empty or whitespace-only body and footer", async () => {
     const html = await render(props, { default: "  \n ", footer: "   " });
-    expect(html).not.toContain("c-section-card__body");
-    expect(html).not.toContain("c-section-card__footer");
-    expect(await render(props)).not.toContain("c-section-card__body");
+    expect(html).not.toContain('class="body"');
+    expect(html).not.toContain("<footer");
+    expect(await render(props)).not.toContain('class="body"');
   });
 });

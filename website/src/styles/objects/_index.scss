@@ -3,52 +3,54 @@
 @use "@sass-butler/functions" as butler-fn;
 @use "@sass-butler/mixins" as butler-mx;
 
-.o-index {
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    margin-block-start: 5%;
-    flex-wrap: var(--wrap-flex, wrap);
-    row-gap: vars.$spacer * 0.5;
+@layer legacy {
+  .o-index {
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      margin-block-start: 5%;
+      flex-wrap: var(--wrap-flex, wrap);
+      row-gap: vars.$spacer * 0.5;
 
-    @include mx.breakpoint("xs") {
-      --wrap-flex: nowrap;
+      @include mx.breakpoint("xs") {
+        --wrap-flex: nowrap;
+      }
     }
-  }
 
-  &__headline {
-    font-size: butler-fn.fluid(29, 56, 320, 1260);
-    margin: 0;
-  }
-
-  &__image-wrap {
-    flex: var(--flex, 0 1 64%);
-    margin-inline-start: var(--spacing-outer-left, auto);
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
-    margin-block-start: 80px;
-
-    @include mx.breakpoint("xs") {
-      --flex: 0 1 85%;
+    &__headline {
+      font-size: butler-fn.fluid(29, 56, 320, 1260);
+      margin: 0;
     }
-    @include mx.breakpoint("sm") {
-      --spacing-outer-left: 0;
-      --flex: 0 1 50%;
+
+    &__image-wrap {
+      flex: var(--flex, 0 1 64%);
+      margin-inline-start: var(--spacing-outer-left, auto);
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      margin-block-start: 80px;
+
+      @include mx.breakpoint("xs") {
+        --flex: 0 1 85%;
+      }
+      @include mx.breakpoint("sm") {
+        --spacing-outer-left: 0;
+        --flex: 0 1 50%;
+      }
     }
-  }
 
-  &__image {
-    filter: drop-shadow(
-      0 0 25px var(--color-shadow, color-mix(in srgb, var(--orange-500) 40%, transparent))
-    );
+    &__image {
+      filter: drop-shadow(
+        0 0 25px var(--color-shadow, color-mix(in srgb, var(--orange-500) 40%, transparent))
+      );
 
-    @include butler-mx.dark-mode-class {
-      --color-shadow: rgb(255 255 255 / 20%);
+      @include butler-mx.dark-mode-class {
+        --color-shadow: rgb(255 255 255 / 20%);
+      }
     }
-  }
 
-  .c-facts-grid {
-    margin: 3rem 0 10rem;
+    .c-facts-grid {
+      margin: 3rem 0 10rem;
+    }
   }
 }

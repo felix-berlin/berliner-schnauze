@@ -9,12 +9,12 @@ const days = Math.round(hours / 8);
 {
   hours > 0 && (
     <div class="c-anki-dev-hours">
-      <div class="c-anki-dev-hours__head">
+      <div class="head">
         <Timer width="18" height="18" />
         <span>Bisherige Entwicklungszeit</span>
       </div>
-      <div class="c-anki-dev-hours__body">
-        <div class="c-anki-dev-hours__figure">
+      <div class="body">
+        <div class="figure">
           <strong>{hours.toLocaleString("de-DE")}</strong>
           <span>Stunden</span>
         </div>
@@ -23,8 +23,8 @@ const days = Math.round(hours / 8);
           und es werden täglich mehr.
         </p>
       </div>
-      <div class="c-anki-dev-hours__foot">
-        <span class="c-anki-dev-hours__dot" />
+      <div class="foot">
+        <span class="dot" />
         <span>Live gemessen mit Wakapi</span>
       </div>
     </div>

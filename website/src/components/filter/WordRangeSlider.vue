@@ -33,7 +33,8 @@
       <button
         v-if="!hasRangeSet"
         type="button"
-        class="c-button c-button--center-icon c-word-range-slider__reset-button"
+        class="c-button c-word-range-slider__reset-button"
+        data-variant="center-icon"
         :aria-describedby="`${id}-legend`"
         aria-label="Filter zurücksetzen"
         @click="resetRange"

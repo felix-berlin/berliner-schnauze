@@ -1,55 +1,69 @@
-// Trend box (docs/design/wortseite/SPEC.md §2/§5, mock: Mobile2/Desktop3 #n-trend, ds bundle.css .c-trend).
-.c-trend {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: end;
-  gap: 0.25rem 1rem;
-  padding: 0.875rem 1rem;
-  background: color-mix(in srgb, var(--orange-500) 14%, var(--surface-paper));
-  border-radius: var(--radius-sm);
-  box-shadow: var(--paper-lift);
-  scroll-margin-block-start: var(--word-anchor-offset);
+@use "@styles/mixins" as mx;
 
-  &__text {
+// Trend box (docs/design/wortseite/SPEC.md §2/§5, mock: Mobile2/Desktop3 #n-trend, ds bundle.css
+// .c-trend). Parts .text (.label, .rank, .meta), .bars (one span per day, the last is today) and
+// .more (row of the "alle Trend-Wörter" textlink).
+@include mx.component("word-trend") {
+  :scope {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R41: one-off
+    --_bg: light-dark(rgb(243 226 222), rgb(81 70 72));
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R57: one-off
+    --_bar: rgb(207 87 54 / 45%);
+    --_text-gap: 0.125rem; // below every space step
+    --_bar-gap: 3px; // one-off, between the day bars
+    --_bar-width: 8px; // one-off
+    --_bar-radius: 1px; // below radius-xxs
+    --textlink-display: inline-flex;
+    --textlink-min-block-size: 2.75rem;
+
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: var(--space-1) var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-sm);
+    background: var(--_bg);
+    box-shadow: var(--shadow-paper-lift);
+    scroll-margin-block-start: var(--word-anchor-offset);
+  }
+
+  .text {
     display: flex;
     flex-direction: column;
-    gap: 0.125rem;
+    gap: var(--_text-gap);
   }
 
-  &__label {
-    color: var(--color-accent-text);
+  .label {
+    color: var(--color-text-accent);
   }
 
-  &__rank,
-  &__meta {
+  .rank,
+  .meta {
     margin: 0;
   }
 
-  &__rank {
-    color: var(--color-ink-strong);
+  .rank {
+    color: var(--color-text-strong);
   }
 
-  &__bars {
+  .bars {
     display: flex;
     align-items: flex-end;
-    gap: 3px;
-    block-size: 44px;
+    gap: var(--_bar-gap);
+    block-size: 2.75rem;
 
     > span {
-      inline-size: 8px;
-      background: color-mix(in srgb, var(--orange-500) 45%, transparent);
-      border-radius: 1px;
+      inline-size: var(--_bar-width);
+      border-radius: var(--_bar-radius);
+      background: var(--_bar);
 
       &:last-child {
-        background: var(--orange-600);
+        background: var(--color-accent-solid);
       }
     }
   }
 
-  &__link {
+  .more {
     grid-column: 1 / -1;
-    display: inline-flex;
-    align-items: center;
-    min-block-size: 44px;
   }
 }

@@ -28,7 +28,7 @@
             v-if="field.textarea"
             :id="field.id"
             v-model="form[field.name]"
-            class="c-textarea c-floating-label__input"
+            class="c-textarea"
             :name="field.id"
             rows="4"
             placeholder=" "
@@ -37,20 +37,18 @@
             v-else
             :id="field.id"
             v-model="form[field.name]"
-            class="c-input c-form__input c-floating-label__input"
+            class="c-input c-form__input"
             :class="{ 'c-input--email': field.type === 'email' }"
             :type="field.type ?? 'text'"
             :name="field.id"
             placeholder=" "
             :required="field.required"
           />
-          <AlertBanner
-            v-if="errors[field.name]"
-            type="danger"
-            class="c-floating-label__label c-floating-label__label--bottom c-alert--small"
-          >
-            {{ errors[field.name] }}
-          </AlertBanner>
+          <span v-if="errors[field.name]" class="error">
+            <AlertBanner type="danger" class="c-alert--small">
+              {{ errors[field.name] }}
+            </AlertBanner>
+          </span>
         </div>
       </div>
     </div>
@@ -80,8 +78,8 @@
 import TurnStile from "@components/TurnStile.vue";
 import { useContentTracking } from "@composables/useContentTracking";
 import { createToastNotify } from "@stores/toastNotify.ts";
-import { captchaWaitToast } from "@utils/captchaToast.ts";
 import { trackEvent } from "@utils/analytics";
+import { captchaWaitToast } from "@utils/captchaToast.ts";
 import { type SuggestWord, suggestWordSchema } from "@utils/suggestWordSchema.ts";
 import { useTimeoutFn } from "@vueuse/core";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";

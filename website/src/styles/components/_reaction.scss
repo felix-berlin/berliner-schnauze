@@ -1,41 +1,49 @@
-// Reaktion (docs/design/wortseite/SPEC.md §5/§9): thumbs up/down, "hilfreich". Borderless until hover.
-:where(.c-reaction) {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  min-inline-size: 2.75rem;
-  min-block-size: 2.75rem;
-  padding: 0 0.625rem;
-  border: 1px dashed transparent;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--color-muted);
-  font: inherit;
-  letter-spacing: inherit;
-  cursor: pointer;
-  transition:
-    color 0.3s ease-in-out,
-    border-color 0.3s ease-in-out,
-    background-color 0.3s ease-in-out;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
-  @media (hover: hover) {
-    &:hover:not(:disabled, [aria-disabled="true"]) {
-      border-color: var(--rule-card);
-      color: var(--color-ink-strong);
+// Reaktion (docs/design/wortseite/SPEC.md §5/§9): thumbs up/down, "hilfreich". Borderless until hover.
+// Part .count (the number; fixed minimum width, so the count arriving does not shift the row).
+// Public: --reaction-padding-inline, --reaction-disabled-cursor.
+@include mx.component("reaction") {
+  :scope {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
+    padding: 0 var(--reaction-padding-inline, var(--space-2));
+    border: 1px dashed transparent;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-muted);
+    font: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+    transition:
+      color var(--duration-base) var(--ease-standard),
+      border-color var(--duration-base) var(--ease-standard),
+      background-color var(--duration-base) var(--ease-standard);
+
+    @include butler-mx.hover {
+      &:not(:disabled, [aria-disabled="true"]) {
+        border-color: var(--color-border-card);
+        color: var(--color-text-strong);
+      }
+    }
+
+    &[aria-pressed="true"] {
+      background: var(--color-surface-wash);
+      color: var(--color-text-accent);
+    }
+
+    &[aria-disabled="true"] {
+      opacity: 0.55;
+      cursor: var(--reaction-disabled-cursor, not-allowed);
     }
   }
 
-  &[aria-pressed="true"] {
-    background: var(--surface-wash);
-    color: var(--color-accent-text);
-  }
-
-  &[aria-disabled="true"] {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition-duration: 0ms;
+  .count {
+    min-inline-size: 1.5ch;
+    font-variant-numeric: tabular-nums;
   }
 }

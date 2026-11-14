@@ -6,9 +6,9 @@ describe("CommentForm", () => {
   it("counter shows 1000 limit and blocks submit over it", async () => {
     const submit = vi.fn(async () => true);
     const wrapper = mount(CommentForm, { props: { submit } });
-    expect(wrapper.find(".c-comment-form__counter").text()).toBe("0 / 1000");
+    expect(wrapper.find(".c-comment-form .counter").text()).toBe("0 / 1000");
     await wrapper.find("textarea").setValue("a".repeat(1001));
-    expect(wrapper.find(".c-comment-form__counter").text()).toBe("1001 / 1000");
+    expect(wrapper.find(".c-comment-form .counter").text()).toBe("1001 / 1000");
     await wrapper.find("form").trigger("submit");
     expect(submit).not.toHaveBeenCalled();
   });
@@ -28,7 +28,7 @@ describe("CommentForm", () => {
 
   it("makes the counter a live region only from 900 characters", async () => {
     const wrapper = mount(CommentForm, { props: { submit: vi.fn() } });
-    const counter = () => wrapper.find(".c-comment-form__counter").attributes("aria-live");
+    const counter = () => wrapper.find(".c-comment-form .counter").attributes("aria-live");
     expect(counter()).toBeUndefined();
     await wrapper.find("textarea").setValue("a".repeat(899));
     expect(counter()).toBeUndefined();
@@ -44,12 +44,12 @@ describe("CommentForm", () => {
     expect(wrapper.find("button[type=submit]").attributes("disabled")).toBeUndefined();
     await wrapper.find("form").trigger("submit");
     expect(submit).not.toHaveBeenCalled();
-    const hint = wrapper.find(".c-comment-form__error");
+    const hint = wrapper.find(".c-comment-form .error");
     expect(hint.text()).toBe("Bisken mehr musste schon schreiben.");
     expect(area.attributes("aria-describedby")).toBe(hint.attributes("id"));
     expect(area.attributes("aria-invalid")).toBe("true");
     await area.setValue("Na, ditt stimmt.");
-    expect(wrapper.find(".c-comment-form__error").exists()).toBe(false);
+    expect(wrapper.find(".c-comment-form .error").exists()).toBe(false);
     expect(area.attributes("aria-invalid")).toBeUndefined();
   });
 
@@ -57,7 +57,7 @@ describe("CommentForm", () => {
     const wrapper = mount(CommentForm, { props: { submit: vi.fn() } });
     await wrapper.find("textarea").setValue("a".repeat(1001));
     await wrapper.find("form").trigger("submit");
-    expect(wrapper.find(".c-comment-form__error").text()).toBe(
+    expect(wrapper.find(".c-comment-form .error").text()).toBe(
       "Dit is zu lang: höchstens 1000 Zeichen.",
     );
   });
@@ -103,14 +103,14 @@ describe("CommentForm", () => {
 
   it("shows the spec privacy sentence and the shortcut hint with .c-kbd", () => {
     const wrapper = mount(CommentForm, { props: { submit: vi.fn() } });
-    expect(wrapper.find(".c-comment-form__privacy").text()).toContain(
+    expect(wrapper.find(".c-comment-form .privacy").text()).toContain(
       "Mit dem Abschicken wird dein Kommentar öffentlich angezeigt.",
     );
-    expect(wrapper.findAll(".c-comment-form__kbd .c-kbd").map((k) => k.text())).toEqual([
+    expect(wrapper.findAll(".c-comment-form .kbd .c-kbd").map((k) => k.text())).toEqual([
       "Strg",
       "Enter",
     ]);
-    expect(wrapper.find(".c-comment-form__kbd").text()).toContain("zum Abschicken");
+    expect(wrapper.find(".c-comment-form .kbd").text()).toContain("zum Abschicken");
   });
 
   it("edit: „Speichern“ is a pressed choice, no primary button, no hint", () => {
@@ -121,8 +121,8 @@ describe("CommentForm", () => {
     expect(save.text()).toBe("Speichern");
     expect(save.classes()).toContain("c-choice");
     expect(save.attributes("aria-pressed")).toBe("true");
-    expect(wrapper.find(".c-button--primary").exists()).toBe(false);
-    expect(wrapper.find(".c-comment-form__kbd").exists()).toBe(false);
+    expect(wrapper.find(".c-button[data-variant~='primary']").exists()).toBe(false);
+    expect(wrapper.find(".c-comment-form .kbd").exists()).toBe(false);
   });
 
   it("shows a busy state while sending and blocks a second submit", async () => {
@@ -150,7 +150,7 @@ describe("CommentForm", () => {
     await wrapper.find("textarea").setValue("Hallo Welt");
     await wrapper.find("form").trigger("submit");
     await flushPromises();
-    const box = wrapper.find(".c-state--error");
+    const box = wrapper.find(".c-state[data-variant~='error']");
     expect(box.attributes("role")).toBe("alert");
     expect(box.text()).toContain("Ditt hat nich jeklappt.");
     expect(box.text()).toContain("Dein Text bleibt stehen");
@@ -158,7 +158,7 @@ describe("CommentForm", () => {
     expect((wrapper.find("textarea").element as HTMLTextAreaElement).value).toBe("Hallo Welt");
     await wrapper.find("form").trigger("submit");
     await flushPromises();
-    expect(wrapper.find(".c-state--error").exists()).toBe(false);
+    expect(wrapper.find(".c-state[data-variant~='error']").exists()).toBe(false);
     expect(wrapper.find("button[type=submit]").text()).toBe("Abschicken");
   });
 
@@ -168,7 +168,7 @@ describe("CommentForm", () => {
     await wrapper.find("textarea").setValue("Hallo Welt");
     await wrapper.find("form").trigger("submit");
     await flushPromises();
-    expect(wrapper.find(".c-state--error").exists()).toBe(false);
+    expect(wrapper.find(".c-state[data-variant~='error']").exists()).toBe(false);
     expect(wrapper.find("[role=alert]").exists()).toBe(false);
     expect(wrapper.find("[role=status]").text()).toBe("Moment noch, ick prüf dich kurz.");
     expect(wrapper.find("button[type=submit]").text()).toBe("Abschicken");
@@ -201,7 +201,7 @@ describe("CommentForm", () => {
     await wrapper.find("form").trigger("submit");
     await flushPromises();
     expect(wrapper.find("[role=status]").text()).toContain("klemmt");
-    expect(wrapper.find(".c-state--error").exists()).toBe(false);
+    expect(wrapper.find(".c-state[data-variant~='error']").exists()).toBe(false);
   });
 
   it("a failure with a reason shows it under the Spec sentence, headline unchanged", async () => {
@@ -210,12 +210,10 @@ describe("CommentForm", () => {
     await wrapper.find("textarea").setValue("Hallo Welt");
     await wrapper.find("form").trigger("submit");
     await flushPromises();
-    const box = wrapper.find(".c-state--error");
+    const box = wrapper.find(".c-state[data-variant~='error']");
     expect(box.find("b").text()).toBe("Ditt hat nich jeklappt.");
     expect(box.text()).toContain("Dein Text bleibt stehen");
-    expect(box.find(".c-comment-form__reason").text()).toBe(
-      "Ma langsam, Keule – versuch's gleich nochmal.",
-    );
+    expect(box.find(".detail").text()).toBe("Ma langsam, Keule – versuch's gleich nochmal.");
     expect(wrapper.findAll("[role=alert]")).toHaveLength(1);
   });
 

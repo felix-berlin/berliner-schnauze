@@ -15,405 +15,409 @@ $panel-border: 1px solid var(--new-blue-200);
   }
 }
 
-.c-pwa-cache {
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-block-end: 1.5rem;
-  }
-
-  &__status {
-    font-family: vars.$berliner;
-    font-size: butler-fn.fluid(14, 18, 320, 1260);
-
-    &.is-online {
-      color: var(--success);
+@layer legacy {
+  .c-pwa-cache {
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-block-end: 1.5rem;
     }
 
-    &.is-offline {
-      color: var(--danger);
-    }
-  }
+    &__status {
+      font-family: vars.$berliner;
+      font-size: butler-fn.fluid(14, 18, 320, 1260);
 
-  &__stats {
-    display: flex;
-    gap: 1rem;
-    margin-block-end: 1.5rem;
-    flex-wrap: wrap;
-  }
+      &.is-online {
+        color: var(--success);
+      }
 
-  &__stat {
-    display: flex;
-    flex-direction: column;
-    padding: 0.75rem 1.25rem;
-    min-width: 8rem;
-
-    @include panel;
-  }
-
-  &__stat-value {
-    font-family: vars.$berliner;
-    font-size: butler-fn.fluid(20, 28, 320, 1260);
-    line-height: 1.2;
-  }
-
-  &__stat-label {
-    font-size: 0.8rem;
-    color: var(--color-muted);
-    margin-block-start: 0.25rem;
-  }
-
-  &__stat-icon {
-    width: 14px;
-    height: 14px;
-    opacity: 0.5;
-    margin-block-end: 0.375rem;
-    flex-shrink: 0;
-  }
-
-  &__stat--quota {
-    flex: 1;
-    min-width: 12rem;
-  }
-
-  &__stat-quota-bar {
-    display: block;
-    height: 3px;
-    background-color: color-mix(in srgb, var(--blue) 20%, transparent);
-    margin-block-start: 0.625rem;
-    overflow: hidden;
-
-    @include butler-mx.dark-mode-class {
-      background-color: rgb(255 255 255 / 10%);
-    }
-  }
-
-  &__stat-quota-fill {
-    display: block;
-    height: 100%;
-    background-color: var(--orange-500);
-    min-width: 2px;
-    transition: width 0.4s ease;
-  }
-
-  &__stat-quota-detail {
-    font-size: 0.75rem;
-    color: var(--color-muted);
-    margin-block-start: 0.375rem;
-  }
-
-  &__actions {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    margin-block-end: 2rem;
-
-    .c-button {
-      --padding: 0.5rem 1rem;
-
-      gap: 0.5rem;
-    }
-  }
-
-  &__skeleton {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  &__skeleton-row {
-    height: 4rem;
-
-    @include mx.skeleton-loader;
-  }
-
-  &__empty {
-    padding: 2rem;
-    text-align: center;
-    color: var(--color-muted);
-    font-family: vars.$berliner;
-    font-size: butler-fn.fluid(16, 20, 320, 1260);
-  }
-
-  &__unavailable {
-    padding: 1rem 1.25rem;
-
-    @include panel;
-  }
-
-  &__list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  // Delete button sits next to the <details>: interactive content can't live in <summary>.
-  &__bucket {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: start;
-    gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-
-    @include panel;
-  }
-
-  &__bucket-item {
-    &.c-accordion__item {
-      border: none;
+      &.is-offline {
+        color: var(--danger);
+      }
     }
 
-    &.is-empty {
-      opacity: 0.5;
-    }
-  }
-
-  &__bucket-summary {
-    &.c-accordion__trigger {
-      padding: 0;
+    &__stats {
+      display: flex;
+      gap: 1rem;
+      margin-block-end: 1.5rem;
+      flex-wrap: wrap;
     }
 
-    .c-accordion__trigger-label {
+    &__stat {
       display: flex;
       flex-direction: column;
+      padding: 0.75rem 1.25rem;
+      min-width: 8rem;
+
+      @include panel;
     }
 
-    .c-accordion__trigger-icon {
-      align-self: flex-start;
-      padding: 0.25rem;
+    &__stat-value {
+      font-family: vars.$berliner;
+      font-size: butler-fn.fluid(20, 28, 320, 1260);
+      line-height: 1.2;
+    }
+
+    &__stat-label {
+      font-size: 0.8rem;
+      color: var(--color-muted);
+      margin-block-start: 0.25rem;
+    }
+
+    &__stat-icon {
+      width: 14px;
+      height: 14px;
       opacity: 0.5;
+      margin-block-end: 0.375rem;
+      flex-shrink: 0;
     }
-  }
 
-  &__bucket-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-block-end: 0.25rem;
-  }
-
-  &__bucket-name {
-    flex: 1;
-    font-family: vars.$berliner;
-    font-size: butler-fn.fluid(15, 19, 320, 1260);
-  }
-
-  &__bucket-size {
-    font-size: 0.875rem;
-    color: var(--color-muted);
-  }
-
-  &__bucket-delete {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.25rem;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    color: inherit;
-    opacity: 0.5;
-
-    @include butler-mx.hover-focus {
-      opacity: 1;
+    &__stat--quota {
+      flex: 1;
+      min-width: 12rem;
     }
-  }
 
-  &__bucket-meta {
-    font-size: 0.8rem;
-    color: var(--color-muted);
-  }
+    &__stat-quota-bar {
+      display: block;
+      height: 3px;
+      background-color: color-mix(in srgb, var(--blue) 20%, transparent);
+      margin-block-start: 0.625rem;
+      overflow: hidden;
 
-  &__bucket-types {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem;
-    margin-block-start: 0.25rem;
-  }
+      @include butler-mx.dark-mode-class {
+        background-color: rgb(255 255 255 / 10%);
+      }
+    }
 
-  &__type-pill {
-    font-size: 0.7rem;
-    font-family: monospace;
-    padding: 0.1rem 0.4rem;
-    border-radius: 3px;
-    background-color: color-mix(in srgb, var(--new-blue-200) 40%, transparent);
-    opacity: 0.8;
-  }
+    &__stat-quota-fill {
+      display: block;
+      height: 100%;
+      background-color: var(--orange-500);
+      min-width: 2px;
+      transition: width 0.4s ease;
+    }
 
-  &__url-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
+    &__stat-quota-detail {
+      font-size: 0.75rem;
+      color: var(--color-muted);
+      margin-block-start: 0.375rem;
+    }
 
-  &__url-size {
-    font-size: 0.7rem;
-    color: var(--color-muted);
-  }
+    &__actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-block-end: 2rem;
 
-  &__url-type {
-    font-size: 0.65rem;
-    padding: 0.05rem 0.3rem;
-    border-radius: 2px;
-    background-color: color-mix(in srgb, var(--new-blue-200) 30%, transparent);
-    opacity: 0.8;
-  }
+      .c-button {
+        --button-padding: 0.5rem 1rem;
 
-  &__urls {
-    margin-block-start: 0.5rem;
-    padding-block-start: 0.5rem;
-    border-block-start: $panel-border;
-  }
+        gap: 0.5rem;
+      }
+    }
 
-  &__url {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding: 0.1rem 0.25rem;
-    font-size: 0.75rem;
-    font-family: monospace;
-    color: var(--color-muted);
-  }
+    &__skeleton {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
 
-  &__url-path {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    min-width: 0;
-  }
+    &__skeleton-row {
+      height: 4rem;
 
-  &__url-age {
-    white-space: nowrap;
-    flex-shrink: 0;
-    font-size: 0.7rem;
-  }
+      @include mx.skeleton-loader;
+    }
 
-  &__info-grid {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    margin-block-end: 1.5rem;
+    &__empty {
+      padding: 2rem;
+      text-align: center;
+      color: var(--color-muted);
+      font-family: vars.$berliner;
+      font-size: butler-fn.fluid(16, 20, 320, 1260);
+    }
 
-    @include panel;
-  }
+    &__unavailable {
+      padding: 1rem 1.25rem;
 
-  &__info-row {
-    display: grid;
-    grid-column: 1 / -1;
-    grid-template-columns: subgrid;
-    align-items: center;
-    min-height: 2.75rem;
-    padding-block: 0.4rem;
+      @include panel;
+    }
 
-    & + & {
+    &__list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    // Delete button sits next to the <details>: interactive content can't live in <summary>.
+    &__bucket {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+
+      @include panel;
+    }
+
+    &__bucket-item {
+      &.c-accordion__item {
+        border: none;
+      }
+
+      &.is-empty {
+        opacity: 0.5;
+      }
+    }
+
+    &__bucket-summary {
+      &.c-accordion__trigger {
+        padding: 0;
+      }
+
+      .c-accordion__trigger-label {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .c-accordion__trigger-icon {
+        align-self: flex-start;
+        padding: 0.25rem;
+        opacity: 0.5;
+      }
+    }
+
+    &__bucket-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-block-end: 0.25rem;
+    }
+
+    &__bucket-name {
+      flex: 1;
+      font-family: vars.$berliner;
+      font-size: butler-fn.fluid(15, 19, 320, 1260);
+    }
+
+    &__bucket-size {
+      font-size: 0.875rem;
+      color: var(--color-muted);
+    }
+
+    &__bucket-delete {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.25rem;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: inherit;
+      opacity: 0.5;
+
+      @include butler-mx.hover-focus {
+        opacity: 1;
+      }
+    }
+
+    &__bucket-meta {
+      font-size: 0.8rem;
+      color: var(--color-muted);
+    }
+
+    &__bucket-types {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      margin-block-start: 0.25rem;
+    }
+
+    &__type-pill {
+      font-size: 0.7rem;
+      font-family: monospace;
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+      background-color: color-mix(in srgb, var(--new-blue-200) 40%, transparent);
+      opacity: 0.8;
+    }
+
+    &__url-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    &__url-size {
+      font-size: 0.7rem;
+      color: var(--color-muted);
+    }
+
+    &__url-type {
+      font-size: 0.65rem;
+      padding: 0.05rem 0.3rem;
+      border-radius: 2px;
+      background-color: color-mix(in srgb, var(--new-blue-200) 30%, transparent);
+      opacity: 0.8;
+    }
+
+    &__urls {
+      margin-block-start: 0.5rem;
+      padding-block-start: 0.5rem;
       border-block-start: $panel-border;
     }
-  }
 
-  &__info-label {
-    font-size: 0.8rem;
-    color: var(--color-muted);
-    padding-inline: 1.25rem;
-  }
-
-  &__info-value {
-    padding-inline: 1.25rem;
-    font-size: 0.875rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-
-    &.is-sw-active,
-    &.is-installed {
-      color: var(--success);
+    &__url {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.1rem 0.25rem;
+      font-size: 0.75rem;
+      font-family: monospace;
+      color: var(--color-muted);
     }
 
-    &.is-sw-waiting,
-    &.is-sw-installing {
-      color: var(--gold);
+    &__url-path {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-width: 0;
+    }
+
+    &__url-age {
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-size: 0.7rem;
+    }
+
+    &__info-grid {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      margin-block-end: 1.5rem;
+
+      @include panel;
+    }
+
+    &__info-row {
+      display: grid;
+      grid-column: 1 / -1;
+      grid-template-columns: subgrid;
+      align-items: center;
+      min-height: 2.75rem;
+      padding-block: 0.4rem;
+
+      & + & {
+        border-block-start: $panel-border;
+      }
+    }
+
+    &__info-label {
+      font-size: 0.8rem;
+      color: var(--color-muted);
+      padding-inline: 1.25rem;
+    }
+
+    &__info-value {
+      padding-inline: 1.25rem;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+
+      &.is-sw-active,
+      &.is-installed {
+        color: var(--success);
+      }
+
+      &.is-sw-waiting,
+      &.is-sw-installing {
+        color: var(--gold);
+      }
+    }
+
+    &__info-sub {
+      font-size: 0.75rem;
+      color: var(--color-muted);
+      font-family: monospace;
+    }
+
+    &__quota-bar {
+      display: inline-block;
+      width: 6rem;
+      height: 0.4rem;
+      background-color: color-mix(in srgb, currentcolor 20%, transparent);
+      border: $panel-border;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    &__quota-fill {
+      display: block;
+      height: 100%;
+      background-color: var(--success);
+      transition: width 0.3s ease;
     }
   }
 
-  &__info-sub {
-    font-size: 0.75rem;
-    color: var(--color-muted);
-    font-family: monospace;
-  }
+  .c-pwa-type-bar {
+    margin-block-end: 1rem;
 
-  &__quota-bar {
-    display: inline-block;
-    width: 6rem;
-    height: 0.4rem;
-    background-color: color-mix(in srgb, currentcolor 20%, transparent);
-    border: $panel-border;
-    overflow: hidden;
-    flex-shrink: 0;
-  }
+    &__track {
+      display: flex;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      gap: 2px;
+      background-color: color-mix(in srgb, var(--new-blue-200) 30%, transparent);
+    }
 
-  &__quota-fill {
-    display: block;
-    height: 100%;
-    background-color: var(--success);
-    transition: width 0.3s ease;
-  }
-}
+    &__segment {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.3s ease;
+      min-width: 2px;
+    }
 
-.c-pwa-type-bar {
-  margin-block-end: 1rem;
+    &__legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      margin: 0.5rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
 
-  &__track {
-    display: flex;
-    height: 8px;
-    border-radius: 4px;
-    overflow: hidden;
-    gap: 2px;
-    background-color: color-mix(in srgb, var(--new-blue-200) 30%, transparent);
-  }
+    &__legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.75rem;
+    }
 
-  &__segment {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.3s ease;
-    min-width: 2px;
-  }
+    &__legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
 
-  &__legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1rem;
-    margin-block-start: 0.5rem;
-  }
+    &__legend-type {
+      font-family: monospace;
+      font-weight: 600;
+    }
 
-  &__legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-size: 0.75rem;
-  }
+    &__legend-size {
+      color: var(--color-muted);
+    }
 
-  &__legend-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  &__legend-type {
-    font-family: monospace;
-    font-weight: 600;
-  }
-
-  &__legend-size {
-    color: var(--color-muted);
-  }
-
-  &__legend-pct {
-    color: var(--color-muted);
-    font-size: 0.7rem;
+    &__legend-pct {
+      color: var(--color-muted);
+      font-size: 0.7rem;
+    }
   }
 }

@@ -1,109 +1,88 @@
-@use "@styles/variables" as vars;
-@use "@sass-butler/mixins" as butler-mx;
 @use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
-.c-word-sidebar {
-  display: flex;
-  flex-direction: column;
-  background-color: var(--white-100);
-  border: 1px dashed var(--grey-100);
-  border-radius: var(--radius-sm);
-  position: sticky;
-  inset-block-start: calc(var(--site-header-height) + vars.$spacer);
-  align-self: start;
-  // Phone landscape: stay inside the viewport, scroll the nav instead of cutting it off.
-  max-block-size: calc(100dvh - var(--site-header-height) - 2 * #{vars.$spacer});
-  overflow-y: auto;
-  overscroll-behavior: contain;
+// Word page sidebar (wide screens; the tab bar is its narrow counterpart, both list the same
+// sections). Parts .word (.title, .subtitle), .nav, .link (active: aria-current, set by the scroll spy).
+// Public: --word-sidebar-display (the page shell shows it from its "word" breakpoint).
+@include mx.component("word-sidebar") {
+  :scope {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R88: one-off
+    --_subtitle: light-dark(rgb(96 102 108), rgb(250 208 176 / 70%));
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R86: one-off
+    --_link: light-dark(rgb(85 92 98), rgb(252 234 215 / 80%));
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R64: one-off
+    --_link-hover-bg: light-dark(rgb(240 172 133 / 12%), rgb(178 59 39 / 15%));
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R65: one-off
+    --_link-active-bg: light-dark(rgb(240 172 133 / 18%), rgb(178 59 39 / 20%));
 
-  @include butler-mx.dark-mode-class {
-    background-color: var(--new-blue-400);
-    border-color: color-mix(in srgb, var(--orange-300) 20%, transparent);
-  }
-  @include mx.breakpoint("word", "max") {
-    display: none;
-  }
-
-  &__word {
-    padding-inline: vars.$spacer * 0.75;
-    padding-block: vars.$spacer * 0.75;
-    border-block-end: 1px dashed var(--grey-100);
-
-    @include butler-mx.dark-mode-class {
-      border-block-end-color: color-mix(in srgb, var(--orange-300) 30%, transparent);
-    }
+    display: var(--word-sidebar-display, none);
+    flex-direction: column;
+    position: sticky;
+    inset-block-start: calc(var(--site-header-height) + var(--space-4));
+    align-self: start;
+    // Phone landscape: stay inside the viewport, scroll the nav instead of cutting it off.
+    max-block-size: calc(100dvh - var(--site-header-height) - 2 * var(--space-4));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 1px dashed var(--color-border-card);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface-paper);
   }
 
-  &__word-title {
-    font-family: vars.$berlin;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--new-blue-400);
+  .word {
+    padding: var(--space-3);
+    border-block-end: 1px dashed var(--color-border-card);
+  }
+
+  .title {
     margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
     line-height: 1.1;
-
-    @include butler-mx.dark-mode-class {
-      color: var(--orange-300);
-    }
+    color: var(--color-text-emphasis);
   }
 
-  &__word-subtitle {
-    font-size: 0.75rem;
-    color: var(--color-muted);
-    margin: 0;
-    margin-block-start: 0.2rem;
-
-    @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, var(--orange-200) 70%, transparent);
-    }
+  .subtitle {
+    margin: var(--space-1) 0 0;
+    font-size: var(--font-size-xs);
+    color: var(--_subtitle);
   }
 
-  &__nav {
+  .nav {
     display: flex;
     flex-direction: column;
-    padding-block: vars.$spacer * 0.5;
+    padding-block: var(--space-2);
   }
 
-  &__link {
+  .link {
+    --_weight: 600; // no weight token between regular and bold
+
     display: flex;
     align-items: center;
-    min-block-size: 44px; // touch target (Spec §8.6)
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: color-mix(in srgb, var(--blue) 80%, white);
-    padding-block: 0.35rem;
-    padding-inline: vars.$spacer * 0.75;
+    min-block-size: 2.75rem; // touch target (Spec §8.6)
+    padding: var(--space-1) var(--space-3);
     border-inline-start: 3px solid transparent;
+    color: var(--_link);
+    font-size: var(--font-size-sm);
+    font-weight: var(--_weight);
     text-decoration: none;
 
     @include butler-mx.feature("motion") {
       transition:
-        color 150ms ease,
-        background-color 150ms ease,
-        border-color 150ms ease;
-    }
-    @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, var(--orange-100) 80%, transparent);
+        color var(--duration-fast) ease,
+        background-color var(--duration-fast) ease,
+        border-color var(--duration-fast) ease;
     }
     @include butler-mx.hover {
-      color: var(--new-blue-400);
-      background-color: color-mix(in srgb, var(--orange-300) 12%, transparent);
-
-      @include butler-mx.dark-mode-class {
-        color: var(--orange-200);
-        background-color: color-mix(in srgb, var(--orange-600) 15%, transparent);
-      }
+      color: var(--color-text-badge);
+      background-color: var(--_link-hover-bg);
     }
 
-    &.is-active {
-      color: var(--new-blue-400);
-      background-color: color-mix(in srgb, var(--orange-300) 18%, transparent);
-      border-inline-start-color: var(--orange-600);
-
-      @include butler-mx.dark-mode-class {
-        color: var(--orange-200);
-        background-color: color-mix(in srgb, var(--orange-600) 20%, transparent);
-      }
+    &[aria-current="true"] {
+      color: var(--color-text-badge);
+      background-color: var(--_link-active-bg);
+      border-inline-start-color: var(--color-accent-solid);
     }
   }
 }

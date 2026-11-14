@@ -69,8 +69,10 @@ describe("BonResult", () => {
 
   describe("head", () => {
     it("shows the record badge only for a score above the previous record", () => {
-      expect(mountResult().find(".c-badge--strong").text()).toBe("Neuer Rekord!");
-      expect(mountResult({ previousHighScore: 150 }).find(".c-badge--strong").exists()).toBe(false);
+      expect(mountResult().find(".c-badge[data-variant~='strong']").text()).toBe("Neuer Rekord!");
+      expect(
+        mountResult({ previousHighScore: 150 }).find(".c-badge[data-variant~='strong']").exists(),
+      ).toBe(false);
     });
 
     it("greets by name and falls back without one", () => {
@@ -94,9 +96,7 @@ describe("BonResult", () => {
   describe("name", () => {
     it("shows the editor below the heading with the name and tag", () => {
       const wrapper = mountResult({ tag: "K7QX" });
-      expect(wrapper.find(".c-bon-result__head .c-bon-name").text()).toContain(
-        "Du spielst als Berta",
-      );
+      expect(wrapper.find("header .c-bon-name").text()).toContain("Du spielst als Berta");
       expect(wrapper.find("h1").text()).toContain("Berta");
     });
 
@@ -187,7 +187,7 @@ describe("BonResult", () => {
 
   describe("stats", () => {
     const stat = (wrapper: ReturnType<typeof mountResult>, label: string) =>
-      wrapper.findAll(".c-bon-result__stat").find((s) => s.find("dt").text() === label)!;
+      wrapper.findAll(".c-bon-result dl > div").find((s) => s.find("dt").text() === label)!;
 
     it("lists them in a dl", () => {
       expect(
@@ -299,7 +299,7 @@ describe("BonResult", () => {
 
   it("restarts from the primary button", async () => {
     const wrapper = mountResult();
-    const button = wrapper.find("button.c-button--primary");
+    const button = wrapper.find("button.c-button[data-variant~='primary']");
     expect(button.text()).toBe("Nochmal spielen");
     await button.trigger("click");
     expect(wrapper.emitted("restart")).toHaveLength(1);
@@ -319,8 +319,7 @@ describe("BonResult", () => {
   });
 
   describe("Deine Runde", () => {
-    const rows = (wrapper: ReturnType<typeof mountResult>) =>
-      wrapper.findAll(".c-bon-result__round li");
+    const rows = (wrapper: ReturnType<typeof mountResult>) => wrapper.findAll(".c-bon-round li");
 
     it("has one row per card in order, marked right or wrong", () => {
       const r = rows(mountResult());
@@ -355,9 +354,10 @@ describe("BonResult", () => {
     });
 
     it("links to the word index", () => {
-      const a = mountResult().find(".c-section-card__footer a");
-      expect(a.text()).toBe("Alle Wörter im Wort-Index");
-      expect(a.attributes("href")).toBe("/");
+      const a = mountResult()
+        .findAll("a")
+        .find((link) => link.text() === "Alle Wörter im Wort-Index");
+      expect(a?.attributes("href")).toBe("/");
     });
   });
 });

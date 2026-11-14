@@ -72,7 +72,7 @@ describe("BonIntro", () => {
     expect(input.attributes("maxlength")).toBe("24");
     expect(input.attributes("placeholder")).toBe("Anonym");
     expect((input.element as HTMLInputElement).value).toBe("Berta");
-    expect(wrapper.find("button.c-button--primary").text()).toBe("Los jeht’s");
+    expect(wrapper.find("button.c-button[data-variant~='primary']").text()).toBe("Los jeht’s");
     expect(wrapper.text()).toContain("So jeht’s");
     expect(wrapper.text()).toContain("erfunden oder Hochdeutsch");
   });
@@ -134,8 +134,8 @@ describe("BonIntro", () => {
 
   it("offline: shows the notice and starts nothing", async () => {
     const wrapper = mountIntro({ offline: true });
-    expect(wrapper.find(".c-state--offline").text()).toContain("Du bist offline.");
-    const button = wrapper.find("button.c-button--primary");
+    expect(wrapper.find(".c-state[data-variant~='offline']").text()).toContain("Du bist offline.");
+    const button = wrapper.find("button.c-button[data-variant~='primary']");
     expect(button.attributes("aria-disabled")).toBe("true");
     await wrapper.find("form").trigger("submit");
     expect(wrapper.emitted("start")).toBeUndefined();
@@ -149,19 +149,19 @@ describe("BonIntro", () => {
     wrapper.findComponent({ name: "BonPlayerCode" }).vm.$emit("close");
     await wrapper.vm.$nextTick();
     expect(wrapper.find(".mock-code").exists()).toBe(false);
-    expect(wrapper.find("button.c-bon-intro__redeem").exists()).toBe(true);
+    expect(wrapper.find(".c-bon-intro .redeem button").exists()).toBe(true);
   });
 
   it("puts the code card first in the left column when opened from a link", () => {
     const wrapper = mountIntro({ linkRedeem: true });
-    expect(wrapper.find(".c-bon-intro__main").element.firstElementChild?.className).toContain(
+    expect(wrapper.find(".c-bon-intro section").element.firstElementChild?.className).toContain(
       "mock-code",
     );
     expect(wrapper.find("button.c-textlink").exists()).toBe(false);
   });
 
   it("links to the leaderboard", () => {
-    const link = mountIntro({}).find("a.c-bon-intro__leaderboard");
+    const link = mountIntro({}).find('a[href$="/rangliste"]');
     expect(link.text()).toBe("Rangliste");
     expect(link.attributes("href")).toBe("/games/berliner-oder-nicht/rangliste");
   });

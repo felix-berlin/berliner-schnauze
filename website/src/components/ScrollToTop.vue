@@ -8,8 +8,9 @@
         offset: 12,
       }"
       type="button"
-      class="c-scroll-to-top c-button c-button--center-icon"
-      :class="{ 'is-close-to-end': isFooterVisible }"
+      class="o-scroll-to-top c-button"
+      data-variant="center-icon"
+      :data-state="isFooterVisible ? 'near-end' : undefined"
       :aria-label="buttonAriaLabel"
       @click="scrollToTop"
     >
@@ -51,7 +52,7 @@ const footerGround = ref<HTMLElement | null>(null);
 
 onMounted(() => {
   docStart.value = document.querySelector<HTMLElement>("#docStart");
-  footerGround.value = document.querySelector<HTMLElement>(".c-footer__ground");
+  footerGround.value = document.querySelector<HTMLElement>(".js-footer-ground");
 });
 
 useIntersectionObserver(
@@ -69,5 +70,5 @@ useIntersectionObserver(footerGround, (entries) => {
 </script>
 
 <style lang="scss">
-@use "@styles/components/scroll-to-top";
+@use "@styles/objects/scroll-to-top";
 </style>

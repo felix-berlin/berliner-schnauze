@@ -1,3 +1,6 @@
+@use "sass:meta";
+@use "tokens/tokens.generated";
+@use "tokens/legacy-aliases";
 @use "base";
 @use "utilities";
 @use "layouts";
@@ -6,9 +9,12 @@
 
 // Word filter (homepage island + search modal on every page) — loaded globally so
 // both entry points share one stylesheet instead of emitting two identical chunks.
-@use "@vueform/multiselect/themes/default.css";
 @use "components/custom-multiselect";
 @use "components/badge";
 @use "components/letter-filter";
 @use "components/word-range-slider";
 @use "components/word-filter";
+
+@layer vendor {
+  @include meta.load-css("@vueform/multiselect/themes/default.css");
+}

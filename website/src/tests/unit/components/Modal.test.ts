@@ -93,19 +93,19 @@ describe("Modal.vue", () => {
     mockProps.value = { ...mockProps.value, position: "bottom" };
     setupUseStore();
     const wrapper = mount(Modal);
-    expect(wrapper.find("dialog").classes()).toContain("c-modal--bottom");
+    expect(wrapper.find("dialog").attributes("data-variant")).toBe("bottom");
   });
 
-  it("applies has-close-on-click-outside class when closeOnClickOutside is true", () => {
+  it("lets a backdrop click close when closeOnClickOutside is true", () => {
     const wrapper = mount(Modal);
-    expect(wrapper.find("dialog").classes()).toContain("has-close-on-click-outside");
+    expect(wrapper.find("dialog").attributes("closedby")).toBe("any");
   });
 
-  it("does not apply has-close-on-click-outside when false", () => {
+  it("only closes on a close request when closeOnClickOutside is false", () => {
     mockProps.value = { ...mockProps.value, closeOnClickOutside: false };
     setupUseStore();
     const wrapper = mount(Modal);
-    expect(wrapper.find("dialog").classes()).not.toContain("has-close-on-click-outside");
+    expect(wrapper.find("dialog").attributes("closedby")).toBe("closerequest");
   });
 
   it("MutationObserver callback calls preventScroll(true) when disableScroll and dialog opens", () => {

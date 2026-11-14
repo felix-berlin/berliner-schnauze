@@ -2,88 +2,90 @@
 @use "@sass-butler/mixins" as butler-mx;
 @use "@sass-butler/functions" as butler-fn;
 
-.c-word-search {
-  --padding-y-input: 0.5rem;
-  --padding-x-input: 0.5rem;
+@layer legacy {
+  .c-word-search {
+    --padding-y-input: 0.5rem;
+    --padding-x-input: 0.5rem;
 
-  display: flex;
-
-  &__search-button {
-    --style-border: solid;
-    --offset-x-box-shadow: 2px;
-    --color-box-shadow: rgb(0 0 0 / 20%);
-
-    height: 100%;
-    aspect-ratio: 1;
-
-    // The icon swaps (search ↔ x) with a fade: a click starting on the leaving icon and ending
-    // on the new one fired no click at all. The button itself is always the target.
-    > * {
-      pointer-events: none;
-    }
-
-    &--right {
-      order: 2;
-    }
-  }
-
-  &__search-input.c-input {
-    --color-border: var(--orange-600);
-    --color-background: color-mix(in srgb, var(--orange-100) 30%, white);
-    --color-outline: color-mix(in srgb, var(--accent) 40%, transparent);
-    --spacing-inner: var(--padding-y-input) var(--padding-x-input);
-
-    border-inline-start: none;
-    flex: 1 1 auto;
     display: flex;
-    width: 1%;
-    min-width: 0;
-    color: var(--color, var(--color-body));
-    scroll-margin-block-start: 100px;
 
-    // Dark fill = the field well: cream text and the muted placeholder stay above 4.5:1
-    // (the old blue-70%-white fill gave 3.85:1 text and ~2:1 placeholder).
-    @include butler-mx.dark-mode-class {
-      --color-background: var(--new-blue-600);
-      --color-border: color-mix(in srgb, var(--blue) 60%, white);
+    &__search-button {
+      --button-border-style: solid;
+      --offset-x-box-shadow: 2px;
+      --color-box-shadow: rgb(0 0 0 / 20%);
+
+      height: 100%;
+      aspect-ratio: 1;
+
+      // The icon swaps (search ↔ x) with a fade: a click starting on the leaving icon and ending
+      // on the new one fired no click at all. The button itself is always the target.
+      > * {
+        pointer-events: none;
+      }
+
+      &--right {
+        order: 2;
+      }
     }
 
-    // Keeps its own look: no dashed hover flip, soft outline instead of the field ring.
-    &:hover,
-    &:focus-visible {
-      --style-border: solid;
+    &__search-input.c-input {
       --color-border: var(--orange-600);
+      --color-background: color-mix(in srgb, var(--orange-100) 30%, white);
+      --color-outline: color-mix(in srgb, var(--accent) 40%, transparent);
+      --spacing-inner: var(--padding-y-input) var(--padding-x-input);
 
+      border-inline-start: none;
+      flex: 1 1 auto;
+      display: flex;
+      width: 1%;
+      min-width: 0;
+      color: var(--color, var(--color-body));
+      scroll-margin-block-start: 100px;
+
+      // Dark fill = the field well: cream text and the muted placeholder stay above 4.5:1
+      // (the old blue-70%-white fill gave 3.85:1 text and ~2:1 placeholder).
       @include butler-mx.dark-mode-class {
+        --color-background: var(--new-blue-600);
         --color-border: color-mix(in srgb, var(--blue) 60%, white);
       }
-    }
 
-    &:focus-within,
-    &:focus-visible {
-      outline: var(--color-outline) solid 2px;
-      outline-offset: 0;
-      z-index: 2;
-    }
-  }
+      // Keeps its own look: no dashed hover flip, soft outline instead of the field ring.
+      &:hover,
+      &:focus-visible {
+        --style-border: solid;
+        --color-border: var(--orange-600);
 
-  input[type="search"]::-webkit-search-cancel-button {
-    display: none;
-  }
-
-  &--large {
-    @include mx.breakpoint("md") {
-      --padding-y-input: 0.75rem;
-      --padding-x-input: 0.75rem;
-    }
-
-    .c-word-search {
-      &__search-button {
-        --padding: var(--padding-y-input) var(--padding-x-input);
+        @include butler-mx.dark-mode-class {
+          --color-border: color-mix(in srgb, var(--blue) 60%, white);
+        }
       }
 
-      &__search-input {
-        --size-font: #{butler-fn.fluid(16, 32, 320, 1260)};
+      &:focus-within,
+      &:focus-visible {
+        outline: var(--color-outline) solid 2px;
+        outline-offset: 0;
+        z-index: 2;
+      }
+    }
+
+    input[type="search"]::-webkit-search-cancel-button {
+      display: none;
+    }
+
+    &--large {
+      @include mx.breakpoint("md") {
+        --padding-y-input: 0.75rem;
+        --padding-x-input: 0.75rem;
+      }
+
+      .c-word-search {
+        &__search-button {
+          --button-padding: var(--padding-y-input) var(--padding-x-input);
+        }
+
+        &__search-input {
+          --size-font: #{butler-fn.fluid(16, 32, 320, 1260)};
+        }
       }
     }
   }

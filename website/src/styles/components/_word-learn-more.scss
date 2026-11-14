@@ -1,27 +1,29 @@
-@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-.c-single-word {
-  &__learn-more {
-    &-link {
-      display: flex;
-      align-items: center;
-      min-block-size: 44px; // touch target (Spec §8.6)
-      gap: vars.$spacer * 0.2;
-      font-size: var(--size-font, 0.9rem);
-      margin-block-start: 2.5rem;
+// "Erfahre mehr" link at the end of a word page without images (with images WordImages carries it).
+// Part .icon.
+@include mx.component("word-learn-more") {
+  :scope {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-block-size: 2.75rem; // touch target (Spec §8.6)
+    margin-block-start: var(--space-8);
+    font-size: var(--font-size-md);
 
-      @include butler-mx.hover {
-        --decoration-text: underline dashed;
-      }
-
-      @container word-main (inline-size >= 23rem) {
-        --size-font: 1rem;
-      }
-
-      &-icon {
-        display: inline-flex;
-      }
+    @include butler-mx.hover {
+      --decoration-text: underline dashed;
     }
+  }
+
+  @container word-main (inline-size >= 23rem) {
+    :scope {
+      font-size: var(--font-size-base);
+    }
+  }
+
+  .icon {
+    display: inline-flex;
   }
 }

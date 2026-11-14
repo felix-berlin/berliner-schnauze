@@ -1,124 +1,123 @@
-@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-.c-tooltip {
-  display: inline-flex;
-}
+// Tooltip panel: a manual popover placed with CSS Anchor Positioning (position-anchor set inline per
+// instance by TooltipPopover.vue and the v-tooltip directive). Variants = placement: top, top-start,
+// top-end, bottom, bottom-start, bottom-end, left, right. Part: .arrow (positioned by JS).
+// Public: --tooltip-offset (gap to the trigger, set inline from the offset option).
+@include mx.component("tooltip") {
+  :scope {
+    // drop-shadow unifies panel + arrow into one silhouette (no double shadow where the arrow overlaps).
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R20 + R36: one-off (paper-lift as a filter)
+    --_lift: drop-shadow(0 0.5px 0.6px rgb(0 0 0 / 8%)) drop-shadow(0 4px 5px rgb(0 0 0 / 16%));
+    --_offset: var(--tooltip-offset, 8px);
+    --_pad: 0.25em 0.6em; // em: follows the tooltip text
+    --_max: 20rem; // one-off reading width
+    --_center: 50%;
+    --_fade: 0.1s; // faster than every duration token: a tooltip must not lag the pointer
 
-.c-tooltip__panel {
-  --c-tooltip-bg: var(--color-tooltip-bg, var(--floating-color-background));
+    // UA popover reset: browsers add margin/border/overflow/size to [popover]
+    margin: 0;
+    border: none;
+    overflow: visible;
+    max-block-size: none;
+    position: fixed;
+    position-try-fallbacks:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline;
+    background: var(--color-surface-floating);
+    color: var(--color-text-body);
+    padding: var(--_pad);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    max-inline-size: var(--_max);
+    filter: var(--_lift);
 
-  // UA Popover reset — browsers add margin/border/overflow/size to [popover] elements
-  margin: 0;
-  border: none;
-  overflow: visible;
-  max-height: none;
-
-  // Anchor Positioning — position-anchor set via inline style (dynamic per instance)
-  position: fixed;
-  position-try-fallbacks:
-    flip-block,
-    flip-inline,
-    flip-block flip-inline;
-
-  // Visual style
-  // filter: drop-shadow unifies panel + arrow into one shadow silhouette,
-  // avoiding the double-shadow artifact where the arrow overlaps the panel edge.
-  background: var(--c-tooltip-bg);
-  color: var(--color-tooltip-text, var(--color-body));
-  padding: 0.25em 0.6em;
-  border-radius: 4px;
-  font-size: 0.8125rem;
-  max-width: 20rem;
-  filter: vars.$paper-lift-drop;
-
-  // Placement modifiers — offset margin direction matches placement direction
-  &--top {
-    position-area: block-start;
-    margin-block-end: var(--c-tooltip-offset, 8px);
-  }
-
-  &--top-start {
-    position-area: block-start span-inline-end;
-    margin-block-end: var(--c-tooltip-offset, 8px);
-  }
-
-  &--top-end {
-    position-area: block-start span-inline-start;
-    margin-block-end: var(--c-tooltip-offset, 8px);
-  }
-
-  &--bottom {
-    position-area: block-end;
-    margin-block-start: var(--c-tooltip-offset, 8px);
-  }
-
-  &--bottom-start {
-    position-area: block-end span-inline-end;
-    margin-block-start: var(--c-tooltip-offset, 8px);
-  }
-
-  &--bottom-end {
-    position-area: block-end span-inline-start;
-    margin-block-start: var(--c-tooltip-offset, 8px);
-  }
-
-  &--left {
-    position-area: inline-start;
-    margin-inline-end: var(--c-tooltip-offset, 8px);
-  }
-
-  &--right {
-    position-area: inline-end;
-    margin-inline-start: var(--c-tooltip-offset, 8px);
-  }
-
-  // Fallback for browsers without CSS Anchor Positioning: centered in the viewport,
-  // so an arrow would point nowhere.
-  @supports not (position-area: block-end) {
-    inset-block-start: 50%;
-    inset-inline-start: 50%;
-    translate: -50% -50%;
-
-    .c-tooltip__arrow {
-      display: none;
-    }
-  }
-}
-
-// Arrow element — rotated square that creates a directional pointer toward the trigger
-.c-tooltip__arrow {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: var(--c-tooltip-bg);
-  rotate: 45deg;
-  // top, left, right, bottom set via JS (syncArrow) to track trigger center
-}
-
-// Closed panel must never intercept clicks — during overlay allow-discrete exit transition
-// the panel stays in the top layer for the full animation duration.
-.c-tooltip__panel:not(:popover-open) {
-  pointer-events: none;
-}
-
-// Fade via @starting-style + allow-discrete
-@include butler-mx.feature("motion") {
-  .c-tooltip__panel {
-    opacity: 1;
-    transition:
-      opacity 0.1s ease,
-      display 0.1s allow-discrete,
-      overlay 0.1s allow-discrete;
-
+    // Closed panel must never catch clicks: during the allow-discrete exit it stays in the top layer.
     &:not(:popover-open) {
-      opacity: 0;
+      pointer-events: none;
     }
 
-    @starting-style {
-      &:popover-open {
-        opacity: 0;
+    // Without Anchor Positioning: centred in the viewport, so an arrow would point nowhere.
+    @supports not (position-area: block-end) {
+      inset-block-start: var(--_center);
+      inset-inline-start: var(--_center);
+      translate: -50% -50%;
+
+      .arrow {
+        display: none;
       }
     }
+
+    @include butler-mx.feature("motion") {
+      opacity: 1;
+      transition:
+        opacity var(--_fade) ease,
+        display var(--_fade) allow-discrete,
+        overlay var(--_fade) allow-discrete;
+
+      &:not(:popover-open) {
+        opacity: 0;
+      }
+
+      @starting-style {
+        &:popover-open {
+          opacity: 0;
+        }
+      }
+    }
+  }
+
+  // Offset margin direction matches the placement.
+  :scope[data-variant="top"] {
+    position-area: block-start;
+    margin-block-end: var(--_offset);
+  }
+
+  :scope[data-variant="top-start"] {
+    position-area: block-start span-inline-end;
+    margin-block-end: var(--_offset);
+  }
+
+  :scope[data-variant="top-end"] {
+    position-area: block-start span-inline-start;
+    margin-block-end: var(--_offset);
+  }
+
+  :scope[data-variant="bottom"] {
+    position-area: block-end;
+    margin-block-start: var(--_offset);
+  }
+
+  :scope[data-variant="bottom-start"] {
+    position-area: block-end span-inline-end;
+    margin-block-start: var(--_offset);
+  }
+
+  :scope[data-variant="bottom-end"] {
+    position-area: block-end span-inline-start;
+    margin-block-start: var(--_offset);
+  }
+
+  :scope[data-variant="left"] {
+    position-area: inline-start;
+    margin-inline-end: var(--_offset);
+  }
+
+  :scope[data-variant="right"] {
+    position-area: inline-end;
+    margin-inline-start: var(--_offset);
+  }
+
+  // Rotated square pointing at the trigger; top/left/right/bottom come from JS (syncArrow).
+  .arrow {
+    --_size: 8px;
+
+    position: absolute;
+    inline-size: var(--_size);
+    block-size: var(--_size);
+    background: var(--color-surface-floating);
+    rotate: 45deg;
   }
 }

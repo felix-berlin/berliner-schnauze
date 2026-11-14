@@ -16,6 +16,8 @@ const port = process.env.E2E_PORT ?? "4321";
 
 export default defineConfig({
   testDir: "./src/tests/e2e",
+  // Local gate for the design-system migration (see the header of the spec); its snapshots are not CI-portable.
+  testIgnore: process.env.CI ? "**/visual-baseline.spec.ts" : undefined,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

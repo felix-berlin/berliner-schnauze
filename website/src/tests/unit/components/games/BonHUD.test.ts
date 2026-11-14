@@ -10,8 +10,8 @@ describe("BonHUD.vue", () => {
     const wrapper = hud({ lives: 2 });
     const img = wrapper.find('[role="img"]');
     expect(img.attributes("aria-label")).toBe("Noch 2 Leben von 3");
-    expect(img.findAll(".c-bon-hud__life")).toHaveLength(3);
-    expect(img.findAll(".c-bon-hud__life--lost")).toHaveLength(1);
+    expect(img.findAll("svg")).toHaveLength(3);
+    expect(img.findAll('[data-state="lost"]')).toHaveLength(1);
   });
 
   it("shows points and player in a polite live region", () => {
@@ -34,13 +34,13 @@ describe("BonHUD.vue", () => {
   });
 
   it("marks the current multiplier field and the reached ones", () => {
-    const fields = hud({ streak: 7 }).findAll(".c-bon-hud__field");
+    const fields = hud({ streak: 7 }).findAll('[aria-label^="Multiplikator"] > span');
     expect(fields.map((f) => f.text().split("·").pop()!.trim())).toEqual(["×1", "×2", "×3", "×5"]);
-    expect(fields.map((f) => f.classes())).toEqual([
-      expect.arrayContaining(["c-bon-hud__field--reached"]),
-      expect.arrayContaining(["c-bon-hud__field--reached"]),
-      expect.arrayContaining(["c-bon-hud__field--active"]),
-      expect.not.arrayContaining(["c-bon-hud__field--reached", "c-bon-hud__field--active"]),
+    expect(fields.map((f) => f.attributes("data-state"))).toEqual([
+      "reached",
+      "reached",
+      "active",
+      undefined,
     ]);
   });
 });

@@ -3,193 +3,195 @@
 @use "@sass-butler/mixins" as butler-mx;
 @use "@sass-butler/functions" as butler-fn;
 
-.c-app-settings {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-
-  // Shared card surface for settings cards and nav cards
-  &__card,
-  &__nav-card {
-    border: 1px solid
-      var(--color-card-border, color-mix(in srgb, var(--orange-400) 50%, transparent));
-    background-color: var(--color-card-bg, color-mix(in srgb, var(--orange-100) 35%, white));
-
-    @include butler-mx.dark-mode-class {
-      --color-card-border: var(--control-border);
-      --color-card-bg: color-mix(in srgb, var(--new-blue-400) 70%, transparent);
-    }
-  }
-
-  &__card {
+@layer legacy {
+  .c-app-settings {
     display: flex;
     flex-direction: column;
-    gap: 0.875rem;
-    padding: 1.25rem 1.5rem;
-
-    .c-button {
-      --padding: 0.375rem 0.75rem;
-
-      align-self: flex-start;
-    }
-  }
-
-  &__card-title {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: vars.$berliner;
-    font-size: butler-fn.fluid(18, 22, 320, 1260);
-    margin: 0;
-  }
-
-  &__card-title-icon {
-    flex-shrink: 0;
-    opacity: 0.8;
-  }
-
-  &__status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
-    font-size: 0.8125rem;
-    font-weight: 500;
-    padding: 0.2rem 0.625rem;
-    border: 1px solid currentColor;
-    width: fit-content;
-
-    &.is-granted {
-      color: var(--success);
-      background-color: color-mix(in srgb, var(--success) 8%, transparent);
-    }
-
-    &.is-denied {
-      color: var(--danger);
-      background-color: color-mix(in srgb, var(--danger) 8%, transparent);
-    }
-
-    &.is-default {
-      color: var(--color-muted);
-    }
-  }
-
-  &__status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: currentColor;
-    flex-shrink: 0;
-  }
-
-  &__row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     gap: 0.75rem;
-    padding-block-start: 0.75rem;
-    border-block-start: 1px solid
-      var(--color-row-border, color-mix(in srgb, var(--orange-300) 35%, transparent));
 
-    @include butler-mx.dark-mode-class {
-      --color-row-border: var(--control-border);
-    }
-  }
+    // Shared card surface for settings cards and nav cards
+    &__card,
+    &__nav-card {
+      border: 1px solid
+        var(--color-card-border, color-mix(in srgb, var(--orange-400) 50%, transparent));
+      background-color: var(--color-card-bg, color-mix(in srgb, var(--orange-100) 35%, white));
 
-  &__row-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9375rem;
-    cursor: pointer;
-  }
-
-  &__hint {
-    font-size: 0.8125rem;
-    line-height: 1.55;
-    color: var(--color-muted);
-
-    &--error {
-      color: var(--danger);
-    }
-  }
-
-  &__revoke-btn {
-    align-self: flex-start;
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    font-size: 0.8125rem;
-    color: var(--color-muted);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    transition: color 0.2s ease;
-
-    @include butler-mx.hover-focus {
-      color: var(--color-body);
-    }
-  }
-
-  &__nav-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1rem 1.5rem;
-    text-decoration: none;
-    color: var(--color-body);
-    transition:
-      box-shadow 0.25s ease,
-      border-color 0.25s ease;
-
-    @include butler-mx.hover-focus {
-      border-color: var(--orange-600);
-      box-shadow: vars.$hover-glow;
-
-      .c-app-settings__nav-card-arrow {
-        translate: 3px 0;
+      @include butler-mx.dark-mode-class {
+        --color-card-border: var(--control-border);
+        --color-card-bg: color-mix(in srgb, var(--new-blue-400) 70%, transparent);
       }
     }
-  }
 
-  &__nav-card--button {
-    width: 100%;
-    margin: 0;
-    font-family: inherit;
-    text-align: start;
-    cursor: pointer;
-  }
+    &__card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+      padding: 1.25rem 1.5rem;
 
-  &__nav-card-content {
-    display: flex;
-    align-items: center;
-    gap: 0.875rem;
-  }
+      .c-button {
+        --button-padding: 0.375rem 0.75rem;
 
-  &__nav-card-icon {
-    flex-shrink: 0;
-    opacity: 0.75;
-  }
+        align-self: flex-start;
+      }
+    }
 
-  &__nav-card-text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-  }
+    &__card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: vars.$berliner;
+      font-size: butler-fn.fluid(18, 22, 320, 1260);
+      margin: 0;
+    }
 
-  &__nav-card-title {
-    font-family: vars.$berliner;
-    font-size: butler-fn.fluid(16, 18, 320, 1260);
-  }
+    &__card-title-icon {
+      flex-shrink: 0;
+      opacity: 0.8;
+    }
 
-  &__nav-card-desc {
-    font-size: 0.8125rem;
-    color: var(--color-muted);
-  }
+    &__status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      padding: 0.2rem 0.625rem;
+      border: 1px solid currentColor;
+      width: fit-content;
 
-  &__nav-card-arrow {
-    flex-shrink: 0;
-    opacity: 0.5;
-    transition: translate 0.2s ease;
+      &.is-granted {
+        color: var(--success);
+        background-color: color-mix(in srgb, var(--success) 8%, transparent);
+      }
+
+      &.is-denied {
+        color: var(--danger);
+        background-color: color-mix(in srgb, var(--danger) 8%, transparent);
+      }
+
+      &.is-default {
+        color: var(--color-muted);
+      }
+    }
+
+    &__status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: currentColor;
+      flex-shrink: 0;
+    }
+
+    &__row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding-block-start: 0.75rem;
+      border-block-start: 1px solid
+        var(--color-row-border, color-mix(in srgb, var(--orange-300) 35%, transparent));
+
+      @include butler-mx.dark-mode-class {
+        --color-row-border: var(--control-border);
+      }
+    }
+
+    &__row-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9375rem;
+      cursor: pointer;
+    }
+
+    &__hint {
+      font-size: 0.8125rem;
+      line-height: 1.55;
+      color: var(--color-muted);
+
+      &--error {
+        color: var(--danger);
+      }
+    }
+
+    &__revoke-btn {
+      align-self: flex-start;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--color-muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s ease;
+
+      @include butler-mx.hover-focus {
+        color: var(--color-body);
+      }
+    }
+
+    &__nav-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      text-decoration: none;
+      color: var(--color-body);
+      transition:
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+
+      @include butler-mx.hover-focus {
+        border-color: var(--orange-600);
+        box-shadow: vars.$hover-glow;
+
+        .c-app-settings__nav-card-arrow {
+          translate: 3px 0;
+        }
+      }
+    }
+
+    &__nav-card--button {
+      width: 100%;
+      margin: 0;
+      font-family: inherit;
+      text-align: start;
+      cursor: pointer;
+    }
+
+    &__nav-card-content {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+    }
+
+    &__nav-card-icon {
+      flex-shrink: 0;
+      opacity: 0.75;
+    }
+
+    &__nav-card-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    &__nav-card-title {
+      font-family: vars.$berliner;
+      font-size: butler-fn.fluid(16, 18, 320, 1260);
+    }
+
+    &__nav-card-desc {
+      font-size: 0.8125rem;
+      color: var(--color-muted);
+    }
+
+    &__nav-card-arrow {
+      flex-shrink: 0;
+      opacity: 0.5;
+      transition: translate 0.2s ease;
+    }
   }
 }

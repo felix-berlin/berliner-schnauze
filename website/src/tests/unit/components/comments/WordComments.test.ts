@@ -1,6 +1,6 @@
 import CommentForm from "@components/comments/CommentForm.vue";
 import WordComments from "@components/comments/WordComments.vue";
-import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
+import { enableAutoUnmount, flushPromises, mount, type VueWrapper } from "@vue/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("astro:env/client", () => ({ TURNSTILE_SITE_KEY: "k" }));
@@ -10,6 +10,13 @@ vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));
 
 const { fetchMock } = vi.hoisted(() => ({ fetchMock: vi.fn() }));
 vi.stubGlobal("fetch", fetchMock);
+
+/** First button with this text (spec §7.1: tests find by role and text, not by part class). */
+const byText = (w: VueWrapper, text: string | RegExp) =>
+  w
+    .findAll("button")
+    .find((b) => (typeof text === "string" ? b.text() === text : text.test(b.text()))) ??
+  w.find("button[data-none]");
 
 describe("WordComments", () => {
   enableAutoUnmount(afterEach);
@@ -72,12 +79,12 @@ describe("WordComments", () => {
       props: { wordId: 7 },
     });
     await vi.waitFor(() =>
-      expect(wrapper.find("#kommentar-42.is-highlighted").exists()).toBe(true),
+      expect(wrapper.find(`#kommentar-42[data-state="highlighted"]`).exists()).toBe(true),
     );
     expect(wrapper.text()).toContain("Verlinkt");
     // The wash lasts 2 s (spec §9a), then the class goes.
     await vi.waitFor(
-      () => expect(wrapper.find("#kommentar-42.is-highlighted").exists()).toBe(false),
+      () => expect(wrapper.find(`#kommentar-42[data-state="highlighted"]`).exists()).toBe(false),
       {
         timeout: 3500,
       },
@@ -121,10 +128,10 @@ describe("WordComments", () => {
       props: { wordId: 7 },
     });
     await vi.waitFor(() => expect(wrapper.find("#kommentar-5").exists()).toBe(true));
-    expect(wrapper.find("#kommentar-5").classes()).not.toContain("is-highlighted");
+    expect(wrapper.find("#kommentar-5").attributes("data-state")).toBeUndefined();
     await wrapper.find('a[href="#kommentar-5"]').trigger("click");
     await vi.waitFor(() =>
-      expect(wrapper.find("#kommentar-5").classes()).toContain("is-highlighted"),
+      expect(wrapper.find("#kommentar-5").attributes("data-state")).toBe("highlighted"),
     );
     document.removeEventListener("click", router);
     wrapper.unmount();
@@ -169,7 +176,7 @@ describe("WordComments", () => {
       props: { wordId: 7 },
     });
     await flushPromises();
-    await wrapper.findAll(".c-word-comments__sort button")[1]!.trigger("click");
+    await wrapper.findAll(".c-word-comments .sort button")[1]!.trigger("click");
     await flushPromises();
     expect(wrapper.find("[aria-pressed=true]").text()).toBe("Neueste");
     expect(fetchMock.mock.calls.at(-1)![0]).toContain("sort=new");
@@ -184,7 +191,7 @@ describe("WordComments", () => {
       global: { stubs: { TurnStile: TurnStileStub } },
       props: { wordId: 7 },
     });
-    await wrapper.find(".c-word-comments__write").trigger("click");
+    await byText(wrapper, "Kommentar schreiben").trigger("click");
     await wrapper.find("form").trigger("focusin");
     await flushPromises();
     const submit = wrapper.findComponent(CommentForm).props("submit") as (v: {
@@ -236,7 +243,7 @@ describe("WordComments", () => {
       global: { stubs: { TurnStile: TurnStileStub } },
       props: { wordId: 7 },
     });
-    await wrapper.find(".c-word-comments__write").trigger("click");
+    await byText(wrapper, "Kommentar schreiben").trigger("click");
     await wrapper.find("form").trigger("focusin");
     await flushPromises();
     const submit = wrapper.findComponent(CommentForm).props("submit") as (v: {
@@ -271,7 +278,7 @@ describe("WordComments", () => {
     expect(createToastNotify).toHaveBeenCalledWith(expect.objectContaining({ status: "warning" }));
     expect(ctx.takeToken(true)).toBeNull();
     expect(createToastNotify).toHaveBeenCalledTimes(1);
-    await wrapper.find(".c-word-comments__write").trigger("click");
+    await byText(wrapper, "Kommentar schreiben").trigger("click");
     await wrapper.find("form").trigger("focusin");
     await flushPromises();
     const widget = wrapper.findComponent(TurnStileStub);
@@ -291,7 +298,7 @@ describe("WordComments", () => {
       props: { wordId: 7 },
     });
     await flushPromises();
-    await wrapper.find(".c-word-comments__write").trigger("focusin");
+    await byText(wrapper, "Kommentar schreiben").trigger("focusin");
     expect(wrapper.findComponent(TurnStileStub).exists()).toBe(false);
   });
 
@@ -318,7 +325,7 @@ describe("WordComments", () => {
       props: { wordId: 7 },
     });
     await flushPromises();
-    await wrapper.find(".c-comment__reply").trigger("click");
+    await byText(wrapper, "Antworten").trigger("click");
     const widget = wrapper.findComponent(TurnStileStub);
     widget.vm.$emit("error", "110200");
     widget.vm.$emit("error", "110200");
@@ -348,7 +355,7 @@ describe("WordComments", () => {
     });
     await flushPromises();
     expect(wrapper.findComponent(TurnStileStub).exists()).toBe(false);
-    await wrapper.find(".c-comment__reply").trigger("click");
+    await byText(wrapper, "Antworten").trigger("click");
     expect(wrapper.findComponent(TurnStileStub).exists()).toBe(true);
   });
 
@@ -359,8 +366,8 @@ describe("WordComments", () => {
       props: { wordId: 7 },
     });
     await flushPromises();
-    const items = () => wrapper.findAll(".c-word-comments__item").length;
-    const more = () => wrapper.find(".c-word-comments__more");
+    const items = () => wrapper.findAll(".c-word-comments .item").length;
+    const more = () => byText(wrapper, /Kommentare zeigen$/);
     expect(items()).toBe(3);
     expect(more().text()).toBe("Alle 25 Kommentare zeigen");
     await more().trigger("click");
@@ -379,8 +386,8 @@ describe("WordComments", () => {
       props: { wordId: 7 },
     });
     await flushPromises();
-    expect(wrapper.findAll(".c-word-comments__item")).toHaveLength(3);
-    expect(wrapper.find(".c-word-comments__more").exists()).toBe(false);
+    expect(wrapper.findAll(".c-word-comments .item")).toHaveLength(3);
+    expect(byText(wrapper, /Kommentare zeigen$/).exists()).toBe(false);
   });
 
   it("asks for the next page when the shown slice outgrows the loaded comments", async () => {
@@ -390,7 +397,7 @@ describe("WordComments", () => {
       props: { wordId: 7 },
     });
     await flushPromises();
-    await wrapper.find(".c-word-comments__more").trigger("click"); // limit 10 > 4 loaded, more exist
+    await byText(wrapper, /Kommentare zeigen$/).trigger("click"); // limit 10 > 4 loaded, more exist
     await flushPromises();
     expect(fetchMock.mock.calls.at(-1)![0]).toContain("page=2");
   });
@@ -404,7 +411,7 @@ describe("WordComments", () => {
     });
     await flushPromises();
     expect(wrapper.find("form").exists()).toBe(false);
-    await wrapper.find(".c-word-comments__write").trigger("click");
+    await byText(wrapper, "Kommentar schreiben").trigger("click");
     expect(wrapper.find("form").exists()).toBe(true);
     expect(document.activeElement).toBe(wrapper.find("textarea").element);
     wrapper.unmount();
@@ -415,7 +422,7 @@ describe("WordComments", () => {
       props: { wordId: 7 },
     });
     await flushPromises();
-    const write = offline.find(".c-word-comments__write");
+    const write = byText(offline, "Kommentar schreiben");
     expect(write.attributes("aria-disabled")).toBe("true");
     expect(write.attributes("disabled")).toBeUndefined();
     expect(offline.find(`#${write.attributes("aria-describedby")}`).text()).toContain(
@@ -434,7 +441,7 @@ describe("WordComments", () => {
       props: { wordId: 7 },
     });
     await flushPromises();
-    await wrapper.find(".c-word-comments__write").trigger("click");
+    await byText(wrapper, "Kommentar schreiben").trigger("click");
     await flushPromises();
     wrapper.findComponent(TurnStileStub).vm.$emit("token", "tok");
     fetchMock.mockResolvedValueOnce({
@@ -446,11 +453,11 @@ describe("WordComments", () => {
     await wrapper.find("form").trigger("submit");
     await flushPromises();
     expect(wrapper.find("form").exists()).toBe(false);
-    const box = wrapper.find(".c-state--success");
+    const box = wrapper.find(".c-state[data-variant~='success']");
     expect(box.attributes("role")).toBe("status");
     expect(box.text()).toContain("Danke, is anjekommen!");
     expect(box.text()).toContain("Dein Kommentar erscheint, sobald wa ihn jesehen haben.");
-    expect(document.activeElement).toBe(wrapper.find(".c-word-comments__write").element);
+    expect(document.activeElement).toBe(byText(wrapper, "Kommentar schreiben").element);
     wrapper.unmount();
   });
 
@@ -479,7 +486,7 @@ describe("WordComments", () => {
     });
     await flushPromises();
     expect(fetchMock.mock.calls.some(([u]) => String(u).endsWith("/77"))).toBe(true);
-    expect(wrapper.find(".is-highlighted").exists()).toBe(false);
+    expect(wrapper.find('[data-state="highlighted"]').exists()).toBe(false);
     location.hash = "";
   });
 
@@ -513,7 +520,9 @@ describe("WordComments", () => {
     await flushPromises();
     location.hash = "#kommentar-6";
     window.dispatchEvent(new HashChangeEvent("hashchange"));
-    await vi.waitFor(() => expect(wrapper.find("#kommentar-6.is-highlighted").exists()).toBe(true));
+    await vi.waitFor(() =>
+      expect(wrapper.find(`#kommentar-6[data-state="highlighted"]`).exists()).toBe(true),
+    );
     wrapper.unmount();
     location.hash = "";
   });

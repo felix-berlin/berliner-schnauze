@@ -1,18 +1,18 @@
 <template>
-  <div class="c-letter-tiles">
+  <div class="c-word-letter-tiles">
     <!-- Decorative: the toggled list below carries the same information as text. -->
-    <ul class="c-letters" aria-hidden="true">
+    <ul class="letters" aria-hidden="true">
       <li
         v-for="(tile, i) in letters"
         :key="i"
-        class="c-letters__tile"
-        :class="{ 'is-vowel': tile.vowel }"
+        class="tile"
+        :data-kind="tile.vowel ? 'vowel' : undefined"
         :style="{ '--fill': `${tile.pct ?? 0}%` }"
       >
         <span>{{ tile.ch }}</span>
       </li>
     </ul>
-    <div class="c-letter-tiles__legend">
+    <div class="legend">
       Füllhöhe = wie häufig der Buchstabe im Deutschen vorkommt. Orange = Vokal, grau = Konsonant.
     </div>
     <button
@@ -24,7 +24,7 @@
     >
       {{ open ? "Häufigkeiten ausblenden" : "Häufigkeiten als Zahlen zeigen" }}
     </button>
-    <ul v-show="open" id="letter-frequencies" class="c-letter-tiles__freq">
+    <ul v-show="open" id="letter-frequencies" class="freq">
       <li v-for="f in frequencies" :key="f.char">
         <b>{{ f.char }}</b>
         <span>{{ percent(f.percent) }} · {{ f.label }}</span>
@@ -35,6 +35,7 @@
 
 <script setup lang="ts">
 import type { LetterTile } from "@utils/letterTiles";
+
 import { ref } from "vue";
 
 defineProps<{

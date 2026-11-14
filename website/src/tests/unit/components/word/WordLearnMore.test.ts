@@ -13,7 +13,7 @@ describe("WordLearnMore.astro", () => {
 
   it("renders the learn more link", async () => {
     const result = await render({ learnMore: "https://de.wikipedia.org/wiki/Schnauze" });
-    expect(result).toContain("c-single-word__learn-more-link");
+    expect(result).toContain("c-word-learn-more");
     expect(result).toContain("Erfahre mehr über dieses Wort");
   });
 
@@ -30,6 +30,6 @@ describe("WordLearnMore.astro", () => {
 
   it("renders the icon wrapper", async () => {
     const result = await render({ learnMore: "https://de.wikipedia.org/wiki/Schnauze" });
-    expect(result).toContain("c-single-word__learn-more-link-icon");
+    expect(result).toContain('class="icon"');
   });
 });

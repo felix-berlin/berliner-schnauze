@@ -1,164 +1,111 @@
 @use "@styles/mixins" as mx;
 @use "section-card";
 
-// Start screen (docs/design/bon/SPEC.md §6): one column on mobile, from the word breakpoint 1.1fr / 1fr.
-.c-bon-intro {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+// Start screen (docs/design/bon/SPEC.md §6): one column on narrow screens, from 45rem width 1.1fr / 1fr.
+// Parts: .inner (the layout, since the root is the container), .main (.title band, .lead, .form
+// with .name, .label, .optional, .start, .cta, .record; .redeem; .leaderboard), then the rules card (c-bon-rules).
+@include mx.component("bon-intro") {
+  :scope {
+    --_title-wide: 3.25rem; // hero headline, above the type scale
 
-  @include mx.breakpoint("word") {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-    gap: 3rem;
-    align-items: start;
+    container: bon-intro / inline-size;
   }
 
-  &__main {
+  .inner {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    min-width: 0;
+    gap: var(--space-6);
   }
 
-  &__title {
-    font-size: 2.25rem;
-    line-height: 1.05;
+  .main {
+    --band-font-size: var(--font-size-4xl);
+    --band-line-height: 1.05;
 
-    @include mx.breakpoint("word") {
-      font-size: 3.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-inline-size: 0;
+  }
+
+  // The word breakpoint (808px viewport) is a 45rem wide start screen.
+  @container bon-intro (inline-size >= 45rem) {
+    .inner {
+      // Sheet section cards get more room.
+      --section-card-gutter: var(--space-6);
+      --section-card-header-block: var(--space-4);
+
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: var(--space-12);
+      align-items: start;
+    }
+
+    .main {
+      --band-font-size: var(--_title-wide);
     }
   }
 
-  &__lead {
+  .lead {
     margin: 0;
   }
 
-  &__form {
+  .form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--space-4);
   }
 
-  &__name {
+  .name {
+    // The EXIT link inside the alert: a notch bigger, its text flush with the alert text.
+    --textlink-font-size: var(--font-size-md);
+    --textlink-padding-start: 0;
+    --textlink-place-self: start;
+
     display: flex;
     flex-direction: column;
-    gap: 0.375rem;
-    max-width: 360px;
+    gap: var(--space-1);
+    max-inline-size: 360px;
   }
 
-  &__exit {
-    align-self: flex-start;
-    margin-inline-start: -0.25rem;
-    font-size: 0.9rem;
+  // Own part, not .c-label: a c- class would end the scope and leave .optional bold.
+  .label {
+    font-weight: var(--font-weight-bold);
   }
 
-  &__input {
-    box-sizing: border-box;
-    inline-size: 100%;
-    min-block-size: 44px;
+  .optional {
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-muted);
   }
 
-  &__optional {
-    font-weight: 400;
-    color: var(--color-muted);
-  }
-
-  &__start {
+  .start {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.75rem 1.25rem;
+    gap: var(--space-3) var(--space-5);
   }
 
-  &__cta {
-    --padding: 0 2rem;
+  // Morphs into the first card (docs/design/bon/SPEC.md §13); wraps the start button tightly.
+  .cta {
+    --button-padding: 0 var(--space-8);
+    --button-font-size: var(--font-size-base);
+    --button-min-block-size: 52px;
 
-    // Morphs into the first card (docs/design/bon/SPEC.md §13).
-    view-transition-name: bon-card;
-    min-block-size: 52px;
-    font-size: 1.05rem;
-
-    &[aria-disabled="true"] {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  }
-
-  &__record {
-    color: var(--color-ink-strong);
-  }
-
-  &__redeem,
-  &__leaderboard {
-    align-self: flex-start;
-  }
-
-  &__redeem {
-    gap: 0.375rem;
-    font-size: 0.9rem;
-  }
-
-  &__rules {
-    align-self: start;
-  }
-
-  &__rules-header {
-    border-block-end: 0;
-    padding-block-end: 0;
-  }
-
-  &__list {
     display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-
-    li {
-      display: grid;
-      grid-template-columns: 28px 1fr;
-      gap: 0.75rem;
-      align-items: start;
-      padding-block: 0.75rem;
-      border-block-start: 1px dashed var(--rule-inner);
-
-      &:first-child {
-        border-block-start: 0;
-      }
-    }
-
-    svg {
-      color: var(--orange-400);
-    }
-
-    b {
-      color: var(--color-ink-strong);
-    }
+    view-transition-name: bon-card;
   }
 
-  &__track {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 3px;
-    margin-block-start: 0.5rem;
-
-    > span {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 22px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--color-accent-text);
-      background: color-mix(in srgb, var(--orange-500) 22%, transparent);
-      border-radius: var(--radius-xxs);
-    }
+  .record {
+    color: var(--color-text-strong);
   }
 
-  &__tip {
-    margin: 0.75rem 0 0;
-    font-size: 0.8rem;
-    font-style: italic;
+  .redeem {
+    --textlink-font-size: var(--font-size-md);
+    --textlink-gap: var(--space-1);
+  }
+
+  // Wrapper parts keep the alignment off the nested components (an inherited --textlink-place-self
+  // would reach BonName and BonPlayerCode).
+  .leaderboard {
+    display: flex;
   }
 }

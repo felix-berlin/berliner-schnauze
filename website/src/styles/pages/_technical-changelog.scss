@@ -1,32 +1,34 @@
 @use "@styles/variables" as vars;
 @use "@styles/pages/changelog-prose" as prose;
 
-.c-technical-changelog {
-  padding-block: vars.$spacer * 3;
+@layer legacy {
+  .c-technical-changelog {
+    padding-block: vars.$spacer * 3;
 
-  @include prose.changelog-prose;
+    @include prose.changelog-prose;
 
-  h1,
-  h2,
-  h3 {
-    margin-block-start: vars.$spacer * 2;
-    margin-block-end: vars.$spacer * 0.5;
-    text-wrap: balance;
-  }
+    h1,
+    h2,
+    h3 {
+      margin-block-start: vars.$spacer * 2;
+      margin-block-end: vars.$spacer * 0.5;
+      text-wrap: balance;
+    }
 
-  h1:first-child {
-    margin-block-start: 0;
-  }
+    h1:first-child {
+      margin-block-start: 0;
+    }
 
-  a {
-    overflow-wrap: anywhere;
-  }
+    a {
+      overflow-wrap: anywhere;
+    }
 
-  code {
-    font-family: monospace;
-    font-size: 0.875em;
-    background-color: color-mix(in srgb, currentColor 8%, transparent);
-    padding-inline: 0.25em;
-    border-radius: 2px;
+    code {
+      font-family: monospace;
+      font-size: 0.875em;
+      background-color: color-mix(in srgb, currentColor 8%, transparent);
+      padding-inline: 0.25em;
+      border-radius: 2px;
+    }
   }
 }

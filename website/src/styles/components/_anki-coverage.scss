@@ -1,120 +1,130 @@
-@use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-.c-anki-coverage {
-  padding: vars.$spacer * 1.5 vars.$spacer * 1.25;
-  display: flex;
-  flex-direction: column;
-  gap: vars.$spacer * 1.25;
+// Letter coverage card of the Anki page: .head (.title, .subtitle, .count, .toggle with two
+// aria-pressed buttons Lite/Full), then .grid of .col (.track with .fill scaled by --fill-pct, .letter).
+@include mx.component("anki-coverage") {
+  :scope {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R69: one-off (empty bar track)
+    --_track: light-dark(rgb(253 240 227), rgb(73 80 86 / 70%));
 
-  @include mx.paper-card;
+    @include mx.paper-card;
 
-  &__head {
+    padding: var(--space-6) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .head {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: vars.$spacer;
+    gap: var(--space-4);
   }
 
-  &__title {
+  .title {
     @include mx.paper-card-title;
   }
 
-  &__subtitle {
+  .subtitle {
     display: block;
-    // impeccable-disable design-system-font-size -- literal value from design handoff
-    font-size: 0.95rem;
-    color: var(--color-muted);
+    font-size: var(--font-size-md);
+    color: var(--color-text-muted);
   }
 
-  &__count-toggle {
+  .count-toggle {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: vars.$spacer * 1.25;
+    gap: var(--space-5);
   }
 
-  &__count {
+  .count {
     display: flex;
     align-items: baseline;
-    gap: vars.$spacer * 0.5;
+    gap: var(--space-2);
 
     strong {
-      font-size: 2rem;
-      font-weight: 900;
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-black);
       line-height: 1;
-      color: var(--anki-color-accent-text);
+      color: var(--color-text-accent); // colour inventory R17
     }
 
     span {
-      // impeccable-disable design-system-font-size -- literal value from design handoff
-      font-size: 0.95rem;
-      color: var(--color-muted);
+      font-size: var(--font-size-md);
+      color: var(--color-text-muted);
     }
   }
 
-  &__toggle {
+  // Segmented Lite/Full switch, same colours as a c-button filter.
+  .toggle {
     display: flex;
-    border: 1px solid var(--orange-600);
+    border: 1px solid var(--color-accent-solid); // colour inventory R1
 
-    .c-button {
+    button {
+      padding: var(--space-2) var(--space-4);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-control-text);
+      background-color: var(--color-control-bg);
       border: 0;
-      font-weight: 700;
-      padding: vars.$spacer * 0.5 vars.$spacer * 1.125;
-    }
+      cursor: pointer;
+      transition:
+        background-color var(--duration-base) var(--ease-standard),
+        color var(--duration-base) var(--ease-standard),
+        box-shadow var(--duration-base) var(--ease-standard);
 
-    .c-button.is-current {
-      --color: var(--white-100);
+      @include butler-mx.hover {
+        color: var(--color-surface-overlay);
+        background-color: var(--color-accent-active);
+        box-shadow: var(--shadow-hover-glow);
+      }
 
-      @include butler-mx.dark-mode-class {
-        --color: var(--white-100);
+      &[aria-pressed="true"] {
+        color: var(--color-text-on-accent); // colour inventory R3
+        background-color: var(--color-accent-active); // colour inventory R2
       }
     }
   }
 
-  &__grid {
+  .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(2.125rem, 1fr));
-    gap: vars.$spacer * 0.375;
+    gap: var(--space-1);
   }
 
-  &__col {
+  .col {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: vars.$spacer * 0.375;
+    gap: var(--space-1);
   }
 
-  &__track {
-    width: 100%;
-    height: 4.5rem;
-    background: color-mix(in srgb, var(--orange-100) 70%, white);
-    border: 1px dashed var(--orange-200);
+  .track {
+    inline-size: 100%;
+    block-size: 4.5rem;
+    background: var(--_track);
+    border: 1px dashed var(--color-border-accent-soft); // colour inventory R6
     overflow: hidden;
-
-    @include butler-mx.dark-mode-class {
-      background: color-mix(in srgb, var(--new-blue-200) 70%, transparent);
-    }
   }
 
-  &__fill {
-    width: 100%;
-    height: 100%;
-    background: var(--orange-500);
+  .fill {
+    inline-size: 100%;
+    block-size: 100%;
+    background: var(--color-accent-active); // colour inventory R2
     transform-origin: bottom;
     transform: scaleY(var(--fill-pct, 0));
-    transition: transform 0.5s ease-in-out;
+    transition: transform var(--duration-slow) var(--ease-standard);
 
     @include butler-mx.feature("no-motion") {
       transition: none;
     }
   }
 
-  &__letter {
-    // impeccable-disable design-system-font-size -- literal value from design handoff
-    font-size: 0.85rem;
-    font-weight: 700;
+  .letter {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
   }
 }

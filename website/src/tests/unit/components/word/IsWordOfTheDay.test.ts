@@ -93,7 +93,7 @@ describe("IsWordOfTheDay.vue", () => {
     const tooltip = document.body.querySelector("[popover='manual']");
     expect(tooltip).not.toBeNull();
     expect(tooltip?.textContent).toContain("TestWord, ist das heutige Wort des Tages");
-    expect(tooltip?.className).toContain("c-tooltip__panel--bottom");
+    expect(tooltip?.dataset.variant).toBe("bottom");
     wrapper.unmount();
   });
 
@@ -109,7 +109,7 @@ describe("IsWordOfTheDay.vue", () => {
       },
     });
 
-    const badge = wrapper.find(".c-word-hero__wotd-badge");
+    const badge = wrapper.find(".c-badge[data-variant~='award']");
     expect(badge.exists()).toBe(true);
     expect(badge.text()).toContain("Wort des Tages");
     expect(wrapper.findComponent(Crown).exists()).toBe(true);
@@ -126,7 +126,7 @@ describe("IsWordOfTheDay.vue", () => {
       },
     });
 
-    expect(wrapper.find(".c-word-hero__wotd-badge").exists()).toBe(false);
+    expect(wrapper.find(".c-badge[data-variant~='award']").exists()).toBe(false);
     wrapper.unmount();
   });
 });
