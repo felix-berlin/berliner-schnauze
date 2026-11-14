@@ -2,6 +2,61 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.12.5](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.4...v4.12.5) (2026-11-14)
+
+
+### Bug Fixes
+
+* **anki:** restore the hover glow on the Lite/Full toggle ([05705d6](https://github.com/felix-berlin/berliner-schnauze/commit/05705d6b4e6a17942a5df1e535a1fa7b7bb82338))
+* **bon:** ranking cells use .metric, the section card's .num hid them ([9e1581b](https://github.com/felix-berlin/berliner-schnauze/commit/9e1581b2b45a1ab462094edb66014352bdc5e703))
+* **bon:** swallow the AbortError of a skipped view transition ([c265765](https://github.com/felix-berlin/berliner-schnauze/commit/c26576554442b3085cdab52307169f14a1f090a9))
+* **bon:** textlink alignment sits on wrapper parts, not on the card and intro roots ([17974c0](https://github.com/felix-berlin/berliner-schnauze/commit/17974c02bc9c6665fd6fde05db3c4f5426e406be))
+* **bon:** the card's feedback slot gets a data-slot wrapper ([0e8eac8](https://github.com/felix-berlin/berliner-schnauze/commit/0e8eac8a5759b00eed8351f8ce16a40d2b46da2e))
+* **bon:** the intro name label is a bon-intro part so (optional) stays regular ([90a6d31](https://github.com/felix-berlin/berliner-schnauze/commit/90a6d311c3e3d29e1841b0c3a76b3ff8812b90f3))
+* **bon:** the leaderboard motion object gets its own module name; confetti rule spacing ([e7caa81](https://github.com/felix-berlin/berliner-schnauze/commit/e7caa81944a88f9e59018d0367a5935d141abccf))
+* **bon:** the leaderboard retry keeps its 0.5rem top margin ([e1ee60a](https://github.com/felix-berlin/berliner-schnauze/commit/e1ee60a9991c1a119e51c260226ec7fb73dcff0a))
+* **bon:** word of the day clips its card again ([23c8da1](https://github.com/felix-berlin/berliner-schnauze/commit/23c8da1b7f5f45f7e0bbd3dc6a4152b61fbfa137))
+* **ci:** generate the browser regex before the unit tests ([b6f91e3](https://github.com/felix-berlin/berliner-schnauze/commit/b6f91e3cd6f7b94ac9862b10bbdfcd3c9fb6b6a8))
+* **dev:** button reads --button-font-size on every variant ([a072956](https://github.com/felix-berlin/berliner-schnauze/commit/a0729567c101e27b60ef7113ce1e20f1bcd02c70))
+* **dev:** close layer gaps found in review ([7cc779d](https://github.com/felix-berlin/berliner-schnauze/commit/7cc779d57c76a3d3d29ff246a1a561c74f89b88f))
+* **dev:** close stylelint gate bypasses ([3111258](https://github.com/felix-berlin/berliner-schnauze/commit/31112589a3cc630a43a5bd645f07900fd518bfb4))
+* **dev:** fail the token build on malformed tokens ([66ea625](https://github.com/felix-berlin/berliner-schnauze/commit/66ea625c2bb6170bf797d61d72a968e00d7a72f7))
+* **dev:** form fields follow the word page's dashed ring ([f82c097](https://github.com/felix-berlin/berliner-schnauze/commit/f82c0976e3722deba482ecda43c047b6900d8d9e))
+* **dev:** give the skeleton shimmer its merge lead's colour (R13) ([7805c81](https://github.com/felix-berlin/berliner-schnauze/commit/7805c8186a82c155592f2b7194b7d8e102fc1ead))
+* **dev:** keep generated tokens out of stylelint ([1374092](https://github.com/felix-berlin/berliner-schnauze/commit/1374092bfd4357332ffd3af18edcd23ef4f84686))
+* **dev:** keep the BON CTA height and the toast button fill after the button move ([c3493fa](https://github.com/felix-berlin/berliner-schnauze/commit/c3493fa58d41fe8bb60536d96d7ffd3fc33b9f97))
+* **dev:** keep the old 1rem small print and trim the section card (review 8a) ([cc0c59e](https://github.com/felix-berlin/berliner-schnauze/commit/cc0c59e2fe2bdb6236afda8cbaea53e5623ee31c))
+* **dev:** keep the vote count in the feedback card header at 0.8rem ([11af51e](https://github.com/felix-berlin/berliner-schnauze/commit/11af51e355eaba83fc30ff3af34ee74022f997b8))
+* **dev:** let the dropdown offset prop reach the panel ([3246893](https://github.com/felix-berlin/berliner-schnauze/commit/32468932cd9d0b8cdd72ada32d2e85b0179a1fbc))
+* **dev:** main menu drops the top rule of its second column on wide panels ([936fea1](https://github.com/felix-berlin/berliner-schnauze/commit/936fea13d19444aaacae41d83a8a6aa6ea24df6b))
+* **dev:** mark the ButtonWithStates slot wrapper and keep disabled filters disabled ([eb24694](https://github.com/felix-berlin/berliner-schnauze/commit/eb24694c3d5d931a4cafb95f2f85e8555ad7e8a8))
+* **dev:** move the main menu hairline gap and modal backdrop timing into private properties ([9d209f7](https://github.com/felix-berlin/berliner-schnauze/commit/9d209f7f61f2f1f6e6b356716c8a5660c0dbe3d4))
+* **dev:** remove remaining dark-mode shim from base styles ([6601823](https://github.com/felix-berlin/berliner-schnauze/commit/66018236975058c543b9f1fe05fd7b40770f22ab))
+* **dev:** reseed e2e media under its own file names ([7881050](https://github.com/felix-berlin/berliner-schnauze/commit/788105051c171555799a44755d0e28552a15d776))
+* **dev:** restore the 0.25rem gap of the search-modal close button ([4325ec0](https://github.com/felix-berlin/berliner-schnauze/commit/4325ec0103b0eeacb69e50233b1a311e9631b02d))
+* **dev:** stop stylelint when the token ban list scrapes empty ([fd1c265](https://github.com/felix-berlin/berliner-schnauze/commit/fd1c2652842b3ac6470362faf3b701649c28c7ac))
+* **dev:** stop the skeleton shimmer under reduced motion again ([2174b9f](https://github.com/felix-berlin/berliner-schnauze/commit/2174b9fa52ddfd9d3b8bcf9ad7bba2621875a914))
+* **dev:** wrap the BadgeTag slot in its own data-slot element ([9366375](https://github.com/felix-berlin/berliner-schnauze/commit/93663751d51c712d06a0e6cab59dee788c56efa0))
+* **search:** show the filter reset check only after a click ([a7317bd](https://github.com/felix-berlin/berliner-schnauze/commit/a7317bdadf0928b41c45b5a66b03361577d158a7))
+* **toast:** keep toasts below the word tab bar on narrow screens ([59a42e1](https://github.com/felix-berlin/berliner-schnauze/commit/59a42e186343be4394353195794a0902e75eae25))
+* **word:** a locked pressed choice keeps AA contrast ([4aa8db2](https://github.com/felix-berlin/berliner-schnauze/commit/4aa8db2287f1065af3c029b578bbe16ea60a842f))
+* **word:** analysis card bodies get their layout back ([56d9ddb](https://github.com/felix-berlin/berliner-schnauze/commit/56d9ddb604a66894a7b87786fae5e8a4a3cba38e))
+* **word:** drop content-visibility from the lower word page sections ([0acde37](https://github.com/felix-berlin/berliner-schnauze/commit/0acde3712e2c05ead1c16e361ed3d4e879cc9128))
+* **word:** keep the 44px rows of the analysis links after the textlink move ([b54b478](https://github.com/felix-berlin/berliner-schnauze/commit/b54b47852f309edc2eb168fc5e487e02faffc1c0))
+* **word:** keep the comment form's privacy link at 1rem ([c1bf81c](https://github.com/felix-berlin/berliner-schnauze/commit/c1bf81c4a5c8cdb6abf221d9e3f1e3a6375ff000))
+* **word:** keep the comment list's button settings off the nested form ([d61ea69](https://github.com/felix-berlin/berliner-schnauze/commit/d61ea699362e38cdaa7641743d6cd8b5aa8db999))
+* **word:** keep the scrollbar gutter on word pages ([3c2ba1d](https://github.com/felix-berlin/berliner-schnauze/commit/3c2ba1d848c45d193dbbcad9f33b91d904106c47))
+* **word:** land section-card anchors below the tab bar again ([da6437b](https://github.com/felix-berlin/berliner-schnauze/commit/da6437b4668de7a38523c873fcd1531774ef16da))
+* **word:** lower word page cards keep their shadows ([f600711](https://github.com/felix-berlin/berliner-schnauze/commit/f6007114b84be3c16af2e70c2c070043d73eeed0))
+* **word:** restore the 3rem comment submit button ([289db70](https://github.com/felix-berlin/berliner-schnauze/commit/289db700400015a92be20d59efae5eedf2e0d4f7))
+* **word:** textlink keeps a legacy gap when --textlink-gap is unset ([1f1d285](https://github.com/felix-berlin/berliner-schnauze/commit/1f1d285a0a4d169a6cbc8e4ab14390f0eff2f434))
+* **word:** wash the Berolinismus badge in the word hero ([39cb7b0](https://github.com/felix-berlin/berliner-schnauze/commit/39cb7b0c090ec3c03ea5b892d16dde404d85b1a1))
+
+
+### Performance Improvements
+
+* **word:** skip rendering the lower word page sections until they come near ([c81b426](https://github.com/felix-berlin/berliner-schnauze/commit/c81b4267f36b8030305306c4a2459e345e1e87fe))
+
 ## [4.12.4](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.3...v4.12.4) (2026-11-13)
 
 
