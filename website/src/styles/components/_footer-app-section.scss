@@ -11,8 +11,8 @@
     &__settings-link,
     .c-install-button {
       --button-padding: 0.5rem 1rem;
+      --button-gap: #{vars.$spacer * 0.5};
 
-      gap: vars.$spacer * 0.5;
       text-decoration: none;
     }
 

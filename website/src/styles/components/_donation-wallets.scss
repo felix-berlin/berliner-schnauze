@@ -68,14 +68,13 @@
     }
 
     &__card .c-button.c-donation-wallets__copy-button {
+      --button-padding: 0.4375rem 0.8125rem;
+      --button-gap: 0.4375rem;
+      --button-font-size: 0.85rem;
+
       display: inline-flex;
       align-items: center;
-      gap: 0.4375rem;
-
-      --button-padding: 0.4375rem 0.8125rem;
-
       margin-inline-start: auto;
-      font-size: 0.85rem;
       font-weight: 700;
       white-space: nowrap;
 

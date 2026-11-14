@@ -66,13 +66,11 @@
       --button-bg: var(--orange-100);
       --button-border-color: var(--orange-600);
       --button-color: var(--blue);
+      --button-padding: 0.9375rem 1rem;
+      --button-gap: #{vars.$spacer * 0.8};
 
       display: flex;
       align-items: center;
-      gap: vars.$spacer * 0.8;
-
-      --button-padding: 0.9375rem 1rem;
-
       text-decoration: none;
 
       @include butler-mx.dark-mode-class {

@@ -42,10 +42,10 @@
 
       &.is-bottom {
         --button-display: flex;
+        --button-gap: 0.5rem;
       }
 
-      span,
-      &.is-bottom {
+      span {
         display: flex;
         align-items: center;
         gap: 0.5rem;

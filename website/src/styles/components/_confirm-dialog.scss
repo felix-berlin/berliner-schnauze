@@ -11,13 +11,11 @@
     }
 
     &__actions {
+      --button-padding: 0.5rem 1rem;
+
       display: flex;
       justify-content: flex-end;
       gap: 0.75rem;
-
-      .c-button {
-        --button-padding: 0.5rem 1rem;
-      }
     }
   }
 }
