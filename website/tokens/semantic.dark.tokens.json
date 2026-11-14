@@ -142,6 +142,13 @@
           "hex": "#cf5736",
           "alpha": 0.22
         }
+      },
+      "tint-warm": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.317647, 0.27451, 0.282353],
+          "hex": "#514648"
+        }
       }
     },
     "accent": {
@@ -200,6 +207,9 @@
       },
       "accent-soft": {
         "$value": "{color.orange.200}"
+      },
+      "rim": {
+        "$value": "{color.cream.500}"
       }
     },
     "control": {
@@ -257,6 +267,24 @@
       },
       "track": {
         "$value": "{color.ink.100}"
+      }
+    },
+    "shadow": {
+      "soft": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0, 0, 0],
+          "hex": "#000000",
+          "alpha": 0.08
+        }
+      },
+      "strong": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0, 0, 0],
+          "hex": "#000000",
+          "alpha": 0.16
+        }
       }
     }
   },

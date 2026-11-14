@@ -5,8 +5,7 @@
 // .more (row of the "alle Trend-Wörter" textlink).
 @include mx.component("word-trend") {
   :scope {
-    // stylelint-disable-next-line function-disallowed-list -- colour inventory R41: one-off
-    --_bg: light-dark(rgb(243 226 222), rgb(81 70 72));
+    --_bg: var(--color-surface-tint-warm);
     // stylelint-disable-next-line function-disallowed-list -- colour inventory R57: one-off
     --_bar: rgb(207 87 54 / 45%);
     --_text-gap: 0.125rem; // below every space step

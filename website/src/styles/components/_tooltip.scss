@@ -8,8 +8,9 @@
 @include mx.component("tooltip") {
   :scope {
     // drop-shadow unifies panel + arrow into one silhouette (no double shadow where the arrow overlaps).
-    // stylelint-disable-next-line function-disallowed-list -- colour inventory R20 + R36: one-off (paper-lift as a filter)
-    --_lift: drop-shadow(0 0.5px 0.6px rgb(0 0 0 / 8%)) drop-shadow(0 4px 5px rgb(0 0 0 / 16%));
+    // shadow.paper-lift as a filter (a token cannot hold drop-shadow()); same in _dropdown-popover.scss
+    --_lift: drop-shadow(0 0.5px 0.6px var(--color-shadow-soft))
+      drop-shadow(0 4px 5px var(--color-shadow-strong));
     --_offset: var(--tooltip-offset, 8px);
     --_pad: 0.25em 0.6em; // em: follows the tooltip text
     --_max: 20rem; // one-off reading width

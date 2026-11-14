@@ -104,26 +104,29 @@ The scales are Claude's call, derived from the most used values.
 
 Values are the ones in `src/styles/base/_colors.scss` at the start, copied, not redesigned. This table is the subset planned before the colour inventory; the source of truth for the semantic tokens is `website/tokens/*.tokens.json`.
 
-| Token                                                                            | Replaces                                                                                                  |
-| -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `color.text.body` / `strong` / `muted` / `accent`                                | `--color-body` / `--color-ink-strong` / `--color-muted` / `--color-accent-text`                           |
-| `color.text.on-accent`                                                           | `--white-100` as text on orange (new)                                                                     |
-| `color.surface.hero` / `sheet` / `paper` / `chip` / `callout` / `badge` / `wash` | `--surface-*`                                                                                             |
-| `color.surface.tint`                                                             | `rgb(0 0 0 / 10%)` light, `rgb(255 255 255 / 10%)` dark (new)                                             |
-| `color.surface.floating`                                                         | `--floating-color-background`                                                                             |
-| `color.surface.overlay`, `color.text.on-overlay`                                 | `--overlay-base`, `--overlay-ink`                                                                         |
-| `color.accent.solid` / `color.accent.icon`                                       | `--orange-600` as a full surface / `--orange-400` on icons                                                |
-| `color.border.card` / `inner` / `control`                                        | `--rule-card` / `--rule-inner` / `--control-border`                                                       |
-| `color.control.bg` / `text`                                                      | `--control-bg` / `--control-color`                                                                        |
-| `color.focus.ring`                                                               | `--focus-ring`                                                                                            |
-| `color.status.danger` / `success` / `gold`                                       | `--danger` / `--success` / `--gold`                                                                       |
-| `shadow.paper-lift` / `shadow.hover-glow`                                        | `--paper-lift` / `--shadow-hover-glow`                                                                    |
-| `color.border.accent` / `accent-soft`                                            | `--orange-300` on accent borders and icons / `--orange-200` on dashed dividers (colour inventory R7 / R6) |
-| `color.surface.placeholder`                                                      | `--orange-200` light, `--new-blue-200` dark on placeholder and skeleton fills (R12, R13)                  |
-| `color.surface.inverse`                                                          | `--new-blue-200` / `--grey-100` dark panels in both themes (R14, R15)                                     |
-| `color.surface.chrome`                                                           | header and footer background: `--orange-200` light, `--blue` dark (R38)                                   |
-| `color.surface.wash-strong`                                                      | `--orange-500` at 22 % (R18, R19; `wash` is 15 %)                                                         |
-| `color.text.emphasis` / `badge`                                                  | `--color-ink-strong` light, `--orange-300` / `--orange-200` dark (R16 / R29)                              |
+| Token                                                                            | Replaces                                                                                                       |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `color.text.body` / `strong` / `muted` / `accent`                                | `--color-body` / `--color-ink-strong` / `--color-muted` / `--color-accent-text`                                |
+| `color.text.on-accent`                                                           | `--white-100` as text on orange (new)                                                                          |
+| `color.surface.hero` / `sheet` / `paper` / `chip` / `callout` / `badge` / `wash` | `--surface-*`                                                                                                  |
+| `color.surface.tint`                                                             | `rgb(0 0 0 / 10%)` light, `rgb(255 255 255 / 10%)` dark (new)                                                  |
+| `color.surface.floating`                                                         | `--floating-color-background`                                                                                  |
+| `color.surface.overlay`, `color.text.on-overlay`                                 | `--overlay-base`, `--overlay-ink`                                                                              |
+| `color.accent.solid` / `color.accent.icon`                                       | `--orange-600` as a full surface / `--orange-400` on icons                                                     |
+| `color.border.card` / `inner` / `control`                                        | `--rule-card` / `--rule-inner` / `--control-border`                                                            |
+| `color.control.bg` / `text`                                                      | `--control-bg` / `--control-color`                                                                             |
+| `color.focus.ring`                                                               | `--focus-ring`                                                                                                 |
+| `color.status.danger` / `success` / `gold`                                       | `--danger` / `--success` / `--gold`                                                                            |
+| `shadow.paper-lift` / `shadow.hover-glow`                                        | `--paper-lift` / `--shadow-hover-glow`                                                                         |
+| `color.border.accent` / `accent-soft`                                            | `--orange-300` on accent borders and icons / `--orange-200` on dashed dividers (colour inventory R7 / R6)      |
+| `color.surface.placeholder`                                                      | `--orange-200` light, `--new-blue-200` dark on placeholder and skeleton fills (R12, R13)                       |
+| `color.surface.inverse`                                                          | `--new-blue-200` / `--grey-100` dark panels in both themes (R14, R15)                                          |
+| `color.surface.chrome`                                                           | header and footer background: `--orange-200` light, `--blue` dark (R38)                                        |
+| `color.surface.wash-strong`                                                      | `--orange-500` at 22 % (R18, R19; `wash` is 15 %)                                                              |
+| `color.text.emphasis` / `badge`                                                  | `--color-ink-strong` light, `--orange-300` / `--orange-200` dark (R16 / R29)                                   |
+| `color.border.rim`                                                               | `rgb(227 227 210)` (`--yellow-500`) rim of the primary/filter button hover and the Anki badge (R28)            |
+| `color.surface.tint-warm`                                                        | trend box ground and skeleton shimmer: `rgb(243 226 222)` light, `rgb(81 70 72)` dark (R41, R42)               |
+| `color.shadow.soft` / `strong`                                                   | `rgb(0 0 0 / 8%)` / `rgb(0 0 0 / 16%)` in the paper-lift filter and the BON sticky bar shadow (R36 / R20, R21) |
 
 The full row-by-row decisions (token, merge or private one-off) are in `docs/design/design-system/colour-inventory.md`.
 
