@@ -107,10 +107,13 @@
   }
 
   .form {
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- a width, like inline-size (not a spacing value)
     --input-inline-size: 100%;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- a one-off width, like max-inline-size
     --input-max-inline-size: 20rem;
     --input-text-align: center;
     --input-text-transform: uppercase;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- letter-spacing has no token, like the plain property
     --input-letter-spacing: 0.12em;
 
     display: flex;

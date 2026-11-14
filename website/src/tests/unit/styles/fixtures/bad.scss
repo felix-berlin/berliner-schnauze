@@ -28,6 +28,8 @@
     scroll-margin-top: 4rem; // bad
     scroll-padding: 2rem; // bad
     scroll-padding-left: 0; // bad
+    --demo-padding: 6px var(--space-3); // bad
+    --demo-delay: 200ms; // bad
 
     @media (width >= 40rem) { // bad
       color: inherit;

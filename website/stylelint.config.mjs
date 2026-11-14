@@ -36,6 +36,21 @@ const rawTime = new RegExp(`${num}m?s(?!\\w)`);
 // The whole value must be tokens (a comma list of var()) or a keyword.
 const notToken = /^(?!(?:var\([^()]*\)(?:\s*,\s*var\([^()]*\))*|none|inherit|initial|unset)$)/;
 
+// The value checks; `publicProperties` adds the public custom properties (`--button-padding`),
+// which feed the same declarations. `--_` stays free (raw lengths with a one-line reason, spec §5.6).
+const valueChecks = {
+  "/.*/": [bannedVar, /\$|#\{/],
+  "font-size": [rawLength],
+  "/^(margin|padding|scroll-margin|scroll-padding)(-(block|inline)(-(start|end))?)?$|^(row-|column-)?gap$|^inset(-block|-inline)?(-(start|end))?$/":
+    [rawLength],
+  "/^border(-(start|end)-(start|end))?-radius$/": [rawLength],
+  "/^(box|text)-shadow$/": [notToken],
+  "z-index": [/^-?\d+$/],
+  "/^(transition|animation)(-duration|-delay)?$/": [rawTime],
+  "/^font(-family)?$/": [notToken],
+};
+const publicProperties = { "/^--(?!_)/": [rawLength, rawTime] };
+
 export const strictRules = {
   "color-no-hex": true,
   "color-named": "never",
@@ -52,18 +67,7 @@ export const strictRules = {
     "color-mix",
     "color",
   ],
-  // `--_` custom properties are never matched by a property key, so raw lengths stay legal there.
-  "declaration-property-value-disallowed-list": {
-    "/.*/": [bannedVar, /\$|#\{/],
-    "font-size": [rawLength],
-    "/^(margin|padding|scroll-margin|scroll-padding)(-(block|inline)(-(start|end))?)?$|^(row-|column-)?gap$|^inset(-block|-inline)?(-(start|end))?$/":
-      [rawLength],
-    "/^border(-(start|end)-(start|end))?-radius$/": [rawLength],
-    "/^(box|text)-shadow$/": [notToken],
-    "z-index": [/^-?\d+$/],
-    "/^(transition|animation)(-duration|-delay)?$/": [rawTime],
-    "/^font(-family)?$/": [notToken],
-  },
+  "declaration-property-value-disallowed-list": { ...valueChecks, ...publicProperties },
   "property-disallowed-list": [
     "width",
     "height",
@@ -108,6 +112,18 @@ export default {
         "src/styles/pages/_changelog-prose.scss",
       ],
       rules: Object.fromEntries(Object.keys(strictRules).map((rule) => [rule, null])),
+    },
+    {
+      // shortcut: these still set public custom properties to raw lengths; they belong to the
+      // focus-ring/anchor (S5/S6) and toast (S9) follow-ups. Remove a file once it is clean; only shrinks.
+      files: [
+        "src/styles/base/_global.scss",
+        "src/styles/base/_inputs.scss",
+        "src/styles/components/_toast-container.scss",
+        "src/styles/components/_toast-notify.scss",
+        "src/styles/objects/_word.scss",
+      ],
+      rules: { "declaration-property-value-disallowed-list": valueChecks },
     },
     {
       customSyntax: "postcss-html",

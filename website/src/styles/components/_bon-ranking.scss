@@ -92,6 +92,7 @@
 
   .name {
     // The "Melden" link: a compact target flush with the name, at its own width.
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- a size, no token scale for heights (compact Melden link)
     --textlink-min-block-size: 2rem;
     --textlink-padding-inline: 0;
     --textlink-place-self: start;

@@ -45,6 +45,7 @@
   }
 
   .periods {
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- a size, no token scale for heights (period chips)
     --choice-min-block-size: 2.5rem;
     --choice-padding-inline: var(--space-2);
 

@@ -16,6 +16,7 @@
   .row {
     // Grows with the text; rows="4" is the floor (field-sizing ignores rows), plus padding and border.
     --textarea-field-sizing: content;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- four text lines plus padding and border
     --textarea-min-block-size: calc(4lh + 1.2rem + 2px);
 
     display: grid;
@@ -64,6 +65,7 @@
 
   .actions {
     --button-padding: var(--space-2) var(--space-4);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- a size, no token scale for heights (submit row)
     --button-min-block-size: 3rem;
     --button-flex: 1 1 auto;
 

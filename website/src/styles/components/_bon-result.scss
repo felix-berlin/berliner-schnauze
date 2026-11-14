@@ -29,6 +29,7 @@
     --bon-player-code-margin-block: 0;
     --band-font-size: var(--font-size-4xl);
     --band-line-height: 1.05;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- an outline offset, not policed on outline-offset either
     --band-focus-offset: 4px;
 
     display: flex;
@@ -122,6 +123,7 @@
 
   // Wraps the share choice: it fills this flex item (grid stretch) at 52px.
   .share {
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- a size, no token scale for heights (share choice)
     --choice-min-block-size: 52px;
 
     display: grid;

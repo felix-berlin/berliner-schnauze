@@ -129,6 +129,7 @@
   .badges {
     --badge-display: inline-flex;
     --badge-gap: var(--space-1);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- 1px border (spec §5.6)
     --badge-border: 1px solid transparent;
 
     grid-area: badges;

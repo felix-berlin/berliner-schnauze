@@ -133,6 +133,7 @@
 
   .answers {
     --choice-justify: center;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- a size, no token scale for heights (BON answer buttons, SPEC)
     --choice-min-block-size: 60px;
     --choice-padding-inline: var(--space-2);
     --choice-font-size: var(--font-size-base);

@@ -88,6 +88,7 @@
   .cta {
     --button-padding: 0 var(--space-8);
     --button-font-size: var(--font-size-base);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- a size, no token scale for heights (start button, SPEC)
     --button-min-block-size: 52px;
 
     display: flex;
