@@ -23,17 +23,6 @@
     display: grid;
   }
 
-  @container main-menu (inline-size >= 36rem) {
-    .columns {
-      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
-    }
-
-    .col + .col {
-      border-block-start: none;
-      border-inline-start: 1px dashed var(--_rule);
-    }
-  }
-
   .col {
     --_hairline: 2px; // below every space step
 
@@ -48,6 +37,18 @@
 
     &.discover {
       padding: var(--space-4) var(--space-3) var(--space-3);
+    }
+  }
+
+  // After .col: same specificity and proximity, so only source order lets `none` win.
+  @container main-menu (inline-size >= 36rem) {
+    .columns {
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    }
+
+    .col + .col {
+      border-block-start: none;
+      border-inline-start: 1px dashed var(--_rule);
     }
   }
 
