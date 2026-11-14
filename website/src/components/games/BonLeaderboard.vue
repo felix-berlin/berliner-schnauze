@@ -423,5 +423,5 @@ onMounted(() => {
 @use "@styles/components/bon-leaderboard";
 @use "@styles/components/bon-ranking";
 @use "@styles/components/bon-me";
-@use "@styles/objects/bon-leaderboard";
+@use "@styles/objects/bon-leaderboard-motion";
 </style>
