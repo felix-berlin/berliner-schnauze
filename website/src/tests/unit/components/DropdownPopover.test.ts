@@ -185,10 +185,23 @@ describe("DropdownPopover.vue", () => {
 
   it("arrow element is rendered with aria-hidden once opened", async () => {
     const wrapper = mountWithTrigger();
-    expect(wrapper.find("[aria-hidden='true']").exists()).toBe(false);
+    expect(wrapper.find(".c-dropdown-popover .arrow").exists()).toBe(false);
     openToggle(wrapper);
     await nextTick();
-    expect(wrapper.find("[aria-hidden='true']").attributes("aria-hidden")).toBe("true");
+    expect(wrapper.find(".c-dropdown-popover .arrow").attributes("aria-hidden")).toBe("true");
+  });
+
+  it("theme joins the placement in data-variant; the panel slot sits in .content[data-slot]", async () => {
+    const wrapper = mountWithTrigger({
+      props: { name: "t", theme: "menu" },
+      slots: { panel: () => h("p", { class: "item" }, "Eintrag") },
+    });
+    expect(wrapper.find(".c-dropdown-popover").attributes("data-variant")).toBe(
+      "bottom-start menu",
+    );
+    openToggle(wrapper);
+    await nextTick();
+    expect(wrapper.find(".panel > .content[data-slot] > .item").text()).toBe("Eintrag");
   });
 
   // --- $attrs ---
@@ -301,7 +314,7 @@ describe("DropdownPopover.vue", () => {
     } as DOMRect);
     openToggle(wrapper);
     await nextTick();
-    expect(wrapper.find("[aria-hidden='true']").exists()).toBe(true);
+    expect(wrapper.find(".c-dropdown-popover .arrow").exists()).toBe(true);
   });
 
   // --- onToggle close: setTimeout false branch (line 137) ---
