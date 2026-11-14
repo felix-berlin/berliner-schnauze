@@ -85,7 +85,7 @@ const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(
       {
         word.berolinismus && (
           <TooltipPopover client:only='vue'>
-            <BadgeTag> Berolinismus </BadgeTag>
+            <BadgeTag data-variant='wash'> Berolinismus </BadgeTag>
             <Fragment slot='tooltip'>
               {word.berlinerisch} gehört zu den Berlinismen.
               <>

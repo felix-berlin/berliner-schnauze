@@ -242,9 +242,10 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await page.goto("/wort/alex");
 
     await expect(page.locator("h1 dfn")).toHaveText("Alex");
-    await expect(
-      page.locator(".c-word-hero .badges .c-badge", { hasText: "Berolinismus" }),
-    ).toBeVisible();
+    const badge = page.locator(".c-word-hero .badges .c-badge", { hasText: "Berolinismus" });
+    await expect(badge).toBeVisible();
+    // Every hero badge but the trend link is washed.
+    await expect(badge).toHaveAttribute("data-variant", "wash");
   });
 
   test("Smoke-Check: Wortseite lädt mit Breadcrumb und ohne 404 (wa)", async ({ page }) => {
