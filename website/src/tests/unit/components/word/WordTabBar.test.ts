@@ -22,7 +22,7 @@ describe("WordTabBar.vue", () => {
   it("renders a labelled nav with one anchor link per section, in order", () => {
     const wrapper = mount(WordTabBar, { props: { sections } });
     expect(wrapper.find("nav").attributes("aria-label")).toBe("Inhalt der Wortseite");
-    const links = wrapper.findAll("a.c-word-tabbar__tab");
+    const links = wrapper.findAll("a");
     expect(links.map((a) => a.text())).toEqual(["Bedeutung", "Beispiele"]);
     expect(links.map((a) => a.attributes("href"))).toEqual(["#n-bedeutung", "#n-beispiele"]);
   });
@@ -35,9 +35,9 @@ describe("WordTabBar.vue", () => {
     const wrapper = mount(WordTabBar, { props: { sections } });
     expect(initHeaderScrollSpy).toHaveBeenCalledTimes(1);
     const options = vi.mocked(initHeaderScrollSpy).mock.calls[0][0] as SpyOptions;
-    expect(options.linkSelector).toBe(".c-word-tabbar__tab");
+    expect(options.linkSelector).toBe("a");
     expect(options.navSelector).toBe(".c-word-tabbar");
-    expect(options.activeClass).toBe("is-active");
+    expect(options.activeClass).toBeUndefined();
     const link = wrapper.find("a").element;
     expect(options.getSectionId?.(link)).toBe("n-bedeutung");
     expect(options.getSectionId?.(document.createElement("a"))).toBeUndefined();

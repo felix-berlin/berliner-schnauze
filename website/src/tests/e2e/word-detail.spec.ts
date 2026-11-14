@@ -418,8 +418,8 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await expect(box).toContainText("Platz 1 diese Woche");
     // Pulse views of other tests change the numbers, so only the shape is asserted.
     await expect(box).toContainText(/\d+ Aufrufe in 7 Tagen · [+−±]\d+ % zur Vorwoche/);
-    await expect(box.locator(".c-trend__bars")).toHaveAttribute("aria-hidden", "true");
-    await expect(box.locator(".c-trend__bars span")).toHaveCount(7);
+    await expect(box.locator(".bars")).toHaveAttribute("aria-hidden", "true");
+    await expect(box.locator(".bars span")).toHaveCount(7);
   });
 
   test("Wort außerhalb der Top 10 hat weder Trend-Kasten noch Badge (wa)", async ({ page }) => {

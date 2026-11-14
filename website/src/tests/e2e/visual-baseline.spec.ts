@@ -85,7 +85,7 @@ for (const size of SIZES) {
           // Trend box and badge: rank and call counts come from the last 7 days. Footer dates: the seed stamps them.
           const timeDependent = [
             wotd,
-            page.locator(".c-trend"),
+            page.locator(".c-word-trend"),
             page.getByText("Im Trend · Platz"),
             page.locator(".c-word-page-footer time"),
             page.getByText(/Coding-Zeit/),

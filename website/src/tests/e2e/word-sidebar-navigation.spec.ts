@@ -21,7 +21,7 @@ test.describe("Wort-Sidebar-Navigation (c-word-sidebar)", () => {
       (window as unknown as { __noReloadMarker?: boolean }).__noReloadMarker = true;
     });
 
-    await page.locator(".c-word-sidebar__link[href='#analyse']").click();
+    await page.locator(".c-word-sidebar a[href='#analyse']").click();
 
     await expect(page).toHaveURL(/#analyse$/);
     await expect(page.locator("#analyse")).toBeInViewport();

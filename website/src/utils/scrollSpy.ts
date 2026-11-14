@@ -1,7 +1,8 @@
 interface ScrollSpyOptions {
   navSelector: string;
   linkSelector: string;
-  activeClass: string;
+  /** Class toggled on the active link; omit it when onActivate marks the link (aria-current). */
+  activeClass?: string;
   getSectionId: (link: HTMLAnchorElement) => string | null | undefined;
   rootMargin?: string;
   onActivate?: (link: HTMLAnchorElement, nav: HTMLElement) => void;
@@ -60,8 +61,10 @@ export function initScrollSpy({
   const setActive = (id: string) => {
     const next = links.get(id) ?? null;
     if (next === current) return;
-    current?.classList.remove(activeClass);
-    next?.classList.add(activeClass);
+    if (activeClass) {
+      current?.classList.remove(activeClass);
+      next?.classList.add(activeClass);
+    }
     current = next;
     if (next) onActivate?.(next, nav);
   };

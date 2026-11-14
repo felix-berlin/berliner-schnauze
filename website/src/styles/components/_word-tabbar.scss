@@ -1,46 +1,43 @@
-@use "@styles/variables" as vars;
-@use "@sass-butler/mixins" as butler-mx;
 @use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
-@layer legacy {
-  // Mobile counterpart of .c-word-sidebar; both list the same sections.
-  .c-word-tabbar {
+// Narrow-screen counterpart of the word sidebar; both list the same sections. Part .tab (active:
+// aria-current). Public: --word-tabbar-display (the page shell hides it from its "word" breakpoint),
+// --word-tabbar-top (sticky offset, set by the page shell).
+@include mx.component("word-tabbar") {
+  :scope {
     position: sticky;
     inset-block-start: var(--word-tabbar-top, 0);
-    z-index: 4;
-    display: flex;
+    z-index: var(--z-sticky);
+    display: var(--word-tabbar-display, flex);
     overflow-x: auto;
     scrollbar-width: none;
     // Full-bleed: cancels the --page-gutter side padding of .u-max-body-width (mock: nav sits outside the page padding).
     margin-inline: calc(-1 * var(--page-gutter));
-    padding-inline: 0.5rem;
-    background: var(--surface-paper);
-    box-shadow: vars.$paper-lift;
+    padding-inline: var(--space-2);
+    background: var(--color-surface-paper);
+    box-shadow: var(--shadow-paper-lift);
+  }
 
-    @include mx.breakpoint("word") {
-      display: none;
+  .tab {
+    display: flex;
+    align-items: center;
+    min-block-size: 3rem;
+    padding-inline: var(--space-3);
+    border-block-end: 3px solid transparent;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    white-space: nowrap;
+    text-decoration: none;
+
+    @include butler-mx.hover {
+      color: var(--color-text-strong);
     }
 
-    &__tab {
-      display: flex;
-      align-items: center;
-      min-block-size: 48px;
-      padding-inline: 0.875rem;
-      white-space: nowrap;
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-decoration: none;
-      color: var(--color-muted);
-      border-block-end: 3px solid transparent;
-
-      @include butler-mx.hover {
-        color: var(--color-ink-strong);
-      }
-
-      &[aria-current="true"] {
-        color: var(--color-ink-strong);
-        border-block-end-color: var(--orange-600);
-      }
+    &[aria-current="true"] {
+      color: var(--color-text-strong);
+      border-block-end-color: var(--color-accent-solid);
     }
   }
 }

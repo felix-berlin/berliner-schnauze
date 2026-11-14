@@ -146,7 +146,7 @@ test.describe("tab order (real Tab presses)", () => {
         return el.getAttribute("aria-label") === "Weitere Aktionen" ? "menu" : "like";
       }
       if (el.matches('a[href="#n-trend"]')) return "trend";
-      if (el.closest(".c-trend")) return "trendbox";
+      if (el.closest(".c-word-trend")) return "trendbox";
       if (el.closest(".c-word-themes")) return "themen";
       if (el.closest(".c-word-audio")) return "audio";
       if (el.closest(".c-word-images")) return "bilder";
