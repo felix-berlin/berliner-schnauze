@@ -46,6 +46,17 @@ describe("BonCard.vue", () => {
     expect(wrapper.text()).toContain("Karte 4 von 20 · Stapel 2");
   });
 
+  it("the feedback slot takes the card's place, wrapped in [data-slot]; the answers stay", () => {
+    const wrapper = mount(BonCard, {
+      props: base,
+      slots: { feedback: "<p class='fb'>Richtig!</p>" },
+    });
+    expect(wrapper.find("section").exists()).toBe(false);
+    expect(wrapper.find(".c-bon-card > [data-slot] > .fb").text()).toBe("Richtig!");
+    expect(wrapper.findAll(".c-choice")).toHaveLength(2);
+    expect(wrapper.text()).not.toContain("Jeht ooch");
+  });
+
   it("has two answer buttons with shortcuts and emits on click", async () => {
     const wrapper = card();
     const [nee, ja] = wrapper.findAll("button");
