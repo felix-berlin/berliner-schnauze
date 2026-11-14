@@ -3,11 +3,14 @@
 // Toast container: a manual popover per corner (ToastPositionGroup.vue), stacking its ToastNotify
 // children. Variants = position: top-right, top-left, top-center, bottom-right, bottom-left,
 // bottom-center. Sets --toast-notify-offscreen on itself so each toast slides in from its edge.
+// Public: --toast-container-top (the sticky chrome the top toasts stay below; default: the site
+// header; the word page adds its tab bar on narrow screens).
 @include mx.component("toast-container") {
   :scope {
     --_edge: var(--space-5);
     --_center: 50%;
-    --_header: var(--site-header-height, 60px); // 60px: header height before MainHeader.astro measures it
+    --_off: 110%; // slide distance: a bit more than the toast's own size, so it starts fully outside
+    --_top: var(--toast-container-top, var(--site-header-height));
 
     // UA popover reset
     inset: unset;
@@ -35,19 +38,19 @@
     inset-block-end: var(--_edge);
   }
 
-  // Below the sticky header, never over it (--site-header-height is kept current by MainHeader.astro).
+  // Below the sticky chrome, never over it (--site-header-height is kept current by MainHeader.astro).
   :scope:is([data-variant="top-right"], [data-variant="top-left"], [data-variant="top-center"]) {
-    inset-block-start: calc(var(--_header) + var(--_edge));
+    inset-block-start: calc(var(--_top) + var(--_edge));
   }
 
   :scope:is([data-variant="top-right"], [data-variant="bottom-right"]) {
-    --toast-notify-offscreen: translateX(110%);
+    --toast-notify-offscreen: translateX(var(--_off));
 
     inset-inline-end: var(--_edge);
   }
 
   :scope:is([data-variant="top-left"], [data-variant="bottom-left"]) {
-    --toast-notify-offscreen: translateX(-110%);
+    --toast-notify-offscreen: translateX(calc(-1 * var(--_off)));
 
     inset-inline-start: var(--_edge);
   }
@@ -58,10 +61,10 @@
   }
 
   :scope[data-variant="top-center"] {
-    --toast-notify-offscreen: translateY(-110%);
+    --toast-notify-offscreen: translateY(calc(-1 * var(--_off)));
   }
 
   :scope[data-variant="bottom-center"] {
-    --toast-notify-offscreen: translateY(110%);
+    --toast-notify-offscreen: translateY(var(--_off));
   }
 }

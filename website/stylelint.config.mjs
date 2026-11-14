@@ -114,15 +114,6 @@ export default {
       rules: Object.fromEntries(Object.keys(strictRules).map((rule) => [rule, null])),
     },
     {
-      // shortcut: these still set public custom properties to raw lengths; they belong to the
-      // toast follow-up (S9). Remove a file once it is clean; only shrinks.
-      files: [
-        "src/styles/components/_toast-container.scss",
-        "src/styles/components/_toast-notify.scss",
-      ],
-      rules: { "declaration-property-value-disallowed-list": valueChecks },
-    },
-    {
       customSyntax: "postcss-html",
       files: ["*.vue", "**/*.vue"],
       rules: {},

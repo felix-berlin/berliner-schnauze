@@ -3,7 +3,7 @@
 // Word page shell ([...wordSlug].astro): content column, offline banner slot, breadcrumb bar, the
 // article grid (tab bar or sidebar + main column) and the word-main container that the cards query.
 // Public: --word-tabbar-top (sticky offset of the tab bar), --word-anchor-offset (scroll margin of
-// every section anchor). From the "word" breakpoint the images move from the strip into the hero
+// every section anchor); sets the toast container's --toast-container-top on the root. From the "word" breakpoint the images move from the strip into the hero
 // (WordImages' --word-images-strip-display / --word-images-hero-display).
 @layer objects {
   .o-word {
@@ -47,6 +47,15 @@
       grid-template-columns: var(--_sidebar) minmax(0, 1fr);
       gap: var(--space-8);
       align-items: start;
+    }
+  }
+
+  // Below the "word" breakpoint the tab bar sticks under the header, so toasts start below both. The
+  // toast container lives outside the page (Layout.astro), hence the root.
+  html:has(.o-word-page) {
+    @include mx.breakpoint("word", "max") {
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- 3rem: the tab bar's row height (.tab min-block-size in _word-tabbar.scss)
+      --toast-container-top: calc(var(--site-header-height) + 3rem);
     }
   }
 

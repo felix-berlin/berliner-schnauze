@@ -70,8 +70,10 @@
 
   // Wrappers hand the nested buttons their settings through the buttons' public properties.
   .action {
-    --button-padding: 0.3rem var(--space-3); // 0.3rem: no step within 0.1rem
-    --button-font-size: 0.85em; // em: follows the toast text
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- 0.3rem: a compact action inside the toast, kept from before the token migration (space-1 is 0.25rem)
+    --button-padding: 0.3rem var(--space-3);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- em on purpose: the action follows the toast text size, no rem token can
+    --button-font-size: 0.85em;
 
     display: flex;
     white-space: nowrap;
