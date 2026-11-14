@@ -64,7 +64,9 @@
       <p class="t-small how" data-input="keys">Jeht ooch mit den Pfeiltasten.</p>
     </template>
 
-    <button class="c-textlink" type="button" @click="emit('end')">Spiel beenden</button>
+    <div class="end">
+      <button class="c-textlink" type="button" @click="emit('end')">Spiel beenden</button>
+    </div>
   </div>
 </template>
 

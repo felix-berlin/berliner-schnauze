@@ -4,8 +4,9 @@
 // Game card, answers and swipe (docs/design/bon/SPEC.md §7, §10).
 // Parts: .card (data-state="hint": the intro wiggle) with .label, .word > .headword, .progress,
 // .overlay (data-side="nee" | "ja"), .swipe-hint > .swipe-hint-icon; .answers (two c-choice), .how
-// (data-input="touch" | "keys"), then the end textlink. BonFeedback takes the card's place through
-// the "feedback" slot, wrapped in .feedback[data-slot].
+// (data-input="touch" | "keys"), then .end (centres the "Spiel beenden" textlink; a wrapper, so no
+// alignment property reaches the slotted feedback). BonFeedback takes the card's place through the
+// "feedback" slot, wrapped in .feedback[data-slot].
 // Public: --bon-card-touch-display, --bon-card-keys-display (one hint per input kind; the game
 // shell switches them at the word breakpoint).
 @include mx.component("bon-card") {
@@ -16,7 +17,6 @@
     --_hint-delay: 0.6s;
     --_word-size: clamp(2rem, 12cqi, 3rem); // fluid with the card width
     --_underline-drop: -0.1em; // em: follows the word size
-    --textlink-place-self: center;
 
     display: flex;
     flex-direction: column;
@@ -155,5 +155,10 @@
     &[data-input="keys"] {
       display: var(--bon-card-keys-display, none);
     }
+  }
+
+  .end {
+    display: flex;
+    justify-content: center;
   }
 }

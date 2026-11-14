@@ -3,7 +3,7 @@
 
 // Start screen (docs/design/bon/SPEC.md §6): one column on narrow screens, from 45rem width 1.1fr / 1fr.
 // Parts: .inner (the layout, since the root is the container), .main (.title band, .lead, .form
-// with .name, .label, .optional, .start, .cta, .record; .redeem), then the rules card (c-bon-rules).
+// with .name, .label, .optional, .start, .cta, .record; .redeem; .leaderboard), then the rules card (c-bon-rules).
 @include mx.component("bon-intro") {
   :scope {
     --_title-wide: 3.25rem; // hero headline, above the type scale
@@ -20,7 +20,6 @@
   .main {
     --band-font-size: var(--font-size-4xl);
     --band-line-height: 1.05;
-    --textlink-place-self: start;
 
     display: flex;
     flex-direction: column;
@@ -60,6 +59,7 @@
     // The EXIT link inside the alert: a notch bigger, its text flush with the alert text.
     --textlink-font-size: var(--font-size-md);
     --textlink-padding-start: 0;
+    --textlink-place-self: start;
 
     display: flex;
     flex-direction: column;
@@ -101,5 +101,11 @@
   .redeem {
     --textlink-font-size: var(--font-size-md);
     --textlink-gap: var(--space-1);
+  }
+
+  // Wrapper parts keep the alignment off the nested components (an inherited --textlink-place-self
+  // would reach BonName and BonPlayerCode).
+  .leaderboard {
+    display: flex;
   }
 }

@@ -92,7 +92,9 @@
             <span>Spielercode einlösen</span>
           </button>
         </div>
-        <a class="c-textlink" href="/games/berliner-oder-nicht/rangliste">Rangliste</a>
+        <div class="leaderboard">
+          <a class="c-textlink" href="/games/berliner-oder-nicht/rangliste">Rangliste</a>
+        </div>
       </section>
 
       <aside
