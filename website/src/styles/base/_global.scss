@@ -5,20 +5,17 @@
   }
 
   // Keyboard focus indicator for every interactive element; mouse clicks stay ring-free.
+  // The only ring rule: a container or a form control sets the public --focus-ring-style and
+  // --focus-ring-color (inherited) instead of re-declaring the outline; outline-offset stays overridable.
   :focus-visible {
-    outline: 2px solid var(--color-text-accent);
+    outline: 2px var(--focus-ring-style, solid) var(--focus-ring-color, var(--color-text-accent));
     outline-offset: 2px;
   }
 
   // Word page and lightbox: one dashed ring for all components (SPEC.md §8); single overrides only change offset.
-  // --focus-ring-style (public): form controls with their own, stronger focus rule read it too.
   :where(.o-word-page, .c-lightbox) {
     --focus-ring-style: dashed;
-  }
-
-  :where(.o-word-page, .c-lightbox) :focus-visible {
-    outline: 2px var(--focus-ring-style) var(--color-focus-ring);
-    outline-offset: 2px;
+    --focus-ring-color: var(--color-focus-ring);
   }
 
   // Word pages reserve the scrollbar track, so the lightbox's scroll lock does not shift the page

@@ -22,7 +22,6 @@
     font-size: var(--size-font);
     letter-spacing: 1px;
     background-color: var(--color-background);
-    outline: none;
     appearance: none;
     border-radius: 0;
     color: var(--color, var(--color-text-body));
@@ -49,9 +48,9 @@
       cursor: not-allowed;
     }
 
-    // outline: none above hides the ring on every field; keyboard focus gets it back here (text fields restyle it below).
+    // The global :focus-visible ring in the focus colour (text fields restyle it below).
     &:focus-visible {
-      outline: 2px var(--focus-ring-style, solid) var(--color-focus-ring);
+      --focus-ring-color: var(--color-focus-ring);
     }
 
     &::placeholder {
@@ -78,8 +77,8 @@
 
     &:focus-visible {
       --color-border: var(--color-border-active);
+      --focus-ring-color: var(--color-border-active);
 
-      outline: 2px var(--focus-ring-style, solid) var(--color-border-active);
       outline-offset: 1px;
     }
 
