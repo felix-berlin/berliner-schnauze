@@ -124,7 +124,7 @@ test.describe("Berliner oder nicht (/games/berliner-oder-nicht)", () => {
     await page.goto(GAME);
     await page.getByRole("textbox", { name: /^Dein Name/ }).fill("Testerin");
     await startButton(page).click();
-    await expect(page.locator(".c-bon-hud__score")).toContainText("Testerin");
+    await expect(page.locator(".c-bon-hud [aria-live=polite]")).toContainText("Testerin");
     await expect(page.getByRole("button", { name: /^Ja, Berlinerisch/ })).toBeVisible();
     await expect(page.getByRole("button", { name: /Nee, nich Berlinerisch/ })).toBeVisible();
 

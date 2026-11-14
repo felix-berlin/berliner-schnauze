@@ -10,7 +10,6 @@ export default [
   "src/styles/components/_berliner-oder-nicht.scss",
   "src/styles/components/_bon-card.scss",
   "src/styles/components/_bon-feedback.scss",
-  "src/styles/components/_bon-hud.scss",
   "src/styles/components/_bon-intro.scss",
   "src/styles/components/_bon-leaderboard.scss",
   "src/styles/components/_bon-player-code.scss",

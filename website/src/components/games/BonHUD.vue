@@ -1,16 +1,18 @@
 <template>
   <div class="c-bon-hud">
-    <div class="c-bon-hud__row">
+    <div class="row">
       <span
         :key="hit"
-        :class="['c-bon-hud__lives', hit > 0 && 'c-bon-hud__lives--hit']"
+        class="lives"
+        :data-state="hit > 0 ? 'hit' : undefined"
         role="img"
         :aria-label="`Noch ${lives} Leben von 3`"
       >
         <svg
           v-for="i in 3"
           :key="i"
-          :class="['c-bon-hud__life', { 'c-bon-hud__life--lost': i > lives }]"
+          class="life"
+          :data-state="i > lives ? 'lost' : undefined"
           width="24"
           height="24"
           viewBox="0 0 24 24"
@@ -26,15 +28,15 @@
         </svg>
       </span>
 
-      <span class="c-bon-hud__score" aria-live="polite">
-        <b :key="gain" :class="['c-bon-hud__points', gain > 0 && 'c-bon-hud__points--gain']">{{
+      <span class="score" aria-live="polite">
+        <b :key="gain" class="points" :data-state="gain > 0 ? 'gain' : undefined">{{
           score
         }}</b>
         <span class="t-label">Punkte · {{ playerLabel }}</span>
       </span>
 
-      <span class="c-bon-hud__streak">
-        <span class="c-bon-hud__streak-count">
+      <span class="streak">
+        <span class="streak-count">
           <FlameIcon width="16" height="16" aria-hidden="true" />
           Serie {{ streak }}
         </span>
@@ -42,15 +44,12 @@
       </span>
     </div>
 
-    <span class="c-bon-hud__track" role="img" :aria-label="`Multiplikator ×${MULTIPLIER_STEPS[current].mult}`">
+    <span class="track" role="img" :aria-label="`Multiplikator ×${MULTIPLIER_STEPS[current].mult}`">
       <span
         v-for="(field, i) in MULTIPLIER_LABELS"
         :key="field"
-        :class="[
-          'c-bon-hud__field',
-          i < current && 'c-bon-hud__field--reached',
-          i === current && 'c-bon-hud__field--active',
-        ]"
+        class="field"
+        :data-state="i < current ? 'reached' : i === current ? 'active' : undefined"
       >
         {{ field }}
       </span>

@@ -65,4 +65,22 @@
       translate: 0 200px;
     }
   }
+
+  // BON HUD: the points pop, a lost heart wobbles (bon-hud).
+  @keyframes c-bon-hud-pop {
+    35% {
+      scale: 1.2;
+    }
+  }
+  @keyframes c-bon-hud-wobble {
+    20%,
+    60% {
+      translate: -6px;
+    }
+
+    40%,
+    80% {
+      translate: 6px;
+    }
+  }
 }
