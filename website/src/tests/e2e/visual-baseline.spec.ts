@@ -93,7 +93,7 @@ for (const size of SIZES) {
             page.locator(".c-anki-dev-hours"),
             page.locator(".c-anki-flashcard"),
           ];
-          if (path === "/") await expect(wotd.locator(".c-word-of-the-day .word")).toBeVisible();
+          if (path === "/") await expect(wotd.locator(".word")).toBeVisible();
           // Live numbers that change the layout (line wrap, badge width), not just pixels under a mask:
           // pin their digits before the shot. Footer: Wakapi coding hours; hero: the weekly trend rank.
           await page.evaluate(() => {
@@ -105,6 +105,9 @@ for (const size of SIZES) {
               }
             }
           });
+          // The word page's lower sections skip rendering off screen (content-visibility: auto), and a
+          // full-page shot does not scroll: draw them.
+          await page.addStyleTag({ content: ".o-word-below-fold { content-visibility: visible; }" });
           const name = `${path === "/" ? "home" : path.slice(1).replaceAll("/", "-")}-${size.width}-${theme}.png`;
           await expect(page).toHaveScreenshot(name, {
             fullPage: true,

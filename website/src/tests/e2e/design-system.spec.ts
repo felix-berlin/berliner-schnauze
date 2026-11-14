@@ -96,3 +96,25 @@ test("form fields take the word page's dashed focus ring (--focus-ring-style)", 
   await page.goto("/");
   expect(await focusRing("main")).toBe("solid");
 });
+
+test("checkbox, radio and select on the word page take the dashed ring too", async ({ page }) => {
+  // The shared field rule (not the text-field one) draws their ring; it reads the same property.
+  await page.goto("/wort/anmachen");
+  const styles = await page.evaluate(() => {
+    const root = document.querySelector(".o-word-page")!;
+    const make = (html: string) => {
+      const holder = document.createElement("div");
+      holder.innerHTML = html;
+      const control = holder.firstElementChild as HTMLElement;
+      root.append(control);
+      control.focus({ focusVisible: true } as FocusOptions);
+      return getComputedStyle(control).outlineStyle;
+    };
+    return [
+      make('<input type="checkbox" class="c-input c-input--checkbox">'),
+      make('<input type="radio" class="c-input c-input--radio">'),
+      make('<select class="c-select"><option>a</option></select>'),
+    ];
+  });
+  expect(styles).toEqual(["dashed", "dashed", "dashed"]);
+});
