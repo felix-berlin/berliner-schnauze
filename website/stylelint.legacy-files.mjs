@@ -35,7 +35,6 @@ export default [
   "src/styles/components/_footer-app-section.scss",
   "src/styles/components/_form.scss",
   "src/styles/components/_letter-filter.scss",
-  "src/styles/components/_lightbox.scss",
   "src/styles/components/_magazin-article.scss",
   "src/styles/components/_magazin-overview.scss",
   "src/styles/components/_next-links.scss",

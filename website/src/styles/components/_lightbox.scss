@@ -1,30 +1,42 @@
-@layer legacy {
-  // Lightbox (mock: bundle.css .c-lightbox): native <dialog>, fade 200 ms with 4px backdrop blur.
-  .c-lightbox {
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Lightbox (mock: bundle.css .c-lightbox): native <dialog>, fade with a 4px backdrop blur. Dark in
+// both themes: the photo needs a dark ground. Parts .bar, .stage (.prev, .next around the step
+// buttons), .caption. Scroll lock and scrollbar gutter: base/_global.scss.
+@include mx.component("lightbox") {
+  :scope {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R49: one-off scrim
+    --_scrim: rgb(0 0 0 / 82%);
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R48: one-off button ground
+    --_button-bg: rgb(0 0 0 / 45%);
+    --_max: 960px; // one-off reading width of the stage
+    --_middle: 50%; // centres the step buttons on the image
+    --icon-button-color: var(--color-text-on-overlay);
+    --icon-button-hover-border: currentcolor;
+
     inline-size: 100%;
     block-size: 100%;
     max-inline-size: none;
     max-block-size: none;
     margin: 0;
-    padding: 1rem;
+    padding: var(--space-4);
     border: 0;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    // Dark in both themes: the photo needs a dark ground.
-    --lightbox-scrim: color-mix(in srgb, var(--overlay-base) 82%, transparent);
-    --lightbox-button-bg: color-mix(in srgb, var(--overlay-base) 45%, transparent);
-    --lightbox-ink: var(--overlay-ink);
-
-    background: var(--lightbox-scrim);
+    gap: var(--space-3);
+    background: var(--_scrim);
     backdrop-filter: blur(4px);
-    color: var(--lightbox-ink);
+    color: var(--color-text-on-overlay);
     opacity: 0;
-    transition:
-      opacity 200ms ease-out,
-      display 200ms allow-discrete,
-      overlay 200ms allow-discrete;
+
+    @include butler-mx.feature("motion") {
+      transition:
+        opacity var(--duration-fast) ease-out,
+        display var(--duration-fast) allow-discrete,
+        overlay var(--duration-fast) allow-discrete;
+    }
 
     &[open] {
       display: flex;
@@ -38,73 +50,56 @@
     &::backdrop {
       background: none;
     }
+  }
 
-    @media (prefers-reduced-motion: reduce) {
-      transition: none;
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    inline-size: 100%;
+    max-inline-size: var(--_max);
+    font-size: var(--font-size-sm);
+  }
+
+  .stage {
+    --icon-button-bg: var(--_button-bg);
+
+    position: relative;
+    display: grid;
+    place-items: center;
+    max-inline-size: min(100%, var(--_max));
+
+    img {
+      display: block;
+      max-inline-size: 100%;
+      max-block-size: 75dvh;
+      border-radius: var(--radius-sm);
     }
+  }
 
-    &__bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      inline-size: 100%;
-      max-inline-size: 960px;
-      font-size: 0.8rem;
-    }
+  .prev,
+  .next {
+    position: absolute;
+    inset-block-start: var(--_middle);
+    translate: 0 -50%;
+  }
 
-    &__stage {
-      position: relative;
-      display: grid;
-      place-items: center;
-      max-inline-size: min(100%, 960px);
+  .prev {
+    inset-inline-start: var(--space-1);
+  }
 
-      img {
-        display: block;
-        max-inline-size: 100%;
-        max-block-size: 75dvh;
-        border-radius: var(--radius-sm);
-      }
+  .next {
+    inset-inline-end: var(--space-1);
+  }
 
-      .c-icon-button {
-        --icon-button-bg: var(--lightbox-button-bg);
-
-        position: absolute;
-        inset-block-start: 50%;
-        translate: 0 -50%;
-
-        &:first-child {
-          inset-inline-start: 0.25rem;
-        }
-
-        &:last-child {
-          inset-inline-end: 0.25rem;
-        }
-      }
-    }
-
-    &__caption {
-      margin: 0;
-      font-size: 0.85rem;
-      max-inline-size: 960px;
-      text-align: center;
-    }
-
-    .c-icon-button {
-      --icon-button-color: var(--lightbox-ink);
-      --icon-button-hover-border: currentcolor;
-    }
+  .caption {
+    margin: 0;
+    max-inline-size: var(--_max);
+    font-size: var(--font-size-sm);
+    text-align: center;
 
     a {
       color: inherit;
     }
-  }
-
-  // Reserve the scrollbar track so locking the scroll does not shift the page sideways.
-  html {
-    scrollbar-gutter: stable;
-  }
-
-  body:has(.c-lightbox[open]) {
-    overflow: hidden;
   }
 }

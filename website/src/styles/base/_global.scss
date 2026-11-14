@@ -20,4 +20,14 @@
     outline: 2px var(--focus-ring-style) var(--color-focus-ring);
     outline-offset: 2px;
   }
+
+  // Lightbox (word pages with images): reserve the scrollbar track so locking the scroll does not
+  // shift the page sideways, and lock it while the dialog is open.
+  html:has(.c-lightbox) {
+    scrollbar-gutter: stable;
+  }
+
+  body:has(.c-lightbox[open]) {
+    overflow: hidden;
+  }
 }
