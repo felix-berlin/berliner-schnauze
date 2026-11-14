@@ -73,11 +73,13 @@
       cursor: pointer;
       transition:
         background-color var(--duration-base) var(--ease-standard),
-        color var(--duration-base) var(--ease-standard);
+        color var(--duration-base) var(--ease-standard),
+        box-shadow var(--duration-base) var(--ease-standard);
 
       @include butler-mx.hover {
         color: var(--color-surface-overlay);
         background-color: var(--color-accent-active);
+        box-shadow: var(--shadow-hover-glow);
       }
 
       &[aria-pressed="true"] {
