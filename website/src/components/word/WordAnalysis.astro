@@ -144,7 +144,7 @@ const facts = [
 
     {grammarRows.length > 0 && (
       <SectionCard id='grammatik' title='Grammatik' level={3}>
-        <div class='c-word-analysis-card block'>
+        <div class='c-word-analysis-card' data-variant='block'>
           <div class='t-label'>Wortart (NLP-Analyse)</div>
           <ul class='grammar'>
             {grammarRows.map((row) => (
@@ -162,7 +162,7 @@ const facts = [
   </div>
 
   <SectionCard id='linguistik' title='Quantitative Linguistik' level={3}>
-    <div class='c-word-analysis-card tiles'>
+    <div class='c-word-analysis-card' data-variant='tiles'>
       <div class='t-label'>Buchstaben &amp; Häufigkeit</div>
       <LetterTiles
         client:visible
@@ -186,7 +186,7 @@ const facts = [
 
   {soundingWords.length > 0 && (
     <SectionCard id='phonologie' title='Phonologie' level={3}>
-      <div class='c-word-analysis-card block'>
+      <div class='c-word-analysis-card' data-variant='block'>
         <div class='t-label'>Ähnlich klingende Wörter</div>
         <ul class='links'>
           {soundingWords.map((w) => (

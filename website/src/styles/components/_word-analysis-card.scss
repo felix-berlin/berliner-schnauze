@@ -2,8 +2,9 @@
 
 // Body of an analysis card (WordAnalysis.astro passes it into SectionCard). Labelled .block parts
 // (no boxes in boxes) with .count, .links (44px textlink rows), .parts (word decomposition),
-// .grammar (.tags of .tag), .tiles (.stats, .facts). A one-part body puts .block or .tiles on the
-// root itself (a plain class inside @scope never matches the root, hence :scope.block).
+// .grammar (.tags of .tag), .tiles (.stats, .facts). Variants block and tiles: a one-part body that
+// lays out the root itself like that part (a part class on the root would never match: @scope
+// selectors only reach descendants).
 @include mx.component("word-analysis-card") {
   :scope {
     li {
@@ -11,7 +12,7 @@
     }
   }
 
-  :scope.block,
+  :scope[data-variant~="block"],
   .block {
     display: flex;
     flex-direction: column;
@@ -102,7 +103,7 @@
     font-size: var(--font-size-sm);
   }
 
-  :scope.tiles,
+  :scope[data-variant~="tiles"],
   .tiles {
     display: flex;
     flex-direction: column;
