@@ -1,0 +1,79 @@
+@use "@styles/mixins" as mx;
+
+// Thank-you card after the Full purchase (pages/anki/danke.astro): .stamp, .title, .lead, the
+// numbered .steps and .actions (raised primary + paper secondary, as on /anki).
+@include mx.component("anki-thanks") {
+  :scope {
+    --_measure: 36rem; // one-off card width
+    --_stamp: 4.5rem; // one-off stamp size
+    --_stamp-ring: 5px; // postmark ring distance
+
+    @include mx.paper-card;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-5);
+    max-inline-size: var(--_measure);
+    margin: var(--space-12) auto;
+    padding: var(--space-8);
+  }
+
+  // Filled stamp with a dashed outer ring, like a postmark
+  .stamp {
+    display: grid;
+    place-items: center;
+    inline-size: var(--_stamp);
+    aspect-ratio: 1;
+    margin: var(--space-1);
+    border-radius: var(--radius-pill);
+    background: var(--color-accent-solid); // colour inventory R1
+    color: var(--color-text-on-accent); // colour inventory R3
+    outline: 2px dashed var(--color-text-accent); // colour inventory R17
+    outline-offset: var(--_stamp-ring);
+    rotate: -6deg;
+  }
+
+  .title {
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .lead {
+    margin: 0;
+    max-inline-size: 65ch;
+    text-wrap: pretty;
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin: 0;
+    padding-inline-start: var(--space-5);
+    max-inline-size: 65ch;
+
+    li {
+      padding-inline-start: var(--space-1);
+      text-wrap: pretty;
+    }
+
+    li::marker {
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-accent); // colour inventory R17
+    }
+  }
+
+  .actions {
+    --button-padding: var(--space-3) var(--space-5);
+    --button-font-size: var(--font-size-lg);
+    --button-gap: var(--space-2);
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    inline-size: 100%;
+    padding-block-start: var(--space-6);
+    border-block-start: 1px dashed var(--color-surface-inverse); // colour inventory R15, merged into R14
+  }
+}

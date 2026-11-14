@@ -37,7 +37,6 @@ export default [
   "src/styles/objects/_index.scss",
   "src/styles/objects/_legal-pages.scss",
   "src/styles/objects/_word-index.scss",
-  "src/styles/pages/_anki-danke.scss",
   "src/styles/pages/_changelog-detail.scss",
   "src/styles/pages/_changelog-overview.scss",
   "src/styles/pages/_technical-changelog.scss",
