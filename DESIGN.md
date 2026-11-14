@@ -67,7 +67,7 @@ The palette reads as a hand-labeled dossier: warm orange annotations and a rare 
 ### Primary
 
 - **Currywurst Orange** (`#cf5736` core, ramp `#fcead7` → `#781111`): the dominant accent. Badges, borders, stat highlights, button fills, the word-of-the-day marker, the dashed underline beneath headwords. Carries most of the system's color weight.
-- **Fills behind white text use Currywurst-600** (`#b23b27`, 5.6:1): `.c-button--primary`, fact-card CTA, BON "Nee". White on `#cf5736` is only 3.9:1 and fails WCAG AA; 500 stays the accent for borders, tints and large display text. Orange accent text uses `--color-accent-text` (600 light / 300 dark).
+- **Fills behind white text use Currywurst-600** (`#b23b27`, 5.6:1): `c-button` `data-variant="primary"`, fact-card CTA, BON "Nee". White on `#cf5736` is only 3.9:1 and fails WCAG AA; 500 stays the accent for borders, tints and large display text. Orange accent text uses `--color-accent-text` (600 light / 300 dark).
 
 ### Secondary
 
@@ -141,7 +141,7 @@ The global header (`MainHeader.astro`) is a single row: wordmark · header links
 - **Main menu dropdown** (`MainMenu.vue`, `.c-main-menu`): 600px, 4px radius, Paper-Lift drop-shadow with arrow. Two columns split by a dashed rule:
   - _Entdecken_ — every CMS item that has a description becomes a card: 34×34 icon tile (3px radius, button colors), bold title, muted description. Hover: dashed border + tinted fill, 3px radius. "Neu" tag: 0.72rem, dashed border, 3px radius.
   - _Mitmachen_ / _App_ — remaining items as compact icon links with a dashed underline on hover, then the Hell / Dunkel / System segment (`ColorModePicker`: fieldset of native radios, 4px radius, inactive options dimmed, active = light orange tint; icon-only here, labelled on /settings).
-  - Install bar (only while the PWA isn't installed): dashed top rule, `c-button--primary` CTA with 4px radius.
+  - Install bar (only while the PWA isn't installed): dashed top rule, `c-button` primary CTA (`data-variant="primary"`) with 4px radius.
   - Group labels are sentence case, 0.8rem / 700 / `--color-muted` — not the uppercase Label style.
 - **Radius scale here:** 4px controls/panel/segment/CTA · 3px tiles, hover areas, tags · 2px `kbd`.
 

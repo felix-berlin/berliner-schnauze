@@ -110,6 +110,6 @@ Applies only to files listed in `website/stylelint.legacy-files.mjs` (not yet mi
 Pattern `.c-block__element--modifier`, hyphens inside each part, never plain BEM without prefix.
 
 - Old palette and aliases (`var(--orange-600)`) and `butler-mx.dark-mode-class` still work here (aliases in `src/styles/tokens/_legacy-aliases.scss`).
-- Breakpoints: `mx.breakpoint`; container queries where the behaviour is about a component's own width (`_word-page-layout.scss`).
-- Shared: `mx.paper-card` / `mx.paper-card-title` (`mixins/_paper-card.scss`); `.c-button--primary` = orange CTA; `var(--color-muted)` = secondary text. Word page controls (`docs/design/wortseite/SPEC.md`): `.c-choice` (`aria-pressed`), `.c-link`, `.c-icon-button`, only the submit is `.c-button--primary`; global, wrapped in `:where()`.
+- Breakpoints: `mx.breakpoint`; container queries where the behaviour is about a component's own width (`objects/_word.scss`).
+- Shared: `mx.paper-card` / `mx.paper-card-title` (`mixins/_paper-card.scss`); `c-button` with `data-variant="primary"` = orange CTA; `var(--color-muted)` = secondary text. Word page controls (`docs/design/wortseite/SPEC.md`): `.c-choice` (`aria-pressed`), `c-link` (an `@scope` component), `.c-icon-button`, only the submit has `data-variant="primary"`. Focus ring: `.o-word-page` and `.c-lightbox` set the public `--focus-ring-style: dashed`; form controls with their own focus rule read it (`var(--focus-ring-style, solid)`), so set it instead of overriding their outline.
 - `@use "@styles/path"`, never `@import`.

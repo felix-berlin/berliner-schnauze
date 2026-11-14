@@ -216,7 +216,7 @@ A page passes `<h3 class="title">` into the card's body slot. The card's `.title
 
 ## 8. Modern CSS used
 
-Logical properties only; `:has()` instead of mirrored state classes; `gap` instead of margin chains; `subgrid` for aligned rows; `text-wrap: balance` (headings) and `pretty` (paragraphs); `:focus-visible` with `outline: 2px solid var(--color-focus-ring)`; `@starting-style` with `transition-behavior: allow-discrete` for enter animations; `@property` only for tokens that are animated as values; `cqi` units where a size follows the container.
+Logical properties only; `:has()` instead of mirrored state classes; `gap` instead of margin chains; `subgrid` for aligned rows; `text-wrap: balance` (headings) and `pretty` (paragraphs); `:focus-visible` with `outline: 2px solid var(--color-focus-ring)`; on `.o-word-page` and `.c-lightbox` the public `--focus-ring-style` (`dashed`) sets the line style, and form controls with their own focus rule read it (`var(--focus-ring-style, solid)`); `@starting-style` with `transition-behavior: allow-discrete` for enter animations; `@property` only for tokens that are animated as values; `cqi` units where a size follows the container.
 
 Newly available features (Baseline 2025/2026). Only `@scope` and Popover are load-bearing and inside the floor of §9; every other "adopt" is an enhancement whose fallback is named and must keep working:
 
