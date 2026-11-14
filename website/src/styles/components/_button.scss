@@ -16,11 +16,11 @@
 
     cursor: pointer;
     padding: var(--button-padding, var(--space-1));
-    // revert-layer: unset, a legacy or base font-size on the button still applies.
-    font-size: var(--button-font-size, revert-layer);
-    flex: var(--button-flex, revert-layer);
-    gap: var(--button-gap, revert-layer);
-    min-block-size: var(--button-min-block-size, revert-layer);
+    // revert: the browser default, a native <button> keeps its control size, an <a> inherits.
+    font-size: var(--button-font-size, revert);
+    flex: var(--button-flex, 0 1 auto);
+    gap: var(--button-gap, normal);
+    min-block-size: var(--button-min-block-size, auto);
     background-color: var(--_bg);
     border: var(--button-border-width, 1px) var(--_border-style) var(--_border-color);
     color: var(--_color);
