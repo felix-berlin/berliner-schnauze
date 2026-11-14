@@ -2,8 +2,8 @@
 
 // Comments card (docs/design/wortseite/SPEC.md §9). Sits on the same root as the section card
 // (c-section-card c-word-comments), so its part names avoid the card's (.header, .num, .title,
-// .body, .footer). Parts: .count and .sort (header), .content (body column: .empty, .list, .captcha
-// with .captcha-text). The sort chips are c-choice data-variant="segment".
+// .body, .footer). Parts: .count and .sort (header), .content (body column: .empty, .list, .more,
+// .write, .captcha with .captcha-text). The sort chips are c-choice data-variant="segment".
 @include mx.component("word-comments") {
   :scope {
     --section-card-header-justify: space-between;
@@ -21,10 +21,6 @@
   }
 
   .content {
-    // "Alle … Kommentare zeigen" keeps its own width, "Kommentar schreiben" centres its label.
-    --textlink-place-self: start;
-    --choice-justify: center;
-
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
@@ -34,6 +30,18 @@
   .content > p.t-small,
   .captcha-text {
     font-size: var(--font-size-sm);
+  }
+
+  // Wrappers, so the settings reach only their own button and not the cards and form in .content:
+  // "Alle … Kommentare zeigen" keeps its own width, "Kommentar schreiben" spans and centres its label.
+  .more {
+    display: flex;
+  }
+
+  .write {
+    --choice-justify: center;
+
+    display: grid;
   }
 
   .empty {

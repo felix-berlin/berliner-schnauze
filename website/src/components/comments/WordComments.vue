@@ -42,9 +42,13 @@
           </li>
         </ol>
 
-        <button v-if="canShowMore" type="button" class="c-textlink" @click="showMore">
-          {{ expanded ? "Weitere Kommentare zeigen" : `Alle ${ctx.total.value} Kommentare zeigen` }}
-        </button>
+        <div v-if="canShowMore" class="more">
+          <button type="button" class="c-textlink" @click="showMore">
+            {{
+              expanded ? "Weitere Kommentare zeigen" : `Alle ${ctx.total.value} Kommentare zeigen`
+            }}
+          </button>
+        </div>
 
         <div
           v-if="ctx.failed.value && !ctx.loading.value"
@@ -77,18 +81,20 @@
         </div>
 
         <template v-if="!writing">
-          <button
-            ref="writeButton"
-            type="button"
-            class="c-choice"
-            aria-expanded="false"
-            :aria-disabled="!ctx.online.value"
-            :aria-describedby="ctx.online.value ? undefined : 'word-comments-offline'"
-            @click="startWriting"
-          >
-            <PenLine aria-hidden="true" height="15" width="15" />
-            Kommentar schreiben
-          </button>
+          <div class="write">
+            <button
+              ref="writeButton"
+              type="button"
+              class="c-choice"
+              aria-expanded="false"
+              :aria-disabled="!ctx.online.value"
+              :aria-describedby="ctx.online.value ? undefined : 'word-comments-offline'"
+              @click="startWriting"
+            >
+              <PenLine aria-hidden="true" height="15" width="15" />
+              Kommentar schreiben
+            </button>
+          </div>
           <p v-if="!ctx.online.value" id="word-comments-offline" class="t-small">
             Du bist offline. Kommentieren jeht wieder, sobald du Netz hast.
           </p>
