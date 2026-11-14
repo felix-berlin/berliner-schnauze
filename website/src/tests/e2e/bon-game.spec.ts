@@ -114,7 +114,7 @@ test.describe("Berliner oder nicht (/games/berliner-oder-nicht)", () => {
     await expect(page.locator('[aria-current="true"]')).toBeVisible();
 
     await page.goto(new URL(link).pathname + new URL(link).search);
-    await expect(page.locator(".c-bon-share-view__stats")).toContainText(points);
+    await expect(page.locator(".c-bon-share-view dl")).toContainText(points);
   });
 
   test("Spiel 2: Name im Kopf, Wischen auf 390px, Knopf, nächste Karte, reduzierte Bewegung", async ({

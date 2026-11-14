@@ -1,90 +1,90 @@
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-@layer legacy {
-  .c-bon-share-view {
-    --c-bon-share-surface: var(--white-100);
-    --c-bon-share-border: rgb(0 0 0 / 12%);
-    --c-bon-share-text-muted: var(--color-muted);
+// Shared result page (/games/berliner-oder-nicht/share). Parts: .title, .stats of .stat (.label,
+// .value), .date, .error, .cta.
+@include mx.component("bon-share-view") {
+  :scope {
+    --_stat-radius: 0.75rem; // one-off rounded tile, no radius step near 12px
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R27: one-off (CTA fill, old --accent)
+    --_cta: light-dark(rgb(226 137 100), rgb(207 87 54));
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R53: one-off (CTA text)
+    --_cta-text: rgb(17 17 17);
 
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.25rem;
-    padding: 2rem 1rem;
-    max-width: 420px;
+    gap: var(--space-5);
+    padding: var(--space-8) var(--space-4);
+    max-inline-size: 420px;
     margin: 0 auto;
     text-align: center;
+  }
 
-    @include butler-mx.dark-mode-class {
-      --c-bon-share-surface: var(--new-blue-400);
-      --c-bon-share-border: rgb(255 255 255 / 12%);
+  .title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-black);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    inline-size: 100%;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface-paper); // colour inventory R8
+    border: 1px solid var(--color-surface-tint); // colour inventory R46
+    border-radius: var(--_stat-radius);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .value {
+    margin: 0;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-black);
+    line-height: 1.2;
+    order: -1;
+  }
+
+  .label {
+    font-size: var(--font-size-2xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .date {
+    font-size: var(--font-size-md);
+    color: var(--color-text-muted);
+  }
+
+  .error {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-base);
+  }
+
+  .cta {
+    display: inline-block;
+    padding: var(--space-3) var(--space-8);
+    background: var(--_cta);
+    color: var(--_cta-text);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-lg);
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    transition: opacity var(--duration-fast);
+
+    @include butler-mx.hover {
+      opacity: 0.88;
     }
 
-    &__title {
-      font-size: 1.75rem;
-      font-weight: 900;
-    }
-
-    &__stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      width: 100%;
-    }
-
-    &__stat {
-      display: flex;
-      flex-direction: column;
-      background: var(--c-bon-share-surface);
-      border: 1px solid var(--c-bon-share-border);
-      border-radius: 0.75rem;
-      padding: 0.875rem 1rem;
-    }
-
-    &__stat-value {
-      margin: 0;
-      font-size: 1.375rem;
-      font-weight: 900;
-      line-height: 1.2;
-      order: -1;
-    }
-
-    &__stat-label {
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--c-bon-share-text-muted);
-    }
-
-    &__date {
-      font-size: 0.875rem;
-      color: var(--c-bon-share-text-muted);
-    }
-
-    &__error {
-      color: var(--c-bon-share-text-muted);
-      font-size: 1rem;
-    }
-
-    &__cta {
-      display: inline-block;
-      padding: 0.875rem 2.5rem;
-      background: var(--accent);
-      color: #111;
-      font-weight: 700;
-      font-size: 1.125rem;
-      border-radius: 50px;
-      text-decoration: none;
-      transition: opacity 0.15s;
-
-      @include butler-mx.hover {
-        opacity: 0.88;
-      }
-
-      &:focus-visible {
-        outline: 2px solid var(--accent);
-        outline-offset: 2px;
-      }
+    &:focus-visible {
+      outline: 2px solid var(--_cta);
+      outline-offset: 2px;
     }
   }
 }

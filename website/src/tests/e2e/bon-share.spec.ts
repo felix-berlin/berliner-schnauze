@@ -17,7 +17,7 @@ test.describe("BON Share-Ansicht", () => {
 
     await page.goto(`${SHARE}?r=${r}`);
 
-    const stats = page.locator(".c-bon-share-view__stats");
+    const stats = page.locator(".c-bon-share-view dl");
     await expect(stats).toContainText("120");
     await expect(stats).toContainText("5");
     await expect(stats).toContainText("80%");

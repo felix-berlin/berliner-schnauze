@@ -14,7 +14,6 @@ export default [
   "src/styles/components/_bon-leaderboard.scss",
   "src/styles/components/_bon-player-code.scss",
   "src/styles/components/_bon-result.scss",
-  "src/styles/components/_bon-share-view.scss",
   "src/styles/components/_carbon-badge.scss",
   "src/styles/components/_color-mode-picker.scss",
   "src/styles/components/_confirm-dialog.scss",

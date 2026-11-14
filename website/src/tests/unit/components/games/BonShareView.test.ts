@@ -32,7 +32,7 @@ vi.mock("@utils/bonShare", async (importOriginal) => ({
 describe("BonShareView.vue", () => {
   it("shows error state when no r param", () => {
     const wrapper = mount(BonShareView);
-    expect(wrapper.find(".c-bon-share-view__error").exists()).toBe(true);
+    expect(wrapper.find('[role="alert"]').exists()).toBe(true);
     expect(wrapper.text()).toContain("Kein gültiges Ergebnis");
   });
 
@@ -43,7 +43,7 @@ describe("BonShareView.vue", () => {
     >);
 
     const wrapper = mount(BonShareView);
-    expect(wrapper.find(".c-bon-share-view__stats").exists()).toBe(true);
+    expect(wrapper.find("dl").exists()).toBe(true);
     expect(wrapper.text()).toContain("120");
     expect(wrapper.text()).toContain("Felix");
   });
@@ -138,7 +138,7 @@ describe("BonShareView.vue", () => {
     >);
 
     const wrapper = mount(BonShareView);
-    expect(wrapper.find(".c-bon-share-view__date").text()).toBeTruthy();
+    expect(wrapper.find(".c-bon-share-view .date").text()).toBeTruthy();
   });
 
   it("formattedDate returns empty string when date is missing (covers line 62 early return)", async () => {
@@ -153,7 +153,7 @@ describe("BonShareView.vue", () => {
     });
 
     const wrapper = mount(BonShareView);
-    expect(wrapper.find(".c-bon-share-view__date").text()).toBe("");
+    expect(wrapper.find(".c-bon-share-view .date").text()).toBe("");
   });
 
   it("handles array r param by taking first value", async () => {
@@ -163,6 +163,6 @@ describe("BonShareView.vue", () => {
     } as unknown as ReturnType<typeof useUrlSearchParams>);
 
     const wrapper = mount(BonShareView);
-    expect(wrapper.find(".c-bon-share-view__stats").exists()).toBe(true);
+    expect(wrapper.find("dl").exists()).toBe(true);
   });
 });
