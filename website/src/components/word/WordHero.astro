@@ -37,20 +37,21 @@ const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(
 
 <header
   id='bedeutung'
-  class:list={['c-word-hero', { 'c-word-hero--has-images': images.length > 0 }]}
+  class='c-word-hero'
+  data-variant={images.length > 0 ? 'images' : undefined}
   data-track-content
   data-content-name='Word Hero'
   data-content-piece={word.berlinerisch}
   data-content-target={routeToWord(word.slug)}
 >
-  <div class='c-word-hero__head'>
-    <h1 class='c-word-hero__title'>
-      <dfn class='c-headword'>{word.berlinerisch}</dfn>{word.article && (
-        <span class='c-word-hero__word-article'>, {word.article}</span>
+  <div class='head'>
+    <h1 class='title'>
+      <dfn class='headword'>{word.berlinerisch}</dfn>{word.article && (
+        <span class='article'>, {word.article}</span>
       )}
     </h1>
     {/* Before the badges in the DOM: focus order is Like, ⋮, then the badge row and the themes (Spec §14). */}
-    <div class='c-word-hero__actions'>
+    <div class='actions'>
       {!draft && <WordReactions client:idle wordId={word.id} />}
       <WordOptionDropdown
         berlinerisch={word.berlinerisch}
@@ -60,11 +61,11 @@ const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(
         wordId={draft ? undefined : word.id}
       />
     </div>
-    <div class='c-word-hero__badges'>
+    <div class='badges'>
       {/* Spec §5 order: trend, word type, Berolinismus; the themes sit in their own row below (the §14 focus order lists the themes before the trend link; the visual order wins). */}
       {
         trend && (
-          <a href='#n-trend' class='c-badge c-word-hero__trend-badge' data-variant='strong'>
+          <a href='#n-trend' class='c-badge' data-variant='strong trend'>
             <TrendingUp width='12' height='12' aria-hidden='true' />
             Im Trend · Platz {trend.rank}
           </a>
@@ -105,14 +106,18 @@ const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(
         slug={word.slug}
       />
     </div>
-    <WordThemes themes={themes} />
+    {themes.length > 0 && (
+      <div class='themes'>
+        <WordThemes themes={themes} />
+      </div>
+    )}
   </div>
   {
     (meanings.length > 0 || same) && (
-      <div class='c-word-hero__meaning'>
+      <div class='meaning'>
         {meanings.length > 0 && <WordMeanings client:idle meanings={meanings} />}
         {same && (
-          <p class='c-word-hero__same'>
+          <p class='same'>
             Selbe Bedeutung wie <span>{same}</span>
           </p>
         )}
@@ -120,5 +125,5 @@ const same = (word.alternativeWords ?? []).map((w) => w.alternativeWord).filter(
     )
   }
   {/* From 808px the images live here (right column from 1000px); below, the page renders the strip under the hero. */}
-  {images.length > 0 && <WordImages class='c-word-hero__images' images={images} learnMore={learnMore} placement='hero' />}
+  {images.length > 0 && <WordImages images={images} learnMore={learnMore} placement='hero' />}
 </header>

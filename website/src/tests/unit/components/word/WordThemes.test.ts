@@ -19,12 +19,12 @@ describe("WordThemes.astro", () => {
 
   it("labels a single theme 'Thema' and links it", async () => {
     const result = await render({ themes: [{ label: "Essen", url: "/themen/essen" }] });
-    expect(result).toMatch(/<p class="c-themes">/);
+    expect(result).toMatch(/<p class="c-word-themes">/);
     expect(result).toMatch(/<span class="t-label">Thema<\/span>/);
     expect(result).toContain('href="/themen/essen"');
   });
 
-  it("labels several themes 'Themen' and keeps the separator out of the markup", async () => {
+  it("labels several themes 'Themen' and hides the separator from screen readers", async () => {
     const result = await render({
       themes: [
         { label: "Alltag & Wohnen", url: "/themen/alltag" },
@@ -33,6 +33,6 @@ describe("WordThemes.astro", () => {
     });
     expect(result).toMatch(/<span class="t-label">Themen<\/span>/);
     expect(result.match(/<a /g)).toHaveLength(2);
-    expect(result).not.toContain("·");
+    expect(result.match(/<span aria-hidden="true">·<\/span>/g)).toHaveLength(1);
   });
 });

@@ -3,7 +3,8 @@
 // Word page shell ([...wordSlug].astro): content column, offline banner slot, breadcrumb bar, the
 // article grid (tab bar or sidebar + main column) and the word-main container that the cards query.
 // Public: --word-tabbar-top (sticky offset of the tab bar), --word-anchor-offset (scroll margin of
-// every section anchor).
+// every section anchor). From the "word" breakpoint the images move from the strip into the hero
+// (WordImages' --word-images-strip-display / --word-images-hero-display).
 @layer objects {
   .o-word {
     display: flex;
@@ -35,6 +36,9 @@
     padding-block-end: var(--space-12);
 
     @include mx.breakpoint("word") {
+      --word-images-strip-display: none;
+      --word-images-hero-display: flex;
+
       display: grid;
       grid-template-columns: var(--_sidebar) minmax(0, 1fr);
       gap: var(--space-8);

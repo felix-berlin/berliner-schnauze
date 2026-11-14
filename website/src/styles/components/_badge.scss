@@ -1,8 +1,10 @@
 @use "@styles/mixins" as mx;
 
 // Badge. Variants: strong (the trend badge, the only solid orange badge), wash (borderless wash of
-// the word page, Spec §8.2/§8.4), auto (NLP-guessed value: dashed outline inside, text unchanged).
-// Public: --badge-padding, --badge-radius, --badge-font-size, --badge-font-weight.
+// the word page, Spec §8.2/§8.4), auto (NLP-guessed value: dashed outline inside, text unchanged),
+// trend (the hero's trend link: caps, 44px hit area), award (gold icon: word of the day).
+// Public: --badge-padding, --badge-radius, --badge-font-size, --badge-font-weight, and for a badge
+// row (word hero) --badge-display, --badge-gap, --badge-border.
 @include mx.component("badge") {
   :scope {
     // stylelint-disable-next-line function-disallowed-list -- colour inventory R60: one-off
@@ -12,12 +14,17 @@
     --_padding: 0.2em 0.5em; // em: follows the badge's own font size
     --_radius: 0.25em; // em: follows the badge's own font size
     --_weight: 600; // no weight token between regular and bold
+    --_size: var(--font-size-sm);
 
+    display: var(--badge-display, revert-layer);
+    align-items: center;
+    gap: var(--badge-gap, revert-layer);
+    border: var(--badge-border, revert-layer);
     background-color: var(--_bg);
     color: var(--_color);
     padding: var(--badge-padding, var(--_padding));
     border-radius: var(--badge-radius, var(--_radius));
-    font-size: var(--badge-font-size, var(--font-size-sm));
+    font-size: var(--badge-font-size, var(--_size));
     font-weight: var(--badge-font-weight, var(--_weight));
   }
 
@@ -33,5 +40,32 @@
   :scope[data-variant~="auto"] {
     outline: 1px dashed currentcolor;
     outline-offset: -3px;
+  }
+
+  :scope[data-variant~="trend"] {
+    --_padding: var(--space-1) var(--space-2);
+    --_radius: var(--radius-sm);
+    --_size: var(--font-size-2xs);
+    --_weight: var(--font-weight-bold);
+
+    position: relative;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+
+    // 44px hit area without changing the visual size
+    &::after {
+      content: "";
+      position: absolute;
+      inset: calc(-1 * var(--space-3)) calc(-1 * var(--space-1));
+    }
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  :scope[data-variant~="award"] svg {
+    color: var(--color-status-gold);
   }
 }

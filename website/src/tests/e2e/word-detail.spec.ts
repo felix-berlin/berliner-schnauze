@@ -36,10 +36,10 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await expect(page.locator("h1 dfn")).toHaveText("aasen");
 
     // The hero owns the meanings; the etymology card only holds the origin.
-    await expect(page.locator(".c-word-hero .c-meanings li")).toHaveCount(2);
+    await expect(page.locator(".c-word-meanings .list li")).toHaveCount(2);
     const etymologie = page.locator("#etymologie");
     await expect(etymologie.getByRole("heading", { level: 2, name: "Etymologie" })).toBeVisible();
-    await expect(etymologie.locator(".c-meanings")).toHaveCount(0);
+    await expect(etymologie.locator(".c-word-meanings")).toHaveCount(0);
     await expect(etymologie.locator(".c-word-origin")).toContainText("Erfundener Infotext");
     await expect(etymologie.locator("footer")).toHaveCount(0);
 
@@ -112,7 +112,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await page.keyboard.press("ArrowLeft");
       await page.keyboard.press("ArrowLeft");
       await expect(dialog).toContainText("4 / 4");
-      await expect(dialog.locator(".c-lightbox__caption")).toHaveCount(0); // 4th image has no credit
+      await expect(dialog.locator(".caption")).toHaveCount(0); // 4th image has no credit
       await page.keyboard.press("Escape");
       await expect(dialog).toBeHidden();
       await expect(buttons.first()).toBeFocused();
@@ -133,7 +133,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await page.goto("/wort/bildzwei");
       const section = images(page);
       await expect(section).toHaveCount(1);
-      await expect(section.locator(".c-image-strip")).toBeVisible();
+      await expect(section.locator(".strip")).toBeVisible();
       await expect(section.locator("figure")).toHaveCount(2);
       // No horizontal page scroll: the strip scrolls inside itself.
       expect(
@@ -241,7 +241,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
 
     await expect(page.locator("h1 dfn")).toHaveText("Alex");
     await expect(
-      page.locator(".c-word-hero__badges .c-badge", { hasText: "Berolinismus" }),
+      page.locator(".c-word-hero .badges .c-badge", { hasText: "Berolinismus" }),
     ).toBeVisible();
   });
 
@@ -249,7 +249,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     const response = await page.goto("/wort/wa");
     expect(response?.status()).toBe(200);
 
-    await expect(page.locator(".c-word-hero__title")).toHaveCount(1);
+    await expect(page.locator(".c-word-hero .title")).toHaveCount(1);
     const breadcrumb = page.getByRole("navigation", { name: "breadcrumbs" });
     await expect(breadcrumb.getByRole("link").last()).toHaveText("Wa");
   });
@@ -285,14 +285,14 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       const hero = page.locator("#bedeutung");
       await expect(hero.locator("h1 dfn")).toHaveText("anmachen");
       await expect(hero.locator("p.t-label")).toHaveText("Bedeutungen");
-      await expect(hero.locator("ol.c-meanings li")).toHaveText([
+      await expect(hero.locator(".c-word-meanings ol.list li")).toHaveText([
         "einschalten",
         "sich jemandem forsch nähern",
       ]);
       await expect(hero.locator(".c-badge").first()).toHaveText(/\S/);
-      await expect(hero.locator('.c-themes a[href^="/themen/"]').first()).toBeVisible();
-      await expect(hero.locator(".c-themes .t-label")).toHaveText(/^Themen?$/);
-      await expect(hero.locator('.c-word-hero__badges a[href^="/themen/"]')).toHaveCount(0);
+      await expect(hero.locator('.c-word-themes a[href^="/themen/"]').first()).toBeVisible();
+      await expect(hero.locator(".c-word-themes .t-label")).toHaveText(/^Themen?$/);
+      await expect(hero.locator('.c-word-hero .badges a[href^="/themen/"]')).toHaveCount(0);
     });
 
     test("einzelne Bedeutung als Absatz (wa)", async ({ page }) => {
@@ -300,7 +300,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       const hero = page.locator("#bedeutung");
       await expect(hero.locator(".t-label")).toHaveText("Bedeutung");
       await expect(hero.locator("p.t-em")).toHaveText("nicht wahr");
-      await expect(hero.locator("ol.c-meanings")).toHaveCount(0);
+      await expect(hero.locator(".c-word-meanings ol.list")).toHaveCount(0);
     });
 
     test("Tab-Reihenfolge: Like, Menü, Trend-Badge, Themen", async ({ page }) => {
@@ -319,7 +319,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       await page.keyboard.press("Tab");
       await expect(hero.locator('a[href="#n-trend"]')).toBeFocused();
       await page.keyboard.press("Tab");
-      await expect(hero.locator('.c-themes a[href^="/themen/"]').first()).toBeFocused();
+      await expect(hero.locator('.c-word-themes a[href^="/themen/"]').first()).toBeFocused();
     });
 
     test("Like und Dislike immer beide sichtbar: setzen und zurücknehmen", async ({

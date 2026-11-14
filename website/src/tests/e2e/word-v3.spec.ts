@@ -142,12 +142,12 @@ test.describe("tab order (real Tab presses)", () => {
       if (!el) return "none";
       if (el.closest('nav[aria-label="Inhalt der Wortseite"]')) return "tabs";
       if (el.closest(".c-word-sidebar")) return "sidebar";
-      if (el.closest(".c-word-hero__actions")) {
+      if (el.closest(".c-word-hero .actions")) {
         return el.getAttribute("aria-label") === "Weitere Aktionen" ? "menu" : "like";
       }
       if (el.matches('a[href="#n-trend"]')) return "trend";
       if (el.closest(".c-trend")) return "trendbox";
-      if (el.closest(".c-themes")) return "themen";
+      if (el.closest(".c-word-themes")) return "themen";
       if (el.closest(".c-word-audio")) return "audio";
       if (el.closest(".c-word-images")) return "bilder";
       if (el.closest("#sagste-det-noch")) return "umfrage";
@@ -294,8 +294,8 @@ test.describe("prefers-reduced-motion", () => {
 test("at 320px the headword keeps its own line and the actions sit below it", async ({ page }) => {
   await page.setViewportSize({ height: 700, width: 320 });
   await page.goto(`/wort/${WORDS.full}`);
-  const title = await page.locator(".c-word-hero__title").boundingBox();
-  const actions = await page.locator(".c-word-hero__actions").boundingBox();
+  const title = await page.locator(".c-word-hero .title").boundingBox();
+  const actions = await page.locator(".c-word-hero .actions").boundingBox();
   // Beside the three 44px actions the headword was squeezed to about 60px and broke into syllables.
   expect(title!.width).toBeGreaterThan(200);
   expect(actions!.y).toBeGreaterThan(title!.y + title!.height - 1);

@@ -3,8 +3,9 @@
 
 // Text link (docs/design/wortseite/SPEC.md): link look on <a> or <button>, 44px hit area.
 // Variant inline (data-variant="inline"): in running text, no hit-area padding, inherits size
-// and colour. Public (the old :where() let parents override these): --textlink-display,
-// --textlink-min-block-size, --textlink-padding-inline, --textlink-font-size, --textlink-color, --textlink-padding-start.
+// and colour. Variant hit-area: a 44px target around a small link without changing the layout (flex
+// rows, where the inline-link exception of WCAG 2.5.8 does not apply).
+// Public (the old :where() let parents override these): --textlink-display, --textlink-min-block-size, --textlink-padding-inline, --textlink-font-size, --textlink-color, --textlink-padding-start.
 @include mx.component("textlink") {
   :scope {
     --_color: var(--color-text-muted);
@@ -50,5 +51,21 @@
     padding-inline: var(--textlink-padding-start, var(--textlink-padding-inline, 0))
       var(--textlink-padding-inline, 0);
     font-size: var(--textlink-font-size, inherit);
+  }
+
+  :scope[data-variant~="hit-area"] {
+    --_middle: 50%; // centres the target on the link
+
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset-block-start: var(--_middle);
+      inset-inline-start: 0;
+      block-size: 2.75rem;
+      inline-size: max(100%, 2.75rem);
+      translate: 0 -50%;
+    }
   }
 }

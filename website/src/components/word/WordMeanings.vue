@@ -1,8 +1,8 @@
 <template>
   <div class="c-word-meanings">
     <p class="t-label">{{ meanings.length === 1 ? "Bedeutung" : "Bedeutungen" }}</p>
-    <p v-if="meanings.length === 1" class="t-em c-word-meanings__single">{{ meanings[0] }}</p>
-    <ol v-else :id="listId" class="c-meanings">
+    <p v-if="meanings.length === 1" class="t-em single">{{ meanings[0] }}</p>
+    <ol v-else :id="listId" class="list">
       <li v-for="(m, i) in split.visible" :key="i" class="t-em">{{ m }}</li>
       <li
         v-for="(m, i) in split.hidden"
@@ -19,7 +19,7 @@
       v-if="split.hidden.length > 0 && !open"
       :aria-controls="listId"
       aria-expanded="false"
-      class="c-textlink c-word-meanings__more"
+      class="c-textlink"
       type="button"
       @click="showAll"
     >
@@ -46,3 +46,7 @@ const showAll = async () => {
   firstHidden.value?.focus();
 };
 </script>
+
+<style lang="scss">
+@use "@styles/components/word-meanings";
+</style>

@@ -8,10 +8,9 @@ interface Props {
   /** strip: below the hero (< 808px). hero: inside the hero (from 808px). Both are in the page, CSS shows one. */
   placement: 'strip' | 'hero';
   learnMore?: string | null | undefined;
-  class?: string;
 }
 
-const { images, placement, learnMore, class: className } = Astro.props;
+const { images, placement, learnMore } = Astro.props;
 const hero = placement === 'hero';
 const widths = hero ? [220, 330, 440, 660] : [320, 480, 640, 800];
 // The hero copy sits in the image column once .o-word-main is >= 45.5rem wide (about a 1000px viewport, see _word-hero.scss); below that the 70vw/380px split mirrors it.
@@ -22,7 +21,7 @@ const first = images[0];
 const preload = first
   ? await getImage({ format: 'webp', height: first.height, sizes, src: first.src, width: first.width, widths })
   : undefined;
-// Must match the CSS switch (mx.breakpoint("word") = 808px).
+// Must match the CSS switch (objects/_word.scss, mx.breakpoint("word") = 808px).
 const preloadMedia = hero ? '(min-width: 808px)' : '(max-width: 807.98px)';
 ---
 
@@ -30,13 +29,13 @@ const preloadMedia = hero ? '(min-width: 808px)' : '(max-width: 807.98px)';
   <link rel='preload' as='image' imagesrcset={preload.srcSet.attribute} imagesizes={sizes} media={preloadMedia} fetchpriority='high' />
 )}
 
-<section class:list={['c-word-images', `c-word-images--${placement}`, className]} aria-label='Bilder'>
-  <div class:list={['c-image-strip', { 'c-image-strip--single': images.length === 1 }]}>
+<section class='c-word-images' data-variant={placement} aria-label='Bilder'>
+  <div class='strip'>
     {
       images.map((image, i) => (
         <figure>
           <button
-            class='c-image-strip__btn'
+            class='open'
             type='button'
             data-lightbox-index={i}
             aria-label={`Bild ${i + 1} von ${images.length} vergrößern: ${image.alt}`}
@@ -64,7 +63,7 @@ const preloadMedia = hero ? '(min-width: 808px)' : '(max-width: 807.98px)';
   {
     learnMore && (
       <a
-        class='c-textlink t-small c-word-images__more' data-variant='inline'
+        class='c-textlink t-small' data-variant='inline'
         href={learnMore}
         rel='noopener noreferrer'
         target='_blank'

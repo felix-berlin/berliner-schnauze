@@ -1,246 +1,163 @@
 @use "@styles/mixins" as mx;
-@use "@styles/variables" as vars;
-@use "@sass-butler/mixins" as butler-mx;
 
-@layer legacy {
-  // Hero v3 (docs/design/wortseite/SPEC.md §3/§5, mock: Mobile2/Desktop3 .c-word-hero).
-  .c-word-hero {
-    container-type: inline-size;
-    container-name: word-hero;
+// Hero v3 (docs/design/wortseite/SPEC.md §3/§5, mock: Mobile2/Desktop3). Parts .head (.title with
+// .headword and .article, .actions, .badges, .themes), .meaning (.same). Variant images (WordImages
+// inside, placement hero): a second column holds them from a 45.5rem main column on.
+@include mx.component("word-hero") {
+  :scope {
+    // Padding grows with the main column (cqi here is .o-word-main, the hero is its own container).
+    --_pad-block: clamp(1.5rem, 1rem + 2cqi, 2rem); // fluid, between space-6 and space-8
+    --_pad-inline: clamp(1.25rem, 0.5rem + 3cqi, 2rem); // fluid, between space-5 and space-8
+    --_title-size: clamp(2rem, 1rem + 6cqi, 3.75rem); // fluid headword, no step above 4xl
+    --_image-column: minmax(220px, 38%); // one-off image column
+
+    container: word-hero / inline-size;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 1.5rem;
+    gap: var(--space-6);
     align-items: start;
-    // Padding grows with the main column (cqi here is .o-word-main, the hero is its own container).
-    padding-block: clamp(1.5rem, 1rem + 2cqi, 2rem);
-    padding-inline: clamp(1.25rem, 0.5rem + 3cqi, 2rem);
-    background: var(--surface-hero);
-    border: 1px dashed var(--rule-card);
+    padding: var(--_pad-block) var(--_pad-inline);
+    border: 1px dashed var(--color-border-card);
     border-radius: var(--radius-sm);
-    box-shadow: var(--paper-lift);
+    background: var(--color-surface-hero);
+    box-shadow: var(--shadow-paper-lift);
+  }
 
-    // Image column (Task "Bilder"): only with images, otherwise the 38% would stay empty.
-    &--has-images {
-      // Spec two-column breakpoint (SPEC.md §3: about a 1000px viewport) as the width of the main column: 45.5rem = 728px.
-      @container word-main (inline-size >= 45.5rem) {
-        grid-template-columns: minmax(0, 1fr) minmax(220px, 38%);
-        column-gap: 2rem;
+  // Image column: only with images, otherwise the 38% would stay empty. Spec two-column breakpoint
+  // (SPEC.md §3: about a 1000px viewport) as the width of the main column: 45.5rem = 728px.
+  @container word-main (inline-size >= 45.5rem) {
+    :scope[data-variant="images"] {
+      --word-images-column: 2;
+      --word-images-row: 1 / span 3;
 
-        > * {
-          grid-column: 1;
-        }
+      grid-template-columns: minmax(0, 1fr) var(--_image-column);
+      column-gap: var(--space-8);
 
-        > .c-word-hero__images {
-          grid-column: 2;
-          grid-row: 1 / span 3;
-        }
+      > * {
+        grid-column: 1;
       }
     }
+  }
 
-    &__head {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+  .head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "title actions"
+      "badges badges"
+      "themes themes";
+    gap: var(--space-2);
+    align-items: start;
+
+    // Narrow column: title and the three 44px actions side by side leave the headword about 60px
+    // ("ab-brum-men"). The actions get their own row under the title instead.
+    @container word-main (inline-size < 28rem) {
+      grid-template-columns: minmax(0, 1fr);
       grid-template-areas:
-        "title actions"
-        "badges badges"
-        "themes themes";
-      column-gap: 0.5rem;
-      row-gap: 0.625rem;
-      align-items: start;
-
-      // Narrow column: title and the three 44px actions side by side leave the headword about 60px
-      // ("ab-brum-men"). The actions get their own row under the title instead.
-      @container word-main (inline-size < 28rem) {
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-areas:
-          "title"
-          "actions"
-          "badges"
-          "themes";
-      }
-    }
-
-    &__title {
-      grid-area: title;
-      min-inline-size: 0;
-      margin: 0;
-      font-family: vars.$berlin;
-      font-size: clamp(2rem, 1rem + 6cqi, 3.75rem);
-      font-weight: 700;
-      line-height: 1.1;
-      color: var(--color-ink-strong);
-      text-wrap: balance;
-      hyphens: auto;
-      overflow-wrap: anywhere;
-
-      @include butler-mx.dark-mode-class {
-        color: var(--orange-300);
-      }
-    }
-
-    .c-headword {
-      display: inline-block;
-      position: relative;
-      font-style: normal;
-
-      &::after {
-        content: "";
-        position: absolute;
-        inset-inline: 0;
-        inset-block-end: -0.1em;
-        block-size: 2px;
-        background: repeating-linear-gradient(
-          to right,
-          var(--orange-300) 0,
-          var(--orange-300) 5px,
-          transparent 5px,
-          transparent 9px
-        );
-      }
-    }
-
-    &__word-article {
-      margin-inline-start: 0.15em;
-      font-size: 0.6em;
-      font-weight: 400;
-      color: var(--grey-100);
-
-      @include butler-mx.dark-mode-class {
-        color: color-mix(in srgb, var(--orange-200) 70%, transparent);
-      }
-    }
-
-    // Pulled into the corner so the 44px targets do not push the padding out (mock: margin -0.5rem -0.5rem 0 0).
-    &__actions {
-      grid-area: actions;
-      display: flex;
-      align-items: center;
-      margin: -0.5rem -0.5rem 0 0;
-
-      @container word-main (inline-size < 28rem) {
-        // Aligns the first icon with the text edge: the reaction button carries 0.625rem inline padding.
-        margin: -0.25rem 0 -0.25rem -0.625rem;
-      }
-    }
-
-    &__badges {
-      grid-area: badges;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: vars.$spacer * 0.5;
-    }
-
-    &__trend-badge {
-      --badge-padding: 0.25rem 0.6rem;
-      --badge-radius: var(--radius-sm);
-      --badge-font-size: 0.7rem;
-      --badge-font-weight: 700;
-
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      border: 1px solid transparent;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      text-decoration: none;
-
-      // 44px hit area without changing the visual size
-      &::after {
-        content: "";
-        position: absolute;
-        inset: -0.75rem -0.25rem;
-      }
-    }
-
-    // Badges are borderless washes here (Spec §8.4); the global .c-badge (word index) keeps its look.
-    // The wash itself is the badge's data-variant="wash".
-    .c-badge:not([data-variant~="strong"]),
-    &__wotd-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      border: 1px solid transparent;
-    }
-
-    &__wotd-badge {
-      @include mx.badge-wash;
-    }
-
-    &__wotd-badge svg {
-      flex-shrink: 0;
-      color: var(--gold);
-    }
-
-    // Own row under the badges (WordThemes); inline links in a p are exempt from the 44px rule.
-    &__head > .c-themes {
-      grid-area: themes;
-      margin-block-start: -0.125rem;
-    }
-
-    &__meaning {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    &__same {
-      margin: 0;
-      color: var(--color-muted);
-
-      span {
-        color: var(--color-body);
-      }
+        "title"
+        "actions"
+        "badges"
+        "themes";
     }
   }
 
-  // Meanings (Spec §5): single = p.t-em, from two on a numbered list.
-  .c-word-meanings {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-
-    &__single {
-      margin: 0;
-    }
-
-    &__more {
-      align-self: flex-start;
-    }
-  }
-
-  .c-meanings {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3em;
+  .title {
+    grid-area: title;
+    min-inline-size: 0;
     margin: 0;
-    padding: 0;
-    list-style: none;
-    counter-reset: meaning;
+    font-family: var(--font-family-body);
+    font-size: var(--_title-size);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1;
+    color: var(--color-text-emphasis);
+    text-wrap: balance;
+    hyphens: auto;
+    overflow-wrap: anywhere;
+  }
 
-    li {
-      counter-increment: meaning;
-      display: grid;
-      grid-template-columns: 1.4em 1fr;
-      gap: 0.3em;
-      align-items: baseline;
-      line-height: 1.45;
+  .headword {
+    --_below: -0.1em; // em: follows the headword size
 
-      &[hidden] {
-        display: none;
-      }
+    display: inline-block;
+    position: relative;
+    font-style: normal;
 
-      &::before {
-        content: counter(meaning) ".";
-        color: var(--orange-500);
-        font-size: 0.7em;
-        font-weight: 700;
+    &::after {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      inset-block-end: var(--_below);
+      block-size: 2px;
+      background: repeating-linear-gradient(
+        to right,
+        var(--color-border-accent) 0,
+        var(--color-border-accent) 5px,
+        transparent 5px,
+        transparent 9px
+      );
+    }
+  }
 
-        @include butler-mx.dark-mode-class {
-          color: var(--orange-300);
-        }
-      }
+  .article {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R84: one-off
+    --_color: light-dark(rgb(78 84 90), rgb(250 208 176 / 70%));
+    --_space: 0.15em; // em: follows the headword size
+    --_size: 0.6em; // em: follows the headword size
+
+    margin-inline-start: var(--_space);
+    font-size: var(--_size);
+    font-weight: var(--font-weight-regular);
+    color: var(--_color);
+  }
+
+  // Pulled into the corner so the 44px targets do not push the padding out (mock: margin -0.5rem -0.5rem 0 0).
+  .actions {
+    grid-area: actions;
+    display: flex;
+    align-items: center;
+    margin-block: calc(-1 * var(--space-2)) 0;
+    margin-inline: 0 calc(-1 * var(--space-2));
+
+    @container word-main (inline-size < 28rem) {
+      // Aligns the first icon with the text edge: the reaction button carries space-2 inline padding.
+      margin-block: calc(-1 * var(--space-1));
+      margin-inline: calc(-1 * var(--space-2)) 0;
+    }
+  }
+
+  // Badges are borderless washes here (Spec §8.4), all in one row with the same box.
+  .badges {
+    --badge-display: inline-flex;
+    --badge-gap: var(--space-1);
+    --badge-border: 1px solid transparent;
+
+    grid-area: badges;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  // Own row under the badges (WordThemes); inline links in a p are exempt from the 44px rule.
+  .themes {
+    --_pull: -0.125rem; // optical, below every space step
+
+    grid-area: themes;
+    margin-block-start: var(--_pull);
+  }
+
+  .meaning {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .same {
+    margin: 0;
+    color: var(--color-text-muted);
+
+    span {
+      color: var(--color-text-body);
     }
   }
 }
