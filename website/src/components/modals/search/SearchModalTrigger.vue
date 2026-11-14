@@ -14,13 +14,15 @@
 <script setup lang="ts">
 import { open } from "@stores/modal.ts";
 import { trackEvent } from "@utils/analytics";
-import { useMagicKeys, whenever } from "@vueuse/core";
+import { isEditableTarget } from "@utils/helpers.ts";
+import { onKeyStroke } from "@vueuse/core";
 import SearchIcon from "virtual:icons/lucide/search";
 import { defineAsyncComponent } from "vue";
 
 const openSearchModal = () => {
   open({
     props: {
+      ariaLabel: "Wörter suchen",
       class: "c-modal--search",
       showCloseButton: false,
     },
@@ -41,16 +43,12 @@ const openSearchViaKeyboard = (): void => {
   trackEvent("Search", "Open Search Modal via Keyboard", "Search Modal Opened via Keyboard");
 };
 
-const keys = useMagicKeys({
-  onEventFired(e) {
-    if (e.shiftKey && e.key === "/" && e.type === "keydown") e.preventDefault();
-  },
-  passive: false,
+// "/" is Shift+7 on a German keyboard: any key event that types "/" counts, but never inside a field.
+onKeyStroke("/", (e) => {
+  if (e.repeat || isEditableTarget(e.target)) return;
+  e.preventDefault();
+  openSearchViaKeyboard();
 });
-
-const shiftSlash = keys["Shift+/"];
-
-whenever(shiftSlash, () => openSearchViaKeyboard());
 </script>
 
 <style lang="scss">

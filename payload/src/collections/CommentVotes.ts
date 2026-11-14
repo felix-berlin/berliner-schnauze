@@ -13,6 +13,13 @@ export const CommentVotes: CollectionConfig = {
   fields: [
     { name: "comment", type: "relationship", relationTo: "comments", required: true },
     { name: "visitor", type: "text", required: true },
-    { name: "value", type: "number", required: true, min: -1, max: 1, validate: (v: unknown) => v === 1 || v === -1 || "1 oder -1" },
+    {
+      name: "value",
+      type: "number",
+      required: true,
+      min: -1,
+      max: 1,
+      validate: (v: unknown) => v === 1 || v === -1 || "1 oder -1",
+    },
   ],
 };

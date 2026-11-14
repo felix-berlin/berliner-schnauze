@@ -94,9 +94,10 @@ Wichtige Konsequenzen:
    Impression erst beim Eintreten in den Viewport feuern — nicht bei `onMounted`. Viele Kandidaten (RelatedWords, WordAnagrams, WordAlphabetNav, BonCard, Footer) liegen unterhalb des Folds. Ein `onMounted`-Aufruf würde Impressionen für Inhalte zählen, die der User nie gesehen hat.
 
    ```ts
-   import { useIntersectionObserver } from "@vueuse/core";
    import type { Ref } from "vue";
+
    import { trackContentImpressionsWithinNode } from "@utils/analytics";
+   import { useIntersectionObserver } from "@vueuse/core";
 
    export function useContentTracking(el: Ref<Element | null>) {
      const { stop } = useIntersectionObserver(el, ([entry]) => {
@@ -255,8 +256,8 @@ Zentraler Header jeder Wort-Detailseite mit Titel, Badges, Audio-Player und Opti
 <header
   data-track-content
   data-content-name="Word Hero"
-  data-content-piece={word}
-  data-content-target={`/wort/${slug}`}
+  data-content-piece="{word}"
+  data-content-target="{`/wort/${slug}`}"
 >
 ```
 
@@ -475,8 +476,8 @@ Dieses Vue-Island wird via `client:only="vue"` auf `/games/berliner-oder-nicht/s
 In `<script setup>`:
 
 ```ts
-import { ref, computed } from "vue";
 import { useContentTracking } from "@composables/useContentTracking";
+import { ref, computed } from "vue";
 
 const root = ref<HTMLElement | null>(null);
 useContentTracking(root);

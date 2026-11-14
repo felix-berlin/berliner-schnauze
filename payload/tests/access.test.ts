@@ -4,7 +4,22 @@ import { mediaRead, usersCreate } from "../src/access";
 import { getTestPayload } from "./helpers/payload";
 
 // Add every new collection/global here.
-const lockedCollections = ["users", "words", "word-types", "themen", "posts", "pages", "suggestions", "redirects", "comments", "comment-votes", "comment-reports", "word-feedback", "bon-games", "bon-players"] as const;
+const lockedCollections = [
+  "users",
+  "words",
+  "word-types",
+  "themen",
+  "posts",
+  "pages",
+  "suggestions",
+  "redirects",
+  "comments",
+  "comment-votes",
+  "comment-reports",
+  "word-feedback",
+  "bon-games",
+  "bon-players",
+] as const;
 const lockedGlobals = ["navigation", "affiliate", "company", "home", "anki"] as const;
 
 const png = Buffer.from(
@@ -18,10 +33,20 @@ let mediaId: number | string;
 beforeAll(async () => {
   const payload = await getTestPayload();
   await payload.delete({ collection: "users", where: { email: { equals: "access@test.local" } } });
-  await payload.delete({ collection: "media", where: { wpPath: { in: ["access-test/pixel.png", "access-test/anon.png", "access-test/authed.png"] } } });
+  await payload.delete({
+    collection: "media",
+    where: {
+      wpPath: { in: ["access-test/pixel.png", "access-test/anon.png", "access-test/authed.png"] },
+    },
+  });
   const user = await payload.create({
     collection: "users",
-    data: { email: "access@test.local", password: "x".repeat(16), enableAPIKey: true, apiKey: "k-access" },
+    data: {
+      email: "access@test.local",
+      password: "x".repeat(16),
+      enableAPIKey: true,
+      apiKey: "k-access",
+    },
   });
   userId = user.id;
   const media = await payload.create({
@@ -43,30 +68,44 @@ describe("anonymous reads", () => {
   for (const collection of lockedCollections) {
     it(`${collection} is Forbidden`, async () => {
       const payload = await getTestPayload();
-      await expect(payload.find({ collection, overrideAccess: false })).rejects.toThrow(/not allowed|forbidden/i);
+      await expect(payload.find({ collection, overrideAccess: false })).rejects.toThrow(
+        /not allowed|forbidden/i,
+      );
     });
   }
 
   for (const slug of lockedGlobals) {
     it(`global ${slug} is Forbidden`, async () => {
       const payload = await getTestPayload();
-      await expect(payload.findGlobal({ slug, overrideAccess: false })).rejects.toThrow(/not allowed|forbidden/i);
+      await expect(payload.findGlobal({ slug, overrideAccess: false })).rejects.toThrow(
+        /not allowed|forbidden/i,
+      );
     });
   }
 
   for (const collection of ["words", "posts", "pages"] as const) {
     it(`${collection} versions and count are Forbidden`, async () => {
       const payload = await getTestPayload();
-      await expect(payload.findVersions({ collection, overrideAccess: false })).rejects.toThrow(/not allowed|forbidden/i);
-      await expect(payload.count({ collection, overrideAccess: false })).rejects.toThrow(/not allowed|forbidden/i);
+      await expect(payload.findVersions({ collection, overrideAccess: false })).rejects.toThrow(
+        /not allowed|forbidden/i,
+      );
+      await expect(payload.count({ collection, overrideAccess: false })).rejects.toThrow(
+        /not allowed|forbidden/i,
+      );
     });
   }
 
   it("media listing, findByID and count are Forbidden", async () => {
     const payload = await getTestPayload();
-    await expect(payload.find({ collection: "media", overrideAccess: false })).rejects.toThrow(/not allowed|forbidden/i);
-    await expect(payload.findByID({ collection: "media", id: mediaId, overrideAccess: false })).rejects.toThrow(/not allowed|forbidden/i);
-    await expect(payload.count({ collection: "media", overrideAccess: false })).rejects.toThrow(/not allowed|forbidden/i);
+    await expect(payload.find({ collection: "media", overrideAccess: false })).rejects.toThrow(
+      /not allowed|forbidden/i,
+    );
+    await expect(
+      payload.findByID({ collection: "media", id: mediaId, overrideAccess: false }),
+    ).rejects.toThrow(/not allowed|forbidden/i);
+    await expect(payload.count({ collection: "media", overrideAccess: false })).rejects.toThrow(
+      /not allowed|forbidden/i,
+    );
   });
 
   it("media files stay public (static file reads)", () => {
@@ -83,23 +122,34 @@ describe("anonymous writes", () => {
   for (const collection of lockedCollections) {
     it(`${collection} create, update and delete are Forbidden`, async () => {
       const payload = await getTestPayload();
-      await expect(payload.create({ collection, data: {}, overrideAccess: false } as never)).rejects.toThrow(denied);
-      await expect(payload.update({ collection, data: {}, overrideAccess: false, where: nothing })).rejects.toThrow(denied);
-      await expect(payload.delete({ collection, overrideAccess: false, where: nothing })).rejects.toThrow(denied);
+      await expect(
+        payload.create({ collection, data: {}, overrideAccess: false } as never),
+      ).rejects.toThrow(denied);
+      await expect(
+        payload.update({ collection, data: {}, overrideAccess: false, where: nothing }),
+      ).rejects.toThrow(denied);
+      await expect(
+        payload.delete({ collection, overrideAccess: false, where: nothing }),
+      ).rejects.toThrow(denied);
     });
   }
 
   for (const slug of lockedGlobals) {
     it(`global ${slug} update is Forbidden`, async () => {
       const payload = await getTestPayload();
-      await expect(payload.updateGlobal({ slug, data: {}, overrideAccess: false })).rejects.toThrow(denied);
+      await expect(payload.updateGlobal({ slug, data: {}, overrideAccess: false })).rejects.toThrow(
+        denied,
+      );
     });
   }
 });
 
 it("an authenticated user can list media", async () => {
   const payload = await getTestPayload();
-  const user = { ...(await payload.findByID({ collection: "users", id: userId })), collection: "users" as const };
+  const user = {
+    ...(await payload.findByID({ collection: "users", id: userId })),
+    collection: "users" as const,
+  };
   const res = await payload.find({ collection: "media", overrideAccess: false, user });
   expect(res.docs.some((d) => d.id === mediaId)).toBe(true);
 });
@@ -111,18 +161,30 @@ describe("media writes", () => {
   it("anonymous create is Forbidden", async () => {
     const payload = await getTestPayload();
     await expect(
-      payload.create({ collection: "media", data: { wpPath: "access-test/anon.png" }, file: file(), overrideAccess: false }),
+      payload.create({
+        collection: "media",
+        data: { wpPath: "access-test/anon.png" },
+        file: file(),
+        overrideAccess: false,
+      }),
     ).rejects.toThrow(denied);
   });
   it("anonymous update is Forbidden", async () => {
     const payload = await getTestPayload();
     await expect(
-      payload.update({ collection: "media", id: mediaId, data: { alt: "x" }, overrideAccess: false }),
+      payload.update({
+        collection: "media",
+        id: mediaId,
+        data: { alt: "x" },
+        overrideAccess: false,
+      }),
     ).rejects.toThrow(denied);
   });
   it("anonymous delete is Forbidden", async () => {
     const payload = await getTestPayload();
-    await expect(payload.delete({ collection: "media", id: mediaId, overrideAccess: false })).rejects.toThrow(denied);
+    await expect(
+      payload.delete({ collection: "media", id: mediaId, overrideAccess: false }),
+    ).rejects.toThrow(denied);
   });
   it("authenticated create works", async () => {
     const payload = await getTestPayload();
@@ -142,13 +204,20 @@ describe("media writes", () => {
 it("an authenticated user can read users", async () => {
   const payload = await getTestPayload();
   const user = await payload.findByID({ collection: "users", id: userId });
-  const res = await payload.find({ collection: "users", overrideAccess: false, user: { ...user, collection: "users" } });
+  const res = await payload.find({
+    collection: "users",
+    overrideAccess: false,
+    user: { ...user, collection: "users" },
+  });
   expect(res.totalDocs).toBeGreaterThan(0);
 });
 
 it("an authenticated user can read every locked collection and global", async () => {
   const payload = await getTestPayload();
-  const user = { ...(await payload.findByID({ collection: "users", id: userId })), collection: "users" as const };
+  const user = {
+    ...(await payload.findByID({ collection: "users", id: userId })),
+    collection: "users" as const,
+  };
   for (const collection of lockedCollections) {
     await expect(payload.find({ collection, overrideAccess: false, user })).resolves.toBeDefined();
   }
@@ -180,7 +249,8 @@ describe("users.create bootstrap", () => {
 });
 
 describe("site reads (req.context.siteRead, Local API only)", () => {
-  const site = (siteRead: "all" | "published") => ({ overrideAccess: false, context: { siteRead } }) as const;
+  const site = (siteRead: "all" | "published") =>
+    ({ overrideAccess: false, context: { siteRead } }) as const;
   const slugs = ["site-read-entwurf", "site-read-kiez", "site-read-schrippe"];
   const ids: Record<string, number> = {};
 
@@ -194,14 +264,24 @@ describe("site reads (req.context.siteRead, Local API only)", () => {
     });
     const published = await payload.create({
       collection: "words",
-      data: { _status: "published", berlinerisch: "Kiez", relatedWords: [draft.id], slug: slugs[1] },
+      data: {
+        _status: "published",
+        berlinerisch: "Kiez",
+        relatedWords: [draft.id],
+        slug: slugs[1],
+      },
     });
     // published, then edited as a draft: the public read keeps the published version
     const edited = await payload.create({
       collection: "words",
       data: { _status: "published", berlinerisch: "Schrippe", slug: slugs[2] },
     });
-    await payload.update({ collection: "words", id: edited.id, data: { berlinerisch: "Schrippe (neu)" }, draft: true });
+    await payload.update({
+      collection: "words",
+      id: edited.id,
+      data: { berlinerisch: "Schrippe (neu)" },
+      draft: true,
+    });
     Object.assign(ids, { draft: draft.id, edited: edited.id, published: published.id });
   });
 
@@ -212,25 +292,41 @@ describe("site reads (req.context.siteRead, Local API only)", () => {
 
   it("published: only published words, in their published version", async () => {
     const payload = await getTestPayload();
-    const { docs } = await payload.find({ collection: "words", where: { slug: { in: slugs } }, ...site("published") });
+    const { docs } = await payload.find({
+      collection: "words",
+      where: { slug: { in: slugs } },
+      ...site("published"),
+    });
     expect(docs.map((d) => d.berlinerisch).sort()).toEqual(["Kiez", "Schrippe"]);
   });
 
   it("published: a draft is not populated into a published word", async () => {
     const payload = await getTestPayload();
-    const doc = await payload.findByID({ collection: "words", depth: 1, id: ids.published, ...site("published") });
+    const doc = await payload.findByID({
+      collection: "words",
+      depth: 1,
+      id: ids.published,
+      ...site("published"),
+    });
     expect(doc.relatedWords).toEqual([ids.draft]);
   });
 
   it("all (SHOW_TEST_DATA): drafts too", async () => {
     const payload = await getTestPayload();
-    const { docs } = await payload.find({ collection: "words", draft: true, where: { slug: { in: slugs } }, ...site("all") });
+    const { docs } = await payload.find({
+      collection: "words",
+      draft: true,
+      where: { slug: { in: slugs } },
+      ...site("all"),
+    });
     expect(docs.map((d) => d.berlinerisch).sort()).toEqual(["Entwurf", "Kiez", "Schrippe (neu)"]);
   });
 
   it("content without drafts and the media listing are readable", async () => {
     const payload = await getTestPayload();
     for (const collection of ["themen", "word-types", "pages", "redirects", "media"] as const)
-      await expect(payload.find({ collection, limit: 1, ...site("published") })).resolves.toBeDefined();
+      await expect(
+        payload.find({ collection, limit: 1, ...site("published") }),
+      ).resolves.toBeDefined();
   });
 });

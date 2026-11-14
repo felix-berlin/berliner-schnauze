@@ -30,12 +30,13 @@ Berliner Schnauze is a translator for the Berlin dialect. It helps users underst
 
    ```
 
-3. Create a .env file based on .env.example and configure the required environment variables.
+3. Set up secrets and a database: `pnpm dev` runs through Infisical (`npx infisical login` once) and needs a Postgres
+   database. The walkthrough is in [docs/worktree-setup.md](docs/worktree-setup.md); `.env.example` lists the
+   variables Docker Compose reads from the root `.env`.
 4. Start the development server:
 
    ```bash
    pnpm dev
-
    ```
 
-5. Open your browser and navigate to `http://localhost:4321` to see the application in action.
+5. Open the URL `pnpm dev` prints (port `WEBSITE_PORT` from `.env.worktree`, else 4321).

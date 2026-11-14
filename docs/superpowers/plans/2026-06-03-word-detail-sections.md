@@ -459,6 +459,7 @@ Create `src/tests/unit/utils/findAnagrams.test.ts`:
 ```typescript
 import { findAnagrams } from "@utils/wordHelper";
 import { describe, it, expect } from "vitest";
+
 import type { BerlinerWord } from "@/gql/entity-types";
 
 const makeWord = (berlinerisch: string, id: string): BerlinerWord =>
@@ -553,6 +554,7 @@ Create `src/tests/unit/utils/alphabeticNeighbors.test.ts`:
 ```typescript
 import { alphabeticNeighbors } from "@utils/wordHelper";
 import { describe, it, expect } from "vitest";
+
 import type { BerlinerWord } from "@/gql/entity-types";
 
 const makeWord = (berlinerisch: string, id: string): BerlinerWord =>
@@ -1186,12 +1188,12 @@ git commit -m "feat(component): add WordAlphabetNav Astro component"
 In `src/pages/wort/[...wordSlug].astro`, add to the imports at the top of the frontmatter:
 
 ```typescript
+import WordAlphabetNav from "@components/word/WordAlphabetNav.astro";
+import WordAnagrams from "@components/word/WordAnagrams.astro";
+import WordCuriosities from "@components/word/WordCuriosities.astro";
 import WordDecomposition from "@components/word/WordDecomposition.astro";
 import WordLetterFrequency from "@components/word/WordLetterFrequency.astro";
-import WordCuriosities from "@components/word/WordCuriosities.astro";
 import WordSimilarSpelling from "@components/word/WordSimilarSpelling.astro";
-import WordAnagrams from "@components/word/WordAnagrams.astro";
-import WordAlphabetNav from "@components/word/WordAlphabetNav.astro";
 ```
 
 - [ ] **Step 2: Load the German wordlist**

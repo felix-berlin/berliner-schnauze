@@ -65,6 +65,19 @@ describe("POST /api/comment-reports", () => {
     expect(await res.json()).toEqual({ reported: true });
   });
 
+  it("hands Turnstile the proxy's X-Forwarded-For entry, not the spoofable first one", async () => {
+    await POST({
+      clientAddress: "6.6.6.6",
+      cookies: { get: () => ({ value: "v-1" }), set: vi.fn() },
+      request: new Request("https://berliner-schnauze.wtf/api/comment-reports", {
+        body: JSON.stringify({ commentId: id, reason: "Spam", turnstileToken: "tok" }),
+        headers: { "x-forwarded-for": "6.6.6.6, 9.8.7.6" },
+        method: "POST",
+      }),
+    } as unknown as APIContext);
+    expect(verifyTurnstile).toHaveBeenCalledWith("tok", "9.8.7.6");
+  });
+
   it("403 failed captcha, 503 unavailable", async () => {
     verifyTurnstile.mockResolvedValue("fail");
     expect((await post({ commentId: id })).status).toBe(403);

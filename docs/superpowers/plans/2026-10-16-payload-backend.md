@@ -37,12 +37,14 @@
 ### Task 1: Workspace package, Postgres, users with API keys
 
 **Files:**
+
 - Modify: `pnpm-workspace.yaml` (add `packages: ["payload"]`; the root stays a package)
 - Modify: `package.json` (root scripts `cms:dev`, `cms:test` → `pnpm --filter payload-app …`)
 - Create: `payload/package.json`, `payload/tsconfig.json`, `payload/next.config.mjs`, `payload/src/payload.config.ts`, `payload/src/index.ts`, `payload/src/app/(payload)/**` (copy from `payloadcms/payload/examples/astro/payload/src/app` at tag `v3.91.0`), `payload/src/collections/Users.ts`, `payload/vitest.config.ts`, `payload/tests/helpers/payload.ts`, `payload/tests/boot.test.ts`
 - Modify: `compose.yaml` (add `postgres` service + `pgdata` volume, healthcheck `pg_isready`)
 
 **Interfaces:**
+
 - Produces: `payload-app` exports `.` → `./src/index.ts` (`export { default as config } from "./payload.config"` + `payload-types`), and `./word-derived` → `./src/lib/wordDerived.ts` (Task 4).
 - Produces: `getTestPayload(): Promise<Payload>` in `payload/tests/helpers/payload.ts`. It uses `DATABASE_URL_TEST` (fails loudly if unset, never skips) and `push` schema mode.
 - Produces: scripts in `payload/package.json`: `dev` (`next dev -p 3001`), `build`, `start`, `test` (`vitest run`), `generate:types`, `import:wp` (Task 6).
@@ -56,7 +58,12 @@ it("boots and creates an API-key user", async () => {
   const payload = await getTestPayload();
   const user = await payload.create({
     collection: "users",
-    data: { email: "bot@test.local", password: "x".repeat(16), enableAPIKey: true, apiKey: "k-test" },
+    data: {
+      email: "bot@test.local",
+      password: "x".repeat(16),
+      enableAPIKey: true,
+      apiKey: "k-test",
+    },
   });
   expect(user.enableAPIKey).toBe(true);
 });
@@ -69,10 +76,12 @@ it("boots and creates an API-key user", async () => {
 ### Task 2: Access control, media, old-URL redirects
 
 **Files:**
+
 - Create: `payload/src/access.ts`, `payload/src/collections/Media.ts`, `payload/src/app/wp-content/uploads/[...path]/route.ts`
 - Test: `payload/tests/access.test.ts`, `payload/tests/mediaRedirect.test.ts`
 
 **Interfaces:**
+
 - Produces: `authenticated: Access` (`({ req }) => Boolean(req.user)`) and `anyone: Access` in `payload/src/access.ts`. **Every** collection/global after this uses `access: { read: authenticated, create: authenticated, update: authenticated, delete: authenticated }`. `Media.read` is the only `anyone`.
 - Produces: `media` collection: `upload: { staticDir: process.env.MEDIA_DIR ?? "media", mimeTypes: ["image/*", "audio/*"] }`, fields `alt` (text), `caption` (text), `wpPath` (text, unique, indexed, admin readOnly; the old URL normalized by `wpUploadPath`).
 - Produces: `wpUploadPath(url: string): string` (exported from the route module or a sibling `payload/src/lib/wpUploadPath.ts`). It normalizes an old URL to its `wp-content/uploads/…` path: query stripped, percent-decoded.
@@ -88,10 +97,12 @@ it("boots and creates an API-key user", async () => {
 ### Task 3: Taxonomies, SEO group, words schema
 
 **Files:**
+
 - Create: `payload/src/fields/seo.ts`, `payload/src/collections/WordTypes.ts`, `payload/src/collections/Themen.ts`, `payload/src/collections/Words.ts`
 - Modify: `payload/src/payload.config.ts`, `payload/tests/access.test.ts`
 
 **Interfaces:**
+
 - Produces: `seoField: GroupField` named `seo` with fields `title`, `description` (textarea), `canonical`, `ogTitle`, `ogDescription`, `ogImage` (upload → media), `twitterTitle`, `twitterDescription`, `noindex` (checkbox), `nofollow` (checkbox). This is the subset of the Yoast fields the site renders (`PostTypeSeoFragment` / `TaxonomySeoFragment` in `src/services/fragments/fragments.ts`). `readingTime` is dropped (it is computed).
 - Produces collections (all with `wpId: number` unique+indexed, admin readOnly, and `slug: text` unique+indexed):
   - `word-types`: `name`.
@@ -108,12 +119,14 @@ it("boots and creates an API-key user", async () => {
 ### Task 4: Derived word fields
 
 **Files:**
+
 - Create: `payload/src/lib/wordDerived.ts`, `payload/src/hooks/deriveWordFields.ts`
 - Modify: `payload/src/collections/Words.ts` (`derived` group + `hooks.beforeChange`), `src/utils/wordHelper.ts` (re-export the moved functions), `src/pages/api/search/index.json.ts` (import `getWordComponents` from `payload-app/word-derived`), root `package.json` (`"payload-app": "workspace:*"`)
 - Move deps: `de-compromise`, `natural`, `hypher` (+ `hyphenation.de` or whichever pattern pkg `src/utils/hypher.ts` uses) are also declared in `payload/package.json`.
 - Test: `payload/tests/wordDerived.test.ts`, `payload/tests/words.test.ts`
 
 **Interfaces:**
+
 - Produces in `payload/src/lib/wordDerived.ts` (moved verbatim, same behavior): `countLetters`, `getWordType`, `translateNlpTags`, `WordTags`, `hypher`, `getWordComponents(word: string, minLen = 4): string[]`. New: `soundexCode(word: string): string` (`new natural.SoundEx().process`, `""` for empty), `wordGroupOf(word: string): string` (first char uppercased if `/\p{L}/u`, else `""`), and
   `deriveWordFields(berlinerisch: string): { wordGroup: string; characterLength: number; syllablesCount: number; consonantsCount: number; vowelsCount: number; nlpTags: WordTags[]; wordComponents: string[]; soundexCode: string }`. `nlpTags` = `translateNlpTags(getWordType(b))`, `syllablesCount` = `b ? hypher.hyphenate(b).length : 0`.
 - `src/utils/wordHelper.ts` keeps its public API. The moved names are re-exported from `payload-app/word-derived`, so existing callers and tests stay unchanged.
@@ -123,7 +136,10 @@ it("boots and creates an API-key user", async () => {
 
 ```ts
 it.each([
-  ["aasen", "A"], ["Ärger", "Ä"], ["08/15", ""], ["", ""],
+  ["aasen", "A"],
+  ["Ärger", "Ä"],
+  ["08/15", ""],
+  ["", ""],
 ])("wordGroupOf(%s) = %s", (w, g) => expect(wordGroupOf(w)).toBe(g));
 
 it("derives fields for a multi-word headword", () => {
@@ -134,11 +150,17 @@ it("derives fields for a multi-word headword", () => {
 });
 
 it("handles the empty headword", () => {
-  expect(deriveWordFields("")).toMatchObject({ syllablesCount: 0, characterLength: 0, soundexCode: "", wordComponents: [] });
+  expect(deriveWordFields("")).toMatchObject({
+    syllablesCount: 0,
+    characterLength: 0,
+    soundexCode: "",
+    wordComponents: [],
+  });
 });
 ```
 
-  In `words.test.ts`: creating `{ berlinerisch: "aasen" }` stores `derived.wordGroup === "A"`. Updating `berlinerisch` to `"Bulette"` updates `derived.wordGroup` to `"B"`.
+In `words.test.ts`: creating `{ berlinerisch: "aasen" }` stores `derived.wordGroup === "A"`. Updating `berlinerisch` to `"Bulette"` updates `derived.wordGroup` to `"B"`.
+
 - [ ] **Step 2: Run, expect FAIL.**
 - [ ] **Step 3: Move the helpers**, add the hook (`beforeChange` sets `data.derived = deriveWordFields(data.berlinerisch ?? originalDoc.berlinerisch ?? "")`), wire the re-exports.
 - [ ] **Step 4: Run** `(cd payload && rtk vitest run)` **and** the existing Astro tests that cover the moved code: `pnpm vitest run src/tests/unit/utils/wordHelper.test.ts src/tests/unit/pages/api/search/index.json.test.ts`. Expected: all PASS, Astro tests unchanged.
@@ -148,10 +170,12 @@ it("handles the empty headword", () => {
 ### Task 5: Posts, pages, globals
 
 **Files:**
+
 - Create: `payload/src/collections/Posts.ts`, `payload/src/collections/Pages.ts`, `payload/src/globals/Navigation.ts`, `payload/src/globals/Affiliate.ts`, `payload/src/globals/Company.ts`
 - Modify: `payload/src/payload.config.ts`, `payload/tests/access.test.ts`
 
 **Interfaces:**
+
 - `posts` (drafts): `wpId`, `slug`, `title`, `excerpt` (textarea, HTML stripped), `publishedAt` (date), `featuredImage` (upload), `content` (richText, Lexical with default features incl. upload + blockquote), `seo`.
 - `pages`: `wpId`, `slug`, `title`, `content` (richText), `seo`. Imported: `datenschutz`, `impressum`.
 - Global `navigation`: arrays `main`, `footer1`, `footer2`, each item `{ title, link, rel?, description? }` (same shape as `MenuItem` in `src/services/queries/getMenu.ts`; WP menus `Main Menu`, `Footer Nav 1`, `Footer Nav 2`).
@@ -167,10 +191,12 @@ it("handles the empty headword", () => {
 ### Task 6: WordPress import
 
 **Files:**
+
 - Create: `payload/src/import/wp.ts` (GraphQL fetch + queries), `payload/src/import/mappers.ts` (pure WP → Payload data), `payload/src/import/html.ts` (HTML → Lexical), `payload/src/import/run.ts` (orchestration)
 - Test: `payload/tests/import/mappers.test.ts`, `payload/tests/import/html.test.ts`, `payload/tests/import/run.test.ts`, fixtures `payload/tests/import/fixtures/{word-aasen,word-wa,post}.json` (hand-trimmed WPGraphQL responses; **public words only**, these three are on the live site)
 
 **Interfaces:**
+
 - `wpGraphql<T>(query: string, variables?: Record<string, unknown>): Promise<T>`: POST to `WP_API` with Basic Auth from `WP_AUTH_USER`/`WP_AUTH_PASS` (same as `src/services/wpGraphqlClient.ts`). Throws on HTTP or GraphQL errors. Queries copy the field selections of `src/services/fragments/fragments.ts` + `src/services/queries/*` as plain strings, **plus `databaseId`** on every node. Words paginate 100/page sequentially, both stati `DRAFT`, `PUBLISH`.
 - `htmlToLexical(html: string, config: SanitizedConfig): Promise<SerializedEditorState>` via `convertHTMLToLexical` + `editorConfigFactory.default` from `@payloadcms/richtext-lexical` and `JSDOM` (add `jsdom`).
 - `type ImportRefs = { mediaIdByUrl: Map<string, number>; wordTypeIdByName: Map<string, number>; themaIdBySlug: Map<string, number>; wordIdByWpId: Map<number, number> }`. Media URLs are keyed by `wpUploadPath(url)` (Task 2).
@@ -201,6 +227,7 @@ it("handles the empty headword", () => {
 ### Task 7: Docker image, compose service, CI
 
 **Files:**
+
 - Create: `payload/Dockerfile`, `payload/.dockerignore`
 - Modify: `payload/next.config.mjs` (`output: "standalone"`), `payload/src/payload.config.ts` (`db: postgresAdapter({ …, prodMigrations: migrations })`), create `payload/src/migrations/` via `payload migrate:create initial`
 - Modify: `compose.yaml` (service `cms`: image `ghcr.io/felix-berlin/berliner-schnauze-cms:${TAG:-latest}`, `depends_on: postgres (healthy)`, volume `media:/app/media`, `MEDIA_DIR=/app/media`, `env_file .env`, port `3001`, healthcheck `fetch('http://localhost:3001/api/users/me')` (`200` with `user: null`))
@@ -209,6 +236,7 @@ it("handles the empty headword", () => {
 - Modify: `CLAUDE.md` (Commands: `pnpm cms:dev`, `pnpm cms:test`, `pnpm --filter payload-app import:wp`; one line under Architecture about the `payload/` package)
 
 **Interfaces:**
+
 - Consumes everything above. Produces image `ghcr.io/felix-berlin/berliner-schnauze-cms`.
 
 - [ ] **Step 1: Multi-stage Dockerfile**: build stage `node:24-slim` with `pnpm --filter payload-app build`, runtime `gcr.io/distroless/nodejs24-debian13:nonroot` copying `.next/standalone`, `.next/static`, `public`. The build must not need a database (`next build` with Payload only reads config). If it does, set `PAYLOAD_DISABLE_DB_CONNECT` or document a dummy `DATABASE_URL` build-arg. Never bake a real one.

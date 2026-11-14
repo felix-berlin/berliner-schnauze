@@ -160,8 +160,8 @@ Run: `pnpm vitest run src/tests/unit/stores/notificationPermission.test.ts` — 
 Create `src/stores/notificationPermission.ts`:
 
 ```ts
-import { atom } from "nanostores";
 import { trackEvent } from "@utils/analytics";
+import { atom } from "nanostores";
 
 export type NotificationPermissionState = NotificationPermission | "unsupported";
 

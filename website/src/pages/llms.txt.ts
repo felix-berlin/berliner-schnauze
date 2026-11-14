@@ -6,12 +6,17 @@ import { fetchAllWords } from "@services/payload/words.ts";
 import { setPageCache } from "@utils/cacheHeaders.ts";
 import { docPath } from "payload-app/routes";
 
-const oneLine = (text: string | null | undefined): string => (text ?? "").replace(/\s+/g, " ").trim();
+const oneLine = (text: string | null | undefined): string =>
+  (text ?? "").replace(/\s+/g, " ").trim();
 
 /** llmstxt.org index of the site, built from the CMS so counts and lists never go stale. */
 export const GET: APIRoute = async ({ site: origin }) => {
   const site = origin ?? "https://berliner-schnauze.wtf";
-  const [words, themen, posts] = await Promise.all([fetchAllWords(), fetchAllThemen(), fetchAllPosts()]);
+  const [words, themen, posts] = await Promise.all([
+    fetchAllWords(),
+    fetchAllThemen(),
+    fetchAllPosts(),
+  ]);
   const link = (title: string, path: string, note?: string) =>
     `- [${title}](${new URL(path, site)})${note ? `: ${note}` : ""}`;
   const count = words.length.toLocaleString("de-DE");
@@ -35,18 +40,40 @@ export const GET: APIRoute = async ({ site: origin }) => {
     "",
     "## Magazin",
     "",
-    link("Magazin", "/magazin", "Wissensartikel zu Geschichte, Herkunft und Kuriositäten des Berliner Dialekts"),
+    link(
+      "Magazin",
+      "/magazin",
+      "Wissensartikel zu Geschichte, Herkunft und Kuriositäten des Berliner Dialekts",
+    ),
     // The imported descriptions start with the title again.
     ...posts.map((p) => {
       const description = oneLine(p.meta?.description);
-      return link(p.title, docPath("posts", p.slug), (description.startsWith(p.title) ? description.slice(p.title.length).trim() : description) || undefined);
+      return link(
+        p.title,
+        docPath("posts", p.slug),
+        (description.startsWith(p.title)
+          ? description.slice(p.title.length).trim()
+          : description) || undefined,
+      );
     }),
     "",
     "## Mitmachen und Lernen",
     "",
-    link("Berliner oder Nicht?", "/games/berliner-oder-nicht", "Swipe-Spiel: Gehört das Wort zum Berliner Dialekt oder nicht? Kostenlos, ohne Anmeldung"),
-    link("Anki-Karteikarten", "/anki", "Lerndeck zum Berlinerisch-Lernen: ein kostenloses Lite-Deck und das kostenpflichtige Full-Deck mit allen Wörtern und Beispielen"),
-    link("Wort vorschlagen", "/wort-vorschlagen", "fehlendes Wort oder fehlende Redewendung melden"),
+    link(
+      "Berliner oder Nicht?",
+      "/games/berliner-oder-nicht",
+      "Swipe-Spiel: Gehört das Wort zum Berliner Dialekt oder nicht? Kostenlos, ohne Anmeldung",
+    ),
+    link(
+      "Anki-Karteikarten",
+      "/anki",
+      "Lerndeck zum Berlinerisch-Lernen: ein kostenloses Lite-Deck und das kostenpflichtige Full-Deck mit allen Wörtern und Beispielen",
+    ),
+    link(
+      "Wort vorschlagen",
+      "/wort-vorschlagen",
+      "fehlendes Wort oder fehlende Redewendung melden",
+    ),
     link("Spenden", "/spenden", "das Projekt unterstützen"),
     "",
     "## Optional",

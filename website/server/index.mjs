@@ -47,12 +47,27 @@ const brAsset = (pathname) => {
   return brAssets.get(name).then((body) => ({ body, type: ASSET_TYPES[extname(name)] }));
 };
 
+// The one required `access: "secret"` variable (astro.config.mjs); unchecked it fails only on the first image. Not via
+// env.validateSecrets: that also runs at build time, and the build has no secrets.
+if (!process.env.IMAGOR_SECRET) {
+  console.error("IMAGOR_SECRET is not set");
+  process.exit(1);
+}
+
 process.env.ASTRO_NODE_AUTOSTART = "disabled";
 const { handler } = await import("../dist/server/entry.mjs");
 
 const server = createServer((req, res) => {
   // www → canonical host. The target is fixed: a header-derived one would redirect anywhere (Host: www.evil.com).
-  const { pathname, search } = new URL(req.url ?? "/", "http://localhost");
+  let url;
+  try {
+    url = new URL(req.url ?? "/", "http://localhost");
+  } catch {
+    // "//" or "//:x" read as a protocol-relative URL with a bad host: an unhandled throw here kills the process.
+    res.writeHead(400).end();
+    return;
+  }
+  const { pathname, search } = url;
   const hosts = [req.headers.host, req.headers["x-forwarded-host"]].map((h) =>
     String(h ?? "")
       .split(",")[0]

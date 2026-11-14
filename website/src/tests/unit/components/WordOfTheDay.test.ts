@@ -1,21 +1,26 @@
 import WordOfTheDay from "@components/WordOfTheDay.vue";
-import { mount } from "@vue/test-utils";
+import { enableAutoUnmount, mount } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { ref } from "vue";
 
 const mockWordOfTheDay = ref<{
   loading: boolean;
   error: boolean;
-  word: { berlinerisch: string; slug: string } | null;
+  timestamp?: number;
+  word: { berlinerisch: string; expiresAt?: number; slug: string } | null;
 }>({
   error: false,
   loading: false,
+  timestamp: 0,
   word: { berlinerisch: "Kiez", slug: "kiez" },
 });
 
-vi.mock("@stores/wordOfTheDay.ts", () => ({
-  $wordOfTheDay: {},
-}));
+const { getWordOfTheDay } = vi.hoisted(() => ({ getWordOfTheDay: vi.fn() }));
+
+vi.mock("@stores/wordOfTheDay.ts", async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>();
+  return { $wordOfTheDay: {}, expiresAt: actual.expiresAt, getWordOfTheDay };
+});
 
 vi.mock("@nanostores/vue", () => ({
   useStore: vi.fn(() => mockWordOfTheDay),
@@ -41,12 +46,17 @@ const mountComponent = () =>
     },
   });
 
+// Every mount reads the same store ref: an old one left mounted would count down too.
+enableAutoUnmount(afterEach);
+
 describe("WordOfTheDay.vue", () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    getWordOfTheDay.mockClear();
     mockWordOfTheDay.value = {
       error: false,
       loading: false,
+      timestamp: 0,
       word: { berlinerisch: "Kiez", slug: "kiez" },
     };
   });
@@ -119,16 +129,16 @@ describe("WordOfTheDay.vue", () => {
     expect(wrapper.find(".mock-confetti").exists()).toBe(false);
   });
 
-  it("shows confetti on focus", async () => {
+  it("shows confetti while the word link has focus", async () => {
     const wrapper = mountComponent();
-    await wrapper.trigger("focus");
+    await wrapper.trigger("focusin");
     expect(wrapper.find(".mock-confetti").exists()).toBe(true);
   });
 
-  it("hides confetti on blur", async () => {
+  it("hides confetti when focus leaves", async () => {
     const wrapper = mountComponent();
-    await wrapper.trigger("focus");
-    await wrapper.trigger("blur");
+    await wrapper.trigger("focusin");
+    await wrapper.trigger("focusout");
     expect(wrapper.find(".mock-confetti").exists()).toBe(false);
   });
 
@@ -155,10 +165,36 @@ describe("WordOfTheDay.vue", () => {
     });
   });
 
-  it("counts down to local midnight", () => {
-    vi.setSystemTime(new Date(2026, 0, 1, 22, 58, 30));
+  it("counts down to the server's expiry (Berlin midnight), not local midnight", () => {
+    vi.setSystemTime(new Date(2026, 0, 1, 12, 0, 0));
+    mockWordOfTheDay.value = {
+      error: false,
+      loading: false,
+      word: { berlinerisch: "Kiez", expiresAt: Date.now() + 3_690_000, slug: "kiez" },
+    };
     const wrapper = mountComponent();
     const spans = wrapper.findAll(".c-word-of-the-day .update span").map((s) => s.text());
     expect(spans).toEqual(["01", "01", "30"]);
+  });
+
+  it("shows 00:00:00 and does not fetch for a word without an expiry", async () => {
+    const wrapper = mountComponent();
+    vi.advanceTimersByTime(3000);
+    await wrapper.vm.$nextTick();
+    const spans = wrapper.findAll(".c-word-of-the-day .update span").map((s) => s.text());
+    expect(spans).toEqual(["00", "00", "00"]);
+    expect(getWordOfTheDay).not.toHaveBeenCalled();
+  });
+
+  it("fetches the next word when the countdown reaches zero", async () => {
+    mockWordOfTheDay.value = {
+      error: false,
+      loading: false,
+      word: { berlinerisch: "Kiez", expiresAt: Date.now() + 2000, slug: "kiez" },
+    };
+    const wrapper = mountComponent();
+    vi.advanceTimersByTime(3000);
+    await wrapper.vm.$nextTick();
+    expect(getWordOfTheDay).toHaveBeenCalledTimes(1);
   });
 });

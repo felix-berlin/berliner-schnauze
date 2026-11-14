@@ -19,7 +19,12 @@
     "coverage",
     "dist",
     "CHANGELOG.md",
-    "payload/src/app/(payload)/admin/importMap.js",
-    "website/src/styles/tokens/_tokens.generated.scss"
+    "website/src/styles/tokens/_tokens.generated.scss",
+    "data",
+    "payload/src/migrations",
+    "payload/src/payload-types.ts",
+    "docs/design",
+    "pnpm-workspace.yaml",
+    "payload/src/app/(payload)"
   ]
 }

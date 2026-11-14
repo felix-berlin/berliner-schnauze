@@ -7,7 +7,10 @@ import type { Word } from "../payload-types";
 
 export type RichText = NonNullable<Word["infoText"]>;
 
-const editorConfigs = new WeakMap<SanitizedConfig, ReturnType<typeof editorConfigFactory.default>>();
+const editorConfigs = new WeakMap<
+  SanitizedConfig,
+  ReturnType<typeof editorConfigFactory.default>
+>();
 
 type LexicalNode = { type?: string; children?: LexicalNode[]; [k: string]: unknown };
 
@@ -18,7 +21,8 @@ type LexicalNode = { type?: string; children?: LexicalNode[]; [k: string]: unkno
  */
 export async function htmlToLexical(html: string, config: SanitizedConfig): Promise<RichText> {
   let editorConfig = editorConfigs.get(config);
-  if (!editorConfig) editorConfigs.set(config, (editorConfig = editorConfigFactory.default({ config })));
+  if (!editorConfig)
+    editorConfigs.set(config, (editorConfig = editorConfigFactory.default({ config })));
 
   const doc = new JSDOM(escapeUrlBrackets(html)).window.document;
   for (const img of doc.querySelectorAll("img")) {
@@ -30,9 +34,15 @@ export async function htmlToLexical(html: string, config: SanitizedConfig): Prom
 
   // Lexical's DOM import drops `rel`: remember the sponsored (affiliate) urls and set the link field after.
   const sponsored = new Set(
-    [...doc.querySelectorAll("a[href]")].filter((a) => /\bsponsored\b/i.test(a.getAttribute("rel") ?? "")).map((a) => a.getAttribute("href")),
+    [...doc.querySelectorAll("a[href]")]
+      .filter((a) => /\bsponsored\b/i.test(a.getAttribute("rel") ?? ""))
+      .map((a) => a.getAttribute("href")),
   );
-  const state = convertHTMLToLexical({ editorConfig: await editorConfig, html: doc.body.innerHTML, JSDOM }) as unknown as RichText;
+  const state = convertHTMLToLexical({
+    editorConfig: await editorConfig,
+    html: doc.body.innerHTML,
+    JSDOM,
+  }) as unknown as RichText;
   if (sponsored.size) markSponsored(state.root as LexicalNode, sponsored);
   return state;
 }
@@ -45,4 +55,3 @@ function markSponsored(node: LexicalNode, urls: Set<string | null>) {
 
 /** A literal `<https://...>` (Wikimedia attribution) must stay text, the parser would swallow it as a tag. */
 const escapeUrlBrackets = (html: string): string => html.replace(/<(?=https?:)/gi, "&lt;");
-

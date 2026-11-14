@@ -6,12 +6,10 @@
     data-content-name="Word of the Day"
     :data-content-piece="currentWord?.word?.berlinerisch ?? ''"
     :data-content-target="currentWord?.word?.slug ? routeToWord(currentWord.word.slug) : undefined"
-    role="link"
-    tabindex="0"
     @mouseover="celebrate = true"
     @mouseout="celebrate = false"
-    @focus="celebrate = true"
-    @blur="celebrate = false"
+    @focusin="celebrate = true"
+    @focusout="celebrate = false"
   >
     <div
       v-tooltip="{
@@ -59,11 +57,11 @@ import ConfettiEffect from "@components/ConfettiEffect.vue";
 import SingleLoader from "@components/SingleLoader.vue";
 import { useContentTracking } from "@composables/useContentTracking";
 import { useStore } from "@nanostores/vue";
-import { $wordOfTheDay } from "@stores/wordOfTheDay.ts";
+import { $wordOfTheDay, expiresAt, getWordOfTheDay } from "@stores/wordOfTheDay.ts";
 import { routeToWord } from "@utils/helpers.ts";
 import { useIntervalFn, useNow } from "@vueuse/core";
 import Crown from "virtual:icons/lucide/crown";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 const root = ref<HTMLElement | null>(null);
 useContentTracking(root);
@@ -76,17 +74,20 @@ const now = useNow({ scheduler: (cb) => useIntervalFn(cb, 1000) });
 
 const pad = (num: number): string => num.toString().padStart(2, "0");
 
-/** Hours / minutes / seconds left until local midnight. */
-const timeToUpdate = computed(() => {
-  const n = now.value;
-  const midnight = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1);
-  const totalSeconds = Math.floor((midnight.getTime() - n.getTime()) / 1000);
+/** Hours / minutes / seconds left until the server switches the word (Berlin midnight). */
+const secondsLeft = computed(() =>
+  Math.max(0, Math.floor((expiresAt(currentWord.value) - now.value.getTime()) / 1000)),
+);
 
-  return {
-    hours: pad(Math.floor(totalSeconds / 3600) % 24),
-    minutes: pad(Math.floor(totalSeconds / 60) % 60),
-    seconds: pad(totalSeconds % 60),
-  };
+const timeToUpdate = computed(() => ({
+  hours: pad(Math.floor(secondsLeft.value / 3600)),
+  minutes: pad(Math.floor(secondsLeft.value / 60) % 60),
+  seconds: pad(secondsLeft.value % 60),
+}));
+
+// The countdown ran out on an open page: fetch the new word.
+watch(secondsLeft, (left, before) => {
+  if (left === 0 && before > 0) void getWordOfTheDay();
 });
 </script>
 

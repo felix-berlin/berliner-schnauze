@@ -11,9 +11,19 @@ const UPDATE_CHECK_MS = 60 * 60 * 1000;
 // If the waiting worker never takes control (it went redundant), navigate anyway.
 const SWITCH_TIMEOUT_MS = 3000;
 
-const updatedVersion = sessionStorage.getItem(PWA_UPDATED_KEY);
+// Blocked storage (privacy settings) throws: without the guard the worker below would never register.
+const takeUpdatedVersion = (): string | null => {
+  try {
+    const value = sessionStorage.getItem(PWA_UPDATED_KEY);
+    if (value) sessionStorage.removeItem(PWA_UPDATED_KEY);
+    return value;
+  } catch {
+    return null;
+  }
+};
+
+const updatedVersion = takeUpdatedVersion();
 if (updatedVersion) {
-  sessionStorage.removeItem(PWA_UPDATED_KEY);
   const shown = createToastNotify({
     message: `App erfolgreich auf Version ${updatedVersion} aktualisiert.`,
     showClose: true,
@@ -128,7 +138,11 @@ const updateSW = registerSW({
 });
 
 function switchNow(then: () => void) {
-  sessionStorage.setItem(PWA_UPDATED_KEY, version);
+  try {
+    sessionStorage.setItem(PWA_UPDATED_KEY, version);
+  } catch {
+    // No success toast after the reload, the update still goes through.
+  }
   // Another tab already switched: no worker is waiting any more, this page only needs the reload.
   if (switched) return then();
   afterSwitch = then;

@@ -42,6 +42,7 @@
 ### Task 0: Handoff into the repo
 
 **Files:**
+
 - Create: `docs/design/bon/SPEC.md` (from `bon-handoff.zip`, identical to `SPEC (1).md`), `docs/design/bon/design/*.dc.html`, `docs/design/bon/ds/*`, `docs/design/bon/README.md` (3 lines like `docs/design/wortseite/README.md`)
 - Modify: `website/CLAUDE.md` (BON paragraph: pointer to `docs/design/bon/SPEC.md`, „copy binding, deviations in the plan“)
 
@@ -51,11 +52,13 @@
 ### Task 1: Server: reveal answers one at a time
 
 **Files:**
+
 - Modify: `website/src/utils/bonDeck.ts` (`DealtCard`), `website/src/services/bonPool.ts`, `website/src/services/bonGame.ts`, `website/src/utils/bonSchema.ts`, `website/src/pages/api/bon/next.ts`, `website/src/pages/api/bon/finish.ts`, `website/src/utils/rateLimit.ts`
 - Create: `website/src/pages/api/bon/answer.ts`
 - Test: `website/src/tests/unit/pages/api/bon.test.ts`, `website/src/tests/unit/utils/bonDeck.test.ts`, `website/src/tests/unit/utils/rateLimit.test.ts`
 
 **Interfaces:**
+
 - Produces:
   - `DealtCard = { id; word; isReal; translation?; slug?: string; category?: "invented" | "hochdeutsch"; answer?: boolean; answeredAt?: number }`. The last two are set only by `answer`. Everything lives in `bon-games.cards` (JSON), **so no migration**.
   - `answerSchema = z.strictObject({ token, card: z.string().max(20), real: z.boolean() })`. `finishSchema` loses `answers` (no client uses it yet).
@@ -84,12 +87,14 @@
 ### Task 2: `useBon` as a phase machine on top of the API
 
 **Files:**
+
 - Create: `website/src/services/bonGameApi.ts`
 - Modify (rewrite): `website/src/composable/useBon.ts`
 - Delete: `website/src/stores/savedBon.ts`, the resume parts in `website/src/tests/unit/stores/bonPersistence.test.ts`
 - Test: `website/src/tests/unit/composable/useBon.test.ts` (rewrite, `fetch` mocked), `website/src/tests/unit/services/bonGameApi.test.ts`
 
 **Interfaces:**
+
 - Consumes: `AnswerReply`, the routes from Task 1.
 - Produces:
   - `bonGameApi.ts`: `startRun(): Promise<{ token: string; cards: PublicCard[] }>`, `nextCards(token): Promise<PublicCard[]>`, `answerCard(token, card: string, real: boolean): Promise<AnswerReply>`, `finishRun(token, playerName?: string): Promise<FinishResult | undefined>`. `finishRun` returns `undefined` on 4xx/5xx; it never throws. The others throw `Error` with the server's `error` text (pattern: `post()` in `bonPlayerApi.ts`, reuse it, export it there).
@@ -118,12 +123,14 @@
 ### Task 3: Shell and start (`intro`)
 
 **Files:**
+
 - Modify (rebuild): `website/src/components/games/BerlinerOderNicht.vue` (= `BonGame` from the spec; the file name stays because of the page import and tests), `website/src/styles/components/_berliner-oder-nicht.scss`
 - Create: `website/src/components/games/BonIntro.vue`, `website/src/styles/components/_bon-intro.scss`
 - Modify: `website/src/pages/games/berliner-oder-nicht.astro` (remove the `u-sr-only` h1; the visible `h1.c-band` comes from the component)
 - Test: `website/src/tests/unit/components/games/BerlinerOderNicht.test.ts` (rewrite), `BonIntro.test.ts`
 
 **Interfaces:**
+
 - Consumes: `useBon()` (Task 2), `$bonStats` (`playerName`, `highScore`, `hasSeenIntro`), `BonPlayerCode` (restyled in Task 7, the props come from there).
 - Produces: `BonIntro` props `{ highScore: number; offline: boolean; linkRedeem: boolean }`, emits `start(name: string)`. The name is written to `$bonStats.playerName`, max 24.
 
@@ -139,10 +146,12 @@
 ### Task 4: HUD, card, answers, swipe
 
 **Files:**
+
 - Modify (rebuild): `website/src/components/games/BonHUD.vue`, `website/src/components/games/BonCard.vue` and their SCSS files
 - Test: `BonHUD.test.ts`, `BonCard.test.ts` (rewrite)
 
 **Interfaces:**
+
 - Consumes: `useBon` slices.
 - Produces:
   - `BonHUD` props `{ lives; score; streak; multiplier; playerLabel: string }`. `playerLabel` = name, or „Anonym“. The `#K7QX` tag comes in Task 11.
@@ -162,11 +171,13 @@
 ### Task 5: Feedback with timer, pause and lock
 
 **Files:**
+
 - Create: `website/src/components/games/BonFeedback.vue`, `website/src/styles/components/_bon-feedback.scss`
 - Modify: `BerlinerOderNicht.vue` (feedback slot, vibration, input lock)
 - Test: `website/src/tests/unit/components/games/BonFeedback.test.ts`, `BerlinerOderNicht.test.ts`
 
 **Interfaces:**
+
 - Consumes: `RoundEntry` (Task 2), `advance()`.
 - Produces: `BonFeedback` props `{ last: RoundEntry; gameOver: boolean }`, emits `next`. It controls its own timer; the parent only calls `advance()` on `next`.
 
@@ -185,11 +196,13 @@
 ### Task 6: Stack switch, error, result, „Deine Runde“
 
 **Files:**
+
 - Modify (rebuild): `website/src/components/games/BonResult.vue`, `_bon-result.scss` (or rename the existing file; check that one exists)
 - Modify: `BerlinerOderNicht.vue` (`loading`/`error`)
 - Test: `BonResult.test.ts` (rewrite), `BerlinerOderNicht.test.ts`
 
 **Interfaces:**
+
 - Consumes: `result`, `history`, `endedEarly`, `bestStreak`, `$bonStats.highScore` (read **before** `over` updates it), `buildShareUrl`/`accuracyPercent` from `utils/bonShare.ts`.
 - Produces: `BonResult` props `{ result?: FinishResult; history: RoundEntry[]; score; bestStreak; previousHighScore: number; playerName: string; endedEarly: boolean }`, emits `restart`.
 
@@ -210,10 +223,12 @@
 ### Task 7: Restyle the player code to §12
 
 **Files:**
+
 - Modify: `website/src/components/games/BonPlayerCode.vue`, `website/src/styles/components/_bon-player-code.scss`
 - Test: `website/src/tests/unit/components/BonPlayerCode.test.ts`
 
 **Interfaces:**
+
 - Consumes: `createPlayerCode`, `redeemPlayerCode`, `applyPlayerStats`, `playerLink`, `takeRedeemCode` (`bonPlayerApi.ts`, unchanged), `normalizeCode` from `payload-app/bon-player` **only if it is client-safe**. It imports `node:crypto`, so no: normalize in the client to „uppercase, strip whitespace/`-`/`_`, check 12 characters from the alphabet“ and copy the alphabet into `utils/`. The server normalizes again.
 - Produces: props `{ mode?: 'none' | 'redeem' }` (start: `redeem` via „Spielercode einlösen“), emits `close`.
 
@@ -232,16 +247,19 @@
 ### Task 8: Ranking server: periods, best game, tag, endpoint
 
 Rulings for the spec's open points (my call, noted in `docs/design/bon/SPEC.md` §16):
+
 - **Point 4:** each pseudonym counts with its **best game in the period**. The pseudonym is `player` if set, otherwise `visitor`. On a tie, the earlier `finishedAt` wins.
 - **Point 4:** the tag shows **only for „Anonym“**.
 - **Point 3:** after a switch, the old pseudonym is reachable only through its own code, as built.
 
 **Files:**
+
 - Create: `payload/src/lib/bonRanking.ts` (pure, export `payload-app/bon-ranking` in `payload/package.json` like `bon-rules`), `website/src/services/bonRanking.ts` (Payload query + `ttl` cache), `website/src/pages/api/bon/leaderboard.ts`
 - Modify: `website/src/pages/api/bon/start.ts` (response gains `tag`), `website/src/utils/rateLimit.ts`
 - Test: `payload/src/lib/bonRanking.test.ts` (or wherever `bonRules` tests live), `website/src/tests/unit/pages/api/bon.test.ts`
 
 **Interfaces:**
+
 - Produces:
   - `type Period = "week" | "month" | "all"`.
   - `periodStart(period, now: Date): Date | undefined`. Week = Monday 00:00 Europe/Berlin, month = the 1st 00:00 Europe/Berlin, all = `undefined`.
@@ -263,11 +281,13 @@ Rulings for the spec's open points (my call, noted in `docs/design/bon/SPEC.md` 
 ### Task 9: Name filter and „Namen melden“ (launch blocker §14)
 
 **Files:**
+
 - Create: `payload/src/lib/bonNames.ts` (pure, export `payload-app/bon-names`), `website/src/pages/api/bon/report-name.ts`, a Payload migration (rule: `.claude/rules/payload-migrations.md`, expand only, with a working `down` and `IF EXISTS`)
 - Modify: `payload/src/collections/BonGames.ts` (fields `nameReports: number, default 0`, `nameHidden: checkbox, default false`, both editable in the admin), `website/src/utils/bonSchema.ts` (`playerName` through `cleanName`), `website/src/services/bonRanking.ts`, `website/src/utils/rateLimit.ts`, `payload/src/payload-types.ts` (regenerate)
 - Test: `payload/src/lib/bonNames.test.ts`, `website/src/tests/unit/pages/api/bon.test.ts`
 
 **Interfaces:**
+
 - Produces:
   - `isOffensiveName(name: string): boolean`: normalizes (lowercase, umlauts → base letters, `0→o 1→i 3→e 4→a 5→s 7→t @→a $→s`, strips everything except a–z). It then checks for substrings from a short list (insults, slurs, Nazi codes like `heil`, `hitler`, `88` before normalization). The list lives in the same file as `const BLOCKED: string[]`.
   - `cleanName(name: string): string`: returns „Anonym“ when `isOffensiveName`, otherwise the name.
@@ -285,11 +305,13 @@ Rulings for the spec's open points (my call, noted in `docs/design/bon/SPEC.md` 
 ### Task 10: Leaderboard page
 
 **Files:**
+
 - Create: `website/src/pages/games/berliner-oder-nicht/rangliste.astro` (Layout, `<BonLeaderboard client:load />`), `website/src/components/games/BonLeaderboard.vue`, `website/src/styles/components/_bon-leaderboard.scss`, `website/src/services/bonLeaderboardApi.ts`
 - Modify: `website/src/components/games/BonIntro.vue` (link „Rangliste“ below the start; my call), sitemap only if the game page is in it (grep `berliner-oder-nicht` in `pages/sitemap-0.xml.ts`/services and add it the same way)
 - Test: `website/src/tests/unit/components/games/BonLeaderboard.test.ts`
 
 **Interfaces:**
+
 - Consumes: `GET /api/bon/leaderboard` (Task 8), `POST /api/bon/report-name` (Task 9), `BonPlayerCode` `mode: 'redeem'` (Task 7).
 - Produces: `fetchLeaderboard(period, offset, limit): Promise<LeaderboardReply>`, `reportName(id): Promise<void>`. The types are re-exported from `payload-app/bon-ranking` (type-only import, client-safe).
 
@@ -306,11 +328,13 @@ Rulings for the spec's open points (my call, noted in `docs/design/bon/SPEC.md` 
 ### Task 11: „Hier stehste“ in the result, tag in the HUD
 
 **Files:**
+
 - Create: `website/src/components/games/BonPlacement.vue` (+ SCSS)
 - Modify: `BonResult.vue`, `BerlinerOderNicht.vue` / `useBon.ts` (store `tag` from `start`, `playerLabel` = name or `Anonym #TAG`)
 - Test: `BonPlacement.test.ts`, `BonResult.test.ts`, `useBon.test.ts`
 
 **Interfaces:**
+
 - Consumes: `fetchLeaderboard("week", 0, 0)` → `me.around` (Task 10). It is called after `finishRun` returns a result.
 - Produces: `BonPlacement` props `{ around: PublicEntry[] }`.
 
@@ -325,6 +349,7 @@ Rulings for the spec's open points (my call, noted in `docs/design/bon/SPEC.md` 
 ### Task 12: Motion, E2E, docs
 
 **Files:**
+
 - Create: `website/src/utils/viewTransition.ts` (`vt(update: () => void, dir: string): void` exactly as in §13)
 - Modify: `BerlinerOderNicht.vue`, the SCSS files from Tasks 3–7, `website/src/tests/e2e/bon-game.spec.ts`, `website/CLAUDE.md` (BON paragraph: answer endpoint, cookie-free play, `savedBon` gone)
 - Test: `website/src/tests/unit/utils/viewTransition.test.ts`, `bon-game.spec.ts`

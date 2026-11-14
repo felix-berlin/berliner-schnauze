@@ -21,7 +21,7 @@
 
 ## Review Focus
 
-- **Polar upload failing partway through** (e.g. network drop after the file uploads but before the benefit PATCH) — the script must not delete the *old* file until the new one is confirmed attached to the benefit, so a partial failure never leaves the benefit with zero files.
+- **Polar upload failing partway through** (e.g. network drop after the file uploads but before the benefit PATCH) — the script must not delete the _old_ file until the new one is confirmed attached to the benefit, so a partial failure never leaves the benefit with zero files.
 - **A release with no matching Lite asset yet** (workflow hasn't run, or failed) — `getLiteDeckDownloadUrl()` must return `undefined` rather than throw, so the Astro build doesn't fail and the button just doesn't render.
 - **GitHub API rate limiting / transient 5xx** on the unauthenticated `releases/latest` call at build time — must degrade the same way as a missing asset (`undefined`, no thrown error, no failed production build).
 - **Re-running the workflow for the same release** (e.g. after a fix) — the benefit-file replace logic must be idempotent: if the "old" file id already equals the freshly uploaded one there is nothing to delete, and the code must not delete the file it just attached.
@@ -32,10 +32,12 @@
 ## Task 1: Version support in `build_anki_decks.py`
 
 **Files:**
+
 - Modify: `scripts/build_anki_decks.py`
 - Test: `scripts/test_build_anki_decks.py`
 
 **Interfaces:**
+
 - Produces: `build_decks(words, full_url, version="dev")` (now takes an optional third arg; existing two-arg call sites keep working); CLI `python scripts/build_anki_decks.py --version <str>` (default `"dev"`), writing `dist-anki/berlinerisch-{full,lite}-v<version>.apkg` and setting each deck's `description` to `"Version <version> · <ISO date>"`.
 
 - [ ] **Step 1: Write the failing test for the versioned description and filenames**
@@ -123,10 +125,12 @@ git commit -m "feat(anki): add --version flag to deck build script"
 ## Task 2: Polar upload script
 
 **Files:**
+
 - Create: `scripts/upload_anki_to_polar.py`
 - Test: `scripts/test_upload_anki_to_polar.py`
 
 **Interfaces:**
+
 - Consumes: nothing from Task 1 (takes a plain file path).
 - Produces: CLI `python scripts/upload_anki_to_polar.py <apkg_path> --version <str>`, reading env vars `POLAR_UPLOAD_TOKEN` (required), `ANKI_DECK_FULL_BENEFIT_ID` (required), `POLAR_SANDBOX` (optional, `"true"`/`"false"`, default prod). Exits non-zero with a message on any failure. Exposes `upload_full_deck(path, token, benefit_id, version=None) -> str` (returns the new file id) for the test and for Task 4's local command.
 
@@ -396,9 +400,11 @@ git commit -m "feat(anki): add Polar full-deck upload script"
 ## Task 3: GitHub Actions release workflow
 
 **Files:**
+
 - Create: `.github/workflows/anki-release.yml`
 
 **Interfaces:**
+
 - Consumes: Task 1's `build_anki_decks.py --version <str>` CLI and Task 2's `upload_anki_to_polar.py <path> --version <str>` CLI.
 - Produces: nothing consumed by later tasks — this is the CI wiring.
 
@@ -481,10 +487,12 @@ git commit -m "ci(anki): publish decks to GitHub Release and Polar on production
 ## Task 4: Local dev slash commands
 
 **Files:**
+
 - Create: `.claude/commands/anki-build.md`
 - Create: `.claude/commands/anki-push-sandbox.md`
 
 **Interfaces:**
+
 - Consumes: Task 1's `build_anki_decks.py --version <str>` CLI and Task 2's `upload_anki_to_polar.py <path> --version <str>` CLI.
 - Produces: nothing consumed by later tasks.
 
@@ -492,7 +500,7 @@ git commit -m "ci(anki): publish decks to GitHub Release and Polar on production
 
 Create `.claude/commands/anki-build.md`:
 
-```markdown
+````markdown
 ---
 description: Build both Anki decks locally with a "-dev" version suffix and copy the Lite deck into public/downloads/ for local testing.
 ---
@@ -505,16 +513,20 @@ Run these steps in order:
    ```bash
    npx infisical run -- .venv-anki/bin/python scripts/build_anki_decks.py --version "<version>-dev"
    ```
-   substituting the actual version. This writes
-   `dist-anki/berlinerisch-{full,lite}-v<version>-dev.apkg`.
-3. Copy the Lite deck to the fixed path the dev server serves:
-   ```bash
-   cp dist-anki/berlinerisch-lite-v<version>-dev.apkg public/downloads/berlinerisch-lite.apkg
-   ```
+````
+
+substituting the actual version. This writes
+`dist-anki/berlinerisch-{full,lite}-v<version>-dev.apkg`. 3. Copy the Lite deck to the fixed path the dev server serves:
+
+```bash
+cp dist-anki/berlinerisch-lite-v<version>-dev.apkg public/downloads/berlinerisch-lite.apkg
+```
+
 4. Report the two file paths under `dist-anki/` and confirm the copy to
    `public/downloads/berlinerisch-lite.apkg` succeeded, so the user can
    restart/reload their local dev server and test the download.
-```
+
+````
 
 - [ ] **Step 2: Create the sandbox push command**
 
@@ -538,9 +550,11 @@ Run these steps in order:
    ```bash
    npx infisical run -- .venv-anki/bin/python scripts/upload_anki_to_polar.py \
      "<the file found in step 1>" --version "<version parsed from its filename>"
-   ```
+````
+
 4. Report the script's output (new file id) to the user.
-```
+
+````
 
 - [ ] **Step 3: Manually verify both commands end-to-end**
 
@@ -557,17 +571,19 @@ file.
 ```bash
 git add .claude/commands/anki-build.md .claude/commands/anki-push-sandbox.md
 git commit -m "chore(anki): add local build/sandbox-push slash commands"
-```
+````
 
 ---
 
 ## Task 5: `githubRelease.ts` service
 
 **Files:**
+
 - Create: `src/services/githubRelease.ts`
 - Test: `src/tests/unit/services/githubRelease.test.ts`
 
 **Interfaces:**
+
 - Consumes: nothing from earlier tasks.
 - Produces: `export const getLiteDeckDownloadUrl = (): Promise<string | undefined>`.
 
@@ -595,8 +611,14 @@ describe("getLiteDeckDownloadUrl", () => {
   it("returns the lite asset's download URL", async () => {
     const release = {
       assets: [
-        { browser_download_url: "https://example.com/full", name: "berlinerisch-full-v3.52.0.apkg" },
-        { browser_download_url: "https://example.com/lite", name: "berlinerisch-lite-v3.52.0.apkg" },
+        {
+          browser_download_url: "https://example.com/full",
+          name: "berlinerisch-full-v3.52.0.apkg",
+        },
+        {
+          browser_download_url: "https://example.com/lite",
+          name: "berlinerisch-lite-v3.52.0.apkg",
+        },
       ],
     };
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(makeResponse(true, release)));
@@ -638,7 +660,9 @@ describe("getLiteDeckDownloadUrl", () => {
 
   it("memoizes the result across calls within the same module instance", async () => {
     const release = {
-      assets: [{ browser_download_url: "https://example.com/lite", name: "berlinerisch-lite-v1.apkg" }],
+      assets: [
+        { browser_download_url: "https://example.com/lite", name: "berlinerisch-lite-v1.apkg" },
+      ],
     };
     const fetchMock = vi.fn().mockResolvedValue(makeResponse(true, release));
     vi.stubGlobal("fetch", fetchMock);
@@ -712,9 +736,11 @@ git commit -m "feat(anki): add githubRelease service for the live Lite download 
 ## Task 6: Wire `anki.astro` to the real Lite download link
 
 **Files:**
+
 - Modify: `src/pages/anki.astro`
 
 **Interfaces:**
+
 - Consumes: Task 5's `getLiteDeckDownloadUrl(): Promise<string | undefined>` from `@services/githubRelease.ts`.
 
 - [ ] **Step 1: Swap the import and the constant**

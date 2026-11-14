@@ -7,11 +7,11 @@ import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 
+import { BonGames } from "./collections/BonGames";
+import { BonPlayers } from "./collections/BonPlayers";
 import { CommentReports } from "./collections/CommentReports";
 import { Comments } from "./collections/Comments";
 import { CommentVotes } from "./collections/CommentVotes";
-import { BonGames } from "./collections/BonGames";
-import { BonPlayers } from "./collections/BonPlayers";
 import { Media } from "./collections/Media";
 import { Pages } from "./collections/Pages";
 import { Posts } from "./collections/Posts";

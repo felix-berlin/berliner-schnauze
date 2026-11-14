@@ -88,3 +88,8 @@ export const canonicalUrl = (pathname: string, site: URL | undefined): string =>
 
 /** JSON for a `<script type="application/ld+json">` via set:html: `<` escaped so a field can't close the tag. */
 export const jsonLd = (data: unknown): string => JSON.stringify(data).replace(/</g, "\\u003c");
+
+/** True when a key event lands in a text field, select or contenteditable: global shortcuts must leave it alone. */
+export const isEditableTarget = (target: EventTarget | null): boolean =>
+  target instanceof HTMLElement &&
+  (target.isContentEditable || target.matches("input, textarea, select"));

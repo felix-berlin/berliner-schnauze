@@ -34,12 +34,14 @@
 ### Task 1: Load Sentry lazily after page load + idle
 
 **Files:**
+
 - Create: `src/plugins/sentryInit.ts` (the current `Sentry.init(...)` moved verbatim)
 - Modify: `src/plugins/sentryBrowser.ts` (becomes the loader)
 - Modify: `astro.config.mjs:625` (`manualChunks` sentry rule)
 - Test: `src/tests/unit/plugins/sentryBrowser.test.ts` (create)
 
 **Interfaces:**
+
 - Produces: `sentryBrowser.ts` has no exports; side effect only: schedules `import("./sentryInit")` once after `load` + idle.
 - `sentryInit.ts`: side effect only (`Sentry.init`), no exports.
 
@@ -181,6 +183,7 @@ git commit -m "perf(sentry): initialize Sentry after load and idle"
 ### Task 2: Fix homepage CLS caused by the Berliner font swap
 
 **Files:**
+
 - Modify (one of, decided by measurement): `src/styles/objects/_index.scss` (`.o-index__header` / `.o-index__headline`) **or** `astro.config.mjs` fonts block (`fallbacks` of `Berliner`)
 - Test: `src/tests/e2e/index.spec.ts` (add CLS assertion)
 
@@ -203,15 +206,20 @@ In Chrome MCP on the e2e dev server, mobile viewport `412x823x1.75,mobile,touch`
 
 ```js
 // evaluate_script
-() => [...document.fonts].filter(f => f.family.startsWith("Berliner")).map(f => f.status)
+() => [...document.fonts].filter((f) => f.family.startsWith("Berliner")).map((f) => f.status);
 ```
 
 and compare `.o-index__header` height with the font loaded vs. with the request for `/_astro/fonts/<berliner-hash>.woff2` blocked (Playwright MCP `browser_route` to abort it, or DevTools request blocking):
 
 ```js
-() => ({ header: document.querySelector(".o-index__header").getBoundingClientRect().height,
-         h1: document.querySelector(".o-index__headline").getBoundingClientRect().height,
-         lines: Math.round(document.querySelector(".o-index__headline").getBoundingClientRect().height / parseFloat(getComputedStyle(document.querySelector(".o-index__headline")).lineHeight)) })
+() => ({
+  header: document.querySelector(".o-index__header").getBoundingClientRect().height,
+  h1: document.querySelector(".o-index__headline").getBoundingClientRect().height,
+  lines: Math.round(
+    document.querySelector(".o-index__headline").getBoundingClientRect().height /
+      parseFloat(getComputedStyle(document.querySelector(".o-index__headline")).lineHeight),
+  ),
+});
 ```
 
 Expected: the header height differs between the two states. Note both values at 320, 412 and 768 px width.
@@ -226,7 +234,10 @@ test("homepage header does not shift when the Berliner font swaps in", async ({ 
       new Promise<number>((resolve) => {
         let total = 0;
         new PerformanceObserver((list) => {
-          for (const e of list.getEntries() as unknown as { hadRecentInput: boolean; value: number }[]) {
+          for (const e of list.getEntries() as unknown as {
+            hadRecentInput: boolean;
+            value: number;
+          }[]) {
             if (!e.hadRecentInput) total += e.value;
           }
         }).observe({ type: "layout-shift", buffered: true });
@@ -245,18 +256,18 @@ Expected: FAIL (CLS ≥ 0.1). If it passes locally (font served fast from localh
 If Step 2 showed the headline line count changes on swap, reserve the larger height so a re-wrap cannot grow the header. In `src/styles/objects/_index.scss` `&__headline`:
 
 ```scss
-  &__headline {
-    font-size: butler-fn.fluid(29, 56, 320, 1260);
-    margin: 0;
-    // Berliner swaps in late (font-display: fallback); reserve its line box so
-    // the swap cannot change the header height (PSI CLS 0.141 on .c-facts-grid).
-    min-block-size: calc(2lh); // <- replace 2 with the line count measured WITH Berliner in Step 2
-  }
+&__headline {
+  font-size: butler-fn.fluid(29, 56, 320, 1260);
+  margin: 0;
+  // Berliner swaps in late (font-display: fallback); reserve its line box so
+  // the swap cannot change the header height (PSI CLS 0.141 on .c-facts-grid).
+  min-block-size: calc(2lh); // <- replace 2 with the line count measured WITH Berliner in Step 2
+}
 ```
 
 `lh` is Baseline Newly Available. If the measured line count differs per breakpoint, set it per breakpoint with `@include mx.breakpoint("xs") { min-block-size: calc(Nlh); }`.
 
-Option B (only if A cannot hold — e.g. the fallback is *taller* than Berliner so `min-block-size` doesn't prevent shrink-shift): in `astro.config.mjs` change the Berliner `fallbacks: ["Georgia", "serif"]` to a fallback Astro computes metrics for that exists on Linux/Android, then rebuild and check the generated `@font-face{... fallback: ...}` in `dist/index.html` has `size-adjust`.
+Option B (only if A cannot hold — e.g. the fallback is _taller_ than Berliner so `min-block-size` doesn't prevent shrink-shift): in `astro.config.mjs` change the Berliner `fallbacks: ["Georgia", "serif"]` to a fallback Astro computes metrics for that exists on Linux/Android, then rebuild and check the generated `@font-face{... fallback: ...}` in `dist/index.html` has `size-adjust`.
 
 - [ ] **Step 5: Run the e2e assertion to verify it passes**
 
@@ -279,6 +290,7 @@ git commit -m "perf(index): reserve headline height to prevent font-swap layout 
 ### Task 3: Long-term cache for hashed assets + CSP cleanup
 
 **Files:**
+
 - Modify: `public/_headers`
 
 **Interfaces:** none.
@@ -315,6 +327,7 @@ git commit -m "perf(cache): serve hashed assets as immutable and drop cloudflare
 ### Task 4: Correct footer image `sizes`
 
 **Files:**
+
 - Modify: `src/components/Footer.astro:37`
 
 **Interfaces:** none.
@@ -324,7 +337,7 @@ git commit -m "perf(cache): serve hashed assets as immutable and drop cloudflare
 On the e2e dev server, Chrome MCP, for each viewport width 360, 412, 568, 768, 1024, 1440: `emulate` the viewport, scroll to the footer, then:
 
 ```js
-() => Math.round(document.querySelector(".c-footer__farewell-image").getBoundingClientRect().width)
+() => Math.round(document.querySelector(".c-footer__farewell-image").getBoundingClientRect().width);
 ```
 
 Known data point: 412 px viewport → 186 px. Write down the table (viewport → width) and derive a `sizes` that is ≥ the rendered width at each breakpoint (round up to the nearest 10 px or use `vw` if it scales linearly). Example shape: `(min-width: 1024px) 400px, (min-width: 768px) 30vw, 46vw` — the real numbers come from the table.
@@ -336,7 +349,10 @@ Known data point: 412 px viewport → 186 px. Write down the table (viewport →
 At 412×823 DPR 1.75 the selected `currentSrc` width (from the `srcset` `w` descriptor) must be the smallest candidate ≥ 186 × 1.75 ≈ 326 px:
 
 ```js
-() => { const i = document.querySelector(".c-footer__farewell-image"); return { w: i.getBoundingClientRect().width, src: i.currentSrc }; }
+() => {
+  const i = document.querySelector(".c-footer__farewell-image");
+  return { w: i.getBoundingClientRect().width, src: i.currentSrc };
+};
 ```
 
 Screenshot the footer at 412 and 1440 px, light and dark — image sharp, layout unchanged.

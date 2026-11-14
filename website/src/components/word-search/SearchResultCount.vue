@@ -1,6 +1,9 @@
 <template>
-  <p v-if="searchState === 'ready'" class="c-word-search-list__result-count">
-    {{ searchResultCount }} {{ `Ergebnis${searchResultCount !== 1 ? "se" : ""}` }}
+  <!-- Always rendered: a live region must exist before its text changes, or nothing is announced. -->
+  <p class="c-word-search-list__result-count" aria-live="polite" aria-atomic="true">
+    <template v-if="searchState === 'ready'">
+      {{ searchResultCount }} {{ `Ergebnis${searchResultCount !== 1 ? "se" : ""}` }}
+    </template>
   </p>
 </template>
 

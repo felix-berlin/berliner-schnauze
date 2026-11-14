@@ -129,11 +129,10 @@ import {
   $toggleWordListFilterFlyout,
   resetAll,
 } from "@stores/wordList.ts";
-import { onClickOutside } from "@vueuse/core";
-import { useTimeout } from "@vueuse/core";
+import { onClickOutside, onKeyStroke, useTimeout } from "@vueuse/core";
 import FilterReset from "virtual:icons/lucide/filter-x";
 import X from "virtual:icons/lucide/x";
-import { computed, useTemplateRef } from "vue";
+import { computed, nextTick, useTemplateRef, watch } from "vue";
 
 const { closeOnClickOutside = true } = defineProps<{
   closeOnClickOutside?: boolean;
@@ -148,6 +147,30 @@ const searchMeta = useStore($searchMeta);
 const themenOptions = computed(() =>
   searchMeta.value.themen.map((t) => ({ label: t.name, value: t.slug })),
 );
+
+// Opening moves focus into the flyout; closing returns it to the opener, unless focus already went elsewhere.
+let opener: HTMLElement | null = null;
+watch(showWordListFilterFlyout, async (open) => {
+  if (open) {
+    opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    await nextTick();
+    wordListFilter.value?.querySelector<HTMLElement>("button")?.focus();
+  } else if (
+    !document.activeElement ||
+    document.activeElement === document.body ||
+    wordListFilter.value?.contains(document.activeElement)
+  ) {
+    opener?.focus();
+  }
+});
+
+// Handled Escapes are marked: a control that closed its own list first, the second WordFilter instance (page
+// and search modal both mount one), and the search dialog, which would otherwise close too.
+onKeyStroke("Escape", (e) => {
+  if (!showWordListFilterFlyout.value || e.defaultPrevented) return;
+  e.preventDefault();
+  $toggleWordListFilterFlyout();
+});
 
 onClickOutside(wordListFilter, () => {
   if (showWordListFilterFlyout.value && closeOnClickOutside) {

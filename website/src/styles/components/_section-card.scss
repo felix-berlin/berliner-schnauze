@@ -19,7 +19,10 @@
     --_footer-inline: 0;
 
     // The word page publishes its anchor offset (below header + tab bar); elsewhere just below the header.
-    scroll-margin-block-start: var(--word-anchor-offset, calc(var(--site-header-height) + var(--space-4)));
+    scroll-margin-block-start: var(
+      --word-anchor-offset,
+      calc(var(--site-header-height) + var(--space-4))
+    );
     counter-increment: section-num;
 
     @include mx.paper-card;

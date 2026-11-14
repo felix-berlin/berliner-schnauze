@@ -8,6 +8,8 @@ cd "$(dirname "$0")/.."
 
 BASE_REF="${1:-origin/main}"
 : "${DATABASE_URL:?set DATABASE_URL to a throwaway database whose name ends in _e2e}"
+db_name="${DATABASE_URL%%\?*}"; db_name="${db_name##*/}"
+[[ "$db_name" == *_e2e ]] || { echo "refusing: database '$db_name' does not end in _e2e" >&2; exit 1; }
 export PAYLOAD_SECRET="${PAYLOAD_SECRET:-upgrade-test-secret}"
 export NODE_ENV=production
 

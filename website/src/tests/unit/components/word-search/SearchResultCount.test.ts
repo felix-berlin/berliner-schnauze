@@ -38,16 +38,18 @@ describe("SearchResultCount.vue", () => {
     expect(wrapper.find("p").exists()).toBe(true);
   });
 
-  it("renders nothing while state is loading", () => {
+  it("keeps an empty live region while state is loading", () => {
     searchStateRef.value = "loading";
     const wrapper = mount(SearchResultCount);
-    expect(wrapper.find("p").exists()).toBe(false);
+    expect(wrapper.find("p[aria-live='polite']").exists()).toBe(true);
+    expect(wrapper.text()).toBe("");
   });
 
-  it("renders nothing when state is failed", () => {
+  it("keeps an empty live region when state is failed", () => {
     searchStateRef.value = "failed";
     const wrapper = mount(SearchResultCount);
-    expect(wrapper.find("p").exists()).toBe(false);
+    expect(wrapper.find("p[aria-live='polite']").exists()).toBe(true);
+    expect(wrapper.text()).toBe("");
   });
 
   it("shows singular Ergebnis when count is 1", () => {

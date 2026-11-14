@@ -36,12 +36,14 @@
 ### Task 1: Setup, Normalisieren, Filtern, Lite-Auswahl
 
 **Files:**
+
 - Create: `scripts/build_anki_decks.py`
 - Create: `scripts/test_build_anki_decks.py`
 - Create: `scripts/requirements-anki.txt`
 - Modify: `.gitignore`
 
 **Interfaces:**
+
 - Produces (Wortform, ein `dict`): `{"id": int, "slug": str, "title": str, "article": str, "translations": list[str], "examples": list[tuple[str, str]], "alternatives": list[str]}`
 - Produces: `clean(value) -> str`, `normalize_word(node: dict) -> dict`, `is_publishable(word: dict) -> bool`, `letter(title: str) -> str`, `score(word: dict) -> int`, `select_lite(words: list[dict]) -> list[dict]`
 
@@ -54,6 +56,7 @@ printf 'genanki\n' > scripts/requirements-anki.txt
 printf '\ndist-anki/\n.venv-anki/\n' >> .gitignore
 .venv-anki/bin/python -c "import genanki; print(genanki.__name__)"
 ```
+
 Expected: letzte Zeile `genanki`.
 
 - [ ] **Step 2: Failing Tests schreiben** (`scripts/test_build_anki_decks.py`)
@@ -246,10 +249,12 @@ git commit -m "feat(anki): add word normalisation and lite selection"
 ### Task 2: Modell, Karten, Decks, Prüfungen
 
 **Files:**
+
 - Modify: `scripts/build_anki_decks.py` (unter die vorhandenen Funktionen anhängen)
 - Modify: `scripts/test_build_anki_decks.py` (Klasse vor `if __name__` einfügen)
 
 **Interfaces:**
+
 - Consumes: `letter`, `select_lite`, `is_publishable`, Wortform aus Task 1.
 - Produces: `MODEL` (`genanki.Model`), `note_fields(word, hint_html) -> list[str]`, `build_decks(words, full_url) -> tuple[genanki.Deck, genanki.Deck]` (Full, Lite), `check_decks(full, lite, words) -> None` (wirft `AssertionError`).
 
@@ -440,9 +445,11 @@ git commit -m "feat(anki): add note model, deck building and consistency checks"
 ### Task 3: Fetch aus WordPress, CLI, echter Lauf
 
 **Files:**
+
 - Modify: `scripts/build_anki_decks.py` (anhängen)
 
 **Interfaces:**
+
 - Consumes: `normalize_word`, `build_decks`, Konstanten `SITE`, `OUT_DIR`.
 - Produces: `fetch_words() -> list[dict]` (rohe GraphQL-Knoten), `main() -> None`, Ausgabe `dist-anki/berlinerisch-full.apkg` und `dist-anki/berlinerisch-lite.apkg`.
 
@@ -503,6 +510,7 @@ Falls der Fetch mit `KeyError: 'WP_AUTH_USER'` scheitert: Die Variablen heißen 
 - [ ] **Step 4: Stichprobe der echten Daten**
 
 Run:
+
 ```bash
 .venv-anki/bin/python - <<'EOF'
 import zipfile, sqlite3, tempfile, os
@@ -514,6 +522,7 @@ with tempfile.TemporaryDirectory() as t:
         print(f.replace("\x1f", " | ")[:300]); print()
 EOF
 ```
+
 Expected: drei Karten mit sinnvollem Berlinerisch, Übersetzung(en), bei Lite ein Hinweis-Feld mit `https://berliner-schnauze.wtf/anki`. Wenn `Artikel` als seltsamer Wert erscheint (z. B. Array-Reste wie `['der']`), `article` in `normalize_word` gezielt anpassen und einen Test dafür ergänzen.
 
 - [ ] **Step 5: Import in Anki prüfen (manuell, durch den Owner)**
@@ -535,11 +544,13 @@ git commit -m "feat(anki): fetch published words and write lite and full apkg fi
 ### Task 4: Website-Seite und Lite-Download
 
 **Files:**
+
 - Create: `src/pages/anki.astro`
 - Create: `public/downloads/berlinerisch-lite.apkg` (Kopie aus `dist-anki/`)
 - Modify (nur prüfen): `astro.config.mjs` (PWA-Precache)
 
 **Interfaces:**
+
 - Consumes: `dist-anki/berlinerisch-lite.apkg` aus Task 3; `Layout` aus `@layouts/Layout.astro` mit `content={{ title }}` (wie `src/pages/wort-vorschlagen.astro`).
 - Produces: Route `/anki`, Download unter `/downloads/berlinerisch-lite.apkg`.
 
@@ -555,6 +566,7 @@ mkdir -p public/downloads
 cp dist-anki/berlinerisch-lite.apkg public/downloads/berlinerisch-lite.apkg
 ls -l public/downloads/berlinerisch-lite.apkg
 ```
+
 Expected: Größe deutlich unter 2 MB. Sonst zuerst den Precache-Ausschluss aus Schritt 1 sicherstellen.
 
 - [ ] **Step 3: Seite schreiben** (`src/pages/anki.astro`)
@@ -620,6 +632,7 @@ sleep 20
 curl -s http://localhost:4322/anki | grep -c "berlinerisch-lite.apkg"
 curl -sI http://localhost:4322/downloads/berlinerisch-lite.apkg | head -1
 ```
+
 Expected: `1` (oder mehr) und `HTTP/1.1 200 OK`. Danach den eigenen Server beenden (nicht den Dev-Server des Owners).
 
 - [ ] **Step 5: Lint**
@@ -639,9 +652,11 @@ git commit -m "feat(anki): add download page and lite deck"
 ### Task 5: AnkiWeb-Beschreibung und Übergabe
 
 **Files:**
+
 - Create: `docs/anki/ankiweb-description.md`
 
 **Interfaces:**
+
 - Consumes: Seite `/anki` aus Task 4, `dist-anki/berlinerisch-lite.apkg`.
 - Produces: Text zum Einfügen bei AnkiWeb (Shared Decks).
 
@@ -682,6 +697,7 @@ git commit -m "docs(anki): add AnkiWeb description and upload checklist"
 - [ ] **Step 3: Übergabe an den Owner (keine Aktion des Agents)**
 
 Offen beim Owner, in dieser Reihenfolge:
+
 1. Polar-Produkt „Full“ anlegen, `dist-anki/berlinerisch-full.apkg` als Datei-Benefit hinterlegen.
 2. Checkout-Link in `FULL_CHECKOUT_URL` in `src/pages/anki.astro` eintragen (Datei ist danach zu committen).
 3. Lite bei AnkiWeb hochladen, nachdem die Eigenleistungs-Bestätigung geprüft ist.

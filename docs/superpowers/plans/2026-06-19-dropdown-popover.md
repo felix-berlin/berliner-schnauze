@@ -54,8 +54,8 @@ Create `src/tests/unit/components/DropdownPopover.test.ts`:
 ```ts
 import DropdownPopover from "@components/DropdownPopover.vue";
 import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { nextTick } from "vue";
 
 const mockShowPopover = vi.fn();
 const mockHidePopover = vi.fn();

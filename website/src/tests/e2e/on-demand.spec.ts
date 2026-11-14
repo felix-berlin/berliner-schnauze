@@ -48,6 +48,7 @@ test.describe("On-demand routes", () => {
     expect(body).toEqual({
       berlinerisch: expect.any(String),
       expires: expect.any(Number),
+      expiresAt: expect.any(Number),
       slug: expect.any(String),
     });
   });

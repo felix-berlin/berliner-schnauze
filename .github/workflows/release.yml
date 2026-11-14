@@ -41,7 +41,7 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
 
       - name: Fetch secrets from Infisical (root) 🔐
-        uses: Infisical/secrets-action@v1.0.18
+        uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
         with:
           method: "oidc"
           identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
@@ -50,7 +50,7 @@ jobs:
           domain: "https://infisical.kasimir.dev"
 
       - name: Fetch secrets from Infisical (/GitHub) 🔐
-        uses: Infisical/secrets-action@v1.0.18
+        uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
         with:
           method: "oidc"
           identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
@@ -94,7 +94,7 @@ jobs:
       # A Sentry outage must not skip the docker job: the version is already published.
       - name: Create Sentry release
         continue-on-error: true
-        uses: getsentry/action-release@v3
+        uses: getsentry/action-release@d55c8c3b7375607e972b710f12926b676d89d7d2 # v3
         env:
           SENTRY_AUTH_TOKEN: ${{ env.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ env.SENTRY_ORG }}
@@ -136,7 +136,7 @@ jobs:
         run: echo "VERSION=$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
 
       - name: Fetch secrets from Infisical 🔐
-        uses: Infisical/secrets-action@v1.0.18
+        uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
         with:
           method: "oidc"
           identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"

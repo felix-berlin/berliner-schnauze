@@ -36,6 +36,7 @@ vi.mock("@vueuse/core", async (importOriginal) => {
 
 const mockView = ref<Record<string, unknown>>({});
 const mockProps = ref({
+  ariaLabel: "",
   class: "",
   closeOnClickOutside: true,
   disableScroll: true,
@@ -53,6 +54,7 @@ beforeEach(() => {
   capturedMutationCallback = null;
   mockView.value = {};
   mockProps.value = {
+    ariaLabel: "",
     class: "",
     closeOnClickOutside: true,
     disableScroll: true,
@@ -81,6 +83,13 @@ describe("Modal.vue", () => {
   it("dialog has aria-modal=true attribute", () => {
     const wrapper = mount(Modal);
     expect(wrapper.find("dialog").attributes("aria-modal")).toBe("true");
+  });
+
+  it("names the dialog from the ariaLabel prop, and leaves the attribute off without one", () => {
+    expect(mount(Modal).find("dialog").attributes("aria-label")).toBeUndefined();
+    mockProps.value = { ...mockProps.value, ariaLabel: "Wörter suchen" };
+    setupUseStore();
+    expect(mount(Modal).find("dialog").attributes("aria-label")).toBe("Wörter suchen");
   });
 
   it("close event triggers resetModal", async () => {

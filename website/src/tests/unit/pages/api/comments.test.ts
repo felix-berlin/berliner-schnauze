@@ -104,6 +104,19 @@ describe("POST /api/comments", () => {
     expect((await post({ ...valid, parentId: 3 })).status).toBe(400);
   });
 
+  it("hands Turnstile the proxy's X-Forwarded-For entry, not the spoofable first one", async () => {
+    await POST({
+      clientAddress: "6.6.6.6",
+      cookies,
+      request: new Request(url, {
+        body: JSON.stringify(valid),
+        headers: { "x-forwarded-for": "6.6.6.6, 9.8.7.6" },
+        method: "POST",
+      }),
+    } as unknown as APIContext);
+    expect(verifyTurnstile).toHaveBeenCalledWith("tok", "9.8.7.6");
+  });
+
   it("403 on failed captcha", async () => {
     verifyTurnstile.mockResolvedValue("fail");
     const res = await post(valid);

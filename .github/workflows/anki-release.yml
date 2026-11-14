@@ -18,15 +18,7 @@ jobs:
       - name: Checkout ✅
         uses: actions/checkout@v7
 
-      - name: Fetch secrets from Infisical 🔐
-        uses: Infisical/secrets-action@v1.0.18
-        with:
-          method: "oidc"
-          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
-          project-slug: "berliner-schnauze"
-          env-slug: "prod"
-          domain: "https://infisical.kasimir.dev"
-
+      # Install before the secrets: no package code runs with the prod values in the environment.
       - name: Setup Python 🛠️
         uses: actions/setup-python@v7
         with:
@@ -35,7 +27,16 @@ jobs:
           cache-dependency-path: scripts/requirements-anki.txt
 
       - name: Install deck-build dependencies
-        run: pip install -r scripts/requirements-anki.txt
+        run: pip install --require-hashes -r scripts/requirements-anki.txt
+
+      - name: Fetch secrets from Infisical 🔐
+        uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
+        with:
+          method: "oidc"
+          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
+          project-slug: "berliner-schnauze"
+          env-slug: "prod"
+          domain: "https://infisical.kasimir.dev"
 
       - name: Build decks 🏗️
         env:

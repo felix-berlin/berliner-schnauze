@@ -159,9 +159,11 @@ export const CoreQuoteBlockFields = graphql(`
 Create `src/services/queries/getPosts.ts`:
 
 ```ts
-import { graphql } from "@/gql";
-import type { GetAllPostsQuery } from "@/gql/graphql";
 import { wpGraphqlClient } from "@services/wpGraphqlClient";
+
+import type { GetAllPostsQuery } from "@/gql/graphql";
+
+import { graphql } from "@/gql";
 
 export type PostNodes = NonNullable<GetAllPostsQuery["posts"]>["nodes"];
 
@@ -273,6 +275,7 @@ Create `src/tests/unit/components/magazin/ArticleBlocks.test.ts`:
 ```ts
 // @vitest-environment node
 import { describe, expect, it, beforeAll } from "vitest";
+
 import { createAstroRender } from "../../helpers";
 
 describe("ArticleBlocks.astro", () => {

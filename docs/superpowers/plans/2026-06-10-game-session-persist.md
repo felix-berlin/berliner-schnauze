@@ -42,8 +42,9 @@ Define the snapshot type and persistentAtom.
 - [ ] **Step 1: Write the file**
 
 ```typescript
-import { persistentAtom } from "@nanostores/persistent";
 import type { GameCard } from "@composables/useGame";
+
+import { persistentAtom } from "@nanostores/persistent";
 
 export interface SavedGameSnapshot {
   phase: "playing";

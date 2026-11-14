@@ -20,19 +20,28 @@ const send = async (): Promise<void> => {
   onErrors = [];
   if (!key || urls.length === 0) return;
   const report = (message: string) => reporters.forEach((fn) => fn(message));
-  const chunks = Array.from({ length: Math.ceil(urls.length / MAX_URLS) }, (_, i) => urls.slice(i * MAX_URLS, (i + 1) * MAX_URLS));
+  const chunks = Array.from({ length: Math.ceil(urls.length / MAX_URLS) }, (_, i) =>
+    urls.slice(i * MAX_URLS, (i + 1) * MAX_URLS),
+  );
   await Promise.all(
     chunks.map((urlList) =>
       fetch(ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json; charset=utf-8" },
-        body: JSON.stringify({ host: new URL(siteUrl()).host, key, keyLocation: `${siteUrl()}/indexnow.txt`, urlList }),
+        body: JSON.stringify({
+          host: new URL(siteUrl()).host,
+          key,
+          keyLocation: `${siteUrl()}/indexnow.txt`,
+          urlList,
+        }),
         signal: AbortSignal.timeout(5000),
       })
         .then((res) => {
           if (!res.ok) report(`[indexnow] ${res.status} for ${urlList.length} URL(s)`);
         })
-        .catch((error: unknown) => report(`[indexnow] ${error instanceof Error ? error.message : String(error)}`)),
+        .catch((error: unknown) =>
+          report(`[indexnow] ${error instanceof Error ? error.message : String(error)}`),
+        ),
     ),
   );
 };
@@ -46,7 +55,10 @@ export const flushIndexNow = send;
  * Fire and forget: a failed ping is only reported to `onError`, never thrown. Does nothing without INDEXNOW_KEY
  * (dev, tests). The site serves the key at /indexnow.txt as proof of ownership.
  */
-export const pingIndexNow = (paths: string[], onError: (message: string) => void = console.error): void => {
+export const pingIndexNow = (
+  paths: string[],
+  onError: (message: string) => void = console.error,
+): void => {
   if (!process.env.INDEXNOW_KEY || paths.length === 0) return;
   for (const path of paths) pending.add(`${siteUrl()}${path}`);
   onErrors.push(onError);

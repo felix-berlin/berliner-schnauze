@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
 import { captchaGate, reply } from "@utils/apiReply.ts";
+import { requestIp } from "@utils/rateLimit.ts";
 import { suggestWordSchema } from "@utils/suggestWordSchema.ts";
 
 /**
@@ -15,7 +16,10 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
   const suggestion = suggestWordSchema.safeParse(body);
   if (!suggestion.success) return reply({ error: "Ungültige Eingabe" }, 400);
 
-  const blocked = await captchaGate(body, clientAddress);
+  const blocked = await captchaGate(
+    body,
+    requestIp(request.headers.get("x-forwarded-for"), clientAddress),
+  );
   if (blocked) return blocked;
 
   try {

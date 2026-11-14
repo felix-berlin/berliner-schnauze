@@ -2,6 +2,8 @@ import { atom, map } from "nanostores";
 import { markRaw, nextTick } from "vue";
 
 type ModalProps = {
+  /** The dialog's accessible name (screen readers announce it on open). */
+  ariaLabel: string;
   class: string;
   closeOnClickOutside: boolean;
   disableScroll: boolean;
@@ -23,6 +25,7 @@ type ModalSettings = {
 };
 
 const propsDefault: ModalProps = {
+  ariaLabel: "",
   class: "",
   closeOnClickOutside: true,
   disableScroll: true,
@@ -41,14 +44,37 @@ export const preventScroll = (status: boolean) => {
   document.body.classList.toggle("u-disable-scroll", status);
 };
 
+let resetTimer: ReturnType<typeof setTimeout> | undefined;
+// Set while open() waits for the modal island to hydrate; close() or the next open() drops it.
+let stopWaiting: (() => void) | undefined;
+
 export const open = (settings: ModalSettings) => {
-  $props.set({ ...$props.get(), ...settings.props });
+  // A close just before must not wipe this view when its reset timer fires.
+  clearTimeout(resetTimer);
+  stopWaiting?.();
+  // Start from the defaults: a skipped reset must not hand the last modal's class or close button to this one.
+  $props.set({ ...propsDefault, ...settings.props });
   $view.set(markRaw(settings.view ?? {}));
 
-  void nextTick(() => $element.get()?.showModal());
+  void nextTick(() => {
+    const element = $element.get();
+    if (element) return element.showModal();
+    // The modal island has not hydrated yet: show it as soon as it registers.
+    const off = $element.listen((el) => {
+      if (!el) return;
+      off();
+      stopWaiting = undefined;
+      el.showModal();
+    });
+    stopWaiting = () => {
+      off();
+      stopWaiting = undefined;
+    };
+  });
 };
 
 export const close = () => {
+  stopWaiting?.();
   $element.get()?.close();
   resetModal();
 };
@@ -57,7 +83,8 @@ export const resetModal = () => {
   preventScroll(false);
   // Give the animation time to finish
   if (typeof window !== "undefined") {
-    setTimeout(() => {
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => {
       $view.set({});
       $props.set({ ...propsDefault });
     }, 500);

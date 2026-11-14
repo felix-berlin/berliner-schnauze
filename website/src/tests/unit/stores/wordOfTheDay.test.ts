@@ -42,6 +42,19 @@ describe("wordOfTheDay store", () => {
       expect($wordOfTheDay.get().timestamp).toBeGreaterThanOrEqual(before);
     });
 
+    it("keeps the old timestamp when the body does not parse", async () => {
+      mockFetch.mockResolvedValueOnce({
+        json: () => Promise.reject(new SyntaxError("bad")),
+        ok: true,
+      });
+      vi.spyOn(console, "error").mockImplementation(() => {});
+      const { $wordOfTheDay, getWordOfTheDay } = await import("@stores/wordOfTheDay.ts");
+      $wordOfTheDay.setKey("timestamp", 42);
+      await getWordOfTheDay();
+      expect($wordOfTheDay.get().timestamp).toBe(42);
+      expect($wordOfTheDay.get().error).toBe(true);
+    });
+
     it("sets error=true and loading=false on non-ok response", async () => {
       mockFetch.mockResolvedValueOnce({ ok: false, status: 500 });
       vi.spyOn(console, "error").mockImplementation(() => {});
@@ -61,12 +74,12 @@ describe("wordOfTheDay store", () => {
     });
   });
 
-  describe("onMount / isCachedToday", () => {
+  describe("onMount / cache expiry", () => {
     it("asks the site's own word-of-the-day endpoint", async () => {
       const { getWordOfTheDay } = await import("@stores/wordOfTheDay.ts");
       mockFetch.mockClear();
       await getWordOfTheDay();
-      expect(mockFetch).toHaveBeenCalledWith("/api/word-of-the-day");
+      expect(mockFetch).toHaveBeenCalledWith("/api/word-of-the-day", { cache: "no-cache" });
     });
 
     it("calls getWordOfTheDay when no timestamp in localStorage", async () => {
@@ -88,11 +101,15 @@ describe("wordOfTheDay store", () => {
       unsub();
     });
 
-    it("skips fetch when localStorage timestamp is from today (isCachedToday = true)", async () => {
+    it("skips fetch when localStorage timestamp is from today (before expiry)", async () => {
       localStorage.setItem("wordOfTheDay:timestamp", JSON.stringify(Date.now()));
       localStorage.setItem(
         "wordOfTheDay:word",
-        JSON.stringify({ berlinerisch: "Schnauze", slug: "schnauze" }),
+        JSON.stringify({
+          berlinerisch: "Schnauze",
+          expiresAt: Date.now() + 3_600_000,
+          slug: "schnauze",
+        }),
       );
       const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
       mockFetch.mockClear();
@@ -102,9 +119,40 @@ describe("wordOfTheDay store", () => {
       unsub();
     });
 
-    it("fetches when localStorage timestamp is from a past day (isCachedToday = false)", async () => {
+    it("fetches when localStorage timestamp is from a past day (past expiry)", async () => {
       const yesterday = Date.now() - 24 * 60 * 60 * 1000;
       localStorage.setItem("wordOfTheDay:timestamp", JSON.stringify(yesterday));
+      const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
+      mockFetch.mockClear();
+      const unsub = $wordOfTheDay.subscribe(() => {});
+      await flushTasks();
+      expect(mockFetch).toHaveBeenCalled();
+      unsub();
+    });
+
+    it("fetches once the server's expiry has passed, even on the same local day", async () => {
+      localStorage.setItem(
+        "wordOfTheDay:word",
+        JSON.stringify({
+          berlinerisch: "Schnauze",
+          expiresAt: Date.now() - 1000,
+          slug: "schnauze",
+        }),
+      );
+      const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
+      mockFetch.mockClear();
+      const unsub = $wordOfTheDay.subscribe(() => {});
+      await flushTasks();
+      expect(mockFetch).toHaveBeenCalled();
+      unsub();
+    });
+
+    it("fetches a word cached before expiresAt existed (only a relative expires)", async () => {
+      localStorage.setItem("wordOfTheDay:timestamp", JSON.stringify(Date.now()));
+      localStorage.setItem(
+        "wordOfTheDay:word",
+        JSON.stringify({ berlinerisch: "Schnauze", expires: 3600, slug: "schnauze" }),
+      );
       const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
       mockFetch.mockClear();
       const unsub = $wordOfTheDay.subscribe(() => {});
@@ -121,7 +169,7 @@ describe("wordOfTheDay store", () => {
       mockFetch.mockClear();
       const unsub = $wordOfTheDay.subscribe(() => {});
       await flushTasks();
-      // timestamp=0 → isCachedToday(0) is false → fetch is called
+      // timestamp=0 → expired → fetch is called
       expect(mockFetch).toHaveBeenCalled();
       unsub();
     });

@@ -84,18 +84,23 @@ export const resetRateLimits = (): void => {
 let loggedSource = false;
 
 /**
- * The key a client is counted under (networkKey of its IP): the last X-Forwarded-For entry, the one our reverse proxy (Traefik) appended. The
- * first entries come from the client and can be anything (Astro's clientAddress takes the first). Without the
- * header, the socket address, which behind the proxy is the same for everyone.
+ * The visitor's address: the last X-Forwarded-For entry, the one our reverse proxy (Traefik) appended. The first
+ * entries come from the client and can be anything (Astro's clientAddress takes the first). Without the header, the
+ * socket address, which behind the proxy is the same for everyone. Turnstile gets this one too (audit SEC-03).
  */
-export const clientIp = (forwardedFor: string | null, socketAddress: string): string => {
-  // An IPv6 client gets a whole /64, so it counts by network (networkKey) or every address would be a new client.
+export const requestIp = (forwardedFor: string | null, socketAddress: string): string => {
   const forwarded = forwardedFor?.split(",").at(-1)?.trim();
   if (!loggedSource) {
     loggedSource = true;
     console.info(`[rate-limit] client ip from ${forwarded ? "x-forwarded-for" : "the socket"}`);
   }
-  const ip = forwarded || socketAddress;
+  return forwarded || socketAddress;
+};
+
+/** The key a client is counted under: networkKey of its requestIp. */
+export const clientIp = (forwardedFor: string | null, socketAddress: string): string => {
+  // An IPv6 client gets a whole /64, so it counts by network (networkKey) or every address would be a new client.
+  const ip = requestIp(forwardedFor, socketAddress);
   return ip ? networkKey(ip) : ip;
 };
 
