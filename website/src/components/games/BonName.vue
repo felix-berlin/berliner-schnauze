@@ -3,9 +3,7 @@
     <!-- Trailing space keeps the text readable as one sentence outside the flex layout. -->
     <span class="label">{{ "Du spielst als " }}</span>
     <b class="name">{{ shown.name }}</b>
-    <span v-if="shown.name === 'Anonym' && shown.tag" class="tag"
-      >#{{ shown.tag }}</span
-    >
+    <span v-if="shown.name === 'Anonym' && shown.tag" class="tag">#{{ shown.tag }}</span>
     <span v-if="justSaved" class="ok" role="status">
       <CheckIcon aria-hidden="true" height="14" width="14" />Jespeichert
     </span>
@@ -23,9 +21,7 @@
 
   <div v-else class="c-bon-name" data-variant="edit" role="group" aria-labelledby="bon-name-label">
     <span class="head">
-      <label id="bon-name-label" for="bon-name-input" class="field-label">
-        Dein Name
-      </label>
+      <label id="bon-name-label" for="bon-name-input" class="field-label"> Dein Name </label>
       <span class="t-small" aria-live="polite">{{ draft.length }} / 24</span>
     </span>
     <input

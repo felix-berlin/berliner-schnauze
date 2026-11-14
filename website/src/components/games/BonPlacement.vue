@@ -2,12 +2,7 @@
   <section class="c-bon-placement" aria-labelledby="bon-placement-title">
     <h2 id="bon-placement-title" class="title">Hier stehste · diese Woche</h2>
     <ol class="list">
-      <li
-        v-for="e in around"
-        :key="e.rank"
-        class="row"
-        :aria-current="e.isMe ? 'true' : undefined"
-      >
+      <li v-for="e in around" :key="e.rank" class="row" :aria-current="e.isMe ? 'true' : undefined">
         <span class="rank"><span class="u-sr-only">Platz</span> {{ e.rank }}</span>
         <span class="name">
           <b>{{ e.name }}</b>
@@ -35,7 +30,9 @@ const props = defineProps<{ around: PublicEntry[] }>();
 const me = computed(() => props.around.find((e) => e.isMe));
 // Rank 1 has nobody ahead, so no hint.
 const ahead = computed(() => props.around.find((e) => me.value && e.rank === me.value.rank - 1));
-const missing = computed(() => (ahead.value && me.value ? ahead.value.score - me.value.score + 1 : 0));
+const missing = computed(() =>
+  ahead.value && me.value ? ahead.value.score - me.value.score + 1 : 0,
+);
 </script>
 
 <style lang="scss">

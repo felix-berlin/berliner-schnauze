@@ -24,8 +24,7 @@ const around = [
   entry(14, 290),
 ];
 
-const place = (list: PublicEntry[] = around) =>
-  mount(BonPlacement, { props: { around: list } });
+const place = (list: PublicEntry[] = around) => mount(BonPlacement, { props: { around: list } });
 
 describe("BonPlacement", () => {
   it("lists the rows with the own one marked", () => {

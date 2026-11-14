@@ -29,9 +29,7 @@
       </span>
 
       <span class="score" aria-live="polite">
-        <b :key="gain" class="points" :data-state="gain > 0 ? 'gain' : undefined">{{
-          score
-        }}</b>
+        <b :key="gain" class="points" :data-state="gain > 0 ? 'gain' : undefined">{{ score }}</b>
         <span class="t-label">Punkte · {{ playerLabel }}</span>
       </span>
 
