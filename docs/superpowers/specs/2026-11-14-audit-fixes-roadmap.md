@@ -15,15 +15,15 @@ Quelle: `docs/audit-2026-11-13.md` (Stand `92e7d19a`). Geprüft gegen HEAD `4d04
 
 ## Stand
 
-- [ ] 1. SEC-01
-- [ ] 2. BUG-01, BUG-02
-- [ ] 3. BUG-03, BUG-04, BUG-05
-- [ ] 4. CI-01
-- [ ] 5. CI-03, CI-05, CFG-05
-- [ ] 6. SEC-03, SEC-04, SEC-05
-- [ ] 7. PERF-02
-- [ ] 8. CFG-01–04, DX-01–03, MAINT-02
-- [ ] 9. A11Y-01–04
+- [x] 1. SEC-01 (`549ef857`)
+- [x] 2. BUG-01, BUG-02 (`c840d894`)
+- [x] 3. BUG-03, BUG-04, BUG-05 (`e992fdc9`)
+- [x] 4. CI-01 (`2d40989b`, `b2dbc20f`; oxfmt ignoriert jetzt `data/`, Migrationen, generierte Payload-Dateien, Design-Mocks und `pnpm-workspace.yaml`)
+- [x] 5. CI-03, CI-05, CFG-05 (`a858eb39`)
+- [x] 6. SEC-03, SEC-04, SEC-05 (`7e67742d`)
+- [x] 7. PERF-02 (`725f1aee`)
+- [x] 8. CFG-01–04, DX-01–03, MAINT-02 (`e9fa34fd`; CFG-01 als Startprüfung im Server statt `validateSecrets`, das auch den Build ohne Secrets bräche; MAINT-02: `@nanostores/logger` und `@vue/devtools-api` sind optionale Peers der Devtools und bleiben; `MCP_DISABLED=false` steht schon in `.env.example`)
+- [x] 9. A11Y-01–04 (`76753464`)
 - [ ] 10. DEP-01
 - [ ] 11. CI-02, CI-04 (Repo-Teil)
 - [ ] 12. PERF-01
