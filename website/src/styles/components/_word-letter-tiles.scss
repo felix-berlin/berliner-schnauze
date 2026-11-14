@@ -1,100 +1,106 @@
-@layer legacy {
-  // Letter tiles of the quantitative-linguistics card (docs/design/wortseite/SPEC.md §5, mock: .c-letters).
-  .c-letters {
+@use "@styles/mixins" as mx;
+
+// Letter tiles of the quantitative-linguistics card (docs/design/wortseite/SPEC.md §5, mock:
+// .c-letters). Parts .letters (.tile, data-kind="vowel"; --fill = frequency, set inline), .legend,
+// .freq (the same data as text, toggled by the textlink).
+@include mx.component("word-letter-tiles") {
+  :scope {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R87: one-off consonant fill
+    --_fill-consonant: light-dark(rgb(96 102 108 / 20%), rgb(181 183 172 / 20%));
+
+    container: word-letter-tiles / inline-size;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    inline-size: 100%;
+  }
+
+  .letters {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: var(--space-1);
+    inline-size: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tile {
+    position: relative;
+    flex: 1 1 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 28px;
+    max-inline-size: 44px;
+    block-size: 52px;
+    overflow: hidden;
+    border-radius: var(--radius-xxs);
+    background: var(--color-surface-chip);
+    color: var(--color-text-strong);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+
+    // Fill = frequency; a wash of the tile's kind, never solid orange.
+    &::before {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      inset-block-end: 0;
+      block-size: var(--fill, 0%);
+      background: var(--_fill-consonant);
+    }
+
+    &[data-kind="vowel"]::before {
+      background: var(--color-surface-wash);
+    }
+
+    > span {
+      position: relative;
+    }
+  }
+
+  @container word-letter-tiles (inline-size >= 30rem) {
+    .tile {
+      max-inline-size: 64px;
+      block-size: 72px;
+      font-size: var(--font-size-2xl);
+    }
+  }
+
+  .legend {
+    margin: 0;
+    font-size: var(--font-size-xs);
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  .freq {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-1) var(--space-4);
+    inline-size: 100%;
     margin: 0;
     padding: 0;
     list-style: none;
 
-    .c-letters__tile {
-      position: relative;
-      flex: 1 1 0;
-      min-inline-size: 28px;
-      max-inline-size: 44px;
-      block-size: 52px;
+    li {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--color-ink-strong);
-      background: var(--surface-chip);
-      border-radius: var(--radius-xxs);
-
-      // Fill = frequency; a wash of the tile's kind, never solid orange.
-      &::before {
-        content: "";
-        position: absolute;
-        inset-inline: 0;
-        inset-block-end: 0;
-        block-size: var(--fill, 0%);
-        background: color-mix(in srgb, var(--color-muted) 20%, transparent);
-      }
-
-      &.is-vowel::before {
-        background: var(--surface-wash);
-      }
-
-      > span {
-        position: relative;
-      }
-
-      @container letter-tiles (inline-size >= 30rem) {
-        max-inline-size: 64px;
-        block-size: 72px;
-        font-size: 1.6rem;
-      }
-    }
-  }
-
-  .c-letter-tiles {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-    inline-size: 100%;
-    container: letter-tiles / inline-size;
-
-    .c-letters {
-      inline-size: 100%;
+      justify-content: space-between;
+      gap: var(--space-2);
+      font-size: var(--font-size-base);
     }
 
-    &__legend {
-      margin: 0;
-      font-size: 0.75rem;
+    b {
+      color: var(--color-text-strong);
+    }
+
+    span {
+      font-size: var(--font-size-xs);
       line-height: 1.5;
-      color: var(--color-muted);
-    }
-
-    &__freq {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.25rem 1rem;
-      inline-size: 100%;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-
-      li {
-        display: flex;
-        justify-content: space-between;
-        gap: 0.5rem;
-        font-size: 1rem;
-      }
-
-      b {
-        color: var(--color-ink-strong);
-      }
-
-      span {
-        font-size: 0.75rem;
-        line-height: 1.5;
-        color: var(--color-muted);
-        text-align: end;
-      }
+      color: var(--color-text-muted);
+      text-align: end;
     }
   }
 }

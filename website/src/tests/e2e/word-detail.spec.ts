@@ -40,7 +40,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     const etymologie = page.locator("#etymologie");
     await expect(etymologie.getByRole("heading", { level: 2, name: "Etymologie" })).toBeVisible();
     await expect(etymologie.locator(".c-word-meanings")).toHaveCount(0);
-    await expect(etymologie.locator(".c-word-origin")).toContainText("Erfundener Infotext");
+    await expect(etymologie.locator(".c-word-section-etymologie")).toContainText("Erfundener Infotext");
     await expect(etymologie.locator("footer")).toHaveCount(0);
 
     const beispiele = page.locator("#beispiele");
@@ -528,9 +528,9 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await page.goto("/wort/anmachen");
 
     const card = page.locator("#linguistik");
-    const tiles = card.locator(".c-letters");
+    const tiles = card.locator(".c-word-letter-tiles .letters");
     await expect(tiles).toHaveAttribute("aria-hidden", "true");
-    await expect(tiles.locator(".c-letters__tile")).toHaveCount(8);
+    await expect(tiles.locator(".tile")).toHaveCount(8);
 
     // client:visible island: hydrates once scrolled into view; a click before would do nothing.
     await card.scrollIntoViewIfNeeded();
@@ -550,7 +550,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await page.setViewportSize({ height: 844, width: 390 });
     await page.goto("/wort/rinnsteinschwalbenbeobachtungsposten");
 
-    await expect(page.locator("#linguistik .c-letters__tile")).toHaveCount(36);
+    await expect(page.locator("#linguistik .c-word-letter-tiles .tile")).toHaveCount(36);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - window.innerWidth,
     );

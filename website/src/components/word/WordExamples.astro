@@ -16,12 +16,12 @@ const { examples = [] } = Astro.props as WordExamplesProps;
   {examples.map((item, index) => {
     const sources = voiceSources(item.exampleAudio);
     return (
-      <li class='c-word-examples__item'>
-        <blockquote class='c-word-examples__quote'>
-          <p class='t-em c-word-examples__text'>
-            <span aria-hidden='true' class='c-word-examples__mark'>“</span>{item.example}
+      <li class='item'>
+        <blockquote class='quote'>
+          <p class='t-em text'>
+            <span aria-hidden='true' class='mark'>“</span>{item.example}
           </p>
-          {item.exampleExplanation && <p class='c-word-examples__explanation'>{"– " + item.exampleExplanation}</p>}
+          {item.exampleExplanation && <p class='explanation'>{"– " + item.exampleExplanation}</p>}
         </blockquote>
         {(sources.m || sources.w) && (
           <VoiceButtons aria-label={`Beispiel ${index + 1} anhören`} client:visible sources={sources} />

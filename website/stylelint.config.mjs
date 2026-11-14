@@ -93,7 +93,6 @@ export default {
         "src/styles/variables/**",
         "src/styles/tokens/_legacy-aliases.scss", // _legacy-aliases.scss names the legacy properties
         // Mixin-only files (no CSS output, so not in the legacy list); migrate with their consumers.
-        "src/styles/components/_word-definition-grid.scss",
         "src/styles/pages/_changelog-prose.scss",
       ],
       rules: Object.fromEntries(Object.keys(strictRules).map((rule) => [rule, null])),

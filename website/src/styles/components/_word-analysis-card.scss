@@ -1,0 +1,163 @@
+@use "@styles/mixins" as mx;
+
+// Body of an analysis card (WordAnalysis.astro passes it into SectionCard). Labelled .block parts
+// (no boxes in boxes) with .count, .links (44px textlink rows), .parts (word decomposition),
+// .grammar (.tags of .tag), .tiles (.stats, .facts).
+@include mx.component("word-analysis-card") {
+  :scope {
+    li {
+      line-height: 1.5;
+    }
+  }
+
+  .block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+
+    & + & {
+      margin-block-start: var(--space-4);
+    }
+  }
+
+  .count {
+    font-size: var(--font-size-xs);
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  .links,
+  .parts {
+    --textlink-display: inline-flex;
+    --textlink-min-block-size: 2.75rem;
+
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+  }
+
+  .links {
+    align-items: baseline;
+    gap: 0 var(--space-4);
+    padding: 0;
+    list-style: none;
+  }
+
+  .parts {
+    align-items: center;
+    gap: 0 var(--space-2);
+
+    > span {
+      display: inline-flex;
+      align-items: center;
+      min-block-size: 2.75rem;
+    }
+
+    > span[aria-hidden] {
+      color: var(--color-text-muted);
+    }
+  }
+
+  .grammar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-1) var(--space-4);
+      min-block-size: 2rem;
+    }
+
+    b {
+      color: var(--color-text-strong);
+      overflow-wrap: break-word;
+    }
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-1);
+    margin-inline-start: auto;
+  }
+
+  .tag {
+    --_pad-block: 0.125rem; // below every space step
+
+    display: inline-block;
+    padding: var(--_pad-block) var(--space-2);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-wash);
+    color: var(--color-text-body);
+    font-size: var(--font-size-sm);
+  }
+
+  .tiles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+    margin: 0;
+
+    > div {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-sm);
+      background: var(--color-surface-chip);
+    }
+
+    dt {
+      font-size: var(--font-size-xs);
+      line-height: 1.5;
+      color: var(--color-text-muted);
+    }
+
+    dd {
+      margin: 0;
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-strong);
+    }
+  }
+
+  .facts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-2);
+    }
+
+    li::before {
+      content: "";
+      flex-shrink: 0;
+      inline-size: 6px;
+      block-size: 6px;
+      background: var(--color-text-accent);
+      rotate: 45deg;
+      translate: 0 -2px;
+    }
+  }
+}

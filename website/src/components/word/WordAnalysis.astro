@@ -1,5 +1,6 @@
 ---
 import '@styles/components/_word-analysis.scss';
+import '@styles/components/_word-analysis-card.scss';
 import LetterTiles from '@components/word/LetterTiles.vue';
 import SectionCard from '@components/word/SectionCard.astro';
 import { routeToWord } from '@utils/helpers';
@@ -73,19 +74,20 @@ const facts = [
 <section class='c-word-analysis' id='analyse' aria-labelledby='heading-analyse'>
   <h2 class='c-band' id='heading-analyse'>Sprachliche Analyse</h2>
 
-  <div class='c-word-analysis__pair'>
+  <div class='pair'>
     <SectionCard id='orthographie' title='Orthographie' level={3}>
-      <div class='c-word-analysis__block'>
+      <div class='c-word-analysis-card'>
+      <div class='block'>
         <div class='t-label'>Silbentrennung</div>
         <div class='t-em'>
           {syllables.join(' · ')}
-          <span class='c-word-analysis__count'>· {syllables.length} {syllables.length === 1 ? 'Silbe' : 'Silben'}</span>
+          <span class='count'>· {syllables.length} {syllables.length === 1 ? 'Silbe' : 'Silben'}</span>
         </div>
       </div>
       {hasParts && (
-        <div class='c-word-analysis__block'>
+        <div class='block'>
           <div class='t-label'>Wortzerlegung</div>
-          <div class='c-word-analysis__parts'>
+          <div class='parts'>
             {parts.map((part, i) => {
               const linked = findWordByHeadword(allWords, part);
               return (
@@ -106,14 +108,14 @@ const facts = [
       )}
       {similarSpelling.length > 0 && (
         <div
-          class='c-word-analysis__block'
+          class='block'
           data-track-content
           data-content-name='Similar Spelling'
           data-content-piece={similarSpelling[0]?.berlinerisch ?? ''}
           data-content-target='#'
         >
           <div class='t-label'>Ähnlich geschrieben</div>
-          <ul class='c-word-analysis__links'>
+          <ul class='links'>
             {similarSpelling.map((w) => (
               <li><a class='c-textlink' data-variant='inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a></li>
             ))}
@@ -122,7 +124,7 @@ const facts = [
       )}
       {anagrams.length > 0 && (
         <div
-          class='c-word-analysis__block'
+          class='block'
           id='anagramme'
           data-track-content
           data-content-name='Word Anagrams'
@@ -130,25 +132,26 @@ const facts = [
           data-content-target='#'
         >
           <div class='t-label'>Anagramme</div>
-          <ul class='c-word-analysis__links'>
+          <ul class='links'>
             {anagrams.map((w) => (
               <li><a class='c-textlink' data-variant='inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a></li>
             ))}
           </ul>
         </div>
       )}
+      </div>
     </SectionCard>
 
     {grammarRows.length > 0 && (
       <SectionCard id='grammatik' title='Grammatik' level={3}>
-        <div class='c-word-analysis__block'>
+        <div class='c-word-analysis-card block'>
           <div class='t-label'>Wortart (NLP-Analyse)</div>
-          <ul class='c-word-analysis__grammar'>
+          <ul class='grammar'>
             {grammarRows.map((row) => (
               <li>
                 <b>{row.label}</b>
-                <span class='c-word-analysis__tags'>
-                  {row.tags.map((tag) => <span class='c-word-analysis__tag'>{tag}</span>)}
+                <span class='tags'>
+                  {row.tags.map((tag) => <span class='tag'>{tag}</span>)}
                 </span>
               </li>
             ))}
@@ -159,19 +162,19 @@ const facts = [
   </div>
 
   <SectionCard id='linguistik' title='Quantitative Linguistik' level={3}>
-    <div class='c-word-analysis__tiles'>
+    <div class='c-word-analysis-card tiles'>
       <div class='t-label'>Buchstaben &amp; Häufigkeit</div>
       <LetterTiles
         client:visible
         letters={toLetterTiles(word, GERMAN_LETTER_FREQ)}
         frequencies={letterFrequency(word)}
       />
-      <dl class='c-word-analysis__stats'>
+      <dl class='stats'>
         {stats.map(([label, value]) => (
           <div><dt>{label}</dt><dd>{value}</dd></div>
         ))}
       </dl>
-      <ul class='c-word-analysis__facts'>
+      <ul class='facts'>
         {facts.map((fact) => <li>{fact}</li>)}
       </ul>
     </div>
@@ -183,9 +186,9 @@ const facts = [
 
   {soundingWords.length > 0 && (
     <SectionCard id='phonologie' title='Phonologie' level={3}>
-      <div class='c-word-analysis__block'>
+      <div class='c-word-analysis-card block'>
         <div class='t-label'>Ähnlich klingende Wörter</div>
-        <ul class='c-word-analysis__links'>
+        <ul class='links'>
           {soundingWords.map((w) => (
             <li><a class='c-textlink' data-variant='inline' href={routeToWord(w.slug)}>{w.berlinerisch}</a></li>
           ))}

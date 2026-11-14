@@ -181,7 +181,7 @@ const schemaJson = () => {
         '.c-word-hero h1',
         '.c-word-meanings .t-em',
         // Only rendered with examples: a selector that matches nothing is noise.
-        ...(exampleComments.length > 0 ? ['.c-word-examples__text'] : []),
+        ...(exampleComments.length > 0 ? ['.c-word-examples .text'] : []),
       ],
     },
     ...(firstImage && {
