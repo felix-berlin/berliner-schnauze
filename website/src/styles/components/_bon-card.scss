@@ -5,7 +5,7 @@
 // Parts: .card (data-state="hint": the intro wiggle) with .label, .word > .headword, .progress,
 // .overlay (data-side="nee" | "ja"), .swipe-hint > .swipe-hint-icon; .answers (two c-choice), .how
 // (data-input="touch" | "keys"), then the end textlink. BonFeedback takes the card's place through
-// the "feedback" slot; it is a c- root, so the scope stops there on its own.
+// the "feedback" slot, wrapped in .feedback[data-slot].
 // Public: --bon-card-touch-display, --bon-card-keys-display (one hint per input kind; the game
 // shell switches them at the word breakpoint).
 @include mx.component("bon-card") {

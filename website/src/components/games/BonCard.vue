@@ -8,33 +8,35 @@
     data-content-target="javascript:answer"
   >
     <!-- Feedback takes the card's place; the answer buttons stay, so focus stays put (Spec §15). -->
-    <slot name="feedback">
-      <section
-        ref="cardRef"
-        aria-labelledby="bon-word"
-        aria-describedby="bon-question"
-        class="card"
-        :data-state="hint ? 'hint' : undefined"
-        :style="dragStyle"
-        @pointerdown="onDown"
-        @pointermove="onMove"
-        @pointerup="onUp"
-        @pointercancel="reset"
-      >
-        <p id="bon-question" class="t-label label">Berlinerisch oder nich?</p>
-        <h2 id="bon-word" class="word">
-          <span class="headword">{{ word }}</span>
-        </h2>
-        <p class="t-small progress">Karte {{ cardInStack }} von 20 · Stapel {{ stack }}</p>
+    <div v-if="$slots.feedback" class="feedback" data-slot>
+      <slot name="feedback" />
+    </div>
+    <section
+      v-else
+      ref="cardRef"
+      aria-labelledby="bon-word"
+      aria-describedby="bon-question"
+      class="card"
+      :data-state="hint ? 'hint' : undefined"
+      :style="dragStyle"
+      @pointerdown="onDown"
+      @pointermove="onMove"
+      @pointerup="onUp"
+      @pointercancel="reset"
+    >
+      <p id="bon-question" class="t-label label">Berlinerisch oder nich?</p>
+      <h2 id="bon-word" class="word">
+        <span class="headword">{{ word }}</span>
+      </h2>
+      <p class="t-small progress">Karte {{ cardInStack }} von 20 · Stapel {{ stack }}</p>
 
-        <span class="overlay" data-side="nee" :style="overlay(-1)" aria-hidden="true"> ← Nee </span>
-        <span class="overlay" data-side="ja" :style="overlay(1)" aria-hidden="true"> Ja → </span>
+      <span class="overlay" data-side="nee" :style="overlay(-1)" aria-hidden="true"> ← Nee </span>
+      <span class="overlay" data-side="ja" :style="overlay(1)" aria-hidden="true"> Ja → </span>
 
-        <div v-if="hint" class="swipe-hint" aria-hidden="true">
-          <HandIcon class="swipe-hint-icon" width="32" height="32" />
-        </div>
-      </section>
-    </slot>
+      <div v-if="hint" class="swipe-hint" aria-hidden="true">
+        <HandIcon class="swipe-hint-icon" width="32" height="32" />
+      </div>
+    </section>
 
     <div class="answers">
       <button
