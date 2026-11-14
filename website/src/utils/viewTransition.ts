@@ -1,12 +1,5 @@
 import { nextTick } from "vue";
 
-/**
- * Runs a state change inside a same-document view transition (docs/design/bon/SPEC.md §13).
- * Without support or under reduced motion it just runs `update`. `type`, when given, becomes the
- * transition type the stylesheet matches with `:active-view-transition-type()`; a browser without
- * transition types gets no transition at all (no morph, spec §8). Without `type` it is the default
- * crossfade.
- */
 const ignoreAbort = (error: unknown) => {
   if (!(error instanceof DOMException && error.name === "AbortError")) throw error;
 };
@@ -22,6 +15,13 @@ const settle = (transition: ViewTransition): void => {
   transition.finished.catch(() => {});
 };
 
+/**
+ * Runs a state change inside a same-document view transition (docs/design/bon/SPEC.md §13).
+ * Without support or under reduced motion it just runs `update`. `type`, when given, becomes the
+ * transition type the stylesheet matches with `:active-view-transition-type()`; a browser without
+ * transition types gets no transition at all (no morph, spec §8). Without `type` it is the default
+ * crossfade.
+ */
 export function vt(update: () => void, type?: string): void {
   if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) {
     return update();
