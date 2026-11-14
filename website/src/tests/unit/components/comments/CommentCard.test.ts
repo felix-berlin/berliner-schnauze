@@ -72,6 +72,10 @@ const mountCard = (
   };
 };
 
+/** First button with this text (spec §7.1: tests find by role and text, not by part class). */
+const byText = (w: VueWrapper, text: string) =>
+  w.findAll("button").find((b) => b.text() === text) ?? w.find("button[data-none]");
+
 describe("CommentCard", () => {
   it("keeps the thumbs pair and „Antworten“ on the card, the rest behind „⋯“", async () => {
     const { wrapper } = mountCard({});
@@ -79,7 +83,7 @@ describe("CommentCard", () => {
     expect(group.attributes("aria-label")).toBe("Kommentar bewerten");
     expect(group.classes()).toContain("c-word-reactions");
     expect(group.findAll(".c-reaction")).toHaveLength(2);
-    expect(wrapper.find(".c-comment .reply").exists()).toBe(true);
+    expect(byText(wrapper, "Antworten").exists()).toBe(true);
     expect(
       wrapper.find('[aria-label="Weitere Aktionen zum Kommentar von Anonymer Berliner"]').exists(),
     ).toBe(true);
@@ -109,7 +113,7 @@ describe("CommentCard", () => {
   it("placeholder shows „Wird geprüft“ without vote buttons", () => {
     const { wrapper } = mountCard({ state: "reviewing", text: null });
     expect(wrapper.text()).toContain("Wird geprüft");
-    expect(wrapper.find(".c-comment .helpful").exists()).toBe(false);
+    expect(wrapper.find('[aria-label^="Hilfreich"]').exists()).toBe(false);
     expect(wrapper.text()).not.toContain("Antworten");
   });
 
@@ -120,7 +124,7 @@ describe("CommentCard", () => {
 
   it("reply prefills @Name", async () => {
     const { wrapper } = mountCard({ authorName: "Icke" });
-    await wrapper.find(".c-comment .reply").trigger("click");
+    await byText(wrapper, "Antworten").trigger("click");
     expect((wrapper.find("textarea").element as HTMLTextAreaElement).value).toBe("@Icke ");
   });
 
@@ -130,7 +134,7 @@ describe("CommentCard", () => {
     [0, "false"],
   ])("„hilfreich“ is pressed only for myVote 1 (myVote %s)", (myVote, pressed) => {
     const { wrapper } = mountCard({ myVote });
-    const button = wrapper.find(".c-comment .helpful");
+    const button = wrapper.find('[aria-label^="Hilfreich"]');
     expect(button.attributes("aria-pressed")).toBe(pressed);
     expect(button.attributes("aria-label")).toBe("Hilfreich, 3");
   });
@@ -139,7 +143,7 @@ describe("CommentCard", () => {
     const { ctx, wrapper } = mountCard({});
     ctx.busy.value = new Set([1]);
     await wrapper.vm.$nextTick();
-    const button = wrapper.find(".c-comment .helpful");
+    const button = wrapper.find('[aria-label^="Hilfreich"]');
     expect(button.attributes("aria-disabled")).toBe("true");
     expect(button.attributes("disabled")).toBeUndefined();
     await button.trigger("click");
@@ -148,16 +152,16 @@ describe("CommentCard", () => {
 
   it("„hilfreich“ toggles one up-vote: 0 -> 1, 1 -> 0", async () => {
     const own = mountCard({ myVote: 1 });
-    await own.wrapper.find(".c-comment .helpful").trigger("click");
+    await own.wrapper.find('[aria-label^="Hilfreich"]').trigger("click");
     expect(own.ctx.vote).toHaveBeenCalledWith(1, 0);
     const other = mountCard({ myVote: 0 });
-    await other.wrapper.find(".c-comment .helpful").trigger("click");
+    await other.wrapper.find('[aria-label^="Hilfreich"]').trigger("click");
     expect(other.ctx.vote).toHaveBeenCalledWith(1, 1);
   });
 
   it("„nich hilfreich“ shows the downvotes and is pressed only for myVote -1", () => {
     const pressed = (myVote: number) =>
-      mountCard({ downvotes: 2, myVote }).wrapper.find(".c-comment .unhelpful");
+      mountCard({ downvotes: 2, myVote }).wrapper.find('[aria-label^="Nich hilfreich"]');
     expect(pressed(-1).attributes("aria-pressed")).toBe("true");
     expect(pressed(1).attributes("aria-pressed")).toBe("false");
     expect(pressed(0).attributes("aria-label")).toBe("Nich hilfreich, 2");
@@ -167,7 +171,7 @@ describe("CommentCard", () => {
   it("„nich hilfreich“ sets -1, switches from an up-vote and takes itself back", async () => {
     const click = async (myVote: number) => {
       const { ctx, wrapper } = mountCard({ myVote });
-      await wrapper.find(".c-comment .unhelpful").trigger("click");
+      await wrapper.find('[aria-label^="Nich hilfreich"]').trigger("click");
       return ctx.vote;
     };
     expect(await click(0)).toHaveBeenCalledWith(1, -1);
@@ -179,7 +183,7 @@ describe("CommentCard", () => {
     const { ctx, wrapper } = mountCard({});
     ctx.online.value = false;
     await wrapper.vm.$nextTick();
-    const button = wrapper.find(".c-comment .helpful");
+    const button = wrapper.find('[aria-label^="Hilfreich"]');
     expect(button.attributes("aria-disabled")).toBe("true");
     expect(button.attributes("disabled")).toBeUndefined();
     await button.trigger("click");
@@ -190,19 +194,19 @@ describe("CommentCard", () => {
     const { wrapper } = mountCard({ text: "x".repeat(601) });
     const text = wrapper.find(".c-comment .text");
     expect(text.attributes("data-state")).toBe("clamped");
-    const more = wrapper.find(".c-comment .more");
+    const more = wrapper.find('[aria-controls$="-text"]');
     expect(more.text()).toBe("Weiterlesen");
     expect(more.attributes("aria-expanded")).toBe("false");
     expect(more.attributes("aria-controls")).toBe(text.attributes("id"));
     await more.trigger("click");
     expect(wrapper.find(".c-comment .text").attributes("data-state")).toBeUndefined();
-    expect(wrapper.find(".c-comment .more").attributes("aria-expanded")).toBe("true");
+    expect(wrapper.find('[aria-controls$="-text"]').attributes("aria-expanded")).toBe("true");
   });
 
   it("short comments have no „Weiterlesen“", () => {
     expect(
       mountCard({ text: "x".repeat(600) })
-        .wrapper.find(".c-comment .more")
+        .wrapper.find('[aria-controls$="-text"]')
         .exists(),
     ).toBe(false);
   });
@@ -297,8 +301,8 @@ describe("CommentCard", () => {
     };
     const { wrapper } = mountCard(placeholder);
     expect(wrapper.text()).toContain("Hallo");
-    expect(wrapper.find(".c-comment .reply").exists()).toBe(false);
-    expect(mountCard({}).wrapper.find(".c-comment .reply").exists()).toBe(true);
+    expect(byText(wrapper, "Antworten").exists()).toBe(false);
+    expect(byText(mountCard({}).wrapper, "Antworten").exists()).toBe(true);
   });
 
   it("has an anchor id, a permalink and a link copy action", async () => {
@@ -367,24 +371,24 @@ describe("CommentCard", () => {
     vi.mocked(trackEvent).mockClear();
     const { ctx, wrapper } = mountCard({});
     ctx.vote.mockResolvedValueOnce(true).mockResolvedValueOnce(false);
-    await wrapper.find(".c-comment .helpful").trigger("click");
+    await wrapper.find('[aria-label^="Hilfreich"]').trigger("click");
     await flushPromises();
     expect(ctx.vote).toHaveBeenCalledWith(1, 1);
     expect(trackEvent).toHaveBeenCalledWith("Comments", "Vote", "7");
-    await wrapper.find(".c-comment .helpful").trigger("click");
+    await wrapper.find('[aria-label^="Hilfreich"]').trigger("click");
     await flushPromises();
     expect(trackEvent).toHaveBeenCalledTimes(1);
   });
 
   it("arms the captcha when a reply form opens", async () => {
     const { ctx, wrapper } = mountCard({});
-    await wrapper.find(".c-comment .reply").trigger("click");
+    await byText(wrapper, "Antworten").trigger("click");
     expect(ctx.armCaptcha).toHaveBeenCalledOnce();
   });
 
   it("reply: posts under the thread root, closes on success, stays open on error or without token", async () => {
     const { ctx, wrapper } = mountCard({ id: 3, parentId: 1 });
-    await wrapper.find(".c-comment .reply").trigger("click");
+    await byText(wrapper, "Antworten").trigger("click");
     const submit = () =>
       wrapper.findComponent(CommentForm).props("submit") as (v: {
         authorName: string;
@@ -412,10 +416,10 @@ describe("CommentCard", () => {
 
   it("„Antworten“ toggles the reply form and „Abbrechen“ closes it", async () => {
     const { wrapper } = mountCard({});
-    await wrapper.find(".c-comment .reply").trigger("click");
-    await wrapper.find(".c-comment .reply").trigger("click");
+    await byText(wrapper, "Antworten").trigger("click");
+    await byText(wrapper, "Antworten").trigger("click");
     expect(wrapper.findComponent(CommentForm).exists()).toBe(false);
-    await wrapper.find(".c-comment .reply").trigger("click");
+    await byText(wrapper, "Antworten").trigger("click");
     wrapper.findComponent(CommentForm).vm.$emit("cancel");
     await flushPromises();
     expect(wrapper.findComponent(CommentForm).exists()).toBe(false);
@@ -471,7 +475,7 @@ describe("CommentCard", () => {
   });
 
   describe("focus after a panel closes (WCAG 2.4.3)", () => {
-    const menuButton = (w: VueWrapper) => w.find(".c-comment .menu-button").element;
+    const menuButton = (w: VueWrapper) => w.find('[aria-label^="Weitere Aktionen"]').element;
 
     it("Abbrechen of the delete confirm and Esc hand the focus back to the ⋯ button", async () => {
       const { wrapper } = mountCard({ id: 99 }, true, [], true);
@@ -540,7 +544,7 @@ describe("CommentCard", () => {
 
   it("a reply to a top-level comment goes under that comment", async () => {
     const { ctx, wrapper } = mountCard({ id: 4 });
-    await wrapper.find(".c-comment .reply").trigger("click");
+    await byText(wrapper, "Antworten").trigger("click");
     const submit = wrapper.findComponent(CommentForm).props("submit") as (v: {
       authorName: string;
       text: string;

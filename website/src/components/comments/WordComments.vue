@@ -42,7 +42,7 @@
           </li>
         </ol>
 
-        <button v-if="canShowMore" type="button" class="c-textlink more" @click="showMore">
+        <button v-if="canShowMore" type="button" class="c-textlink" @click="showMore">
           {{ expanded ? "Weitere Kommentare zeigen" : `Alle ${ctx.total.value} Kommentare zeigen` }}
         </button>
 
@@ -80,7 +80,7 @@
           <button
             ref="writeButton"
             type="button"
-            class="c-choice write"
+            class="c-choice"
             aria-expanded="false"
             :aria-disabled="!ctx.online.value"
             :aria-describedby="ctx.online.value ? undefined : 'word-comments-offline'"

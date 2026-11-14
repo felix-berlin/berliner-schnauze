@@ -45,7 +45,7 @@
         <!-- Proposal in the spec (§9, long comments): cut at about 600 characters to 8 lines. -->
         <button
           v-if="long"
-          class="c-textlink more"
+          class="c-textlink"
           type="button"
           :aria-controls="`${uid}-text`"
           :aria-expanded="expanded"
@@ -58,7 +58,7 @@
       <div class="actions">
         <div aria-label="Kommentar bewerten" class="c-word-reactions" role="group">
           <button
-            class="c-reaction helpful"
+            class="c-reaction"
             type="button"
             :aria-label="`Hilfreich, ${comment.upvotes}`"
             :aria-pressed="comment.myVote === 1"
@@ -69,7 +69,7 @@
             <b>{{ comment.upvotes }}</b>
           </button>
           <button
-            class="c-reaction unhelpful"
+            class="c-reaction"
             type="button"
             :aria-label="`Nich hilfreich, ${comment.downvotes}`"
             :aria-pressed="comment.myVote === -1"
@@ -80,12 +80,7 @@
             <b>{{ comment.downvotes }}</b>
           </button>
         </div>
-        <button
-          v-if="parentVisible"
-          class="c-textlink reply"
-          type="button"
-          @click="toggle('reply')"
-        >
+        <button v-if="parentVisible" class="c-textlink" type="button" @click="toggle('reply')">
           Antworten
         </button>
         <div class="menu">
@@ -94,7 +89,7 @@
               <button
                 v-bind="triggerProps"
                 ref="menuButton"
-                class="c-icon-button menu-button"
+                class="c-icon-button"
                 type="button"
                 :aria-label="`Weitere Aktionen zum Kommentar von ${comment.authorName}`"
               >
@@ -211,7 +206,7 @@
         <textarea :id="`${uid}-note`" v-model="note" class="c-textarea" maxlength="300" rows="2" />
         <div class="panel-actions">
           <button
-            class="c-button report-button"
+            class="c-button"
             data-variant="primary"
             type="submit"
             :aria-disabled="!reason || reporting"
