@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
 
+import { dismissToasts } from "./helpers";
+
 test.describe("Wort-Detailseite (/wort/<slug>)", () => {
   test("spärliches Wort rendert ohne zu brechen (wa)", async ({ page }) => {
     const response = await page.goto("/wort/wa");
@@ -258,6 +260,8 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     page,
   }) => {
     await page.setViewportSize({ height: 800, width: 390 });
+    // The toasts (top-right, below the header) cover the sticky tab bar on narrow screens.
+    await dismissToasts(page);
     await page.goto("/wort/anmachen");
 
     const tabbar = page.getByRole("navigation", { name: "Inhalt der Wortseite" });
