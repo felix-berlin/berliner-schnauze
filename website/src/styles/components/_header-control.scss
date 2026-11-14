@@ -74,8 +74,8 @@
       --_swing: cubic-bezier(0.2, 0.8, 0.2, 1);
       // Only what actually changes.
       --button-transition:
-        background-color var(--_fade) ease, border-color var(--_fade) ease, box-shadow var(--_glow) ease,
-        scale var(--_press) ease-out;
+        background-color var(--_fade) ease, border-color var(--_fade) ease,
+        box-shadow var(--_glow) ease, scale var(--_press) ease-out;
 
       &:active {
         scale: 0.96;

@@ -26,7 +26,11 @@
   }
 
   // Bottom: the newest toast sits nearest the edge.
-  :scope:is([data-variant="bottom-right"], [data-variant="bottom-left"], [data-variant="bottom-center"]) {
+  :scope:is(
+    [data-variant="bottom-right"],
+    [data-variant="bottom-left"],
+    [data-variant="bottom-center"]
+  ) {
     flex-direction: column-reverse;
     inset-block-end: var(--_edge);
   }

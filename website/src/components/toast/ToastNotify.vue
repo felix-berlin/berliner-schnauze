@@ -12,12 +12,7 @@
     @focusin="pauseTimer"
     @focusout="resumeTimer"
   >
-    <Component
-      :is="toastIconMap[status]"
-      v-if="showStatusIcon"
-      class="icon"
-      aria-hidden="true"
-    />
+    <Component :is="toastIconMap[status]" v-if="showStatusIcon" class="icon" aria-hidden="true" />
 
     <div class="body">
       <div class="message">

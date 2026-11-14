@@ -78,8 +78,8 @@
 import TurnStile from "@components/TurnStile.vue";
 import { useContentTracking } from "@composables/useContentTracking";
 import { createToastNotify } from "@stores/toastNotify.ts";
-import { captchaWaitToast } from "@utils/captchaToast.ts";
 import { trackEvent } from "@utils/analytics";
+import { captchaWaitToast } from "@utils/captchaToast.ts";
 import { type SuggestWord, suggestWordSchema } from "@utils/suggestWordSchema.ts";
 import { useTimeoutFn } from "@vueuse/core";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";

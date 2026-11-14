@@ -1,15 +1,6 @@
 <template>
-  <div
-    ref="container"
-    popover="manual"
-    class="c-toast-container"
-    :data-variant="position"
-  >
-    <TransitionGroup
-      name="toast"
-      @before-leave="onBeforeLeave"
-      @after-leave="onAfterLeave"
-    >
+  <div ref="container" popover="manual" class="c-toast-container" :data-variant="position">
+    <TransitionGroup name="toast" @before-leave="onBeforeLeave" @after-leave="onAfterLeave">
       <ToastNotify v-for="toast in toasts" :key="toast.id" v-bind="toast" />
     </TransitionGroup>
   </div>

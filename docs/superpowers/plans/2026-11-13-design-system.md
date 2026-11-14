@@ -25,21 +25,21 @@
 
 ## File structure
 
-| File | Responsibility |
-| --- | --- |
-| `tokens/primitive.tokens.json`, `tokens/semantic.light.tokens.json`, `tokens/semantic.dark.tokens.json` | Token source (§5) |
-| `scripts/build-tokens.mjs` | DTCG → CSS |
-| `src/styles/tokens/_tokens.generated.scss` | Generated, committed |
-| `src/styles/tokens/_legacy-aliases.scss` | Old custom property names → new ones, until `legacy` is empty |
-| `src/styles/mixins/_component.scss` | `mx.component($name)` (§7.1) |
-| `stylelint.legacy-files.mjs` | `export default [ …paths ]`: files still in `legacy`; only shrinks |
-| `stylelint.config.mjs` | Strict rules for all, switched off for the legacy list |
-| `src/tests/unit/scripts/build-tokens.test.ts` | Token build |
-| `src/tests/unit/styles/contract.test.ts` | What lint cannot see (§11) |
-| `src/tests/unit/styles/component-mixin.test.ts` | Mixin output |
-| `src/tests/e2e/visual-baseline.spec.ts` | Screenshots of the reference pages |
-| `src/tests/e2e/design-system.spec.ts` | Layer order after client navigation, slot boundary, `@scope` support |
-| `scripts/colour-inventory.mjs`, `docs/design/design-system/colour-inventory.md` | Task 7 |
+| File                                                                                                    | Responsibility                                                       |
+| ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `tokens/primitive.tokens.json`, `tokens/semantic.light.tokens.json`, `tokens/semantic.dark.tokens.json` | Token source (§5)                                                    |
+| `scripts/build-tokens.mjs`                                                                              | DTCG → CSS                                                           |
+| `src/styles/tokens/_tokens.generated.scss`                                                              | Generated, committed                                                 |
+| `src/styles/tokens/_legacy-aliases.scss`                                                                | Old custom property names → new ones, until `legacy` is empty        |
+| `src/styles/mixins/_component.scss`                                                                     | `mx.component($name)` (§7.1)                                         |
+| `stylelint.legacy-files.mjs`                                                                            | `export default [ …paths ]`: files still in `legacy`; only shrinks   |
+| `stylelint.config.mjs`                                                                                  | Strict rules for all, switched off for the legacy list               |
+| `src/tests/unit/scripts/build-tokens.test.ts`                                                           | Token build                                                          |
+| `src/tests/unit/styles/contract.test.ts`                                                                | What lint cannot see (§11)                                           |
+| `src/tests/unit/styles/component-mixin.test.ts`                                                         | Mixin output                                                         |
+| `src/tests/e2e/visual-baseline.spec.ts`                                                                 | Screenshots of the reference pages                                   |
+| `src/tests/e2e/design-system.spec.ts`                                                                   | Layer order after client navigation, slot boundary, `@scope` support |
+| `scripts/colour-inventory.mjs`, `docs/design/design-system/colour-inventory.md`                         | Task 7                                                               |
 
 ## Review Focus
 
@@ -188,6 +188,7 @@ it("the committed file is current", () => expect(readFileSync(generated, "utf8")
 **Task 8 — global controls and page shell** (must be complete before 9 to 11; it is the reference set).
 Files: `mixins/{_paper-card,_surfaces,_typo,_badge-wash,_skeleton-loader}.scss` (rewritten to tokens; then remove the `mixins` glob from the lint override), `components/{_button,_choice,_link,_icon-button,_reaction,_band,_state,_skeleton,_badge,_section-card,_switch,_tooltip,_modal,_toast-container,_toast-notify,_dropdown-popover,_dropdown-popover-themes,_options-dropdown,_main-menu,_menu-nav,_scroll-to-top,_floating-label}.scss`, `layouts/{_header,_footer}.scss` (layer `objects`, `mx.breakpoint` allowed).
 Extra steps:
+
 - [ ] Dropdown, comment menu trigger and tooltip move to the Popover API (§8); delete the click-outside and manual focus code they replace, keep their unit tests green by adapting them.
 - [ ] `design-system.spec.ts`: Review Focus 4. Render a page where a `.title` element is passed into `SectionCard`'s body slot (the word page has one; else add a case to the e2e seed page list); assert its computed `font-size` differs from the card title's.
 

@@ -52,7 +52,10 @@ describe("ToastNotify.vue", () => {
     const wrapper = mountToast(ToastNotify, {
       props: { actionLabel: "Aktualisieren", id: "test-uuid-2", message: "Hi", onAction },
     });
-    await wrapper.findAll("button").find((b) => b.text() === "Aktualisieren")!.trigger("click");
+    await wrapper
+      .findAll("button")
+      .find((b) => b.text() === "Aktualisieren")!
+      .trigger("click");
     expect(onAction).toHaveBeenCalledOnce();
     expect(removeToastById).toHaveBeenCalledWith("test-uuid-2");
   });
@@ -61,7 +64,10 @@ describe("ToastNotify.vue", () => {
     const wrapper = mountToast(ToastNotify, {
       props: { actionLabel: "Aktualisieren", id: "test-uuid-3", message: "Hi" },
     });
-    await wrapper.findAll("button").find((b) => b.text() === "Aktualisieren")!.trigger("click");
+    await wrapper
+      .findAll("button")
+      .find((b) => b.text() === "Aktualisieren")!
+      .trigger("click");
     expect(removeToastById).toHaveBeenCalledWith("test-uuid-3");
   });
 

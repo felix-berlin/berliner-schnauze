@@ -15,7 +15,12 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, transparent 25%, var(--_skeleton-shine) 50%, transparent 75%);
+    background: linear-gradient(
+      90deg,
+      transparent 25%,
+      var(--_skeleton-shine) 50%,
+      transparent 75%
+    );
 
     @include butler-mx.feature("motion") {
       animation: var(--_shine-duration) shine linear infinite;

@@ -23,7 +23,9 @@
       @pointerleave="scheduleHide"
     >
       <span ref="arrow" class="arrow" aria-hidden="true" />
-      <span data-slot><slot name="tooltip">{{ content }}</slot></span>
+      <span data-slot
+        ><slot name="tooltip">{{ content }}</slot></span
+      >
     </div>
   </div>
 </template>

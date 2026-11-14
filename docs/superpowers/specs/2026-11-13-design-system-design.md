@@ -80,23 +80,23 @@ Measured today (273 style files): 384 semantic colour references against 363 dir
 
 ### 5.4 Primitives
 
-| Group | Tokens | Source |
-| --- | --- | --- |
-| `color.white` | `100`, `200`, `pure` (#ffffff); `color.black.pure` | `src/styles/variables/_colors.scss` |
-| `color.orange` | `100` to `900` | same |
-| `color.red` | `100`, `200`, `500`; `color.red-berlin.500/600/700` | same |
-| `color.cream` | `500` (today `yellow-500`) | same |
-| `color.grey` | `100`, `200` | same |
-| `color.ink` | `100`–`1000` (today's generated `--blue-*`; `--blue-800` is still used by the scrollbar), `base` (#2b333b), `200m`, `300m`, `400m`, `600m` (today's `--new-blue-*` mixes, as fixed colours) | computed values read in the browser |
-| `color.danger`, `color.success`, `color.gold` | one token each (not `color.status.*`: that path belongs to the semantic tier, and one path in both tiers is a build error) | same file |
-| `space` | `1` 0.25rem, `2` 0.5, `3` 0.75, `4` 1, `5` 1.25, `6` 1.5, `8` 2, `12` 3, `16` 4 | `DESIGN.md` spacing |
-| `font.size` | `2xs` 0.7rem, `xs` 0.75, `sm` 0.8, `md` 0.9, `base` 1, `lg` 1.1, `xl` 1.25, `2xl` 1.6, `3xl` 2, `4xl` 2.25 | word page type scale + most used values |
-| `font.family` | `display`, `body`, `mono` | `variables/_fonts.scss` |
-| `font.weight` | `regular` 400, `bold` 700, `black` 900 | word page spec §4 |
-| `radius` | `none` 0, `xxs` 2px, `xs` 3px, `sm` 4px, `pill` 999px | `variables/_base.scss` |
-| `duration` | `fast` 150ms, `base` 300ms, `slow` 600ms | most used values |
-| `ease` | `standard` (cubic-bezier 0.42, 0, 0.58, 1) | `_button.scss` |
-| `z` | `below` -1, `raised` 1, `sticky` 10, `overlay` 20, `header` 100 | today 1–5 and 11000 |
+| Group                                         | Tokens                                                                                                                                                                                      | Source                                  |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `color.white`                                 | `100`, `200`, `pure` (#ffffff); `color.black.pure`                                                                                                                                          | `src/styles/variables/_colors.scss`     |
+| `color.orange`                                | `100` to `900`                                                                                                                                                                              | same                                    |
+| `color.red`                                   | `100`, `200`, `500`; `color.red-berlin.500/600/700`                                                                                                                                         | same                                    |
+| `color.cream`                                 | `500` (today `yellow-500`)                                                                                                                                                                  | same                                    |
+| `color.grey`                                  | `100`, `200`                                                                                                                                                                                | same                                    |
+| `color.ink`                                   | `100`–`1000` (today's generated `--blue-*`; `--blue-800` is still used by the scrollbar), `base` (#2b333b), `200m`, `300m`, `400m`, `600m` (today's `--new-blue-*` mixes, as fixed colours) | computed values read in the browser     |
+| `color.danger`, `color.success`, `color.gold` | one token each (not `color.status.*`: that path belongs to the semantic tier, and one path in both tiers is a build error)                                                                  | same file                               |
+| `space`                                       | `1` 0.25rem, `2` 0.5, `3` 0.75, `4` 1, `5` 1.25, `6` 1.5, `8` 2, `12` 3, `16` 4                                                                                                             | `DESIGN.md` spacing                     |
+| `font.size`                                   | `2xs` 0.7rem, `xs` 0.75, `sm` 0.8, `md` 0.9, `base` 1, `lg` 1.1, `xl` 1.25, `2xl` 1.6, `3xl` 2, `4xl` 2.25                                                                                  | word page type scale + most used values |
+| `font.family`                                 | `display`, `body`, `mono`                                                                                                                                                                   | `variables/_fonts.scss`                 |
+| `font.weight`                                 | `regular` 400, `bold` 700, `black` 900                                                                                                                                                      | word page spec §4                       |
+| `radius`                                      | `none` 0, `xxs` 2px, `xs` 3px, `sm` 4px, `pill` 999px                                                                                                                                       | `variables/_base.scss`                  |
+| `duration`                                    | `fast` 150ms, `base` 300ms, `slow` 600ms                                                                                                                                                    | most used values                        |
+| `ease`                                        | `standard` (cubic-bezier 0.42, 0, 0.58, 1)                                                                                                                                                  | `_button.scss`                          |
+| `z`                                           | `below` -1, `raised` 1, `sticky` 10, `overlay` 20, `header` 100                                                                                                                             | today 1–5 and 11000                     |
 
 The scales are Claude's call, derived from the most used values.
 
@@ -104,26 +104,26 @@ The scales are Claude's call, derived from the most used values.
 
 Values are the ones in `src/styles/base/_colors.scss` today, copied, not redesigned.
 
-| Token | Replaces |
-| --- | --- |
-| `color.text.body` / `strong` / `muted` / `accent` | `--color-body` / `--color-ink-strong` / `--color-muted` / `--color-accent-text` |
-| `color.text.on-accent` | `--white-100` as text on orange (new) |
-| `color.surface.hero` / `sheet` / `paper` / `chip` / `callout` / `badge` / `wash` | `--surface-*` |
-| `color.surface.tint` | `rgb(0 0 0 / 10%)` light, `rgb(255 255 255 / 10%)` dark (new) |
-| `color.surface.floating` | `--floating-color-background` |
-| `color.surface.overlay`, `color.text.on-overlay` | `--overlay-base`, `--overlay-ink` |
-| `color.accent.solid` / `color.accent.icon` | `--orange-600` as a full surface / `--orange-400` on icons |
-| `color.border.card` / `inner` / `control` | `--rule-card` / `--rule-inner` / `--control-border` |
-| `color.control.bg` / `text` | `--control-bg` / `--control-color` |
-| `color.focus.ring` | `--focus-ring` |
-| `color.status.danger` / `success` / `gold` | `--danger` / `--success` / `--gold` |
-| `shadow.paper-lift` / `shadow.hover-glow` | `--paper-lift` / `--shadow-hover-glow` |
-| `color.border.accent` / `accent-soft` | `--orange-300` on accent borders and icons / `--orange-200` on dashed dividers (colour inventory R7 / R6) |
-| `color.surface.placeholder` | `--orange-200` light, `--new-blue-200` dark on placeholder and skeleton fills (R12, R13) |
-| `color.surface.inverse` | `--new-blue-200` / `--grey-100` dark panels in both themes (R14, R15) |
-| `color.surface.chrome` | header and footer background: `--orange-200` light, `--blue` dark (R38) |
-| `color.surface.wash-strong` | `--orange-500` at 22 % (R18, R19; `wash` is 15 %) |
-| `color.text.emphasis` / `badge` | `--color-ink-strong` light, `--orange-300` / `--orange-200` dark (R16 / R29) |
+| Token                                                                            | Replaces                                                                                                  |
+| -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `color.text.body` / `strong` / `muted` / `accent`                                | `--color-body` / `--color-ink-strong` / `--color-muted` / `--color-accent-text`                           |
+| `color.text.on-accent`                                                           | `--white-100` as text on orange (new)                                                                     |
+| `color.surface.hero` / `sheet` / `paper` / `chip` / `callout` / `badge` / `wash` | `--surface-*`                                                                                             |
+| `color.surface.tint`                                                             | `rgb(0 0 0 / 10%)` light, `rgb(255 255 255 / 10%)` dark (new)                                             |
+| `color.surface.floating`                                                         | `--floating-color-background`                                                                             |
+| `color.surface.overlay`, `color.text.on-overlay`                                 | `--overlay-base`, `--overlay-ink`                                                                         |
+| `color.accent.solid` / `color.accent.icon`                                       | `--orange-600` as a full surface / `--orange-400` on icons                                                |
+| `color.border.card` / `inner` / `control`                                        | `--rule-card` / `--rule-inner` / `--control-border`                                                       |
+| `color.control.bg` / `text`                                                      | `--control-bg` / `--control-color`                                                                        |
+| `color.focus.ring`                                                               | `--focus-ring`                                                                                            |
+| `color.status.danger` / `success` / `gold`                                       | `--danger` / `--success` / `--gold`                                                                       |
+| `shadow.paper-lift` / `shadow.hover-glow`                                        | `--paper-lift` / `--shadow-hover-glow`                                                                    |
+| `color.border.accent` / `accent-soft`                                            | `--orange-300` on accent borders and icons / `--orange-200` on dashed dividers (colour inventory R7 / R6) |
+| `color.surface.placeholder`                                                      | `--orange-200` light, `--new-blue-200` dark on placeholder and skeleton fills (R12, R13)                  |
+| `color.surface.inverse`                                                          | `--new-blue-200` / `--grey-100` dark panels in both themes (R14, R15)                                     |
+| `color.surface.chrome`                                                           | header and footer background: `--orange-200` light, `--blue` dark (R38)                                   |
+| `color.surface.wash-strong`                                                      | `--orange-500` at 22 % (R18, R19; `wash` is 15 %)                                                         |
+| `color.text.emphasis` / `badge`                                                  | `--color-ink-strong` light, `--orange-300` / `--orange-200` dark (R16 / R29)                              |
 
 The full row-by-row decisions (token, merge or private one-off) are in `docs/design/design-system/colour-inventory.md`.
 
@@ -143,16 +143,16 @@ Order, declared once inline in the document head (`BaseHead.astro`) so no chunk 
 @layer reset, tokens, vendor, base, legacy, objects, components, utilities;
 ```
 
-| Layer | Content |
-| --- | --- |
-| `reset` | `base/_reset.scss` |
-| `tokens` | generated tokens, `@property` registrations, legacy aliases |
-| `vendor` | third-party CSS (`@vueform/multiselect`) |
-| `base` | element defaults, fonts, inputs, scrollbar (migrated with the foundation) |
-| `legacy` | every not yet migrated file from `styles/{components,objects,layouts,pages,plugins}` |
-| `objects` | migrated page shell: header, footer, page grids |
-| `components` | migrated components |
-| `utilities` | `u-` classes (migrated with the foundation) |
+| Layer        | Content                                                                              |
+| ------------ | ------------------------------------------------------------------------------------ |
+| `reset`      | `base/_reset.scss`                                                                   |
+| `tokens`     | generated tokens, `@property` registrations, legacy aliases                          |
+| `vendor`     | third-party CSS (`@vueform/multiselect`)                                             |
+| `base`       | element defaults, fonts, inputs, scrollbar (migrated with the foundation)            |
+| `legacy`     | every not yet migrated file from `styles/{components,objects,layouts,pages,plugins}` |
+| `objects`    | migrated page shell: header, footer, page grids                                      |
+| `components` | migrated components                                                                  |
+| `utilities`  | `u-` classes (migrated with the foundation)                                          |
 
 - `legacy` sits above `base` and below `objects`/`components`: old components still beat element defaults, new components always beat old ones.
 - Mechanism: in wave 1 every existing partial wraps its own rules in `@layer legacy { … }` below its `@use` lines (Vue style blocks keep their plain `@use`). `.astro` and `.vue` style blocks hold no rules of their own today; the contract test keeps it that way. The multiselect theme is loaded into `vendor` with `meta.load-css`.
@@ -190,9 +190,16 @@ Before (`_section-card.scss`, markup `class="c-section-card c-section-card--note
 ```scss
 .c-section-card {
   background: white;
-  &__title { font-size: 1.25rem; color: var(--new-blue-400);
-    @include butler-mx.dark-mode-class { color: var(--orange-300); } }
-  &--note { border-inline-start: 3px solid var(--orange-300); }
+  &__title {
+    font-size: 1.25rem;
+    color: var(--new-blue-400);
+    @include butler-mx.dark-mode-class {
+      color: var(--orange-300);
+    }
+  }
+  &--note {
+    border-inline-start: 3px solid var(--orange-300);
+  }
 }
 ```
 
@@ -205,8 +212,13 @@ After (markup `class="c-section-card" data-variant="note"`, title `class="title"
     background: var(--_bg);
     container: section-card / inline-size;
   }
-  .title { font-size: var(--font-size-xl); color: var(--color-text-strong); }
-  :scope[data-variant="note"] { border-inline-start: 3px solid var(--color-border-inner); }
+  .title {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-strong);
+  }
+  :scope[data-variant="note"] {
+    border-inline-start: 3px solid var(--color-border-inner);
+  }
 }
 ```
 
@@ -220,19 +232,19 @@ Logical properties only; `:has()` instead of mirrored state classes; `gap` inste
 
 Newly available features (Baseline 2025/2026). Only `@scope` and Popover are load-bearing and inside the floor of §9; every other "adopt" is an enhancement whose fallback is named and must keep working:
 
-| Feature | Decision |
-| --- | --- |
-| `@scope` | Adopt, load-bearing |
-| Popover (`popover`, `popovertarget`) | Adopt, load-bearing: dropdown, comment menu, tooltip |
-| Custom highlights | Adopt for search-term highlighting (replaces `v-html` in `SingleWord.vue`); no support = no highlight |
-| `field-sizing: content` | Enhancement for comment and suggest textareas; fallback fixed rows |
-| `::details-content` | Enhancement for the accordion animation; fallback opens without animation |
-| `content-visibility: auto` | Not adopted on the word page: it blocks Astro `client:visible` hydration in WebKit (the skipped subtree's placeholder height moves islands out of view after a programmatic scroll) |
-| `scrollbar-color` | Add next to the existing `::-webkit-scrollbar` rules, which stay until Safari below 26.2 leaves the floor |
-| `:active-view-transition` | Adopt in the BON game instead of `html[data-vt]`; fallback no morph |
-| Container style queries | Not for variants; allowed where the fallback is the default look |
-| Invoker commands | Not yet (outside the Safari floor) |
-| `contrast-color()` | No: the design fixes `color.text.on-accent` |
+| Feature                              | Decision                                                                                                                                                                            |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@scope`                             | Adopt, load-bearing                                                                                                                                                                 |
+| Popover (`popover`, `popovertarget`) | Adopt, load-bearing: dropdown, comment menu, tooltip                                                                                                                                |
+| Custom highlights                    | Adopt for search-term highlighting (replaces `v-html` in `SingleWord.vue`); no support = no highlight                                                                               |
+| `field-sizing: content`              | Enhancement for comment and suggest textareas; fallback fixed rows                                                                                                                  |
+| `::details-content`                  | Enhancement for the accordion animation; fallback opens without animation                                                                                                           |
+| `content-visibility: auto`           | Not adopted on the word page: it blocks Astro `client:visible` hydration in WebKit (the skipped subtree's placeholder height moves islands out of view after a programmatic scroll) |
+| `scrollbar-color`                    | Add next to the existing `::-webkit-scrollbar` rules, which stay until Safari below 26.2 leaves the floor                                                                           |
+| `:active-view-transition`            | Adopt in the BON game instead of `html[data-vt]`; fallback no morph                                                                                                                 |
+| Container style queries              | Not for variants; allowed where the fallback is the default look                                                                                                                    |
+| Invoker commands                     | Not yet (outside the Safari floor)                                                                                                                                                  |
+| `contrast-color()`                   | No: the design fixes `color.text.on-accent`                                                                                                                                         |
 
 ## 9. Browser floor
 
@@ -240,16 +252,16 @@ Newly available features (Baseline 2025/2026). Only `@scope` and Popover are loa
 
 ## 10. Migration
 
-| Wave | Content | Result |
-| --- | --- | --- |
-| 0 | Screenshot baseline (Playwright, chromium, 390 and 1280, light and dark, reduced motion, service workers blocked) against the e2e seed database: `/`, `/wort/anmachen`, `/wort/wa`, `/games/berliner-oder-nicht`, `/games/berliner-oder-nicht/rangliste`, `/anki`, `/wort-vorschlagen`. Snapshots are committed | Proof for "no undecided visual change" |
-| 1 | Foundation: tokens + build, layer order, everything existing into `legacy` with aliases, `base` and `utilities` migrated, `mx.component`, browser floor, Stylelint gate, contract test | No visual change |
-| 1b | Colour inventory: a script lists, for every file of waves 2 to 5, each colour value without a semantic token (palette reference, `color-mix()`, literal, keyword), in light and dark as computed today, grouped by identical value pair, with file and line and the number of uses. Output: `docs/design/design-system/colour-inventory.md`, one table row per value pair with an empty column "decision". The user fills it in: an existing token, a new token name (by role, not by colour), or "keep as private one-off" for decoration such as the confetti colours. The token files are then extended in one commit | Waves 2 to 5 run without colour questions |
-| 2 | Global controls (`button`, `choice`, `link`, `icon-button`, `reaction`, `band`, `state`, `skeleton`, `badge`, `section-card`, `switch`, `tooltip`, `modal`, toast) and page shell (header, footer, main menu) | The reference set every later wave copies |
-| 3 | Word page | |
-| 4 | BON game | |
-| 5 | Anki page (already close to the new design, untidy: 651 lines, 40 palette references) | |
-| later | Every other page, together with its redesign | `legacy` empties, then is removed |
+| Wave  | Content                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Result                                    |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
+| 0     | Screenshot baseline (Playwright, chromium, 390 and 1280, light and dark, reduced motion, service workers blocked) against the e2e seed database: `/`, `/wort/anmachen`, `/wort/wa`, `/games/berliner-oder-nicht`, `/games/berliner-oder-nicht/rangliste`, `/anki`, `/wort-vorschlagen`. Snapshots are committed                                                                                                                                                                                                                                                                                                          | Proof for "no undecided visual change"    |
+| 1     | Foundation: tokens + build, layer order, everything existing into `legacy` with aliases, `base` and `utilities` migrated, `mx.component`, browser floor, Stylelint gate, contract test                                                                                                                                                                                                                                                                                                                                                                                                                                   | No visual change                          |
+| 1b    | Colour inventory: a script lists, for every file of waves 2 to 5, each colour value without a semantic token (palette reference, `color-mix()`, literal, keyword), in light and dark as computed today, grouped by identical value pair, with file and line and the number of uses. Output: `docs/design/design-system/colour-inventory.md`, one table row per value pair with an empty column "decision". The user fills it in: an existing token, a new token name (by role, not by colour), or "keep as private one-off" for decoration such as the confetti colours. The token files are then extended in one commit | Waves 2 to 5 run without colour questions |
+| 2     | Global controls (`button`, `choice`, `link`, `icon-button`, `reaction`, `band`, `state`, `skeleton`, `badge`, `section-card`, `switch`, `tooltip`, `modal`, toast) and page shell (header, footer, main menu)                                                                                                                                                                                                                                                                                                                                                                                                            | The reference set every later wave copies |
+| 3     | Word page                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |                                           |
+| 4     | BON game                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |                                           |
+| 5     | Anki page (already close to the new design, untidy: 651 lines, 40 palette references)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |                                           |
+| later | Every other page, together with its redesign                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | `legacy` empties, then is removed         |
 
 - A wave changes styles, markup, unit tests and e2e selectors of its components in the same commits (about 1,100 class references in templates, 550 in unit tests, 40 in e2e, 20 in JS across all waves).
 - Waves 3 to 5 touch disjoint files and may run in parallel after wave 2.
@@ -278,13 +290,13 @@ A styleguide page, served only in dev and e2e builds, renders every token from t
 
 ## 14. To verify before or during wave 1
 
-| Assumption | How to check | If wrong |
-| --- | --- | --- |
-| `@scope` needs Firefox 146, Chrome 118, Safari 17.4 | MDN compatibility table | Use MDN's versions in §9 |
-| `postcss-preset-env` rewrites `light-dark()` for the target | Build once, inspect the CSS. Checked in wave 1 (Task 1): every browserslist target supports `light-dark()`, so the built CSS keeps it native (no `csstools` toggles) and it follows `color-scheme` on `html` | Emit both theme blocks from the build script instead |
-| Sass passes `@scope … to (…)` and nested rules through unchanged | Mixin test in wave 1 | Write the component files as plain `.css` |
-| Playwright's Firefox and WebKit support `@scope` | `typeof CSSScopeRule` in each project | Update Playwright before wave 2 |
-| jsdom ignores `@scope`, so unit tests cannot assert scoped styles | — | Scoped-style assertions live in Playwright only |
-| The production CSS minifier keeps `@scope (…) to (…)` and `:scope` intact | Build once, inspect the CSS | Change the minifier setting for CSS |
-| The inline `@layer` statement keeps the order across `ClientRouter` navigations | Playwright: navigate client-side, then check that a `components` rule still beats a `legacy` rule | Mark the `<style>` with `transition:persist` |
-| The unsupported-browser regex (`scripts/generate-supported-browsers.mjs`) follows the new browserslist query | Unit test with a Firefox 140 and a Firefox 146 user agent | Fix the generator in wave 1 |
+| Assumption                                                                                                   | How to check                                                                                                                                                                                                 | If wrong                                             |
+| ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
+| `@scope` needs Firefox 146, Chrome 118, Safari 17.4                                                          | MDN compatibility table                                                                                                                                                                                      | Use MDN's versions in §9                             |
+| `postcss-preset-env` rewrites `light-dark()` for the target                                                  | Build once, inspect the CSS. Checked in wave 1 (Task 1): every browserslist target supports `light-dark()`, so the built CSS keeps it native (no `csstools` toggles) and it follows `color-scheme` on `html` | Emit both theme blocks from the build script instead |
+| Sass passes `@scope … to (…)` and nested rules through unchanged                                             | Mixin test in wave 1                                                                                                                                                                                         | Write the component files as plain `.css`            |
+| Playwright's Firefox and WebKit support `@scope`                                                             | `typeof CSSScopeRule` in each project                                                                                                                                                                        | Update Playwright before wave 2                      |
+| jsdom ignores `@scope`, so unit tests cannot assert scoped styles                                            | —                                                                                                                                                                                                            | Scoped-style assertions live in Playwright only      |
+| The production CSS minifier keeps `@scope (…) to (…)` and `:scope` intact                                    | Build once, inspect the CSS                                                                                                                                                                                  | Change the minifier setting for CSS                  |
+| The inline `@layer` statement keeps the order across `ClientRouter` navigations                              | Playwright: navigate client-side, then check that a `components` rule still beats a `legacy` rule                                                                                                            | Mark the `<style>` with `transition:persist`         |
+| The unsupported-browser regex (`scripts/generate-supported-browsers.mjs`) follows the new browserslist query | Unit test with a Firefox 140 and a Firefox 146 user agent                                                                                                                                                    | Fix the generator in wave 1                          |
