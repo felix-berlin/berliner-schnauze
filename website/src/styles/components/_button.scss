@@ -16,6 +16,8 @@
 
     cursor: pointer;
     padding: var(--button-padding, var(--space-1));
+    // revert-layer: unset, a legacy or base font-size on the button still applies.
+    font-size: var(--button-font-size, revert-layer);
     background-color: var(--_bg);
     border: var(--button-border-width, 1px) var(--_border-style) var(--_border-color);
     color: var(--_color);
