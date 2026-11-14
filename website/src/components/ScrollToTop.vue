@@ -52,7 +52,7 @@ const footerGround = ref<HTMLElement | null>(null);
 
 onMounted(() => {
   docStart.value = document.querySelector<HTMLElement>("#docStart");
-  footerGround.value = document.querySelector<HTMLElement>(".c-footer__ground");
+  footerGround.value = document.querySelector<HTMLElement>(".js-footer-ground");
 });
 
 useIntersectionObserver(

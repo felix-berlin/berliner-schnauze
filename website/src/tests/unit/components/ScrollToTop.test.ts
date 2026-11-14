@@ -30,7 +30,7 @@ describe("ScrollToTop.vue", () => {
 
     // useIntersectionObserver only constructs the observer once its ref targets
     // resolve to actual elements (queried in onMounted) — provide them in the DOM.
-    document.body.innerHTML = '<div id="docStart"></div><div class="c-footer__ground"></div>';
+    document.body.innerHTML = '<div id="docStart"></div><div class="js-footer-ground"></div>';
   });
 
   // Mount + flush twice: onMounted resolves the target refs, then VueUse's

@@ -75,7 +75,6 @@ export default [
   "src/styles/components/_word-themes.scss",
   "src/styles/components/_word-trend.scss",
   "src/styles/components/modals/_search-modal.scss",
-  "src/styles/layouts/_footer.scss",
   "src/styles/objects/_error-page.scss",
   "src/styles/objects/_index.scss",
   "src/styles/objects/_legal-pages.scss",
