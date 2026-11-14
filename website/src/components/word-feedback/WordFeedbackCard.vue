@@ -7,7 +7,7 @@
     <div class="header">
       <span class="num" />
       <h2 id="word-feedback-title" class="title">Sagste det noch?</h2>
-      <span v-if="feedback" class="c-word-feedback-card__count">
+      <span v-if="feedback" class="count">
         {{
           totalVotes
             ? `Bisher ${totalVotes} ${totalVotes === 1 ? "Stimme" : "Stimmen"}`
@@ -17,11 +17,11 @@
     </div>
 
     <div class="body">
-      <div class="c-word-feedback-card__body">
+      <div class="poll">
         <!-- Persistent, so the announcement works although the card swaps its content. -->
         <p class="u-sr-only" role="status">{{ announcement }}</p>
         <template v-if="current === 'usage'">
-          <p ref="lead" class="c-word-feedback-card__lead" tabindex="-1">
+          <p ref="lead" class="lead" tabindex="-1">
             Is dit Wort bei dir noch im Einsatz?
           </p>
           <div
@@ -61,7 +61,7 @@
               </span>
             </span>
           </div>
-          <div class="c-word-feedback-card__tiles" role="group" aria-labelledby="word-feedback-title">
+          <div class="tiles" role="group" aria-labelledby="word-feedback-title">
             <button
               v-for="o in USAGE_OPTIONS"
               :key="o.value"
@@ -81,7 +81,7 @@
               </span>
             </button>
           </div>
-          <p class="c-word-feedback-card__teaser">
+          <p class="teaser">
             {{
               totalVotes
                 ? `Schon ${totalVotes} ${totalVotes === 1 ? "Stimme" : "Stimmen"} – wat sagst du?`
@@ -92,20 +92,20 @@
 
         <template v-else>
           <div aria-live="polite">
-            <div v-if="feedback" class="c-word-feedback-card__bars">
+            <div v-if="feedback" class="bars">
               <div
                 v-for="b in bars"
                 :key="b.value"
-                class="c-word-feedback-card__bar"
-                :class="{ 'is-mine': b.value === selected.usage }"
+                class="bar"
+                :data-state="b.value === selected.usage ? 'mine' : undefined"
               >
-                <span class="c-word-feedback-card__bar-label">
+                <span class="bar-label">
                   {{ b.label }}<template v-if="b.value === selected.usage"> · deine Antwort</template>
                 </span>
-                <span class="c-word-feedback-card__bar-value">{{ b.percent }} % · {{ b.text }}</span>
-                <span class="c-word-feedback-card__bar-track" aria-hidden="true">
+                <span class="bar-value">{{ b.percent }} % · {{ b.text }}</span>
+                <span class="bar-track" aria-hidden="true">
                   <span
-                    class="c-word-feedback-card__bar-fill"
+                    class="bar-fill"
                     :style="{ inlineSize: `${b.percent}%` }"
                   />
                 </span>
@@ -116,26 +116,26 @@
           <div
             v-if="current !== 'done'"
             :key="current"
-            class="c-word-feedback-card__step"
-            :class="enter"
+            class="step"
+            :data-enter="enter"
           >
             <span
-              class="c-word-feedback-card__segments"
+              class="segments"
               role="img"
               :aria-label="`Schritt ${stepIndex + 1} von ${steps.length}`"
             >
               <span
                 v-for="s in segments"
                 :key="s.step"
-                class="c-word-feedback-card__segment"
-                :class="`is-${s.state}`"
+                class="segment"
+                :data-state="s.state"
               />
             </span>
-            <div class="c-word-feedback-card__progress">
-              <h3 ref="question" class="c-word-feedback-card__question" tabindex="-1">
+            <div class="progress">
+              <h3 ref="question" class="question" tabindex="-1">
                 {{ QUESTIONS[current] }}
               </h3>
-              <span class="c-word-feedback-card__eyebrow" aria-hidden="true">
+              <span class="eyebrow" aria-hidden="true">
                 Schritt {{ stepIndex + 1 }} von {{ steps.length }}
               </span>
             </div>
@@ -143,8 +143,9 @@
             <div
               v-show="explainOpen"
               id="word-feedback-why"
-              class="c-infotext c-word-feedback-card__why"
+              class="c-infotext"
             >
+              <div class="c-word-feedback-why">
               <b>Warum so ville Fragen?</b>
               <span>
                 Weil wa hier zusammen forschen: Wie klingt det Berlinerische heute, wo wird’s noch
@@ -152,15 +153,16 @@
                 verstehen – dafür brauchen wa ’n paar Angaben von dir: wo de wohnst, ob de hier
                 uffjewachsen bist und wie alt de bist.
               </span>
-              <span class="c-word-feedback-card__why-note">
+              <span class="note">
                 Mach mit, so weit de willst – jede Frage kannste überspringen.
               </span>
+              </div>
             </div>
-            <div>
+            <div class="why-toggle">
               <button
                 aria-controls="word-feedback-why"
                 :aria-expanded="explainOpen"
-                class="c-textlink c-word-feedback-card__why-link"
+                class="c-textlink"
                 type="button"
                 @click="explainOpen = !explainOpen"
               >
@@ -175,8 +177,8 @@
             />
             <div
               v-else
-              class="c-word-feedback-card__options"
-              :class="`c-word-feedback-card__options--${current}`"
+              class="options"
+              :data-kind="current"
               role="group"
               :aria-label="QUESTIONS[current]"
             >
@@ -194,9 +196,9 @@
             </div>
           </div>
 
-          <div v-else ref="doneBox" class="c-word-feedback-card__done" :class="enter" tabindex="-1">
-            <p class="c-word-feedback-card__done-title"><strong>Danke fürs Mitmachen!</strong></p>
-            <ul v-if="rows.length" class="c-word-feedback-card__compare">
+          <div v-else ref="doneBox" class="done" :data-enter="enter" tabindex="-1">
+            <p class="done-title"><strong>Danke fürs Mitmachen!</strong></p>
+            <ul v-if="rows.length" class="compare">
               <li v-for="r in rows" :key="r.label">{{ r.label }}: {{ r.share }} % sagen det</li>
             </ul>
             <button class="c-textlink" type="button" @click="reset">Angaben ändern</button>
@@ -205,8 +207,8 @@
             </button>
           </div>
 
-          <div class="c-word-feedback-card__privacy">
-            <label class="c-word-feedback-card__remember">
+          <div class="privacy">
+            <label class="remember">
               <input
                 type="checkbox"
                 :checked="remember"
@@ -228,10 +230,10 @@
       </div>
     </div>
 
-    <footer v-if="current !== 'usage' && current !== 'done'" class="c-word-feedback-card__footer">
+    <footer v-if="current !== 'usage' && current !== 'done'" class="steps-nav">
       <button class="c-textlink" :disabled="pending" type="button" @click="back">← Zurück</button>
       <button
-        class="c-textlink c-word-feedback-card__skip"
+        class="c-textlink"
         :disabled="pending"
         type="button"
         @click="answerProfile(current, null)"
@@ -397,13 +399,10 @@ const doneBox = useTemplateRef<HTMLElement>("doneBox");
 const ORDER: Step[] = ["usage", "area", "locality", "origin", "half", "age", "done"];
 // Enter animation (CSS only, no View Transitions: nothing to coordinate with the focus move below).
 // Only a user-driven step change sets it, so mount and a revisit's first paint stay still.
-const enter = ref<string[]>([]);
+const enter = ref<"back" | "forward">();
 // Only user-driven step changes move focus (the buttons that held it are gone), never mount/hydration.
 watch(step, async (to, from) => {
-  enter.value = [
-    "is-entering",
-    ...(to && from && ORDER.indexOf(to) < ORDER.indexOf(from) ? ["is-back"] : []),
-  ];
+  enter.value = to && from && ORDER.indexOf(to) < ORDER.indexOf(from) ? "back" : "forward";
   if (to === "usage") announcement.value = "";
   await nextTick();
   (question.value ?? doneBox.value ?? lead.value)?.focus();
@@ -624,4 +623,5 @@ const rows = computed(() => {
 
 <style lang="scss">
 @use "@styles/components/word-feedback-card";
+@use "@styles/components/word-feedback-why";
 </style>

@@ -18,4 +18,12 @@
       background-position: -200% 0;
     }
   }
+
+  // Word feedback poll: a step slides in by its own --_shift (word-feedback-card).
+  @keyframes word-feedback-step-in {
+    from {
+      opacity: 0;
+      transform: translateX(var(--_shift));
+    }
+  }
 }

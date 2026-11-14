@@ -5,7 +5,7 @@
 // Variant tile (data-variant="tile"): poll answer, a big choice on a chip ground, parts .icon and .text.
 // Public (a parent's layout knobs, the old :where() let parents override these): --choice-display,
 // --choice-justify, --choice-min-block-size, --choice-padding-block, --choice-padding-inline,
-// --choice-font-size.
+// --choice-font-size, --choice-text-align (wrapping labels).
 @include mx.component("choice") {
   :scope {
     --_text-gap: 0.125rem; // between 0 and space-1, no step within 0.1rem
@@ -13,6 +13,7 @@
     display: var(--choice-display, inline-flex);
     align-items: center;
     justify-content: var(--choice-justify, normal);
+    text-align: var(--choice-text-align, revert-layer);
     gap: var(--space-2);
     min-block-size: var(--choice-min-block-size, 2.75rem);
     padding: var(--choice-padding-block, 0) var(--choice-padding-inline, var(--space-4));
