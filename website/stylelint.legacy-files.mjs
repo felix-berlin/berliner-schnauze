@@ -60,7 +60,6 @@ export default [
   "src/styles/components/_word-neighborhood.scss",
   "src/styles/components/_word-of-the-day.scss",
   "src/styles/components/_word-range-slider.scss",
-  "src/styles/components/_word-reactions.scss",
   "src/styles/components/_word-search-filter-toggle.scss",
   "src/styles/components/_word-search-link.scss",
   "src/styles/components/_word-search.scss",

@@ -58,7 +58,7 @@
       </template>
 
       <div class="c-comment__actions">
-        <div aria-label="Kommentar bewerten" class="c-reaction-group" role="group">
+        <div aria-label="Kommentar bewerten" class="c-word-reactions" role="group">
           <button
             class="c-reaction c-comment__helpful"
             type="button"
@@ -436,4 +436,5 @@ const submitReport = async (): Promise<void> => {
 
 <style lang="scss">
 @use "@styles/components/comment";
+@use "@styles/components/word-reactions";
 </style>

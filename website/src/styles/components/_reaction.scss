@@ -2,7 +2,8 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 // Reaktion (docs/design/wortseite/SPEC.md §5/§9): thumbs up/down, "hilfreich". Borderless until hover.
-// Public: --reaction-padding-inline.
+// Part .count (the number; fixed minimum width, so the count arriving does not shift the row).
+// Public: --reaction-padding-inline, --reaction-disabled-cursor.
 @include mx.component("reaction") {
   :scope {
     display: inline-flex;
@@ -37,7 +38,12 @@
 
     &[aria-disabled="true"] {
       opacity: 0.55;
-      cursor: not-allowed;
+      cursor: var(--reaction-disabled-cursor, not-allowed);
     }
+  }
+
+  .count {
+    min-inline-size: 1.5ch;
+    font-variant-numeric: tabular-nums;
   }
 }

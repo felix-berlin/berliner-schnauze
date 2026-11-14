@@ -77,7 +77,7 @@ describe("CommentCard", () => {
     const { wrapper } = mountCard({});
     const group = wrapper.find('[role="group"]');
     expect(group.attributes("aria-label")).toBe("Kommentar bewerten");
-    expect(group.classes()).toContain("c-reaction-group");
+    expect(group.classes()).toContain("c-word-reactions");
     expect(group.findAll(".c-reaction")).toHaveLength(2);
     expect(wrapper.find(".c-comment__reply").exists()).toBe(true);
     expect(
