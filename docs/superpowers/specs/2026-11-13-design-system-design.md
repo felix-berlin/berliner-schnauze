@@ -227,7 +227,7 @@ Newly available features (Baseline 2025/2026). Only `@scope` and Popover are loa
 | Custom highlights | Adopt for search-term highlighting (replaces `v-html` in `SingleWord.vue`); no support = no highlight |
 | `field-sizing: content` | Enhancement for comment and suggest textareas; fallback fixed rows |
 | `::details-content` | Enhancement for the accordion animation; fallback opens without animation |
-| `content-visibility: auto` | Enhancement on word page sections below the fold; fallback renders everything |
+| `content-visibility: auto` | Not adopted on the word page: it blocks Astro `client:visible` hydration in WebKit (the skipped subtree's placeholder height moves islands out of view after a programmatic scroll) |
 | `scrollbar-color` | Add next to the existing `::-webkit-scrollbar` rules, which stay until Safari below 26.2 leaves the floor |
 | `:active-view-transition` | Adopt in the BON game instead of `html[data-vt]`; fallback no morph |
 | Container style queries | Not for variants; allowed where the fallback is the default look |
