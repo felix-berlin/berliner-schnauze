@@ -68,8 +68,8 @@ test("a card's part styles stop at its slot (Review Focus 4, spec §7.1)", async
     foreign.textContent = "fremd";
     slot.append(foreign);
     return {
-      own: getComputedStyle(own).fontSize,
       foreign: getComputedStyle(foreign).fontSize,
+      own: getComputedStyle(own).fontSize,
     };
   });
   // Positive control: the card's own title is styled (--font-size-xl = 1.25rem = 20px), so the
