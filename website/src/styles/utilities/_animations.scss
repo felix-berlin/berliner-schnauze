@@ -38,4 +38,16 @@
       outline-color: transparent;
     }
   }
+
+  // Word list loading rows pulse (word-list-skeleton).
+  @keyframes word-list-skeleton-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.55;
+    }
+  }
 }

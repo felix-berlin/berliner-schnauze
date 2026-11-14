@@ -1,73 +1,61 @@
-@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-@layer legacy {
-  .c-word-list-skeleton {
+// Loading rows of the word list (WordList while the index loads). Parts: .row, .lines, .bar
+// (data-kind="word|translation"), .icon. The row height follows --word-list-skeleton-row-size.
+@include mx.component("word-list-skeleton") {
+  :scope {
     margin: 0;
     padding: 0;
+  }
 
-    &__row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 1rem;
-      box-sizing: border-box;
-      height: var(--word-list-skeleton-row-size, 110px);
-      margin-block-end: vars.$spacer;
-      padding: vars.$spacer * 0.5 vars.$spacer;
-      background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 30%, white));
-      border: 1px dashed var(--color-border, var(--orange-200));
+  .row {
+    --_pulse: 1.6s; // slow on purpose, beyond the duration tokens
 
-      @include butler-mx.dark-mode-class {
-        --color-background: var(--new-blue-400);
-        --color-border: var(--new-blue-200);
-        --color-skeleton-bone: var(--new-blue-200);
-      }
-      @include butler-mx.feature("motion") {
-        animation: word-list-skeleton-pulse 1.6s ease-in-out infinite;
-      }
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: var(--space-4);
+    box-sizing: border-box;
+    block-size: var(--word-list-skeleton-row-size, 110px);
+    margin-block-end: var(--space-4);
+    padding: var(--space-2) var(--space-4);
+    border: 1px dashed var(--color-surface-placeholder);
+    background-color: var(--color-surface-hero);
+
+    @include butler-mx.feature("motion") {
+      animation: word-list-skeleton-pulse var(--_pulse) ease-in-out infinite;
+    }
+  }
+
+  .lines {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-2);
+    min-inline-size: 0;
+  }
+
+  .bar {
+    block-size: 0.75rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface-placeholder);
+
+    &[data-kind="word"] {
+      inline-size: min(40%, 220px);
     }
 
-    &__lines {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: vars.$spacer * 0.5;
-      min-inline-size: 0;
-    }
-
-    &__bar {
-      height: 0.75rem;
-      border-radius: 4px;
-      background-color: var(--color-skeleton-bone, var(--orange-200));
-
-      &--word {
-        width: min(40%, 220px);
-      }
-
-      &--translation {
-        width: min(65%, 340px);
-        opacity: 0.6;
-      }
-    }
-
-    &__icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 4px;
-      background-color: var(--color-skeleton-bone, var(--orange-200));
+    &[data-kind="translation"] {
+      inline-size: min(65%, 340px);
       opacity: 0.6;
     }
   }
 
-  @keyframes word-list-skeleton-pulse {
-    0%,
-    100% {
-      opacity: 1;
-    }
-
-    50% {
-      opacity: 0.55;
-    }
+  .icon {
+    inline-size: 32px;
+    block-size: 32px;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface-placeholder);
+    opacity: 0.6;
   }
 }

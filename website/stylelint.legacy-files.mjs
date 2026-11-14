@@ -41,7 +41,6 @@ export default [
   "src/styles/components/_themen-overview.scss",
   "src/styles/components/_voice-buttons.scss",
   "src/styles/components/_word-filter.scss",
-  "src/styles/components/_word-list-skeleton.scss",
   "src/styles/components/_word-list.scss",
   "src/styles/components/_word-range-slider.scss",
   "src/styles/components/_word-search-filter-toggle.scss",
