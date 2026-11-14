@@ -44,12 +44,17 @@ describe("secondsUntilBerlinMidnight", () => {
 });
 
 describe("toWordOfTheDayResponse", () => {
-  it("answers what the store reads: headword, slug and the seconds until Berlin midnight", () => {
+  it("answers what the store reads: headword, slug and Berlin midnight (relative and absolute)", () => {
     expect(
       toWordOfTheDayResponse(
         { berlinerisch: "Schrapen", slug: "schrapen" },
         new Date("2026-10-16T21:00:00Z"),
       ),
-    ).toEqual({ berlinerisch: "Schrapen", expires: 3600, slug: "schrapen" });
+    ).toEqual({
+      berlinerisch: "Schrapen",
+      expires: 3600,
+      expiresAt: Date.parse("2026-10-16T22:00:00Z"),
+      slug: "schrapen",
+    });
   });
 });

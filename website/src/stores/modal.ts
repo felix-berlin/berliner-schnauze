@@ -45,11 +45,15 @@ export const preventScroll = (status: boolean) => {
 };
 
 let resetTimer: ReturnType<typeof setTimeout> | undefined;
+// Set while open() waits for the modal island to hydrate; close() or the next open() drops it.
+let stopWaiting: (() => void) | undefined;
 
 export const open = (settings: ModalSettings) => {
   // A close just before must not wipe this view when its reset timer fires.
   clearTimeout(resetTimer);
-  $props.set({ ...$props.get(), ...settings.props });
+  stopWaiting?.();
+  // Start from the defaults: a skipped reset must not hand the last modal's class or close button to this one.
+  $props.set({ ...propsDefault, ...settings.props });
   $view.set(markRaw(settings.view ?? {}));
 
   void nextTick(() => {
@@ -59,12 +63,18 @@ export const open = (settings: ModalSettings) => {
     const off = $element.listen((el) => {
       if (!el) return;
       off();
+      stopWaiting = undefined;
       el.showModal();
     });
+    stopWaiting = () => {
+      off();
+      stopWaiting = undefined;
+    };
   });
 };
 
 export const close = () => {
+  stopWaiting?.();
   $element.get()?.close();
   resetModal();
 };

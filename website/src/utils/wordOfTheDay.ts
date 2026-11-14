@@ -60,5 +60,7 @@ export const toWordOfTheDayResponse = (
 ) => ({
   berlinerisch: word.berlinerisch,
   expires: secondsUntilBerlinMidnight(now),
+  // Absolute, so a copy served stale from a cache still runs out at that midnight, not later.
+  expiresAt: now.getTime() + secondsUntilBerlinMidnight(now) * 1000,
   slug: word.slug,
 });

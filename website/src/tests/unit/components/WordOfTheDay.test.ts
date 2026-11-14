@@ -7,7 +7,7 @@ const mockWordOfTheDay = ref<{
   loading: boolean;
   error: boolean;
   timestamp?: number;
-  word: { berlinerisch: string; expires?: number; slug: string } | null;
+  word: { berlinerisch: string; expiresAt?: number; slug: string } | null;
 }>({
   error: false,
   loading: false,
@@ -170,20 +170,27 @@ describe("WordOfTheDay.vue", () => {
     mockWordOfTheDay.value = {
       error: false,
       loading: false,
-      timestamp: Date.now(),
-      word: { berlinerisch: "Kiez", expires: 3690, slug: "kiez" },
+      word: { berlinerisch: "Kiez", expiresAt: Date.now() + 3_690_000, slug: "kiez" },
     };
     const wrapper = mountComponent();
     const spans = wrapper.findAll(".c-word-of-the-day .update span").map((s) => s.text());
     expect(spans).toEqual(["01", "01", "30"]);
   });
 
+  it("shows 00:00:00 and does not fetch for a word without an expiry", async () => {
+    const wrapper = mountComponent();
+    vi.advanceTimersByTime(3000);
+    await wrapper.vm.$nextTick();
+    const spans = wrapper.findAll(".c-word-of-the-day .update span").map((s) => s.text());
+    expect(spans).toEqual(["00", "00", "00"]);
+    expect(getWordOfTheDay).not.toHaveBeenCalled();
+  });
+
   it("fetches the next word when the countdown reaches zero", async () => {
     mockWordOfTheDay.value = {
       error: false,
       loading: false,
-      timestamp: Date.now(),
-      word: { berlinerisch: "Kiez", expires: 2, slug: "kiez" },
+      word: { berlinerisch: "Kiez", expiresAt: Date.now() + 2000, slug: "kiez" },
     };
     const wrapper = mountComponent();
     vi.advanceTimersByTime(3000);

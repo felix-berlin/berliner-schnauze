@@ -245,6 +245,22 @@ describe("WordList.vue", () => {
     expect(startHideActiveTimerFn).not.toHaveBeenCalled();
   });
 
+  it("arrow keys on a range slider stay with the slider", () => {
+    mockStores({ state: "ready", value: { hits: [makeHit("a")] } });
+    mount(WordList);
+    const slider = document.createElement("input");
+    slider.type = "range";
+    expect(fireKey("ArrowUp", {}, slider)).not.toHaveBeenCalled();
+  });
+
+  it("Enter in the word search box opens the active word", () => {
+    mockStores({ state: "ready", value: { hits: [makeHit("a")] } });
+    mount(WordList);
+    const input = document.createElement("input");
+    input.type = "search";
+    expect(fireKey("Enter", {}, input)).toHaveBeenCalled();
+  });
+
   it("ArrowDown in the word search box still moves through the list", () => {
     mockStores({ state: "ready", value: { hits: [makeHit("a")] } });
     mount(WordList);

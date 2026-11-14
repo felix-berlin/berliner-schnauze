@@ -5,7 +5,10 @@ import { onMount, task } from "nanostores";
 /** The body of /api/word-of-the-day (`toWordOfTheDayResponse`). */
 export interface Word {
   berlinerisch?: string;
+  /** Seconds until Berlin midnight at render time (the proxy cache lifetime). */
   expires?: number;
+  /** Berlin midnight in epoch ms: when the word runs out. */
+  expiresAt?: number;
   slug?: string;
 }
 
@@ -32,36 +35,25 @@ export const $wordOfTheDay = persistentMap<WordOfTheDay>(
  * @return {Promise<void>}
  */
 export const getWordOfTheDay = async (): Promise<void> => {
-  return await fetch("/api/word-of-the-day")
-    .then((res) => {
-      if (!res.ok) {
-        $wordOfTheDay.setKey("error", true);
-        $wordOfTheDay.setKey("loading", false);
-
-        throw new Error("Failed to fetch Word of the Day");
-      }
-
-      const timeOfFetch = new Date().getTime();
-      $wordOfTheDay.setKey("timestamp", timeOfFetch);
-
-      return res.json();
-    })
-    .then((data) => {
-      $wordOfTheDay.setKey("error", false);
-      $wordOfTheDay.setKey("word", data);
-      $wordOfTheDay.setKey("loading", false);
-    })
-    .catch((err) => {
-      $wordOfTheDay.setKey("error", true);
-      $wordOfTheDay.setKey("loading", false);
-
-      console.error("Failed to fetch Word of the Day: ", err);
-    });
+  try {
+    // no-cache: the browser must revalidate, never hand back yesterday's copy from stale-while-revalidate.
+    const res = await fetch("/api/word-of-the-day", { cache: "no-cache" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = (await res.json()) as Word;
+    // Only a parsed word moves the timestamp: a broken body must not refresh the old word's lifetime.
+    $wordOfTheDay.setKey("timestamp", Date.now());
+    $wordOfTheDay.setKey("error", false);
+    $wordOfTheDay.setKey("word", data);
+  } catch (err) {
+    $wordOfTheDay.setKey("error", true);
+    console.error("Failed to fetch Word of the Day: ", err);
+  } finally {
+    $wordOfTheDay.setKey("loading", false);
+  }
 };
 
-/** When the cached word runs out: the server's `expires` counts to Berlin midnight, not the visitor's local one. */
-export const expiresAt = ({ timestamp, word }: Pick<WordOfTheDay, "timestamp" | "word">): number =>
-  timestamp + (word?.expires ?? 0) * 1000;
+/** When the cached word runs out (Berlin midnight, from the server); a word cached in an older shape has run out. */
+export const expiresAt = ({ word }: Pick<WordOfTheDay, "word">): number => word?.expiresAt ?? 0;
 
 // nanostores onMount callbacks run in reverse registration order (reduceRight),
 // so persistentMap's restore() hasn't populated the store yet when our callback runs.
@@ -81,10 +73,9 @@ onMount($wordOfTheDay, () => {
   if (import.meta.env.SSR) return;
 
   void task(async () => {
-    const timestamp = readPersisted("timestamp", 0);
     // A word cached in an older shape has no slug or expiry: fetch it again.
     const word = readPersisted<Word>("word", {});
-    if (word.slug && Date.now() < expiresAt({ timestamp, word })) return;
+    if (word.slug && Date.now() < expiresAt({ word })) return;
 
     // getWordOfTheDay() handles its own errors and never rejects.
     await getWordOfTheDay();

@@ -163,9 +163,12 @@ watch(showWordListFilterFlyout, async (open) => {
   }
 });
 
-// A control inside that handles Escape itself (an open select list) calls preventDefault.
+// Handled Escapes are marked: a control that closed its own list first, the second WordFilter instance (page
+// and search modal both mount one), and the search dialog, which would otherwise close too.
 onKeyStroke("Escape", (e) => {
-  if (showWordListFilterFlyout.value && !e.defaultPrevented) $toggleWordListFilterFlyout();
+  if (!showWordListFilterFlyout.value || e.defaultPrevented) return;
+  e.preventDefault();
+  $toggleWordListFilterFlyout();
 });
 
 onClickOutside(wordListFilter, () => {
