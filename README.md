@@ -39,4 +39,4 @@ Berliner Schnauze is a translator for the Berlin dialect. It helps users underst
    pnpm dev
    ```
 
-5. Open your browser and navigate to `http://localhost:4321` to see the application in action.
+5. Open the URL `pnpm dev` prints (port `WEBSITE_PORT` from `.env.worktree`, else 4321).

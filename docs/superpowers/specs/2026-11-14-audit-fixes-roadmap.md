@@ -9,7 +9,7 @@ Quelle: `docs/audit-2026-11-13.md` (Stand `92e7d19a`). Geprüft gegen HEAD `4d04
 - Ein Schritt = ein in sich geschlossener Commit (oder wenige), Conventional Commits.
 - Schritte 1–9 sind klein (S): direkt umsetzen, ohne eigenen Plan. Logik mit Verzweigung bekommt einen Test (TDD).
 - Schritte 10–15 sind M oder größer: Beim Start eine kurze Klärung und ein eigener Plan, eigener Branch.
-- Schritte 1–9 laufen auf `audit-improvements`, PR danach (oder früher, wenn du willst).
+- Schritte 1–9 liefen auf `felix-berlin/audit-quick-wins` (PR #1881, gestapelt auf #1880).
 - Alles, was du selbst tun musst (Infisical, GitHub, Komodo-Deploy), sammelt sich in Schritt 16 ganz am Ende. Die Schritte davor erledigen nur den Teil im Repo und blockieren nicht auf dich.
 - Fortschritt: Checkliste unten (wird nach jedem erledigten Schritt abgehakt, mit Commit-Hash) und claude-mem-Liste `audit-fixes`.
 
@@ -22,7 +22,7 @@ Quelle: `docs/audit-2026-11-13.md` (Stand `92e7d19a`). Geprüft gegen HEAD `4d04
 - [x] 5. CI-03, CI-05, CFG-05 (`a858eb39`)
 - [x] 6. SEC-03, SEC-04, SEC-05 (`7e67742d`)
 - [x] 7. PERF-02 (`725f1aee`)
-- [x] 8. CFG-01–04, DX-01–03, MAINT-02 (`e9fa34fd`; CFG-01 als Startprüfung im Server statt `validateSecrets`, das auch den Build ohne Secrets bräche; MAINT-02: `@nanostores/logger` und `@vue/devtools-api` sind optionale Peers der Devtools und bleiben; `MCP_DISABLED=false` steht schon in `.env.example`)
+- [x] 8. CFG-01–04, DX-01–03, MAINT-02 (`e9fa34fd`; CFG-01 als Startprüfung im Server statt `validateSecrets`, das auch den Build ohne Secrets bräche; MAINT-02: `@nanostores/logger` und `@vue/devtools-api` sind optionale Peers der Devtools und bleiben; `MCP_DISABLED=false` in `.env.example` ergänzt)
 - [x] 9. A11Y-01–04 (`76753464`)
 - [ ] 10. DEP-01
 - [ ] 11. CI-02, CI-04 (Repo-Teil)

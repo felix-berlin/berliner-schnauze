@@ -22,6 +22,7 @@ pnpm test:unit               # Run full test suite with coverage
 
 # Linting & type checking
 pnpm lint                    # Oxlint (website + payload/, root .oxlintrc.json holds typeAware) + Stylelint (SCSS) — auto-fixes (--fix), modifies files
+# check only, what CI runs: lint:js:check + lint:style:check in website/, lint:check in payload/, pnpm format:check at the root
 pnpm typechecking            # astro check + vue-tsc  (slow — run targeted, not after every edit; tsc can't resolve .vue imports)
 
 # Build

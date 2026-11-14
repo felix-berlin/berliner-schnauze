@@ -47,7 +47,7 @@ const brAsset = (pathname) => {
   return brAssets.get(name).then((body) => ({ body, type: ASSET_TYPES[extname(name)] }));
 };
 
-// The one required runtime secret (astro.config.mjs); unchecked it fails only on the first image. Not via
+// The one required `access: "secret"` variable (astro.config.mjs); unchecked it fails only on the first image. Not via
 // env.validateSecrets: that also runs at build time, and the build has no secrets.
 if (!process.env.IMAGOR_SECRET) {
   console.error("IMAGOR_SECRET is not set");

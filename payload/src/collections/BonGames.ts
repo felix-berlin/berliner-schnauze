@@ -35,7 +35,7 @@ export const BonGames: CollectionConfig = {
     ],
   },
   fields: [
-    // finish, rename and the 24 h cleanup look games up by visitor.
+    // finish and rename (gamesOf, findGame in website/src/services/bonGame.ts) look games up by visitor.
     { name: "visitor", type: "text", required: true, index: true },
     { name: "token", type: "text", required: true },
     {

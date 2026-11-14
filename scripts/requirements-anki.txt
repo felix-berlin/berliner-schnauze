@@ -66,7 +66,6 @@ frozendict==2.5.1 \
 genanki==0.13.1 \
     --hash=sha256:65b59434008588a1213b940474d1aca8cca83243af6fc0e26200b560efe4d9e3 \
     --hash=sha256:84d090423a8879520465bfe9784083edacb8d35e2ba511fa5a1bdef01d8f71ed
-    # via -r /tmp/claude-1000/-home-felix-orca-workspaces-berliner-schnauze-codebase/8a9b65c4-8863-442c-9992-49b0dd4632aa/scratchpad/req.in
 pyyaml==6.0.3 \
     --hash=sha256:00c4bdeba853cc34e7dd471f16b4114f4162dc03e6b7afcc2128711f0eca823c \
     --hash=sha256:0150219816b6a1fa26fb4699fb7daa9caf09eb1999f3b70fb6e786805e80375a \
