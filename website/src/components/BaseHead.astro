@@ -17,6 +17,8 @@ const canonicalURL = seo?.canonical || canonicalUrl(Astro.url.pathname, Astro.si
 
 <!-- Global Metadata -->
 <meta charset='utf-8' />
+<!-- Cascade layer order (design system spec section 6); first on purpose: the first mention fixes the order, so no CSS chunk can change it. -->
+<style is:inline>@layer reset, tokens, vendor, base, legacy, objects, components, utilities;</style>
 <meta content='width=device-width, initial-scale=1' name='viewport' />
 <link href={IMAGOR_HOST} rel='preconnect' />
 <SetColorMode />

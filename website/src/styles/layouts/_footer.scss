@@ -1,134 +1,107 @@
-@use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
-@use "@sass-butler/functions" as butler-fn;
-@use "@sass-butler/mixins" as butler-mx;
 
-.c-footer {
-  --space-walking: 40px;
+// Site footer (Footer.astro): farewell row with the walking bear, the link grid on the ground and
+// the end bar. Page shell, so an object. js-footer-ground is the ScrollToTop hook.
+@layer objects {
+  .o-footer-farewell {
+    --_gap: 5%; // one-off: scales with the row
+    --_basis: 50%;
 
-  &__farewell {
-    margin-block-start: 60px;
-    grid-area: farewell;
     display: flex;
-    gap: var(--gap, 5%);
+    gap: var(--_gap);
+    margin-block-start: var(--space-16);
 
-    &-image-wrapper {
-      flex: 0 0 var(--basis-flex, 50%);
-      display: flex;
-
-      @include mx.breakpoint("md") {
-        --basis-flex: 40%;
-      }
-
-      img {
-        filter: drop-shadow(0 0 25px rgb(255 255 255 / 20%));
-      }
-    }
-
-    // Page-provided replacement for the farewell text (e.g. the Anki CTA).
-    // Always visible and wraps below the bear when the row gets too narrow.
-    &:has(&-slot) {
+    // Page-provided replacement for the farewell text (e.g. the Anki CTA). Always visible and wraps
+    // below the bear when the row gets too narrow.
+    &:has(.o-footer-farewell-slot) {
       flex-wrap: wrap;
-      row-gap: vars.$spacer * 2;
+      row-gap: var(--space-8);
     }
-
-    &-slot {
-      flex: 1 1 20rem;
-      align-self: center;
-      min-width: 0;
-    }
-
-    &-text {
-      display: var(--display, none);
-      font-family: vars.$berliner;
-      align-self: center;
-      font-size: butler-fn.fluid(32, 48, 320, 1260);
-
-      @include mx.breakpoint("xs") {
-        --display: block;
-      }
-    }
-  }
-
-  &__ground {
-    background-color: var(--color-background, color-mix(in srgb, var(--orange-200) 60%, white));
-    padding-block: 25px;
-
-    @include butler-mx.dark-mode-class {
-      --color-background: var(--new-blue-400);
-    }
-
-    .c-footer__wrapper {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      grid-template-areas: var(--areas-template);
-      gap: 1rem;
-    }
-
-    &-image {
-      grid-area: image;
-      mix-blend-mode: multiply;
-
-      @include butler-mx.dark-mode-class {
-        mix-blend-mode: lighten;
-        filter: invert(1);
-      }
-    }
-
-    // Not a heading: the four link lists carry their name in aria-label, and twelve repeated h2 would dilute the page outline.
-    .c-footer__title {
-      margin-block: 0.83em;
-      font-family: vars.$berliner;
-      font-size: 1.2rem;
-      font-weight: normal;
-    }
-  }
-
-  &__nav {
-    &-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    &.is-legal {
-      grid-area: nav-legal;
-    }
-  }
-
-  &__slogan {
-    grid-area: slogan;
-    text-align: var(--align-text, center);
 
     @include mx.breakpoint("md") {
-      --align-text: start;
+      --_basis: 40%;
     }
   }
 
-  &__end {
-    background-color: var(--color-background, var(--orange-200));
-    font-size: 0.8rem;
+  .o-footer-bear {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R75: one-off glow behind the bear
+    --_glow: rgb(255 255 255 / 20%);
+    --_glow-blur: 25px; // one-off blur radius
 
-    @include butler-mx.dark-mode-class {
-      --color-background: var(--blue);
+    display: flex;
+    flex: 0 0 var(--_basis);
+
+    img {
+      filter: drop-shadow(0 0 var(--_glow-blur) var(--_glow));
+    }
+  }
+
+  .o-footer-farewell-slot {
+    flex: 1 1 20rem;
+    align-self: center;
+    min-inline-size: 0;
+  }
+
+  .o-footer-farewell-text {
+    --_size: clamp(2rem, 1.6596rem + 1.7021vw, 3rem); // fluid 32px at 320 to 48px at 1260
+
+    display: none;
+    align-self: center;
+    font-family: var(--font-family-display);
+    font-size: var(--_size);
+
+    @include mx.breakpoint("xs") {
+      display: block;
+    }
+  }
+
+  .o-footer-ground {
+    padding-block: var(--space-6);
+    background-color: var(--color-surface-floating); // colour inventory R33
+  }
+
+  .o-footer-grid {
+    --_column: 230px; // one-off minimum column width
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--_column), 1fr));
+    gap: var(--space-4);
+  }
+
+  // Not a heading: the four link lists carry their name in aria-label, and twelve repeated h2 would
+  // dilute the page outline.
+  .o-footer-title {
+    margin-block: var(--space-4);
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .o-footer-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .o-footer-end {
+    font-size: var(--font-size-sm);
+    background-color: var(--color-surface-chrome); // colour inventory R38
+  }
+
+  .o-footer-end-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2) var(--space-5);
+    padding-block: var(--space-2);
+
+    > p {
+      margin: 0;
     }
 
-    &-content {
-      grid-area: content;
-      display: flex;
-      gap: vars.$spacer * 0.5 vars.$spacer * 1.25;
-      padding-block: vars.$spacer * 0.5;
-      flex-wrap: wrap;
-      justify-content: var(--content-justify, center);
-      align-items: center;
-
-      @include mx.breakpoint("sm") {
-        --content-justify: flex-start;
-      }
-
-      p {
-        margin: 0;
-      }
+    @include mx.breakpoint("sm") {
+      justify-content: flex-start;
     }
   }
 }

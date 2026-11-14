@@ -52,14 +52,13 @@ test.describe("word feedback", () => {
     await expect(again.getByText("Wo wohnste?")).toHaveCount(0);
 
     const like = page.getByRole("button", { name: /Jefällt ma/ });
-    const count = async () =>
-      Number((await like.locator(".c-reaction__count").textContent()) ?? "NaN");
-    await expect(like.locator(".c-reaction__count")).toHaveText(/^\d+$/);
+    const count = async () => Number((await like.locator(".count").textContent()) ?? "NaN");
+    await expect(like.locator(".count")).toHaveText(/^\d+$/);
     const before = await count();
     await like.click();
-    await expect(like.locator(".c-reaction__count")).toHaveText(String(before + 1));
+    await expect(like.locator(".count")).toHaveText(String(before + 1));
     await like.click();
-    await expect(like.locator(".c-reaction__count")).toHaveText(String(before));
+    await expect(like.locator(".count")).toHaveText(String(before));
 
     // A second word in the same context: usage alone carries the stored profile.
     await page.goto("/wort/wa");
@@ -140,7 +139,7 @@ test.describe("word feedback", () => {
       return route.continue();
     });
     await card.getByRole("button", { name: "Kenn ick" }).click();
-    const error = card.locator(".c-state--error");
+    const error = card.locator(".c-state[data-variant~='error']");
     await expect(error).toBeVisible();
     await expect(error).toHaveAttribute("role", "alert");
     fail = false;
@@ -157,11 +156,11 @@ test.describe("word feedback", () => {
     await card.scrollIntoViewIfNeeded();
     await expect(card.getByRole("button", { name: "Kenn ick" })).toBeVisible();
     await context.setOffline(true);
-    const tiles = card.locator(".c-choice--tile");
+    const tiles = card.locator(".c-choice[data-variant~='tile']");
     await expect(tiles).toHaveCount(3);
     for (const tile of await tiles.all())
       await expect(tile).toHaveAttribute("aria-disabled", "true");
-    await expect(card.locator(".c-state--offline")).toBeVisible();
+    await expect(card.locator(".c-state[data-variant~='offline']")).toBeVisible();
     await context.setOffline(false);
     await expect(tiles.first()).toHaveAttribute("aria-disabled", "false");
   });

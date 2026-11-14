@@ -1,6 +1,7 @@
 <template>
   <button
-    class="c-button c-button--center-icon c-magazin-article__share"
+    class="c-button c-magazin-article__share"
+    data-variant="center-icon"
     type="button"
     @click="shareArticle"
   >

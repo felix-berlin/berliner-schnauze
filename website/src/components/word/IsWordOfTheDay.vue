@@ -1,5 +1,5 @@
 <template>
-  <span v-if="isWordOfTheDay && variant === 'badge'" class="c-word-hero__wotd-badge">
+  <span v-if="isWordOfTheDay && variant === 'badge'" class="c-badge" data-variant="wash award">
     <Crown width="13" height="13" aria-hidden="true" />
     Wort des Tages
   </span>

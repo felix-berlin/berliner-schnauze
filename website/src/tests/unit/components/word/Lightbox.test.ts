@@ -35,7 +35,7 @@ describe("Lightbox", () => {
     await flushPromises();
     expect(shown(wrapper)).toBe("/2.jpg");
     expect(wrapper.text()).toContain("2 / 3");
-    expect(wrapper.find(".c-lightbox__caption").html()).toContain("<a href");
+    expect(wrapper.find(".c-lightbox .caption").html()).toContain("<a href");
   });
 
   it("tracks opening and slide switches", async () => {

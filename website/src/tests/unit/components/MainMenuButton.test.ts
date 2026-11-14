@@ -11,7 +11,7 @@ describe("MainMenuButton.vue", () => {
   });
 
   it("keeps both icons mounted for the CSS crossfade", () => {
-    const icons = mount(MainMenuButton).find(".c-header-control__icons");
+    const icons = mount(MainMenuButton).find(".c-header-control .icons");
     expect(icons.attributes("aria-hidden")).toBe("true");
     expect(icons.find("[data-testid='icon-lucide-menu']").exists()).toBe(true);
     expect(icons.find("[data-testid='icon-lucide-x']").exists()).toBe(true);

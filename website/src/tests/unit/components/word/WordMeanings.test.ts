@@ -16,7 +16,7 @@ describe("WordMeanings", () => {
   it("renders a numbered list from two meanings on, without a button up to five", () => {
     const w = mount(WordMeanings, { props: { meanings: make(5) } });
     expect(w.find(".t-label").text()).toBe("Bedeutungen");
-    expect(w.findAll("ol.c-meanings li")).toHaveLength(5);
+    expect(w.findAll("ol.list li")).toHaveLength(5);
     expect(w.findAll("li[hidden]")).toHaveLength(0);
     expect(w.find("button").exists()).toBe(false);
   });

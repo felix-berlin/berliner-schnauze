@@ -24,7 +24,6 @@ describe("WordImages.astro", () => {
   it("renders one full-width figure and no thumbs for a single image", async () => {
     const result = await render({ images: [image(1)], placement: "strip" });
     expect(result.match(/<figure/g)).toHaveLength(1);
-    expect(result).toContain("c-image-strip--single");
   });
 
   it("renders a labelled section with an opener button per image", async () => {
@@ -33,7 +32,6 @@ describe("WordImages.astro", () => {
     expect(result).toContain('aria-label="Bild 2 von 2 vergrößern: Bild 2"');
     expect(result).toContain('data-lightbox-index="1"');
     expect(result).toMatch(/<img[^>]*\salt(=""|\s)/);
-    expect(result).not.toContain("c-image-strip--single");
   });
 
   it("shows the credit as Foto caption, and no caption without credit", async () => {

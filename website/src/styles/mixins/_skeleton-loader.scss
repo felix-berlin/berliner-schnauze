@@ -1,15 +1,15 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 @mixin skeleton-loader {
-  --color-skeleton: white;
+  // stylelint-disable-next-line function-disallowed-list -- colour inventory R73/R77: one-off
+  --_skeleton-bg: light-dark(rgb(255 255 255 / 10%), rgb(0 0 0 / 10%));
+  // stylelint-disable-next-line function-disallowed-list -- colour inventory R74/R77: one-off
+  --_skeleton-shine: light-dark(rgb(255 255 255 / 20%), rgb(0 0 0 / 20%));
+  --_shine-duration: 1.5s; // slower than every duration token, the sweep reads as idle
 
   position: relative;
   overflow: hidden;
-  background: color-mix(in srgb, var(--color-skeleton) 10%, transparent);
-
-  @include butler-mx.dark-mode-class {
-    --color-skeleton: black;
-  }
+  background: var(--_skeleton-bg);
 
   &::after {
     content: "";
@@ -18,12 +18,12 @@
     background: linear-gradient(
       90deg,
       transparent 25%,
-      color-mix(in srgb, var(--color-skeleton) 20%, transparent) 50%,
+      var(--_skeleton-shine) 50%,
       transparent 75%
     );
 
     @include butler-mx.feature("motion") {
-      animation: 1.5s shine linear infinite;
+      animation: var(--_shine-duration) shine linear infinite;
     }
   }
 }

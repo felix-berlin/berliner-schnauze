@@ -8,8 +8,9 @@ describe("BadgeTag.vue", () => {
     expect(wrapper.find("span.c-badge").exists()).toBe(true);
   });
 
-  it("renders slot content", () => {
+  it("renders slot content inside a [data-slot] wrapper, not on the root", () => {
     const wrapper = mount(BadgeTag, { slots: { default: "Hello World" } });
-    expect(wrapper.text()).toBe("Hello World");
+    expect(wrapper.attributes("data-slot")).toBeUndefined();
+    expect(wrapper.find(".c-badge > [data-slot]").text()).toBe("Hello World");
   });
 });

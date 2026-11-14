@@ -13,7 +13,7 @@ describe("WordPageFooter.astro", () => {
 
   it("renders the footer element", async () => {
     const result = await render({});
-    expect(result).toContain("c-single-word__footer");
+    expect(result).toContain("c-word-page-footer");
     expect(result).toContain("<footer");
   });
 
@@ -26,14 +26,14 @@ describe("WordPageFooter.astro", () => {
   it("renders publishedAt when provided", async () => {
     const result = await render({ publishedAt: "2024-01-15T12:00:00.000Z" });
     expect(result).toContain("Wort erstellt am");
-    expect(result).toContain("c-single-word__created");
+    expect(result).toContain('class="created"');
     expect(result).toContain('datetime="2024-01-15T12:00:00.000Z"');
   });
 
   it("renders modifiedAt when provided", async () => {
     const result = await render({ modifiedAt: "2024-06-20T10:30:00.000Z" });
     expect(result).toContain("Bearbeitet am");
-    expect(result).toContain("c-single-word__modified");
+    expect(result).toContain('class="modified"');
     expect(result).toContain('datetime="2024-06-20T10:30:00.000Z"');
   });
 

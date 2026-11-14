@@ -138,7 +138,7 @@ describe("WordList.vue", () => {
     mockStores({ state: "loading" });
     const wrapper = mount(WordList);
     expect(wrapper.find(".c-word-list-skeleton").exists()).toBe(true);
-    expect(wrapper.findAll(".c-word-list-skeleton__row")).toHaveLength(6);
+    expect(wrapper.findAll(".c-word-list-skeleton .row")).toHaveLength(6);
     expect(wrapper.find(".c-word-list").exists()).toBe(false);
   });
 
@@ -149,7 +149,7 @@ describe("WordList.vue", () => {
     expect(skeleton.attributes("role")).toBe("status");
     expect(skeleton.attributes("aria-busy")).toBe("true");
     expect(skeleton.attributes("aria-label")).toContain("Momentchen");
-    expect(wrapper.find(".c-word-list-skeleton__row").attributes("aria-hidden")).toBe("true");
+    expect(wrapper.find(".c-word-list-skeleton .row").attributes("aria-hidden")).toBe("true");
   });
 
   it("passes itemSize through to the skeleton row height", () => {

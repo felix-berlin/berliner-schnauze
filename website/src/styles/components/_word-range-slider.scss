@@ -1,38 +1,40 @@
-.c-word-range-slider {
-  display: flex;
-  gap: 0.5rem;
-  flex-direction: row;
-  border: none;
-  padding-block: 0;
-  padding-inline: 0;
-  margin-inline: 0;
+@layer legacy {
+  .c-word-range-slider {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: row;
+    border: none;
+    padding-block: 0;
+    padding-inline: 0;
+    margin-inline: 0;
 
-  &__legend {
-    margin-block-end: 0.5rem;
-  }
-
-  .c-input--number {
-    // Single value: the width calc below needs a length, not the field's two-value padding.
-    --spacing-inner: 0.55rem;
-
-    // + 3px for the 1px tracking of three digits
-    width: calc(var(--spacing-inner) * 2 + 3ch + 3px);
-    text-align: center;
-
-    // Remove number input spinners for Chrome, Safari, Edge, Opera
-    &::-webkit-outer-spin-button,
-    &::-webkit-inner-spin-button {
-      appearance: none;
-      margin: 0;
+    &__legend {
+      margin-block-end: 0.5rem;
     }
 
-    // Remove number input spinners for Firefox
-    &[type="number"] {
-      appearance: textfield;
-    }
-  }
+    .c-input--number {
+      // Single value: the width calc below needs a length, not the field's two-value padding.
+      --spacing-inner: 0.55rem;
 
-  &__reset-button {
-    width: 37px;
+      // + 3px for the 1px tracking of three digits
+      width: calc(var(--spacing-inner) * 2 + 3ch + 3px);
+      text-align: center;
+
+      // Remove number input spinners for Chrome, Safari, Edge, Opera
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        appearance: none;
+        margin: 0;
+      }
+
+      // Remove number input spinners for Firefox
+      &[type="number"] {
+        appearance: textfield;
+      }
+    }
+
+    &__reset-button {
+      width: 37px;
+    }
   }
 }

@@ -1,169 +1,177 @@
-@use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-.c-anki-flashcard {
-  // Stack holds the papers + card; the hint sits below it so the papers can't cover it
-  &__stack {
-    position: relative;
-    padding: vars.$spacer * 1.5 vars.$spacer * 0.75 vars.$spacer * 0.75;
+// Demo card of the Anki page hero: two rotated papers behind the card, the hint below the stack so
+// the papers cannot cover it. Parts: .stack, .paper (.back, .front), .card (.head, .body with .word
+// and .answer, then .foot or .ratings), .hint. A .rating button carries data-kind (again, hard,
+// good, easy); it is a part, not a c-button, because its two labels are styled here.
+@include mx.component("anki-flashcard") {
+  :scope {
+    --_card-min: 25rem; // one-off card height
+    --_word-size: clamp(2.5rem, 2rem + 2vw, 3.5rem); // fluid headword, above the type scale
+    --_rating-gap: 2px; // one-off: no space step within 0.1rem
   }
 
-  &__paper {
+  .stack {
+    position: relative;
+    padding: var(--space-6) var(--space-3) var(--space-3);
+  }
+
+  .paper {
     position: absolute;
-    background: var(--white-100);
-    border: 1px dashed var(--orange-200);
-    box-shadow: vars.$paper-lift;
-    border-radius: 4px;
-
-    @include butler-mx.dark-mode-class {
-      background: var(--new-blue-300);
-      border-color: var(--new-blue-200);
-    }
-
-    &--back {
-      inset: vars.$spacer * 2.25 vars.$spacer * 1.75 0 vars.$spacer * 1.75;
-      rotate: 3deg;
-    }
-
-    &--front {
-      inset: vars.$spacer * 1.875 vars.$spacer * 1.25 vars.$spacer * 0.25 vars.$spacer * 1.25;
-      rotate: -2deg;
-    }
+    background: var(--color-surface-skeleton); // colour inventory R10
+    border: 1px dashed var(--color-surface-placeholder); // colour inventory R12
+    box-shadow: var(--shadow-paper-lift);
+    border-radius: var(--radius-sm);
   }
 
-  &__card {
+  .back {
+    inset: var(--space-8) var(--space-6) 0;
+    rotate: 3deg;
+  }
+
+  .front {
+    inset: var(--space-8) var(--space-5) var(--space-1);
+    rotate: -2deg;
+  }
+
+  .card {
+    @include mx.paper-card;
+
     position: relative;
-    min-height: 25rem;
+    min-block-size: var(--_card-min);
     display: flex;
     flex-direction: column;
-
-    @include mx.paper-card;
   }
 
-  &__head {
+  .head {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: vars.$spacer * 0.625 vars.$spacer;
-    border-block-end: 1px dashed var(--orange-200);
-    font-size: 0.8rem;
-    color: var(--color-muted);
+    padding: var(--space-2) var(--space-4);
+    border-block-end: 1px dashed var(--color-border-accent-soft); // colour inventory R6
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
 
     span:first-child {
-      font-weight: 700;
+      font-weight: var(--font-weight-bold);
     }
   }
 
-  &__body {
+  .body {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: vars.$spacer;
-    padding: vars.$spacer * 2 vars.$spacer * 1.5;
+    gap: var(--space-4);
+    padding: var(--space-8) var(--space-6);
     text-align: center;
   }
 
-  &__word {
-    font-family: vars.$berlin;
-    font-weight: 700;
-    font-size: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  .word {
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--_word-size);
     line-height: 1.1;
     text-decoration: underline dashed from-font;
-    text-decoration-color: var(--orange-500);
+    text-decoration-color: var(--color-accent-active); // colour inventory R2
     text-underline-position: from-font;
   }
 
-  &__answer {
-    width: 100%;
+  .answer {
+    inline-size: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: vars.$spacer * 0.75;
-    border-block-start: 1px dashed var(--new-blue-200);
-    padding-block-start: vars.$spacer * 1.125;
+    gap: var(--space-3);
+    border-block-start: 1px dashed var(--color-surface-inverse); // colour inventory R14
+    padding-block-start: var(--space-4);
   }
 
-  &__meaning {
-    // impeccable-disable design-system-font-size -- literal value from design_handoff_anki_deck_landing (v2, confirmed with user)
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--anki-color-accent-text);
+  .meaning {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-accent); // colour inventory R17
   }
 
-  &__example {
-    // impeccable-disable design-system-font-size -- literal value from design handoff
-    font-size: 1.05rem;
+  .example {
+    font-size: var(--font-size-base);
     font-style: italic;
     line-height: 1.5;
-    max-width: 26em;
+    max-inline-size: 26em;
     text-wrap: pretty;
   }
 
-  &__foot {
-    padding: vars.$spacer;
-    border-block-start: 1px dashed var(--orange-200);
+  .foot {
+    --button-display: flex;
+    --button-padding: var(--space-3);
+    --button-font-size: var(--font-size-lg);
 
-    .c-button {
-      width: 100%;
-      justify-content: center;
-      display: flex;
-      padding: vars.$spacer * 0.875;
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
+    padding: var(--space-4);
+    border-block-start: 1px dashed var(--color-border-accent-soft); // colour inventory R6
   }
 
-  &__ratings {
-    padding: vars.$spacer;
-    border-block-start: 1px dashed var(--orange-200);
+  .ratings {
+    padding: var(--space-4);
+    border-block-start: 1px dashed var(--color-border-accent-soft); // colour inventory R6
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: vars.$spacer * 0.5;
+    gap: var(--space-2);
   }
 
-  &__rating {
+  // Same look as the paper button (c-button data-variant="paper").
+  .rating {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
-    padding: vars.$spacer * 0.625 vars.$spacer * 0.25;
+    gap: var(--_rating-gap);
+    padding: var(--space-1);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-control-text);
+    background: var(--color-surface-field); // colour inventory R23
+    border: 1px solid var(--color-border-control);
+    cursor: pointer;
+    transition:
+      border-color var(--duration-base) var(--ease-standard),
+      box-shadow var(--duration-base) var(--ease-standard);
+
+    @include butler-mx.hover {
+      border-style: dashed;
+      box-shadow: var(--shadow-hover-glow);
+    }
   }
 
-  &__rating-interval {
-    // impeccable-disable design-system-font-size -- literal value from design handoff
-    font-size: 0.75rem;
-    color: var(--color-muted);
+  .interval {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
   }
 
-  &__rating-label {
-    font-weight: 700;
+  .label {
+    font-weight: var(--font-weight-bold);
   }
 
-  &__rating--again .c-anki-flashcard__rating-label {
-    color: var(--danger);
+  .rating[data-kind="again"] .label {
+    color: var(--color-status-danger);
   }
 
-  &__rating--hard .c-anki-flashcard__rating-label {
-    color: var(--color-body);
+  .rating[data-kind="hard"] .label {
+    color: var(--color-text-body);
   }
 
-  &__rating--good .c-anki-flashcard__rating-label {
-    color: var(--success);
+  .rating[data-kind="good"] .label {
+    color: var(--color-status-success);
   }
 
-  &__rating--easy .c-anki-flashcard__rating-label {
-    color: var(--anki-color-accent-text);
+  .rating[data-kind="easy"] .label {
+    color: var(--color-text-accent); // colour inventory R17
   }
 
-  &__hint {
-    margin: vars.$spacer 0 0;
-    // impeccable-disable design-system-font-size -- literal value from design handoff
-    font-size: 0.9rem;
+  .hint {
+    margin: var(--space-4) 0 0;
+    font-size: var(--font-size-md);
     text-align: center;
-    color: var(--color-muted);
+    color: var(--color-text-muted);
 
     a {
       color: inherit;

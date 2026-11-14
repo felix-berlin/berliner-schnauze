@@ -37,7 +37,7 @@ describe("WordReactions", () => {
     const w = await mountIt();
     expect(buttons(w)).toHaveLength(2);
     const [like, dislike] = buttons(w);
-    expect(w.classes()).toContain("c-reaction-group");
+    expect(w.classes()).toContain("c-word-reactions");
     expect(w.attributes("role")).toBe("group");
     expect(w.attributes("aria-label")).toBe("Wie findste ditt Wort?");
     expect(like.attributes("aria-label")).toBe("Jefällt ma, 128");

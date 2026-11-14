@@ -13,9 +13,13 @@ import { isAgent } from "std-env";
  * See https://playwright.dev/docs/test-configuration.
  */
 const port = process.env.E2E_PORT ?? "4321";
+// The screenshot baseline is the chromium project only; other projects never load it.
+const VISUAL_BASELINE = "**/visual-baseline.spec.ts";
 
 export default defineConfig({
   testDir: "./src/tests/e2e",
+  // Local gate for the design-system migration (see the header of the spec); its snapshots are not CI-portable.
+  testIgnore: process.env.CI ? VISUAL_BASELINE : undefined,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -49,21 +53,25 @@ export default defineConfig({
 
     {
       name: "firefox",
+      testIgnore: VISUAL_BASELINE,
       use: { ...devices["Desktop Firefox"] },
     },
 
     {
       name: "webkit",
+      testIgnore: VISUAL_BASELINE,
       use: { ...devices["Desktop Safari"] },
     },
 
     /* Test against mobile viewports. */
     {
       name: "Mobile Chrome",
+      testIgnore: VISUAL_BASELINE,
       use: { ...devices["Pixel 5"] },
     },
     {
       name: "Mobile Safari",
+      testIgnore: VISUAL_BASELINE,
       use: { ...devices["iPhone 12"] },
     },
 

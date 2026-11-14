@@ -37,12 +37,9 @@
       class="c-word-list__options-dropdown"
     >
       <template #after>
-        <a
-          :href="routeToWord(source.slug)"
-          class="c-dropdown__item c-options-dropdown__copy-button"
-        >
-          <BookOpen width="18" height="18" class="c-options-dropdown__icon-button" />
-          <span class="c-options-dropdown__copy-text">Mehr erfahren</span>
+        <a :href="routeToWord(source.slug)" class="c-menu-item">
+          <BookOpen width="18" height="18" aria-hidden="true" />
+          <span>Mehr erfahren</span>
         </a>
       </template>
     </WordOptionDropdown>

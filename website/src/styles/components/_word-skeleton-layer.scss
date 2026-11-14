@@ -1,0 +1,14 @@
+@use "@styles/mixins" as mx;
+
+// Word page loading layer (utils/wordLoading.ts): covers the old page below the sticky header.
+@include mx.component("word-skeleton-layer") {
+  :scope {
+    --_z: 5; // above the page content, below the sticky header; no z token between raised and sticky
+
+    position: fixed;
+    inset: var(--site-header-height, 0) 0 0;
+    z-index: var(--_z);
+    overflow: hidden;
+    background: var(--color-surface-skeleton);
+  }
+}

@@ -1,0 +1,45 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// One "Und nu?" card (ds bundle .c-next-link): icon, .text, .arrow. Also on the random-word link
+// (c-random-word-button c-next-link).
+@include mx.component("next-link") {
+  :scope {
+    --_icon-column: 1.5rem;
+
+    display: grid;
+    grid-template-columns: var(--_icon-column) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-3);
+    min-block-size: 60px;
+    padding: 0 var(--space-4);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-paper);
+    box-shadow: var(--shadow-paper-lift);
+    color: var(--color-text-strong);
+    text-decoration: none;
+
+    @include butler-mx.feature("motion") {
+      transition: box-shadow var(--duration-base);
+    }
+    @include butler-mx.hover {
+      box-shadow: var(--shadow-hover-glow);
+      color: var(--color-text-strong);
+    }
+  }
+
+  svg {
+    color: var(--color-accent-icon);
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .arrow {
+    color: var(--color-text-muted);
+  }
+}

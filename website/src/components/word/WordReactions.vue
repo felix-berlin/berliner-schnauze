@@ -1,5 +1,5 @@
 <template>
-  <div aria-label="Wie findste ditt Wort?" class="c-reaction-group" role="group">
+  <div aria-label="Wie findste ditt Wort?" class="c-word-reactions" role="group">
     <button
       :aria-disabled="pending"
       :aria-label="label('Jefällt ma', 'like')"
@@ -9,7 +9,7 @@
       @click="vote('like')"
     >
       <ThumbsUp aria-hidden="true" height="18" width="18" />
-      <b class="c-reaction__count">{{ count("like") }}</b>
+      <b class="count">{{ count("like") }}</b>
     </button>
     <button
       :aria-disabled="pending"
@@ -20,7 +20,7 @@
       @click="vote('dislike')"
     >
       <ThumbsDown aria-hidden="true" height="18" width="18" />
-      <b class="c-reaction__count">{{ count("dislike") }}</b>
+      <b class="count">{{ count("dislike") }}</b>
     </button>
   </div>
 </template>

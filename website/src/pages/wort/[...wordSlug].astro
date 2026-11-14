@@ -1,7 +1,6 @@
 ---
 // Styles
 import '@styles/objects/_word.scss';
-import '@styles/components/_word-page-layout.scss';
 import '@styles/plugins/astro-breadcrumbs.scss';
 
 import Lightbox from '@components/word/Lightbox.vue';
@@ -179,10 +178,10 @@ const schemaJson = () => {
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: [
-        '.c-word-hero__title',
+        '.c-word-hero h1',
         '.c-word-meanings .t-em',
         // Only rendered with examples: a selector that matches nothing is noise.
-        ...(exampleComments.length > 0 ? ['.c-word-examples__text'] : []),
+        ...(exampleComments.length > 0 ? ['.c-word-examples .text'] : []),
       ],
     },
     ...(firstImage && {
@@ -245,24 +244,24 @@ const schemaJson = () => {
 
   <WordOfflineBanner client:load />
 
-  <nav class='c-page-topbar' aria-label='Brotkrümelpfad'>
+  <nav class='o-page-topbar' aria-label='Brotkrümelpfad'>
     <Breadcrumbs indexText='Start' linkTextFormat='capitalized' truncated={true}>
       <ChevronRight height='20' slot='separator' width='20' />
     </Breadcrumbs>
   </nav>
 
-  <article class='c-word-page' data-pulse-word={draft ? undefined : word.id}>
+  <article class='o-word-page' data-pulse-word={draft ? undefined : word.id}>
     <WordTabBar client:load sections={sections} />
     <WordSidebar posLabel={wordPos?.pos} sections={sections} word={word} />
 
-    <div class='c-word-main'>
+    <div class='o-word-main'>
       <WordHero images={wordImages} learnMore={word.learnMore} word={word} pos={wordPos?.pos} posAuto={wordPos?.auto} meanings={translations} draft={!!draft} trend={trend} />
 
       {hasImages && <WordImages images={wordImages} learnMore={word.learnMore} placement='strip' />}
       {/* Only the lightbox needs JS: the strip is server-rendered, its buttons open the dialog once this hydrates. */}
       {hasImages && <Lightbox client:idle images={lightboxImages} />}
 
-      <div class='c-word-main__content'>
+      <div class='o-word-main-content'>
         {trend && <WordTrendBox {...trend} />}
 
         {/* client:visible: the row sits right under the hero, but nothing needs JS before a click and the buttons are server-rendered. */}
@@ -291,17 +290,19 @@ const schemaJson = () => {
 
         {!hasImages && word.learnMore && <WordLearnMore learnMore={word.learnMore} />}
 
-        <BookShelf books={affiliateBooks} disclaimers={affiliateDisclaimers} />
+        <div class='o-word-below-fold'>
+          <BookShelf books={affiliateBooks} disclaimers={affiliateDisclaimers} />
 
-        <WordNeighborhood {...neighborhood} />
+          <WordNeighborhood {...neighborhood} />
 
-        {!draft && (
-          <div id='kommentare'>
-            <WordComments client:visible wordId={word.id} />
-          </div>
-        )}
+          {!draft && (
+            <div id='kommentare'>
+              <WordComments client:visible wordId={word.id} />
+            </div>
+          )}
 
-        <NextLinks trending={!!trend} words={wordRefs} />
+          <NextLinks trending={!!trend} words={wordRefs} />
+        </div>
 
         <WordPageFooter publishedAt={word.publishedAt} modifiedAt={word.contentModifiedAt} />
       </div>

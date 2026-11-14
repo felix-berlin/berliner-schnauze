@@ -1,6 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 
-const button = (page: Page) => page.locator(".c-scroll-to-top");
+const button = (page: Page) => page.locator(".o-scroll-to-top");
 const scrollTo = (page: Page, y: number | "bottom") =>
   page.evaluate(
     (target) => window.scrollTo(0, target === "bottom" ? document.body.scrollHeight : target),
@@ -42,7 +42,7 @@ for (const path of ["/", "/wort/anmachen"]) {
       // Lists render after hydration and grow the page, so keep scrolling until the footer is reached.
       await expect(async () => {
         await scrollTo(page, "bottom");
-        await expect(button(page)).toHaveClass(/is-close-to-end/, { timeout: 1000 });
+        await expect(button(page)).toHaveAttribute("data-state", "near-end", { timeout: 1000 });
       }).toPass();
 
       if (isMobile) {

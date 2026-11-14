@@ -1,86 +1,71 @@
-@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 
-// Card chrome comes from .c-section-card (this block only adds what the comments need inside it).
-.c-word-comments {
-  &__header {
-    justify-content: space-between;
-    flex-wrap: wrap;
+// Comments card (docs/design/wortseite/SPEC.md §9). Sits on the same root as the section card
+// (c-section-card c-word-comments), so its part names avoid the card's (.header, .num, .title,
+// .body, .footer). Parts: .count and .sort (header), .content (body column: .empty, .list, .more,
+// .write, .captcha with .captcha-text). The sort chips are c-choice data-variant="segment".
+@include mx.component("word-comments") {
+  :scope {
+    --section-card-header-justify: space-between;
+    --section-card-header-wrap: wrap;
   }
 
-  &__count {
-    color: var(--color-muted);
-    font-weight: 400;
+  .count {
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-regular);
   }
 
-  // Small connected segmented control (mock: 36px, -1px overlap).
-  &__sort {
+  .sort {
     display: flex;
     margin-inline-start: auto;
   }
 
-  &__sort-button {
-    min-block-size: 2.25rem;
-    padding-inline: 0.625rem;
-    font-size: 0.75rem;
-
-    & + & {
-      margin-inline-start: -1px;
-    }
-
-    // Looks 36px, hits 44px: the invisible band reaches 4px beyond the border box above and below (36 + 2 x 4 = 44;
-    // the band is positioned from the padding box, hence the extra border width). It only covers header padding.
-    position: relative;
-
-    &::before {
-      content: "";
-      position: absolute;
-      inset-block: calc(-0.25rem - 1px);
-      inset-inline: 0;
-    }
-
-    // The ring sits 2px outside the chip; a later neighbour (positioned) must not paint over it.
-    &:focus-visible {
-      z-index: 1;
-    }
-  }
-
-  &__body {
+  .content {
     display: flex;
     flex-direction: column;
-    gap: 0.875rem;
+    gap: var(--space-3);
   }
 
-  // .c-section-card__body forces p to 1rem; small print stays small (same size as the field hints).
-  &__body p.t-small {
-    font-size: 0.8rem;
+  // Small print stays small (same size as the field hints).
+  .content > p.t-small,
+  .captcha-text {
+    font-size: var(--font-size-sm);
   }
 
-  &__empty {
+  // Wrappers, so the settings reach only their own button and not the cards and form in .content:
+  // "Alle … Kommentare zeigen" keeps its own width, "Kommentar schreiben" spans and centres its label.
+  .more {
+    display: flex;
+  }
+
+  .write {
+    --choice-justify: center;
+
+    display: grid;
+  }
+
+  .empty {
     margin: 0;
-    color: var(--color-muted);
+    color: var(--color-text-muted);
   }
 
-  &__list {
+  .list {
     margin: 0;
     padding: 0;
     list-style: none;
+
+    > li {
+      line-height: 1.5;
+    }
+
+    // The first comment needs no rule above it.
+    > li:first-child {
+      --comment-rule: 0;
+      --comment-padding-start: 0;
+    }
   }
 
-  &__item:first-child > .c-comment {
-    border-block-start: 0;
-    padding-block-start: 0;
-  }
-
-  &__more {
-    align-self: flex-start;
-  }
-
-  &__write {
-    inline-size: 100%;
-    justify-content: center;
-  }
-
-  &__captcha-text {
-    margin: 0 0 vars.$spacer * 0.5;
+  .captcha-text {
+    margin: 0 0 var(--space-2);
   }
 }

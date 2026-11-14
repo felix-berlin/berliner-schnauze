@@ -1,6 +1,6 @@
 <template>
   <span class="c-badge">
-    <slot />
+    <span data-slot><slot /></span>
   </span>
 </template>
 

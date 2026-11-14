@@ -1,0 +1,11 @@
+@use "@styles/mixins" as mx;
+
+// Callout (docs/design/wortseite/SPEC.md §8): the only bordered box allowed inside a section card
+// besides the stat surfaces.
+@include mx.component("infotext") {
+  :scope {
+    padding: var(--space-3) var(--space-4);
+
+    @include mx.side-stripe;
+  }
+}

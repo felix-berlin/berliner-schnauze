@@ -65,8 +65,14 @@ jobs:
         with:
           sarif_file: website/oxlint-results.sarif
 
+      # Before `pnpm run lint`, which fixes in place: these two only check, so the gate cannot pass by self-repair.
+      - name: Design token gate
+        run: |
+          pnpm run lint:style:check
+          pnpm run tokens:check
+
       - name: Lint
-        run: pnpm run lint
+        run: pnpm run lint:js
 
       - name: Type check
         run: pnpm run typechecking

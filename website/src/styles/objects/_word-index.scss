@@ -1,9 +1,11 @@
-.o-word-index {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
+@layer legacy {
+  .o-word-index {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
 
-  h1 {
-    grid-column: 1 / -1;
-    text-align: center;
+    h1 {
+      grid-column: 1 / -1;
+      text-align: center;
+    }
   }
 }

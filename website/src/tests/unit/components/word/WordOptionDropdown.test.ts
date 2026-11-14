@@ -56,7 +56,7 @@ describe("WordOptionDropdown.vue", () => {
     const wrapper = mount(WordOptionDropdown, {
       props: { berlinerisch: "Schnauze", slug: "schnauze" },
     });
-    const btn = wrapper.find(".c-options-dropdown__options-icon");
+    const btn = wrapper.find("button[aria-label='Optionen']");
     expect(btn.exists()).toBe(true);
     expect(btn.attributes("aria-label")).toBe("Optionen");
   });

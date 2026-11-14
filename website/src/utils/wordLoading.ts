@@ -2,17 +2,19 @@
 // (ClientRouter). It shows when the new word is still not there after 300 ms and never for a quick or cached load.
 export const SKELETON_DELAY_MS = 300;
 
-const bar = (cls: string, style = ""): string =>
-  `<span class="c-skeleton ${cls}"${style ? ` style="${style}"` : ""}></span>`;
+const bar = (variant = "", style = ""): string =>
+  `<span class="c-skeleton"${variant ? ` data-variant="${variant}"` : ""}${style ? ` style="${style}"` : ""}></span>`;
 const card = (): string =>
-  `<div class="c-word-skeleton__card">${bar("c-skeleton--title", "inline-size:40%")}${bar("c-skeleton--line")}${bar("c-skeleton--line")}${bar("c-skeleton--line", "inline-size:70%")}</div>`;
+  `<div class="card">${bar("title", "inline-size:40%")}${bar("line")}${bar("line")}${bar("line", "inline-size:70%")}</div>`;
+const badge = bar("badge");
+const audio = bar("audio");
 
-export const skeletonHtml = (): string =>
+const SKELETON_HTML =
   `<div class="c-word-skeleton" role="status" aria-busy="true" aria-label="Wort wird jeladen">` +
-  `<div class="c-word-skeleton__card">${bar("c-skeleton--title")}` +
-  `<div class="c-word-skeleton__badges">${bar("c-word-skeleton__badge")}${bar("c-word-skeleton__badge")}</div>` +
-  `${bar("c-skeleton--line")}${bar("c-skeleton--line", "inline-size:80%")}</div>` +
-  `${bar("c-word-skeleton__audio")}${bar("c-word-skeleton__audio")}${card()}${card()}</div>`;
+  `<div class="card">${bar("title")}` +
+  `<div class="badges">${badge}${badge}</div>` +
+  `${bar("line")}${bar("line", "inline-size:80%")}</div>` +
+  `${audio}${audio}${card()}${card()}</div>`;
 
 let teardown: (() => void) | undefined;
 
@@ -32,7 +34,7 @@ export const initWordLoading = (): (() => void) => {
     timer = setTimeout(() => {
       const el = document.createElement("div");
       el.className = "c-word-skeleton-layer";
-      el.innerHTML = skeletonHtml();
+      el.innerHTML = SKELETON_HTML;
       document.body.append(el);
       shown = el;
     }, SKELETON_DELAY_MS);

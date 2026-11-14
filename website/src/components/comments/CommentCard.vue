@@ -2,17 +2,15 @@
   <article
     :id="`kommentar-${comment.id}`"
     class="c-comment"
-    :class="{
-      'c-comment--reply': comment.parentId,
-      'is-highlighted': ctx.highlighted.value === comment.id,
-    }"
+    :data-variant="comment.parentId ? 'reply' : undefined"
+    :data-state="ctx.highlighted.value === comment.id ? 'highlighted' : undefined"
     @keydown.esc="onEsc"
   >
-    <span class="c-comment__avatar" aria-hidden="true">{{ initial }}</span>
-    <header class="c-comment__meta">
-      <b class="c-comment__name">{{ comment.authorName }}</b>
+    <span class="avatar" aria-hidden="true">{{ initial }}</span>
+    <header class="meta">
+      <b class="name">{{ comment.authorName }}</b>
       <span class="t-small">
-        <a class="c-comment__permalink" :href="`#kommentar-${comment.id}`">
+        <a class="permalink" :href="`#kommentar-${comment.id}`">
           <time :datetime="comment.createdAt">{{ relativeTime }}</time>
         </a>
         <template v-if="comment.edited && comment.state === 'visible'"> · bearbeitet</template>
@@ -22,7 +20,7 @@
     <p
       v-if="comment.state !== 'visible'"
       ref="placeholder"
-      class="c-comment__placeholder"
+      class="placeholder"
       tabindex="-1"
       :role="deleted ? 'status' : undefined"
     >
@@ -41,13 +39,13 @@
         @cancel="closePanel"
       />
       <template v-else>
-        <p :id="`${uid}-text`" class="c-comment__text" :class="{ 'is-clamped': long && !expanded }">
+        <p :id="`${uid}-text`" class="text" :data-state="long && !expanded ? 'clamped' : undefined">
           {{ comment.text }}
         </p>
         <!-- Proposal in the spec (§9, long comments): cut at about 600 characters to 8 lines. -->
         <button
           v-if="long"
-          class="c-textlink c-comment__more"
+          class="c-textlink"
           type="button"
           :aria-controls="`${uid}-text`"
           :aria-expanded="expanded"
@@ -57,10 +55,10 @@
         </button>
       </template>
 
-      <div class="c-comment__actions">
-        <div aria-label="Kommentar bewerten" class="c-reaction-group" role="group">
+      <div class="actions">
+        <div aria-label="Kommentar bewerten" class="c-word-reactions" role="group">
           <button
-            class="c-reaction c-comment__helpful"
+            class="c-reaction"
             type="button"
             :aria-label="`Hilfreich, ${comment.upvotes}`"
             :aria-pressed="comment.myVote === 1"
@@ -71,7 +69,7 @@
             <b>{{ comment.upvotes }}</b>
           </button>
           <button
-            class="c-reaction c-comment__unhelpful"
+            class="c-reaction"
             type="button"
             :aria-label="`Nich hilfreich, ${comment.downvotes}`"
             :aria-pressed="comment.myVote === -1"
@@ -82,76 +80,69 @@
             <b>{{ comment.downvotes }}</b>
           </button>
         </div>
-        <button
-          v-if="parentVisible"
-          class="c-textlink c-comment__reply"
-          type="button"
-          @click="toggle('reply')"
-        >
+        <button v-if="parentVisible" class="c-textlink" type="button" @click="toggle('reply')">
           Antworten
         </button>
-        <DropdownPopover
-          :name="`comment-${comment.id}`"
-          placement="bottom-end"
-          class="c-comment__menu c-dropdown--theme-menu"
-        >
-          <template #default="{ triggerProps }">
-            <button
-              v-bind="triggerProps"
-              ref="menuButton"
-              class="c-icon-button c-comment__menu-button"
-              type="button"
-              :aria-label="`Weitere Aktionen zum Kommentar von ${comment.authorName}`"
-            >
-              <IconMore aria-hidden="true" />
-            </button>
-            <span aria-live="polite" class="u-sr-only" role="status">{{
-              copied ? "Link kopiert" : ""
-            }}</span>
-          </template>
-          <template #panel>
-            <template v-for="entry in entries" :key="entry">
+        <div class="menu">
+          <DropdownPopover :name="`comment-${comment.id}`" placement="bottom-end" theme="menu">
+            <template #default="{ triggerProps }">
               <button
-                v-if="entry === 'copy'"
-                class="c-dropdown__item c-comment__menu-item"
-                :data-done="copied"
+                v-bind="triggerProps"
+                ref="menuButton"
+                class="c-icon-button"
                 type="button"
-                @click="copyLink"
+                :aria-label="`Weitere Aktionen zum Kommentar von ${comment.authorName}`"
               >
-                <Check v-if="copied" aria-hidden="true" width="16" height="16" />
-                <IconLink v-else aria-hidden="true" width="16" height="16" />
-                {{ copied ? "Link kopiert" : "Link kopieren" }}
+                <IconMore aria-hidden="true" />
               </button>
-              <button
-                v-else-if="entry === 'report' && reported"
-                aria-disabled="true"
-                class="c-dropdown__item c-comment__menu-item"
-                type="button"
-              >
-                <Check aria-hidden="true" width="16" height="16" />
-                Schon jemeldet
-              </button>
-              <button
-                v-else
-                class="c-dropdown__item c-comment__menu-item"
-                type="button"
-                :popovertarget="`dropdown-comment-${comment.id}`"
-                popovertargetaction="hide"
-                @click="open(entry)"
-              >
-                <IconFlag v-if="entry === 'report'" aria-hidden="true" width="16" height="16" />
-                <IconPencil
-                  v-else-if="entry === 'edit'"
-                  aria-hidden="true"
-                  width="16"
-                  height="16"
-                />
-                <IconTrash v-else aria-hidden="true" width="16" height="16" />
-                {{ LABELS[entry] }}
-              </button>
+              <span aria-live="polite" class="u-sr-only" role="status">{{
+                copied ? "Link kopiert" : ""
+              }}</span>
             </template>
-          </template>
-        </DropdownPopover>
+            <template #panel>
+              <template v-for="entry in entries" :key="entry">
+                <button
+                  v-if="entry === 'copy'"
+                  class="c-menu-item"
+                  :data-done="copied"
+                  type="button"
+                  @click="copyLink"
+                >
+                  <Check v-if="copied" aria-hidden="true" width="16" height="16" />
+                  <IconLink v-else aria-hidden="true" width="16" height="16" />
+                  {{ copied ? "Link kopiert" : "Link kopieren" }}
+                </button>
+                <button
+                  v-else-if="entry === 'report' && reported"
+                  aria-disabled="true"
+                  class="c-menu-item"
+                  type="button"
+                >
+                  <Check aria-hidden="true" width="16" height="16" />
+                  Schon jemeldet
+                </button>
+                <button
+                  v-else
+                  class="c-menu-item"
+                  type="button"
+                  :popovertarget="`dropdown-comment-${comment.id}`"
+                  popovertargetaction="hide"
+                  @click="open(entry)"
+                >
+                  <IconFlag v-if="entry === 'report'" aria-hidden="true" width="16" height="16" />
+                  <IconPencil
+                    v-else-if="entry === 'edit'"
+                    aria-hidden="true"
+                    width="16"
+                    height="16"
+                  />
+                  <IconTrash v-else aria-hidden="true" width="16" height="16" />
+                  {{ LABELS[entry] }}
+                </button>
+              </template>
+            </template>
+          </DropdownPopover>
+        </div>
       </div>
 
       <CommentForm
@@ -166,15 +157,16 @@
 
       <div
         v-if="mode === 'delete'"
-        class="c-state c-state--error c-comment__confirm"
+        class="c-state"
+        data-variant="error"
         role="alertdialog"
         :aria-labelledby="`${uid}-delete`"
       >
         <CircleAlert aria-hidden="true" height="18" width="18" />
-        <span class="c-state__body">
+        <span class="body">
           <b :id="`${uid}-delete`">Kommentar wirklich löschen?</b>
           <span>Dit kann man nich rückgängig machen.</span>
-          <span class="c-comment__panel-actions">
+          <span class="actions">
             <button
               ref="confirmButton"
               class="c-choice"
@@ -189,14 +181,14 @@
         </span>
       </div>
 
-      <div v-if="sentReport" class="c-state c-state--done" role="status">
+      <div v-if="sentReport" class="c-state" data-variant="done" role="status">
         <Check aria-hidden="true" height="18" width="18" />
-        <span class="c-state__body">
+        <span class="body">
           <b>Danke, is jemeldet.</b>
           <span>Wir kieken uns den Kommentar an. Bis dahin bleibt er sichtbar.</span>
         </span>
       </div>
-      <form v-else-if="mode === 'report'" class="c-comment__report" @submit.prevent="submitReport">
+      <form v-else-if="mode === 'report'" class="report" @submit.prevent="submitReport">
         <b :id="`${uid}-report`">Wat is mit dem Kommentar?</b>
         <div :aria-labelledby="`${uid}-report`" class="c-choice-group" role="group">
           <button
@@ -212,9 +204,10 @@
         </div>
         <label class="c-label" :for="`${uid}-note`">Magste dit kurz erklären? (optional)</label>
         <textarea :id="`${uid}-note`" v-model="note" class="c-textarea" maxlength="300" rows="2" />
-        <div class="c-comment__panel-actions">
+        <div class="panel-actions">
           <button
-            class="c-button c-button--primary c-comment__report-button"
+            class="c-button"
+            data-variant="primary"
             type="submit"
             :aria-disabled="!reason || reporting"
             :aria-busy="reporting"
@@ -228,7 +221,7 @@
       </form>
     </template>
 
-    <div v-if="comment.replies.length" class="c-comment__replies">
+    <div v-if="comment.replies.length" class="replies">
       <CommentCard
         v-for="r in comment.replies"
         :key="r.id"
@@ -433,4 +426,5 @@ const submitReport = async (): Promise<void> => {
 
 <style lang="scss">
 @use "@styles/components/comment";
+@use "@styles/components/word-reactions";
 </style>

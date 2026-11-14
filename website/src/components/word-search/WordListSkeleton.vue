@@ -6,12 +6,12 @@
     aria-busy="true"
     aria-label="Momentchen, ick blätter noch durch't Wörterbuch…"
   >
-    <div v-for="row in ROW_COUNT" :key="row" class="c-word-list-skeleton__row" aria-hidden="true">
-      <span class="c-word-list-skeleton__lines">
-        <span class="c-word-list-skeleton__bar c-word-list-skeleton__bar--word" />
-        <span class="c-word-list-skeleton__bar c-word-list-skeleton__bar--translation" />
+    <div v-for="row in ROW_COUNT" :key="row" class="row" aria-hidden="true">
+      <span class="lines">
+        <span class="bar" data-kind="word" />
+        <span class="bar" data-kind="translation" />
       </span>
-      <span class="c-word-list-skeleton__icon" />
+      <span class="icon" />
     </div>
   </div>
 </template>

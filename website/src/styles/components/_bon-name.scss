@@ -1,82 +1,79 @@
-// Player name display and inline editor (docs/design/bon/SPEC.md §12b).
-// The name always shows in full; without room "Namen ändern" moves to the next line as a whole.
-.c-bon-name {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.25rem 0.5rem;
-  margin: 0;
+@use "@styles/mixins" as mx;
 
-  > * {
+// Player name display and inline editor (docs/design/bon/SPEC.md §12b).
+// Display (<p>): .label, .name, .tag, .ok and a textlink. The name always shows in full; without room
+// "Namen ändern" moves to the next line as a whole. Variant edit (<div data-variant="edit">): .head
+// with .field-label, the field, .error (the alert region), .actions.
+@include mx.component("bon-name") {
+  :scope {
+    --textlink-font-size: var(--font-size-md);
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-2);
+    margin: 0;
     white-space: nowrap;
   }
 
-  &__label {
-    color: var(--color-muted);
+  .label {
+    color: var(--color-text-muted);
   }
 
   // A long name without spaces breaks instead of overflowing the column.
-  & &__name {
+  .name {
     overflow-wrap: anywhere;
     white-space: normal;
-    color: var(--color-ink-strong);
+    color: var(--color-text-strong);
   }
 
-  &__tag {
-    font-size: 0.8em;
-    color: var(--color-muted);
+  .tag {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
   }
 
-  &__ok {
+  .ok {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--color-accent-text);
+    gap: var(--space-1);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-accent);
   }
 
-  &__link {
-    font-size: 0.9rem;
-  }
-
-  &__edit {
-    display: flex;
+  // The field is a full-width flex item with the 44px target of the base .c-input (Spec §12b).
+  :scope[data-variant="edit"] {
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 1rem;
-    background: var(--surface-chip);
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    background: var(--color-surface-chip);
     border-radius: var(--radius-sm);
+    white-space: normal;
   }
 
-  &__head {
+  .head {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: 1rem;
+    gap: var(--space-4);
   }
 
-  // Full width and a 44px target like the DS .c-field (Spec §12b).
-  &__input {
-    box-sizing: border-box;
-    inline-size: 100%;
-    min-block-size: 44px;
+  .field-label {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
   }
 
-  &__field-label {
-    font-weight: 700;
-    color: var(--color-ink-strong);
+  // The EXIT link inside the alert keeps its own width.
+  .error {
+    --textlink-place-self: start;
   }
 
-  &__actions {
+  .actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem 1.25rem;
-  }
-
-  &__exit {
-    align-self: flex-start;
-    font-size: 0.9rem;
+    gap: var(--space-2) var(--space-5);
   }
 }

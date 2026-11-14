@@ -103,7 +103,7 @@ describe("BookShelf.astro", () => {
       books: [book({ href: "https://www.thalia.de/b" })],
       disclaimers: [],
     });
-    expect(result).not.toContain("c-book-shelf__note");
+    expect(result).not.toContain('class="t-small note"');
   });
 
   it("renders nothing without books", async () => {

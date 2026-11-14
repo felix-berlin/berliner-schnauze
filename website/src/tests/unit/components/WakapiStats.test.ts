@@ -3,6 +3,8 @@ import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
 vi.mock("astro:env/server", () => ({
+  E2E_SERVER: undefined,
+  PAYLOAD_SERVER_URL: undefined,
   WAKAPI_API_KEY: "test-api-key",
 }));
 

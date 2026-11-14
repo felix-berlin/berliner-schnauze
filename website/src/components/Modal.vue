@@ -3,18 +3,17 @@
     :id="props.uid"
     ref="currentModal"
     class="c-modal"
-    :class="[
-      `c-modal--${props.position}`,
-      { 'has-close-on-click-outside': props.closeOnClickOutside },
-      [props.class],
-    ]"
-    :style="`--width-modal: ${props.width}`"
+    :class="props.class"
+    :data-variant="props.position"
+    :style="`--modal-width: ${props.width}`"
     aria-modal="true"
     :closedby="props.closeOnClickOutside ? 'any' : 'closerequest'"
     @close="resetModal"
   >
     <template v-if="view.component">
-      <ModalCloseButton v-if="props.showCloseButton" />
+      <div v-if="props.showCloseButton" class="close">
+        <ModalCloseButton />
+      </div>
 
       <Component :is="view.component" v-bind="view.props" v-on="view.events || {}" />
     </template>

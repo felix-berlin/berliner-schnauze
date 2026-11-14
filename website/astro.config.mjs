@@ -10,6 +10,8 @@ import { visualizer } from "rollup-plugin-visualizer";
 import Icons from "unplugin-icons/vite";
 import { loadEnv } from "vite";
 
+import { sassAliasImporter } from "./sass-aliases.mjs";
+
 const env = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 const {
   SENTRY_AUTH_TOKEN,
@@ -39,11 +41,6 @@ const visualizerPlugin = visualizer({
   gzipSize: true,
   brotliSize: true,
 });
-
-const sassAliases = {
-  "@sass-butler/": new URL("./node_modules/@felix_berlin/sass-butler/", import.meta.url),
-  "@styles/": new URL("./src/styles/", import.meta.url),
-};
 
 // https://astro.build/config
 export default defineConfig({
@@ -164,6 +161,12 @@ export default defineConfig({
         optional: true,
       }),
       OG_CACHE_DIR: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      // "1" on the Playwright e2e server only (src/utils/e2eServer.ts): fixed Wakapi hours, no rate limits.
+      E2E_SERVER: envField.string({
         context: "server",
         access: "secret",
         optional: true,
@@ -612,18 +615,7 @@ export default defineConfig({
       preprocessorMaxWorkers: true,
       preprocessorOptions: {
         scss: {
-          importers: [
-            {
-              findFileUrl(url) {
-                for (const [prefix, base] of Object.entries(sassAliases)) {
-                  if (url.startsWith(prefix)) {
-                    return new URL(url.slice(prefix.length), base);
-                  }
-                }
-                return null;
-              },
-            },
-          ],
+          importers: [sassAliasImporter],
         },
       },
     },

@@ -1,18 +1,32 @@
-@use "@styles/variables" as vars;
+@layer base {
+  :root {
+    --padding-y-header: calc(var(--space-4) * 0.6);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- start value until MainHeader.astro measures the header
+    --site-header-height: 60px; // JS-updated by MainHeader.astro
+  }
 
-:root {
-  --padding-y-header: #{vars.$spacer * 0.6};
-  --site-header-height: 60px; // JS-updated by MainHeader.astro
-}
+  // Keyboard focus indicator for every interactive element; mouse clicks stay ring-free.
+  // The only ring rule: a container or a form control sets the public --focus-ring-style and
+  // --focus-ring-color (inherited) instead of re-declaring the outline; outline-offset stays overridable.
+  :focus-visible {
+    outline: 2px var(--focus-ring-style, solid) var(--focus-ring-color, var(--color-text-accent));
+    outline-offset: 2px;
+  }
 
-// Keyboard focus indicator for every interactive element; mouse clicks stay ring-free.
-:focus-visible {
-  outline: 2px solid var(--color-accent-text);
-  outline-offset: 2px;
-}
+  // Word page and lightbox: one dashed ring for all components (SPEC.md §8); single overrides only change offset.
+  :where(.o-word-page, .c-lightbox) {
+    --focus-ring-style: dashed;
+    --focus-ring-color: var(--color-focus-ring);
+  }
 
-// Word page and lightbox: one dashed ring for all components (SPEC.md §8); single overrides only change offset.
-:where(.c-word-page, .c-lightbox) :focus-visible {
-  outline: 2px dashed var(--focus-ring);
-  outline-offset: 2px;
+  // Word pages reserve the scrollbar track, so the lightbox's scroll lock does not shift the page
+  // sideways (the dialog only exists while open, so it cannot be the :has() guard).
+  html:has(.o-word-page) {
+    scrollbar-gutter: stable;
+  }
+
+  // Lock the page while the lightbox is open.
+  body:has(.c-lightbox[open]) {
+    overflow: hidden;
+  }
 }

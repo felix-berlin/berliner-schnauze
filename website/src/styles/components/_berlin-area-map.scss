@@ -1,154 +1,156 @@
 @use "@styles/mixins" as mx;
 
-// List first by default (narrow); the map takes over from 28.5rem, where its labels reach 11 px.
-.c-berlin-area-map {
-  container-type: inline-size;
-  container-name: area-map;
-  display: grid;
-  gap: 0.75rem;
-  justify-items: center;
+// "Wo wohnste?" picker of the feedback poll. List first by default (narrow); the map takes over
+// from 28.5rem, where its labels reach 11 px. Parts .map (details: .svg with .area radios and
+// .label texts, .elsewhere), .list (details: .list-items), .credit. Selected: aria-checked on an
+// area, data-state="selected" on its label; data-area="brandenburg" is the frame around Berlin.
+@include mx.component("berlin-area-map") {
+  :scope {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R63: one-off
+    --_frame-hover: rgb(240 172 133 / 12%);
 
-  &__map {
+    container: berlin-area-map / inline-size;
+    display: grid;
+    gap: var(--space-3);
+    justify-items: center;
+  }
+
+  .map {
     inline-size: 100%;
     order: 1;
   }
 
-  &__svg {
+  .svg {
     display: block;
-    width: 100%;
-    height: auto;
+    inline-size: 100%;
+    block-size: auto;
     margin-inline: auto;
   }
 
-  &__area {
-    fill: var(--surface-chip);
-    stroke: var(--color-muted);
+  .area {
+    fill: var(--color-surface-chip);
+    stroke: var(--color-text-muted);
     stroke-dasharray: 3 2;
     stroke-width: 0.75;
     cursor: pointer;
-    transition: fill 0.3s;
+    transition: fill var(--duration-base);
 
     &:hover,
     &:focus-visible {
-      fill: var(--orange-500);
+      fill: var(--color-accent-active);
     }
 
     &:focus-visible {
       outline-offset: 1px;
     }
 
-    &.is-selected {
-      fill: var(--orange-600);
-      stroke: var(--color-body);
-      stroke-dasharray: none;
-    }
-
     // After the generic rules: same specificity, later wins.
-    &--brandenburg {
+    &[data-area="brandenburg"] {
       fill: transparent;
-      stroke: var(--rule-card);
+      stroke: var(--color-border-card);
       stroke-dasharray: 6 4;
 
       &:hover,
       &:focus-visible {
-        fill: color-mix(in srgb, var(--orange-300) 12%, transparent);
+        fill: var(--_frame-hover);
       }
+    }
 
-      &.is-selected {
-        fill: var(--orange-600);
-        stroke: var(--color-body);
-        stroke-dasharray: none;
-      }
+    // Selected beats every hover above (the frame's hover is one attribute stronger).
+    &[aria-checked="true"],
+    &[aria-checked="true"]:is(:hover, :focus-visible) {
+      fill: var(--color-accent-solid);
+      stroke: var(--color-text-body);
+      stroke-dasharray: none;
     }
   }
 
-  &__label {
-    fill: var(--color-body);
+  .label {
     display: none;
-    font-size: 11px;
-    font-weight: 700;
+    fill: var(--color-text-body);
+    font-size: var(--font-size-2xs);
+    font-weight: var(--font-weight-bold);
     text-anchor: middle;
     dominant-baseline: middle;
     pointer-events: none;
     paint-order: stroke;
-    stroke: var(--surface-chip);
+    stroke: var(--color-surface-chip);
     stroke-width: 3px;
     stroke-linejoin: round;
 
-    // White-100 on orange-600 (same pair as the primary button) is 5.6:1 in both modes.
-    &.is-selected {
-      fill: var(--white-100);
-      stroke: var(--orange-600);
+    // On-accent text on solid accent (same pair as the primary button) is 5.6:1 in both modes.
+    &[data-state="selected"] {
+      fill: var(--color-text-on-accent);
+      stroke: var(--color-accent-solid);
     }
 
-    &--brandenburg {
+    &[data-area="brandenburg"] {
       text-anchor: start;
-      font-weight: 400;
-      fill: var(--color-muted);
+      font-weight: var(--font-weight-regular);
+      fill: var(--color-text-muted);
       stroke: none;
     }
   }
 
-  // In the list on narrow screens; the standalone button belongs to the map.
-  &__elsewhere {
+  // Only with the map; in the list on narrow screens.
+  .elsewhere {
+    --_min: 9rem; // one-off button width
+    --choice-justify: center;
+
     display: none;
-    min-inline-size: 9rem;
-    margin: 0.75rem auto 0;
+    grid-template-columns: minmax(var(--_min), max-content);
     justify-content: center;
+    margin-block-start: var(--space-3);
   }
 
-  &__list {
+  .list {
     inline-size: 100%;
     order: 0;
   }
 
-  &__list-items {
+  .list-items {
+    --choice-justify: flex-start;
+    --choice-padding-block: var(--space-1);
+    --choice-text-align: start;
+
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem;
-  }
-
-  &__list-item {
-    justify-content: flex-start;
-    padding-block: 0.3rem;
+    gap: var(--space-2);
     overflow-wrap: anywhere;
-    text-align: start;
   }
 
-  &__credit {
+  .credit {
     order: 2;
     margin: 0;
-    color: var(--color-muted);
-    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-2xs);
   }
 
-  @container area-map (inline-size >= 28.5rem) {
-    &__map {
-      order: 0;
+  @container berlin-area-map (inline-size >= 28.5rem) {
+    .map {
+      --textlink-display: none; // the summary: the map is always open here
 
-      summary {
-        display: none;
-      }
+      order: 0;
     }
 
-    &__svg {
+    .svg {
       max-inline-size: 40rem;
     }
 
-    &__label {
+    .label {
       display: inline;
     }
 
-    &__elsewhere {
-      display: block;
+    .elsewhere {
+      display: grid;
     }
 
-    &__list {
+    .list {
       order: 1;
       inline-size: min(100%, 40rem);
     }
 
-    &__list-items {
+    .list-items {
       display: flex;
       flex-wrap: wrap;
     }

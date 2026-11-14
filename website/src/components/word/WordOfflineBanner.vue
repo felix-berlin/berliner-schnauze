@@ -1,7 +1,7 @@
 <template>
-  <div v-if="!online" class="c-state c-state--offline c-word-offline" role="status">
+  <div v-if="!online" class="c-state o-word-offline" data-variant="offline" role="status">
     <WifiOff aria-hidden="true" height="18" width="18" />
-    <span class="c-state__body">
+    <span class="body">
       <b>Du bist offline.</b>
       <span>
         Du siehst die jespeicherte Version. Abstimmen und Kommentieren jeht wieder, sobald du Netz

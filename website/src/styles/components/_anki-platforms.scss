@@ -1,0 +1,83 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// "Läuft überall" card: .head (two c-anki-heading blocks), .tiles of .tile links (.icons, .name,
+// .meta) and the sync note in .foot.
+@include mx.component("anki-platforms") {
+  :scope {
+    @include mx.paper-card;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  .head {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: var(--space-5) var(--space-8);
+    align-items: end;
+    padding: var(--space-6) var(--space-6) var(--space-2);
+  }
+
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12.5rem), 1fr));
+    gap: var(--space-3);
+    padding: var(--space-5) var(--space-6) var(--space-6);
+  }
+
+  .tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-5) var(--space-4);
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    background: var(--color-surface-paper); // colour inventory R8
+    border: 1px solid var(--color-surface-placeholder); // colour inventory R12
+    transition: border-color var(--duration-base) var(--ease-standard);
+
+    @include butler-mx.hover {
+      border-style: dashed;
+      border-color: var(--color-accent-solid); // colour inventory R1
+    }
+  }
+
+  .icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-block-size: 2.125rem;
+
+    svg {
+      color: var(--color-text-accent); // colour inventory R17
+    }
+  }
+
+  .name {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .meta {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .foot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    border-block-start: 1px dashed var(--color-border-accent-soft); // colour inventory R6
+    font-size: var(--font-size-md);
+    color: var(--color-text-muted);
+
+    svg {
+      color: var(--color-accent-active); // colour inventory R2
+    }
+  }
+}

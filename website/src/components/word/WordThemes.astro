@@ -10,12 +10,15 @@ const { themes } = Astro.props;
 
 {
   themes.length > 0 && (
-    <p class='c-themes'>
+    <p class='c-word-themes'>
       <span class='t-label'>{themes.length > 1 ? 'Themen' : 'Thema'}</span>
-      {themes.map((thema) => (
-        <a href={thema.url} class='c-textlink c-textlink--inline'>
-          {thema.label}
-        </a>
+      {themes.map((thema, i) => (
+        <>
+          {i > 0 && <span aria-hidden='true'>·</span>}
+          <a href={thema.url} class='c-textlink' data-variant='inline hit-area'>
+            {thema.label}
+          </a>
+        </>
       ))}
     </p>
   )

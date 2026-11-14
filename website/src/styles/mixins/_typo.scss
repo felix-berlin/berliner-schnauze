@@ -1,10 +1,8 @@
-@use "@styles/variables" as vars;
-
 // Small uppercase label above a value or section ("eyebrow"), muted ink.
-@mixin eyebrow($size: 0.7rem, $tracking: 0.06em) {
-  font-size: $size;
-  font-weight: 700;
+@mixin eyebrow {
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
-  letter-spacing: $tracking;
-  color: var(--color-muted);
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
 }

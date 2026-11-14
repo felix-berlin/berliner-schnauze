@@ -154,7 +154,7 @@ describe("SingleWord.vue", () => {
       props: { showDropdown: true, source },
     });
     await flushPromises();
-    const link = wrapper.find(".c-options-dropdown__copy-button");
+    const link = wrapper.find("a.c-menu-item");
     expect(link.exists()).toBe(true);
     expect(link.attributes("href")).toBe("/wort/schnauze");
     expect(link.text()).toContain("Mehr erfahren");

@@ -8,39 +8,39 @@
     data-content-target="/games/berliner-oder-nicht"
   >
     <template v-if="payload">
-      <h1 class="c-bon-share-view__title">
+      <h1 class="title">
         {{ payload.playerName ? `${payload.playerName}s Spielergebnis` : "Spielergebnis" }}
       </h1>
 
-      <dl class="c-bon-share-view__stats">
-        <div class="c-bon-share-view__stat">
-          <dt class="c-bon-share-view__stat-label">Score</dt>
-          <dd class="c-bon-share-view__stat-value">{{ payload.score }}</dd>
+      <dl class="stats">
+        <div class="stat">
+          <dt class="label">Score</dt>
+          <dd class="value">{{ payload.score }}</dd>
         </div>
-        <div class="c-bon-share-view__stat">
-          <dt class="c-bon-share-view__stat-label">Best Streak</dt>
-          <dd class="c-bon-share-view__stat-value">{{ payload.bestStreak }}</dd>
+        <div class="stat">
+          <dt class="label">Best Streak</dt>
+          <dd class="value">{{ payload.bestStreak }}</dd>
         </div>
-        <div class="c-bon-share-view__stat">
-          <dt class="c-bon-share-view__stat-label">Genauigkeit</dt>
-          <dd class="c-bon-share-view__stat-value">{{ accuracyPercent }}%</dd>
+        <div class="stat">
+          <dt class="label">Genauigkeit</dt>
+          <dd class="value">{{ accuracyPercent }}%</dd>
         </div>
-        <div class="c-bon-share-view__stat">
-          <dt class="c-bon-share-view__stat-label">Antworten</dt>
-          <dd class="c-bon-share-view__stat-value">{{ payload.totalAnswered }}</dd>
+        <div class="stat">
+          <dt class="label">Antworten</dt>
+          <dd class="value">{{ payload.totalAnswered }}</dd>
         </div>
       </dl>
 
-      <p class="c-bon-share-view__date">{{ formattedDate }}</p>
+      <p class="date">{{ formattedDate }}</p>
 
-      <a href="/games/berliner-oder-nicht" class="c-bon-share-view__cta">
+      <a href="/games/berliner-oder-nicht" class="cta">
         Selbst spielen <span aria-hidden="true">→</span>
       </a>
     </template>
 
     <template v-else>
-      <p class="c-bon-share-view__error" role="alert">Kein gültiges Ergebnis gefunden.</p>
-      <a href="/games/berliner-oder-nicht" class="c-bon-share-view__cta">
+      <p class="error" role="alert">Kein gültiges Ergebnis gefunden.</p>
+      <a href="/games/berliner-oder-nicht" class="cta">
         Zum Spiel <span aria-hidden="true">→</span>
       </a>
     </template>

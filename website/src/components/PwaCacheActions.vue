@@ -2,7 +2,8 @@
   <div class="c-pwa-cache__actions">
     <button
       type="button"
-      class="c-button c-button--center-icon"
+      class="c-button"
+      data-variant="center-icon"
       :disabled="isLoading"
       @click="emit('refresh')"
     >
@@ -11,14 +12,15 @@
     </button>
     <button
       type="button"
-      class="c-button c-button--center-icon"
+      class="c-button"
+      data-variant="center-icon"
       :disabled="isLoading || hasNoBuckets"
       @click="emit('clear-all')"
     >
       <component :is="Trash2" width="16" height="16" />
       Alles leeren
     </button>
-    <button type="button" class="c-button c-button--center-icon" @click="emit('resync')">
+    <button type="button" class="c-button" data-variant="center-icon" @click="emit('resync')">
       <component :is="RotateCcw" width="16" height="16" />
       Re-sync
     </button>

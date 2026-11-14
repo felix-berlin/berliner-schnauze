@@ -1,0 +1,53 @@
+@use "@styles/mixins" as mx;
+
+// Meanings in the word hero (Spec §5): one is p.single, from two on a numbered .list; the
+// "Alle … zeigen" textlink starts at the left edge (items are not stretched).
+@include mx.component("word-meanings") {
+  :scope {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R58: one-off (list numbers)
+    --_number: light-dark(rgb(207 87 54), rgb(240 172 133));
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .single {
+    margin: 0;
+  }
+
+  .list {
+    --_gap: 0.3em; // em: follows the meaning text
+    --_marker: 1.4em; // em: follows the meaning text
+    --_marker-size: 0.7em; // em: follows the meaning text
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--_gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: meaning;
+
+    li {
+      counter-increment: meaning;
+      display: grid;
+      grid-template-columns: var(--_marker) 1fr;
+      gap: var(--_gap);
+      align-items: baseline;
+      line-height: 1.45;
+
+      &[hidden] {
+        display: none;
+      }
+
+      &::before {
+        content: counter(meaning) ".";
+        color: var(--_number);
+        font-size: var(--_marker-size);
+        font-weight: var(--font-weight-bold);
+      }
+    }
+  }
+}

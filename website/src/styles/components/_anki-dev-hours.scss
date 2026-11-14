@@ -1,72 +1,76 @@
-@use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 
-.c-anki-dev-hours {
-  display: flex;
-  flex-direction: column;
+// Wakapi development hours card of the Anki page: .head, .body (.figure, p), .foot with the live .dot.
+@include mx.component("anki-dev-hours") {
+  :scope {
+    --_figure: clamp(3rem, 2.4rem + 2.5vw, 4.5rem); // fluid figure, above the type scale
 
-  @include mx.paper-card;
+    @include mx.paper-card;
 
-  &__head {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .head {
     display: flex;
     align-items: center;
-    gap: vars.$spacer * 0.5;
-    padding: vars.$spacer * 0.75 vars.$spacer * 1.25;
-    border-block-end: 1px dashed var(--orange-200);
-    font-weight: 700;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    border-block-end: 1px dashed var(--color-border-accent-soft); // colour inventory R6
+    font-weight: var(--font-weight-bold);
 
     svg {
-      color: var(--orange-500);
+      color: var(--color-accent-active); // colour inventory R2
       flex-shrink: 0;
     }
   }
 
-  &__body {
-    padding: vars.$spacer * 1.75 vars.$spacer * 1.5;
+  .body {
+    padding: var(--space-6);
     display: flex;
     flex-direction: column;
-    gap: vars.$spacer;
+    gap: var(--space-4);
+
+    p {
+      margin: 0;
+      line-height: 1.5;
+    }
   }
 
-  &__figure {
+  .figure {
     display: flex;
     align-items: baseline;
-    gap: vars.$spacer * 0.5;
+    gap: var(--space-2);
     flex-wrap: wrap;
 
     strong {
-      font-size: clamp(3rem, 2.4rem + 2.5vw, 4.5rem);
-      font-weight: 900;
+      font-size: var(--_figure);
+      font-weight: var(--font-weight-black);
       line-height: 1;
-      color: var(--anki-color-accent-text);
+      color: var(--color-text-accent); // colour inventory R17
     }
 
     span {
-      font-size: 1.25rem;
-      font-weight: 700;
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
     }
   }
 
-  &__body p {
-    margin: 0;
-    line-height: 1.5;
-  }
-
-  &__foot {
-    padding: vars.$spacer * 0.875 vars.$spacer * 1.5;
-    border-block-start: 1px dashed var(--new-blue-200);
+  .foot {
+    padding: var(--space-3) var(--space-6);
+    border-block-start: 1px dashed var(--color-surface-inverse); // colour inventory R14
     display: flex;
     align-items: center;
-    gap: vars.$spacer * 0.375;
-    font-size: 0.8rem;
-    color: var(--color-muted);
+    gap: var(--space-1);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
   }
 
-  &__dot {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    background: var(--success);
+  .dot {
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-status-success);
     flex-shrink: 0;
   }
 }

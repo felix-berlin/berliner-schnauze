@@ -1,18 +1,12 @@
 <template>
   <div class="c-bon-feedback">
-    <div class="c-bon-feedback__stage">
-      <div
-        class="c-bon-feedback__ghost"
-        :data-dir="guessedReal ? 'right' : 'left'"
-        aria-hidden="true"
-      >
+    <div class="stage">
+      <div class="ghost" :data-dir="guessedReal ? 'right' : 'left'" aria-hidden="true">
         {{ last.word }}
       </div>
       <section
-        :class="[
-          'c-bon-feedback__card',
-          `c-bon-feedback__card--${last.correct ? 'right' : 'wrong'}`,
-        ]"
+        class="card"
+        :data-state="last.correct ? 'right' : 'wrong'"
         @click="go(true)"
         @pointerenter="onEnter"
         @pointerleave="onLeave"
@@ -22,10 +16,10 @@
       >
         <p class="u-sr-only" role="status">{{ summary }}</p>
 
-        <div class="c-bon-feedback__body" aria-hidden="true">
-          <span class="c-bon-feedback__head">
+        <div class="body" aria-hidden="true">
+          <span class="head">
             <svg
-              :class="`c-bon-feedback__icon c-bon-feedback__icon--${last.correct ? 'ok' : 'no'}`"
+              class="icon"
               width="22"
               height="22"
               viewBox="0 0 24 24"
@@ -39,18 +33,18 @@
               <path v-if="last.correct" d="m9 12 2 2 4-4" />
               <path v-else d="m15 9-6 6M9 9l6 6" />
             </svg>
-            <b class="c-bon-feedback__title">{{ title }}</b>
+            <b class="title">{{ title }}</b>
           </span>
-          <p v-if="!last.correct" class="c-bon-feedback__verdict">{{ verdict }}</p>
-          <p class="c-bon-feedback__word">{{ last.word }}</p>
+          <p v-if="!last.correct" class="verdict">{{ verdict }}</p>
+          <p class="word">{{ last.word }}</p>
           <p v-if="last.translation && (last.correct || last.isReal)" class="t-em">
             = {{ last.translation }}
           </p>
-          <p class="c-bon-feedback__delta">{{ delta }}</p>
+          <p class="delta">{{ delta }}</p>
         </div>
         <a
           v-if="!last.correct && last.isReal && last.slug"
-          class="c-textlink c-bon-feedback__link"
+          class="c-textlink"
           :href="`/wort/${last.slug}`"
           target="_blank"
           rel="noopener"
@@ -62,7 +56,7 @@
         <span
           :key="run"
           ref="bar"
-          class="c-bon-feedback__timer"
+          class="timer"
           :style="{
             '--bar-from': barFrom,
             animationDuration: `${barMs}ms`,
@@ -73,12 +67,10 @@
       </section>
     </div>
 
-    <p v-if="gameOver" class="t-small c-bon-feedback__hint">
-      Gleich kommt dein Ergebnis – tippen für sofort.
-    </p>
+    <p v-if="gameOver" class="t-small hint">Gleich kommt dein Ergebnis – tippen für sofort.</p>
     <template v-else>
-      <p class="t-small c-bon-feedback__hint c-bon-feedback__hint--touch">{{ hint.touch }}</p>
-      <p class="t-small c-bon-feedback__hint c-bon-feedback__hint--keys">{{ hint.keys }}</p>
+      <p class="t-small hint" data-input="touch">{{ hint.touch }}</p>
+      <p class="t-small hint" data-input="keys">{{ hint.keys }}</p>
     </template>
   </div>
 </template>

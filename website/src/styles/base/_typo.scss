@@ -1,65 +1,66 @@
-@use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: vars.$berliner;
-  font-weight: normal;
-}
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-family-display);
+    font-weight: normal;
+  }
 
-html,
-button {
-  font-family: vars.$berlin;
-  font-weight: normal;
-  letter-spacing: 1px;
-}
+  html,
+  button {
+    font-family: var(--font-family-body);
+    font-weight: normal;
+    letter-spacing: 1px;
+  }
 
-// Components restyle links through these variables; this rule beats a zero-specificity :where() class otherwise.
-a {
-  color: var(--color-link, inherit);
-  cursor: pointer;
-  text-decoration: var(--decoration-text, none);
-}
-
-.c-content {
+  // Components restyle links through --decoration-text; this rule beats a zero-specificity :where() class otherwise.
   a {
-    --decoration-text: underline dashed from-font;
+    color: inherit;
+    cursor: pointer;
+    text-decoration: var(--decoration-text, none);
+  }
 
-    text-underline-position: from-font;
+  .c-content {
+    a {
+      --decoration-text: underline dashed from-font;
 
-    @include mx.breakpoint("xs") {
-      --decoration-text: none;
+      text-underline-position: from-font;
 
-      @include butler-mx.hover {
-        --decoration-text: underline dashed from-font;
+      @include mx.breakpoint("xs") {
+        --decoration-text: none;
+
+        @include butler-mx.hover {
+          --decoration-text: underline dashed from-font;
+        }
       }
     }
   }
-}
 
-// Type scale v3 (docs/design/wortseite/SPEC.md §4): the only sizes besides the headword.
-:where(.t-label) {
-  margin: 0;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--color-muted);
-}
+  // Type scale v3 (docs/design/wortseite/SPEC.md §4): the only sizes besides the headword.
+  :where(.t-label) {
+    margin: 0;
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+  }
 
-:where(.t-em) {
-  font-size: 1.25rem;
-  line-height: 1.35;
-  color: var(--color-ink-strong);
-}
+  :where(.t-em) {
+    font-size: var(--font-size-xl);
+    line-height: 1.35;
+    color: var(--color-text-strong);
+  }
 
-:where(.t-small) {
-  font-size: 0.75rem;
-  line-height: 1.5;
-  color: var(--color-muted);
+  :where(.t-small) {
+    font-size: var(--font-size-xs);
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
 }

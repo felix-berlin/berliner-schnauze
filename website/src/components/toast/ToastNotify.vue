@@ -3,7 +3,7 @@
     :id="`toast-${id}`"
     ref="toast"
     class="c-toast-notify"
-    :class="`c-toast-notify--${status}`"
+    :data-variant="status"
     :role="ariaRole"
     :aria-live="ariaLive"
     aria-atomic="true"
@@ -12,37 +12,31 @@
     @focusin="pauseTimer"
     @focusout="resumeTimer"
   >
-    <Component
-      :is="toastIconMap[status]"
-      v-if="showStatusIcon"
-      class="c-toast-notify__icon"
-      aria-hidden="true"
-    />
+    <Component :is="toastIconMap[status]" v-if="showStatusIcon" class="icon" aria-hidden="true" />
 
-    <div class="c-toast-notify__body">
-      <div class="c-toast-notify__message">
+    <div class="body">
+      <div class="message">
         {{ message }}
       </div>
 
-      <button
-        v-if="actionLabel"
-        type="button"
-        class="c-toast-notify__action c-button"
-        @click="handleAction()"
-      >
-        {{ actionLabel }}
-      </button>
+      <span v-if="actionLabel" class="action">
+        <button type="button" class="c-button" @click="handleAction()">
+          {{ actionLabel }}
+        </button>
+      </span>
     </div>
 
-    <button
-      v-if="showClose"
-      type="button"
-      class="c-toast-notify__close c-button c-button--center-icon"
-      aria-label="Benachrichtigung schließen"
-      @click="dismiss()"
-    >
-      <Close :width="12" :height="12" />
-    </button>
+    <span v-if="showClose" class="close">
+      <button
+        type="button"
+        class="c-button"
+        data-variant="center-icon"
+        aria-label="Benachrichtigung schließen"
+        @click="dismiss()"
+      >
+        <Close :width="12" :height="12" />
+      </button>
+    </span>
   </div>
 </template>
 

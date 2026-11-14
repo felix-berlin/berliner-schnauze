@@ -3,7 +3,8 @@
     <aside v-show="showWordListFilterFlyout" ref="wordListFilter" class="c-filter-search__filter">
       <button
         v-if="showWordListFilterFlyout"
-        class="c-filter-search__close c-button c-button--center-icon is-top"
+        class="c-filter-search__close c-button is-top"
+        data-variant="center-icon"
         type="button"
         aria-label="schließen"
         @click="$toggleWordListFilterFlyout"
@@ -87,7 +88,8 @@
 
       <ButtonWithStates
         type="button"
-        class="c-button--center-icon c-filter-search__reset"
+        class="c-filter-search__reset"
+        data-variant="center-icon"
         :state="ready ? 'normal' : 'success'"
         @click="
           resetAll();
@@ -100,7 +102,8 @@
 
       <button
         v-if="showWordListFilterFlyout"
-        class="c-filter-search__close c-button c-button--center-icon is-bottom"
+        class="c-filter-search__close c-button is-bottom"
+        data-variant="center-icon"
         type="button"
         @click="$toggleWordListFilterFlyout"
       >
@@ -137,7 +140,8 @@ const { closeOnClickOutside = true } = defineProps<{
 }>();
 
 const wordListFilter = useTemplateRef("wordListFilter");
-const { ready, start } = useTimeout(1200, { controls: true });
+// Not immediate: the reset button shows its success check only after a click, not for 1.2 s after mount.
+const { ready, start } = useTimeout(1200, { controls: true, immediate: false });
 
 const showWordListFilterFlyout = useStore($showWordListFilterFlyout);
 const searchMeta = useStore($searchMeta);

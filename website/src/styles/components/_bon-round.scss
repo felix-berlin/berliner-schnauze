@@ -1,0 +1,91 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// "Deine Runde" on the result (docs/design/bon/SPEC.md §9, mock): a sheet section card
+// (c-section-card c-bon-round), so its parts avoid the card's names. Parts: .list of li > .row
+// (an <a> for a real word, else a <span>; data-real="false" for invented / Hochdeutsch) with .mark
+// (data-state="ok" | "no"), .word, .arrow.
+@include mx.component("bon-round") {
+  :scope {
+    --_mark-nudge: 0.1rem; // lines the mark up with the word's first line
+    --_in: 350ms; // docs/design/bon/SPEC.md §13 tile fade, the last tile of the result
+    --_in-delay: 300ms;
+    // The rows end in the footer's rule, so the body keeps little room below them.
+    --section-card-body-end: var(--space-2);
+
+    @include butler-mx.feature("motion") {
+      animation: c-bon-result-in var(--_in) cubic-bezier(0.2, 0.8, 0.2, 1) var(--_in-delay) both;
+    }
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    > li {
+      line-height: 1.5;
+    }
+  }
+
+  // Mark | word over its note | arrow, 52px rows; a real word's whole row is the link.
+  .row {
+    display: grid;
+    grid-template-columns: 20px minmax(0, 1fr) auto;
+    gap: var(--space-3);
+    align-items: center;
+    min-block-size: 52px;
+    padding-block: var(--space-1);
+    color: inherit;
+    text-decoration: none;
+    border-block-start: 1px dashed var(--color-border-inner);
+  }
+
+  li:first-child > .row {
+    border-block-start: 0;
+  }
+
+  a.row:hover b {
+    text-decoration: underline dashed from-font;
+  }
+
+  .arrow {
+    color: var(--color-text-muted);
+  }
+
+  // Colour only on the icon; the aria-label carries the meaning.
+  .mark {
+    margin-block-start: var(--_mark-nudge);
+
+    &[data-state="ok"] {
+      color: var(--color-status-success);
+    }
+
+    &[data-state="no"] {
+      color: var(--color-status-danger);
+    }
+  }
+
+  .word {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+
+    b,
+    s {
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-strong);
+    }
+  }
+
+  // Not Berlinerisch: muted, struck through when invented (mock), plain for Hochdeutsch.
+  .row[data-real="false"] .word {
+    b,
+    s {
+      color: var(--color-text-muted);
+    }
+  }
+}

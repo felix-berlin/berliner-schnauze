@@ -81,9 +81,9 @@ test.describe("word comments", () => {
     await page.setViewportSize({ height: 800, width: 1280 });
     const card = await open(page);
     await card.getByRole("button", { name: "Kommentar schreiben" }).click();
-    await expect(card.locator(".c-comment-form__kbd")).toBeVisible();
+    await expect(card.locator(".c-comment-form .kbd")).toBeVisible();
     await page.setViewportSize({ height: 800, width: 390 });
-    await expect(card.locator(".c-comment-form__kbd")).toBeHidden();
+    await expect(card.locator(".c-comment-form .kbd")).toBeHidden();
   });
 
   test("a word without comments shows the empty copy and no sort", async ({ page }) => {
@@ -104,9 +104,9 @@ test.describe("word comments", () => {
     const card = await open(page);
     await expect(card.getByRole("heading", { name: "Wat sagste dazu? (4)" })).toBeVisible();
     await expect(card.getByRole("group", { name: "Sortierung" })).toBeVisible();
-    await expect(card.locator(".c-word-comments__item")).toHaveCount(3);
+    await expect(card.locator(".c-word-comments .item")).toHaveCount(3);
     await card.getByRole("button", { name: "Alle 4 Kommentare zeigen" }).click();
-    await expect(card.locator(".c-word-comments__item")).toHaveCount(4);
+    await expect(card.locator(".c-word-comments .item")).toHaveCount(4);
     await expect(card.getByRole("button", { name: /Kommentare zeigen/ })).toHaveCount(0);
   });
 
@@ -154,8 +154,10 @@ test.describe("word comments", () => {
     await expect(card.getByRole("heading", { name: "Wat sagste dazu? (0)" })).toBeVisible();
     await expect(write).not.toHaveAttribute("aria-disabled", "true");
     await context.setOffline(true);
-    await expect(page.locator(".c-word-offline")).toBeVisible();
-    await expect(page.locator(".c-word-offline")).toContainText("Du bist offline.");
+    await expect(page.getByRole("status").filter({ hasText: "Du bist offline." })).toBeVisible();
+    await expect(page.getByRole("status").filter({ hasText: "Du bist offline." })).toContainText(
+      "Du bist offline.",
+    );
     await expect(write).toHaveAttribute("aria-disabled", "true");
     await write.focus();
     await expect(write).toBeFocused();
@@ -163,7 +165,7 @@ test.describe("word comments", () => {
     await write.click({ force: true });
     await expect(card.getByRole("textbox")).toHaveCount(0);
     await context.setOffline(false);
-    await expect(page.locator(".c-word-offline")).toHaveCount(0);
+    await expect(page.getByRole("status").filter({ hasText: "Du bist offline." })).toHaveCount(0);
   });
 });
 

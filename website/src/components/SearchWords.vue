@@ -4,16 +4,17 @@
       :aria-label="localSearch.length > 0 ? 'Wortsuche löschen' : 'Wortsuche betätigen'"
       type="button"
       :class="[
-        'c-word-search__search-button c-button c-button--center-icon',
+        'c-word-search__search-button c-button',
         `c-word-search__search-button--${buttonPosition}`,
       ]"
+      data-variant="center-icon"
       @click="buttonActions"
     >
       <Transition name="fade-fast" mode="out-in">
-        <span v-if="localSearch.length === 0" key="search" class="c-button--center-icon">
+        <span v-if="localSearch.length === 0" key="search" class="center">
           <Search default-class="c-word-search__search-icon" />
         </span>
-        <span v-else key="del" class="c-button--center-icon">
+        <span v-else key="del" class="center">
           <X />
         </span>
       </Transition>

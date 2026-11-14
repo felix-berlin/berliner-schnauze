@@ -1,27 +1,24 @@
 <template>
   <section
-    class="c-section-card c-section-card--unnumbered c-word-comments"
+    class="c-section-card c-word-comments"
+    data-variant="unnumbered word"
     aria-labelledby="word-comments-title"
     @click="onLinkClick"
     @focusin="onFocusIn"
   >
-    <div class="c-section-card__header c-word-comments__header">
-      <span class="c-section-card__num" />
-      <h2 id="word-comments-title" class="c-section-card__title">
+    <div class="header">
+      <span class="num" />
+      <h2 id="word-comments-title" class="title">
         Wat sagste dazu?
-        <span v-if="ctx.loaded.value" class="c-word-comments__count">({{ ctx.total.value }})</span>
+        <span v-if="ctx.loaded.value" class="count">({{ ctx.total.value }})</span>
       </h2>
-      <div
-        v-if="ctx.total.value >= 2"
-        class="c-word-comments__sort"
-        role="group"
-        aria-label="Sortierung"
-      >
+      <div v-if="ctx.total.value >= 2" class="sort" role="group" aria-label="Sortierung">
         <button
           v-for="option in SORTS"
           :key="option.value"
           type="button"
-          class="c-choice c-word-comments__sort-button"
+          class="c-choice"
+          data-variant="segment"
           :aria-pressed="ctx.sort.value === option.value"
           @click="ctx.sort.value = option.value"
         >
@@ -30,86 +27,95 @@
       </div>
     </div>
 
-    <div class="c-section-card__body c-word-comments__body">
-      <p
-        v-if="ctx.loaded.value && !ctx.comments.value.length && !ctx.hasMore.value"
-        class="c-word-comments__empty"
-      >
-        Hier hat noch keener wat jesacht. Fang du doch an!
-      </p>
-
-      <ol v-else-if="shown.length" class="c-word-comments__list">
-        <li v-for="item in shown" :key="item.id" class="c-word-comments__item">
-          <CommentCard :comment="item" />
-        </li>
-      </ol>
-
-      <button
-        v-if="canShowMore"
-        type="button"
-        class="c-textlink c-word-comments__more"
-        @click="showMore"
-      >
-        {{ expanded ? "Weitere Kommentare zeigen" : `Alle ${ctx.total.value} Kommentare zeigen` }}
-      </button>
-
-      <div
-        v-if="ctx.failed.value && !ctx.loading.value"
-        class="c-state c-state--error"
-        role="alert"
-      >
-        <CircleAlert aria-hidden="true" height="18" width="18" />
-        <span class="c-state__body">
-          <b>Die Kommentare wollten grad nich laden.</b>
-          <span>
-            <button type="button" class="c-textlink c-textlink--inline" @click="ctx.loadMore()">
-              Nochmal versuchen
-            </button>
-          </span>
-        </span>
-      </div>
-
-      <div v-if="sent" class="c-state c-state--success" role="status">
-        <Check aria-hidden="true" height="18" width="18" />
-        <span class="c-state__body">
-          <b>Danke, is anjekommen!</b>
-          <span>Dein Kommentar erscheint, sobald wa ihn jesehen haben.</span>
-        </span>
-      </div>
-
-      <template v-if="!writing">
-        <button
-          ref="writeButton"
-          type="button"
-          class="c-choice c-word-comments__write"
-          aria-expanded="false"
-          :aria-disabled="!ctx.online.value"
-          :aria-describedby="ctx.online.value ? undefined : 'word-comments-offline'"
-          @click="startWriting"
+    <div class="body">
+      <div class="content">
+        <p
+          v-if="ctx.loaded.value && !ctx.comments.value.length && !ctx.hasMore.value"
+          class="empty"
         >
-          <PenLine aria-hidden="true" height="15" width="15" />
-          Kommentar schreiben
-        </button>
-        <p v-if="!ctx.online.value" id="word-comments-offline" class="t-small">
-          Du bist offline. Kommentieren jeht wieder, sobald du Netz hast.
+          Hier hat noch keener wat jesacht. Fang du doch an!
         </p>
-      </template>
-      <CommentForm v-else focus-on-mount :captcha-ready="!!token" :submit="submitNew" />
 
-      <div class="c-word-comments__captcha">
-        <p v-show="captchaSize.height.value > 0" class="c-word-comments__captcha-text t-small">
-          Kurz jucken, ob de 'n echter Berliner bist
-        </p>
-        <div ref="captcha">
-          <TurnStile
-            v-if="captchaOn"
-            ref="turnstile"
-            wrapper-id="commentsTurnstile"
-            appearance="interaction-only"
-            :site-key="TURNSTILE_SITE_KEY"
-            @token="onToken"
-            @error="onCaptchaError"
-          />
+        <ol v-else-if="shown.length" class="list">
+          <li v-for="item in shown" :key="item.id" class="item">
+            <CommentCard :comment="item" />
+          </li>
+        </ol>
+
+        <div v-if="canShowMore" class="more">
+          <button type="button" class="c-textlink" @click="showMore">
+            {{
+              expanded ? "Weitere Kommentare zeigen" : `Alle ${ctx.total.value} Kommentare zeigen`
+            }}
+          </button>
+        </div>
+
+        <div
+          v-if="ctx.failed.value && !ctx.loading.value"
+          class="c-state"
+          data-variant="error"
+          role="alert"
+        >
+          <CircleAlert aria-hidden="true" height="18" width="18" />
+          <span class="body">
+            <b>Die Kommentare wollten grad nich laden.</b>
+            <span>
+              <button
+                type="button"
+                class="c-textlink"
+                data-variant="inline"
+                @click="ctx.loadMore()"
+              >
+                Nochmal versuchen
+              </button>
+            </span>
+          </span>
+        </div>
+
+        <div v-if="sent" class="c-state" data-variant="success" role="status">
+          <Check aria-hidden="true" height="18" width="18" />
+          <span class="body">
+            <b>Danke, is anjekommen!</b>
+            <span>Dein Kommentar erscheint, sobald wa ihn jesehen haben.</span>
+          </span>
+        </div>
+
+        <template v-if="!writing">
+          <div class="write">
+            <button
+              ref="writeButton"
+              type="button"
+              class="c-choice"
+              aria-expanded="false"
+              :aria-disabled="!ctx.online.value"
+              :aria-describedby="ctx.online.value ? undefined : 'word-comments-offline'"
+              @click="startWriting"
+            >
+              <PenLine aria-hidden="true" height="15" width="15" />
+              Kommentar schreiben
+            </button>
+          </div>
+          <p v-if="!ctx.online.value" id="word-comments-offline" class="t-small">
+            Du bist offline. Kommentieren jeht wieder, sobald du Netz hast.
+          </p>
+        </template>
+        <CommentForm v-else focus-on-mount :captcha-ready="!!token" :submit="submitNew" />
+
+        <div class="captcha">
+          <p v-show="captchaSize.height.value > 0" class="captcha-text t-small">
+            Kurz jucken, ob de 'n echter Berliner bist
+          </p>
+          <div ref="captcha">
+            <TurnStile
+              v-if="captchaOn"
+              ref="turnstile"
+              wrapper-id="commentsTurnstile"
+              appearance="interaction-only"
+              :site-key="TURNSTILE_SITE_KEY"
+              @token="onToken"
+              @error="onCaptchaError"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -123,8 +129,8 @@ import TurnStile from "@components/TurnStile.vue";
 import { commentsKey, useComments, type CommentsContext } from "@composables/useComments.ts";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
-import { reportError } from "@utils/reportError.ts";
 import { captchaWaitToast } from "@utils/captchaToast.ts";
+import { reportError } from "@utils/reportError.ts";
 import { useElementSize, useEventListener, useOnline, useTimeoutFn } from "@vueuse/core";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
 import Check from "virtual:icons/lucide/check";

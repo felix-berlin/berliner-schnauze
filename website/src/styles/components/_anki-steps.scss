@@ -1,0 +1,42 @@
+@use "@styles/mixins" as mx;
+
+// "Was ist Anki" step cards: a grid of .step (paper card) with .head (.num, .title) and .text.
+@include mx.component("anki-steps") {
+  :scope {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17.5rem), 1fr));
+    gap: var(--space-5);
+  }
+
+  .step {
+    @include mx.paper-card;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    border-block-end: 1px dashed var(--color-border-accent-soft); // colour inventory R6
+  }
+
+  .num {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent-active); // colour inventory R2
+  }
+
+  .title {
+    @include mx.paper-card-title;
+  }
+
+  .text {
+    margin: 0;
+    padding: var(--space-4) var(--space-5) var(--space-5);
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+}

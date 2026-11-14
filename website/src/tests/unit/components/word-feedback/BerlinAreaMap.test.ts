@@ -99,14 +99,14 @@ describe("BerlinAreaMap", () => {
 
   it("marks the Brandenburg label selected with the frame", () => {
     const w = mountMap("brandenburg");
-    expect(w.find(".c-berlin-area-map__label--brandenburg").classes()).toContain("is-selected");
+    expect(w.find('.label[data-area="brandenburg"]').attributes("data-state")).toBe("selected");
     w.unmount();
   });
 
   it("emits the area from the list buttons", async () => {
     const w = mount(BerlinAreaMap, { props: { modelValue: null } });
     const btn = w
-      .findAll(".c-berlin-area-map__list-item")
+      .findAll(".list-items .c-choice")
       .find((b) => b.text() === "Friedrichshain-Kreuzberg");
     await btn!.trigger("click");
     expect(w.emitted("update:modelValue")![0]).toEqual(["friedrichshain-kreuzberg"]);
@@ -114,7 +114,7 @@ describe("BerlinAreaMap", () => {
 
   it("offers Woanders in the list too, with the same emit contract", async () => {
     const w = mount(BerlinAreaMap, { props: { modelValue: null } });
-    const items = w.findAll(".c-berlin-area-map__list-item");
+    const items = w.findAll(".list-items .c-choice");
     expect(items).toHaveLength(14);
     await items.find((b) => b.text() === "Woanders")!.trigger("click");
     expect(w.emitted("update:modelValue")![0]).toEqual(["elsewhere"]);
@@ -122,7 +122,7 @@ describe("BerlinAreaMap", () => {
 
   it("shows the full district names, broken over two lines where they are long", () => {
     const w = mountMap();
-    const lines = w.findAll("text.c-berlin-area-map__label tspan").map((t) => t.text());
+    const lines = w.findAll("text.label tspan").map((t) => t.text());
     expect(lines).toContain("Reinickendorf");
     expect(lines).toEqual(expect.arrayContaining(["Charlottenburg-", "Wilmersdorf"]));
     w.unmount();
@@ -130,8 +130,8 @@ describe("BerlinAreaMap", () => {
 
   it("starts map first without a measured width", () => {
     const w = mountMap();
-    expect((w.find(".c-berlin-area-map__map").element as HTMLDetailsElement).open).toBe(true);
-    expect((w.find(".c-berlin-area-map__list").element as HTMLDetailsElement).open).toBe(false);
+    expect((w.find(".map").element as HTMLDetailsElement).open).toBe(true);
+    expect((w.find(".list").element as HTMLDetailsElement).open).toBe(false);
     w.unmount();
   });
 });

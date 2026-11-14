@@ -32,7 +32,7 @@ describe("ToastPositionGroup.vue", () => {
     const wrapper = mount(ToastPositionGroup, {
       props: { position: "bottom-left", toasts: [] },
     });
-    expect(wrapper.find(".c-toast-container--bottom-left").exists()).toBe(true);
+    expect(wrapper.find(".c-toast-container[data-variant='bottom-left']").exists()).toBe(true);
   });
 
   it("renders one ToastNotify per toast", () => {

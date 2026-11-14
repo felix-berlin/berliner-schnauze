@@ -1,0 +1,19 @@
+@use "@styles/mixins" as mx;
+
+// "Warum fragen wa dit?" text of the poll, inside an infotext callout. Part .note.
+@include mx.component("word-feedback-why") {
+  :scope {
+    display: grid;
+    gap: var(--space-1);
+    font-size: var(--font-size-md);
+    line-height: 1.5;
+  }
+
+  b {
+    color: var(--color-text-strong);
+  }
+
+  .note {
+    color: var(--color-text-muted);
+  }
+}

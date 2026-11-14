@@ -21,12 +21,11 @@ const fundingMenu = [
 ];
 ---
 
-<footer class='c-footer'>
-  <div class='c-footer__farewell u-max-body-width'>
-    <div class='c-footer__farewell-image-wrapper'>
+<footer class='o-footer'>
+  <div class='o-footer-farewell u-max-body-width'>
+    <div class='o-footer-bear'>
       <Picture
         alt='Ein Bär der durch die Stadt läuft'
-        class='c-footer__farewell-image'
         fallbackFormat='webp'
         formats={['avif', 'webp']}
         layout='constrained'
@@ -39,27 +38,26 @@ const fundingMenu = [
     </div>
     {
       Astro.slots.has('farewell') ? (
-        <div class='c-footer__farewell-slot'>
+        <div class='o-footer-farewell-slot'>
           <slot name='farewell' />
         </div>
       ) : (
-        <p class='c-footer__farewell-text'>Knorke ditt du mich hier unten besuchst.</p>
+        <p class='o-footer-farewell-text'>Knorke ditt du mich hier unten besuchst.</p>
       )
     }
   </div>
 
-  <div class='c-footer__ground'>
-    <div class='c-footer__wrapper u-max-body-width'>
-      <div class='c-footer__ground-app-install'>
+  <div class='o-footer-ground js-footer-ground'>
+    <div class='o-footer-grid u-max-body-width'>
+      <div>
         <FooterAppSection client:only='vue' />
       </div>
 
       <div>
-        <p class='c-footer__title'>Seiten</p>
+        <p class='o-footer-title'>Seiten</p>
         <NavList
           ariaLabel='Seiten'
-          classesNav={'c-footer__nav'}
-          classesUl={'c-footer__nav-list u-list-reset'}
+          classesUl={'o-footer-nav-list u-list-reset'}
           items={navMenu1}
         />
       </div>
@@ -70,39 +68,36 @@ const fundingMenu = [
         data-content-piece='Projekt unterstützen'
         data-content-target={fundingMenu[0]?.link ?? '/spenden'}
       >
-        <p class='c-footer__title'>Projekt unterstützen</p>
+        <p class='o-footer-title'>Projekt unterstützen</p>
         <NavList
           ariaLabel='Projekt unterstützen'
-          classesNav={'c-footer__nav'}
-          classesUl={'c-footer__nav-list u-list-reset'}
+          classesUl={'o-footer-nav-list u-list-reset'}
           items={fundingMenu}
         />
       </div>
 
       <div>
-        <p class='c-footer__title'>Social Media</p>
+        <p class='o-footer-title'>Social Media</p>
         <NavList
           ariaLabel='Social Media'
-          classesNav={'c-footer__nav'}
-          classesUl={'c-footer__nav-list u-list-reset'}
+          classesUl={'o-footer-nav-list u-list-reset'}
           items={socialMenu}
         />
       </div>
 
       <div>
-        <p class='c-footer__title'>Andere</p>
+        <p class='o-footer-title'>Andere</p>
         <NavList
           ariaLabel='Andere'
-          classesNav={'c-footer__nav is-legal'}
-          classesUl={'c-footer__nav-list u-list-reset'}
+          classesUl={'o-footer-nav-list u-list-reset'}
           items={navMenu2}
         />
       </div>
     </div>
   </div>
 </footer>
-<div class='c-footer__end'>
-  <div class='c-footer__end-content u-max-body-width'>
+<div class='o-footer-end'>
+  <div class='o-footer-end-content u-max-body-width'>
     <a href='https://github.com/felix-berlin/berliner-schnauze/releases'
       >Website Version: {version}</a
     >

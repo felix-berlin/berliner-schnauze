@@ -15,10 +15,10 @@ const footer = (await Astro.slots.render('footer'))?.trim();
 const headingId = `heading-${id}`;
 ---
 
-<section class='c-section-card' id={id} aria-labelledby={headingId}>
-  <div class='c-section-card__header'>
-    <Heading class='c-section-card__title' id={headingId}>{title}</Heading>
+<section class='c-section-card' data-variant='word' id={id} aria-labelledby={headingId}>
+  <div class='header'>
+    <Heading class='title' id={headingId}>{title}</Heading>
   </div>
-  {body && <div class='c-section-card__body' set:html={body} />}
-  {footer && <footer class='c-section-card__footer t-small' set:html={footer} />}
+  {body && <div class='body' data-slot set:html={body} />}
+  {footer && <footer class='footer t-small' data-slot set:html={footer} />}
 </section>

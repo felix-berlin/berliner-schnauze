@@ -1,43 +1,46 @@
-@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 
 // Examples card body (mock: list without bullets, quote + explanation, then the voice choices).
-.c-word-examples {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-
-  &__item {
+// Parts .item, .quote (.text with the .mark, .explanation).
+@include mx.component("word-examples") {
+  :scope {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
-  &__quote {
-    margin: 0;
+  .item {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--space-2);
+    line-height: 1.5;
   }
 
-  // Beats the card body's `:where(p)` size, which would shrink the t-em sentence to 1rem.
-  &__quote &__text {
+  .quote {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
     margin: 0;
-    font-size: 1.25rem;
+  }
+
+  .text {
+    margin: 0;
+    font-size: var(--font-size-xl);
     font-style: italic;
   }
 
-  &__mark {
-    margin-inline-end: 0.25rem;
-    font-family: vars.$berliner;
+  .mark {
+    margin-inline-end: var(--space-1);
+    font-family: var(--font-family-display);
     font-style: normal;
-    color: var(--color-accent-text);
+    color: var(--color-text-accent);
   }
 
-  &__explanation {
+  .explanation {
     margin: 0;
-    color: var(--color-muted);
+    color: var(--color-text-muted);
   }
 }

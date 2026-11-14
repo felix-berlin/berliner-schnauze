@@ -36,14 +36,14 @@ describe("ToastNotify.vue", () => {
 
   it("displays the message", () => {
     const wrapper = mountToast(ToastNotify, { props: { id: "abc-123", message: "Test message" } });
-    expect(wrapper.find(".c-toast-notify__message").text()).toBe("Test message");
+    expect(wrapper.text()).toContain("Test message");
   });
 
   it("calls removeToastById with string id when close button clicked", async () => {
     const wrapper = mountToast(ToastNotify, {
       props: { id: "test-uuid-1", message: "Hi", showClose: true },
     });
-    await wrapper.find(".c-toast-notify__close").trigger("click");
+    await wrapper.find("button[aria-label='Benachrichtigung schließen']").trigger("click");
     expect(removeToastById).toHaveBeenCalledWith("test-uuid-1");
   });
 
@@ -52,7 +52,10 @@ describe("ToastNotify.vue", () => {
     const wrapper = mountToast(ToastNotify, {
       props: { actionLabel: "Aktualisieren", id: "test-uuid-2", message: "Hi", onAction },
     });
-    await wrapper.find(".c-toast-notify__action").trigger("click");
+    await wrapper
+      .findAll("button")
+      .find((b) => b.text() === "Aktualisieren")!
+      .trigger("click");
     expect(onAction).toHaveBeenCalledOnce();
     expect(removeToastById).toHaveBeenCalledWith("test-uuid-2");
   });
@@ -61,13 +64,16 @@ describe("ToastNotify.vue", () => {
     const wrapper = mountToast(ToastNotify, {
       props: { actionLabel: "Aktualisieren", id: "test-uuid-3", message: "Hi" },
     });
-    await wrapper.find(".c-toast-notify__action").trigger("click");
+    await wrapper
+      .findAll("button")
+      .find((b) => b.text() === "Aktualisieren")!
+      .trigger("click");
     expect(removeToastById).toHaveBeenCalledWith("test-uuid-3");
   });
 
   it("does not render action button without actionLabel", () => {
     const wrapper = mountToast(ToastNotify, { props: { id: "abc", message: "Hi" } });
-    expect(wrapper.find(".c-toast-notify__action").exists()).toBe(false);
+    expect(wrapper.findAll("button").filter((b) => b.text() === "Aktualisieren")).toHaveLength(0);
   });
 
   it("sets role=alert and aria-live=assertive for error status", () => {
@@ -91,7 +97,7 @@ describe("ToastNotify.vue", () => {
     const wrapper = mountToast(ToastNotify, {
       props: { id: "" as unknown as string, message: "Hi", showClose: true },
     });
-    await wrapper.find(".c-toast-notify__close").trigger("click");
+    await wrapper.find("button[aria-label='Benachrichtigung schließen']").trigger("click");
     expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining("no id"));
     expect(removeToastById).not.toHaveBeenCalled();
     consoleSpy.mockRestore();

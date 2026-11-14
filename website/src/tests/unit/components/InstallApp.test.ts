@@ -92,11 +92,12 @@ describe("InstallApp.vue", () => {
     expect(wrapper.element.tagName).toBe("BUTTON");
   });
 
-  it("merges a caller-provided class with its own classes via fallthrough", () => {
-    const wrapper = mount(InstallApp, { attrs: { class: "c-button--center-icon" } });
+  it("passes a caller-provided class and data-variant through to its root", () => {
+    const wrapper = mount(InstallApp, { attrs: { class: "c-x", "data-variant": "center-icon" } });
     expect(wrapper.classes()).toEqual(
-      expect.arrayContaining(["c-install-button", "c-button", "c-button--center-icon"]),
+      expect.arrayContaining(["c-install-button", "c-button", "c-x"]),
     );
+    expect(wrapper.attributes("data-variant")).toBe("center-icon");
   });
 
   it("button is disabled when showButton is false", () => {

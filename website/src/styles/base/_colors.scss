@@ -1,79 +1,10 @@
-@use "@styles/variables" as vars;
-@use "@sass-butler/mixins" as butler-mx;
+@layer base {
+  // Colour values live in the tokens (src/styles/tokens); light-dark() follows this switch.
+  html {
+    color-scheme: light;
 
-:root {
-  @each $name, $color in vars.$all-colors {
-    --#{$name}: #{$color};
-  }
-
-  --new-blue-200: color-mix(in srgb, var(--blue) 86%, white);
-  --new-blue-300: color-mix(in srgb, var(--blue) 90%, white);
-  --new-blue-400: color-mix(in srgb, var(--blue) 92%, white);
-  --new-blue-500: var(--blue);
-  --new-blue-600: color-mix(in srgb, var(--blue) 90%, black);
-}
-
-html {
-  --primary: var(--blue-100);
-  --accent: var(--orange-400);
-  --color-body: var(--blue);
-  // Secondary text. --primary (blue-100, a generated shade) fails AA on white
-  // and on dark surfaces, so muted copy uses this AA-safe mix instead.
-  --color-muted: color-mix(in srgb, var(--blue) 75%, white);
-  // Orange accent text (links, eyebrows, highlights) that stays AA in both modes.
-  --color-accent-text: var(--orange-600);
-  --floating-color-background: color-mix(in srgb, var(--orange-200) 50%, white);
-  // Default control palette: .c-button plus header dividers and main-menu tiles.
-  --control-bg: var(--orange-100);
-  --control-color: var(--blue);
-  --control-border: var(--orange-600);
-  // Word-page canon (docs/design/wortseite/SPEC.md): surfaces, dashed rules, hover glow.
-  --surface-chip: color-mix(in srgb, var(--orange-600) 10%, white);
-  --surface-callout: color-mix(in srgb, var(--orange-100) 60%, white);
-  --rule-card: var(--grey-100);
-  --rule-inner: var(--orange-200);
-  --shadow-hover-glow: 0 0 12px 0 color-mix(in srgb, var(--orange-500) 60%, white);
-  // v3 surfaces and ink (Spec §4). --danger, --success, --gold come from vars.$all-colors.
-  --color-ink-strong: var(--new-blue-400);
-  --surface-hero: color-mix(in srgb, var(--orange-100) 30%, white);
-  --surface-sheet: white;
-  --surface-paper: var(--white-100);
-  --surface-badge: color-mix(in srgb, var(--orange-200) 60%, white);
-  --surface-wash: color-mix(in srgb, var(--orange-500) 15%, transparent);
-  // Focus ring (WCAG 1.4.11 3:1): orange-600 on light grounds, orange-400 on the dark blue. Deviates from SPEC.md orange-400.
-  --focus-ring: var(--orange-600);
-  // Lightbox ground: dark in both themes, so these are not redefined under .dark.
-  --overlay-base: black;
-  --overlay-ink: var(--white-100);
-  --paper-lift: #{vars.$paper-lift};
-  --radius-sm: #{vars.$radius-sm};
-  --radius-xs: #{vars.$radius-xs};
-  --radius-xxs: #{vars.$radius-xxs};
-
-  color-scheme: light;
-
-  &[class~="dark"] {
-    --primary: var(--blue-500);
-    --accent: var(--orange-500);
-    --color-body: #{vars.$yellow-500};
-    --color-muted: color-mix(in srgb, var(--yellow-500) 75%, var(--blue));
-    --color-accent-text: var(--orange-300);
-    --floating-color-background: var(--new-blue-200);
-    --control-bg: var(--new-blue-600);
-    --control-color: var(--yellow-500);
-    --control-border: color-mix(in srgb, var(--blue) 80%, white);
-    --surface-chip: color-mix(in srgb, var(--new-blue-400) 80%, black);
-    --surface-callout: color-mix(in srgb, var(--new-blue-400) 80%, black);
-    --rule-card: color-mix(in srgb, var(--orange-300) 25%, transparent);
-    --rule-inner: color-mix(in srgb, var(--orange-300) 30%, transparent);
-    --shadow-hover-glow: 0 0 12px 0 var(--orange-500);
-    --color-ink-strong: var(--white-100);
-    --surface-hero: var(--new-blue-400);
-    --surface-sheet: var(--new-blue-400);
-    --surface-paper: var(--new-blue-400);
-    --surface-badge: color-mix(in srgb, var(--new-blue-400) 80%, black);
-    --focus-ring: var(--orange-400);
-
-    color-scheme: dark;
+    &[class~="dark"] {
+      color-scheme: dark;
+    }
   }
 }

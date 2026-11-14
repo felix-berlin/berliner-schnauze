@@ -6,10 +6,22 @@ const setMotion = (reduce: boolean) =>
   vi.stubGlobal("matchMedia", (q: string) => ({ matches: reduce && q.includes("reduce") }));
 
 describe("vt", () => {
+  const setStart = (start: unknown) =>
+    ((document as unknown as { startViewTransition: unknown }).startViewTransition = start);
+  const setTypes = (supported: boolean) =>
+    vi.stubGlobal("CSS", {
+      supports: (q: string) => supported && q.includes("view-transition-type"),
+    });
+
+  const transition = (ready: Promise<void> = Promise.resolve()) => ({
+    finished: Promise.resolve(),
+    ready,
+    updateCallbackDone: Promise.resolve(),
+  });
+
   afterEach(() => {
     vi.unstubAllGlobals();
     delete (document as { startViewTransition?: unknown }).startViewTransition;
-    delete document.documentElement.dataset.vt;
   });
 
   it("calls update synchronously without startViewTransition", () => {
@@ -17,51 +29,68 @@ describe("vt", () => {
     const update = vi.fn();
     vt(update, "start");
     expect(update).toHaveBeenCalledOnce();
-    expect(document.documentElement.dataset.vt).toBeUndefined();
   });
 
   it("calls update synchronously under reduced motion, even with startViewTransition", () => {
     setMotion(true);
     const start = vi.fn();
-    (document as unknown as { startViewTransition: unknown }).startViewTransition = start;
+    setStart(start);
     const update = vi.fn();
     vt(update, "start");
     expect(update).toHaveBeenCalledOnce();
     expect(start).not.toHaveBeenCalled();
   });
 
-  it("sets the direction and runs update inside the transition, then clears the direction", async () => {
+  it("passes the kind as the transition type and runs update inside the transition", async () => {
     setMotion(false);
-    let done!: () => void;
-    const finished = new Promise<void>((r) => (done = r));
-    (document as unknown as { startViewTransition: unknown }).startViewTransition = (
-      cb: () => Promise<void>,
-    ) => {
-      void cb();
-      return { finished };
-    };
+    setTypes(true);
+    const start = vi.fn((options: { update: () => Promise<void> }) => {
+      void options.update();
+      return transition();
+    });
+    setStart(start);
     const update = vi.fn();
     vt(update, "next");
-    expect(document.documentElement.dataset.vt).toBe("next");
+    expect(start).toHaveBeenCalledWith(expect.objectContaining({ types: ["next"] }));
     expect(update).toHaveBeenCalledOnce();
-    done();
-    await finished;
-    await Promise.resolve();
     expect(document.documentElement.dataset.vt).toBeUndefined();
   });
 
-  it("without a direction runs the default crossfade and sets no data-vt", () => {
+  it("without transition types a typed change runs without a transition (no morph)", () => {
     setMotion(false);
+    setTypes(false);
+    const start = vi.fn();
+    setStart(start);
+    const update = vi.fn();
+    vt(update, "next");
+    expect(update).toHaveBeenCalledOnce();
+    expect(start).not.toHaveBeenCalled();
+  });
+
+  it("a skipped transition (AbortError) raises no unhandled rejection", async () => {
+    setMotion(false);
+    const unhandled = vi.fn();
+    process.on("unhandledRejection", unhandled);
+    setStart(() => transition(Promise.reject(new DOMException("skipped", "AbortError"))));
+    vt(vi.fn());
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    process.off("unhandledRejection", unhandled);
+    expect(unhandled).not.toHaveBeenCalled();
+  });
+
+  it("without a kind runs the default crossfade", () => {
+    setMotion(false);
+    setTypes(false);
     const start = vi.fn((cb: () => Promise<void>) => {
       void cb();
-      return { finished: Promise.resolve() };
+      return transition();
     });
-    (document as unknown as { startViewTransition: unknown }).startViewTransition = start;
+    setStart(start);
     const update = vi.fn();
     vt(update);
     expect(start).toHaveBeenCalledOnce();
+    expect(typeof start.mock.calls[0][0]).toBe("function");
     expect(update).toHaveBeenCalledOnce();
-    expect(document.documentElement.dataset.vt).toBeUndefined();
   });
 });
 

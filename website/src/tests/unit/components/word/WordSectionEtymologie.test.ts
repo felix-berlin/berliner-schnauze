@@ -70,12 +70,12 @@ describe("WordSectionEtymologie.astro", () => {
     const result = await render({ word: makeWord({ sources: ["Meyer"] }) });
     expect(result).toContain("Quelle");
     expect(result).not.toContain("Quellen");
-    expect(result).not.toContain("c-section-card__body");
+    expect(result).not.toContain('class="body"');
   });
 
   it("omits the footer without sources", async () => {
     const result = await render({ word: makeWord({ infoTextHtml: "<p>Info</p>" }) });
-    expect(result).not.toContain("c-section-card__footer");
+    expect(result).not.toContain("<footer");
   });
 
   it("renders aria-labelledby heading-etymologie", async () => {

@@ -1,0 +1,37 @@
+// Old custom property names → tokens (spec §6). Deleted when the `legacy` layer is empty.
+@layer tokens {
+  :root {
+    // Primitives
+    --white-100: var(--color-white-100);
+    --orange-100: var(--color-orange-100);
+    --orange-200: var(--color-orange-200);
+    --orange-300: var(--color-orange-300);
+    --orange-400: var(--color-orange-400);
+    --orange-500: var(--color-orange-500);
+    --orange-600: var(--color-orange-600);
+    --orange-700: var(--color-orange-700);
+    --yellow-500: var(--color-cream-500);
+    --grey-100: var(--color-grey-100);
+    --blue: var(--color-ink-base);
+    --new-blue-200: var(--color-ink-200m);
+    --new-blue-300: var(--color-ink-300m);
+    --new-blue-400: var(--color-ink-400m);
+    --new-blue-600: var(--color-ink-600m);
+    --danger: var(--color-status-danger);
+    --success: var(--color-status-success);
+    --gold: var(--color-status-gold);
+
+    // No successor (spec §5.5)
+    --accent: light-dark(var(--color-orange-400), var(--color-orange-500));
+
+    // Semantic
+    --color-body: var(--color-text-body);
+    --color-muted: var(--color-text-muted);
+    --color-accent-text: var(--color-text-accent);
+    --floating-color-background: var(--color-surface-floating);
+    --control-bg: var(--color-control-bg);
+    --control-color: var(--color-control-text);
+    --control-border: var(--color-border-control);
+    --surface-paper: var(--color-surface-paper);
+  }
+}
