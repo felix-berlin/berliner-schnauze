@@ -16,7 +16,7 @@ Full design and tables: `docs/superpowers/specs/2026-11-13-design-system-design.
 - Tier 1 primitive: raw values (`color.orange.600`, `color.ink.100`-`1000` plus `m` mixes, `color.danger|success|gold`, `space.*`, `font.*`, `radius.*`, `duration.*`, `z.*`). Never used in components.
 - Tier 2 semantic: meaning per theme (`color.surface.*`, `color.text.*`, `color.status.*`, `shadow.*`). The only colour tier components may use. Non-colour tokens (space, font, radius, duration, ease, z) are used directly.
 - Tier 3 component: custom properties inside a component. Private `--_name`, public `--<component>-name` (a parent may set it).
-- `--_` properties may hold raw lengths (one-line comment why: no token step within 0.1rem, `clamp()`, one-off width), never colours.
+- `--_` properties may hold raw lengths (one-line comment why: no token step within 0.1rem, `clamp()`, one-off width), never a raw colour or primitive; a `--_` may alias a semantic token, or hold a one-off colour only with a colour-inventory disable comment.
 
 ## Semantic tokens only
 
@@ -31,7 +31,7 @@ Full design and tables: `docs/superpowers/specs/2026-11-13-design-system-design.
 
 Order, declared inline in `BaseHead.astro` (do not touch): `reset, tokens, vendor, base, legacy, objects, components, utilities`.
 
-- Folder decides the layer: `base/` -> base, `objects/` -> objects, `utilities/` -> utilities, migrated components -> `components` (via `mx.component`).
+- Folder decides the layer: `base/` -> base, `objects/`, `layouts/` and `pages/` -> objects, `utilities/` -> utilities, migrated components -> `components` (via `mx.component`).
 - Never write `@layer` for a new style except through `mx.component`; the contract test allows only these layer names.
 - Library CSS: load with `meta.load-css` inside a layer block (`@layer vendor { @include meta.load-css(...) }`). A plain `@use` of foreign CSS lands unlayered and beats every layer; the contract test rejects foreign `@use`.
 - `legacy` holds every not yet migrated partial (each wraps its rules in `@layer legacy`). A file leaves `legacy` only when fully migrated, and is then removed from `stylelint.legacy-files.mjs`. The list only shrinks, never add to it.

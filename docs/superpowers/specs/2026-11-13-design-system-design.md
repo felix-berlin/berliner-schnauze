@@ -80,29 +80,29 @@ Measured today (273 style files): 384 semantic colour references against 363 dir
 
 ### 5.4 Primitives
 
-| Group                                         | Tokens                                                                                                                                                                                      | Source                                  |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| `color.white`                                 | `100`, `200`, `pure` (#ffffff); `color.black.pure`                                                                                                                                          | `src/styles/variables/_colors.scss`     |
-| `color.orange`                                | `100` to `900`                                                                                                                                                                              | same                                    |
-| `color.red`                                   | `100`, `200`, `500`; `color.red-berlin.500/600/700`                                                                                                                                         | same                                    |
-| `color.cream`                                 | `500` (today `yellow-500`)                                                                                                                                                                  | same                                    |
-| `color.grey`                                  | `100`, `200`                                                                                                                                                                                | same                                    |
-| `color.ink`                                   | `100`–`1000` (today's generated `--blue-*`; `--blue-800` is still used by the scrollbar), `base` (#2b333b), `200m`, `300m`, `400m`, `600m` (today's `--new-blue-*` mixes, as fixed colours) | computed values read in the browser     |
-| `color.danger`, `color.success`, `color.gold` | one token each (not `color.status.*`: that path belongs to the semantic tier, and one path in both tiers is a build error)                                                                  | same file                               |
-| `space`                                       | `1` 0.25rem, `2` 0.5, `3` 0.75, `4` 1, `5` 1.25, `6` 1.5, `8` 2, `12` 3, `16` 4                                                                                                             | `DESIGN.md` spacing                     |
-| `font.size`                                   | `2xs` 0.7rem, `xs` 0.75, `sm` 0.8, `md` 0.9, `base` 1, `lg` 1.1, `xl` 1.25, `2xl` 1.6, `3xl` 2, `4xl` 2.25                                                                                  | word page type scale + most used values |
-| `font.family`                                 | `display`, `body`, `mono`                                                                                                                                                                   | `variables/_fonts.scss`                 |
-| `font.weight`                                 | `regular` 400, `bold` 700, `black` 900                                                                                                                                                      | word page spec §4                       |
-| `radius`                                      | `none` 0, `xxs` 2px, `xs` 3px, `sm` 4px, `pill` 999px                                                                                                                                       | `variables/_base.scss`                  |
-| `duration`                                    | `fast` 150ms, `base` 300ms, `slow` 600ms                                                                                                                                                    | most used values                        |
-| `ease`                                        | `standard` (cubic-bezier 0.42, 0, 0.58, 1)                                                                                                                                                  | `_button.scss`                          |
-| `z`                                           | `below` -1, `raised` 1, `sticky` 10, `overlay` 20, `header` 100                                                                                                                             | today 1–5 and 11000                     |
+| Group                                         | Tokens                                                                                                                                                                       | Source                                  |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `color.white`                                 | `100`, `200`, `pure` (#ffffff); `color.black.pure`                                                                                                                           | `src/styles/variables/_colors.scss`     |
+| `color.orange`                                | `100` to `900`                                                                                                                                                               | same                                    |
+| `color.red`                                   | `100`, `200`, `500`; `color.red-berlin.500/600/700`                                                                                                                          | same                                    |
+| `color.cream`                                 | `500` (today `yellow-500`)                                                                                                                                                   | same                                    |
+| `color.grey`                                  | `100`, `200`                                                                                                                                                                 | same                                    |
+| `color.ink`                                   | `100`–`1000` (the old generated `--blue-*`), `base` (#2b333b), `200m`, `300m`, `400m`, `600m` (the old `--new-blue-*` `color-mix()` results, stored as fixed `srgb` colours) | computed values read in the browser     |
+| `color.danger`, `color.success`, `color.gold` | one token each (not `color.status.*`: that path belongs to the semantic tier, and one path in both tiers is a build error)                                                   | same file                               |
+| `space`                                       | `1` 0.25rem, `2` 0.5, `3` 0.75, `4` 1, `5` 1.25, `6` 1.5, `8` 2, `12` 3, `16` 4                                                                                              | `DESIGN.md` spacing                     |
+| `font.size`                                   | `2xs` 0.7rem, `xs` 0.75, `sm` 0.8, `md` 0.9, `base` 1, `lg` 1.1, `xl` 1.25, `2xl` 1.6, `3xl` 2, `4xl` 2.25                                                                   | word page type scale + most used values |
+| `font.family`                                 | `display`, `body`, `mono`                                                                                                                                                    | `variables/_fonts.scss`                 |
+| `font.weight`                                 | `regular` 400, `bold` 700, `black` 900                                                                                                                                       | word page spec §4                       |
+| `radius`                                      | `none` 0, `xxs` 2px, `xs` 3px, `sm` 4px, `pill` 999px                                                                                                                        | `variables/_base.scss`                  |
+| `duration`                                    | `fast` 150ms, `base` 300ms, `slow` 600ms                                                                                                                                     | most used values                        |
+| `ease`                                        | `standard` (cubic-bezier 0.42, 0, 0.58, 1)                                                                                                                                   | `_button.scss`                          |
+| `z`                                           | `below` -1, `raised` 1, `sticky` 10, `overlay` 20, `header` 100                                                                                                              | today 1–5 and 11000                     |
 
 The scales are Claude's call, derived from the most used values.
 
 ### 5.5 Semantic tokens
 
-Values are the ones in `src/styles/base/_colors.scss` today, copied, not redesigned.
+Values are the ones in `src/styles/base/_colors.scss` at the start, copied, not redesigned. This table is the subset planned before the colour inventory; the source of truth for the semantic tokens is `website/tokens/*.tokens.json`.
 
 | Token                                                                            | Replaces                                                                                                  |
 | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
@@ -127,7 +127,7 @@ Values are the ones in `src/styles/base/_colors.scss` today, copied, not redesig
 
 The full row-by-row decisions (token, merge or private one-off) are in `docs/design/design-system/colour-inventory.md`.
 
-`--primary` and `--accent` get no successor. **Missing tokens are settled once, before wave 2 (user decision).** The colour inventory (§10, wave 1b) lists every colour in the files of waves 2 to 5 that has no semantic token; the user decides each one, and the token files are extended from that. After it, a builder who still meets a colour without a token stops and reports it: no invented token, no primitive, no `--_` property holding a colour.
+`--primary` and `--accent` get no successor. **Missing tokens are settled once, before wave 2 (user decision).** The colour inventory (§10, wave 1b) lists every colour in the files of waves 2 to 5 that has no semantic token; the user decides each one, and the token files are extended from that. After it, a builder who still meets a colour without a token stops and reports it: no invented token, no primitive, no `--_` property holding a raw colour (a `--_` may alias a semantic token, or hold a one-off colour only with a colour-inventory disable comment).
 
 ### 5.6 Mapping rule for existing values
 
@@ -146,7 +146,7 @@ Order, declared once inline in the document head (`BaseHead.astro`) so no chunk 
 | Layer        | Content                                                                              |
 | ------------ | ------------------------------------------------------------------------------------ |
 | `reset`      | `base/_reset.scss`                                                                   |
-| `tokens`     | generated tokens, `@property` registrations, legacy aliases                          |
+| `tokens`     | generated tokens, legacy aliases                                                     |
 | `vendor`     | third-party CSS (`@vueform/multiselect`)                                             |
 | `base`       | element defaults, fonts, inputs, scrollbar (migrated with the foundation)            |
 | `legacy`     | every not yet migrated file from `styles/{components,objects,layouts,pages,plugins}` |
@@ -236,12 +236,12 @@ Newly available features (Baseline 2025/2026). Only `@scope` and Popover are loa
 | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `@scope`                             | Adopt, load-bearing                                                                                                                                                                 |
 | Popover (`popover`, `popovertarget`) | Adopt, load-bearing: dropdown, comment menu, tooltip                                                                                                                                |
-| Custom highlights                    | Adopt for search-term highlighting (replaces `v-html` in `SingleWord.vue`); no support = no highlight                                                                               |
+| Custom highlights                    | Planned, with the home/search redesign (not in this migration, ruling R16): search-term highlighting to replace `v-html` in `SingleWord.vue`; no support = no highlight             |
 | `field-sizing: content`              | Enhancement for comment and suggest textareas; fallback fixed rows                                                                                                                  |
 | `::details-content`                  | Enhancement for the accordion animation; fallback opens without animation                                                                                                           |
 | `content-visibility: auto`           | Not adopted on the word page: it blocks Astro `client:visible` hydration in WebKit (the skipped subtree's placeholder height moves islands out of view after a programmatic scroll) |
 | `scrollbar-color`                    | Add next to the existing `::-webkit-scrollbar` rules, which stay until Safari below 26.2 leaves the floor                                                                           |
-| `:active-view-transition`            | Adopt in the BON game instead of `html[data-vt]`; fallback no morph                                                                                                                 |
+| `:active-view-transition-type()`     | Adopt in the BON game instead of `html[data-vt]`; fallback no morph                                                                                                                 |
 | Container style queries              | Not for variants; allowed where the fallback is the default look                                                                                                                    |
 | Invoker commands                     | Not yet (outside the Safari floor)                                                                                                                                                  |
 | `contrast-color()`                   | No: the design fixes `color.text.on-accent`                                                                                                                                         |
