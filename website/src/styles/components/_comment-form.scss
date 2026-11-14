@@ -54,6 +54,9 @@
   }
 
   .privacy {
+    // R12: the link keeps the 1rem the section card used to force on slotted links.
+    --textlink-font-size: var(--font-size-base);
+
     margin: 0;
     font-size: var(--font-size-sm);
     color: var(--color-text-muted);
