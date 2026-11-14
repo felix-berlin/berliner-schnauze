@@ -355,21 +355,16 @@
       gap: vars.$spacer * 2;
     }
 
+    // Both actions (back link + share, c-button center-icon) read as the same button.
     &__footer-actions {
+      --button-padding: #{vars.$spacer * 0.5 vars.$spacer * 0.85};
+      --button-gap: #{vars.$spacer * 0.4};
+
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: vars.$spacer;
-
-      // Both actions (back link + share) read as the same button.
-      .c-button {
-        --button-padding: #{vars.$spacer * 0.5 vars.$spacer * 0.85};
-
-        display: inline-flex;
-        align-items: center;
-        gap: vars.$spacer * 0.4;
-      }
     }
 
     &__related-title {

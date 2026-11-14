@@ -4,7 +4,8 @@ import { test, expect, type Page } from "@playwright/test";
 // snapshots are linux/chromium renders of this machine's fonts). Run: ../scripts/with-env.sh npx playwright test visual-baseline --project=chromium
 // Screenshot baseline for the design-system migration (docs/superpowers/specs/2026-11-13-design-system-design.md §10,
 // wave 0): later CSS refactors must not change a pixel unless the snapshot update names the reason. Run against the
-// e2e seed database and a fresh build; a stale service worker serves old CSS, so it is blocked.
+// e2e seed database and a fresh build; a stale service worker serves old CSS, so it is blocked. The server must run
+// with E2E_SERVER=1 (fixed Wakapi hours in the footer, no rate limits; src/utils/e2eServer.ts) on a fresh seed.
 // Chromium project only: playwright.config.ts gives every other project a testIgnore for this file.
 test.use({ reducedMotion: "reduce", serviceWorkers: "block" });
 
@@ -60,10 +61,6 @@ for (const size of SIZES) {
                 ? route.fulfill({ body: PIXEL, contentType: "image/png" })
                 : route.abort(),
           );
-          // The server rate-limits per IP in memory (leaderboard: 60 per 10 min), which repeated runs exhaust: every test is a new client.
-          await page.context().setExtraHTTPHeaders({
-            "x-forwarded-for": `203.0.113.${Math.floor(Math.random() * 254) + 1}`,
-          });
           // Pulse counts feed the trend box and badge: a baseline run must not change them.
           await page.route("**/api/word-pulse", (route) => route.abort());
           // SetColorMode reads this key before first paint; storing the same value keeps it from fighting the toggle.
@@ -77,35 +74,24 @@ for (const size of SIZES) {
             theme === "dark",
           );
           await settle(page);
+          // The fixed scroll-to-top button follows an IntersectionObserver whose report can lag the settle
+          // scroll (seen at 1280px on the leaderboard, about 1 in 6 runs): its state is not what this baseline guards.
+          await page.addStyleTag({
+            content: ".o-scroll-to-top { visibility: hidden !important; }",
+          });
           // Word of the day: the word changes daily and the countdown ("Neues Wort in: …") ticks every second.
           const wotd = page.locator(".c-word-of-the-day");
-          // Trend box and badge: rank and call counts come from the last 7 days. Footer dates: the seed stamps them.
+          // Trend box and badge: rank and counts come from the last 7 days (the seed writes them relative to its
+          // own day, and other specs' page views add to them). Footer dates: the seed stamps them.
           const timeDependent = [
             wotd,
             page.locator(".c-word-trend"),
             page.getByText("Im Trend · Platz"),
             page.locator(".c-word-page-footer time"),
-            page.getByText(/Coding-Zeit/),
-            // Anki: Wakapi hours grow daily; the demo card shows a random word.
-            page.locator(".c-anki-dev-hours"),
+            // Anki: the demo card shows a random word.
             page.locator(".c-anki-flashcard"),
           ];
           if (path === "/") await expect(wotd.locator(".word")).toBeVisible();
-          // Live numbers that change the layout (line wrap, badge width), not just pixels under a mask:
-          // pin them before the shot. Hero: the weekly trend rank, digits zeroed. Footer: the Wakapi
-          // coding hours (live from the Wakapi API, so they grow; the row sits in .o-footer-end, outside
-          // <footer>). At 522 the word-page row at 390px wrapped (+23px); "120" gives the mask box the
-          // baseline was taken with (121px wide, one row).
-          await page.evaluate(() => {
-            for (const el of document.querySelectorAll(".o-footer-end p, a[href='#n-trend']")) {
-              const text = el.textContent ?? "";
-              if (/Coding-Zeit/.test(text)) el.textContent = "120+ Std. Coding-Zeit";
-              else if (/Platz/.test(text))
-                for (const node of el.childNodes)
-                  if (node.nodeType === Node.TEXT_NODE)
-                    node.textContent = (node.textContent ?? "").replace(/\d/g, "0");
-            }
-          });
           const name = `${path === "/" ? "home" : path.slice(1).replaceAll("/", "-")}-${size.width}-${theme}.png`;
           await expect(page).toHaveScreenshot(name, {
             fullPage: true,

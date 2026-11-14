@@ -354,6 +354,12 @@ describe("WordFilter.vue", () => {
     expect(wrapper.text()).toContain("Zurücksetzen");
   });
 
+  it("starts the reset success timer only on click, not on mount", async () => {
+    const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
+    mount(WordFilter);
+    expect(mockUseTimeout).toHaveBeenCalledWith(1200, { controls: true, immediate: false });
+  });
+
   it("ButtonWithStates gets state='success' when ready is false (covers line 66 branch)", async () => {
     mockUseTimeout.mockReturnValueOnce({ ready: ref(false), start: vi.fn() });
     const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;

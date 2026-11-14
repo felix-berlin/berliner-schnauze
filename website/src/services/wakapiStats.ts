@@ -1,5 +1,6 @@
 import { ttl } from "@services/cache.ts";
 import { fetchJson } from "@services/fetchJson.ts";
+import { isE2eServer } from "@utils/e2eServer.ts";
 import { WAKAPI_HOST } from "astro:env/client";
 import { WAKAPI_API_KEY } from "astro:env/server";
 import { readFileSync, writeFileSync } from "node:fs";
@@ -42,7 +43,11 @@ function writeCache(stats: CachedStats) {
   }
 }
 
+// The e2e server renders a fixed line instead of live hours, so footer and Anki screenshots do not drift.
+const E2E_STATS: WakapiStats = { hours: 120, minutes: 0 };
+
 async function loadStats(): Promise<WakapiStats> {
+  if (isE2eServer()) return E2E_STATS;
   if (!WAKAPI_API_KEY) return { hours: 0, minutes: 0 };
 
   const cached = readCache();

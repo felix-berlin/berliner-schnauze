@@ -9,7 +9,7 @@
               Neuer Rekord!
             </span>
           </span>
-          <h1 ref="titleRef" tabindex="-1" class="c-band">
+          <h1 ref="titleRef" tabindex="-1" class="c-band" data-variant="hero">
             {{ shownName ? `Aus die Maus, ${shownName}!` : "Aus die Maus!" }}
           </h1>
           <p class="t-em why">

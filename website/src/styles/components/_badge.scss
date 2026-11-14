@@ -16,10 +16,10 @@
     --_weight: 600; // no weight token between regular and bold
     --_size: var(--font-size-sm);
 
-    display: var(--badge-display, revert-layer);
+    display: var(--badge-display, inline);
     align-items: center;
-    gap: var(--badge-gap, revert-layer);
-    border: var(--badge-border, revert-layer);
+    gap: var(--badge-gap, normal);
+    border: var(--badge-border, none);
     background-color: var(--_bg);
     color: var(--_color);
     padding: var(--badge-padding, var(--_padding));

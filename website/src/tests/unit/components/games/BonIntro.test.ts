@@ -68,6 +68,7 @@ describe("BonIntro", () => {
     $bonStats.setKey("playerName", "Berta");
     const wrapper = mountIntro({});
     expect(wrapper.find("h1.c-band").text()).toBe("Berliner oder nicht?");
+    expect(wrapper.find("h1.c-band").attributes("data-variant")).toBe("hero");
     const input = wrapper.find("input");
     expect(input.attributes("maxlength")).toBe("24");
     expect(input.attributes("placeholder")).toBe("Anonym");

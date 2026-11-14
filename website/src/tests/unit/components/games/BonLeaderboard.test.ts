@@ -96,6 +96,7 @@ describe("BonLeaderboard", () => {
     expect(w.find("a.c-textlink").text()).toBe("← Berliner oder nicht?");
     expect(w.find("a.c-textlink").attributes("href")).toBe("/games/berliner-oder-nicht");
     expect(w.find("h1.c-band").text()).toBe("Rangliste");
+    expect(w.find("h1.c-band").attributes("data-variant")).toBe("hero");
     expect(w.text()).toContain("340 Spiele · diese Woche");
     const buttons = w.findAll(".c-choice");
     expect(buttons.map((b) => b.text())).toEqual(["Diese Woche", "Diesen Monat", "Allzeit"]);

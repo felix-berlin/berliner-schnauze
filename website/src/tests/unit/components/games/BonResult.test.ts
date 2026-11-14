@@ -77,6 +77,7 @@ describe("BonResult", () => {
 
     it("greets by name and falls back without one", () => {
       expect(mountResult().find("h1.c-band").text()).toBe("Aus die Maus, Berta!");
+      expect(mountResult().find("h1.c-band").attributes("data-variant")).toBe("hero");
       expect(mountResult({ playerName: "" }).find("h1").text()).toBe("Aus die Maus!");
       expect(mountResult({ playerName: "H1tler" }).find("h1").text()).toBe("Aus die Maus, Anonym!");
     });

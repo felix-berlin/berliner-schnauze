@@ -23,14 +23,15 @@
     }
 
     &__card {
+      --button-padding: 0.375rem 0.75rem;
+
       display: flex;
       flex-direction: column;
       gap: 0.875rem;
       padding: 1.25rem 1.5rem;
 
+      // Placement only: the button keeps its own width in the column.
       .c-button {
-        --button-padding: 0.375rem 0.75rem;
-
         align-self: flex-start;
       }
     }

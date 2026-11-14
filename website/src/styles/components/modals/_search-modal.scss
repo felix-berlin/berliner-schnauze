@@ -107,11 +107,9 @@
         }
       }
 
-      // Was in the modal. The button sets no gap, so this legacy rule still reaches it.
       .c-modal__close.has-suffix {
         --button-padding: var(--space-1) var(--space-2) var(--space-1) var(--space-1);
-
-        gap: var(--space-1);
+        --button-gap: var(--space-1);
       }
 
       .c-modal__close {

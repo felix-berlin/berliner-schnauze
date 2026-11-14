@@ -27,8 +27,6 @@
     // The code card fills the column, spaced by the column gap.
     --bon-player-code-max-inline-size: none;
     --bon-player-code-margin-block: 0;
-    --band-font-size: var(--font-size-4xl);
-    --band-line-height: 1.05;
     // stylelint-disable-next-line declaration-property-value-disallowed-list -- an outline offset, not policed on outline-offset either
     --band-focus-offset: 4px;
 
@@ -114,7 +112,6 @@
   // Mock: both buttons stretched across the column.
   .actions {
     --button-flex: 1 1 auto;
-    --button-padding: 0 var(--space-6);
 
     display: flex;
     flex-wrap: wrap;

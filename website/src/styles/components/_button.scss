@@ -1,7 +1,7 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Variants (space-separated in data-variant): primary, lg, center-icon, filter, paper, raised. A
+// Variants (space-separated in data-variant): primary, lg, xl, center-icon, filter, paper, raised. A
 // pressed filter button is aria-pressed="true". Public: --button-padding, --button-bg, --button-color,
 // --button-border-color, --button-border-style, --button-border-width, --button-display,
 // --button-font-size, --button-min-block-size, --button-transition, --button-flex, --button-gap.
@@ -16,11 +16,11 @@
 
     cursor: pointer;
     padding: var(--button-padding, var(--space-1));
-    // revert-layer: unset, a legacy or base font-size on the button still applies.
-    font-size: var(--button-font-size, revert-layer);
-    flex: var(--button-flex, revert-layer);
-    gap: var(--button-gap, revert-layer);
-    min-block-size: var(--button-min-block-size, revert-layer);
+    // revert: the browser default, a native <button> keeps its control size, an <a> inherits.
+    font-size: var(--button-font-size, revert);
+    flex: var(--button-flex, 0 1 auto);
+    gap: var(--button-gap, normal);
+    min-block-size: var(--button-min-block-size, auto);
     background-color: var(--_bg);
     border: var(--button-border-width, 1px) var(--_border-style) var(--_border-color);
     color: var(--_color);
@@ -66,6 +66,13 @@
     min-block-size: var(--button-min-block-size, 48px);
     font-size: var(--button-font-size, var(--font-size-base));
     text-decoration: none;
+  }
+
+  // Extra large call to action (Anki pages): roomier padding, large text, icon gap.
+  :scope[data-variant~="xl"] {
+    padding: var(--button-padding, var(--space-3) var(--space-5));
+    font-size: var(--button-font-size, var(--font-size-lg));
+    gap: var(--button-gap, var(--space-2));
   }
 
   :scope[data-variant~="center-icon"] {

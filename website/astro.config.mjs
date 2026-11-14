@@ -165,6 +165,12 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
+      // "1" on the Playwright e2e server only (src/utils/e2eServer.ts): fixed Wakapi hours, no rate limits.
+      E2E_SERVER: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
       PAYLOAD_SERVER_URL: envField.string({
         context: "server",
         access: "secret",

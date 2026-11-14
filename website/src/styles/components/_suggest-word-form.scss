@@ -4,8 +4,8 @@
   .c-suggest-word-form {
     &__button {
       --button-padding: #{vars.$spacer * 0.75} #{vars.$spacer * 1.2};
+      --button-font-size: 1.7rem;
 
-      font-size: 1.7rem;
       width: 100%;
       display: flex;
       align-items: center;

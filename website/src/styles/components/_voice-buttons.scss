@@ -32,11 +32,5 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
     }
-
-    &__voices .c-voice-buttons__button {
-      padding-inline: 0.5rem;
-      font-size: 0.9rem;
-      justify-content: center;
-    }
   }
 }

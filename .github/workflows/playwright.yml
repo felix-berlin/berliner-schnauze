@@ -209,9 +209,12 @@ jobs:
       # Started here instead of via Playwright's webServer: in the container the job hung
       # after the last test while Playwright tore the server down. setsid + redirected
       # output detach it from the step so the step can end.
+      # E2E_SERVER: fixed Wakapi hours instead of the live API, no in-memory rate limits (all specs share one
+      # address); honoured only with a localhost PAYLOAD_SERVER_URL (website/src/utils/e2eServer.ts).
       - name: Start server
         env:
           DATABASE_URL: postgres://postgres:postgres@postgres:5432/bs_e2e
+          E2E_SERVER: "1"
           NODE_ENV: production
           PAYLOAD_SECRET: e2e-secret
           PAYLOAD_SERVER_URL: http://localhost:4321
