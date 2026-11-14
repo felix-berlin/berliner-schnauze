@@ -95,14 +95,18 @@ for (const size of SIZES) {
           ];
           if (path === "/") await expect(wotd.locator(".word")).toBeVisible();
           // Live numbers that change the layout (line wrap, badge width), not just pixels under a mask:
-          // pin their digits before the shot. Footer: Wakapi coding hours; hero: the weekly trend rank.
+          // pin them before the shot. Hero: the weekly trend rank, digits zeroed. Footer: the Wakapi
+          // coding hours (live from the Wakapi API, so they grow; the row sits in .o-footer-end, outside
+          // <footer>). At 522 the word-page row at 390px wrapped (+23px); "120" gives the mask box the
+          // baseline was taken with (121px wide, one row).
           await page.evaluate(() => {
-            for (const el of document.querySelectorAll("footer p, a[href='#n-trend']")) {
-              if (!/Coding-Zeit|Platz/.test(el.textContent ?? "")) continue;
-              for (const node of el.childNodes) {
-                if (node.nodeType === Node.TEXT_NODE)
-                  node.textContent = (node.textContent ?? "").replace(/\d/g, "0");
-              }
+            for (const el of document.querySelectorAll(".o-footer-end p, a[href='#n-trend']")) {
+              const text = el.textContent ?? "";
+              if (/Coding-Zeit/.test(text)) el.textContent = "120+ Std. Coding-Zeit";
+              else if (/Platz/.test(text))
+                for (const node of el.childNodes)
+                  if (node.nodeType === Node.TEXT_NODE)
+                    node.textContent = (node.textContent ?? "").replace(/\d/g, "0");
             }
           });
           const name = `${path === "/" ? "home" : path.slice(1).replaceAll("/", "-")}-${size.width}-${theme}.png`;
