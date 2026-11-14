@@ -1,5 +1,6 @@
 // @vitest-environment node
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import { join } from "node:path";
 
 import buildTokens, { readSources } from "../../../../scripts/build-tokens.mjs";
 
@@ -140,4 +141,33 @@ describe("buildTokens", () => {
   });
   it("the committed file is current", () =>
     expect(readFileSync(generated, "utf8")).toBe(buildTokens(readSources())));
+});
+
+describe("token use in the stylesheets", () => {
+  const styles = new URL("../../../styles/", import.meta.url).pathname;
+  const walk = (dir: string): string[] =>
+    readdirSync(dir).flatMap((name) => {
+      const path = join(dir, name);
+      return statSync(path).isDirectory() ? walk(path) : [path];
+    });
+  const files = walk(styles).filter((p) => p.endsWith(".scss"));
+  const declared = (css: string) => [...css.matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]);
+  const tokens = new Set(declared(readFileSync(generated, "utf8")));
+  const prefixes = new Set([...tokens].map((name) => name.split("-")[2]));
+
+  it("every var() of a token family names a generated token, a legacy alias or a declared property", () => {
+    // Declared anywhere (legacy aliases, component publics such as --color-active), or a font
+    // family Astro's font loader defines (cssVariable in astro.config.mjs): not a typo.
+    const config = readFileSync(new URL("../../../../astro.config.mjs", import.meta.url), "utf8");
+    const fonts = [...config.matchAll(/cssVariable:\s*"(--[\w-]+)"/g)].map((m) => m[1]);
+    const known = new Set([...fonts, ...files.flatMap((p) => declared(readFileSync(p, "utf8")))]);
+    const unknown = files.flatMap((path) =>
+      [...readFileSync(path, "utf8").matchAll(/var\(\s*(--[\w-]+)/g)]
+        .map((m) => m[1])
+        .filter((name) => prefixes.has(name.split("-")[2]) && !known.has(name))
+        .map((name) => `${path.slice(styles.length)}: ${name}`),
+    );
+    expect(prefixes.size).toBeGreaterThan(5);
+    expect([...new Set(unknown)]).toEqual([]);
+  });
 });
