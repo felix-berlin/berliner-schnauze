@@ -18,6 +18,8 @@
   }
 
   .pad {
+    --state-actions-margin-block-start: var(--space-2); // the retry button's old 0.5rem
+
     padding: var(--space-4);
   }
 

@@ -3,6 +3,7 @@
 // Page states (docs/design/wortseite/SPEC.md §8/§9). Stripe + icon carry the colour, text never does.
 // Variants: offline, error, success, done. Part .body: bold line over the text; inside it .detail
 // (a muted extra line, e.g. the server's reason) and .actions (a row of buttons).
+// Public: --state-actions-margin-block-start.
 @include mx.component("state") {
   :scope {
     --_stripe: var(--color-text-muted);
@@ -63,6 +64,6 @@
     flex-wrap: wrap;
     gap: var(--space-2);
     align-items: center;
-    margin-block-start: var(--space-1);
+    margin-block-start: var(--state-actions-margin-block-start, var(--space-1));
   }
 }
