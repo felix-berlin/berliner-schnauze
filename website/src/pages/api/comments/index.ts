@@ -4,6 +4,7 @@ import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { hashEditKey, listComments, toPublic, visitorId } from "@services/payload/comments.ts";
 import { captchaGate, orNull, positiveInt, reply } from "@utils/apiReply.ts";
 import { commentCreateSchema } from "@utils/commentSchema.ts";
+import { requestIp } from "@utils/rateLimit.ts";
 import { createHash, randomBytes } from "node:crypto";
 import { pickPseudonym } from "payload-app/comments";
 
@@ -42,7 +43,10 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
   const input = commentCreateSchema.safeParse(body);
   if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
 
-  const blocked = await captchaGate(body, clientAddress);
+  const blocked = await captchaGate(
+    body,
+    requestIp(request.headers.get("x-forwarded-for"), clientAddress),
+  );
   if (blocked) return blocked;
 
   const { authorName, parentId, text, wordId } = input.data;

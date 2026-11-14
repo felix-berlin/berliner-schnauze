@@ -4,7 +4,7 @@ import { getPayloadClient } from "@services/payload.ts";
 import { visitorId, voterKey } from "@services/payload/comments.ts";
 import { captchaGate, isUniqueViolation, orNull, reply } from "@utils/apiReply.ts";
 import { reportSchema } from "@utils/commentSchema.ts";
-import { clientIp, rateLimitedBy } from "@utils/rateLimit.ts";
+import { clientIp, rateLimitedBy, requestIp } from "@utils/rateLimit.ts";
 
 /**
  * Reports are idempotent: a repeat on the same comment (same IP within 24 h, or same visitor cookie) answers like
@@ -16,7 +16,10 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
   const input = reportSchema.safeParse(body);
   if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
 
-  const blocked = await captchaGate(body, clientAddress);
+  const blocked = await captchaGate(
+    body,
+    requestIp(request.headers.get("x-forwarded-for"), clientAddress),
+  );
   if (blocked) return blocked;
 
   const { commentId, reason } = input.data;

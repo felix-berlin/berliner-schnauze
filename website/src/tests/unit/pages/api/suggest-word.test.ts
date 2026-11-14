@@ -34,6 +34,18 @@ beforeEach(() => {
 });
 
 describe("POST /api/suggest-word", () => {
+  it("hands Turnstile the proxy's X-Forwarded-For entry, not the client-supplied first one", async () => {
+    await POST({
+      clientAddress: "6.6.6.6",
+      request: new Request("https://berliner-schnauze.wtf/api/suggest-word", {
+        body: JSON.stringify(valid),
+        headers: { "x-forwarded-for": "6.6.6.6, 9.8.7.6" },
+        method: "POST",
+      }),
+    } as unknown as APIContext);
+    expect(verifyTurnstile).toHaveBeenCalledWith("tok", "9.8.7.6");
+  });
+
   it("stores a valid suggestion with a valid token", async () => {
     const res = await post(valid);
     expect(res.status).toBe(200);

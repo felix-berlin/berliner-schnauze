@@ -48,5 +48,7 @@ exec "${inf[@]}" run --silent --log-level=error --env=dev --path=/agent -- bash 
   set -u
   url="$1"; shift
   : "${PROD_BASIC_AUTH:?missing in Infisical dev, folder /agent}"
-  printf "user = \"%s\"\n" "$PROD_BASIC_AUTH" | exec curl -q -K - -sS --fail-with-body --proto =https --max-redirs 0 "$@" -- "$url"
+  # Like ~/.curlrc, the environment must not reroute the credential: no proxy, the system CA store only.
+  unset http_proxy https_proxy HTTPS_PROXY all_proxy ALL_PROXY CURL_CA_BUNDLE SSL_CERT_FILE SSL_CERT_DIR CURL_HOME
+  printf "user = \"%s\"\n" "$PROD_BASIC_AUTH" | exec curl -q -K - -sS --noproxy "*" --fail-with-body --proto =https --max-redirs 0 "$@" -- "$url"
 ' _ "$url" "${flags[@]}"

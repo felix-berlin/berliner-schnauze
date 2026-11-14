@@ -1,15 +1,20 @@
+import { visibleName } from "payload-app/bon-names";
 import { COMMENT_MAX, COMMENT_MIN, NAME_MAX } from "payload-app/comments";
 import { z } from "zod";
 
 const id = z.number().int().positive();
-const text = z
-  .string()
-  .trim()
-  .min(COMMENT_MIN, "Bisken mehr musste schon schreiben.")
-  .max(COMMENT_MAX, "Ditt is ein bisken zu lang.");
+// Format characters (bidi overrides, zero-width) dropped like in BON names: "\u202E" would flip the rendered text.
+const visible = z.string().transform(visibleName).pipe(z.string().trim());
+
+const text = visible.pipe(
+  z
+    .string()
+    .min(COMMENT_MIN, "Bisken mehr musste schon schreiben.")
+    .max(COMMENT_MAX, "Ditt is ein bisken zu lang."),
+);
 
 export const commentCreateSchema = z.object({
-  authorName: z.string().trim().max(NAME_MAX, "Ditt is ein bisken zu lang.").default(""),
+  authorName: visible.pipe(z.string().max(NAME_MAX, "Ditt is ein bisken zu lang.")).default(""),
   parentId: id.optional(),
   text,
   wordId: id,
