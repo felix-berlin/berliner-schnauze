@@ -2,7 +2,7 @@ import SearchModalTrigger from "@components/modals/search/SearchModalTrigger.vue
 import * as modalStore from "@stores/modal.ts";
 import { mount, flushPromises } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { ref, type Component } from "vue";
+import type { Component } from "vue";
 
 const { slashHandler } = vi.hoisted(() => ({
   slashHandler: { current: null as ((e: KeyboardEvent) => void) | null },
