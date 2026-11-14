@@ -24,7 +24,7 @@
     color: var(--textlink-color, var(--_color));
     font: inherit;
     font-size: var(--textlink-font-size, var(--font-size-sm));
-    gap: var(--textlink-gap, normal);
+    gap: var(--textlink-gap, revert-layer); // unset: the legacy BON redeem links keep their icon gap
     letter-spacing: inherit;
     text-decoration: underline dashed from-font;
     text-underline-position: from-font;
