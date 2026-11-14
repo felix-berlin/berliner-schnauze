@@ -32,7 +32,7 @@ function fb(last: RoundEntry, extra: { gameOver?: boolean; lives?: number } = {}
 function fire(wrapper: ReturnType<typeof fb>, type: string, clientX = 0, pointerType = "touch") {
   const event = new MouseEvent(type, { bubbles: true, clientX });
   Object.assign(event, { pointerType });
-  wrapper.find(".c-bon-feedback__card").element.dispatchEvent(event);
+  wrapper.find("section").element.dispatchEvent(event);
 }
 
 describe("BonFeedback.vue", () => {
@@ -63,7 +63,7 @@ describe("BonFeedback.vue", () => {
     vi.advanceTimersByTime(10_000);
     expect(wrapper.emitted("next")).toBeUndefined();
     expect(
-      wrapper.find<HTMLElement>(".c-bon-feedback__timer").element.style.animationPlayState,
+      wrapper.find<HTMLElement>(".c-bon-feedback .timer").element.style.animationPlayState,
     ).toBe("paused");
     fire(wrapper, "pointerleave");
     vi.advanceTimersByTime(1199);
@@ -91,7 +91,7 @@ describe("BonFeedback.vue", () => {
   it("goes on at once on click or swipe, and only once", async () => {
     const clicked = fb(right);
     vi.advanceTimersByTime(FEEDBACK_LOCK_MS);
-    await clicked.find(".c-bon-feedback__card").trigger("click");
+    await clicked.find("section").trigger("click");
     vi.advanceTimersByTime(5000);
     expect(clicked.emitted("next")).toHaveLength(1);
 
@@ -99,7 +99,7 @@ describe("BonFeedback.vue", () => {
     vi.advanceTimersByTime(FEEDBACK_LOCK_MS);
     fire(swiped, "pointerdown", 10);
     fire(swiped, "pointerup", 120);
-    await swiped.find(".c-bon-feedback__card").trigger("click");
+    await swiped.find("section").trigger("click");
     expect(swiped.emitted("next")).toHaveLength(1);
   });
 
@@ -110,7 +110,7 @@ describe("BonFeedback.vue", () => {
     const streak = fb({ ...right, multiplier: 3, points: 30 });
     expect(streak.text()).toContain("Knorke, weiter so!");
     expect(fb({ ...right, multiplier: 1, points: 10 }).text()).toContain("+10 Punkte");
-    expect(fb(right).find(".c-bon-feedback__card--right").exists()).toBe(true);
+    expect(fb(right).find('section[data-state="right"]').exists()).toBe(true);
   });
 
   it.each([
@@ -119,10 +119,10 @@ describe("BonFeedback.vue", () => {
     [{ ...right, correct: false }, "Dit is echtes Berlinerisch:"],
   ])("wrong answer says the sentence for its category", (last, sentence) => {
     const wrapper = fb(last);
-    expect(wrapper.find(".c-bon-feedback__verdict").text()).toBe(sentence);
+    expect(wrapper.find(".c-bon-feedback .verdict").text()).toBe(sentence);
     expect(wrapper.text()).toContain("Daneben!");
     expect(wrapper.text()).toContain("−1 Leben · Serie futsch");
-    expect(wrapper.find(".c-bon-feedback__card--wrong").exists()).toBe(true);
+    expect(wrapper.find('section[data-state="wrong"]').exists()).toBe(true);
   });
 
   it("links real words to their page in a new tab, others not", () => {
@@ -146,7 +146,7 @@ describe("BonFeedback.vue", () => {
 
   it("the timer bar runs for the standing time", () => {
     const bar = (w: ReturnType<typeof fb>) =>
-      w.find<HTMLElement>(".c-bon-feedback__timer").element.style.animationDuration;
+      w.find<HTMLElement>(".c-bon-feedback .timer").element.style.animationDuration;
     expect(bar(fb(right))).toBe("900ms");
     expect(bar(fb(wrong))).toBe("2500ms");
   });
@@ -154,16 +154,16 @@ describe("BonFeedback.vue", () => {
   it("drops a tap in the lock window (the flip animation) without losing the timer, accepts one later", async () => {
     const early = fb(wrong);
     vi.advanceTimersByTime(100);
-    await early.find(".c-bon-feedback__card").trigger("click");
+    await early.find("section").trigger("click");
     expect(early.emitted("next")).toBeUndefined();
     vi.advanceTimersByTime(2400);
     expect(early.emitted("next")).toHaveLength(1);
 
     const late = fb(wrong);
     vi.advanceTimersByTime(100);
-    await late.find(".c-bon-feedback__card").trigger("click");
+    await late.find("section").trigger("click");
     vi.advanceTimersByTime(FEEDBACK_LOCK_MS - 100 + 20);
-    await late.find(".c-bon-feedback__card").trigger("click");
+    await late.find("section").trigger("click");
     expect(late.emitted("next")).toHaveLength(1);
   });
 
@@ -173,7 +173,7 @@ describe("BonFeedback.vue", () => {
     fire(wrapper, "pointerleave");
     await nextTick();
     expect(
-      wrapper.find<HTMLElement>(".c-bon-feedback__timer").element.style.animationDuration,
+      wrapper.find<HTMLElement>(".c-bon-feedback .timer").element.style.animationDuration,
     ).toBe("1200ms");
   });
 

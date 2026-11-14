@@ -83,4 +83,83 @@
       translate: 6px;
     }
   }
+
+  // BON card: the intro wiggle and the swipe hand (bon-card).
+  @keyframes c-bon-card-intro {
+    0%,
+    50%,
+    100% {
+      translate: 0;
+      rotate: 0deg;
+    }
+
+    25% {
+      translate: 34px;
+      rotate: 3.5deg;
+    }
+
+    75% {
+      translate: -22px;
+      rotate: -2.5deg;
+    }
+  }
+  @keyframes c-bon-swipe-gesture {
+    0% {
+      translate: 0;
+      opacity: 0;
+    }
+
+    8%,
+    50%,
+    90% {
+      translate: 0;
+      opacity: 0.65;
+    }
+
+    33% {
+      translate: 34px;
+      opacity: 0.65;
+    }
+
+    75% {
+      translate: -22px;
+      opacity: 0.65;
+    }
+
+    100% {
+      translate: 0;
+      opacity: 0;
+    }
+  }
+
+  // BON feedback: timer bar, flip in, the answered card flies out (bon-feedback).
+  @keyframes c-bon-feedback-timer {
+    from {
+      transform: scaleX(var(--bar-from, 1));
+    }
+
+    to {
+      transform: scaleX(0);
+    }
+  }
+  @keyframes c-bon-feedback-flip {
+    from {
+      transform: perspective(800px) rotateY(-60deg) scale(0.96);
+      opacity: 0;
+    }
+  }
+  @keyframes c-bon-feedback-fly-right {
+    to {
+      transform: translateX(115%) rotate(14deg);
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  @keyframes c-bon-feedback-fly-left {
+    to {
+      transform: translateX(-115%) rotate(-14deg);
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
 }

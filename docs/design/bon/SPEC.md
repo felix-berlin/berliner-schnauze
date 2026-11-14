@@ -329,10 +329,11 @@ Der Name gehört zum Spieler (Pseudonym), nicht zu einem einzelnen Spiel. Eine �
 **Im Code:** Same-Document View Transitions (`document.startViewTransition`) innerhalb der Komponenten. Zwischen Spiel und Rangliste Cross-Document mit `@view-transition { navigation: auto; }`, was Astro ohne Router kann. **Fallback:** Ohne Unterstützung oder bei `prefers-reduced-motion: reduce` wechseln die Zustände ohne Animation.
 
 ```ts
-function vt(update: () => void, dir: string) {
+function vt(update: () => void, type: string) {
   if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) return update()
-  document.documentElement.dataset.vt = dir
-  document.startViewTransition(async () => { update(); await nextTick() })
+  // Ohne Transition-Typen (`:active-view-transition-type()`) kein Morph
+  if (!CSS.supports('selector(:active-view-transition-type(a))')) return update()
+  document.startViewTransition({ types: [type], update: async () => { update(); await nextTick() } })
 }
 ```
 

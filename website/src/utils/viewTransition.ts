@@ -1,27 +1,26 @@
 import { nextTick } from "vue";
 
-let active: ViewTransition | undefined;
-
 /**
  * Runs a state change inside a same-document view transition (docs/design/bon/SPEC.md §13).
- * Without support or under reduced motion it just runs `update`. `dir`, when given, lands in
- * `html[data-vt]` for the stylesheet and is removed again when the transition is over, so router
- * navigations keep their default fade; without it the transition is the default crossfade.
+ * Without support or under reduced motion it just runs `update`. `type`, when given, becomes the
+ * transition type the stylesheet matches with `:active-view-transition-type()`; a browser without
+ * transition types gets no transition at all (no morph, spec §8). Without `type` it is the default
+ * crossfade.
  */
-export function vt(update: () => void, dir?: string): void {
+export function vt(update: () => void, type?: string): void {
   if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) {
     return update();
   }
-  if (dir) document.documentElement.dataset.vt = dir;
-  const transition = document.startViewTransition(async () => {
+  const run = async () => {
     update();
     await nextTick();
-  });
-  active = transition;
-  void transition.finished.finally(() => {
-    // A later transition owns data-vt by now.
-    if (active === transition) delete document.documentElement.dataset.vt;
-  });
+  };
+  if (!type) {
+    document.startViewTransition(run);
+    return;
+  }
+  if (!globalThis.CSS?.supports?.("selector(:active-view-transition-type(a))")) return update();
+  document.startViewTransition({ types: [type], update: run });
 }
 
 const isViewTransitionAnimation = (a: Animation) =>

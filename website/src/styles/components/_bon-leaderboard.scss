@@ -394,7 +394,7 @@
   }
 
   // Motion on this page (docs/design/bon/SPEC.md §13). Period switch: the rows crossfade inside a still card
-  // (no slide, it read as a jump; no own fade timing, it made the own row flash); `vt` sets html[data-vt], the root itself does not animate.
+  // (no slide, it read as a jump; no own fade timing, it made the own row flash); `vt` passes the type "period", the root itself does not animate.
   @media (prefers-reduced-motion: no-preference) {
     // Morph from "Hier stehste" on the result: the pseudo elements belong to the new page, so the
     // timing has to live in this stylesheet (the result's one is gone by then).
@@ -404,17 +404,17 @@
     }
 
     // The own row only morphs in from the result; on a period switch it would fly across the fading list.
-    :root[data-vt="period"] .c-bon-leaderboard__row--me {
+    :root:active-view-transition-type(period) .c-bon-leaderboard__row--me {
       view-transition-name: none;
     }
 
-    :root[data-vt="period"]::view-transition-old(root),
-    :root[data-vt="period"]::view-transition-new(root) {
+    :root:active-view-transition-type(period)::view-transition-old(root),
+    :root:active-view-transition-type(period)::view-transition-new(root) {
       animation: none;
     }
 
     // The browser's own crossfade (in step, plus-lighter): rows that stay the same do not flicker.
-    :root[data-vt="period"]::view-transition-group(lb-list) {
+    :root:active-view-transition-type(period)::view-transition-group(lb-list) {
       animation-duration: 200ms;
     }
   }

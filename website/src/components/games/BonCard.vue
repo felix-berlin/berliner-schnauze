@@ -13,43 +13,30 @@
         ref="cardRef"
         aria-labelledby="bon-word"
         aria-describedby="bon-question"
-        :class="['c-bon-card__card', hint && 'c-bon-card__card--intro']"
+        class="card"
+        :data-state="hint ? 'hint' : undefined"
         :style="dragStyle"
         @pointerdown="onDown"
         @pointermove="onMove"
         @pointerup="onUp"
         @pointercancel="reset"
       >
-        <p id="bon-question" class="t-label c-bon-card__label">Berlinerisch oder nich?</p>
-        <h2 id="bon-word" class="c-bon-card__word">
-          <span class="c-headword">{{ word }}</span>
+        <p id="bon-question" class="t-label label">Berlinerisch oder nich?</p>
+        <h2 id="bon-word" class="word">
+          <span class="headword">{{ word }}</span>
         </h2>
-        <p class="t-small c-bon-card__progress">
-          Karte {{ cardInStack }} von 20 · Stapel {{ stack }}
-        </p>
+        <p class="t-small progress">Karte {{ cardInStack }} von 20 · Stapel {{ stack }}</p>
 
-        <span
-          class="c-bon-card__overlay c-bon-card__overlay--nee"
-          :style="overlay(-1)"
-          aria-hidden="true"
-        >
-          ← Nee
-        </span>
-        <span
-          class="c-bon-card__overlay c-bon-card__overlay--ja"
-          :style="overlay(1)"
-          aria-hidden="true"
-        >
-          Ja →
-        </span>
+        <span class="overlay" data-side="nee" :style="overlay(-1)" aria-hidden="true"> ← Nee </span>
+        <span class="overlay" data-side="ja" :style="overlay(1)" aria-hidden="true"> Ja → </span>
 
-        <div v-if="hint" class="c-bon-card__swipe-hint" aria-hidden="true">
-          <HandIcon class="c-bon-card__swipe-hint-icon" width="32" height="32" />
+        <div v-if="hint" class="swipe-hint" aria-hidden="true">
+          <HandIcon class="swipe-hint-icon" width="32" height="32" />
         </div>
       </section>
     </slot>
 
-    <div class="c-bon-card__answers">
+    <div class="answers">
       <button
         class="c-choice"
         type="button"
@@ -71,13 +58,11 @@
     </div>
 
     <template v-if="!$slots.feedback">
-      <p class="t-small c-bon-card__how c-bon-card__how--touch">Jeht ooch mit Wischen.</p>
-      <p class="t-small c-bon-card__how c-bon-card__how--keys">Jeht ooch mit den Pfeiltasten.</p>
+      <p class="t-small how" data-input="touch">Jeht ooch mit Wischen.</p>
+      <p class="t-small how" data-input="keys">Jeht ooch mit den Pfeiltasten.</p>
     </template>
 
-    <button class="c-textlink c-bon-card__end" type="button" @click="emit('end')">
-      Spiel beenden
-    </button>
+    <button class="c-textlink" type="button" @click="emit('end')">Spiel beenden</button>
   </div>
 </template>
 

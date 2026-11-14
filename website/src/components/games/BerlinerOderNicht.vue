@@ -36,7 +36,7 @@
       </template>
 
       <div v-else-if="view === 'loading'" class="c-bon-card">
-        <section class="c-bon-card__card" aria-busy="true">
+        <section class="card" aria-busy="true">
           <p class="t-small" role="status">
             {{
               finishing
@@ -49,7 +49,7 @@
           <span class="c-skeleton" data-variant="title" aria-hidden="true" />
           <span class="c-skeleton" data-variant="line" aria-hidden="true" />
         </section>
-        <div class="c-bon-card__answers">
+        <div class="answers">
           <button class="c-choice" type="button" aria-disabled="true">
             <span aria-hidden="true">←</span> Nee, nich Berlinerisch
           </button>
