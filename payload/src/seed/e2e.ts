@@ -161,6 +161,8 @@ async function upsert(payload: Payload, collection: "themen" | "words" | "posts"
 }
 
 export async function seedE2e(payload: Payload): Promise<void> {
+  // Upload files outlive a dropped e2e database (payload/media): overwrite them, or Payload would store
+  // stimme-m-1.wav, stimme-m-2.wav … on every fresh seed and the specs would not find the file names.
   // Media: four images for the word page and the post. Credits follow the CMS convention (description = attribution,
   // caption = fallback): plain, with a link, caption only, none.
   const imageMedia: { id: number }[] = [];
@@ -179,7 +181,7 @@ export async function seedE2e(payload: Payload): Promise<void> {
     imageMedia.push(
       found.docs[0]
         ? await payload.update({ collection: "media", data, depth: 0, id: found.docs[0].id })
-        : await payload.create({ collection: "media", data: { ...data, wpPath }, file: { data: PNG, mimetype: "image/png", name: wpPath.slice(4), size: PNG.length } }),
+        : await payload.create({ collection: "media", data: { ...data, wpPath }, file: { data: PNG, mimetype: "image/png", name: wpPath.slice(4), size: PNG.length }, overwriteExistingFiles: true }),
     );
   }
   const media = imageMedia[0]!;
@@ -195,6 +197,7 @@ export async function seedE2e(payload: Payload): Promise<void> {
         collection: "media",
         data: { alt: `Stimme ${gender}`, wpPath },
         file: { data: WAV, mimetype: "audio/wav", name: `${name}.wav`, size: WAV.length },
+        overwriteExistingFiles: true,
       }));
     voiceMedia.set(gender, doc.id);
   }
