@@ -20,7 +20,6 @@ export default [
   "src/styles/components/_bon-share-view.scss",
   "src/styles/components/_carbon-badge.scss",
   "src/styles/components/_color-mode-picker.scss",
-  "src/styles/components/_confetti.scss",
   "src/styles/components/_confirm-dialog.scss",
   "src/styles/components/_custom-multiselect.scss",
   "src/styles/components/_donation-page.scss",

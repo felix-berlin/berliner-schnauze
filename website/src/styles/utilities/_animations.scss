@@ -50,4 +50,19 @@
       opacity: 0.55;
     }
   }
+
+  // Confetti pieces fall and fade (confetti).
+  @keyframes make-it-rain {
+    0% {
+      opacity: 0;
+    }
+
+    50% {
+      opacity: 1;
+    }
+
+    100% {
+      translate: 0 200px;
+    }
+  }
 }

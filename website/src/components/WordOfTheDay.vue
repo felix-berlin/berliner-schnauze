@@ -1,7 +1,7 @@
 <template>
   <div
     ref="root"
-    class="c-word-of-the-day c-confetti"
+    class="c-word-of-the-day"
     data-track-content
     data-content-name="Word of the Day"
     :data-content-piece="currentWord?.word?.berlinerisch ?? ''"

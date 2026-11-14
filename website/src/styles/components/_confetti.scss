@@ -1,78 +1,121 @@
-@use "@sass-butler/functions" as butler-fn;
+@use "@styles/mixins" as mx;
 
-@layer legacy {
-  $yellow: #ffd300;
-  $blue: #17d3ff;
-  $pink: #ff4e91;
-  $duration: 1000;
+// Confetti (ConfettiEffect.vue): pieces rain down over the positioned parent (the parent sets
+// position: relative). Parts: .piece. Ten pieces have their own spot, tilt and timing (fixed values,
+// taken from the last random Sass build).
+@include mx.component("confetti") {
+  :scope {
+    // stylelint-disable-next-line color-no-hex -- colour inventory R72: one-off (confetti)
+    --_yellow: #ffd300;
+    // stylelint-disable-next-line color-no-hex -- colour inventory R62: one-off (confetti)
+    --_blue: #17d3ff;
+    // stylelint-disable-next-line color-no-hex -- colour inventory R78: one-off (confetti)
+    --_pink: #ff4e91;
 
-  .c-confetti {
-    position: relative;
+    position: absolute;
+    inset: 0;
     overflow: hidden;
-
-    &__wrapper {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    &__piece {
-      position: absolute;
-      width: 8px;
-      height: 16px;
-      background: $yellow;
-      inset-block-start: 0;
-      opacity: 0;
-
-      // One rule per piece; ConfettiEffect.vue renders 10 by default
-      @for $i from 1 through 10 {
-        &:nth-child(#{$i}) {
-          inset-inline-start: $i * 7%;
-          rotate: #{butler-fn.random-num(-80, 80)}deg;
-          animation: make-it-rain $duration * 1ms infinite ease-out;
-          animation-delay: #{butler-fn.random-num(0, $duration * 0.5)}ms;
-          animation-duration: #{butler-fn.random-num($duration * 0.7, $duration * 1.2)}ms;
-        }
-      }
-
-      &:nth-child(odd) {
-        background: $blue;
-      }
-
-      &:nth-child(even) {
-        z-index: 1;
-      }
-
-      &:nth-child(4n) {
-        width: 5px;
-        height: 12px;
-        animation-duration: $duration * 2ms;
-      }
-
-      &:nth-child(3n) {
-        width: 3px;
-        height: 10px;
-        animation-duration: $duration * 2.5ms;
-        animation-delay: $duration * 1ms;
-      }
-
-      &:nth-child(4n + 1) {
-        background: $pink;
-      }
-    }
+    pointer-events: none;
   }
 
-  @keyframes make-it-rain {
-    0% {
-      opacity: 0;
+  .piece {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: var(--_x);
+    inline-size: 8px;
+    block-size: 16px;
+    background: var(--_yellow);
+    opacity: 0;
+    rotate: var(--_tilt);
+    // Pieces after the tenth have no timing: the shorthand is invalid there, so they stay still.
+    animation: make-it-rain var(--_duration) var(--_delay) infinite ease-out;
+
+    &:nth-child(1) {
+      --_x: 7%;
+      --_tilt: -48deg;
+      --_delay: 37ms;
+      --_duration: 899ms;
+    }
+    &:nth-child(2) {
+      --_x: 14%;
+      --_tilt: -19deg;
+      --_delay: 172ms;
+      --_duration: 814ms;
+    }
+    &:nth-child(3) {
+      --_x: 21%;
+      --_tilt: -13deg;
+      --_delay: 445ms;
+      --_duration: 1065ms;
+    }
+    &:nth-child(4) {
+      --_x: 28%;
+      --_tilt: -24deg;
+      --_delay: 479ms;
+      --_duration: 1165ms;
+    }
+    &:nth-child(5) {
+      --_x: 35%;
+      --_tilt: -60deg;
+      --_delay: 391ms;
+      --_duration: 889ms;
+    }
+    &:nth-child(6) {
+      --_x: 42%;
+      --_tilt: 36deg;
+      --_delay: 46ms;
+      --_duration: 1146ms;
+    }
+    &:nth-child(7) {
+      --_x: 49%;
+      --_tilt: 40deg;
+      --_delay: 79ms;
+      --_duration: 1013ms;
+    }
+    &:nth-child(8) {
+      --_x: 56%;
+      --_tilt: -28deg;
+      --_delay: 437ms;
+      --_duration: 1099ms;
+    }
+    &:nth-child(9) {
+      --_x: 63%;
+      --_tilt: -26deg;
+      --_delay: 84ms;
+      --_duration: 965ms;
+    }
+    &:nth-child(10) {
+      --_x: 70%;
+      --_tilt: -1deg;
+      --_delay: 384ms;
+      --_duration: 1089ms;
     }
 
-    50% {
-      opacity: 1;
+    &:nth-child(odd) {
+      background: var(--_blue);
     }
 
-    100% {
-      translate: 0 200px;
+    &:nth-child(even) {
+      z-index: var(--z-raised);
+    }
+
+    &:nth-child(4n) {
+      --_duration: 2000ms;
+
+      inline-size: 5px;
+      block-size: 12px;
+    }
+
+    &:nth-child(3n) {
+      --_duration: 2500ms;
+      --_delay: 1000ms;
+
+      inline-size: 3px;
+      block-size: 10px;
+    }
+
+    &:nth-child(4n + 1) {
+      background: var(--_pink);
     }
   }
 }

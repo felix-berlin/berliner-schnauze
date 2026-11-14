@@ -10,17 +10,17 @@ describe("ConfettiEffect.vue", () => {
         pieces,
       },
     });
-    expect(wrapper.findAll(".c-confetti__piece").length).toBe(pieces);
+    expect(wrapper.findAll(".c-confetti .piece").length).toBe(pieces);
   });
 
   it("renders 10 pieces by default", () => {
     const wrapper = mount(ConfettiEffect);
 
-    expect(wrapper.findAll(".c-confetti__piece").length).toBe(10);
+    expect(wrapper.findAll(".c-confetti .piece").length).toBe(10);
   });
 
   it("has the correct class for the wrapper", () => {
     const wrapper = mount(ConfettiEffect);
-    expect(wrapper.classes()).toContain("c-confetti__wrapper");
+    expect(wrapper.classes()).toContain("c-confetti");
   });
 });
