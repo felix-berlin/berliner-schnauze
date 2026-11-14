@@ -6,12 +6,14 @@
 // and colour. Variant hit-area: a 44px target around a small link without changing the layout (flex
 // rows, where the inline-link exception of WCAG 2.5.8 does not apply).
 // Public (the old :where() let parents override these): --textlink-gap, --textlink-mark-color (an
-// aria-hidden mark inside the link, e.g. an arrow), --textlink-display, --textlink-min-block-size, --textlink-padding-inline, --textlink-font-size, --textlink-color, --textlink-padding-start.
+// aria-hidden mark inside the link, e.g. an arrow), --textlink-display, --textlink-min-block-size, --textlink-padding-inline, --textlink-font-size, --textlink-color, --textlink-padding-start, --textlink-place-self
+// (a stretching flex/grid parent keeps the link at its own width with start).
 @include mx.component("textlink") {
   :scope {
     --_color: var(--color-text-muted);
 
     display: var(--textlink-display, inline-flex);
+    place-self: var(--textlink-place-self, revert-layer);
     align-items: center;
     min-block-size: var(--textlink-min-block-size, 2.75rem);
     padding-block: 0;

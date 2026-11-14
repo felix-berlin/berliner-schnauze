@@ -98,8 +98,12 @@
     min-block-size: 44px;
   }
 
+  // A form may let the field grow with its text: --textarea-field-sizing: content plus a
+  // --textarea-min-block-size floor (field-sizing ignores rows).
   .c-textarea {
     display: block;
+    field-sizing: var(--textarea-field-sizing, fixed);
+    min-block-size: var(--textarea-min-block-size, auto);
     line-height: 1.45;
     resize: vertical;
   }

@@ -4,7 +4,8 @@
 // Variants (space-separated in data-variant): primary, lg, center-icon, filter. A pressed filter
 // button is aria-pressed="true". Public: --button-padding, --button-bg, --button-color,
 // --button-border-color, --button-border-style, --button-border-width, --button-display,
-// --button-font-size, --button-min-block-size, --button-transition.
+// --button-font-size, --button-min-block-size, --button-transition, --button-flex.
+// Locked but focusable (busy, offline): aria-disabled="true"; aria-busy="true" shows the progress cursor.
 @include mx.component("button") {
   :scope {
     // stylelint-disable-next-line function-disallowed-list -- colour inventory R28: one-off (hover rim of primary and filter)
@@ -18,6 +19,7 @@
     padding: var(--button-padding, var(--space-1));
     // revert-layer: unset, a legacy or base font-size on the button still applies.
     font-size: var(--button-font-size, revert-layer);
+    flex: var(--button-flex, revert-layer);
     background-color: var(--_bg);
     border: var(--button-border-width, 1px) var(--_border-style) var(--_border-color);
     color: var(--_color);
@@ -115,5 +117,15 @@
       cursor: not-allowed;
       box-shadow: none;
     }
+  }
+
+  :scope[aria-disabled="true"] {
+    opacity: 0.55;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  :scope[aria-busy="true"] {
+    cursor: progress;
   }
 }

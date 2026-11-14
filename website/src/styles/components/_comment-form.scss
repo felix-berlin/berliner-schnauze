@@ -1,131 +1,90 @@
-@use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-@layer legacy {
-  .c-comment-form {
+// Comment form (docs/design/wortseite/SPEC.md §9): text with counter, optional name, state boxes,
+// the actions row (submit, cancel, shortcut hint) and the privacy line. Parts: .row, .under,
+// .error, .counter (data-state="over"), .hint, .actions, .kbd, .privacy.
+// Public: --comment-form-kbd-display (the page shows the shortcut hint from its breakpoint; only
+// on hover devices, where a hardware keyboard is likely).
+@include mx.component("comment-form") {
+  :scope {
     container: comment-form / inline-size;
     display: grid;
-    gap: vars.$spacer * 0.75;
+    gap: var(--space-3);
+  }
 
-    &__row {
-      display: grid;
-      gap: vars.$spacer * 0.25;
-    }
+  .row {
+    // Grows with the text; rows="4" is the floor (field-sizing ignores rows), plus padding and border.
+    --textarea-field-sizing: content;
+    --textarea-min-block-size: calc(4lh + 1.2rem + 2px);
 
-    // Why it failed (429 / server message), under the Spec sentence inside the error box.
-    &__reason {
-      color: var(--color-muted);
-    }
+    display: grid;
+    gap: var(--space-1);
+  }
 
-    &__hint {
-      font-size: 0.8rem;
-      color: var(--color-muted);
-    }
+  .hint {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
 
-    &__under {
-      display: flex;
-      gap: vars.$spacer * 0.5;
-      align-items: baseline;
-    }
+  .under {
+    display: flex;
+    gap: var(--space-2);
+    align-items: baseline;
+  }
 
-    &__error {
-      --color-error-text: color-mix(in srgb, var(--danger) 75%, black);
+  .error {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R55: one-off
+    --_color: light-dark(rgb(182 43 21), rgb(249 166 153));
 
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--color-error-text);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--_color);
+  }
 
-      @include butler-mx.dark-mode-class {
-        --color-error-text: color-mix(in srgb, var(--danger) 45%, white);
-      }
-    }
+  .counter {
+    margin-inline-start: auto;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
 
-    &__counter {
-      margin-inline-start: auto;
-      font-size: 0.8rem;
-      color: var(--color-muted);
-
-      &.is-over {
-        color: var(--danger);
-        font-weight: 700;
-      }
-    }
-
-    &__privacy {
-      --decoration-text: underline dashed from-font;
-
-      margin: 0;
-      text-underline-position: from-font;
-      font-size: 0.8rem;
-      color: var(--color-muted);
-    }
-
-    &__actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: vars.$spacer * 0.5;
-      align-items: center;
-    }
-
-    &__button {
-      --button-padding: #{vars.$spacer * 0.5 vars.$spacer};
-
-      flex: 1 1 auto;
-      min-block-size: 3rem;
-
-      // Wide form: the button keeps its width, the shortcut hint sits next to it (full width when narrow).
-      @container comment-form (inline-size >= 30rem) {
-        flex: 0 0 auto;
-      }
-
-      // Busy and offline keep the focus (no :disabled); the look says it is locked.
-      &[aria-disabled="true"] {
-        opacity: 0.55;
-        cursor: not-allowed;
-        box-shadow: none;
-      }
-
-      &[aria-busy="true"] {
-        cursor: progress;
-      }
-    }
-
-    &__save {
-      --choice-min-block-size: 2.75rem;
-
-      &[aria-disabled="true"] {
-        opacity: 0.55;
-        cursor: not-allowed;
-      }
-    }
-
-    // Shortcut hint from 808px and only where a hardware keyboard is likely (spec §9).
-    &__kbd {
-      display: none;
-      gap: 0.375rem;
-      align-items: center;
-      margin-inline-start: auto;
-      font-size: 0.75rem;
-      color: var(--color-muted);
-
-      @include mx.breakpoint("word") {
-        @media (hover: hover) {
-          display: inline-flex;
-        }
-      }
+    &[data-state="over"] {
+      color: var(--color-status-danger);
+      font-weight: var(--font-weight-bold);
     }
   }
 
-  // Keyboard hint (spec: .c-kbd).
-  :where(.c-kbd) {
-    padding: 0.125rem 0.375rem;
-    border: 1px solid var(--rule-card);
-    border-radius: var(--radius-xxs);
-    background: var(--surface-chip);
-    color: var(--color-ink-strong);
-    font: inherit;
-    font-size: 0.7rem;
-    font-weight: 700;
+  .privacy {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .actions {
+    --button-padding: var(--space-2) var(--space-4);
+    --button-min-block-size: 3rem;
+    --button-flex: 1 1 auto;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+
+    // Wide form: the button keeps its width, the shortcut hint sits next to it (full width when narrow).
+    @container comment-form (inline-size >= 30rem) {
+      --button-flex: 0 0 auto;
+    }
+  }
+
+  .kbd {
+    display: none;
+    gap: var(--space-1);
+    align-items: center;
+    margin-inline-start: auto;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+
+    @include butler-mx.feature("hover") {
+      display: var(--comment-form-kbd-display, none);
+    }
   }
 }

@@ -1,7 +1,8 @@
 @use "@styles/mixins" as mx;
 
 // Page states (docs/design/wortseite/SPEC.md §8/§9). Stripe + icon carry the colour, text never does.
-// Variants: offline, error, success, done. Part .body: bold line over the text.
+// Variants: offline, error, success, done. Part .body: bold line over the text; inside it .detail
+// (a muted extra line, e.g. the server's reason) and .actions (a row of buttons).
 @include mx.component("state") {
   :scope {
     --_stripe: var(--color-text-muted);
@@ -51,5 +52,17 @@
     b {
       color: var(--color-text-strong);
     }
+  }
+
+  .detail {
+    color: var(--color-text-muted);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+    margin-block-start: var(--space-1);
   }
 }

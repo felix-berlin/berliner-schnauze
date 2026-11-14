@@ -10,19 +10,15 @@
       <span class="num" />
       <h2 id="word-comments-title" class="title">
         Wat sagste dazu?
-        <span v-if="ctx.loaded.value" class="c-word-comments__count">({{ ctx.total.value }})</span>
+        <span v-if="ctx.loaded.value" class="count">({{ ctx.total.value }})</span>
       </h2>
-      <div
-        v-if="ctx.total.value >= 2"
-        class="c-word-comments__sort"
-        role="group"
-        aria-label="Sortierung"
-      >
+      <div v-if="ctx.total.value >= 2" class="sort" role="group" aria-label="Sortierung">
         <button
           v-for="option in SORTS"
           :key="option.value"
           type="button"
-          class="c-choice c-word-comments__sort-button"
+          class="c-choice"
+          data-variant="segment"
           :aria-pressed="ctx.sort.value === option.value"
           @click="ctx.sort.value = option.value"
         >
@@ -32,26 +28,21 @@
     </div>
 
     <div class="body">
-      <div class="c-word-comments__body">
+      <div class="content">
         <p
           v-if="ctx.loaded.value && !ctx.comments.value.length && !ctx.hasMore.value"
-          class="c-word-comments__empty"
+          class="empty"
         >
           Hier hat noch keener wat jesacht. Fang du doch an!
         </p>
 
-        <ol v-else-if="shown.length" class="c-word-comments__list">
-          <li v-for="item in shown" :key="item.id" class="c-word-comments__item">
+        <ol v-else-if="shown.length" class="list">
+          <li v-for="item in shown" :key="item.id" class="item">
             <CommentCard :comment="item" />
           </li>
         </ol>
 
-        <button
-          v-if="canShowMore"
-          type="button"
-          class="c-textlink c-word-comments__more"
-          @click="showMore"
-        >
+        <button v-if="canShowMore" type="button" class="c-textlink more" @click="showMore">
           {{ expanded ? "Weitere Kommentare zeigen" : `Alle ${ctx.total.value} Kommentare zeigen` }}
         </button>
 
@@ -65,7 +56,12 @@
           <span class="body">
             <b>Die Kommentare wollten grad nich laden.</b>
             <span>
-              <button type="button" class="c-textlink" data-variant="inline" @click="ctx.loadMore()">
+              <button
+                type="button"
+                class="c-textlink"
+                data-variant="inline"
+                @click="ctx.loadMore()"
+              >
                 Nochmal versuchen
               </button>
             </span>
@@ -84,7 +80,7 @@
           <button
             ref="writeButton"
             type="button"
-            class="c-choice c-word-comments__write"
+            class="c-choice write"
             aria-expanded="false"
             :aria-disabled="!ctx.online.value"
             :aria-describedby="ctx.online.value ? undefined : 'word-comments-offline'"
@@ -99,8 +95,8 @@
         </template>
         <CommentForm v-else focus-on-mount :captcha-ready="!!token" :submit="submitNew" />
 
-        <div class="c-word-comments__captcha">
-          <p v-show="captchaSize.height.value > 0" class="c-word-comments__captcha-text t-small">
+        <div class="captcha">
+          <p v-show="captchaSize.height.value > 0" class="captcha-text t-small">
             Kurz jucken, ob de 'n echter Berliner bist
           </p>
           <div ref="captcha">

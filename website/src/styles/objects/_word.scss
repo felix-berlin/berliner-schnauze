@@ -40,6 +40,7 @@
       --word-images-hero-display: flex;
       --word-sidebar-display: flex;
       --word-tabbar-display: none;
+      --comment-form-kbd-display: inline-flex;
 
       display: grid;
       grid-template-columns: var(--_sidebar) minmax(0, 1fr);

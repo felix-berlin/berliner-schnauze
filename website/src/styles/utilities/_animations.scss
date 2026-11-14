@@ -26,4 +26,16 @@
       transform: translateX(var(--_shift));
     }
   }
+
+  // Linked comment: wash and outline fade out (comment).
+  @keyframes comment-wash {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes comment-outline {
+    to {
+      outline-color: transparent;
+    }
+  }
 }

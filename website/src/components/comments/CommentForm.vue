@@ -1,6 +1,6 @@
 <template>
   <form class="c-comment-form" novalidate @submit.prevent="onSubmit">
-    <div class="c-comment-form__row">
+    <div class="row">
       <label class="c-label" :for="`${uid}-text`">{{ label }}</label>
       <textarea
         :id="`${uid}-text`"
@@ -13,17 +13,17 @@
         @keydown.enter.ctrl.exact.prevent="onSubmit"
         @keydown.enter.meta.exact.prevent="onSubmit"
       />
-      <div class="c-comment-form__under">
-        <span v-if="error" :id="`${uid}-error`" class="c-comment-form__error">{{ error }}</span>
+      <div class="under">
+        <span v-if="error" :id="`${uid}-error`" class="error">{{ error }}</span>
         <span
-          class="c-comment-form__counter t-small"
-          :class="{ 'is-over': over }"
+          class="counter t-small"
+          :data-state="over ? 'over' : undefined"
           :aria-live="text.length >= LIVE_FROM ? 'polite' : undefined"
           >{{ text.length }} / {{ COMMENT_MAX }}</span
         >
       </div>
     </div>
-    <div v-if="showName" class="c-comment-form__row">
+    <div v-if="showName" class="row">
       <label class="c-label" :for="`${uid}-name`">Dein Name (optional)</label>
       <input
         :id="`${uid}-name`"
@@ -35,7 +35,7 @@
         placeholder="z. B. Kiez-Kalle"
         :aria-describedby="`${uid}-name-hint`"
       />
-      <span :id="`${uid}-name-hint`" class="c-comment-form__hint t-small">
+      <span :id="`${uid}-name-hint`" class="hint t-small">
         Leer jelassen? Dann kriegste ’n Berliner Namen, z. B. „Anonyme Schrippe“.
       </span>
     </div>
@@ -46,7 +46,7 @@
         <span>
           Dein Kommentar is nich rausjegangen. Dein Text bleibt stehen – versuch’s gleich nochmal.
         </span>
-        <span v-if="reason" class="c-comment-form__reason">{{ reason }}</span>
+        <span v-if="reason" class="detail">{{ reason }}</span>
       </span>
     </div>
     <!-- Nothing was sent (captcha still running): a calm status, not the error box. -->
@@ -54,13 +54,13 @@
       <Hourglass aria-hidden="true" height="18" width="18" />
       <span class="body">{{ waiting }}</span>
     </div>
-    <p v-if="!online" :id="`${uid}-offline`" class="c-comment-form__hint t-small">
+    <p v-if="!online" :id="`${uid}-offline`" class="hint t-small">
       Du bist offline. Abschicken jeht wieder, sobald du Netz hast.
     </p>
-    <div class="c-comment-form__actions">
+    <div class="actions">
       <!-- Edit: "Speichern" is a pressed choice, the spec allows one primary per view (the new-comment button). -->
       <button
-        :class="edit ? 'c-choice c-comment-form__save' : 'c-button c-comment-form__button'"
+        :class="edit ? 'c-choice' : 'c-button'"
         :data-variant="edit ? undefined : 'primary'"
         type="submit"
         :aria-pressed="edit ? true : undefined"
@@ -73,13 +73,13 @@
       <button v-if="cancellable" class="c-link" type="button" @click="emit('cancel')">
         Abbrechen
       </button>
-      <span v-if="!edit" class="c-comment-form__kbd" aria-hidden="true">
+      <span v-if="!edit" class="kbd" aria-hidden="true">
         <kbd class="c-kbd">{{ modKey }}</kbd>
         <kbd class="c-kbd">Enter</kbd>
         zum Abschicken
       </span>
     </div>
-    <p v-if="!edit" class="c-comment-form__privacy t-small">
+    <p v-if="!edit" class="privacy t-small">
       Mit dem Abschicken wird dein Kommentar öffentlich angezeigt. Was wir dabei speichern, steht in
       der
       <a
@@ -198,4 +198,5 @@ const onSubmit = async (): Promise<void> => {
 
 <style lang="scss">
 @use "@styles/components/comment-form";
+@use "@styles/components/kbd";
 </style>
