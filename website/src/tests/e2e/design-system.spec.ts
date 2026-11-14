@@ -106,7 +106,9 @@ test("one focus ring: dashed on the word page, solid elsewhere, form controls in
     await page.keyboard.press("Tab");
     const probe = page.locator("#ring-probe");
     await expect(probe).toBeFocused();
-    const ring = await probe.evaluate((el) => {
+    // Fields transition outline-color from currentColor: read the settled value.
+    const ring = await probe.evaluate(async (el) => {
+      await Promise.all(el.getAnimations().map((a) => a.finished));
       const style = getComputedStyle(el);
       return `${style.outlineStyle} ${style.outlineWidth} ${style.outlineColor}`;
     });
