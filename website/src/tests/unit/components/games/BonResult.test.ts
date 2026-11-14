@@ -96,9 +96,7 @@ describe("BonResult", () => {
   describe("name", () => {
     it("shows the editor below the heading with the name and tag", () => {
       const wrapper = mountResult({ tag: "K7QX" });
-      expect(wrapper.find(".c-bon-result__head .c-bon-name").text()).toContain(
-        "Du spielst als Berta",
-      );
+      expect(wrapper.find("header .c-bon-name").text()).toContain("Du spielst als Berta");
       expect(wrapper.find("h1").text()).toContain("Berta");
     });
 
@@ -189,7 +187,7 @@ describe("BonResult", () => {
 
   describe("stats", () => {
     const stat = (wrapper: ReturnType<typeof mountResult>, label: string) =>
-      wrapper.findAll(".c-bon-result__stat").find((s) => s.find("dt").text() === label)!;
+      wrapper.findAll(".c-bon-result dl > div").find((s) => s.find("dt").text() === label)!;
 
     it("lists them in a dl", () => {
       expect(
@@ -321,8 +319,7 @@ describe("BonResult", () => {
   });
 
   describe("Deine Runde", () => {
-    const rows = (wrapper: ReturnType<typeof mountResult>) =>
-      wrapper.findAll(".c-bon-result__round li");
+    const rows = (wrapper: ReturnType<typeof mountResult>) => wrapper.findAll(".c-bon-round li");
 
     it("has one row per card in order, marked right or wrong", () => {
       const r = rows(mountResult());

@@ -86,7 +86,7 @@ test.describe("Berliner oder nicht (/games/berliner-oder-nicht)", () => {
 
     await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
     await page.evaluate(() => Object.defineProperty(navigator, "share", { value: undefined }));
-    const points = await page.locator(".c-bon-result__stat").first().locator("dd").innerText();
+    const points = await page.locator(".c-bon-result dl > div").first().locator("dd").innerText();
     await page.getByRole("button", { name: "Ergebnis teilen" }).click();
     await expect(page.getByRole("button", { name: "Text kopiert" })).toBeVisible();
     const link = (await page.evaluate(() => navigator.clipboard.readText())).match(

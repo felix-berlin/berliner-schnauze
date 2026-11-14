@@ -162,4 +162,12 @@
       visibility: hidden;
     }
   }
+
+  // BON result tiles fade in (bon-result, bon-round).
+  @keyframes c-bon-result-in {
+    from {
+      opacity: 0;
+      translate: 0 8px;
+    }
+  }
 }

@@ -1,7 +1,8 @@
 @use "@styles/mixins" as mx;
 
 // Page band (docs/design/wortseite/SPEC.md §4): section headline outside a card, the only display-font use on the page.
-// Public: --band-font-size, --band-line-height.
+// Public: --band-font-size, --band-line-height, --band-focus-offset (a focusable band, e.g. a
+// result title that takes the focus).
 @include mx.component("band") {
   :scope {
     margin: 0;
@@ -10,5 +11,9 @@
     font-size: var(--band-font-size, var(--font-size-2xl));
     line-height: var(--band-line-height, 1.2);
     color: var(--color-text-strong);
+
+    &:focus-visible {
+      outline-offset: var(--band-focus-offset, 2px); // 2px = the base focus ring offset
+    }
   }
 }

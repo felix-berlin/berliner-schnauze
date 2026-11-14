@@ -1,133 +1,128 @@
 <template>
   <div class="c-bon-result">
-    <div class="c-bon-result__main">
-      <header class="c-bon-result__head">
-        <span v-if="isRecord" class="c-badge c-bon-result__badge" data-variant="strong">
-          <TrophyIcon width="16" height="16" aria-hidden="true" />
-          Neuer Rekord!
-        </span>
-        <h1 ref="titleRef" tabindex="-1" class="c-band c-bon-result__title">
-          {{ shownName ? `Aus die Maus, ${shownName}!` : "Aus die Maus!" }}
-        </h1>
-        <p class="t-em c-bon-result__why">
-          {{ endedEarly ? "Du hast dit Spiel beendet." : "Drei Fehler – dit Spiel is vorbei." }}
-        </p>
-        <!-- Only a stored result has a game a rename can find. -->
-        <BonName v-if="result" :name="shownName || 'Anonym'" :tag="tag" @saved="onSaved" />
-      </header>
+    <div class="inner">
+      <div class="main">
+        <header class="head">
+          <span v-if="isRecord" class="badge">
+            <span class="c-badge" data-variant="strong">
+              <TrophyIcon width="16" height="16" aria-hidden="true" />
+              Neuer Rekord!
+            </span>
+          </span>
+          <h1 ref="titleRef" tabindex="-1" class="c-band">
+            {{ shownName ? `Aus die Maus, ${shownName}!` : "Aus die Maus!" }}
+          </h1>
+          <p class="t-em why">
+            {{ endedEarly ? "Du hast dit Spiel beendet." : "Drei Fehler – dit Spiel is vorbei." }}
+          </p>
+          <!-- Only a stored result has a game a rename can find. -->
+          <BonName v-if="result" :name="shownName || 'Anonym'" :tag="tag" @saved="onSaved" />
+        </header>
 
-      <dl class="c-bon-result__stats">
-        <div class="c-bon-result__stat">
-          <dt class="t-label">Punkte</dt>
-          <dd class="c-bon-result__value">{{ score }}</dd>
-        </div>
-        <div class="c-bon-result__stat">
-          <dt class="t-label">Platz</dt>
-          <dd class="c-bon-result__value">{{ ranked ? ranked.rank : "–" }}</dd>
-          <dd class="t-small c-bon-result__note">
-            {{
-              ranked
-                ? `von ${ranked.totalPlayers} Spielern diese Woche · besser als ${beaten} %`
-                : finishError
-                  ? `Nich in der Rangliste: ${finishError.message}`
-                  : "Platzierung jerade nich da"
-            }}
-          </dd>
-          <dd v-if="finishError?.retryable">
-            <button class="c-choice" type="button" @click="emit('retryFinish')">
-              Nochmal speichern
+        <dl class="stats">
+          <div class="stat">
+            <dt class="t-label">Punkte</dt>
+            <dd class="value">{{ score }}</dd>
+          </div>
+          <div class="stat">
+            <dt class="t-label">Platz</dt>
+            <dd class="value">{{ ranked ? ranked.rank : "–" }}</dd>
+            <dd class="t-small note">
+              {{
+                ranked
+                  ? `von ${ranked.totalPlayers} Spielern diese Woche · besser als ${beaten} %`
+                  : finishError
+                    ? `Nich in der Rangliste: ${finishError.message}`
+                    : "Platzierung jerade nich da"
+              }}
+            </dd>
+            <dd v-if="finishError?.retryable">
+              <button class="c-choice" type="button" @click="emit('retryFinish')">
+                Nochmal speichern
+              </button>
+            </dd>
+          </div>
+          <div class="stat">
+            <dt class="t-label">Trefferquote</dt>
+            <dd class="value">{{ accuracy }}%</dd>
+            <dd class="t-small note">{{ correct }} von {{ history.length }} richtig</dd>
+          </div>
+          <div class="stat">
+            <dt class="t-label">Beste Serie</dt>
+            <dd class="value">{{ bestStreak }}</dd>
+            <dd class="t-small note">
+              in Folge richtig · bis ×{{ computeMultiplier(bestStreak) }}
+            </dd>
+          </div>
+        </dl>
+
+        <div class="actions">
+          <button class="c-button" data-variant="primary lg" type="button" @click="emit('restart')">
+            Nochmal spielen
+          </button>
+          <span class="share">
+            <button class="c-choice" type="button" aria-live="polite" @click="share">
+              <ShareIcon width="16" height="16" aria-hidden="true" />
+              {{ copied ? "Text kopiert" : "Ergebnis teilen" }}
             </button>
-          </dd>
+          </span>
         </div>
-        <div class="c-bon-result__stat">
-          <dt class="t-label">Trefferquote</dt>
-          <dd class="c-bon-result__value">{{ accuracy }}%</dd>
-          <dd class="t-small c-bon-result__note">{{ correct }} von {{ history.length }} richtig</dd>
-        </div>
-        <div class="c-bon-result__stat">
-          <dt class="t-label">Beste Serie</dt>
-          <dd class="c-bon-result__value">{{ bestStreak }}</dd>
-          <dd class="t-small c-bon-result__note">
-            in Folge richtig · bis ×{{ computeMultiplier(bestStreak) }}
-          </dd>
-        </div>
-      </dl>
+        <p v-if="shareFailed" class="t-small" role="alert">
+          Teilen hat nich jeklappt – versuch’s nochmal.
+        </p>
 
-      <div class="c-bon-result__actions">
-        <button
-          class="c-button c-bon-result__again"
-          data-variant="primary lg"
-          type="button"
-          @click="emit('restart')"
-        >
-          Nochmal spielen
-        </button>
-        <button
-          class="c-choice c-bon-result__share"
-          type="button"
-          aria-live="polite"
-          @click="share"
-        >
-          <ShareIcon width="16" height="16" aria-hidden="true" />
-          {{ copied ? "Text kopiert" : "Ergebnis teilen" }}
-        </button>
+        <p class="t-small">Dein Rekord: {{ record }} Punkte · gespeichert auf diesem Jerät</p>
+
+        <BonPlacement v-if="around" :around="around" />
+
+        <BonPlayerCode />
       </div>
-      <p v-if="shareFailed" class="t-small" role="alert">
-        Teilen hat nich jeklappt – versuch’s nochmal.
-      </p>
 
-      <p class="t-small">Dein Rekord: {{ record }} Punkte · gespeichert auf diesem Jerät</p>
-
-      <BonPlacement v-if="around" :around="around" />
-
-      <BonPlayerCode />
-    </div>
-
-    <section
-      class="c-section-card c-bon-result__round"
-      data-variant="sheet"
-      aria-labelledby="bon-round-title"
-    >
-      <div class="header">
-        <h2 id="bon-round-title" class="title">Deine Runde</h2>
-      </div>
-      <div class="body">
-        <ol class="c-bon-result__list">
-          <li v-for="(e, i) in history" :key="i">
-            <!-- Mock "Deine Runde": the whole row links a real word; mark, word over its note, arrow. -->
-            <component
-              :is="e.isReal && e.slug ? 'a' : 'span'"
-              :href="e.isReal && e.slug ? routeToWord(e.slug) : undefined"
-              class="c-bon-result__row"
-              :class="{ 'c-bon-result__row--fake': !e.isReal }"
-            >
+      <section
+        class="c-section-card c-bon-round"
+        data-variant="sheet"
+        aria-labelledby="bon-round-title"
+      >
+        <div class="header">
+          <h2 id="bon-round-title" class="title">Deine Runde</h2>
+        </div>
+        <div class="body">
+          <ol class="list">
+            <li v-for="(e, i) in history" :key="i">
+              <!-- Mock "Deine Runde": the whole row links a real word; mark, word over its note, arrow. -->
               <component
-                :is="e.correct ? CheckIcon : XIcon"
-                :class="`c-bon-result__mark c-bon-result__mark--${e.correct ? 'ok' : 'no'}`"
-                role="img"
-                :aria-label="e.correct ? 'richtig' : 'falsch'"
-                width="20"
-                height="20"
-              />
-              <span class="c-bon-result__word">
-                <s v-if="e.category === 'invented'">{{ e.word }}</s>
-                <b v-else>{{ e.word }}</b>
-                <span v-if="e.translation" class="t-small">{{ e.translation }}</span>
-                <span v-else-if="e.category" class="t-small">
-                  {{ e.category === "invented" ? "erfunden" : "Hochdeutsch" }}
-                </span>
-              </span>
-              <span v-if="e.isReal && e.slug" class="c-bon-result__arrow" aria-hidden="true"
-                >→</span
+                :is="e.isReal && e.slug ? 'a' : 'span'"
+                :href="e.isReal && e.slug ? routeToWord(e.slug) : undefined"
+                class="row"
+                :data-real="e.isReal ? undefined : 'false'"
               >
-            </component>
-          </li>
-        </ol>
-      </div>
-      <div class="footer">
-        <a class="c-textlink" href="/">Alle Wörter im Wort-Index</a>
-      </div>
-    </section>
+                <component
+                  :is="e.correct ? CheckIcon : XIcon"
+                  class="mark"
+                  :data-state="e.correct ? 'ok' : 'no'"
+                  role="img"
+                  :aria-label="e.correct ? 'richtig' : 'falsch'"
+                  width="20"
+                  height="20"
+                />
+                <span class="word">
+                  <s v-if="e.category === 'invented'">{{ e.word }}</s>
+                  <b v-else>{{ e.word }}</b>
+                  <span v-if="e.translation" class="t-small">{{ e.translation }}</span>
+                  <span v-else-if="e.category" class="t-small">
+                    {{ e.category === "invented" ? "erfunden" : "Hochdeutsch" }}
+                  </span>
+                </span>
+                <span v-if="e.isReal && e.slug" class="arrow" aria-hidden="true">→</span>
+              </component>
+            </li>
+          </ol>
+        </div>
+        <div class="footer">
+          <a class="c-textlink" href="/">Alle Wörter im Wort-Index</a>
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -252,4 +247,5 @@ async function share() {
 
 <style lang="scss">
 @use "@styles/components/bon-result";
+@use "@styles/components/bon-round";
 </style>

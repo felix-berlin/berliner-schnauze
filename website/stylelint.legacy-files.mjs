@@ -9,7 +9,6 @@ export default [
   "src/styles/components/_app-settings.scss",
   "src/styles/components/_berliner-oder-nicht.scss",
   "src/styles/components/_bon-leaderboard.scss",
-  "src/styles/components/_bon-result.scss",
   "src/styles/components/_carbon-badge.scss",
   "src/styles/components/_color-mode-picker.scss",
   "src/styles/components/_confirm-dialog.scss",

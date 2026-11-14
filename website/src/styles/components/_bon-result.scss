@@ -1,228 +1,150 @@
 @use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 @use "section-card";
 
-@layer legacy {
-  // Result screen (docs/design/bon/SPEC.md §9): one column on mobile, from the word breakpoint two equal columns.
-  .c-bon-result {
-    // Sheet section cards get more room from the "word" breakpoint on.
-    @include mx.breakpoint("word") {
-      --section-card-gutter: var(--space-6);
-      --section-card-header-block: var(--space-4);
-    }
+// Result screen (docs/design/bon/SPEC.md §9): one column on narrow screens, from 45rem width two
+// equal columns. Parts: .inner (the layout, since the root is the container), .main (.head with
+// .badge and the band title, .why; .stats of .stat with .value/.note; .actions with .share), then
+// the round card (c-bon-round).
+@include mx.component("bon-result") {
+  :scope {
+    --_title-wide: 3.25rem; // hero headline, above the type scale
+    --_stat-gap: 0.125rem; // between 0 and space-1, no step within 0.1rem
+    // Tiles fade in one by one, +60 ms each (Spec §13; choreography, not a duration token).
+    --_in: 350ms;
+    --_in-step: 60ms;
+
+    container: bon-result / inline-size;
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .main {
+    // The code card fills the column, spaced by the column gap.
+    --bon-player-code-max-inline-size: none;
+    --bon-player-code-margin-block: 0;
+    --band-font-size: var(--font-size-4xl);
+    --band-line-height: 1.05;
+    --band-focus-offset: 4px;
 
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: var(--space-5);
+    min-inline-size: 0;
 
-    @include mx.breakpoint("word") {
+    > p {
+      margin: 0;
+    }
+  }
+
+  // The word breakpoint (808px viewport) is a 45rem wide result screen.
+  @container bon-result (inline-size >= 45rem) {
+    .inner {
+      // Sheet section cards get more room.
+      --section-card-gutter: var(--space-6);
+      --section-card-header-block: var(--space-4);
+
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 2.5rem;
+      gap: var(--space-8);
       align-items: start;
     }
 
-    &__main {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-      min-width: 0;
-
-      > p {
-        margin: 0;
-      }
-
-      // The code card fills the left column, spaced by the column gap.
-      --bon-player-code-max-inline-size: none;
-      --bon-player-code-margin-block: 0;
-    }
-
-    &__head {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-
-    &__badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    &__title {
-      --band-font-size: 2.25rem;
-      --band-line-height: 1.05;
-
-      &:focus-visible {
-        outline-offset: 4px;
-      }
-
-      @include mx.breakpoint("word") {
-        --band-font-size: 3.25rem;
-      }
-    }
-
-    &__why {
-      margin: 0;
-    }
-
-    &__stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
-      margin: 0;
-    }
-
-    &__stat {
-      display: flex;
-      flex-direction: column;
-      gap: 0.125rem;
-      min-width: 0;
-      padding: 0.75rem 1rem;
-      background: var(--surface-chip);
-      border-radius: var(--radius-sm);
-
-      dd {
-        margin: 0;
-      }
-    }
-
-    // The score morphs from the HUD (docs/design/bon/SPEC.md §13).
-    &__stat:first-child &__value {
-      view-transition-name: bon-score;
-    }
-
-    &__value {
-      font-size: 1.75rem;
-      font-weight: 700;
-      line-height: 1.15;
-      color: var(--color-ink-strong);
-    }
-
-    &__note {
-      overflow-wrap: anywhere;
-    }
-
-    // Mock: both buttons 52px high and stretched across the column.
-    &__actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    &__again,
-    &__share {
-      --choice-min-block-size: 52px;
-
-      flex: 1 1 auto;
-    }
-
-    &__again {
-      --button-padding: 0 1.75rem;
-    }
-
-    // The rows end in the footer's rule, so the body keeps little room below them.
-    &__round {
-      --section-card-body-end: 0.5rem;
-    }
-
-    &__list {
-      // The section card's li rule used to reach in here; it stops at its parts now.
-      > li {
-        line-height: 1.5;
-      }
-
-      display: flex;
-      flex-direction: column;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    // Mock "Deine Runde": mark | word over its note | arrow, 52px rows; a real word's whole row is the link.
-    &__row {
-      display: grid;
-      grid-template-columns: 20px minmax(0, 1fr) auto;
-      gap: 0.75rem;
-      align-items: center;
-      box-sizing: border-box;
-      min-block-size: 52px;
-      padding-block: 0.375rem;
-      color: inherit;
-      text-decoration: none;
-      border-block-start: 1px dashed var(--rule-inner);
-
-      li:first-child > & {
-        border-block-start: 0;
-      }
-    }
-
-    a#{&}__row:hover b {
-      text-decoration: underline dashed from-font;
-    }
-
-    &__arrow {
-      color: var(--color-muted);
-    }
-
-    // Colour only on the icon; the aria-label carries the meaning.
-    &__mark {
-      margin-block-start: 0.1rem;
-
-      &--ok {
-        color: var(--success);
-      }
-
-      &--no {
-        color: var(--danger);
-      }
-    }
-
-    &__word {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-      overflow-wrap: anywhere;
-
-      b,
-      s {
-        font-weight: 700;
-        color: var(--color-ink-strong);
-      }
-    }
-
-    // Not Berlinerisch: muted, struck through when invented (mock), plain for Hochdeutsch.
-    &__row--fake &__word {
-      b,
-      s {
-        color: var(--color-muted);
-      }
+    .main {
+      --band-font-size: var(--_title-wide);
     }
   }
 
-  // The result fades in tile by tile, +60 ms each (Spec §13); the first tile morphs instead.
-  @media (prefers-reduced-motion: no-preference) {
-    .c-bon-result__badge,
-    .c-bon-result__stat:nth-child(n + 2),
-    .c-bon-result__round {
-      animation: c-bon-result-in 350ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-    }
+  .head {
+    --badge-display: inline-flex;
+    --badge-gap: var(--space-1);
 
-    @for $i from 2 through 4 {
-      .c-bon-result__stat:nth-child(#{$i}) {
-        animation-delay: ($i - 1) * 60ms;
-      }
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
 
-    .c-bon-result__round {
-      animation-delay: 300ms;
+  .why {
+    margin: 0;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+    margin: 0;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--_stat-gap);
+    min-inline-size: 0;
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-surface-chip);
+    border-radius: var(--radius-sm);
+
+    dd {
+      margin: 0;
     }
   }
 
-  @keyframes c-bon-result-in {
-    from {
-      opacity: 0;
-      translate: 0 8px;
+  // The score morphs from the HUD (docs/design/bon/SPEC.md §13).
+  .stat:first-child .value {
+    view-transition-name: bon-score;
+  }
+
+  .value {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.15;
+    color: var(--color-text-strong);
+  }
+
+  .note {
+    overflow-wrap: anywhere;
+  }
+
+  // Mock: both buttons stretched across the column.
+  .actions {
+    --button-flex: 1 1 auto;
+    --button-padding: 0 var(--space-6);
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  // Wraps the share choice: it fills this flex item (grid stretch) at 52px.
+  .share {
+    --choice-min-block-size: 52px;
+
+    display: grid;
+    flex: 1 1 auto;
+  }
+
+  // The result fades in tile by tile; the first tile morphs instead.
+  @include butler-mx.feature("motion") {
+    .badge,
+    .stat:nth-child(n + 2) {
+      animation: c-bon-result-in var(--_in) cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+
+    .stat:nth-child(2) {
+      animation-delay: var(--_in-step);
+    }
+
+    .stat:nth-child(3) {
+      animation-delay: calc(2 * var(--_in-step));
+    }
+
+    .stat:nth-child(4) {
+      animation-delay: calc(3 * var(--_in-step));
     }
   }
 }
