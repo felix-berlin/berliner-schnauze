@@ -11,7 +11,7 @@
     grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
     align-items: start;
-    // Padding grows with the main column (cqi here is .c-word-main, the hero is its own container).
+    // Padding grows with the main column (cqi here is .o-word-main, the hero is its own container).
     padding-block: clamp(1.5rem, 1rem + 2cqi, 2rem);
     padding-inline: clamp(1.25rem, 0.5rem + 3cqi, 2rem);
     background: var(--surface-hero);

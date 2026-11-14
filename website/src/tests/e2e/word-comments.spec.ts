@@ -154,8 +154,8 @@ test.describe("word comments", () => {
     await expect(card.getByRole("heading", { name: "Wat sagste dazu? (0)" })).toBeVisible();
     await expect(write).not.toHaveAttribute("aria-disabled", "true");
     await context.setOffline(true);
-    await expect(page.locator(".c-word-offline")).toBeVisible();
-    await expect(page.locator(".c-word-offline")).toContainText("Du bist offline.");
+    await expect(page.getByRole("status").filter({ hasText: "Du bist offline." })).toBeVisible();
+    await expect(page.getByRole("status").filter({ hasText: "Du bist offline." })).toContainText("Du bist offline.");
     await expect(write).toHaveAttribute("aria-disabled", "true");
     await write.focus();
     await expect(write).toBeFocused();
@@ -163,7 +163,7 @@ test.describe("word comments", () => {
     await write.click({ force: true });
     await expect(card.getByRole("textbox")).toHaveCount(0);
     await context.setOffline(false);
-    await expect(page.locator(".c-word-offline")).toHaveCount(0);
+    await expect(page.getByRole("status").filter({ hasText: "Du bist offline." })).toHaveCount(0);
   });
 });
 

@@ -1,7 +1,80 @@
-@layer legacy {
+@use "@styles/mixins" as mx;
+
+// Word page shell ([...wordSlug].astro): content column, offline banner slot, breadcrumb bar, the
+// article grid (tab bar or sidebar + main column) and the word-main container that the cards query.
+// Public: --word-tabbar-top (sticky offset of the tab bar), --word-anchor-offset (scroll margin of
+// every section anchor).
+@layer objects {
   .o-word {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-8);
+  }
+
+  .o-word-offline {
+    margin-block-end: var(--space-4);
+  }
+
+  .o-page-topbar {
+    padding: var(--space-3) var(--space-6);
+    border-block-end: 1px dashed var(--color-border-card); // colour inventory R40
+    background: var(--color-surface-paper); // colour inventory R8
+    box-shadow: var(--shadow-paper-lift);
+  }
+
+  .o-word-page {
+    // The site header is still sticky, so the bar sits below it; a header that hides on scroll would reset this to 0.
+    --word-tabbar-top: var(--site-header-height);
+    // Anchor jumps land below header + tab bar; shared by every scroll-margin on the page.
+    --word-anchor-offset: calc(var(--word-tabbar-top) + 56px);
+    --_sidebar: 200px; // one-off sidebar column
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding-block-end: var(--space-12);
+
+    @include mx.breakpoint("word") {
+      display: grid;
+      grid-template-columns: var(--_sidebar) minmax(0, 1fr);
+      gap: var(--space-8);
+      align-items: start;
+    }
+  }
+
+  // Anchors of the tab bar and sidebar, plus the inner Analyse ids.
+  :is(
+    #bedeutung,
+    #sagste-det-noch,
+    #etymologie,
+    #beispiele,
+    #analyse,
+    #orthographie,
+    #linguistik,
+    #grammatik,
+    #phonologie,
+    #anagramme,
+    #buecher,
+    #verwandte-worte,
+    #verwandte,
+    #navigation,
+    #kommentare
+  ) {
+    scroll-margin-block-start: var(--word-anchor-offset);
+  }
+
+  .o-word-main,
+  .o-word-main-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+
+    @include mx.breakpoint("word") {
+      gap: var(--space-5);
+    }
+  }
+
+  .o-word-main {
+    container: word-main / inline-size;
   }
 }

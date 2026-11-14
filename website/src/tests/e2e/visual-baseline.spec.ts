@@ -87,7 +87,7 @@ for (const size of SIZES) {
             wotd,
             page.locator(".c-trend"),
             page.getByText("Im Trend · Platz"),
-            page.locator(".c-single-word__footer time"),
+            page.locator(".c-word-page-footer time"),
             page.getByText(/Coding-Zeit/),
             // Anki: Wakapi hours grow daily; the demo card shows a random word.
             page.locator(".c-anki-dev-hours"),

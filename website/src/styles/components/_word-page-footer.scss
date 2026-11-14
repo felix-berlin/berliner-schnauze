@@ -1,10 +1,12 @@
-@layer legacy {
-  // Dates line (Spec §7): one muted .t-small paragraph, no rule.
-  .c-single-word__footer {
-    margin-block-start: 1rem;
+@use "@styles/mixins" as mx;
 
-    p {
-      margin: 0;
-    }
+// Dates line of the word page (Spec §7): one muted .t-small paragraph, no rule. Parts .created, .modified.
+@include mx.component("word-page-footer") {
+  :scope {
+    margin-block-start: var(--space-4);
+  }
+
+  p {
+    margin: 0;
   }
 }

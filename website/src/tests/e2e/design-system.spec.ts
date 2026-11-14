@@ -92,7 +92,7 @@ test("form fields take the word page's dashed focus ring (--focus-ring-style)", 
     }, root);
 
   await page.goto("/wort/anmachen");
-  expect(await focusRing(".c-word-page")).toBe("dashed");
+  expect(await focusRing(".o-word-page")).toBe("dashed");
   await page.goto("/");
   expect(await focusRing("main")).toBe("solid");
 });

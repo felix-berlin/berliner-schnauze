@@ -92,11 +92,11 @@ for (const [kind, slug] of Object.entries(WORDS)) {
       test("every visible control is at least 44x44", async ({ page }) => {
         await settle(page, slug, width);
         // Without the root the sweep below would check nothing and pass.
-        await expect(page.locator(".c-word-page")).toHaveCount(1);
+        await expect(page.locator(".o-word-page")).toHaveCount(1);
         const small = await page.evaluate(() => {
           const controls =
             'a[href], button, input:not([type="hidden"]), select, textarea, summary, [role="button"], [role="tab"]';
-          const root = document.querySelector(".c-word-page")!;
+          const root = document.querySelector(".o-word-page")!;
           const pseudo = (el: Element, which: "::before" | "::after") => {
             const s = getComputedStyle(el, which);
             return s.content === "none" || s.position !== "absolute"

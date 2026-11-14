@@ -207,7 +207,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
       "href",
       "/wort-vorschlagen",
     );
-    await expect(page.locator(".c-single-word__footer")).toContainText("Wort erstellt am");
+    await expect(page.locator(".c-word-page-footer")).toContainText("Wort erstellt am");
   });
 
   test("kein horizontales Scrollen bei 1280px und 390px (ballast-der-republik)", async ({
