@@ -1,5 +1,6 @@
 import { fetchRedirects, normalizePath } from "@services/payload/redirects.ts";
 import { setPageCache } from "@utils/cacheHeaders.ts";
+import { isE2eServer } from "@utils/e2eServer.ts";
 import { clientIp, rateLimited, rateLimitRule } from "@utils/rateLimit.ts";
 import { defineMiddleware } from "astro:middleware";
 
@@ -25,7 +26,10 @@ const redirectFor404 = async (pathname: string): Promise<Response | undefined> =
  * A client over the limit of an expensive route (`@utils/rateLimit.ts`) gets a 429 before anything renders.
  */
 export const onRequest = defineMiddleware(async (context, next) => {
-  const rule = rateLimitRule(context.url.pathname, context.request.method);
+  // The e2e server runs every spec from one address; the limits themselves are covered by unit tests.
+  const rule = isE2eServer()
+    ? undefined
+    : rateLimitRule(context.url.pathname, context.request.method);
   const wait = rule
     ? rateLimited(
         clientIp(context.request.headers.get("x-forwarded-for"), context.clientAddress),

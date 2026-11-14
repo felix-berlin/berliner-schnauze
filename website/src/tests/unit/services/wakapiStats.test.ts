@@ -14,7 +14,12 @@ vi.mock("node:fs", async (importOriginal) => {
 });
 vi.mock("astro:env/client", () => ({ WAKAPI_HOST: "https://wakapi.test" }));
 
-const mockKey = (key: string) => vi.doMock("astro:env/server", () => ({ WAKAPI_API_KEY: key }));
+const mockKey = (key: string, e2e?: string) =>
+  vi.doMock("astro:env/server", () => ({
+    E2E_SERVER: e2e,
+    PAYLOAD_SERVER_URL: "http://localhost:4321",
+    WAKAPI_API_KEY: key,
+  }));
 
 const loadStats = async () => {
   const { getWakapiStats } = await import("@services/wakapiStats.ts");
@@ -35,6 +40,13 @@ describe("getWakapiStats", () => {
     mockKey("");
 
     expect(await loadStats()).toEqual({ hours: 0, minutes: 0 });
+    expect(fetchJson).not.toHaveBeenCalled();
+  });
+
+  it("returns the fixed e2e hours on the e2e server without calling Wakapi", async () => {
+    mockKey("secret", "1");
+
+    expect(await loadStats()).toEqual({ hours: 120, minutes: 0 });
     expect(fetchJson).not.toHaveBeenCalled();
   });
 
