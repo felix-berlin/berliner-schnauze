@@ -35,7 +35,7 @@
         </div>
       </Transition>
 
-      <div v-if="currentWord.error" class="word-wrap is-error">
+      <div v-if="currentWord.error" class="word-wrap" data-state="error">
         Ditt kann ne wahr sein, es ist ein Fehler aufgetreten.
       </div>
 

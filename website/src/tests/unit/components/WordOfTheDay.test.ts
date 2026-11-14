@@ -91,13 +91,13 @@ describe("WordOfTheDay.vue", () => {
   it("shows error message when error is true", () => {
     mockWordOfTheDay.value = { error: true, loading: false, word: null };
     const wrapper = mountComponent();
-    expect(wrapper.find(".is-error").exists()).toBe(true);
-    expect(wrapper.find(".is-error").text()).toContain("Fehler aufgetreten");
+    expect(wrapper.find('[data-state="error"]').exists()).toBe(true);
+    expect(wrapper.find('[data-state="error"]').text()).toContain("Fehler aufgetreten");
   });
 
   it("does not show error block when error is false", () => {
     const wrapper = mountComponent();
-    expect(wrapper.find(".is-error").exists()).toBe(false);
+    expect(wrapper.find('[data-state="error"]').exists()).toBe(false);
   });
 
   it("shows countdown update element", () => {
