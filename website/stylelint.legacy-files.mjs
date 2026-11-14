@@ -38,7 +38,6 @@ export default [
   "src/styles/components/_lightbox.scss",
   "src/styles/components/_magazin-article.scss",
   "src/styles/components/_magazin-overview.scss",
-  "src/styles/components/_menu-nav.scss",
   "src/styles/components/_next-links.scss",
   "src/styles/components/_pwa-cache.scss",
   "src/styles/components/_searchbar.scss",

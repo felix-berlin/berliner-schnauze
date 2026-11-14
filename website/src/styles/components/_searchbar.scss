@@ -3,7 +3,7 @@
 @layer legacy {
   .c-searchbar {
     @include mx.breakpoint("md") {
-      --button-padding: 0 6px 0 10px;
+      --header-control-padding: 0 6px 0 10px;
 
       width: 180px;
     }

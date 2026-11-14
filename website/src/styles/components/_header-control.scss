@@ -1,0 +1,92 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Header control: one look for the search trigger, the menu button and the main-menu install
+// button. It sits on the same element as .c-button and hands the button padding, font size,
+// border style and transition through the button's public properties (a property both components
+// declared would depend on CSS chunk order).
+// Parts: .icons (stacked icons), .icon (.menu, .close: swapped by [aria-expanded]).
+// Variant: compact (the main-menu install button). Public: --header-control-padding.
+@include mx.component("header-control") {
+  :scope {
+    --_block-size: 36px; // one-off control height, the menu-nav links share it
+    --_icon: 20px; // one-off icon size
+    --button-padding: var(--header-control-padding, 0 var(--space-3) 0 var(--space-2));
+    --button-font-size: var(--font-size-base);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    block-size: var(--_block-size);
+    border-radius: var(--radius-sm);
+
+    svg {
+      flex: none;
+      inline-size: var(--_icon);
+      block-size: var(--_icon);
+    }
+  }
+
+  :scope[aria-expanded="true"] {
+    --button-border-style: dashed;
+  }
+
+  // Compact: centred label, natural height, smaller icon.
+  :scope[data-variant~="compact"] {
+    --_block-size: auto;
+    --_icon: 18px; // one-off icon size, matches the main-menu icons
+    --button-padding: 6px var(--space-3); // 6px: between space-1 and space-2, kept from the mock
+    --button-font-size: 0.95rem; // between md and base, kept from the mock
+
+    justify-content: center;
+  }
+
+  .icons {
+    display: grid;
+
+    > * {
+      grid-area: 1 / 1;
+    }
+  }
+
+  .close,
+  :scope[aria-expanded="true"] .menu {
+    opacity: 0;
+    rotate: -90deg;
+    scale: 0.6;
+  }
+
+  :scope[aria-expanded="true"] .close {
+    opacity: 1;
+    rotate: 0deg;
+    scale: 1;
+  }
+
+  :scope[aria-expanded="true"] .menu {
+    rotate: 90deg;
+  }
+
+  @include butler-mx.feature("motion") {
+    :scope {
+      --_fade: 0.2s; // between duration-fast and -base, kept from the mock: snappier than buttons
+      --_glow: 0.25s;
+      --_press: 0.12s;
+      --_swing: cubic-bezier(0.2, 0.8, 0.2, 1);
+      // Only what actually changes.
+      --button-transition:
+        background-color var(--_fade) ease, border-color var(--_fade) ease, box-shadow var(--_glow) ease,
+        scale var(--_press) ease-out;
+
+      &:active {
+        scale: 0.96;
+      }
+    }
+
+    .icon {
+      transition:
+        opacity var(--_fade) ease,
+        rotate var(--duration-base) var(--_swing),
+        scale var(--duration-base) var(--_swing);
+    }
+  }
+}

@@ -176,11 +176,8 @@
     line-height: 1.4;
   }
 
-  // Compact install button: hands the nested c-button its padding and size.
+  // Stretches the install button (c-header-control, compact variant) in the narrow layout.
   .install-action {
-    --button-padding: 6px var(--space-3); // 6px: between space-1 and space-2, kept from the mock
-    --button-font-size: 0.95rem; // between md and base, kept from the mock
-
     display: flex;
     flex-direction: column;
   }

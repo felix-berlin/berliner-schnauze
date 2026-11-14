@@ -12,7 +12,9 @@
     padding: var(--padding-y-header) 0;
   }
 
+  // Container "header": the menu nav shows its desktop links by this row's width.
   .o-header-inner {
+    container: header / inline-size;
     display: grid;
     grid-template-areas: "logo menu-nav";
     grid-template-columns: 1fr max-content;

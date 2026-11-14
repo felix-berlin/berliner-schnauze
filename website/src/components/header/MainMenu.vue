@@ -60,7 +60,7 @@
               Mit der App bleibst Du immer informiert, ob online oder offline.
             </span>
             <span class="install-action">
-              <InstallApp data-variant="primary">
+              <InstallApp class="c-header-control" data-variant="primary compact">
                 <DownloadIcon aria-hidden="true" /> App installieren
               </InstallApp>
             </span>
