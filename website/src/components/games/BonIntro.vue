@@ -20,7 +20,7 @@
         <form class="form" @submit.prevent="start">
           <BonName v-if="known" :name="known.name" :tag="known.tag" @saved="onSaved" />
           <div v-else class="name">
-            <label for="bon-name" class="c-label">
+            <label for="bon-name" class="label">
               Dein Name <span class="optional">(optional)</span>
             </label>
             <input

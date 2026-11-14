@@ -3,7 +3,7 @@
 
 // Start screen (docs/design/bon/SPEC.md §6): one column on narrow screens, from 45rem width 1.1fr / 1fr.
 // Parts: .inner (the layout, since the root is the container), .main (.title band, .lead, .form
-// with .name, .optional, .start, .cta, .record; .redeem), then the rules card (c-bon-rules).
+// with .name, .label, .optional, .start, .cta, .record; .redeem), then the rules card (c-bon-rules).
 @include mx.component("bon-intro") {
   :scope {
     --_title-wide: 3.25rem; // hero headline, above the type scale
@@ -65,6 +65,11 @@
     flex-direction: column;
     gap: var(--space-1);
     max-inline-size: 360px;
+  }
+
+  // Own part, not .c-label: a c- class would end the scope and leave .optional bold.
+  .label {
+    font-weight: var(--font-weight-bold);
   }
 
   .optional {
