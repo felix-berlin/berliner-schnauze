@@ -21,6 +21,7 @@
     font-size: var(--button-font-size, revert-layer);
     flex: var(--button-flex, revert-layer);
     gap: var(--button-gap, revert-layer);
+    min-block-size: var(--button-min-block-size, revert-layer);
     background-color: var(--_bg);
     border: var(--button-border-width, 1px) var(--_border-style) var(--_border-color);
     color: var(--_color);
