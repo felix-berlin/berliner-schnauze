@@ -70,12 +70,12 @@
           <template v-else>
             <div class="body">
               <div v-if="isDesktop" class="row" data-kind="head" aria-hidden="true">
-                <span class="num">Platz</span>
+                <span class="metric">Platz</span>
                 <span>Name</span>
-                <span class="num">Treffer</span>
-                <span class="num">Serie</span>
-                <span class="num">Wann</span>
-                <span class="num">Punkte</span>
+                <span class="metric">Treffer</span>
+                <span class="metric">Serie</span>
+                <span class="metric">Wann</span>
+                <span class="metric">Punkte</span>
               </div>
               <ol class="list" :aria-label="periodTitle">
                 <template v-for="item in items" :key="item.gap ? 'gap' : item.entry.rank">
@@ -110,9 +110,9 @@
                         </template>
                       </span>
                       <template v-if="isDesktop">
-                        <span class="num">{{ item.entry.accuracy }} %</span>
-                        <span class="num">{{ item.entry.bestStreak }}</span>
-                        <span class="num t-small">{{ relativeDay(item.entry.finishedAt) }}</span>
+                        <span class="metric">{{ item.entry.accuracy }} %</span>
+                        <span class="metric">{{ item.entry.bestStreak }}</span>
+                        <span class="metric t-small">{{ relativeDay(item.entry.finishedAt) }}</span>
                       </template>
                       <span class="score">{{ fmt(item.entry.score) }}</span>
                     </div>

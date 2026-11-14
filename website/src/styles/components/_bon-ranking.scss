@@ -2,11 +2,11 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 // Ranking list of the leaderboard (docs/design/bon/SPEC.md §11): a sheet section card
-// (c-section-card c-bon-ranking), so its parts avoid the card's names. Variant table
+// (c-section-card c-bon-ranking), so its parts avoid the card's names (.num, .title, .header). Variant table
 // (data-variant~="table", set with the desktop layout of BonLeaderboard.vue): six columns and a head row.
 // Parts: .skeleton of .skeleton-row; .pad (error state); .empty with .play; .list of li > .row
 // (own row aria-current="true"; data-kind="head" for the head row) with .rank (data-state="top"),
-// .name (.who with .tag and .you), .num, .score; li.gap between the top and the own rows.
+// .name (.who with .tag and .you), .metric, .score; li.gap between the top and the own rows.
 @include mx.component("bon-ranking") {
   :scope {
     --section-card-body-padding: var(--space-2);
@@ -130,12 +130,12 @@
     color: var(--color-text-accent);
   }
 
-  .num {
+  .metric {
     text-align: end;
     color: var(--color-text-body);
   }
 
-  .row[data-kind="head"] .num {
+  .row[data-kind="head"] .metric {
     color: inherit;
   }
 
