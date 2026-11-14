@@ -1,9 +1,9 @@
 <template>
   <nav class="c-letter-filter">
-    <ul class="c-letter-filter__list u-list-reset">
-      <li class="c-letter-filter__list-item">
+    <ul class="list u-list-reset">
+      <li class="list-item" data-kind="all">
         <button
-          class="c-letter-filter__button is-all c-button"
+          class="c-button"
           data-variant="filter"
           :aria-pressed="wordSearchStore.activeLetterFilter === ''"
           type="button"
@@ -12,15 +12,11 @@
           Alle
         </button>
       </li>
-      <li
-        v-for="letter in searchMeta.letterGroups"
-        :key="letter!"
-        class="c-letter-filter__list-item"
-      >
+      <li v-for="letter in searchMeta.letterGroups" :key="letter!" class="list-item">
         <button
           :aria-label="`Filter nach Buchstabe ${letter}`"
           type="button"
-          class="c-letter-filter__button c-button"
+          class="c-button"
           data-variant="filter"
           :aria-pressed="letter === wordSearchStore.activeLetterFilter"
           :title="`Filter nach Buchstabe ${letter}`"

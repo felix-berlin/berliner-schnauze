@@ -93,7 +93,7 @@ for (const size of SIZES) {
             page.locator(".c-anki-dev-hours"),
             page.locator(".c-anki-flashcard"),
           ];
-          if (path === "/") await expect(wotd.locator(".c-word-of-the-day__word")).toBeVisible();
+          if (path === "/") await expect(wotd.locator(".c-word-of-the-day .word")).toBeVisible();
           // Live numbers that change the layout (line wrap, badge width), not just pixels under a mask:
           // pin their digits before the shot. Footer: Wakapi coding hours; hero: the weekly trend rank.
           await page.evaluate(() => {

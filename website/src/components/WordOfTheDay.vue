@@ -20,30 +20,30 @@
         shown: celebrate,
         placement: 'bottom',
       }"
-      class="c-word-of-the-day__content"
+      class="content"
     >
-      <div class="c-word-of-the-day__crown-icon">
+      <div class="crown-icon">
         <Crown :width="80" :height="80" />
       </div>
 
       <Transition v-if="!currentWord.error" name="fade-fast" mode="out-in">
         <SingleLoader v-if="currentWord.loading || !currentWord.word?.slug" key="loading" />
-        <div v-else key="word" class="c-word-of-the-day__word-wrap">
-          <a :href="routeToWord(currentWord?.word?.slug)" class="c-word-of-the-day__word">
+        <div v-else key="word" class="word-wrap">
+          <a :href="routeToWord(currentWord?.word?.slug)" class="word">
             {{ currentWord?.word?.berlinerisch }}
           </a>
         </div>
       </Transition>
 
-      <div v-if="currentWord.error" class="c-word-of-the-day__word-wrap is-error">
+      <div v-if="currentWord.error" class="word-wrap is-error">
         Ditt kann ne wahr sein, es ist ein Fehler aufgetreten.
       </div>
 
-      <hr class="c-word-of-the-day__divider" />
+      <hr class="divider" />
 
-      <p class="c-word-of-the-day__headline">Wort des Tages</p>
+      <p class="headline">Wort des Tages</p>
     </div>
-    <div class="c-word-of-the-day__update">
+    <div class="update">
       Neues Wort in: <span>{{ timeToUpdate.hours }}</span> :
       <span>{{ timeToUpdate.minutes }}</span> :
       <span>{{ timeToUpdate.seconds }}</span>

@@ -7,13 +7,13 @@
     data-content-piece="Wort vorschlagen"
     data-content-target="#"
   >
-    <strong class="c-word-suggest-hint__text"
+    <strong class="text"
       >Dieses Wort ist anscheinend noch nicht Teil des Wörterbuchs.<br />
       Möchtest du es hinzufügen?</strong
     >
     <button
       type="button"
-      class="c-button c-word-suggest-hint__button"
+      class="c-button"
       data-variant="center-icon"
       @click="openWordSuggestionModal"
     >

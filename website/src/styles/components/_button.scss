@@ -4,7 +4,7 @@
 // Variants (space-separated in data-variant): primary, lg, center-icon, filter. A pressed filter
 // button is aria-pressed="true". Public: --button-padding, --button-bg, --button-color,
 // --button-border-color, --button-border-style, --button-border-width, --button-display,
-// --button-font-size, --button-min-block-size, --button-transition, --button-flex.
+// --button-font-size, --button-min-block-size, --button-transition, --button-flex, --button-gap.
 // Locked but focusable (busy, offline): aria-disabled="true"; aria-busy="true" shows the progress cursor.
 @include mx.component("button") {
   :scope {
@@ -20,6 +20,7 @@
     // revert-layer: unset, a legacy or base font-size on the button still applies.
     font-size: var(--button-font-size, revert-layer);
     flex: var(--button-flex, revert-layer);
+    gap: var(--button-gap, revert-layer);
     background-color: var(--_bg);
     border: var(--button-border-width, 1px) var(--_border-style) var(--_border-color);
     color: var(--_color);

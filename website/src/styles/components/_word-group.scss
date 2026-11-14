@@ -1,26 +1,30 @@
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-@layer legacy {
-  .c-word-group {
+// One letter group of the word index (/wort). Parts: .group (the letter), .list, .link.
+@include mx.component("word-group") {
+  :scope {
     // ~6000 links on /wort: skip layout/paint of off-screen letter groups.
     content-visibility: auto;
     contain-intrinsic-size: auto 1200px;
+  }
 
-    &__group {
-      font-size: 2.5rem;
-    }
+  .group {
+    --_size: 2.5rem; // no step above 4xl
 
-    &__list {
-      padding-inline-start: 15px;
-    }
+    font-size: var(--_size);
+  }
 
-    &__link {
-      font-size: 1.2rem;
-      line-height: 1.6;
+  .list {
+    padding-inline-start: var(--space-4);
+  }
 
-      @include butler-mx.hover {
-        text-decoration: underline;
-      }
+  .link {
+    font-size: var(--font-size-xl);
+    line-height: 1.6;
+
+    @include butler-mx.hover {
+      text-decoration: underline;
     }
   }
 }

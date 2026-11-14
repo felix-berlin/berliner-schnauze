@@ -68,24 +68,24 @@ describe("WordOfTheDay.vue", () => {
 
   it("shows 'Wort des Tages' headline", () => {
     const wrapper = mountComponent();
-    expect(wrapper.find(".c-word-of-the-day__headline").text()).toBe("Wort des Tages");
+    expect(wrapper.find(".c-word-of-the-day .headline").text()).toBe("Wort des Tages");
   });
 
   it("renders the word link when loaded", () => {
     const wrapper = mountComponent();
-    expect(wrapper.find("a.c-word-of-the-day__word").text()).toBe("Kiez");
+    expect(wrapper.find(".c-word-of-the-day a.word").text()).toBe("Kiez");
   });
 
   it("word link has correct href", () => {
     const wrapper = mountComponent();
-    expect(wrapper.find("a.c-word-of-the-day__word").attributes("href")).toBe("/wort/kiez");
+    expect(wrapper.find(".c-word-of-the-day a.word").attributes("href")).toBe("/wort/kiez");
   });
 
   it("shows loader when loading is true", () => {
     mockWordOfTheDay.value = { error: false, loading: true, word: null };
     const wrapper = mountComponent();
     expect(wrapper.find(".mock-loader").exists()).toBe(true);
-    expect(wrapper.find("a.c-word-of-the-day__word").exists()).toBe(false);
+    expect(wrapper.find(".c-word-of-the-day a.word").exists()).toBe(false);
   });
 
   it("shows error message when error is true", () => {
@@ -102,7 +102,7 @@ describe("WordOfTheDay.vue", () => {
 
   it("shows countdown update element", () => {
     const wrapper = mountComponent();
-    expect(wrapper.find(".c-word-of-the-day__update").text()).toContain("Neues Wort in:");
+    expect(wrapper.find(".c-word-of-the-day .update").text()).toContain("Neues Wort in:");
   });
 
   it("shows confetti on mouseover", async () => {
@@ -134,7 +134,7 @@ describe("WordOfTheDay.vue", () => {
 
   it("renders word-of-the-day__content", () => {
     const wrapper = mountComponent();
-    expect(wrapper.find(".c-word-of-the-day__content").exists()).toBe(true);
+    expect(wrapper.find(".c-word-of-the-day .content").exists()).toBe(true);
   });
 
   it("updates countdown display after first tick", async () => {
@@ -142,14 +142,14 @@ describe("WordOfTheDay.vue", () => {
     vi.advanceTimersByTime(1000);
     await wrapper.vm.$nextTick();
     // Countdown spans should still be present — values are derived from real time
-    expect(wrapper.findAll(".c-word-of-the-day__update span")).toHaveLength(3);
+    expect(wrapper.findAll(".c-word-of-the-day .update span")).toHaveLength(3);
   });
 
   it("countdown spans render two-digit strings", async () => {
     const wrapper = mountComponent();
     vi.advanceTimersByTime(1000);
     await wrapper.vm.$nextTick();
-    const spans = wrapper.findAll(".c-word-of-the-day__update span");
+    const spans = wrapper.findAll(".c-word-of-the-day .update span");
     spans.forEach((span) => {
       expect(span.text()).toMatch(/^\d{2}$/);
     });
@@ -158,7 +158,7 @@ describe("WordOfTheDay.vue", () => {
   it("counts down to local midnight", () => {
     vi.setSystemTime(new Date(2026, 0, 1, 22, 58, 30));
     const wrapper = mountComponent();
-    const spans = wrapper.findAll(".c-word-of-the-day__update span").map((s) => s.text());
+    const spans = wrapper.findAll(".c-word-of-the-day .update span").map((s) => s.text());
     expect(spans).toEqual(["01", "01", "30"]);
   });
 });

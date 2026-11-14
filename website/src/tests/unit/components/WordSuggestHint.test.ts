@@ -29,7 +29,7 @@ describe("WordSuggestHint.vue", () => {
       const wrapper = mount(WordSuggestHint);
 
       expect(wrapper.find(".c-word-suggest-hint").exists()).toBe(true);
-      expect(wrapper.find(".c-word-suggest-hint__text").exists()).toBe(true);
+      expect(wrapper.find(".c-word-suggest-hint .text").exists()).toBe(true);
       expect(wrapper.text()).toContain(
         "Dieses Wort ist anscheinend noch nicht Teil des Wörterbuchs.",
       );
@@ -38,7 +38,7 @@ describe("WordSuggestHint.vue", () => {
 
     it("should render the add word button", () => {
       const wrapper = mount(WordSuggestHint);
-      const button = wrapper.find(".c-word-suggest-hint__button");
+      const button = wrapper.find(".c-word-suggest-hint button");
 
       expect(button.exists()).toBe(true);
       expect(button.text()).toContain("Wort hinzufügen");
@@ -63,7 +63,7 @@ describe("WordSuggestHint.vue", () => {
   describe("Modal Opening Behavior", () => {
     it("should open modal when button is clicked", async () => {
       const wrapper = mount(WordSuggestHint);
-      const button = wrapper.find(".c-word-suggest-hint__button");
+      const button = wrapper.find(".c-word-suggest-hint button");
 
       await button.trigger("click");
 
@@ -72,7 +72,7 @@ describe("WordSuggestHint.vue", () => {
 
     it("should open modal with correct component configuration", async () => {
       const wrapper = mount(WordSuggestHint);
-      const button = wrapper.find(".c-word-suggest-hint__button");
+      const button = wrapper.find(".c-word-suggest-hint button");
 
       await button.trigger("click");
 
@@ -88,7 +88,7 @@ describe("WordSuggestHint.vue", () => {
       $searchQuery.set("");
 
       const wrapper = mount(WordSuggestHint);
-      const button = wrapper.find(".c-word-suggest-hint__button");
+      const button = wrapper.find(".c-word-suggest-hint button");
 
       await button.trigger("click");
 
@@ -104,7 +104,7 @@ describe("WordSuggestHint.vue", () => {
       $searchQuery.set("Kiez");
 
       const wrapper = mount(WordSuggestHint);
-      const button = wrapper.find(".c-word-suggest-hint__button");
+      const button = wrapper.find(".c-word-suggest-hint button");
 
       await button.trigger("click");
 
@@ -117,7 +117,7 @@ describe("WordSuggestHint.vue", () => {
 
     it("should handle multiple button clicks", async () => {
       const wrapper = mount(WordSuggestHint);
-      const button = wrapper.find(".c-word-suggest-hint__button");
+      const button = wrapper.find(".c-word-suggest-hint button");
 
       await button.trigger("click");
       await button.trigger("click");
@@ -212,7 +212,7 @@ describe("WordSuggestHint.vue", () => {
       const strong = wrapper.find("strong");
 
       expect(strong.exists()).toBe(true);
-      expect(strong.classes()).toContain("c-word-suggest-hint__text");
+      expect(strong.classes()).toContain("text");
     });
   });
 

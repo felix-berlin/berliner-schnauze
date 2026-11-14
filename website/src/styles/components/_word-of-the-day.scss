@@ -1,62 +1,62 @@
-@use "@styles/variables" as vars;
-@use "@sass-butler/mixins" as butler-mx;
-@use "@sass-butler/functions" as butler-fn;
+@use "@styles/mixins" as mx;
 
-@layer legacy {
-  .c-word-of-the-day {
-    background-color: var(
-      --color-background,
-      color-mix(in srgb, var(--orange-100) 20%, transparent)
-    );
-    padding: vars.$spacer;
-    border: 1px solid var(--new-blue-200);
+// Word of the day (home): crown, the word, a rule, the label and the countdown.
+// Parts: .content, .crown-icon, .word-wrap, .word, .divider, .headline, .update.
+@include mx.component("word-of-the-day") {
+  :scope {
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R68: one-off
+    --_bg: light-dark(rgb(252 234 215 / 20%), rgb(0 0 0 / 10%));
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory R52: one-off
+    --_divider: light-dark(rgb(122 140 158), rgb(58 69 80));
+
     display: flex;
-    row-gap: vars.$spacer * 1.5;
     flex-direction: column;
+    row-gap: var(--space-6);
+    padding: var(--space-4);
+    border: 1px solid var(--color-surface-inverse);
+    background-color: var(--_bg);
+  }
 
-    @include butler-mx.dark-mode-class {
-      --color-background: rgb(0 0 0 / 10%);
-    }
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+  }
 
-    &__content {
-      margin: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+  .headline {
+    margin: 0;
+  }
 
-    &__headline {
-      margin: 0;
-    }
+  .word-wrap {
+    position: relative;
+  }
 
-    &__word-wrap {
-      position: relative;
-    }
+  .word {
+    --_size: clamp(1.1875rem, 0.911rem + 1.383vw, 2rem); // fluid 19 → 32px between 320 and 1260px
 
-    &__word {
-      font-family: vars.$berlin;
-      font-weight: 700;
-      font-size: butler-fn.fluid(19, 32, 320, 1260);
-      padding: 0.5rem;
-      display: block;
-      overflow-wrap: anywhere;
-    }
+    display: block;
+    padding: var(--space-2);
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--_size);
+    overflow-wrap: anywhere;
+  }
 
-    &__crown-icon {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: vars.$gold;
-    }
+  .crown-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-status-gold);
+  }
 
-    &__divider {
-      width: 100%;
-      border: none;
-      border-block-start: 1px solid var(--primary);
-    }
+  .divider {
+    inline-size: 100%;
+    border: none;
+    border-block-start: 1px solid var(--_divider);
+  }
 
-    &__update {
-      font-size: 0.8rem;
-    }
+  .update {
+    font-size: var(--font-size-sm);
   }
 }
