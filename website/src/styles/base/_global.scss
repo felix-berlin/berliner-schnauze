@@ -21,12 +21,13 @@
     outline-offset: 2px;
   }
 
-  // Lightbox (word pages with images): reserve the scrollbar track so locking the scroll does not
-  // shift the page sideways, and lock it while the dialog is open.
-  html:has(.c-lightbox) {
+  // Word pages reserve the scrollbar track, so the lightbox's scroll lock does not shift the page
+  // sideways (the dialog only exists while open, so it cannot be the :has() guard).
+  html:has(.o-word-page) {
     scrollbar-gutter: stable;
   }
 
+  // Lock the page while the lightbox is open.
   body:has(.c-lightbox[open]) {
     overflow: hidden;
   }
