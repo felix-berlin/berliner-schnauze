@@ -115,13 +115,10 @@ export default {
     },
     {
       // shortcut: these still set public custom properties to raw lengths; they belong to the
-      // focus-ring/anchor (S5/S6) and toast (S9) follow-ups. Remove a file once it is clean; only shrinks.
+      // toast follow-up (S9). Remove a file once it is clean; only shrinks.
       files: [
-        "src/styles/base/_global.scss",
-        "src/styles/base/_inputs.scss",
         "src/styles/components/_toast-container.scss",
         "src/styles/components/_toast-notify.scss",
-        "src/styles/objects/_word.scss",
       ],
       rules: { "declaration-property-value-disallowed-list": valueChecks },
     },

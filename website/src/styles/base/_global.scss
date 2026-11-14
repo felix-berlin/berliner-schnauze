@@ -1,6 +1,7 @@
 @layer base {
   :root {
     --padding-y-header: calc(var(--space-4) * 0.6);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- start value until MainHeader.astro measures the header
     --site-header-height: 60px; // JS-updated by MainHeader.astro
   }
 

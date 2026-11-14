@@ -17,6 +17,8 @@ Full design and tables: `docs/superpowers/specs/2026-11-13-design-system-design.
 - Tier 2 semantic: meaning per theme (`color.surface.*`, `color.text.*`, `color.status.*`, `shadow.*`). The only colour tier components may use. Non-colour tokens (space, font, radius, duration, ease, z) are used directly.
 - Tier 3 component: custom properties inside a component. Private `--_name`, public `--<component>-name` (a parent may set it).
 - `--_` properties may hold raw lengths (one-line comment why: no token step within 0.1rem, `clamp()`, one-off width), never a raw colour or primitive; a `--_` may alias a semantic token, or hold a one-off colour only with a colour-inventory disable comment.
+- Public custom properties (`--<component>-name`, page-level ones) are linted like the property they feed: a raw length or duration needs a token or a `stylelint-disable-next-line declaration-property-value-disallowed-list -- <reason>`.
+- Touch targets: `var(--size-tap-target)` (44px); a textlink list gets `data-variant="tap"` (combine: `data-variant="inline tap"`) instead of setting `--textlink-min-block-size`.
 
 ## Semantic tokens only
 

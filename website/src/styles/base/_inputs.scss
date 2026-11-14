@@ -13,9 +13,11 @@
     --color-border-hover: var(--color-border-control-hover);
     --color-border-active: var(--color-text-accent);
     --size-font: var(--font-size-base);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- ring width, no token scale for widths
     --box-shadow-focus: 2px var(--color-focus-halo);
     --color-background: var(--color-surface-field);
     --color-background-disabled: var(--color-surface-field-disabled);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- border width, no token scale for widths
     --width-border: 1px;
 
     font-family: var(--font-family-body);
@@ -188,6 +190,7 @@
     --duration-transition-opacity: var(--_duration-short);
     --cursor: pointer;
     --spacing-inner: 0;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- control size, no token scale for heights
     --height: 20px;
     --color-border: var(--color-border-check);
     --color-background: var(--color-surface-check);
@@ -310,6 +313,7 @@
     --_travel: 11px;
     --_round: 50%; // a circle; --radius-pill would make a capsule
     --_center: 50%;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- control size, no token scale for heights
     --height: 22px;
 
     inline-size: var(--_track-width);
@@ -367,7 +371,9 @@
     /* stylelint-enable selector-class-pattern */
     --_round: 50%; // a circle; --radius-pill would make a capsule
     --_thumb-offset: calc(-1 * (var(--height-track) + 0.05rem)); // centres the thumb on the track
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- range track size, no token scale for heights
     --height-track: 0.3rem;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- range thumb size, no token scale for heights
     --size-thumb: 1rem;
 
     appearance: none;
@@ -437,6 +443,7 @@
     --spacing-inner: var(--space-8);
     --spacing-legend: calc(var(--spacing-inner) / 2);
     --color-border: var(--color-border-fieldset);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- border width, no token scale for widths
     --width-border: 2px;
     --style-border: solid;
 
