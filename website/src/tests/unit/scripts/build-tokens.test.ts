@@ -115,6 +115,19 @@ describe("buildTokens", () => {
     (untyped.primitive as Record<string, unknown>).misc = { a: { $value: 1 } };
     expect(() => buildTokens(untyped)).toThrow("misc.a: no $type");
   });
+  it("throws on a malformed node instead of dropping it", () => {
+    const scalar = input();
+    (scalar.primitive.space as Record<string, unknown>)[8] = "2rem";
+    expect(() => buildTokens(scalar)).toThrow("space.8: neither a token nor a group");
+
+    const empty = input();
+    (empty.primitive as Record<string, unknown>).misc = { $type: "number" };
+    expect(() => buildTokens(empty)).toThrow("misc: group without tokens");
+
+    const p3 = input();
+    p3.primitive.color.orange[300].$value = { ...rgb("#f0ac85"), colorSpace: "display-p3" };
+    expect(() => buildTokens(p3)).toThrow("color.orange.300: colorSpace display-p3 (only srgb)");
+  });
   it("throws on a path defined in both tiers", () => {
     const i = input();
     (i.primitive.color as Record<string, unknown>).text = { body: { $value: rgb("#000000") } };

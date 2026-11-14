@@ -12,12 +12,17 @@ const ALIAS = /^\{([^}]+)\}$/;
 const flatten = (tree, prefix = [], inherited, out = new Map()) => {
   const type = tree.$type ?? inherited;
   for (const [key, node] of Object.entries(tree)) {
-    if (key.startsWith("$") || node === null || typeof node !== "object") continue;
+    if (key.startsWith("$")) continue;
     const path = [...prefix, key];
+    if (node === null || typeof node !== "object" || Array.isArray(node)) {
+      throw new Error(`${path.join(".")}: neither a token nor a group`);
+    }
     if ("$value" in node) {
       const t = node.$type ?? type;
       if (!t) throw new Error(`${path.join(".")}: no $type`);
       out.set(path.join("."), { type: t, value: node.$value });
+    } else if (Object.keys(node).every((k) => k.startsWith("$"))) {
+      throw new Error(`${path.join(".")}: group without tokens`);
     } else flatten(node, path, type, out);
   }
   return out;
@@ -26,7 +31,8 @@ const flatten = (tree, prefix = [], inherited, out = new Map()) => {
 const cssName = (path) => `--${path.replaceAll(".", "-")}`;
 const num = (n) => String(Number(n.toFixed(6)));
 
-const color = (c) => {
+const color = (c, path) => {
+  if (c?.colorSpace !== "srgb") throw new Error(`${path}: colorSpace ${c?.colorSpace} (only srgb)`);
   const alpha = c.alpha ?? 1;
   const bytes = c.components.map((v) => v * 255);
   if (!bytes.every((b) => Math.abs(b - Math.round(b)) < 1e-3)) {
@@ -52,7 +58,7 @@ const format = (path, { type, value }, known) => {
   if (alias) return alias;
   switch (type) {
     case "color":
-      return color(value);
+      return color(value, path);
     case "dimension":
       return dim(value);
     case "duration": // a unitless 0 is invalid for <time>
@@ -66,7 +72,7 @@ const format = (path, { type, value }, known) => {
       return `cubic-bezier(${value.join(", ")})`;
     case "shadow":
       return [value].flat().map((s) => ({
-        color: ref(s.color) ?? color(s.color),
+        color: ref(s.color) ?? color(s.color, path),
         geometry: [s.inset ? "inset" : "", ...[s.offsetX, s.offsetY, s.blur, s.spread].map(dim)]
           .filter(Boolean)
           .join(" "),
@@ -149,7 +155,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     let current = "";
     try {
       current = readFileSync(OUT, "utf8");
-    } catch {}
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error; // a missing file is just stale
+    }
     if (current !== css) {
       console.error("src/styles/tokens/_tokens.generated.scss is stale: run pnpm tokens:build");
       process.exit(1);
