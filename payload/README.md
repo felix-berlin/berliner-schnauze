@@ -15,7 +15,7 @@ Payload 3 (Admin + REST, Postgres; GraphQL ist abgeschaltet). Die Astro-Seite in
 | `PAYLOAD_SERVER_URL`                                | Basis-URL des Admins                       | lokal `http://localhost:3001`, Produktion `https://cms.berliner-schnauze.wtf` |
 | `MEDIA_DIR`                                         | Ablage der Uploads                         | leer lassen (= `payload/media`)                                               |
 
-`compose.yaml` bricht ab, wenn `POSTGRES_PASSWORD`, `PAYLOAD_SECRET` oder `PAYLOAD_SERVER_URL` fehlen, auch wenn du nur Postgres startest.
+`compose.yaml` bricht ab, wenn `POSTGRES_PASSWORD` fehlt, auch wenn du nur Postgres startest.
 
 **2. Postgres starten und die Test-DB anlegen** (einmalig):
 
