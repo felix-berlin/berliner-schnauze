@@ -59,8 +59,12 @@
     &[aria-disabled="true"] {
       border-style: dotted;
       box-shadow: none;
-      opacity: 0.55;
       cursor: not-allowed;
+    }
+
+    // Same AA reason as :disabled: the pressed one (e.g. "Speichern" while sending) keeps full opacity.
+    &[aria-disabled="true"]:not([aria-pressed="true"]) {
+      opacity: 0.55;
     }
   }
 
