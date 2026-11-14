@@ -169,7 +169,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     expect(
       (await book().evaluate((el) => getComputedStyle(el).gridTemplateColumns)).startsWith("64px "),
     ).toBe(true);
-    await expect(book().locator(".c-book__cover")).toHaveCSS("width", "64px");
+    await expect(book().locator(".cover")).toHaveCSS("width", "64px");
   });
 
   test("Bücher, Umfeld und Und nu? (ballast-der-republik)", async ({ page }) => {

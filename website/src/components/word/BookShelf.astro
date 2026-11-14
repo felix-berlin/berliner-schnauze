@@ -3,6 +3,7 @@ import type { AffiliateData } from '@services/payload/site.ts';
 
 import { Picture } from 'astro:assets';
 import '@styles/components/_book-shelf.scss';
+import '@styles/components/_book.scss';
 import BookOpen from '~icons/lucide/book-open';
 
 interface Props {
@@ -53,16 +54,16 @@ const noteText = [
 
 {books.length > 0 && (
   <section class='c-book-shelf' id='buecher' aria-labelledby='heading-buecher'>
-    <div class='c-book-shelf__head'>
+    <div class='head'>
       <h2 class='c-band' id='heading-buecher'>Ooch als Buch zu haben, wa?</h2>
       <span class='c-badge' data-variant='wash'>Anzeige</span>
     </div>
-    <p class='c-book-shelf__intro'>
+    <p class='intro'>
       Für Berliner &amp; solche, die es werden wollen – zum Nachschlagen, Rätseln und Verschenken.
     </p>
-    <ul class='c-shelf' role='list'>
+    <ul class='shelf' role='list'>
       {books.map((book) => (
-        <li class='c-shelf__item'>
+        <li class='item'>
           <a
             class='c-book'
             href={book.href ?? undefined}
@@ -73,7 +74,7 @@ const noteText = [
             data-content-piece={book.title}
             data-content-target={book.href}
           >
-            <span class='c-book__cover' aria-hidden='true'>
+            <span class='cover' aria-hidden='true'>
               {book.imageUrl ? (
                 <Picture
                   alt=''
@@ -90,17 +91,17 @@ const noteText = [
                 <BookOpen height='32' width='32' />
               )}
             </span>
-            {book.badge && <span class='c-book__tag'>{book.badge}</span>}
-            <b class='c-book__title'>{book.title}</b>
+            {book.badge && <span class='tag'>{book.badge}</span>}
+            <b class='title'>{book.title}</b>
             {book.description && <span class='t-small'>{book.description}</span>}
-            <span class='c-book__cta'>
+            <span class='cta'>
               {ctaFor(book.href)} <span aria-hidden='true'>↗</span>
             </span>
           </a>
         </li>
       ))}
     </ul>
-    {noteText && <p class='t-small c-book-shelf__note'>{noteText}</p>}
+    {noteText && <p class='t-small note'>{noteText}</p>}
   </section>
 )}
 

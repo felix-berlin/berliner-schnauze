@@ -1,56 +1,18 @@
-@layer legacy {
-  // "Und nu?" (docs/design/wortseite/SPEC.md §3/§5, mock #n-weiter, ds bundle .c-next-link).
-  .c-next-links {
+@use "@styles/mixins" as mx;
+
+// "Und nu?" (docs/design/wortseite/SPEC.md §3/§5, mock #n-weiter): band heading and a .grid of
+// next-link cards.
+@include mx.component("next-links") {
+  :scope {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding-block-start: 1.5rem;
-
-    &__grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
-      gap: 0.5rem;
-    }
+    gap: var(--space-2);
+    padding-block-start: var(--space-6);
   }
 
-  .c-next-link {
+  .grid {
     display: grid;
-    grid-template-columns: 1.5rem minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 0.75rem;
-    min-block-size: 60px;
-    padding: 0 1rem;
-    background: var(--surface-paper);
-    border-radius: var(--radius-sm);
-    box-shadow: var(--paper-lift);
-    color: var(--color-ink-strong);
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    @media (prefers-reduced-motion: reduce) {
-      transition: none;
-    }
-
-    svg {
-      color: var(--orange-400);
-    }
-
-    @media (hover: hover) {
-      &:hover {
-        box-shadow: var(--shadow-hover-glow);
-        color: var(--color-ink-strong);
-      }
-    }
-
-    &__text {
-      display: flex;
-      flex-direction: column;
-      min-inline-size: 0;
-      overflow-wrap: anywhere;
-    }
-
-    &__arrow {
-      color: var(--color-muted);
-    }
+    grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+    gap: var(--space-2);
   }
 }
