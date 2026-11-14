@@ -19,9 +19,9 @@
     letter-spacing: 1px;
   }
 
-  // Components restyle links through these variables; this rule beats a zero-specificity :where() class otherwise.
+  // Components restyle links through --decoration-text; this rule beats a zero-specificity :where() class otherwise.
   a {
-    color: var(--color-link, inherit);
+    color: inherit;
     cursor: pointer;
     text-decoration: var(--decoration-text, none);
   }

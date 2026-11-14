@@ -56,7 +56,7 @@
 
     &::placeholder {
       // Muted, not body ink: reads as a hint, still ≥4.5:1 on the fill.
-      color: var(--color-placeholder, var(--color-text-muted));
+      color: var(--color-text-muted);
       opacity: 1;
     }
   }
