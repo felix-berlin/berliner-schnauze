@@ -20,7 +20,7 @@
   }
 
   .item {
-    --_row: 2.75rem; // 44px touch target
+    --_row: var(--size-tap-target);
     --_hover-time: 0.2s; // between duration-fast and -base, kept from the mock
 
     display: flex;

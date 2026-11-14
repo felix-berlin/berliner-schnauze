@@ -3,7 +3,8 @@
 
 // Text link (docs/design/wortseite/SPEC.md): link look on <a> or <button>, 44px hit area.
 // Variant inline (data-variant="inline"): in running text, no hit-area padding, inherits size
-// and colour. Variant hit-area: a 44px target around a small link without changing the layout (flex
+// and colour. Variant tap (data-variant="inline tap"): that look as a 44px inline-flex row (link
+// lists). Variant hit-area: a 44px target around a small link without changing the layout (flex
 // rows, where the inline-link exception of WCAG 2.5.8 does not apply).
 // Public (the old :where() let parents override these): --textlink-gap, --textlink-mark-color (an
 // aria-hidden mark inside the link, e.g. an arrow), --textlink-display, --textlink-min-block-size, --textlink-padding-inline, --textlink-font-size, --textlink-color, --textlink-padding-start, --textlink-place-self
@@ -15,7 +16,7 @@
     display: var(--textlink-display, inline-flex);
     place-self: var(--textlink-place-self, revert-layer);
     align-items: center;
-    min-block-size: var(--textlink-min-block-size, 2.75rem);
+    min-block-size: var(--textlink-min-block-size, var(--size-tap-target));
     padding-block: 0;
     padding-inline: var(--textlink-padding-start, var(--textlink-padding-inline, var(--space-1)))
       var(--textlink-padding-inline, var(--space-1));
@@ -61,6 +62,11 @@
     font-size: var(--textlink-font-size, inherit);
   }
 
+  :scope[data-variant~="tap"] {
+    display: var(--textlink-display, inline-flex);
+    min-block-size: var(--textlink-min-block-size, var(--size-tap-target));
+  }
+
   :scope[data-variant~="hit-area"] {
     --_middle: 50%; // centres the target on the link
 
@@ -71,8 +77,8 @@
       position: absolute;
       inset-block-start: var(--_middle);
       inset-inline-start: 0;
-      block-size: 2.75rem;
-      inline-size: max(100%, 2.75rem);
+      block-size: var(--size-tap-target);
+      inline-size: max(100%, var(--size-tap-target));
       translate: 0 -50%;
     }
   }

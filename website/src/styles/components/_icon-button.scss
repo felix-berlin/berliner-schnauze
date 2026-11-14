@@ -6,8 +6,8 @@
   :scope {
     display: inline-grid;
     place-items: center;
-    inline-size: 2.75rem;
-    block-size: 2.75rem;
+    inline-size: var(--size-tap-target);
+    block-size: var(--size-tap-target);
     padding: 0;
     border: 1px solid transparent;
     background: var(--icon-button-bg, none);

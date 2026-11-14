@@ -8,7 +8,7 @@
 
     display: inline-flex;
     align-items: center;
-    min-block-size: 2.75rem;
+    min-block-size: var(--size-tap-target);
     padding: 0 var(--space-1);
     border: 0;
     background: none;

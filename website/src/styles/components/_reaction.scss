@@ -9,8 +9,8 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-1);
-    min-inline-size: 2.75rem;
-    min-block-size: 2.75rem;
+    min-inline-size: var(--size-tap-target);
+    min-block-size: var(--size-tap-target);
     padding: 0 var(--reaction-padding-inline, var(--space-2));
     border: 1px dashed transparent;
     border-radius: var(--radius-sm);

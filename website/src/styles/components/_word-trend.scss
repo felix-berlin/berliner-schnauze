@@ -12,8 +12,6 @@
     --_bar-gap: 3px; // one-off, between the day bars
     --_bar-width: 8px; // one-off
     --_bar-radius: 1px; // below radius-xxs
-    --textlink-display: inline-flex;
-    --textlink-min-block-size: 2.75rem;
 
     display: grid;
     grid-template-columns: 1fr auto;

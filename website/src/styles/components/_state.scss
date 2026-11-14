@@ -42,7 +42,7 @@
   .body {
     // A retry button in a state box is a control, not running text: 44px hit area (WCAG 2.5.8).
     --textlink-display: inline-flex;
-    --textlink-min-block-size: 2.75rem;
+    --textlink-min-block-size: var(--size-tap-target);
     --_gap: 0.125rem; // between 0 and space-1, no step within 0.1rem
 
     display: flex;

@@ -25,10 +25,9 @@
     min-inline-size: 0;
   }
 
-  // 44px rows: touch target (Spec §8.6).
+  // Rows of tap textlinks (44px touch target, Spec §8.6).
   .list {
     --textlink-display: flex;
-    --textlink-min-block-size: 2.75rem;
     --textlink-color: var(--color-text-strong);
     --textlink-font-size: var(--font-size-base);
     --textlink-gap: var(--space-2);
@@ -51,7 +50,7 @@
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    min-block-size: 2.75rem;
+    min-block-size: var(--size-tap-target);
     margin-inline: calc(-1 * var(--space-2));
     padding-inline: var(--space-2);
     border-radius: var(--radius-sm);

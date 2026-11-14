@@ -474,6 +474,15 @@
       }
     }
   },
+  "size": {
+    "$type": "dimension",
+    "tap-target": {
+      "$value": {
+        "value": 2.75,
+        "unit": "rem"
+      }
+    }
+  },
   "duration": {
     "$type": "duration",
     "fast": {

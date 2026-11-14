@@ -9,8 +9,6 @@
 @include mx.component("word-images") {
   :scope {
     --_focus-room: 0.3125rem; // room for the 2px dashed focus ring (offset 2px) that overflow-x would clip
-    --textlink-display: inline-flex;
-    --textlink-min-block-size: 2.75rem;
     --textlink-font-size: var(--font-size-sm);
 
     flex-direction: column;

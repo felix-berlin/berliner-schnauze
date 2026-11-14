@@ -60,7 +60,7 @@
 
     display: flex;
     align-items: center;
-    min-block-size: 2.75rem; // touch target (Spec §8.6)
+    min-block-size: var(--size-tap-target); // Spec §8.6
     padding: var(--space-1) var(--space-3);
     border-inline-start: 3px solid transparent;
     color: var(--_link);

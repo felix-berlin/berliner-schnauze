@@ -31,9 +31,6 @@
 
   .links,
   .parts {
-    --textlink-display: inline-flex;
-    --textlink-min-block-size: 2.75rem;
-
     display: flex;
     flex-wrap: wrap;
     margin: 0;
@@ -53,7 +50,7 @@
     > span {
       display: inline-flex;
       align-items: center;
-      min-block-size: 2.75rem;
+      min-block-size: var(--size-tap-target);
     }
 
     > span[aria-hidden] {

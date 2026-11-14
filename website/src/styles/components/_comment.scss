@@ -127,7 +127,7 @@
   // Inline report panel (docs/design/wortseite/SPEC.md §9a) on the chip ground; the delete confirmation is a c-state.
   .report {
     --button-padding: var(--space-2) var(--space-4);
-    --button-min-block-size: 2.75rem;
+    --button-min-block-size: var(--size-tap-target);
 
     display: grid;
     gap: var(--space-2);
