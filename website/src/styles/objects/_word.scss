@@ -27,6 +27,7 @@
     // The site header is still sticky, so the bar sits below it; a header that hides on scroll would reset this to 0.
     --word-tabbar-top: var(--site-header-height);
     // Anchor jumps land below header + tab bar; shared by every scroll-margin on the page.
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- anchor gap below the tab bar (SPEC.md: scroll-margin-top 56px), no space token is 56px
     --word-anchor-offset: calc(var(--word-tabbar-top) + 56px);
     --_sidebar: 200px; // one-off sidebar column
 
@@ -49,24 +50,8 @@
     }
   }
 
-  // Anchors of the tab bar and sidebar, plus the inner Analyse ids.
-  :is(
-    #bedeutung,
-    #sagste-det-noch,
-    #etymologie,
-    #beispiele,
-    #analyse,
-    #orthographie,
-    #linguistik,
-    #grammatik,
-    #phonologie,
-    #anagramme,
-    #buecher,
-    #verwandte-worte,
-    #verwandte,
-    #navigation,
-    #kommentare
-  ) {
+  // Anchors of the tab bar and sidebar that are no section card (c-section-card reads --word-anchor-offset itself).
+  :is(#bedeutung, #sagste-det-noch, #analyse, #anagramme, #buecher, #verwandte, #navigation, #kommentare) {
     scroll-margin-block-start: var(--word-anchor-offset);
   }
 
