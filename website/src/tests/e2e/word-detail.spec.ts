@@ -242,7 +242,7 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
     await page.goto("/wort/alex");
 
     await expect(page.locator("h1 dfn")).toHaveText("Alex");
-    const badge = page.locator(".c-word-hero .badges .c-badge", { hasText: "Berolinismus" });
+    const badge = page.locator(".c-word-hero .c-badge", { hasText: "Berolinismus" });
     await expect(badge).toBeVisible();
     // Every hero badge but the trend link is washed.
     await expect(badge).toHaveAttribute("data-variant", "wash");

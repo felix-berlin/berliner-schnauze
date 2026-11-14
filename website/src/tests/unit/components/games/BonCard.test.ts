@@ -9,12 +9,14 @@ vi.mock("@utils/analytics", async (importOriginal) => ({
   trackContentImpressionsWithinNode: mockTrack,
 }));
 
+// The card section is named by its word (aria-labelledby): find it by that, not by tag or part.
+const CARD = '[aria-labelledby="bon-word"]';
 const base = { cardInStack: 4, locked: false, showSwipeHint: false, stack: 2, word: "Schnauze" };
 const WIDTH = 400;
 
 function card(props: Partial<typeof base> = {}) {
   const wrapper = mount(BonCard, { props: { ...base, ...props } });
-  const el = wrapper.find("section").element as HTMLElement;
+  const el = wrapper.find(CARD).element as HTMLElement;
   el.getBoundingClientRect = () => ({ width: WIDTH }) as DOMRect;
   return wrapper;
 }
@@ -28,7 +30,7 @@ function fire(target: { element: Element }, type: string, clientX: number) {
 
 /** Drags the card by dx px, taking `ms` milliseconds, and releases it. */
 async function drag(wrapper: ReturnType<typeof card>, dx: number, ms: number) {
-  const target = wrapper.find("section");
+  const target = wrapper.find(CARD);
   fire(target, "pointerdown", 200);
   vi.advanceTimersByTime(ms);
   fire(target, "pointermove", 200 + dx);
@@ -51,7 +53,7 @@ describe("BonCard.vue", () => {
       props: base,
       slots: { feedback: "<p class='fb'>Richtig!</p>" },
     });
-    expect(wrapper.find("section").exists()).toBe(false);
+    expect(wrapper.find(CARD).exists()).toBe(false);
     expect(wrapper.find(".c-bon-card > [data-slot] > .fb").text()).toBe("Richtig!");
     expect(wrapper.findAll(".c-choice")).toHaveLength(2);
     expect(wrapper.text()).not.toContain("Jeht ooch");
@@ -107,12 +109,12 @@ describe("BonCard.vue", () => {
     const wrapper = card();
     await drag(wrapper, 60, 1000);
     expect(wrapper.emitted("answer")).toBeUndefined();
-    expect(wrapper.find<HTMLElement>("section").element.style.transform).toBe("");
+    expect(wrapper.find<HTMLElement>(CARD).element.style.transform).toBe("");
   });
 
   it("rotates with the drag, at most 14 degrees, and shows the overlay", async () => {
     const wrapper = card();
-    const target = wrapper.find("section");
+    const target = wrapper.find(CARD);
     fire(target, "pointerdown", 200);
     fire(target, "pointermove", 600);
     await nextTick();

@@ -3,7 +3,8 @@ import { test, expect, type Page } from "@playwright/test";
 const GAME = "/games/berliner-oder-nicht";
 const LEADERBOARD = `${GAME}/rangliste`;
 const startButton = (page: Page) => page.getByRole("button", { name: /^Los jeht/ });
-const playCard = (page: Page) => page.locator(".c-bon-card > section");
+// The card is a region named by its word (aria-labelledby); the feedback card has no accessible name.
+const playCard = (page: Page) => page.locator(".c-bon-card").getByRole("region");
 const feedback = (page: Page) => page.locator(".c-bon-feedback section");
 const resultTitle = (page: Page) => page.getByRole("heading", { level: 1, name: /^Aus die Maus/ });
 // Feedback ignores input while the card flies out and flips in (Spec §7, 480 ms).
@@ -56,7 +57,7 @@ test.describe("Berliner oder nicht (/games/berliner-oder-nicht)", () => {
     await startButton(page).click();
     await expect(playCard(page)).toBeVisible();
     await expect(page.getByLabel("Noch 3 Leben von 3")).toBeVisible();
-    await expect(page.locator(".c-bon-card .progress")).toHaveText("Karte 1 von 20 · Stapel 1");
+    await expect(page.getByText(/^Karte \d+ von 20/)).toHaveText("Karte 1 von 20 · Stapel 1");
     await each(async () => {
       await expect(page.locator("h1")).toHaveCount(1);
       await expect(page.locator("h1")).toContainText("Spiel läuft");
@@ -142,7 +143,7 @@ test.describe("Berliner oder nicht (/games/berliner-oder-nicht)", () => {
 
     // It moves on by itself (0.9 s right, 2.5 s wrong), then the button answers.
     await expect(playCard(page)).toBeVisible({ timeout: 6000 });
-    await expect(page.locator(".c-bon-card .progress")).toHaveText("Karte 2 von 20 · Stapel 1");
+    await expect(page.getByText(/^Karte \d+ von 20/)).toHaveText("Karte 2 von 20 · Stapel 1");
     await page.waitForTimeout(400);
     await page.getByRole("button", { name: /^Ja, Berlinerisch/ }).click();
     await expect(feedback(page)).toBeVisible();
