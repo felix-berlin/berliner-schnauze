@@ -10,6 +10,7 @@
     --_divider: light-dark(rgb(122 140 158), rgb(58 69 80));
 
     position: relative; // the confetti (ConfettiEffect) covers the card
+    overflow: hidden; // clips the card as the old c-confetti co-class did
     display: flex;
     flex-direction: column;
     row-gap: var(--space-6);
