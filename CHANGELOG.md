@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.12.6](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.5...v4.12.6) (2026-11-14)
+
+
+### Bug Fixes
+
+* **dev:** absolute word-of-the-day expiry, clean modal reopen, one Escape per flyout ([0eaad83](https://github.com/felix-berlin/berliner-schnauze/commit/0eaad83cb9216093e646c6ae44ba293ca3ce4d26))
+* **dev:** answer 400 to an unparsable request URL instead of crashing ([549ef85](https://github.com/felix-berlin/berliner-schnauze/commit/549ef857832b49f9c4b8f273de5e2b54073c8555))
+* **dev:** harden the modal reset, storage access and word-of-the-day expiry ([e992fdc](https://github.com/felix-berlin/berliner-schnauze/commit/e992fdc9876498c36ba5a32cb30d586ead94d937))
+* **dev:** name the modal, announce result counts and manage filter focus ([7675346](https://github.com/felix-berlin/berliner-schnauze/commit/767534644949cf9a8ba47e919b7bde044c2574b1))
+* **dev:** one client IP for Turnstile and limits, no bidi characters in comments ([7e67742](https://github.com/felix-berlin/berliner-schnauze/commit/7e67742dc90e2cdab3ca4647a00a093e997156c8))
+* **search:** keep the / shortcut and list arrow keys out of form fields ([c840d89](https://github.com/felix-berlin/berliner-schnauze/commit/c840d894315bf6ced0042e67c6eaf9ed32ff5468))
+
+
+### Performance Improvements
+
+* **bon:** index bon_games by visitor and by status plus finish time ([725f1ae](https://github.com/felix-berlin/berliner-schnauze/commit/725f1aeefbde45dd6c5fa6565157c69d256e1a6e))
+
 ## [4.12.5](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.4...v4.12.5) (2026-11-14)
 
 
