@@ -17,7 +17,6 @@
     --_padding: var(--space-2);
     --_fade: var(--duration-fast);
     --_center: 50%;
-    --_offset: var(--dropdown-popover-offset, 8px); // 8px: the arrow's size, so its tip touches the trigger
 
     display: inline-flex;
   }
@@ -34,6 +33,9 @@
   }
 
   .panel {
+    // On the panel, not :scope: DropdownPopover.vue sets --dropdown-popover-offset inline here.
+    --_offset: var(--dropdown-popover-offset, 8px); // 8px: the arrow's size, so its tip touches the trigger
+
     // UA popover reset: browsers add margin/border/padding to [popover]
     margin: 0;
     border: none;
