@@ -69,6 +69,8 @@ done
 check "folder slash 301" "$(status /magazin/)" 301
 check "malformed query 200" "$(status '/games/berliner-oder-nicht/share?r=abc.%%%')" 200
 check "malformed path 400" "$(status '/wort/%E0%A4%A')" 400
+check "double slash 400" "$(curl -s --path-as-is -o /dev/null -w '%{http_code}' "$BASE//")" 400
+check "alive after //" "$(status /)" 200
 check "sw.js 200" "$(status /sw.js)" 200
 check "trailing slash 301" "$(status /wort/aasen/)" 301
 check "redirect 301" "$(status /suggest-word)" 301

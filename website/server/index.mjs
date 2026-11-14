@@ -52,7 +52,15 @@ const { handler } = await import("../dist/server/entry.mjs");
 
 const server = createServer((req, res) => {
   // www → canonical host. The target is fixed: a header-derived one would redirect anywhere (Host: www.evil.com).
-  const { pathname, search } = new URL(req.url ?? "/", "http://localhost");
+  let url;
+  try {
+    url = new URL(req.url ?? "/", "http://localhost");
+  } catch {
+    // "//" or "//:x" read as a protocol-relative URL with a bad host: an unhandled throw here kills the process.
+    res.writeHead(400).end();
+    return;
+  }
+  const { pathname, search } = url;
   const hosts = [req.headers.host, req.headers["x-forwarded-host"]].map((h) =>
     String(h ?? "")
       .split(",")[0]
