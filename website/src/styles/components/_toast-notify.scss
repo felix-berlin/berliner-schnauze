@@ -12,7 +12,7 @@
     // stylelint-disable-next-line function-disallowed-list -- colour inventory R43: one-off (dark border only)
     --_border: light-dark(transparent, rgb(85 92 98));
     --_max: min(88vw, 400px); // one-off toast width
-    --_move: 0.3s; // between duration-base and -slow, kept from the slide
+    --_move: var(--duration-base); // the slide (0.3s)
 
     display: flex;
     align-items: center;

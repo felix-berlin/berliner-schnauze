@@ -11,7 +11,7 @@
     --_backdrop: rgb(0 0 0 / 30%);
     --_gutter: 2rem; // two space-4 gutters around the dialog
     --_max-width: 800px; // one-off reading width
-    --_slide: 0.3s; // between duration-base and -slow, kept from the exit animation
+    --_slide: var(--duration-base); // the exit animation (0.3s)
     --_blur: 4px;
     --_backdrop-in: 1s; // slower than every duration token: the dim settles after the slide
 
