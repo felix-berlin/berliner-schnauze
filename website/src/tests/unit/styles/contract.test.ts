@@ -134,6 +134,72 @@ const componentProblems = (code: string, name: string) => {
   return problems;
 };
 
+/** Splits a selector list into compounds (whitespace and combinators at paren depth 0). */
+const compounds = (selector: string) => {
+  const out: string[] = [];
+  let depth = 0;
+  let cur = "";
+  for (const ch of selector) {
+    if (ch === "(") depth++;
+    if (ch === ")") depth--;
+    if (depth === 0 && /[\s>+~,]/.test(ch)) {
+      if (cur) out.push(cur);
+      cur = "";
+    } else cur += ch;
+  }
+  if (cur) out.push(cur);
+  return out;
+};
+
+/**
+ * Part classes of a component file: classes in its top-level selectors (directly in the
+ * mx.component block or in at-rules there), minus those compounded with :scope (root states).
+ */
+const partClasses = (code: string) => {
+  const rest = body(code);
+  const m = rest.match(/^@include\s+mx\.component\(\s*"[^"]+"\s*\)\s*\{/);
+  if (!m) return [];
+  const inner = rest.slice(m[0].length, closeOf(rest, m[0].length - 1) - 1);
+  const parts = new Set<string>();
+  const stack: boolean[] = [];
+  let prelude = "";
+  for (const ch of inner) {
+    if (ch === "{") {
+      const atRule = prelude.trim().startsWith("@");
+      if (!atRule && !stack.includes(true))
+        for (const c of compounds(prelude.trim()))
+          if (!c.includes(":scope"))
+            for (const [, name] of c.matchAll(/\.([a-z][\w-]*)/g)) parts.add(name);
+      stack.push(!atRule);
+      prelude = "";
+    } else if (ch === "}") {
+      stack.pop();
+      prelude = "";
+    } else prelude = ch === ";" ? "" : prelude + ch;
+  }
+  return [...parts];
+};
+
+/** Class tokens per opening tag: static class/className, plus string literals in :class, class:list, class={…}. */
+const tagClasses = (source: string) =>
+  [...source.matchAll(/<[a-zA-Z][\w.-]*\b((?:[^>"']|"[^"]*"|'[^']*')*)>/g)].map((tag) => {
+    const tokens: string[] = [];
+    const add = (text: string) => tokens.push(...text.split(/\s+/));
+    for (const [, , value] of tag[1].matchAll(/(?:^|\s)(?:class|className)=(["'])(.*?)\1/g))
+      add(value);
+    for (const [, quoted, braced] of tag[1].matchAll(
+      /(?:^|\s)(?:(?::class|v-bind:class)="([^"]*)"|(?:class|class:list)=\{([^}]*)\})/g,
+    ))
+      for (const [, , lit] of (quoted ?? braced).matchAll(/(["'`])([\w\s-]+)\1/g)) add(lit);
+    return tokens.filter(Boolean);
+  });
+
+/** Part classes set from script (className = "...", classList.add("...")). */
+const scriptClasses = (source: string) =>
+  [
+    ...source.matchAll(/(?:className\s*=\s*|classList\.(?:add|toggle)\()\s*["'`]([\w\s-]+)["'`]/g),
+  ].flatMap((m) => m[1].split(/\s+/));
+
 /** Dark-mode class hooks outside legacy; each exception names its reason. */
 const DARK_ALLOWED = [
   {
@@ -289,6 +355,45 @@ describe("style layer contract", () => {
     expect(componentProblems(ok, "other")).toHaveLength(1);
     expect(componentProblems(`${ok} .rogue { color: red }`, "demo")).toHaveLength(1);
     expect(componentProblems(`${ok} @include mx.component("demo") { }`, "demo")).toHaveLength(1);
+  });
+
+  it("puts every part class of a component on markup, never on the component's own root", () => {
+    const sources = walk(src).filter(
+      (p) => /\.(vue|astro|ts)$/.test(p) && !p.includes("/src/tests/"),
+    );
+    const tags = sources.flatMap((p) =>
+      p.endsWith(".ts") ? [] : tagClasses(readFileSync(p, "utf8")),
+    );
+    const used = new Set([
+      ...tags.flat(),
+      ...sources.flatMap((p) => scriptClasses(readFileSync(p, "utf8"))),
+    ]);
+    const bad = styleFiles
+      .filter((p) => p.includes("/styles/components/") && !legacyFiles.includes(rel(p)))
+      .flatMap((path) => {
+        const name = path
+          .split("/")
+          .pop()!
+          .replace(/^_/, "")
+          .replace(/\.scss$/, "");
+        const parts = partClasses(readFileSync(path, "utf8"));
+        const dead = parts.filter((c) => !used.has(c)).map((c) => `.${c} is on no element`);
+        const onRoot = parts
+          .filter((c) => tags.some((t) => t.includes(`c-${name}`) && t.includes(c)))
+          .map((c) => `.${c} sits on the c-${name} root itself`);
+        return dead.concat(onRoot).map((problem) => `${rel(path)}: ${problem}`);
+      });
+    expect(bad).toEqual([]);
+
+    const demo =
+      '@include mx.component("demo") { :scope.on { a: b } .a > .b, :scope:is(.x) .c { a: b } .d { .e { a: b } } @media (x) { .f { a: b } } }';
+    expect(partClasses(demo).sort()).toEqual(["a", "b", "c", "d", "f"]);
+    expect(
+      tagClasses(`<div class="c-demo a" :class="{ 'b': x }"><i :class="on ? 'c' : 'd'">`),
+    ).toEqual([
+      ["c-demo", "a", "b"],
+      ["c", "d"],
+    ]);
   });
 
   it("allows dark-mode hooks only in legacy files, bar the two named exceptions", () => {
