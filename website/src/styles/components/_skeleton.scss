@@ -3,7 +3,7 @@
 
 // Skeleton (docs/design/wortseite/SPEC.md §9): shown by WordPageLoading after 300 ms, never for cached pages.
 // Shimmer moves background-position (keyframes c-shimmer in utilities/_animations.scss); with reduced
-// motion the bars stand still. Variants: line, title.
+// motion the bars stand still. Variants: line, title, badge (a hero badge), audio (an audio row).
 @include mx.component("skeleton") {
   :scope {
     --_shine: var(--color-surface-tint-warm); // colour inventory R42, merged into R41
@@ -35,5 +35,14 @@
   :scope[data-variant~="title"] {
     block-size: 2.25rem;
     inline-size: 60%;
+  }
+
+  :scope[data-variant~="badge"] {
+    block-size: 1.5rem;
+    inline-size: 5rem;
+  }
+
+  :scope[data-variant~="audio"] {
+    block-size: var(--size-tap-target);
   }
 }

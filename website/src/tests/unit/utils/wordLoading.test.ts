@@ -28,6 +28,15 @@ describe("word page loading skeleton", () => {
     expect(skeleton()?.getAttribute("aria-busy")).toBe("true");
   });
 
+  it("sizes badges and audio rows by skeleton variant, not inline style", () => {
+    vi.useFakeTimers();
+    navigate("/wort/anmachen");
+    vi.advanceTimersByTime(SKELETON_DELAY_MS);
+    expect(skeleton()?.querySelectorAll('[data-variant="badge"]')).toHaveLength(2);
+    expect(skeleton()?.querySelectorAll('[data-variant="audio"]')).toHaveLength(2);
+    expect(skeleton()?.querySelector('[style*="block-size"]')).toBeNull();
+  });
+
   it("a load that finishes in time never shows it", () => {
     vi.useFakeTimers();
     navigate("/wort/anmachen");

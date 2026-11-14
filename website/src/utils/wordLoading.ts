@@ -6,8 +6,8 @@ const bar = (variant = "", style = ""): string =>
   `<span class="c-skeleton"${variant ? ` data-variant="${variant}"` : ""}${style ? ` style="${style}"` : ""}></span>`;
 const card = (): string =>
   `<div class="card">${bar("title", "inline-size:40%")}${bar("line")}${bar("line")}${bar("line", "inline-size:70%")}</div>`;
-const badge = bar("", "inline-size:5rem;block-size:1.5rem");
-const audio = bar("", "block-size:2.75rem");
+const badge = bar("badge");
+const audio = bar("audio");
 
 const SKELETON_HTML =
   `<div class="c-word-skeleton" role="status" aria-busy="true" aria-label="Wort wird jeladen">` +
