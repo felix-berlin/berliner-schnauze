@@ -9,7 +9,7 @@
     // Morph from "Hier stehste" on the result: the pseudo elements belong to the new page, so the
     // timing has to live in this page's stylesheet (the result's one is gone by then).
     ::view-transition-group(bon-me) {
-      --_morph: 500ms; // Spec §13 (choreography, not a duration token)
+      --_morph: 500ms; // docs/design/bon/SPEC.md §13 (choreography, not a duration token)
 
       animation-duration: var(--_morph);
       animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -22,7 +22,7 @@
 
     // The browser's own crossfade (in step, plus-lighter): rows that stay the same do not flicker.
     :root:active-view-transition-type(period)::view-transition-group(lb-list) {
-      --_fade: 200ms; // Spec §13 (choreography, not a duration token)
+      --_fade: 200ms; // docs/design/bon/SPEC.md §13 (choreography, not a duration token)
 
       animation-duration: var(--_fade);
     }

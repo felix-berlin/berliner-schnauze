@@ -28,7 +28,7 @@
     display: flex;
     gap: var(--space-1);
 
-    // A lost heart: wobble ±6px (Spec §13).
+    // A lost heart: wobble ±6px (docs/design/bon/SPEC.md §13).
     @include butler-mx.feature("motion") {
       &[data-state="hit"] {
         animation: c-bon-hud-wobble var(--_wobble) ease-in-out;
@@ -60,10 +60,10 @@
     font-weight: var(--font-weight-black);
     color: var(--color-text-strong);
     font-variant-numeric: tabular-nums;
-    // Morphs into the "Punkte" figure of the result (Spec §13).
+    // Morphs into the "Punkte" figure of the result (docs/design/bon/SPEC.md §13).
     view-transition-name: bon-score;
 
-    // A right answer: pop (Spec §13).
+    // A right answer: pop (docs/design/bon/SPEC.md §13).
     @include butler-mx.feature("motion") {
       &[data-state="gain"] {
         animation: c-bon-hud-pop var(--_pop) var(--_pop-ease);

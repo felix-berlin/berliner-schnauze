@@ -28,7 +28,7 @@
   }
 
   :scope[data-state~="highlighted"] {
-    --_fade: 2s; // spec §9a, far beyond the duration tokens
+    --_fade: 2s; // docs/design/wortseite/SPEC.md §9a, far beyond the duration tokens
 
     outline: 2px solid var(--color-accent-active);
     outline-offset: 2px;
@@ -124,7 +124,7 @@
     margin-inline-start: auto;
   }
 
-  // Inline report panel (spec §9a) on the chip ground; the delete confirmation is a c-state.
+  // Inline report panel (docs/design/wortseite/SPEC.md §9a) on the chip ground; the delete confirmation is a c-state.
   .report {
     --button-padding: var(--space-2) var(--space-4);
     --button-min-block-size: 2.75rem;

@@ -8,7 +8,7 @@
 @include mx.component("bon-round") {
   :scope {
     --_mark-nudge: 0.1rem; // lines the mark up with the word's first line
-    --_in: 350ms; // Spec §13 tile fade, the last tile of the result
+    --_in: 350ms; // docs/design/bon/SPEC.md §13 tile fade, the last tile of the result
     --_in-delay: 300ms;
     // The rows end in the footer's rule, so the body keeps little room below them.
     --section-card-body-end: var(--space-2);

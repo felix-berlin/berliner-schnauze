@@ -10,7 +10,7 @@
   :scope {
     --_title-wide: 3.25rem; // hero headline, above the type scale
     --_stat-gap: 0.125rem; // between 0 and space-1, no step within 0.1rem
-    // Tiles fade in one by one, +60 ms each (Spec §13; choreography, not a duration token).
+    // Tiles fade in one by one, +60 ms each (docs/design/bon/SPEC.md §13; choreography, not a duration token).
     --_in: 350ms;
     --_in-step: 60ms;
 

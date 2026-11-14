@@ -179,7 +179,7 @@
   .c-input--radio {
     /* stylelint-enable selector-class-pattern */
     --_duration-short: 0.2s; // no token between --duration-fast and --duration-base
-    --_focus-shadow: 0 0 0 var(--box-shadow-focus); // box-shadow only takes tokens; the halo is a spread ring
+    --_focus-shadow: 0 0 0 var(--box-shadow-focus); // spread ring: 0 0 0 + width/colour from --box-shadow-focus
     --color-active: var(--color-accent-active);
     --color-inner-active: var(--color-text-on-active);
     --color-border-disabled-checked: var(--color-border-check-disabled);

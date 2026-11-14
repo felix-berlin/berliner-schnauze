@@ -14,7 +14,7 @@
     --_end-room: 96px; // room below the wide page, above the space scale
     // stylelint-disable-next-line function-disallowed-list -- colour inventory R21, merged into R20 (one-off): the sticky bar's upward shadow with R20's value
     --_sticky-shadow: 0 -4px 8px rgb(0 0 0 / 16%);
-    --_sticky-in: 350ms; // Spec §13 slide-in (choreography, not a duration token)
+    --_sticky-in: 350ms; // docs/design/bon/SPEC.md §13 slide-in (choreography, not a duration token)
     --_sticky-delay: 200ms;
 
     container: bon-leaderboard / inline-size;

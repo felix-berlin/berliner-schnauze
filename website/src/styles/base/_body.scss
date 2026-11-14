@@ -32,11 +32,12 @@
     *,
     ::before,
     ::after {
-      // stylelint-disable-next-line declaration-property-value-disallowed-list -- the sanctioned reduced-motion reset (spec §8): 0.01ms, not 0, so animationend still fires
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- the sanctioned reduced-motion reset (spec §6): 0.01ms, not 0, so animationend still fires
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       // stylelint-disable-next-line declaration-property-value-disallowed-list -- same reset, transitionend still fires
       transition-duration: 0.01ms !important;
+      // same reset: jumps instead of smooth scrolling (a keyword, so no rule to disable)
       scroll-behavior: auto !important;
     }
   }
