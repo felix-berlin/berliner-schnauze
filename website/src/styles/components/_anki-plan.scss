@@ -93,9 +93,7 @@
 
   .cta {
     --button-display: flex;
-    --button-padding: var(--space-3) var(--space-5);
-    --button-font-size: var(--font-size-base);
-    --button-gap: var(--space-2);
+    --button-font-size: var(--font-size-base); // the xl button with body-size text
 
     display: flex;
     flex-direction: column;

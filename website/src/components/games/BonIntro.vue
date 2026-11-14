@@ -4,7 +4,7 @@
       <section class="main" aria-labelledby="bon-title">
         <BonPlayerCode v-if="linkRedeem" />
         <p class="t-label">Spiel</p>
-        <h1 id="bon-title" class="c-band">Berliner oder nicht?</h1>
+        <h1 id="bon-title" class="c-band" data-variant="hero">Berliner oder nicht?</h1>
         <p class="t-em lead">
           Echtes Berlinerisch – oder erfunden oder Hochdeutsch? Wisch oder tipp – du hast 3 Leben.
         </p>

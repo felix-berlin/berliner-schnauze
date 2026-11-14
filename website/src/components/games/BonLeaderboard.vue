@@ -4,7 +4,7 @@
       <header class="header">
         <a class="c-textlink" href="/games/berliner-oder-nicht"> ← Berliner oder nicht? </a>
         <div class="titlebar">
-          <h1 class="c-band">Rangliste</h1>
+          <h1 class="c-band" data-variant="hero">Rangliste</h1>
           <span class="t-small">{{ totalLabel }}</span>
         </div>
         <div class="periods" role="group" aria-label="Zeitraum">
