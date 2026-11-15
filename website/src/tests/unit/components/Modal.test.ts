@@ -80,9 +80,9 @@ describe("Modal.vue", () => {
     expect(wrapper.find("dialog").classes()).toContain("c-modal");
   });
 
-  it("dialog has aria-modal=true attribute", () => {
+  it("leaves aria-modal to the browser (showModal() already makes the dialog modal)", () => {
     const wrapper = mount(Modal);
-    expect(wrapper.find("dialog").attributes("aria-modal")).toBe("true");
+    expect(wrapper.find("dialog").attributes("aria-modal")).toBeUndefined();
   });
 
   it("names the dialog from the ariaLabel prop, and leaves the attribute off without one", () => {
