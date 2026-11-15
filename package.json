@@ -60,11 +60,11 @@
     "@semantic-release/changelog": "7.0.0",
     "@semantic-release/exec": "7.1.0",
     "@semantic-release/git": "11.0.1",
-    "oxfmt": "^0.76.0",
-    "oxlint": "^1.91.0",
-    "oxlint-tsgolint": "^7.0.2006",
+    "oxfmt": "0.76.0",
+    "oxlint": "1.93.0",
+    "oxlint-tsgolint": "7.0.2006",
     "semantic-release": "25.0.9",
-    "typescript": "^6.0.3"
+    "typescript": "6.0.3"
   },
   "engines": {
     "node": ">=26.0.0"
