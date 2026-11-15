@@ -2,16 +2,8 @@ name: Playwright Tests
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - "**.md"
-      - "docs/**"
-      - "openspec/**"
   # Every PR, whatever its base: stacked PRs need e2e + docker smoke too.
   pull_request:
-    paths-ignore:
-      - "**.md"
-      - "docs/**"
-      - "openspec/**"
 
 permissions:
   id-token: write
@@ -22,8 +14,47 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  # The browser image must match the installed @playwright/test exactly; read it from the lockfile so they cannot drift.
+  # Doc-only changes skip the jobs below. They are required checks, and a job skipped via `if` counts as passed,
+  # unlike a workflow skipped via `paths-ignore`, which leaves the required check pending forever.
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      code: ${{ steps.f.outputs.code }}
+    steps:
+      # Pushes are diffed with git, pull requests via the API (no checkout needed there).
+      - name: Checkout ✅
+        uses: actions/checkout@v7
+
+      - name: Detect code changes
+        id: f
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        with:
+          filters: |
+            code:
+              - "**"
+              - "!**.md"
+              - "!docs/**"
+              - "!renovate.json"
+              - "!.claude/**"
+              - "!.vscode/**"
+              - "!.opencodereview/**"
+              - "!.design-sync/**"
+              - "!orca.yaml"
+              - "!.worktreeinclude"
+              - "!skills-lock.json"
+              - "!data/**"
+              - "!scripts/berlin-map/**"
+              - "!scripts/orca-*.sh"
+              - "!scripts/*anki*"
+              - "!scripts/test_*.py"
+
   playwright-version:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 2
     outputs:
@@ -39,6 +70,8 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
   build:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     timeout-minutes: 30
     runs-on: ubuntu-latest
     defaults:
