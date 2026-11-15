@@ -14,6 +14,7 @@ Payload 3 (Admin + REST, Postgres; GraphQL ist abgeschaltet). Die Astro-Seite in
 | `PAYLOAD_SECRET`                                    | Signatur für Sessions/Keys                 | langer Zufallsstring                                                          |
 | `PAYLOAD_SERVER_URL`                                | Basis-URL des Admins                       | lokal `http://localhost:3001`, Produktion `https://cms.berliner-schnauze.wtf` |
 | `MEDIA_DIR`                                         | Ablage der Uploads                         | leer lassen (= `payload/media`)                                               |
+| `MCP_DISABLED`                                      | `true` schaltet den Endpoint `/api/mcp` ab | Standard `false`; auf `true` setzen, solange kein MCP-Client gebraucht wird   |
 
 `compose.yaml` bricht ab, wenn `POSTGRES_PASSWORD` fehlt, auch wenn du nur Postgres startest.
 

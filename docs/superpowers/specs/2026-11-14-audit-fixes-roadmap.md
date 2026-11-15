@@ -24,7 +24,7 @@ Quelle: `docs/audit-2026-11-13.md` (Stand `92e7d19a`). Geprüft gegen HEAD `4d04
 - [x] 7. PERF-02 (`725f1aee`)
 - [x] 8. CFG-01–04, DX-01–03, MAINT-02 (`e9fa34fd`; CFG-01 als Startprüfung im Server statt `validateSecrets`, das auch den Build ohne Secrets bräche; MAINT-02: `@nanostores/logger` und `@vue/devtools-api` sind optionale Peers der Devtools und bleiben; `MCP_DISABLED=false` in `.env.example` ergänzt)
 - [x] 9. A11Y-01–04 (`76753464`)
-- [ ] 10. DEP-01
+- [x] 10. DEP-01 (49 → 23 Advisories, prod 41 → 23; offen nur zod 3.x im Codecov-Build-Plugin, ein Major-Sprung per Override wäre riskanter als die Lücke; `MCP_DISABLED` in `payload/README.md` dokumentiert)
 - [ ] 11. CI-02, CI-04 (Repo-Teil)
 - [ ] 12. PERF-01
 - [ ] 13. SEC-02

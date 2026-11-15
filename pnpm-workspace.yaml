@@ -7,6 +7,14 @@ overrides:
   # dedupe picked the 2.0.0-beta for @astrojs/check's wasm peers; its bridge crashes astro check on exit
   "@emnapi/core": "1.11.3"
   "@emnapi/runtime": "1.11.3"
+  # pnpm audit (DEP-01): transitive packages whose parents have no release with the fix yet; drop each once its parent ships it
+  "@modelcontextprotocol/sdk": "^1.32.2"
+  "body-parser": "^2.4.0"
+  "dompurify": "^3.4.17"
+  "handlebars": "^4.7.10"
+  "happy-dom": "^21.0.4"
+  "mongoose": "^9.12.1"
+  "undici@6": "^6.29.1"
 
 allowBuilds:
   "@infisical/cli": true
