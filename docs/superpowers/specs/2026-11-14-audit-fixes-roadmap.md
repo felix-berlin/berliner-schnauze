@@ -24,11 +24,11 @@ Quelle: `docs/audit-2026-11-13.md` (Stand `92e7d19a`). Geprüft gegen HEAD `4d04
 - [x] 7. PERF-02 (`725f1aee`)
 - [x] 8. CFG-01–04, DX-01–03, MAINT-02 (`e9fa34fd`; CFG-01 als Startprüfung im Server statt `validateSecrets`, das auch den Build ohne Secrets bräche; MAINT-02: `@nanostores/logger` und `@vue/devtools-api` sind optionale Peers der Devtools und bleiben; `MCP_DISABLED=false` in `.env.example` ergänzt)
 - [x] 9. A11Y-01–04 (`76753464`)
-- [x] 10. DEP-01 (`f484b2fd`; 49 → 23 Advisories, prod 41 → 23; offen nur zod 3.x im Codecov-Build-Plugin, ein Major-Sprung per Override wäre riskanter als die Lücke; `MCP_DISABLED` in `payload/README.md` dokumentiert)
+- [x] 10. DEP-01 (`f484b2fd`; 18 → 5 Advisories nach dem Merge mit main (ohne die Overrides 18, davon 1 kritisch; Audit-Bericht: 48); offen u. a. zod 3.x über `@payloadcms/plugin-mcp`, ein Major-Sprung per Override wäre riskanter als die Lücke; `MCP_DISABLED` in `payload/README.md` dokumentiert; happy-dom 21 zieht `@lexical/headless` 20 → 21, abgedeckt durch `htmlToLexical.test.ts`)
 - [x] 11. CI-02, CI-04 (Repo-Teil; `47ae6c67`: Infisical-Schritte stehen hinter `pnpm install`, `id-token: write` nur an den Jobs mit Infisical. Der Infisical-Schritt der Unit-Tests steht hinter dem Testlauf, direkt vor Codecov (nur dafür wird das Token gebraucht). CI-04 ohne Workflow-Umbau: der Release ist über Required Checks abgesichert, Details in Schritt 16)
 - [x] 12. PERF-01 (`2e43a600`; `collect()` gruppiert in SQL pro Wort statt alle Tageszeilen zu laden; die bestehenden Trending-Tests decken Gleichheit ab)
 - [ ] 13. SEC-02
-- [x] 14. MAINT-01 (`WordFeedbackCard.vue` 609 → 154 Zeilen: Ablauf und Persistenz in `composable/useWordFeedbackFlow.ts` (318 Zeilen), fünf Präsentationskomponenten `WordFeedback{Usage,Bars,Question,Done,Privacy}.vue`, Anzeige-Helfer und Konstanten in `utils/wordFeedbackView.ts`, `window.confirm` durch `ConfirmDialog`; im Browser geprüft: Vote, Balken, Fokus, Dialog, hell und dunkel)
+- [x] 14. MAINT-01 (`WordFeedbackCard.vue` 609 → 154 Zeilen: Ablauf und Persistenz in `composable/useWordFeedbackFlow.ts` (318 Zeilen), fünf Präsentationskomponenten `WordFeedback{Usage,Bars,Question,Done,Privacy}.vue`, Anzeige-Helfer und Konstanten in `utils/wordFeedbackView.ts`, `window.confirm` durch `ConfirmDialog`; Hashes `11d0c9db`, `ff488d99`; Modal-Default `fit-content` `1b4c25da`; im Browser geprüft: Vote, Balken, Fokus, Dialog, hell und dunkel)
 - [ ] 15. OPS-01 (zurückgestellt)
 - [ ] 16. Deine Schritte
 

@@ -108,17 +108,23 @@ const W_OTHER = 1; // audio, share, click and reaction each
 /** Counts per word for the Berlin days `first..last` (inclusive). Words without activity get no entry. */
 const collect = async (payload: Payload, first: string, last: string) => {
   const map = new Map<number, Counts>();
+  let dropped = 0;
   const bump = (word: unknown, views: number, interactions: number) => {
-    if (typeof word !== "number") return;
+    if (typeof word !== "number") {
+      dropped++; // a row without a word (deleted word, NULL word_id) cannot be ranked
+      return;
+    }
     const c = map.get(word) ?? { views: 0, interactions: 0 };
-    c.views += views;
-    c.interactions += interactions;
+    c.views += Number.isFinite(views) ? views : 0;
+    c.interactions += Number.isFinite(interactions) ? interactions : 0;
     map.set(word, c);
   };
   const from = dayStart(first).toISOString();
   const to = dayStart(addDays(last, 1)).toISOString();
   const { drizzle } = payload.db as unknown as PostgresAdapter;
-  // Grouped in SQL: one row per word instead of one per word and day (a year is ~6000 words x 365 days).
+  // Aggregated in SQL (one result row per word, not per word and day: a year is ~6000 words x 365 days). Raw SQL
+  // bypasses Payload access and hooks; table and column names (word_stats, word_feedback, comments, word_id,
+  // created_at, reaction, status) must follow any collection or migration rename.
   type Row = { word_id: number | null; views?: string; n: string };
   const rows = async (query: ReturnType<typeof sql>) =>
     (await drizzle.execute(query)).rows as Row[];
@@ -143,6 +149,7 @@ const collect = async (payload: Payload, first: string, last: string) => {
   // is the first-answer time); a later change is not moved.
   for (const f of feedback) bump(f.word_id, 0, Number(f.n) * W_OTHER);
   for (const c of comments) bump(c.word_id, 0, Number(c.n) * W_COMMENT);
+  if (dropped) console.warn(`wordStats: ${dropped} grouped rows without a word id were skipped`);
   return map;
 };
 

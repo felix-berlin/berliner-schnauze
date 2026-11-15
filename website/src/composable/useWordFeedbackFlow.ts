@@ -227,6 +227,7 @@ export const useWordFeedbackFlow = (wordId: number) => {
   };
 
   const deleteAll = async () => {
+    if (pending.value) return;
     pending.value = true;
     try {
       if (!(await deleteAllFeedback(wordId))) return;

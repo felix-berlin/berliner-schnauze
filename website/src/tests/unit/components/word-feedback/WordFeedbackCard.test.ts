@@ -1,6 +1,6 @@
 import WordFeedbackCard from "@components/word-feedback/WordFeedbackCard.vue";
 import { flushPromises, mount } from "@vue/test-utils";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, onTestFinished, vi } from "vitest";
 
 const store = vi.hoisted(() => ({
   answerUsage: vi.fn(),
@@ -419,6 +419,7 @@ describe("WordFeedbackCard", () => {
     $feedback.set(state({ mine: { area: "pankow", usage: "say" } }));
     store.deleteAllFeedback.mockResolvedValue(true);
     const confirm = vi.spyOn(window, "confirm");
+    onTestFinished(() => confirm.mockRestore());
     const w = await mountIt();
 
     await click(w, "Alle meine Antworten löschen");
@@ -432,7 +433,6 @@ describe("WordFeedbackCard", () => {
     $view.get().events?.confirm?.();
     await flushPromises();
     expect(store.deleteAllFeedback).toHaveBeenCalledWith(7);
-    confirm.mockRestore();
   });
 
   it("moves focus to the new question after an answer, not on mount", async () => {

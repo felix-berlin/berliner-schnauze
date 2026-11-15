@@ -1,4 +1,4 @@
-import { compareRows, progressSegments, usageBars } from "@utils/wordFeedbackView";
+import { compareRows, plural, progressSegments, usageBars } from "@utils/wordFeedbackView";
 import { describe, expect, it } from "vitest";
 
 const options = [
@@ -43,5 +43,26 @@ describe("compareRows", () => {
   });
   it("is empty without comparison data", () => {
     expect(compareRows(undefined, "Pankow", "Prenzlauer Berg")).toEqual([]);
+  });
+});
+
+describe("edge cases", () => {
+  it("plural: 0 and 2 are plural, 1 is singular", () => {
+    expect(plural(0)).toBe("0 Stimmen");
+    expect(plural(1)).toBe("1 Stimme");
+    expect(plural(2)).toBe("2 Stimmen");
+  });
+  it("compareRows keeps a share of 0 and drops the area row when its share is null", () => {
+    const c = { area: null, east: 0, locality: null, moved: null, west: null };
+    expect(compareRows(c, "Pankow", null)).toEqual([{ label: "Ost-Berliner", share: 0 }]);
+  });
+  it("progressSegments: a current step outside active marks nothing as done before it", () => {
+    const seg = progressSegments(["a", "b", "c"], ["a", "c"], "b");
+    expect(seg.map((x) => x.state)).toEqual(["done", "skipped", "open"]);
+  });
+  it("usageBars: an option missing from the totals gets 0 %", () => {
+    expect(usageBars([{ label: "Sag ich", value: "say" }], { know: 3 }, 3)).toEqual([
+      { label: "Sag ich", percent: 0, text: "0 Stimmen", value: "say" },
+    ]);
   });
 });
