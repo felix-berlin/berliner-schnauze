@@ -120,7 +120,7 @@ Das Zugangsdatum liegt in Infisical (dev, Ordner `/agent`, Secret `PROD_BASIC_AU
 ## Regeln
 
 - **Nie Produktion lokal:** `with-env.sh` ruft Infisical immer mit `--env=dev` auf; prod lässt sich darüber nicht wählen. `.infisical.yaml` ordnet jeden Branch (auch `main`) dem Environment dev zu.
-- **Kein Browser gegen die echte Seite:** Playwright und Chrome DevTools nie gegen `berliner-schnauze.wtf` richten, jeder Seitenaufruf zählt im Produktions-Matomo. `curl` oder `scripts/prod-curl.sh` sind in Ordnung. Dev hat eine eigene Matomo-ID.
+- **Keine Produktions-Matomo-ID lokal:** `MATOMO_SITE_ID` ist lokal leer oder die Dev/Staging-ID (Infisical dev). Einen lokalen Server oder Build mit der Produktions-ID nicht im Browser öffnen, jeder Aufruf zählt sonst im Produktions-Matomo. Playwright und Chrome DevTools gegen `berliner-schnauze.wtf` sind in Ordnung.
 - **Der Dump enthält personenbezogene Daten** (Vorschläge mit Name und Mail). Er gehört nie ins Repo und nie in den Chat. Er liegt außerhalb des Repos in `~/backups/berliner-schnauze/`.
 - **Keine Secrets in Dateien oder im Chat:** Werte bleiben in Infisical. Die Skripte lesen sie zur Laufzeit.
 
