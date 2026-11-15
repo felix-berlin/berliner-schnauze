@@ -24,9 +24,9 @@ Quelle: `docs/audit-2026-11-13.md` (Stand `92e7d19a`). Geprüft gegen HEAD `4d04
 - [x] 7. PERF-02 (`725f1aee`)
 - [x] 8. CFG-01–04, DX-01–03, MAINT-02 (`e9fa34fd`; CFG-01 als Startprüfung im Server statt `validateSecrets`, das auch den Build ohne Secrets bräche; MAINT-02: `@nanostores/logger` und `@vue/devtools-api` sind optionale Peers der Devtools und bleiben; `MCP_DISABLED=false` in `.env.example` ergänzt)
 - [x] 9. A11Y-01–04 (`76753464`)
-- [x] 10. DEP-01 (49 → 23 Advisories, prod 41 → 23; offen nur zod 3.x im Codecov-Build-Plugin, ein Major-Sprung per Override wäre riskanter als die Lücke; `MCP_DISABLED` in `payload/README.md` dokumentiert)
-- [x] 11. CI-02, CI-04 (Repo-Teil; `47ae6c67`: Infisical-Schritte stehen hinter `pnpm install`, `id-token: write` nur an den Jobs mit Infisical. Die Unit-Tests brauchen weiter das Codecov-Token aus Infisical, also bleibt der Schritt dort. CI-04 ohne Workflow-Umbau: der Release ist über Required Checks abgesichert, Details in Schritt 16)
-- [x] 12. PERF-01 (`collect()` gruppiert in SQL pro Wort statt alle Tageszeilen zu laden; die bestehenden Trending-Tests decken Gleichheit ab)
+- [x] 10. DEP-01 (`f484b2fd`; 49 → 23 Advisories, prod 41 → 23; offen nur zod 3.x im Codecov-Build-Plugin, ein Major-Sprung per Override wäre riskanter als die Lücke; `MCP_DISABLED` in `payload/README.md` dokumentiert)
+- [x] 11. CI-02, CI-04 (Repo-Teil; `47ae6c67`: Infisical-Schritte stehen hinter `pnpm install`, `id-token: write` nur an den Jobs mit Infisical. Der Infisical-Schritt der Unit-Tests steht hinter dem Testlauf, direkt vor Codecov (nur dafür wird das Token gebraucht). CI-04 ohne Workflow-Umbau: der Release ist über Required Checks abgesichert, Details in Schritt 16)
+- [x] 12. PERF-01 (`2e43a600`; `collect()` gruppiert in SQL pro Wort statt alle Tageszeilen zu laden; die bestehenden Trending-Tests decken Gleichheit ab)
 - [ ] 13. SEC-02
 - [ ] 14. MAINT-01
 - [ ] 15. OPS-01 (zurückgestellt)
@@ -128,9 +128,9 @@ Quelle: `docs/audit-2026-11-13.md` (Stand `92e7d19a`). Geprüft gegen HEAD `4d04
 
 Ich liefere jeweils eine fertige Anleitung bzw. vorbereitete Änderung:
 
-- **Komodo:** `MCP_DISABLED=false` in die `cms`-Stack-Env übernehmen und deployen (aus Schritt 10).
+- **Komodo:** `MCP_DISABLED=false` in die `cms`-Stack-Env (`komodo.toml`, Stack `berliner-schnauze`) eintragen und deployen (aus Schritt 10). Nicht vorbereitet, weil das Komodo-Repo nur über einen Worker dort geändert wird. Wer den Endpoint nicht braucht, setzt stattdessen `true`.
 - **Infisical:** OIDC-Subject der Prod-Identity auf `refs/heads/main` binden (aus Schritt 11).
-- **GitHub:** Branch Protection für `main` setzen (aus Schritt 11, CI-04): Merge nur über PR, Required Checks `lint-and-typecheck`, `Run unit tests`, `Run CMS tests`, `Migration upgrade test`, `build`, `docker-smoke`, `test` (Playwright, alle Shards), kein Bypass für Admins.
+- **GitHub:** Branch Protection für `main` (aus Schritt 11, CI-04): Merge nur über PR; Required Checks `lint-and-typecheck`, `Run unit tests`, `Run CMS tests`, `Migration upgrade test`, `docker-smoke`, `test (1)` bis `test (4)` (Playwright-Shards). Beachten: (a) semantic-release pusht `chore(release): …` mit `GH_TOKEN` direkt auf `main`/`beta`, diese Identität muss Bypass-Akteur bleiben; (b) die Test-Workflows haben `paths-ignore` für `**.md` und `docs/**`, ein reiner Doku-PR meldet die Checks nie und bliebe blockiert, also die Checks nicht als Pflicht setzen, wenn solche PRs ohne Admin-Merge möglich sein sollen (oder die `paths-ignore` entfernen).
 - **Rollout-Konzept** für mehrere `web`-Container klären, falls Schritt 15 angegangen werden soll.
 
 ## Nicht im Umfang
