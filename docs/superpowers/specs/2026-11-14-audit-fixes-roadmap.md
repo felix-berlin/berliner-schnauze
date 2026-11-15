@@ -26,7 +26,7 @@ Quelle: `docs/audit-2026-11-13.md` (Stand `92e7d19a`). Geprüft gegen HEAD `4d04
 - [x] 9. A11Y-01–04 (`76753464`)
 - [x] 10. DEP-01 (49 → 23 Advisories, prod 41 → 23; offen nur zod 3.x im Codecov-Build-Plugin, ein Major-Sprung per Override wäre riskanter als die Lücke; `MCP_DISABLED` in `payload/README.md` dokumentiert)
 - [x] 11. CI-02, CI-04 (Repo-Teil; `47ae6c67`: Infisical-Schritte stehen hinter `pnpm install`, `id-token: write` nur an den Jobs mit Infisical. Die Unit-Tests brauchen weiter das Codecov-Token aus Infisical, also bleibt der Schritt dort. CI-04 ohne Workflow-Umbau: der Release ist über Required Checks abgesichert, Details in Schritt 16)
-- [ ] 12. PERF-01
+- [x] 12. PERF-01 (`collect()` gruppiert in SQL pro Wort statt alle Tageszeilen zu laden; die bestehenden Trending-Tests decken Gleichheit ab)
 - [ ] 13. SEC-02
 - [ ] 14. MAINT-01
 - [ ] 15. OPS-01 (zurückgestellt)

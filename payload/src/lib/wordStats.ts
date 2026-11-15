@@ -115,40 +115,34 @@ const collect = async (payload: Payload, first: string, last: string) => {
     c.interactions += interactions;
     map.set(word, c);
   };
-  const created = {
-    createdAt: {
-      greater_than_equal: dayStart(first).toISOString(),
-      less_than: dayStart(addDays(last, 1)).toISOString(),
-    },
-  };
-  const opts = { pagination: false, depth: 0 } as const;
+  const from = dayStart(first).toISOString();
+  const to = dayStart(addDays(last, 1)).toISOString();
+  const { drizzle } = payload.db as unknown as PostgresAdapter;
+  // Grouped in SQL: one row per word instead of one per word and day (a year is ~6000 words x 365 days).
+  type Row = { word_id: number | null; views?: string; n: string };
+  const rows = async (query: ReturnType<typeof sql>) =>
+    (await drizzle.execute(query)).rows as Row[];
   const [stats, feedback, comments] = await Promise.all([
-    payload.find({
-      collection: "word-stats",
-      where: { day: { greater_than_equal: first, less_than_equal: last } },
-      select: { word: true, views: true, audio: true, shares: true, clicks: true },
-      ...opts,
-    }),
-    payload.find({
-      collection: "word-feedback",
-      where: { ...created, reaction: { exists: true } },
-      select: { word: true },
-      ...opts,
-    }),
-    payload.find({
-      collection: "comments",
-      where: { ...created, status: { equals: "published" } },
-      select: { word: true },
-      ...opts,
-    }),
+    rows(sql`
+      select word_id, sum(views) as views, sum(audio + shares + clicks) as n
+      from word_stats where day >= ${first} and day <= ${last} group by word_id
+    `),
+    rows(sql`
+      select word_id, count(*) as n from word_feedback
+      where created_at >= ${from}::timestamptz and created_at < ${to}::timestamptz and reaction is not null
+      group by word_id
+    `),
+    rows(sql`
+      select word_id, count(*) as n from comments
+      where created_at >= ${from}::timestamptz and created_at < ${to}::timestamptz and status = 'published'
+      group by word_id
+    `),
   ]);
-  for (const s of stats.docs) {
-    bump(s.word, s.views, (s.audio + s.shares + s.clicks) * W_OTHER);
-  }
+  for (const s of stats) bump(s.word_id, Number(s.views), Number(s.n) * W_OTHER);
   // A reaction counts on the Berlin day the visitor FIRST answered anything (one row per visitor and word, createdAt
   // is the first-answer time); a later change is not moved.
-  for (const f of feedback.docs) bump(f.word, 0, W_OTHER);
-  for (const c of comments.docs) bump(c.word, 0, W_COMMENT);
+  for (const f of feedback) bump(f.word_id, 0, Number(f.n) * W_OTHER);
+  for (const c of comments) bump(c.word_id, 0, Number(c.n) * W_COMMENT);
   return map;
 };
 
