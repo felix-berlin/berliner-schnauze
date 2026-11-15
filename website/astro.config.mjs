@@ -2,7 +2,7 @@ import node from "@astrojs/node";
 import vue from "@astrojs/vue";
 import codecovplugin from "@codecov/astro-plugin";
 import sentry from "@sentry/astro";
-import AstroPWA from "@vite-pwa/astro";
+import { AstroPWAIntegration as AstroPWA } from "@vite-pwa/astro";
 import matomo from "astro-matomo";
 import { defineConfig, envField, fontProviders } from "astro/config";
 import { fileURLToPath } from "node:url";
@@ -352,7 +352,6 @@ export default defineConfig({
       mode: import.meta.env.DEV ? "development" : "production",
       base: "/",
       scope: "/",
-      includeAssets: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
       // "prompt", not "autoUpdate": a new worker waits instead of reloading open tabs (suggest-word form, BON).
       // src/services/pwa.ts switches on the next navigation or when the user accepts the update toast.
       registerType: "prompt",
@@ -426,7 +425,7 @@ export default defineConfig({
           },
         ],
       },
-      workbox: {
+      generateSW: {
         globDirectory: "dist/client",
         cleanupOutdatedCaches: true,
         // No navigate fallback: with on-demand pages the precache holds no HTML, and Workbox would answer
