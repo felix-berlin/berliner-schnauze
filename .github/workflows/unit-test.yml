@@ -15,9 +15,7 @@ on:
       - "openspec/**"
 
 permissions:
-  id-token: write
   contents: read
-  checks: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -27,6 +25,11 @@ jobs:
   lint:
     name: Run unit tests
     runs-on: ubuntu-latest
+    # id-token only here: the Infisical OIDC login (CODECOV_TOKEN); checks for the test-report check run.
+    permissions:
+      id-token: write
+      contents: read
+      checks: write
     defaults:
       run:
         working-directory: website
@@ -34,15 +37,6 @@ jobs:
     steps:
       - name: Checkout ✅
         uses: actions/checkout@v7
-
-      - name: Fetch secrets from Infisical 🔐
-        uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
-        with:
-          method: "oidc"
-          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
-          project-slug: "berliner-schnauze"
-          env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
-          domain: "https://infisical.kasimir.dev"
 
       - name: Setup pnpm 🛠️
         uses: pnpm/action-setup@v6
@@ -55,6 +49,15 @@ jobs:
 
       - name: Install dependencies 🛠️
         run: pnpm install --frozen-lockfile
+
+      - name: Fetch secrets from Infisical 🔐
+        uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
+        with:
+          method: "oidc"
+          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
+          project-slug: "berliner-schnauze"
+          env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
+          domain: "https://infisical.kasimir.dev"
 
       - name: Run Vitest (with coverage report) 🧪
         run: pnpm run test:ci

@@ -14,7 +14,6 @@ on:
       - "openspec/**"
 
 permissions:
-  id-token: write
   contents: read
 
 concurrency:
@@ -41,21 +40,15 @@ jobs:
   build:
     timeout-minutes: 30
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Infisical OIDC
+      contents: read
     defaults:
       run:
         working-directory: website
     steps:
       - name: Checkout ✅
         uses: actions/checkout@v7
-
-      - name: Fetch secrets from Infisical 🔐
-        uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
-        with:
-          method: "oidc"
-          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
-          project-slug: "berliner-schnauze"
-          env-slug: "staging" # never prod: e2e errors would land in the prod Sentry, suggestions could send real mail
-          domain: "https://infisical.kasimir.dev"
 
       - name: Setup pnpm 🛠️
         uses: pnpm/action-setup@v6
@@ -74,6 +67,15 @@ jobs:
       # seeded Postgres. E2E_BUILD only skips the Sentry/Codecov source-map upload plugins, which add real
       # time for a build nobody deploys (see astro.config.mjs's isE2eBuild).
       # Analytics off: the client must not report e2e runs to any Matomo site.
+      - name: Fetch secrets from Infisical 🔐
+        uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
+        with:
+          method: "oidc"
+          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
+          project-slug: "berliner-schnauze"
+          env-slug: "staging" # never prod: e2e errors would land in the prod Sentry, suggestions could send real mail
+          domain: "https://infisical.kasimir.dev"
+
       - name: Build site
         env:
           E2E_BUILD: "1"
@@ -138,6 +140,9 @@ jobs:
     needs: [build, playwright-version]
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Infisical OIDC
+      contents: read
     # Browsers + OS libs are baked into the image; the tag follows the lockfile (playwright-version job).
     container:
       image: mcr.microsoft.com/playwright:v${{ needs.playwright-version.outputs.version }}-noble
@@ -170,15 +175,6 @@ jobs:
       - name: Checkout ✅
         uses: actions/checkout@v7
 
-      - name: Fetch secrets from Infisical 🔐
-        uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
-        with:
-          method: "oidc"
-          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
-          project-slug: "berliner-schnauze"
-          env-slug: "staging" # never prod: e2e errors would land in the prod Sentry, suggestions could send real mail
-          domain: "https://infisical.kasimir.dev"
-
       - name: Setup pnpm 🛠️
         uses: pnpm/action-setup@v6
 
@@ -190,6 +186,15 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Fetch secrets from Infisical 🔐
+        uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
+        with:
+          method: "oidc"
+          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
+          project-slug: "berliner-schnauze"
+          env-slug: "staging" # never prod: e2e errors would land in the prod Sentry, suggestions could send real mail
+          domain: "https://infisical.kasimir.dev"
 
       - name: Download build
         uses: actions/download-artifact@v8
