@@ -12,6 +12,12 @@ const slugs = [
   "trend-test-held",
   "trend-test-plain",
   "trend-test-zero",
+  "trend-test-edge",
+  "trend-test-win",
+  "trend-test-cin",
+  "trend-test-cout",
+  "trend-test-none",
+  "trend-test-null",
 ];
 const today = "2026-11-30";
 let payload: Payload;
@@ -131,5 +137,84 @@ describe("trending", () => {
     for (const type of ["viewed", "rising", "engaged"] as const) {
       expect(await trending(payload, { ...opts, type, today: "2020-01-31" })).toEqual([]);
     }
+  });
+});
+
+describe("trending: window edges", () => {
+  let edge: number;
+  let win: number;
+  let cin: number;
+  let cout: number;
+  let none: number;
+  let nul: number;
+  const word = async (n: string, s: string) =>
+    (
+      await payload.create({
+        collection: "words",
+        data: { berlinerisch: n, slug: s, _status: "published" },
+      })
+    ).id;
+  const comment = (w: number, createdAt: string) =>
+    payload.create({
+      collection: "comments",
+      data: { word: w, text: "kiek ma", authorName: "Icke", createdAt } as never,
+    });
+
+  beforeAll(async () => {
+    edge = await word("Trendkante", "trend-test-edge");
+    win = await word("Trendfenster", "trend-test-win");
+    cin = await word("Trendrein", "trend-test-cin");
+    cout = await word("Trendraus", "trend-test-cout");
+    none = await word("Trendkein", "trend-test-none");
+    nul = await word("Trendnix", "trend-test-null");
+    // first and last day count, the day before and after do not; one word over several days is summed
+    await stat(edge, "2026-11-01", { views: 1, audio: 1 });
+    await stat(edge, "2026-11-30", { views: 2, shares: 1, clicks: 1 });
+    await stat(edge, "2026-10-31", { views: 100 });
+    await stat(edge, "2026-12-01", { views: 100 });
+    // previous period is 2026-10-02..2026-10-31
+    await stat(win, "2026-11-01", { views: 8 });
+    await stat(win, "2026-10-31", { views: 2 });
+    await stat(win, "2026-10-02", { views: 4 });
+    await stat(win, "2026-10-01", { views: 100 });
+    for (const w of [cin, cout, none, nul]) await stat(w, "2026-11-12", { views: 1 });
+    // Berlin is UTC+1 in November: the Berlin day starts at 23:00 UTC of the day before
+    await comment(cin, "2026-11-29T23:30:00.000Z"); // 30 Nov 00:30 Berlin: last day, counts
+    await comment(cin, "2026-10-31T23:30:00.000Z"); // 1 Nov 00:30 Berlin: first day, counts
+    await comment(cout, "2026-11-30T23:30:00.000Z"); // 1 Dec 00:30 Berlin: outside
+    await comment(cout, "2026-10-31T22:30:00.000Z"); // 31 Oct 23:30 Berlin: outside
+    // answers without a reaction (usage only, explicit null) are not reactions
+    const at = "2026-11-12T12:00:00.000Z";
+    await payload.create({
+      collection: "word-feedback",
+      data: { word: nul, visitor: "v-null-1", usage: "say", createdAt: at } as never,
+    });
+    await payload.create({
+      collection: "word-feedback",
+      data: { word: nul, visitor: "v-null-2", reaction: null, createdAt: at } as never,
+    });
+  }, 60_000);
+
+  it("viewed: sums the days inside the window, first and last day included", async () => {
+    const r = (await trending(payload, { ...opts, type: "viewed", limit: 1000 })).find(
+      (x) => x.word === edge,
+    );
+    expect(r?.views).toBe(3);
+    expect(typeof r?.views).toBe("number");
+  });
+
+  it("rising: previous period spans the 30 days before the window", async () => {
+    const r = (await trending(payload, { ...opts, type: "rising", limit: 1000 })).find(
+      (x) => x.word === win,
+    );
+    expect(r).toMatchObject({ views: 8, previous: 6 });
+  });
+
+  it("engaged: comments count by Berlin day, empty answers do not count", async () => {
+    const r = await trending(payload, { ...opts, type: "engaged", limit: 1000 });
+    const value = (w: number) => r.find((x) => x.word === w)?.value as number;
+    expect(value(cout)).toBe(value(none));
+    expect(value(nul)).toBe(value(none));
+    expect(value(cin)).toBeGreaterThan(value(none));
   });
 });

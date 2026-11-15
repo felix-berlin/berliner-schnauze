@@ -1,32 +1,79 @@
 name: Unit tests
 on:
   pull_request:
-    paths-ignore:
-      - "**.md"
-      - "docs/**"
-      - "openspec/**"
   push:
     branches:
       - main
       - beta
-    paths-ignore:
-      - "**.md"
-      - "docs/**"
-      - "openspec/**"
 
 permissions:
-  id-token: write
   contents: read
-  checks: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  # Doc-only changes skip the jobs below. They are required checks, and a job skipped via `if` counts as passed,
+  # unlike a workflow skipped via `paths-ignore`, which leaves the required check pending forever.
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      code: ${{ steps.f.outputs.code }}
+      payload: ${{ steps.f.outputs.payload }}
+    steps:
+      # Pushes are diffed with git, pull requests via the API (no checkout needed there).
+      - name: Checkout ✅
+        uses: actions/checkout@v7
+
+      - name: Detect code changes
+        id: f
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        with:
+          filters: |
+            code:
+              - "**"
+              - "!**.md"
+              - "!docs/**"
+              - "!renovate.json"
+              - "!.claude/**"
+              - "!.vscode/**"
+              - "!.opencodereview/**"
+              - "!.design-sync/**"
+              - "!orca.yaml"
+              - "!.worktreeinclude"
+              - "!skills-lock.json"
+              - "!data/**"
+              - "!scripts/berlin-map/**"
+              - "!scripts/orca-*.sh"
+              - "!scripts/*anki*"
+              - "!scripts/test_*.py"
+            # What can change the database schema or the migration run; the website cannot.
+            payload:
+              - "payload/**"
+              - "pnpm-lock.yaml"
+              - "pnpm-workspace.yaml"
+              - "package.json"
+              - "patches/**"
+              - ".npmrc"
+              - ".nvmrc"
+              - "scripts/migration-upgrade-test.sh"
+              - ".github/workflows/unit-test.yml"
+
   lint:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     name: Run unit tests
     runs-on: ubuntu-latest
+    # id-token only here: the Infisical OIDC login (CODECOV_TOKEN, loaded after the tests); checks for the test-report check run.
+    permissions:
+      id-token: write
+      contents: read
+      checks: write
     defaults:
       run:
         working-directory: website
@@ -34,15 +81,6 @@ jobs:
     steps:
       - name: Checkout ✅
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-
-      - name: Fetch secrets from Infisical 🔐
-        uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
-        with:
-          method: "oidc"
-          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
-          project-slug: "berliner-schnauze"
-          env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
-          domain: "https://infisical.kasimir.dev"
 
       - name: Setup pnpm 🛠️
         uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6
@@ -59,7 +97,19 @@ jobs:
       - name: Run Vitest (with coverage report) 🧪
         run: pnpm run test:ci
 
+      - name: Fetch secrets from Infisical 🔐
+        if: ${{ !cancelled() }} # the test-results upload below also runs after a failed test run
+        continue-on-error: true # a login failure must not turn a green test run red; Codecov is skipped below
+        uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
+        with:
+          method: "oidc"
+          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
+          project-slug: "berliner-schnauze"
+          env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
+          domain: "https://infisical.kasimir.dev"
+
       - name: Codecov
+        if: ${{ env.CODECOV_TOKEN != '' }}
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           directory: ./website/tests/unit/coverage
@@ -67,7 +117,7 @@ jobs:
           CODECOV_TOKEN: ${{ env.CODECOV_TOKEN }}
 
       - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && env.CODECOV_TOKEN != '' }}
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           report_type: test_results
@@ -97,6 +147,8 @@ jobs:
             website/tests/unit/coverage
 
   cms-test:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     name: Run CMS tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -155,7 +207,8 @@ jobs:
   # from an empty database, so this job migrates with the base branch's code, seeds, upgrades with the PR and rolls back.
   migration-upgrade:
     name: Migration upgrade test
-    if: github.event_name == 'pull_request'
+    needs: changes
+    if: github.event_name == 'pull_request' && needs.changes.outputs.payload == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:

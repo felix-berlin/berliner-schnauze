@@ -238,9 +238,10 @@ Use the exact same `---` import block pattern (same layout, same title conventio
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
-import { decodeShareHash } from "@utils/gameShare";
 import type { SharePayload } from "@utils/gameShare";
+
+import { decodeShareHash } from "@utils/gameShare";
+import { computed, onMounted, ref } from "vue";
 
 const payload = ref<SharePayload | null>(null);
 

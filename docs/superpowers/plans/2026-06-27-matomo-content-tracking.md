@@ -310,8 +310,8 @@ Vue-Islands werden **nach** dem initialen Matomo-Scan gemountet → `useContentT
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import { useContentTracking } from "@composables/useContentTracking";
+import { ref } from "vue";
 
 const root = ref<HTMLElement | null>(null);
 useContentTracking(root);
@@ -376,8 +376,8 @@ Pattern: Wie `AlertBanner.vue` in Phase 4b — Composable-Pattern + `data-conten
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import { useContentTracking } from "@composables/useContentTracking";
+import { ref } from "vue";
 
 const root = ref<HTMLFormElement | null>(null);
 useContentTracking(root);
@@ -404,8 +404,8 @@ Einfacher Discovery-CTA. Impression = Button wurde gesehen, Interaction = Klick.
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import { useContentTracking } from "@composables/useContentTracking";
+import { ref } from "vue";
 
 const root = ref<HTMLAnchorElement | null>(null);
 useContentTracking(root);

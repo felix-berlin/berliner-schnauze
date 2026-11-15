@@ -383,12 +383,12 @@ Create `src/components/AppSettings.vue`:
 ```vue
 <script setup lang="ts">
 import { useStore } from "@nanostores/vue";
-import { defineAsyncComponent } from "vue";
 import {
   $notificationPermission,
   isNotificationSupported,
   requestNotificationPermission,
 } from "@stores/notificationPermission.ts";
+import { defineAsyncComponent } from "vue";
 
 const BellIcon = defineAsyncComponent(() => import("virtual:icons/lucide/bell"));
 const BellOffIcon = defineAsyncComponent(() => import("virtual:icons/lucide/bell-off"));
