@@ -56,7 +56,7 @@
     "anki:push:sandbox": "infisical run -- env POLAR_SANDBOX=true .venv-anki/bin/python scripts/upload_anki_to_polar.py --version $npm_package_version-dev"
   },
   "devDependencies": {
-    "@infisical/cli": "0.45.6",
+    "@infisical/cli": "0.45.8",
     "@semantic-release/changelog": "7.0.0",
     "@semantic-release/exec": "7.1.0",
     "@semantic-release/git": "11.0.1",
