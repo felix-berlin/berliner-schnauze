@@ -1,6 +1,6 @@
 import WordFeedbackCard from "@components/word-feedback/WordFeedbackCard.vue";
 import { flushPromises, mount } from "@vue/test-utils";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, onTestFinished, vi } from "vitest";
 
 const store = vi.hoisted(() => ({
   answerUsage: vi.fn(),
@@ -16,6 +16,7 @@ vi.mock("@stores/wordFeedback.ts", async () => {
 const track = vi.hoisted(() => vi.fn());
 vi.mock("@utils/analytics", () => ({ trackEvent: track }));
 
+import { $view } from "@stores/modal.ts";
 import { $feedback, $profile, $sendError } from "@stores/wordFeedback.ts";
 
 const state = (over: Record<string, unknown> = {}) =>
@@ -414,19 +415,24 @@ describe("WordFeedbackCard", () => {
     expect($remember.get()).toBe(false);
   });
 
-  it("Alle meine Antworten löschen asks first and then deletes through the store", async () => {
+  it("Alle meine Antworten löschen asks in the confirm dialog and then deletes through the store", async () => {
     $feedback.set(state({ mine: { area: "pankow", usage: "say" } }));
     store.deleteAllFeedback.mockResolvedValue(true);
-    const confirm = vi
-      .spyOn(window, "confirm")
-      .mockReturnValueOnce(false)
-      .mockReturnValueOnce(true);
+    const confirm = vi.spyOn(window, "confirm");
+    onTestFinished(() => confirm.mockRestore());
     const w = await mountIt();
+
     await click(w, "Alle meine Antworten löschen");
+    expect(confirm).not.toHaveBeenCalled();
+    expect($view.get().props?.message).toBe("Alle Deine Antworten zu allen Wörtern löschen?");
+    $view.get().events?.cancel?.();
+    await flushPromises();
     expect(store.deleteAllFeedback).not.toHaveBeenCalled();
+
     await click(w, "Alle meine Antworten löschen");
+    $view.get().events?.confirm?.();
+    await flushPromises();
     expect(store.deleteAllFeedback).toHaveBeenCalledWith(7);
-    confirm.mockRestore();
   });
 
   it("moves focus to the new question after an answer, not on mount", async () => {

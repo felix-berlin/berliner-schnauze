@@ -19,7 +19,7 @@
     inset: 0;
     background-color: var(--color-surface-floating);
     inline-size: var(--modal-width, min(100% - var(--_gutter), var(--_max-width)));
-    block-size: var(--modal-block-size, auto);
+    block-size: var(--modal-block-size, fit-content);
     max-block-size: var(--modal-max-block-size, 80svh);
     margin: auto;
 
