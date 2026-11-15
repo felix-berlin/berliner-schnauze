@@ -62,7 +62,7 @@
     "@semantic-release/git": "11.0.1",
     "oxfmt": "0.76.0",
     "oxlint": "1.93.0",
-    "oxlint-tsgolint": "7.0.2006",
+    "oxlint-tsgolint": "7.0.2007",
     "semantic-release": "25.0.9",
     "typescript": "6.0.3"
   },
