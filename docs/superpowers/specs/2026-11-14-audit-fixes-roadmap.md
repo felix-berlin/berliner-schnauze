@@ -25,7 +25,7 @@ Quelle: `docs/audit-2026-11-13.md` (Stand `92e7d19a`). Geprüft gegen HEAD `4d04
 - [x] 8. CFG-01–04, DX-01–03, MAINT-02 (`e9fa34fd`; CFG-01 als Startprüfung im Server statt `validateSecrets`, das auch den Build ohne Secrets bräche; MAINT-02: `@nanostores/logger` und `@vue/devtools-api` sind optionale Peers der Devtools und bleiben; `MCP_DISABLED=false` in `.env.example` ergänzt)
 - [x] 9. A11Y-01–04 (`76753464`)
 - [x] 10. DEP-01 (49 → 23 Advisories, prod 41 → 23; offen nur zod 3.x im Codecov-Build-Plugin, ein Major-Sprung per Override wäre riskanter als die Lücke; `MCP_DISABLED` in `payload/README.md` dokumentiert)
-- [ ] 11. CI-02, CI-04 (Repo-Teil)
+- [x] 11. CI-02, CI-04 (Repo-Teil; `47ae6c67`: Infisical-Schritte stehen hinter `pnpm install`, `id-token: write` nur an den Jobs mit Infisical. Die Unit-Tests brauchen weiter das Codecov-Token aus Infisical, also bleibt der Schritt dort. CI-04 ohne Workflow-Umbau: der Release ist über Required Checks abgesichert, Details in Schritt 16)
 - [ ] 12. PERF-01
 - [ ] 13. SEC-02
 - [ ] 14. MAINT-01
@@ -130,7 +130,7 @@ Ich liefere jeweils eine fertige Anleitung bzw. vorbereitete Änderung:
 
 - **Komodo:** `MCP_DISABLED=false` in die `cms`-Stack-Env übernehmen und deployen (aus Schritt 10).
 - **Infisical:** OIDC-Subject der Prod-Identity auf `refs/heads/main` binden (aus Schritt 11).
-- **GitHub:** Branch Protection / Required Checks für `main` prüfen bzw. setzen (aus Schritt 11).
+- **GitHub:** Branch Protection für `main` setzen (aus Schritt 11, CI-04): Merge nur über PR, Required Checks `lint-and-typecheck`, `Run unit tests`, `Run CMS tests`, `Migration upgrade test`, `build`, `docker-smoke`, `test` (Playwright, alle Shards), kein Bypass für Admins.
 - **Rollout-Konzept** für mehrere `web`-Container klären, falls Schritt 15 angegangen werden soll.
 
 ## Nicht im Umfang
