@@ -1,18 +1,10 @@
 name: Unit tests
 on:
   pull_request:
-    paths-ignore:
-      - "**.md"
-      - "docs/**"
-      - "openspec/**"
   push:
     branches:
       - main
       - beta
-    paths-ignore:
-      - "**.md"
-      - "docs/**"
-      - "openspec/**"
 
 permissions:
   contents: read
@@ -22,7 +14,59 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  # Doc-only changes skip the jobs below. They are required checks, and a job skipped via `if` counts as passed,
+  # unlike a workflow skipped via `paths-ignore`, which leaves the required check pending forever.
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      code: ${{ steps.f.outputs.code }}
+      payload: ${{ steps.f.outputs.payload }}
+    steps:
+      # Pushes are diffed with git, pull requests via the API (no checkout needed there).
+      - name: Checkout ✅
+        uses: actions/checkout@v7
+
+      - name: Detect code changes
+        id: f
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        with:
+          filters: |
+            code:
+              - "**"
+              - "!**.md"
+              - "!docs/**"
+              - "!renovate.json"
+              - "!.claude/**"
+              - "!.vscode/**"
+              - "!.opencodereview/**"
+              - "!.design-sync/**"
+              - "!orca.yaml"
+              - "!.worktreeinclude"
+              - "!skills-lock.json"
+              - "!data/**"
+              - "!scripts/berlin-map/**"
+              - "!scripts/orca-*.sh"
+              - "!scripts/*anki*"
+              - "!scripts/test_*.py"
+            # What can change the database schema or the migration run; the website cannot.
+            payload:
+              - "payload/**"
+              - "pnpm-lock.yaml"
+              - "pnpm-workspace.yaml"
+              - "package.json"
+              - "patches/**"
+              - ".npmrc"
+              - ".nvmrc"
+              - "scripts/migration-upgrade-test.sh"
+              - ".github/workflows/unit-test.yml"
+
   lint:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     name: Run unit tests
     runs-on: ubuntu-latest
     # id-token only here: the Infisical OIDC login (CODECOV_TOKEN, loaded after the tests); checks for the test-report check run.
@@ -103,6 +147,8 @@ jobs:
             website/tests/unit/coverage
 
   cms-test:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     name: Run CMS tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -161,7 +207,8 @@ jobs:
   # from an empty database, so this job migrates with the base branch's code, seeds, upgrades with the PR and rolls back.
   migration-upgrade:
     name: Migration upgrade test
-    if: github.event_name == 'pull_request'
+    needs: changes
+    if: github.event_name == 'pull_request' && needs.changes.outputs.payload == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
