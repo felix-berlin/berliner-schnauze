@@ -60,7 +60,7 @@
     "@semantic-release/changelog": "7.0.0",
     "@semantic-release/exec": "7.1.0",
     "@semantic-release/git": "11.0.1",
-    "oxfmt": "0.76.0",
+    "oxfmt": "0.78.0",
     "oxlint": "1.93.0",
     "oxlint-tsgolint": "7.0.2007",
     "semantic-release": "25.0.9",

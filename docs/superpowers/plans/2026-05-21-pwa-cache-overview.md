@@ -701,8 +701,8 @@ Create `src/components/PwaCacheOverview.vue`:
 </template>
 
 <script setup lang="ts">
-import { open } from "@stores/modal";
 import { formatBytes, getBucketDisplayName, useCacheStorage } from "@composables/useCacheStorage";
+import { open } from "@stores/modal";
 import RefreshCw from "virtual:icons/lucide/refresh-cw";
 import RotateCcw from "virtual:icons/lucide/rotate-ccw";
 import Trash2 from "virtual:icons/lucide/trash-2";
