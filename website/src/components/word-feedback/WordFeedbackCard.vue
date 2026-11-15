@@ -8,11 +8,7 @@
       <span class="num" />
       <h2 id="word-feedback-title" class="title">Sagste det noch?</h2>
       <span v-if="feedback" class="count">
-        {{
-          totalVotes
-            ? `Bisher ${totalVotes} ${totalVotes === 1 ? "Stimme" : "Stimmen"}`
-            : "Noch keene Stimme"
-        }}
+        {{ totalVotes ? `Bisher ${plural(totalVotes)}` : "Noch keene Stimme" }}
       </span>
     </div>
 
@@ -82,7 +78,7 @@
           <p class="teaser">
             {{
               totalVotes
-                ? `Schon ${totalVotes} ${totalVotes === 1 ? "Stimme" : "Stimmen"} – wat sagst du?`
+                ? `Schon ${plural(totalVotes)} – wat sagst du?`
                 : "Noch keener hat abjestimmt – mach den Anfang!"
             }}
           </p>
@@ -203,7 +199,12 @@
                 href="/datenschutz#7-wort-feedback"
                 >Datenschutz</a
               >).
-              <button class="c-textlink" :disabled="pending" type="button" @click="deleteAll">
+              <button
+                class="c-textlink"
+                :disabled="pending"
+                type="button"
+                @click="confirmDeleteAll"
+              >
                 Alle meine Antworten löschen
               </button>
             </p>
@@ -229,6 +230,7 @@
 <script setup lang="ts">
 import BerlinAreaMap from "@components/word-feedback/BerlinAreaMap.vue";
 import { useStore } from "@nanostores/vue";
+import { close, open } from "@stores/modal.ts";
 import {
   $feedback,
   $profile,
@@ -243,6 +245,7 @@ import {
   type Profile,
 } from "@stores/wordFeedback.ts";
 import { trackEvent } from "@utils/analytics";
+import { compareRows, plural, progressSegments, usageBars } from "@utils/wordFeedbackView";
 import { useOnline } from "@vueuse/core";
 import {
   AREA_LOCALITIES,
@@ -260,7 +263,15 @@ import CircleQuestionMark from "virtual:icons/lucide/circle-question-mark";
 import Ear from "virtual:icons/lucide/ear";
 import MessageCircleMore from "virtual:icons/lucide/message-circle-more";
 import WifiOff from "virtual:icons/lucide/wifi-off";
-import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from "vue";
+import {
+  computed,
+  defineAsyncComponent,
+  nextTick,
+  onMounted,
+  ref,
+  useTemplateRef,
+  watch,
+} from "vue";
 
 import { BERLIN_AREAS } from "@/data/berlinAreas";
 
@@ -268,6 +279,8 @@ type Step = "age" | "area" | "done" | "half" | "locality" | "origin" | "usage";
 type ProfileStep = "age" | "area" | "half" | "locality" | "origin";
 
 const props = defineProps<{ wordId: number }>();
+
+const ConfirmDialog = defineAsyncComponent(() => import("@components/ConfirmDialog.vue"));
 
 const USAGE_OPTIONS = [
   {
@@ -515,7 +528,6 @@ const withdraw = async () => {
 };
 
 const deleteAll = async () => {
-  if (pending.value || !window.confirm("Alle Deine Antworten zu allen Wörtern löschen?")) return;
   pending.value = true;
   try {
     if (!(await deleteAllFeedback(props.wordId))) return;
@@ -526,6 +538,24 @@ const deleteAll = async () => {
   pickedUsage.value = null;
   history.value = [];
   step.value = null;
+};
+
+const confirmDeleteAll = () => {
+  if (pending.value) return;
+  open({
+    props: { ariaLabel: "Antworten löschen", width: "400px" },
+    view: {
+      component: ConfirmDialog,
+      events: {
+        cancel: () => close(),
+        confirm: () => {
+          close();
+          void deleteAll();
+        },
+      },
+      props: { message: "Alle Deine Antworten zu allen Wörtern löschen?" },
+    },
+  });
 };
 
 // Without history (after a reload) the way back is the vote; the stored vote stays until a new one replaces it.
@@ -551,33 +581,14 @@ const stepIndex = computed(() => Math.max(0, steps.value.indexOf(current.value))
 
 // Always six segments, so the bar does not jump when the optional steps come or go.
 const ALL_STEPS = ["usage", "area", "locality", "origin", "half", "age"];
-const segments = computed(() => {
-  const at = ALL_STEPS.indexOf(current.value);
-  return ALL_STEPS.map((s, i) => {
-    if (!steps.value.includes(s)) return { state: "skipped", step: s };
-    if (current.value === "done" || i < at) return { state: "done", step: s };
-    return { state: i === at ? "current" : "open", step: s };
-  });
-});
+const segments = computed(() => progressSegments(ALL_STEPS, steps.value, current.value));
 
 const totalVotes = computed(() => {
   const t = feedback.value?.totals;
   return t ? t.say + t.know + t.never : 0;
 });
 
-const bars = computed(() => {
-  const t = feedback.value?.totals;
-  const total = totalVotes.value;
-  return USAGE_OPTIONS.map((o) => {
-    const n = t?.[o.value] ?? 0;
-    return {
-      label: o.label,
-      percent: total ? Math.round((n / total) * 100) : 0,
-      text: `${n} ${n === 1 ? "Stimme" : "Stimmen"}`,
-      value: o.value,
-    };
-  });
-});
+const bars = computed(() => usageBars(USAGE_OPTIONS, feedback.value?.totals, totalVotes.value));
 
 const areaName = computed(() => {
   const key = feedback.value?.mine?.area ?? profile.value.area;
@@ -589,18 +600,9 @@ const localityName = computed(() => {
   return key ? LOCALITY_NAMES[key] : null;
 });
 
-// Groups below the minimum size come back as null and get no row.
-const rows = computed(() => {
-  const c = feedback.value?.compare;
-  if (!c) return [];
-  return [
-    { label: "Ost-Berliner", share: c.east },
-    { label: "West-Berliner", share: c.west },
-    { label: "Zujezogene", share: c.moved },
-    { label: `in ${areaName.value}`, share: areaName.value ? c.area : null },
-    { label: `in ${localityName.value}`, share: localityName.value ? c.locality : null },
-  ].filter((r): r is { label: string; share: number } => r.share !== null);
-});
+const rows = computed(() =>
+  compareRows(feedback.value?.compare, areaName.value, localityName.value),
+);
 </script>
 
 <style lang="scss">
