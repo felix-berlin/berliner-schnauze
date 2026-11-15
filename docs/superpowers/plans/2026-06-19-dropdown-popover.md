@@ -349,7 +349,12 @@ Replace all content of `src/components/DropdownPopover.vue`:
 import { ref, useId } from "vue";
 
 export type PlacementValue =
-  "bottom-start" | "bottom-end" | "bottom" | "top-start" | "top-end" | "top";
+  | "bottom-start"
+  | "bottom-end"
+  | "bottom"
+  | "top-start"
+  | "top-end"
+  | "top";
 
 export type DropdownPopoverProps = {
   lazy?: boolean;

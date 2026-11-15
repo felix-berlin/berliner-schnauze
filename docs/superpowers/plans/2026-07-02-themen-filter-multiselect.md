@@ -267,8 +267,8 @@ Neue Datei `src/components/filter/ThemenFilter.vue`, 1:1 Kopie des `WordTypeFilt
 import { useStore, useVModel } from "@nanostores/vue";
 import { $wordSearch } from "@stores/wordList.ts";
 import { trackEvent } from "@utils/analytics";
-import { computed } from "vue";
 import Multiselect from "@vueform/multiselect";
+import { computed } from "vue";
 
 const wordSearch = useStore($wordSearch);
 const value = useVModel($wordSearch, "activeThemenFilter");

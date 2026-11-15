@@ -1113,8 +1113,8 @@ The card handles swipe detection via `useSwipe` and keyboard via `onKeyStroke`, 
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref } from "vue";
 import { onKeyStroke, useSwipe } from "@vueuse/core";
+import { computed, defineAsyncComponent, ref } from "vue";
 
 const XIcon = defineAsyncComponent(() => import("virtual:icons/lucide/x"));
 const CheckIcon = defineAsyncComponent(() => import("virtual:icons/lucide/check"));
@@ -1225,9 +1225,10 @@ git commit -m "feat(game): add GameCard component with swipe, keyboard, and anim
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent } from "vue";
-import { useShare } from "@vueuse/core";
 import type { GameCard } from "@composables/useGame";
+
+import { useShare } from "@vueuse/core";
+import { computed, defineAsyncComponent } from "vue";
 
 const TrophyIcon = defineAsyncComponent(() => import("virtual:icons/lucide/trophy"));
 const ExternalLinkIcon = defineAsyncComponent(() => import("virtual:icons/lucide/external-link"));
@@ -1349,15 +1350,16 @@ This component fetches `/api/search/index.json`, maps words to `GameCard[]`, ini
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
-import { useStore } from "@nanostores/vue";
 import ConfettiEffect from "@components/ConfettiEffect.vue";
-import { $gameStats } from "@stores/gameStats";
-import { fakeWords } from "@/data/fakeWords";
-import { useGame, type GameCard as GameCardData } from "@composables/useGame";
 import GameCard from "@components/games/GameCard.vue";
 import GameHUD from "@components/games/GameHUD.vue";
 import GameResult from "@components/games/GameResult.vue";
+import { useGame, type GameCard as GameCardData } from "@composables/useGame";
+import { useStore } from "@nanostores/vue";
+import { $gameStats } from "@stores/gameStats";
+import { computed, onMounted, ref } from "vue";
+
+import { fakeWords } from "@/data/fakeWords";
 
 const {
   answer,
