@@ -62,11 +62,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Built explicitly here (rather than inside webServer.command) so the build has the full job timeout.
-      # The build reads no database: pages render on demand, the shards below start the server against a
-      # seeded Postgres. E2E_BUILD only skips the Sentry/Codecov source-map upload plugins, which add real
-      # time for a build nobody deploys (see astro.config.mjs's isE2eBuild).
-      # Analytics off: the client must not report e2e runs to any Matomo site.
       - name: Fetch secrets from Infisical 🔐
         uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
         with:
@@ -76,6 +71,11 @@ jobs:
           env-slug: "staging" # never prod: e2e errors would land in the prod Sentry, suggestions could send real mail
           domain: "https://infisical.kasimir.dev"
 
+      # Built explicitly here (rather than inside webServer.command) so the build has the full job timeout.
+      # The build reads no database: pages render on demand, the shards below start the server against a
+      # seeded Postgres. E2E_BUILD only skips the Sentry/Codecov source-map upload plugins, which add real
+      # time for a build nobody deploys (see astro.config.mjs's isE2eBuild).
+      # Analytics off: the client must not report e2e runs to any Matomo site.
       - name: Build site
         env:
           E2E_BUILD: "1"
@@ -92,7 +92,7 @@ jobs:
           retention-days: 1
 
   # Builds the production image from the same dist/ the e2e shards use and
-  # checks routing, _headers/_redirects and caching in the running container.
+  # checks routing, security headers, redirects and caching in the running container.
   docker-smoke:
     needs: build
     timeout-minutes: 10

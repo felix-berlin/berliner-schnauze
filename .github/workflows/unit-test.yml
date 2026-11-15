@@ -55,6 +55,7 @@ jobs:
 
       - name: Fetch secrets from Infisical 🔐
         if: ${{ !cancelled() }} # the test-results upload below also runs after a failed test run
+        continue-on-error: true # a login failure must not turn a green test run red; Codecov is skipped below
         uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
         with:
           method: "oidc"
@@ -64,6 +65,7 @@ jobs:
           domain: "https://infisical.kasimir.dev"
 
       - name: Codecov
+        if: ${{ env.CODECOV_TOKEN != '' }}
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           directory: ./website/tests/unit/coverage
@@ -71,7 +73,7 @@ jobs:
           CODECOV_TOKEN: ${{ env.CODECOV_TOKEN }}
 
       - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && env.CODECOV_TOKEN != '' }}
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           report_type: test_results
