@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.12.7](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.6...v4.12.7) (2026-11-15)
+
+
+### Bug Fixes
+
+* **ci:** skip codecov without a token when the infisical step fails ([f1a4442](https://github.com/felix-berlin/berliner-schnauze/commit/f1a444205b375bf279635808b0fa8a205d78b19c))
+* **dev:** apply review findings for trending sql, feedback delete and docs ([6b21394](https://github.com/felix-berlin/berliner-schnauze/commit/6b21394a5730b57cf5364d4c1b62f21970966271))
+* **dev:** audit part 2 (advisories, CI secrets, trending SQL, feedback card, modals) ([#1884](https://github.com/felix-berlin/berliner-schnauze/issues/1884)) ([c0d2c0f](https://github.com/felix-berlin/berliner-schnauze/commit/c0d2c0f8120f2644be13f1838e782d7f33161c69))
+* **dev:** size modals to their content unless they set a block size ([1b4c25d](https://github.com/felix-berlin/berliner-schnauze/commit/1b4c25da9c90afc248e07299d753e630e1cc80bc))
+
+
+### Performance Improvements
+
+* **word:** aggregate trending counts in SQL instead of loading every daily row ([2e43a60](https://github.com/felix-berlin/berliner-schnauze/commit/2e43a60028e7b6c90909150c916d8fc21fbbca5e))
+
 ## [4.12.6](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.5...v4.12.6) (2026-11-14)
 
 
