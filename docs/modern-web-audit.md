@@ -20,7 +20,7 @@ Geprüft mit `modern-web-guidance legacy-scan` (`website/src`, `payload/src`) pl
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Layout                 | 29 `@container`-Regeln, 0 viewport-basierte `@media (min/max-width)`. Komponenten reagieren auf ihren Container.                                               |
 | CSS-Struktur           | `@layer` in 68 Dateien, `:has()` in 8, `@scope` (`:scope`) in Komponenten, `@supports` für 4 Fallbacks.                                                        |
-| Logische Eigenschaften | 119× `margin/padding/inset-inline                                                                                                                              | block`, 0× physische `-left/-right`. |
+| Logische Eigenschaften | 119× logische Eigenschaften (`-inline`/`-block` bei margin, padding, inset), 0× physische `-left/-right`.                                                      |
 | Theming                | `color-scheme: light/dark` in `_colors.scss`, `prefers-color-scheme`/`light-dark()` in 24 Dateien.                                                             |
 | Dialoge                | `Modal.vue` und `Lightbox.vue` nutzen natives `<dialog>` + `showModal()`; `Modal.vue` setzt `closedby`.                                                        |
 | Popover                | `directives/tooltip.ts` nutzt die Popover-API (`showPopover`).                                                                                                 |
