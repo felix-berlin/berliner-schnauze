@@ -54,6 +54,7 @@ jobs:
         run: pnpm run test:ci
 
       - name: Fetch secrets from Infisical 🔐
+        if: ${{ !cancelled() }} # the test-results upload below also runs after a failed test run
         uses: Infisical/secrets-action@d2e351f16c6ca20d17c85e6c992e04bdeb64e87d # v1.0.18
         with:
           method: "oidc"
