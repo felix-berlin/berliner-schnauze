@@ -12,7 +12,8 @@
 - Astros `security.csp` ist nicht aktiv (`astro.config.mjs` hat nur `allowedDomains`). Es erzeugt Hashes pro Seite als `<meta http-equiv>`; Header und Meta gelten dann **beide**.
 - Inline-Skripte je Seite (ohne JSON-LD, das `script-src` nicht betrifft): ca. 10. Eigene: Farbmodus (`SetColorMode.astro`, 1,7 KB, überall), BON-Fragment (`bonFragment.ts`, nur Spiel-Seite). Rest von Astro: Hydrations-Helfer (`Astro.load`/`only`, Island-Direktiven; Länge variiert je Seite) und inline gebündelte Module (Header, Breadcrumbs, Client-Router).
 - Style: Seiten tragen `style="…"`-Attribute (6 bis 34 je Seite) und `<style>`-Blöcke. Hashes in `style-src` würden `'unsafe-inline'` dort aufheben und die Attribute brechen.
-- Offen: wozu `data:` in `script-src` gebraucht wird (nicht belegt).
+- Prod (Startseite, per `scripts/prod-curl.sh`, 2026-11-15): Header identisch zum Repo. Die gerenderte Seite hat dieselben Inline-Skripte plus zwei Inline-Module mit einem `globalThis`-Snippet (1,1 und 1,7 KB; Sentry-Plugin beim Prod-Build, lokal nicht vorhanden). Der Inline-Satz hängt also vom Build ab: Hashes von Hand in den Header zu schreiben, wäre brüchig; sie müssen zur Buildzeit entstehen (Astro `security.csp`).
+- `data:` in `script-src`: In den gebauten Client-Dateien kommt `data:` nur in Strings vor (Sentry, Vue, Filter), nirgends als Skriptquelle. Streichen ist wahrscheinlich sicher, bleibt aber durch Aufgabe 3 und 4 zu belegen.
 
 ## Entscheidung
 
