@@ -28,7 +28,7 @@ Quelle: `docs/audit-2026-11-13.md` (Stand `92e7d19a`). Geprüft gegen HEAD `4d04
 - [x] 11. CI-02, CI-04 (Repo-Teil; `47ae6c67`: Infisical-Schritte stehen hinter `pnpm install`, `id-token: write` nur an den Jobs mit Infisical. Der Infisical-Schritt der Unit-Tests steht hinter dem Testlauf, direkt vor Codecov (nur dafür wird das Token gebraucht). CI-04 ohne Workflow-Umbau: der Release ist über Required Checks abgesichert, Details in Schritt 16)
 - [x] 12. PERF-01 (`2e43a600`; `collect()` gruppiert in SQL pro Wort statt alle Tageszeilen zu laden; die bestehenden Trending-Tests decken Gleichheit ab)
 - [ ] 13. SEC-02
-- [x] 14. MAINT-01 (nur teilweise: `window.confirm` ist durch den `ConfirmDialog` ersetzt, Balken, Segmente und Vergleichszeilen stehen als getestete Helfer in `utils/wordFeedbackView.ts`; die Komponente hat mit dem Template noch ca. 600 Zeilen, Ablauf und Persistenz sind nicht weiter zerlegt, die Browser-Prüfung des Dialogs steht aus)
+- [x] 14. MAINT-01 (`WordFeedbackCard.vue` 609 → 154 Zeilen: Ablauf und Persistenz in `composable/useWordFeedbackFlow.ts` (318 Zeilen), fünf Präsentationskomponenten `WordFeedback{Usage,Bars,Question,Done,Privacy}.vue`, Anzeige-Helfer und Konstanten in `utils/wordFeedbackView.ts`, `window.confirm` durch `ConfirmDialog`; im Browser geprüft: Vote, Balken, Fokus, Dialog, hell und dunkel)
 - [ ] 15. OPS-01 (zurückgestellt)
 - [ ] 16. Deine Schritte
 

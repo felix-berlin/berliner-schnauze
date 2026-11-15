@@ -56,3 +56,44 @@ export const compareRows = (
     { label: `in ${localityName}`, share: localityName ? c.locality : null },
   ].filter((r): r is { label: string; share: number } => r.share !== null);
 };
+
+export type Step = "age" | "area" | "done" | "half" | "locality" | "origin" | "usage";
+export type ProfileStep = Exclude<Step, "done" | "usage">;
+
+export const QUESTIONS = {
+  age: "Wie alt biste?",
+  area: "Wo wohnste?",
+  half: "In welcher Hälfte?",
+  locality: "Welcher Kiez?",
+  origin: "Uffjewachsen oder zujezogen?",
+};
+// The localities come from the chosen area (`choices` in the flow).
+export const CHOICES: Record<
+  Exclude<ProfileStep, "area" | "locality">,
+  { label: string; value: string }[]
+> = {
+  age: [
+    { label: "unter 20", value: "u20" },
+    { label: "20–29", value: "20-29" },
+    { label: "30–39", value: "30-39" },
+    { label: "40–49", value: "40-49" },
+    { label: "50–59", value: "50-59" },
+    { label: "60–69", value: "60-69" },
+    { label: "70–79", value: "70-79" },
+    { label: "80+", value: "80plus" },
+  ],
+  half: [
+    { label: "Ost", value: "east" },
+    { label: "West", value: "west" },
+    { label: "Beides / nach der Wende", value: "both" },
+  ],
+  origin: [
+    { label: "Hier uffjewachsen", value: "grewUp" },
+    { label: "Zujezogen, über 10 Jahre her", value: "movedOver10" },
+    { label: "Zujezogen, unter 10 Jahren", value: "movedUnder10" },
+  ],
+};
+/** Step order: decides the slide direction of the enter animation. */
+export const ORDER: Step[] = ["usage", "area", "locality", "origin", "half", "age", "done"];
+/** Always six segments, so the bar does not jump when the optional steps come or go. */
+export const ALL_STEPS = ["usage", "area", "locality", "origin", "half", "age"];
