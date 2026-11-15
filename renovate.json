@@ -5,7 +5,8 @@
   "schedule": ["before 6am every weekday"],
   "minimumReleaseAge": "3 days",
   "internalChecksFilter": "strict",
-  "prConcurrentLimit": 5,
+  "prConcurrentLimit": 0,
+  "prHourlyLimit": 0,
   "postUpdateOptions": ["pnpmDedupe"],
   "lockFileMaintenance": {
     "enabled": true,

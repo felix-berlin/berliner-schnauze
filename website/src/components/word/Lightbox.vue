@@ -3,7 +3,7 @@
     ref="dialog"
     class="c-lightbox"
     aria-label="Bildansicht"
-    @click.self="dialog?.close()"
+    closedby="any"
     @close="restoreFocus"
     @keydown="onKey"
   >
