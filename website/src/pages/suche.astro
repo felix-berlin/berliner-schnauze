@@ -1,0 +1,21 @@
+---
+import WordSearch from '@components/word-search/WordSearch.astro';
+import Layout from '@layouts/Layout.astro';
+import { SITE_URL } from 'astro:env/client';
+import { seoData } from '@utils/helpers';
+
+const content = {
+  seo: {
+    canonical: `${SITE_URL}/suche`,
+    opengraphDescription: 'Durchsuche den Berliner Jargon: Berlinerisch zu Hochdeutsch und zurück.',
+    robots: 'noindex, follow',
+  },
+  title: 'Wortsuche - Berlinerisch zu Hochdeutsch',
+};
+---
+
+<Layout content={seoData(content)}>
+  <h1>Wortsuche</h1>
+
+  <WordSearch />
+</Layout>
