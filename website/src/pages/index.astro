@@ -2,7 +2,6 @@
 import '@styles/objects/_index.scss';
 import FactCard from '@components/FactCard.astro';
 import GameCtaCard from '@components/GameCtaCard.astro';
-import WordSearch from '@components/word-search/WordSearch.astro';
 import WordOfTheDay from '@components/WordOfTheDay.vue';
 import WordSearchLink from '@components/WordSearchLink.vue';
 import Layout from '@layouts/Layout.astro';
@@ -24,7 +23,7 @@ const websiteSchema = jsonLd({
     'query-input': 'required name=search_term_string',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: `${SITE_URL}/wort?q={search_term_string}`,
+      urlTemplate: `${SITE_URL}/suche?q={search_term_string}`,
     },
   },
   url: SITE_URL,
@@ -107,6 +106,4 @@ const facts = await fetchHomeFacts();
       <div slot='fallback' class='c-facts-grid__wotd-slot'></div>
     </WordOfTheDay>
   </section>
-
-  <WordSearch />
 </Layout>

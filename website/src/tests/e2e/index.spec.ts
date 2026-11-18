@@ -1,7 +1,5 @@
 import { test, expect } from "@playwright/test";
 
-import { resultCount } from "./helpers";
-
 test.describe("Startseite (/)", () => {
   // Only the attributes: the bear comes from Payload media, which the e2e job has no CMS for.
   test("Hero-Bild reserviert seinen Platz (kein Layout Shift)", async ({ page }) => {
@@ -32,16 +30,33 @@ test.describe("Startseite (/)", () => {
     );
   });
 
-  test("Wortsuche filtert die Wortliste", async ({ page }) => {
+  test("Startseite hat keine Wortliste und kein Suchfeld mehr", async ({ page }) => {
     await page.goto("/");
 
-    const search = page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" });
-    const wordList = page.locator(".c-word-list");
-    await expect(resultCount(page)).toBeVisible();
+    // #wordListing is server-rendered; the search field and list are client-only islands
+    await expect(page.locator("#wordListing")).toHaveCount(0);
+    await expect(
+      page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" }),
+    ).toHaveCount(0);
+    await expect(page.locator(".c-word-list")).toHaveCount(0);
+  });
 
-    await search.fill("aasen");
-    await expect(wordList.getByRole("link", { exact: true, name: "aasen" })).toBeVisible();
-    await expect(wordList.getByRole("link", { exact: true, name: "ab" })).toHaveCount(0);
+  test("Suchlink führt auf /suche", async ({ page }) => {
+    await page.goto("/");
+
+    await expect(page.getByRole("link", { name: "Berliner Mundart durchsuchen" })).toHaveAttribute(
+      "href",
+      "/suche",
+    );
+  });
+
+  test("JSON-LD SearchAction zeigt auf /suche", async ({ page }) => {
+    await page.goto("/");
+
+    const jsonLd = await page.locator('script[type="application/ld+json"]').allTextContents();
+    const website = jsonLd.find((text) => text.includes('"WebSite"')) ?? "";
+    expect(website).toContain("/suche?q={search_term_string}");
+    expect(website).not.toContain("/wort?q=");
   });
 
   test("Wort des Tages ist verlinkt", async ({ page }) => {
