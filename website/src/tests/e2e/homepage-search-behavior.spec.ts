@@ -10,12 +10,12 @@ const searchbox = (page: Page) =>
 const cards = (page: Page) => page.locator(".c-word-list article");
 const clearButton = (page: Page) => page.getByRole("button", { name: "Wortsuche löschen" });
 
-test.describe("Search behaviour (/)", () => {
+test.describe("Search behaviour (/suche)", () => {
   test("?q= Deep-Link füllt das Suchfeld und filtert die Liste", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/suche");
     const total = await resultCount(page).textContent();
 
-    await page.goto("/?q=aasen");
+    await page.goto("/suche?q=aasen");
 
     await expect(searchbox(page)).toHaveValue("aasen");
     await expect(resultCount(page)).not.toHaveText(total ?? "");
@@ -23,7 +23,7 @@ test.describe("Search behaviour (/)", () => {
   });
 
   test("Tippen synchronisiert ?q=, Löschen entfernt den Parameter", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/suche");
 
     await searchbox(page).fill("aasen");
     await expect.poll(() => new URL(page.url()).searchParams.get("q")).toBe("aasen");
@@ -36,7 +36,7 @@ test.describe("Search behaviour (/)", () => {
   test("Groß-/Kleinschreibung und umgebende Leerzeichen ändern das Ergebnis nicht", async ({
     page,
   }) => {
-    await page.goto("/");
+    await page.goto("/suche");
     const count = resultCount(page);
     const total = await count.textContent();
 
@@ -58,7 +58,7 @@ test.describe("Search behaviour (/)", () => {
       dialogs.push(d.message());
       void d.dismiss();
     });
-    await page.goto("/");
+    await page.goto("/suche");
 
     for (const input of [
       '<img src=x onerror="alert(1)">',
@@ -74,7 +74,7 @@ test.describe("Search behaviour (/)", () => {
   });
 
   test("Wortanfang findet das vollständige Wort (anmach → anmachen)", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/suche");
 
     await searchbox(page).fill("anmach");
 
@@ -82,7 +82,7 @@ test.describe("Search behaviour (/)", () => {
   });
 
   test("Tippfehler mit einer Abweichung findet das Wort weiterhin", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/suche");
 
     await searchbox(page).fill("aasn");
 
@@ -91,10 +91,12 @@ test.describe("Search behaviour (/)", () => {
 
   test("Zurücksetzen leert Suchfeld und ?q=", async ({ isMobile, page }) => {
     test.skip(isMobile, "Filter sidebar is collapsed on mobile");
-    await page.goto("/");
+    await page.goto("/suche");
 
     await searchbox(page).fill("aasen");
     await expect(cards(page).first()).toBeVisible();
+    // The input pushes to the store after a short pause; reset only once the search has landed
+    await expect.poll(() => new URL(page.url()).searchParams.get("q")).toBe("aasen");
 
     await page.getByRole("button", { name: "Zurücksetzen" }).first().click();
 

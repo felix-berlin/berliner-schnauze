@@ -5,9 +5,9 @@ import { test, expect } from "@playwright/test";
 
 import { resultCount } from "./helpers";
 
-test.describe("Filter Sidebar (/)", () => {
+test.describe("Filter Sidebar (/suche)", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/suche");
     // On narrow viewports the filter sidebar sits behind a "Filter öffnen" toggle.
     const filterToggle = page.getByRole("button", { name: "Filter öffnen" });
     const opensBehindToggle = await filterToggle

@@ -19,11 +19,11 @@ async function search(page: Page, query: string) {
   return (await resultCount(page).textContent()) ?? "";
 }
 
-test.describe("Search language handling (/)", () => {
+test.describe("Search language handling (/suche)", () => {
   test("Umlaute und ß führen zu keinem Fehler, Groß-/Kleinschreibung ist egal", async ({
     page,
   }) => {
-    await page.goto("/");
+    await page.goto("/suche");
 
     const lower = await search(page, "straße");
     expect(lower).toMatch(/^\d+ Ergebnisse$/);
@@ -42,7 +42,7 @@ test.describe("Search language handling (/)", () => {
   test("Wort mit ß bleibt auch in ASCII-Schreibweise auffindbar (Ist-Verhalten)", async ({
     page,
   }) => {
-    await page.goto("/");
+    await page.goto("/suche");
 
     for (const query of ["abbeißen", "abbeissen"]) {
       await search(page, query);
@@ -51,7 +51,7 @@ test.describe("Search language handling (/)", () => {
   });
 
   test("Flexionsform anmachte findet anmachen (Stemming)", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/suche");
 
     await search(page, "anmachte");
 
@@ -59,7 +59,7 @@ test.describe("Search language handling (/)", () => {
   });
 
   test("Partizip angemacht findet anmachen derzeit nicht (Ist-Verhalten)", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/suche");
 
     await search(page, "angemacht");
 
@@ -74,14 +74,14 @@ test.describe("Search language handling (/)", () => {
     await page.goto("/wort/anmachen");
     await expect(page.getByText(/sich jemandem .*nähern/).first()).toBeVisible();
 
-    await page.goto("/");
+    await page.goto("/suche");
     await search(page, "nähern");
 
     await expect(wordLink(page, "anmachen")).toBeVisible();
   });
 
   test("Berliner Wort findet sich selbst (Dialekt → Dialekt)", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/suche");
 
     await search(page, "anmachen");
 

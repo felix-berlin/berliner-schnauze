@@ -3,9 +3,9 @@ import { test, expect } from "@playwright/test";
 const searchbox = (page: import("@playwright/test").Page) =>
   page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" });
 
-test.describe("Suchfeld (/)", () => {
+test.describe("Suchfeld (/suche)", () => {
   test("Platzhalter, Tippen und Leeren", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/suche");
     await expect(searchbox(page)).toHaveAttribute("placeholder", "Durchsuche den Berliner-Jargon");
 
     await searchbox(page).fill("aasen");
@@ -16,7 +16,7 @@ test.describe("Suchfeld (/)", () => {
   });
 
   test("Strg+K öffnet keinen Dialog (kein globaler Such-Shortcut)", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/suche");
 
     await page.keyboard.press("Control+K");
 

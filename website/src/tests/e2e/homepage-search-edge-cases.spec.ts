@@ -2,10 +2,10 @@ import { test, expect } from "@playwright/test";
 
 import { resultCount } from "./helpers";
 
-test.describe("Search Edge Cases (/)", () => {
+test.describe("Search Edge Cases (/suche)", () => {
   test("Suche ohne Treffer zeigt Empty-State-Nachricht", async ({ page }) => {
     // 1. Go to '/'
-    await page.goto("/");
+    await page.goto("/suche");
 
     const search = page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" });
     const results = resultCount(page);
@@ -24,7 +24,7 @@ test.describe("Search Edge Cases (/)", () => {
 
   test("Suche löschen stellt die vollständige Wortliste wieder her", async ({ page }) => {
     // 1. Go to '/'
-    await page.goto("/");
+    await page.goto("/suche");
 
     const search = page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" });
     // Content depends on the database (seed or dev data) — capture the current count instead of a fixed number.
