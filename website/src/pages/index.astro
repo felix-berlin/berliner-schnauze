@@ -63,6 +63,20 @@ const content = {
   title: 'Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch',
 };
 
+// Old share links (/?q=…) pointed at the search that used to live here. Redirect only real page loads:
+// ClientRouter fetches carry ?q= to every target (useSearchQuerySync) and must stay on the home page.
+// 302, not 301: a browser would reuse a cached 301 for those fetches as well.
+const query = Astro.url.searchParams.get("q");
+if (query && Astro.request.headers.get("sec-fetch-mode") === "navigate") {
+  return new Response(null, {
+    headers: {
+      "Cache-Control": "private, no-store",
+      Location: `/suche?q=${encodeURIComponent(query)}`,
+    },
+    status: 302,
+  });
+}
+
 const facts = await fetchHomeFacts();
 ---
 

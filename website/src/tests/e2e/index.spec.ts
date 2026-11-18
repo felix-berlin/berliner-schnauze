@@ -50,6 +50,27 @@ test.describe("Startseite (/)", () => {
     );
   });
 
+  test("alter ?q=-Link auf der Startseite leitet auf /suche?q= weiter", async ({ page }) => {
+    await page.goto("/?q=aasen");
+
+    await expect(page).toHaveURL(/\/suche\?q=aasen$/);
+    await expect(
+      page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" }),
+    ).toHaveValue("aasen");
+  });
+
+  test("Logo-Klick von /suche führt zur Startseite, nicht zurück", async ({ page }) => {
+    await page.goto("/suche?q=aasen");
+    await expect(
+      page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" }),
+    ).toHaveValue("aasen");
+
+    await page.getByRole("banner").getByRole("link", { name: "Berliner Schnauze" }).click();
+
+    await expect(page.getByRole("heading", { level: 1, name: /Na Keule/ })).toBeVisible();
+    expect(new URL(page.url()).pathname).toBe("/");
+  });
+
   test("JSON-LD SearchAction zeigt auf /suche", async ({ page }) => {
     await page.goto("/");
 
