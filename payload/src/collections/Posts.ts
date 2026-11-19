@@ -3,6 +3,7 @@ import type { CollectionConfig } from "payload";
 import { draftsAccess } from "../access";
 import { contentModifiedAtField, touchContentModifiedAt } from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
+import { liveLinkField } from "../fields/liveLink";
 import { previewUrl } from "../lib/preview";
 
 export const Posts: CollectionConfig = {
@@ -24,11 +25,7 @@ export const Posts: CollectionConfig = {
     { name: "excerpt", type: "textarea" },
     { name: "publishedAt", type: "date" },
     contentModifiedAtField,
-    {
-      name: "liveLink",
-      type: "ui",
-      admin: { position: "sidebar", components: { Field: "@/components/LiveLink" } },
-    },
+    liveLinkField,
     { name: "featuredImage", type: "upload", relationTo: "media" },
     // Default Lexical features already include upload (media) and blockquote.
     { name: "content", type: "richText" },

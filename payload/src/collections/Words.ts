@@ -3,6 +3,7 @@ import type { CollectionBeforeDeleteHook, CollectionConfig, Field } from "payloa
 import { draftsAccess } from "../access";
 import { contentModifiedAtField, touchContentModifiedAt } from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
+import { liveLinkField } from "../fields/liveLink";
 import { setDerivedWordFields } from "../hooks/deriveWordFields";
 import { mcpDraftOnly, mcpUpdateDraftOnly } from "../hooks/mcpDraftOnly";
 import { previewUrl } from "../lib/preview";
@@ -92,11 +93,7 @@ export const Words: CollectionConfig = {
     { name: "themen", type: "relationship", relationTo: "themen", hasMany: true },
     { name: "publishedAt", type: "date" },
     contentModifiedAtField,
-    {
-      name: "liveLink",
-      type: "ui",
-      admin: { position: "sidebar", components: { Field: "@/components/LiveLink" } },
-    },
+    liveLinkField,
     {
       name: "feedbackCounts",
       type: "ui",

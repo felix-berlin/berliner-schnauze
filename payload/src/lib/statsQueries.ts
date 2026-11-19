@@ -7,7 +7,7 @@ import type { Range } from "./statsRange";
 
 import { addDays, dayStart } from "./berlinTime";
 import { METRICS, type Metric } from "./statsMetrics";
-import { type StatsData, type TopWord, type VotedWord } from "./statsTypes";
+import { REACTION_KEYS, type StatsData, type TopWord, type VotedWord } from "./statsTypes";
 import { MIN_GROUP } from "./wordFeedback";
 
 /** A database number as a number; anything else is a bug that must show in the log, not as "NaN" on the page. */
@@ -118,14 +118,17 @@ export const loadStats = async (
   const daily = Object.fromEntries(
     METRICS.map((m) => [m, {} as Record<string, number>]),
   ) as StatsData["daily"];
-  for (const r of stats)
-    for (const m of ["views", "audio", "shares", "clicks"] as const) {
-      const n = num(r[m], `${m} on ${r.day}`);
-      if (n) daily[m][r.day] = n;
+  const fill = (metric: Metric, rows: { day: string; n: string }[]) => {
+    for (const r of rows) {
+      const n = num(r.n, `${metric} on ${r.day}`);
+      if (n) daily[metric][r.day] = n;
     }
-  const fill = (metric: Metric, rows: DayRow[]) => {
-    for (const r of rows) daily[metric][r.day] = num(r.n, `${metric} on ${r.day}`);
   };
+  for (const m of ["views", "audio", "shares", "clicks"] as const)
+    fill(
+      m,
+      stats.map((r) => ({ day: r.day, n: r[m] })),
+    );
   fill("reactions", reactions);
   fill("comments", comments);
   fill("suggestions", suggestions);
@@ -136,32 +139,21 @@ export const loadStats = async (
   ) as StatsData["totals"];
   if (split.length !== 1) throw new Error(`stats: reaction split returned ${split.length} rows`);
   const [s] = split;
-  const toTop = (rows: TopRow[]): TopWord[] =>
-    rows.map((r) => ({
-      id: r.id,
-      berlinerisch: r.berlinerisch,
-      slug: r.slug,
-      value: num(r.value, `value of word ${r.id}`),
-    }));
+  const toWord = (r: TopRow): TopWord => ({
+    id: r.id,
+    berlinerisch: r.berlinerisch,
+    slug: r.slug,
+    value: num(r.value, `value of word ${r.id}`),
+  });
   const toVoted = (rows: TopRow[]): VotedWord[] =>
-    rows.map((r) => ({
-      id: r.id,
-      berlinerisch: r.berlinerisch,
-      slug: r.slug,
-      value: num(r.value, `value of word ${r.id}`),
-      votes: num(r.votes, `votes of word ${r.id}`),
-    }));
+    rows.map((r) => Object.assign(toWord(r), { votes: num(r.votes, `votes of word ${r.id}`) }));
   return {
     daily,
     totals,
-    reactionSplit: {
-      like: num(s.like, "likes"),
-      dislike: num(s.dislike, "dislikes"),
-      say: num(s.say, "say"),
-      know: num(s.know, "know"),
-      never: num(s.never, "never"),
-    },
-    topViewed: toTop(topViewed),
+    reactionSplit: Object.fromEntries(
+      REACTION_KEYS.map((k) => [k, num(s[k], k)]),
+    ) as StatsData["reactionSplit"],
+    topViewed: topViewed.map(toWord),
     topLiked: toVoted(topLiked),
     topSay: toVoted(topSay),
   };

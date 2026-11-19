@@ -15,6 +15,8 @@ import { pctChange, previousRange } from "../lib/statsRange";
 import { RangeForm } from "./stats/RangeForm";
 import { StatsCharts } from "./stats/StatsCharts";
 
+const fmt = (n: number) => n.toLocaleString("de-DE");
+
 const percent = (value: ReturnType<typeof pctChange>) =>
   typeof value === "number" ? `${value > 0 ? "+" : ""}${value} %` : value;
 
@@ -32,7 +34,7 @@ function Tile({
   return (
     <div className="stats__card stats__tile">
       <span className="stats__tile-label">{METRIC_LABELS[metric]}</span>
-      <strong className="stats__tile-value">{data.totals[metric].toLocaleString("de-DE")}</strong>
+      <strong className="stats__tile-value">{fmt(data.totals[metric])}</strong>
       <span className={`stats__delta${tone ? ` stats__delta--${tone}` : ""}`}>
         {percent(change)}
       </span>
@@ -62,7 +64,7 @@ function TopList({
               <div className="stats__top-head">
                 <a href={`/admin/collections/words/${r.id}`}>{r.berlinerisch}</a>
                 <span className="stats__top-value">
-                  {r.value.toLocaleString("de-DE")}
+                  {fmt(r.value)}
                   {unit}
                   {"votes" in r ? ` · ${r.votes} Stimmen` : ""}
                 </span>
@@ -128,18 +130,20 @@ export default async function StatsView({
     today,
   );
 
-  const previousRangeOfP = previousRange(p.range);
+  const before = previousRange(p.range);
   const [current, previous] = await Promise.allSettled([
     loadStats(req.payload, p.range),
     // Only the totals are compared, so the three top lists are skipped.
-    loadStats(req.payload, previousRangeOfP, { tops: false }),
+    loadStats(req.payload, before, { tops: false }),
   ]);
-  for (const [result, range] of [
-    [current, p.range],
-    [previous, previousRangeOfP],
-  ] as const)
+  const ranges = [p.range, before];
+  for (const [i, result] of [current, previous].entries())
     if (result.status === "rejected")
-      req.payload.logger.error({ err: result.reason, msg: "[stats] admin stats failed", range });
+      req.payload.logger.error({
+        err: result.reason,
+        msg: "[stats] admin stats failed",
+        range: ranges[i],
+      });
   const body =
     current.status === "fulfilled" ? (
       <Body

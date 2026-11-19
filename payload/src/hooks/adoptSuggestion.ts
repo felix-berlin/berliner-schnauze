@@ -2,6 +2,7 @@ import type { CollectionBeforeChangeHook } from "payload";
 
 import { APIError } from "payload";
 
+import { findSlugHolder } from "../lib/slugHolder";
 import { matchKey, wordSlug } from "../lib/wordMatch";
 
 const taken = (slug: string, inTrash = false) =>
@@ -58,17 +59,8 @@ export const adoptSuggestion: CollectionBeforeChangeHook = async ({
   if (data.status === "accepted" && originalDoc?.status !== "accepted" && d.word == null) {
     const slug = wordSlug(berlinerWord);
     if (!slug) throw new APIError("Aus diesem Vorschlag lässt sich kein Slug bilden.", 400);
-    // `trash: true` also finds the trashed word that still holds the slug.
-    const { docs: holders } = await req.payload.find({
-      collection: "words",
-      depth: 0,
-      limit: 1,
-      trash: true,
-      select: { deletedAt: true },
-      where: { slug: { equals: slug } },
-      req,
-    });
-    if (holders.length > 0) throw taken(slug, Boolean(holders[0].deletedAt));
+    const holder = await findSlugHolder(req.payload, "words", slug, { req });
+    if (holder) throw taken(slug, holder.trashed);
     const word = await req.payload
       .create({
         collection: "words",

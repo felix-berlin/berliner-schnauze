@@ -2,8 +2,8 @@
 import { METRICS, type Metric } from "./statsMetrics";
 import { parseRange, type Range } from "./statsRange";
 
-export const VIEWS = ["linie", "flaeche"] as const;
-export const SPLITS = ["reaktion", "nutzung"] as const;
+const VIEWS = ["linie", "flaeche"] as const;
+const SPLITS = ["reaktion", "nutzung"] as const;
 export type View = (typeof VIEWS)[number];
 export type Split = (typeof SPLITS)[number];
 

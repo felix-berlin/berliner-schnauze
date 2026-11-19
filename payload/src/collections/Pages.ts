@@ -2,6 +2,7 @@ import type { CollectionConfig } from "payload";
 
 import { contentAccess } from "../access";
 import { identityFields } from "../fields/identity";
+import { liveLinkField } from "../fields/liveLink";
 
 export const Pages: CollectionConfig = {
   slug: "pages",
@@ -19,10 +20,6 @@ export const Pages: CollectionConfig = {
     { name: "title", type: "text", required: true },
     { name: "content", type: "richText" },
     ...identityFields,
-    {
-      name: "liveLink",
-      type: "ui",
-      admin: { position: "sidebar", components: { Field: "@/components/LiveLink" } },
-    },
+    liveLinkField,
   ],
 };

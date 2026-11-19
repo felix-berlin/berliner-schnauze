@@ -8,6 +8,27 @@ const QUICK = [
   ["1 Jahr", 365],
 ] as const;
 
+/** The two chart switches: label, URL key, and the options as [text, value]. */
+const SWITCHES = [
+  [
+    "Ansicht",
+    "ansicht",
+    [
+      ["Linie", "linie"],
+      ["Fläche", "flaeche"],
+    ],
+  ],
+  [
+    "Feedback-Diagramm",
+    "verteilung",
+    [
+      ["Reaktion", "reaktion"],
+      ["Nutzung", "nutzung"],
+    ],
+  ],
+] as const;
+const SWITCH_STATE = { ansicht: "view", verteilung: "split" } as const;
+
 /** Range picker (quick links and a GET form), the series choice and the two chart switches. No state: it is all in the URL. */
 export function RangeForm({ params, today }: { params: StatsParams; today: string }) {
   const pill = (label: string, change: StatsQuery, active: boolean) => (
@@ -24,13 +45,14 @@ export function RangeForm({ params, today }: { params: StatsParams; today: strin
     <div className="stats__card stats__controls">
       <div className="stats__row">
         <span className="stats__label">Zeitraum</span>
-        {QUICK.map(([label, days]) =>
-          pill(
+        {QUICK.map(([label, days]) => {
+          const von = addDays(today, 1 - days);
+          return pill(
             label,
-            { von: addDays(today, 1 - days), bis: today },
-            params.range.to === today && params.range.from === addDays(today, 1 - days),
-          ),
-        )}
+            { von, bis: today },
+            params.range.to === today && params.range.from === von,
+          );
+        })}
         <form action="/admin/stats" className="stats__range" method="get">
           <input
             aria-label="Von"
@@ -70,16 +92,14 @@ export function RangeForm({ params, today }: { params: StatsParams; today: strin
           );
         })}
       </div>
-      <div className="stats__row">
-        <span className="stats__label">Ansicht</span>
-        {pill("Linie", { ansicht: "linie" }, params.view === "linie")}
-        {pill("Fläche", { ansicht: "flaeche" }, params.view === "flaeche")}
-      </div>
-      <div className="stats__row">
-        <span className="stats__label">Feedback-Diagramm</span>
-        {pill("Reaktion", { verteilung: "reaktion" }, params.split === "reaktion")}
-        {pill("Nutzung", { verteilung: "nutzung" }, params.split === "nutzung")}
-      </div>
+      {SWITCHES.map(([label, key, options]) => (
+        <div className="stats__row" key={key}>
+          <span className="stats__label">{label}</span>
+          {options.map(([text, value]) =>
+            pill(text, { [key]: value }, params[SWITCH_STATE[key]] === value),
+          )}
+        </div>
+      ))}
     </div>
   );
 }
