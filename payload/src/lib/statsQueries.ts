@@ -6,19 +6,10 @@ import { sql } from "@payloadcms/db-postgres/drizzle";
 import type { Range } from "./statsRange";
 
 import { addDays, dayStart } from "./berlinTime";
+import { METRICS, type Metric } from "./statsMetrics";
 import { MIN_GROUP } from "./wordFeedback";
 
-export const METRICS = [
-  "views",
-  "audio",
-  "shares",
-  "clicks",
-  "reactions",
-  "comments",
-  "suggestions",
-  "bonGames",
-] as const;
-export type Metric = (typeof METRICS)[number];
+export { METRICS, type Metric };
 
 export type TopWord = {
   id: number;

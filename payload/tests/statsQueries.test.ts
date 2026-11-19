@@ -60,7 +60,10 @@ beforeAll(async () => {
     [draft.id, "2020-03-02", 100],
     [trashed.id, "2020-03-02", 50],
   ] as const)
-    await payload.create({ collection: "word-stats", data: { word: w, day, views, audio: 1 } });
+    await payload.create({
+      collection: "word-stats",
+      data: { word: w, day, views, audio: 1, shares: 0, clicks: 0 },
+    });
 
   // 10 reactions for a (all like), 9 for b: b stays below MIN_GROUP.
   for (let i = 0; i < MIN_GROUP; i++)

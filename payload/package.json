@@ -49,6 +49,7 @@
     "@payloadcms/richtext-lexical": "3.94.0",
     "@payloadcms/ui": "3.94.0",
     "all-the-german-words": "^1.1.0",
+    "chart.js": "^4.6.1",
     "cross-env": "^10.1.0",
     "de-compromise": "^0.1.2",
     "graphql": "^16.8.1",
@@ -60,6 +61,7 @@
     "nodemailer": "^10.6.0",
     "payload": "3.94.0",
     "react": "19.3.1",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "19.3.1"
   },
   "devDependencies": {
