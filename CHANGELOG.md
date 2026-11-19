@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.12.8](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.7...v4.12.8) (2026-11-19)
+
+
+### Bug Fixes
+
+* **deps:** repair lockfile entry for @rolldown/pluginutils ([#1904](https://github.com/felix-berlin/berliner-schnauze/issues/1904)) ([c731bc3](https://github.com/felix-berlin/berliner-schnauze/commit/c731bc3d9881ef253d74957adc24b950e47f6bdb))
+
 ## [4.12.7](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.6...v4.12.7) (2026-11-15)
 
 
