@@ -396,7 +396,10 @@ test.describe("Wort-Detailseite (/wort/<slug>)", () => {
         "data-done",
         "true",
       );
-      await expect(page.locator(".c-toast-notify")).toHaveCount(0);
+      // Other toasts (e.g. "offline ready" once the worker is installed) may show up; only a copy toast is wrong.
+      await expect(page.locator(".c-toast-notify", { hasText: /kopiert|kopieren/i })).toHaveCount(
+        0,
+      );
       expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("anmachen");
       await expect(menu.getByRole("menuitem", { name: "Wort kopieren" })).toBeVisible({
         timeout: 4000,

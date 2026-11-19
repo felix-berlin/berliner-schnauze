@@ -44,6 +44,7 @@ export const Suggestions: CollectionConfig = {
   admin: {
     useAsTitle: "berlinerWord",
     defaultColumns: ["berlinerWord", "translation", "status", "createdAt"],
+    group: "Community",
   },
   hooks: { beforeChange: [refuseWhenLocked, adoptSuggestion], afterChange: [mailEditors] },
   fields: [

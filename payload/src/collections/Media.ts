@@ -5,6 +5,7 @@ import { authenticated, mediaRead } from "../access";
 export const Media: CollectionConfig = {
   slug: "media",
   access: { read: mediaRead, create: authenticated, update: authenticated, delete: authenticated },
+  admin: { group: "Inhalt" },
   upload: {
     staticDir: process.env.MEDIA_DIR ?? "media",
     mimeTypes: ["image/*", "audio/*"],

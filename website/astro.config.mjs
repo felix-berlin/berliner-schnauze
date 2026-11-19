@@ -428,6 +428,17 @@ export default defineConfig({
       generateSW: {
         globDirectory: "dist/client",
         cleanupOutdatedCaches: true,
+        // vite-plugin-pwa 2 lists the manifest and shortcut icons a second time with another revision than the glob
+        // below; Workbox then throws add-to-cache-list-conflicting-entries and the worker never registers (no offline
+        // mode, a "Einige App-Funktionen ... nicht verfügbar" toast on every page). One entry per URL, the first wins.
+        manifestTransforms: [
+          (entries) => ({
+            manifest: entries.filter(
+              (entry, index) => entries.findIndex((other) => other.url === entry.url) === index,
+            ),
+            warnings: [],
+          }),
+        ],
         // No navigate fallback: with on-demand pages the precache holds no HTML, and Workbox would answer
         // every page load (not just offline ones) with the homepage. Visited pages are cached by the
         // NetworkFirst navigation route in runtimeCaching instead. Must be null, not omitted: @vite-pwa/astro

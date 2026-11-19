@@ -2,11 +2,14 @@ import type { CollectionBeforeChangeHook } from "payload";
 
 import { APIError } from "payload";
 
+import { findSlugHolder } from "../lib/slugHolder";
 import { matchKey, wordSlug } from "../lib/wordMatch";
 
-const taken = (slug: string) =>
+const taken = (slug: string, inTrash = false) =>
   new APIError(
-    `Es gibt schon ein Wort mit dem Slug „${slug}“. Bitte unter „Wort“ das vorhandene Wort auswählen (Ähnliche Wörter stehen in der Seitenleiste).`,
+    inTrash
+      ? `Der Slug „${slug}“ gehört einem Wort im Papierkorb. Dort wiederherstellen (und unter „Wort“ auswählen) oder endgültig löschen.`
+      : `Es gibt schon ein Wort mit dem Slug „${slug}“. Bitte unter „Wort“ das vorhandene Wort auswählen (Ähnliche Wörter stehen in der Seitenleiste).`,
     400,
   );
 
@@ -56,12 +59,8 @@ export const adoptSuggestion: CollectionBeforeChangeHook = async ({
   if (data.status === "accepted" && originalDoc?.status !== "accepted" && d.word == null) {
     const slug = wordSlug(berlinerWord);
     if (!slug) throw new APIError("Aus diesem Vorschlag lässt sich kein Slug bilden.", 400);
-    const { totalDocs } = await req.payload.count({
-      collection: "words",
-      where: { slug: { equals: slug } },
-      req,
-    });
-    if (totalDocs > 0) throw taken(slug);
+    const holder = await findSlugHolder(req.payload, "words", slug, { req });
+    if (holder) throw taken(slug, holder.trashed);
     const word = await req.payload
       .create({
         collection: "words",

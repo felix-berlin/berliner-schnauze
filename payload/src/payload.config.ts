@@ -47,6 +47,10 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
+    components: {
+      afterNavLinks: ["@/components/StatsNavLink"],
+      views: { stats: { Component: "@/components/StatsView", path: "/stats" } },
+    },
   },
   // A slug change on a collection with a public page adds a 301 from the old path.
   collections: [

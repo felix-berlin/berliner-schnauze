@@ -6,6 +6,7 @@ const re = supportedBrowsers as RegExp;
 const ff = (v: number) =>
   `Mozilla/5.0 (X11; Linux x86_64; rv:${v}.0) Gecko/20100101 Firefox/${v}.0`;
 
+// "baseline widely available" is a sliding 30-month window: use versions well inside it, or this test ages out.
 describe("supported browser regex", () => {
   it.each([140, 145])("rejects Firefox %i", (v) => expect(re.test(ff(v))).toBe(false));
 
@@ -17,18 +18,18 @@ describe("supported browser regex", () => {
 
   it("accepts Firefox 146", () => expect(re.test(ff(146))).toBe(true));
 
-  it("accepts Chrome 124", () => {
+  it("accepts Chrome 140", () => {
     expect(
       re.test(
-        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
       ),
     ).toBe(true);
   });
 
-  it("accepts Safari 17.5", () => {
+  it("accepts Safari 18.6", () => {
     expect(
       re.test(
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
       ),
     ).toBe(true);
   });
