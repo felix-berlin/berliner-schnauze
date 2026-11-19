@@ -7,7 +7,13 @@ import type { Range } from "./statsRange";
 
 import { addDays, dayStart } from "./berlinTime";
 import { METRICS, type Metric } from "./statsMetrics";
-import { REACTION_KEYS, type StatsData, type TopWord, type VotedWord } from "./statsTypes";
+import {
+  REACTION_KEYS,
+  type ReactionKey,
+  type StatsData,
+  type TopWord,
+  type VotedWord,
+} from "./statsTypes";
 import { MIN_GROUP } from "./wordFeedback";
 
 /** A database number as a number; anything else is a bug that must show in the log, not as "NaN" on the page. */
@@ -37,7 +43,7 @@ export const loadStats = async (
   const { drizzle } = payload.db as unknown as PostgresAdapter;
   const from = dayStart(range.from).toISOString();
   const to = dayStart(addDays(range.to, 1)).toISOString();
-  // A failing query names itself, so the page log says which of the nine broke.
+  // A failing query names itself, so the page log says which one broke.
   const run = async <T>(label: string, query: ReturnType<typeof sql>) => {
     try {
       return (await drizzle.execute(query)).rows as T[];
@@ -46,7 +52,9 @@ export const loadStats = async (
     }
   };
   type DayRow = { day: string; n: string };
+  type FeedbackRow = { day: string } & Record<"reactions" | ReactionKey, string>;
   type TopRow = {
+    list?: "liked" | "say";
     id: number;
     berlinerisch: string;
     slug: string | null;
@@ -64,44 +72,52 @@ export const loadStats = async (
       group by 1
     `,
     );
-  const topWords = (label: string, query: ReturnType<typeof sql>) =>
-    tops ? run<TopRow>(label, query) : Promise.resolve([] as TopRow[]);
   const published = sql`w._status = 'published' and w.deleted_at is null`;
   const feedbackWindow = sql`f.created_at >= ${from}::timestamptz and f.created_at < ${to}::timestamptz`;
-  const share = (column: string, value: string) => sql`
-    select w.id, w.berlinerisch, w.slug,
-      round(100.0 * count(*) filter (where f.${sql.identifier(column)} = ${value}) / count(*)) as value,
-      count(*) as votes
-    from word_feedback f join words w on w.id = f.word_id
-    where ${feedbackWindow} and f.${sql.identifier(column)} is not null and ${published}
-    group by w.id having count(*) >= ${MIN_GROUP}
-    order by value desc, votes desc, w.id limit ${TOP}`;
 
-  const [stats, reactions, comments, suggestions, bon, split, topViewed, topLiked, topSay] =
-    await Promise.all([
-      run<{ day: string; views: string; audio: string; shares: string; clicks: string }>(
-        "word_stats",
+  // One scan of word_feedback gives the daily reaction count and the split (its columns sum to the split).
+  const feedbackPerDay = run<FeedbackRow>(
+    "word_feedback",
+    sql`
+      select ${BERLIN_DAY("created_at")} as day,
+        count(*) filter (where reaction is not null) as reactions,
+        count(*) filter (where reaction = 'like') as "like",
+        count(*) filter (where reaction = 'dislike') as dislike,
+        count(*) filter (where usage = 'say') as say,
+        count(*) filter (where usage = 'know') as know,
+        count(*) filter (where usage = 'never') as never
+      from word_feedback f where ${feedbackWindow} group by 1
+    `,
+  );
+  // One scan for both vote lists: per word the like share of the reactions and the say share of the usage answers.
+  const votedWords = tops
+    ? run<TopRow>(
+        "votes",
         sql`
-        select day, sum(views) as views, sum(audio) as audio, sum(shares) as shares, sum(clicks) as clicks
-        from word_stats where day >= ${range.from} and day <= ${range.to} group by day
-      `,
-      ),
-      perDay("word_feedback", "created_at", sql`reaction is not null`),
-      perDay("comments", "created_at", sql`status = 'published'`),
-      perDay("suggestions", "created_at", sql`true`),
-      perDay("bon_games", "finished_at", sql`true`),
-      run<Record<string, string>>(
-        "reaction split",
-        sql`
-        select count(*) filter (where reaction = 'like') as "like",
-          count(*) filter (where reaction = 'dislike') as dislike,
-          count(*) filter (where usage = 'say') as say,
-          count(*) filter (where usage = 'know') as know,
-          count(*) filter (where usage = 'never') as never
-        from word_feedback f where ${feedbackWindow}
-      `,
-      ),
-      topWords(
+      with agg as (
+        select w.id, w.berlinerisch, w.slug,
+          count(*) filter (where f.reaction is not null) as reaction_votes,
+          round(100.0 * count(*) filter (where f.reaction = 'like')
+            / nullif(count(*) filter (where f.reaction is not null), 0)) as like_share,
+          count(*) filter (where f.usage is not null) as usage_votes,
+          round(100.0 * count(*) filter (where f.usage = 'say')
+            / nullif(count(*) filter (where f.usage is not null), 0)) as say_share
+        from word_feedback f join words w on w.id = f.word_id
+        where ${feedbackWindow} and ${published}
+        group by w.id
+      )
+      (select 'liked' as list, id, berlinerisch, slug, like_share as value, reaction_votes as votes
+        from agg where reaction_votes >= ${MIN_GROUP}
+        order by like_share desc, reaction_votes desc, id limit ${TOP})
+      union all
+      (select 'say' as list, id, berlinerisch, slug, say_share as value, usage_votes as votes
+        from agg where usage_votes >= ${MIN_GROUP}
+        order by say_share desc, usage_votes desc, id limit ${TOP})
+    `,
+      )
+    : Promise.resolve([] as TopRow[]);
+  const viewedWords = tops
+    ? run<TopRow>(
         "topViewed",
         sql`
         select w.id, w.berlinerisch, w.slug, sum(s.views) as value
@@ -110,10 +126,24 @@ export const loadStats = async (
         group by w.id having sum(s.views) > 0
         order by value desc, w.id limit ${TOP}
       `,
-      ),
-      topWords("topLiked", share("reaction", "like")),
-      topWords("topSay", share("usage", "say")),
-    ]);
+      )
+    : Promise.resolve([] as TopRow[]);
+
+  const [stats, feedback, comments, suggestions, bon, topViewed, voted] = await Promise.all([
+    run<{ day: string; views: string; audio: string; shares: string; clicks: string }>(
+      "word_stats",
+      sql`
+        select day, sum(views) as views, sum(audio) as audio, sum(shares) as shares, sum(clicks) as clicks
+        from word_stats where day >= ${range.from} and day <= ${range.to} group by day
+      `,
+    ),
+    feedbackPerDay,
+    perDay("comments", "created_at", sql`status = 'published'`),
+    perDay("suggestions", "created_at", sql`true`),
+    perDay("bon_games", "finished_at", sql`true`),
+    viewedWords,
+    votedWords,
+  ]);
 
   const daily = Object.fromEntries(
     METRICS.map((m) => [m, {} as Record<string, number>]),
@@ -129,7 +159,10 @@ export const loadStats = async (
       m,
       stats.map((r) => ({ day: r.day, n: r[m] })),
     );
-  fill("reactions", reactions);
+  fill(
+    "reactions",
+    feedback.map((r) => ({ day: r.day, n: r.reactions })),
+  );
   fill("comments", comments);
   fill("suggestions", suggestions);
   fill("bonGames", bon);
@@ -137,24 +170,25 @@ export const loadStats = async (
   const totals = Object.fromEntries(
     METRICS.map((m) => [m, Object.values(daily[m]).reduce((a, b) => a + b, 0)]),
   ) as StatsData["totals"];
-  if (split.length !== 1) throw new Error(`stats: reaction split returned ${split.length} rows`);
-  const [s] = split;
+  const reactionSplit = Object.fromEntries(
+    REACTION_KEYS.map((k) => [k, feedback.reduce((sum, r) => sum + num(r[k], `${k} on ${r.day}`), 0)]),
+  ) as StatsData["reactionSplit"];
   const toWord = (r: TopRow): TopWord => ({
     id: r.id,
     berlinerisch: r.berlinerisch,
     slug: r.slug,
     value: num(r.value, `value of word ${r.id}`),
   });
-  const toVoted = (rows: TopRow[]): VotedWord[] =>
-    rows.map((r) => Object.assign(toWord(r), { votes: num(r.votes, `votes of word ${r.id}`) }));
+  const toVoted = (list: "liked" | "say"): VotedWord[] =>
+    voted
+      .filter((r) => r.list === list)
+      .map((r) => Object.assign(toWord(r), { votes: num(r.votes, `votes of word ${r.id}`) }));
   return {
     daily,
     totals,
-    reactionSplit: Object.fromEntries(
-      REACTION_KEYS.map((k) => [k, num(s[k], k)]),
-    ) as StatsData["reactionSplit"],
+    reactionSplit,
     topViewed: topViewed.map(toWord),
-    topLiked: toVoted(topLiked),
-    topSay: toVoted(topSay),
+    topLiked: toVoted("liked"),
+    topSay: toVoted("say"),
   };
 };
