@@ -97,12 +97,14 @@ export function StatsCharts({ data, previous, range, series, view, split }: Prop
     scales: {
       x: { grid, ticks: axisText },
       y: {
+        beginAtZero: true,
         grid,
         position: "left",
         ticks: axisText,
         title: { color: colors.text, display: true, text: "Aufrufe" },
       },
       y1: {
+        beginAtZero: true,
         grid: { drawOnChartArea: false },
         position: "right",
         ticks: axisText,
