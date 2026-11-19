@@ -1,7 +1,11 @@
 import type { CollectionBeforeDeleteHook, CollectionConfig, Field } from "payload";
 
 import { draftsAccess } from "../access";
-import { contentModifiedAtField, touchContentModifiedAt } from "../fields/contentModified";
+import {
+  contentModifiedAtField,
+  preserveOnTrash,
+  touchContentModifiedAt,
+} from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
 import { liveLinkField } from "../fields/liveLink";
 import { setDerivedWordFields } from "../hooks/deriveWordFields";
@@ -50,7 +54,7 @@ export const Words: CollectionConfig = {
   versions: { drafts: true },
   hooks: {
     beforeOperation: [mcpUpdateDraftOnly],
-    beforeChange: [mcpDraftOnly, touchContentModifiedAt, setDerivedWordFields],
+    beforeChange: [mcpDraftOnly, preserveOnTrash, touchContentModifiedAt, setDerivedWordFields],
     beforeDelete: [deleteComments],
   },
   fields: [

@@ -22,6 +22,7 @@ describe("parseRange", () => {
     ["garbage", { von: "abc", bis: "2026-11-01" }],
     ["only von", { von: "2026-11-01" }],
     ["impossible date", { von: "2026-02-30", bis: "2026-03-05" }],
+    ["month 13 (must not throw)", { von: "2026-13-01", bis: "2026-11-01" }],
     ["array value", { von: ["2026-11-01", "2026-11-02"], bis: "2026-11-05" }],
   ])("falls back to the default with a notice for %s", (_name, params) => {
     const parsed = parseRange(params, today);

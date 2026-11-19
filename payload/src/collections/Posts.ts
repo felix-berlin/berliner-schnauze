@@ -1,7 +1,11 @@
 import type { CollectionConfig } from "payload";
 
 import { draftsAccess } from "../access";
-import { contentModifiedAtField, touchContentModifiedAt } from "../fields/contentModified";
+import {
+  contentModifiedAtField,
+  preserveOnTrash,
+  touchContentModifiedAt,
+} from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
 import { liveLinkField } from "../fields/liveLink";
 import { previewUrl } from "../lib/preview";
@@ -19,7 +23,7 @@ export const Posts: CollectionConfig = {
   },
   trash: true,
   versions: { drafts: { schedulePublish: true } },
-  hooks: { beforeChange: [touchContentModifiedAt] },
+  hooks: { beforeChange: [preserveOnTrash, touchContentModifiedAt] },
   fields: [
     { name: "title", type: "text", required: true },
     { name: "excerpt", type: "textarea" },

@@ -12,8 +12,9 @@ export const identityFields: Field[] = [
     type: "text",
     unique: true,
     index: true,
-    validate: (async (value, { collectionSlug, id, req }) => {
-      if (!value || !collectionSlug) return true;
+    validate: (async (value, { collectionSlug, event, id, req }) => {
+      // Not on every keystroke of the admin form: the save (and the Local API) checks.
+      if (!value || !collectionSlug || event === "onChange") return true;
       const holder = await findSlugHolder(req.payload, collectionSlug as CollectionSlug, value, {
         excludeId: id,
         req,

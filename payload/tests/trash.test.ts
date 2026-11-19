@@ -2,7 +2,7 @@ import type { CollectionSlug, Payload } from "payload";
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { touchContentModifiedAt } from "../src/fields/contentModified";
+import { preserveOnTrash, touchContentModifiedAt } from "../src/fields/contentModified";
 import { getTestPayload } from "./helpers/payload";
 
 let payload: Payload;
@@ -82,27 +82,30 @@ describe.each(cases)("%s trash", (collection, fields) => {
 });
 
 describe("contentModifiedAt", () => {
-  const hook = (data: Record<string, unknown>, originalDoc: Record<string, unknown>) =>
-    touchContentModifiedAt({ data, originalDoc, req: { context: {} } } as never) as Record<
-      string,
-      unknown
-    >;
+  const OLD = "2020-01-01T00:00:00.000Z";
+  // The hooks in the order the collections run them, sharing one request context.
+  const run = (data: Record<string, unknown>, originalDoc: Record<string, unknown>) => {
+    const req = { context: {} };
+    const args = { data, originalDoc, req } as never;
+    return touchContentModifiedAt({
+      ...(args as object),
+      data: preserveOnTrash(args) as Record<string, unknown>,
+    } as never) as Record<string, unknown>;
+  };
 
   it("moves on a content edit", () => {
-    const out = hook({ title: "neu" }, { contentModifiedAt: "2020-01-01T00:00:00.000Z" });
-    expect(out.contentModifiedAt).not.toBe("2020-01-01T00:00:00.000Z");
+    expect(run({ title: "neu" }, { contentModifiedAt: OLD }).contentModifiedAt).not.toBe(OLD);
   });
 
   it.each([
     ["trashing", { deletedAt: "2026-11-19T10:00:00.000Z" }, { deletedAt: null }],
     ["restoring", { deletedAt: null }, { deletedAt: "2026-11-19T10:00:00.000Z" }],
   ])("stays on %s (the sitemap lastmod is about content)", (_name, data, originalDoc) => {
-    const out = hook(data, { ...originalDoc, contentModifiedAt: "2020-01-01T00:00:00.000Z" });
-    expect(out.contentModifiedAt).toBeUndefined();
+    expect(run(data, { ...originalDoc, contentModifiedAt: OLD }).contentModifiedAt).toBe(OLD);
   });
 
   it("still moves on an edit that sends the unchanged deletedAt along (the admin form does)", () => {
-    const out = hook({ deletedAt: null, title: "neu" }, { deletedAt: null });
-    expect(out.contentModifiedAt).toEqual(expect.any(String));
+    const out = run({ deletedAt: null, title: "neu" }, { deletedAt: null, contentModifiedAt: OLD });
+    expect(out.contentModifiedAt).not.toBe(OLD);
   });
 });

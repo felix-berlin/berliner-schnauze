@@ -10,14 +10,17 @@ export const contentModifiedAtField: Field = {
   admin: { readOnly: true },
 };
 
-/** Trashing or restoring a doc is no content change: the sitemap lastmod of a page that did not change must not move. */
-const isTrashChange = (
-  data: Record<string, unknown>,
-  originalDoc: Record<string, unknown> | undefined,
-) => data.deletedAt !== undefined && (data.deletedAt ?? null) !== (originalDoc?.deletedAt ?? null);
+/**
+ * Put before `touchContentModifiedAt`: trashing or restoring a doc is no content change, so the sitemap lastmod of a
+ * page that did not change must not move. It asks the touch hook to keep the stored date (the flag it already honours).
+ */
+export const preserveOnTrash: CollectionBeforeChangeHook = ({ data, originalDoc, req }) => {
+  if (data.deletedAt !== undefined && (data.deletedAt ?? null) !== (originalDoc?.deletedAt ?? null))
+    req.context[PRESERVE_CONTENT_MODIFIED_AT] = true;
+  return data;
+};
 
 export const touchContentModifiedAt: CollectionBeforeChangeHook = ({ data, originalDoc, req }) => {
-  if (isTrashChange(data, originalDoc)) return data;
   if (req.context[PRESERVE_CONTENT_MODIFIED_AT] === true) {
     // On update `data` is merged with the stored doc, so an absent value already falls back to the stored one.
     data.contentModifiedAt ??= originalDoc?.contentModifiedAt ?? new Date().toISOString();

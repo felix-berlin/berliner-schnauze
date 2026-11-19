@@ -1,5 +1,5 @@
 // Pure range helpers of the admin stats page (no payload/next/drizzle imports).
-import { addDays } from "./berlinTime";
+import { addDays, daysBetween, isDay, mondayOf } from "./berlinTime";
 
 /** Berlin days `YYYY-MM-DD`, both ends included. */
 export type Range = { readonly from: string; readonly to: string };
@@ -7,16 +7,9 @@ export type Range = { readonly from: string; readonly to: string };
 const MAX_DAYS = 366;
 const DEFAULT_DAYS = 30;
 const WEEK_ABOVE_DAYS = 90;
-const MS_DAY = 864e5;
-
-const isDay = (value: unknown): value is string =>
-  typeof value === "string" &&
-  /^\d{4}-\d{2}-\d{2}$/.test(value) &&
-  new Date(Date.parse(`${value}T00:00:00Z`)).toISOString().slice(0, 10) === value; // rejects 02-30
 
 /** Number of days in the range, both ends included. */
-const lengthOf = ({ from, to }: Range): number =>
-  (Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / MS_DAY + 1;
+const lengthOf = ({ from, to }: Range): number => daysBetween(from, to) + 1;
 
 const defaultRange = (today: string): Range => ({
   from: addDays(today, 1 - DEFAULT_DAYS),
@@ -64,8 +57,7 @@ export const bucketMode = (range: Range): "day" | "week" =>
 /** The bucket a day belongs to: itself, or the Monday of its ISO week (never before the range starts). */
 export const bucketKey = (day: string, mode: "day" | "week", range: Range): string => {
   if (mode === "day") return day;
-  const sinceMonday = (new Date(`${day}T00:00:00Z`).getUTCDay() + 6) % 7;
-  const monday = addDays(day, -sinceMonday);
+  const monday = mondayOf(day);
   return monday < range.from ? range.from : monday;
 };
 
