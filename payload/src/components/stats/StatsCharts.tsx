@@ -129,10 +129,10 @@ export function StatsCharts({ data, previous, range, series, view, split }: Prop
   };
 
   return (
-    <div ref={ref} style={{ display: "grid", gap: "1.5rem" }}>
-      <section>
+    <div className="stats" ref={ref} style={{ padding: 0 }}>
+      <section className="stats__card">
         <h3>Verlauf</h3>
-        <div style={{ height: 320 }}>
+        <div className="stats__chart">
           <Line
             data={{
               labels: labels.map((l) => formatLabel(l, mode)),
@@ -152,9 +152,9 @@ export function StatsCharts({ data, previous, range, series, view, split }: Prop
           />
         </div>
       </section>
-      <section>
+      <section className="stats__card">
         <h3>Veränderung zum Zeitraum davor</h3>
-        <div style={{ height: 260 }}>
+        <div className="stats__chart stats__chart--short">
           <Bar
             data={{
               labels: METRICS.map((m) => METRIC_LABELS[m]),
@@ -171,9 +171,9 @@ export function StatsCharts({ data, previous, range, series, view, split }: Prop
           />
         </div>
       </section>
-      <section>
+      <section className="stats__card">
         <h3>{split === "reaktion" ? "Reaktionen" : "Nutzung"}</h3>
-        <div style={{ height: 140 }}>
+        <div className="stats__chart stats__chart--strip">
           <Bar
             data={{
               labels: [""],

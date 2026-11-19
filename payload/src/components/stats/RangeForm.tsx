@@ -34,57 +34,70 @@ const QUICK = [
 
 /** Range picker (quick links and a GET form), the series choice and the two chart switches. No state: it is all in the URL. */
 export function RangeForm({ params, today }: { params: StatsParams; today: string }) {
-  const link = (label: string, change: Partial<Record<string, string>>, active: boolean) => (
+  const pill = (label: string, change: Partial<Record<string, string>>, active: boolean) => (
     <a
       aria-current={active ? "true" : undefined}
+      className="stats-pill"
       href={statsHref(params, change)}
       key={label}
-      style={{ fontWeight: active ? 700 : 400, marginRight: "1rem" }}
     >
       {label}
     </a>
   );
   return (
-    <div style={{ display: "grid", gap: "0.75rem", marginBottom: "1.5rem" }}>
-      <div>
+    <div className="stats__card stats__controls">
+      <div className="stats__row">
+        <span className="stats__label">Zeitraum</span>
         {QUICK.map(([label, days]) =>
-          link(
+          pill(
             label,
             { von: addDays(today, 1 - days), bis: today },
             params.range.to === today && params.range.from === addDays(today, 1 - days),
           ),
         )}
+        <form action={BASE} className="stats__range" method="get">
+          <input
+            aria-label="Von"
+            defaultValue={params.range.from}
+            max={today}
+            name="von"
+            type="date"
+          />
+          <span>bis</span>
+          <input
+            aria-label="Bis"
+            defaultValue={params.range.to}
+            max={today}
+            name="bis"
+            type="date"
+          />
+          <input name="reihen" type="hidden" value={params.series.join(",")} />
+          <input name="ansicht" type="hidden" value={params.view} />
+          <input name="verteilung" type="hidden" value={params.split} />
+          <button className="btn btn--style-primary btn--size-small" type="submit">
+            <span className="btn__content">
+              <span className="btn__label">Anzeigen</span>
+            </span>
+          </button>
+        </form>
       </div>
-      <form
-        action={BASE}
-        method="get"
-        style={{ alignItems: "end", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}
-      >
-        <label>
-          Von <input defaultValue={params.range.from} max={today} name="von" type="date" />
-        </label>
-        <label>
-          Bis <input defaultValue={params.range.to} max={today} name="bis" type="date" />
-        </label>
-        <input name="reihen" type="hidden" value={params.series.join(",")} />
-        <input name="ansicht" type="hidden" value={params.view} />
-        <input name="verteilung" type="hidden" value={params.split} />
-        <button type="submit">Anzeigen</button>
-      </form>
-      <div>
-        Reihen:{" "}
+      <div className="stats__row">
+        <span className="stats__label">Reihen</span>
         {METRICS.map((m) => {
           const on = params.series.includes(m);
           const next = on ? params.series.filter((s) => s !== m) : [...params.series, m];
-          return link(`${on ? "✓ " : ""}${METRIC_LABELS[m]}`, { reihen: next.join(",") }, on);
+          return pill(METRIC_LABELS[m], { reihen: next.join(",") }, on);
         })}
       </div>
-      <div>
-        Ansicht: {link("Linie", { ansicht: "linie" }, params.view === "linie")}
-        {link("Fläche", { ansicht: "flaeche" }, params.view === "flaeche")}
-        {" · "}Verteilung:{" "}
-        {link("Reaktion", { verteilung: "reaktion" }, params.split === "reaktion")}
-        {link("Nutzung", { verteilung: "nutzung" }, params.split === "nutzung")}
+      <div className="stats__row">
+        <span className="stats__label">Ansicht</span>
+        {pill("Linie", { ansicht: "linie" }, params.view === "linie")}
+        {pill("Fläche", { ansicht: "flaeche" }, params.view === "flaeche")}
+      </div>
+      <div className="stats__row">
+        <span className="stats__label">Verteilung</span>
+        {pill("Reaktion", { verteilung: "reaktion" }, params.split === "reaktion")}
+        {pill("Nutzung", { verteilung: "nutzung" }, params.split === "nutzung")}
       </div>
     </div>
   );

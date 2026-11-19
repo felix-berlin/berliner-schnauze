@@ -25,17 +25,15 @@ function Tile({
   data: StatsData;
   previous: StatsData;
 }) {
+  const change = pctChange(data.totals[metric], previous.totals[metric]);
+  const tone = typeof change === "number" ? (change > 0 ? "up" : change < 0 ? "down" : "") : "";
   return (
-    <div
-      style={{
-        border: "1px solid var(--theme-elevation-150)",
-        borderRadius: 4,
-        padding: "0.75rem",
-      }}
-    >
-      <div style={{ color: "var(--theme-elevation-600)" }}>{METRIC_LABELS[metric]}</div>
-      <strong style={{ fontSize: "1.5rem" }}>{data.totals[metric].toLocaleString("de-DE")}</strong>
-      <div>{percent(pctChange(data.totals[metric], previous.totals[metric]))}</div>
+    <div className="stats__card stats__tile">
+      <span className="stats__tile-label">{METRIC_LABELS[metric]}</span>
+      <strong className="stats__tile-value">{data.totals[metric].toLocaleString("de-DE")}</strong>
+      <span className={`stats__delta${tone ? ` stats__delta--${tone}` : ""}`}>
+        {percent(change)}
+      </span>
     </div>
   );
 }
@@ -43,25 +41,25 @@ function Tile({
 function TopList({ title, rows, unit }: { title: string; rows: TopWord[]; unit: string }) {
   const max = Math.max(1, ...rows.map((r) => r.value));
   return (
-    <section>
+    <section className="stats__card">
       <h3>{title}</h3>
       {rows.length === 0 ? (
-        <p>Noch keine Daten.</p>
+        <p className="stats__empty">Noch keine Daten.</p>
       ) : (
-        <ol style={{ paddingLeft: "1.25rem" }}>
+        <ol className="stats__top">
           {rows.map((r) => (
-            <li key={r.id}>
-              <a href={`/admin/collections/words/${r.id}`}>{r.berlinerisch}</a>{" "}
-              {r.value.toLocaleString("de-DE")}
-              {unit}
-              {r.votes ? ` (${r.votes} Stimmen)` : ""}
-              <div
-                style={{
-                  background: "var(--theme-success-500)",
-                  height: 4,
-                  width: `${(r.value / max) * 100}%`,
-                }}
-              />
+            <li className="stats__top-row" key={r.id}>
+              <div className="stats__top-head">
+                <a href={`/admin/collections/words/${r.id}`}>{r.berlinerisch}</a>
+                <span className="stats__top-value">
+                  {r.value.toLocaleString("de-DE")}
+                  {unit}
+                  {r.votes ? ` · ${r.votes} Stimmen` : ""}
+                </span>
+              </div>
+              <div className="stats__bar">
+                <span style={{ width: `${(r.value / max) * 100}%` }} />
+              </div>
             </li>
           ))}
         </ol>
@@ -81,14 +79,7 @@ function Body({
 }) {
   return (
     <>
-      <div
-        style={{
-          display: "grid",
-          gap: "0.75rem",
-          gridTemplateColumns: "repeat(auto-fill, minmax(10rem, 1fr))",
-          marginBottom: "1.5rem",
-        }}
-      >
+      <div className="stats__tiles">
         {METRICS.map((m) => (
           <Tile data={data} key={m} metric={m} previous={previous} />
         ))}
@@ -101,14 +92,7 @@ function Body({
         split={p.split}
         view={p.view}
       />
-      <div
-        style={{
-          display: "grid",
-          gap: "1.5rem",
-          gridTemplateColumns: "repeat(auto-fit, minmax(16rem, 1fr))",
-          marginTop: "1.5rem",
-        }}
-      >
+      <div className="stats__lists">
         <TopList rows={data.topViewed} title="Top-Wörter nach Aufrufen" unit="" />
         <TopList rows={data.topLiked} title="Beliebt" unit=" %" />
         <TopList rows={data.topSay} title="Typisch berlinerisch" unit=" %" />
@@ -141,7 +125,7 @@ export default async function StatsView({
   const body = loaded ? (
     <Body current={loaded[0]} params={p} previous={loaded[1]} />
   ) : (
-    <p>Die Statistik ist gerade nicht verfügbar.</p>
+    <p className="stats__empty">Die Statistik ist gerade nicht verfügbar.</p>
   );
 
   return (
@@ -156,9 +140,11 @@ export default async function StatsView({
       visibleEntities={visibleEntities}
     >
       <Gutter>
-        <h1>Statistik</h1>
-        <RangeForm params={p} today={today} />
-        {body}
+        <div className="stats">
+          <h1>Statistik</h1>
+          <RangeForm params={p} today={today} />
+          {body}
+        </div>
       </Gutter>
     </DefaultTemplate>
   );

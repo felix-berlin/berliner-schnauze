@@ -1,0 +1,177 @@
+// Admin stats page (/admin/stats). Colors come from Payload's theme variables, so light and dark mode follow the admin.
+.stats {
+  display: grid;
+  gap: 1.5rem;
+  padding-block: 0.5rem 6rem;
+
+  h1 {
+    margin: 0;
+  }
+
+  &__card {
+    background: var(--theme-elevation-50);
+    border: 1px solid var(--theme-elevation-100);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+
+    h3 {
+      font-size: 1rem;
+      margin: 0 0 1rem;
+    }
+  }
+
+  &__controls {
+    display: grid;
+    gap: 1rem;
+  }
+
+  &__row {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+  }
+
+  &__label {
+    color: var(--theme-elevation-600);
+    flex: 0 0 6rem;
+    font-size: 0.85rem;
+  }
+
+  &__range {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-inline-start: 0.5rem;
+
+    input[type="date"] {
+      background: var(--theme-input-bg, var(--theme-bg));
+      border: 1px solid var(--theme-elevation-150);
+      border-radius: 4px;
+      color: var(--theme-text);
+      font: inherit;
+      padding: 0.35rem 0.6rem;
+    }
+
+    .btn {
+      margin: 0;
+    }
+  }
+
+  &__tiles {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  }
+
+  &__tile {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  &__tile-label {
+    color: var(--theme-elevation-600);
+    font-size: 0.85rem;
+  }
+
+  &__tile-value {
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  &__delta {
+    color: var(--theme-elevation-600);
+    font-size: 0.85rem;
+
+    &--up {
+      color: var(--theme-success-600, var(--theme-success-500));
+    }
+
+    &--down {
+      color: var(--theme-error-600, var(--theme-error-500));
+    }
+  }
+
+  &__chart {
+    height: 20rem;
+
+    &--short {
+      height: 15rem;
+    }
+
+    &--strip {
+      height: 9rem;
+    }
+  }
+
+  &__lists {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  }
+
+  &__top {
+    display: grid;
+    gap: 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__top-row {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  &__top-head {
+    align-items: baseline;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+  }
+
+  &__top-value {
+    color: var(--theme-elevation-600);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  &__bar {
+    background: var(--theme-elevation-100);
+    border-radius: 2px;
+    height: 4px;
+
+    > span {
+      background: var(--theme-success-500);
+      border-radius: 2px;
+      display: block;
+      height: 100%;
+    }
+  }
+
+  &__empty {
+    color: var(--theme-elevation-600);
+    margin: 0;
+  }
+}
+
+.stats-pill {
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 999px;
+  color: var(--theme-text);
+  font-size: 0.9rem;
+  padding: 0.25rem 0.85rem;
+  text-decoration: none;
+
+  &:hover {
+    background: var(--theme-elevation-100);
+  }
+
+  &[aria-current="true"] {
+    background: var(--theme-elevation-800);
+    border-color: var(--theme-elevation-800);
+    color: var(--theme-elevation-0);
+  }
+}
