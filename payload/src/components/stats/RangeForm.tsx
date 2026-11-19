@@ -1,6 +1,8 @@
+import { Button } from "@payloadcms/ui";
+
 import { addDays } from "../../lib/berlinTime";
 import { METRICS, METRIC_LABELS } from "../../lib/statsMetrics";
-import { statsHref, type StatsParams, type StatsQuery } from "../../lib/statsParams";
+import { statsHref, statsQuery, type StatsParams, type StatsQuery } from "../../lib/statsParams";
 
 const QUICK = [
   ["7 Tage", 7],
@@ -69,14 +71,14 @@ export function RangeForm({ params, today }: { params: StatsParams; today: strin
             name="bis"
             type="date"
           />
-          <input name="reihen" type="hidden" value={params.series.join(",")} />
-          <input name="ansicht" type="hidden" value={params.view} />
-          <input name="verteilung" type="hidden" value={params.split} />
-          <button className="btn btn--style-primary btn--size-small" type="submit">
-            <span className="btn__content">
-              <span className="btn__label">Anzeigen</span>
-            </span>
-          </button>
+          {Object.entries(statsQuery(params))
+            .filter(([key]) => key !== "von" && key !== "bis")
+            .map(([key, value]) => (
+              <input key={key} name={key} type="hidden" value={value} />
+            ))}
+          <Button buttonStyle="primary" size="small" type="submit">
+            Anzeigen
+          </Button>
         </form>
       </div>
       <div className="stats__row">

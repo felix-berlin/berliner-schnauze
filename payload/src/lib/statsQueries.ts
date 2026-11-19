@@ -171,7 +171,10 @@ export const loadStats = async (
     METRICS.map((m) => [m, Object.values(daily[m]).reduce((a, b) => a + b, 0)]),
   ) as StatsData["totals"];
   const reactionSplit = Object.fromEntries(
-    REACTION_KEYS.map((k) => [k, feedback.reduce((sum, r) => sum + num(r[k], `${k} on ${r.day}`), 0)]),
+    REACTION_KEYS.map((k) => [
+      k,
+      feedback.reduce((sum, r) => sum + num(r[k], `${k} on ${r.day}`), 0),
+    ]),
   ) as StatsData["reactionSplit"];
   const toWord = (r: TopRow): TopWord => ({
     id: r.id,

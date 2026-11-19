@@ -42,15 +42,15 @@ export const statsParams = (searchParams: SearchParams, today: string): StatsPar
   };
 };
 
+/** The URL query of `params`, the German keys in one place. */
+export const statsQuery = (params: StatsParams): Record<string, string> => ({
+  von: params.range.from,
+  bis: params.range.to,
+  reihen: params.series.join(","),
+  ansicht: params.view,
+  verteilung: params.split,
+});
+
 /** The inverse of `statsParams`: a link to the page with `change` applied to `params`. */
-export const statsHref = (params: StatsParams, change: StatsQuery = {}): string => {
-  const query = new URLSearchParams({
-    von: params.range.from,
-    bis: params.range.to,
-    reihen: params.series.join(","),
-    ansicht: params.view,
-    verteilung: params.split,
-    ...change,
-  });
-  return `/admin/stats?${query}`;
-};
+export const statsHref = (params: StatsParams, change: StatsQuery = {}): string =>
+  `/admin/stats?${new URLSearchParams({ ...statsQuery(params), ...change })}`;

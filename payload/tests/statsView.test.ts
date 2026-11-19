@@ -8,7 +8,10 @@ import { METRICS } from "../src/lib/statsMetrics";
 import { loadStats } from "../src/lib/statsQueries";
 
 // The admin UI packages import CSS, which vitest cannot load; these stand-ins just render their children.
-vi.mock("@payloadcms/ui", () => ({ Gutter: ({ children }: { children: unknown }) => children }));
+vi.mock("@payloadcms/ui", () => ({
+  Button: ({ children }: { children: unknown }) => children,
+  Gutter: ({ children }: { children: unknown }) => children,
+}));
 vi.mock("@payloadcms/next/templates", () => ({
   DefaultTemplate: ({ children }: { children: unknown }) => children,
 }));

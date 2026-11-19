@@ -2,25 +2,19 @@ import { color } from "chart.js/helpers";
 
 const FALLBACK_TEXT = "#6f6f6f";
 const FALLBACK_GRID = "#e3e3e3";
-const FALLBACK_SERIES = [
-  "#2f9e6b", // views / like
-  "#d9822b",
-  "#4a7bd0",
-  "#c0504d",
-  "#8a63c8",
-  "#2a9fb5",
-  "#b5a12a",
-  "#7d7d7d",
-];
 /**
- * Admin CSS variables (Payload 3) that replace the first series colors when they exist. Series 2 follows the elevation
- * grey on purpose; its blue fallback only shows where the variable is missing.
+ * Series colors as [admin CSS variable, fallback]: the variable wins when the admin defines it. Series 2 follows the
+ * elevation grey on purpose; its blue fallback only shows where the variable is missing.
  */
-const SERIES_VARS = [
-  "--theme-success-500",
-  "--theme-warning-500",
-  "--theme-elevation-600",
-  "--theme-error-500",
+const SERIES: readonly (readonly [string | null, string])[] = [
+  ["--theme-success-500", "#2f9e6b"], // views / like
+  ["--theme-warning-500", "#d9822b"],
+  ["--theme-elevation-600", "#4a7bd0"],
+  ["--theme-error-500", "#c0504d"],
+  [null, "#8a63c8"],
+  [null, "#2a9fb5"],
+  [null, "#b5a12a"],
+  [null, "#7d7d7d"],
 ];
 
 export type ThemeColors = { text: string; grid: string; series: string[] };
@@ -31,9 +25,7 @@ export const pickColors = (get: (name: string) => string): ThemeColors => {
   return {
     text: value("--theme-elevation-800", FALLBACK_TEXT),
     grid: value("--theme-elevation-150", FALLBACK_GRID),
-    series: FALLBACK_SERIES.map((fallback, i) =>
-      SERIES_VARS[i] ? value(SERIES_VARS[i], fallback) : fallback,
-    ),
+    series: SERIES.map(([name, fallback]) => (name ? value(name, fallback) : fallback)),
   };
 };
 
