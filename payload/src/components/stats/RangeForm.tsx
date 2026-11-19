@@ -95,7 +95,7 @@ export function RangeForm({ params, today }: { params: StatsParams; today: strin
         {pill("Fläche", { ansicht: "flaeche" }, params.view === "flaeche")}
       </div>
       <div className="stats__row">
-        <span className="stats__label">Verteilung</span>
+        <span className="stats__label">Feedback-Diagramm</span>
         {pill("Reaktion", { verteilung: "reaktion" }, params.split === "reaktion")}
         {pill("Nutzung", { verteilung: "nutzung" }, params.split === "nutzung")}
       </div>
