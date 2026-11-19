@@ -2,7 +2,7 @@
 import { addDays } from "./berlinTime";
 
 /** Berlin days `YYYY-MM-DD`, both ends included. */
-export type Range = { from: string; to: string };
+export type Range = { readonly from: string; readonly to: string };
 
 const MAX_DAYS = 366;
 const DEFAULT_DAYS = 30;

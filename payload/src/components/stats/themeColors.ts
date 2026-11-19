@@ -12,7 +12,10 @@ const FALLBACK_SERIES = [
   "#b5a12a",
   "#7d7d7d",
 ];
-/** Admin CSS variables (Payload 3) that replace the first series colors when they exist. */
+/**
+ * Admin CSS variables (Payload 3) that replace the first series colors when they exist. Series 2 follows the elevation
+ * grey on purpose; its blue fallback only shows where the variable is missing.
+ */
 const SERIES_VARS = [
   "--theme-success-500",
   "--theme-warning-500",

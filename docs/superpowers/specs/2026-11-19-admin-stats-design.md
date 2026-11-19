@@ -1,6 +1,6 @@
 # Admin-Statistik: Übersichtsseite mit Zeitraumwahl
 
-Status: Entwurf, wartet auf Freigabe. Datum: 2026-11-19.
+Status: umgesetzt (Branch `improve-payload`), Stand 2026-11-19. Abweichungen vom Entwurf stehen unten als „Stand der Umsetzung“.
 
 ## Absicht und Warum
 
@@ -11,7 +11,7 @@ Felix (alleiniger Betreiber) will einen guten Gesamtüberblick über die einzeln
 - Eine Admin-Seite `/admin/stats` (Payload Custom View, Link in der Navigation), nur für eingeloggte Admins.
 - Zeitraum einstellbar: Schnellwahl 7 Tage, 30 Tage, 1 Jahr, dazu freie Datumsfelder von/bis. Tage zählen nach Berliner Zeit (`berlinDay`, wie `word-stats`).
 - Kennzahl-Kacheln mit der Summe im Zeitraum und dem Vergleich zum gleich langen Zeitraum davor.
-- Mehrere Diagrammarten: Verlauf pro Tag (Linie/Fläche, Reihen wählbar), Vergleich (Balken), Verteilung (z. B. Reaktionen oder Nutzung als gestapelter Balken oder Torte), Top-Wörter-Liste.
+- Mehrere Diagrammarten: Verlauf pro Tag (Linie/Fläche, Reihen wählbar), Vergleich (Balken), Verteilung (Reaktionen oder Nutzung als gestapelter Balken), Top-Wörter-Liste.
 - Zwei zusätzliche Top-Listen neben den Top-Wörtern nach Aufrufen:
   - **Beliebt:** Anteil der Likes an allen Reaktionen (`like` / (`like` + `dislike`)) je Wort im Zeitraum.
   - **Typisch berlinerisch:** Anteil von „Sag ick selbst“ an allen Nutzungs-Antworten (`usage`) je Wort im Zeitraum.
@@ -28,12 +28,12 @@ Felix (alleiniger Betreiber) will einen guten Gesamtüberblick über die einzeln
 
 ## Randbedingungen
 
-- Payload 3.93.0, Next 16.4.6, React 19.3.1. Admin-Komponenten werden über den importMap (`pnpm --filter payload-app generate:importmap`) registriert.
+- Payload 3.94.0 (beim Bau von 3.93.0 angehoben), Next 16.4.6, React 19.3.1. Admin-Komponenten werden über den importMap (`pnpm --filter payload-app generate:importmap`) registriert.
 - Datenquellen und ihre Zeitachse: `word_stats` (Spalte `day` als Text `YYYY-MM-DD`; `views`, `audio`, `shares`, `clicks`), `word_feedback` (Reaktionen/Nutzung, `created_at`), `comments` (`status`, `created_at`), `suggestions` (`created_at`, `status`), `bon_games` (`finished_at`, `status`, `score`).
 - Aggregation in SQL (wie `collect()` in `lib/wordStats.ts`, `drizzle.execute`), nicht pro Zeile über die Payload-API: ein Jahr mit ca. 6000 Wörtern × 365 Tagen sind zu viele Zeilen. Rohes SQL umgeht Payload-Access, die Seite prüft den Login deshalb selbst. Tabellen- und Spaltennamen müssen einer Umbenennung folgen (Test).
 - Neue Abhängigkeit: Chart.js plus `react-chartjs-2` in `payload-app`. Das pnpm-Alterslimit (24 h) gilt; Version vor Installation prüfen. Nur die benötigten Chart.js-Typen registrieren (Tree-Shaking).
 - Canvas statt SVG: Farben kommen nicht per CSS. Admin-Farben und Dark Mode aus den CSS-Variablen des Admin auslesen und an Chart.js übergeben.
-- Es braucht keine Migration (nur Lesen). Die Seite darf die Website nicht berühren und keinen Code in `payload-app`-Exports ziehen, den die Seite lädt.
+- Die Statistik selbst braucht keine Migration (nur Lesen); die Migration dieser Branch gehört zum Papierkorb. Die Seite darf die Website nicht berühren und keinen Code in `payload-app`-Exports ziehen, den die Seite lädt.
 - Sprache der Oberfläche: Deutsch, im Ton der anderen Admin-Texte.
 
 ## Ansätze (Auswahl durch Felix)
@@ -51,7 +51,7 @@ Felix (alleiniger Betreiber) will einen guten Gesamtüberblick über die einzeln
 ## Meine Annahmen (Felix kann sie ändern)
 
 - Kacheln: Aufrufe, Audio, Teilen, Weiterklick, Reaktionen, Kommentare (veröffentlicht), Vorschläge, BON-Spiele (beendet). Vergleichswert: gleich langer Zeitraum davor, in Prozent. Bei Vorwert 0 wird „neu“ statt eines Prozentwerts gezeigt.
-- Diagramme: (a) Verlauf pro Tag, Reihen per Legende ein- und ausblendbar; (b) Balken: Summen der Kennzahlen im Vergleich zum Vorzeitraum; (c) Verteilung der Reaktionen als gestapelter Balken oder Torte; (d) Top-Wörter nach Aufrufen (Tabelle mit Mini-Balken), Anzahl 10.
+- Diagramme: (a) Verlauf pro Tag, Reihen per Legende ein- und ausblendbar; (b) Balken: prozentuale Veränderung je Kennzahl zum Vorzeitraum; (c) Verteilung der Reaktionen als gestapelter Balken; (d) Top-Wörter nach Aufrufen (Tabelle mit Mini-Balken), Anzahl 10.
 - Bei Zeiträumen über ca. 90 Tage zeigt der Verlauf Wochensummen statt Tageswerte, damit er lesbar bleibt (Umschaltung automatisch).
 - Zeitraum wird begrenzt: höchstens 366 Tage, von ≤ bis, nicht in der Zukunft; ungültige Parameter fallen auf 30 Tage zurück.
 - Trash (Soft-Delete von Wörtern): Aufrufe getrashter Wörter zählen in den Summen mit, tauchen aber in der Top-Liste nicht auf (Top-Liste zeigt nur veröffentlichte, nicht gelöschte Wörter wie `trending()`).
@@ -59,7 +59,7 @@ Felix (alleiniger Betreiber) will einen guten Gesamtüberblick über die einzeln
 ## Festlegungen nach der Prüfung (meine Entscheidungen)
 
 - **Zeitachse:** überall Berliner Zeit (`AT TIME ZONE 'Europe/Berlin'`), damit alle Reihen mit den Berliner Tagen von `word_stats` übereinstimmen. Das Enddatum zählt komplett mit. Die Spalten: `created_at` (Feedback, Kommentare, Vorschläge), `finished_at` (BON-Spiele). Spätere Änderungen (`updated_at`) zählen nicht.
-- **Reaktionen:** Kachel = Feedback-Zeilen mit gesetzter `reaction` (`like`/`dislike`). Die Verteilung hat einen Umschalter Reaktion / Nutzung (Felder und Beschriftungen aus `REACTIONS` und `USAGES` in `lib/wordFeedback`).
+- **Reaktionen:** Kachel = Feedback-Zeilen mit gesetzter `reaction` (`like`/`dislike`). Die Verteilung (in der Oberfläche „Feedback-Diagramm“, URL-Parameter `verteilung`) hat einen Umschalter Reaktion / Nutzung; die Beschriftungen stehen fest in `StatsCharts.tsx` (`SPLIT_LABELS`, im Ton von `lib/wordFeedback`).
 - **Filter je Quelle:** Kommentare nur `status = published`, Vorschläge alle (nach Erstellungsdatum), BON-Spiele nur beendete (`finished_at` gesetzt).
 - **Skalen:** Der Verlauf zeigt standardmäßig nur „Aufrufe“; weitere Reihen schaltet man über die Legende zu. Reihen mit sehr verschiedenen Größen laufen auf einer zweiten Achse (Aufrufe links, alle anderen rechts). Das Balken-Diagramm zeigt die prozentuale Veränderung zum Vorzeitraum pro Kennzahl, nicht die Rohwerte.
 - **URL-Parameter:** `von`, `bis` (Datum), `reihen` (Liste), `verteilung` (reaktion|nutzung), `ansicht` (linie|flaeche). Die Schnellwahl setzt `von`/`bis` neu (7, 30 und 365 Tage rückwärts bis heute). Ein laufender Tag zählt als Teiltag mit.
@@ -67,10 +67,20 @@ Felix (alleiniger Betreiber) will einen guten Gesamtüberblick über die einzeln
 - **Zugriff:** `Users` hat keine Rollen, jeder eingeloggte Nutzer reicht (wie `authenticatedOnly`). Link über `admin.components.afterNavLinks`.
 - **Trash:** Die Seite baut auf dem Stand dieser Branch auf (Soft-Delete der Wörter, Spalte `deleted_at`). Die Top-Liste filtert veröffentlicht und `deleted_at is null`.
 - **Wochen:** ISO-Wochen (Montag), über 90 Tage; Teilwochen am Rand werden auf den gewählten Zeitraum begrenzt.
-- **Farben:** Payload-Variablen `--theme-elevation-*` und `--theme-success-*`, `--theme-error-*`; beim Bauen gegen 3.93 prüfen.
+- **Farben:** Payload-Variablen `--theme-elevation-*` und `--theme-success-*`, `--theme-error-*`; beim Bauen gegen 3.94 geprüft (zusätzlich `--theme-warning-500`).
 
 ## Dem Bauenden überlassen
 
 - Genaue Gestaltung, Abstände, Farbwahl innerhalb der Admin-Farben.
 - Aufteilung in Dateien (Seite, Datenabfrage in `lib/`, Diagramm-Komponenten) und Tests (reine Rechenfunktionen wie Zeitraumparsing, Vergleich und Wochenaggregation als Unit-Tests; eine SQL-Abfrage-Test gegen die Test-DB).
 - Welche Chart.js-Version, wenn mehrere dem Alterslimit entsprechen.
+
+## Stand der Umsetzung (Abweichungen nach der Prüfung)
+
+- **Zeitraum:** Ein `bis` in der Zukunft wird auf heute gekürzt, ein Zeitraum über 366 Tage verliert die ältesten Tage; Unsinn oder vertauschte Daten ergeben die letzten 30 Tage. Die Seite zeigt jeweils einen Hinweis (statt stillem Zurückfallen wie im Entwurf). Ohne `von`/`bis` kein Hinweis.
+- **Teilausfall:** Fällt nur die Abfrage des Vorzeitraums aus, zeigt die Seite alles außer den Vergleichen („–“, kein Vergleichsdiagramm). Der Vorzeitraum lädt nur Summen (`tops: false`).
+- **Summen und Top-Listen:** Summen, Diagramme und die Verteilung zählen alle Wörter (auch gelöschte und Entwürfe), nur die Top-Listen zeigen veröffentlichte, nicht gelöschte Wörter. Bewusst so, weil es um die Aktivität der Seite geht.
+- **„neu“:** Im Vergleichsdiagramm hat eine Kennzahl ohne Vorwert keinen Balken (die Kachel sagt „neu“).
+- **Papierkorb:** Wiederherstellen verlangt `trash: true`; Trash ändert `contentModifiedAt` nicht; ein belegter Slug im Papierkorb wird benannt.
+- **Zugriff:** Ohne Login Weiterleitung zur Anmeldung.
+- **Umbenennungstest:** `statsQueries.test.ts` prüft, dass die Spalten des rohen SQL existieren.

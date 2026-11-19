@@ -6,7 +6,7 @@
 
 **Architecture:** Reine Zeitraum-Funktionen (`lib/statsRange.ts`) und eine SQL-Abfrage (`lib/statsQueries.ts`, `drizzle.execute` wie `collect()` in `lib/wordStats.ts`) liefern Daten an eine Server-Komponente (`StatsView`). Diese gibt sie an Client-Komponenten mit Chart.js (Canvas) weiter. Zeitraum und Auswahl stehen als URL-Parameter.
 
-**Tech Stack:** Payload 3.93.0 (Custom View, `afterNavLinks`), Next 16, React 19, Postgres/drizzle, Chart.js + `react-chartjs-2`, vitest.
+**Tech Stack:** Payload 3.94.0 (Custom View, `afterNavLinks`), Next 16, React 19, Postgres/drizzle, Chart.js + `react-chartjs-2`, vitest.
 
 **Spec:** `docs/superpowers/specs/2026-11-19-admin-stats-design.md` (lesen, die Festlegungen dort gelten).
 
@@ -21,7 +21,7 @@
 - Top-Listen: nur veröffentlichte Wörter (`_status = 'published'`) mit `deleted_at is null`; „Beliebt“ und „Typisch berlinerisch“ ab `MIN_GROUP` Stimmen (`lib/wordFeedback.ts`), 10 Einträge.
 - Zugriff: jeder eingeloggte Nutzer (keine Rollen); ohne Login nichts anzeigen.
 - Oberfläche Deutsch. Commits: `feat(dev): …` o. ä. nach Root-`CLAUDE.md`, Attribution wie dort.
-- Schema ändert sich nicht (keine Migration). `lib/`-Dateien, die die Seite lädt, importieren nichts aus `payload-app`-Exports der Website.
+- Die Statistik ändert das Schema nicht (keine Migration; die Migration der Branch gehört zum Papierkorb, Task 0). `lib/`-Dateien, die die Seite lädt, importieren nichts aus `payload-app`-Exports der Website.
 
 ## Review Focus
 
@@ -39,14 +39,14 @@
 
 - [ ] **Step 1:** `pnpm format` ausführen (u. a. die lange `admin`-Zeile in `BonGames.ts`, `WordFeedback.ts`).
 - [ ] **Step 2:** `scripts/with-env.sh pnpm cms:test` und `(cd payload && pnpm lint:check)`. Erwartet: grün. Schlägt ein Test wegen Trash fehl (z. B. Kaskade beim Löschen), den Test oder Hook anpassen.
-- [ ] **Step 3:** Test ergänzen in `tests/words.trash.test.ts`: Wort mit Kommentar und `word-stats`-Zeile trashen (`payload.update` mit `data: { deletedAt: new Date().toISOString() }`); danach `find` ohne `trash` liefert es nicht, Kommentar und Stat-Zeile bleiben; endgültiges `payload.delete` räumt beides ab.
+- [ ] **Step 3:** Test ergänzen in `tests/wordsTrash.test.ts`: Wort mit Kommentar und `word-stats`-Zeile trashen (`payload.update` mit `data: { deletedAt: new Date().toISOString() }`); danach `find` ohne `trash` liefert es nicht, Kommentar und Stat-Zeile bleiben; endgültiges `payload.delete` räumt beides ab.
 - [ ] **Step 4:** Commit `feat(dev): trash for words, live link and admin groups` (Lockfile-Änderung als eigener `fix(deps): …`-Commit).
 
 ### Task 0b: Payload-Abhängigkeiten aktualisieren
 
 **Files:** Modify `payload/package.json`, `pnpm-lock.yaml`; ggf. `src/payload-types.ts`, `src/app/(payload)/admin/importMap.js`, neue Migration.
 
-- [ ] **Step 1:** Aktuelle Versionen prüfen: `pnpm --filter payload-app outdated`. `payload` und alle `@payloadcms/*` (`db-postgres`, `email-nodemailer`, `next`, `plugin-mcp`, `plugin-redirects`, `plugin-seo`, `richtext-lexical`, `ui`) müssen exakt dieselbe Version haben, sie bleiben wie bisher gepinnt (aktuell 3.93.0). Die übrigen `dependencies` und `devDependencies` von `payload/package.json` (z. B. `next`, `react`, `vitest`, `nodemailer`) auf die neueste Version, die das 24-h-Alterslimit erfüllt. Eine Hauptversion nur nach Lesen des Changelogs (Context7 oder Release Notes) und Rücksprache mit Felix.
+- [ ] **Step 1:** Aktuelle Versionen prüfen: `pnpm --filter payload-app outdated`. `payload` und alle `@payloadcms/*` (`db-postgres`, `email-nodemailer`, `next`, `plugin-mcp`, `plugin-redirects`, `plugin-seo`, `richtext-lexical`, `ui`) müssen exakt dieselbe Version haben, sie bleiben wie bisher gepinnt (damals 3.93.0, jetzt 3.94.0). Die übrigen `dependencies` und `devDependencies` von `payload/package.json` (z. B. `next`, `react`, `vitest`, `nodemailer`) auf die neueste Version, die das 24-h-Alterslimit erfüllt. Eine Hauptversion nur nach Lesen des Changelogs (Context7 oder Release Notes) und Rücksprache mit Felix.
 - [ ] **Step 2:** Anheben, z. B. `pnpm --filter payload-app update --latest` bzw. gezielt `pnpm --filter payload-app add payload@<v> @payloadcms/<paket>@<v> …`; danach `pnpm install`. Schlägt der Alterslimit-Check an: `pnpm clean --lockfile && pnpm install`.
 - [ ] **Step 3:** `pnpm --filter payload-app generate:types`, `generate:importmap`, dann `scripts/with-env.sh env NODE_ENV=production pnpm cms:migrate:create payload_update` nur ausführen, wenn Payload ein Schema-Drift meldet (Migration prüfen: nur additiv, sonst nachfragen); gibt es keine Änderung, bleibt es bei „keine neue Migration“.
 - [ ] **Step 4:** Prüfen: `scripts/with-env.sh pnpm cms:test`, `(cd payload && pnpm lint:check)`, `pnpm build` (der Website-Build zieht `payload-app`). Vorher grüne Tests aus Task 0 als Vergleich nehmen; neue Fehler nennen, nicht wegretuschieren.
@@ -84,7 +84,7 @@
 
 **Interfaces:**
 
-- Consumes: `Range` aus Task 1; `MIN_GROUP`, `REACTIONS`, `USAGES` aus `./wordFeedback`; `dayStart`, `addDays` aus `./berlinTime`.
+- Consumes: `Range` aus Task 1; `MIN_GROUP` aus `./wordFeedback`; `dayStart`, `addDays` aus `./berlinTime`.
 - Produces:
   - `const METRICS = ["views","audio","shares","clicks","reactions","comments","suggestions","bonGames"] as const; type Metric = (typeof METRICS)[number]`
   - `type StatsData = { daily: Record<Metric, Record<string, number>>; totals: Record<Metric, number>; reactionSplit: Record<"like"|"dislike"|"say"|"know"|"never", number>; topViewed: TopWord[]; topLiked: TopWord[]; topSay: TopWord[] }`
@@ -107,7 +107,7 @@
 
 - Modify: `package.json` (payload), `pnpm-lock.yaml`
 - Create: `src/components/stats/themeColors.ts`, `src/components/stats/StatsCharts.tsx` (`"use client"`)
-- Test: `tests/statsColors.test.ts` (nur die reine Funktion)
+- Test: `tests/statsChartData.test.ts` (nur die reine Funktion)
 
 **Interfaces:**
 
@@ -147,3 +147,5 @@
 
 - [ ] **Step 1:** Ein Absatz: Seite `/admin/stats`, Dateien (`lib/statsRange.ts`, `lib/statsQueries.ts`, `components/StatsView.tsx`), rohes SQL folgt Spalten-Umbenennungen, Parameter `von`/`bis`/`reihen`/`verteilung`/`ansicht`, Chart.js Canvas mit Farben aus Admin-Variablen.
 - [ ] **Step 2:** `pnpm format:check` und Commit `docs(dev): document admin stats page`.
+
+> **Stand nach der Umsetzung:** Task 3 braucht zusätzlich `BarController` und `LineController`, `StatsCharts` bekommt `previous`, und es gibt `lib/statsParams.ts`, `lib/statsMetrics.ts`, `lib/statsTypes.ts` und `components/stats/chartData.ts`. Die Abweichungen von der Spec stehen am Ende der Spec.
