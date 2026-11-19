@@ -63,7 +63,7 @@
     "oxfmt": "0.78.0",
     "oxlint": "1.93.0",
     "oxlint-tsgolint": "7.0.2007",
-    "semantic-release": "25.0.9",
+    "semantic-release": "26.0.1",
     "typescript": "6.0.3"
   },
   "engines": {
