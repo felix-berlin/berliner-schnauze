@@ -1,30 +1,6 @@
-import type { Metric } from "../../lib/statsMetrics";
-import type { Range } from "../../lib/statsRange";
-
 import { addDays } from "../../lib/berlinTime";
 import { METRICS, METRIC_LABELS } from "../../lib/statsMetrics";
-
-export type StatsParams = {
-  range: Range;
-  series: Metric[];
-  view: "linie" | "flaeche";
-  split: "reaktion" | "nutzung";
-};
-
-const BASE = "/admin/stats";
-
-/** A link to the stats page with the given params (the others are kept). */
-export const statsHref = (p: StatsParams, change: Partial<Record<string, string>> = {}): string => {
-  const query = new URLSearchParams({
-    von: p.range.from,
-    bis: p.range.to,
-    reihen: p.series.join(","),
-    ansicht: p.view,
-    verteilung: p.split,
-    ...change,
-  });
-  return `${BASE}?${query}`;
-};
+import { statsHref, type StatsParams, type StatsQuery } from "../../lib/statsParams";
 
 const QUICK = [
   ["7 Tage", 7],
@@ -34,7 +10,7 @@ const QUICK = [
 
 /** Range picker (quick links and a GET form), the series choice and the two chart switches. No state: it is all in the URL. */
 export function RangeForm({ params, today }: { params: StatsParams; today: string }) {
-  const pill = (label: string, change: Partial<Record<string, string>>, active: boolean) => (
+  const pill = (label: string, change: StatsQuery, active: boolean) => (
     <a
       aria-current={active ? "true" : undefined}
       className="stats-pill"
@@ -55,7 +31,7 @@ export function RangeForm({ params, today }: { params: StatsParams; today: strin
             params.range.to === today && params.range.from === addDays(today, 1 - days),
           ),
         )}
-        <form action={BASE} className="stats__range" method="get">
+        <form action="/admin/stats" className="stats__range" method="get">
           <input
             aria-label="Von"
             defaultValue={params.range.from}
@@ -85,8 +61,13 @@ export function RangeForm({ params, today }: { params: StatsParams; today: strin
         <span className="stats__label">Reihen</span>
         {METRICS.map((m) => {
           const on = params.series.includes(m);
+          // The last visible series cannot be switched off (the page would fall back to "views" anyway).
           const next = on ? params.series.filter((s) => s !== m) : [...params.series, m];
-          return pill(METRIC_LABELS[m], { reihen: next.join(",") }, on);
+          return pill(
+            METRIC_LABELS[m],
+            { reihen: (next.length ? next : params.series).join(",") },
+            on,
+          );
         })}
       </div>
       <div className="stats__row">

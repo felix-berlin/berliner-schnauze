@@ -2,15 +2,17 @@ import type { AdminViewServerProps } from "payload";
 
 import { DefaultTemplate } from "@payloadcms/next/templates";
 import { Gutter } from "@payloadcms/ui";
+import { redirect } from "next/navigation";
 
-import type { StatsData, TopWord } from "../lib/statsQueries";
+import type { StatsParams } from "../lib/statsParams";
+import type { StatsData, TopWord, VotedWord } from "../lib/statsTypes";
 
 import { berlinDay } from "../lib/berlinTime";
 import { METRICS, METRIC_LABELS, type Metric } from "../lib/statsMetrics";
 import { statsParams } from "../lib/statsParams";
 import { loadStats } from "../lib/statsQueries";
 import { pctChange, previousRange } from "../lib/statsRange";
-import { RangeForm, type StatsParams } from "./stats/RangeForm";
+import { RangeForm } from "./stats/RangeForm";
 import { StatsCharts } from "./stats/StatsCharts";
 
 const percent = (value: ReturnType<typeof pctChange>) =>
@@ -23,9 +25,9 @@ function Tile({
 }: {
   metric: Metric;
   data: StatsData;
-  previous: StatsData;
+  previous: StatsData | null;
 }) {
-  const change = pctChange(data.totals[metric], previous.totals[metric]);
+  const change = previous ? pctChange(data.totals[metric], previous.totals[metric]) : "–";
   const tone = typeof change === "number" ? (change > 0 ? "up" : change < 0 ? "down" : "") : "";
   return (
     <div className="stats__card stats__tile">
@@ -38,7 +40,15 @@ function Tile({
   );
 }
 
-function TopList({ title, rows, unit }: { title: string; rows: TopWord[]; unit: string }) {
+function TopList({
+  title,
+  rows,
+  unit,
+}: {
+  title: string;
+  rows: (TopWord | VotedWord)[];
+  unit: string;
+}) {
   const max = Math.max(1, ...rows.map((r) => r.value));
   return (
     <section className="stats__card">
@@ -54,7 +64,7 @@ function TopList({ title, rows, unit }: { title: string; rows: TopWord[]; unit: 
                 <span className="stats__top-value">
                   {r.value.toLocaleString("de-DE")}
                   {unit}
-                  {r.votes ? ` · ${r.votes} Stimmen` : ""}
+                  {"votes" in r ? ` · ${r.votes} Stimmen` : ""}
                 </span>
               </div>
               <div className="stats__bar">
@@ -74,7 +84,7 @@ function Body({
   params: p,
 }: {
   current: StatsData;
-  previous: StatsData;
+  previous: StatsData | null;
   params: StatsParams;
 }) {
   return (
@@ -86,7 +96,7 @@ function Body({
       </div>
       <StatsCharts
         data={data}
-        previous={previous.totals}
+        previous={previous?.totals ?? null}
         range={p.range}
         series={p.series}
         split={p.split}
@@ -101,32 +111,48 @@ function Body({
   );
 }
 
-/** `/admin/stats`: overview of the site's numbers for a chosen range. Admin only (any logged-in user). */
+/**
+ * `/admin/stats`: overview of the site's numbers for a chosen range. Any logged-in user (`Users` has no roles). Raw SQL
+ * bypasses access, so the login check here is the only gate: without one the visitor is sent to the login.
+ */
 export default async function StatsView({
   initPageResult,
   params,
   searchParams,
 }: AdminViewServerProps) {
   const { req, locale, permissions, visibleEntities } = initPageResult;
-  if (!req.user) return null;
+  if (!req.user) redirect("/admin/login?redirect=/admin/stats");
   const today = berlinDay();
   const p = statsParams(
     (searchParams ?? {}) as Record<string, string | string[] | undefined>,
     today,
   );
 
-  const loaded = await Promise.all([
+  const previousRangeOfP = previousRange(p.range);
+  const [current, previous] = await Promise.allSettled([
     loadStats(req.payload, p.range),
-    loadStats(req.payload, previousRange(p.range)),
-  ]).catch((error: unknown) => {
-    req.payload.logger.error({ err: error, msg: "[stats] admin stats failed" });
-    return null;
-  });
-  const body = loaded ? (
-    <Body current={loaded[0]} params={p} previous={loaded[1]} />
-  ) : (
-    <p className="stats__empty">Die Statistik ist gerade nicht verfügbar.</p>
-  );
+    // Only the totals are compared, so the three top lists are skipped.
+    loadStats(req.payload, previousRangeOfP, { tops: false }),
+  ]);
+  for (const [result, range] of [
+    [current, p.range],
+    [previous, previousRangeOfP],
+  ] as const)
+    if (result.status === "rejected")
+      req.payload.logger.error({ err: result.reason, msg: "[stats] admin stats failed", range });
+  const body =
+    current.status === "fulfilled" ? (
+      <Body
+        current={current.value}
+        params={p}
+        previous={previous.status === "fulfilled" ? previous.value : null}
+      />
+    ) : (
+      <p className="stats__empty">
+        Die Statistik ist gerade nicht verfügbar (Datenbankabfrage fehlgeschlagen, Details im
+        Server-Log). Anderen Zeitraum wählen oder neu laden.
+      </p>
+    );
 
   return (
     <DefaultTemplate
@@ -142,6 +168,7 @@ export default async function StatsView({
       <Gutter>
         <div className="stats">
           <h1>Statistik</h1>
+          {p.notice ? <p className="stats__notice">{p.notice}</p> : null}
           <RangeForm params={p} today={today} />
           {body}
         </div>

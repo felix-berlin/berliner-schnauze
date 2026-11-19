@@ -18,16 +18,37 @@ const isDay = (value: unknown): value is string =>
 const lengthOf = ({ from, to }: Range): number =>
   (Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / MS_DAY + 1;
 
-/** `von`/`bis` of the URL; anything invalid, reversed, in the future or longer than 366 days gives the last 30 days. */
+const defaultRange = (today: string): Range => ({
+  from: addDays(today, 1 - DEFAULT_DAYS),
+  to: today,
+});
+
+/**
+ * `von`/`bis` of the URL. Nothing given: the last 30 days. A `bis` in the future is cut back to today and a range over
+ * 366 days loses its oldest days; anything else invalid (garbage, reversed) gives the last 30 days. `notice` says in
+ * German what was changed, so the page never shows another range than the one asked for without telling.
+ */
 export const parseRange = (
   params: Record<string, string | string[] | undefined>,
   today: string,
-): Range => {
+): { range: Range; notice: string | null } => {
   const { von, bis } = params;
-  const fallback = { from: addDays(today, 1 - DEFAULT_DAYS), to: today };
-  if (!isDay(von) || !isDay(bis) || von > bis || bis > today) return fallback;
-  const range = { from: von, to: bis };
-  return lengthOf(range) > MAX_DAYS ? fallback : range;
+  if (von === undefined && bis === undefined) return { range: defaultRange(today), notice: null };
+  const fallback = (why: string) => ({
+    range: defaultRange(today),
+    notice: `${why} Gezeigt werden die letzten ${DEFAULT_DAYS} Tage.`,
+  });
+  if (!isDay(von) || !isDay(bis)) return fallback("Der Zeitraum ist ungültig.");
+  const to = bis > today ? today : bis;
+  if (von > to) return fallback("„Von“ liegt nach „Bis“.");
+  let range = { from: von, to };
+  const notices: string[] = [];
+  if (bis > today) notices.push("„Bis“ liegt in der Zukunft und wurde auf heute gesetzt.");
+  if (lengthOf(range) > MAX_DAYS) {
+    range = { from: addDays(to, 1 - MAX_DAYS), to };
+    notices.push(`Der Zeitraum wurde auf ${MAX_DAYS} Tage gekürzt.`);
+  }
+  return { range, notice: notices.length ? notices.join(" ") : null };
 };
 
 /** The range of the same length directly before `range`. */
@@ -36,7 +57,7 @@ export const previousRange = (range: Range): Range => ({
   to: addDays(range.from, -1),
 });
 
-/** Weeks above 90 days keep the chart readable. */
+/** Above 90 days the chart groups by week instead of by day, so it stays readable. */
 export const bucketMode = (range: Range): "day" | "week" =>
   lengthOf(range) > WEEK_ABOVE_DAYS ? "week" : "day";
 

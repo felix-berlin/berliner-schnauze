@@ -1,8 +1,12 @@
 import type { Payload } from "payload";
 
+import { sql } from "@payloadcms/db-postgres/drizzle";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { METRICS, loadStats, type StatsData } from "../src/lib/statsQueries";
+import type { StatsData } from "../src/lib/statsTypes";
+
+import { METRICS } from "../src/lib/statsMetrics";
+import { loadStats, num } from "../src/lib/statsQueries";
 import { MIN_GROUP } from "../src/lib/wordFeedback";
 import { getTestPayload } from "./helpers/payload";
 
@@ -46,11 +50,8 @@ beforeAll(async () => {
   const b = await word("b");
   const draft = await word("draft", { _status: "draft" });
   const trashed = await word("trashed");
-  await payload.update({
-    collection: "words",
-    id: trashed.id,
-    data: { deletedAt: new Date().toISOString() },
-  });
+  const c = await word("c");
+  const d = await word("d");
   Object.assign(ids, { a: a.id, b: b.id, draft: draft.id, trashed: trashed.id });
 
   for (const [w, day, views] of [
@@ -59,6 +60,11 @@ beforeAll(async () => {
     [b.id, "2020-03-02", 2],
     [draft.id, "2020-03-02", 100],
     [trashed.id, "2020-03-02", 50],
+    // The window is by Berlin day text: the first and the last day count, their neighbours do not.
+    [c.id, "2019-12-31", 1000],
+    [c.id, "2020-01-01", 1],
+    [c.id, "2020-12-31", 1],
+    [c.id, "2021-01-01", 1000],
   ] as const)
     await payload.create({
       collection: "word-stats",
@@ -80,6 +86,37 @@ beforeAll(async () => {
       { reaction: "dislike", usage: "say" },
       "2020-04-10T10:00:00Z",
     );
+  // Draft and trashed words with enough votes must still stay out of the vote lists.
+  for (let i = 0; i < MIN_GROUP - 2; i++)
+    await feedback(
+      draft.id,
+      `${prefix}d${i}`,
+      { reaction: "like", usage: "say" },
+      "2020-04-10T10:00:00Z",
+    );
+  for (let i = 0; i < MIN_GROUP; i++)
+    await feedback(
+      trashed.id,
+      `${prefix}t${i}`,
+      { reaction: "like", usage: "say" },
+      "2020-04-10T10:00:00Z",
+    );
+  await payload.update({
+    collection: "words",
+    id: trashed.id,
+    data: { deletedAt: new Date().toISOString() },
+  });
+  // A second qualifying word: 80 % likes, nobody says it (usage "know"), so the lists have an order to check.
+  for (let i = 0; i < MIN_GROUP; i++)
+    await feedback(
+      d.id,
+      `${prefix}k${i}`,
+      { reaction: i < 8 ? "like" : "dislike", usage: "know" },
+      "2020-04-11T10:00:00Z",
+    );
+  // 22:59:59 UTC on 2020-12-31 is still the last Berlin day of the range, 23:00:00 UTC already 2021.
+  await feedback(c.id, `${prefix}in`, { reaction: "dislike" }, "2020-12-31T22:59:59Z");
+  await feedback(c.id, `${prefix}out`, { reaction: "dislike" }, "2020-12-31T23:00:00Z");
   // Berlin midnight: 23:30 UTC in winter and 22:30 UTC in summer already belong to the next Berlin day.
   await feedback(draft.id, `${prefix}w`, { reaction: "like" }, "2020-01-15T23:30:00Z");
   await feedback(draft.id, `${prefix}s`, { reaction: "like" }, "2020-07-15T22:30:00Z");
@@ -132,9 +169,14 @@ afterAll(async () => {
 
 describe("loadStats", () => {
   it("sums the word counters per day and in total", () => {
-    expect(data.daily.views).toEqual({ "2020-03-01": 5, "2020-03-02": 159 });
-    expect(data.totals.views).toBe(164);
-    expect(data.totals.audio).toBe(5);
+    expect(data.daily.views).toEqual({
+      "2020-01-01": 1,
+      "2020-03-01": 5,
+      "2020-03-02": 159,
+      "2020-12-31": 1,
+    });
+    expect(data.totals.views).toBe(166);
+    expect(data.totals.audio).toBe(7); // the two in-range rows of c add 2
   });
 
   it("counts only published comments, all suggestions and finished BON games", () => {
@@ -147,21 +189,48 @@ describe("loadStats", () => {
     expect(data.daily.reactions["2020-01-16"]).toBe(1);
     expect(data.daily.reactions["2020-07-16"]).toBe(1);
     expect(data.daily.reactions["2020-01-15"]).toBeUndefined();
+    expect(data.daily.reactions["2020-12-31"]).toBe(1);
   });
 
   it("splits reactions and usage", () => {
-    expect(data.reactionSplit).toEqual({ like: 12, dislike: 9, say: 19, know: 0, never: 0 });
+    // The 2021 row (Berlin midnight) is outside the range.
+    expect(data.reactionSplit).toEqual({ like: 38, dislike: 12, say: 37, know: 10, never: 0 });
   });
 
   it("ranks only live words: no draft, no trashed", () => {
-    expect(data.topViewed.map((w) => w.slug)).toEqual([`${prefix}a`, `${prefix}b`]);
+    expect(data.topViewed.map((w) => w.slug)).toEqual([`${prefix}a`, `${prefix}b`, `${prefix}c`]);
     expect(data.topViewed[0]).toMatchObject({ value: 12 });
   });
 
-  it("lists a word in Beliebt and Typisch berlinerisch only from MIN_GROUP votes", () => {
-    expect(data.topLiked.map((w) => w.slug)).toEqual([`${prefix}a`]);
+  it("lists a word in Beliebt and Typisch berlinerisch only from MIN_GROUP votes, best first", () => {
+    expect(data.topLiked.map((w) => w.slug)).toEqual([`${prefix}a`, `${prefix}d`]);
     expect(data.topLiked[0]).toMatchObject({ value: 100, votes: MIN_GROUP });
-    expect(data.topSay.map((w) => w.slug)).toEqual([`${prefix}a`]);
+    expect(data.topLiked[1]).toMatchObject({ value: 80, votes: MIN_GROUP });
+    expect(data.topSay.map((w) => w.slug)).toEqual([`${prefix}a`, `${prefix}d`]);
+  });
+
+  it("keeps draft and trashed words out of the vote lists, however many votes they have", () => {
+    for (const list of [data.topLiked, data.topSay])
+      for (const slug of [`${prefix}draft`, `${prefix}trashed`])
+        expect(list.map((w) => w.slug)).not.toContain(slug);
+  });
+
+  it("has only counts and words in it, never a visitor", () => {
+    expect(Object.keys(data).sort()).toEqual(
+      ["daily", "reactionSplit", "topLiked", "topSay", "topViewed", "totals"].sort(),
+    );
+    for (const w of [...data.topViewed, ...data.topLiked, ...data.topSay])
+      expect(Object.keys(w).sort()).toEqual(
+        "votes" in w
+          ? ["berlinerisch", "id", "slug", "value", "votes"]
+          : ["berlinerisch", "id", "slug", "value"],
+      );
+  });
+
+  it("skips the top lists but not the totals with tops: false", async () => {
+    const totalsOnly = await loadStats(payload, range, { tops: false });
+    expect(totalsOnly.totals).toEqual(data.totals);
+    expect([totalsOnly.topViewed, totalsOnly.topLiked, totalsOnly.topSay]).toEqual([[], [], []]);
   });
 
   it("gives zeros and empty lists for a range without data", async () => {
@@ -170,5 +239,39 @@ describe("loadStats", () => {
     expect(none.daily.views).toEqual({});
     expect([none.topViewed, none.topLiked, none.topSay]).toEqual([[], [], []]);
     expect(Object.values(none.reactionSplit).every((n) => n === 0)).toBe(true);
+  });
+});
+
+describe("raw SQL names", () => {
+  it("still match the schema (a rename must fail here, not on the page)", async () => {
+    const { rows } = await (
+      payload.db as never as {
+        drizzle: { execute: (q: unknown) => Promise<{ rows: { t: string; c: string }[] }> };
+      }
+    ).drizzle.execute(
+      sql`select table_name as t, column_name as c from information_schema.columns where table_schema = current_schema()`,
+    );
+    const have = new Set(rows.map((r) => `${r.t}.${r.c}`));
+    const used = {
+      word_stats: ["word_id", "day", "views", "audio", "shares", "clicks"],
+      word_feedback: ["word_id", "created_at", "reaction", "usage"],
+      comments: ["created_at", "status"],
+      suggestions: ["created_at"],
+      bon_games: ["finished_at"],
+      words: ["id", "berlinerisch", "slug", "_status", "deleted_at"],
+    };
+    const missing = Object.entries(used).flatMap(([t, cols]) =>
+      cols.filter((c) => !have.has(`${t}.${c}`)).map((c) => `${t}.${c}`),
+    );
+    expect(missing).toEqual([]);
+  });
+});
+
+describe("num", () => {
+  it("reads database numbers and refuses anything else", () => {
+    expect(num("12", "x")).toBe(12);
+    expect(num(7, "x")).toBe(7);
+    expect(() => num(undefined, "views")).toThrow(/views is not a number/);
+    expect(() => num("abc", "views")).toThrow(/not a number: abc/);
   });
 });

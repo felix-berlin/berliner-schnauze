@@ -59,6 +59,19 @@
     }
   }
 
+  &__charts {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  &__notice {
+    background: var(--theme-warning-100, var(--theme-elevation-100));
+    border: 1px solid var(--theme-warning-500, var(--theme-elevation-300));
+    border-radius: 8px;
+    margin: 0;
+    padding: 0.75rem 1rem;
+  }
+
   &__tiles {
     display: grid;
     gap: 1rem;

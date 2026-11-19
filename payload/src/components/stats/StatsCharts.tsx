@@ -17,9 +17,8 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { Bar, Line } from "react-chartjs-2";
 
-import type { Metric } from "../../lib/statsMetrics";
-import type { StatsData } from "../../lib/statsQueries";
-import type { Range } from "../../lib/statsRange";
+import type { StatsParams } from "../../lib/statsParams";
+import type { StatsData } from "../../lib/statsTypes";
 
 import { METRIC_LABELS, METRICS } from "../../lib/statsMetrics";
 import { pctChange } from "../../lib/statsRange";
@@ -51,15 +50,10 @@ const SPLIT_LABELS = {
   ],
 } as const;
 
-type Props = {
+type Props = Pick<StatsParams, "range" | "series" | "view" | "split"> & {
   data: StatsData;
-  /** Totals of the range before, for the comparison chart. */
-  previous: StatsData["totals"];
-  range: Range;
-  /** Metrics visible at the start; the legend toggles more. */
-  series: Metric[];
-  view: "linie" | "flaeche";
-  split: "reaktion" | "nutzung";
+  /** Totals of the range before, for the comparison chart; null when that range could not be loaded (no chart then). */
+  previous: StatsData["totals"] | null;
 };
 
 const formatLabel = (key: string, mode: "day" | "week") =>
@@ -112,7 +106,7 @@ export function StatsCharts({ data, previous, range, series, view, split }: Prop
       },
     },
   };
-  const changes = METRICS.map((m) => pctChange(data.totals[m], previous[m]));
+  const changes = previous ? METRICS.map((m) => pctChange(data.totals[m], previous[m])) : [];
   const barOptions: ChartOptions<"bar"> = {
     ...base,
     plugins: { legend: { display: false } },
@@ -129,7 +123,7 @@ export function StatsCharts({ data, previous, range, series, view, split }: Prop
   };
 
   return (
-    <div className="stats" ref={ref} style={{ padding: 0 }}>
+    <div className="stats__charts" ref={ref}>
       <section className="stats__card">
         <h3>Verlauf</h3>
         <div className="stats__chart">
@@ -152,25 +146,28 @@ export function StatsCharts({ data, previous, range, series, view, split }: Prop
           />
         </div>
       </section>
-      <section className="stats__card">
-        <h3>Veränderung zum Zeitraum davor</h3>
-        <div className="stats__chart stats__chart--short">
-          <Bar
-            data={{
-              labels: METRICS.map((m) => METRIC_LABELS[m]),
-              datasets: [
-                {
-                  data: changes.map((c) => (typeof c === "number" ? c : 0)),
-                  backgroundColor: changes.map((c) =>
-                    typeof c === "number" && c < 0 ? colors.series[3] : colors.series[0],
-                  ),
-                },
-              ],
-            }}
-            options={barOptions}
-          />
-        </div>
-      </section>
+      {previous ? (
+        <section className="stats__card">
+          <h3>Veränderung zum Zeitraum davor</h3>
+          <div className="stats__chart stats__chart--short">
+            <Bar
+              data={{
+                labels: METRICS.map((m) => METRIC_LABELS[m]),
+                datasets: [
+                  {
+                    // "neu" and "–" have no percent: no bar (the tile says which).
+                    data: changes.map((c) => (typeof c === "number" ? c : null)),
+                    backgroundColor: changes.map((c) =>
+                      typeof c === "number" && c < 0 ? colors.series[3] : colors.series[0],
+                    ),
+                  },
+                ],
+              }}
+              options={barOptions}
+            />
+          </div>
+        </section>
+      ) : null}
       <section className="stats__card">
         <h3>{split === "reaktion" ? "Reaktionen" : "Nutzung"}</h3>
         <div className="stats__chart stats__chart--strip">

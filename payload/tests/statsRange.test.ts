@@ -6,32 +6,53 @@ const today = "2026-11-19";
 const dflt = { from: "2026-10-21", to: "2026-11-19" };
 
 describe("parseRange", () => {
-  it("defaults to the last 30 days ending today", () => {
-    expect(parseRange({}, today)).toEqual(dflt);
+  it("defaults to the last 30 days ending today, without a notice", () => {
+    expect(parseRange({}, today)).toEqual({ range: dflt, notice: null });
   });
 
   it("takes valid von/bis", () => {
     expect(parseRange({ von: "2026-11-01", bis: "2026-11-07" }, today)).toEqual({
-      from: "2026-11-01",
-      to: "2026-11-07",
+      range: { from: "2026-11-01", to: "2026-11-07" },
+      notice: null,
     });
   });
 
   it.each([
     ["von after bis", { von: "2026-11-10", bis: "2026-11-01" }],
-    ["bis in the future", { von: "2026-11-01", bis: "2026-11-20" }],
-    ["more than 366 days", { von: "2025-10-01", bis: "2026-11-19" }],
     ["garbage", { von: "abc", bis: "2026-11-01" }],
+    ["only von", { von: "2026-11-01" }],
     ["impossible date", { von: "2026-02-30", bis: "2026-03-05" }],
     ["array value", { von: ["2026-11-01", "2026-11-02"], bis: "2026-11-05" }],
-  ])("falls back to the default for %s", (_name, params) => {
-    expect(parseRange(params, today)).toEqual(dflt);
+  ])("falls back to the default with a notice for %s", (_name, params) => {
+    const parsed = parseRange(params, today);
+    expect(parsed.range).toEqual(dflt);
+    expect(parsed.notice).toMatch(/30 Tage/);
   });
 
-  it("allows exactly 366 days", () => {
+  it("cuts a bis in the future back to today", () => {
+    expect(parseRange({ von: "2026-11-01", bis: "2026-11-25" }, today)).toEqual({
+      range: { from: "2026-11-01", to: today },
+      notice: expect.stringContaining("heute"),
+    });
+  });
+
+  it("falls back when von is also in the future", () => {
+    const parsed = parseRange({ von: "2026-11-22", bis: "2026-11-25" }, today);
+    expect(parsed.range).toEqual(dflt);
+    expect(parsed.notice).not.toBeNull();
+  });
+
+  it("keeps bis and cuts von when the range is longer than 366 days", () => {
+    expect(parseRange({ von: "2025-10-01", bis: "2026-11-19" }, today)).toEqual({
+      range: { from: "2025-11-19", to: "2026-11-19" },
+      notice: expect.stringContaining("366"),
+    });
+  });
+
+  it("allows exactly 366 days without a notice", () => {
     expect(parseRange({ von: "2025-11-19", bis: "2026-11-19" }, today)).toEqual({
-      from: "2025-11-19",
-      to: "2026-11-19",
+      range: { from: "2025-11-19", to: "2026-11-19" },
+      notice: null,
     });
   });
 });
