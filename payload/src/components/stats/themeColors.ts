@@ -1,3 +1,5 @@
+import { color } from "chart.js/helpers";
+
 const FALLBACK_TEXT = "#6f6f6f";
 const FALLBACK_GRID = "#e3e3e3";
 const FALLBACK_SERIES = [
@@ -36,3 +38,7 @@ export const readThemeColors = (el: HTMLElement): ThemeColors => {
   const style = getComputedStyle(el);
   return pickColors((name) => style.getPropertyValue(name));
 };
+
+/** `color` with transparency: the admin variables hold `rgb(…)`, so appending a hex alpha would be invalid. */
+export const withAlpha = (value: string, alpha: number): string =>
+  color(value).alpha(alpha).rgbString();

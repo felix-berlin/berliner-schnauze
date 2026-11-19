@@ -24,7 +24,7 @@ import type { Range } from "../../lib/statsRange";
 import { METRIC_LABELS, METRICS } from "../../lib/statsMetrics";
 import { pctChange } from "../../lib/statsRange";
 import { bucketSeries } from "./chartData";
-import { pickColors, readThemeColors } from "./themeColors";
+import { pickColors, readThemeColors, withAlpha } from "./themeColors";
 
 ChartJS.register(
   BarController,
@@ -140,7 +140,7 @@ export function StatsCharts({ data, previous, range, series, view, split }: Prop
                 label: METRIC_LABELS[m],
                 data: values[m],
                 borderColor: colors.series[i],
-                backgroundColor: `${colors.series[i]}33`,
+                backgroundColor: withAlpha(colors.series[i], 0.2),
                 fill: view === "flaeche",
                 hidden: !series.includes(m),
                 pointRadius: labels.length > 60 ? 0 : 3,

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { bucketSeries } from "../src/components/stats/chartData";
-import { pickColors } from "../src/components/stats/themeColors";
+import { pickColors, withAlpha } from "../src/components/stats/themeColors";
 import { METRICS, type Metric } from "../src/lib/statsMetrics";
 
 const emptyDaily = () =>
@@ -45,5 +45,14 @@ describe("pickColors", () => {
   it("uses an admin variable when it has a value", () => {
     const c = pickColors((name) => (name === "--theme-success-500" ? " #00aa00 " : ""));
     expect(c.series[0]).toBe("#00aa00");
+  });
+});
+
+describe("withAlpha", () => {
+  it("adds transparency to an rgb() admin color", () => {
+    expect(withAlpha("rgb(21, 135, 186)", 0.2)).toBe("rgba(21, 135, 186, 0.2)");
+  });
+  it("adds transparency to a hex fallback color", () => {
+    expect(withAlpha("#2f9e6b", 0.2)).toBe("rgba(47, 158, 107, 0.2)");
   });
 });
