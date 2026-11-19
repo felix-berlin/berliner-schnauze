@@ -6,6 +6,7 @@ import { identityFields } from "../fields/identity";
 export const WordTypes: CollectionConfig = {
   slug: "word-types",
   access: contentAccess,
-  admin: { useAsTitle: "name" },
+  admin: { useAsTitle: "name", group: "Inhalt" },
+  trash: true,
   fields: [{ name: "name", type: "text", required: true }, ...identityFields],
 };

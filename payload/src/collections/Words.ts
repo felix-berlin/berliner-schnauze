@@ -1,8 +1,13 @@
 import type { CollectionBeforeDeleteHook, CollectionConfig, Field } from "payload";
 
 import { draftsAccess } from "../access";
-import { contentModifiedAtField, touchContentModifiedAt } from "../fields/contentModified";
+import {
+  contentModifiedAtField,
+  preserveOnTrash,
+  touchContentModifiedAt,
+} from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
+import { liveLinkField } from "../fields/liveLink";
 import { setDerivedWordFields } from "../hooks/deriveWordFields";
 import { mcpDraftOnly, mcpUpdateDraftOnly } from "../hooks/mcpDraftOnly";
 import { previewUrl } from "../lib/preview";
@@ -37,15 +42,19 @@ const deleteComments: CollectionBeforeDeleteHook = async ({ id, req }) => {
 export const Words: CollectionConfig = {
   slug: "words",
   access: draftsAccess,
+  defaultSort: "-updatedAt",
   admin: {
     useAsTitle: "berlinerisch",
     defaultColumns: ["berlinerisch", "slug", "translations", "_status"],
+    group: "Inhalt",
+    listSearchableFields: ["berlinerisch", "slug"],
     preview: previewUrl("words"),
   },
+  trash: true,
   versions: { drafts: true },
   hooks: {
     beforeOperation: [mcpUpdateDraftOnly],
-    beforeChange: [mcpDraftOnly, touchContentModifiedAt, setDerivedWordFields],
+    beforeChange: [mcpDraftOnly, preserveOnTrash, touchContentModifiedAt, setDerivedWordFields],
     beforeDelete: [deleteComments],
   },
   fields: [
@@ -88,6 +97,7 @@ export const Words: CollectionConfig = {
     { name: "themen", type: "relationship", relationTo: "themen", hasMany: true },
     { name: "publishedAt", type: "date" },
     contentModifiedAtField,
+    liveLinkField,
     {
       name: "feedbackCounts",
       type: "ui",

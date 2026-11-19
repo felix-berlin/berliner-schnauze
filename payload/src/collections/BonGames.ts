@@ -8,7 +8,10 @@ import { notifyEditors } from "../lib/notifyEditors";
 export const BonGames: CollectionConfig = {
   slug: "bon-games",
   access: authenticatedOnly,
-  admin: { defaultColumns: ["playerName", "score", "status", "finishedAt"] },
+  admin: {
+    group: "Spiel & Statistik",
+    defaultColumns: ["playerName", "score", "status", "finishedAt"],
+  },
   // status + finishedAt: the weekly ranking.
   indexes: [
     { fields: ["status", "score"] },

@@ -289,6 +289,7 @@ export interface WordType {
   slug?: string | null;
   updatedAt: string;
   createdAt: string;
+  deletedAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -302,6 +303,7 @@ export interface Theman {
   meta?: SeoMetaGroup;
   updatedAt: string;
   createdAt: string;
+  deletedAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -401,6 +403,7 @@ export interface Word {
   meta?: SeoMetaGroup;
   updatedAt: string;
   createdAt: string;
+  deletedAt?: string | null;
   _status?: ('draft' | 'published') | null;
 }
 /**
@@ -433,6 +436,7 @@ export interface Post {
   meta?: SeoMetaGroup;
   updatedAt: string;
   createdAt: string;
+  deletedAt?: string | null;
   _status?: ('draft' | 'published') | null;
 }
 /**
@@ -461,6 +465,7 @@ export interface Page {
   meta?: SeoMetaGroup;
   updatedAt: string;
   createdAt: string;
+  deletedAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1141,6 +1146,7 @@ export interface WordTypesSelect<T extends boolean = true> {
   slug?: T;
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1153,6 +1159,7 @@ export interface ThemenSelect<T extends boolean = true> {
   meta?: T | SeoMetaGroupSelect<T>;
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1222,6 +1229,7 @@ export interface WordsSelect<T extends boolean = true> {
   meta?: T | SeoMetaGroupSelect<T>;
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
   _status?: T;
 }
 /**
@@ -1258,6 +1266,7 @@ export interface PostsSelect<T extends boolean = true> {
   meta?: T | SeoMetaGroupSelect<T>;
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
   _status?: T;
 }
 /**
@@ -1271,6 +1280,7 @@ export interface PagesSelect<T extends boolean = true> {
   meta?: T | SeoMetaGroupSelect<T>;
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

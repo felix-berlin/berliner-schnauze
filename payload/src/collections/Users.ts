@@ -10,7 +10,7 @@ export const Users: CollectionConfig = {
     update: authenticated,
     delete: authenticated,
   },
-  admin: { useAsTitle: "email" },
+  admin: { useAsTitle: "email", group: "System" },
   auth: {
     useAPIKey: true,
     // Secure only behind https: the local compose cms runs NODE_ENV=production over http and would lose its login.

@@ -6,7 +6,7 @@ import { authenticatedOnly } from "../access";
 export const BonPlayers: CollectionConfig = {
   slug: "bon-players",
   access: authenticatedOnly,
-  admin: { defaultColumns: ["name", "updatedAt"] },
+  admin: { group: "Spiel & Statistik", defaultColumns: ["name", "updatedAt"] },
   indexes: [{ fields: ["codeHash"], unique: true }],
   fields: [
     { name: "name", type: "text" },

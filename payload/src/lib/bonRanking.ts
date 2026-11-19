@@ -1,7 +1,7 @@
 // Pure BON ranking, shared by the leaderboard route (payload-app/bon-ranking): periods, best game per pseudonym, tag.
 import { createHash } from "node:crypto";
 
-import { addDays, berlinDay, dayStart } from "./berlinTime";
+import { berlinDay, dayStart, mondayOf } from "./berlinTime";
 import { ANONYM } from "./bonNames";
 import { CODE_ALPHABET } from "./bonPlayer";
 
@@ -12,8 +12,7 @@ export function periodStart(period: Period, now: Date): Date | undefined {
   if (period === "all") return undefined;
   const today = berlinDay(now);
   if (period === "month") return dayStart(`${today.slice(0, 8)}01`);
-  const sinceMonday = (new Date(`${today}T00:00:00Z`).getUTCDay() + 6) % 7;
-  return dayStart(addDays(today, -sinceMonday));
+  return dayStart(mondayOf(today));
 }
 
 /** shortcut: byte % 31 favors the first 8 characters of the alphabet slightly; irrelevant for a display tag. */
