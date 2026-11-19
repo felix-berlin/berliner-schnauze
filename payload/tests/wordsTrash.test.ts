@@ -34,7 +34,7 @@ describe("words trash", () => {
     });
     await payload.create({
       collection: "word-stats",
-      data: { word: word.id, day: "2026-01-01", views: 3 },
+      data: { word: word.id, day: "2026-01-01", views: 3, audio: 0, shares: 0, clicks: 0 },
     });
 
     await payload.update({

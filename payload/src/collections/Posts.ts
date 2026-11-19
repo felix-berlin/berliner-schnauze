@@ -8,10 +8,10 @@ import { previewUrl } from "../lib/preview";
 export const Posts: CollectionConfig = {
   slug: "posts",
   access: draftsAccess,
+  defaultSort: "-updatedAt",
   admin: {
     useAsTitle: "title",
     defaultColumns: ["title", "slug", "publishedAt", "_status"],
-    defaultSort: "-updatedAt",
     group: "Inhalt",
     listSearchableFields: ["title", "slug"],
     preview: previewUrl("posts"),

@@ -37,10 +37,10 @@ const deleteComments: CollectionBeforeDeleteHook = async ({ id, req }) => {
 export const Words: CollectionConfig = {
   slug: "words",
   access: draftsAccess,
+  defaultSort: "-updatedAt",
   admin: {
     useAsTitle: "berlinerisch",
     defaultColumns: ["berlinerisch", "slug", "translations", "_status"],
-    defaultSort: "-updatedAt",
     group: "Inhalt",
     listSearchableFields: ["berlinerisch", "slug"],
     preview: previewUrl("words"),

@@ -4,9 +4,11 @@ import { APIError } from "payload";
 
 import { matchKey, wordSlug } from "../lib/wordMatch";
 
-const taken = (slug: string) =>
+const taken = (slug: string, inTrash = false) =>
   new APIError(
-    `Es gibt schon ein Wort mit dem Slug „${slug}“. Bitte unter „Wort“ das vorhandene Wort auswählen (Ähnliche Wörter stehen in der Seitenleiste).`,
+    inTrash
+      ? `Der Slug „${slug}“ gehört einem Wort im Papierkorb. Dort wiederherstellen (und unter „Wort“ auswählen) oder endgültig löschen.`
+      : `Es gibt schon ein Wort mit dem Slug „${slug}“. Bitte unter „Wort“ das vorhandene Wort auswählen (Ähnliche Wörter stehen in der Seitenleiste).`,
     400,
   );
 
@@ -56,12 +58,17 @@ export const adoptSuggestion: CollectionBeforeChangeHook = async ({
   if (data.status === "accepted" && originalDoc?.status !== "accepted" && d.word == null) {
     const slug = wordSlug(berlinerWord);
     if (!slug) throw new APIError("Aus diesem Vorschlag lässt sich kein Slug bilden.", 400);
-    const { totalDocs } = await req.payload.count({
+    // `trash: true` also finds the trashed word that still holds the slug.
+    const { docs: holders } = await req.payload.find({
       collection: "words",
+      depth: 0,
+      limit: 1,
+      trash: true,
+      select: { deletedAt: true },
       where: { slug: { equals: slug } },
       req,
     });
-    if (totalDocs > 0) throw taken(slug);
+    if (holders.length > 0) throw taken(slug, Boolean(holders[0].deletedAt));
     const word = await req.payload
       .create({
         collection: "words",
