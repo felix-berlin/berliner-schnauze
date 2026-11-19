@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.13.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.8...v4.13.0) (2026-11-19)
+
+
+### Bug Fixes
+
+* **dev:** a month 13 in the stats URL no longer throws; share day helpers, keep lastmod on trash via the existing flag ([6097184](https://github.com/felix-berlin/berliner-schnauze/commit/6097184f1d1056cea8d45feb6a2b8da53a074299))
+* **dev:** stats page tells about changed ranges, survives a failed comparison, rejects bad numbers ([f8d4281](https://github.com/felix-berlin/berliner-schnauze/commit/f8d4281c5e92b5d9c4971f6a1e6d6a1f12e08d28))
+* **dev:** trash keeps lastmod, names the holder of a taken slug, live link follows the published page ([bddf092](https://github.com/felix-berlin/berliner-schnauze/commit/bddf092dca1c5b575fd33740af51a556f3e916b8))
+* **dev:** valid translucent chart colors for admin rgb variables ([2af4bad](https://github.com/felix-berlin/berliner-schnauze/commit/2af4bad566c81fed2598fe2e644ffd1e2873a7d9))
+
+
+### Features
+
+* **dev:** admin stats page ([c82e635](https://github.com/felix-berlin/berliner-schnauze/commit/c82e635fd4258f0e761dffc89539d2c88056ef76))
+* **dev:** admin stats page, trash and live link for the CMS ([#1903](https://github.com/felix-berlin/berliner-schnauze/issues/1903)) ([24528f6](https://github.com/felix-berlin/berliner-schnauze/commit/24528f6ff6fda652423928b8f9c29c1197cc70c7))
+* **dev:** stats charts with chart.js ([835164e](https://github.com/felix-berlin/berliner-schnauze/commit/835164e244ffc5cb25809dea4126612e39286a83))
+* **dev:** stats queries ([3a75039](https://github.com/felix-berlin/berliner-schnauze/commit/3a75039f07fce6825005baf3a18fa4dc77f0cf5b))
+* **dev:** stats range helpers ([7333ffc](https://github.com/felix-berlin/berliner-schnauze/commit/7333ffc18dcb67551c3bd7234e0b0aae707ef968))
+* **dev:** trash for words, live link and admin groups ([48d957c](https://github.com/felix-berlin/berliner-schnauze/commit/48d957cc3d38075e4fd3b960d0cfde822ebe651a))
+
+
+### Performance Improvements
+
+* **dev:** stats read word_feedback twice instead of four times ([3f8a0b1](https://github.com/felix-berlin/berliner-schnauze/commit/3f8a0b1b3919b4f554cb119e28e04666cd0afe70))
+
 ## [4.12.8](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.7...v4.12.8) (2026-11-19)
 
 
