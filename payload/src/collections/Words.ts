@@ -40,8 +40,12 @@ export const Words: CollectionConfig = {
   admin: {
     useAsTitle: "berlinerisch",
     defaultColumns: ["berlinerisch", "slug", "translations", "_status"],
+    defaultSort: "-updatedAt",
+    group: "Inhalt",
+    listSearchableFields: ["berlinerisch", "slug"],
     preview: previewUrl("words"),
   },
+  trash: true,
   versions: { drafts: true },
   hooks: {
     beforeOperation: [mcpUpdateDraftOnly],
@@ -88,6 +92,11 @@ export const Words: CollectionConfig = {
     { name: "themen", type: "relationship", relationTo: "themen", hasMany: true },
     { name: "publishedAt", type: "date" },
     contentModifiedAtField,
+    {
+      name: "liveLink",
+      type: "ui",
+      admin: { position: "sidebar", components: { Field: "@/components/LiveLink" } },
+    },
     {
       name: "feedbackCounts",
       type: "ui",

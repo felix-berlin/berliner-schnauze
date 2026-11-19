@@ -8,10 +8,21 @@ export const Pages: CollectionConfig = {
   access: contentAccess,
   // History of the legal pages (Impressum, Datenschutz); no drafts, a save is live.
   versions: { maxPerDoc: 50 },
-  admin: { useAsTitle: "title" },
+  admin: {
+    useAsTitle: "title",
+    defaultColumns: ["title", "slug", "updatedAt"],
+    group: "Inhalt",
+    listSearchableFields: ["title", "slug"],
+  },
+  trash: true,
   fields: [
     { name: "title", type: "text", required: true },
     { name: "content", type: "richText" },
     ...identityFields,
+    {
+      name: "liveLink",
+      type: "ui",
+      admin: { position: "sidebar", components: { Field: "@/components/LiveLink" } },
+    },
   ],
 };

@@ -8,7 +8,15 @@ import { previewUrl } from "../lib/preview";
 export const Posts: CollectionConfig = {
   slug: "posts",
   access: draftsAccess,
-  admin: { useAsTitle: "title", preview: previewUrl("posts") },
+  admin: {
+    useAsTitle: "title",
+    defaultColumns: ["title", "slug", "publishedAt", "_status"],
+    defaultSort: "-updatedAt",
+    group: "Inhalt",
+    listSearchableFields: ["title", "slug"],
+    preview: previewUrl("posts"),
+  },
+  trash: true,
   versions: { drafts: { schedulePublish: true } },
   hooks: { beforeChange: [touchContentModifiedAt] },
   fields: [
@@ -16,6 +24,11 @@ export const Posts: CollectionConfig = {
     { name: "excerpt", type: "textarea" },
     { name: "publishedAt", type: "date" },
     contentModifiedAtField,
+    {
+      name: "liveLink",
+      type: "ui",
+      admin: { position: "sidebar", components: { Field: "@/components/LiveLink" } },
+    },
     { name: "featuredImage", type: "upload", relationTo: "media" },
     // Default Lexical features already include upload (media) and blockquote.
     { name: "content", type: "richText" },

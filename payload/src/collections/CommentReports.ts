@@ -7,7 +7,7 @@ import { mailReport, recountAfterChange } from "../hooks/commentCounts";
 export const CommentReports: CollectionConfig = {
   slug: "comment-reports",
   access: authenticatedOnly,
-  admin: { defaultColumns: ["comment", "reason", "createdAt"] },
+  admin: { group: "Community", defaultColumns: ["comment", "reason", "createdAt"] },
   indexes: [{ fields: ["comment", "visitor"], unique: true }],
   hooks: { afterChange: [recountAfterChange, mailReport] },
   fields: [
