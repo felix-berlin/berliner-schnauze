@@ -64,7 +64,7 @@
     "oxlint": "1.93.0",
     "oxlint-tsgolint": "7.0.2007",
     "semantic-release": "25.0.9",
-    "typescript": "6.0.3"
+    "typescript": "7.0.2"
   },
   "engines": {
     "node": ">=26.0.0"
