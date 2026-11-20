@@ -70,7 +70,7 @@
     "@iconify-json/simple-icons": "1.2.102",
     "@infisical/cli": "0.45.8",
     "@nanostores/logger": "1.1.0",
-    "@playwright/test": "1.65.0",
+    "@playwright/test": "1.65.1",
     "@types/jsdom": "30.0.0",
     "@types/node": "26.6.6",
     "@vite-pwa/assets-generator": "2.0.0",
