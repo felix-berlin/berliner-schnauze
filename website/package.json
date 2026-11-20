@@ -81,7 +81,7 @@
     "@vitest/web-worker": "5.1.0",
     "@vue/compiler-sfc": "3.5.45",
     "@vue/devtools-api": "8.2.1",
-    "@vue/test-utils": "2.5.1",
+    "@vue/test-utils": "2.6.0",
     "browserslist-useragent-regexp": "4.1.4",
     "esbuild": "0.28.2",
     "eslint-plugin-astro": "3.2.1",
