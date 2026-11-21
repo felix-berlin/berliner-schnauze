@@ -1,0 +1,218 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Start page FAQ + about (docs/design/startseite-v20/SPEC.md §12.2, §15-17). Parts: .questions (h2, .faq =
+// details > summary (h3, .plus) + .answer of CMS html) and .about (h3, p, .stats of li > b + span, .links).
+// The surface (--card) is the page section's; this block only lays out its content.
+@include mx.component("home-faq") {
+  :scope {
+    --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
+    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
+    --_q: 1.2rem; // SPEC §12.2 question (mock), between the lg and xl steps
+    --_plus: 28px; // SPEC §12.2 plus circle
+    --_bar: 12px; // plus bar length
+    --_centre: 50%; // bars start at the circle centre, translate pulls them back
+    --_figure: 1.9rem; // SPEC §12.2 figure size, between the 3xl and 4xl steps
+    --_open: 250ms; // SPEC §12.2 plus to minus
+    --_answer: 300ms; // SPEC §16 answer h19-up
+    --focus-ring-color: var(--color-accent-active);
+
+    container: home-faq / inline-size;
+  }
+
+  .inner {
+    display: grid;
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  h2 {
+    margin: 0 0 var(--space-6);
+    font-family: var(--font-condensed);
+    font-size: var(--_h2);
+    font-weight: var(--font-weight-black);
+    line-height: 0.95;
+    text-transform: uppercase;
+    color: var(--color-text-strong);
+  }
+
+  .faq {
+    border-block-start: 1px solid var(--line);
+
+    &:last-child {
+      border-block-end: 1px solid var(--line);
+    }
+  }
+
+  summary {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    justify-content: space-between;
+    padding-block: var(--space-4);
+    list-style: none;
+    cursor: pointer;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    h3 {
+      margin: 0;
+      font-family: var(--font-family-body); // mock: h1-h3 use the body font, the global h3 would be the display font
+      font-size: var(--_q);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-strong);
+      transition: color var(--duration-fast) var(--ease-standard);
+    }
+
+    @include butler-mx.hover {
+      h3 {
+        color: var(--color-text-accent);
+      }
+
+      .plus {
+        background: var(--card3);
+      }
+    }
+  }
+
+  .plus {
+    position: relative;
+    flex: none;
+    inline-size: var(--_plus);
+    block-size: var(--_plus);
+    border-radius: var(--radius-pill);
+    background: var(--card2);
+    transition: background-color var(--duration-fast) var(--ease-standard);
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      inset: var(--_centre) auto auto var(--_centre);
+      inline-size: var(--_bar);
+      block-size: 2px;
+      background: var(--color-accent-active);
+      translate: -50% -50%;
+    }
+
+    &::after {
+      rotate: 90deg;
+    }
+  }
+
+  .faq[open] .plus::after {
+    rotate: 0deg;
+  }
+
+  .answer {
+    max-inline-size: 64ch;
+    line-height: 1.7;
+
+    > :first-child {
+      margin-block-start: 0;
+    }
+
+    > :last-child {
+      margin-block-end: var(--space-5);
+    }
+  }
+
+  .about {
+    padding: var(--space-6);
+    border-radius: var(--radius-sm);
+    background: var(--card2);
+
+    h3 {
+      margin: 0 0 var(--space-2);
+      font-family: var(--font-condensed);
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-strong);
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-2);
+    margin: var(--space-5) 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      flex-direction: column;
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-sm);
+      background: var(--card);
+    }
+
+    b {
+      font-family: var(--font-condensed);
+      font-size: var(--_figure);
+      font-weight: var(--font-weight-black);
+      line-height: 1.1;
+      color: var(--color-text-strong);
+    }
+
+    span {
+      font-size: var(--_small);
+      color: var(--t3);
+    }
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+
+    a {
+      color: var(--color-text-strong);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition:
+        color var(--duration-fast) var(--ease-standard),
+        text-decoration-color var(--duration-fast) var(--ease-standard);
+
+      @include butler-mx.hover {
+        color: var(--color-text-accent);
+        text-decoration-color: var(--color-accent-active);
+        text-decoration-thickness: 2px;
+      }
+    }
+  }
+
+  @container home-faq (inline-size >= 45.5rem) {
+    h2 {
+      --_h2: 3rem; // SPEC §3 tablet h2
+    }
+  }
+  @container home-faq (inline-size >= 59.5rem) {
+    .inner {
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      gap: var(--space-16);
+    }
+
+    h2 {
+      --_h2: 3.5rem; // SPEC §3 desktop h2
+    }
+  }
+
+  @include butler-mx.feature("motion") {
+    .plus::after {
+      @include butler-mx.feature("motion") {
+        transition: rotate var(--_open) var(--ease-standard);
+      }
+    }
+
+    .faq[open] .answer {
+      animation: home-up var(--_answer) ease both;
+    }
+  }
+}

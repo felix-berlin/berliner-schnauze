@@ -5,29 +5,9 @@
  */
 import type { Payload } from "payload";
 
-import { LOCAL_DB_HOSTS } from "../lib/localDb";
 import { berlinDay } from "../lib/wordStats";
-
-/** Only a worktree's own dev database (`bsw_<workspace>`): not prod, not the throwaway e2e/smoke/test databases. */
-export function assertDevDatabase(url: string | undefined): void {
-  const parsed = url && URL.canParse(url) ? new URL(url) : undefined;
-  const raw = parsed?.pathname.slice(1) ?? "";
-  // The driver decodes the path (`bsw_x%5Fe2e` is `bsw_x_e2e`): check the decoded name; a malformed escape stays raw and fails the prefix check.
-  let name = raw;
-  try {
-    name = decodeURIComponent(raw);
-  } catch {}
-  if (
-    !parsed ||
-    !LOCAL_DB_HOSTS.has(parsed.hostname) ||
-    !name.startsWith("bsw_") ||
-    /_(e2e|smoke|test)$/.test(name)
-  ) {
-    throw new Error(
-      `Refusing to seed "${name || String(url)}": only a local worktree dev database (bsw_<workspace>) is allowed`,
-    );
-  }
-}
+import { assertDevDatabase } from "./assertDevDatabase";
+import { PNG, WAV } from "./fixtures";
 
 const text = (value: string) => ({
   detail: 0,
@@ -59,31 +39,6 @@ const lexical = (value: string) =>
       version: 1,
     },
   }) as never;
-
-// 1x1 PNG
-const PNG = Buffer.from(
-  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
-  "base64",
-);
-
-// 0.3 s of silence (8 kHz, 8 bit mono WAV): a playable file for the voice buttons.
-const WAV = (() => {
-  const data = Buffer.alloc(2400, 128);
-  const head = Buffer.alloc(44);
-  head.write("RIFF", 0);
-  head.writeUInt32LE(36 + data.length, 4);
-  head.write("WAVEfmt ", 8);
-  head.writeUInt32LE(16, 16);
-  head.writeUInt16LE(1, 20);
-  head.writeUInt16LE(1, 22);
-  head.writeUInt32LE(8000, 24);
-  head.writeUInt32LE(8000, 28);
-  head.writeUInt16LE(1, 32);
-  head.writeUInt16LE(8, 34);
-  head.write("data", 36);
-  head.writeUInt32LE(data.length, 40);
-  return Buffer.concat([head, data]);
-})();
 
 const link = (label: string, url: string) => ({
   children: [text(label)],

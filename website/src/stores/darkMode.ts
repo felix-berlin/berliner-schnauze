@@ -1,4 +1,5 @@
 import { persistentAtom } from "@nanostores/persistent";
+import { THEME_COLORS } from "@utils/themeColors";
 
 export type DarkMode = boolean | null;
 
@@ -31,6 +32,6 @@ export const setDarkMode = (value: DarkMode): void => {
   document.documentElement.classList.toggle("dark", resolved);
   document.documentElement.style.colorScheme = resolved ? "dark" : "light";
   document
-    .querySelector("meta[name=theme-color]")
-    ?.setAttribute("content", resolved ? "#2b333b" : "#fad0b0");
+    .querySelector("meta[name=theme-color]:not([media])")
+    ?.setAttribute("content", resolved ? THEME_COLORS.dark : THEME_COLORS.light);
 };

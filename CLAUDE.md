@@ -82,6 +82,8 @@ Types: `feat` (bumps minor), `fix` (bumps patch), `refactor`, `perf`, `style` (f
 
 Scopes (optional, encouraged): `bon`, `pwa`, `search`, `toast`, `word`, `images`, `anki`, `ci`, `deps`, `dev`.
 
+**Browser support policy** (read by `modern-web-guidance`): the floor is spec §9 of `docs/superpowers/specs/2026-11-13-design-system-design.md` (Baseline widely available, Firefox >= 146). Newly available features only as progressive enhancement with a named fallback.
+
 ## Renovate
 
 Rules for `renovate.json` and the dependency age gates load from `.claude/rules/renovate.md` when you touch `renovate.json`, `pnpm-workspace.yaml` or workflows.

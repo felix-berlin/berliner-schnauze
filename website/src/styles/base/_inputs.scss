@@ -1,6 +1,11 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 @layer base {
+  // Native checkbox, radio, range and progress take the brand accent (browser-ui-theming guide).
+  html {
+    accent-color: var(--color-accent-solid);
+  }
+
   // Text fields: Berlin with the body tracking, warm paper fill, solid muted border that
   // turns dashed on hover (the button signature) and solid Currywurst with a ring on focus.
   .c-input,
@@ -265,7 +270,7 @@
     }
 
     & + label {
-      --_font-size: 14px; // between --font-size-sm and --font-size-md
+      --_font-size: 0.875rem; // between --font-size-sm and --font-size-md
       --_gap: 4px; // px on purpose, next to the 21px box
       --cursor: pointer;
 

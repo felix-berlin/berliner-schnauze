@@ -1,4 +1,5 @@
 @use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
 // Confetti (ConfettiEffect.vue): pieces rain down over the positioned parent (the parent sets
 // position: relative). Parts: .piece. Ten pieces have their own spot, tilt and timing (fixed values,
@@ -28,7 +29,9 @@
     opacity: 0;
     rotate: var(--_tilt);
     // Pieces after the tenth have no timing: the shorthand is invalid there, so they stay still.
-    animation: make-it-rain var(--_duration) var(--_delay) infinite ease-out;
+    @include butler-mx.feature("motion") {
+      animation: make-it-rain var(--_duration) var(--_delay) infinite ease-out;
+    }
 
     &:nth-child(1) {
       --_x: 7%;

@@ -1,9 +1,10 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Variants (space-separated in data-variant): primary, lg, xl, center-icon, filter, paper, raised. A
+// Variants (space-separated in data-variant): primary, secondary, soft, lg, xl, center-icon, filter, paper, raised. A
 // pressed filter button is aria-pressed="true". Public: --button-padding, --button-bg, --button-color,
 // --button-border-color, --button-border-style, --button-border-width, --button-display,
+// --button-disabled-bg, --button-disabled-color, --button-disabled-border-color, --button-disabled-border-style,
 // --button-font-size, --button-min-block-size, --button-transition, --button-flex, --button-gap.
 // Locked but focusable (busy, offline): aria-disabled="true"; aria-busy="true" shows the progress cursor.
 @include mx.component("button") {
@@ -97,6 +98,37 @@
     }
   }
 
+  // Secondary next to a primary (start page): transparent, dashed ink rim at rest, solid orange rim and card2 fill on hover.
+  :scope[data-variant~="secondary"] {
+    --_bg: var(--button-bg, transparent);
+    --_color: var(--button-color, var(--color-text-strong));
+    // stylelint-disable function-disallowed-list -- colour inventory: the mock's ink 40 % rim, no token holds it
+    --_border-color: var(
+      --button-border-color,
+      color-mix(in srgb, var(--color-text-strong) 40%, transparent)
+    );
+    // stylelint-enable function-disallowed-list
+    --_border-style: dashed;
+
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- the mock's 1.5px dashed rim, no border-width token
+    border-width: var(--button-border-width, 1.5px);
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-bold);
+
+    @include butler-mx.hover {
+      --_bg: var(--card2);
+      --_border-color: var(--color-accent-active);
+      --_border-style: solid;
+
+      box-shadow: none;
+    }
+  }
+
+  // Small radius for buttons that sit in a card or band (start page, mock: 4px). The default stays square.
+  :scope[data-variant~="soft"] {
+    border-radius: var(--radius-sm);
+  }
+
   // Inner wrapper that centres a swapped icon (search button).
   .center {
     display: inline-flex;
@@ -133,10 +165,10 @@
   :scope:disabled {
     &,
     &:hover {
-      --_bg: transparent;
-      --_color: var(--color-text-muted);
-      --_border-color: var(--color-text-muted);
-      --_border-style: dotted;
+      --_bg: var(--button-disabled-bg, transparent);
+      --_color: var(--button-disabled-color, var(--color-text-muted));
+      --_border-color: var(--button-disabled-border-color, var(--color-text-muted));
+      --_border-style: var(--button-disabled-border-style, dotted);
 
       cursor: not-allowed;
       box-shadow: none;

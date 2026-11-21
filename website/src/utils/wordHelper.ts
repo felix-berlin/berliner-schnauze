@@ -1,3 +1,5 @@
+import type { WordRef as PayloadWordRef } from "payload-app/home-stats";
+
 // Deep import: the package entry loads all of natural (classifiers, WordNet, ...) for this one function.
 import JaroWinklerDistance from "natural/lib/natural/distance/jaro-winkler_distance.js";
 import {
@@ -16,7 +18,7 @@ export {
 } from "payload-app/word-derived";
 
 /** Minimal word shape for cross-word helpers; a `SiteWord` from fetchAllWords satisfies it. */
-export type WordRef = { berlinerisch: string; id: number; slug: string };
+export type WordRef = PayloadWordRef & { id: number };
 
 // Soundex compare() is exact code equality, so — like findAnagrams — we can bucket by
 // code once per array instead of running compare() against all ~6000 words on every page.

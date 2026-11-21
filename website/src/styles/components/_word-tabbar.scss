@@ -11,6 +11,7 @@
     z-index: var(--z-sticky);
     display: var(--word-tabbar-display, flex);
     overflow-x: auto;
+    // scroll alternative: every item is focusable and focus scrolls it into view (browser-ui-theming guide)
     scrollbar-width: none;
     // Full-bleed: cancels the --page-gutter side padding of .u-max-body-width (mock: nav sits outside the page padding).
     margin-inline: calc(-1 * var(--page-gutter));

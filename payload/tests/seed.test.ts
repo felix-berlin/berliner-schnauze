@@ -3,6 +3,7 @@ import type { Payload } from "payload";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { assertLocalDatabase, E2E_WORD_SLUGS, SEEDED, seededSlugs, seedE2e } from "../src/seed/e2e";
+import { seedHomeStats } from "../src/seed/homeStatsSeed";
 import { getTestPayload } from "./helpers/payload";
 
 let payload: Payload;
@@ -30,6 +31,17 @@ const slugs = async (collection: "words" | "themen" | "posts" | "pages") =>
   (
     await payload.find({ collection, depth: 0, draft: true, limit: 500, pagination: false })
   ).docs.map((d) => (d as { slug?: string | null }).slug);
+
+describe("seedHomeStats", () => {
+  it("adds nothing on another run (seedE2e already ran it twice)", async () => {
+    expect(await seedHomeStats(payload)).toEqual({ votes: 0, games: 0 });
+  });
+
+  it("throws when a fixed seed word is missing", async () => {
+    const empty = { find: async () => ({ docs: [] }) } as never;
+    await expect(seedHomeStats(empty)).rejects.toThrow(/seed words missing: bolle/);
+  });
+});
 
 describe("seedE2e", () => {
   it("creates every word the specs navigate to, once", async () => {

@@ -129,7 +129,7 @@ The palette reads as a hand-labeled dossier: warm orange annotations and a rare 
 - **Shape:** square corners, 0 radius (`.c-button`) — flat and stamped, not soft.
 - **Default:** Currywurst-100 background (`#fcead7`), Currywurst-600 border (`#b23b27`), ink-colored text.
 - **Themed variant** (`--theme`): ink-base background, white text, Berliner font — the "declarative" button used for primary actions.
-- **Hover:** border style flips from solid to **dashed**, plus a soft orange glow (`box-shadow: 0 0 12px color-mix(orange-500, white 60%)`). The dashed flip is the interaction signature — do not replace it with a color-only hover.
+- **Hover:** border style flips from solid to **dashed**, plus a soft orange glow (`box-shadow: 0 0 12px color-mix(orange-500, white 60%)`). The dashed flip is the interaction signature (in forced colors the glow disappears: `base/_forced-colors.scss` draws a dashed `Highlight` outline instead) — do not replace it with a color-only hover.
 - **Filter variant:** active/current state fills Currywurst-500 with a dashed gold border and black text — the loudest state in the system, reserved for "this filter is on."
 
 ### Header & Main Menu

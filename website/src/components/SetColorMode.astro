@@ -1,19 +1,23 @@
 ---
-
+import { THEME_COLORS } from '@utils/themeColors';
 ---
 
 <!-- Block until theme class is set -->
-<script is:inline>
+<script is:inline define:vars={{ THEME_COLORS }}>
   const STORAGE_KEY = 'darkMode';
   const DARK_CLASS = 'dark';
 
-  const getPreferredDarkMode = () => {
-    let persistedValue = null;
+  const readStored = () => {
     try {
-      persistedValue = localStorage.getItem(STORAGE_KEY);
+      return localStorage.getItem(STORAGE_KEY);
     } catch {
       // Blocked storage: fall back to the system preference.
+      return null;
     }
+  };
+
+  const getPreferredDarkMode = () => {
+    const persistedValue = readStored();
 
     if (persistedValue === 'true') return true;
     if (persistedValue === 'false') return false;
@@ -22,7 +26,9 @@
   };
 
   const upsertThemeColorMeta = (targetDocument, isDark) => {
-    const themeColor = isDark ? '#2b333b' : '#fad0b0';
+    const themeColor = isDark ? THEME_COLORS.dark : THEME_COLORS.light;
+    // The static per-scheme fallbacks (BaseHead) would override the resolved choice: drop them.
+    targetDocument.querySelectorAll("meta[name='theme-color'][media]").forEach((m) => m.remove());
     const metaThemeColor =
       targetDocument.querySelector("meta[name='theme-color']") ||
       targetDocument.createElement('meta');
@@ -48,6 +54,17 @@
   const applyTheme = () => applyThemeToDocument(document);
 
   applyTheme();
+
+  // A stored choice wins; only an unset preference follows the system while the page is open.
+  if (!window.__schemeSync) {
+    window.__schemeSync = true;
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', () => {
+        const stored = readStored();
+        if (stored !== 'true' && stored !== 'false') applyTheme();
+      });
+  }
 
   document.addEventListener('astro:before-swap', (event) => {
     const newDocument = event?.newDocument || event?.detail?.newDocument;

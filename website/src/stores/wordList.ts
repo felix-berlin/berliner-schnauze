@@ -1,10 +1,10 @@
-import type { Orama, SearchParamsFullText } from "@orama/orama";
+import type { SearchParamsFullText } from "@orama/orama";
+import type { WordDb } from "@services/wordSearchDb.ts";
 
 import { computedAsync } from "@nanostores/async";
 import { persistentAtom, persistentMap } from "@nanostores/persistent";
-import { create, insertMultiple, search } from "@orama/orama";
-import { language, stemmer } from "@orama/stemmers/german";
-import { fetchSearchIndex } from "@services/searchIndex.ts";
+import { search } from "@orama/orama";
+import { FULL_TEXT, getWordDb } from "@services/wordSearchDb.ts";
 import { trackEvent } from "@utils/analytics";
 import { jsonCodec } from "@utils/jsonCodec";
 import { vt } from "@utils/viewTransition.ts";
@@ -157,11 +157,6 @@ export const $toggleWordListFilterFlyout = () => {
   $showWordListFilterFlyout.set(!$showWordListFilterFlyout.get());
 };
 
-/**
- * Set the active letter to filter the word list
- *
- * @param letter the letter to filter by
- */
 export const setLetterFilter = (letter: string) => {
   vt(() => $wordSearch.setKey("activeLetterFilter", letter));
 
@@ -209,45 +204,6 @@ onMount($searchMeta, () => {
     }
   });
 });
-
-/**
- * ORAMA
- */
-
-const wordSchema = {
-  berlinerischWordTypes: "enum[]",
-  dateTs: "number",
-  modifiedTs: "number",
-  themen: "enum[]",
-  wordComponents: "string[]",
-  wordGroup: "enum",
-  wordProperties: {
-    audioBerlinerisch: "boolean",
-    audioExamples: "boolean",
-    berlinerisch: "string",
-    berolinismus: "boolean",
-    characterLength: "number",
-    consonantsCount: "number",
-    multipleMeanings: "boolean",
-    syllablesCount: "number",
-    translations: "string[]",
-    vowelsCount: "number",
-  },
-} as const;
-
-let db: null | Orama<typeof wordSchema> = null;
-
-const FULL_TEXT = {
-  boost: {
-    wordComponents: 1.0,
-    "wordProperties.berlinerisch": 2.5,
-    "wordProperties.translations": 1,
-  },
-  // Only the user-facing text fields.
-  properties: ["wordComponents", "wordProperties.berlinerisch", "wordProperties.translations"],
-  threshold: 0.5,
-  tolerance: 1,
-} satisfies Partial<SearchParamsFullText<Orama<typeof wordSchema>>>;
 
 function buildWhere(wordSearch: WordList): Record<string, unknown> {
   const where: Record<string, unknown> = {};
@@ -313,65 +269,20 @@ export function matchTier(
   return translations.some((t) => coversTerm(t, termParts)) ? 3 : 4;
 }
 
-async function initOrama(words: OramaSearchIndex[]) {
-  db = create({
-    components: {
-      tokenizer: {
-        language,
-        stemmer,
-        stemmerSkipProperties: [
-          "wordGroup",
-          "modifiedTs",
-          "dateTs",
-          "wordProperties.berolinismus",
-          "berlinerischWordTypes",
-          "themen",
-        ],
-        stemming: true,
-      },
-    },
-    schema: wordSchema,
-  });
-
-  await insertMultiple(db, words);
-}
-
-let initPromise: null | Promise<number> = null;
-
-/**
- * Single-flight guard: build the Orama DB exactly once, even when several
- * computations start before the first one settles (rapid typing on a cold
- * cache would otherwise double-insert documents). Kept lazy — nothing runs
- * until the first search. On failure the memoized promise is cleared so the
- * next computation retries. Resolves to the number of indexed words.
- */
-function ensureSearchReady(): Promise<number> {
-  initPromise ??= fetchSearchIndex()
-    .then(async (searchIndex) => {
-      await initOrama(searchIndex);
-      return searchIndex.length;
-    })
-    .catch((err: unknown) => {
-      initPromise = null; // allow retry after failure
-      throw err;
-    });
-  return initPromise;
-}
-
 export const $oramaSearchResults = computedAsync(
   [$wordSearch, $searchQuery],
   async (wordSearch, searchQuery) => {
     // Fetch/init failures propagate on purpose: computedAsync then reports
     // state "failed" and the error UI can prompt a reload.
     // limit = index size, so every match is returned.
-    const limit = await ensureSearchReady();
+    const { db, size: limit } = await getWordDb();
 
     try {
       const where = buildWhere(wordSearch);
       const term = normalize(searchQuery);
       const sortBy = getSortBy(wordSearch, term);
 
-      const params: SearchParamsFullText<Orama<typeof wordSchema>> = {
+      const params: SearchParamsFullText<WordDb> = {
         limit,
         ...(sortBy ? { sortBy } : {}),
         // Full-text params only with a term: on an empty term properties + threshold
@@ -380,7 +291,6 @@ export const $oramaSearchResults = computedAsync(
         ...(Object.keys(where).length > 0 ? { where } : {}),
       };
 
-      if (!db) return null;
       const results = await search(db, params);
       if (!sortBy) {
         // Stable sort keeps Orama's score order within a tier.

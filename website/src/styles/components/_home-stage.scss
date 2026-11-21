@@ -1,0 +1,275 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Word of the day on the start page (docs/design/startseite-v20/SPEC.md §5, §16, §19).
+// Parts: .ipa (outline behind everything), .eye, .lemma-row (.lemma of .letter, .art, the word seal),
+// .meaning, .example, .no-audio, .go. The inline --i (letter index) and --chars (lemma length) feed
+// the stagger and the fitted lemma size.
+// Reveal: the load animation runs unless the root has data-reveal="wait"; the page's observer
+// removes that attribute on first view.
+@include mx.component("home-stage") {
+  :scope {
+    // Mobile values (< 808px viewport); the desktop ones follow in the container query below.
+    --_lemma: 5.5rem; // SPEC §4.5, far above the type scale
+    --_meaning: var(--font-size-3xl);
+    --_ipa: 8rem; // SPEC §5, outline size
+    --_ipa-opacity: 0.07;
+    --_seal: 5.25rem; // 84px seal (SPEC §5.1)
+    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
+    --_quote: 0.9375rem; // 15px translation and pill text, between the sm and md steps
+    --_track: 2px; // eyebrow letter spacing
+    --_rise: 700ms;
+    --_rise-step: 70ms;
+    --_rise-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --_up: 600ms;
+    --_up-start: 350ms;
+    --_up-meaning: 400ms;
+    --_up-example: 500ms;
+    --_fade: 1.4s;
+    --_fade-start: 200ms;
+    --_drift: 18s;
+    --_drift-start: 1.6s;
+    --focus-ring-color: var(--color-accent-active);
+
+    container: home-stage / inline-size;
+  }
+
+  // The outline belongs to the whole band, not to this column: the field fills the band (the page's stage section
+  // is its positioned parent: it also holds the search and the chips) across the viewport and clips the outline at
+  // its edges (a wide outline would otherwise add a horizontal scrollbar).
+  .field {
+    --_edge: calc(50% - 50vw); // from the column's centre to the screen's edge: no token
+
+    position: absolute;
+    inset-block: 0;
+    inset-inline: var(--_edge);
+    z-index: var(--z-below);
+    overflow: clip;
+    pointer-events: none;
+  }
+
+  .ipa {
+    --_ipa-end: -0.06em; // cut off at the right edge (mock)
+    --_ipa-top: 15.625rem; // 250px from the band's top, behind the lemma (SPEC §5 mobile)
+
+    position: absolute;
+    inset-block: var(--_ipa-top) auto;
+    inset-inline-end: var(--_ipa-end);
+    font-size: var(--_ipa);
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--color-text-strong);
+    opacity: var(--_ipa-opacity);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .eye {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+    margin: 0 0 var(--space-2);
+    font-size: var(--_small);
+    text-transform: uppercase;
+    letter-spacing: var(--_track);
+    color: var(--t3);
+
+    b {
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-accent);
+    }
+  }
+
+  .lemma-row {
+    --word-seal-size: var(--_seal);
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  .lemma {
+    // Long words shrink to fit the row (SPEC §19: 3.5rem floor), short ones keep the full size.
+    // TODO(startseite): replaces §19's 12vw, which would undercut §4.5's 5.5rem for short words on mobile.
+    --_fit: clamp(3.5rem, 166cqi / var(--chars, 1), var(--_lemma));
+
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--_fit);
+    font-weight: var(--font-weight-bold);
+    line-height: 0.9;
+    color: var(--color-text-accent);
+  }
+
+  .letter {
+    display: inline-block;
+    white-space: pre;
+  }
+
+  .art {
+    font-size: var(--font-size-xl);
+    color: var(--t3);
+  }
+
+  .meaning {
+    margin: var(--space-5) 0 0;
+    font-size: var(--_meaning);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1;
+    color: var(--color-text-strong);
+  }
+
+  .example {
+    max-inline-size: 46ch;
+    margin: var(--space-4) 0 0;
+    font-size: var(--font-size-xl);
+    font-style: italic;
+    color: var(--color-text-body);
+
+    span {
+      display: block;
+      margin-block-start: var(--space-1);
+      font-size: var(--_quote);
+      font-style: normal;
+      color: var(--t3);
+    }
+  }
+
+  .no-audio {
+    display: inline-flex;
+    gap: var(--space-2);
+    align-items: center;
+    min-block-size: var(--size-tap-target);
+    margin-block-start: var(--space-5);
+    margin-inline-end: var(--space-6);
+    padding: var(--space-2) var(--space-4);
+    border: 1.5px dashed var(--t3);
+    border-radius: var(--radius-pill);
+    font-size: var(--_quote);
+    color: var(--t3);
+    text-decoration: none;
+    background: none;
+    font-family: inherit;
+    text-align: start;
+    cursor: help; // not a link: the feature is not there yet, the tooltip says so
+    transition:
+      border-color var(--duration-fast) var(--ease-standard),
+      background-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
+
+    b {
+      color: var(--color-text-strong);
+    }
+
+    svg {
+      flex: 0 0 auto;
+      inline-size: 18px;
+      block-size: 18px;
+      color: var(--t3);
+      transition: color var(--duration-fast) var(--ease-standard);
+    }
+
+    @include butler-mx.hover {
+      border-style: solid;
+      border-color: var(--color-accent-active);
+      background: var(--card2);
+      color: var(--color-text-strong);
+
+      svg {
+        color: var(--color-accent-active);
+      }
+    }
+  }
+
+  .go {
+    display: inline-flex;
+    gap: var(--space-2);
+    align-items: center;
+    margin-block-start: var(--space-6);
+    padding-block-end: var(--space-1);
+    border-block-end: 2px solid var(--color-accent-active);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+    text-decoration: none;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard);
+
+    svg {
+      inline-size: 18px;
+      block-size: 18px;
+
+      @include butler-mx.feature("motion") {
+        transition: translate var(--duration-fast) var(--ease-standard);
+      }
+    }
+
+    @include butler-mx.hover {
+      border-block-end-color: var(--color-border-accent);
+      color: var(--color-text-accent);
+
+      svg {
+        translate: 4px 0;
+      }
+    }
+  }
+
+  a:focus-visible {
+    outline-offset: 3px;
+  }
+
+  // From 728px container (= the 808px viewport minus the 40px tablet padding).
+  @container home-stage (inline-size >= 45.5rem) {
+    .ipa,
+    .lemma-row,
+    .meaning {
+      --_lemma: 10rem;
+      --_meaning: 2.625rem; // SPEC §4.5, no token above 2.25rem
+      --_ipa: 26rem;
+      --_ipa-opacity: 0.1;
+      --_seal: 7.5rem; // 120px seal
+    }
+
+    .ipa {
+      --_ipa-bottom: 0; // whole letters: the SPEC's -0.2em cut the lower part off the band (user feedback)
+
+      inset-block: auto var(--_ipa-bottom);
+    }
+  }
+
+  // Load animation (mock h19-*), only with motion allowed and once the page releases the reveal.
+  @include butler-mx.feature("motion") {
+    :scope:not([data-reveal="wait"]) {
+      .letter {
+        animation: home-rise var(--_rise) var(--_rise-ease) both;
+        // --i set inline: sibling-index() is not Baseline widely available yet
+        animation-delay: calc(var(--i, 0) * var(--_rise-step));
+      }
+
+      .art,
+      .meaning,
+      .example,
+      .go {
+        animation: home-up var(--_up) var(--_up-start) both;
+      }
+
+      .meaning {
+        animation-delay: var(--_up-meaning);
+      }
+
+      .example {
+        animation-delay: var(--_up-example);
+      }
+
+      .ipa {
+        animation:
+          home-fade var(--_fade) var(--_fade-start) both,
+          home-drift var(--_drift) var(--_drift-start) ease-in-out infinite alternate;
+      }
+    }
+  }
+}

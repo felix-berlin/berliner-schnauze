@@ -1,0 +1,92 @@
+@use "@styles/mixins" as mx;
+
+// Start page shell (pages/index.astro, docs/design/startseite-v20/SPEC.md §2, §3): full-bleed section bands
+// (.o-home-section with data-surface) around a centred .o-home-in column. The surface reaches the screen edges
+// through a spread shadow clipped to the band's block size (ink overflow, no horizontal scrollbar).
+// COUPLING: the home-* components switch their container queries at 45.5rem (808px viewport minus 2 x 40px) and
+// 59.5rem (1000px viewport minus 2 x 24px). Keep the side padding below exactly 24px / 40px / 24px.
+@layer objects {
+  // The IPA outlines span the viewport (100vw includes the scrollbar): clip the sliver instead of scrolling it.
+  html:has(.o-home) {
+    overflow-x: clip;
+  }
+
+  .o-home {
+    --_surface: var(--page);
+    --_bleed: 0 0 0 100vmax var(--_surface); // spread to the screen edges
+
+    background: var(--_surface);
+    box-shadow: var(--_bleed);
+    clip-path: inset(0 -100vmax);
+  }
+
+  .o-home-section {
+    --_surface: var(--page);
+    --_pad: var(--space-16); // SPEC §3 mobile 64px
+    --_bleed: 0 0 0 100vmax var(--_surface); // spread to the screen edges
+
+    // Cancels the layout gutter of .u-max-body-width: the band spans the main column, .o-home-in pads it.
+    margin-inline: calc(-1 * var(--page-gutter));
+    padding-block: var(--_pad);
+    background: var(--_surface);
+    box-shadow: var(--_bleed);
+    clip-path: inset(0 -100vmax);
+
+    @include mx.breakpoint("word") {
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3 tablet 80px, no space token
+      --_pad: 80px;
+    }
+    @include mx.breakpoint("desktop") {
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3 desktop 96px, no space token
+      --_pad: 96px;
+    }
+  }
+
+  // Stage: 72px / 64px (mock .h18__stage). The word's IPA outline clips itself (.field in home-stage), so the
+  // search list may still drop below the band.
+  .o-home-section[data-variant="stage"] {
+    position: relative; // parent of the IPA field
+    isolation: isolate;
+    padding-block: calc(var(--space-16) + var(--space-2)) var(--space-16);
+    clip-path: none;
+    box-shadow: none;
+  }
+
+  // The to-go bar brings its own block padding.
+  .o-home-section[data-variant="bar"] {
+    padding-block: 0;
+  }
+
+  .o-home-section[data-surface="card"] {
+    --_surface: var(--card);
+  }
+
+  .o-home-section[data-surface="card2"] {
+    --_surface: var(--card2);
+  }
+
+  .o-home-section[data-surface="accent"] {
+    --_surface: var(--color-accent-solid);
+  }
+
+  .o-home-section[data-surface="band"] {
+    --_surface: var(--band-dark-bg);
+  }
+
+  .o-home-in {
+    --_max: 75.5rem; // SPEC §3: 1208px incl. padding
+    --_side: var(--space-6); // 24px
+
+    box-sizing: border-box;
+    max-inline-size: var(--_max);
+    margin-inline: auto;
+    padding-inline: var(--_side);
+
+    @include mx.breakpoint("word") {
+      --_side: calc(var(--space-8) + var(--space-2)); // 40px
+    }
+    @include mx.breakpoint("desktop") {
+      --_side: var(--space-6);
+    }
+  }
+}

@@ -20,6 +20,12 @@ const canonicalURL = seo?.canonical || canonicalUrl(Astro.url.pathname, Astro.si
 <!-- Cascade layer order (design system spec section 6); first on purpose: the first mention fixes the order, so no CSS chunk can change it. -->
 <style is:inline>@layer reset, tokens, vendor, base, legacy, objects, components, utilities;</style>
 <meta content='width=device-width, initial-scale=1' name='viewport' />
+<!-- Both schemes supported: lets the browser theme the canvas before CSS loads (dark-mode guide). -->
+<meta content='light dark' name='color-scheme' />
+<!-- Chromium: follow the OS text size. Never set font-size on html/:root, or the scale is lost. -->
+<meta content='scale' name='text-scale' />
+<meta content='#fad0b0' media='(prefers-color-scheme: light)' name='theme-color' />
+<meta content='#2b333b' media='(prefers-color-scheme: dark)' name='theme-color' />
 <link href={IMAGOR_HOST} rel='preconnect' />
 <SetColorMode />
 
@@ -29,6 +35,7 @@ const canonicalURL = seo?.canonical || canonicalUrl(Astro.url.pathname, Astro.si
 
 <Font cssVariable="--font-berliner" preload />
 <Font cssVariable="--font-berlin" preload />
+<Font cssVariable="--font-condensed" />
 
 <script src='../plugins/sentryBrowser.ts'></script>
 

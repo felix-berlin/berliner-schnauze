@@ -1,0 +1,316 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Start page "Wat is Berlinerisch?" (docs/design/startseite-v20/SPEC.md §12.1, §15-17). Parts: h2, .grid with
+// .text (CMS html: p, h3, a; the first p gets the drop cap; .more = details > summary with .chevron) and .side
+// (h3, .label, .rules of .rule > .sound (s, b) + .example (i, small), .tags of a).
+// Reveal: the strokes draw unless the root has data-reveal="wait" (the page's observer removes it).
+// One DOM for all widths: .more is open from 808px (inline script); then its summary hides here. 45.5rem
+// container = 808px viewport minus the page padding (coupled in Task 10's page layout).
+@include mx.component("home-knowledge") {
+  :scope {
+    --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
+    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
+    --_h3: 1.6rem; // SPEC §12.1 text h3 (mock), between the 2xl and 3xl steps
+    --_drop: 5.2rem; // SPEC §12.1 drop cap
+    --_berlin: 1.6rem; // SPEC §12.1 rule's Berlin form
+    --_track: 2px; // .label letter spacing (mock)
+    --_chevron: 12px;
+    --_sound: 5.5rem; // mock column of the sound pair
+    --_chip: 36px; // SPEC §17 chip height (WCAG 2.5.8 exception with the 8px gap)
+    --_strike-overhang: -2px; // the stroke reaches past the word (mock)
+    --_strike-y: 55%; // stroke height in the word (mock)
+    --_strike: 500ms; // SPEC §16 correction stroke
+    --_strike-start: 250ms;
+    --_strike-ease: cubic-bezier(0.6, 0, 0.3, 1);
+    --focus-ring-color: var(--color-accent-active);
+
+    container: home-knowledge / inline-size;
+  }
+
+  h2 {
+    margin: 0 0 var(--space-6);
+    font-family: var(--font-condensed);
+    font-size: var(--_h2);
+    font-weight: var(--font-weight-black);
+    line-height: 0.95;
+    text-transform: uppercase;
+    color: var(--color-text-strong);
+  }
+
+  .grid {
+    display: grid;
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .text {
+    max-inline-size: 68ch;
+    font-size: var(--font-size-lg);
+    line-height: 1.7;
+    text-wrap: pretty;
+
+    p {
+      margin: 0 0 var(--space-4);
+    }
+
+    // The drop cap as ::first-letter: the word stays whole in the text, so screen readers read it once.
+    > p:first-child {
+      font-size: var(--font-size-xl);
+
+      &::first-letter {
+        float: inline-start;
+        margin-block-start: var(--space-1);
+        margin-inline-end: var(--space-2);
+        font-family: var(--font-condensed);
+        font-size: var(--_drop);
+        font-weight: var(--font-weight-black);
+        line-height: 0.82;
+        color: var(--color-text-strong);
+      }
+    }
+
+    h3 {
+      margin: var(--space-8) 0 var(--space-2);
+      font-family: var(--font-condensed);
+      font-size: var(--_h3);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-strong);
+    }
+
+    a {
+      color: var(--color-text-strong);
+      text-decoration: underline;
+      text-decoration-color: var(--color-accent-active);
+      text-underline-offset: 3px;
+      transition:
+        color var(--duration-fast) var(--ease-standard),
+        text-decoration-thickness var(--duration-fast) var(--ease-standard);
+
+      @include butler-mx.hover {
+        color: var(--color-text-accent);
+        text-decoration-thickness: 2px;
+      }
+    }
+  }
+
+  .more > summary {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    justify-content: space-between;
+    min-block-size: var(--size-tap-target);
+    margin-block-start: var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-sm);
+    background: var(--card);
+    box-shadow: var(--shadow-paper-lift);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+    list-style: none;
+    cursor: pointer;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  .chevron {
+    flex: none;
+    inline-size: var(--_chevron);
+    block-size: var(--_chevron);
+    border-block-end: 2px solid var(--color-accent-active);
+    border-inline-end: 2px solid var(--color-accent-active);
+    rotate: 45deg;
+    translate: 0 -3px;
+  }
+
+  .more[open] {
+    > summary {
+      margin-block-end: var(--space-4);
+    }
+
+    .chevron {
+      rotate: -135deg;
+      translate: 0 3px;
+    }
+  }
+
+  .side {
+    padding: var(--space-6);
+    border-radius: var(--radius-sm);
+    background: var(--card);
+    box-shadow: var(--shadow-paper-lift);
+
+    h3 {
+      margin: 0;
+      font-family: var(--font-condensed);
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-strong);
+    }
+  }
+
+  .label {
+    margin: var(--space-1) 0 var(--space-4);
+    font-size: var(--_small);
+    text-transform: uppercase;
+    letter-spacing: var(--_track);
+    color: var(--t3);
+  }
+
+  .rules + .label {
+    margin-block-start: var(--space-6);
+  }
+
+  .rules {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .rule {
+    display: grid;
+    grid-template-columns: var(--_sound) minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: center;
+    padding-block: var(--space-3);
+    border-block-start: 1px solid var(--line);
+  }
+
+  .sound {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.1;
+
+    // The correction stroke is a drawn line, so it can grow in from the start (SPEC §16).
+    s {
+      position: relative;
+      font-size: var(--font-size-md);
+      text-decoration: none;
+      color: var(--t3);
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset-inline: var(--_strike-overhang);
+        inset-block-start: var(--_strike-y);
+        block-size: 2px;
+        background: var(--color-accent-active);
+        transform-origin: left center;
+      }
+    }
+
+    b {
+      font-family: var(--font-condensed);
+      font-size: var(--_berlin);
+      font-weight: var(--font-weight-black);
+      color: var(--color-text-accent);
+    }
+  }
+
+  .example {
+    display: flex;
+    flex-direction: column;
+
+    i {
+      color: var(--color-text-strong);
+    }
+
+    small {
+      font-size: var(--_small);
+      color: var(--t3);
+    }
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      min-block-size: var(--_chip);
+      padding-inline: var(--space-3);
+      border-radius: var(--radius-pill);
+      background: var(--card2);
+      font-size: var(--font-size-md);
+      color: var(--color-text-strong);
+      transition: background-color var(--duration-fast) var(--ease-standard);
+
+      @include butler-mx.hover {
+        background: var(--card3);
+      }
+    }
+  }
+
+  @container home-knowledge (inline-size >= 45.5rem) {
+    h2 {
+      --_h2: 3rem; // SPEC §3 tablet h2
+
+      margin-block-end: var(--space-8);
+    }
+
+    .grid {
+      gap: var(--space-12);
+    }
+
+    // From 808px the text shows whatever the details state is (::details-content, Baseline 2025; the inline script
+    // also opens it as the fallback) and the summary has nothing left to do.
+    .more > summary {
+      display: none;
+    }
+
+    .more::details-content {
+      content-visibility: visible;
+    }
+
+    .rules {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: var(--space-8);
+    }
+  }
+  @container home-knowledge (inline-size >= 59.5rem) {
+    h2 {
+      --_h2: 3.5rem; // SPEC §3 desktop h2
+    }
+
+    .grid {
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      gap: var(--space-16);
+    }
+
+    .side {
+      position: sticky;
+      inset-block-start: calc(var(--site-header-height) + var(--space-4)); // below the sticky header
+      align-self: start;
+      max-block-size: calc(100dvh - var(--site-header-height) - 2 * var(--space-4));
+      overflow-y: auto;
+    }
+
+    .rules {
+      display: block;
+    }
+  }
+
+  @include butler-mx.feature("motion") {
+    .chevron {
+      transition:
+        rotate var(--duration-base) var(--ease-standard),
+        translate var(--duration-base) var(--ease-standard);
+    }
+
+    // Runs unless the page's reveal observer still holds the section (data-reveal="wait", Task 10).
+    :scope:not([data-reveal="wait"]) .sound s::after {
+      animation: home-strike var(--_strike) var(--_strike-start) var(--_strike-ease) both;
+    }
+
+    .tags a:active {
+      scale: 0.96;
+    }
+  }
+}

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Startseite v20 · Desktop · Dark</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/berliner-schnauze/tokens.css">
+<link rel="stylesheet" href="ds/berliner-schnauze/colors_and_type.css">
+<link rel="stylesheet" href="ds/berliner-schnauze/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div data-theme="dark">
+<dc-import name="Header" theme="dark" size="desktop" current="start" hint-size="100%,64px"></dc-import>
+<dc-import name="HomeV20" theme="dark" size="desktop" hint-size="100%,8472px"></dc-import>
+<dc-import name="Footer" theme="dark" size="desktop" hint-size="100%,560px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":9096}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { yes: true };
+  }
+}
+</script>
+</body>
+</html>

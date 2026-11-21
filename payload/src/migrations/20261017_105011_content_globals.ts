@@ -71,7 +71,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   // Loaded lazily: the seed pulls in jsdom (../lib/htmlToLexical), and a static import would bundle it into the
   // site's server through payload.config, where jsdom's __dirname lookups crash every render.
   const { seedSiteContent } = await import('../seed/siteContent')
-  await seedSiteContent(payload, req)
+  await seedSiteContent(payload, req, db)
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {

@@ -45,7 +45,9 @@
 
     // Spring back; the inline style of an active drag sets transition: none.
     @include butler-mx.feature("motion") {
-      transition: transform var(--_spring) ease-out;
+      @include butler-mx.feature("motion") {
+        transition: transform var(--_spring) ease-out;
+      }
 
       &[data-state="hint"] {
         animation: c-bon-card-intro var(--_hint) linear var(--_hint-delay) both;

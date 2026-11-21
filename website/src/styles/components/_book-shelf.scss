@@ -40,6 +40,7 @@
     scroll-padding-inline: calc(var(--_edge) + var(--_focus-room));
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    // scroll alternative: every item is focusable and focus scrolls it into view (browser-ui-theming guide)
     scrollbar-width: none;
     list-style: none;
   }

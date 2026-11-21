@@ -8,7 +8,7 @@ test.describe("Toast-Benachrichtigungen", () => {
   }) => {
     test.skip(isMobile, "Dropdown-Interaktion ist auf Mobil anders; Desktop reicht für den Toast");
     await context.grantPermissions(["clipboard-read", "clipboard-write"]).catch(() => {});
-    await page.goto("/");
+    await page.goto("/suche");
     await page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" }).fill("aasen");
     const card = page.locator(".c-word-list article").first();
 

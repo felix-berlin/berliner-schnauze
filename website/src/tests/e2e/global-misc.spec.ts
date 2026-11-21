@@ -1,14 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Startseite: Wort des Tages und Zufallswort", () => {
-  test("Wort des Tages wird im localStorage abgelegt", async ({ page }) => {
-    await page.goto("/");
-
-    await expect
-      .poll(() => page.evaluate(() => localStorage.getItem("wordOfTheDay:word")))
-      .toContain("slug");
-  });
-
+test.describe("Zufallswort", () => {
   test("Zufallswort-Link auf der Wortseite zeigt auf eine Wortseite", async ({ page }) => {
     await page.goto("/wort/anmachen");
 

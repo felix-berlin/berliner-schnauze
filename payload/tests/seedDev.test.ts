@@ -1,7 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { describe, expect, it } from "vitest";
 
-import { assertDevDatabase } from "../src/seed/dev";
+import { assertDevDatabase } from "../src/seed/assertDevDatabase";
 
 const url = (host: string, db: string) => `postgres://u:p@${host}:5433/${db}`;
 
