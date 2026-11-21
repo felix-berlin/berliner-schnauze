@@ -1,0 +1,110 @@
+import { describe, expect, it } from "vitest";
+
+import {
+  ageGroup,
+  agePercents,
+  districtValue,
+  MIN_GROUP,
+  MORSE_MAX_MARKS,
+  morseRing,
+  typicalWord,
+  type AgeGroup,
+  type UsageCounts,
+} from "../src/lib/homeStats";
+
+describe("morseRing", () => {
+  it("counts the marks of the word", () => {
+    expect(morseRing("KIEZ")).toHaveLength(10);
+    expect(morseRing("SCHRIPPE")).toHaveLength(25);
+  });
+
+  it("maps dot to d and dash to l", () => {
+    // K -.-  I ..  E .  Z --..
+    expect(morseRing("KIEZ").map((m) => m.sym)).toEqual([
+      "l",
+      "d",
+      "l",
+      "d",
+      "d",
+      "d",
+      "l",
+      "l",
+      "d",
+      "d",
+    ]);
+  });
+
+  it("places the first mark like the SPEC formula", () => {
+    // E = one dot: total t = 1 + 0.9, first unit at 0.5, angle -90 + 360 * 0.5 / 1.9
+    expect(morseRing("E")).toEqual([
+      { sym: "d", left: "94.846%", top: "53.716%", rotate: "94.737deg" },
+    ]);
+  });
+
+  it("handles umlauts and ß", () => {
+    expect(morseRing("Äh")).toHaveLength(8);
+    expect(morseRing("ß")).toHaveLength(7);
+  });
+
+  it("skips characters outside the table", () => {
+    expect(morseRing("-’")).toEqual([]);
+    expect(morseRing("")).toEqual([]);
+    expect(morseRing("a b-c")).toEqual(morseRing("abc"));
+  });
+
+  it("caps at whole letters from the start of the word", () => {
+    // K O D D E R S C H = 27 marks, N would make 29
+    expect(morseRing("Kodderschnauze")).toHaveLength(27);
+    expect(morseRing("Kodderschnauze").length).toBeLessThanOrEqual(MORSE_MAX_MARKS);
+  });
+});
+
+describe("ageGroup", () => {
+  it("merges the eight ages into four groups", () => {
+    expect(
+      (["u20", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80plus"] as const).map(
+        ageGroup,
+      ),
+    ).toEqual(["u30", "u30", "30-49", "30-49", "50-69", "50-69", "70plus", "70plus"]);
+  });
+});
+
+describe("districtValue", () => {
+  it("is null below MIN_GROUP and the rounded say share from MIN_GROUP", () => {
+    expect(MIN_GROUP).toBe(10);
+    expect(districtValue({ say: 4, know: 3, never: 2 })).toBeNull();
+    expect(districtValue({ say: 5, know: 3, never: 2 })).toBe(50);
+    expect(districtValue({ say: 0, know: 0, never: 0 })).toBeNull();
+    expect(districtValue({ say: 1, know: 2, never: 7 })).toBe(10);
+    expect(districtValue({ say: 2, know: 0, never: 9 })).toBe(18);
+  });
+});
+
+describe("agePercents", () => {
+  it("nulls groups below MIN_GROUP", () => {
+    const c = (say: number, know: number, never: number): UsageCounts => ({ say, know, never });
+    const by: Record<AgeGroup, UsageCounts> = {
+      u30: c(1, 1, 1),
+      "30-49": c(5, 3, 2),
+      "50-69": c(10, 0, 0),
+      "70plus": c(0, 0, 0),
+    };
+    expect(agePercents(by)).toEqual({ u30: null, "30-49": 50, "50-69": 100, "70plus": null });
+  });
+});
+
+describe("typicalWord", () => {
+  it("ignores words below MIN_GROUP and picks the largest gap above the average", () => {
+    const words = [
+      { word: 1, say: 5, total: 10 }, // 0.5
+      { word: 2, say: 9, total: 10 }, // 0.9
+      { word: 3, say: 3, total: 3 }, // 1.0 but too few votes
+    ];
+    expect(typicalWord(words, 0.4)).toBe(2);
+  });
+
+  it("returns null for an empty list or when nothing has enough votes", () => {
+    expect(typicalWord([], 0.4)).toBeNull();
+    expect(typicalWord([{ word: 1, say: 3, total: 3 }], 0.4)).toBeNull();
+  });
+});

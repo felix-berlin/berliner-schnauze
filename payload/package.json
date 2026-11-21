@@ -15,6 +15,7 @@
     "./bon-player": "./src/lib/bonPlayer.ts",
     "./bon-names": "./src/lib/bonNames.ts",
     "./bon-ranking": "./src/lib/bonRanking.ts",
+    "./home-stats": "./src/lib/homeStats.ts",
     "./word-stats": "./src/lib/wordStats.ts",
     "./lexical-html": "./src/lib/lexicalHtml.ts",
     "./routes": "./src/lib/routes.ts",
