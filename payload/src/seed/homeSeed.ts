@@ -21,23 +21,23 @@ import {
   HOME_TRY_WORD_SLUGS,
 } from "./homeContent";
 
+type Outcome = { written: string[]; alreadySet: string[]; unavailable: string[] };
+
 export async function seedHome(
   payload: Payload,
   tryWordSlugs: string[] = HOME_TRY_WORD_SLUGS,
-): Promise<{ written: string[]; alreadySet: string[]; unavailable: string[] }> {
+): Promise<Outcome> {
   const home = await payload.findGlobal({ slug: "home", depth: 0 });
   const data: Record<string, unknown> = {};
-  const written: string[] = [];
-  const alreadySet: string[] = [];
-  const unavailable: string[] = [];
+  const out: Outcome = { written: [], alreadySet: [], unavailable: [] };
   /** Queues `value()` for `name` when the field is empty; `value` returns undefined when there is nothing to write. */
   const fill = async (name: string, empty: boolean, value: () => unknown) => {
-    if (!empty) return void alreadySet.push(name);
+    if (!empty) return void out.alreadySet.push(name);
     const v = await value();
-    if (v === undefined) unavailable.push(name);
+    if (v === undefined) out.unavailable.push(name);
     else {
       data[name] = v;
-      written.push(name);
+      out.written.push(name);
     }
   };
 
@@ -72,31 +72,38 @@ export async function seedHome(
   });
 
   // Speech bubbles of the topic register: only topics that exist and have no saying yet.
-  const topicsFilled: string[] = [];
-  const topicsSet: string[] = [];
-  const topicsMissing: string[] = [];
-  for (const [slug, typischerSatz] of Object.entries(HOME_TOPIC_SAYINGS)) {
-    const { docs } = await payload.find({
-      collection: "themen",
-      where: { slug: { equals: slug } },
-      limit: 1,
-      depth: 0,
-    });
-    if (!docs[0]) topicsMissing.push(slug);
-    else if (docs[0].typischerSatz) topicsSet.push(slug);
+  const sayings = Object.entries(HOME_TOPIC_SAYINGS);
+  const { docs: topics } = await payload.find({
+    collection: "themen",
+    where: { slug: { in: sayings.map(([slug]) => slug) } },
+    limit: sayings.length,
+    depth: 0,
+    pagination: false,
+  });
+  const topicState: Record<"written" | "alreadySet" | "missing", string[]> = {
+    written: [],
+    alreadySet: [],
+    missing: [],
+  };
+  for (const [slug, typischerSatz] of sayings) {
+    const topic = topics.find((t) => t.slug === slug);
+    if (!topic) topicState.missing.push(slug);
+    else if (topic.typischerSatz) topicState.alreadySet.push(slug);
     else {
       await payload.update({
         collection: "themen",
-        id: docs[0].id,
+        id: topic.id,
         data: { typischerSatz },
         depth: 0,
       });
-      topicsFilled.push(slug);
+      topicState.written.push(slug);
     }
   }
-  if (topicsFilled.length) written.push(`topicSayings(${topicsFilled.length})`);
-  if (topicsSet.length) alreadySet.push(`topicSayings(${topicsSet.length})`);
-  if (topicsMissing.length) unavailable.push(`topicSayings(no topic: ${topicsMissing.join(", ")})`);
+  if (topicState.written.length) out.written.push(`topicSayings(${topicState.written.length})`);
+  if (topicState.alreadySet.length)
+    out.alreadySet.push(`topicSayings(${topicState.alreadySet.length})`);
+  if (topicState.missing.length)
+    out.unavailable.push(`topicSayings(no topic: ${topicState.missing.join(", ")})`);
 
   // Magazine teaser: the latest published post gets a quote (its own first sentence) and an IPA outline when it has
   // none (dev stand-ins; the site drops the section without a quote, SPEC §12.3).
@@ -116,9 +123,9 @@ export async function seedHome(
       .replace(/\s+/g, " ")
       .trim();
     const sentence = /^.{20,160}?[.!?](?=\s|$)/.exec(plain)?.[0];
-    if (post.teaserZitat) alreadySet.push("teaserZitat");
+    if (post.teaserZitat) out.alreadySet.push("teaserZitat");
     else if (!sentence)
-      unavailable.push("teaserZitat(no sentence of 20-160 characters in the newest post)");
+      out.unavailable.push("teaserZitat(no sentence of 20-160 characters in the newest post)");
     else {
       await payload.update({
         collection: "posts",
@@ -127,9 +134,9 @@ export async function seedHome(
         depth: 0,
         id: post.id,
       });
-      written.push("teaserZitat");
+      out.written.push("teaserZitat");
     }
-  } else unavailable.push("teaserZitat(no published post)");
+  } else out.unavailable.push("teaserZitat(no published post)");
 
   // The dev site also shows drafts (SHOW_TEST_DATA), so the newest posts get the outline, whatever their status.
   const { docs: latest } = await payload.find({
@@ -150,15 +157,14 @@ export async function seedHome(
       id: p.id,
     });
   }
-  if (latest.length) written.push(`teaserIpa(${latest.length})`);
+  if (latest.length) out.written.push(`teaserIpa(${latest.length})`);
 
   const ipaDays = await seedWordOfTheDayIpa(payload);
-  if (ipaDays) written.push(`wordIpa(${ipaDays})`);
-  else alreadySet.push("wordIpa");
+  if (ipaDays) out.written.push(`wordIpa(${ipaDays})`);
+  else out.alreadySet.push("wordIpa");
 
   if (Object.keys(data).length) await payload.updateGlobal({ slug: "home", data, depth: 0 });
-  if (unavailable.length) console.warn(`[seed] home: could not write: ${unavailable.join("; ")}`);
-  return { written, alreadySet, unavailable };
+  return out;
 }
 
 // DEV PLACEHOLDER, not phonetics: a rough letter-to-sound guess so the stage outline has something to show.

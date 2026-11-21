@@ -571,7 +571,9 @@ export async function seedE2e(payload: Payload): Promise<void> {
   await payload.updateGlobal({ data: navigation as never, slug: "navigation" });
   await payload.updateGlobal({ data: company as never, slug: "company" });
   await payload.updateGlobal({ data: affiliate as never, slug: "affiliate" });
-  await seedHome(payload);
+  const home = await seedHome(payload);
+  if (home.unavailable.length)
+    console.warn(`seed e2e: home unavailable: ${home.unavailable.join(", ")}`);
   await seedHomeStats(payload);
 }
 

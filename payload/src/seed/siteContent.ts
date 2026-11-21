@@ -122,22 +122,27 @@ export async function seedSiteContent(
   const existing = (await db.execute(sql`SELECT "id" FROM "home" LIMIT 1`)) as {
     rows: unknown[];
   };
-  if (!existing.rows.length) {
-    const { rows } = (await db.execute(
-      sql`INSERT INTO "home" ("updated_at", "created_at") VALUES (now(), now()) RETURNING "id"`,
-    )) as { rows: { id: number }[] };
-    const homeId = rows[0]?.id;
-    if (homeId === undefined) throw new Error("seedSiteContent: the home insert returned no id");
-    for (const [i, fact] of facts.entries()) {
-      // oxlint-disable-next-line no-await-in-loop -- five rows
-      await db.execute(
-        sql`INSERT INTO "home_facts" ("_order", "_parent_id", "id", "headline", "text") VALUES (${i + 1}, ${homeId}, ${crypto.randomUUID()}, ${fact.headline}, ${JSON.stringify(fact.text)}::jsonb)`,
-      );
-    }
-  }
+  if (!existing.rows.length) await insertHome(db, facts);
   await payload.updateGlobal({
     slug: "company",
     data: { donationHighlights: DONATION_HIGHLIGHTS },
     req,
   });
+}
+
+async function insertHome(
+  db: { execute: (query: ReturnType<typeof sql>) => Promise<unknown> },
+  facts: { headline: string; text: unknown }[],
+): Promise<void> {
+  const { rows } = (await db.execute(
+    sql`INSERT INTO "home" ("updated_at", "created_at") VALUES (now(), now()) RETURNING "id"`,
+  )) as { rows: { id: number }[] };
+  const homeId = rows[0]?.id;
+  if (homeId === undefined) throw new Error("seedSiteContent: the home insert returned no id");
+  for (const [i, fact] of facts.entries()) {
+    // oxlint-disable-next-line no-await-in-loop -- five rows
+    await db.execute(
+      sql`INSERT INTO "home_facts" ("_order", "_parent_id", "id", "headline", "text") VALUES (${i + 1}, ${homeId}, ${crypto.randomUUID()}, ${fact.headline}, ${JSON.stringify(fact.text)}::jsonb)`,
+    );
+  }
 }
