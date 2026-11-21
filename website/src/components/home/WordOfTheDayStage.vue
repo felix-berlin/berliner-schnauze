@@ -1,6 +1,8 @@
 <template>
   <div class="c-home-stage">
-    <span v-if="word.ipa" class="ipa" aria-hidden="true">[{{ word.ipa }}]</span>
+    <span v-if="word.ipa" class="field" aria-hidden="true"
+      ><span class="ipa">[{{ word.ipa }}]</span></span
+    >
     <p class="eye"><b>Wort des Tages</b> {{ word.dateLabel }}</p>
     <div class="lemma-row">
       <h2

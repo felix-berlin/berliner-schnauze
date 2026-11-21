@@ -36,13 +36,25 @@
     container: home-stage / inline-size;
   }
 
+  // The outline belongs to the whole screen, not to the centred column: this field spans the viewport and clips
+  // the outline at its edges (a wide outline would otherwise add a horizontal scrollbar).
+  .field {
+    --_edge: calc(50% - 50vw); // from the column's centre to the screen's edge: no token
+
+    position: absolute;
+    inset-block: 0;
+    inset-inline: var(--_edge);
+    z-index: var(--z-below);
+    overflow: clip;
+    pointer-events: none;
+  }
+
   .ipa {
     --_ipa-end: -0.06em; // cut off at the right edge (mock)
 
     position: absolute;
     inset-block: var(--space-4) auto;
     inset-inline-end: var(--_ipa-end);
-    z-index: var(--z-below);
     font-size: var(--_ipa);
     font-weight: var(--font-weight-bold);
     line-height: 1;

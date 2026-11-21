@@ -6,6 +6,11 @@
 // COUPLING: the home-* components switch their container queries at 45.5rem (808px viewport minus 2 x 40px) and
 // 59.5rem (1000px viewport minus 2 x 24px). Keep the side padding below exactly 24px / 40px / 24px.
 @layer objects {
+  // The IPA outlines span the viewport (100vw includes the scrollbar): clip the sliver instead of scrolling it.
+  html:has(.o-home) {
+    overflow-x: clip;
+  }
+
   .o-home {
     --_surface: var(--page);
     --_bleed: 0 0 0 100vmax var(--_surface); // spread to the screen edges
@@ -37,11 +42,10 @@
     }
   }
 
-  // Stage: 72px / 64px (mock .h18__stage). Clips the word's IPA outline sideways only, so the search list may
-  // still drop below the band.
+  // Stage: 72px / 64px (mock .h18__stage). The word's IPA outline clips itself (.field in home-stage), so the
+  // search list may still drop below the band.
   .o-home-section[data-variant="stage"] {
     padding-block: calc(var(--space-16) + var(--space-2)) var(--space-16);
-    overflow-x: clip;
     clip-path: none;
     box-shadow: none;
   }
