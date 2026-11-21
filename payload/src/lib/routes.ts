@@ -12,8 +12,10 @@ export const isRoutedCollection = (slug: string | undefined): slug is RoutedColl
 export const docPath = (collection: RoutedCollection, slug: string): string =>
   `${ROUTES[collection]}/${slug}`;
 
+export const PRODUCTION_URL = "https://berliner-schnauze.wtf";
+
 /** Public site origin (CMS side): `SITE_URL`, else production. */
-export const siteUrl = (): string => process.env.SITE_URL || "https://berliner-schnauze.wtf";
+export const siteUrl = (): string => process.env.SITE_URL || PRODUCTION_URL;
 
 /** True when a Lexical state holds any text (an empty editor still has one empty paragraph). */
 export const hasLexicalText = (node: unknown): boolean =>

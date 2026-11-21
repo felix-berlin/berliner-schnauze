@@ -7,7 +7,7 @@ import { recountAfterChange, recountAfterDelete } from "../hooks/commentCounts";
 export const CommentVotes: CollectionConfig = {
   slug: "comment-votes",
   access: authenticatedOnly,
-  admin: { defaultColumns: ["comment", "visitor", "value"] },
+  admin: { group: "Community", defaultColumns: ["comment", "visitor", "value"] },
   indexes: [{ fields: ["comment", "visitor"], unique: true }],
   hooks: { afterChange: [recountAfterChange], afterDelete: [recountAfterDelete] },
   fields: [

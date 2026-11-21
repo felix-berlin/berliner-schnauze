@@ -197,4 +197,29 @@ describe("mcp endpoint", () => {
       await payload.delete({ collection: "words", where: { berlinerisch: { like: WORD } } });
     }
   });
+
+  it("cannot move a published word to the trash", async () => {
+    const payload = await getTestPayload();
+    const live = await payload.create({
+      collection: "words",
+      data: { berlinerisch: WORD, _status: "published" },
+      draft: false,
+    });
+    const stillLive = async () =>
+      (await payload.find({ collection: "words", where: { id: { equals: live.id } } })).totalDocs;
+    try {
+      for (const draft of [false, true])
+        await rpc("tools/call", `Bearer ${KEY}`, {
+          name: "updateWords",
+          arguments: { id: live.id, deletedAt: new Date().toISOString(), draft },
+        });
+      expect(await stillLive()).toBe(1);
+    } finally {
+      await payload.delete({
+        collection: "words",
+        trash: true,
+        where: { berlinerisch: { like: WORD } },
+      });
+    }
+  });
 });

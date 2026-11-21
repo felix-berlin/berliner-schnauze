@@ -138,6 +138,7 @@ export const Comments: CollectionConfig = {
   slug: "comments",
   access: authenticatedOnly,
   admin: {
+    group: "Community",
     useAsTitle: "text",
     defaultColumns: [
       "text",

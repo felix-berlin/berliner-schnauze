@@ -16,7 +16,10 @@ const pick = (name: string, options: readonly string[]): Field => ({
 export const WordFeedback: CollectionConfig = {
   slug: "word-feedback",
   access: authenticatedOnly,
-  admin: { defaultColumns: ["word", "usage", "reaction", "area", "locality", "origin", "age"] },
+  admin: {
+    group: "Community",
+    defaultColumns: ["word", "usage", "reaction", "area", "locality", "origin", "age"],
+  },
   indexes: [{ fields: ["word", "visitor"], unique: true }],
   fields: [
     { name: "word", type: "relationship", relationTo: "words", required: true },

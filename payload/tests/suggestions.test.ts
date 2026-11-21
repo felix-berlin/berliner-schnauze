@@ -119,7 +119,11 @@ describe("suggestions: adopt and lock", () => {
   const clean = async () => {
     const payload = await getTestPayload();
     await payload.delete({ collection: "suggestions", where: { berlinerWord: { in: SPELLINGS } } });
-    await payload.delete({ collection: "words", where: { slug: { in: [SLUG, SIMILAR_SLUG] } } });
+    await payload.delete({
+      collection: "words",
+      trash: true,
+      where: { slug: { in: [SLUG, SIMILAR_SLUG] } },
+    });
   };
   beforeEach(clean);
   afterEach(clean);
@@ -279,6 +283,23 @@ describe("suggestions: adopt and lock", () => {
         payload.update({ collection: "suggestions", id: empty.id, data: { status: "accepted" } }),
       ).rejects.toMatchObject({ status: 400, message: expect.stringMatching(/Slug/) });
     });
+  });
+
+  it("names the trash when a trashed word holds the slug", async () => {
+    const payload = await getTestPayload();
+    const word = await payload.create({
+      collection: "words",
+      data: { berlinerisch: "Anders", slug: SLUG },
+    });
+    await payload.update({
+      collection: "words",
+      id: word.id,
+      data: { deletedAt: new Date().toISOString() },
+    });
+    const doc = await payload.create({ collection: "suggestions", data });
+    await expect(
+      payload.update({ collection: "suggestions", id: doc.id, data: { status: "accepted" } }),
+    ).rejects.toMatchObject({ status: 400, message: expect.stringMatching(/Papierkorb/) });
   });
 
   describe("lock", () => {
