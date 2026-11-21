@@ -7,7 +7,7 @@ import type { Payload } from "payload";
 
 import { htmlToLexical } from "../lib/htmlToLexical";
 import { hasLexicalText } from "../lib/routes";
-import { assertDevDatabase } from "./dev";
+import { assertDevDatabase } from "./assertDevDatabase";
 import {
   HOME_ABOUT_TEXT,
   HOME_BROWSE_LINKS,
