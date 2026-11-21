@@ -538,6 +538,14 @@
       "hex": "#2e7d4f"
     }
   },
+  "ok-bg": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.901961, 0.94902, 0.917647],
+      "hex": "#e6f2ea"
+    }
+  },
   "band-dark-bg": {
     "$type": "color",
     "$value": {

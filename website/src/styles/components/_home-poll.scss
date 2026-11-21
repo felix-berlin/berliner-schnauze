@@ -208,8 +208,9 @@
     margin: 0 0 var(--space-4);
     padding: var(--space-2) var(--space-4);
     border-inline-start: 3px solid var(--ok);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    background: var(--card2); // the mock's --ok-bg has no token
+    border-radius: var(--radius-sm);
+    background: var(--ok-bg);
+    font-family: var(--font-family-body); // an h3 would take the display font (mock: a p)
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-bold);
     color: var(--ok);

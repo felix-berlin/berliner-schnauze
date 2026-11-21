@@ -531,6 +531,15 @@
       "hex": "#6cc08b"
     }
   },
+  "ok-bg": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.423529, 0.752941, 0.545098],
+      "hex": "#6cc08b",
+      "alpha": 0.12
+    }
+  },
   "band-dark-bg": {
     "$type": "color",
     "$value": {

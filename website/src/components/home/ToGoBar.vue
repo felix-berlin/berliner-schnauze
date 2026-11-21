@@ -10,7 +10,13 @@
         </p>
         <InstallApp v-if="mounted" data-variant="primary lg soft">App installieren</InstallApp>
         <!-- Server stand-in, same size: InstallApp reads matchMedia once its store mounts and starts disabled anyway. -->
-        <button v-else class="c-button" data-variant="primary lg soft" type="button" disabled>
+        <button
+          v-else
+          class="c-button install"
+          data-variant="primary lg soft"
+          type="button"
+          disabled
+        >
           App installieren
         </button>
       </div>

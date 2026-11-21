@@ -35,7 +35,7 @@
     --button-font-size: var(--_label);
   }
 
-  .c-button[data-variant~="primary"]:disabled {
+  .install:disabled {
     --_bg: var(--color-accent-solid);
     --_color: var(--color-text-on-accent);
     --_border-color: var(--color-accent-solid);

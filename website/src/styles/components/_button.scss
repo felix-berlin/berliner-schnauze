@@ -101,8 +101,12 @@
   :scope[data-variant~="secondary"] {
     --_bg: var(--button-bg, transparent);
     --_color: var(--button-color, var(--color-text-strong));
-    // stylelint-disable-next-line function-disallowed-list -- colour inventory: the mock's ink 40 % rim, no token holds it
-    --_border-color: var(--button-border-color, color-mix(in srgb, var(--color-text-strong) 40%, transparent));
+    // stylelint-disable function-disallowed-list -- colour inventory: the mock's ink 40 % rim, no token holds it
+    --_border-color: var(
+      --button-border-color,
+      color-mix(in srgb, var(--color-text-strong) 40%, transparent)
+    );
+    // stylelint-enable function-disallowed-list
     --_border-style: dashed;
 
     // stylelint-disable-next-line declaration-property-value-disallowed-list -- the mock's 1.5px dashed rim, no border-width token
