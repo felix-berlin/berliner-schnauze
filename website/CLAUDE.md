@@ -21,6 +21,8 @@ E2E_BUILD=1 pnpm build        # then: node server/index.mjs with E2E_SERVER=1, P
 
 Or against a dev server of your own: `NO_DEV_TOOLBAR=1 ASTRO_DEV_BACKGROUND=0 ../scripts/with-env.sh sh -c 'astro dev --ignore-lock --port $E2E_PORT'`. Don't run the full suite against the user's dev server — it starves it. Always start with `NO_DEV_TOOLBAR=1` (the Astro dev toolbar overlay distorts agent/Playwright results); it is on by default locally, and a server already running without it must be restarted.
 
+`ttl()` memos (words, posts, home, stats) keep data 60 s to 24 h per process. Seed or CMS edits show late; run `pnpm dev:fresh` (= `dev` with `NO_TTL_CACHE=1`) to load on every request (slow: all ~6000 words per page).
+
 ## Architecture
 
 **Data flow**: Payload (Local API, in the Astro server process) → adapters in `src/services/payload/` (generated Payload types narrowed to `SiteWord` etc.) → on-demand pages and API routes (`api/search/index.json`, sitemap, OG images, word of the day) → Orama in-browser search → Vue components
