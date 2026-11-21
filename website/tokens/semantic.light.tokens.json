@@ -289,6 +289,101 @@
           "alpha": 0.16
         }
       }
+    },
+    "mascot": {
+      "ink": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.168627, 0.2, 0.231373],
+          "hex": "#2b333b"
+        }
+      },
+      "ink2": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.227451, 0.270588, 0.309804],
+          "hex": "#3a454f"
+        }
+      },
+      "nose": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.070588, 0.086275, 0.101961],
+          "hex": "#12161a"
+        }
+      },
+      "red": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.94902, 0.223529, 0.113725],
+          "hex": "#f2391d"
+        }
+      },
+      "white": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [1.0, 1.0, 1.0],
+          "hex": "#ffffff"
+        }
+      },
+      "mouth": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.490196, 0.090196, 0.043137],
+          "hex": "#7d170b"
+        }
+      },
+      "disc": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.980392, 0.815686, 0.690196],
+          "hex": "#fad0b0"
+        }
+      },
+      "shadow": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.0, 0.0, 0.0],
+          "hex": "#000000",
+          "alpha": 0.18
+        }
+      },
+      "edge": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.662745, 0.721569, 0.776471],
+          "hex": "#a9b8c6",
+          "alpha": 0
+        }
+      },
+      "vest": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.290196, 0.333333, 0.376471],
+          "hex": "#4a5560"
+        }
+      },
+      "cap": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.545098, 0.435294, 0.305882],
+          "hex": "#8b6f4e"
+        }
+      },
+      "cap2": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.411765, 0.321569, 0.227451],
+          "hex": "#69523a"
+        }
+      },
+      "brow": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.435294, 0.490196, 0.541176],
+          "hex": "#6f7d8a"
+        }
+      }
     }
   },
   "shadow": {

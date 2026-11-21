@@ -22,6 +22,7 @@
     "website/src/styles/tokens/_tokens.generated.scss",
     "data",
     "payload/src/migrations",
+    "website/src/components/kalle/BerlinerBaer.vue",
     "payload/src/payload-types.ts",
     "docs/design",
     "pnpm-workspace.yaml",
