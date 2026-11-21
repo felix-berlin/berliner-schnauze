@@ -133,7 +133,9 @@ export default defineConfig({
           {
             weight: 600,
             style: "normal",
-            src: ["./src/assets/fonts/FiraSansExtraCondensed-600.woff2"],
+            src: [
+              "./node_modules/@fontsource/fira-sans-extra-condensed/files/fira-sans-extra-condensed-latin-600-normal.woff2",
+            ],
             unicodeRange: [
               "U+0000-00FF",
               "U+0131",
@@ -159,7 +161,9 @@ export default defineConfig({
           {
             weight: 800,
             style: "normal",
-            src: ["./src/assets/fonts/FiraSansExtraCondensed-800.woff2"],
+            src: [
+              "./node_modules/@fontsource/fira-sans-extra-condensed/files/fira-sans-extra-condensed-latin-800-normal.woff2",
+            ],
             unicodeRange: [
               "U+0000-00FF",
               "U+0131",
@@ -185,7 +189,9 @@ export default defineConfig({
           {
             weight: 800,
             style: "normal",
-            src: ["./src/assets/fonts/FiraSansExtraCondensed-latin-ext-800.woff2"],
+            src: [
+              "./node_modules/@fontsource/fira-sans-extra-condensed/files/fira-sans-extra-condensed-latin-ext-800-normal.woff2",
+            ],
             unicodeRange: ["U+0100-02AF"],
           },
         ],
