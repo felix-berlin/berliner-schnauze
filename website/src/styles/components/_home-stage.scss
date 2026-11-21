@@ -235,7 +235,7 @@
     }
 
     .ipa {
-      --_ipa-bottom: -0.2em; // cut off below the stage (SPEC §5)
+      --_ipa-bottom: 0; // whole letters: the SPEC's -0.2em cut the lower part off the band (user feedback)
 
       inset-block: auto var(--_ipa-bottom);
     }
