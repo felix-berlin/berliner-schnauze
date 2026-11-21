@@ -7,6 +7,9 @@
       role="group"
       aria-label="Berlin-Karte aus Punkten: Anteil „Sag ick selbst“ je Bezirk"
       @keydown.esc="active = null"
+      @pointermove="onMove"
+      @pointerleave="onPointer($event, null)"
+      @click="onTap"
     >
       <!-- Ranking order (SPEC §17): focus walks from the most to the least berlinert district. -->
       <g
@@ -52,7 +55,7 @@
 import type { Geometry } from "@utils/dotMap.ts";
 import type { HomeStats } from "payload-app/home-stats-load";
 
-import { dotStyle } from "@utils/dotMap.ts";
+import { dotStyle, nearestDistrict } from "@utils/dotMap.ts";
 import { useIntersectionObserver } from "@vueuse/core";
 import { computed, onMounted, ref, useTemplateRef } from "vue";
 
@@ -102,6 +105,21 @@ const tip = computed(() => shapes.value.find((s) => s.slug === active.value));
 // the focused district.
 const onPointer = (e: PointerEvent, slug: string | null) => {
   if (e.pointerType !== "touch") active.value = slug ?? focused.value;
+};
+
+// The whole district area is the target: the pointer position is mapped to the nearest dot. A mouse or pen hovers
+// (touch taps through `onTap`); where jsdom or an old engine has no screen matrix, nothing happens.
+const districtAt = (e: PointerEvent | MouseEvent): string | null => {
+  const m = svg.value?.getScreenCTM?.();
+  if (!m) return null;
+  const { x, y } = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse());
+  return nearestDistrict(props.geometry, x, y);
+};
+const onMove = (e: PointerEvent) => {
+  if (e.pointerType !== "touch") active.value = districtAt(e) ?? focused.value;
+};
+const onTap = (e: MouseEvent) => {
+  active.value = districtAt(e) ?? active.value;
 };
 
 // SPEC §16: the wave runs once when the map becomes visible; without JS the dots just stand.

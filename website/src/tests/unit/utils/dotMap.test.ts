@@ -1,4 +1,6 @@
-import { dotStyle, filledDots } from "@utils/dotMap.ts";
+import type { Geometry } from "@utils/dotMap.ts";
+
+import { dotStyle, filledDots, nearestDistrict } from "@utils/dotMap.ts";
 import { describe, expect, it } from "vitest";
 
 describe("dotStyle", () => {
@@ -29,5 +31,24 @@ describe("filledDots", () => {
     expect(filledDots(3)).toBe(0);
     expect(filledDots(100)).toBe(10);
     expect(filledDots(null)).toBe(0);
+  });
+});
+
+describe("nearestDistrict", () => {
+  const geometry: Geometry = {
+    bezirke: [
+      { dots: [[10, 10]], name: "A", slug: "a" },
+      { dots: [[40, 10]], name: "B", slug: "b" },
+    ],
+    viewBox: "0 0 50 20",
+  };
+
+  it("maps a point between dots to the nearest district", () => {
+    expect(nearestDistrict(geometry, 14, 12)).toBe("a");
+    expect(nearestDistrict(geometry, 36, 8)).toBe("b");
+  });
+
+  it("returns null outside the map", () => {
+    expect(nearestDistrict(geometry, 25, 10)).toBeNull();
   });
 });
