@@ -483,12 +483,12 @@ importers:
       postcss-scss:
         specifier: 4.0.9
         version: 4.0.9(postcss@8.5.33)
-      rollup-plugin-visualizer:
-        specifier: 7.1.3
-        version: 7.1.3(rolldown@1.2.19)(rollup@4.68.3)
       sass:
         specifier: 1.108.2
         version: 1.108.2
+      sonda:
+        specifier: 0.14.0
+        version: 0.14.0
       std-env:
         specifier: 4.3.0
         version: 4.3.0
@@ -8109,19 +8109,6 @@ packages:
     peerDependencies:
       rollup: '>=2.78.0'
 
-  rollup-plugin-visualizer@7.1.3:
-    resolution: {integrity: sha512-P7G0p9RowDd0ahXXBtx4MOHlSVzclyW5pDeZ2Z0HensWSI9vJdu2bqdZDsD375g+0AxND8VJzWYuKD9yH38etw==}
-    engines: {node: '>=22'}
-    hasBin: true
-    peerDependencies:
-      rolldown: 1.x || ^1.0.0-beta || ^1.0.0-rc
-      rollup: 2.x || 3.x || 4.x
-    peerDependenciesMeta:
-      rolldown:
-        optional: true
-      rollup:
-        optional: true
-
   rollup@4.68.3:
     resolution: {integrity: sha512-wd2gavj7CEQv52rdcVqfUupO/KPIKcoJKxyFWl4cOqYZGMQEOSijJRkliz0dRa7gpkj/h4TRqyWa+dJJi6T0OA==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
@@ -8319,6 +8306,11 @@ packages:
   smol-toml@1.9.1:
     resolution: {integrity: sha512-j7WyPdf0CJoutMzMoPLF/bVXHtKZIT9Rb4eGeEbWw8X2t5oirjPgpL+OpaENZrILYaXqYwnVH+qgUwVbl+pUJQ==}
     engines: {node: '>= 18'}
+
+  sonda@0.14.0:
+    resolution: {integrity: sha512-NAneRzAkk8KTW1G/Z8n3kUIUjZ8u6B1yRGq1onkD+D93CSOq/aTRVkHHutD/9R6M72Jei3AIpCbkSr8tjzZVdw==}
+    engines: {node: '>=22.12'}
+    hasBin: true
 
   sonic-boom@4.2.1:
     resolution: {integrity: sha512-w6AxtubXa2wTXAUsZMMWERrsIRAdrK0Sc+FUytWvYAhBJLyuI4llrMIC1DtlNSdI99EI86KZum2MMq3EAZlF9Q==}
@@ -8618,6 +8610,9 @@ packages:
 
   tiny-inflate@1.0.3:
     resolution: {integrity: sha512-pkY1fj1cKHb2seWDy0B16HeWyczlJA9/WW3u3c4z/NiWDsO3DOU5D7nhTLE9CF0yXv/QZFY7sEJmj24dK+Rrqw==}
+
+  tiny-open@1.3.0:
+    resolution: {integrity: sha512-GUFS8yjJZq0oWqCKCJVHcBgMpmi2WEGXY1le3E5ncR0DsgTII5uUyxtfk8/vGyDDGBE42UYHR6Ocvlk8mkXSRg==}
 
   tinybench@6.2.3:
     resolution: {integrity: sha512-Al01C2JIBnO2CXCAPbpAl6sUiOZHeThGtHYNTa51JRw9PyWOCdr+9Ong05R4qg/Sk3+H645E8ov1h2c58ityNw==}
@@ -17632,16 +17627,6 @@ snapshots:
     dependencies:
       rollup: 4.68.3
 
-  rollup-plugin-visualizer@7.1.3(rolldown@1.2.19)(rollup@4.68.3):
-    dependencies:
-      open: 11.0.4
-      picomatch: 4.0.7
-      source-map: 0.8.0
-      yargs: 18.2.0
-    optionalDependencies:
-      rolldown: 1.2.19
-      rollup: 4.68.3
-
   rollup@4.68.3:
     dependencies:
       '@types/estree': 1.0.10
@@ -17971,6 +17956,11 @@ snapshots:
   smob@1.6.2: {}
 
   smol-toml@1.9.1: {}
+
+  sonda@0.14.0:
+    dependencies:
+      '@jridgewell/remapping': 2.3.5
+      tiny-open: 1.3.0
 
   sonic-boom@4.2.1:
     dependencies:
@@ -18305,6 +18295,8 @@ snapshots:
       convert-hrtime: 5.0.0
 
   tiny-inflate@1.0.3: {}
+
+  tiny-open@1.3.0: {}
 
   tinybench@6.2.3: {}
 

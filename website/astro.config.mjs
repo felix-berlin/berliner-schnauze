@@ -6,9 +6,9 @@ import { AstroPWAIntegration as AstroPWA } from "@vite-pwa/astro";
 import matomo from "astro-matomo";
 import { defineConfig, envField, fontProviders } from "astro/config";
 import { fileURLToPath } from "node:url";
-import { visualizer } from "rollup-plugin-visualizer";
+import { SondaVitePlugin } from "sonda";
 import Icons from "unplugin-icons/vite";
-import { loadEnv } from "vite";
+import { loadEnv, perEnvironmentPlugin } from "vite";
 
 import { sassAliasImporter } from "./sass-aliases.mjs";
 
@@ -19,7 +19,7 @@ const {
   SENTRY_PROJECT,
   PWA_DEBUG,
   CODECOV_TOKEN,
-  BUNDLE_ANALYZER_OPEN,
+  BUNDLE_ANALYZE,
   IMAGOR_HOST,
   E2E_BUILD,
 } = env;
@@ -35,12 +35,21 @@ const uploadsArtifacts = !isE2eBuild && Boolean(process.env.CI);
 
 const SITE_ORIGIN = import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf";
 
-const visualizerPlugin = visualizer({
-  open: BUNDLE_ANALYZER_OPEN === "true",
-  template: "treemap",
-  gzipSize: true,
-  brotliSize: true,
-});
+// `pnpm build:analyze` sets BUNDLE_ANALYZE: Sonda writes one HTML treemap + JSON per Vite environment
+// (client, ssr, prerender) to website/.sonda/sonda_<env>.*, overwritten per run.
+const analyzeBundle = Boolean(BUNDLE_ANALYZE);
+// Not sonda/astro: Astro 7 builds all environments in one builder and calls astro:build:setup once (target "server"),
+// so its single plugin instance writes every environment into the same sonda_server report.
+const sondaPlugin = perEnvironmentPlugin("sonda", (environment) =>
+  SondaVitePlugin({
+    enabled: analyzeBundle,
+    format: ["html", "json"],
+    filename: `sonda_${environment.name}`,
+    open: environment.name === "client" ? "html" : false, // tiny-open reaches the Windows browser from WSL
+    gzip: true,
+    brotli: true,
+  }),
+);
 
 // https://astro.build/config
 export default defineConfig({
@@ -331,11 +340,6 @@ export default defineConfig({
         context: "server",
         access: "secret",
         optional: true,
-      }),
-      BUNDLE_ANALYZER_OPEN: envField.boolean({
-        context: "server",
-        access: "public",
-        default: false,
       }),
       PUBLIC_VAPID_PUBLIC_KEY: envField.string({
         context: "client",
@@ -684,7 +688,7 @@ export default defineConfig({
           }
         },
       }), // chooses the compiler automatically
-      visualizerPlugin,
+      sondaPlugin,
     ],
 
     css: {
@@ -697,7 +701,7 @@ export default defineConfig({
     },
 
     build: {
-      sourcemap: uploadsArtifacts, // only needed for the Sentry source map upload (~9s), which is skipped for local and e2e builds
+      sourcemap: uploadsArtifacts || analyzeBundle, // Sentry upload (~9s, skipped for local and e2e builds) and Sonda need them
       target: "esnext",
       cssMinify: "esbuild",
       rolldownOptions: {

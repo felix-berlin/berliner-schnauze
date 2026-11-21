@@ -56,7 +56,7 @@ pnpm-debug.log*
 .wrangler
 
 website/src/utils/supportedBrowsers.mjs
-stats.html
+.sonda/
 oxlint-results.sarif
 
 # AI
