@@ -1,6 +1,7 @@
 import type { MorseMark } from "payload-app/home-stats";
 
 import WordSeal from "@components/WordSeal.vue";
+import { vTooltip } from "@/directives/tooltip";
 import { flushPromises, mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -14,7 +15,10 @@ const mark = (sym: MorseMark["sym"]): MorseMark => ({
 const morse = [mark("l"), mark("d"), mark("d")];
 
 const seal = (props: Partial<InstanceType<typeof WordSeal>["$props"]> = {}) =>
-  mount(WordSeal, { props: { audioUrl: "/kiez.mp3", morse, word: "Kiez", ...props } });
+  mount(WordSeal, {
+    global: { directives: { tooltip: vTooltip } },
+    props: { audioUrl: "/kiez.mp3", morse, word: "Kiez", ...props },
+  });
 
 const onMarks = (w: ReturnType<typeof seal>) =>
   w.findAll("i[data-sym]").filter((i) => i.attributes("data-state") !== undefined).length;
@@ -30,12 +34,14 @@ describe("WordSeal", () => {
     vi.restoreAllMocks();
   });
 
-  it("renders one mark per morse sign inside an aria-hidden ring", () => {
+  it("renders one mark per morse sign inside a ring labelled with the word", () => {
     const w = seal();
     const marks = w.findAll("i[data-sym]");
     expect(marks).toHaveLength(3);
     expect(marks.map((i) => i.attributes("data-sym"))).toEqual(["l", "d", "d"]);
-    expect(marks[0]!.element.parentElement!.getAttribute("aria-hidden")).toBe("true");
+    const ring = marks[0]!.element.parentElement!;
+    expect(ring.getAttribute("aria-label")).toBe("Morsecode von Kiez");
+    expect(ring.getAttribute("tabindex")).toBe("0");
   });
 
   it("loads the audio only on click", () => {

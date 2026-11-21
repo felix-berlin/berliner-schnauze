@@ -21,6 +21,8 @@
     --focus-ring-color: var(--color-accent-active);
 
     position: relative;
+    max-inline-size: 47.5rem; // 760px (mock .h18__find)
+    margin-block-start: calc(var(--space-12) + var(--space-2)); // 56px below the word (mock)
     display: flex;
     gap: var(--space-3);
     align-items: center;

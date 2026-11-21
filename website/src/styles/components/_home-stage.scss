@@ -140,6 +140,10 @@
     font-size: var(--_quote);
     color: var(--t3);
     text-decoration: none;
+    background: none;
+    font-family: inherit;
+    text-align: start;
+    cursor: help; // not a link: the feature is not there yet, the tooltip says so
     transition:
       border-color var(--duration-fast) var(--ease-standard),
       background-color var(--duration-fast) var(--ease-standard),

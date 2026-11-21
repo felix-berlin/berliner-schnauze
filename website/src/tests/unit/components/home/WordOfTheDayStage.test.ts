@@ -1,6 +1,7 @@
 import type { HomeWord } from "@services/payload/home.ts";
 
 import WordOfTheDayStage from "@components/home/WordOfTheDayStage.vue";
+import { vTooltip } from "@/directives/tooltip";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 
@@ -21,7 +22,10 @@ const word: HomeWord = {
 };
 
 const stage = (over: Partial<HomeWord> = {}) =>
-  mount(WordOfTheDayStage, { props: { word: { ...word, ...over } } });
+  mount(WordOfTheDayStage, {
+    global: { directives: { tooltip: vTooltip } },
+    props: { word: { ...word, ...over } },
+  });
 
 describe("WordOfTheDayStage", () => {
   it("labels the lemma h2 and hides the single letters", () => {
@@ -45,7 +49,7 @@ describe("WordOfTheDayStage", () => {
 
   it("shows the no-audio pill only without audio", () => {
     expect(stage().text()).not.toContain("Noch keene Hörprobe.");
-    const pill = stage({ audio: undefined }).get('a[href="/wort-vorschlagen"]');
+    const pill = stage({ audio: undefined }).get("button.no-audio");
     expect(pill.text()).toContain("Noch keene Hörprobe.");
     expect(pill.text()).toContain("Sprichste „Kiez“ ein?");
   });

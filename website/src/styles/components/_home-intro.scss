@@ -8,7 +8,7 @@
     --_track: 1px; // h1 letter spacing (SPEC §4.5)
     --focus-ring-color: var(--color-accent-active);
 
-    margin-block-end: var(--space-8);
+    margin-block-end: calc(var(--space-8) + var(--space-2)); // 40px (mock .h20__intro)
     container: home-intro / inline-size;
   }
 

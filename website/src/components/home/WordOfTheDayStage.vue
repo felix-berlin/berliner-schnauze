@@ -29,11 +29,17 @@
         word.example.translation
       }}</span>
     </p>
-    <!-- TODO(startseite): no recording route yet; the suggestion page stands in for "einsprechen". -->
-    <a v-if="!word.audio" class="no-audio" href="/wort-vorschlagen">
+    <!-- TODO(startseite): no recording route yet; stays a focusable non-link with a tooltip until it exists. -->
+    <button
+      v-if="!word.audio"
+      v-tooltip="{ content: 'Kommt bald! Det Einsprechen is noch in Arbeit, Moment ma.', placement: 'top' }"
+      type="button"
+      class="no-audio"
+      aria-disabled="true"
+    >
       <IconMic aria-hidden="true" />
       <span><b>Noch keene Hörprobe.</b> Sprichste „{{ word.lemma }}“ ein?</span>
-    </a>
+    </button>
     <a class="go" :href="`/wort/${word.slug}`">Zum Wort <IconArrowRight aria-hidden="true" /></a>
   </div>
 </template>

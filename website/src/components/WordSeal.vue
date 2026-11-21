@@ -1,6 +1,15 @@
 <template>
   <span class="c-word-seal" :data-state="playing ? 'playing' : undefined">
-    <span class="ring" aria-hidden="true">
+    <span
+      v-tooltip="{
+        content: 'Dit Wort in Morsezeichen: Punkt is kurz, Strich is lang. Funk ma wat!',
+        placement: 'top',
+      }"
+      class="ring"
+      role="img"
+      :aria-label="`Morsecode von ${word}`"
+      tabindex="0"
+    >
       <i
         v-for="(mark, n) in morse"
         :key="n"
