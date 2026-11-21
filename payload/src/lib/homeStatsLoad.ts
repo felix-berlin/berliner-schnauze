@@ -21,7 +21,8 @@ import { trending } from "./wordStats";
 
 // Start page aggregates (`payload-app/home-stats-load`). Only aggregates leave this module: no ids, timestamps,
 // visitor hashes or single votes. Raw SQL bypasses Payload access and hooks; table and column names (word_feedback,
-// words, bon_games, word_id, usage, area, age, _status, cards, status, finished_at) must follow any rename.
+// words, words_translations, bon_games, word_id, usage, area, age, _status, cards, status, finished_at) must
+// follow any rename.
 
 /** Structural copy of the site's WordRef without `id` (payload-app cannot import website types). */
 export type WordRef = { slug: string; berlinerisch: string };
@@ -39,7 +40,14 @@ export type HomeStats = {
   bon: {
     roundsToday: number;
     steps: { from: number; mult: number }[];
-    card: { word: string; wrongShare: number } | null;
+    /** slug and meaning only for a real card whose word is published. */
+    card: {
+      word: string;
+      wrongShare: number;
+      isReal: boolean;
+      slug?: string;
+      meaning?: string;
+    } | null;
   };
 };
 /** The parts that change slowly (cache for a day) and quickly (cache for an hour). */
@@ -198,18 +206,30 @@ const loadBon = async (payload: BasePayload): Promise<HomeStats["bon"]> => {
           and finished_at >= ${todayStart}::timestamptz and finished_at < ${end}::timestamptz`,
     ),
     // TODO(startseite): "most wrongly answered" read as the highest wrong count (share breaks ties); confirm.
-    query<{ word: string; wrong: string; total: string }>(
+    // Real cards carry the word's slug (bonPool); slug and meaning come from the published word only.
+    query<{
+      word: string;
+      is_real: boolean;
+      wrong: string;
+      total: string;
+      slug: string | null;
+      meaning: string | null;
+    }>(
       payload,
-      sql`select c->>'word' as word,
-            count(*) filter (where (c->>'answer')::boolean <> (c->>'isReal')::boolean) as wrong,
-            count(*) as total
-          from bon_games g, jsonb_array_elements(g.cards) c
-          where g.status = 'finished'
-            and g.finished_at >= ${weekStart}::timestamptz and g.finished_at < ${end}::timestamptz
-            and jsonb_typeof(c->'answer') = 'boolean' and jsonb_typeof(c->'isReal') = 'boolean'
-          group by c->>'word' having count(*) >= ${MIN_GROUP}
-          order by wrong desc, total, word
-          limit 1`,
+      sql`select top.word, top.is_real, top.wrong, top.total, w.slug,
+            (select string_agg(t.translation, ', ' order by t._order) from words_translations t
+              where t._parent_id = w.id and coalesce(t.translation, '') <> '') as meaning
+          from (select c->>'word' as word, (c->>'isReal')::boolean as is_real, max(c->>'slug') as card_slug,
+              count(*) filter (where (c->>'answer')::boolean <> (c->>'isReal')::boolean) as wrong,
+              count(*) as total
+            from bon_games g, jsonb_array_elements(g.cards) c
+            where g.status = 'finished'
+              and g.finished_at >= ${weekStart}::timestamptz and g.finished_at < ${end}::timestamptz
+              and jsonb_typeof(c->'answer') = 'boolean' and jsonb_typeof(c->'isReal') = 'boolean'
+            group by c->>'word', (c->>'isReal')::boolean having count(*) >= ${MIN_GROUP}
+            order by wrong desc, total, word
+            limit 1) top
+          left join words w on top.is_real and w.slug = top.card_slug and w._status = 'published'`,
     ),
   ]);
   return {
@@ -220,6 +240,9 @@ const loadBon = async (payload: BasePayload): Promise<HomeStats["bon"]> => {
         ? {
             word: card.word,
             wrongShare: Math.round((Number(card.wrong) / Number(card.total)) * 100),
+            isReal: card.is_real,
+            ...(card.slug ? { slug: card.slug } : {}),
+            ...(card.slug && card.meaning ? { meaning: card.meaning } : {}),
           }
         : null,
   };

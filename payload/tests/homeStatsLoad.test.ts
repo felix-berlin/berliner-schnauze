@@ -182,7 +182,45 @@ describe("loadHomeStats", () => {
   it("counts today's finished BON rounds and the most wrongly answered card", () => {
     expect(stats.bon.roundsToday).toBe(1);
     expect(stats.bon.steps[0]).toEqual({ from: 0, mult: 1 });
-    expect(stats.bon.card).toEqual({ word: "Quatschwort", wrongShare: 75 });
+    expect(stats.bon.card).toEqual({ word: "Quatschwort", wrongShare: 75, isReal: false });
+  });
+
+  it("adds slug and meaning of the published word only for a real card", async () => {
+    const slug = `hs-r-${Date.now()}`;
+    const id = await word(slug);
+    await payload.update({
+      collection: "words",
+      id,
+      data: { translations: [{ translation: "Erfundene Bedeutung" }, { translation: "zweite" }] },
+    });
+    // 11 wrong of 12: beats Quatschwort's 9 wrong answers.
+    const cards = Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      word: "Echtwort",
+      isReal: true,
+      slug,
+      answer: i === 0,
+    }));
+    const game = await payload.create({
+      collection: "bon-games",
+      data: {
+        visitor: "hs-g3",
+        token: "hs-t3",
+        status: "finished",
+        finishedAt: new Date().toISOString(),
+        cards,
+        batches: [],
+      } as never,
+    });
+    const { bon } = await loadHourlyStats(payload);
+    await payload.delete({ collection: "bon-games", id: game.id });
+    expect(bon.card).toEqual({
+      word: "Echtwort",
+      wrongShare: 92,
+      isReal: true,
+      slug,
+      meaning: "Erfundene Bedeutung, zweite",
+    });
   });
 
   it("returns only aggregates: no ids, visitors or timestamps", () => {

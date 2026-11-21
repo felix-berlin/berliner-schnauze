@@ -11,7 +11,7 @@
       <b class="name">{{ comment.authorName }}</b>
       <span class="t-small">
         <a class="permalink" :href="`#kommentar-${comment.id}`">
-          <time :datetime="comment.createdAt">{{ relativeTime }}</time>
+          <time :datetime="comment.createdAt">{{ relativeTimeLabel }}</time>
         </a>
         <template v-if="comment.edited && comment.state === 'visible'"> · bearbeitet</template>
       </span>
@@ -246,6 +246,7 @@ import {
   type CommentMenuEntry,
   type ReportReason,
 } from "@utils/commentMenu.ts";
+import { relativeTime } from "@utils/relativeTime";
 import { useClipboard } from "@vueuse/core";
 import Check from "virtual:icons/lucide/check";
 import CircleAlert from "virtual:icons/lucide/circle-alert";
@@ -331,19 +332,9 @@ const placeholderText = computed(() =>
         : "Kommentar entfernt",
 );
 
-const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
-  ["year", 31_536_000],
-  ["month", 2_592_000],
-  ["day", 86_400],
-  ["hour", 3600],
-  ["minute", 60],
-];
-const rtf = new Intl.RelativeTimeFormat("de", { numeric: "auto" });
-const relativeTime = computed(() => {
-  const seconds = (new Date(comment.createdAt).getTime() - Date.now()) / 1000;
-  const [unit, size] = UNITS.find(([, s]) => Math.abs(seconds) >= s) ?? ["second", 1];
-  return rtf.format(unit === "second" ? 0 : Math.round(seconds / size), unit);
-});
+const relativeTimeLabel = computed(() =>
+  relativeTime(new Date(comment.createdAt), new Date(), { numeric: "auto", precise: true }),
+);
 
 // „Link kopieren“: icon turns into a check and the label into „Link kopiert“ for 2s, then the menu closes.
 const { copy } = useClipboard();

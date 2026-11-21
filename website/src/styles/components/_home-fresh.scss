@@ -1,0 +1,302 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Start page "Frisch uff'm Tisch" (docs/design/startseite-v20/SPEC.md §10, §15-17). Parts: .head (h2, .all),
+// .cols with .new (h3, .list) and .ranking (.tabs of [role=tab], [role=tabpanel] > .list). A .list row is
+// li > a with b (word) plus .meaning/time (new), .rank, .dots of i[data-state="on"], .share (ranked) or
+// .trend (rising); the list kind is data-variant on the list.
+@include mx.component("home-fresh") {
+  :scope {
+    --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
+    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
+    --_tab: var(--font-size-2xl); // 1.5rem tabs and h3 (SPEC §4.5), nearest step
+    --_rank: 1.75rem; // SPEC §10 rank digits, between the 2xl and 3xl steps
+    --_dot: 8px;
+    --_under: -1px; // the tab line sits on the tablist's 1px border
+    --_tab-line: 250ms; // SPEC §16 tab line
+    --_pop: 300ms;
+    --_pop-step: 40ms;
+    --_pop-ease: cubic-bezier(0.3, 1.5, 0.6, 1);
+    --focus-ring-color: var(--color-accent-active);
+
+    container: home-fresh / inline-size;
+  }
+
+  .head {
+    display: grid;
+    margin-block-end: var(--space-8);
+  }
+
+  h2 {
+    margin: 0;
+    font-family: var(--font-condensed);
+    font-size: var(--_h2);
+    font-weight: var(--font-weight-black);
+    line-height: 0.95;
+    text-transform: uppercase;
+    color: var(--color-text-strong);
+  }
+
+  .all {
+    justify-self: start;
+    margin-block-start: var(--space-3);
+    font-size: var(--font-size-md);
+    white-space: nowrap;
+    color: var(--color-text-strong);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      text-decoration-color var(--duration-fast) var(--ease-standard);
+
+    @include butler-mx.hover {
+      color: var(--color-text-accent);
+      text-decoration-color: var(--color-accent-active);
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  .cols {
+    display: grid;
+    gap: calc(var(--space-8) + var(--space-2)); // 40px (SPEC §3 mobile)
+  }
+
+  h3,
+  [role="tab"] {
+    font-family: var(--font-condensed);
+    font-size: var(--_tab);
+    font-weight: 600; // SPEC §4.5 Fira 600, no weight token between regular and bold
+  }
+
+  h3 {
+    margin: 0 0 var(--space-2);
+    color: var(--color-text-strong);
+  }
+
+  .tabs {
+    display: flex;
+    gap: var(--space-6);
+    margin-block-end: var(--space-1);
+    border-block-end: 1px solid var(--line);
+  }
+
+  [role="tab"] {
+    position: relative;
+    padding: var(--space-2) 0 var(--space-3);
+    border: 0;
+    background: none;
+    color: var(--t3);
+    cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-standard);
+
+    // A border on the pseudo-element (not a background) survives forced colours.
+    &::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 var(--_under);
+      border-block-end: 3px solid var(--color-accent-active);
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    &[aria-selected="true"] {
+      color: var(--color-text-strong);
+
+      &::after {
+        transform: none;
+      }
+    }
+
+    @include butler-mx.hover {
+      color: var(--color-text-strong);
+    }
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      border-block-start: 1px solid var(--line);
+    }
+
+    a {
+      display: grid;
+      gap: var(--space-4);
+      align-items: center;
+      margin-inline: calc(-1 * var(--space-3));
+      padding: var(--space-3);
+      border-radius: var(--radius-sm);
+      color: var(--color-text-body);
+      text-decoration: none;
+      transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        color var(--duration-fast) var(--ease-standard);
+
+      &:active {
+        background: var(--card3);
+      }
+
+      @include butler-mx.hover {
+        background: var(--card2);
+
+        b {
+          color: var(--color-text-accent);
+        }
+      }
+    }
+
+    b {
+      font-size: var(--font-size-xl);
+      color: var(--color-text-strong);
+    }
+  }
+
+  // The tab line already separates the first row.
+  [role="tabpanel"] li:first-child {
+    border-block-start: 0;
+  }
+
+  // Mobile: meaning below the word, the time to the right of both lines (SPEC §10).
+  .new a {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 0;
+
+    .meaning {
+      grid-row: 2;
+      color: var(--t3);
+    }
+
+    time {
+      grid-row: 1 / 3;
+      grid-column: 2;
+      font-size: var(--_small);
+      color: var(--t3);
+    }
+  }
+
+  .rank {
+    font-family: var(--font-condensed);
+    font-size: var(--_rank);
+    font-weight: var(--font-weight-black);
+    font-variant-numeric: tabular-nums;
+    color: var(--t3);
+  }
+
+  .list[data-variant="ranked"] a {
+    grid-template-columns: 2.25rem minmax(0, 1fr) auto 3.5rem; // rank / word / dots / percent (mock)
+  }
+
+  .list[data-variant="rising"] a {
+    grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+  }
+
+  .dots {
+    display: flex;
+    gap: var(--space-1);
+
+    i {
+      inline-size: var(--_dot);
+      block-size: var(--_dot);
+      border: 1.5px solid var(--card3);
+      border-radius: var(--radius-pill);
+
+      &[data-state="on"] {
+        border-color: var(--d-bl);
+        background: var(--d-bl);
+      }
+    }
+  }
+
+  .share,
+  .trend {
+    font-style: normal;
+    font-family: var(--font-condensed);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-black);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .share {
+    text-align: end;
+    color: var(--color-text-strong);
+  }
+
+  .trend {
+    display: inline-flex;
+    gap: var(--space-1);
+    align-items: center;
+    color: var(--ok);
+
+    svg {
+      inline-size: 14px;
+      block-size: 14px;
+    }
+  }
+
+  // From 728px container (= the 808px viewport minus the 40px tablet padding): tablet.
+  @container home-fresh (inline-size >= 45.5rem) {
+    .head {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+    }
+
+    .all {
+      margin: 0;
+    }
+
+    h2 {
+      --_h2: 3rem; // SPEC §3 tablet h2
+    }
+
+    .cols {
+      gap: var(--space-12); // 48px (SPEC §3 tablet)
+    }
+
+    .new a {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      row-gap: var(--space-4);
+
+      .meaning,
+      time {
+        grid-row: auto;
+        grid-column: auto;
+      }
+    }
+  }
+
+  // From 952px container (= the 1000px viewport minus the 24px desktop padding): two columns.
+  @container home-fresh (inline-size >= 59.5rem) {
+    .cols {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-16);
+    }
+
+    h2 {
+      --_h2: 3.5rem; // SPEC §3 desktop h2
+    }
+  }
+
+  @include butler-mx.feature("motion") {
+    [role="tab"]::after {
+      transition: transform var(--_tab-line) var(--ease-standard);
+    }
+
+    .list a {
+      transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        color var(--duration-fast) var(--ease-standard),
+        translate var(--duration-fast) var(--ease-standard);
+
+      @include butler-mx.hover {
+        translate: 6px 0;
+      }
+    }
+
+    .dots i[data-state="on"] {
+      animation: home-pop var(--_pop) var(--_pop-ease) both;
+      animation-delay: calc(var(--i, 0) * var(--_pop-step));
+    }
+  }
+}

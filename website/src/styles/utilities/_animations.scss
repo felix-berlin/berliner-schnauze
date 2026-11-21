@@ -246,4 +246,12 @@
       scale: 0.4;
     }
   }
+
+  // Start page game teaser (home-bon; mock h19-flip): the resolution turns in.
+  @keyframes home-flip {
+    from {
+      opacity: 0;
+      transform: rotateY(70deg);
+    }
+  }
 }

@@ -1,0 +1,367 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Start page game teaser "Berliner oder nich?" (docs/design/startseite-v20/SPEC.md §9, §4.3, §15-17), the
+// orange band. Parts: .inner (the split), .intro (h2, .sub, .mult, .actions with .play/.board, .rounds),
+// .trial (.stack of two .back cards, the .card and the .status region with the .result; .answers, .hint
+// with .keys/.swipe). Answer state: .card[data-state="yes|no"], .result[data-state="ok|wrong"].
+@include mx.component("home-bon") {
+  :scope {
+    --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
+    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
+    --_word: var(--font-size-4xl); // mobile card word (2.25rem)
+    --_answer: 3.5rem; // 56px answer buttons (SPEC §9)
+    --_stack: 21.25rem; // 340px card stack (mock)
+    --_fly: 450ms; // the card's fly-out (SPEC §9)
+    --_fly-ease: cubic-bezier(0.3, 0.7, 0.3, 1);
+    --_flip-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    // TODO(startseite): white 85 % (secondary text) and 14 % (multiplier boxes) on the orange band have no token.
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory: "Weiß 85 %" band text (SPEC §4.3), no token holds it
+    --_dim: color-mix(in oklab, var(--color-text-on-active) 85%, transparent);
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory: "Weiß 14 %" multiplier boxes (SPEC §9), no token holds it
+    --_glass: color-mix(in oklab, var(--color-text-on-active) 14%, transparent);
+    --focus-ring-color: var(--color-text-on-active); // SPEC §15: white ring on the band
+
+    container: home-bon / inline-size;
+    background: var(--color-accent-solid);
+    color: var(--color-text-on-active);
+  }
+
+  .inner {
+    display: grid;
+    gap: calc(var(--space-8) + var(--space-2)); // 40px (SPEC §3 mobile)
+    align-items: center;
+  }
+
+  h2 {
+    margin: 0;
+    font-family: var(--font-condensed);
+    font-size: var(--_h2);
+    font-weight: var(--font-weight-black);
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  .sub {
+    max-inline-size: 56ch;
+    margin: var(--space-3) 0 var(--space-6);
+    color: var(--_dim);
+  }
+
+  .mult {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-6);
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-inline-size: 4rem; // 64px box (mock)
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-sm);
+      background: var(--_glass);
+      font-size: var(--_small);
+
+      // TODO(startseite): the mock uses orange-700 text here; nearest semantic token is --color-accent-solid.
+      &:last-child {
+        background: var(--color-text-on-active);
+        color: var(--color-accent-solid);
+      }
+    }
+
+    b {
+      font-family: var(--font-condensed);
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-black);
+      line-height: 1.1;
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-6);
+    align-items: center;
+  }
+
+  .play {
+    display: inline-flex;
+    gap: var(--space-2);
+    align-items: center;
+    min-block-size: var(--size-tap-target);
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-sm);
+    background: var(--color-text-on-active);
+    color: var(--color-accent-solid);
+    font-weight: var(--font-weight-bold);
+    text-decoration: none;
+  }
+
+  .board,
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--size-tap-target);
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .arrow {
+    inline-size: 18px;
+    block-size: 18px;
+  }
+
+  :is(.play, .board, .answers button, .links a, .again):focus-visible {
+    outline-offset: 3px;
+  }
+
+  .rounds {
+    margin: var(--space-4) 0 0;
+    font-size: var(--font-size-md); // 14px in the mock, nearest step
+    color: var(--_dim);
+
+    b {
+      font-family: var(--font-condensed);
+      font-weight: var(--font-weight-black);
+      font-variant-numeric: tabular-nums;
+      color: var(--color-text-on-active);
+    }
+  }
+
+  .trial {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  // The card is paper in both themes: light colour scheme makes the light-dark() tokens resolve to light.
+  // TODO(startseite): card #fff8f0 and text #2b333b have no token; --card2 / --color-text-strong (light) are nearest.
+  .stack {
+    --focus-ring-color: var(--color-accent-active);
+
+    position: relative;
+    inline-size: min(var(--_stack), 100%);
+    aspect-ratio: 1 / 1.05;
+    color-scheme: light;
+    color: var(--color-text-strong);
+  }
+
+  .back,
+  .card,
+  .result {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-sm);
+    background: var(--card2);
+  }
+
+  .back {
+    opacity: 0.7;
+    transform: rotate(-4deg);
+
+    & + .back {
+      opacity: 0.45;
+      transform: rotate(7deg);
+    }
+  }
+
+  // TODO(startseite): SPEC §4.6 game card shadow 0 20px 40px rgb(0 0 0 / 22%) has no token; Paper Lift instead.
+  .card,
+  .result {
+    box-shadow: var(--shadow-paper-lift);
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6);
+    text-align: center;
+    transform: rotate(-1.5deg);
+    touch-action: pan-y; // horizontal swipes answer, vertical ones still scroll
+    user-select: none;
+  }
+
+  .label,
+  .note {
+    margin: 0;
+    font-size: var(--_small);
+    color: var(--t3);
+  }
+
+  .label {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .word {
+    margin: var(--space-2) 0;
+    font-size: var(--_word);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+    color: var(--color-text-accent);
+    text-decoration: underline 3px;
+    text-underline-offset: 8px;
+  }
+
+  .result {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    justify-content: center;
+    padding: var(--space-6);
+    border-inline-start: 6px solid var(--color-status-success);
+
+    &[data-state="wrong"] {
+      border-inline-start-color: var(--color-status-danger);
+    }
+  }
+
+  .head {
+    margin: 0;
+    font-size: var(--font-size-2xl); // 1.5rem in the mock, nearest step
+    font-weight: var(--font-weight-bold);
+
+    &:focus-visible {
+      outline-offset: 3px;
+    }
+  }
+
+  .text {
+    margin: 0;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-5);
+
+    .go {
+      gap: var(--space-1);
+      font-weight: var(--font-weight-bold);
+    }
+  }
+
+  .again {
+    align-self: flex-start;
+    min-block-size: var(--size-tap-target);
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: var(--_small);
+    color: var(--t3);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .answers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    inline-size: min(var(--_stack), 100%);
+    margin-block-start: var(--space-8);
+
+    button {
+      min-block-size: var(--_answer);
+      border: 2px solid var(--color-text-on-active);
+      border-radius: var(--radius-sm);
+      background: transparent;
+      font: inherit;
+      font-weight: var(--font-weight-bold);
+      color: inherit;
+      cursor: pointer;
+      transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        color var(--duration-fast) var(--ease-standard);
+
+      // TODO(startseite): the mock fills white with orange-700 text; nearest semantic token is --color-accent-solid.
+      @include butler-mx.hover {
+        background: var(--color-text-on-active);
+        color: var(--color-accent-solid);
+      }
+    }
+  }
+
+  .hint {
+    margin: var(--space-3) 0 0;
+    font-size: var(--_small);
+    color: var(--_dim);
+  }
+
+  .swipe {
+    display: none;
+  }
+
+  // Touch screens swipe instead of using the arrow keys: the input device, which a container cannot know.
+  // stylelint-disable-next-line at-rule-disallowed-list -- input-device query (pointer), not a viewport query; no mixin covers it
+  @media (pointer: coarse) {
+    .keys {
+      display: none;
+    }
+
+    .swipe {
+      display: inline;
+    }
+  }
+
+  // From 728px container (= the 808px viewport minus the 40px tablet padding): two columns.
+  @container home-bon (inline-size >= 45.5rem) {
+    .inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    h2 {
+      --_h2: 3rem; // SPEC §3 tablet h2
+    }
+
+    .card {
+      --_word: 2.75rem; // mock desktop card word, between the 4xl and 3xl steps
+    }
+  }
+
+  // From 952px container (= the 1000px viewport minus the 24px desktop padding).
+  @container home-bon (inline-size >= 59.5rem) {
+    .inner {
+      gap: var(--space-16);
+    }
+
+    h2 {
+      --_h2: 3.5rem; // SPEC §3 desktop h2
+    }
+  }
+
+  @include butler-mx.feature("motion") {
+    .card {
+      transition:
+        transform var(--_fly) var(--_fly-ease),
+        opacity var(--_fly) var(--_fly-ease);
+
+      &[data-state="yes"] {
+        opacity: 0;
+        transform: translateX(130%) rotate(22deg);
+      }
+
+      &[data-state="no"] {
+        opacity: 0;
+        transform: translateX(-130%) rotate(-22deg);
+      }
+    }
+
+    .result {
+      animation: home-flip var(--_fly) var(--_flip-ease) both;
+    }
+
+    .answers button:active {
+      scale: 0.97;
+    }
+  }
+}
