@@ -273,10 +273,10 @@ function onKeydown(event: KeyboardEvent) {
   }
 }
 
-// "/" focuses the field unless a field already has focus. Capture on document and stop it there,
-// so the header's window listener does not open the search modal as well.
+// "/" focuses the field unless a field already has focus. Window capture runs before the header's
+// window bubble listener; stopping it there keeps the search modal closed. The default target
+// (window) is SSR-safe: VueUse skips it on the server.
 useEventListener(
-  document,
   "keydown",
   (event: KeyboardEvent) => {
     if (event.key !== "/" || event.repeat || isEditableTarget(event.target)) return;

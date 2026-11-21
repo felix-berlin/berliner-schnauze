@@ -14,8 +14,9 @@
     --_gap-popup: var(--space-2); // 8px below the field
     --_below: 100%; // the popup starts at the field's bottom edge
     --_hover: 0 0 0 1px var(--line), var(--shadow-paper-lift);
-    // --color-focus-halo stands in for "Orange 45 %" (SPEC §8): the nearest semantic focus tint.
-    --_ring: 0 0 0 3px var(--color-focus-halo), var(--shadow-paper-lift);
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory: one-off "Orange 45 %" focus glow (SPEC §8), no token holds it
+    --_halo: color-mix(in oklab, var(--color-accent-active) 45%, transparent);
+    --_ring: 0 0 0 3px var(--_halo), var(--shadow-paper-lift);
     --_edge: inset 3px 0 0 var(--color-accent-active); // active option's orange left edge
     --focus-ring-color: var(--color-accent-active);
 
@@ -159,7 +160,8 @@
     position: absolute;
     inset-block-start: var(--_below);
     inset-inline: 0;
-    z-index: var(--z-sticky);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §8 z-index 20, no z token holds it (sticky 10, header 100)
+    z-index: 20;
     display: flex;
     flex-direction: column;
     margin-block-start: var(--_gap-popup);

@@ -218,10 +218,15 @@ describe("HomeSearch", () => {
     expect(document.activeElement).toBe(other);
 
     other.blur();
+    // Stands in for the header's window listener that opens the search modal.
+    const header = vi.fn();
+    window.addEventListener("keydown", header);
     const event = new KeyboardEvent("keydown", { bubbles: true, cancelable: true, key: "/" });
     document.body.dispatchEvent(event);
+    window.removeEventListener("keydown", header);
     expect(document.activeElement).toBe(input(w).element);
     expect(event.defaultPrevented).toBe(true);
+    expect(header).not.toHaveBeenCalled();
     other.remove();
   });
 
