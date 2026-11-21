@@ -254,4 +254,18 @@
       transform: rotateY(70deg);
     }
   }
+
+  // Start page sound rules (home-knowledge): the correction stroke draws in from the start.
+  @keyframes home-strike {
+    from {
+      scale: 0 1;
+    }
+  }
+
+  // Start page "Mitmachen" (home-gap; mock h19-bob): Kalle bobs.
+  @keyframes home-bob {
+    50% {
+      translate: 0 -6px;
+    }
+  }
 }

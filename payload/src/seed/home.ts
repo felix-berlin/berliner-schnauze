@@ -6,6 +6,7 @@
 import type { Payload } from "payload";
 
 import { htmlToLexical } from "../lib/htmlToLexical";
+import { hasLexicalText } from "../lib/routes";
 import { assertDevDatabase } from "./dev";
 import {
   HOME_ABOUT_TEXT,
@@ -36,7 +37,7 @@ export async function seedHome(
   };
 
   await fill("intro", !home.intro, () => HOME_INTRO);
-  await fill("knowledge", !home.knowledge, () =>
+  await fill("knowledge", !hasLexicalText(home.knowledge), () =>
     htmlToLexical(HOME_KNOWLEDGE_HTML, payload.config),
   );
   await fill("soundRules", !home.soundRules?.length, () => HOME_SOUND_RULES);

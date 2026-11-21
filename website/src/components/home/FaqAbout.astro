@@ -1,0 +1,65 @@
+---
+import type { HomeData } from "@services/payload/home.ts";
+
+import { withCount } from "@utils/homeIntro.ts";
+
+interface Props {
+  faq: HomeData["faq"];
+  about: HomeData["about"];
+  wordCount: number;
+}
+
+const { faq, about, wordCount } = Astro.props;
+const figures = [
+  { label: "Wörter und Redewendungen", value: about.counts.words },
+  { label: "Themen", value: about.counts.topics },
+  { label: "Hörproben", value: about.counts.audio },
+  { label: "Stimmen in der Umfrage", value: about.counts.votes },
+].filter((f) => f.value > 0); // SPEC §13: a missing figure drops its tile
+---
+
+<div class="c-home-faq">
+  <div class="inner">
+    {
+      faq.length > 0 && (
+        <div class="questions">
+          <h2>Häufig jefragt</h2>
+          {/* h3 in the summary is binding (SPEC §12.2, §14) although JAWS/TalkBack drop it there; see the report. */}
+          {faq.map((f, i) => (
+            <details class="faq" open={i === 0}>
+              <summary>
+                <h3>{f.question}</h3>
+                <span class="plus" aria-hidden="true" />
+              </summary>
+              <div class="answer" set:html={f.answerHtml} />
+            </details>
+          ))}
+        </div>
+      )
+    }
+    <aside class="about" aria-labelledby="home-faq-about">
+      <h3 id="home-faq-about">Über ditt Wörterbuch</h3>
+      {about.text && <p>{withCount(about.text, wordCount)}</p>}
+      {
+        figures.length > 0 && (
+          <ul class="stats" role="list">
+            {figures.map((f) => (
+              <li>
+                <b>{f.value.toLocaleString("de-DE")}</b>
+                <span>{f.label}</span>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      <p class="links">
+        {/* TODO(startseite): "Quellen und Arbeitsweise" has no page yet; add the link once it exists. */}
+        <a href="/changelog">Wat is neu?</a>
+      </p>
+    </aside>
+  </div>
+</div>
+
+<style lang="scss" is:global>
+  @use "@styles/components/home-faq";
+</style>

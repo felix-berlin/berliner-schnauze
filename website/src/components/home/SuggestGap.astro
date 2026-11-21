@@ -1,0 +1,57 @@
+---
+import type { HomeData } from "@services/payload/home.ts";
+
+import BerlinerBaer from "@components/kalle/BerlinerBaer.vue";
+import Plus from "virtual:icons/lucide/plus";
+
+interface Props {
+  gap: HomeData["gap"];
+}
+
+const { gap } = Astro.props;
+// TODO(startseite): no recording route yet; both links open a word without audio, whose page offers the upload.
+const recordHref = gap.randomSlug && `/wort/${gap.randomSlug}`;
+---
+
+<div class="c-home-gap">
+  <div class="inner">
+    {/* SSR only: the pose is CSS; before hydration Kalle only lacks the thin arm/body seams (mask id). */}
+    <div class="kalle">
+      <BerlinerBaer stimmung="zeigen" groesse={170} />
+    </div>
+    <div class="body">
+      <p class="eyebrow" aria-hidden="true"><s>Fehlt ein Wort?</s></p>
+      <h2>Fehlt dir een Wort?</h2>
+      <p>
+        Dit Wörterbuch lebt von dir. Schlag een Wort vor, sprech eens ein oder erzähl, wie man bei dir
+        im Kiez sacht.
+      </p>
+      {
+        recordHref && gap.wordsWithoutAudio > 0 && (
+          <p class="todo">
+            <b>{gap.wordsWithoutAudio.toLocaleString("de-DE")}</b> Wörtern fehlt noch eene Hörprobe.{" "}
+            <a href={recordHref}>Zeig mir eens</a>
+          </p>
+        )
+      }
+      <div class="actions">
+        <a class="c-button" data-variant="primary lg center-icon" href="/wort-vorschlagen">
+          <Plus aria-hidden="true" />
+          Wort vorschlagen
+        </a>
+        {
+          recordHref && (
+            <a class="c-button" data-variant="lg center-icon" href={recordHref}>
+              <Plus aria-hidden="true" />
+              Aussprache einsprechen
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<style lang="scss" is:global>
+  @use "@styles/components/home-gap";
+</style>

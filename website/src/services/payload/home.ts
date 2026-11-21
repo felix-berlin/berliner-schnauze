@@ -7,6 +7,7 @@ import { fetchAllWords, type SiteWord, translationTexts } from "@services/payloa
 import { pickWordOfTheDay } from "@utils/wordOfTheDay.ts";
 import { type MorseMark, morseRing } from "payload-app/home-stats";
 import { lexicalToHtml } from "payload-app/lexical-html";
+import { hasLexicalText } from "payload-app/routes";
 
 /** The word of the day as the start page shows it. */
 export type HomeWord = {
@@ -184,7 +185,8 @@ const load = async (): Promise<HomeData> => {
     .slice(0, TRY_WORDS)
     .map((w) => ({ lemma: w.berlinerisch, slug: w.slug }));
 
-  const knowledgeHtml = lexicalToHtml(global.knowledge);
+  // A rich text saved empty in the admin is a truthy root with one empty paragraph: drop it like a missing one.
+  const knowledgeHtml = hasLexicalText(global.knowledge) ? lexicalToHtml(global.knowledge) : "";
 
   const topics = themen
     .toSorted((a, b) => b.count - a.count)

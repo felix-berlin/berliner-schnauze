@@ -1,0 +1,195 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Start page magazine teaser (docs/design/startseite-v20/SPEC.md §12.3, §15-17). Parts: .ipa (outline behind
+// everything), .grid with .quote (.tag, blockquote > p, h3 > a, .meta) and .read (.excerpt with drop cap, .go,
+// .others of p + a). Reveal: the quote rises unless the root has data-reveal="wait" (the page's observer).
+@include mx.component("home-magazine") {
+  :scope {
+    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
+    --_quote: 2.4rem; // SPEC §12.3 mobile quote
+    --_ipa: 13rem; // SPEC §12.3 mobile outline
+    --_ipa-opacity: 0.08; // mock
+    --_drop: 5.2rem; // SPEC §12.3 drop cap like §12.1
+    --_fade: 15.5rem; // SPEC §12.3 excerpt height before the fade
+    --_track: 2px; // .others label letter spacing (mock)
+    --_ipa-start: -0.05em; // cut off at the left edge (mock)
+    --_ipa-mid: 50%; // vertically centred from the tablet width on
+    --_under: 2px; // gap between .go and its underline (mock)
+    --_rise: 600ms; // SPEC §16 quote
+    --_rise-start: 100ms;
+    --focus-ring-color: var(--color-accent-active);
+
+    container: home-magazine / inline-size;
+    position: relative;
+    // The outline is far wider than the section: clip it here, not with overflow (keeps focus rings).
+    overflow: clip;
+  }
+
+  .ipa {
+    position: absolute;
+    inset-block-start: var(--space-16);
+    inset-inline-start: var(--_ipa-start);
+    font-size: var(--_ipa);
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--color-text-strong);
+    opacity: var(--_ipa-opacity);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .grid {
+    position: relative;
+    display: grid;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .tag {
+    margin: 0;
+    font-family: var(--font-condensed);
+    font-weight: var(--font-weight-black);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-text-accent);
+  }
+
+  blockquote {
+    margin: var(--space-4) 0 var(--space-6);
+
+    p {
+      margin: 0;
+      font-family: var(--font-condensed);
+      font-size: var(--_quote);
+      font-weight: var(--font-weight-black);
+      line-height: 1;
+      text-transform: uppercase;
+      text-wrap: balance;
+      color: var(--color-text-accent);
+    }
+  }
+
+  h3 {
+    margin: 0;
+    font-size: var(--font-size-2xl);
+
+    a {
+      color: var(--color-text-strong);
+      text-decoration: underline;
+      text-decoration-color: var(--color-accent-active);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 5px;
+      transition: color var(--duration-fast) var(--ease-standard);
+
+      @include butler-mx.hover {
+        color: var(--color-text-accent);
+      }
+    }
+  }
+
+  .meta {
+    margin: var(--space-2) 0 0;
+    font-size: var(--font-size-md);
+    color: var(--t3);
+  }
+
+  .excerpt {
+    max-block-size: var(--_fade);
+    margin: 0;
+    overflow: hidden;
+    font-size: var(--font-size-lg);
+    line-height: 1.7;
+    // A mask reads only alpha: any opaque token works as the "visible" stop.
+    mask-image: linear-gradient(180deg, var(--color-text-strong) 55%, transparent);
+
+    &::first-letter {
+      float: inline-start;
+      margin-block-start: var(--space-1);
+      margin-inline-end: var(--space-2);
+      font-family: var(--font-condensed);
+      font-size: var(--_drop);
+      font-weight: var(--font-weight-black);
+      line-height: 0.82;
+      color: var(--color-text-strong);
+    }
+  }
+
+  .go {
+    display: inline-flex;
+    gap: var(--space-2);
+    align-items: center;
+    margin-block-start: var(--space-2);
+    padding-block-end: var(--_under);
+    border-block-end: 2px solid var(--color-accent-active);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+
+    @include butler-mx.hover {
+      color: var(--color-text-accent);
+    }
+  }
+
+  .others {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-block-start: var(--space-8);
+    padding-block-start: var(--space-5);
+    border-block-start: 1px solid var(--line);
+
+    p {
+      margin: 0;
+      font-size: var(--_small);
+      text-transform: uppercase;
+      letter-spacing: var(--_track);
+      color: var(--t3);
+    }
+
+    a {
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-strong);
+
+      @include butler-mx.hover {
+        color: var(--color-text-accent);
+      }
+    }
+  }
+
+  @container home-magazine (inline-size >= 45.5rem) {
+    .ipa {
+      --_ipa: 30rem; // SPEC §12.3 outline behind the quote
+
+      inset-block-start: var(--_ipa-mid);
+      translate: 0 -50%;
+    }
+
+    blockquote p {
+      --_quote: 3.75rem; // SPEC §12.3
+    }
+  }
+  @container home-magazine (inline-size >= 59.5rem) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-16);
+    }
+  }
+
+  @include butler-mx.feature("motion") {
+    :scope:not([data-reveal="wait"]) blockquote p {
+      animation: home-up var(--_rise) var(--_rise-start) ease both;
+    }
+
+    :is(.go, .others a) {
+      transition:
+        color var(--duration-fast) var(--ease-standard),
+        translate var(--duration-fast) var(--ease-standard);
+
+      @include butler-mx.hover {
+        translate: 4px 0;
+      }
+    }
+  }
+}

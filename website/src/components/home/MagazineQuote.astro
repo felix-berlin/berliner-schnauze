@@ -1,0 +1,51 @@
+---
+import type { HomeData } from "@services/payload/home.ts";
+
+interface Props {
+  magazine: HomeData["magazine"];
+}
+
+const OTHERS = 2;
+const { magazine } = Astro.props;
+---
+
+{/* fetchHome falls back to the first pull quote; without any quote the section drops (SPEC §12.3). */}
+{
+  magazine?.quote && (
+    <article class="c-home-magazine" aria-labelledby="home-magazine-title">
+      {magazine.ipa && (
+        <span class="ipa" aria-hidden="true">{`[${magazine.ipa}]`}</span>
+      )}
+      <div class="grid">
+        <div class="quote">
+          <p class="tag">Magazin · Sprache &amp; Jeschichte</p>
+          <blockquote>
+            <p>{magazine.quote}</p>
+          </blockquote>
+          <h3 id="home-magazine-title">
+            <a href={`/magazin/${magazine.slug}`}>{magazine.title}</a>
+          </h3>
+          <p class="meta">{magazine.readingMinutes} Min. Lesezeit</p>
+        </div>
+        <div class="read">
+          <p class="excerpt">{magazine.excerpt}</p>
+          <a class="go" href={`/magazin/${magazine.slug}`}>
+            Weiterlesen <span aria-hidden="true">→</span>
+          </a>
+          {magazine.others.length > 0 && (
+            <div class="others">
+              <p>Ooch lesenswert</p>
+              {magazine.others.slice(0, OTHERS).map((o) => (
+                <a href={`/magazin/${o.slug}`}>{o.title}</a>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </article>
+  )
+}
+
+<style lang="scss" is:global>
+  @use "@styles/components/home-magazine";
+</style>
