@@ -270,7 +270,7 @@
     }
 
     & + label {
-      --_font-size: 14px; // between --font-size-sm and --font-size-md
+      --_font-size: 0.875rem; // between --font-size-sm and --font-size-md
       --_gap: 4px; // px on purpose, next to the 21px box
       --cursor: pointer;
 

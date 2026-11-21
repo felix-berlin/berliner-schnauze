@@ -22,6 +22,8 @@ const canonicalURL = seo?.canonical || canonicalUrl(Astro.url.pathname, Astro.si
 <meta content='width=device-width, initial-scale=1' name='viewport' />
 <!-- Both schemes supported: lets the browser theme the canvas before CSS loads (dark-mode guide). -->
 <meta content='light dark' name='color-scheme' />
+<!-- Chromium: follow the OS text size. Never set font-size on html/:root, or the scale is lost. -->
+<meta content='scale' name='text-scale' />
 <meta content='#fad0b0' media='(prefers-color-scheme: light)' name='theme-color' />
 <meta content='#2b333b' media='(prefers-color-scheme: dark)' name='theme-color' />
 <link href={IMAGOR_HOST} rel='preconnect' />

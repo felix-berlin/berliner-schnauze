@@ -459,4 +459,22 @@ describe("colour scheme contract", () => {
       .map(rel);
     expect(unguarded).toEqual([]);
   });
+
+  it("opts into OS text scale and never fixes the root font size", () => {
+    expect(read(join(src, "components/BaseHead.astro"))).toMatch(
+      /<meta[^>]*content=['"]scale['"][^>]*name=['"]text-scale['"]/,
+    );
+    const rootSize = styleFiles.filter((p) =>
+      /(?:^|\n)\s*(?:html|:root)\s*\{[^}]*font-size/.test(read(p)),
+    );
+    expect(rootSize.map(rel)).toEqual([]);
+  });
+
+  it("sets no px font sizes in migrated styles", () => {
+    const bad = styleFiles
+      .filter((p) => !legacyFiles.includes(rel(p)))
+      .filter((p) => /font-size:\s*[\d.]+px/.test(read(p)))
+      .map(rel);
+    expect(bad).toEqual([]);
+  });
 });
