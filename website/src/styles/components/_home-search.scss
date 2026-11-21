@@ -1,0 +1,362 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Start page search (docs/design/startseite-v20/SPEC.md §8, §15, §17): the root is the field box,
+// parts .lens, input, .clear, .submit, then .popup (8px below the field) with the listbox
+// (.label per group, a[role="option"]), .all and .keys, or the no-hit box (.none, .add).
+@include mx.component("home-search") {
+  :scope {
+    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
+    --_label-track: 2px; // group label letter spacing (mock)
+    --_clear: 2.25rem; // 36px round clear button (SPEC §8)
+    --_submit: 3.25rem; // 52px minimum submit height (SPEC §8)
+    --_icon: 1.25rem;
+    --_gap-popup: var(--space-2); // 8px below the field
+    --_below: 100%; // the popup starts at the field's bottom edge
+    --_hover: 0 0 0 1px var(--line), var(--shadow-paper-lift);
+    // --color-focus-halo stands in for "Orange 45 %" (SPEC §8): the nearest semantic focus tint.
+    --_ring: 0 0 0 3px var(--color-focus-halo), var(--shadow-paper-lift);
+    --_edge: inset 3px 0 0 var(--color-accent-active); // active option's orange left edge
+    --focus-ring-color: var(--color-accent-active);
+
+    position: relative;
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    padding: var(--space-2) var(--space-2) var(--space-2) var(--space-5);
+    border-radius: var(--radius-sm);
+    background: var(--card);
+    box-shadow: var(--shadow-paper-lift);
+    transition: box-shadow var(--duration-fast) var(--ease-standard);
+    container: home-search / inline-size;
+
+    @include butler-mx.hover {
+      box-shadow: var(--_hover);
+    }
+
+    // The field draws the ring for the input (SPEC §8, §15).
+    &:has(input:focus-visible) {
+      box-shadow: var(--_ring);
+    }
+  }
+
+  .lens {
+    flex: 0 0 auto;
+    inline-size: var(--_icon);
+    block-size: var(--_icon);
+    color: var(--t3);
+  }
+
+  input {
+    flex: 1;
+    min-inline-size: 0;
+    padding-block: var(--space-3);
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: var(--font-size-xl);
+    color: var(--color-text-strong);
+
+    &::placeholder {
+      color: var(--t3);
+    }
+
+    // The custom .clear button replaces the browser's cancel cross.
+    &::-webkit-search-cancel-button,
+    &::-webkit-search-decoration {
+      appearance: none;
+      display: none;
+    }
+
+    // Invisible outline: the field's ring shows focus, and forced colors (which drop
+    // box-shadow) paint this outline instead.
+    &:focus-visible {
+      outline: 2px solid transparent;
+    }
+  }
+
+  .clear {
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    inline-size: var(--_clear);
+    min-block-size: var(--_clear);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--t3);
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
+
+    svg {
+      inline-size: 16px;
+      block-size: 16px;
+      fill: none;
+      stroke: currentcolor;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    &:focus-visible {
+      outline-offset: 2px;
+    }
+
+    @include butler-mx.hover {
+      background: var(--card2);
+      color: var(--color-text-strong);
+    }
+  }
+
+  .submit {
+    display: inline-flex;
+    flex: 0 0 auto;
+    gap: var(--space-2);
+    align-items: center;
+    justify-content: center;
+    min-block-size: var(--_submit);
+    padding: 0 var(--space-4);
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-solid);
+    font: inherit;
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    color: var(--color-text-on-accent);
+    cursor: pointer;
+    transition:
+      box-shadow var(--duration-fast) var(--ease-standard),
+      scale var(--duration-fast) var(--ease-standard);
+
+    svg {
+      inline-size: var(--_icon);
+      block-size: var(--_icon);
+    }
+
+    // Mobile: icon only, the name comes from aria-label.
+    span {
+      display: none;
+    }
+
+    &:focus-visible {
+      outline-offset: 3px;
+    }
+
+    // TODO(startseite): the mock darkens to orange-700, which has no semantic token; glow instead.
+    @include butler-mx.hover {
+      box-shadow: var(--shadow-hover-glow);
+    }
+
+    &:active {
+      scale: 0.96;
+    }
+  }
+
+  .popup {
+    // The heavier list shadow of SPEC §4.6 has no token: Paper Lift only.
+    position: absolute;
+    inset-block-start: var(--_below);
+    inset-inline: 0;
+    z-index: var(--z-sticky);
+    display: flex;
+    flex-direction: column;
+    margin-block-start: var(--_gap-popup);
+    padding: var(--space-2);
+    border-radius: var(--radius-sm);
+    background: var(--card);
+    box-shadow: var(--shadow-paper-lift);
+  }
+
+  .label {
+    margin: var(--space-2) var(--space-3) var(--space-1);
+    font-size: var(--_small);
+    text-transform: uppercase;
+    letter-spacing: var(--_label-track);
+    color: var(--t3);
+  }
+
+  a[role="option"] {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: baseline;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-body);
+    text-decoration: none;
+
+    b {
+      font-size: var(--font-size-lg);
+      color: var(--color-text-strong);
+    }
+
+    span {
+      color: var(--t3);
+    }
+
+    // Mobile: no Enter hint (mock).
+    kbd {
+      display: none;
+    }
+
+    &[aria-selected="true"] {
+      background: var(--card2);
+      box-shadow: var(--_edge);
+    }
+
+    @include butler-mx.hover {
+      background: var(--card2);
+    }
+  }
+
+  mark {
+    background: none;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-accent);
+  }
+
+  kbd {
+    padding: 0 var(--space-1);
+    border-radius: var(--radius-xs);
+    background: var(--card3);
+    font: inherit;
+    font-size: var(--_small);
+    color: var(--color-text-strong);
+  }
+
+  .all {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    margin-block-start: var(--space-1);
+    padding: var(--space-3);
+    border-block-start: 1px solid var(--line);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-standard);
+
+    svg {
+      inline-size: 18px;
+      block-size: 18px;
+      transition: translate var(--duration-fast) var(--ease-standard);
+    }
+
+    @include butler-mx.hover {
+      color: var(--color-text-accent);
+
+      svg {
+        translate: 4px 0;
+      }
+    }
+  }
+
+  // Footer hint: desktop and tablet only (container query below).
+  .keys {
+    display: none;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    align-items: center;
+    margin: 0;
+    padding: var(--space-1) var(--space-3) var(--space-2);
+    font-size: var(--_small);
+    color: var(--t3);
+  }
+
+  .none {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin: 0;
+    padding: var(--space-3);
+
+    b {
+      font-size: var(--font-size-lg);
+      color: var(--color-text-strong);
+    }
+
+    span {
+      color: var(--t3);
+    }
+
+    a {
+      color: var(--color-text-strong);
+    }
+  }
+
+  .add {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    margin: var(--space-1);
+    padding: var(--space-4);
+    border: 1.5px dashed var(--t3);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-accent);
+    text-decoration: none;
+    transition: border-color var(--duration-fast) var(--ease-standard);
+
+    svg {
+      flex: 0 0 auto;
+      inline-size: 18px;
+      block-size: 18px;
+    }
+
+    b {
+      display: block;
+      color: var(--color-text-strong);
+    }
+
+    small {
+      font-size: var(--font-size-md);
+      color: var(--t3);
+    }
+
+    @include butler-mx.hover {
+      border-color: var(--color-accent-active);
+    }
+  }
+
+  a:focus-visible {
+    outline-offset: 2px;
+  }
+
+  // From 728px container (= the 808px viewport minus the 40px tablet padding).
+  @container home-search (inline-size >= 45.5rem) {
+    .submit {
+      padding: 0 var(--space-6);
+
+      span {
+        display: inline;
+      }
+    }
+
+    a[role="option"] {
+      grid-template-columns: auto 1fr auto;
+      gap: var(--space-3);
+
+      kbd {
+        display: inline;
+      }
+    }
+
+    .keys {
+      display: flex;
+    }
+  }
+
+  // The list rises into place; without motion it just appears.
+  @include butler-mx.feature("motion") {
+    .popup {
+      transition:
+        opacity var(--duration-fast) var(--ease-standard),
+        translate var(--duration-fast) var(--ease-standard);
+
+      @starting-style {
+        opacity: 0;
+        translate: 0 -4px;
+      }
+    }
+  }
+}
