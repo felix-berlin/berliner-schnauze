@@ -1,0 +1,418 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Start page results band "Wo wird noch berlinert?" (docs/design/startseite-v20/SPEC.md §11, §4.3, §15-17), dark
+// in both themes. Parts: .head (.eyebrow, h2, .sub), .tabs of [role=tab], two [role=tabpanel]: .districts
+// (.ranking with .legend, .label, .rank, .fine; the DotMap .map with svg > g[tabindex] > circle and the .tip)
+// and .ages (.sub, .cols of h3 + .list of li > a with b and the AgeDots .age of .col > i, then .axis).
+// DotMap and AgeDots are parts of this band, not components of their own. A district's dot opacity comes in as
+// inline --o, each dot's wave delay as --wave; states: g[data-state="active"], g[data-value="none"] (below
+// MIN_GROUP), .map[data-wave="ready|in"], .tip[data-side="below"], .age[data-variant="dying|growing"],
+// .age i[data-state="on"].
+@include mx.component("home-results") {
+  :scope {
+    --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
+    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
+    --_tab: var(--font-size-2xl); // 1.5rem tabs and h3 (SPEC §4.5), nearest step
+    --_track: 2px; // eyebrow and rank label letter spacing (mock)
+    --_under: -1px; // the tab line sits on the tablist's 1px border
+    --_tab-line: 250ms; // SPEC §16 tab line
+    --_age-dot: 7px; // SPEC §11.2
+    --_age-gap: 7px; // SPEC §11.2 gap between the columns
+    --_dot-gap: 2px; // SPEC §11.2 gap between the dots of a column
+    --_map: 38.75rem; // 620px max map width on tablet (mock)
+    --_pop: 500ms; // SPEC §16 map dots
+    --_ms: 1ms; // unit for each dot's wave delay (--wave, ms from the geometry JSON)
+    --_pop-ease: cubic-bezier(0.3, 1.5, 0.6, 1);
+    --_dim: 0.12; // SPEC §11.1 the other districts on hover/focus
+    // TODO(startseite): the band's "Weiß 12 %" line (SPEC §4.3) has no token; --line is orange in dark.
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory: "rgb(255 255 255 / 12%)" band line (SPEC §4.3), no token holds it
+    --_line: color-mix(in oklab, var(--color-text-on-active) 12%, transparent);
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory: "--d-gr 45 %" empty age dot ring (SPEC §11.2), no token holds it
+    --_ring: color-mix(in oklab, var(--d-gr) 45%, transparent);
+    --focus-ring-color: var(--color-accent-active);
+
+    container: home-results / inline-size;
+    // Dark in both themes: the light-dark() tokens (--t3, --d-*, text) resolve to their dark values.
+    color-scheme: dark;
+    // TODO(startseite): band text #c9cfd6 has no token; --color-text-body (dark) is nearest.
+    background: var(--band-dark-bg);
+    color: var(--color-text-body);
+  }
+
+  .head {
+    margin-block-end: var(--space-6);
+  }
+
+  .eyebrow {
+    margin: 0 0 var(--space-1);
+    font-size: var(--font-size-lg);
+    color: var(--t3);
+
+    s {
+      text-decoration-color: var(--color-accent-active);
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  h2 {
+    margin: 0;
+    font-family: var(--font-condensed);
+    font-size: var(--_h2);
+    font-weight: var(--font-weight-black);
+    line-height: 0.95;
+    text-transform: uppercase;
+    color: var(--color-text-strong);
+  }
+
+  .sub {
+    max-inline-size: 60ch;
+    margin: var(--space-3) 0 0;
+  }
+
+  h3,
+  [role="tab"] {
+    font-family: var(--font-condensed);
+    font-size: var(--_tab);
+    font-weight: 600; // SPEC §4.5 Fira 600, no weight token between regular and bold
+  }
+
+  h3 {
+    margin: 0 0 var(--space-2);
+    color: var(--color-text-strong);
+  }
+
+  .tabs {
+    display: flex;
+    gap: var(--space-6);
+    margin-block-end: calc(var(--space-8) + var(--space-2)); // 40px to the content (SPEC §11)
+    border-block-end: 1px solid var(--_line);
+  }
+
+  [role="tab"] {
+    position: relative;
+    padding: var(--space-2) 0 var(--space-3);
+    border: 0;
+    background: none;
+    color: var(--t3);
+    cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-standard);
+
+    // A border on the pseudo-element (not a background) survives forced colours.
+    &::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 var(--_under);
+      border-block-end: 3px solid var(--color-accent-active);
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    &[aria-selected="true"] {
+      color: var(--color-text-strong);
+
+      &::after {
+        transform: none;
+      }
+    }
+
+    @include butler-mx.hover {
+      color: var(--color-text-strong);
+    }
+  }
+
+  // By district: ranking, then the map; side by side from the desktop step.
+  // :not([hidden]): display would beat the hidden attribute where "until-found" falls back to display: none.
+  .districts:not([hidden]) {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  .legend {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    margin: 0 0 var(--space-6);
+    font-size: var(--font-size-md);
+    color: var(--t3);
+
+    // SPEC §11.1: dots 5-8px, opacity .3-1.
+    i {
+      inline-size: 5px;
+      block-size: 5px;
+      border-radius: var(--radius-pill);
+      background: var(--d-ye);
+      opacity: 0.3;
+
+      &:nth-of-type(2) {
+        inline-size: 6px;
+        block-size: 6px;
+        opacity: 0.55;
+      }
+
+      &:nth-of-type(3) {
+        inline-size: 7px;
+        block-size: 7px;
+        opacity: 0.8;
+      }
+
+      &:nth-of-type(4) {
+        inline-size: 8px;
+        block-size: 8px;
+        opacity: 1;
+      }
+    }
+  }
+
+  .label {
+    margin: var(--space-6) 0 var(--space-1);
+    font-size: var(--_small);
+    letter-spacing: var(--_track);
+    text-transform: uppercase;
+    color: var(--t3);
+  }
+
+  .legend + .label {
+    margin-block-start: 0;
+  }
+
+  .rank {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      gap: var(--space-4);
+      justify-content: space-between;
+      padding-block: var(--space-2);
+      border-block-start: 1px solid var(--_line);
+    }
+
+    b {
+      font-family: var(--font-condensed);
+      font-size: var(--font-size-xl);
+      font-variant-numeric: tabular-nums;
+      color: var(--color-text-strong);
+    }
+  }
+
+  .fine,
+  .axis {
+    margin: var(--space-4) 0 0;
+    font-size: var(--_small);
+    color: var(--t3);
+  }
+
+  // The map: the tooltip sits in .map's box, positioned from the district's centre (--x) and edge (--y).
+  .map {
+    position: relative;
+    // The ranking comes first in the DOM (focus order, SPEC §17); on mobile and tablet the map shows above it.
+    order: -1;
+    inline-size: 100%;
+    max-inline-size: var(--_map);
+    justify-self: center;
+  }
+
+  svg {
+    display: block;
+    overflow: visible;
+    inline-size: 100%;
+    block-size: auto;
+    fill: var(--d-ye);
+
+    &:has([data-state="active"], g:focus-visible) g:not([data-state="active"], :focus-visible) {
+      opacity: var(--_dim);
+    }
+  }
+
+  g {
+    opacity: var(--o, 1);
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    &[data-value="none"] {
+      fill: var(--d-gr);
+    }
+
+    &:focus-visible circle {
+      stroke: var(--color-text-strong);
+      stroke-width: 1;
+    }
+  }
+
+  // Never takes the pointer: hovering it would leave the district underneath.
+  .tip {
+    position: absolute;
+    inset-block-start: var(--y);
+    inset-inline-start: var(--x);
+    display: grid;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    font-size: var(--_small);
+    white-space: nowrap;
+    // White card in the dark band: light scheme makes the tokens resolve to light.
+    color-scheme: light;
+    background: var(--card);
+    color: var(--color-text-strong);
+    pointer-events: none;
+    // Shifted by its own share of --x, so it never leaves the map's box sideways.
+    translate: calc(-1 * var(--x)) calc(-100% - var(--space-2));
+
+    &[data-side="below"] {
+      translate: calc(-1 * var(--x)) var(--space-2);
+    }
+
+    span {
+      color: var(--t3);
+    }
+  }
+
+  // By age.
+  .ages > .sub {
+    margin: 0 0 var(--space-8);
+  }
+
+  .ages .cols {
+    display: grid;
+    gap: calc(var(--space-8) + var(--space-2)); // 40px (SPEC §3 mobile)
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      border-block-start: 1px solid var(--_line);
+    }
+
+    a {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-4);
+      align-items: center;
+      margin-inline: calc(-1 * var(--space-3));
+      padding: var(--space-3);
+      border-radius: var(--radius-sm);
+      color: var(--color-text-body);
+      text-decoration: none;
+      transition: background-color var(--duration-fast) var(--ease-standard);
+
+      &:active {
+        background: var(--card3);
+      }
+
+      @include butler-mx.hover {
+        background: var(--card2);
+      }
+    }
+
+    b {
+      font-size: var(--font-size-xl);
+      color: var(--color-text-strong);
+    }
+  }
+
+  .age {
+    display: flex;
+    gap: var(--_age-gap);
+    align-items: flex-end;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: var(--_dot-gap);
+
+    i {
+      inline-size: var(--_age-dot);
+      block-size: var(--_age-dot);
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--_ring);
+
+      &[data-state="on"] {
+        border-color: var(--d-gr);
+        background: var(--d-gr);
+      }
+    }
+  }
+
+  .age[data-variant="dying"] .col:last-child i[data-state="on"] {
+    border-color: var(--d-ye);
+    background: var(--d-ye);
+  }
+
+  .age[data-variant="growing"] .col:first-child i[data-state="on"] {
+    border-color: var(--d-bl);
+    background: var(--d-bl);
+  }
+
+  // From 728px container (= the 808px viewport minus the 40px tablet padding): tablet.
+  @container home-results (inline-size >= 45.5rem) {
+    h2 {
+      --_h2: 3rem; // SPEC §3 tablet h2
+    }
+
+    .districts {
+      gap: calc(var(--space-8) + var(--space-2)); // 40px (mock)
+    }
+
+    .ages .cols {
+      gap: var(--space-12); // 48px (SPEC §3 tablet)
+    }
+  }
+
+  // From 952px container (= the 1000px viewport minus the 24px desktop padding): two columns.
+  @container home-results (inline-size >= 59.5rem) {
+    h2 {
+      --_h2: 3.5rem; // SPEC §3 desktop h2
+    }
+
+    .districts {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: var(--space-12);
+    }
+
+    .map {
+      order: 0;
+      max-inline-size: none;
+    }
+
+    .ages .cols {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-16);
+    }
+  }
+
+  @include butler-mx.feature("motion") {
+    [role="tab"]::after {
+      transition: transform var(--_tab-line) var(--ease-standard);
+    }
+
+    .list a {
+      transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        translate var(--duration-fast) var(--ease-standard);
+
+      @include butler-mx.hover {
+        translate: 6px 0;
+      }
+    }
+
+    // SPEC §16: the wave once the map is in view (DotMap sets data-wave); before that the dots wait hidden.
+    circle {
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    .map[data-wave="ready"] circle {
+      opacity: 0;
+    }
+
+    .map[data-wave="in"] circle {
+      animation: home-pop var(--_pop) var(--_pop-ease) both;
+      animation-delay: calc(var(--wave, 0) * var(--_ms));
+    }
+  }
+}
