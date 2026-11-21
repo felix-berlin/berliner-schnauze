@@ -1,22 +1,12 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Startseite (/)", () => {
-  // Only the attributes: the bear comes from Payload media, which the e2e job has no CMS for.
-  test("Hero-Bild reserviert seinen Platz (kein Layout Shift)", async ({ page }) => {
-    await page.goto("/");
-    const img = page.locator(".o-index__image");
-    const width = Number(await img.getAttribute("width"));
-    const height = Number(await img.getAttribute("height"));
-    expect(width, "hero needs a width attribute").toBeGreaterThan(0);
-    expect(height, "hero needs a height attribute").toBeGreaterThan(0);
-  });
-
   test("lädt mit korrektem Titel und Überschrift", async ({ page }) => {
     await page.goto("/");
 
-    await expect(page).toHaveTitle(/Berliner Dialekt Wörterbuch/);
+    await expect(page).toHaveTitle(/Berliner Wörterbuch/);
     await expect(
-      page.getByRole("heading", { level: 1, name: "Na Keule, keen'n Dunst vom Berlinern?" }),
+      page.getByRole("heading", { level: 1, name: "Berliner Wörterbuch" }),
     ).toBeVisible();
   });
 
@@ -30,24 +20,14 @@ test.describe("Startseite (/)", () => {
     );
   });
 
-  test("Startseite hat keine Wortliste und kein Suchfeld mehr", async ({ page }) => {
+  test("Startseite hat keine Wortliste, ihr Suchfeld schickt per GET an /suche", async ({
+    page,
+  }) => {
     await page.goto("/");
 
-    // #wordListing is server-rendered; the search field and list are client-only islands
     await expect(page.locator("#wordListing")).toHaveCount(0);
-    await expect(
-      page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" }),
-    ).toHaveCount(0);
     await expect(page.locator(".c-word-list")).toHaveCount(0);
-  });
-
-  test("Suchlink führt auf /suche", async ({ page }) => {
-    await page.goto("/");
-
-    await expect(page.getByRole("link", { name: "Berliner Mundart durchsuchen" })).toHaveAttribute(
-      "href",
-      "/suche",
-    );
+    await expect(page.getByRole("search")).toHaveAttribute("action", "/suche");
   });
 
   test("alter ?q=-Link auf der Startseite leitet auf /suche?q= weiter", async ({ page }) => {
@@ -67,7 +47,9 @@ test.describe("Startseite (/)", () => {
 
     await page.getByRole("banner").getByRole("link", { name: "Berliner Schnauze" }).click();
 
-    await expect(page.getByRole("heading", { level: 1, name: /Na Keule/ })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Berliner Wörterbuch" }),
+    ).toBeVisible();
     expect(new URL(page.url()).pathname).toBe("/");
   });
 
@@ -83,14 +65,13 @@ test.describe("Startseite (/)", () => {
   test("Wort des Tages ist verlinkt", async ({ page }) => {
     await page.goto("/");
 
-    const wordOfTheDay = page.getByText("Wort des Tages").locator("..");
-    await expect(wordOfTheDay.getByRole("link").first()).toHaveAttribute("href", /^\/wort\//);
+    await expect(page.locator('.c-home-stage a[href^="/wort/"]').first()).toBeVisible();
   });
 
   test("BON-Spiel-Link führt zum Kartenspiel", async ({ page }) => {
     await page.goto("/");
 
-    await expect(page.getByRole("link", { name: "Jetzt zocken" })).toHaveAttribute(
+    await expect(page.getByRole("link", { name: "Jetzt spielen" })).toHaveAttribute(
       "href",
       "/games/berliner-oder-nicht",
     );
