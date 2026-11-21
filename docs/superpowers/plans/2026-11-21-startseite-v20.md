@@ -21,6 +21,7 @@
 - Payload nur additiv (Expand/Contract, `payload/CLAUDE.md`). `pnpm` only. `oxlint` direkt immer mit `--format=agent`.
 - Styles als SCSS-Komponenten, BEM, keine Scoped Styles; `pnpm lint` und `pnpm tokens:check` grün vor jedem Commit.
 - Keine echten Daten aus der Prod-DB in Tests, Fixtures, Screenshots. Offene Punkte: Zwischenlösung mit `TODO(startseite):`.
+- **Modern web guidance (user requirement):** all HTML, CSS and client-side JS (Tasks 1, 6-11) is built according to the `/modern-web-guidance` skill. Before writing UI code, the implementer runs `npx -y modern-web-guidance@latest search "<2-5 word capability>"` (one search per capability: e.g. combobox/listbox, tabs, details/accordion, dialog/popover, scroll reveal animation, reduced motion, tooltip/anchor positioning, responsive layout, dark mode, view of SVG a11y) then `retrieve "<id>"`, applies the guide incl. its fallbacks for non-Baseline features, and ends the report with a `### Modern Web Guidance` section (ids applied, non-obvious choices). Task reviewers check this section exists and that the code follows it. The project's `supportedBrowsers` policy decides whether non-Baseline fallbacks are needed.
 - Commits: Conventional Commits (`feat(home): …`), mit Co-Author-Zeile laut Session-Vorgabe.
 
 ## Review Focus
