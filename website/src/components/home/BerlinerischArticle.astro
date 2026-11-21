@@ -36,7 +36,7 @@ const typical = TYPICAL.filter((lemma) => linkable[lemma]);
               </summary>
               <Fragment set:html={more} />
             </details>
-            <script is:inline>
+            <script is:inline data-astro-rerun>
               // One DOM for all widths (SPEC §12.1): open from 808px (= the 45.5rem container query that hides the
               // summary), before first paint since this runs while parsing. Re-runs after a view transition swap.
               (() => {

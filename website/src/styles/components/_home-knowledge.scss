@@ -258,9 +258,14 @@
       gap: var(--space-12);
     }
 
-    // From 808px the script opens .more; the summary then has nothing left to do.
-    .more[open] > summary {
+    // From 808px the text shows whatever the details state is (::details-content, Baseline 2025; the inline script
+    // also opens it as the fallback) and the summary has nothing left to do.
+    .more > summary {
       display: none;
+    }
+
+    .more::details-content {
+      content-visibility: visible;
     }
 
     .rules {
