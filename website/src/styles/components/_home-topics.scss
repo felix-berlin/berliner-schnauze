@@ -1,0 +1,303 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Start page topic register "Kiek ma rin" (docs/design/startseite-v20/SPEC.md §7, §4.4-4.6, §15).
+// Parts: .head (.eyebrow, h2, .all), .register of li > .row (.no, .name, .examples, .count, .say).
+// Mobile and touch: no number, no bubble, examples always shown. Number, folded examples and
+// the bubble exist only from the tablet width on hover devices.
+@include mx.component("home-topics") {
+  :scope {
+    --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
+    --_name: 1.75rem; // SPEC §4.5 mobile topic name, between the 2xl and 3xl steps
+    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
+    --_shift: 12px; // hover shift of name and examples (SPEC §7)
+    --_bubble-radius: 18px; // SPEC §4.6 exception for the speech bubble
+    --_bubble-max: 20rem; // 320px bubble width (mock)
+    --_bubble-tip: 12px;
+    --_bubble-end: 10rem; // SPEC §7, clear of the counter
+    --_slide: 350ms; // SPEC §7 examples, 0.35s
+    --_slide-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --_pop-ease: cubic-bezier(0.3, 1.4, 0.6, 1);
+    --focus-ring-color: var(--color-accent-active);
+
+    container: home-topics / inline-size;
+  }
+
+  .head {
+    display: grid;
+    margin-block-end: var(--space-6);
+  }
+
+  .eyebrow {
+    margin: 0 0 var(--space-1);
+    font-size: var(--font-size-lg);
+    color: var(--t3);
+
+    s {
+      text-decoration-color: var(--color-accent-active);
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  h2 {
+    margin: 0;
+    font-family: var(--font-condensed);
+    font-size: var(--_h2);
+    font-weight: var(--font-weight-black);
+    line-height: 0.95;
+    text-transform: uppercase;
+    color: var(--color-text-strong);
+  }
+
+  .all {
+    justify-self: start;
+    margin-block-start: var(--space-3);
+    font-size: var(--font-size-md);
+    white-space: nowrap;
+    color: var(--color-text-strong);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      text-decoration-color var(--duration-fast) var(--ease-standard);
+
+    &:focus-visible {
+      outline-offset: 3px;
+    }
+
+    @include butler-mx.hover {
+      color: var(--color-text-accent);
+      text-decoration-color: var(--color-accent-active);
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  .register {
+    margin: 0;
+    padding: 0;
+    border-block-start: 1px solid var(--line);
+    list-style: none;
+
+    li {
+      border-block-end: 1px solid var(--line);
+    }
+  }
+
+  .row {
+    position: relative;
+    display: grid;
+    grid-template-areas:
+      "name count"
+      "examples count";
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-4);
+    align-items: center;
+    padding: var(--space-4) 0;
+    color: var(--color-text-strong);
+    text-decoration: none;
+
+    &:focus-visible {
+      outline-offset: 2px;
+    }
+  }
+
+  .no,
+  .say {
+    display: none;
+  }
+
+  .name {
+    grid-area: name;
+    font-family: var(--font-condensed);
+    font-size: var(--_name);
+    font-weight: var(--font-weight-black);
+    line-height: 1;
+    text-transform: uppercase;
+    transition: color var(--duration-base) var(--ease-standard);
+  }
+
+  .examples {
+    grid-area: examples;
+    margin-block-start: var(--space-1);
+    font-size: var(--font-size-md);
+    color: var(--t3);
+  }
+
+  .count {
+    display: flex;
+    flex-direction: column;
+    grid-area: count;
+    align-items: flex-end;
+    align-self: start;
+    font-family: var(--font-condensed);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-black);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+
+    small {
+      margin-block-start: var(--space-1);
+      font-family: var(--font-family-body);
+      font-size: var(--_small);
+      font-weight: var(--font-weight-regular);
+      color: var(--t3);
+    }
+  }
+
+  // From 728px container (= the 808px viewport minus the 40px tablet padding).
+  @container home-topics (inline-size >= 45.5rem) {
+    .head {
+      grid-template-columns: 1fr auto;
+      column-gap: var(--space-8);
+      align-items: end;
+      margin-block-end: calc(var(--space-8) + var(--space-2)); // 40px (mock)
+    }
+
+    h2 {
+      --_h2: 3rem; // SPEC §3 tablet h2
+    }
+
+    .eyebrow,
+    h2 {
+      grid-column: 1;
+    }
+
+    .all {
+      grid-row: 2;
+      grid-column: 2;
+      margin: 0;
+    }
+
+    .name {
+      --_name: clamp(2rem, 6cqi, 3.25rem); // SPEC §4.5 tablet, vw of the mock as container width
+    }
+
+    .count {
+      font-size: var(--font-size-3xl);
+    }
+
+    // Hover devices only (SPEC §3, §7): number, folded examples, bubble.
+    @include butler-mx.feature("hover") {
+      .row {
+        grid-template-areas:
+          "no name count"
+          "no examples count";
+        grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+        column-gap: var(--space-6);
+      }
+
+      .no {
+        display: block;
+        grid-area: no;
+        align-self: start;
+        margin-block-start: var(--space-4);
+        font-family: var(--font-condensed);
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-black);
+        font-variant-numeric: tabular-nums;
+        color: var(--t3);
+      }
+
+      // The examples keep their line and only fade, so rows never change height.
+      .examples {
+        font-size: var(--font-size-base);
+        opacity: 0;
+      }
+
+      .say {
+        position: absolute;
+        inset-block: 0;
+        inset-inline-end: var(--_bubble-end);
+        z-index: var(--z-raised);
+        display: block;
+        block-size: fit-content;
+        margin-block: auto; // centred on the row without a translate, which the rotate would skew
+        max-inline-size: var(--_bubble-max);
+        padding: var(--space-4) var(--space-5);
+        border-radius: var(--_bubble-radius);
+        background: var(--color-accent-solid);
+        box-shadow: var(--shadow-paper-lift);
+        font-family: var(--font-family-body);
+        font-size: var(--font-size-xl);
+        font-style: italic;
+        font-weight: var(--font-weight-bold);
+        line-height: 1.2;
+        color: var(--color-text-on-accent);
+        opacity: 0;
+        pointer-events: none;
+        rotate: -3deg;
+        transform-origin: left center;
+
+        &::after {
+          content: "";
+          position: absolute;
+          inset-block: 0;
+          inset-inline-start: calc(-1 * var(--_bubble-tip));
+          block-size: fit-content;
+          margin-block: auto;
+          border-block: 10px solid transparent;
+          border-inline-end: 14px solid var(--color-accent-solid);
+        }
+      }
+
+      .row:is(:hover, :focus-visible) {
+        .name {
+          color: var(--color-text-accent);
+        }
+
+        .examples,
+        .say {
+          opacity: 1;
+        }
+      }
+
+      .register:hover .row:not(:hover) .name {
+        color: var(--t3);
+      }
+    }
+  }
+
+  // From 952px container (= the 1000px viewport minus the 24px desktop padding).
+  @container home-topics (inline-size >= 59.5rem) {
+    h2 {
+      --_h2: 3.5rem; // SPEC §3 desktop h2
+    }
+
+    .name {
+      --_name: 4.25rem; // SPEC §4.5 desktop topic name
+    }
+  }
+
+  // Movement only with motion allowed; without it the states switch in place.
+  @include butler-mx.feature("motion") {
+    @container home-topics (inline-size >= 45.5rem) {
+      @include butler-mx.feature("hover") {
+        .name,
+        .examples {
+          transition:
+            color var(--duration-base) var(--ease-standard),
+            opacity var(--duration-base) var(--ease-standard),
+            translate var(--_slide) var(--_slide-ease);
+        }
+
+        .say {
+          scale: 0.85;
+          transition:
+            opacity var(--duration-fast) var(--ease-standard),
+            scale var(--_slide) var(--_pop-ease);
+        }
+
+        .row:is(:hover, :focus-visible) {
+          .name,
+          .examples {
+            translate: var(--_shift) 0;
+          }
+
+          .say {
+            scale: 1;
+          }
+        }
+      }
+    }
+  }
+}

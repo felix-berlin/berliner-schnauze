@@ -238,4 +238,12 @@
       --home-browse-fade-end: var(--_fade-size);
     }
   }
+
+  // Start page poll result (home-poll; mock w14-pop): each dot pops in.
+  @keyframes home-pop {
+    from {
+      opacity: 0;
+      scale: 0.4;
+    }
+  }
 }

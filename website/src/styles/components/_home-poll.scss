@@ -1,0 +1,355 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Start page poll "Forsch ma mit!" (docs/design/startseite-v20/SPEC.md §6, §15-17). Parts: .inner
+// (the split), .intro (.head with .eyebrow/h2/.sub, the .word card), .vote (.question, .tiles of
+// .tile, .hint; after the vote .done, .dots and .legend). Answers carry data-usage, the own vote
+// data-state="mine"; the dots get their index as inline --i for the stagger.
+@include mx.component("home-poll") {
+  :scope {
+    --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
+    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
+    --_track: 2px; // eyebrow and card label letter spacing
+    --_tile: 4.5rem; // 72px minimum tile height (SPEC §6)
+    --_icon: 2.75rem; // 44px icon circle
+    --_dot-gap: 5px; // mock gap between the dots
+    --_pop: 320ms;
+    --_pop-step: 7ms;
+    --_pop-ease: cubic-bezier(0.3, 1.5, 0.6, 1);
+    --focus-ring-color: var(--color-accent-active);
+
+    container: home-poll / inline-size;
+  }
+
+  .inner {
+    display: grid;
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .head {
+    margin-block-end: var(--space-6);
+  }
+
+  .eyebrow {
+    margin: 0 0 var(--space-1);
+    font-size: var(--font-size-lg);
+    color: var(--t3);
+
+    s {
+      text-decoration-color: var(--color-accent-active);
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  h2 {
+    margin: 0;
+    font-family: var(--font-condensed);
+    font-size: var(--_h2);
+    font-weight: var(--font-weight-black);
+    line-height: 0.95;
+    text-transform: uppercase;
+    color: var(--color-text-strong);
+  }
+
+  .sub {
+    max-inline-size: 56ch;
+    margin: var(--space-3) 0 0;
+    color: var(--color-text-body);
+  }
+
+  .word {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-4);
+    align-items: center;
+    padding: var(--space-5) var(--space-5) var(--space-5) var(--space-6);
+    border-inline-start: 4px solid var(--color-accent-active);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    background: var(--card2);
+    color: var(--t3);
+    text-decoration: none;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+
+    small {
+      display: block;
+      margin-block-end: var(--space-1);
+      font-size: var(--_small);
+      text-transform: uppercase;
+      letter-spacing: var(--_track);
+    }
+
+    b {
+      display: block;
+      font-size: var(--font-size-4xl);
+      line-height: 1.1;
+      color: var(--color-text-accent);
+    }
+
+    small,
+    b,
+    span {
+      grid-column: 1;
+    }
+
+    .arrow {
+      grid-row: 1 / span 3;
+      grid-column: 2;
+      inline-size: 28px;
+      block-size: 28px;
+      color: var(--color-accent-active);
+      rotate: 90deg; // mobile: points down to the tiles below
+    }
+
+    &:focus-visible {
+      outline-offset: 3px;
+    }
+
+    @include butler-mx.hover {
+      background: var(--card3);
+    }
+  }
+
+  .question {
+    margin: 0 0 var(--space-3);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+
+    b {
+      color: var(--color-text-accent);
+    }
+  }
+
+  .tiles {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .tile {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    inline-size: 100%;
+    min-block-size: var(--_tile);
+    padding: var(--space-3) var(--space-4);
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: var(--card2);
+    font: inherit;
+    text-align: start;
+    color: var(--color-text-strong);
+    cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+
+    &[aria-disabled="true"] {
+      cursor: progress;
+    }
+
+    &:focus-visible {
+      outline-offset: 2px;
+    }
+
+    .icon {
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      inline-size: var(--_icon);
+      block-size: var(--_icon);
+      border: 1.5px dashed var(--line);
+      border-radius: var(--radius-pill);
+      color: var(--color-text-strong);
+      transition:
+        border-color var(--duration-base) var(--ease-standard),
+        color var(--duration-base) var(--ease-standard),
+        transform var(--duration-base) var(--ease-standard);
+    }
+
+    .text {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+
+      b {
+        font-size: var(--font-size-lg);
+      }
+
+      span {
+        font-size: var(--_small);
+        color: var(--t3);
+      }
+    }
+
+    @include butler-mx.hover {
+      background: var(--card3);
+
+      .icon {
+        border-color: var(--color-accent-active);
+        color: var(--color-accent-active);
+      }
+    }
+
+    &:active {
+      background: var(--card3);
+    }
+  }
+
+  .hint {
+    margin: var(--space-3) 0 0;
+    font-size: var(--font-size-md);
+    color: var(--t3);
+  }
+
+  .done {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+    margin: 0 0 var(--space-4);
+    padding: var(--space-2) var(--space-4);
+    border-inline-start: 3px solid var(--ok);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    background: var(--card2); // the mock's --ok-bg has no token
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--ok);
+
+    svg {
+      inline-size: 16px;
+      block-size: 16px;
+    }
+
+    span {
+      font-weight: var(--font-weight-regular);
+      color: var(--color-text-strong);
+    }
+
+    &:focus-visible {
+      outline-offset: 3px;
+    }
+  }
+
+  .dots {
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    gap: var(--_dot-gap);
+    margin-block-end: var(--space-4);
+
+    i {
+      display: block;
+      aspect-ratio: 1;
+      border-radius: var(--radius-pill);
+      background: var(--card2);
+    }
+
+    i[data-state="mine"] {
+      outline: 2px solid var(--color-text-strong);
+      outline-offset: 1px;
+    }
+  }
+
+  .dots i[data-usage="say"],
+  .legend [data-usage="say"] i {
+    background: var(--d-bl);
+  }
+
+  .dots i[data-usage="know"],
+  .legend [data-usage="know"] i {
+    background: var(--d-ye);
+  }
+
+  .dots i[data-usage="never"],
+  .legend [data-usage="never"] i {
+    background: var(--d-gr);
+  }
+
+  .legend {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: grid;
+      grid-template-columns: 12px 1fr auto;
+      gap: var(--space-3);
+      align-items: center;
+      color: var(--color-text-body);
+    }
+
+    i {
+      inline-size: 12px;
+      block-size: 12px;
+      border-radius: var(--radius-pill);
+    }
+
+    small {
+      margin-inline-start: var(--space-2);
+      font-size: var(--_small);
+      color: var(--color-text-accent);
+    }
+
+    b {
+      font-family: var(--font-condensed);
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-black);
+      font-variant-numeric: tabular-nums;
+      color: var(--color-text-strong);
+    }
+  }
+
+  // From 728px container (= the 808px viewport minus the 40px tablet padding): tablet.
+  @container home-poll (inline-size >= 45.5rem) {
+    .inner {
+      gap: calc(var(--space-8) + var(--space-2)); // 40px (SPEC §3 tablet)
+    }
+
+    h2 {
+      --_h2: 3rem; // SPEC §3 tablet h2
+    }
+
+    .head {
+      margin-block-end: var(--space-8);
+    }
+
+    .word .arrow {
+      rotate: none;
+    }
+  }
+
+  // From 952px container (= the 1000px viewport minus the 24px desktop padding): two columns.
+  @container home-poll (inline-size >= 59.5rem) {
+    .inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-16);
+    }
+
+    h2 {
+      --_h2: 3.5rem; // SPEC §3 desktop h2
+    }
+  }
+
+  @include butler-mx.feature("motion") {
+    .tile {
+      transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        scale var(--duration-fast) var(--ease-standard);
+
+      &:active {
+        scale: 0.98;
+      }
+
+      @include butler-mx.hover {
+        .icon {
+          transform: rotate(-8deg) scale(1.08);
+        }
+      }
+    }
+
+    .dots i {
+      animation: home-pop var(--_pop) var(--_pop-ease) both;
+      animation-delay: calc(var(--i, 0) * var(--_pop-step));
+    }
+  }
+}
