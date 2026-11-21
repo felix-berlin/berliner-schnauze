@@ -7,6 +7,7 @@
 import type { Payload } from "payload";
 
 import { PRESERVE_CONTENT_MODIFIED_AT } from "../fields/contentModified";
+import { stripTags } from "../lib/htmlText";
 import { htmlToLexical } from "../lib/htmlToLexical";
 import { lexicalToHtml } from "../lib/lexicalHtml";
 import { hasLexicalText } from "../lib/routes";
@@ -118,10 +119,7 @@ export async function seedHome(
   ).docs;
   if (post) {
     const first = /<p[^>]*>(.*?)<\/p>/s.exec(lexicalToHtml(post.content))?.[1] ?? "";
-    const plain = first
-      .replace(/<[^>]*>/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+    const plain = stripTags(first).replace(/\s+/g, " ").trim();
     const sentence = /^.{20,160}?[.!?](?=\s|$)/.exec(plain)?.[0];
     if (post.teaserZitat) out.alreadySet.push("teaserZitat");
     else if (!sentence)

@@ -7,6 +7,7 @@ import { fetchAllWords } from "@services/payload/words.ts";
 import { setPageCache } from "@utils/cacheHeaders.ts";
 import { withCount } from "@utils/homeIntro.ts";
 import { reportAndFallback } from "@utils/reportError.ts";
+import { htmlToText } from "payload-app/html-text";
 import { docPath } from "payload-app/routes";
 
 const oneLine = (text: string | null | undefined): string =>
@@ -14,15 +15,7 @@ const oneLine = (text: string | null | undefined): string =>
 
 /** CMS html (p, h3, inline tags) as Markdown text: h3 become ###, links and emphasis drop to their text. */
 const toMarkdown = (html: string): string =>
-  html
-    .replace(/<h3[^>]*>/g, "\n\n### ")
-    .replace(/<\/(p|h3|li)>|<br\s*\/?>/g, "\n\n")
-    .replace(/<[^>]*>/g, "")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&amp;/g, "&")
+  htmlToText(html.replace(/<h3[^>]*>/g, "\n\n### ").replace(/<\/(p|h3|li)>|<br\s*\/?>/g, "\n\n"))
     .split(/\n{2,}/)
     .map((block) => block.replace(/\s+/g, " ").trim())
     .filter(Boolean)

@@ -1,22 +1,14 @@
 import type { HomeData } from "@services/payload/home.ts";
 
 import { SITE_URL } from "astro:env/client";
+import { htmlToText } from "payload-app/html-text";
 
 /** Meta description of the start page with the live word count (SPEC startseite-v20 §14). */
 export const homeDescription = (wordCount: number): string =>
   `Über ${wordCount.toLocaleString("de-DE")} Berliner Wörter mit Bedeutung, Aussprache, Herkunft und Beispielsätzen. Von Atze bis Zicke, jeprüft und jesammelt mit der Community.`;
 
-// Answer html from lexicalToHtml: tags dropped, the entities it escapes decoded (&amp; last).
-const plain = (html: string) =>
-  html
-    .replace(/<[^>]*>/g, "")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&amp;/g, "&")
-    .replace(/\s+/g, " ")
-    .trim();
+// Answer html from lexicalToHtml: tags dropped, the entities it escapes decoded.
+const plain = (html: string) => htmlToText(html).replace(/\s+/g, " ").trim();
 
 /** JSON-LD of the start page (docs/design/startseite-v20/SPEC.md §14): WebSite + SearchAction, Organization, FAQPage, DefinedTerm. */
 export const homeJsonLd = ({ faq, word }: Pick<HomeData, "faq" | "word">): object[] => [

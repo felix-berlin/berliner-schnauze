@@ -9,6 +9,7 @@ import { fetchAllWords, type SiteWord, translationTexts } from "@services/payloa
 import { reportAndFallback, reportError } from "@utils/reportError.ts";
 import { pickWordOfTheDay } from "@utils/wordOfTheDay.ts";
 import { type MorseMark, morseRing } from "payload-app/home-stats";
+import { htmlToText } from "payload-app/html-text";
 import { lexicalToHtml } from "payload-app/lexical-html";
 import { hasLexicalText } from "payload-app/routes";
 
@@ -114,16 +115,7 @@ const dayKey = (date: Date) => date.toLocaleDateString("sv-SE", { timeZone: "Eur
 
 const meaning = (word: SiteWord) => translationTexts(word).join(", ");
 
-const plain = (html: string) =>
-  html
-    .replace(/<[^>]*>/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/\s+/g, " ")
-    .trim();
+const plain = (html: string) => htmlToText(html, " ").replace(/\s+/g, " ").trim();
 
 /** `{ [key]: value }` when the value is set, else nothing: keeps absent optional fields out of the object. */
 const opt = <K extends string, V>(key: K, value: V | null | undefined | "") =>
