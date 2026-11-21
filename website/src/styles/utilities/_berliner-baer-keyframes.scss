@@ -513,7 +513,7 @@
       transform: translateY(-2px) scaleY(1);
     }
   }
-  @keyframes berliner-baer-nee {
+  @keyframes berliner-baer-shake {
     0%,
     55%,
     100% {
@@ -530,7 +530,7 @@
       transform: translateX(14px) rotate(4deg);
     }
   }
-  @keyframes berliner-baer-neeeyes {
+  @keyframes berliner-baer-shakeeyes {
     0%,
     55%,
     100% {
@@ -956,7 +956,7 @@
       transform: rotate(40deg);
     }
   }
-  @keyframes berliner-baer-pstpulse {
+  @keyframes berliner-baer-shushpulse {
     0%,
     100% {
       transform: scale(1) rotate(-6deg);
@@ -1004,7 +1004,7 @@
       transform: rotate(-2deg) translateY(-8px);
     }
   }
-  @keyframes berliner-baer-prost {
+  @keyframes berliner-baer-cheers {
     0%,
     100% {
       transform: rotate(12deg);
@@ -1014,7 +1014,7 @@
       transform: rotate(-12deg);
     }
   }
-  @keyframes berliner-baer-prostfore {
+  @keyframes berliner-baer-cheersfore {
     0%,
     100% {
       transform: rotate(18deg);
@@ -1140,7 +1140,7 @@
       transform: scale(1.35);
     }
   }
-  @keyframes berliner-baer-tipp-a {
+  @keyframes berliner-baer-type-a {
     0%,
     100% {
       transform: rotate(0);
@@ -1150,7 +1150,7 @@
       transform: rotate(-12deg);
     }
   }
-  @keyframes berliner-baer-tipp-b {
+  @keyframes berliner-baer-type-b {
     0%,
     100% {
       transform: rotate(0);
@@ -1160,7 +1160,7 @@
       transform: rotate(12deg);
     }
   }
-  @keyframes berliner-baer-tipphead-a {
+  @keyframes berliner-baer-typehead-a {
     0%,
     100% {
       transform: none;
@@ -1170,7 +1170,7 @@
       transform: translateY(5px);
     }
   }
-  @keyframes berliner-baer-tipphead-b {
+  @keyframes berliner-baer-typehead-b {
     0%,
     100% {
       transform: none;

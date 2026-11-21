@@ -1,5 +1,5 @@
 // @vitest-environment node
-import type { HomeData } from "@services/payload/home.ts";
+import type { HomeAbout, HomeMagazine, HomeSoundRule } from "@services/payload/home.ts";
 
 import { JSDOM } from "jsdom";
 import { beforeAll, describe, expect, it } from "vitest";
@@ -14,7 +14,7 @@ const knowledgeHtml =
   '<h3>Dritte Frage</h3><p>Absatz drei mit <a href="/wort/testwort">Testwort</a>.</p>' +
   "<h3>Vierte Frage</h3><p>Absatz vier.</p>";
 
-const soundRules: HomeData["soundRules"] = [
+const soundRules: HomeSoundRule[] = [
   { berlin: "ab", example: "ab cd", rule: "Regel 1", standard: "aa" },
   { berlin: "bc", standard: "bb" },
   { berlin: "cd", example: "cd ef", rule: "Regel 3", standard: "cc" },
@@ -40,7 +40,7 @@ const domAt = (html: string, wide: boolean) =>
 
 describe("BerlinerischArticle.astro", () => {
   let render: (props: Record<string, unknown>) => Promise<string>;
-  const props = { knowledgeHtml, linkable: {}, soundRules, wordCount: 1234 };
+  const props = { knowledgeHtml, linkable: new Map(), soundRules, wordCount: 1234 };
 
   beforeAll(async () => {
     render = await createAstroRender(
@@ -93,7 +93,13 @@ describe("BerlinerischArticle.astro", () => {
   });
 
   it("links only the typical words that exist", async () => {
-    const html = await render({ ...props, linkable: { Kiez: "kiez", Stulle: "stulle" } });
+    const html = await render({
+      ...props,
+      linkable: new Map([
+        ["Kiez", "kiez"],
+        ["Stulle", "stulle"],
+      ]),
+    });
     expect(html).toContain("Typisch Berlin");
     expect(html).toContain('<a href="/wort/stulle">Stulle</a>');
     expect(html).toContain('<a href="/wort/kiez">Kiez</a>');
@@ -108,8 +114,8 @@ describe("FaqAbout.astro", () => {
     answerHtml: `<p>Antwort ${n}</p>`,
     question: `Frage ${n}?`,
   }));
-  const about: HomeData["about"] = {
-    counts: { audio: 0, topics: 12, votes: 34567, words: 1234 },
+  const about: HomeAbout = {
+    counts: { audio: 0, topics: 12, votes: 34567 },
     text: "Erfundenes Wörterbuch mit {count} Einträgen.",
   };
 
@@ -140,7 +146,7 @@ describe("FaqAbout.astro", () => {
 
 describe("MagazineQuote.astro", () => {
   let render: (props: Record<string, unknown>) => Promise<string>;
-  const magazine: NonNullable<HomeData["magazine"]> = {
+  const magazine: HomeMagazine = {
     excerpt: "Erfundene Leseprobe über ein Testwort.",
     ipa: "tɛst",
     others: [1, 2, 3].map((n) => ({ slug: `beitrag-${n}`, title: `Beitrag ${n}` })),
@@ -191,7 +197,7 @@ describe("SuggestGap.astro", () => {
   it("renders Kalle pointing, the audio gap hint and both buttons", async () => {
     const html = await render({ gap: { randomSlug: "ohne-ton", wordsWithoutAudio: 1312 } });
     expect(html).toContain("<h2>Fehlt dir een Wort?</h2>");
-    expect(html).toMatch(/data-state="zeigen"/);
+    expect(html).toMatch(/data-state="point"/);
     expect(html).toMatch(/<b>1\.312<\/b>\s*Wörtern fehlt noch eene Hörprobe\./);
     // Only the hint links to a word; the recording button is a tooltip button until the feature exists.
     expect(html.match(/href="\/wort\/ohne-ton"/g)).toHaveLength(1);

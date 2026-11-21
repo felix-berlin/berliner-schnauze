@@ -5,12 +5,12 @@ import { renderToString } from "vue/server-renderer";
 import BerlinerBaer from "@/components/kalle/BerlinerBaer.vue";
 
 describe("BerlinerBaer SSR", () => {
-  it("rendert serverseitig ohne Masken-ID und ohne Fehler", async () => {
+  it("renders on the server without a mask id and without errors", async () => {
     const html = await renderToString(
-      createSSRApp({ render: () => h(BerlinerBaer, { groesse: 240, stimmung: "winken" }) }),
+      createSSRApp({ render: () => h(BerlinerBaer, { mood: "wave", size: 240 }) }),
     );
-    expect(html).toContain('data-state="winken"');
-    expect(html).toContain("brauen");
+    expect(html).toContain('data-state="wave"');
+    expect(html).toContain("brows");
     expect(html).not.toContain("url(#");
   });
 });

@@ -9,11 +9,11 @@ def tuft(x,y,a=0,sc=1.0,flip=False):
 def tufts(pts):
     return ''.join(tuft(x,y,a,sc)+tuft(520-x,y,-a,sc,True) for x,y,a,sc in pts)
 FURMARK='fill="none" stroke="var(--bv-ink2)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"'
-PROPS='''<g class="bv__prop bv__prop--pils"><g transform="translate(506 150) scale(1.4) translate(-506 -150)"><path d="M496 60L500 24h12l4 36z" fill="#6b3d1c"></path><rect x="498" y="14" width="16" height="11" rx="2" fill="#e9d7b0"></rect><rect x="488" y="58" width="36" height="96" rx="8" fill="#7a4a1e"></rect><rect x="488" y="86" width="36" height="42" fill="#f4ecd8"></rect><rect x="488" y="100" width="36" height="9" fill="var(--bv-red)"></rect><path d="M495 64v16" fill="none" stroke="#a9733c" stroke-width="4" stroke-linecap="round"></path><g fill="var(--bv-ink)"><rect x="474" y="126" width="62" height="15" rx="7.5"></rect><rect x="474" y="146" width="62" height="15" rx="7.5"></rect></g></g></g><g class="bv__prop bv__prop--schrippe"><ellipse cx="500" cy="124" rx="44" ry="29" fill="#d9a253"></ellipse><path d="M470 118q30-14 60 0" fill="none" stroke="#a8672a" stroke-width="6" stroke-linecap="round"></path><ellipse cx="486" cy="134" rx="12" ry="5" fill="#eabd78"></ellipse></g>'''
+PROPS='''<g class="bv__prop bv__prop--beer"><g transform="translate(506 150) scale(1.4) translate(-506 -150)"><path d="M496 60L500 24h12l4 36z" fill="#6b3d1c"></path><rect x="498" y="14" width="16" height="11" rx="2" fill="#e9d7b0"></rect><rect x="488" y="58" width="36" height="96" rx="8" fill="#7a4a1e"></rect><rect x="488" y="86" width="36" height="42" fill="#f4ecd8"></rect><rect x="488" y="100" width="36" height="9" fill="var(--bv-red)"></rect><path d="M495 64v16" fill="none" stroke="#a9733c" stroke-width="4" stroke-linecap="round"></path><g fill="var(--bv-ink)"><rect x="474" y="126" width="62" height="15" rx="7.5"></rect><rect x="474" y="146" width="62" height="15" rx="7.5"></rect></g></g></g><g class="bv__prop bv__prop--roll"><ellipse cx="500" cy="124" rx="44" ry="29" fill="#d9a253"></ellipse><path d="M470 118q30-14 60 0" fill="none" stroke="#a8672a" stroke-width="6" stroke-linecap="round"></path><ellipse cx="486" cy="134" rx="12" ry="5" fill="#eabd78"></ellipse></g>'''
 THUMB='<rect class="bv__thumb" x="424" y="122" width="64" height="30" rx="15" fill="var(--bv-ink)"></rect>'
-GB='''<g class="bv__gang"><path d="M152 302L214 296 260 372 306 296 368 302Q398 400 366 516L300 546 260 522 220 546 154 516Q122 400 152 302Z" fill="var(--bv-vest)"></path><path class="bv__detail" d="M176 330V506M202 320V524M228 330V536M292 330V536M318 320V524M344 330V506" fill="none" stroke="#fff" stroke-opacity=".13" stroke-width="2.5"></path><path d="M214 296L260 372 306 296" fill="none" stroke="var(--bv-ink)" stroke-width="6" stroke-linejoin="round"></path><g class="bv__detail" fill="#e9d7b0"><circle cx="260" cy="410" r="5.5"></circle><circle cx="260" cy="450" r="5.5"></circle><circle cx="260" cy="490" r="5.5"></circle></g><path d="M312 446h40" fill="none" stroke="var(--bv-ink)" stroke-width="5" stroke-linecap="round"></path><path class="bv__detail" d="M262 452Q296 492 336 448" fill="none" stroke="#e1b125" stroke-width="4" stroke-linecap="round"></path><path d="M186 286Q260 340 334 286L330 314Q260 366 190 314Z" fill="var(--bv-red)"></path><path d="M250 336l-24 56 32-16 8 24 14-62z" fill="#c22a13"></path></g>'''
-GH='''<g class="bv__gang"><g transform="rotate(-7 260 90)"><path d="M134 118Q124 62 196 40Q262 20 332 38Q400 58 386 118Q260 98 134 118Z" fill="var(--bv-cap)"></path><path d="M262 30Q214 50 204 106M262 30Q262 70 262 102M262 30Q312 50 318 106" fill="none" stroke="var(--bv-cap2)" stroke-width="3.5" stroke-linecap="round"></path><circle cx="262" cy="31" r="7" fill="var(--bv-cap2)"></circle><path d="M134 118Q260 98 386 118L382 130Q260 112 138 130Z" fill="var(--bv-cap2)"></path><path d="M172 126Q260 110 348 126Q342 152 260 156Q178 152 172 126Z" fill="var(--bv-cap2)"></path><path d="M190 134Q260 122 330 134" fill="none" stroke="var(--bv-cap)" stroke-width="3" stroke-linecap="round" opacity=".7"></path></g><g transform="rotate(16 290 262)"><rect x="286" y="254" width="64" height="16" rx="6" fill="#7a4a1e"></rect><rect x="340" y="254" width="12" height="16" rx="5" fill="var(--bv-red)"></rect><rect x="300" y="254" width="6" height="16" fill="#e1b125"></rect></g><path class="bv__smoke" d="M358 276q-16-22 2-40t-4-44" fill="none" stroke="#c9d1d8" stroke-width="6" stroke-linecap="round"></path></g>'''
-GC='<g class="bv__gang"><g class="bv__coin"><circle cx="436" cy="138" r="20" fill="#e1b125"></circle><circle cx="436" cy="138" r="12" fill="none" stroke="#b98d12" stroke-width="3.5"></circle></g></g>'
+GB='''<g class="bv__gangster"><path d="M152 302L214 296 260 372 306 296 368 302Q398 400 366 516L300 546 260 522 220 546 154 516Q122 400 152 302Z" fill="var(--bv-vest)"></path><path class="bv__detail" d="M176 330V506M202 320V524M228 330V536M292 330V536M318 320V524M344 330V506" fill="none" stroke="#fff" stroke-opacity=".13" stroke-width="2.5"></path><path d="M214 296L260 372 306 296" fill="none" stroke="var(--bv-ink)" stroke-width="6" stroke-linejoin="round"></path><g class="bv__detail" fill="#e9d7b0"><circle cx="260" cy="410" r="5.5"></circle><circle cx="260" cy="450" r="5.5"></circle><circle cx="260" cy="490" r="5.5"></circle></g><path d="M312 446h40" fill="none" stroke="var(--bv-ink)" stroke-width="5" stroke-linecap="round"></path><path class="bv__detail" d="M262 452Q296 492 336 448" fill="none" stroke="#e1b125" stroke-width="4" stroke-linecap="round"></path><path d="M186 286Q260 340 334 286L330 314Q260 366 190 314Z" fill="var(--bv-red)"></path><path d="M250 336l-24 56 32-16 8 24 14-62z" fill="#c22a13"></path></g>'''
+GH='''<g class="bv__gangster"><g transform="rotate(-7 260 90)"><path d="M134 118Q124 62 196 40Q262 20 332 38Q400 58 386 118Q260 98 134 118Z" fill="var(--bv-cap)"></path><path d="M262 30Q214 50 204 106M262 30Q262 70 262 102M262 30Q312 50 318 106" fill="none" stroke="var(--bv-cap2)" stroke-width="3.5" stroke-linecap="round"></path><circle cx="262" cy="31" r="7" fill="var(--bv-cap2)"></circle><path d="M134 118Q260 98 386 118L382 130Q260 112 138 130Z" fill="var(--bv-cap2)"></path><path d="M172 126Q260 110 348 126Q342 152 260 156Q178 152 172 126Z" fill="var(--bv-cap2)"></path><path d="M190 134Q260 122 330 134" fill="none" stroke="var(--bv-cap)" stroke-width="3" stroke-linecap="round" opacity=".7"></path></g><g transform="rotate(16 290 262)"><rect x="286" y="254" width="64" height="16" rx="6" fill="#7a4a1e"></rect><rect x="340" y="254" width="12" height="16" rx="5" fill="var(--bv-red)"></rect><rect x="300" y="254" width="6" height="16" fill="#e1b125"></rect></g><path class="bv__smoke" d="M358 276q-16-22 2-40t-4-44" fill="none" stroke="#c9d1d8" stroke-width="6" stroke-linecap="round"></path></g>'''
+GC='<g class="bv__gangster"><g class="bv__coin"><circle cx="436" cy="138" r="20" fill="#e1b125"></circle><circle cx="436" cy="138" r="12" fill="none" stroke="#b98d12" stroke-width="3.5"></circle></g></g>'
 
 TORSO='M192 236L146 288Q100 298 94 342Q92 384 112 424Q140 472 158 520Q150 580 164 632Q206 672 260 668Q314 672 356 632Q370 580 362 520Q380 472 408 424Q428 384 426 342Q420 298 374 288L328 236Z'
 HIP=(178,600);KNEE=(152,708);ANK=(158,784)
@@ -97,16 +97,16 @@ def full(i):
 <g class="bv__dots" fill="var(--bv-red)"><circle cx="372" cy="92" r="9"></circle><circle cx="402" cy="70" r="11"></circle><circle cx="438" cy="44" r="14"></circle></g>
 <text class="bv__hick" x="352" y="92" fill="var(--bv-red)" font-family="Berlin, sans-serif" font-weight="700" font-size="54">Hick!</text>
 <g class="bv__bubbles" fill="none" stroke="var(--bv-red)" stroke-width="5"><circle cx="150" cy="90" r="9"></circle><circle cx="118" cy="120" r="6"></circle><circle cx="170" cy="130" r="5"></circle></g>
-<text class="bv__pst" x="378" y="250" fill="var(--bv-red)" font-family="Berlin, sans-serif" font-weight="700" font-size="56">Pst!</text>
+<text class="bv__shush" x="378" y="250" fill="var(--bv-red)" font-family="Berlin, sans-serif" font-weight="700" font-size="56">Pst!</text>
 <g class="bv__crumbs" fill="#d9a253"><circle cx="270" cy="286" r="5"></circle><circle cx="292" cy="292" r="4"></circle><circle cx="252" cy="296" r="4"></circle></g>
 <text class="bv__q" x="380" y="84" fill="var(--bv-red)" font-family="Berlin, sans-serif" font-weight="700" font-size="104">?</text>
 <g class="bv__zzz" fill="var(--bv-red)" font-family="Berlin, sans-serif" font-weight="700"><text x="396" y="130" font-size="60">Z</text><text x="446" y="76" font-size="46">z</text><text x="484" y="32" font-size="34">z</text></g>
 </svg>'''%dict(i=i,ml=arm('l',True),mr=arm('r',True),body=body,head=head,al=arm('l'),ar=arm('r'),legs=LEGS)
-def kopf(): return '<svg class="bv__svg" viewBox="96 50 328 284" %ARIA%>'+head+'</svg>'
-def lugen(i):
+def head_only(): return '<svg class="bv__svg" viewBox="96 50 328 284" %ARIA%>'+head+'</svg>'
+def peek(i):
     cl=lambda x:claws([(x-30,214,196,.6),(x-10,218,185,.6),(x+10,218,175,.6),(x+30,214,164,.6)])
     return '''<svg class="bv__svg" viewBox="60 60 400 172" %%ARIA%%><defs><clipPath id="bv-l-%s"><rect x="0" y="-200" width="520" height="406"></rect></clipPath></defs>
-<g clip-path="url(#bv-l-%s)">%s</g><g class="bv__lugpaws"><g %s>%s%s</g><g clip-path="url(#bv-l-%s)"><ellipse cx="134" cy="206" rx="46" ry="32" %s></ellipse><ellipse cx="386" cy="206" rx="46" ry="32" %s></ellipse></g></g></svg>'''%(i,i,head,RED,cl(134),cl(386),i,INK,INK)
+<g clip-path="url(#bv-l-%s)">%s</g><g class="bv__peekpaws"><g %s>%s%s</g><g clip-path="url(#bv-l-%s)"><ellipse cx="134" cy="206" rx="46" ry="32" %s></ellipse><ellipse cx="386" cy="206" rx="46" ry="32" %s></ellipse></g></g></svg>'''%(i,i,head,RED,cl(134),cl(386),i,INK,INK)
 # ---- IK
 L1=math.dist(S,E);L2=math.dist(E,P);a1=math.atan2(E[1]-S[1],E[0]-S[0]);a2=math.atan2(P[1]-E[1],P[0]-E[0])
 def ik(T,key,S_=S):
@@ -126,7 +126,7 @@ css='''.bv{display:block;--bv-ink:#2b333b;--bv-ink2:#3a454f;--bv-nose:#12161a;--
 .bv--dark{--bv-ink:#14181c;--bv-ink2:#252d35;--bv-nose:#000;--bv-disc:#566676;--bv-shadow:rgb(0 0 0 / 35%%)}
 .bv--plain .bv__disc{display:none}
 .bv--dark.bv--plain{--bv-edge:#a9b8c6}
-.bv--dark.bv--plain .bv__all,.bv--dark.bv--kopf .bv__head,.bv--dark.bv--lugen .bv__svg{filter:drop-shadow(1.2px 0 0 var(--bv-edge)) drop-shadow(-1.2px 0 0 var(--bv-edge)) drop-shadow(0 1.2px 0 var(--bv-edge)) drop-shadow(0 -1.2px 0 var(--bv-edge))}
+.bv--dark.bv--plain .bv__all,.bv--dark.bv--head .bv__head,.bv--dark.bv--peek .bv__svg{filter:drop-shadow(1.2px 0 0 var(--bv-edge)) drop-shadow(-1.2px 0 0 var(--bv-edge)) drop-shadow(0 1.2px 0 var(--bv-edge)) drop-shadow(0 -1.2px 0 var(--bv-edge))}
 .bv__svg{display:block;width:100%%;height:auto;overflow:visible}
 .bv__disc{fill:var(--bv-disc)}
 .bv__shadow{fill:var(--bv-shadow);transform-origin:260px 829px}
@@ -136,11 +136,11 @@ css='''.bv{display:block;--bv-ink:#2b333b;--bv-ink2:#3a454f;--bv-nose:#12161a;--
 .bv__head{transform-origin:260px 296px;animation:bv-head 5.3s ease-in-out infinite}
 .bv__arm,.bv__fore{transition:transform .35s cubic-bezier(.3,1.3,.5,1)}
 .bv__head,.bv__eye,.bv__curve,.bv__open,.bv__blep,.bv__pupil{transition:transform .3s ease-out}
-.bv__lid,.bv__smile,.bv__eyes,.bv__sleep,.bv__grr,.bv__thumb,.bv__prop,.bv__gang,.bv__claws,.bv__knuckles{transition:opacity .2s}
+.bv__lid,.bv__smile,.bv__eyes,.bv__sleep,.bv__grr,.bv__thumb,.bv__prop,.bv__gangster,.bv__claws,.bv__knuckles{transition:opacity .2s}
 .bv__pop{transform-origin:260px 824px}
 .bv--sw-a .bv__pop{animation:bv-sw-a .5s cubic-bezier(.3,1.3,.5,1)}
 .bv--sw-b .bv__pop{animation:bv-sw-b .5s cubic-bezier(.3,1.3,.5,1)}
-.bv--auftritt .bv__pop,.bv--abgang .bv__pop{animation:none}
+.bv--enter .bv__pop,.bv--exit .bv__pop{animation:none}
 @keyframes bv-sw-a{0%%{transform:scale(1.05,.93)}45%%{transform:scale(.97,1.05)}100%%{transform:none}}
 @keyframes bv-sw-b{0%%{transform:scale(1.05,.93)}45%%{transform:scale(.97,1.05)}100%%{transform:none}}
 .bv__arm--l{transform-origin:%(sx)spx %(sy)spx;animation:bv-arml 4.6s ease-in-out infinite}
@@ -149,7 +149,7 @@ css='''.bv{display:block;--bv-ink:#2b333b;--bv-ink2:#3a454f;--bv-nose:#12161a;--
 .bv__eye--l{transform-origin:208px 160px}.bv__eye--r{transform-origin:312px 160px}
 .bv__blink,.bv__wide{transform-box:fill-box;transform-origin:center}
 .bv__blink{animation:bv-blink 7s infinite}
-.bv--pennen .bv__blink,.bv--gaehnen .bv__blink,.bv--einnicken .bv__blink,.bv--folgen .bv__glance{animation:none}
+.bv--nap .bv__blink,.bv--yawn .bv__blink,.bv--doze .bv__blink,.bv--follow .bv__glance{animation:none}
 .bv__ear--r{transform-origin:330px 130px;animation:bv-ear 9s ease-in-out infinite}
 .bv__pupil{transition:transform .2s}
 .bv__lid,.bv__smile,.bv__blep{transition:opacity .15s,transform .2s}
@@ -172,76 +172,76 @@ css='''.bv{display:block;--bv-ink:#2b333b;--bv-ink2:#3a454f;--bv-nose:#12161a;--
 @keyframes bv-look{0%%,100%%{transform:translateX(-7px)}50%%{transform:translateX(7px)}}
 @keyframes bv-shadow{0%%,100%%{transform:scaleX(1)}50%%{transform:scaleX(.82)}}
 
-/* winken */
-'''+pose('.bv--winken','hang',None)+'''.bv--winken .bv__arm--r{animation:bv-wave .6s ease-in-out infinite}
-.bv--winken .bv__head{animation:bv-tilt 1.2s ease-in-out infinite}
-.bv--winken .bv__lid{opacity:0}
-.bv--winken .bv__blep{transform:scaleY(1)}
+/* wave */
+'''+pose('.bv--wave','hang',None)+'''.bv--wave .bv__arm--r{animation:bv-wave .6s ease-in-out infinite}
+.bv--wave .bv__head{animation:bv-tilt 1.2s ease-in-out infinite}
+.bv--wave .bv__lid{opacity:0}
+.bv--wave .bv__blep{transform:scaleY(1)}
 @keyframes bv-wave{0%%,100%%{transform:rotate(-10deg)}50%%{transform:rotate(16deg)}}
 @keyframes bv-tilt{0%%,100%%{transform:rotate(4deg)}50%%{transform:rotate(8deg)}}
 
-/* schnauze */
-.bv--schnauze .bv__smile,.bv--schnauze .bv__lid{opacity:0}
-.bv--schnauze .bv__grr{opacity:1}
-.bv--schnauze .bv__open{transform:scaleY(1.35);animation:bv-jaw .2s ease-in-out infinite alternate}
-.bv--schnauze .bv__eye{animation:none}
-.bv--schnauze .bv__tongue{animation:bv-flap .16s ease-in-out infinite alternate}
-.bv--schnauze .bv__head{animation:bv-roar .12s linear infinite alternate}
-.bv--schnauze .bv__arm--l{animation:bv-clawl .24s ease-in-out infinite alternate}
-.bv--schnauze .bv__arm--r{animation:bv-clawr .24s ease-in-out infinite alternate}
-.bv--schnauze .bv__shout{opacity:1;animation:bv-shout .3s steps(2) infinite}
+/* roar */
+.bv--roar .bv__smile,.bv--roar .bv__lid{opacity:0}
+.bv--roar .bv__grr{opacity:1}
+.bv--roar .bv__open{transform:scaleY(1.35);animation:bv-jaw .2s ease-in-out infinite alternate}
+.bv--roar .bv__eye{animation:none}
+.bv--roar .bv__tongue{animation:bv-flap .16s ease-in-out infinite alternate}
+.bv--roar .bv__head{animation:bv-roar .12s linear infinite alternate}
+.bv--roar .bv__arm--l{animation:bv-clawl .24s ease-in-out infinite alternate}
+.bv--roar .bv__arm--r{animation:bv-clawr .24s ease-in-out infinite alternate}
+.bv--roar .bv__shout{opacity:1;animation:bv-shout .3s steps(2) infinite}
 @keyframes bv-jaw{from{transform:scaleY(1.25)}to{transform:scaleY(1.45)}}
 @keyframes bv-roar{from{transform:translate(-2px,-6px) scale(1.06)}to{transform:translate(2px,-6px) scale(1.06)}}
 @keyframes bv-clawl{from{transform:rotate(10deg)}to{transform:rotate(16deg)}}
 @keyframes bv-clawr{from{transform:rotate(-10deg)}to{transform:rotate(-16deg)}}
 
-/* tanzen */
-.bv--tanzen .bv__all{animation:bv-dance 1s ease-in-out infinite}
-.bv--tanzen .bv__arm--l{animation:bv-dl 1s ease-in-out infinite}
-.bv--tanzen .bv__arm--r{animation:bv-dr 1s ease-in-out infinite}
-.bv--tanzen .bv__head{animation:bv-dh 1s ease-in-out infinite}
-.bv--tanzen .bv__shadow{animation:bv-shadow .5s ease-in-out infinite}
-.bv--tanzen .bv__lid{opacity:0}
-.bv--tanzen .bv__curve{transform:scaleY(1.6)}
-.bv--tanzen .bv__blep{transform:scaleY(1)}
-.bv--tanzen .bv__eye{animation:none;transform:scaleY(.55)}
-.bv--tanzen .bv__tongue{animation:bv-flap .25s ease-in-out infinite alternate}
+/* dance */
+.bv--dance .bv__all{animation:bv-dance 1s ease-in-out infinite}
+.bv--dance .bv__arm--l{animation:bv-dl 1s ease-in-out infinite}
+.bv--dance .bv__arm--r{animation:bv-dr 1s ease-in-out infinite}
+.bv--dance .bv__head{animation:bv-dh 1s ease-in-out infinite}
+.bv--dance .bv__shadow{animation:bv-shadow .5s ease-in-out infinite}
+.bv--dance .bv__lid{opacity:0}
+.bv--dance .bv__curve{transform:scaleY(1.6)}
+.bv--dance .bv__blep{transform:scaleY(1)}
+.bv--dance .bv__eye{animation:none;transform:scaleY(.55)}
+.bv--dance .bv__tongue{animation:bv-flap .25s ease-in-out infinite alternate}
 @keyframes bv-dance{0%%,100%%{transform:rotate(-5deg)}25%%,75%%{transform:rotate(0)}50%%{transform:rotate(5deg)}}
 @keyframes bv-dl{0%%,100%%{transform:rotate(-40deg)}50%%{transform:rotate(14deg)}}
 @keyframes bv-dr{0%%,100%%{transform:rotate(-14deg)}50%%{transform:rotate(40deg)}}
 @keyframes bv-dh{0%%,100%%{transform:rotate(6deg)}50%%{transform:rotate(-6deg)}}
 
-/* kieken */
-'''+pose('.bv--kieken','visor','hip').replace('transform:rotate(%sdeg)}.bv--kieken .bv__fore--l'%IK['visor'][0],'transform:translate(0,-34px) rotate(%sdeg)}.bv--kieken .bv__fore--l'%IK['visor'][0])+'''.bv--kieken .bv__head{animation:bv-peer 4s ease-in-out infinite}
-.bv--kieken .bv__pupil{animation:bv-look 4s ease-in-out infinite}
-.bv--kieken .bv__eye{animation:none}
-.bv--kieken .bv__lid{opacity:0}
-.bv--kieken .bv__curve{transform:scaleY(.2)}
+/* look */
+'''+pose('.bv--look','visor','hip').replace('transform:rotate(%sdeg)}.bv--look .bv__fore--l'%IK['visor'][0],'transform:translate(0,-34px) rotate(%sdeg)}.bv--look .bv__fore--l'%IK['visor'][0])+'''.bv--look .bv__head{animation:bv-peer 4s ease-in-out infinite}
+.bv--look .bv__pupil{animation:bv-look 4s ease-in-out infinite}
+.bv--look .bv__eye{animation:none}
+.bv--look .bv__lid{opacity:0}
+.bv--look .bv__curve{transform:scaleY(.2)}
 @keyframes bv-peer{0%%,100%%{transform:translate(-8px,6px) rotate(-5deg)}50%%{transform:translate(8px,6px) rotate(5deg)}}
 
-/* nüscht */
-'''+pose('.bv--nuescht','shrug','shrug')+'''.bv--nuescht .bv__head{animation:bv-shrug 2.4s ease-in-out infinite}
-.bv--nuescht .bv__arm--l{animation:bv-shl 2.4s ease-in-out infinite}
-.bv--nuescht .bv__arm--r{animation:bv-shr 2.4s ease-in-out infinite}
-.bv--nuescht .bv__pupil{transform:translate(0,-5px)}
-.bv--nuescht .bv__lid{opacity:0}
-.bv--nuescht .bv__curve{transform:scaleY(-.5)}
-.bv--nuescht .bv__q{opacity:1;animation:bv-q 2.4s ease-in-out infinite}
+/* blank */
+'''+pose('.bv--blank','shrug','shrug')+'''.bv--blank .bv__head{animation:bv-shrug 2.4s ease-in-out infinite}
+.bv--blank .bv__arm--l{animation:bv-shl 2.4s ease-in-out infinite}
+.bv--blank .bv__arm--r{animation:bv-shr 2.4s ease-in-out infinite}
+.bv--blank .bv__pupil{transform:translate(0,-5px)}
+.bv--blank .bv__lid{opacity:0}
+.bv--blank .bv__curve{transform:scaleY(-.5)}
+.bv--blank .bv__q{opacity:1;animation:bv-q 2.4s ease-in-out infinite}
 @keyframes bv-shrug{0%%,100%%{transform:translateY(8px) rotate(7deg)}50%%{transform:translateY(16px) rotate(9deg)}}
 @keyframes bv-shl{0%%,100%%{transform:rotate(%(shl)sdeg)}50%%{transform:translateY(-12px) rotate(%(shl)sdeg)}}
 @keyframes bv-shr{0%%,100%%{transform:rotate(%(shr)sdeg)}50%%{transform:translateY(-12px) rotate(%(shr)sdeg)}}
 @keyframes bv-q{0%%,100%%{transform:translateY(0) rotate(8deg)}50%%{transform:translateY(-10px) rotate(14deg)}}
 
-/* jubeln */
-.bv--jubeln .bv__all{animation:bv-jump .6s cubic-bezier(.3,0,.4,1) infinite alternate}
-.bv--jubeln .bv__arm--l{animation:bv-jl .3s ease-in-out infinite alternate}
-.bv--jubeln .bv__arm--r{animation:bv-jr .3s ease-in-out infinite alternate}
-.bv--jubeln .bv__smile,.bv--jubeln .bv__lid{opacity:0}
-.bv--jubeln .bv__open{transform:scaleY(1.2)}
-.bv--jubeln .bv__tongue{animation:bv-flap .2s ease-in-out infinite alternate}
-.bv--jubeln .bv__shadow{animation:bv-jshadow .6s cubic-bezier(.3,0,.4,1) infinite alternate}
-.bv--jubeln .bv__shout{opacity:1;animation:bv-shout .3s steps(2) infinite}
-.bv--jubeln .bv__head{animation:bv-jhead .6s ease-in-out infinite alternate}
+/* cheer */
+.bv--cheer .bv__all{animation:bv-jump .6s cubic-bezier(.3,0,.4,1) infinite alternate}
+.bv--cheer .bv__arm--l{animation:bv-jl .3s ease-in-out infinite alternate}
+.bv--cheer .bv__arm--r{animation:bv-jr .3s ease-in-out infinite alternate}
+.bv--cheer .bv__smile,.bv--cheer .bv__lid{opacity:0}
+.bv--cheer .bv__open{transform:scaleY(1.2)}
+.bv--cheer .bv__tongue{animation:bv-flap .2s ease-in-out infinite alternate}
+.bv--cheer .bv__shadow{animation:bv-jshadow .6s cubic-bezier(.3,0,.4,1) infinite alternate}
+.bv--cheer .bv__shout{opacity:1;animation:bv-shout .3s steps(2) infinite}
+.bv--cheer .bv__head{animation:bv-jhead .6s ease-in-out infinite alternate}
 @keyframes bv-jump{from{transform:translateY(0)}to{transform:translateY(-80px)}}
 @keyframes bv-jl{from{transform:rotate(-16deg)}to{transform:rotate(4deg)}}
 @keyframes bv-jr{from{transform:rotate(16deg)}to{transform:rotate(-4deg)}}
@@ -257,148 +257,148 @@ css='''.bv{display:block;--bv-ink:#2b333b;--bv-ink2:#3a454f;--bv-nose:#12161a;--
 @keyframes bv-fp{0%%,100%%{transform:translateY(10px) rotate(-4deg)}50%%{transform:translateY(14px) rotate(-7deg)}}
 @keyframes bv-fpa{0%%,100%%{transform:translateY(8px) rotate(%(fpa)sdeg)}50%%{transform:translateY(12px) rotate(%(fpa)sdeg)}}
 
-/* pennen */
-'''+pose('.bv--pennen','hang','hang')+'''.bv--pennen .bv__eyes,.bv--pennen .bv__lid{opacity:0}
-.bv--pennen .bv__sleep{opacity:1}
-.bv--pennen .bv__curve{transform:scaleY(.25)}
-.bv--pennen .bv__blep{transform:scaleY(.8)}
-.bv--pennen .bv__head{animation:bv-snooze 5s ease-in-out infinite}
-.bv--pennen .bv__all{animation:bv-snoozebody 5s ease-in-out infinite}
-.bv--pennen .bv__body{animation-duration:5s}
-.bv--pennen .bv__ear--r{animation:none}
-.bv--pennen .bv__zzz{opacity:1}
-.bv--pennen .bv__zzz text{animation:bv-zzz 3s ease-in-out infinite}
-.bv--pennen .bv__zzz text:nth-child(2){animation-delay:.6s}
-.bv--pennen .bv__zzz text:nth-child(3){animation-delay:1.2s}
+/* nap */
+'''+pose('.bv--nap','hang','hang')+'''.bv--nap .bv__eyes,.bv--nap .bv__lid{opacity:0}
+.bv--nap .bv__sleep{opacity:1}
+.bv--nap .bv__curve{transform:scaleY(.25)}
+.bv--nap .bv__blep{transform:scaleY(.8)}
+.bv--nap .bv__head{animation:bv-snooze 5s ease-in-out infinite}
+.bv--nap .bv__all{animation:bv-snoozebody 5s ease-in-out infinite}
+.bv--nap .bv__body{animation-duration:5s}
+.bv--nap .bv__ear--r{animation:none}
+.bv--nap .bv__zzz{opacity:1}
+.bv--nap .bv__zzz text{animation:bv-zzz 3s ease-in-out infinite}
+.bv--nap .bv__zzz text:nth-child(2){animation-delay:.6s}
+.bv--nap .bv__zzz text:nth-child(3){animation-delay:1.2s}
 @keyframes bv-snooze{0%%,100%%{transform:translateY(12px) rotate(9deg)}50%%{transform:translateY(20px) rotate(13deg)}}
 @keyframes bv-snoozebody{0%%,100%%{transform:rotate(1deg)}50%%{transform:rotate(2.5deg)}}
 @keyframes bv-zzz{0%%{opacity:0;transform:translate(-10px,14px)}30%%,70%%{opacity:1}100%%{opacity:0;transform:translate(14px,-22px)}}
 
-/* umsehen im Leerlauf */
+/* looking around while idle */
 .bv__glance{animation:bv-glance 9s ease-in-out infinite}
-.bv--schnauze .bv__glance,.bv--schreck .bv__glance,.bv--nee .bv__glance,.bv--kieken .bv__glance,.bv--auftritt .bv__glance{animation:none}
+.bv--roar .bv__glance,.bv--scare .bv__glance,.bv--shake .bv__glance,.bv--look .bv__glance,.bv--enter .bv__glance{animation:none}
 @keyframes bv-glance{0%%,28%%,40%%,58%%,70%%,100%%{transform:translateX(0)}31%%,37%%{transform:translateX(-6px)}61%%,67%%{transform:translateX(6px)}}
 .bv__waves{opacity:0}
 
-/* auftritt (läuft einmal) */
-.bv--auftritt .bv__all{animation:bv-enter .9s cubic-bezier(.2,.8,.3,1) both}
-.bv--auftritt .bv__shadow{animation:bv-entershadow .9s ease-out both}
-.bv--auftritt .bv__arm--l{animation:bv-enterl .9s cubic-bezier(.3,1.4,.5,1) both}
-.bv--auftritt .bv__arm--r{animation:bv-enterr .9s cubic-bezier(.3,1.4,.5,1) both}
-.bv--auftritt .bv__head{animation:bv-enterhead .9s ease-out both}
-.bv--auftritt .bv__lid{opacity:0}
+/* enter (runs once) */
+.bv--enter .bv__all{animation:bv-enter .9s cubic-bezier(.2,.8,.3,1) both}
+.bv--enter .bv__shadow{animation:bv-entershadow .9s ease-out both}
+.bv--enter .bv__arm--l{animation:bv-enterl .9s cubic-bezier(.3,1.4,.5,1) both}
+.bv--enter .bv__arm--r{animation:bv-enterr .9s cubic-bezier(.3,1.4,.5,1) both}
+.bv--enter .bv__head{animation:bv-enterhead .9s ease-out both}
+.bv--enter .bv__lid{opacity:0}
 @keyframes bv-enter{0%%{transform:translateY(300px) scale(.86,.6);opacity:0}25%%{opacity:1}58%%{transform:translateY(-34px) scale(.98,1.04)}76%%,100%%{transform:none}}
 @keyframes bv-entershadow{0%%{transform:scaleX(.3);opacity:0}60%%{transform:scaleX(.8);opacity:1}100%%{transform:none}}
 @keyframes bv-enterl{0%%,35%%{transform:rotate(-70deg)}75%%{transform:rotate(8deg)}100%%{transform:rotate(0)}}
 @keyframes bv-enterr{0%%,35%%{transform:rotate(70deg)}75%%{transform:rotate(-8deg)}100%%{transform:rotate(0)}}
 @keyframes bv-enterhead{0%%,40%%{transform:translateY(16px)}70%%{transform:translateY(-8px)}100%%{transform:none}}
 
-/* nicken */
-'''+pose('.bv--nicken','hang','hang')+'''.bv--nicken .bv__head{animation:bv-nod 2.2s ease-in-out infinite}
-.bv--nicken .bv__lid{opacity:0}
+/* nod */
+'''+pose('.bv--nod','hang','hang')+'''.bv--nod .bv__head{animation:bv-nod 2.2s ease-in-out infinite}
+.bv--nod .bv__lid{opacity:0}
 @keyframes bv-nod{0%%,50%%,100%%{transform:translateY(0) scaleY(1)}12%%,36%%{transform:translateY(16px) scaleY(.95)}24%%{transform:translateY(-2px) scaleY(1)}}
 
-/* nee (kopfschütteln) */
-'''+pose('.bv--nee','hang','hang')+'''.bv--nee .bv__head{animation:bv-nee 2.2s ease-in-out infinite}
-.bv--nee .bv__eyes{animation:bv-neeeyes 2.2s ease-in-out infinite}
-.bv--nee .bv__curve{transform:scaleY(-.5)}
-@keyframes bv-nee{0%%,55%%,100%%{transform:translateX(0) rotate(0)}10%%,34%%{transform:translateX(-14px) rotate(-4deg)}22%%,46%%{transform:translateX(14px) rotate(4deg)}}
-@keyframes bv-neeeyes{0%%,55%%,100%%{transform:translateX(0)}10%%,34%%{transform:translateX(-8px)}22%%,46%%{transform:translateX(8px)}}
+/* shake (head shake) */
+'''+pose('.bv--shake','hang','hang')+'''.bv--shake .bv__head{animation:bv-shake 2.2s ease-in-out infinite}
+.bv--shake .bv__eyes{animation:bv-shakeeyes 2.2s ease-in-out infinite}
+.bv--shake .bv__curve{transform:scaleY(-.5)}
+@keyframes bv-shake{0%%,55%%,100%%{transform:translateX(0) rotate(0)}10%%,34%%{transform:translateX(-14px) rotate(-4deg)}22%%,46%%{transform:translateX(14px) rotate(4deg)}}
+@keyframes bv-shakeeyes{0%%,55%%,100%%{transform:translateX(0)}10%%,34%%{transform:translateX(-8px)}22%%,46%%{transform:translateX(8px)}}
 
-/* zeigen */
-'''+pose('.bv--zeigen','hang','point')+'''.bv--zeigen .bv__arm--r{animation:bv-point 1.2s ease-in-out infinite}
-.bv--zeigen .bv__head{animation:bv-pointhead 1.2s ease-in-out infinite}
-.bv--zeigen .bv__pupil{transform:translateX(7px)}
-.bv--zeigen .bv__lid{opacity:0}
+/* point */
+'''+pose('.bv--point','hang','point')+'''.bv--point .bv__arm--r{animation:bv-point 1.2s ease-in-out infinite}
+.bv--point .bv__head{animation:bv-pointhead 1.2s ease-in-out infinite}
+.bv--point .bv__pupil{transform:translateX(7px)}
+.bv--point .bv__lid{opacity:0}
 @keyframes bv-point{0%%,100%%{transform:rotate(%(ptr)sdeg)}50%%{transform:translateX(14px) rotate(%(ptr)sdeg)}}
 @keyframes bv-pointhead{0%%,100%%{transform:translateX(8px) rotate(5deg)}50%%{transform:translateX(12px) rotate(7deg)}}
 
-/* lauschen */
-'''+pose('.bv--lauschen','ear','hang')+'''.bv--lauschen .bv__head{animation:bv-listen 3s ease-in-out infinite}
-.bv--lauschen .bv__ear--l{transform-origin:176px 126px;animation:bv-twitch .5s ease-in-out infinite}
-.bv--lauschen .bv__ear--r{animation:none}
-.bv--lauschen .bv__pupil{transform:translateX(-7px)}
-.bv--lauschen .bv__lid{opacity:0}
-.bv--lauschen .bv__curve{transform:scaleY(.3)}
-.bv--lauschen .bv__waves{opacity:1}
-.bv--lauschen .bv__waves path{animation:bv-wave3 1.2s ease-out infinite}
-.bv--lauschen .bv__waves path:nth-child(2){animation-delay:.2s}
-.bv--lauschen .bv__waves path:nth-child(3){animation-delay:.4s}
+/* listen */
+'''+pose('.bv--listen','ear','hang')+'''.bv--listen .bv__head{animation:bv-listen 3s ease-in-out infinite}
+.bv--listen .bv__ear--l{transform-origin:176px 126px;animation:bv-twitch .5s ease-in-out infinite}
+.bv--listen .bv__ear--r{animation:none}
+.bv--listen .bv__pupil{transform:translateX(-7px)}
+.bv--listen .bv__lid{opacity:0}
+.bv--listen .bv__curve{transform:scaleY(.3)}
+.bv--listen .bv__waves{opacity:1}
+.bv--listen .bv__waves path{animation:bv-wave3 1.2s ease-out infinite}
+.bv--listen .bv__waves path:nth-child(2){animation-delay:.2s}
+.bv--listen .bv__waves path:nth-child(3){animation-delay:.4s}
 @keyframes bv-listen{0%%,100%%{transform:rotate(-8deg)}50%%{transform:rotate(-11deg)}}
 @keyframes bv-twitch{0%%,100%%{transform:rotate(0)}50%%{transform:rotate(-10deg)}}
 @keyframes bv-wave3{0%%{opacity:0}30%%{opacity:1}100%%{opacity:0}}
 
-/* --- Requisiten und Zeichen --- */
-.bv__prop,.bv__thumb,.bv__blush,.bv__bang,.bv__dots,.bv__hick,.bv__bubbles,.bv__pst,.bv__crumbs{opacity:0}
-.bv__bang{transform-origin:392px 60px}.bv__hick{transform-origin:400px 80px}.bv__pst{transform-origin:420px 236px}
+/* --- props and signs --- */
+.bv__prop,.bv__thumb,.bv__blush,.bv__bang,.bv__dots,.bv__hick,.bv__bubbles,.bv__shush,.bv__crumbs{opacity:0}
+.bv__bang{transform-origin:392px 60px}.bv__hick{transform-origin:400px 80px}.bv__shush{transform-origin:420px 236px}
 
-/* abgang (läuft einmal) */
-.bv--abgang .bv__all{animation:bv-exit 2s ease-in both}
-.bv--abgang .bv__shadow{animation:bv-exitshadow 2s ease-in both}
-.bv--abgang .bv__arm--r{animation:bv-wave .3s ease-in-out 4}
-.bv--abgang .bv__head{animation:bv-exithead 2s ease-in-out both}
-.bv--abgang .bv__lid{opacity:0}
-.bv--abgang .bv__blep{transform:scaleY(1)}
+/* exit (runs once) */
+.bv--exit .bv__all{animation:bv-exit 2s ease-in both}
+.bv--exit .bv__shadow{animation:bv-exitshadow 2s ease-in both}
+.bv--exit .bv__arm--r{animation:bv-wave .3s ease-in-out 4}
+.bv--exit .bv__head{animation:bv-exithead 2s ease-in-out both}
+.bv--exit .bv__lid{opacity:0}
+.bv--exit .bv__blep{transform:scaleY(1)}
 @keyframes bv-exithead{0%%{transform:none}20%%,55%%{transform:rotate(7deg)}100%%{transform:rotate(-4deg)}}
 @keyframes bv-exit{0%%,55%%{transform:none;opacity:1}68%%{transform:none}76%%{transform:translateY(-30px) scale(.98,1.05)}92%%{opacity:1}100%%{transform:translateY(360px) scale(.9,.6);opacity:0}}
 @keyframes bv-exitshadow{0%%,70%%{transform:none;opacity:1}100%%{transform:scaleX(.3);opacity:0}}
 
-/* anlauf: einatmen vor dem brüllen */
-.bv--schnauze .bv__body{animation:bv-roarin .45s ease-out}
+/* run-up: breathing in before the roar */
+.bv--roar .bv__body{animation:bv-roarin .45s ease-out}
 @keyframes bv-roarin{0%%{transform:scale(1)}35%%{transform:scale(1.05,.95)}70%%{transform:scale(.97,1.05)}100%%{transform:scale(1)}}
 
-/* daumen hoch */
-'''+pose('.bv--daumen','hip','thumb')+'''.bv--daumen .bv__thumb{opacity:1}
-.bv--daumen .bv__arm--r{animation:bv-thumb 1.4s ease-in-out infinite}
-.bv--daumen .bv__lid{opacity:0}
-.bv--daumen .bv__curve{transform:scaleY(1.5)}
-.bv--daumen .bv__eye--r{animation:bv-wink 2.8s ease-in-out infinite}
-.bv--daumen .bv__pupil{animation:none}
-.bv--daumen .bv__head{animation:bv-tilt 1.4s ease-in-out infinite}
+/* thumbs up */
+'''+pose('.bv--thumbs-up','hip','thumb')+'''.bv--thumbs-up .bv__thumb{opacity:1}
+.bv--thumbs-up .bv__arm--r{animation:bv-thumb 1.4s ease-in-out infinite}
+.bv--thumbs-up .bv__lid{opacity:0}
+.bv--thumbs-up .bv__curve{transform:scaleY(1.5)}
+.bv--thumbs-up .bv__eye--r{animation:bv-wink 2.8s ease-in-out infinite}
+.bv--thumbs-up .bv__pupil{animation:none}
+.bv--thumbs-up .bv__head{animation:bv-tilt 1.4s ease-in-out infinite}
 @keyframes bv-thumb{0%%,100%%{transform:rotate(%(thr)sdeg)}50%%{transform:translateY(-12px) rotate(%(thr)sdeg)}}
 @keyframes bv-wink{0%%,40%%,60%%,100%%{transform:scaleY(1)}45%%,55%%{transform:scaleY(.1)}}
 
-/* denken */
-'''+pose('.bv--denken','hip','chin')+'''.bv--denken .bv__head{animation:bv-think 3s ease-in-out infinite}
-.bv--denken .bv__pupil{animation:none;transform:translate(4px,-6px)}
-.bv--denken .bv__lid{opacity:0}
-.bv--denken .bv__curve{transform:scaleY(.15)}
-.bv--denken .bv__dots{opacity:1}
-.bv--denken .bv__dots circle{animation:bv-wave3 1.5s ease-in-out infinite}
-.bv--denken .bv__dots circle:nth-child(2){animation-delay:.25s}
-.bv--denken .bv__dots circle:nth-child(3){animation-delay:.5s}
+/* think */
+'''+pose('.bv--think','hip','chin')+'''.bv--think .bv__head{animation:bv-think 3s ease-in-out infinite}
+.bv--think .bv__pupil{animation:none;transform:translate(4px,-6px)}
+.bv--think .bv__lid{opacity:0}
+.bv--think .bv__curve{transform:scaleY(.15)}
+.bv--think .bv__dots{opacity:1}
+.bv--think .bv__dots circle{animation:bv-wave3 1.5s ease-in-out infinite}
+.bv--think .bv__dots circle:nth-child(2){animation-delay:.25s}
+.bv--think .bv__dots circle:nth-child(3){animation-delay:.5s}
 @keyframes bv-think{0%%,100%%{transform:rotate(4deg)}50%%{transform:rotate(7deg) translateY(-3px)}}
 
-/* erschrecken */
-.bv--schreck .bv__all{animation:bv-scare 2s ease-out infinite}
-.bv--schreck .bv__arm--l{animation:none;transform:rotate(-26deg)}
-.bv--schreck .bv__arm--r{animation:none;transform:rotate(26deg)}
-.bv--schreck .bv__eye{animation:none;transform:scale(1.4)}
-.bv--schreck .bv__pupil{animation:none;transform:scale(.6);transform-box:fill-box;transform-origin:center}
-.bv--schreck .bv__lid,.bv--schreck .bv__smile{opacity:0}
-.bv--schreck .bv__open{transform:scale(.55,.75)}
-.bv--schreck .bv__tongue{opacity:0}
-.bv--schreck .bv__bang{opacity:1;animation:bv-pop 2s ease-out infinite}
+/* scare */
+.bv--scare .bv__all{animation:bv-scare 2s ease-out infinite}
+.bv--scare .bv__arm--l{animation:none;transform:rotate(-26deg)}
+.bv--scare .bv__arm--r{animation:none;transform:rotate(26deg)}
+.bv--scare .bv__eye{animation:none;transform:scale(1.4)}
+.bv--scare .bv__pupil{animation:none;transform:scale(.6);transform-box:fill-box;transform-origin:center}
+.bv--scare .bv__lid,.bv--scare .bv__smile{opacity:0}
+.bv--scare .bv__open{transform:scale(.55,.75)}
+.bv--scare .bv__tongue{opacity:0}
+.bv--scare .bv__bang{opacity:1;animation:bv-pop 2s ease-out infinite}
 @keyframes bv-scare{0%%{transform:none}7%%{transform:translateY(-48px) scale(.96,1.06)}16%%{transform:none}22%%,34%%,46%%,58%%{transform:translateX(-3px)}28%%,40%%,52%%,64%%{transform:translateX(3px)}70%%,100%%{transform:none}}
 @keyframes bv-pop{0%%{transform:scale(0)}8%%{transform:scale(1.3)}16%%,70%%{transform:scale(1);opacity:1}100%%{transform:scale(1);opacity:0}}
 
-/* kratzen */
-'''+pose('.bv--kratzen','belly','hang')+'''.bv--kratzen .bv__arm--l{animation:bv-scratch .28s ease-in-out infinite alternate}
-.bv--kratzen .bv__head{animation:bv-tilt 2.4s ease-in-out infinite}
-.bv--kratzen .bv__blep{transform:scaleY(1)}
-.bv--kratzen .bv__lid{transform:translateY(5px)}
+/* scratch */
+'''+pose('.bv--scratch','belly','hang')+'''.bv--scratch .bv__arm--l{animation:bv-scratch .28s ease-in-out infinite alternate}
+.bv--scratch .bv__head{animation:bv-tilt 2.4s ease-in-out infinite}
+.bv--scratch .bv__blep{transform:scaleY(1)}
+.bv--scratch .bv__lid{transform:translateY(5px)}
 @keyframes bv-scratch{from{transform:rotate(%(bel)sdeg)}to{transform:rotate(calc(%(bel)sdeg + 7deg))}}
 
-/* gähnen und strecken */
-.bv--gaehnen .bv__head{animation:bv-yawnhead 4s ease-in-out infinite}
-.bv--gaehnen .bv__yawn{animation:bv-yawn 4s ease-in-out infinite}
-.bv--gaehnen .bv__smile{animation:bv-yawnsmile 4s ease-in-out infinite}
-.bv--gaehnen .bv__eye{animation:bv-yawneye 4s ease-in-out infinite}
-.bv--gaehnen .bv__lid{opacity:0}
-.bv--gaehnen .bv__arm--l{animation:bv-stretchl 4s ease-in-out infinite}
-.bv--gaehnen .bv__arm--r{animation:bv-stretchr 4s ease-in-out infinite}
-.bv--gaehnen .bv__body{animation:bv-stretchbody 4s ease-in-out infinite}
-.bv--gaehnen .bv__tongue{animation:none}
+/* yawn and stretch */
+.bv--yawn .bv__head{animation:bv-yawnhead 4s ease-in-out infinite}
+.bv--yawn .bv__yawn{animation:bv-yawn 4s ease-in-out infinite}
+.bv--yawn .bv__smile{animation:bv-yawnsmile 4s ease-in-out infinite}
+.bv--yawn .bv__eye{animation:bv-yawneye 4s ease-in-out infinite}
+.bv--yawn .bv__lid{opacity:0}
+.bv--yawn .bv__arm--l{animation:bv-stretchl 4s ease-in-out infinite}
+.bv--yawn .bv__arm--r{animation:bv-stretchr 4s ease-in-out infinite}
+.bv--yawn .bv__body{animation:bv-stretchbody 4s ease-in-out infinite}
+.bv--yawn .bv__tongue{animation:none}
 @keyframes bv-yawnhead{0%%,20%%,80%%,100%%{transform:none}40%%,60%%{transform:translateY(-10px) rotate(-5deg) scale(1.04)}}
 @keyframes bv-yawn{0%%,22%%,78%%,100%%{transform:scaleY(0)}40%%,60%%{transform:scaleY(1.5)}}
 @keyframes bv-yawnsmile{0%%,22%%,78%%,100%%{opacity:1}30%%,70%%{opacity:0}}
@@ -407,155 +407,155 @@ css='''.bv{display:block;--bv-ink:#2b333b;--bv-ink2:#3a454f;--bv-nose:#12161a;--
 @keyframes bv-stretchr{0%%,20%%,80%%,100%%{transform:rotate(0)}40%%,60%%{transform:rotate(20deg) translateY(-8px)}}
 @keyframes bv-stretchbody{0%%,20%%,80%%,100%%{transform:scale(1)}40%%,60%%{transform:scale(.98,1.04)}}
 
-/* einnicken und aufschrecken */
-'''+pose('.bv--einnicken','hang','hang')+'''.bv--einnicken .bv__head{animation:bv-doze 5s ease-in infinite}
-.bv--einnicken .bv__eye{animation:bv-dozeeye 5s ease-in infinite}
-.bv--einnicken .bv__pupil{animation:none}
+/* doze off and startle awake */
+'''+pose('.bv--doze','hang','hang')+'''.bv--doze .bv__head{animation:bv-doze 5s ease-in infinite}
+.bv--doze .bv__eye{animation:bv-dozeeye 5s ease-in infinite}
+.bv--doze .bv__pupil{animation:none}
 @keyframes bv-doze{0%%{transform:none}58%%{transform:translateY(24px) rotate(9deg)}64%%{transform:translateY(-10px) rotate(-3deg)}74%%,100%%{transform:none}}
 @keyframes bv-dozeeye{0%%{transform:scaleY(1)}30%%{transform:scaleY(.5)}55%%,60%%{transform:scaleY(.08)}64%%,70%%{transform:scaleY(1.35)}80%%,100%%{transform:scaleY(1)}}
 
-/* futtern */
-'''+pose('.bv--futtern','hang','mouth')+'''.bv--futtern .bv__prop--schrippe{opacity:1}
-.bv--futtern .bv__arm--r{animation:bv-bite 1.6s ease-in-out infinite}
-.bv--futtern .bv__curve{animation:bv-chew .22s ease-in-out infinite alternate}
-.bv--futtern .bv__head{animation:bv-chewhead .44s ease-in-out infinite}
-.bv--futtern .bv__lid{opacity:0}
-.bv--futtern .bv__crumbs{opacity:1}
-.bv--futtern .bv__crumbs circle{animation:bv-crumb 1.6s ease-in infinite}
-.bv--futtern .bv__crumbs circle:nth-child(2){animation-delay:.5s}
-.bv--futtern .bv__crumbs circle:nth-child(3){animation-delay:.9s}
+/* eat */
+'''+pose('.bv--eat','hang','mouth')+'''.bv--eat .bv__prop--roll{opacity:1}
+.bv--eat .bv__arm--r{animation:bv-bite 1.6s ease-in-out infinite}
+.bv--eat .bv__curve{animation:bv-chew .22s ease-in-out infinite alternate}
+.bv--eat .bv__head{animation:bv-chewhead .44s ease-in-out infinite}
+.bv--eat .bv__lid{opacity:0}
+.bv--eat .bv__crumbs{opacity:1}
+.bv--eat .bv__crumbs circle{animation:bv-crumb 1.6s ease-in infinite}
+.bv--eat .bv__crumbs circle:nth-child(2){animation-delay:.5s}
+.bv--eat .bv__crumbs circle:nth-child(3){animation-delay:.9s}
 @keyframes bv-bite{0%%,60%%,100%%{transform:translateY(16px) rotate(%(mth)sdeg)}75%%,85%%{transform:translateY(-8px) rotate(%(mth)sdeg)}}
 @keyframes bv-chew{from{transform:scaleY(1)}to{transform:scaleY(.2)}}
 @keyframes bv-chewhead{0%%,100%%{transform:translateY(0)}50%%{transform:translateY(3px)}}
 @keyframes bv-crumb{0%%{transform:translate(0,0);opacity:0}15%%{opacity:1}100%%{transform:translate(8px,110px);opacity:0}}
 
-/* abwinken */
-'''+pose('.bv--abwinken','hang',None)+'''.bv--abwinken .bv__arm--r{animation:none;transform:rotate(24deg)}
-.bv--abwinken .bv__fore--r{animation:bv-flick 1.5s ease-in-out infinite}
-.bv--abwinken .bv__head{animation:none;transform:translateX(-8px) rotate(-7deg)}
-.bv--abwinken .bv__pupil{animation:none;transform:translateX(-6px)}
-.bv--abwinken .bv__lid{transform:translateY(5px)}
-.bv--abwinken .bv__curve{transform:scaleY(-.35)}
+/* dismiss */
+'''+pose('.bv--dismiss','hang',None)+'''.bv--dismiss .bv__arm--r{animation:none;transform:rotate(24deg)}
+.bv--dismiss .bv__fore--r{animation:bv-flick 1.5s ease-in-out infinite}
+.bv--dismiss .bv__head{animation:none;transform:translateX(-8px) rotate(-7deg)}
+.bv--dismiss .bv__pupil{animation:none;transform:translateX(-6px)}
+.bv--dismiss .bv__lid{transform:translateY(5px)}
+.bv--dismiss .bv__curve{transform:scaleY(-.35)}
 @keyframes bv-flick{0%%,55%%,100%%{transform:rotate(0)}18%%,40%%{transform:rotate(68deg)}29%%{transform:rotate(40deg)}}
 
-/* schnauze halten */
-'''+pose('.bv--pst','hang','lip')+'''.bv--pst .bv__pupil{animation:bv-look 2.4s ease-in-out infinite}
-.bv--pst .bv__eye{animation:none}
-.bv--pst .bv__lid{opacity:0}
-.bv--pst .bv__curve{transform:scaleY(.1)}
-.bv--pst .bv__pst{opacity:1;animation:bv-pstpulse 1.6s ease-in-out infinite}
-.bv--pst .bv__head{animation:bv-think 3s ease-in-out infinite}
-@keyframes bv-pstpulse{0%%,100%%{transform:scale(1) rotate(-6deg);opacity:.5}50%%{transform:scale(1.12) rotate(-6deg);opacity:1}}
+/* shush */
+'''+pose('.bv--shush','hang','lip')+'''.bv--shush .bv__pupil{animation:bv-look 2.4s ease-in-out infinite}
+.bv--shush .bv__eye{animation:none}
+.bv--shush .bv__lid{opacity:0}
+.bv--shush .bv__curve{transform:scaleY(.1)}
+.bv--shush .bv__shush{opacity:1;animation:bv-shushpulse 1.6s ease-in-out infinite}
+.bv--shush .bv__head{animation:bv-think 3s ease-in-out infinite}
+@keyframes bv-shushpulse{0%%,100%%{transform:scale(1) rotate(-6deg);opacity:.5}50%%{transform:scale(1.12) rotate(-6deg);opacity:1}}
 
-/* betrunken mit pils */
-'''+pose('.bv--pils','hang',None)+'''.bv--pils .bv__prop--pils{opacity:1}
-.bv--pils .bv__all{animation:bv-drunk 3.4s ease-in-out infinite}
-.bv--pils .bv__head{animation:bv-drunkhead 3.4s ease-in-out infinite}
-.bv--pils .bv__arm--r{animation:bv-prost 3.4s ease-in-out infinite}
-.bv--pils .bv__fore--r{animation:bv-prostfore 3.4s ease-in-out infinite}
-.bv--pils .bv__arm--l{animation:bv-drunkarm 3.4s ease-in-out infinite}
-.bv--pils .bv__pupil{animation:none}
-.bv--pils .bv__eye--l .bv__pupil{transform:translate(5px,3px)}
-.bv--pils .bv__eye--r .bv__pupil{transform:translate(-5px,2px)}
-.bv--pils .bv__eye{animation:bv-drunkblink 3.4s ease-in-out infinite}
-.bv--pils .bv__lid{transform:translateY(6px)}
-.bv--pils .bv__curve{transform:scaleY(1.3) rotate(-7deg)}
-.bv--pils .bv__blep{transform:scaleY(1) translateX(8px)}
-.bv--pils .bv__hick{animation:bv-hick 3.4s ease-out infinite}
-.bv--pils .bv__bubbles{opacity:1}
-.bv--pils .bv__bubbles circle{animation:bv-bubble 2.6s ease-in infinite}
-.bv--pils .bv__bubbles circle:nth-child(2){animation-delay:.8s}
-.bv--pils .bv__bubbles circle:nth-child(3){animation-delay:1.6s}
-.bv--pils .bv__shadow{animation:bv-drunkshadow 3.4s ease-in-out infinite}
+/* drunk with a beer */
+'''+pose('.bv--beer','hang',None)+'''.bv--beer .bv__prop--beer{opacity:1}
+.bv--beer .bv__all{animation:bv-drunk 3.4s ease-in-out infinite}
+.bv--beer .bv__head{animation:bv-drunkhead 3.4s ease-in-out infinite}
+.bv--beer .bv__arm--r{animation:bv-cheers 3.4s ease-in-out infinite}
+.bv--beer .bv__fore--r{animation:bv-cheersfore 3.4s ease-in-out infinite}
+.bv--beer .bv__arm--l{animation:bv-drunkarm 3.4s ease-in-out infinite}
+.bv--beer .bv__pupil{animation:none}
+.bv--beer .bv__eye--l .bv__pupil{transform:translate(5px,3px)}
+.bv--beer .bv__eye--r .bv__pupil{transform:translate(-5px,2px)}
+.bv--beer .bv__eye{animation:bv-drunkblink 3.4s ease-in-out infinite}
+.bv--beer .bv__lid{transform:translateY(6px)}
+.bv--beer .bv__curve{transform:scaleY(1.3) rotate(-7deg)}
+.bv--beer .bv__blep{transform:scaleY(1) translateX(8px)}
+.bv--beer .bv__hick{animation:bv-hick 3.4s ease-out infinite}
+.bv--beer .bv__bubbles{opacity:1}
+.bv--beer .bv__bubbles circle{animation:bv-bubble 2.6s ease-in infinite}
+.bv--beer .bv__bubbles circle:nth-child(2){animation-delay:.8s}
+.bv--beer .bv__bubbles circle:nth-child(3){animation-delay:1.6s}
+.bv--beer .bv__shadow{animation:bv-drunkshadow 3.4s ease-in-out infinite}
 @keyframes bv-drunk{0%%,100%%{transform:translateX(-16px) rotate(-7deg)}50%%{transform:translateX(16px) rotate(7deg)}70%%{transform:translateX(6px) rotate(3deg)}73%%{transform:translate(4px,-12px) rotate(2deg)}77%%{transform:translateX(0) rotate(0)}}
 @keyframes bv-drunkhead{0%%,100%%{transform:rotate(8deg) translateY(4px)}50%%{transform:rotate(-9deg) translateY(6px)}73%%{transform:rotate(-2deg) translateY(-8px)}}
-@keyframes bv-prost{0%%,100%%{transform:rotate(12deg)}50%%{transform:rotate(-12deg)}}
-@keyframes bv-prostfore{0%%,100%%{transform:rotate(18deg)}50%%{transform:rotate(-10deg)}}
+@keyframes bv-cheers{0%%,100%%{transform:rotate(12deg)}50%%{transform:rotate(-12deg)}}
+@keyframes bv-cheersfore{0%%,100%%{transform:rotate(18deg)}50%%{transform:rotate(-10deg)}}
 @keyframes bv-drunkarm{0%%,100%%{transform:rotate(%(hgl)sdeg)}50%%{transform:rotate(calc(%(hgl)sdeg + 14deg))}}
 @keyframes bv-drunkblink{0%%,40%%,56%%,100%%{transform:scaleY(1)}46%%,50%%{transform:scaleY(.1)}}
 @keyframes bv-hick{0%%,69%%{opacity:0;transform:scale(.4) rotate(-10deg)}74%%{opacity:1;transform:scale(1.15) rotate(-10deg)}88%%{opacity:1;transform:scale(1) rotate(-10deg) translateY(-8px)}100%%{opacity:0;transform:scale(1) rotate(-10deg) translateY(-22px)}}
 @keyframes bv-bubble{0%%{transform:translateY(0);opacity:0}20%%{opacity:1}100%%{transform:translateY(-90px);opacity:0}}
 @keyframes bv-drunkshadow{0%%,100%%{transform:translateX(-10px)}50%%{transform:translateX(10px)}}
 
-/* blick folgt dem Zeiger (braucht --lx und --ly zwischen -1 und 1) */
-.bv--folgen .bv__pupil{animation:none;transition:transform .12s;transform:translate(calc(var(--lx,0) * 8px),calc(var(--ly,0) * 6px))}
-.bv--folgen .bv__head{animation:none;transition:transform .25s;transform:translate(calc(var(--lx,0) * 8px),calc(var(--ly,0) * 5px)) rotate(calc(var(--lx,0) * 5deg))}
-.bv--folgen .bv__lid{opacity:0}
+/* gaze follows the pointer (needs --lx and --ly between -1 and 1) */
+.bv--follow .bv__pupil{animation:none;transition:transform .12s;transform:translate(calc(var(--lx,0) * 8px),calc(var(--ly,0) * 6px))}
+.bv--follow .bv__head{animation:none;transition:transform .25s;transform:translate(calc(var(--lx,0) * 8px),calc(var(--ly,0) * 5px)) rotate(calc(var(--lx,0) * 5deg))}
+.bv--follow .bv__lid{opacity:0}
 
-/* antippen und tippen (Klasse wechselt a/b, damit es neu startet) */
+/* tap and type (the class alternates a/b so the animation restarts) */
 .bv__react{transform-origin:260px 824px}
-.bv--zuck-a .bv__react,.bv--zuck-b .bv__react{animation:bv-flinch-a .4s ease-out}
-.bv--zuck-b .bv__react{animation-name:bv-flinch-b}
-.bv--zuck-a .bv__wide,.bv--zuck-b .bv__wide{animation:bv-flincheye-a .4s ease-out}
-.bv--zuck-b .bv__wide{animation-name:bv-flincheye-b}
+.bv--flinch-a .bv__react,.bv--flinch-b .bv__react{animation:bv-flinch-a .4s ease-out}
+.bv--flinch-b .bv__react{animation-name:bv-flinch-b}
+.bv--flinch-a .bv__wide,.bv--flinch-b .bv__wide{animation:bv-flincheye-a .4s ease-out}
+.bv--flinch-b .bv__wide{animation-name:bv-flincheye-b}
 @keyframes bv-flinch-a{0%%{transform:none}30%%{transform:translateY(-14px) scale(.97,1.04)}100%%{transform:none}}
 @keyframes bv-flinch-b{0%%{transform:none}30%%{transform:translateY(-14px) scale(.97,1.04)}100%%{transform:none}}
 @keyframes bv-flincheye-a{0%%,100%%{transform:scale(1)}30%%{transform:scale(1.35)}}
 @keyframes bv-flincheye-b{0%%,100%%{transform:scale(1)}30%%{transform:scale(1.35)}}
 .bv__earin{transform-box:fill-box;transform-origin:50%% 90%%}
 .bv__nod{transform-origin:260px 296px}
-.bv--tipp-a .bv__ear--l .bv__earin,.bv--tipp-b .bv__ear--r .bv__earin{animation:bv-tipp-a .3s ease-out}
-.bv--tipp-b .bv__ear--l .bv__earin,.bv--tipp-a .bv__ear--r .bv__earin{animation:bv-tipp-b .3s ease-out}
-.bv--tipp-a .bv__nod{animation:bv-tipphead-a .3s ease-out}
-.bv--tipp-b .bv__nod{animation:bv-tipphead-b .3s ease-out}
+.bv--type-a .bv__ear--l .bv__earin,.bv--type-b .bv__ear--r .bv__earin{animation:bv-type-a .3s ease-out}
+.bv--type-b .bv__ear--l .bv__earin,.bv--type-a .bv__ear--r .bv__earin{animation:bv-type-b .3s ease-out}
+.bv--type-a .bv__nod{animation:bv-typehead-a .3s ease-out}
+.bv--type-b .bv__nod{animation:bv-typehead-b .3s ease-out}
 .bv__ear--l{transform-origin:176px 126px}
-@keyframes bv-tipp-a{0%%,100%%{transform:rotate(0)}40%%{transform:rotate(-12deg)}}
-@keyframes bv-tipp-b{0%%,100%%{transform:rotate(0)}40%%{transform:rotate(12deg)}}
-@keyframes bv-tipphead-a{0%%,100%%{transform:none}40%%{transform:translateY(5px)}}
-@keyframes bv-tipphead-b{0%%,100%%{transform:none}40%%{transform:translateY(5px)}}
+@keyframes bv-type-a{0%%,100%%{transform:rotate(0)}40%%{transform:rotate(-12deg)}}
+@keyframes bv-type-b{0%%,100%%{transform:rotate(0)}40%%{transform:rotate(12deg)}}
+@keyframes bv-typehead-a{0%%,100%%{transform:none}40%%{transform:translateY(5px)}}
+@keyframes bv-typehead-b{0%%,100%%{transform:none}40%%{transform:translateY(5px)}}
 
-/* locker: ruhig mit Armen unten */
-'''+pose('.bv--locker','relax','relax')+'''.bv--locker .bv__all{animation:bv-shift 8s ease-in-out infinite}
-.bv--locker .bv__arm--l{animation:bv-dangle-l 4.6s ease-in-out infinite}
-.bv--locker .bv__arm--r{animation:bv-dangle-r 4.6s ease-in-out infinite}
-.bv--locker .bv__lid{opacity:0}
-.bv--locker .bv__curve{transform:scaleY(1.2)}
+/* relaxed: calm with arms down */
+'''+pose('.bv--relaxed','relax','relax')+'''.bv--relaxed .bv__all{animation:bv-shift 8s ease-in-out infinite}
+.bv--relaxed .bv__arm--l{animation:bv-dangle-l 4.6s ease-in-out infinite}
+.bv--relaxed .bv__arm--r{animation:bv-dangle-r 4.6s ease-in-out infinite}
+.bv--relaxed .bv__lid{opacity:0}
+.bv--relaxed .bv__curve{transform:scaleY(1.2)}
 @keyframes bv-shift{0%%,100%%{transform:translateX(-5px) rotate(-1deg)}50%%{transform:translateX(5px) rotate(1deg)}}
 @keyframes bv-dangle-l{0%%,100%%{transform:rotate(%(rlx)sdeg)}50%%{transform:rotate(calc(%(rlx)sdeg + 4deg))}}
 @keyframes bv-dangle-r{0%%,100%%{transform:rotate(calc(%(rlx)sdeg * -1))}50%%{transform:rotate(calc(%(rlx)sdeg * -1 - 4deg))}}
 
-/* alt-berliner ganove */
+/* old-Berlin gangster */
 .bv{--bv-vest:#4a5560;--bv-cap:#8b6f4e;--bv-cap2:#69523a}
 .bv--dark{--bv-vest:#2c353e}
-.bv__gang{opacity:0}
-.bv--ganove .bv__gang{opacity:1}
-'''+pose('.bv--ganove','hip','thumb')+'''.bv--ganove .bv__arm--r{animation:bv-toss 1.1s cubic-bezier(.3,0,.7,1) infinite alternate}
-.bv--ganove .bv__coin{transform-box:fill-box;transform-origin:center;animation:bv-coin 1.1s cubic-bezier(.2,.6,.4,1) infinite alternate}
-.bv--ganove .bv__eye--l{animation:none;transform:scaleY(.5)}
-.bv--ganove .bv__pupil{animation:bv-glance 6s ease-in-out infinite}
-.bv--ganove .bv__curve{transform:scaleY(.6) rotate(9deg)}
-.bv--ganove .bv__head{animation:bv-think 4s ease-in-out infinite}
-.bv--ganove .bv__smoke{animation:bv-smoke 2.6s ease-in-out infinite}
+.bv__gangster{opacity:0}
+.bv--gangster .bv__gangster{opacity:1}
+'''+pose('.bv--gangster','hip','thumb')+'''.bv--gangster .bv__arm--r{animation:bv-toss 1.1s cubic-bezier(.3,0,.7,1) infinite alternate}
+.bv--gangster .bv__coin{transform-box:fill-box;transform-origin:center;animation:bv-coin 1.1s cubic-bezier(.2,.6,.4,1) infinite alternate}
+.bv--gangster .bv__eye--l{animation:none;transform:scaleY(.5)}
+.bv--gangster .bv__pupil{animation:bv-glance 6s ease-in-out infinite}
+.bv--gangster .bv__curve{transform:scaleY(.6) rotate(9deg)}
+.bv--gangster .bv__head{animation:bv-think 4s ease-in-out infinite}
+.bv--gangster .bv__smoke{animation:bv-smoke 2.6s ease-in-out infinite}
 @keyframes bv-toss{from{transform:translateY(6px) rotate(%(thr)sdeg)}to{transform:translateY(-4px) rotate(%(thr)sdeg)}}
 @keyframes bv-coin{from{transform:translateX(0) scaleY(1)}to{transform:translateX(-130px) scaleY(-1)}}
 @keyframes bv-smoke{0%%{transform:translateY(8px);opacity:0}30%%{opacity:.75}100%%{transform:translateY(-22px);opacity:0}}
 
 
-/* --- Beine mit Knie --- */
+/* --- legs with knees --- */
 .bv__leg--l{transform-origin:178px 600px}.bv__leg--r{transform-origin:342px 600px}
 .bv__shin--l{transform-origin:152px 708px}.bv__shin--r{transform-origin:368px 708px}
 .bv__foot--l{transform-origin:158px 784px}.bv__foot--r{transform-origin:362px 784px}
 .bv__leg,.bv__shin,.bv__foot,.bv__upper{transition:transform .3s cubic-bezier(.3,1.2,.5,1)}
 
-/* --- Handformen --- */
+/* --- hand shapes --- */
 .bv__knuckles{opacity:0}
-.bv--pst .bv__fore--r .bv__claws{opacity:0}
-.bv--pst .bv__fore--r .bv__knuckles{opacity:1}
-.bv--denken .bv__fore--r .bv__claws,.bv--daumen .bv__fore--r .bv__claws,.bv--futtern .bv__fore--r .bv__claws{opacity:0}
-.bv--denken .bv__fore--r .bv__knuckles,.bv--daumen .bv__fore--r .bv__knuckles,.bv--futtern .bv__fore--r .bv__knuckles{opacity:1}
-.bv--locker .bv__claws,.bv--nicken .bv__claws,.bv--nee .bv__claws,.bv--einnicken .bv__claws,.bv--pennen .bv__claws{opacity:0}
-.bv--locker .bv__knuckles,.bv--nicken .bv__knuckles,.bv--nee .bv__knuckles,.bv--einnicken .bv__knuckles,.bv--pennen .bv__knuckles{opacity:1}
-.bv--kieken .bv__fore--l .bv__claws{opacity:0}.bv--kieken .bv__fore--l .bv__knuckles{opacity:1}
-.bv--lauschen .bv__fore--l .bv__claws{opacity:0}.bv--lauschen .bv__fore--l .bv__knuckles{opacity:1}
+.bv--shush .bv__fore--r .bv__claws{opacity:0}
+.bv--shush .bv__fore--r .bv__knuckles{opacity:1}
+.bv--think .bv__fore--r .bv__claws,.bv--thumbs-up .bv__fore--r .bv__claws,.bv--eat .bv__fore--r .bv__claws{opacity:0}
+.bv--think .bv__fore--r .bv__knuckles,.bv--thumbs-up .bv__fore--r .bv__knuckles,.bv--eat .bv__fore--r .bv__knuckles{opacity:1}
+.bv--relaxed .bv__claws,.bv--nod .bv__claws,.bv--shake .bv__claws,.bv--doze .bv__claws,.bv--nap .bv__claws{opacity:0}
+.bv--relaxed .bv__knuckles,.bv--nod .bv__knuckles,.bv--shake .bv__knuckles,.bv--doze .bv__knuckles,.bv--nap .bv__knuckles{opacity:1}
+.bv--look .bv__fore--l .bv__claws{opacity:0}.bv--look .bv__fore--l .bv__knuckles{opacity:1}
+.bv--listen .bv__fore--l .bv__claws{opacity:0}.bv--listen .bv__fore--l .bv__knuckles{opacity:1}
 
-/* tanzen: Knie im Wechsel */
-.bv--tanzen .bv__leg--l{animation:bv-kneeL 1s ease-in-out infinite}
-.bv--tanzen .bv__shin--l{animation:bv-shinL 1s ease-in-out infinite}
-.bv--tanzen .bv__foot--l{animation:bv-footL 1s ease-in-out infinite}
-.bv--tanzen .bv__leg--r{animation:bv-kneeR 1s ease-in-out infinite}
-.bv--tanzen .bv__shin--r{animation:bv-shinR 1s ease-in-out infinite}
-.bv--tanzen .bv__foot--r{animation:bv-footR 1s ease-in-out infinite}
-.bv--tanzen .bv__upper{animation:bv-bobup 1s ease-in-out infinite}
+/* dance: knees alternate */
+.bv--dance .bv__leg--l{animation:bv-kneeL 1s ease-in-out infinite}
+.bv--dance .bv__shin--l{animation:bv-shinL 1s ease-in-out infinite}
+.bv--dance .bv__foot--l{animation:bv-footL 1s ease-in-out infinite}
+.bv--dance .bv__leg--r{animation:bv-kneeR 1s ease-in-out infinite}
+.bv--dance .bv__shin--r{animation:bv-shinR 1s ease-in-out infinite}
+.bv--dance .bv__foot--r{animation:bv-footR 1s ease-in-out infinite}
+.bv--dance .bv__upper{animation:bv-bobup 1s ease-in-out infinite}
 @keyframes bv-kneeL{0%%,50%%,100%%{transform:translateY(%(d12)spx) rotate(%(t12)sdeg)}25%%{transform:translateY(-46px) rotate(24deg)}75%%{transform:none}}
 @keyframes bv-shinL{0%%,50%%,100%%{transform:rotate(%(s12)sdeg)}25%%{transform:rotate(-58deg)}75%%{transform:none}}
 @keyframes bv-footL{0%%,50%%,100%%{transform:rotate(%(f12)sdeg)}25%%{transform:rotate(34deg)}75%%{transform:none}}
@@ -564,14 +564,14 @@ css='''.bv{display:block;--bv-ink:#2b333b;--bv-ink2:#3a454f;--bv-nose:#12161a;--
 @keyframes bv-footR{0%%,50%%,100%%{transform:rotate(%(nf12)sdeg)}75%%{transform:rotate(-34deg)}25%%{transform:none}}
 @keyframes bv-bobup{0%%,50%%,100%%{transform:translateY(12px)}25%%,75%%{transform:translateY(0)}}
 
-/* jubeln: aus der Hocke hoch, Beine angezogen */
-.bv--jubeln .bv__upper{animation:bv-jupper .6s cubic-bezier(.3,0,.4,1) infinite alternate}
-.bv--jubeln .bv__leg--l{animation:bv-jlegL .6s cubic-bezier(.3,0,.4,1) infinite alternate}
-.bv--jubeln .bv__shin--l{animation:bv-jshinL .6s cubic-bezier(.3,0,.4,1) infinite alternate}
-.bv--jubeln .bv__foot--l{animation:bv-jfootL .6s cubic-bezier(.3,0,.4,1) infinite alternate}
-.bv--jubeln .bv__leg--r{animation:bv-jlegR .6s cubic-bezier(.3,0,.4,1) infinite alternate}
-.bv--jubeln .bv__shin--r{animation:bv-jshinR .6s cubic-bezier(.3,0,.4,1) infinite alternate}
-.bv--jubeln .bv__foot--r{animation:bv-jfootR .6s cubic-bezier(.3,0,.4,1) infinite alternate}
+/* cheer: up from the crouch, legs tucked */
+.bv--cheer .bv__upper{animation:bv-jupper .6s cubic-bezier(.3,0,.4,1) infinite alternate}
+.bv--cheer .bv__leg--l{animation:bv-jlegL .6s cubic-bezier(.3,0,.4,1) infinite alternate}
+.bv--cheer .bv__shin--l{animation:bv-jshinL .6s cubic-bezier(.3,0,.4,1) infinite alternate}
+.bv--cheer .bv__foot--l{animation:bv-jfootL .6s cubic-bezier(.3,0,.4,1) infinite alternate}
+.bv--cheer .bv__leg--r{animation:bv-jlegR .6s cubic-bezier(.3,0,.4,1) infinite alternate}
+.bv--cheer .bv__shin--r{animation:bv-jshinR .6s cubic-bezier(.3,0,.4,1) infinite alternate}
+.bv--cheer .bv__foot--r{animation:bv-jfootR .6s cubic-bezier(.3,0,.4,1) infinite alternate}
 @keyframes bv-jupper{from{transform:translateY(28px)}to{transform:translateY(0)}}
 @keyframes bv-jlegL{from{transform:translateY(28px) rotate(%(t28)sdeg)}to{transform:translateY(-10px) rotate(16deg)}}
 @keyframes bv-jshinL{from{transform:rotate(%(s28)sdeg)}to{transform:rotate(-34deg)}}
@@ -580,10 +580,10 @@ css='''.bv{display:block;--bv-ink:#2b333b;--bv-ink2:#3a454f;--bv-nose:#12161a;--
 @keyframes bv-jshinR{from{transform:rotate(%(ns28)sdeg)}to{transform:rotate(34deg)}}
 @keyframes bv-jfootR{from{transform:rotate(%(nf28)sdeg)}to{transform:rotate(-22deg)}}
 
-/* auftritt: Landung in die Knie */
-.bv--auftritt .bv__upper{animation:bv-landup .9s ease-out both}
-.bv--auftritt .bv__leg--l{animation:bv-landL .9s ease-out both}.bv--auftritt .bv__shin--l{animation:bv-landSL .9s ease-out both}.bv--auftritt .bv__foot--l{animation:bv-landFL .9s ease-out both}
-.bv--auftritt .bv__leg--r{animation:bv-landR .9s ease-out both}.bv--auftritt .bv__shin--r{animation:bv-landSR .9s ease-out both}.bv--auftritt .bv__foot--r{animation:bv-landFR .9s ease-out both}
+/* enter: landing into the knees */
+.bv--enter .bv__upper{animation:bv-landup .9s ease-out both}
+.bv--enter .bv__leg--l{animation:bv-landL .9s ease-out both}.bv--enter .bv__shin--l{animation:bv-landSL .9s ease-out both}.bv--enter .bv__foot--l{animation:bv-landFL .9s ease-out both}
+.bv--enter .bv__leg--r{animation:bv-landR .9s ease-out both}.bv--enter .bv__shin--r{animation:bv-landSR .9s ease-out both}.bv--enter .bv__foot--r{animation:bv-landFR .9s ease-out both}
 @keyframes bv-landup{0%%,76%%,100%%{transform:none}86%%{transform:translateY(24px)}}
 @keyframes bv-landL{0%%,76%%,100%%{transform:none}86%%{transform:translateY(24px) rotate(%(t24)sdeg)}}
 @keyframes bv-landSL{0%%,76%%,100%%{transform:none}86%%{transform:rotate(%(s24)sdeg)}}
@@ -592,10 +592,10 @@ css='''.bv{display:block;--bv-ink:#2b333b;--bv-ink2:#3a454f;--bv-nose:#12161a;--
 @keyframes bv-landSR{0%%,76%%,100%%{transform:none}86%%{transform:rotate(%(ns24)sdeg)}}
 @keyframes bv-landFR{0%%,76%%,100%%{transform:none}86%%{transform:rotate(%(nf24)sdeg)}}
 
-/* abgang: Anlauf aus den Knien */
-.bv--abgang .bv__upper{animation:bv-exitup 2s ease-in both}
-.bv--abgang .bv__leg--l{animation:bv-exitL 2s ease-in both}.bv--abgang .bv__shin--l{animation:bv-exitSL 2s ease-in both}.bv--abgang .bv__foot--l{animation:bv-exitFL 2s ease-in both}
-.bv--abgang .bv__leg--r{animation:bv-exitR 2s ease-in both}.bv--abgang .bv__shin--r{animation:bv-exitSR 2s ease-in both}.bv--abgang .bv__foot--r{animation:bv-exitFR 2s ease-in both}
+/* exit: run-up from the knees */
+.bv--exit .bv__upper{animation:bv-exitup 2s ease-in both}
+.bv--exit .bv__leg--l{animation:bv-exitL 2s ease-in both}.bv--exit .bv__shin--l{animation:bv-exitSL 2s ease-in both}.bv--exit .bv__foot--l{animation:bv-exitFL 2s ease-in both}
+.bv--exit .bv__leg--r{animation:bv-exitR 2s ease-in both}.bv--exit .bv__shin--r{animation:bv-exitSR 2s ease-in both}.bv--exit .bv__foot--r{animation:bv-exitFR 2s ease-in both}
 @keyframes bv-exitup{0%%,55%%,76%%,100%%{transform:none}68%%{transform:translateY(30px)}}
 @keyframes bv-exitL{0%%,55%%,76%%,100%%{transform:none}68%%{transform:translateY(30px) rotate(%(t30)sdeg)}}
 @keyframes bv-exitSL{0%%,55%%,76%%,100%%{transform:none}68%%{transform:rotate(%(s30)sdeg)}}
@@ -604,26 +604,26 @@ css='''.bv{display:block;--bv-ink:#2b333b;--bv-ink2:#3a454f;--bv-nose:#12161a;--
 @keyframes bv-exitSR{0%%,55%%,76%%,100%%{transform:none}68%%{transform:rotate(%(ns30)sdeg)}}
 @keyframes bv-exitFR{0%%,55%%,76%%,100%%{transform:none}68%%{transform:rotate(%(nf30)sdeg)}}
 
-/* locker und ganove: ein Knie entspannt */
-.bv--locker .bv__leg--l,.bv--ganove .bv__leg--r{transform:translateY(10px) rotate(-7deg)}
-.bv--locker .bv__shin--l{transform:rotate(14deg)}.bv--ganove .bv__shin--r{transform:rotate(-14deg)}
-.bv--locker .bv__foot--l{transform:rotate(-7deg)}.bv--ganove .bv__foot--r{transform:rotate(7deg)}
-.bv--locker .bv__upper{transform:translateY(5px) rotate(-1.5deg)}.bv--ganove .bv__upper{transform:translateY(5px) rotate(1.5deg)}
+/* relaxed and gangster: one knee loose */
+.bv--relaxed .bv__leg--l,.bv--gangster .bv__leg--r{transform:translateY(10px) rotate(-7deg)}
+.bv--relaxed .bv__shin--l{transform:rotate(14deg)}.bv--gangster .bv__shin--r{transform:rotate(-14deg)}
+.bv--relaxed .bv__foot--l{transform:rotate(-7deg)}.bv--gangster .bv__foot--r{transform:rotate(7deg)}
+.bv--relaxed .bv__upper{transform:translateY(5px) rotate(-1.5deg)}.bv--gangster .bv__upper{transform:translateY(5px) rotate(1.5deg)}
 
-/* pils: weiche Knie */
-.bv--pils .bv__leg--l{animation:bv-wobL 1.7s ease-in-out infinite}.bv--pils .bv__shin--l{animation:bv-wobSL 1.7s ease-in-out infinite}
-.bv--pils .bv__leg--r{animation:bv-wobR 1.7s ease-in-out infinite}.bv--pils .bv__shin--r{animation:bv-wobSR 1.7s ease-in-out infinite}
-.bv--pils .bv__upper{animation:bv-wobup 1.7s ease-in-out infinite}
+/* beer: soft knees */
+.bv--beer .bv__leg--l{animation:bv-wobL 1.7s ease-in-out infinite}.bv--beer .bv__shin--l{animation:bv-wobSL 1.7s ease-in-out infinite}
+.bv--beer .bv__leg--r{animation:bv-wobR 1.7s ease-in-out infinite}.bv--beer .bv__shin--r{animation:bv-wobSR 1.7s ease-in-out infinite}
+.bv--beer .bv__upper{animation:bv-wobup 1.7s ease-in-out infinite}
 @keyframes bv-wobL{0%%,100%%{transform:translateY(16px) rotate(%(t16)sdeg)}50%%{transform:translateY(4px) rotate(-4deg)}}
 @keyframes bv-wobSL{0%%,100%%{transform:rotate(%(s16)sdeg)}50%%{transform:rotate(6deg)}}
 @keyframes bv-wobR{0%%,100%%{transform:translateY(4px) rotate(4deg)}50%%{transform:translateY(16px) rotate(%(nt16)sdeg)}}
 @keyframes bv-wobSR{0%%,100%%{transform:rotate(-6deg)}50%%{transform:rotate(%(ns16)sdeg)}}
 @keyframes bv-wobup{0%%,100%%,50%%{transform:translateY(12px)}}
 
-/* kopf + lugen */
-.bv--lugen .bv__head{animation:bv-peek 6s ease-in-out infinite}
-.bv--lugen .bv__pupil{animation:bv-look 3s ease-in-out infinite}
-.bv--lugen .bv__lid{opacity:0}
+/* head + peek */
+.bv--peek .bv__head{animation:bv-peek 6s ease-in-out infinite}
+.bv--peek .bv__pupil{animation:bv-look 3s ease-in-out infinite}
+.bv--peek .bv__lid{opacity:0}
 @keyframes bv-peek{0%%,8%%{transform:translateY(150px)}20%%,80%%{transform:translateY(-18px)}92%%,100%%{transform:translateY(150px)}}
 '''
 LEGV={}
@@ -644,38 +644,38 @@ for sel,body_ in re.findall(r'([^{}\n]+)\{([^{}]*animation:[^{}]*infinite[^{}]*)
     cs=', '.join(_calm(y.strip(),False) for y in sel.split(','))
     hs=', '.join(_calm(y.strip(),True) for y in sel.split(','))
     calm.append('%s{animation-iteration-count:%d}\n%s{animation-iteration-count:infinite}'%(cs,n,hs))
-css+='\n/* calm: Schleifen enden nach rund 6 Sekunden, bei Hover laufen sie wieder */\n'+'\n'.join(calm)+'\n@media (prefers-reduced-motion:reduce){.bv *{animation:none!important;transition:none!important}.bv--lugen .bv__head{transform:translateY(-18px)}}\n'
+css+='\n/* calm: finite loops, endless again on hover (duration: see the calm prop in BerlinerBaer.vue) */\n'+'\n'.join(calm)+'\n@media (prefers-reduced-motion:reduce){.bv *{animation:none!important;transition:none!important}.bv--peek .bv__head{transform:translateY(-18px)}}\n'
 css+='''
-/* --- Augenbrauen: nur bei großen Auftritten (Klasse bv--brauen, ab 200px) --- */
+/* --- eyebrows: only for big appearances (class bv--brows, from 200px) --- */
 .bv{--bv-brow:#6f7d8a}.bv--dark{--bv-brow:#5c6975}
 .bv__brows{display:none}
-.bv--brauen .bv__brows{display:inline}
-.bv--brauen .bv__lid,.bv--brauen .bv__grr{opacity:0}
+.bv--brows .bv__brows{display:inline}
+.bv--brows .bv__lid,.bv--brows .bv__grr{opacity:0}
 .bv__brow{transform-box:fill-box;transform-origin:center;transition:transform .3s ease-out}
-.bv--brauen.bv--winken .bv__brow,.bv--brauen.bv--jubeln .bv__brow,.bv--brauen.bv--tanzen .bv__brow,.bv--brauen.bv--daumen .bv__brow,.bv--brauen.bv--auftritt .bv__brow,.bv--brauen.bv--futtern .bv__brow{transform:translateY(-9px)}
-.bv--brauen.bv--nuescht .bv__brow,.bv--brauen.bv--gaehnen .bv__brow{transform:translateY(-14px)}
-.bv--brauen.bv--schreck .bv__brow{transform:translateY(-20px)}
-.bv--brauen.bv--schnauze .bv__brow--l,.bv--brauen.bv--nee .bv__brow--l,.bv--brauen.bv--abwinken .bv__brow--l{transform:translate(5px,8px) rotate(26deg)}
-.bv--brauen.bv--schnauze .bv__brow--r,.bv--brauen.bv--nee .bv__brow--r,.bv--brauen.bv--abwinken .bv__brow--r{transform:translate(-5px,8px) rotate(-26deg)}
-.bv--brauen.bv--denken .bv__brow--l,.bv--brauen.bv--lauschen .bv__brow--l,.bv--brauen.bv--ganove .bv__brow--r{transform:translateY(-14px) rotate(-6deg)}
-.bv--brauen.bv--denken .bv__brow--r,.bv--brauen.bv--lauschen .bv__brow--r,.bv--brauen.bv--ganove .bv__brow--l{transform:translateY(5px)}
-.bv--brauen.bv--facepalm .bv__brow--l,.bv--brauen.bv--kieken .bv__brow--l{transform:translate(4px,-10px) rotate(-24deg)}
-.bv--brauen.bv--facepalm .bv__brow--r,.bv--brauen.bv--kieken .bv__brow--r{transform:translate(-4px,-10px) rotate(24deg)}
-.bv--brauen.bv--pils .bv__brow--l{transform:translateY(-10px) rotate(-10deg)}
-.bv--brauen.bv--pils .bv__brow--r{transform:translateY(4px) rotate(-6deg)}
-.bv--brauen.bv--pennen .bv__brow,.bv--brauen.bv--einnicken .bv__brow{transform:translateY(5px)}
+.bv--brows.bv--wave .bv__brow,.bv--brows.bv--cheer .bv__brow,.bv--brows.bv--dance .bv__brow,.bv--brows.bv--thumbs-up .bv__brow,.bv--brows.bv--enter .bv__brow,.bv--brows.bv--eat .bv__brow{transform:translateY(-9px)}
+.bv--brows.bv--blank .bv__brow,.bv--brows.bv--yawn .bv__brow{transform:translateY(-14px)}
+.bv--brows.bv--scare .bv__brow{transform:translateY(-20px)}
+.bv--brows.bv--roar .bv__brow--l,.bv--brows.bv--shake .bv__brow--l,.bv--brows.bv--dismiss .bv__brow--l{transform:translate(5px,8px) rotate(26deg)}
+.bv--brows.bv--roar .bv__brow--r,.bv--brows.bv--shake .bv__brow--r,.bv--brows.bv--dismiss .bv__brow--r{transform:translate(-5px,8px) rotate(-26deg)}
+.bv--brows.bv--think .bv__brow--l,.bv--brows.bv--listen .bv__brow--l,.bv--brows.bv--gangster .bv__brow--r{transform:translateY(-14px) rotate(-6deg)}
+.bv--brows.bv--think .bv__brow--r,.bv--brows.bv--listen .bv__brow--r,.bv--brows.bv--gangster .bv__brow--l{transform:translateY(5px)}
+.bv--brows.bv--facepalm .bv__brow--l,.bv--brows.bv--look .bv__brow--l{transform:translate(4px,-10px) rotate(-24deg)}
+.bv--brows.bv--facepalm .bv__brow--r,.bv--brows.bv--look .bv__brow--r{transform:translate(-4px,-10px) rotate(24deg)}
+.bv--brows.bv--beer .bv__brow--l{transform:translateY(-10px) rotate(-10deg)}
+.bv--brows.bv--beer .bv__brow--r{transform:translateY(4px) rotate(-6deg)}
+.bv--brows.bv--nap .bv__brow,.bv--brows.bv--doze .bv__brow{transform:translateY(5px)}
 '''
 css+='''
-/* --- Barrierefreiheit: Zittern und Schreck nur als kurzer Ausloeser, nie als Dauerschleife --- */
-.bv.bv--schnauze .bv__open,.bv.bv--schnauze .bv__tongue,.bv.bv--schnauze .bv__head,.bv.bv--schnauze .bv__arm,.bv.bv--schnauze .bv__shout{animation-iteration-count:8!important}
-.bv.bv--schreck .bv__all,.bv.bv--schreck .bv__bang{animation-iteration-count:1!important}
-.bv.bv--schreck .bv__bang{animation-fill-mode:forwards!important}
-/* --- kleine Groessen: feine Details aus, damit nichts flimmert --- */
-.bv--klein .bv__detail,.bv--klein .bv__smoke,.bv--klein .bv__coin,.bv--klein .bv__crumbs,.bv--klein .bv__bubbles,.bv--klein .bv__hick,.bv--klein .bv__waves,.bv--klein .bv__dots{display:none}
-/* --- Dark Mode ohne Scheibe: Kontur ist Pflicht (Fell 1.5:1, Kontur 4.6:1 gegen die dunklen Flaechen) --- */
+/* --- accessibility: shaking and scare only as a short trigger, never an endless loop --- */
+.bv.bv--roar .bv__open,.bv.bv--roar .bv__tongue,.bv.bv--roar .bv__head,.bv.bv--roar .bv__arm,.bv.bv--roar .bv__shout{animation-iteration-count:8!important}
+.bv.bv--scare .bv__all,.bv.bv--scare .bv__bang{animation-iteration-count:1!important}
+.bv.bv--scare .bv__bang{animation-fill-mode:forwards!important}
+/* --- small sizes: fine details off so nothing flickers --- */
+.bv--small .bv__detail,.bv--small .bv__smoke,.bv--small .bv__coin,.bv--small .bv__crumbs,.bv--small .bv__bubbles,.bv--small .bv__hick,.bv--small .bv__waves,.bv--small .bv__dots{display:none}
+/* --- dark mode without the disc: the outline is mandatory (fur 1.5:1, outline 4.6:1 against the dark surfaces) --- */
 [data-theme="dark"] .bv:not(.bv--light){--bv-ink:#14181c;--bv-ink2:#252d35;--bv-nose:#000;--bv-disc:#566676;--bv-shadow:rgb(0 0 0 / 35%);--bv-brow:#5c6975;--bv-edge:#a9b8c6;--bv-vest:#2c353e}
 [data-theme="dark"] .bv.bv--plain:not(.bv--light) .bv__all{filter:drop-shadow(1.2px 0 0 var(--bv-edge)) drop-shadow(-1.2px 0 0 var(--bv-edge)) drop-shadow(0 1.2px 0 var(--bv-edge)) drop-shadow(0 -1.2px 0 var(--bv-edge))}
 '''
 open('v2.css','w').write(css)
-open('v2.svg','w').write(full('ID'));open('v2_kopf.svg','w').write(kopf());open('v2_lugen.svg','w').write(lugen('ID'))
+open('v2.svg','w').write(full('ID'));open('v2_head.svg','w').write(head_only());open('v2_peek.svg','w').write(peek('ID'))
 print(IK,len(calm))

@@ -1,12 +1,12 @@
 ---
-import type { HomeData } from "@services/payload/home.ts";
+import type { HomeGap } from "@services/payload/home.ts";
 
 import SoonButton from "@components/home/SoonButton.vue";
 import BerlinerBaer from "@components/kalle/BerlinerBaer.vue";
 import Plus from "virtual:icons/lucide/plus";
 
 interface Props {
-  gap: HomeData["gap"];
+  gap: HomeGap;
 }
 
 const { gap } = Astro.props;
@@ -18,7 +18,7 @@ const recordHref = gap.randomSlug && `/wort/${gap.randomSlug}`;
   <div class="inner">
     {/* SSR only: the pose is CSS; before hydration Kalle only lacks the thin arm/body seams (mask id). */}
     <div class="kalle">
-      <BerlinerBaer stimmung="zeigen" groesse={170} />
+      <BerlinerBaer mood="point" size={170} />
     </div>
     <div class="body">
       <p class="eyebrow" aria-hidden="true"><s>Fehlt ein Wort?</s></p>

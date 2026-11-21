@@ -63,7 +63,7 @@
     --_t-9s: 9s;
   }
 
-  // thema="hell"/"dunkel": the tokens follow color-scheme, so forcing the scheme is enough.
+  // theme="light"/"dark": the tokens follow color-scheme, so forcing the scheme is enough.
   :scope[data-variant~="dark"] {
     color-scheme: dark;
   }
@@ -80,8 +80,8 @@
   // Dark without a disc: the light outline is mandatory (fur 1.5:1, outline 4.6:1 on the dark surfaces).
   // In light the edge colour is transparent, so the filter draws nothing.
   :scope[data-variant~="plain"] .all,
-  :scope[data-variant~="kopf"] .head,
-  :scope[data-variant~="lugen"] .svg {
+  :scope[data-variant~="head"] .head,
+  :scope[data-variant~="peek"] .svg {
     filter: drop-shadow(1.2px 0 0 var(--_edge)) drop-shadow(-1.2px 0 0 var(--_edge))
       drop-shadow(0 1.2px 0 var(--_edge)) drop-shadow(0 -1.2px 0 var(--_edge));
   }
@@ -237,7 +237,7 @@
     .grr,
     .thumb,
     .prop,
-    .gang,
+    .gangster,
     .claws,
     .knuckles {
       transition: opacity var(--_t-0-2s);
@@ -251,8 +251,8 @@
       animation: berliner-baer-sw-b var(--_t-0-5s) cubic-bezier(0.3, 1.3, 0.5, 1);
     }
 
-    :scope[data-state~="auftritt"] .pop,
-    :scope[data-state~="abgang"] .pop {
+    :scope[data-state~="enter"] .pop,
+    :scope[data-state~="exit"] .pop {
       animation: none;
     }
 
@@ -268,10 +268,10 @@
       animation: berliner-baer-blink var(--_t-7s) infinite;
     }
 
-    :scope[data-state~="pennen"] .blink,
-    :scope[data-state~="gaehnen"] .blink,
-    :scope[data-state~="einnicken"] .blink,
-    :scope[data-state~="folgen"] .glance {
+    :scope[data-state~="nap"] .blink,
+    :scope[data-state~="yawn"] .blink,
+    :scope[data-state~="doze"] .blink,
+    :scope[data-state~="follow"] .glance {
       animation: none;
     }
 
@@ -300,279 +300,279 @@
     }
   }
 
-  // winken
-  :scope[data-state~="winken"] .arm-l {
+  // wave
+  :scope[data-state~="wave"] .arm-l {
     transform: rotate(-82deg);
   }
 
-  :scope[data-state~="winken"] .fore-l {
+  :scope[data-state~="wave"] .fore-l {
     transform: rotate(-92.4deg);
   }
 
-  :scope[data-state~="winken"] .lid {
+  :scope[data-state~="wave"] .lid {
     opacity: 0;
   }
 
-  :scope[data-state~="winken"] .blep {
+  :scope[data-state~="wave"] .blep {
     transform: scaleY(1);
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="winken"] .arm-l {
+    :scope[data-state~="wave"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="winken"] .arm-r {
+    :scope[data-state~="wave"] .arm-r {
       animation: berliner-baer-wave var(--_t-0-6s) ease-in-out infinite;
     }
 
-    :scope[data-state~="winken"] .head {
+    :scope[data-state~="wave"] .head {
       animation: berliner-baer-tilt var(--_t-1-2s) ease-in-out infinite;
     }
   }
 
-  // schnauze
-  :scope[data-state~="schnauze"] .smile,
-  :scope[data-state~="schnauze"] .lid {
+  // roar
+  :scope[data-state~="roar"] .smile,
+  :scope[data-state~="roar"] .lid {
     opacity: 0;
   }
 
-  :scope[data-state~="schnauze"] .grr {
+  :scope[data-state~="roar"] .grr {
     opacity: 1;
   }
 
-  :scope[data-state~="schnauze"] .open {
+  :scope[data-state~="roar"] .open {
     transform: scaleY(1.35);
   }
 
-  :scope[data-state~="schnauze"] .shout {
+  :scope[data-state~="roar"] .shout {
     opacity: 1;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="schnauze"] .open {
+    :scope[data-state~="roar"] .open {
       animation: berliner-baer-jaw var(--_t-0-2s) ease-in-out infinite alternate;
     }
 
-    :scope[data-state~="schnauze"] .eye {
+    :scope[data-state~="roar"] .eye {
       animation: none;
     }
 
-    :scope[data-state~="schnauze"] .tongue {
+    :scope[data-state~="roar"] .tongue {
       animation: berliner-baer-flap var(--_t-0-16s) ease-in-out infinite alternate;
     }
 
-    :scope[data-state~="schnauze"] .head {
+    :scope[data-state~="roar"] .head {
       animation: berliner-baer-roar var(--_t-0-12s) linear infinite alternate;
     }
 
-    :scope[data-state~="schnauze"] .arm-l {
+    :scope[data-state~="roar"] .arm-l {
       animation: berliner-baer-clawl var(--_t-0-24s) ease-in-out infinite alternate;
     }
 
-    :scope[data-state~="schnauze"] .arm-r {
+    :scope[data-state~="roar"] .arm-r {
       animation: berliner-baer-clawr var(--_t-0-24s) ease-in-out infinite alternate;
     }
 
-    :scope[data-state~="schnauze"] .shout {
+    :scope[data-state~="roar"] .shout {
       animation: berliner-baer-shout var(--_t-0-3s) steps(2) infinite;
     }
   }
 
-  // tanzen
-  :scope[data-state~="tanzen"] .lid {
+  // dance
+  :scope[data-state~="dance"] .lid {
     opacity: 0;
   }
 
-  :scope[data-state~="tanzen"] .curve {
+  :scope[data-state~="dance"] .curve {
     transform: scaleY(1.6);
   }
 
-  :scope[data-state~="tanzen"] .blep {
+  :scope[data-state~="dance"] .blep {
     transform: scaleY(1);
   }
 
-  :scope[data-state~="tanzen"] .eye {
+  :scope[data-state~="dance"] .eye {
     transform: scaleY(0.55);
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="tanzen"] .all {
+    :scope[data-state~="dance"] .all {
       animation: berliner-baer-dance var(--_t-1s) ease-in-out infinite;
     }
 
-    :scope[data-state~="tanzen"] .arm-l {
+    :scope[data-state~="dance"] .arm-l {
       animation: berliner-baer-dl var(--_t-1s) ease-in-out infinite;
     }
 
-    :scope[data-state~="tanzen"] .arm-r {
+    :scope[data-state~="dance"] .arm-r {
       animation: berliner-baer-dr var(--_t-1s) ease-in-out infinite;
     }
 
-    :scope[data-state~="tanzen"] .head {
+    :scope[data-state~="dance"] .head {
       animation: berliner-baer-dh var(--_t-1s) ease-in-out infinite;
     }
 
-    :scope[data-state~="tanzen"] .shadow {
+    :scope[data-state~="dance"] .shadow {
       animation: berliner-baer-shadow var(--_t-0-5s) ease-in-out infinite;
     }
 
-    :scope[data-state~="tanzen"] .eye {
+    :scope[data-state~="dance"] .eye {
       animation: none;
     }
 
-    :scope[data-state~="tanzen"] .tongue {
+    :scope[data-state~="dance"] .tongue {
       animation: berliner-baer-flap var(--_t-0-25s) ease-in-out infinite alternate;
     }
   }
 
-  // kieken
-  :scope[data-state~="kieken"] .arm-l {
+  // look
+  :scope[data-state~="look"] .arm-l {
     transform: translate(0, -34px) rotate(61.9deg);
   }
 
-  :scope[data-state~="kieken"] .fore-l {
+  :scope[data-state~="look"] .fore-l {
     transform: rotate(-10.5deg);
   }
 
-  :scope[data-state~="kieken"] .arm-r {
+  :scope[data-state~="look"] .arm-r {
     transform: rotate(73.5deg);
   }
 
-  :scope[data-state~="kieken"] .fore-r {
+  :scope[data-state~="look"] .fore-r {
     transform: rotate(124.8deg);
   }
 
-  :scope[data-state~="kieken"] .lid {
+  :scope[data-state~="look"] .lid {
     opacity: 0;
   }
 
-  :scope[data-state~="kieken"] .curve {
+  :scope[data-state~="look"] .curve {
     transform: scaleY(0.2);
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="kieken"] .arm-l {
+    :scope[data-state~="look"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="kieken"] .arm-r {
+    :scope[data-state~="look"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="kieken"] .head {
+    :scope[data-state~="look"] .head {
       animation: berliner-baer-peer var(--_t-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="kieken"] .pupil {
+    :scope[data-state~="look"] .pupil {
       animation: berliner-baer-look var(--_t-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="kieken"] .eye {
+    :scope[data-state~="look"] .eye {
       animation: none;
     }
   }
 
-  // nüscht
-  :scope[data-state~="nuescht"] .arm-l {
+  // blank
+  :scope[data-state~="blank"] .arm-l {
     transform: rotate(-117.4deg);
   }
 
-  :scope[data-state~="nuescht"] .fore-l {
+  :scope[data-state~="blank"] .fore-l {
     transform: rotate(74.2deg);
   }
 
-  :scope[data-state~="nuescht"] .arm-r {
+  :scope[data-state~="blank"] .arm-r {
     transform: rotate(117.4deg);
   }
 
-  :scope[data-state~="nuescht"] .fore-r {
+  :scope[data-state~="blank"] .fore-r {
     transform: rotate(-74.2deg);
   }
 
-  :scope[data-state~="nuescht"] .pupil {
+  :scope[data-state~="blank"] .pupil {
     transform: translate(0, -5px);
   }
 
-  :scope[data-state~="nuescht"] .lid {
+  :scope[data-state~="blank"] .lid {
     opacity: 0;
   }
 
-  :scope[data-state~="nuescht"] .curve {
+  :scope[data-state~="blank"] .curve {
     transform: scaleY(-0.5);
   }
 
-  :scope[data-state~="nuescht"] .q {
+  :scope[data-state~="blank"] .q {
     opacity: 1;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="nuescht"] .arm-l {
+    :scope[data-state~="blank"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="nuescht"] .arm-r {
+    :scope[data-state~="blank"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="nuescht"] .head {
+    :scope[data-state~="blank"] .head {
       animation: berliner-baer-shrug var(--_t-2-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="nuescht"] .arm-l {
+    :scope[data-state~="blank"] .arm-l {
       animation: berliner-baer-shl var(--_t-2-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="nuescht"] .arm-r {
+    :scope[data-state~="blank"] .arm-r {
       animation: berliner-baer-shr var(--_t-2-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="nuescht"] .q {
+    :scope[data-state~="blank"] .q {
       animation: berliner-baer-q var(--_t-2-4s) ease-in-out infinite;
     }
   }
 
-  // jubeln
-  :scope[data-state~="jubeln"] .smile,
-  :scope[data-state~="jubeln"] .lid {
+  // cheer
+  :scope[data-state~="cheer"] .smile,
+  :scope[data-state~="cheer"] .lid {
     opacity: 0;
   }
 
-  :scope[data-state~="jubeln"] .open {
+  :scope[data-state~="cheer"] .open {
     transform: scaleY(1.2);
   }
 
-  :scope[data-state~="jubeln"] .shout {
+  :scope[data-state~="cheer"] .shout {
     opacity: 1;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="jubeln"] .all {
+    :scope[data-state~="cheer"] .all {
       animation: berliner-baer-jump var(--_t-0-6s) cubic-bezier(0.3, 0, 0.4, 1) infinite alternate;
     }
 
-    :scope[data-state~="jubeln"] .arm-l {
+    :scope[data-state~="cheer"] .arm-l {
       animation: berliner-baer-jl var(--_t-0-3s) ease-in-out infinite alternate;
     }
 
-    :scope[data-state~="jubeln"] .arm-r {
+    :scope[data-state~="cheer"] .arm-r {
       animation: berliner-baer-jr var(--_t-0-3s) ease-in-out infinite alternate;
     }
 
-    :scope[data-state~="jubeln"] .tongue {
+    :scope[data-state~="cheer"] .tongue {
       animation: berliner-baer-flap var(--_t-0-2s) ease-in-out infinite alternate;
     }
 
-    :scope[data-state~="jubeln"] .shadow {
+    :scope[data-state~="cheer"] .shadow {
       animation: berliner-baer-jshadow var(--_t-0-6s) cubic-bezier(0.3, 0, 0.4, 1) infinite
         alternate;
     }
 
-    :scope[data-state~="jubeln"] .shout {
+    :scope[data-state~="cheer"] .shout {
       animation: berliner-baer-shout var(--_t-0-3s) steps(2) infinite;
     }
 
-    :scope[data-state~="jubeln"] .head {
+    :scope[data-state~="cheer"] .head {
       animation: berliner-baer-jhead var(--_t-0-6s) ease-in-out infinite alternate;
     }
   }
@@ -624,83 +624,83 @@
     }
   }
 
-  // pennen
-  :scope[data-state~="pennen"] .arm-l {
+  // nap
+  :scope[data-state~="nap"] .arm-l {
     transform: rotate(-82deg);
   }
 
-  :scope[data-state~="pennen"] .fore-l {
+  :scope[data-state~="nap"] .fore-l {
     transform: rotate(-92.4deg);
   }
 
-  :scope[data-state~="pennen"] .arm-r {
+  :scope[data-state~="nap"] .arm-r {
     transform: rotate(82deg);
   }
 
-  :scope[data-state~="pennen"] .fore-r {
+  :scope[data-state~="nap"] .fore-r {
     transform: rotate(92.4deg);
   }
 
-  :scope[data-state~="pennen"] .eyes,
-  :scope[data-state~="pennen"] .lid {
+  :scope[data-state~="nap"] .eyes,
+  :scope[data-state~="nap"] .lid {
     opacity: 0;
   }
 
-  :scope[data-state~="pennen"] .sleep {
+  :scope[data-state~="nap"] .sleep {
     opacity: 1;
   }
 
-  :scope[data-state~="pennen"] .curve {
+  :scope[data-state~="nap"] .curve {
     transform: scaleY(0.25);
   }
 
-  :scope[data-state~="pennen"] .blep {
+  :scope[data-state~="nap"] .blep {
     transform: scaleY(0.8);
   }
 
-  :scope[data-state~="pennen"] .zzz {
+  :scope[data-state~="nap"] .zzz {
     opacity: 1;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="pennen"] .arm-l {
+    :scope[data-state~="nap"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="pennen"] .arm-r {
+    :scope[data-state~="nap"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="pennen"] .head {
+    :scope[data-state~="nap"] .head {
       animation: berliner-baer-snooze var(--_t-5s) ease-in-out infinite;
     }
 
-    :scope[data-state~="pennen"] .all {
+    :scope[data-state~="nap"] .all {
       animation: berliner-baer-snoozebody var(--_t-5s) ease-in-out infinite;
     }
 
-    :scope[data-state~="pennen"] .body {
+    :scope[data-state~="nap"] .body {
       animation-duration: var(--_t-5s);
     }
 
-    :scope[data-state~="pennen"] .ear-r {
+    :scope[data-state~="nap"] .ear-r {
       animation: none;
     }
 
-    :scope[data-state~="pennen"] .zzz text {
+    :scope[data-state~="nap"] .zzz text {
       animation: berliner-baer-zzz var(--_t-3s) ease-in-out infinite;
     }
 
-    :scope[data-state~="pennen"] .zzz text:nth-child(2) {
+    :scope[data-state~="nap"] .zzz text:nth-child(2) {
       animation-delay: var(--_t-0-6s);
     }
 
-    :scope[data-state~="pennen"] .zzz text:nth-child(3) {
+    :scope[data-state~="nap"] .zzz text:nth-child(3) {
       animation-delay: var(--_t-1-2s);
     }
   }
 
-  // umsehen im Leerlauf
+  // looking around while idle
   .waves {
     opacity: 0;
   }
@@ -710,231 +710,231 @@
       animation: berliner-baer-glance var(--_t-9s) ease-in-out infinite;
     }
 
-    :scope[data-state~="schnauze"] .glance,
-    :scope[data-state~="schreck"] .glance,
-    :scope[data-state~="nee"] .glance,
-    :scope[data-state~="kieken"] .glance,
-    :scope[data-state~="auftritt"] .glance {
+    :scope[data-state~="roar"] .glance,
+    :scope[data-state~="scare"] .glance,
+    :scope[data-state~="shake"] .glance,
+    :scope[data-state~="look"] .glance,
+    :scope[data-state~="enter"] .glance {
       animation: none;
     }
   }
 
-  // auftritt (läuft einmal)
-  :scope[data-state~="auftritt"] .lid {
+  // enter (runs once)
+  :scope[data-state~="enter"] .lid {
     opacity: 0;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="auftritt"] .all {
+    :scope[data-state~="enter"] .all {
       animation: berliner-baer-enter var(--_t-0-9s) cubic-bezier(0.2, 0.8, 0.3, 1) both;
     }
 
-    :scope[data-state~="auftritt"] .shadow {
+    :scope[data-state~="enter"] .shadow {
       animation: berliner-baer-entershadow var(--_t-0-9s) ease-out both;
     }
 
-    :scope[data-state~="auftritt"] .arm-l {
+    :scope[data-state~="enter"] .arm-l {
       animation: berliner-baer-enterl var(--_t-0-9s) cubic-bezier(0.3, 1.4, 0.5, 1) both;
     }
 
-    :scope[data-state~="auftritt"] .arm-r {
+    :scope[data-state~="enter"] .arm-r {
       animation: berliner-baer-enterr var(--_t-0-9s) cubic-bezier(0.3, 1.4, 0.5, 1) both;
     }
 
-    :scope[data-state~="auftritt"] .head {
+    :scope[data-state~="enter"] .head {
       animation: berliner-baer-enterhead var(--_t-0-9s) ease-out both;
     }
   }
 
-  // nicken
-  :scope[data-state~="nicken"] .arm-l {
+  // nod
+  :scope[data-state~="nod"] .arm-l {
     transform: rotate(-82deg);
   }
 
-  :scope[data-state~="nicken"] .fore-l {
+  :scope[data-state~="nod"] .fore-l {
     transform: rotate(-92.4deg);
   }
 
-  :scope[data-state~="nicken"] .arm-r {
+  :scope[data-state~="nod"] .arm-r {
     transform: rotate(82deg);
   }
 
-  :scope[data-state~="nicken"] .fore-r {
+  :scope[data-state~="nod"] .fore-r {
     transform: rotate(92.4deg);
   }
 
-  :scope[data-state~="nicken"] .lid {
+  :scope[data-state~="nod"] .lid {
     opacity: 0;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="nicken"] .arm-l {
+    :scope[data-state~="nod"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="nicken"] .arm-r {
+    :scope[data-state~="nod"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="nicken"] .head {
+    :scope[data-state~="nod"] .head {
       animation: berliner-baer-nod var(--_t-2-2s) ease-in-out infinite;
     }
   }
 
-  // nee (kopfschütteln)
-  :scope[data-state~="nee"] .arm-l {
+  // shake (head shake)
+  :scope[data-state~="shake"] .arm-l {
     transform: rotate(-82deg);
   }
 
-  :scope[data-state~="nee"] .fore-l {
+  :scope[data-state~="shake"] .fore-l {
     transform: rotate(-92.4deg);
   }
 
-  :scope[data-state~="nee"] .arm-r {
+  :scope[data-state~="shake"] .arm-r {
     transform: rotate(82deg);
   }
 
-  :scope[data-state~="nee"] .fore-r {
+  :scope[data-state~="shake"] .fore-r {
     transform: rotate(92.4deg);
   }
 
-  :scope[data-state~="nee"] .curve {
+  :scope[data-state~="shake"] .curve {
     transform: scaleY(-0.5);
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="nee"] .arm-l {
+    :scope[data-state~="shake"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="nee"] .arm-r {
+    :scope[data-state~="shake"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="nee"] .head {
-      animation: berliner-baer-nee var(--_t-2-2s) ease-in-out infinite;
+    :scope[data-state~="shake"] .head {
+      animation: berliner-baer-shake var(--_t-2-2s) ease-in-out infinite;
     }
 
-    :scope[data-state~="nee"] .eyes {
-      animation: berliner-baer-neeeyes var(--_t-2-2s) ease-in-out infinite;
+    :scope[data-state~="shake"] .eyes {
+      animation: berliner-baer-shakeeyes var(--_t-2-2s) ease-in-out infinite;
     }
   }
 
-  // zeigen
-  :scope[data-state~="zeigen"] .arm-l {
+  // point
+  :scope[data-state~="point"] .arm-l {
     transform: rotate(-82deg);
   }
 
-  :scope[data-state~="zeigen"] .fore-l {
+  :scope[data-state~="point"] .fore-l {
     transform: rotate(-92.4deg);
   }
 
-  :scope[data-state~="zeigen"] .arm-r {
+  :scope[data-state~="point"] .arm-r {
     transform: rotate(2.2deg);
   }
 
-  :scope[data-state~="zeigen"] .fore-r {
+  :scope[data-state~="point"] .fore-r {
     transform: rotate(74.7deg);
   }
 
-  :scope[data-state~="zeigen"] .pupil {
+  :scope[data-state~="point"] .pupil {
     transform: translateX(7px);
   }
 
-  :scope[data-state~="zeigen"] .lid {
+  :scope[data-state~="point"] .lid {
     opacity: 0;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="zeigen"] .arm-l {
+    :scope[data-state~="point"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="zeigen"] .arm-r {
+    :scope[data-state~="point"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="zeigen"] .arm-r {
+    :scope[data-state~="point"] .arm-r {
       animation: berliner-baer-point var(--_t-1-2s) ease-in-out infinite;
     }
 
-    :scope[data-state~="zeigen"] .head {
+    :scope[data-state~="point"] .head {
       animation: berliner-baer-pointhead var(--_t-1-2s) ease-in-out infinite;
     }
   }
 
-  // lauschen
-  :scope[data-state~="lauschen"] .arm-l {
+  // listen
+  :scope[data-state~="listen"] .arm-l {
     transform: rotate(-5.1deg);
   }
 
-  :scope[data-state~="lauschen"] .fore-l {
+  :scope[data-state~="listen"] .fore-l {
     transform: rotate(32.1deg);
   }
 
-  :scope[data-state~="lauschen"] .arm-r {
+  :scope[data-state~="listen"] .arm-r {
     transform: rotate(82deg);
   }
 
-  :scope[data-state~="lauschen"] .fore-r {
+  :scope[data-state~="listen"] .fore-r {
     transform: rotate(92.4deg);
   }
 
-  :scope[data-state~="lauschen"] .ear-l {
+  :scope[data-state~="listen"] .ear-l {
     transform-origin: 176px 126px;
   }
 
-  :scope[data-state~="lauschen"] .pupil {
+  :scope[data-state~="listen"] .pupil {
     transform: translateX(-7px);
   }
 
-  :scope[data-state~="lauschen"] .lid {
+  :scope[data-state~="listen"] .lid {
     opacity: 0;
   }
 
-  :scope[data-state~="lauschen"] .curve {
+  :scope[data-state~="listen"] .curve {
     transform: scaleY(0.3);
   }
 
-  :scope[data-state~="lauschen"] .waves {
+  :scope[data-state~="listen"] .waves {
     opacity: 1;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="lauschen"] .arm-l {
+    :scope[data-state~="listen"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="lauschen"] .arm-r {
+    :scope[data-state~="listen"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="lauschen"] .head {
+    :scope[data-state~="listen"] .head {
       animation: berliner-baer-listen var(--_t-3s) ease-in-out infinite;
     }
 
-    :scope[data-state~="lauschen"] .ear-l {
+    :scope[data-state~="listen"] .ear-l {
       animation: berliner-baer-twitch var(--_t-0-5s) ease-in-out infinite;
     }
 
-    :scope[data-state~="lauschen"] .ear-r {
+    :scope[data-state~="listen"] .ear-r {
       animation: none;
     }
 
-    :scope[data-state~="lauschen"] .waves path {
+    :scope[data-state~="listen"] .waves path {
       animation: berliner-baer-wave3 var(--_t-1-2s) ease-out infinite;
     }
 
-    :scope[data-state~="lauschen"] .waves path:nth-child(2) {
+    :scope[data-state~="listen"] .waves path:nth-child(2) {
       animation-delay: var(--_t-0-2s);
     }
 
-    :scope[data-state~="lauschen"] .waves path:nth-child(3) {
+    :scope[data-state~="listen"] .waves path:nth-child(3) {
       animation-delay: var(--_t-0-4s);
     }
   }
 
-  // Requisiten und Zeichen
+  // props and signs
   .prop,
   .thumb,
   .blush,
@@ -942,7 +942,7 @@
   .dots,
   .hick,
   .bubbles,
-  .pst,
+  .shush,
   .crumbs {
     opacity: 0;
   }
@@ -955,632 +955,632 @@
     transform-origin: 400px 80px;
   }
 
-  .pst {
+  .shush {
     transform-origin: 420px 236px;
   }
 
-  // abgang (läuft einmal)
-  :scope[data-state~="abgang"] .lid {
+  // exit (runs once)
+  :scope[data-state~="exit"] .lid {
     opacity: 0;
   }
 
-  :scope[data-state~="abgang"] .blep {
+  :scope[data-state~="exit"] .blep {
     transform: scaleY(1);
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="abgang"] .all {
+    :scope[data-state~="exit"] .all {
       animation: berliner-baer-exit var(--_t-2s) ease-in both;
     }
 
-    :scope[data-state~="abgang"] .shadow {
+    :scope[data-state~="exit"] .shadow {
       animation: berliner-baer-exitshadow var(--_t-2s) ease-in both;
     }
 
-    :scope[data-state~="abgang"] .arm-r {
+    :scope[data-state~="exit"] .arm-r {
       animation: berliner-baer-wave var(--_t-0-3s) ease-in-out 4;
     }
 
-    :scope[data-state~="abgang"] .head {
+    :scope[data-state~="exit"] .head {
       animation: berliner-baer-exithead var(--_t-2s) ease-in-out both;
     }
   }
 
-  // anlauf: einatmen vor dem brüllen
+  // run-up: breathing in before the roar
   @include butler-mx.feature("motion") {
-    :scope[data-state~="schnauze"] .body {
+    :scope[data-state~="roar"] .body {
       animation: berliner-baer-roarin var(--_t-0-45s) ease-out;
     }
   }
 
-  // daumen hoch
-  :scope[data-state~="daumen"] .arm-l {
+  // thumbs up
+  :scope[data-state~="thumbs-up"] .arm-l {
     transform: rotate(-73.5deg);
   }
 
-  :scope[data-state~="daumen"] .fore-l {
+  :scope[data-state~="thumbs-up"] .fore-l {
     transform: rotate(-124.8deg);
   }
 
-  :scope[data-state~="daumen"] .arm-r {
+  :scope[data-state~="thumbs-up"] .arm-r {
     transform: rotate(114.9deg);
   }
 
-  :scope[data-state~="daumen"] .fore-r {
+  :scope[data-state~="thumbs-up"] .fore-r {
     transform: rotate(-37.5deg);
   }
 
-  :scope[data-state~="daumen"] .thumb {
+  :scope[data-state~="thumbs-up"] .thumb {
     opacity: 1;
   }
 
-  :scope[data-state~="daumen"] .lid {
+  :scope[data-state~="thumbs-up"] .lid {
     opacity: 0;
   }
 
-  :scope[data-state~="daumen"] .curve {
+  :scope[data-state~="thumbs-up"] .curve {
     transform: scaleY(1.5);
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="daumen"] .arm-l {
+    :scope[data-state~="thumbs-up"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="daumen"] .arm-r {
+    :scope[data-state~="thumbs-up"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="daumen"] .arm-r {
+    :scope[data-state~="thumbs-up"] .arm-r {
       animation: berliner-baer-thumb var(--_t-1-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="daumen"] .eye-r {
+    :scope[data-state~="thumbs-up"] .eye-r {
       animation: berliner-baer-wink var(--_t-2-8s) ease-in-out infinite;
     }
 
-    :scope[data-state~="daumen"] .pupil {
+    :scope[data-state~="thumbs-up"] .pupil {
       animation: none;
     }
 
-    :scope[data-state~="daumen"] .head {
+    :scope[data-state~="thumbs-up"] .head {
       animation: berliner-baer-tilt var(--_t-1-4s) ease-in-out infinite;
     }
   }
 
-  // denken
-  :scope[data-state~="denken"] .arm-l {
+  // think
+  :scope[data-state~="think"] .arm-l {
     transform: rotate(-73.5deg);
   }
 
-  :scope[data-state~="denken"] .fore-l {
+  :scope[data-state~="think"] .fore-l {
     transform: rotate(-124.8deg);
   }
 
-  :scope[data-state~="denken"] .arm-r {
+  :scope[data-state~="think"] .arm-r {
     transform: rotate(99.1deg);
   }
 
-  :scope[data-state~="denken"] .fore-r {
+  :scope[data-state~="think"] .fore-r {
     transform: rotate(-158.2deg);
   }
 
-  :scope[data-state~="denken"] .pupil {
+  :scope[data-state~="think"] .pupil {
     transform: translate(4px, -6px);
   }
 
-  :scope[data-state~="denken"] .lid {
+  :scope[data-state~="think"] .lid {
     opacity: 0;
   }
 
-  :scope[data-state~="denken"] .curve {
+  :scope[data-state~="think"] .curve {
     transform: scaleY(0.15);
   }
 
-  :scope[data-state~="denken"] .dots {
+  :scope[data-state~="think"] .dots {
     opacity: 1;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="denken"] .arm-l {
+    :scope[data-state~="think"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="denken"] .arm-r {
+    :scope[data-state~="think"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="denken"] .head {
+    :scope[data-state~="think"] .head {
       animation: berliner-baer-think var(--_t-3s) ease-in-out infinite;
     }
 
-    :scope[data-state~="denken"] .pupil {
+    :scope[data-state~="think"] .pupil {
       animation: none;
     }
 
-    :scope[data-state~="denken"] .dots circle {
+    :scope[data-state~="think"] .dots circle {
       animation: berliner-baer-wave3 var(--_t-1-5s) ease-in-out infinite;
     }
 
-    :scope[data-state~="denken"] .dots circle:nth-child(2) {
+    :scope[data-state~="think"] .dots circle:nth-child(2) {
       animation-delay: var(--_t-0-25s);
     }
 
-    :scope[data-state~="denken"] .dots circle:nth-child(3) {
+    :scope[data-state~="think"] .dots circle:nth-child(3) {
       animation-delay: var(--_t-0-5s);
     }
   }
 
-  // erschrecken
-  :scope[data-state~="schreck"] .arm-l {
+  // scare
+  :scope[data-state~="scare"] .arm-l {
     transform: rotate(-26deg);
   }
 
-  :scope[data-state~="schreck"] .arm-r {
+  :scope[data-state~="scare"] .arm-r {
     transform: rotate(26deg);
   }
 
-  :scope[data-state~="schreck"] .eye {
+  :scope[data-state~="scare"] .eye {
     transform: scale(1.4);
   }
 
-  :scope[data-state~="schreck"] .pupil {
+  :scope[data-state~="scare"] .pupil {
     transform: scale(0.6);
     transform-box: fill-box;
     transform-origin: center;
   }
 
-  :scope[data-state~="schreck"] .lid,
-  :scope[data-state~="schreck"] .smile {
+  :scope[data-state~="scare"] .lid,
+  :scope[data-state~="scare"] .smile {
     opacity: 0;
   }
 
-  :scope[data-state~="schreck"] .open {
+  :scope[data-state~="scare"] .open {
     transform: scale(0.55, 0.75);
   }
 
-  :scope[data-state~="schreck"] .tongue {
+  :scope[data-state~="scare"] .tongue {
     opacity: 0;
   }
 
-  :scope[data-state~="schreck"] .bang {
+  :scope[data-state~="scare"] .bang {
     opacity: 1;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="schreck"] .all {
+    :scope[data-state~="scare"] .all {
       animation: berliner-baer-scare var(--_t-2s) ease-out infinite;
     }
 
-    :scope[data-state~="schreck"] .arm-l {
+    :scope[data-state~="scare"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="schreck"] .arm-r {
+    :scope[data-state~="scare"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="schreck"] .eye {
+    :scope[data-state~="scare"] .eye {
       animation: none;
     }
 
-    :scope[data-state~="schreck"] .pupil {
+    :scope[data-state~="scare"] .pupil {
       animation: none;
     }
 
-    :scope[data-state~="schreck"] .bang {
+    :scope[data-state~="scare"] .bang {
       animation: berliner-baer-pop var(--_t-2s) ease-out infinite;
     }
   }
 
-  // kratzen
-  :scope[data-state~="kratzen"] .arm-l {
+  // scratch
+  :scope[data-state~="scratch"] .arm-l {
     transform: rotate(-80.2deg);
   }
 
-  :scope[data-state~="kratzen"] .fore-l {
+  :scope[data-state~="scratch"] .fore-l {
     transform: rotate(-161deg);
   }
 
-  :scope[data-state~="kratzen"] .arm-r {
+  :scope[data-state~="scratch"] .arm-r {
     transform: rotate(82deg);
   }
 
-  :scope[data-state~="kratzen"] .fore-r {
+  :scope[data-state~="scratch"] .fore-r {
     transform: rotate(92.4deg);
   }
 
-  :scope[data-state~="kratzen"] .blep {
+  :scope[data-state~="scratch"] .blep {
     transform: scaleY(1);
   }
 
-  :scope[data-state~="kratzen"] .lid {
+  :scope[data-state~="scratch"] .lid {
     transform: translateY(5px);
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="kratzen"] .arm-l {
+    :scope[data-state~="scratch"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="kratzen"] .arm-r {
+    :scope[data-state~="scratch"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="kratzen"] .arm-l {
+    :scope[data-state~="scratch"] .arm-l {
       animation: berliner-baer-scratch var(--_t-0-28s) ease-in-out infinite alternate;
     }
 
-    :scope[data-state~="kratzen"] .head {
+    :scope[data-state~="scratch"] .head {
       animation: berliner-baer-tilt var(--_t-2-4s) ease-in-out infinite;
     }
   }
 
-  // gähnen und strecken
-  :scope[data-state~="gaehnen"] .lid {
+  // yawn and stretch
+  :scope[data-state~="yawn"] .lid {
     opacity: 0;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="gaehnen"] .head {
+    :scope[data-state~="yawn"] .head {
       animation: berliner-baer-yawnhead var(--_t-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="gaehnen"] .yawn {
+    :scope[data-state~="yawn"] .yawn {
       animation: berliner-baer-yawn var(--_t-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="gaehnen"] .smile {
+    :scope[data-state~="yawn"] .smile {
       animation: berliner-baer-yawnsmile var(--_t-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="gaehnen"] .eye {
+    :scope[data-state~="yawn"] .eye {
       animation: berliner-baer-yawneye var(--_t-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="gaehnen"] .arm-l {
+    :scope[data-state~="yawn"] .arm-l {
       animation: berliner-baer-stretchl var(--_t-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="gaehnen"] .arm-r {
+    :scope[data-state~="yawn"] .arm-r {
       animation: berliner-baer-stretchr var(--_t-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="gaehnen"] .body {
+    :scope[data-state~="yawn"] .body {
       animation: berliner-baer-stretchbody var(--_t-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="gaehnen"] .tongue {
+    :scope[data-state~="yawn"] .tongue {
       animation: none;
     }
   }
 
-  // einnicken und aufschrecken
-  :scope[data-state~="einnicken"] .arm-l {
+  // doze off and startle awake
+  :scope[data-state~="doze"] .arm-l {
     transform: rotate(-82deg);
   }
 
-  :scope[data-state~="einnicken"] .fore-l {
+  :scope[data-state~="doze"] .fore-l {
     transform: rotate(-92.4deg);
   }
 
-  :scope[data-state~="einnicken"] .arm-r {
+  :scope[data-state~="doze"] .arm-r {
     transform: rotate(82deg);
   }
 
-  :scope[data-state~="einnicken"] .fore-r {
+  :scope[data-state~="doze"] .fore-r {
     transform: rotate(92.4deg);
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="einnicken"] .arm-l {
+    :scope[data-state~="doze"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="einnicken"] .arm-r {
+    :scope[data-state~="doze"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="einnicken"] .head {
+    :scope[data-state~="doze"] .head {
       animation: berliner-baer-doze var(--_t-5s) ease-in infinite;
     }
 
-    :scope[data-state~="einnicken"] .eye {
+    :scope[data-state~="doze"] .eye {
       animation: berliner-baer-dozeeye var(--_t-5s) ease-in infinite;
     }
 
-    :scope[data-state~="einnicken"] .pupil {
+    :scope[data-state~="doze"] .pupil {
       animation: none;
     }
   }
 
-  // futtern
-  :scope[data-state~="futtern"] .arm-l {
+  // eat
+  :scope[data-state~="eat"] .arm-l {
     transform: rotate(-82deg);
   }
 
-  :scope[data-state~="futtern"] .fore-l {
+  :scope[data-state~="eat"] .fore-l {
     transform: rotate(-92.4deg);
   }
 
-  :scope[data-state~="futtern"] .arm-r {
+  :scope[data-state~="eat"] .arm-r {
     transform: rotate(141.3deg);
   }
 
-  :scope[data-state~="futtern"] .fore-r {
+  :scope[data-state~="eat"] .fore-r {
     transform: rotate(-178.9deg);
   }
 
-  :scope[data-state~="futtern"] .prop-schrippe {
+  :scope[data-state~="eat"] .prop-roll {
     opacity: 1;
   }
 
-  :scope[data-state~="futtern"] .lid {
+  :scope[data-state~="eat"] .lid {
     opacity: 0;
   }
 
-  :scope[data-state~="futtern"] .crumbs {
+  :scope[data-state~="eat"] .crumbs {
     opacity: 1;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="futtern"] .arm-l {
+    :scope[data-state~="eat"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="futtern"] .arm-r {
+    :scope[data-state~="eat"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="futtern"] .arm-r {
+    :scope[data-state~="eat"] .arm-r {
       animation: berliner-baer-bite var(--_t-1-6s) ease-in-out infinite;
     }
 
-    :scope[data-state~="futtern"] .curve {
+    :scope[data-state~="eat"] .curve {
       animation: berliner-baer-chew var(--_t-0-22s) ease-in-out infinite alternate;
     }
 
-    :scope[data-state~="futtern"] .head {
+    :scope[data-state~="eat"] .head {
       animation: berliner-baer-chewhead var(--_t-0-44s) ease-in-out infinite;
     }
 
-    :scope[data-state~="futtern"] .crumbs circle {
+    :scope[data-state~="eat"] .crumbs circle {
       animation: berliner-baer-crumb var(--_t-1-6s) ease-in infinite;
     }
 
-    :scope[data-state~="futtern"] .crumbs circle:nth-child(2) {
+    :scope[data-state~="eat"] .crumbs circle:nth-child(2) {
       animation-delay: var(--_t-0-5s);
     }
 
-    :scope[data-state~="futtern"] .crumbs circle:nth-child(3) {
+    :scope[data-state~="eat"] .crumbs circle:nth-child(3) {
       animation-delay: var(--_t-0-9s);
     }
   }
 
-  // abwinken
-  :scope[data-state~="abwinken"] .arm-l {
+  // dismiss
+  :scope[data-state~="dismiss"] .arm-l {
     transform: rotate(-82deg);
   }
 
-  :scope[data-state~="abwinken"] .fore-l {
+  :scope[data-state~="dismiss"] .fore-l {
     transform: rotate(-92.4deg);
   }
 
-  :scope[data-state~="abwinken"] .arm-r {
+  :scope[data-state~="dismiss"] .arm-r {
     transform: rotate(24deg);
   }
 
-  :scope[data-state~="abwinken"] .head {
+  :scope[data-state~="dismiss"] .head {
     transform: translateX(-8px) rotate(-7deg);
   }
 
-  :scope[data-state~="abwinken"] .pupil {
+  :scope[data-state~="dismiss"] .pupil {
     transform: translateX(-6px);
   }
 
-  :scope[data-state~="abwinken"] .lid {
+  :scope[data-state~="dismiss"] .lid {
     transform: translateY(5px);
   }
 
-  :scope[data-state~="abwinken"] .curve {
+  :scope[data-state~="dismiss"] .curve {
     transform: scaleY(-0.35);
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="abwinken"] .arm-l {
+    :scope[data-state~="dismiss"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="abwinken"] .arm-r {
+    :scope[data-state~="dismiss"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="abwinken"] .fore-r {
+    :scope[data-state~="dismiss"] .fore-r {
       animation: berliner-baer-flick var(--_t-1-5s) ease-in-out infinite;
     }
 
-    :scope[data-state~="abwinken"] .head {
+    :scope[data-state~="dismiss"] .head {
       animation: none;
     }
 
-    :scope[data-state~="abwinken"] .pupil {
+    :scope[data-state~="dismiss"] .pupil {
       animation: none;
     }
   }
 
-  // schnauze halten
-  :scope[data-state~="pst"] .arm-l {
+  // shush
+  :scope[data-state~="shush"] .arm-l {
     transform: rotate(-82deg);
   }
 
-  :scope[data-state~="pst"] .fore-l {
+  :scope[data-state~="shush"] .fore-l {
     transform: rotate(-92.4deg);
   }
 
-  :scope[data-state~="pst"] .arm-r {
+  :scope[data-state~="shush"] .arm-r {
     transform: rotate(147.7deg);
   }
 
-  :scope[data-state~="pst"] .fore-r {
+  :scope[data-state~="shush"] .fore-r {
     transform: rotate(176.7deg);
   }
 
-  :scope[data-state~="pst"] .lid {
+  :scope[data-state~="shush"] .lid {
     opacity: 0;
   }
 
-  :scope[data-state~="pst"] .curve {
+  :scope[data-state~="shush"] .curve {
     transform: scaleY(0.1);
   }
 
-  :scope[data-state~="pst"] .pst {
+  :scope[data-state~="shush"] .shush {
     opacity: 1;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="pst"] .arm-l {
+    :scope[data-state~="shush"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="pst"] .arm-r {
+    :scope[data-state~="shush"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="pst"] .pupil {
+    :scope[data-state~="shush"] .pupil {
       animation: berliner-baer-look var(--_t-2-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="pst"] .eye {
+    :scope[data-state~="shush"] .eye {
       animation: none;
     }
 
-    :scope[data-state~="pst"] .pst {
-      animation: berliner-baer-pstpulse var(--_t-1-6s) ease-in-out infinite;
+    :scope[data-state~="shush"] .shush {
+      animation: berliner-baer-shushpulse var(--_t-1-6s) ease-in-out infinite;
     }
 
-    :scope[data-state~="pst"] .head {
+    :scope[data-state~="shush"] .head {
       animation: berliner-baer-think var(--_t-3s) ease-in-out infinite;
     }
   }
 
-  // betrunken mit pils
-  :scope[data-state~="pils"] .arm-l {
+  // drunk with a beer
+  :scope[data-state~="beer"] .arm-l {
     transform: rotate(-82deg);
   }
 
-  :scope[data-state~="pils"] .fore-l {
+  :scope[data-state~="beer"] .fore-l {
     transform: rotate(-92.4deg);
   }
 
-  :scope[data-state~="pils"] .prop-pils {
+  :scope[data-state~="beer"] .prop-beer {
     opacity: 1;
   }
 
-  :scope[data-state~="pils"] .eye-l .pupil {
+  :scope[data-state~="beer"] .eye-l .pupil {
     transform: translate(5px, 3px);
   }
 
-  :scope[data-state~="pils"] .eye-r .pupil {
+  :scope[data-state~="beer"] .eye-r .pupil {
     transform: translate(-5px, 2px);
   }
 
-  :scope[data-state~="pils"] .lid {
+  :scope[data-state~="beer"] .lid {
     transform: translateY(6px);
   }
 
-  :scope[data-state~="pils"] .curve {
+  :scope[data-state~="beer"] .curve {
     transform: scaleY(1.3) rotate(-7deg);
   }
 
-  :scope[data-state~="pils"] .blep {
+  :scope[data-state~="beer"] .blep {
     transform: scaleY(1) translateX(8px);
   }
 
-  :scope[data-state~="pils"] .bubbles {
+  :scope[data-state~="beer"] .bubbles {
     opacity: 1;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="pils"] .arm-l {
+    :scope[data-state~="beer"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="pils"] .all {
+    :scope[data-state~="beer"] .all {
       animation: berliner-baer-drunk var(--_t-3-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="pils"] .head {
+    :scope[data-state~="beer"] .head {
       animation: berliner-baer-drunkhead var(--_t-3-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="pils"] .arm-r {
-      animation: berliner-baer-prost var(--_t-3-4s) ease-in-out infinite;
+    :scope[data-state~="beer"] .arm-r {
+      animation: berliner-baer-cheers var(--_t-3-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="pils"] .fore-r {
-      animation: berliner-baer-prostfore var(--_t-3-4s) ease-in-out infinite;
+    :scope[data-state~="beer"] .fore-r {
+      animation: berliner-baer-cheersfore var(--_t-3-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="pils"] .arm-l {
+    :scope[data-state~="beer"] .arm-l {
       animation: berliner-baer-drunkarm var(--_t-3-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="pils"] .pupil {
+    :scope[data-state~="beer"] .pupil {
       animation: none;
     }
 
-    :scope[data-state~="pils"] .eye {
+    :scope[data-state~="beer"] .eye {
       animation: berliner-baer-drunkblink var(--_t-3-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="pils"] .hick {
+    :scope[data-state~="beer"] .hick {
       animation: berliner-baer-hick var(--_t-3-4s) ease-out infinite;
     }
 
-    :scope[data-state~="pils"] .bubbles circle {
+    :scope[data-state~="beer"] .bubbles circle {
       animation: berliner-baer-bubble var(--_t-2-6s) ease-in infinite;
     }
 
-    :scope[data-state~="pils"] .bubbles circle:nth-child(2) {
+    :scope[data-state~="beer"] .bubbles circle:nth-child(2) {
       animation-delay: var(--_t-0-8s);
     }
 
-    :scope[data-state~="pils"] .bubbles circle:nth-child(3) {
+    :scope[data-state~="beer"] .bubbles circle:nth-child(3) {
       animation-delay: var(--_t-1-6s);
     }
 
-    :scope[data-state~="pils"] .shadow {
+    :scope[data-state~="beer"] .shadow {
       animation: berliner-baer-drunkshadow var(--_t-3-4s) ease-in-out infinite;
     }
   }
 
-  // blick folgt dem Zeiger (braucht --lx und --ly zwischen -1 und 1)
-  :scope[data-state~="folgen"] .pupil {
+  // gaze follows the pointer (needs --lx and --ly between -1 and 1)
+  :scope[data-state~="follow"] .pupil {
     transform: translate(calc(var(--_lx, 0) * 8px), calc(var(--_ly, 0) * 6px));
   }
 
-  :scope[data-state~="folgen"] .head {
+  :scope[data-state~="follow"] .head {
     transform: translate(calc(var(--_lx, 0) * 8px), calc(var(--_ly, 0) * 5px))
       rotate(calc(var(--_lx, 0) * 5deg));
   }
 
-  :scope[data-state~="folgen"] .lid {
+  :scope[data-state~="follow"] .lid {
     opacity: 0;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="folgen"] .pupil {
+    :scope[data-state~="follow"] .pupil {
       animation: none;
       transition: transform var(--_t-0-12s);
     }
 
-    :scope[data-state~="folgen"] .head {
+    :scope[data-state~="follow"] .head {
       animation: none;
       transition: transform var(--_t-0-25s);
     }
   }
 
-  // antippen und tippen (Klasse wechselt a/b, damit es neu startet)
+  // tap and type (the class alternates a/b so the animation restarts)
   .react {
     transform-origin: 260px 824px;
   }
@@ -1599,163 +1599,163 @@
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="zuck-a"] .react,
-    :scope[data-state~="zuck-b"] .react {
+    :scope[data-state~="flinch-a"] .react,
+    :scope[data-state~="flinch-b"] .react {
       animation: berliner-baer-flinch-a var(--_t-0-4s) ease-out;
     }
 
-    :scope[data-state~="zuck-b"] .react {
+    :scope[data-state~="flinch-b"] .react {
       animation-name: berliner-baer-flinch-b;
     }
 
-    :scope[data-state~="zuck-a"] .wide,
-    :scope[data-state~="zuck-b"] .wide {
+    :scope[data-state~="flinch-a"] .wide,
+    :scope[data-state~="flinch-b"] .wide {
       animation: berliner-baer-flincheye-a var(--_t-0-4s) ease-out;
     }
 
-    :scope[data-state~="zuck-b"] .wide {
+    :scope[data-state~="flinch-b"] .wide {
       animation-name: berliner-baer-flincheye-b;
     }
 
-    :scope[data-state~="tipp-a"] .ear-l .earin,
-    :scope[data-state~="tipp-b"] .ear-r .earin {
-      animation: berliner-baer-tipp-a var(--_t-0-3s) ease-out;
+    :scope[data-state~="type-a"] .ear-l .earin,
+    :scope[data-state~="type-b"] .ear-r .earin {
+      animation: berliner-baer-type-a var(--_t-0-3s) ease-out;
     }
 
-    :scope[data-state~="tipp-b"] .ear-l .earin,
-    :scope[data-state~="tipp-a"] .ear-r .earin {
-      animation: berliner-baer-tipp-b var(--_t-0-3s) ease-out;
+    :scope[data-state~="type-b"] .ear-l .earin,
+    :scope[data-state~="type-a"] .ear-r .earin {
+      animation: berliner-baer-type-b var(--_t-0-3s) ease-out;
     }
 
-    :scope[data-state~="tipp-a"] .nod {
-      animation: berliner-baer-tipphead-a var(--_t-0-3s) ease-out;
+    :scope[data-state~="type-a"] .nod {
+      animation: berliner-baer-typehead-a var(--_t-0-3s) ease-out;
     }
 
-    :scope[data-state~="tipp-b"] .nod {
-      animation: berliner-baer-tipphead-b var(--_t-0-3s) ease-out;
+    :scope[data-state~="type-b"] .nod {
+      animation: berliner-baer-typehead-b var(--_t-0-3s) ease-out;
     }
   }
 
-  // locker: ruhig mit Armen unten
-  :scope[data-state~="locker"] .arm-l {
+  // relaxed: calm with arms down
+  :scope[data-state~="relaxed"] .arm-l {
     transform: rotate(-96.6deg);
   }
 
-  :scope[data-state~="locker"] .fore-l {
+  :scope[data-state~="relaxed"] .fore-l {
     transform: rotate(-77.6deg);
   }
 
-  :scope[data-state~="locker"] .arm-r {
+  :scope[data-state~="relaxed"] .arm-r {
     transform: rotate(96.6deg);
   }
 
-  :scope[data-state~="locker"] .fore-r {
+  :scope[data-state~="relaxed"] .fore-r {
     transform: rotate(77.6deg);
   }
 
-  :scope[data-state~="locker"] .lid {
+  :scope[data-state~="relaxed"] .lid {
     opacity: 0;
   }
 
-  :scope[data-state~="locker"] .curve {
+  :scope[data-state~="relaxed"] .curve {
     transform: scaleY(1.2);
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="locker"] .arm-l {
+    :scope[data-state~="relaxed"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="locker"] .arm-r {
+    :scope[data-state~="relaxed"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="locker"] .all {
+    :scope[data-state~="relaxed"] .all {
       animation: berliner-baer-shift var(--_t-8s) ease-in-out infinite;
     }
 
-    :scope[data-state~="locker"] .arm-l {
+    :scope[data-state~="relaxed"] .arm-l {
       animation: berliner-baer-dangle-l var(--_t-4-6s) ease-in-out infinite;
     }
 
-    :scope[data-state~="locker"] .arm-r {
+    :scope[data-state~="relaxed"] .arm-r {
       animation: berliner-baer-dangle-r var(--_t-4-6s) ease-in-out infinite;
     }
   }
 
-  // alt-berliner ganove
-  .gang {
+  // old-Berlin gangster
+  .gangster {
     opacity: 0;
   }
 
-  :scope[data-state~="ganove"] .gang {
+  :scope[data-state~="gangster"] .gangster {
     opacity: 1;
   }
 
-  :scope[data-state~="ganove"] .arm-l {
+  :scope[data-state~="gangster"] .arm-l {
     transform: rotate(-73.5deg);
   }
 
-  :scope[data-state~="ganove"] .fore-l {
+  :scope[data-state~="gangster"] .fore-l {
     transform: rotate(-124.8deg);
   }
 
-  :scope[data-state~="ganove"] .arm-r {
+  :scope[data-state~="gangster"] .arm-r {
     transform: rotate(114.9deg);
   }
 
-  :scope[data-state~="ganove"] .fore-r {
+  :scope[data-state~="gangster"] .fore-r {
     transform: rotate(-37.5deg);
   }
 
-  :scope[data-state~="ganove"] .coin {
+  :scope[data-state~="gangster"] .coin {
     transform-box: fill-box;
     transform-origin: center;
   }
 
-  :scope[data-state~="ganove"] .eye-l {
+  :scope[data-state~="gangster"] .eye-l {
     transform: scaleY(0.5);
   }
 
-  :scope[data-state~="ganove"] .curve {
+  :scope[data-state~="gangster"] .curve {
     transform: scaleY(0.6) rotate(9deg);
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-state~="ganove"] .arm-l {
+    :scope[data-state~="gangster"] .arm-l {
       animation: none;
     }
 
-    :scope[data-state~="ganove"] .arm-r {
+    :scope[data-state~="gangster"] .arm-r {
       animation: none;
     }
 
-    :scope[data-state~="ganove"] .arm-r {
+    :scope[data-state~="gangster"] .arm-r {
       animation: berliner-baer-toss var(--_t-1-1s) cubic-bezier(0.3, 0, 0.7, 1) infinite alternate;
     }
 
-    :scope[data-state~="ganove"] .coin {
+    :scope[data-state~="gangster"] .coin {
       animation: berliner-baer-coin var(--_t-1-1s) cubic-bezier(0.2, 0.6, 0.4, 1) infinite alternate;
     }
 
-    :scope[data-state~="ganove"] .eye-l {
+    :scope[data-state~="gangster"] .eye-l {
       animation: none;
     }
 
-    :scope[data-state~="ganove"] .pupil {
+    :scope[data-state~="gangster"] .pupil {
       animation: berliner-baer-glance var(--_t-6s) ease-in-out infinite;
     }
 
-    :scope[data-state~="ganove"] .head {
+    :scope[data-state~="gangster"] .head {
       animation: berliner-baer-think var(--_t-4s) ease-in-out infinite;
     }
 
-    :scope[data-state~="ganove"] .smoke {
+    :scope[data-state~="gangster"] .smoke {
       animation: berliner-baer-smoke var(--_t-2-6s) ease-in-out infinite;
     }
   }
 
-  // Beine mit Knie
+  // legs with knees
   .leg-l {
     transform-origin: 178px 600px;
   }
@@ -1789,262 +1789,262 @@
     }
   }
 
-  // Handformen
+  // hand shapes
   .knuckles {
     opacity: 0;
   }
 
-  :scope[data-state~="pst"] .fore-r .claws {
+  :scope[data-state~="shush"] .fore-r .claws {
     opacity: 0;
   }
 
-  :scope[data-state~="pst"] .fore-r .knuckles {
+  :scope[data-state~="shush"] .fore-r .knuckles {
     opacity: 1;
   }
 
-  :scope[data-state~="denken"] .fore-r .claws,
-  :scope[data-state~="daumen"] .fore-r .claws,
-  :scope[data-state~="futtern"] .fore-r .claws {
+  :scope[data-state~="think"] .fore-r .claws,
+  :scope[data-state~="thumbs-up"] .fore-r .claws,
+  :scope[data-state~="eat"] .fore-r .claws {
     opacity: 0;
   }
 
-  :scope[data-state~="denken"] .fore-r .knuckles,
-  :scope[data-state~="daumen"] .fore-r .knuckles,
-  :scope[data-state~="futtern"] .fore-r .knuckles {
+  :scope[data-state~="think"] .fore-r .knuckles,
+  :scope[data-state~="thumbs-up"] .fore-r .knuckles,
+  :scope[data-state~="eat"] .fore-r .knuckles {
     opacity: 1;
   }
 
-  :scope[data-state~="locker"] .claws,
-  :scope[data-state~="nicken"] .claws,
-  :scope[data-state~="nee"] .claws,
-  :scope[data-state~="einnicken"] .claws,
-  :scope[data-state~="pennen"] .claws {
+  :scope[data-state~="relaxed"] .claws,
+  :scope[data-state~="nod"] .claws,
+  :scope[data-state~="shake"] .claws,
+  :scope[data-state~="doze"] .claws,
+  :scope[data-state~="nap"] .claws {
     opacity: 0;
   }
 
-  :scope[data-state~="locker"] .knuckles,
-  :scope[data-state~="nicken"] .knuckles,
-  :scope[data-state~="nee"] .knuckles,
-  :scope[data-state~="einnicken"] .knuckles,
-  :scope[data-state~="pennen"] .knuckles {
+  :scope[data-state~="relaxed"] .knuckles,
+  :scope[data-state~="nod"] .knuckles,
+  :scope[data-state~="shake"] .knuckles,
+  :scope[data-state~="doze"] .knuckles,
+  :scope[data-state~="nap"] .knuckles {
     opacity: 1;
   }
 
-  :scope[data-state~="kieken"] .fore-l .claws {
+  :scope[data-state~="look"] .fore-l .claws {
     opacity: 0;
   }
 
-  :scope[data-state~="kieken"] .fore-l .knuckles {
+  :scope[data-state~="look"] .fore-l .knuckles {
     opacity: 1;
   }
 
-  :scope[data-state~="lauschen"] .fore-l .claws {
+  :scope[data-state~="listen"] .fore-l .claws {
     opacity: 0;
   }
 
-  :scope[data-state~="lauschen"] .fore-l .knuckles {
+  :scope[data-state~="listen"] .fore-l .knuckles {
     opacity: 1;
   }
 
-  // tanzen: Knie im Wechsel
+  // dance: knees alternate
   @include butler-mx.feature("motion") {
-    :scope[data-state~="tanzen"] .leg-l {
+    :scope[data-state~="dance"] .leg-l {
       animation: berliner-baer-knee-l var(--_t-1s) ease-in-out infinite;
     }
 
-    :scope[data-state~="tanzen"] .shin-l {
+    :scope[data-state~="dance"] .shin-l {
       animation: berliner-baer-shin-l var(--_t-1s) ease-in-out infinite;
     }
 
-    :scope[data-state~="tanzen"] .foot-l {
+    :scope[data-state~="dance"] .foot-l {
       animation: berliner-baer-foot-l var(--_t-1s) ease-in-out infinite;
     }
 
-    :scope[data-state~="tanzen"] .leg-r {
+    :scope[data-state~="dance"] .leg-r {
       animation: berliner-baer-knee-r var(--_t-1s) ease-in-out infinite;
     }
 
-    :scope[data-state~="tanzen"] .shin-r {
+    :scope[data-state~="dance"] .shin-r {
       animation: berliner-baer-shin-r var(--_t-1s) ease-in-out infinite;
     }
 
-    :scope[data-state~="tanzen"] .foot-r {
+    :scope[data-state~="dance"] .foot-r {
       animation: berliner-baer-foot-r var(--_t-1s) ease-in-out infinite;
     }
 
-    :scope[data-state~="tanzen"] .upper {
+    :scope[data-state~="dance"] .upper {
       animation: berliner-baer-bobup var(--_t-1s) ease-in-out infinite;
     }
   }
 
-  // jubeln: aus der Hocke hoch, Beine angezogen
+  // cheer: up from the crouch, legs tucked
   @include butler-mx.feature("motion") {
-    :scope[data-state~="jubeln"] .upper {
+    :scope[data-state~="cheer"] .upper {
       animation: berliner-baer-jupper var(--_t-0-6s) cubic-bezier(0.3, 0, 0.4, 1) infinite alternate;
     }
 
-    :scope[data-state~="jubeln"] .leg-l {
+    :scope[data-state~="cheer"] .leg-l {
       animation: berliner-baer-jleg-l var(--_t-0-6s) cubic-bezier(0.3, 0, 0.4, 1) infinite alternate;
     }
 
-    :scope[data-state~="jubeln"] .shin-l {
+    :scope[data-state~="cheer"] .shin-l {
       animation: berliner-baer-jshin-l var(--_t-0-6s) cubic-bezier(0.3, 0, 0.4, 1) infinite
         alternate;
     }
 
-    :scope[data-state~="jubeln"] .foot-l {
+    :scope[data-state~="cheer"] .foot-l {
       animation: berliner-baer-jfoot-l var(--_t-0-6s) cubic-bezier(0.3, 0, 0.4, 1) infinite
         alternate;
     }
 
-    :scope[data-state~="jubeln"] .leg-r {
+    :scope[data-state~="cheer"] .leg-r {
       animation: berliner-baer-jleg-r var(--_t-0-6s) cubic-bezier(0.3, 0, 0.4, 1) infinite alternate;
     }
 
-    :scope[data-state~="jubeln"] .shin-r {
+    :scope[data-state~="cheer"] .shin-r {
       animation: berliner-baer-jshin-r var(--_t-0-6s) cubic-bezier(0.3, 0, 0.4, 1) infinite
         alternate;
     }
 
-    :scope[data-state~="jubeln"] .foot-r {
+    :scope[data-state~="cheer"] .foot-r {
       animation: berliner-baer-jfoot-r var(--_t-0-6s) cubic-bezier(0.3, 0, 0.4, 1) infinite
         alternate;
     }
   }
 
-  // auftritt: Landung in die Knie
+  // enter: landing into the knees
   @include butler-mx.feature("motion") {
-    :scope[data-state~="auftritt"] .upper {
+    :scope[data-state~="enter"] .upper {
       animation: berliner-baer-landup var(--_t-0-9s) ease-out both;
     }
 
-    :scope[data-state~="auftritt"] .leg-l {
+    :scope[data-state~="enter"] .leg-l {
       animation: berliner-baer-land-l var(--_t-0-9s) ease-out both;
     }
 
-    :scope[data-state~="auftritt"] .shin-l {
+    :scope[data-state~="enter"] .shin-l {
       animation: berliner-baer-land-sl var(--_t-0-9s) ease-out both;
     }
 
-    :scope[data-state~="auftritt"] .foot-l {
+    :scope[data-state~="enter"] .foot-l {
       animation: berliner-baer-land-fl var(--_t-0-9s) ease-out both;
     }
 
-    :scope[data-state~="auftritt"] .leg-r {
+    :scope[data-state~="enter"] .leg-r {
       animation: berliner-baer-land-r var(--_t-0-9s) ease-out both;
     }
 
-    :scope[data-state~="auftritt"] .shin-r {
+    :scope[data-state~="enter"] .shin-r {
       animation: berliner-baer-land-sr var(--_t-0-9s) ease-out both;
     }
 
-    :scope[data-state~="auftritt"] .foot-r {
+    :scope[data-state~="enter"] .foot-r {
       animation: berliner-baer-land-fr var(--_t-0-9s) ease-out both;
     }
   }
 
-  // abgang: Anlauf aus den Knien
+  // exit: run-up from the knees
   @include butler-mx.feature("motion") {
-    :scope[data-state~="abgang"] .upper {
+    :scope[data-state~="exit"] .upper {
       animation: berliner-baer-exitup var(--_t-2s) ease-in both;
     }
 
-    :scope[data-state~="abgang"] .leg-l {
+    :scope[data-state~="exit"] .leg-l {
       animation: berliner-baer-exit-l var(--_t-2s) ease-in both;
     }
 
-    :scope[data-state~="abgang"] .shin-l {
+    :scope[data-state~="exit"] .shin-l {
       animation: berliner-baer-exit-sl var(--_t-2s) ease-in both;
     }
 
-    :scope[data-state~="abgang"] .foot-l {
+    :scope[data-state~="exit"] .foot-l {
       animation: berliner-baer-exit-fl var(--_t-2s) ease-in both;
     }
 
-    :scope[data-state~="abgang"] .leg-r {
+    :scope[data-state~="exit"] .leg-r {
       animation: berliner-baer-exit-r var(--_t-2s) ease-in both;
     }
 
-    :scope[data-state~="abgang"] .shin-r {
+    :scope[data-state~="exit"] .shin-r {
       animation: berliner-baer-exit-sr var(--_t-2s) ease-in both;
     }
 
-    :scope[data-state~="abgang"] .foot-r {
+    :scope[data-state~="exit"] .foot-r {
       animation: berliner-baer-exit-fr var(--_t-2s) ease-in both;
     }
   }
 
-  // locker und ganove: ein Knie entspannt
-  :scope[data-state~="locker"] .leg-l,
-  :scope[data-state~="ganove"] .leg-r {
+  // relaxed and gangster: one knee loose
+  :scope[data-state~="relaxed"] .leg-l,
+  :scope[data-state~="gangster"] .leg-r {
     transform: translateY(10px) rotate(-7deg);
   }
 
-  :scope[data-state~="locker"] .shin-l {
+  :scope[data-state~="relaxed"] .shin-l {
     transform: rotate(14deg);
   }
 
-  :scope[data-state~="ganove"] .shin-r {
+  :scope[data-state~="gangster"] .shin-r {
     transform: rotate(-14deg);
   }
 
-  :scope[data-state~="locker"] .foot-l {
+  :scope[data-state~="relaxed"] .foot-l {
     transform: rotate(-7deg);
   }
 
-  :scope[data-state~="ganove"] .foot-r {
+  :scope[data-state~="gangster"] .foot-r {
     transform: rotate(7deg);
   }
 
-  :scope[data-state~="locker"] .upper {
+  :scope[data-state~="relaxed"] .upper {
     transform: translateY(5px) rotate(-1.5deg);
   }
 
-  :scope[data-state~="ganove"] .upper {
+  :scope[data-state~="gangster"] .upper {
     transform: translateY(5px) rotate(1.5deg);
   }
 
-  // pils: weiche Knie
+  // beer: soft knees
   @include butler-mx.feature("motion") {
-    :scope[data-state~="pils"] .leg-l {
+    :scope[data-state~="beer"] .leg-l {
       animation: berliner-baer-wob-l var(--_t-1-7s) ease-in-out infinite;
     }
 
-    :scope[data-state~="pils"] .shin-l {
+    :scope[data-state~="beer"] .shin-l {
       animation: berliner-baer-wob-sl var(--_t-1-7s) ease-in-out infinite;
     }
 
-    :scope[data-state~="pils"] .leg-r {
+    :scope[data-state~="beer"] .leg-r {
       animation: berliner-baer-wob-r var(--_t-1-7s) ease-in-out infinite;
     }
 
-    :scope[data-state~="pils"] .shin-r {
+    :scope[data-state~="beer"] .shin-r {
       animation: berliner-baer-wob-sr var(--_t-1-7s) ease-in-out infinite;
     }
 
-    :scope[data-state~="pils"] .upper {
+    :scope[data-state~="beer"] .upper {
       animation: berliner-baer-wobup var(--_t-1-7s) ease-in-out infinite;
     }
   }
 
-  // kopf + lugen
-  :scope[data-variant~="lugen"] .lid {
+  // head + peek
+  :scope[data-variant~="peek"] .lid {
     opacity: 0;
   }
 
   @include butler-mx.feature("motion") {
-    :scope[data-variant~="lugen"] .head {
+    :scope[data-variant~="peek"] .head {
       animation: berliner-baer-peek var(--_t-6s) ease-in-out infinite;
     }
 
-    :scope[data-variant~="lugen"] .pupil {
+    :scope[data-variant~="peek"] .pupil {
       animation: berliner-baer-look var(--_t-3s) ease-in-out infinite;
     }
   }
 
-  // calm: Schleifen enden nach rund 6 Sekunden, bei Hover laufen sie wieder
+  // calm: finite loops, endless again on hover (duration: see the calm prop in BerlinerBaer.vue)
   @include butler-mx.feature("no-motion") {
-    :scope[data-variant~="lugen"] .head {
+    :scope[data-variant~="peek"] .head {
       transform: translateY(-18px);
     }
   }
@@ -2105,219 +2105,219 @@
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="winken"] .arm-r {
+    :scope[data-variant~="calm"][data-state~="wave"] .arm-r {
       animation-iteration-count: 10;
     }
 
-    :scope[data-variant~="calm"][data-state~="winken"]:hover .arm-r {
+    :scope[data-variant~="calm"][data-state~="wave"]:hover .arm-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="winken"] .head {
+    :scope[data-variant~="calm"][data-state~="wave"] .head {
       animation-iteration-count: 5;
     }
 
-    :scope[data-variant~="calm"][data-state~="winken"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="wave"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="schnauze"] .open {
+    :scope[data-variant~="calm"][data-state~="roar"] .open {
       animation-iteration-count: 30;
     }
 
-    :scope[data-variant~="calm"][data-state~="schnauze"]:hover .open {
+    :scope[data-variant~="calm"][data-state~="roar"]:hover .open {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="schnauze"] .tongue {
+    :scope[data-variant~="calm"][data-state~="roar"] .tongue {
       animation-iteration-count: 38;
     }
 
-    :scope[data-variant~="calm"][data-state~="schnauze"]:hover .tongue {
+    :scope[data-variant~="calm"][data-state~="roar"]:hover .tongue {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="schnauze"] .head {
+    :scope[data-variant~="calm"][data-state~="roar"] .head {
       animation-iteration-count: 50;
     }
 
-    :scope[data-variant~="calm"][data-state~="schnauze"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="roar"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="schnauze"] .arm-l {
+    :scope[data-variant~="calm"][data-state~="roar"] .arm-l {
       animation-iteration-count: 26;
     }
 
-    :scope[data-variant~="calm"][data-state~="schnauze"]:hover .arm-l {
+    :scope[data-variant~="calm"][data-state~="roar"]:hover .arm-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="schnauze"] .arm-r {
+    :scope[data-variant~="calm"][data-state~="roar"] .arm-r {
       animation-iteration-count: 26;
     }
 
-    :scope[data-variant~="calm"][data-state~="schnauze"]:hover .arm-r {
+    :scope[data-variant~="calm"][data-state~="roar"]:hover .arm-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="schnauze"] .shout {
+    :scope[data-variant~="calm"][data-state~="roar"] .shout {
       animation-iteration-count: 20;
     }
 
-    :scope[data-variant~="calm"][data-state~="schnauze"]:hover .shout {
+    :scope[data-variant~="calm"][data-state~="roar"]:hover .shout {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"] .all {
+    :scope[data-variant~="calm"][data-state~="dance"] .all {
       animation-iteration-count: 6;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"]:hover .all {
+    :scope[data-variant~="calm"][data-state~="dance"]:hover .all {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"] .arm-l {
+    :scope[data-variant~="calm"][data-state~="dance"] .arm-l {
       animation-iteration-count: 6;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"]:hover .arm-l {
+    :scope[data-variant~="calm"][data-state~="dance"]:hover .arm-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"] .arm-r {
+    :scope[data-variant~="calm"][data-state~="dance"] .arm-r {
       animation-iteration-count: 6;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"]:hover .arm-r {
+    :scope[data-variant~="calm"][data-state~="dance"]:hover .arm-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"] .head {
+    :scope[data-variant~="calm"][data-state~="dance"] .head {
       animation-iteration-count: 6;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="dance"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"] .shadow {
+    :scope[data-variant~="calm"][data-state~="dance"] .shadow {
       animation-iteration-count: 12;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"]:hover .shadow {
+    :scope[data-variant~="calm"][data-state~="dance"]:hover .shadow {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"] .tongue {
+    :scope[data-variant~="calm"][data-state~="dance"] .tongue {
       animation-iteration-count: 24;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"]:hover .tongue {
+    :scope[data-variant~="calm"][data-state~="dance"]:hover .tongue {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="kieken"] .head {
+    :scope[data-variant~="calm"][data-state~="look"] .head {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="kieken"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="look"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="kieken"] .pupil {
+    :scope[data-variant~="calm"][data-state~="look"] .pupil {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="kieken"]:hover .pupil {
+    :scope[data-variant~="calm"][data-state~="look"]:hover .pupil {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="nuescht"] .head {
+    :scope[data-variant~="calm"][data-state~="blank"] .head {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="nuescht"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="blank"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="nuescht"] .arm-l {
+    :scope[data-variant~="calm"][data-state~="blank"] .arm-l {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="nuescht"]:hover .arm-l {
+    :scope[data-variant~="calm"][data-state~="blank"]:hover .arm-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="nuescht"] .arm-r {
+    :scope[data-variant~="calm"][data-state~="blank"] .arm-r {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="nuescht"]:hover .arm-r {
+    :scope[data-variant~="calm"][data-state~="blank"]:hover .arm-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="nuescht"] .q {
+    :scope[data-variant~="calm"][data-state~="blank"] .q {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="nuescht"]:hover .q {
+    :scope[data-variant~="calm"][data-state~="blank"]:hover .q {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"] .all {
+    :scope[data-variant~="calm"][data-state~="cheer"] .all {
       animation-iteration-count: 10;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"]:hover .all {
+    :scope[data-variant~="calm"][data-state~="cheer"]:hover .all {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"] .arm-l {
+    :scope[data-variant~="calm"][data-state~="cheer"] .arm-l {
       animation-iteration-count: 20;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"]:hover .arm-l {
+    :scope[data-variant~="calm"][data-state~="cheer"]:hover .arm-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"] .arm-r {
+    :scope[data-variant~="calm"][data-state~="cheer"] .arm-r {
       animation-iteration-count: 20;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"]:hover .arm-r {
+    :scope[data-variant~="calm"][data-state~="cheer"]:hover .arm-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"] .tongue {
+    :scope[data-variant~="calm"][data-state~="cheer"] .tongue {
       animation-iteration-count: 30;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"]:hover .tongue {
+    :scope[data-variant~="calm"][data-state~="cheer"]:hover .tongue {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"] .shadow {
+    :scope[data-variant~="calm"][data-state~="cheer"] .shadow {
       animation-iteration-count: 10;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"]:hover .shadow {
+    :scope[data-variant~="calm"][data-state~="cheer"]:hover .shadow {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"] .shout {
+    :scope[data-variant~="calm"][data-state~="cheer"] .shout {
       animation-iteration-count: 20;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"]:hover .shout {
+    :scope[data-variant~="calm"][data-state~="cheer"]:hover .shout {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"] .head {
+    :scope[data-variant~="calm"][data-state~="cheer"] .head {
       animation-iteration-count: 10;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="cheer"]:hover .head {
       animation-iteration-count: infinite;
     }
 
@@ -2337,27 +2337,27 @@
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pennen"] .head {
+    :scope[data-variant~="calm"][data-state~="nap"] .head {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="pennen"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="nap"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pennen"] .all {
+    :scope[data-variant~="calm"][data-state~="nap"] .all {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="pennen"]:hover .all {
+    :scope[data-variant~="calm"][data-state~="nap"]:hover .all {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pennen"] .zzz text {
+    :scope[data-variant~="calm"][data-state~="nap"] .zzz text {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="pennen"]:hover .zzz text {
+    :scope[data-variant~="calm"][data-state~="nap"]:hover .zzz text {
       animation-iteration-count: infinite;
     }
 
@@ -2369,554 +2369,554 @@
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="nicken"] .head {
+    :scope[data-variant~="calm"][data-state~="nod"] .head {
       animation-iteration-count: 3;
     }
 
-    :scope[data-variant~="calm"][data-state~="nicken"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="nod"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="nee"] .head {
+    :scope[data-variant~="calm"][data-state~="shake"] .head {
       animation-iteration-count: 3;
     }
 
-    :scope[data-variant~="calm"][data-state~="nee"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="shake"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="zeigen"] .arm-r {
+    :scope[data-variant~="calm"][data-state~="point"] .arm-r {
       animation-iteration-count: 5;
     }
 
-    :scope[data-variant~="calm"][data-state~="zeigen"]:hover .arm-r {
+    :scope[data-variant~="calm"][data-state~="point"]:hover .arm-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="zeigen"] .head {
+    :scope[data-variant~="calm"][data-state~="point"] .head {
       animation-iteration-count: 5;
     }
 
-    :scope[data-variant~="calm"][data-state~="zeigen"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="point"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="lauschen"] .head {
+    :scope[data-variant~="calm"][data-state~="listen"] .head {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="lauschen"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="listen"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="lauschen"] .ear-l {
+    :scope[data-variant~="calm"][data-state~="listen"] .ear-l {
       animation-iteration-count: 12;
     }
 
-    :scope[data-variant~="calm"][data-state~="lauschen"]:hover .ear-l {
+    :scope[data-variant~="calm"][data-state~="listen"]:hover .ear-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="lauschen"] .waves path {
+    :scope[data-variant~="calm"][data-state~="listen"] .waves path {
       animation-iteration-count: 5;
     }
 
-    :scope[data-variant~="calm"][data-state~="lauschen"]:hover .waves path {
+    :scope[data-variant~="calm"][data-state~="listen"]:hover .waves path {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="daumen"] .arm-r {
+    :scope[data-variant~="calm"][data-state~="thumbs-up"] .arm-r {
       animation-iteration-count: 4;
     }
 
-    :scope[data-variant~="calm"][data-state~="daumen"]:hover .arm-r {
+    :scope[data-variant~="calm"][data-state~="thumbs-up"]:hover .arm-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="daumen"] .head {
+    :scope[data-variant~="calm"][data-state~="thumbs-up"] .head {
       animation-iteration-count: 4;
     }
 
-    :scope[data-variant~="calm"][data-state~="daumen"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="thumbs-up"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="denken"] .head {
+    :scope[data-variant~="calm"][data-state~="think"] .head {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="denken"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="think"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="denken"] .dots circle {
+    :scope[data-variant~="calm"][data-state~="think"] .dots circle {
       animation-iteration-count: 4;
     }
 
-    :scope[data-variant~="calm"][data-state~="denken"]:hover .dots circle {
+    :scope[data-variant~="calm"][data-state~="think"]:hover .dots circle {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="schreck"] .all {
+    :scope[data-variant~="calm"][data-state~="scare"] .all {
       animation-iteration-count: 3;
     }
 
-    :scope[data-variant~="calm"][data-state~="schreck"]:hover .all {
+    :scope[data-variant~="calm"][data-state~="scare"]:hover .all {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="schreck"] .bang {
+    :scope[data-variant~="calm"][data-state~="scare"] .bang {
       animation-iteration-count: 3;
     }
 
-    :scope[data-variant~="calm"][data-state~="schreck"]:hover .bang {
+    :scope[data-variant~="calm"][data-state~="scare"]:hover .bang {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="kratzen"] .arm-l {
+    :scope[data-variant~="calm"][data-state~="scratch"] .arm-l {
       animation-iteration-count: 22;
     }
 
-    :scope[data-variant~="calm"][data-state~="kratzen"]:hover .arm-l {
+    :scope[data-variant~="calm"][data-state~="scratch"]:hover .arm-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="kratzen"] .head {
+    :scope[data-variant~="calm"][data-state~="scratch"] .head {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="kratzen"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="scratch"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="gaehnen"] .head {
+    :scope[data-variant~="calm"][data-state~="yawn"] .head {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="gaehnen"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="yawn"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="gaehnen"] .yawn {
+    :scope[data-variant~="calm"][data-state~="yawn"] .yawn {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="gaehnen"]:hover .yawn {
+    :scope[data-variant~="calm"][data-state~="yawn"]:hover .yawn {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="gaehnen"] .smile {
+    :scope[data-variant~="calm"][data-state~="yawn"] .smile {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="gaehnen"]:hover .smile {
+    :scope[data-variant~="calm"][data-state~="yawn"]:hover .smile {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="gaehnen"] .arm-l {
+    :scope[data-variant~="calm"][data-state~="yawn"] .arm-l {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="gaehnen"]:hover .arm-l {
+    :scope[data-variant~="calm"][data-state~="yawn"]:hover .arm-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="gaehnen"] .arm-r {
+    :scope[data-variant~="calm"][data-state~="yawn"] .arm-r {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="gaehnen"]:hover .arm-r {
+    :scope[data-variant~="calm"][data-state~="yawn"]:hover .arm-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="gaehnen"] .body {
+    :scope[data-variant~="calm"][data-state~="yawn"] .body {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="gaehnen"]:hover .body {
+    :scope[data-variant~="calm"][data-state~="yawn"]:hover .body {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="einnicken"] .head {
+    :scope[data-variant~="calm"][data-state~="doze"] .head {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="einnicken"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="doze"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="futtern"] .arm-r {
+    :scope[data-variant~="calm"][data-state~="eat"] .arm-r {
       animation-iteration-count: 4;
     }
 
-    :scope[data-variant~="calm"][data-state~="futtern"]:hover .arm-r {
+    :scope[data-variant~="calm"][data-state~="eat"]:hover .arm-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="futtern"] .curve {
+    :scope[data-variant~="calm"][data-state~="eat"] .curve {
       animation-iteration-count: 28;
     }
 
-    :scope[data-variant~="calm"][data-state~="futtern"]:hover .curve {
+    :scope[data-variant~="calm"][data-state~="eat"]:hover .curve {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="futtern"] .head {
+    :scope[data-variant~="calm"][data-state~="eat"] .head {
       animation-iteration-count: 14;
     }
 
-    :scope[data-variant~="calm"][data-state~="futtern"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="eat"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="futtern"] .crumbs circle {
+    :scope[data-variant~="calm"][data-state~="eat"] .crumbs circle {
       animation-iteration-count: 4;
     }
 
-    :scope[data-variant~="calm"][data-state~="futtern"]:hover .crumbs circle {
+    :scope[data-variant~="calm"][data-state~="eat"]:hover .crumbs circle {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="abwinken"] .fore-r {
+    :scope[data-variant~="calm"][data-state~="dismiss"] .fore-r {
       animation-iteration-count: 4;
     }
 
-    :scope[data-variant~="calm"][data-state~="abwinken"]:hover .fore-r {
+    :scope[data-variant~="calm"][data-state~="dismiss"]:hover .fore-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pst"] .pupil {
+    :scope[data-variant~="calm"][data-state~="shush"] .pupil {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="pst"]:hover .pupil {
+    :scope[data-variant~="calm"][data-state~="shush"]:hover .pupil {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pst"] .pst {
+    :scope[data-variant~="calm"][data-state~="shush"] .shush {
       animation-iteration-count: 4;
     }
 
-    :scope[data-variant~="calm"][data-state~="pst"]:hover .pst {
+    :scope[data-variant~="calm"][data-state~="shush"]:hover .shush {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pst"] .head {
+    :scope[data-variant~="calm"][data-state~="shush"] .head {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="pst"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="shush"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"] .all {
+    :scope[data-variant~="calm"][data-state~="beer"] .all {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"]:hover .all {
+    :scope[data-variant~="calm"][data-state~="beer"]:hover .all {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"] .head {
+    :scope[data-variant~="calm"][data-state~="beer"] .head {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="beer"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"] .arm-r {
+    :scope[data-variant~="calm"][data-state~="beer"] .arm-r {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"]:hover .arm-r {
+    :scope[data-variant~="calm"][data-state~="beer"]:hover .arm-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"] .fore-r {
+    :scope[data-variant~="calm"][data-state~="beer"] .fore-r {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"]:hover .fore-r {
+    :scope[data-variant~="calm"][data-state~="beer"]:hover .fore-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"] .arm-l {
+    :scope[data-variant~="calm"][data-state~="beer"] .arm-l {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"]:hover .arm-l {
+    :scope[data-variant~="calm"][data-state~="beer"]:hover .arm-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"] .hick {
+    :scope[data-variant~="calm"][data-state~="beer"] .hick {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"]:hover .hick {
+    :scope[data-variant~="calm"][data-state~="beer"]:hover .hick {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"] .bubbles circle {
+    :scope[data-variant~="calm"][data-state~="beer"] .bubbles circle {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"]:hover .bubbles circle {
+    :scope[data-variant~="calm"][data-state~="beer"]:hover .bubbles circle {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"] .shadow {
+    :scope[data-variant~="calm"][data-state~="beer"] .shadow {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"]:hover .shadow {
+    :scope[data-variant~="calm"][data-state~="beer"]:hover .shadow {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="locker"] .all {
+    :scope[data-variant~="calm"][data-state~="relaxed"] .all {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="locker"]:hover .all {
+    :scope[data-variant~="calm"][data-state~="relaxed"]:hover .all {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="locker"] .arm-l {
+    :scope[data-variant~="calm"][data-state~="relaxed"] .arm-l {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="locker"]:hover .arm-l {
+    :scope[data-variant~="calm"][data-state~="relaxed"]:hover .arm-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="locker"] .arm-r {
+    :scope[data-variant~="calm"][data-state~="relaxed"] .arm-r {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="locker"]:hover .arm-r {
+    :scope[data-variant~="calm"][data-state~="relaxed"]:hover .arm-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="ganove"] .arm-r {
+    :scope[data-variant~="calm"][data-state~="gangster"] .arm-r {
       animation-iteration-count: 6;
     }
 
-    :scope[data-variant~="calm"][data-state~="ganove"]:hover .arm-r {
+    :scope[data-variant~="calm"][data-state~="gangster"]:hover .arm-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="ganove"] .coin {
+    :scope[data-variant~="calm"][data-state~="gangster"] .coin {
       animation-iteration-count: 6;
     }
 
-    :scope[data-variant~="calm"][data-state~="ganove"]:hover .coin {
+    :scope[data-variant~="calm"][data-state~="gangster"]:hover .coin {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="ganove"] .pupil {
+    :scope[data-variant~="calm"][data-state~="gangster"] .pupil {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="ganove"]:hover .pupil {
+    :scope[data-variant~="calm"][data-state~="gangster"]:hover .pupil {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="ganove"] .head {
+    :scope[data-variant~="calm"][data-state~="gangster"] .head {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="ganove"]:hover .head {
+    :scope[data-variant~="calm"][data-state~="gangster"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="ganove"] .smoke {
+    :scope[data-variant~="calm"][data-state~="gangster"] .smoke {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-state~="ganove"]:hover .smoke {
+    :scope[data-variant~="calm"][data-state~="gangster"]:hover .smoke {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"] .leg-l {
+    :scope[data-variant~="calm"][data-state~="dance"] .leg-l {
       animation-iteration-count: 6;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"]:hover .leg-l {
+    :scope[data-variant~="calm"][data-state~="dance"]:hover .leg-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"] .shin-l {
+    :scope[data-variant~="calm"][data-state~="dance"] .shin-l {
       animation-iteration-count: 6;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"]:hover .shin-l {
+    :scope[data-variant~="calm"][data-state~="dance"]:hover .shin-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"] .foot-l {
+    :scope[data-variant~="calm"][data-state~="dance"] .foot-l {
       animation-iteration-count: 6;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"]:hover .foot-l {
+    :scope[data-variant~="calm"][data-state~="dance"]:hover .foot-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"] .leg-r {
+    :scope[data-variant~="calm"][data-state~="dance"] .leg-r {
       animation-iteration-count: 6;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"]:hover .leg-r {
+    :scope[data-variant~="calm"][data-state~="dance"]:hover .leg-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"] .shin-r {
+    :scope[data-variant~="calm"][data-state~="dance"] .shin-r {
       animation-iteration-count: 6;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"]:hover .shin-r {
+    :scope[data-variant~="calm"][data-state~="dance"]:hover .shin-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"] .foot-r {
+    :scope[data-variant~="calm"][data-state~="dance"] .foot-r {
       animation-iteration-count: 6;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"]:hover .foot-r {
+    :scope[data-variant~="calm"][data-state~="dance"]:hover .foot-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"] .upper {
+    :scope[data-variant~="calm"][data-state~="dance"] .upper {
       animation-iteration-count: 6;
     }
 
-    :scope[data-variant~="calm"][data-state~="tanzen"]:hover .upper {
+    :scope[data-variant~="calm"][data-state~="dance"]:hover .upper {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"] .upper {
+    :scope[data-variant~="calm"][data-state~="cheer"] .upper {
       animation-iteration-count: 10;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"]:hover .upper {
+    :scope[data-variant~="calm"][data-state~="cheer"]:hover .upper {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"] .leg-l {
+    :scope[data-variant~="calm"][data-state~="cheer"] .leg-l {
       animation-iteration-count: 10;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"]:hover .leg-l {
+    :scope[data-variant~="calm"][data-state~="cheer"]:hover .leg-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"] .shin-l {
+    :scope[data-variant~="calm"][data-state~="cheer"] .shin-l {
       animation-iteration-count: 10;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"]:hover .shin-l {
+    :scope[data-variant~="calm"][data-state~="cheer"]:hover .shin-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"] .foot-l {
+    :scope[data-variant~="calm"][data-state~="cheer"] .foot-l {
       animation-iteration-count: 10;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"]:hover .foot-l {
+    :scope[data-variant~="calm"][data-state~="cheer"]:hover .foot-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"] .leg-r {
+    :scope[data-variant~="calm"][data-state~="cheer"] .leg-r {
       animation-iteration-count: 10;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"]:hover .leg-r {
+    :scope[data-variant~="calm"][data-state~="cheer"]:hover .leg-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"] .shin-r {
+    :scope[data-variant~="calm"][data-state~="cheer"] .shin-r {
       animation-iteration-count: 10;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"]:hover .shin-r {
+    :scope[data-variant~="calm"][data-state~="cheer"]:hover .shin-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"] .foot-r {
+    :scope[data-variant~="calm"][data-state~="cheer"] .foot-r {
       animation-iteration-count: 10;
     }
 
-    :scope[data-variant~="calm"][data-state~="jubeln"]:hover .foot-r {
+    :scope[data-variant~="calm"][data-state~="cheer"]:hover .foot-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"] .leg-l {
+    :scope[data-variant~="calm"][data-state~="beer"] .leg-l {
       animation-iteration-count: 4;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"]:hover .leg-l {
+    :scope[data-variant~="calm"][data-state~="beer"]:hover .leg-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"] .shin-l {
+    :scope[data-variant~="calm"][data-state~="beer"] .shin-l {
       animation-iteration-count: 4;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"]:hover .shin-l {
+    :scope[data-variant~="calm"][data-state~="beer"]:hover .shin-l {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"] .leg-r {
+    :scope[data-variant~="calm"][data-state~="beer"] .leg-r {
       animation-iteration-count: 4;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"]:hover .leg-r {
+    :scope[data-variant~="calm"][data-state~="beer"]:hover .leg-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"] .shin-r {
+    :scope[data-variant~="calm"][data-state~="beer"] .shin-r {
       animation-iteration-count: 4;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"]:hover .shin-r {
+    :scope[data-variant~="calm"][data-state~="beer"]:hover .shin-r {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"] .upper {
+    :scope[data-variant~="calm"][data-state~="beer"] .upper {
       animation-iteration-count: 4;
     }
 
-    :scope[data-variant~="calm"][data-state~="pils"]:hover .upper {
+    :scope[data-variant~="calm"][data-state~="beer"]:hover .upper {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-variant~="lugen"] .head {
+    :scope[data-variant~="calm"][data-variant~="peek"] .head {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-variant~="lugen"]:hover .head {
+    :scope[data-variant~="calm"][data-variant~="peek"]:hover .head {
       animation-iteration-count: infinite;
     }
 
-    :scope[data-variant~="calm"][data-variant~="lugen"] .pupil {
+    :scope[data-variant~="calm"][data-variant~="peek"] .pupil {
       animation-iteration-count: 2;
     }
 
-    :scope[data-variant~="calm"][data-variant~="lugen"]:hover .pupil {
+    :scope[data-variant~="calm"][data-variant~="peek"]:hover .pupil {
       animation-iteration-count: infinite;
     }
   }
 
-  // Augenbrauen: nur bei großen Auftritten (Klasse bv--brauen, ab 200px)
+  // eyebrows: only for big appearances (class bv--brows, from 200px)
   .brows {
     display: none;
   }
 
-  :scope[data-variant~="brauen"] .brows {
+  :scope[data-variant~="brows"] .brows {
     display: inline;
   }
 
-  :scope[data-variant~="brauen"] .lid,
-  :scope[data-variant~="brauen"] .grr {
+  :scope[data-variant~="brows"] .lid,
+  :scope[data-variant~="brows"] .grr {
     opacity: 0;
   }
 
@@ -2925,68 +2925,68 @@
     transform-origin: center;
   }
 
-  :scope[data-variant~="brauen"][data-state~="winken"] .brow,
-  :scope[data-variant~="brauen"][data-state~="jubeln"] .brow,
-  :scope[data-variant~="brauen"][data-state~="tanzen"] .brow,
-  :scope[data-variant~="brauen"][data-state~="daumen"] .brow,
-  :scope[data-variant~="brauen"][data-state~="auftritt"] .brow,
-  :scope[data-variant~="brauen"][data-state~="futtern"] .brow {
+  :scope[data-variant~="brows"][data-state~="wave"] .brow,
+  :scope[data-variant~="brows"][data-state~="cheer"] .brow,
+  :scope[data-variant~="brows"][data-state~="dance"] .brow,
+  :scope[data-variant~="brows"][data-state~="thumbs-up"] .brow,
+  :scope[data-variant~="brows"][data-state~="enter"] .brow,
+  :scope[data-variant~="brows"][data-state~="eat"] .brow {
     transform: translateY(-9px);
   }
 
-  :scope[data-variant~="brauen"][data-state~="nuescht"] .brow,
-  :scope[data-variant~="brauen"][data-state~="gaehnen"] .brow {
+  :scope[data-variant~="brows"][data-state~="blank"] .brow,
+  :scope[data-variant~="brows"][data-state~="yawn"] .brow {
     transform: translateY(-14px);
   }
 
-  :scope[data-variant~="brauen"][data-state~="schreck"] .brow {
+  :scope[data-variant~="brows"][data-state~="scare"] .brow {
     transform: translateY(-20px);
   }
 
-  :scope[data-variant~="brauen"][data-state~="schnauze"] .brow-l,
-  :scope[data-variant~="brauen"][data-state~="nee"] .brow-l,
-  :scope[data-variant~="brauen"][data-state~="abwinken"] .brow-l {
+  :scope[data-variant~="brows"][data-state~="roar"] .brow-l,
+  :scope[data-variant~="brows"][data-state~="shake"] .brow-l,
+  :scope[data-variant~="brows"][data-state~="dismiss"] .brow-l {
     transform: translate(5px, 8px) rotate(26deg);
   }
 
-  :scope[data-variant~="brauen"][data-state~="schnauze"] .brow-r,
-  :scope[data-variant~="brauen"][data-state~="nee"] .brow-r,
-  :scope[data-variant~="brauen"][data-state~="abwinken"] .brow-r {
+  :scope[data-variant~="brows"][data-state~="roar"] .brow-r,
+  :scope[data-variant~="brows"][data-state~="shake"] .brow-r,
+  :scope[data-variant~="brows"][data-state~="dismiss"] .brow-r {
     transform: translate(-5px, 8px) rotate(-26deg);
   }
 
-  :scope[data-variant~="brauen"][data-state~="denken"] .brow-l,
-  :scope[data-variant~="brauen"][data-state~="lauschen"] .brow-l,
-  :scope[data-variant~="brauen"][data-state~="ganove"] .brow-r {
+  :scope[data-variant~="brows"][data-state~="think"] .brow-l,
+  :scope[data-variant~="brows"][data-state~="listen"] .brow-l,
+  :scope[data-variant~="brows"][data-state~="gangster"] .brow-r {
     transform: translateY(-14px) rotate(-6deg);
   }
 
-  :scope[data-variant~="brauen"][data-state~="denken"] .brow-r,
-  :scope[data-variant~="brauen"][data-state~="lauschen"] .brow-r,
-  :scope[data-variant~="brauen"][data-state~="ganove"] .brow-l {
+  :scope[data-variant~="brows"][data-state~="think"] .brow-r,
+  :scope[data-variant~="brows"][data-state~="listen"] .brow-r,
+  :scope[data-variant~="brows"][data-state~="gangster"] .brow-l {
     transform: translateY(5px);
   }
 
-  :scope[data-variant~="brauen"][data-state~="facepalm"] .brow-l,
-  :scope[data-variant~="brauen"][data-state~="kieken"] .brow-l {
+  :scope[data-variant~="brows"][data-state~="facepalm"] .brow-l,
+  :scope[data-variant~="brows"][data-state~="look"] .brow-l {
     transform: translate(4px, -10px) rotate(-24deg);
   }
 
-  :scope[data-variant~="brauen"][data-state~="facepalm"] .brow-r,
-  :scope[data-variant~="brauen"][data-state~="kieken"] .brow-r {
+  :scope[data-variant~="brows"][data-state~="facepalm"] .brow-r,
+  :scope[data-variant~="brows"][data-state~="look"] .brow-r {
     transform: translate(-4px, -10px) rotate(24deg);
   }
 
-  :scope[data-variant~="brauen"][data-state~="pils"] .brow-l {
+  :scope[data-variant~="brows"][data-state~="beer"] .brow-l {
     transform: translateY(-10px) rotate(-10deg);
   }
 
-  :scope[data-variant~="brauen"][data-state~="pils"] .brow-r {
+  :scope[data-variant~="brows"][data-state~="beer"] .brow-r {
     transform: translateY(4px) rotate(-6deg);
   }
 
-  :scope[data-variant~="brauen"][data-state~="pennen"] .brow,
-  :scope[data-variant~="brauen"][data-state~="einnicken"] .brow {
+  :scope[data-variant~="brows"][data-state~="nap"] .brow,
+  :scope[data-variant~="brows"][data-state~="doze"] .brow {
     transform: translateY(5px);
   }
 
@@ -2996,53 +2996,53 @@
     }
   }
 
-  // Barrierefreiheit: Zittern und Schreck nur als kurzer Ausloeser, nie als Dauerschleife
+  // accessibility: shaking and scare only as a short trigger, never an endless loop
   @include butler-mx.feature("motion") {
-    :scope[data-state~="schnauze"] .open,
-    :scope[data-state~="schnauze"] .tongue,
-    :scope[data-state~="schnauze"] .head,
-    :scope[data-state~="schnauze"] .arm,
-    :scope[data-state~="schnauze"] .shout,
-    :scope[data-variant~="calm"][data-state~="schnauze"] .open,
-    :scope[data-variant~="calm"][data-state~="schnauze"]:hover .open,
-    :scope[data-variant~="calm"][data-state~="schnauze"] .tongue,
-    :scope[data-variant~="calm"][data-state~="schnauze"]:hover .tongue,
-    :scope[data-variant~="calm"][data-state~="schnauze"] .head,
-    :scope[data-variant~="calm"][data-state~="schnauze"]:hover .head,
-    :scope[data-variant~="calm"][data-state~="schnauze"] .arm,
-    :scope[data-variant~="calm"][data-state~="schnauze"]:hover .arm,
-    :scope[data-variant~="calm"][data-state~="schnauze"] .shout,
-    :scope[data-variant~="calm"][data-state~="schnauze"]:hover .shout {
+    :scope[data-state~="roar"] .open,
+    :scope[data-state~="roar"] .tongue,
+    :scope[data-state~="roar"] .head,
+    :scope[data-state~="roar"] .arm,
+    :scope[data-state~="roar"] .shout,
+    :scope[data-variant~="calm"][data-state~="roar"] .open,
+    :scope[data-variant~="calm"][data-state~="roar"]:hover .open,
+    :scope[data-variant~="calm"][data-state~="roar"] .tongue,
+    :scope[data-variant~="calm"][data-state~="roar"]:hover .tongue,
+    :scope[data-variant~="calm"][data-state~="roar"] .head,
+    :scope[data-variant~="calm"][data-state~="roar"]:hover .head,
+    :scope[data-variant~="calm"][data-state~="roar"] .arm,
+    :scope[data-variant~="calm"][data-state~="roar"]:hover .arm,
+    :scope[data-variant~="calm"][data-state~="roar"] .shout,
+    :scope[data-variant~="calm"][data-state~="roar"]:hover .shout {
       animation-iteration-count: 8;
     }
 
-    :scope[data-state~="schreck"] .all,
-    :scope[data-state~="schreck"] .bang,
-    :scope[data-variant~="calm"][data-state~="schreck"] .all,
-    :scope[data-variant~="calm"][data-state~="schreck"]:hover .all,
-    :scope[data-variant~="calm"][data-state~="schreck"] .bang,
-    :scope[data-variant~="calm"][data-state~="schreck"]:hover .bang {
+    :scope[data-state~="scare"] .all,
+    :scope[data-state~="scare"] .bang,
+    :scope[data-variant~="calm"][data-state~="scare"] .all,
+    :scope[data-variant~="calm"][data-state~="scare"]:hover .all,
+    :scope[data-variant~="calm"][data-state~="scare"] .bang,
+    :scope[data-variant~="calm"][data-state~="scare"]:hover .bang {
       animation-iteration-count: 1;
     }
 
-    :scope[data-state~="schreck"] .bang,
-    :scope[data-variant~="calm"][data-state~="schreck"] .bang,
-    :scope[data-variant~="calm"][data-state~="schreck"]:hover .bang {
+    :scope[data-state~="scare"] .bang,
+    :scope[data-variant~="calm"][data-state~="scare"] .bang,
+    :scope[data-variant~="calm"][data-state~="scare"]:hover .bang {
       animation-fill-mode: forwards;
     }
   }
 
-  // kleine Groessen: feine Details aus, damit nichts flimmert
-  :scope[data-variant~="klein"] .detail,
-  :scope[data-variant~="klein"] .smoke,
-  :scope[data-variant~="klein"] .coin,
-  :scope[data-variant~="klein"] .crumbs,
-  :scope[data-variant~="klein"] .bubbles,
-  :scope[data-variant~="klein"] .hick,
-  :scope[data-variant~="klein"] .waves,
-  :scope[data-variant~="klein"] .dots {
+  // small sizes: fine details off so nothing flickers
+  :scope[data-variant~="small"] .detail,
+  :scope[data-variant~="small"] .smoke,
+  :scope[data-variant~="small"] .coin,
+  :scope[data-variant~="small"] .crumbs,
+  :scope[data-variant~="small"] .bubbles,
+  :scope[data-variant~="small"] .hick,
+  :scope[data-variant~="small"] .waves,
+  :scope[data-variant~="small"] .dots {
     display: none;
   }
 
-  // Dark Mode ohne Scheibe: Kontur ist Pflicht (Fell 1.5:1, Kontur 4.6:1 gegen die dunklen Flaechen)
+  // dark mode without the disc: the outline is mandatory (fur 1.5:1, outline 4.6:1 against the dark surfaces)
 }

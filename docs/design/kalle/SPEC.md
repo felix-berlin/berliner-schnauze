@@ -2,7 +2,7 @@
 
 Stand 18.11.2026, Update 1 · Quelle: Design-Canvas, Seite „v3 · Bären-Maskottchen“, Board „Kalle · Berliner Bär“
 
-**Änderungen in Update 1:** Die Schiebermütze der Stimmung `ganove` ist neu gezeichnet: gewölbte Haube mit drei Nähten und Knopf, eigenes Band, Schirm vorn über der Stirn. Betroffen sind `src/BerlinerBaer.vue`, `assets/kalle*.svg`, `assets/kalle.css`, `tools/kalle_svg.py`, `design/Kalle.dc.html` und `assets/kalle-alle-stimmungen.png`. API, Klassen und Tests sind unverändert, alle 14 Tests grün. Wer Update 0 schon eingebaut hat, ersetzt nur `BerlinerBaer.vue`.
+**Änderungen in Update 1:** Die Schiebermütze der Stimmung `gangster` ist neu gezeichnet: gewölbte Haube mit drei Nähten und Knopf, eigenes Band, Schirm vorn über der Stirn. Betroffen sind `src/BerlinerBaer.vue`, `assets/kalle*.svg`, `assets/kalle.css`, `tools/kalle_svg.py`, `design/Kalle.dc.html` und `assets/kalle-alle-stimmungen.png`. API, Klassen und Tests sind unverändert, alle 14 Tests grün. Wer Update 0 schon eingebaut hat, ersetzt nur `BerlinerBaer.vue`.
 
 ## 1. Überblick
 
@@ -41,23 +41,23 @@ Kalle ist das Maskottchen von berliner-schnauze.wtf. Er ist an den Berliner Wapp
 
 | Prop | Typ | Standard | Wirkung |
 |---|---|---|---|
-| `stimmung` | `BaerStimmung` (28 Werte, §5) | `'idle'` | Pose und Bewegung |
-| `groesse` | `number` (px) | `200` | Breite. Höhe folgt aus dem Seitenverhältnis (voll ≈ 1,19 × Breite). |
-| `variante` | `'auto' \| 'voll' \| 'kopf' \| 'lugen'` | `'auto'` | `auto`: unter 64px nur der Kopf |
-| `scheibe` | `boolean` | `false` | Farbige Scheibe hinter dem Bären |
-| `ruhig` | `boolean` | `groesse < 200` | Bewegung endet nach rund 6 s, bei Hover läuft sie wieder |
-| `antippbar` | `boolean` | `false` | Klick lässt ihn zucken, jeder 3. Klick: 2 s „Schnauze!“, dann zurück |
-| `blickX`, `blickY` | `number` −1…1 | `0` | Blickrichtung für `stimmung="folgen"`, wird auf −1…1 begrenzt |
+| `mood` | `BearMood` (28 Werte, §5) | `'idle'` | Pose und Bewegung |
+| `size` | `number` (px) | `200` | Breite. Höhe folgt aus dem Seitenverhältnis (voll ≈ 1,19 × Breite). |
+| `variant` | `'auto' \| 'full' \| 'head' \| 'peek'` | `'auto'` | `auto`: unter 64px nur der Kopf |
+| `disc` | `boolean` | `false` | Farbige Scheibe hinter dem Bären |
+| `calm` | `boolean` | `size < 200` | Bewegung endet nach rund 6 s, bei Hover läuft sie wieder |
+| `tappable` | `boolean` | `false` | Klick lässt ihn zucken, jeder 3. Klick: 2 s „Schnauze!“, dann zurück |
+| `gazeX`, `gazeY` | `number` −1…1 | `0` | Blickrichtung für `mood="follow"`, wird auf −1…1 begrenzt |
 | `label` | `string` | `''` | Gesetzt: `role="img"` + `aria-label`. Leer: `aria-hidden="true"` |
-| `thema` | `'auto' \| 'hell' \| 'dunkel'` | `'auto'` | `auto` folgt `[data-theme]` der Seite |
+| `theme` | `'auto' \| 'light' \| 'dark'` | `'auto'` | `auto` folgt `[data-theme]` der Seite |
 
 | Event / Methode | Wann |
 |---|---|
-| `@fertig(stimmung)` | 900 ms nach `auftritt`, 2000 ms nach `abgang` |
-| `antippen()` (über `ref`) | Zucken auslösen, z. B. beim Absenden |
-| `tippen()` (über `ref`) | Ohrenzucken, z. B. bei jedem Tastendruck im Suchfeld |
+| `@done(mood)` | 900 ms nach `enter`, 2000 ms nach `exit` |
+| `tap()` (über `ref`) | Zucken auslösen, z. B. beim Absenden |
+| `keystroke()` (über `ref`) | Ohrenzucken, z. B. bei jedem Tastendruck im Suchfeld |
 
-Abgeleitet (nicht selbst setzen), Wurzel `c-berliner-baer`: `data-variant` trägt `brauen` ab 200px, `klein` unter 96px, `kopf` unter 64px, `lugen`, `calm` wenn ruhig, `plain` ohne Scheibe, `dark`/`light` bei `thema`. `data-state` trägt die Stimmung plus `sw-a/b` beim Wechsel, `zuck-a/b` und `tipp-a/b` bei Reaktionen. Teile heißen klein und mit Bindestrich (`.arm-l`, `.prop-pils`).
+Abgeleitet (nicht selbst setzen), Wurzel `c-berliner-baer`: `data-variant` trägt `brows` ab 200px, `small` unter 96px, `head` unter 64px, `peek`, `calm` wenn ruhig, `plain` ohne Scheibe, `dark`/`light` bei `theme`. `data-state` trägt die Stimmung plus `sw-a/b` beim Wechsel, `zuck-a/b` und `tipp-a/b` bei Reaktionen. Teile heißen klein und mit Bindestrich (`.arm-l`, `.prop-pils`).
 
 ## 4. Größenregeln
 
@@ -74,38 +74,38 @@ Mindestgröße für Ganove, Pils und Futtern: 64px. Darunter ist der Kopf ohne R
 
 Dauer = Länge einer Schleife. „einmal“ = läuft genau einmal und hält dann.
 
-| Gruppe | `stimmung` | Bild | Dauer | Einsatz |
+| Gruppe | `mood` | Bild | Dauer | Einsatz |
 |---|---|---|---|---|
 | Grundlagen | `idle` | Wappenpose, Arme hoch | 6,1 s | Bühne Startseite |
-| | `locker` | Arme hängen, ein Knie entspannt | 8 s | Ruhezustand in Karten |
-| | `auftritt` | springt von unten ins Bild, landet in den Knien | einmal 0,9 s | erstes Erscheinen |
-| | `abgang` | winkt, holt aus den Knien Schwung, taucht ab, danach unsichtbar | einmal 2 s | Hinweis schließen |
-| | `folgen` | Kopf und Pupillen folgen `blickX/Y` | – | Bühne mit Mausverfolgung |
-| Antworten | `winken` | | 0,6 s | Begrüßung |
-| | `nicken` | | 2,2 s | Ja / bestätigt |
-| | `nee` | Kopfschütteln | 2,2 s | Nein / abgelehnt |
-| | `daumen` | Faust mit Daumen, Zwinkern | 1,4 s | gespeichert, Umfrage gesendet |
-| | `zeigen` | gestreckter Arm, offene Tatze | 1,2 s | Hinweis auf ein Ergebnis |
-| | `abwinken` | | 1,5 s | 404, Abbrechen |
-| | `pst` | Faust vor dem Maul, „Pst!“ | 1,6 s | Datenschutz, Cookies |
-| Suche & Spiel | `kieken` | Tatze über den Augen | 4 s | Suche läuft |
-| | `lauschen` | Tatze hinter dem Ohr, Schallbögen | 3 s | Hörprobe läuft |
-| | `denken` | Faust am Kinn, Denkpunkte | 3 s | längeres Laden |
-| | `nuescht` | Schulterzucken, „?“ | 2,4 s | keine Treffer |
-| | `jubeln` | aus der Hocke hoch, Beine angezogen | 0,6 s hin und her | Spiel: richtig |
+| | `relaxed` | Arme hängen, ein Knie entspannt | 8 s | Ruhezustand in Karten |
+| | `enter` | springt von unten ins Bild, landet in den Knien | einmal 0,9 s | erstes Erscheinen |
+| | `exit` | winkt, holt aus den Knien Schwung, taucht ab, danach unsichtbar | einmal 2 s | Hinweis schließen |
+| | `follow` | Kopf und Pupillen folgen `gazeX/Y` | – | Bühne mit Mausverfolgung |
+| Antworten | `wave` | | 0,6 s | Begrüßung |
+| | `nod` | | 2,2 s | Ja / bestätigt |
+| | `shake` | Kopfschütteln | 2,2 s | Nein / abgelehnt |
+| | `thumbs-up` | Faust mit Daumen, Zwinkern | 1,4 s | gespeichert, Umfrage gesendet |
+| | `point` | gestreckter Arm, offene Tatze | 1,2 s | Hinweis auf ein Ergebnis |
+| | `dismiss` | | 1,5 s | 404, Abbrechen |
+| | `shush` | Faust vor dem Maul, „Pst!“ | 1,6 s | Datenschutz, Cookies |
+| Suche & Spiel | `look` | Tatze über den Augen | 4 s | Suche läuft |
+| | `listen` | Tatze hinter dem Ohr, Schallbögen | 3 s | Hörprobe läuft |
+| | `think` | Faust am Kinn, Denkpunkte | 3 s | längeres Laden |
+| | `blank` | Schulterzucken, „?“ | 2,4 s | keine Treffer |
+| | `cheer` | aus der Hocke hoch, Beine angezogen | 0,6 s hin und her | Spiel: richtig |
 | | `facepalm` | Tatze über einem Auge | 3 s | Spiel: falsch |
-| | `schreck` | Sprung, große Augen, „!“ | einmal 2 s | Fehler |
-| Leerlauf | `kratzen` | | 0,28 s | Leerlauf-Variation |
-| | `gaehnen` | Maul ohne Zähne, streckt sich | 4 s | lange Inaktivität |
-| | `einnicken` | nickt weg, schreckt hoch | 5 s | lange Inaktivität |
-| | `pennen` | Augen zu, Z | 5 s | Offline, Wartung |
-| Berlin | `schnauze` | brüllt, Zähne, Zittern | Zittern 8 Durchläufe, dann hält die Pose | Antippen (3.), Akzent |
-| | `tanzen` | Knie im Wechsel, Maul zu | 1 s | Wochenende, Feier |
-| | `futtern` | beißt in eine Schrippe | 1,6 s | Thema Essen, Laden |
-| | `pils` | schwankt, Flasche ohne Marke, „Hick!“ | 3,4 s | Thema Kneipe |
-| | `ganove` | Schiebermütze, Zigarre, Weste, schnippt Münze | 1,1 s | Spiel-Teaser |
+| | `scare` | Sprung, große Augen, „!“ | einmal 2 s | Fehler |
+| Leerlauf | `scratch` | | 0,28 s | Leerlauf-Variation |
+| | `yawn` | Maul ohne Zähne, streckt sich | 4 s | lange Inaktivität |
+| | `doze` | nickt weg, schreckt hoch | 5 s | lange Inaktivität |
+| | `nap` | Augen zu, Z | 5 s | Offline, Wartung |
+| Berlin | `roar` | brüllt, Zähne, Zittern | Zittern 8 Durchläufe, dann hält die Pose | Antippen (3.), Akzent |
+| | `dance` | Knie im Wechsel, Maul zu | 1 s | Wochenende, Feier |
+| | `eat` | beißt in eine Schrippe | 1,6 s | Thema Essen, Laden |
+| | `beer` | schwankt, Flasche ohne Marke, „Hick!“ | 3,4 s | Thema Kneipe |
+| | `gangster` | Schiebermütze, Zigarre, Weste, schnippt Münze | 1,1 s | Spiel-Teaser |
 
-`idle` heißt in der Oberfläche „Ruhig“. Die Werte sind ASCII, damit sie als CSS-Klassen taugen (`nuescht`, `gaehnen`).
+`idle` heißt in der Oberfläche „Ruhig“. Die Werte sind englisch und ASCII, damit sie als CSS-Klassen taugen.
 
 ## 6. Texte (Stimme)
 
@@ -113,16 +113,16 @@ Kalle duzt, spricht Berlinerisch, kurz, nie spöttisch gegenüber dem Nutzer. An
 
 | Einsatz | Stimmung | Text |
 |---|---|---|
-| Begrüßung | `winken` | Na, Keule! Wat suchste? |
-| Suche läuft | `kieken` | Ick kieke ma … |
-| Keine Treffer | `nuescht` | Nüscht jefunden. Schlag ditt Wort doch vor! |
-| Spiel richtig | `jubeln` | Jenau richtig! |
+| Begrüßung | `wave` | Na, Keule! Wat suchste? |
+| Suche läuft | `look` | Ick kieke ma … |
+| Keine Treffer | `blank` | Nüscht jefunden. Schlag ditt Wort doch vor! |
+| Spiel richtig | `cheer` | Jenau richtig! |
 | Spiel falsch | `facepalm` | Knapp vorbei is ooch daneben. |
-| Gespeichert | `daumen` | Jespeichert. Danke dir! |
-| 404 | `abwinken` | Hier is nüscht. Ab zur Startseite? |
-| Laden | `futtern` oder `denken` | Momentchen … |
-| Offline | `pennen` | Keen Netz? Ick wart so lange. |
-| Datenschutz | `pst` | Bleibt unter uns. |
+| Gespeichert | `thumbs-up` | Jespeichert. Danke dir! |
+| 404 | `dismiss` | Hier is nüscht. Ab zur Startseite? |
+| Laden | `eat` oder `think` | Momentchen … |
+| Offline | `nap` | Keen Netz? Ick wart so lange. |
+| Datenschutz | `shush` | Bleibt unter uns. |
 
 Längere Texte gehören in den normalen Fließtext daneben, nicht in Kalles Mund. Keine echten Namen oder Vorschlagstexte aus der Produktions-Datenbank in Beispielen.
 
@@ -142,7 +142,7 @@ Kalle nutzt eigene semantische Tokens `--color-mascot-<name>` (Quelle `website/t
 | `color-mascot-edge` | – | `#a9b8c6` | Kontur im Dunkeln ohne Scheibe |
 | `color-mascot-vest`, `-cap`, `-cap2` | `#4a5560`, `#8b6f4e`, `#69523a` | Weste `#2c353e` | Ganove |
 
-Dunkel folgt `color-scheme` (Klasse `dark` am `html`, später auch Bänder mit `color-scheme: dark`) oder `thema="dunkel"`. Die helle Kontur gilt in allen Formen ohne Scheibe (voll, kopf, lugen); sie ist im Hellen transparent, der Filter bleibt dort aber aktiv (siehe §12).
+Dunkel folgt `color-scheme` (Klasse `dark` am `html`, später auch Bänder mit `color-scheme: dark`) oder `theme="dark"`. Die helle Kontur gilt in allen Formen ohne Scheibe (voll, kopf, lugen); sie ist im Hellen transparent, der Filter bleibt dort aber aktiv (siehe §12).
 
 **Gemessener Kontrast (WCAG, Nicht-Text-Kontrast mindestens 3:1):**
 
@@ -176,7 +176,7 @@ Posen gleiten über `transition: transform .35s`, Requisiten blenden über `opac
 - **`prefers-reduced-motion: reduce`:** Alle Animationen und Übergänge aus, die Pose bleibt als Standbild. Lugen zeigt den Kopf statisch.
 - **Zittern:** Schnauze! zittert maximal 8 Durchläufe (≈ 1–2,4 s), Schreck läuft genau einmal. Auch bei Hover nicht endlos.
 - **Dauerbewegung:** Unter 200px endet die Bewegung nach rund 6 s (WCAG 2.2.2, Bewegung über 5 s muss anhaltbar sein).
-- **Klickfläche:** `antippbar` ist Spielerei, keine Funktion. Kalle ist nie der einzige Weg zu einer Aktion und bekommt keinen Fokus.
+- **Klickfläche:** `tappable` ist Spielerei, keine Funktion. Kalle ist nie der einzige Weg zu einer Aktion und bekommt keinen Fokus.
 - **Kontrast:** §7.
 
 ## 10. Einbau in Astro
@@ -191,15 +191,15 @@ Posen gleiten über `transition: transform .35s`, Requisiten blenden über `opac
 
 | Ort | Stimmung | Größe |
 |---|---|---|
-| Startseite, Bühne | `idle` → beim ersten Besuch `auftritt` | 240–300px, `antippbar` |
-| Suche, Eingabe | `kieken`, `tippen()` pro Taste | 96px |
-| Suche ohne Treffer | `nuescht` | 160px |
-| 404 | `abwinken` | 280px, `label` |
-| Offline (PWA) | `pennen` | 200px |
-| Spiel „Berliner oder nicht?“ | `jubeln` / `facepalm` | 120px |
-| Vorschlag gesendet | `daumen` | 120px |
-| Wort des Tages | `variante="lugen"` über der Karte | 150px |
-| Cookie-Hinweis | `pst` | 72px |
+| Startseite, Bühne | `idle` → beim ersten Besuch `enter` | 240–300px, `tappable` |
+| Suche, Eingabe | `look`, `keystroke()` pro Taste | 96px |
+| Suche ohne Treffer | `blank` | 160px |
+| 404 | `dismiss` | 280px, `label` |
+| Offline (PWA) | `nap` | 200px |
+| Spiel „Berliner oder nicht?“ | `cheer` / `facepalm` | 120px |
+| Vorschlag gesendet | `thumbs-up` | 120px |
+| Wort des Tages | `variant="peek"` über der Karte | 150px |
+| Cookie-Hinweis | `shush` | 72px |
 
 ## 12. Pflege
 
@@ -221,7 +221,7 @@ Der Lauf erzeugt die Dateien Byte für Byte reproduzierbar.
 npx vitest run tests/
 ```
 
-Abgedeckt: Stimmung als Klasse, `aria-hidden` vs. `role="img"`, Brauen ab 200px, Kopf unter 64px, vereinfacht unter 96px, ruhig unter 200px, eindeutige Masken-IDs, Lugen ohne ID, Wechsel-Federn, Antippen inkl. Rückkehr nach 2 s, `tippen()`, `@fertig`, Begrenzung von `blickX/Y`, SSR ohne Masken-Verweis.
+Abgedeckt: Stimmung als Klasse, `aria-hidden` vs. `role="img"`, Brauen ab 200px, Kopf unter 64px, vereinfacht unter 96px, ruhig unter 200px, eindeutige Masken-IDs, Lugen ohne ID, Wechsel-Federn, Antippen inkl. Rückkehr nach 2 s, `keystroke()`, `@done`, Begrenzung von `gazeX/Y`, SSR ohne Masken-Verweis.
 
 Nicht automatisch geprüft: wie flüssig die Bewegung wirkt. Das muss ein Mensch ansehen.
 

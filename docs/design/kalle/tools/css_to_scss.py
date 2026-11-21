@@ -18,7 +18,7 @@ import re
 
 BLOCK = 'berliner-baer'
 PALETTE = ['ink', 'ink2', 'nose', 'red', 'white', 'mouth', 'disc', 'shadow', 'edge', 'vest', 'cap', 'cap2', 'brow']
-VARIANTS = {'plain', 'brauen', 'klein', 'kopf', 'lugen', 'calm', 'dark', 'light'}  # configuration; everything else (mood, restart toggles) is state
+VARIANTS = {'plain', 'brows', 'small', 'head', 'peek', 'calm', 'dark', 'light'}  # configuration; everything else (mood, restart toggles) is state
 MOTION_PROP = re.compile(r'^(animation|transition)(-[a-z-]+)?$')
 TIME = re.compile(r'(?<![\w.-])(\d*\.?\d+)(ms|s)(?![\w-])')
 
@@ -88,7 +88,7 @@ def _compounds(sel):
 
 
 def _root(comp):
-    """`.bv.bv--calm.bv--winken:hover` -> `:scope[data-variant~="calm"][data-variant~="winken"]:hover`"""
+    """`.bv.bv--calm.bv--wave:hover` -> `:scope[data-variant~="calm"][data-variant~="wave"]:hover`"""
     rest, out = comp, ':scope'
     while rest:
         m = re.match(r'\.bv(?:--([a-z0-9-]+))?', rest)
@@ -237,8 +237,8 @@ EDGE = '''  // With a disc the outline is not needed.
   // Dark without a disc: the light outline is mandatory (fur 1.5:1, outline 4.6:1 on the dark surfaces).
   // In light the edge colour is transparent, so the filter draws nothing.
   :scope[data-variant~="plain"] .all,
-  :scope[data-variant~="kopf"] .head,
-  :scope[data-variant~="lugen"] .svg {
+  :scope[data-variant~="head"] .head,
+  :scope[data-variant~="peek"] .svg {
     filter: drop-shadow(1.2px 0 0 var(--_edge)) drop-shadow(-1.2px 0 0 var(--_edge))
       drop-shadow(0 1.2px 0 var(--_edge)) drop-shadow(0 -1.2px 0 var(--_edge));
   }
@@ -258,7 +258,7 @@ def convert(css, header):
     root += '\n    // Choreography lengths of the moods (SPEC §5, §8): no duration token fits these.\n'
     root += ''.join('    --_t-%s: %s;\n' % (k, v) for k, v in sorted(ctx.times.items()))
     root += '  }\n\n'
-    root += '  // thema="hell"/"dunkel": the tokens follow color-scheme, so forcing the scheme is enough.\n'
+    root += '  // theme="light"/"dark": the tokens follow color-scheme, so forcing the scheme is enough.\n'
     root += '  :scope[data-variant~="dark"] {\n    color-scheme: dark;\n  }\n\n'
     root += '  :scope[data-variant~="light"] {\n    color-scheme: light;\n  }\n\n'
     comp = header + '@use "@sass-butler/mixins" as butler-mx;\n@use "@styles/mixins" as mx;\n\n'

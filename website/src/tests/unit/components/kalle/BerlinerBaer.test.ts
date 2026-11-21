@@ -7,125 +7,123 @@ const tok = (w: { attributes: (n: string) => string | undefined }, a: string) =>
   (w.attributes(a) ?? "").split(" ");
 
 describe("BerlinerBaer", () => {
-  it("rendert die Stimmung als Klasse", () => {
-    const w = mount(BerlinerBaer, { props: { stimmung: "winken" } });
-    expect(tok(w, "data-state")).toContain("winken");
+  it("renders the mood as a state token", () => {
+    const w = mount(BerlinerBaer, { props: { mood: "wave" } });
+    expect(tok(w, "data-state")).toContain("wave");
   });
 
-  it("ist ohne label dekorativ und mit label ein Bild", () => {
-    const deko = mount(BerlinerBaer);
-    expect(deko.find("svg").attributes("aria-hidden")).toBe("true");
-    const bild = mount(BerlinerBaer, { props: { label: "Kalle winkt" } });
-    expect(bild.find("svg").attributes("role")).toBe("img");
-    expect(bild.find("svg").attributes("aria-label")).toBe("Kalle winkt");
+  it("is decorative without a label and an image with one", () => {
+    const decorative = mount(BerlinerBaer);
+    expect(decorative.find("svg").attributes("aria-hidden")).toBe("true");
+    const image = mount(BerlinerBaer, { props: { label: "Kalle winkt" } });
+    expect(image.find("svg").attributes("role")).toBe("img");
+    expect(image.find("svg").attributes("aria-label")).toBe("Kalle winkt");
   });
 
-  it("zeigt Brauen erst ab 200px", () => {
-    expect(tok(mount(BerlinerBaer, { props: { groesse: 199 } }), "data-variant")).not.toContain(
-      "brauen",
+  it("shows brows from 200px", () => {
+    expect(tok(mount(BerlinerBaer, { props: { size: 199 } }), "data-variant")).not.toContain(
+      "brows",
     );
-    expect(tok(mount(BerlinerBaer, { props: { groesse: 200 } }), "data-variant")).toContain(
-      "brauen",
-    );
+    expect(tok(mount(BerlinerBaer, { props: { size: 200 } }), "data-variant")).toContain("brows");
   });
 
-  it("setzt die a11y-Attribute auch auf dem Kopf und den Lugen", () => {
-    for (const variante of ["kopf", "lugen"] as const) {
-      const deko = mount(BerlinerBaer, { props: { variante } }).find("svg");
-      expect(deko.attributes("aria-hidden")).toBe("true");
-      const bild = mount(BerlinerBaer, { props: { label: "Kalle", variante } }).find("svg");
-      expect(bild.attributes("role")).toBe("img");
-      expect(bild.attributes("aria-label")).toBe("Kalle");
+  it("sets the a11y attributes on the head and the peek variant too", () => {
+    for (const variant of ["head", "peek"] as const) {
+      const decorative = mount(BerlinerBaer, { props: { variant } }).find("svg");
+      expect(decorative.attributes("aria-hidden")).toBe("true");
+      const image = mount(BerlinerBaer, { props: { label: "Kalle", variant } }).find("svg");
+      expect(image.attributes("role")).toBe("img");
+      expect(image.attributes("aria-label")).toBe("Kalle");
     }
   });
 
-  it("wechselt unter 64px auf den Kopf und unter 96px auf die vereinfachte Fassung", () => {
-    const klein = mount(BerlinerBaer, { props: { groesse: 48 } });
-    expect(tok(klein, "data-variant")).toEqual(expect.arrayContaining(["kopf", "klein"]));
-    expect(klein.find("mask").exists()).toBe(false);
-    expect(tok(mount(BerlinerBaer, { props: { groesse: 80 } }), "data-variant")).toContain("klein");
+  it("switches to the head below 64px and to the simplified version below 96px", () => {
+    const small = mount(BerlinerBaer, { props: { size: 48 } });
+    expect(tok(small, "data-variant")).toEqual(expect.arrayContaining(["head", "small"]));
+    expect(small.find("mask").exists()).toBe(false);
+    expect(tok(mount(BerlinerBaer, { props: { size: 80 } }), "data-variant")).toContain("small");
   });
 
-  it("ist unter 200px standardmäßig ruhig", () => {
-    expect(tok(mount(BerlinerBaer, { props: { groesse: 120 } }), "data-variant")).toContain("calm");
-    expect(tok(mount(BerlinerBaer, { props: { groesse: 300 } }), "data-variant")).not.toContain(
+  it("is calm by default below 200px", () => {
+    expect(tok(mount(BerlinerBaer, { props: { size: 120 } }), "data-variant")).toContain("calm");
+    expect(tok(mount(BerlinerBaer, { props: { size: 300 } }), "data-variant")).not.toContain(
       "calm",
     );
     expect(
-      tok(mount(BerlinerBaer, { props: { groesse: 300, ruhig: true } }), "data-variant"),
+      tok(mount(BerlinerBaer, { props: { calm: true, size: 300 } }), "data-variant"),
     ).toContain("calm");
   });
 
-  it("vergibt nach dem Mounten seitenweit eindeutige Masken-IDs", async () => {
+  it("assigns page-wide unique mask ids after mounting", async () => {
     const a = mount(BerlinerBaer);
     const b = mount(BerlinerBaer);
     await a.vm.$nextTick();
     await b.vm.$nextTick();
-    const ida = a.find("mask").attributes("id");
-    const idb = b.find("mask").attributes("id");
-    expect(ida).toMatch(/^bv-\d+-m$/);
-    expect(ida).not.toBe(idb);
-    expect(a.find(`[mask="url(#${ida})"]`).exists()).toBe(true);
+    const idA = a.find("mask").attributes("id");
+    const idB = b.find("mask").attributes("id");
+    expect(idA).toMatch(/^bv-\d+-m$/);
+    expect(idA).not.toBe(idB);
+    expect(a.find(`[mask="url(#${idA})"]`).exists()).toBe(true);
   });
 
-  it("braucht beim Lugen keine ID", () => {
-    const w = mount(BerlinerBaer, { props: { variante: "lugen" } });
+  it("needs no id for the peek variant", () => {
+    const w = mount(BerlinerBaer, { props: { variant: "peek" } });
     expect(w.find("clipPath").exists()).toBe(false);
-    expect(w.findAll("svg").length).toBe(3); // außen + zwei Clip-Fenster
+    expect(w.findAll("svg").length).toBe(3); // outer + two clip windows
   });
 
-  it("federt bei jedem Stimmungswechsel", async () => {
-    const w = mount(BerlinerBaer, { props: { stimmung: "idle" } });
+  it("springs on every mood change", async () => {
+    const w = mount(BerlinerBaer, { props: { mood: "idle" } });
     expect(tok(w, "data-state")).not.toContain("sw-a");
-    await w.setProps({ stimmung: "nicken" });
+    await w.setProps({ mood: "nod" });
     expect(tok(w, "data-state")).toContain("sw-a");
-    await w.setProps({ stimmung: "nee" });
+    await w.setProps({ mood: "shake" });
     expect(tok(w, "data-state")).toContain("sw-b");
   });
 
-  it("zuckt beim Antippen, brüllt beim dritten Mal und kehrt zurück", async () => {
+  it("flinches on tap, roars on the third tap and returns", async () => {
     vi.useFakeTimers();
-    const w = mount(BerlinerBaer, { props: { antippbar: true, stimmung: "tanzen" } });
+    const w = mount(BerlinerBaer, { props: { mood: "dance", tappable: true } });
     await w.trigger("click");
-    expect(tok(w, "data-state")).toContain("zuck-a");
-    expect(tok(w, "data-state")).toContain("tanzen");
+    expect(tok(w, "data-state")).toContain("flinch-a");
+    expect(tok(w, "data-state")).toContain("dance");
     await w.trigger("click");
-    expect(tok(w, "data-state")).toContain("zuck-b");
+    expect(tok(w, "data-state")).toContain("flinch-b");
     await w.trigger("click");
-    expect(tok(w, "data-state")).toContain("schnauze");
+    expect(tok(w, "data-state")).toContain("roar");
     vi.advanceTimersByTime(2000);
     await w.vm.$nextTick();
-    expect(tok(w, "data-state")).toContain("tanzen");
+    expect(tok(w, "data-state")).toContain("dance");
     vi.useRealTimers();
   });
 
-  it("ignoriert Klicks, wenn nicht antippbar", async () => {
+  it("ignores clicks when not tappable", async () => {
     const w = mount(BerlinerBaer);
     await w.trigger("click");
-    expect(tok(w, "data-state").some((c) => c.startsWith("zuck"))).toBe(false);
+    expect(tok(w, "data-state").some((c) => c.startsWith("flinch"))).toBe(false);
   });
 
-  it("zuckt mit den Ohren über tippen()", async () => {
+  it("twitches the ears through keystroke()", async () => {
     const w = mount(BerlinerBaer);
-    (w.vm as unknown as { tippen: () => void }).tippen();
+    (w.vm as unknown as { keystroke: () => void }).keystroke();
     await w.vm.$nextTick();
-    expect(tok(w, "data-state")).toContain("tipp-a");
+    expect(tok(w, "data-state")).toContain("type-a");
   });
 
-  it("meldet das Ende von Auftritt und Abgang", async () => {
+  it("reports the end of enter and exit", async () => {
     vi.useFakeTimers();
-    const w = mount(BerlinerBaer, { props: { stimmung: "idle" } });
-    await w.setProps({ stimmung: "auftritt" });
+    const w = mount(BerlinerBaer, { props: { mood: "idle" } });
+    await w.setProps({ mood: "enter" });
     vi.advanceTimersByTime(900);
-    expect(w.emitted("fertig")?.[0]).toEqual(["auftritt"]);
-    await w.setProps({ stimmung: "abgang" });
+    expect(w.emitted("done")?.[0]).toEqual(["enter"]);
+    await w.setProps({ mood: "exit" });
     vi.advanceTimersByTime(2000);
-    expect(w.emitted("fertig")?.[1]).toEqual(["abgang"]);
+    expect(w.emitted("done")?.[1]).toEqual(["exit"]);
     vi.useRealTimers();
   });
 
-  it("begrenzt den Blick auf -1 bis 1", () => {
-    const w = mount(BerlinerBaer, { props: { blickX: 3, blickY: -2, stimmung: "folgen" } });
+  it("clamps the gaze to -1..1", () => {
+    const w = mount(BerlinerBaer, { props: { gazeX: 3, gazeY: -2, mood: "follow" } });
     const style = w.attributes("style") ?? "";
     expect(style).toContain("--_lx: 1");
     expect(style).toContain("--_ly: -1");

@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import BerlinerBaer, { type BaerStimmung } from './BerlinerBaer.vue'
-const stimmungen: BaerStimmung[] = ['idle','locker','winken','nicken','nee','daumen','zeigen','abwinken','pst','kieken','lauschen','denken','nuescht','jubeln','facepalm','schreck','kratzen','gaehnen','einnicken','pennen','schnauze','tanzen','futtern','pils','ganove','folgen']
+import BerlinerBaer, { type BearMood } from './BerlinerBaer.vue'
+const moods: BearMood[] = ['idle','relaxed','wave','nod','shake','thumbs-up','point','dismiss','shush','look','listen','think','blank','cheer','facepalm','scare','scratch','yawn','doze','nap','roar','dance','eat','beer','gangster','follow']
 </script>
 <template>
   <section v-for="t in ['light','dark']" :key="t" :data-theme="t" class="row">
     <div class="grid">
-      <figure v-for="s in stimmungen" :key="s"><BerlinerBaer :stimmung="s" :groesse="120" :ruhig="false" /><figcaption>{{ s }}</figcaption></figure>
+      <figure v-for="s in moods" :key="s"><BerlinerBaer :mood="s" :size="120" :calm="false" /><figcaption>{{ s }}</figcaption></figure>
     </div>
     <div class="sizes">
-      <BerlinerBaer stimmung="winken" :groesse="260" scheibe label="Kalle winkt" />
-      <BerlinerBaer stimmung="ganove" :groesse="260" />
-      <BerlinerBaer stimmung="pils" :groesse="88" />
-      <BerlinerBaer stimmung="ganove" :groesse="88" />
-      <BerlinerBaer stimmung="idle" :groesse="56" />
-      <BerlinerBaer stimmung="idle" :groesse="32" />
-      <BerlinerBaer stimmung="idle" variante="lugen" :groesse="160" />
+      <BerlinerBaer mood="wave" :size="260" disc label="Kalle winkt" />
+      <BerlinerBaer mood="gangster" :size="260" />
+      <BerlinerBaer mood="beer" :size="88" />
+      <BerlinerBaer mood="gangster" :size="88" />
+      <BerlinerBaer mood="idle" :size="56" />
+      <BerlinerBaer mood="idle" :size="32" />
+      <BerlinerBaer mood="idle" variant="peek" :size="160" />
     </div>
   </section>
 </template>
