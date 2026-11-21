@@ -20,6 +20,13 @@ vi.mock("@services/payload/words.ts", async (importOriginal) => ({
 vi.mock("@services/payload/themen.ts", () => ({ fetchAllThemen }));
 vi.mock("@services/payload/posts.ts", () => ({ fetchAllPosts }));
 vi.mock("@services/payload/site.ts", () => ({ fetchHomeGlobal }));
+// A rich text with `boom` stands for html the converter cannot render.
+vi.mock("payload-app/lexical-html", () => ({
+  lexicalToHtml: (state: { boom?: boolean; text: string }) => {
+    if (state.boom) throw new Error("bad lexical");
+    return `<p>${state.text}</p>`;
+  },
+}));
 
 const word = (slug: string, over: Record<string, unknown> = {}) => ({
   article: null,
@@ -162,6 +169,57 @@ describe("fetchHome", () => {
       intro: "Hallo",
       soundRules: [{ berlin: "ick", standard: "ich" }],
     });
+  });
+
+  it("keeps only FAQ rows with a question and a text, and drops one that cannot render", async () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    fetchHomeGlobal.mockResolvedValue({
+      faq: [
+        { answer: { text: "Antwort" }, question: "Was?" },
+        { answer: { text: "Antwort" }, question: "  " },
+        { answer: { text: " " }, question: "Leer?" },
+        { answer: { boom: true, text: "kaputt" }, question: "Kaputt?" },
+      ],
+    });
+    const { faq } = await load();
+    expect(faq).toEqual([{ answerHtml: "<p>Antwort</p>", question: "Was?" }]);
+    expect(error).toHaveBeenCalledWith(
+      expect.objectContaining({ message: '[home] FAQ "Kaputt?" skipped' }),
+    );
+    error.mockRestore();
+  });
+
+  it("warns in production when intro, knowledge or FAQ are missing", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.stubEnv("PROD", true);
+    await load();
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("[home] CMS texts missing"));
+    vi.unstubAllEnvs();
+    warn.mockRestore();
+  });
+
+  it("warns about try-words that are unpublished or deleted", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    fetchAllWords.mockResolvedValue([word("bolle")]);
+    fetchHomeGlobal.mockResolvedValue({ tryWords: [5, { id: 99 }] });
+    await load();
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("ids: 99"));
+    warn.mockRestore();
+  });
+
+  it("drops the magazine and the vote counts when their sources fail, without failing the page", async () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    fetchAllPosts.mockRejectedValue(new Error("posts down"));
+    count.mockRejectedValue(new Error("db down"));
+    fetchAllWords.mockResolvedValue([word("aasen"), word("bolle")]);
+    const home = await load();
+    expect(home.magazine).toBeNull();
+    expect(home.about.counts.votes).toBe(0);
+    expect(home.poll).toMatchObject({ totalVotes: 0 });
+    expect(error).toHaveBeenCalledWith(
+      expect.objectContaining({ message: "[home] posts unavailable" }),
+    );
+    error.mockRestore();
   });
 
   it("builds the magazine teaser from the newest post", async () => {

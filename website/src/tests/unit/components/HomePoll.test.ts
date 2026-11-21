@@ -27,8 +27,8 @@ const props = {
   wordId: 7,
 };
 
-const mountIt = async () => {
-  const w = mount(HomePoll, { attachTo: document.body, props });
+const mountIt = async (total = props.total) => {
+  const w = mount(HomePoll, { attachTo: document.body, props: { ...props, total } });
   await flushPromises();
   return w;
 };
@@ -58,6 +58,13 @@ describe("HomePoll", () => {
     ]);
     expect(w.text()).toContain("Schon 2.317 Stimmen – wat sagst du? Dit Ergebnis siehste danach.");
     expect(dots(w)).toHaveLength(0);
+  });
+
+  it("words the vote count for none and for a single vote", async () => {
+    $feedback.set(null as never); // before the live totals arrive the page count is shown
+    expect((await mountIt(0)).text()).toContain("Noch keener hat abjestimmt – mach den Anfang!");
+    document.body.innerHTML = "";
+    expect((await mountIt(1)).text()).toContain("Schon 1 Stimme – wat sagst du?");
   });
 
   it("sends the usage answer and shows 100 dots with the own vote marked", async () => {

@@ -6,6 +6,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { vTooltip } from "@/directives/tooltip";
 
+const { createToastNotify, reportError } = vi.hoisted(() => ({
+  createToastNotify: vi.fn(),
+  reportError: vi.fn(),
+}));
+vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify }));
+vi.mock("@utils/reportError.ts", () => ({ reportError }));
+
 const mark = (sym: MorseMark["sym"]): MorseMark => ({ angle: 0, sym, x: 50, y: 5 });
 // Invented ring: three marks.
 const morse = [mark("dash"), mark("dot"), mark("dot")];
@@ -57,6 +64,31 @@ describe("WordSeal", () => {
     expect(HTMLMediaElement.prototype.pause).toHaveBeenCalled();
     expect(button.attributes("aria-label")).toBe("Kiez anhören");
     expect(w.emitted("end")).toHaveLength(1);
+    expect(onMarks(w)).toBe(0);
+  });
+
+  it("stays quiet when a pause cuts the load off", async () => {
+    vi.mocked(HTMLMediaElement.prototype.play).mockRejectedValue(
+      new DOMException("interrupted", "AbortError"),
+    );
+    const w = seal();
+    await w.get("button").trigger("click");
+    await flushPromises();
+    expect(reportError).not.toHaveBeenCalled();
+    expect(createToastNotify).not.toHaveBeenCalled();
+    expect(w.get("button").attributes("aria-label")).toBe("Kiez anhören");
+  });
+
+  it("reports a broken file, tells the visitor and returns to rest", async () => {
+    vi.mocked(HTMLMediaElement.prototype.play).mockRejectedValue(new Error("decode"));
+    const w = seal();
+    await w.get("button").trigger("click");
+    await flushPromises();
+    expect(reportError).toHaveBeenCalledWith(
+      expect.objectContaining({ message: "[seal] playback failed: /kiez.mp3" }),
+    );
+    expect(createToastNotify).toHaveBeenCalledWith(expect.objectContaining({ status: "error" }));
+    expect(w.get("button").attributes("aria-label")).toBe("Kiez anhören");
     expect(onMarks(w)).toBe(0);
   });
 

@@ -75,6 +75,19 @@ describe("BonTeaser", () => {
     expect(button(w, "Ja, Berlinerisch")?.exists()).toBe(true);
   });
 
+  it("resolves a real word without a public page without a lookup link", async () => {
+    const w = mountIt({
+      isReal: true,
+      slug: undefined,
+      word: "Quarkwolke",
+      wrongShare: 62,
+    } as never);
+    await button(w, "Nee, erfunden")!.trigger("click");
+    await flushPromises();
+    expect(status(w)).toContain("Knapp daneben!");
+    expect(status(w)).not.toContain("nachschlagen");
+  });
+
   it("resolves a fake word without a lookup link", async () => {
     const right = mountIt(fake);
     await button(right, "Nee, erfunden")!.trigger("click");

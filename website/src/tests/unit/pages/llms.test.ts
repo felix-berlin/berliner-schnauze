@@ -15,8 +15,8 @@ const data = vi.hoisted(() => ({
 vi.mock("@services/payload/words.ts", () => ({ fetchAllWords: async () => data.words }));
 vi.mock("@services/payload/themen.ts", () => ({ fetchAllThemen: async () => data.themen }));
 vi.mock("@services/payload/posts.ts", () => ({ fetchAllPosts: async () => data.posts }));
-vi.mock("@services/payload/home.ts", () => ({
-  fetchHome: async () => ({
+const home = vi.hoisted(() => ({
+  fetchHome: vi.fn(async () => ({
     faq: [
       { answerHtml: "<p>Eine <b>erfundene</b> Antwort &amp; mehr.</p>", question: "Testfrage?" },
     ],
@@ -27,8 +27,9 @@ vi.mock("@services/payload/home.ts", () => ({
       { berlin: "ick", standard: "ich" },
     ],
     wordCount: 1234,
-  }),
+  })),
 }));
+vi.mock("@services/payload/home.ts", () => home);
 
 import { GET } from "@/pages/llms.txt.ts";
 
@@ -76,5 +77,21 @@ describe("llms.txt", () => {
     expect(body).toContain("- g → j: jut (g wird j)");
     expect(body).toContain("- ich → ick");
     expect(body).toContain("### Testfrage?\n\nEine erfundene Antwort & mehr.");
+  });
+
+  it("is served without the start page block when the home texts fail", async () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    home.fetchHome.mockRejectedValueOnce(new Error("cms down"));
+    const res = await get(new URL("https://berliner-schnauze.wtf"));
+    const body = await res.text();
+    expect(res.status).toBe(200);
+    expect(body).toContain("1.234 Einträgen");
+    expect(body).not.toContain("Wat is Berlinerisch?");
+    expect(body).not.toContain("Lautregeln");
+    expect(body).not.toContain("Testfrage?");
+    expect(error).toHaveBeenCalledWith(
+      expect.objectContaining({ message: "[llms.txt] home texts unavailable" }),
+    );
+    error.mockRestore();
   });
 });
