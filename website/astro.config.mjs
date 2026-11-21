@@ -40,16 +40,29 @@ const SITE_ORIGIN = import.meta.env.DEV ? "http://localhost:4321" : "https://ber
 const analyzeBundle = Boolean(BUNDLE_ANALYZE);
 // Not sonda/astro: Astro 7 builds all environments in one builder and calls astro:build:setup once (target "server"),
 // so its single plugin instance writes every environment into the same sonda_server report.
-const sondaPlugin = perEnvironmentPlugin("sonda", (environment) =>
-  SondaVitePlugin({
-    enabled: analyzeBundle,
+const sondaPlugin = perEnvironmentPlugin("sonda", (environment) => {
+  if (!analyzeBundle) return false;
+  const sonda = SondaVitePlugin({
     format: ["html", "json"],
     filename: `sonda_${environment.name}`,
     open: environment.name === "client" ? "html" : false, // tiny-open reaches the Windows browser from WSL
     gzip: true,
     brotli: true,
-  }),
-);
+  });
+  // Astro's image-service builder fires closeBundle for client/ssr without building them: an empty report (and an
+  // opened browser tab) would follow. Report only environments that wrote output.
+  let wrote = false;
+  return {
+    ...sonda,
+    writeBundle(...args) {
+      wrote = true;
+      return sonda.writeBundle.apply(this, args);
+    },
+    closeBundle(...args) {
+      if (wrote) return sonda.closeBundle.apply(this, args);
+    },
+  };
+});
 
 // https://astro.build/config
 export default defineConfig({
