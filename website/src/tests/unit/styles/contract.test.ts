@@ -417,4 +417,10 @@ describe("colour scheme contract", () => {
     expect(colors).toMatch(/color-scheme:\s*light dark/);
     expect(colors).not.toMatch(/color-scheme:\s*light;/);
   });
+
+  it("tints native controls with the accent token", () => {
+    expect(read(join(src, "styles/base/_inputs.scss"))).toMatch(
+      /html\s*\{\s*accent-color:\s*var\(--color-accent-solid\);/,
+    );
+  });
 });
