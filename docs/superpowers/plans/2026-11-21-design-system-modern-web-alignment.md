@@ -158,3 +158,26 @@
 - **Correction to the audit:** the `rgb()` values in migrated files are documented colour-inventory exceptions, not lint escapes; Task 7 shrinks that list rather than fixing violations.
 - **Open decisions:** Task 5 (A or B); whether Task 3 replaces any hand-built control.
 - **Order:** 1 → 2 (shared constant), 7 before 9 (docs cite final token names), 5 last of the code tasks (largest). Tasks 3, 4, 6, 8 are independent.
+
+---
+
+## Outcome and follow-ups (2026-11-21, after execution)
+
+Tasks 1-9 are done (commits `cdfd3419`..`1ae882d3` on `felix-berlin/kalle`). What did not go as planned, and what is still open, so later redesign steps pick it up:
+
+**Deviations from the plan**
+
+- Root `color-scheme` stays `light` (not `light dark`): legacy files hide dark overrides behind the `.dark` class, so without JS `light dark` renders a dark system half dark. The `<meta name="color-scheme">` is in. **Switch the root default to `light dark` when `stylelint.legacy-files.mjs` is empty.**
+- The global `0.01ms !important` reduced-motion net stays: legacy files rely on it. **Remove it with the last legacy file**, then drop the rule-file sentence about it. Migrated files already guard motion (contract test).
+- Generator format is unchanged (hex, `rgb()`, `color(srgb …)`); no `oklch`. Plan Task 7 step 4 dropped on purpose.
+- Task 3 and 4 are covered by contract tests and compiled CSS, not by Playwright (no browser run for accent-color, forced colors, or no-JS).
+
+**Open (decide per redesign step)**
+
+- Promote the remaining `rgb()` one-offs of migrated files (`_badge`, `_toast-notify`, `_word-sidebar`, `_main-menu`, …) and the `--_ring` `color-mix` in `_home-results.scss` to tokens; needs a visual diff per value.
+- Gradient interpolation (`in oklab`) was judged unnecessary for the current hard-stop and colour-to-transparent gradients; revisit when a smooth colour-to-colour gradient is added.
+- `PwaCacheTypeBar.vue` has 8 raw chart hexes; needs a categorical chart palette decision.
+- `base/_inputs.scss` switch thumb `transition: transform` is not motion-guarded (shares a list with colour transitions); `_berliner-baer.scss` was not audited beyond its existing guards.
+- `TurnStile.vue` reads raw `$isDarkMode` (`null` = follow system renders a light widget on a dark system). Pre-existing.
+- Verify in a real browser once: forced colors on home, word page, BON; no-JS with dark system; the four hidden scrollers (`scroll alternative:` claim); `accent-color` in Safari, both schemes.
+- No `prefers-contrast` block was added; add one only when a low-contrast pair is found.

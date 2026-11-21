@@ -308,3 +308,7 @@ A styleguide page, served only in dev and e2e builds, renders every token from t
 | The production CSS minifier keeps `@scope (…) to (…)` and `:scope` intact                                    | Build once, inspect the CSS                                                                                                                                                                                  | Change the minifier setting for CSS                  |
 | The inline `@layer` statement keeps the order across `ClientRouter` navigations                              | Playwright: navigate client-side, then check that a `components` rule still beats a `legacy` rule                                                                                                            | Mark the `<style>` with `transition:persist`         |
 | The unsupported-browser regex (`scripts/generate-supported-browsers.mjs`) follows the new browserslist query | Unit test with a Firefox 140 and a Firefox 146 user agent                                                                                                                                                    | Fix the generator in wave 1                          |
+
+## 15. Modern web guidance alignment (2026-11-21)
+
+Deviations and open follow-ups of the alignment pass (root `color-scheme`, reduced-motion net, token format, deferred colour promotions) are listed in `docs/superpowers/plans/2026-11-21-design-system-modern-web-alignment.md`, section "Outcome and follow-ups". Read it before each redesign step.
