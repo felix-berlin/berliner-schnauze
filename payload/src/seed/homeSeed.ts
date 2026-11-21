@@ -181,14 +181,14 @@ async function seedWordOfTheDayIpa(payload: Payload): Promise<number> {
     draft: true,
     limit: 0,
     pagination: false,
-    select: { berlinerisch: true, ipa: true, slug: true },
+    select: { _status: true, berlinerisch: true, ipa: true, slug: true },
   });
   const published = await payload.find({
     collection: "words",
     depth: 0,
     limit: 0,
     pagination: false,
-    select: { berlinerisch: true, ipa: true, slug: true },
+    select: { _status: true, berlinerisch: true, ipa: true, slug: true },
   });
   const today = Math.floor(Date.now() / MS_PER_DAY);
   const picks = new Map<string, (typeof all.docs)[number]>();
@@ -209,7 +209,7 @@ async function seedWordOfTheDayIpa(payload: Payload): Promise<number> {
       context: { [PRESERVE_CONTENT_MODIFIED_AT]: true },
       data: { ipa },
       depth: 0,
-      draft: true,
+      draft: word._status === "draft",
       id: word.id,
     });
     written++;
