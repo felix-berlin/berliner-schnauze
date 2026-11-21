@@ -5,6 +5,8 @@ import sentry from "@sentry/astro";
 import { AstroPWAIntegration as AstroPWA } from "@vite-pwa/astro";
 import matomo from "astro-matomo";
 import { defineConfig, envField, fontProviders } from "astro/config";
+import { readdir } from "node:fs/promises";
+import { join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { SondaVitePlugin } from "sonda";
 import Icons from "unplugin-icons/vite";
@@ -40,12 +42,14 @@ const SITE_ORIGIN = import.meta.env.DEV ? "http://localhost:4321" : "https://ber
 const analyzeBundle = Boolean(BUNDLE_ANALYZE);
 // Not sonda/astro: Astro 7 builds all environments in one builder and calls astro:build:setup once (target "server"),
 // so its single plugin instance writes every environment into the same sonda_server report.
+let finishClientReport = async () => {};
 const sondaPlugin = perEnvironmentPlugin("sonda", (environment) => {
   if (!analyzeBundle) return false;
+  const isClient = environment.name === "client";
   const sonda = SondaVitePlugin({
     format: ["html", "json"],
     filename: `sonda_${environment.name}`,
-    open: environment.name === "client" ? "html" : false, // tiny-open reaches the Windows browser from WSL
+    open: isClient ? "html" : false, // tiny-open reaches the Windows browser from WSL
     gzip: true,
     brotli: true,
   });
@@ -54,15 +58,33 @@ const sondaPlugin = perEnvironmentPlugin("sonda", (environment) => {
   let wrote = false;
   return {
     ...sonda,
-    writeBundle(...args) {
+    writeBundle(output, bundle) {
       wrote = true;
-      return sonda.writeBundle.apply(this, args);
+      // The client report waits for astro:build:done: Astro moves the CSS in from the server build only afterwards.
+      if (isClient)
+        finishClientReport = () =>
+          addLooseAssets(sonda, output.dir, bundle).then(() => sonda.closeBundle());
+      return sonda.writeBundle(output, bundle);
     },
-    closeBundle(...args) {
-      if (wrote) return sonda.closeBundle.apply(this, args);
+    closeBundle() {
+      if (wrote && !isClient) return sonda.closeBundle();
     },
   };
 });
+
+// shortcut: Sonda 0.14 drops every non-chunk output (CSS, fonts, images) from its report, so the other files in _astro/
+// go in as entry-less chunks and get their sizes. Upgrade when Sonda reports plain assets itself.
+async function addLooseAssets(sonda, dir, bundle) {
+  const files = await readdir(resolve(dir, "_astro"), { recursive: true, withFileTypes: true });
+  const loose = files
+    .filter((file) => file.isFile())
+    .map((file) => relative(dir, join(file.parentPath, file.name)))
+    .filter((path) => bundle[path]?.type !== "chunk");
+  return sonda.writeBundle(
+    { dir },
+    Object.fromEntries(loose.map((path) => [path, { type: "chunk", facadeModuleId: null }])),
+  );
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -396,6 +418,7 @@ export default defineConfig({
   },
   compressHTML: true,
   integrations: [
+    { name: "sonda-client-report", hooks: { "astro:build:done": () => finishClientReport() } },
     // Server SDK + source map upload. The client SDK stays our own lazy init (src/plugins/sentryBrowser.ts): with
     // enabled.client the integration would inject an eager one. Source maps only for CI deploy builds.
     sentry({
