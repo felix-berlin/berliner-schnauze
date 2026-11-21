@@ -7,13 +7,13 @@ import { setPageCache } from "@utils/cacheHeaders.ts";
 import { loadDailyStats, loadHourlyStats } from "payload-app/home-stats-load";
 
 // shortcut: per process; with several web containers use a shared cache.
-// TODO(startseite): bon.roundsToday rides on the daily memo, so it lags by up to a day; confirm or move it to hourly.
+// Districts and age lists move slowly (a day); popular, rising and the BON numbers ("rounds today") hourly.
 const daily = ttl(24 * 3_600_000, async () => loadDailyStats(await getPayloadClient()));
 const hourly = ttl(3_600_000, async () => loadHourlyStats(await getPayloadClient()));
 
 export const GET: APIRoute = async () => {
   try {
-    const [{ districts, ageLists, bon }, { popular, rising }] = await Promise.all([
+    const [{ districts, ageLists }, { popular, rising, bon }] = await Promise.all([
       daily(),
       hourly(),
     ]);

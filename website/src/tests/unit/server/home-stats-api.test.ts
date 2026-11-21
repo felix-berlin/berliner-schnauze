@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const { loadDailyStats, loadHourlyStats } = vi.hoisted(() => ({
   loadDailyStats: vi.fn(),
@@ -23,15 +23,21 @@ const get = () =>
 
 const daily = {
   ageLists: { dying: [], growing: [] },
-  bon: { card: null, roundsToday: 2, steps: [{ from: 0, mult: 1 }] },
   districts: [{ area: "mitte", name: "Mitte", typical: null, value: null }],
 };
-const hourly = { popular: [], rising: [] };
+const hourly = {
+  bon: { card: null, roundsToday: 2, steps: [{ from: 0, mult: 1 }] },
+  popular: [],
+  rising: [],
+};
 
 beforeEach(() => {
+  vi.useFakeTimers();
   loadDailyStats.mockReset().mockResolvedValue({ ...daily, extra: "x" });
   loadHourlyStats.mockReset().mockResolvedValue(hourly);
 });
+
+afterEach(() => vi.useRealTimers());
 
 describe("GET /api/home-stats", () => {
   // memos live per module: the failure case runs first, before a value is cached
@@ -57,5 +63,15 @@ describe("GET /api/home-stats", () => {
     // the failed daily load was not kept and is retried; the hourly part stays memoised from the first test
     expect(loadDailyStats).toHaveBeenCalledTimes(1);
     expect(loadHourlyStats).not.toHaveBeenCalled();
+  });
+
+  it("reloads popular, rising and bon after an hour, districts and age lists only after a day", async () => {
+    vi.advanceTimersByTime(3_600_000 + 1);
+    expect((await get()).status).toBe(200);
+    await vi.waitFor(() => expect(loadHourlyStats).toHaveBeenCalledTimes(1));
+    expect(loadDailyStats).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(24 * 3_600_000);
+    await get();
+    await vi.waitFor(() => expect(loadDailyStats).toHaveBeenCalledTimes(1));
   });
 });

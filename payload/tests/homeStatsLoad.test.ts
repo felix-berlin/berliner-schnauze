@@ -40,6 +40,7 @@ beforeAll(async () => {
   await wipe();
   const a = await word(`hs-a-${Date.now()}`);
   const b = await word(`hs-b-${Date.now()}`);
+  const e = await word(`hs-e-${Date.now()}`);
   const c = await word(`hs-c-${Date.now()}`);
   const draft = await word(`hs-d-${Date.now()}`, false);
 
@@ -47,6 +48,16 @@ beforeAll(async () => {
   await votes(a, 9, { usage: "say", area: "spandau" });
   await votes(a, 7, { usage: "say", area: "mitte" });
   await votes(a, 3, { usage: "never", area: "mitte" });
+  // Typical words: a's Berlin share is 18/30 = 0.6, e's 18/20 = 0.9 (spandau stays out, under MIN_GROUP).
+  // reinickendorf: e is said most (0.9) but sits at its Berlin share; a (0.8) is 0.2 above its own, so a is typical.
+  await votes(a, 3, { usage: "say", area: "lichtenberg" });
+  await votes(a, 7, { usage: "never", area: "lichtenberg" });
+  await votes(a, 8, { usage: "say", area: "reinickendorf" });
+  await votes(a, 2, { usage: "never", area: "reinickendorf" });
+  await votes(e, 9, { usage: "say", area: "lichtenberg" });
+  await votes(e, 1, { usage: "never", area: "lichtenberg" });
+  await votes(e, 9, { usage: "say", area: "reinickendorf" });
+  await votes(e, 1, { usage: "never", area: "reinickendorf" });
   // Rows without usage never count.
   await votes(a, 5, { reaction: "like", area: "pankow" });
 
@@ -114,6 +125,12 @@ describe("loadHomeStats", () => {
     expect(district("mitte")?.typical?.slug).toMatch(/^hs-a-/);
     expect(district("neukoelln")?.name).toBe("Neukölln");
     expect(district("pankow")?.value).toBeNull();
+  });
+
+  it("picks per district the word furthest above its own Berlin share", () => {
+    expect(district("lichtenberg")?.typical?.slug).toMatch(/^hs-e-/);
+    expect(district("reinickendorf")?.typical?.slug).toMatch(/^hs-a-/);
+    expect(district("reinickendorf")?.value).toBe(85);
   });
 
   it("merges u20 and 20-29 into u30 and keeps words below MIN_WORD_VOTES out", () => {

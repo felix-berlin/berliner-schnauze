@@ -94,17 +94,33 @@ describe("agePercents", () => {
 });
 
 describe("typicalWord", () => {
-  it("ignores words below MIN_GROUP and picks the largest gap above the average", () => {
+  it("ignores words below MIN_GROUP and picks the largest gap above the word's own Berlin share", () => {
     const words = [
-      { word: 1, say: 5, total: 10 }, // 0.5
-      { word: 2, say: 9, total: 10 }, // 0.9
-      { word: 3, say: 3, total: 3 }, // 1.0 but too few votes
+      { word: 1, say: 5, total: 10, citySay: 0.2 }, // +0.3
+      { word: 2, say: 9, total: 10, citySay: 0.8 }, // +0.1
+      { word: 3, say: 3, total: 3, citySay: 0 }, // +1.0 but too few votes
     ];
-    expect(typicalWord(words, 0.4)).toBe(2);
+    expect(typicalWord(words)).toBe(1);
+  });
+
+  it("does not pick the most-said word when its Berlin share is just as high", () => {
+    const words = [
+      { word: 1, say: 9, total: 10, citySay: 0.9 }, // most said, but +0
+      { word: 2, say: 4, total: 10, citySay: 0.2 }, // +0.2
+    ];
+    expect(typicalWord(words)).toBe(2);
+  });
+
+  it("breaks ties by the lower word id", () => {
+    const words = [
+      { word: 7, say: 6, total: 10, citySay: 0.4 },
+      { word: 3, say: 6, total: 10, citySay: 0.4 },
+    ];
+    expect(typicalWord(words)).toBe(3);
   });
 
   it("returns null for an empty list or when nothing has enough votes", () => {
-    expect(typicalWord([], 0.4)).toBeNull();
-    expect(typicalWord([{ word: 1, say: 3, total: 3 }], 0.4)).toBeNull();
+    expect(typicalWord([])).toBeNull();
+    expect(typicalWord([{ word: 1, say: 3, total: 3, citySay: 0.1 }])).toBeNull();
   });
 });

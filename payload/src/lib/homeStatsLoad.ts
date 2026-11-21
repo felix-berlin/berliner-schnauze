@@ -43,8 +43,8 @@ export type HomeStats = {
   };
 };
 /** The parts that change slowly (cache for a day) and quickly (cache for an hour). */
-export type DailyStats = Pick<HomeStats, "districts" | "ageLists" | "bon">;
-export type HourlyStats = Pick<HomeStats, "popular" | "rising">;
+export type DailyStats = Pick<HomeStats, "districts" | "ageLists">;
+export type HourlyStats = Pick<HomeStats, "popular" | "rising" | "bon">;
 
 const DISTRICT_NAMES = {
   mitte: "Mitte",
@@ -106,19 +106,27 @@ const loadDistricts = async (payload: BasePayload): Promise<HomeStats["districts
     const c = counts.get(r.area);
     if (c) c[r.usage] += Number(r.n);
   }
-  // The Berlin average runs over the same 12 districts (a 0..1 share, as typicalWord expects).
-  let say = 0;
-  let total = 0;
-  for (const c of counts.values()) {
-    say += c.say;
-    total += c.say + c.know + c.never;
+  // Each word's Berlin share (0..1) runs over the same 12 districts and only over its groups of >= MIN_GROUP votes.
+  const berlin = perWord.filter((r) => counts.has(r.area));
+  const city = new Map<number, { say: number; total: number }>();
+  for (const r of berlin) {
+    const c = city.get(r.word_id) ?? { say: 0, total: 0 };
+    c.say += Number(r.say);
+    c.total += Number(r.total);
+    city.set(r.word_id, c);
   }
-  const avgSay = total ? say / total : 0;
   return DISTRICTS.map((area) => {
-    const rows = perWord.filter((r) => r.area === area);
+    const rows = berlin.filter((r) => r.area === area);
     const best = typicalWord(
-      rows.map((r) => ({ word: r.word_id, say: Number(r.say), total: Number(r.total) })),
-      avgSay,
+      rows.map((r) => {
+        const c = city.get(r.word_id) ?? { say: 0, total: 1 };
+        return {
+          word: r.word_id,
+          say: Number(r.say),
+          total: Number(r.total),
+          citySay: c.say / c.total,
+        };
+      }),
     );
     const hit = rows.find((r) => r.word_id === best);
     return {
@@ -218,15 +226,13 @@ const loadBon = async (payload: BasePayload): Promise<HomeStats["bon"]> => {
 };
 
 export const loadDailyStats = async (payload: BasePayload): Promise<DailyStats> => {
-  const [districts, ageLists, bon] = await Promise.all([
-    loadDistricts(payload),
-    loadAgeLists(payload),
-    loadBon(payload),
-  ]);
-  return { districts, ageLists, bon };
+  const [districts, ageLists] = await Promise.all([loadDistricts(payload), loadAgeLists(payload)]);
+  return { districts, ageLists };
 };
 
-export const loadHourlyStats = async (payload: BasePayload): Promise<HourlyStats> => {
+const loadTrending = async (
+  payload: BasePayload,
+): Promise<Pick<HomeStats, "popular" | "rising">> => {
   // TODO(startseite): "Beliebt" = views of the last 7 days, "Im Aufwind" = trending rising over 7 days with
   // delta = views minus views of the week before; definitions to be confirmed.
   const [viewed, rising] = await Promise.all([
@@ -267,6 +273,11 @@ export const loadHourlyStats = async (payload: BasePayload): Promise<HourlyStats
   };
 };
 
+export const loadHourlyStats = async (payload: BasePayload): Promise<HourlyStats> => {
+  const [{ popular, rising }, bon] = await Promise.all([loadTrending(payload), loadBon(payload)]);
+  return { popular, rising, bon };
+};
+
 export const loadHomeStats = async (payload: BasePayload): Promise<HomeStats> => {
   const [daily, hourly] = await Promise.all([loadDailyStats(payload), loadHourlyStats(payload)]);
   return {
@@ -274,6 +285,6 @@ export const loadHomeStats = async (payload: BasePayload): Promise<HomeStats> =>
     ageLists: daily.ageLists,
     popular: hourly.popular,
     rising: hourly.rising,
-    bon: daily.bon,
+    bon: hourly.bon,
   };
 };

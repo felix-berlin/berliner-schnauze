@@ -118,17 +118,19 @@ export const agePercents = (
     number | null
   >;
 
-/** Word with the largest say share above the average (avgSay is a 0..1 share); words below MIN_GROUP votes are ignored. */
+/**
+ * Word whose say share in the district is furthest above its own Berlin share (`citySay`, 0..1 across the 12
+ * districts); entries below MIN_GROUP votes are ignored, ties go to the lower word id.
+ */
 export function typicalWord(
-  perWord: { word: number; say: number; total: number }[],
-  avgSay: number,
+  perWord: { word: number; say: number; total: number; citySay: number }[],
 ): number | null {
   let best: number | null = null;
   let gap = -Infinity;
-  for (const { word, say, total } of perWord) {
+  for (const { word, say, total, citySay } of perWord) {
     if (total < MIN_GROUP) continue;
-    const g = say / total - avgSay;
-    if (g > gap) {
+    const g = say / total - citySay;
+    if (g > gap || (g === gap && best !== null && word < best)) {
       gap = g;
       best = word;
     }
