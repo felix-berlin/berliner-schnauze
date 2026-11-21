@@ -1,9 +1,10 @@
 import type { MorseMark } from "payload-app/home-stats";
 
 import WordSeal from "@components/WordSeal.vue";
-import { vTooltip } from "@/directives/tooltip";
 import { flushPromises, mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { vTooltip } from "@/directives/tooltip";
 
 const mark = (sym: MorseMark["sym"]): MorseMark => ({
   left: "50%",

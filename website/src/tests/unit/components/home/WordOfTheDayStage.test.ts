@@ -1,9 +1,10 @@
 import type { HomeWord } from "@services/payload/home.ts";
 
 import WordOfTheDayStage from "@components/home/WordOfTheDayStage.vue";
-import { vTooltip } from "@/directives/tooltip";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
+
+import { vTooltip } from "@/directives/tooltip";
 
 // Invented word.
 const word: HomeWord = {

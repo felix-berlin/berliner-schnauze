@@ -32,7 +32,10 @@
     <!-- TODO(startseite): no recording route yet; stays a focusable non-link with a tooltip until it exists. -->
     <button
       v-if="!word.audio"
-      v-tooltip="{ content: 'Kommt bald! Det Einsprechen is noch in Arbeit, Moment ma.', placement: 'top' }"
+      v-tooltip="{
+        content: 'Kommt bald! Det Einsprechen is noch in Arbeit, Moment ma.',
+        placement: 'top',
+      }"
       type="button"
       class="no-audio"
       aria-disabled="true"
