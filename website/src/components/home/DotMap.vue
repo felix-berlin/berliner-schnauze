@@ -13,6 +13,7 @@
         v-for="d in shapes"
         :key="d.slug"
         tabindex="0"
+        role="group"
         :aria-label="d.label"
         :data-state="d.slug === active ? 'active' : undefined"
         :data-value="d.muted ? 'none' : undefined"
