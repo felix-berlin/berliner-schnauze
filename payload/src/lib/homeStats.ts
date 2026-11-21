@@ -9,9 +9,6 @@ export const MIN_WORD_VOTES = 30;
 
 export type MorseMark = { sym: "d" | "l"; left: string; top: string; rotate: string };
 
-// TODO(startseite): interim rule for long words: whole letters from the start while the marks fit.
-export const MORSE_MAX_MARKS = 28;
-
 const MORSE: Record<string, string> = {
   A: ".-",
   B: "-...",
@@ -48,33 +45,48 @@ const MORSE: Record<string, string> = {
 /** Rounded to 3 decimals, so positions stay stable in tests. */
 const num = (n: number) => `${Math.round(n * 1000) / 1000}`;
 
-/** Marks on a ring (SPEC 5.1); characters outside the table are skipped, whole letters only up to MORSE_MAX_MARKS. */
+// Arc lengths in px of the 120px seal (SPEC 5.1 sizes: dot 8, dash 18); the seal scales them with its size.
+// Every mark takes its real length on the ring, so a dash never touches its neighbour (the SPEC's one-unit-per-mark
+// spacing made dots and dashes run together). COUPLING: _word-seal.scss `--_dot`/`--_dash`.
+const DOT = 8;
+const DASH = 18;
+const GAP_MARK = 4; // between marks of one letter
+const GAP_LETTER = 9; // between letters and where the ring closes
+const RING_ARC = 2 * Math.PI * 54; // radius 45% of 120px
+
+/** Marks on a ring (SPEC 5.1); characters outside the table are skipped, whole letters only while they fit the arc. */
 export function morseRing(word: string): MorseMark[] {
   const codes: string[] = [];
-  let marks = 0;
+  let arc = GAP_LETTER; // the closing gap
   for (const ch of word) {
     // "ß".toUpperCase() is "SS", the table has its own entry
     const code = MORSE[ch === "ß" ? ch : ch.toUpperCase()];
     if (!code) continue;
-    if (marks + code.length > MORSE_MAX_MARKS) break;
+    const length =
+      [...code].reduce((sum, sym) => sum + (sym === "." ? DOT : DASH), 0) +
+      (code.length - 1) * GAP_MARK +
+      (codes.length ? GAP_LETTER : 0);
+    if (arc + length > RING_ARC) break;
     codes.push(code);
-    marks += code.length;
+    arc += length;
   }
 
   let t = 0;
-  const units: number[] = [];
+  const centres: number[] = [];
   const syms: MorseMark["sym"][] = [];
   for (const code of codes) {
-    if (units.length) t += 0.9; // gap between letters
-    for (const sym of code) {
-      units.push(t + 0.5);
+    if (centres.length) t += GAP_LETTER;
+    [...code].forEach((sym, i) => {
+      if (i) t += GAP_MARK;
+      const size = sym === "." ? DOT : DASH;
+      centres.push(t + size / 2);
       syms.push(sym === "." ? "d" : "l");
-      t += 1;
-    }
+      t += size;
+    });
   }
-  t += 0.9; // gap where the ring closes
+  t += GAP_LETTER;
 
-  return units.map((u, i) => {
+  return centres.map((u, i) => {
     const a = -90 + (360 * u) / t;
     const r = (a * Math.PI) / 180;
     return {

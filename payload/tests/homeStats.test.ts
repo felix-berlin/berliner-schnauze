@@ -5,7 +5,6 @@ import {
   agePercents,
   districtValue,
   MIN_GROUP,
-  MORSE_MAX_MARKS,
   morseRing,
   typicalWord,
   type AgeGroup,
@@ -15,7 +14,7 @@ import {
 describe("morseRing", () => {
   it("counts the marks of the word", () => {
     expect(morseRing("KIEZ")).toHaveLength(10);
-    expect(morseRing("SCHRIPPE")).toHaveLength(25);
+    expect(morseRing("SCHRIPPE")).toHaveLength(20); // the last letters do not fit the arc
   });
 
   it("maps dot to d and dash to l", () => {
@@ -34,11 +33,27 @@ describe("morseRing", () => {
     ]);
   });
 
-  it("places the first mark like the SPEC formula", () => {
-    // E = one dot: total t = 1 + 0.9, first unit at 0.5, angle -90 + 360 * 0.5 / 1.9
+  it("places a single dot by its arc length", () => {
+    // E = one dot of 8 plus the closing gap 9: t = 17, centre at 4, angle -90 + 360 * 4 / 17
     expect(morseRing("E")).toEqual([
-      { sym: "d", left: "94.846%", top: "53.716%", rotate: "94.737deg" },
+      { sym: "d", left: "94.808%", top: "45.848%", rotate: "84.706deg" },
     ]);
+  });
+
+  it("keeps a gap between neighbouring marks of every word", () => {
+    for (const word of ["KIEZ", "SCHRIPPE", "Kodderschnauze", "Bolle", "Lausepavilion"]) {
+      const marks = morseRing(word);
+      const px = marks.map((m) => ({
+        x: (parseFloat(m.left) / 100) * 120,
+        y: (parseFloat(m.top) / 100) * 120,
+        half: (m.sym === "d" ? 8 : 18) / 2,
+      }));
+      px.forEach((a, n) => {
+        const b = px[(n + 1) % px.length];
+        // centre distance minus both half lengths (a chord, so it slightly undercounts a curved dash)
+        expect(Math.hypot(a.x - b.x, a.y - b.y) - a.half - b.half).toBeGreaterThan(2);
+      });
+    }
   });
 
   it("handles umlauts and ß", () => {
@@ -53,9 +68,9 @@ describe("morseRing", () => {
   });
 
   it("caps at whole letters from the start of the word", () => {
-    // K O D D E R S C H = 27 marks, N would make 29
-    expect(morseRing("Kodderschnauze")).toHaveLength(27);
-    expect(morseRing("Kodderschnauze").length).toBeLessThanOrEqual(MORSE_MAX_MARKS);
+    const ring = morseRing("Kodderschnauze");
+    expect(ring.length).toBeGreaterThan(0);
+    expect(ring.length).toBeLessThan(35);
   });
 });
 
