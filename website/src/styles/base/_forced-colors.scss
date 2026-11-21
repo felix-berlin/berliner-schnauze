@@ -1,0 +1,22 @@
+@use "@sass-butler/mixins" as butler-mx;
+
+@layer base {
+  // Forced colors drops box-shadow and gradients, so a hover or selection drawn with them vanishes.
+  // System colours only; the focus ring is already an outline and stays untouched.
+  @include butler-mx.feature("forced-colors") {
+    :where(a, button, summary, [role="button"], input, select, textarea, label):hover:not(
+        :focus-visible,
+        :disabled
+      ) {
+      outline: 2px dashed Highlight;
+      outline-offset: 2px;
+    }
+
+    [aria-pressed="true"],
+    [aria-current="page"],
+    [aria-selected="true"] {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+  }
+}

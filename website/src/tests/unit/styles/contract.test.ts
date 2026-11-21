@@ -423,4 +423,12 @@ describe("colour scheme contract", () => {
       /html\s*\{\s*accent-color:\s*var\(--color-accent-solid\);/,
     );
   });
+
+  it("keeps hover and selected states visible in forced colors", () => {
+    const forced = read(join(src, "styles/base/_forced-colors.scss"));
+    expect(forced).toContain('feature("forced-colors")');
+    expect(forced).toMatch(/:hover[\s\S]*outline:\s*2px dashed Highlight/);
+    expect(forced).toMatch(/\[aria-pressed="true"\][\s\S]*outline:\s*2px solid Highlight/);
+    expect(read(join(src, "styles/base/index.scss"))).toContain('@forward "forced-colors"');
+  });
 });
