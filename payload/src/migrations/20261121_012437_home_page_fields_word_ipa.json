@@ -8798,7 +8798,8 @@
           "type": "enum_home_browse_links_icon",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "'random'"
         }
       },
       "indexes": {

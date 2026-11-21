@@ -4,11 +4,13 @@ import { LOCAL_DB_HOSTS } from "../lib/localDb";
 export function assertDevDatabase(url: string | undefined): void {
   const parsed = url && URL.canParse(url) ? new URL(url) : undefined;
   const raw = parsed?.pathname.slice(1) ?? "";
-  // The driver decodes the path (`bsw_x%5Fe2e` is `bsw_x_e2e`): check the decoded name; a malformed escape stays raw and fails the prefix check.
-  let name = raw;
+  // The driver decodes the path (`bsw_x%5Fe2e` is `bsw_x_e2e`), so check the decoded name; a malformed escape is refused.
+  let name: string;
   try {
     name = decodeURIComponent(raw);
-  } catch {}
+  } catch {
+    throw new Error("Refusing to seed: the database name in DATABASE_URL has a malformed % escape");
+  }
   if (
     !parsed ||
     !LOCAL_DB_HOSTS.has(parsed.hostname) ||

@@ -1,8 +1,4 @@
-/**
- * Adds INVENTED votes and BON games to the worktree dev database so the start page map, age profile and BON card
- * have data (the dev template strips word_feedback on purpose). Rows carry fake `e2e-…` visitor hashes.
- * Usage: `scripts/with-env.sh pnpm --filter payload-app seed:home-stats` (local worktree database only; reset with orca-archive + orca-setup).
- */
+/** Usage: `scripts/with-env.sh pnpm --filter payload-app seed:home-stats` (local worktree database only; reset with orca-archive + orca-setup). What it writes: `homeStatsSeed.ts`. */
 import { assertDevDatabase } from "./assertDevDatabase";
 
 // CLI entry (`payload run src/seed/homeStats.ts`).
@@ -13,7 +9,7 @@ if (!process.env.VITEST) {
     import("../payload.config"),
     import("./homeStatsSeed"),
   ]);
-  await seedHomeStats(await getPayload({ config }));
-  console.log("[seed] invented home stats ready");
+  const { votes, games } = await seedHomeStats(await getPayload({ config }));
+  console.log(`[seed] invented home stats ready (added ${votes} votes, ${games} BON games)`);
   process.exit(0);
 }

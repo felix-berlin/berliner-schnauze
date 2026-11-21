@@ -1691,8 +1691,11 @@ export interface Home {
   browseLinks?:
     | {
         label: string;
+        /**
+         * Interner Pfad (/wort/ick) oder https://-Adresse.
+         */
         href: string;
-        icon?: ('audio' | 'idiom' | 'short' | 'rhyme' | 'random') | null;
+        icon: 'audio' | 'idiom' | 'short' | 'rhyme' | 'random';
         id?: string | null;
       }[]
     | null;

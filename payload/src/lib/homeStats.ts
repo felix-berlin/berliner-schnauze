@@ -1,13 +1,17 @@
-import type { AGES } from "./wordFeedback";
+import type { AGES, Usage } from "./wordFeedback";
 
 // Pure helpers for the start page (`payload-app/home-stats`): Morse ring, age groups and the privacy threshold.
 
 /** Fewer votes than this in a group are never shown. */
 export const MIN_GROUP = 10;
-// TODO(startseite): interim value, decide how many votes a word needs before it counts as "typical".
+/** Votes (with an age) a word needs before it enters the age lists. TODO(startseite): interim value, to be decided. */
 export const MIN_WORD_VOTES = 30;
 
-export type MorseMark = { sym: "d" | "l"; left: string; top: string; rotate: string };
+/** Shared shape of a word reference without `id`; the site's own `WordRef` extends it. */
+export type WordRef = { slug: string; berlinerisch: string };
+
+/** One mark on the Morse ring: `x`/`y` are the centre in percent of the seal (0..100), `angle` the rotation in degrees. */
+export type MorseMark = { sym: "dot" | "dash"; x: number; y: number; angle: number };
 
 const MORSE: Record<string, string> = {
   A: ".-",
@@ -43,7 +47,7 @@ const MORSE: Record<string, string> = {
 };
 
 /** Rounded to 3 decimals, so positions stay stable in tests. */
-const num = (n: number) => `${Math.round(n * 1000) / 1000}`;
+const num = (n: number) => Math.round(n * 1000) / 1000;
 
 // Arc lengths in px of the 120px seal (SPEC 5.1 sizes: dot 8, dash 18); the seal scales them with its size.
 // Every mark takes its real length on the ring, so a dash never touches its neighbour (the SPEC's one-unit-per-mark
@@ -80,7 +84,7 @@ export function morseRing(word: string): MorseMark[] {
       if (i) t += GAP_MARK;
       const size = sym === "." ? DOT : DASH;
       centres.push(t + size / 2);
-      syms.push(sym === "." ? "d" : "l");
+      syms.push(sym === "." ? "dot" : "dash");
       t += size;
     });
   }
@@ -91,9 +95,9 @@ export function morseRing(word: string): MorseMark[] {
     const r = (a * Math.PI) / 180;
     return {
       sym: syms[i],
-      left: `${num(50 + 45 * Math.cos(r))}%`,
-      top: `${num(50 + 45 * Math.sin(r))}%`,
-      rotate: `${num(a + 90)}deg`,
+      x: num(50 + 45 * Math.cos(r)),
+      y: num(50 + 45 * Math.sin(r)),
+      angle: num(a + 90),
     };
   });
 }
@@ -114,12 +118,12 @@ const AGE_TO_GROUP: Record<(typeof AGES)[number], AgeGroup> = {
 
 export const ageGroup = (age: (typeof AGES)[number]): AgeGroup => AGE_TO_GROUP[age];
 
-export type UsageCounts = { say: number; know: number; never: number };
+export type UsageCounts = Record<Usage, number>;
 
 /** Share of "say" in percent, rounded; null below MIN_GROUP votes. */
-export function districtValue({ say, know, never }: UsageCounts): number | null {
-  const total = say + know + never;
-  return total < MIN_GROUP ? null : Math.round((say / total) * 100);
+export function districtValue(counts: UsageCounts): number | null {
+  const total = Object.values(counts).reduce((sum, n) => sum + n, 0);
+  return total < MIN_GROUP ? null : Math.round((counts.say / total) * 100);
 }
 
 export const agePercents = (

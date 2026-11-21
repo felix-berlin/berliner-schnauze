@@ -63,7 +63,13 @@ describe("globals round-trip", () => {
         intro: "Hallo",
         tryWords: [word.id],
         browseLinks: [{ label: "Wörter", href: "/woerter", icon: "audio" }],
-        soundRules: [{ standard: "ich", berlin: "ick", example: "ick bin", rule: "g/ch zu k" }],
+        // Exactly six rules (minRows/maxRows).
+        soundRules: Array.from({ length: 6 }, () => ({
+          standard: "ich",
+          berlin: "ick",
+          example: "ick bin",
+          rule: "g/ch zu k",
+        })),
         faq: [{ question: "Was?", answer: rich }],
         aboutText: "Über",
       },

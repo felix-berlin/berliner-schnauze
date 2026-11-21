@@ -7,6 +7,7 @@ export const Home: GlobalConfig = {
   label: "Startseite",
   access: authenticatedGlobal,
   fields: [
+    // Dead since start page v20 (nothing reads it); dropped one release later (expand/contract), see "Pending contract" in payload/CLAUDE.md.
     {
       name: "facts",
       label: "Fakten zur Berliner Mundart",
@@ -38,13 +39,26 @@ export const Home: GlobalConfig = {
       name: "browseLinks",
       label: "Stöber-Links",
       type: "array",
+      maxRows: 8,
       fields: [
         { name: "label", label: "Beschriftung", type: "text", required: true },
-        { name: "href", label: "Link", type: "text", required: true },
+        {
+          name: "href",
+          label: "Link",
+          type: "text",
+          required: true,
+          admin: { description: "Interner Pfad (/wort/ick) oder https://-Adresse." },
+          validate: (value: string | null | undefined) =>
+            !value || /^(\/(?!\/)|https:\/\/)/.test(value)
+              ? true
+              : "Der Link muss mit / oder https:// beginnen.",
+        },
         {
           name: "icon",
           label: "Symbol",
           type: "select",
+          required: true,
+          defaultValue: "random",
           options: [
             { label: "Hörprobe", value: "audio" },
             { label: "Redewendung", value: "idiom" },
@@ -60,6 +74,8 @@ export const Home: GlobalConfig = {
       name: "soundRules",
       label: "Lautregeln",
       type: "array",
+      minRows: 6,
+      maxRows: 6,
       admin: { description: "Sechs Regeln, Standarddeutsch gegen Berlinerisch." },
       fields: [
         { name: "standard", label: "Standard", type: "text", required: true },
@@ -72,6 +88,7 @@ export const Home: GlobalConfig = {
       name: "faq",
       label: "Häufige Fragen",
       type: "array",
+      maxRows: 12,
       fields: [
         { name: "question", label: "Frage", type: "text", required: true },
         { name: "answer", label: "Antwort", type: "richText", required: true },

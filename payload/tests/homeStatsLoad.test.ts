@@ -131,7 +131,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await wipe();
-  await payload.delete({ collection: "words", where: { id: { in: wordIds } } });
+  await payload.delete({ collection: "words", trash: true, where: { id: { in: wordIds } } });
 });
 
 const district = (area: string) => stats.districts.find((d) => d.area === area);
@@ -263,6 +263,46 @@ describe("loadHomeStats", () => {
       slug,
       meaning: "Erfundene Bedeutung, zweite",
     });
+  });
+
+  it("ignores the votes of a trashed word (district value, age lists, BON link)", async () => {
+    const slug = `hs-t-${Date.now()}`;
+    const id = await word(slug);
+    await votes(id, 40, { usage: "say", area: "treptow-koepenick", age: "u20" });
+    const before = await loadDailyStats(payload);
+    expect(before.districts.find((d) => d.area === "treptow-koepenick")?.value).toBe(100);
+    expect(before.ageLists.growing.map((w) => w.word.slug)).toContain(slug);
+
+    await payload.update({
+      collection: "words",
+      id,
+      data: { deletedAt: new Date().toISOString() },
+    });
+    const after = await loadDailyStats(payload);
+    expect(after.districts.find((d) => d.area === "treptow-koepenick")?.value).toBeNull();
+    expect(after.ageLists.growing.map((w) => w.word.slug)).not.toContain(slug);
+
+    const cards = Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      word: "Muellwort",
+      isReal: true,
+      slug,
+      answer: i === 0,
+    }));
+    const game = await payload.create({
+      collection: "bon-games",
+      data: {
+        visitor: "hs-g4",
+        token: "hs-t4",
+        status: "finished",
+        finishedAt: new Date().toISOString(),
+        cards,
+        batches: [],
+      } as never,
+    });
+    const { bon } = await loadHourlyStats(payload);
+    await payload.delete({ collection: "bon-games", id: game.id });
+    expect(bon.card).toEqual({ word: "Muellwort", wrongShare: 92, isReal: true });
   });
 
   it("returns only aggregates: no ids, visitors or timestamps", () => {

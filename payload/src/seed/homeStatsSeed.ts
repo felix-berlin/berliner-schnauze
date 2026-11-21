@@ -2,12 +2,21 @@ import type { Payload } from "payload";
 
 import { AGES, AREAS } from "../lib/wordFeedback";
 
+/** The words every seeded database must have: the e2e specs and the start page rely on their votes. */
+const FIXED_SLUGS = ["bolle", "icke", "dette", "kiez", "bulette"];
+
 /**
- * Invented votes for the start page aggregates (home-stats): ten words (five fixed, the five most viewed) x 12 districts x 10 votes (MIN_GROUP) spread
- * over all age brackets, plus 12 finished BON games that all dealt the real card "Bolle" (8 wrong answers).
- * Visitor hashes and tokens are fake. A word that already has its own votes (`e2e-…` hashes) is skipped (the seed may run twice on one database).
+ * Invented votes for the start page aggregates (home-stats): ten words (five fixed, the five most viewed) x 12
+ * districts x 10 votes (MIN_GROUP) spread over all age brackets, plus 12 finished BON games that all dealt the real
+ * card "Bolle" (8 wrong answers). Visitor hashes and tokens are fake. A word that already has its own votes
+ * (`e2e-…` hashes) is skipped, so a second run adds nothing. Returns how many votes and games it added.
+ * Throws when one of the five fixed words is missing (its district would stay under MIN_GROUP).
+ * Writes no guard of its own: the callers are the dev CLI (`homeStats.ts`, assertDevDatabase) and `seedE2e`
+ * (assertLocalDatabase on its CLI entry), both of which refuse a real database before they get here.
  */
-export async function seedHomeStats(payload: Payload): Promise<void> {
+export async function seedHomeStats(payload: Payload): Promise<{ votes: number; games: number }> {
+  let votes = 0;
+  let games = 0;
   const usages = ["say", "know", "never"] as const;
   // The five fixed words plus the five most viewed ones: "Gerade beliebt" shows a share only for words with enough votes.
   const stats = await payload.find({
@@ -29,7 +38,7 @@ export async function seedHomeStats(payload: Payload): Promise<void> {
         collection: "words",
         depth: 0,
         limit: 5,
-        where: { slug: { in: ["bolle", "icke", "dette", "kiez", "bulette"] } },
+        where: { slug: { in: FIXED_SLUGS } },
       })
     ).docs,
     ...(
@@ -41,6 +50,8 @@ export async function seedHomeStats(payload: Payload): Promise<void> {
       })
     ).docs,
   ];
+  const missing = FIXED_SLUGS.filter((s) => !words.some((w) => w.slug === s));
+  if (missing.length) throw new Error(`seedHomeStats: seed words missing: ${missing.join(", ")}`);
   for (const [k, word] of [...new Map(words.map((w) => [w.id, w])).values()].entries()) {
     const slug = word.slug ?? String(word.id);
     // Per word, so a second run adds only what is missing.
@@ -57,13 +68,14 @@ export async function seedHomeStats(payload: Payload): Promise<void> {
           word: word.id,
         },
       });
+      votes++;
     }
   }
   if (
     (await payload.count({ collection: "bon-games", where: { token: { like: "e2e-token-" } } }))
       .totalDocs > 0
   )
-    return;
+    return { votes, games };
   const now = new Date().toISOString();
   for (let i = 0; i < 12; i++) {
     await payload.create({
@@ -77,5 +89,7 @@ export async function seedHomeStats(payload: Payload): Promise<void> {
         visitor: `e2e-visitor-${i}`,
       },
     });
+    games++;
   }
+  return { votes, games };
 }

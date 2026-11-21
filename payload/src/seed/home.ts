@@ -1,8 +1,4 @@
-/**
- * Seeds the start page texts (global `home`): intro, knowledge, sound rules, FAQ, about, try-words. Only writes
- * fields that are still empty, so a second run changes nothing and edited fields survive. Creates no words.
- * Usage: `scripts/with-env.sh pnpm --filter payload-app seed:home` (local worktree database only).
- */
+/** Usage: `scripts/with-env.sh pnpm --filter payload-app seed:home` (local worktree database only). What it writes: `homeSeed.ts`. */
 import { assertDevDatabase } from "./assertDevDatabase";
 import { seedHome } from "./homeSeed";
 
@@ -13,9 +9,9 @@ if (!process.env.VITEST) {
     import("payload"),
     import("../payload.config"),
   ]);
-  const { written, skipped } = await seedHome(await getPayload({ config }));
+  const { written, alreadySet, unavailable } = await seedHome(await getPayload({ config }));
   console.log(
-    `[seed] home written: ${written.join(", ") || "-"}; skipped: ${skipped.join(", ") || "-"}`,
+    `[seed] home written: ${written.join(", ") || "-"}; already set: ${alreadySet.join(", ") || "-"}; unavailable: ${unavailable.join("; ") || "-"}`,
   );
   process.exit(0);
 }

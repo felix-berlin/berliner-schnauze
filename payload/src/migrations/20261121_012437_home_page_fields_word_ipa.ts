@@ -9,7 +9,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"id" varchar PRIMARY KEY NOT NULL,
   	"label" varchar NOT NULL,
   	"href" varchar NOT NULL,
-  	"icon" "enum_home_browse_links_icon"
+  	"icon" "enum_home_browse_links_icon" DEFAULT 'random' NOT NULL
   );
   
   CREATE TABLE "home_sound_rules" (
@@ -67,19 +67,19 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
-   DROP TABLE "home_browse_links" CASCADE;
-  DROP TABLE "home_sound_rules" CASCADE;
-  DROP TABLE "home_faq" CASCADE;
-  DROP TABLE "home_rels" CASCADE;
-  ALTER TABLE "themen" DROP COLUMN "typischer_satz";
-  ALTER TABLE "words" DROP COLUMN "ipa";
-  ALTER TABLE "_words_v" DROP COLUMN "version_ipa";
-  ALTER TABLE "posts" DROP COLUMN "teaser_zitat";
-  ALTER TABLE "posts" DROP COLUMN "teaser_ipa";
-  ALTER TABLE "_posts_v" DROP COLUMN "version_teaser_zitat";
-  ALTER TABLE "_posts_v" DROP COLUMN "version_teaser_ipa";
-  ALTER TABLE "home" DROP COLUMN "intro";
-  ALTER TABLE "home" DROP COLUMN "knowledge";
-  ALTER TABLE "home" DROP COLUMN "about_text";
-  DROP TYPE "public"."enum_home_browse_links_icon";`)
+   DROP TABLE IF EXISTS "home_browse_links" CASCADE;
+  DROP TABLE IF EXISTS "home_sound_rules" CASCADE;
+  DROP TABLE IF EXISTS "home_faq" CASCADE;
+  DROP TABLE IF EXISTS "home_rels" CASCADE;
+  ALTER TABLE "themen" DROP COLUMN IF EXISTS "typischer_satz";
+  ALTER TABLE "words" DROP COLUMN IF EXISTS "ipa";
+  ALTER TABLE "_words_v" DROP COLUMN IF EXISTS "version_ipa";
+  ALTER TABLE "posts" DROP COLUMN IF EXISTS "teaser_zitat";
+  ALTER TABLE "posts" DROP COLUMN IF EXISTS "teaser_ipa";
+  ALTER TABLE "_posts_v" DROP COLUMN IF EXISTS "version_teaser_zitat";
+  ALTER TABLE "_posts_v" DROP COLUMN IF EXISTS "version_teaser_ipa";
+  ALTER TABLE "home" DROP COLUMN IF EXISTS "intro";
+  ALTER TABLE "home" DROP COLUMN IF EXISTS "knowledge";
+  ALTER TABLE "home" DROP COLUMN IF EXISTS "about_text";
+  DROP TYPE IF EXISTS "public"."enum_home_browse_links_icon";`)
 }

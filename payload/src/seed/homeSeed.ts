@@ -1,7 +1,8 @@
 /**
- * Seeds the start page texts (global `home`): intro, knowledge, sound rules, FAQ, about, try-words. Only writes
- * fields that are still empty, so a second run changes nothing and edited fields survive. Creates no words.
- * Usage: `scripts/with-env.sh pnpm --filter payload-app seed:home` (local worktree database only).
+ * Library part of `seed:home` (CLI entry: `home.ts`). Fills the start page texts (global `home`), topic sayings, the
+ * magazine teaser and placeholder IPA, but only what is still empty, so a second run changes nothing and edited
+ * content survives. Creates no words. Result: `written`, `alreadySet` (had content) and `unavailable` (could not be
+ * written, e.g. an unknown slug or no post with a usable sentence).
  */
 import type { Payload } from "payload";
 
@@ -23,15 +24,17 @@ import {
 export async function seedHome(
   payload: Payload,
   tryWordSlugs: string[] = HOME_TRY_WORD_SLUGS,
-): Promise<{ written: string[]; skipped: string[] }> {
+): Promise<{ written: string[]; alreadySet: string[]; unavailable: string[] }> {
   const home = await payload.findGlobal({ slug: "home", depth: 0 });
   const data: Record<string, unknown> = {};
   const written: string[] = [];
-  const skipped: string[] = [];
+  const alreadySet: string[] = [];
+  const unavailable: string[] = [];
   /** Queues `value()` for `name` when the field is empty; `value` returns undefined when there is nothing to write. */
   const fill = async (name: string, empty: boolean, value: () => unknown) => {
-    const v = empty ? await value() : undefined;
-    if (v === undefined) skipped.push(name);
+    if (!empty) return void alreadySet.push(name);
+    const v = await value();
+    if (v === undefined) unavailable.push(name);
     else {
       data[name] = v;
       written.push(name);
@@ -61,30 +64,39 @@ export async function seedHome(
       depth: 0,
       pagination: false,
     });
-    // Keep the mock's order; unknown slugs are simply missing.
+    // Keep the mock's order.
     const ids = tryWordSlugs.flatMap((s) => docs.filter((d) => d.slug === s).map((d) => d.id));
+    const missing = tryWordSlugs.filter((s) => !docs.some((d) => d.slug === s));
+    if (missing.length) console.warn(`[seed] home tryWords: no such word: ${missing.join(", ")}`);
     return ids.length ? ids : undefined;
   });
 
   // Speech bubbles of the topic register: only topics that exist and have no saying yet.
   const topicsFilled: string[] = [];
+  const topicsSet: string[] = [];
+  const topicsMissing: string[] = [];
   for (const [slug, typischerSatz] of Object.entries(HOME_TOPIC_SAYINGS)) {
     const { docs } = await payload.find({
       collection: "themen",
-      where: { slug: { equals: slug }, typischerSatz: { exists: false } },
+      where: { slug: { equals: slug } },
       limit: 1,
       depth: 0,
     });
-    if (!docs[0]) continue;
-    await payload.update({
-      collection: "themen",
-      id: docs[0].id,
-      data: { typischerSatz },
-      depth: 0,
-    });
-    topicsFilled.push(slug);
+    if (!docs[0]) topicsMissing.push(slug);
+    else if (docs[0].typischerSatz) topicsSet.push(slug);
+    else {
+      await payload.update({
+        collection: "themen",
+        id: docs[0].id,
+        data: { typischerSatz },
+        depth: 0,
+      });
+      topicsFilled.push(slug);
+    }
   }
   if (topicsFilled.length) written.push(`topicSayings(${topicsFilled.length})`);
+  if (topicsSet.length) alreadySet.push(`topicSayings(${topicsSet.length})`);
+  if (topicsMissing.length) unavailable.push(`topicSayings(no topic: ${topicsMissing.join(", ")})`);
 
   // Magazine teaser: the latest published post gets a quote (its own first sentence) and an IPA outline when it has
   // none (dev stand-ins; the site drops the section without a quote, SPEC §12.3).
@@ -104,19 +116,20 @@ export async function seedHome(
       .replace(/\s+/g, " ")
       .trim();
     const sentence = /^.{20,160}?[.!?](?=\s|$)/.exec(plain)?.[0];
-    const data: { teaserIpa?: string; teaserZitat?: string } = {};
-    if (!post.teaserZitat && sentence) data.teaserZitat = sentence;
-    if (Object.keys(data).length) {
+    if (post.teaserZitat) alreadySet.push("teaserZitat");
+    else if (!sentence)
+      unavailable.push("teaserZitat(no sentence of 20-160 characters in the newest post)");
+    else {
       await payload.update({
         collection: "posts",
         context: { [PRESERVE_CONTENT_MODIFIED_AT]: true },
-        data,
+        data: { teaserZitat: sentence },
         depth: 0,
         id: post.id,
       });
-      written.push(...Object.keys(data));
+      written.push("teaserZitat");
     }
-  }
+  } else unavailable.push("teaserZitat(no published post)");
 
   // The dev site also shows drafts (SHOW_TEST_DATA), so the newest posts get the outline, whatever their status.
   const { docs: latest } = await payload.find({
@@ -141,9 +154,11 @@ export async function seedHome(
 
   const ipaDays = await seedWordOfTheDayIpa(payload);
   if (ipaDays) written.push(`wordIpa(${ipaDays})`);
+  else alreadySet.push("wordIpa");
 
-  if (written.length) await payload.updateGlobal({ slug: "home", data, depth: 0 });
-  return { written, skipped };
+  if (Object.keys(data).length) await payload.updateGlobal({ slug: "home", data, depth: 0 });
+  if (unavailable.length) console.warn(`[seed] home: could not write: ${unavailable.join("; ")}`);
+  return { written, alreadySet, unavailable };
 }
 
 // DEV PLACEHOLDER, not phonetics: a rough letter-to-sound guess so the stage outline has something to show.

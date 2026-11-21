@@ -15,8 +15,9 @@ import {
   typicalWord,
   type AgeGroup,
   type UsageCounts,
+  type WordRef,
 } from "./homeStats";
-import { AREAS, type Age, type Usage } from "./wordFeedback";
+import { AREAS, type Age, type Area, type Usage } from "./wordFeedback";
 import { trending } from "./wordStats";
 
 // Start page aggregates (`payload-app/home-stats-load`). Only aggregates leave this module: no ids, timestamps,
@@ -24,32 +25,26 @@ import { trending } from "./wordStats";
 // words, words_translations, bon_games, word_id, usage, area, age, _status, cards, status, finished_at) must
 // follow any rename.
 
-/** Structural copy of the site's WordRef without `id` (payload-app cannot import website types). */
-export type WordRef = { slug: string; berlinerisch: string };
+export type { WordRef };
 /** meaning: the published word's translations, only when it has any. */
 export type AgeWord = { word: WordRef; byGroup: Record<AgeGroup, number | null>; meaning?: string };
+export type District = { area: Area; name: string; value: number | null; typical: WordRef | null };
+export type BonStep = { from: number; mult: number };
+type BonCardBase = { word: string; wrongShare: number };
+/** Slug and meaning exist only for a real card whose word is published (`card.slug` narrows to that case). */
+export type BonCard =
+  | (BonCardBase & { isReal: true; slug: string; meaning?: string })
+  | (BonCardBase & { isReal: boolean; slug?: undefined; meaning?: undefined });
 export type HomeStats = {
-  districts: {
-    area: string;
-    name: string;
-    value: number | null;
-    typical: { slug: string; berlinerisch: string } | null;
-  }[];
+  districts: District[];
   ageLists: { dying: AgeWord[]; growing: AgeWord[] };
   popular: { word: WordRef; views: number; sayShare: number | null }[];
   /** meaning: the published word's translations, only when it has any. */
   rising: { word: WordRef; delta: number; meaning?: string }[];
   bon: {
     roundsToday: number;
-    steps: { from: number; mult: number }[];
-    /** slug and meaning only for a real card whose word is published. */
-    card: {
-      word: string;
-      wrongShare: number;
-      isReal: boolean;
-      slug?: string;
-      meaning?: string;
-    } | null;
+    steps: BonStep[];
+    card: BonCard | null;
   };
 };
 /** The parts that change slowly (cache for a day) and quickly (cache for an hour). */
@@ -91,10 +86,10 @@ const MEANING = sql`(select string_agg(t.translation, ', ' order by t._order) fr
   where t._parent_id = w.id and coalesce(t.translation, '') <> '')`;
 
 // Votes of published words with a usage answer; every feedback query starts here.
-const VOTES = sql`word_feedback f join words w on w.id = f.word_id and w._status = 'published'
+const VOTES = sql`word_feedback f join words w on w.id = f.word_id and w._status = 'published' and w.deleted_at is null
   where f.usage is not null`;
 
-const loadDistricts = async (payload: BasePayload): Promise<HomeStats["districts"]> => {
+const loadDistricts = async (payload: BasePayload): Promise<District[]> => {
   const [usage, perWord] = await Promise.all([
     query<{ area: string; usage: Usage; n: string }>(
       payload,
@@ -209,6 +204,23 @@ const loadAgeLists = async (payload: BasePayload): Promise<HomeStats["ageLists"]
   return { dying: list("70plus"), growing: list("u30") };
 };
 
+const toCard = (card: {
+  word: string;
+  is_real: boolean;
+  wrong: string;
+  total: string;
+  slug: string | null;
+  meaning: string | null;
+}): BonCard => {
+  const base = {
+    word: card.word,
+    wrongShare: Math.round((Number(card.wrong) / Number(card.total)) * 100),
+  };
+  return card.slug
+    ? { ...base, isReal: true, slug: card.slug, ...(card.meaning ? { meaning: card.meaning } : {}) }
+    : { ...base, isReal: card.is_real };
+};
+
 const loadBon = async (payload: BasePayload): Promise<HomeStats["bon"]> => {
   const today = berlinDay();
   const end = dayStart(addDays(today, 1)).toISOString();
@@ -243,22 +255,13 @@ const loadBon = async (payload: BasePayload): Promise<HomeStats["bon"]> => {
             group by c->>'word', (c->>'isReal')::boolean having count(*) >= ${MIN_GROUP}
             order by wrong desc, total, word
             limit 1) top
-          left join words w on top.is_real and w.slug = top.card_slug and w._status = 'published'`,
+          left join words w on top.is_real and w.slug = top.card_slug and w._status = 'published' and w.deleted_at is null`,
     ),
   ]);
   return {
     roundsToday: Number(rounds?.n ?? 0),
     steps: MULTIPLIER_STEPS.map(({ from, mult }) => ({ from, mult })),
-    card:
-      card && Number(card.wrong) > 0
-        ? {
-            word: card.word,
-            wrongShare: Math.round((Number(card.wrong) / Number(card.total)) * 100),
-            isReal: card.is_real,
-            ...(card.slug ? { slug: card.slug } : {}),
-            ...(card.slug && card.meaning ? { meaning: card.meaning } : {}),
-          }
-        : null,
+    card: card && Number(card.wrong) > 0 ? toCard(card) : null,
   };
 };
 
@@ -270,8 +273,8 @@ export const loadDailyStats = async (payload: BasePayload): Promise<DailyStats> 
 const loadTrending = async (
   payload: BasePayload,
 ): Promise<Pick<HomeStats, "popular" | "rising">> => {
-  // TODO(startseite): "Beliebt" = views of the last 7 days, "Im Aufwind" = trending rising over 7 days with
-  // delta = views minus views of the week before; definitions to be confirmed.
+  // TODO(startseite): confirm the definitions. "Beliebt" = views of the last 7 days; "Im Aufwind" = rising over 7
+  // days, delta = views minus the views of the week before (`previous`, 0 when absent), growth only.
   const [viewed, rising] = await Promise.all([
     trending(payload as never, { type: "viewed", days: DAYS, limit: TOP_SIZE }),
     trending(payload as never, { type: "rising", days: DAYS, limit: TOP_SIZE }),
@@ -282,7 +285,7 @@ const loadTrending = async (
     query<{ id: number; slug: string; berlinerisch: string; meaning: string | null }>(
       payload,
       sql`select w.id, w.slug, w.berlinerisch, ${MEANING} as meaning
-          from words w where w._status = 'published' and w.id in (${inList(ids)})`,
+          from words w where w._status = 'published' and w.deleted_at is null and w.id in (${inList(ids)})`,
     ),
     query<{ word_id: number; usage: Usage; n: string }>(
       payload,

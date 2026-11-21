@@ -117,15 +117,23 @@ export async function seedSiteContent(
   }
   await payload.updateGlobal({ slug: "anki", data: ANKI_CONTENT, req });
   // Raw SQL, not the Local API: this runs inside an old migration, and the Local API reads every `home` column,
-  // including those later migrations add (a fresh database would fail here).
-  const { rows } = (await db.execute(
-    sql`INSERT INTO "home" ("updated_at", "created_at") VALUES (now(), now()) RETURNING "id"`,
-  )) as { rows: { id: number }[] };
-  for (const [i, fact] of facts.entries()) {
-    // oxlint-disable-next-line no-await-in-loop -- five rows
-    await db.execute(
-      sql`INSERT INTO "home_facts" ("_order", "_parent_id", "id", "headline", "text") VALUES (${i + 1}, ${rows[0]!.id}, ${crypto.randomUUID()}, ${fact.headline}, ${JSON.stringify(fact.text)}::jsonb)`,
-    );
+  // including those later migrations add (a fresh database would fail here). Only when no `home` row exists yet:
+  // a restored dump or a repeated run must not create a second singleton.
+  const existing = (await db.execute(sql`SELECT "id" FROM "home" LIMIT 1`)) as {
+    rows: unknown[];
+  };
+  if (!existing.rows.length) {
+    const { rows } = (await db.execute(
+      sql`INSERT INTO "home" ("updated_at", "created_at") VALUES (now(), now()) RETURNING "id"`,
+    )) as { rows: { id: number }[] };
+    const homeId = rows[0]?.id;
+    if (homeId === undefined) throw new Error("seedSiteContent: the home insert returned no id");
+    for (const [i, fact] of facts.entries()) {
+      // oxlint-disable-next-line no-await-in-loop -- five rows
+      await db.execute(
+        sql`INSERT INTO "home_facts" ("_order", "_parent_id", "id", "headline", "text") VALUES (${i + 1}, ${homeId}, ${crypto.randomUUID()}, ${fact.headline}, ${JSON.stringify(fact.text)}::jsonb)`,
+      );
+    }
   }
   await payload.updateGlobal({
     slug: "company",

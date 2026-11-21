@@ -17,36 +17,34 @@ describe("morseRing", () => {
     expect(morseRing("SCHRIPPE")).toHaveLength(20); // the last letters do not fit the arc
   });
 
-  it("maps dot to d and dash to l", () => {
+  it('maps dot to "dot" and dash to "dash"', () => {
     // K -.-  I ..  E .  Z --..
     expect(morseRing("KIEZ").map((m) => m.sym)).toEqual([
-      "l",
-      "d",
-      "l",
-      "d",
-      "d",
-      "d",
-      "l",
-      "l",
-      "d",
-      "d",
+      "dash",
+      "dot",
+      "dash",
+      "dot",
+      "dot",
+      "dot",
+      "dash",
+      "dash",
+      "dot",
+      "dot",
     ]);
   });
 
   it("places a single dot by its arc length", () => {
     // E = one dot of 8 plus the closing gap 9: t = 17, centre at 4, angle -90 + 360 * 4 / 17
-    expect(morseRing("E")).toEqual([
-      { sym: "d", left: "94.808%", top: "45.848%", rotate: "84.706deg" },
-    ]);
+    expect(morseRing("E")).toEqual([{ sym: "dot", x: 94.808, y: 45.848, angle: 84.706 }]);
   });
 
   it("keeps a gap between neighbouring marks of every word", () => {
     for (const word of ["KIEZ", "SCHRIPPE", "Kodderschnauze", "Bolle", "Lausepavilion"]) {
       const marks = morseRing(word);
       const px = marks.map((m) => ({
-        x: (parseFloat(m.left) / 100) * 120,
-        y: (parseFloat(m.top) / 100) * 120,
-        half: (m.sym === "d" ? 8 : 18) / 2,
+        x: (m.x / 100) * 120,
+        y: (m.y / 100) * 120,
+        half: (m.sym === "dot" ? 8 : 18) / 2,
       }));
       px.forEach((a, n) => {
         const b = px[(n + 1) % px.length];
