@@ -90,6 +90,21 @@ describe("BonTeaser", () => {
     expect(status(wrong)).toContain("Knapp daneben!");
   });
 
+  it("answers a horizontal swipe on the card, ignores a short one", async () => {
+    const w = mountIt();
+    const card = w.get('[role="status"]').element.previousElementSibling as HTMLElement;
+    const swipe = (from: number, to: number) => {
+      card.dispatchEvent(new MouseEvent("pointerdown", { bubbles: true, clientX: from }));
+      card.dispatchEvent(new MouseEvent("pointerup", { bubbles: true, clientX: to }));
+    };
+    swipe(100, 130);
+    await flushPromises();
+    expect(status(w)).toBe("");
+    swipe(100, 20);
+    await flushPromises();
+    expect(status(w)).toContain("Knapp daneben!");
+  });
+
   it("never calls the BON API for the trial card", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch");
     const w = mountIt();

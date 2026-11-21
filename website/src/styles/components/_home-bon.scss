@@ -159,6 +159,15 @@
     grid-area: 1 / 1;
   }
 
+  // The status region stretches over the card even while empty: let pointers reach the card (swipe).
+  .status {
+    pointer-events: none;
+  }
+
+  .result {
+    pointer-events: auto;
+  }
+
   .card,
   .result {
     aspect-ratio: 1 / 1.05;
