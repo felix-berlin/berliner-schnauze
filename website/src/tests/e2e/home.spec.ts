@@ -187,6 +187,8 @@ test.describe("Startseite v20 (/)", () => {
         await page.screenshot({
           fullPage: true,
           path: info.outputPath(`home-${width}-${colorScheme}.png`),
+          // iPhone 12 renders at 3x: the ~11.7k px page would exceed WebKit's 32767 device-pixel limit.
+          scale: "css",
         });
       });
     }
