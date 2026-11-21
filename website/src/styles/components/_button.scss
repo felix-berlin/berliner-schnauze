@@ -4,6 +4,7 @@
 // Variants (space-separated in data-variant): primary, secondary, soft, lg, xl, center-icon, filter, paper, raised. A
 // pressed filter button is aria-pressed="true". Public: --button-padding, --button-bg, --button-color,
 // --button-border-color, --button-border-style, --button-border-width, --button-display,
+// --button-disabled-bg, --button-disabled-color, --button-disabled-border-color, --button-disabled-border-style,
 // --button-font-size, --button-min-block-size, --button-transition, --button-flex, --button-gap.
 // Locked but focusable (busy, offline): aria-disabled="true"; aria-busy="true" shows the progress cursor.
 @include mx.component("button") {
@@ -164,10 +165,10 @@
   :scope:disabled {
     &,
     &:hover {
-      --_bg: transparent;
-      --_color: var(--color-text-muted);
-      --_border-color: var(--color-text-muted);
-      --_border-style: dotted;
+      --_bg: var(--button-disabled-bg, transparent);
+      --_color: var(--button-disabled-color, var(--color-text-muted));
+      --_border-color: var(--button-disabled-border-color, var(--color-text-muted));
+      --_border-style: var(--button-disabled-border-style, dotted);
 
       cursor: not-allowed;
       box-shadow: none;

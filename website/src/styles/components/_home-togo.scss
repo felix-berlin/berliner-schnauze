@@ -27,19 +27,16 @@
     align-items: center;
   }
 
-  // Mock .h18__tgi: 44px buttons with .9375rem text; the disabled install button (no prompt) keeps the primary look,
-  // InstallApp's tooltip says why it does nothing.
+  // Mock .h18__tgi: 44px buttons with .9375rem text.
   .item {
     --_label: 0.9375rem; // 15px, between the sm and md steps
     --button-min-block-size: var(--size-tap-target);
     --button-font-size: var(--_label);
-  }
-
-  .install:disabled {
-    --_bg: var(--color-accent-solid);
-    --_color: var(--color-text-on-accent);
-    --_border-color: var(--color-accent-solid);
-    --_border-style: solid;
+    // The install button is disabled without a prompt (InstallApp's tooltip says why) and keeps the primary look.
+    --button-disabled-bg: var(--color-accent-solid);
+    --button-disabled-color: var(--color-text-on-accent);
+    --button-disabled-border-color: var(--color-accent-solid);
+    --button-disabled-border-style: solid;
   }
 
   .icon {
