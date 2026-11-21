@@ -416,7 +416,6 @@ describe("colour scheme contract", () => {
     // Without JS no .dark class is set; "light dark" would make the tokens dark but the legacy overrides light.
     const colors = read(join(src, "styles/base/_colors.scss"));
     expect(colors).toMatch(/html\s*\{\s*color-scheme:\s*light;/);
-    expect(legacyFiles.length).toBeGreaterThan(0);
   });
 
   it("tints native controls with the accent token", () => {
@@ -478,5 +477,16 @@ describe("colour scheme contract", () => {
       .filter((p) => /font-size:\s*[\d.]+px/.test(read(p)))
       .map(rel);
     expect(bad).toEqual([]);
+  });
+
+  // Tripwire: fails once the legacy list is empty, so the two deferred steps are not forgotten.
+  it("flags the follow-ups that become due when the legacy list is empty", () => {
+    expect(
+      legacyFiles.length,
+      "Legacy list is empty. Now: (1) set the root color-scheme in base/_colors.scss to 'light dark', " +
+        "(2) remove the global 0.01ms reduced-motion net in base/_body.scss and its rule-file sentence, " +
+        "(3) delete this test and the root-default test above. " +
+        "See docs/superpowers/plans/2026-11-21-design-system-modern-web-alignment.md, 'Outcome and follow-ups'.",
+    ).toBeGreaterThan(0);
   });
 });
