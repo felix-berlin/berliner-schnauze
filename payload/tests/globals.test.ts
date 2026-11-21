@@ -62,7 +62,7 @@ describe("globals round-trip", () => {
         facts,
         intro: "Hallo",
         tryWords: [word.id],
-        browseLinks: [{ label: "Wörter", href: "/woerter", icon: "words" }],
+        browseLinks: [{ label: "Wörter", href: "/woerter", icon: "audio" }],
         soundRules: [{ standard: "ich", berlin: "ick", example: "ick bin", rule: "g/ch zu k" }],
         faq: [{ question: "Was?", answer: rich }],
         aboutText: "Über",
@@ -71,7 +71,7 @@ describe("globals round-trip", () => {
     const doc = await payload.findGlobal({ slug: "home", depth: 0 });
     expect(doc.facts?.[0]?.headline).toBe("Fakt");
     expect(doc).toMatchObject({ intro: "Hallo", aboutText: "Über", tryWords: [word.id] });
-    expect(doc.browseLinks?.[0]).toMatchObject({ label: "Wörter", icon: "words" });
+    expect(doc.browseLinks?.[0]).toMatchObject({ label: "Wörter", icon: "audio" });
     expect(doc.soundRules?.[0]).toMatchObject({ berlin: "ick" });
     expect(doc.faq?.[0]?.question).toBe("Was?");
     await payload.delete({ collection: "words", id: word.id });

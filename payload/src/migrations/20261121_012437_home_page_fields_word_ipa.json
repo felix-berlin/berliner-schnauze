@@ -9774,11 +9774,10 @@
       "name": "enum_home_browse_links_icon",
       "schema": "public",
       "values": [
-        "words",
-        "themen",
-        "posts",
-        "game",
-        "anki",
+        "audio",
+        "idiom",
+        "short",
+        "rhyme",
         "random"
       ]
     }

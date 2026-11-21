@@ -1682,7 +1682,7 @@ export interface Home {
     | {
         label: string;
         href: string;
-        icon?: ('words' | 'themen' | 'posts' | 'game' | 'anki' | 'random') | null;
+        icon?: ('audio' | 'idiom' | 'short' | 'rhyme' | 'random') | null;
         id?: string | null;
       }[]
     | null;

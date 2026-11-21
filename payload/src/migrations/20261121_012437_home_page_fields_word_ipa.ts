@@ -2,7 +2,7 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
-   CREATE TYPE "public"."enum_home_browse_links_icon" AS ENUM('words', 'themen', 'posts', 'game', 'anki', 'random');
+   CREATE TYPE "public"."enum_home_browse_links_icon" AS ENUM('audio', 'idiom', 'short', 'rhyme', 'random');
   CREATE TABLE "home_browse_links" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
