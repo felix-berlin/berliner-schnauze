@@ -32,6 +32,7 @@
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "seed:e2e": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/e2e.ts",
     "seed:dev": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/dev.ts",
+    "seed:home": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/home.ts",
     "verify:db": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/verifyDb.ts",
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
     "migrate:down": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:down",
