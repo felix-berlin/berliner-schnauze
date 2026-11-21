@@ -4,36 +4,7 @@ Stand: 21. November 2026 · Design System „Berliner Schnauze“ v3.1 + Palette
 
 > **v20 ersetzt die Startseite v5 „farbig“ vollständig** (`handoff/startseite-SPEC.md` §22). Aus v5 gelten nur noch das Install-Verhalten der App (§22.9 dort, Tabelle „Installieren“) und die Such-Regeln (§22.10 dort), soweit §8 hier nichts anderes sagt. Das Riesenwort „Monument“, das Laufband, die Übersetzer-Tafel, die Fakten-Karten und die A–Z-Kacheln entfallen.
 
-**Boards:** Canvas „Wortseite vereinheitlichen“, Seite **„v20 · Startseite mit Text zu Berlinerisch“**.
-
-| Board | Breite | Inhalt |
-|---|---|---|
-| `StartV20DesktopDark` / `…Light` | 1280 | Header + `HomeV20` + Footer |
-| `StartV20TabletDark` / `…Light` | 834 | Header (kompakt) + `HomeV20 size="tablet"` + Footer (Desktop) |
-| `StartV20MobileDark` / `…Light` | 390 | Header + `HomeV20 size="mobile"` + Footer |
-| `StartV20OhneAudioDesktopDark`, `StartV20OhneAudioMobileLight` | | Wort des Tages ohne Hörprobe (`audio="nein"`) |
-| `StartV20ZustaendeDark` / `…Light` | 1280 | `HomeStates20`: alle Interaktionszustände als Tafel |
-
-**Dateien in diesem Paket:**
-
-| Datei | Inhalt |
-|---|---|
-| `design/HomeV20.dc.html` | **Referenz**: ganze Startseite zwischen Header und Footer, alle Breakpoints über den Prop `size` |
-| `design/HomeStates20.dc.html` | Zustandstafel (Default, Hover, Fokus, Aktiv, Ausgewählt) aller Bedienelemente |
-| `design/StartV20*.dc.html` | Board-Rahmen, zeigen welche Header-/Footer-Variante pro Breakpoint |
-| `design/Header.dc.html`, `design/Footer.dc.html` | bestehender Rahmen, unverändert |
-| `assets/v20/*.jpg` | Sichtvergleich. Desktop in halber Größe, Tablet und Mobil 1:1, dazu Suche offen, Suche leer, Reiter „Nach Alter“, ohne Audio, Zustände |
-| `assets/berlin-bezirke-punkte.json` | Punktraster der Berlin-Karte: 12 Bezirke, 1091 Punkte, `viewBox` 0 0 404 340 |
-| `assets/fonts/fira-sans-extra-condensed-*.woff2` | Überschriften- und Zahlenschrift (SIL OFL), 600, 800, 800 latin-ext |
-| `ds/` | Tokens, Basis-CSS, Komponenten-CSS und Komponenten-Doku des Design Systems |
-| `PROMPT.md` | Startauftrag für Claude Code |
-
-**So liest du die `.dc.html`-Dateien:**
-- `{{x}}` ist ein Wert aus `renderVals()` im `<script data-dc-script>` am Ende. Dort steht auch der Zustand der Demo (`vote`, `bon`, `rank`, `res`, `sopen`, `cleared`).
-- `<sc-if>` / `<sc-for>` entsprechen `v-if` / `v-for`.
-- Alle Klassen und Maße stehen im `<style>` im `<helmet>`. Die Datei ist über mehrere Iterationen gewachsen (Präfixe `w10`–`w17` aus der Wortseite, `h18`–`h20` Startseite). **Spätere Regeln überschreiben frühere.** Im Zweifel gilt, was der Browser beim Rendern berechnet, nicht die erste Fundstelle.
-- Props: `theme` (`dark|light`), `size` (`desktop|tablet|mobile`), `audio` (`ja|nein`), `suche` (`zu|offen|leer`), `fx` (`an|aus`, Animationen).
-- Klassen mit `is-hover`, `is-focus`, `is-active` sind **nur für die Zustandstafel** da. Im Code gelten die echten Pseudoklassen.
+> Die Mockups (`design/*.dc.html`), die Screenshots und der Startauftrag sind nach dem Merge entfernt worden. Sie stehen in der Git-History (Commit vor dem Löschen, Pfad `docs/design/startseite-v20/`). Tokens und Komponenten des Design Systems: `docs/design/design-system/`. 
 
 **Platzhalter:** Alle Zahlen (1.700+, 312, 12.400, Prozentwerte, Bezirkswerte, Altersverteilungen, Themen-Zähler) und alle Listen sind ausgedacht. Echte Namen, Kommentare oder Vorschlagstexte aus der Produktions-Datenbank gehören nicht in Mocks, Tests, Fixtures oder Screenshots. Die Dev-Datenbank stammt aus einem Backup.
 
@@ -368,7 +339,7 @@ Dunkles Band in beiden Themes (§4.3). Kopf mit Korrektur-Überschrift und Satz 
 - „Am wenigsten“: die 2 untersten
 - Fußnote mit Quelle der Kartengeometrie
 
-**Rechts: Punktkarte** aus `assets/berlin-bezirke-punkte.json`:
+**Rechts: Punktkarte** aus `website/src/assets/berlin-bezirke-punkte.json` (1091 Punkte, 12 Bezirke, `viewBox` 0 0 404 340):
 - Positionen fest. Pro Bezirk berechnet aus dem Wert `v` („Sag ick selbst“ in %):
   - `r = 1.6 + 2.0 * v / 100`
   - `opacity = 0.18 + 0.82 * clamp((v - 30) / 56, 0, 1)`
@@ -479,7 +450,7 @@ Leiste `--card2`, 40px oben und unten, zwei Hälften mit Trennlinie: Icon (`--t3
 
 ## 15. Zustände und Interaktionen
 
-Alle Zustände stehen auf den Boards `StartV20Zustaende*` (`assets/v20/zustaende-*.jpg`).
+Alle Zustände stehen auf den Boards `StartV20Zustaende*`.
 
 | Element | Hover | Fokus | Aktiv / Ausgewählt |
 |---|---|---|---|
@@ -628,7 +599,7 @@ Diese Punkte nicht selbst entscheiden: fragen oder die genannte Zwischenlösung 
   - Altersprofil: `round(anteil / 10)` gefüllte Punkte
   - Relative Zeit „vor 2 Tagen“ / „vor 1 Woche“
 - **Playwright:**
-  - Screenshots 390 / 834 / 1280 × Dark / Light gegen `assets/v20/`
+  - Screenshots 390 / 834 / 1280 × Dark / Light gegen das Mockup aus der Git-History
   - `/` fokussiert die Suche, Pfeiltasten und Esc in der Vorschlagsliste, Lösch-Kreuz leert das Feld
   - Reiter per Tastatur (beide Tablists)
   - Umfrage: Stimme → Ergebnis sichtbar, Fokus auf Ergebnis
