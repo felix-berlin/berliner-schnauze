@@ -90,6 +90,7 @@
   }
 
   // White button of the band (mock .h18__btn.h19__btn--w): 48px, 20px side padding, dark text, tinted hover.
+  // The band is orange in both themes, so the colours are primitives: text-strong flips to light in dark mode.
   .play {
     --_btn-height: 3rem; // 48px (mock)
 
@@ -100,7 +101,8 @@
     padding: 0 var(--space-5);
     border-radius: var(--radius-sm);
     background: var(--color-text-on-active);
-    color: var(--color-text-strong);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- the band is orange in both themes: no flipping token fits
+    color: var(--color-ink-700);
     font-weight: var(--font-weight-bold);
     text-decoration: none;
     transition:
@@ -108,10 +110,13 @@
       transform var(--duration-fast) var(--ease-standard);
 
     @include butler-mx.hover {
-      background: var(--color-control-bg);
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- the band is orange in both themes: no flipping token fits
+      background: var(--color-orange-100);
     }
 
     &:active {
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- the band is orange in both themes: no flipping token fits
+      background: var(--color-orange-200);
       transform: scale(0.98);
     }
   }
