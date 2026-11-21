@@ -4,7 +4,7 @@
 // Start page "Frisch uff'm Tisch" (docs/design/startseite-v20/SPEC.md §10, §15-17). Parts: .head (h2, .all),
 // .cols with .new (h3, .list) and .ranking (.tabs of [role=tab], [role=tabpanel] > .list). A .list row is
 // li > a with b (word) plus .meaning/time (new), .rank, .dots of i[data-state="on"], .share (ranked) or
-// .trend (rising); the list kind is data-variant on the list.
+// .word (b, small meaning) and .trend (rising); the list kind is data-variant on the list.
 @include mx.component("home-fresh") {
   :scope {
     --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
@@ -190,6 +190,18 @@
 
   .list[data-variant="rising"] a {
     grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+  }
+
+  // Rising: meaning below the word (SPEC §10).
+  .word {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+
+    small {
+      font-size: var(--font-size-md); // 0.875rem in the mock, nearest step
+      color: var(--t3);
+    }
   }
 
   .dots {

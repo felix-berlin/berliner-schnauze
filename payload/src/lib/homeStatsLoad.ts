@@ -36,7 +36,8 @@ export type HomeStats = {
   }[];
   ageLists: { dying: AgeWord[]; growing: AgeWord[] };
   popular: { word: WordRef; views: number; sayShare: number | null }[];
-  rising: { word: WordRef; delta: number }[];
+  /** meaning: the published word's translations, only when it has any. */
+  rising: { word: WordRef; delta: number; meaning?: string }[];
   bon: {
     roundsToday: number;
     steps: { from: number; mult: number }[];
@@ -83,6 +84,10 @@ const inList = (ids: number[]) =>
 
 const query = async <R>(payload: BasePayload, q: ReturnType<typeof sql>) =>
   (await (payload.db as unknown as PostgresAdapter).drizzle.execute(q)).rows as R[];
+
+// A word's meaning as the site shows it: its translations joined with ", " (needs the word aliased as w).
+const MEANING = sql`(select string_agg(t.translation, ', ' order by t._order) from words_translations t
+  where t._parent_id = w.id and coalesce(t.translation, '') <> '')`;
 
 // Votes of published words with a usage answer; every feedback query starts here.
 const VOTES = sql`word_feedback f join words w on w.id = f.word_id and w._status = 'published'
@@ -217,8 +222,7 @@ const loadBon = async (payload: BasePayload): Promise<HomeStats["bon"]> => {
     }>(
       payload,
       sql`select top.word, top.is_real, top.wrong, top.total, w.slug,
-            (select string_agg(t.translation, ', ' order by t._order) from words_translations t
-              where t._parent_id = w.id and coalesce(t.translation, '') <> '') as meaning
+            ${MEANING} as meaning
           from (select c->>'word' as word, (c->>'isReal')::boolean as is_real, max(c->>'slug') as card_slug,
               count(*) filter (where (c->>'answer')::boolean <> (c->>'isReal')::boolean) as wrong,
               count(*) as total
@@ -265,9 +269,10 @@ const loadTrending = async (
   const ids = [...new Set([...viewed, ...rising].map((r) => r.word))];
   if (!ids.length) return { popular: [], rising: [] };
   const [refs, usage] = await Promise.all([
-    query<{ id: number; slug: string; berlinerisch: string }>(
+    query<{ id: number; slug: string; berlinerisch: string; meaning: string | null }>(
       payload,
-      sql`select id, slug, berlinerisch from words where _status = 'published' and id in (${inList(ids)})`,
+      sql`select w.id, w.slug, w.berlinerisch, ${MEANING} as meaning
+          from words w where w._status = 'published' and w.id in (${inList(ids)})`,
     ),
     query<{ word_id: number; usage: Usage; n: string }>(
       payload,
@@ -276,6 +281,7 @@ const loadTrending = async (
     ),
   ]);
   const byId = new Map(refs.map((r) => [r.id, { slug: r.slug, berlinerisch: r.berlinerisch }]));
+  const meanings = new Map(refs.map((r) => [r.id, r.meaning]));
   const counts = new Map<number, UsageCounts>();
   for (const r of usage) {
     const c = counts.get(r.word_id) ?? emptyCounts();
@@ -293,7 +299,8 @@ const loadTrending = async (
     rising: rising.flatMap((r) => {
       const word = byId.get(r.word);
       const delta = r.views - (r.previous ?? 0);
-      return word && delta > 0 ? [{ word, delta }] : [];
+      const meaning = meanings.get(r.word);
+      return word && delta > 0 ? [{ word, delta, ...(meaning ? { meaning } : {}) }] : [];
     }),
   };
 };

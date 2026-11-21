@@ -76,7 +76,10 @@
             <li v-for="(r, i) in rising" :key="r.word.slug">
               <a :href="routeToWord(r.word.slug)">
                 <span class="rank">{{ i + 1 }}</span>
-                <b>{{ r.word.berlinerisch }}</b>
+                <span class="word">
+                  <b>{{ r.word.berlinerisch }}</b>
+                  <small v-if="r.meaning">{{ r.meaning }}</small>
+                </span>
                 <em class="trend"><IconTrendingUp aria-hidden="true" />+{{ r.delta }}</em>
               </a>
             </li>

@@ -167,6 +167,27 @@ describe("loadHomeStats", () => {
     expect(rising).toHaveLength(1);
     expect(rising[0]).toMatchObject({ delta: 3 });
     expect(rising[0]?.word.slug).toMatch(/^hs-a-/);
+    expect(rising[0]).not.toHaveProperty("meaning");
+  });
+
+  it("adds the published word's meaning to a rising word", async () => {
+    await payload.update({
+      collection: "words",
+      id: e,
+      data: { translations: [{ translation: "Aufwindbedeutung" }, { translation: "noch eine" }] },
+    });
+    trending.mockImplementation(async (_p, { type }) =>
+      type === "rising" ? [{ word: e, value: 1, views: 6, previous: 1 }] : [],
+    );
+    const { rising } = await loadHourlyStats(payload);
+    trending.mockReset().mockResolvedValue([]);
+    expect(rising).toEqual([
+      {
+        word: expect.objectContaining({ slug: expect.stringMatching(/^hs-e-/) }),
+        delta: 5,
+        meaning: "Aufwindbedeutung, noch eine",
+      },
+    ]);
   });
 
   it("merges u20 and 20-29 into u30 and keeps words below MIN_WORD_VOTES out", () => {

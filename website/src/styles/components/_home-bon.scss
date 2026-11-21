@@ -146,17 +146,32 @@
     --focus-ring-color: var(--color-accent-active);
 
     position: relative;
+    display: grid;
     inline-size: min(var(--_stack), 100%);
-    aspect-ratio: 1 / 1.05;
     color-scheme: light;
     color: var(--color-text-strong);
+  }
+
+  // Card and result share one grid cell: the taller one sizes the stack, so a long meaning grows the result
+  // (and the backs behind it) instead of spilling onto the band. aspect-ratio only sets the minimum height.
+  .card,
+  .status {
+    grid-area: 1 / 1;
+  }
+
+  .card,
+  .result {
+    aspect-ratio: 1 / 1.05;
+  }
+
+  .back {
+    position: absolute;
+    inset: 0;
   }
 
   .back,
   .card,
   .result {
-    position: absolute;
-    inset: 0;
     border-radius: var(--radius-sm);
     background: var(--card2);
   }

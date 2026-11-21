@@ -12,7 +12,12 @@ const newest = [1, 2, 3].map((n) => ({
   slug: `neu-${n}`,
 }));
 const popular = [92, 63, null].map((sayShare, i) => ({ sayShare, views: 100 - i, word: ref(i) }));
-const rising = [1, 2, 3].map((n) => ({ delta: 10 * n, word: ref(10 + n) }));
+// The second rising word has no meaning.
+const rising = [
+  { delta: 10, meaning: "Aufwind 1", word: ref(11) },
+  { delta: 20, word: ref(12) },
+  { delta: 30, meaning: "Aufwind 3", word: ref(13) },
+];
 
 const mountIt = (props: Partial<InstanceType<typeof FreshLists>["$props"]> = {}) =>
   mount(FreshLists, { attachTo: document.body, props: { newest, popular, rising, ...props } });
@@ -38,6 +43,9 @@ describe("FreshLists", () => {
     expect(panels[0]!.attributes("hidden")).toBeUndefined();
     expect(panels[1]!.attributes()).toHaveProperty("hidden");
     expect(panels[1]!.text()).toContain("+10");
+    const risingRows = panels[1]!.findAll("li");
+    expect(risingRows[0]!.text()).toContain("Aufwind 1");
+    expect(risingRows[1]!.find("small").exists()).toBe(false);
     const tabs = w.findAll('[role="tab"]');
     expect(panels[0]!.attributes("aria-labelledby")).toBe(tabs[0]!.attributes("id"));
   });
