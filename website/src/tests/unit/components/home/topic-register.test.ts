@@ -31,12 +31,14 @@ describe("TopicRegister.astro", () => {
   });
 
   it("renders the speech bubble only for a topic with a saying", async () => {
-    const html = await render({ topics: [topic(1, "Erfundener Satz"), topic(2)] });
+    const html = await render({ topics: [topic(1, "Erfundener Satz"), topic(2), topic(3)] });
     expect(html.match(/class="say"/g)).toHaveLength(1);
     expect(html).toMatch(/<span class="say" aria-hidden="true">\s*„Erfundener Satz“\s*<\/span>/);
   });
 
-  it("renders nothing without topics", async () => {
+  it("renders nothing without topics or with fewer than three (SPEC §19)", async () => {
     expect(await render({ topics: [] })).not.toContain("c-home-topics");
+    expect(await render({ topics: [topic(1), topic(2)] })).not.toContain("c-home-topics");
+    expect(await render({ topics: [1, 2, 3].map((i) => topic(i)) })).toContain("c-home-topics");
   });
 });

@@ -8,8 +8,9 @@ interface Props {
 const { topics } = Astro.props;
 ---
 
+{/* SPEC §19: below three topics the whole register drops. */}
 {
-  topics.length > 0 && (
+  topics.length >= 3 && (
     <div class="c-home-topics">
       <header class="head">
         <p class="eyebrow" aria-hidden="true">
