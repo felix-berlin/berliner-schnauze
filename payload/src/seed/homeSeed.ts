@@ -14,6 +14,7 @@ import {
   HOME_INTRO,
   HOME_KNOWLEDGE_HTML,
   HOME_SOUND_RULES,
+  HOME_TOPIC_SAYINGS,
   HOME_TRY_WORD_SLUGS,
 } from "./homeContent";
 
@@ -62,6 +63,26 @@ export async function seedHome(
     const ids = tryWordSlugs.flatMap((s) => docs.filter((d) => d.slug === s).map((d) => d.id));
     return ids.length ? ids : undefined;
   });
+
+  // Speech bubbles of the topic register: only topics that exist and have no saying yet.
+  const topicsFilled: string[] = [];
+  for (const [slug, typischerSatz] of Object.entries(HOME_TOPIC_SAYINGS)) {
+    const { docs } = await payload.find({
+      collection: "themen",
+      where: { slug: { equals: slug }, typischerSatz: { exists: false } },
+      limit: 1,
+      depth: 0,
+    });
+    if (!docs[0]) continue;
+    await payload.update({
+      collection: "themen",
+      id: docs[0].id,
+      data: { typischerSatz },
+      depth: 0,
+    });
+    topicsFilled.push(slug);
+  }
+  if (topicsFilled.length) written.push(`topicSayings(${topicsFilled.length})`);
 
   if (written.length) await payload.updateGlobal({ slug: "home", data, depth: 0 });
   return { written, skipped };

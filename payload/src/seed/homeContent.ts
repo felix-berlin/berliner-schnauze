@@ -86,3 +86,13 @@ export const HOME_BROWSE_LINKS = [
   { label: "Wat reimt sich?", href: "/suche", icon: "rhyme" },
   { label: "Zufallswort", href: "/suche", icon: "random" },
 ] as const;
+
+/** Speech bubble of a topic row (Themen.typischerSatz), by slug; the sentences are the mock's, matched to the nearest topic. */
+export const HOME_TOPIC_SAYINGS: Record<string, string> = {
+  "schimpfwoerter-beleidigungen": "Wat willste, Keule?",
+  koerper: "Da kiekste, wa?",
+  "redewendungen-sprueche": "Dit kost’ ma wieder Pinke!",
+  stadtleben: "Ick wohn janz weit draußen. Jwd eben.",
+  "spott-ironie": "Ne Molle und ’n Korn, Meester!",
+  "essen-trinken": "Zwee Schrippen und ’ne Bulette, bitte!",
+};
