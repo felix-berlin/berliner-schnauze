@@ -24,7 +24,8 @@ describe("SetColorMode inline script", () => {
     systemDark = false;
     localStorage.clear();
     document.head.innerHTML =
-      '<meta name="theme-color" media="(prefers-color-scheme: light)" content="x">';
+      '<meta name="theme-color" media="(prefers-color-scheme: light)" content="x">' +
+      '<meta name="theme-color" media="(prefers-color-scheme: dark)" content="y">';
     document.documentElement.className = "";
     document.documentElement.style.colorScheme = "";
     delete (window as unknown as { __schemeSync?: boolean }).__schemeSync;

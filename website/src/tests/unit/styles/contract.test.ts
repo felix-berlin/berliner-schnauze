@@ -412,10 +412,11 @@ describe("colour scheme contract", () => {
     );
   });
 
-  it("keeps 'light dark' as the root default so the system scheme applies without JS", () => {
+  it("keeps 'light' as the root default while legacy files still depend on the .dark class", () => {
+    // Without JS no .dark class is set; "light dark" would make the tokens dark but the legacy overrides light.
     const colors = read(join(src, "styles/base/_colors.scss"));
-    expect(colors).toMatch(/color-scheme:\s*light dark/);
-    expect(colors).not.toMatch(/color-scheme:\s*light;/);
+    expect(colors).toMatch(/html\s*\{\s*color-scheme:\s*light;/);
+    expect(legacyFiles.length).toBeGreaterThan(0);
   });
 
   it("tints native controls with the accent token", () => {
@@ -428,6 +429,7 @@ describe("colour scheme contract", () => {
     const forced = read(join(src, "styles/base/_forced-colors.scss"));
     expect(forced).toContain('feature("forced-colors")');
     expect(forced).toMatch(/:hover[\s\S]*outline:\s*2px dashed Highlight/);
+    expect(forced).toContain('[aria-current]:not([aria-current="false"])');
     expect(forced).toMatch(/\[aria-pressed="true"\][\s\S]*outline:\s*2px solid Highlight/);
     expect(read(join(src, "styles/base/index.scss"))).toContain('@forward "forced-colors"');
   });

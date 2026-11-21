@@ -13,7 +13,7 @@
     }
 
     [aria-pressed="true"],
-    [aria-current="page"],
+    [aria-current]:not([aria-current="false"]),
     [aria-selected="true"] {
       outline: 2px solid Highlight;
       outline-offset: -2px;
