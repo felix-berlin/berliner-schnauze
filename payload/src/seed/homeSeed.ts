@@ -86,8 +86,8 @@ export async function seedHome(
   }
   if (topicsFilled.length) written.push(`topicSayings(${topicsFilled.length})`);
 
-  // Magazine teaser: the latest published post without a teaser quote gets its own first sentence (a dev stand-in;
-  // the site drops the section when a post has neither a teaser quote nor a pull quote, SPEC §12.3).
+  // Magazine teaser: the latest published post gets a quote (its own first sentence) and an IPA outline when it has
+  // none (dev stand-ins; the site drops the section without a quote, SPEC §12.3).
   const [post] = (
     await payload.find({
       collection: "posts",
@@ -97,24 +97,47 @@ export async function seedHome(
       where: { _status: { equals: "published" } },
     })
   ).docs;
-  if (post && !post.teaserZitat) {
+  if (post) {
     const first = /<p[^>]*>(.*?)<\/p>/s.exec(lexicalToHtml(post.content))?.[1] ?? "";
     const plain = first
       .replace(/<[^>]*>/g, "")
       .replace(/\s+/g, " ")
       .trim();
     const sentence = /^.{20,160}?[.!?](?=\s|$)/.exec(plain)?.[0];
-    if (sentence) {
+    const data: { teaserIpa?: string; teaserZitat?: string } = {};
+    if (!post.teaserZitat && sentence) data.teaserZitat = sentence;
+    if (Object.keys(data).length) {
       await payload.update({
         collection: "posts",
         context: { [PRESERVE_CONTENT_MODIFIED_AT]: true },
-        data: { teaserZitat: sentence },
+        data,
         depth: 0,
         id: post.id,
       });
-      written.push("teaserZitat");
+      written.push(...Object.keys(data));
     }
   }
+
+  // The dev site also shows drafts (SHOW_TEST_DATA), so the newest posts get the outline, whatever their status.
+  const { docs: latest } = await payload.find({
+    collection: "posts",
+    depth: 0,
+    draft: true,
+    limit: 3,
+    sort: "-publishedAt",
+    where: { teaserIpa: { exists: false } },
+  });
+  for (const p of latest) {
+    await payload.update({
+      collection: "posts",
+      context: { [PRESERVE_CONTENT_MODIFIED_AT]: true },
+      data: { teaserIpa: "ɪk" },
+      depth: 0,
+      draft: p._status === "draft",
+      id: p.id,
+    });
+  }
+  if (latest.length) written.push(`teaserIpa(${latest.length})`);
 
   if (written.length) await payload.updateGlobal({ slug: "home", data, depth: 0 });
   return { written, skipped };

@@ -16,6 +16,7 @@ const { magazine } = Astro.props;
       {magazine.ipa && (
         <span class="ipa" aria-hidden="true">{`[${magazine.ipa}]`}</span>
       )}
+      <div class="o-home-in">
       <div class="grid">
         <div class="quote">
           <p class="tag">Magazin · Sprache &amp; Jeschichte</p>
@@ -41,6 +42,7 @@ const { magazine } = Astro.props;
             </div>
           )}
         </div>
+      </div>
       </div>
     </article>
   )
