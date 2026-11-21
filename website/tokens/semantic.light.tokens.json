@@ -465,5 +465,89 @@
         }
       }
     }
+  },
+  "page": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.937255, 0.901961, 0.858824],
+      "hex": "#efe6db"
+    }
+  },
+  "card": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [1.0, 1.0, 1.0],
+      "hex": "#ffffff"
+    }
+  },
+  "card2": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.984314, 0.945098, 0.901961],
+      "hex": "#fbf1e6"
+    }
+  },
+  "card3": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.960784, 0.87451, 0.792157],
+      "hex": "#f5dfca"
+    }
+  },
+  "t3": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.32549, 0.368627, 0.411765],
+      "hex": "#535e69"
+    }
+  },
+  "d-bl": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.239216, 0.435294, 0.611765],
+      "hex": "#3d6f9c"
+    }
+  },
+  "d-ye": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.541176, 0.427451, 0.0],
+      "hex": "#8a6d00"
+    }
+  },
+  "d-gr": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.490196, 0.537255, 0.580392],
+      "hex": "#7d8994"
+    }
+  },
+  "ok": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.180392, 0.490196, 0.309804],
+      "hex": "#2e7d4f"
+    }
+  },
+  "band-dark-bg": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.078431, 0.098039, 0.117647],
+      "hex": "#14191e"
+    }
+  },
+  "line": {
+    "$type": "color",
+    "$value": "{color.border.card}"
   }
 }
