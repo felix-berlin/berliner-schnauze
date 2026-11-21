@@ -31,13 +31,12 @@
     --_drift-start: 1.6s;
     --focus-ring-color: var(--color-accent-active);
 
-    position: relative;
-    isolation: isolate;
     container: home-stage / inline-size;
   }
 
-  // The outline belongs to the whole screen, not to the centred column: this field spans the viewport and clips
-  // the outline at its edges (a wide outline would otherwise add a horizontal scrollbar).
+  // The outline belongs to the whole band, not to this column: the field fills the band (the page's stage section
+  // is its positioned parent: it also holds the search and the chips) across the viewport and clips the outline at
+  // its edges (a wide outline would otherwise add a horizontal scrollbar).
   .field {
     --_edge: calc(50% - 50vw); // from the column's centre to the screen's edge: no token
 
@@ -51,9 +50,10 @@
 
   .ipa {
     --_ipa-end: -0.06em; // cut off at the right edge (mock)
+    --_ipa-top: 15.625rem; // 250px from the band's top, behind the lemma (SPEC §5 mobile)
 
     position: absolute;
-    inset-block: var(--space-4) auto;
+    inset-block: var(--_ipa-top) auto;
     inset-inline-end: var(--_ipa-end);
     font-size: var(--_ipa);
     font-weight: var(--font-weight-bold);
