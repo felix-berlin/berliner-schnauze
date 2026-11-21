@@ -22,7 +22,7 @@ export async function seedHomeStats(payload: Payload): Promise<void> {
     const id = typeof r.word === "object" ? r.word.id : r.word;
     views.set(id, (views.get(id) ?? 0) + r.views);
   }
-  const top = [...views].toSorted((a, b) => b[1] - a[1]).slice(0, 5);
+  const top = [...views].sort((a, b) => b[1] - a[1]).slice(0, 5);
   const words = [
     ...(
       await payload.find({
@@ -41,7 +41,7 @@ export async function seedHomeStats(payload: Payload): Promise<void> {
       })
     ).docs,
   ];
-  for (const [k, word] of new Map(words.map((w) => [w.id, w])).values().toArray().entries()) {
+  for (const [k, word] of [...new Map(words.map((w) => [w.id, w])).values()].entries()) {
     const slug = word.slug ?? String(word.id);
     // Per word, so a second run adds only what is missing.
     const own = { visitor: { like: `e2e-${slug}-` }, word: { equals: word.id } };
