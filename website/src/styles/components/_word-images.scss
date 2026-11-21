@@ -33,6 +33,7 @@
     gap: var(--space-3);
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    // scroll alternative: every item is focusable and focus scrolls it into view (browser-ui-theming guide)
     scrollbar-width: none;
     // The negative margin keeps the layout while the padding gives the focus ring room.
     margin: calc(-1 * var(--_focus-room));

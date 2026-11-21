@@ -64,6 +64,7 @@
     overflow-x: auto;
     scroll-snap-type: x proximity;
     scroll-padding-inline: var(--_fade-size);
+    // scroll alternative: every chip is focusable and focus scrolls it into view (browser-ui-theming guide)
     scrollbar-width: none;
 
     > * {

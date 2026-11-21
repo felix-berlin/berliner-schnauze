@@ -431,4 +431,20 @@ describe("colour scheme contract", () => {
     expect(forced).toMatch(/\[aria-pressed="true"\][\s\S]*outline:\s*2px solid Highlight/);
     expect(read(join(src, "styles/base/index.scss"))).toContain('@forward "forced-colors"');
   });
+
+  it("allows scrollbar-width other than auto only next to a named scroll alternative", () => {
+    const bad = styleFiles
+      .filter((p) => !legacyFiles.includes(rel(p)))
+      .filter((p) =>
+        read(p)
+          .split("\n")
+          .some(
+            (line, i, lines) =>
+              /scrollbar-width:\s*(thin|none)/.test(line) &&
+              !/scroll alternative:/.test(lines[i - 1] ?? ""),
+          ),
+      )
+      .map(rel);
+    expect(bad).toEqual([]);
+  });
 });

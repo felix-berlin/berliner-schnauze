@@ -1,8 +1,8 @@
 @layer base {
   // scrollbar-color inherits, so setting it on <html> covers every scroller.
   // Chromium 121+ ignores ::-webkit-scrollbar once scrollbar-color is set.
+  // No thin scrollbars here: the thumb would be too small to grab for some users (browser-ui-theming guide).
   html {
-    scrollbar-width: thin;
     scrollbar-color: var(--color-scrollbar-thumb) var(--color-scrollbar-track);
   }
 
