@@ -1,9 +1,10 @@
+import AxeBuilder from "@axe-core/playwright";
 import { test, expect, type Page } from "@playwright/test";
 
 import { dismissToasts } from "./helpers";
 
-// Start page v20 (docs/design/startseite-v20/SPEC.md). Sections fed by aggregates (BON trial card, results band)
-// drop below MIN_GROUP, so their tests skip on a database without enough votes instead of failing.
+// Start page v20 (docs/design/startseite-v20/SPEC.md). Runs against the e2e seed: it carries invented votes and BON
+// games above MIN_GROUP, so the aggregate sections (BON trial card, results band) are always there.
 const searchField = (page: Page) => page.getByRole("combobox", { name: "Wort suchen" });
 const readyIslands = (page: Page) => expect(page.locator("astro-island[ssr]")).toHaveCount(0);
 
@@ -75,10 +76,6 @@ test.describe("Startseite v20 (/)", () => {
 
   test("Reiter „Umfrage-Ergebnisse“ per Tastatur", async ({ page }) => {
     await hydrate(page);
-    test.skip(
-      (await page.getByRole("tablist", { name: "Umfrage-Ergebnisse" }).count()) === 0,
-      "results band drops below MIN_GROUP",
-    );
     await tabsByKeyboard(page, "Umfrage-Ergebnisse");
   });
 
@@ -96,7 +93,7 @@ test.describe("Startseite v20 (/)", () => {
     test.skip(isMobile, "no hardware keyboard");
     await hydrate(page);
     const trial = page.locator(".c-home-bon .trial");
-    test.skip((await trial.count()) === 0, "no BON card without stats");
+    await expect(trial).toHaveCount(1);
     await trial
       .getByRole("button", { name: /Ja, Berlinerisch|Nee, erfunden/ })
       .first()
@@ -182,6 +179,20 @@ test.describe("Startseite v20 (/)", () => {
     }
   }
 
-  // shortcut: @axe-core/playwright is not installed, so the axe run is skipped; roles are asserted above.
-  test.skip("axe ohne Verstöße", () => {});
+  for (const [width, colorScheme] of [
+    [1280, "light"],
+    [1280, "dark"],
+    [390, "light"],
+    [390, "dark"],
+  ] as const) {
+    test(`axe ohne Verstöße ${width}px ${colorScheme}`, async ({ page }) => {
+      await page.setViewportSize({ height: 900, width });
+      await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
+      await hydrate(page);
+      const { violations } = await new AxeBuilder({ page }).include("main").analyze();
+      expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(" | ")}`)).toEqual(
+        [],
+      );
+    });
+  }
 });

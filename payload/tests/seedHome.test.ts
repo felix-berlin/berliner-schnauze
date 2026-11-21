@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { seedHome } from "../src/seed/home";
+import { seedHome } from "../src/seed/homeSeed";
 import { getTestPayload } from "./helpers/payload";
 
 const ALL = ["intro", "knowledge", "soundRules", "faq", "aboutText", "tryWords", "browseLinks"];
