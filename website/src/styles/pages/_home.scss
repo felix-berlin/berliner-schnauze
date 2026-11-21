@@ -47,6 +47,9 @@
   .o-home-section[data-variant="stage"] {
     position: relative; // parent of the IPA field
     isolation: isolate;
+    // Isolation traps the search list's z-index inside the stage; without this the next band (a later sibling with
+    // its own clip-path context) paints over the list.
+    z-index: var(--z-raised);
     padding-block: calc(var(--space-16) + var(--space-2)) var(--space-16);
     clip-path: none;
     box-shadow: none;
