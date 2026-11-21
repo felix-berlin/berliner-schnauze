@@ -63,6 +63,8 @@ const typical = TYPICAL.filter((lemma) => linkable[lemma]);
                   <span class="sound">
                     <s aria-hidden="true">{r.standard}</s>
                     <b>{r.berlin}</b>
+                    {/* The struck form is decoration; screen readers get the pairing as text. */}
+                    <span class="u-sr-only">{` statt ${r.standard}`}</span>
                   </span>
                   {(r.example || r.rule) && (
                     <span class="example">

@@ -83,6 +83,9 @@ describe("BerlinerischArticle.astro", () => {
     expect(html).toContain("Berlinerisch auf einen Blick");
     expect(html.match(/<li class="rule">/g)).toHaveLength(6);
     expect(html.match(/<s aria-hidden="true">/g)).toHaveLength(6);
+    // Screen readers get the pairing as text: the struck form is decoration only.
+    expect(html.match(/<span class="u-sr-only"> statt \w\w<\/span>/g)).toHaveLength(6);
+    expect(html).toMatch(/<b>ab<\/b>\s*<span class="u-sr-only"> statt aa<\/span>/);
     expect(html).toContain('<s aria-hidden="true">aa</s>');
     expect(html).toContain("<b>ab</b>");
     expect(html).toContain("<i>ab cd</i>");
