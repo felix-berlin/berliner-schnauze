@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.14.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.14.0...v4.14.1) (2026-11-21)
+
+
+### Bug Fixes
+
+* **home:** keep the search list above the band below the stage ([6bb506c](https://github.com/felix-berlin/berliner-schnauze/commit/6bb506cd1cdf7f834989b86669f9f2e59f647372))
+
 # [4.14.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.13.0...v4.14.0) (2026-11-21)
 
 
