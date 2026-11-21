@@ -1,7 +1,8 @@
 @layer base {
   // Colour values live in the tokens (src/styles/tokens); light-dark() follows this switch.
+  // "light dark" is the no-JS default (system scheme); SetColorMode writes the stored choice inline.
   html {
-    color-scheme: light;
+    color-scheme: light dark;
 
     &[class~="dark"] {
       color-scheme: dark;

@@ -403,3 +403,18 @@ describe("style layer contract", () => {
     expect(legacyFiles.filter((p) => !existsSync(join(website, p)))).toEqual([]);
   });
 });
+
+// Modern web guidance alignment (plan 2026-11-21): document-level colour scheme.
+describe("colour scheme contract", () => {
+  it("declares meta color-scheme 'light dark' in the head", () => {
+    expect(read(join(src, "components/BaseHead.astro"))).toMatch(
+      /<meta[^>]*name=['"]color-scheme['"][^>]*content=['"]light dark['"]|<meta[^>]*content=['"]light dark['"][^>]*name=['"]color-scheme['"]/,
+    );
+  });
+
+  it("keeps 'light dark' as the root default so the system scheme applies without JS", () => {
+    const colors = read(join(src, "styles/base/_colors.scss"));
+    expect(colors).toMatch(/color-scheme:\s*light dark/);
+    expect(colors).not.toMatch(/color-scheme:\s*light;/);
+  });
+});
