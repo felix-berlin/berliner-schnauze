@@ -74,7 +74,8 @@ Measured today (273 style files): 384 semantic colour references against 363 dir
 - Name = token path joined with `-`: `color.surface.paper` → `--color-surface-paper`.
 - Themed value: `light-dark(<light>, <dark>)`; one plain value when both agree. Aliases become `var(--…)`, never inlined.
 - `light-dark()` takes colours only. A themed shadow keeps one geometry for both themes and gets `light-dark()` per colour inside it (`0 0 12px 0 light-dark(…, …)`); a shadow whose geometry differs between themes is a build error.
-- Theme switch stays as today: `html[class~="dark"]` sets `color-scheme: dark`, otherwise `light`. The blocking inline script in `SetColorMode.astro` resolves the stored choice or the system setting to that class before first paint, so `light-dark()` never follows the system against the stored choice.
+- Theme switch: the root default is `color-scheme: light dark` (the system scheme when scripts are blocked; `<meta name="color-scheme" content="light dark">` in `BaseHead.astro` themes the canvas before CSS loads), `html[class~="dark"]` sets `dark`. The blocking inline script in `SetColorMode.astro` resolves the stored choice or the system setting to that class and writes `color-scheme` inline before first paint, so `light-dark()` never follows the system against the stored choice. While nothing is stored it follows system changes (`change` listener); a stored choice is never overwritten. `theme-color` values live once in `src/utils/themeColors.ts`.
+- Token format in the generated file: opaque colours as hex, alpha colours as `rgb(r g b / a%)`, colours that are not 8-bit exact as `color(srgb …)` (deliberate, tested in `build-tokens.test.ts`). No `oklch`: lightness adjustment in `oklch` has no reliable gamut mapping yet, and fixed brand values gain nothing from it.
 - The generated file is committed; a test fails when it differs from a fresh build. There is no `predev`/`prebuild` step.
 - No colour math in components: `color-mix()` is not allowed there. A wash is a semantic token with `alpha`.
 
@@ -162,7 +163,7 @@ Order, declared once inline in the document head (`BaseHead.astro`) so no chunk 
 - `stylelint.legacy-files.mjs` lists the legacy files. It only shrinks; lint strictness and the contract test both read it. Migrated files stay at their path.
 - The 7 existing `!important` declarations are checked one by one in wave 1, because importance reverses layer order.
 - A file leaves `legacy` only by being migrated completely. When `legacy` is empty, the layer, the alias file and the old Sass colour variables are deleted.
-- `!important` only in the reduced-motion reset in `base`; migrated files have none.
+- `!important` only in the reduced-motion reset in `base`; migrated files have none. That reset is a safety net for the legacy files and stays until the legacy list is empty (the modern-web-guidance `motion` guide advises against a global `0.01ms` reset). Migrated files do not rely on it: animations and spatial transitions sit inside `feature("motion")` (`prefers-reduced-motion: no-preference`), colour and opacity transitions stay on; a contract test enforces this.
 
 ## 7. Components: `@scope` instead of BEM
 
@@ -235,19 +236,23 @@ Logical properties only; `:has()` instead of mirrored state classes; `gap` inste
 
 Newly available features (Baseline 2025/2026). Only `@scope` and Popover are load-bearing and inside the floor of §9; every other "adopt" is an enhancement whose fallback is named and must keep working:
 
-| Feature                              | Decision                                                                                                                                                                            |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@scope`                             | Adopt, load-bearing                                                                                                                                                                 |
-| Popover (`popover`, `popovertarget`) | Adopt, load-bearing: dropdown, comment menu, tooltip                                                                                                                                |
-| Custom highlights                    | Planned, with the home/search redesign (not in this migration, ruling R16): search-term highlighting to replace `v-html` in `SingleWord.vue`; no support = no highlight             |
-| `field-sizing: content`              | Enhancement for comment and suggest textareas; fallback fixed rows                                                                                                                  |
-| `::details-content`                  | Enhancement for the accordion animation; fallback opens without animation                                                                                                           |
-| `content-visibility: auto`           | Not adopted on the word page: it blocks Astro `client:visible` hydration in WebKit (the skipped subtree's placeholder height moves islands out of view after a programmatic scroll) |
-| `scrollbar-color`                    | Add next to the existing `::-webkit-scrollbar` rules, which stay until Safari below 26.2 leaves the floor                                                                           |
-| `:active-view-transition-type()`     | Adopt in the BON game instead of `html[data-vt]`; fallback no morph                                                                                                                 |
-| Container style queries              | Not for variants; allowed where the fallback is the default look                                                                                                                    |
-| Invoker commands                     | Not yet (outside the Safari floor)                                                                                                                                                  |
-| `contrast-color()`                   | No: the design fixes `color.text.on-accent`                                                                                                                                         |
+| Feature                              | Decision                                                                                                                                                                                       |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@scope`                             | Adopt, load-bearing                                                                                                                                                                            |
+| Popover (`popover`, `popovertarget`) | Adopt, load-bearing: dropdown, comment menu, tooltip                                                                                                                                           |
+| Custom highlights                    | Planned, with the home/search redesign (not in this migration, ruling R16): search-term highlighting to replace `v-html` in `SingleWord.vue`; no support = no highlight                        |
+| `field-sizing: content`              | Enhancement for comment and suggest textareas; fallback fixed rows                                                                                                                             |
+| `::details-content`                  | Enhancement for the accordion animation; fallback opens without animation                                                                                                                      |
+| `content-visibility: auto`           | Not adopted on the word page: it blocks Astro `client:visible` hydration in WebKit (the skipped subtree's placeholder height moves islands out of view after a programmatic scroll)            |
+| `scrollbar-color`                    | Add next to the existing `::-webkit-scrollbar` rules, which stay until Safari below 26.2 leaves the floor                                                                                      |
+| `:active-view-transition-type()`     | Adopt in the BON game instead of `html[data-vt]`; fallback no morph                                                                                                                            |
+| Container style queries              | Not for variants; allowed where the fallback is the default look                                                                                                                               |
+| Invoker commands                     | Not yet (outside the Safari floor)                                                                                                                                                             |
+| `accent-color`                       | Adopt on `html` (`--color-accent-solid`): native checkbox, radio, range, progress; Safari indicator contrast to be checked in both schemes                                                     |
+| `forced-colors`                      | Adopt, scoped (`base/_forced-colors.scss`): hover and selected states drawn with `box-shadow` get an `outline` in `Highlight`; no `prefers-contrast` block until a low-contrast pair needs one |
+| `<meta name="text-scale">`           | Enhancement (Chromium only): OS text size scales `rem`; never set `font-size` on `html`/`:root`; no px font sizes in migrated files                                                            |
+| `scrollbar-width`                    | Only `auto`; `none` needs a `scroll alternative:` comment (focusable items scroll into view)                                                                                                   |
+| `contrast-color()`                   | No: the design fixes `color.text.on-accent`                                                                                                                                                    |
 
 ## 9. Browser floor
 

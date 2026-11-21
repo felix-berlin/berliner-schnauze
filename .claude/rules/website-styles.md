@@ -25,9 +25,10 @@ Full design and tables: `docs/superpowers/specs/2026-11-13-design-system-design.
 - Colour: only `var(--color-<semantic>)` / `var(--shadow-…)`. No hex, named colour, `rgb()`/`hsl()`/`color-mix()`, no primitive, no legacy alias (`--orange-600`, `--blue-*`, `--surface-*` ...).
 - Font size, spacing, radius, shadow, z-index, duration, font family: tokens. Value between two steps: nearer step; exactly in the middle: the smaller.
 - A colour without a semantic token: stop and report it. No primitive, no invented token, no `--_` property holding a colour.
-- No dark-mode code: `light-dark()` tokens follow `color-scheme`. No `dark-mode-class` mixin, no `.dark` selector. Only exceptions: the `color-scheme` switch in `base/_colors.scss` and `html[class~="dark"] .c-select { background-blend-mode }` in `base/_inputs.scss`.
+- No dark-mode code: `light-dark()` tokens follow `color-scheme`. No `dark-mode-class` mixin, no `.dark` selector. `base/_colors.scss` keeps `color-scheme: light dark` as the root default (system scheme without JS); `SetColorMode` writes the stored choice inline. Only exceptions: the `color-scheme` switch in `base/_colors.scss` and `html[class~="dark"] .c-select { background-blend-mode }` in `base/_inputs.scss`.
 - Logical properties only (`inline-size`, `margin-block`, `inset-inline`); no `@media` (viewport queries only via `mx.breakpoint` in `objects`), no `@import`, `@extend`, no Sass variables or `#{}` in declaration values.
-- Per-line Stylelint disables need a reason in the same comment. No `!important` outside the reduced-motion reset in `base`.
+- Per-line Stylelint disables need a reason in the same comment. No `!important` outside the reduced-motion reset in `base` (a safety net for legacy files, removed once the legacy list is empty). Animations and spatial transitions (`transform`, `translate`, `scale`, `rotate`) go inside `@include butler-mx.feature("motion")`; colour and opacity transitions stay unguarded.
+- A hover, selected or current state drawn only with `box-shadow` or a gradient needs an `outline` fallback in `base/_forced-colors.scss` (forced colors removes both). Scrollbars: `scrollbar-width` stays `auto`; `none` only with a `// scroll alternative: …` comment on the line before. No `px` font sizes (`rem`/`em`).
 
 ## Layers
 
