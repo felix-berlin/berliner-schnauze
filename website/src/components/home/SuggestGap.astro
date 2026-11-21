@@ -1,6 +1,7 @@
 ---
 import type { HomeData } from "@services/payload/home.ts";
 
+import SoonButton from "@components/home/SoonButton.vue";
 import BerlinerBaer from "@components/kalle/BerlinerBaer.vue";
 import Plus from "virtual:icons/lucide/plus";
 
@@ -39,14 +40,11 @@ const recordHref = gap.randomSlug && `/wort/${gap.randomSlug}`;
           <Plus aria-hidden="true" />
           Wort vorschlagen
         </a>
-        {
-          recordHref && (
-            <a class="c-button" data-variant="secondary lg center-icon soft" href={recordHref}>
-              <Plus aria-hidden="true" />
-              Aussprache einsprechen
-            </a>
-          )
-        }
+        {/* TODO(startseite): no recording route yet; a tooltip button until it exists. */}
+        <SoonButton client:visible>
+          <Plus aria-hidden="true" />
+          Aussprache einsprechen
+        </SoonButton>
       </div>
     </div>
   </div>

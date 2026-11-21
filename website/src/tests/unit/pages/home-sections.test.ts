@@ -193,15 +193,16 @@ describe("SuggestGap.astro", () => {
     expect(html).toContain("<h2>Fehlt dir een Wort?</h2>");
     expect(html).toMatch(/data-state="zeigen"/);
     expect(html).toMatch(/<b>1\.312<\/b>\s*Wörtern fehlt noch eene Hörprobe\./);
-    expect(html.match(/href="\/wort\/ohne-ton"/g)).toHaveLength(2);
+    // Only the hint links to a word; the recording button is a tooltip button until the feature exists.
+    expect(html.match(/href="\/wort\/ohne-ton"/g)).toHaveLength(1);
     expect(html).toContain('href="/wort-vorschlagen"');
     expect(html).toContain("Aussprache einsprechen");
   });
 
-  it("leaves out the hint and the recording button without a word to record", async () => {
+  it("leaves out the hint but keeps the recording button without a word to record", async () => {
     const html = await render({ gap: { wordsWithoutAudio: 0 } });
     expect(html).not.toContain("Hörprobe");
-    expect(html).not.toContain("Aussprache einsprechen");
+    expect(html).toContain("Aussprache einsprechen");
     expect(html).toContain('href="/wort-vorschlagen"');
   });
 });
