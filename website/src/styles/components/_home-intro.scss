@@ -1,0 +1,72 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Start page intro (docs/design/startseite-v20/SPEC.md §4.5, §5 item 1): the page's only h1 and the
+// sentence with the word links. Parts: h1, p (a = word links).
+@include mx.component("home-intro") {
+  :scope {
+    --_track: 1px; // h1 letter spacing (SPEC §4.5)
+    --focus-ring-color: var(--color-accent-active);
+
+    margin-block-end: var(--space-8);
+    container: home-intro / inline-size;
+  }
+
+  h1 {
+    max-inline-size: 62ch;
+    margin: 0 0 var(--space-2);
+    font-family: var(--font-condensed);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-black);
+    text-transform: uppercase;
+    letter-spacing: var(--_track);
+    color: var(--color-text-strong);
+  }
+
+  p {
+    max-inline-size: 62ch;
+    margin: 0;
+    font-size: var(--font-size-lg);
+    line-height: 1.5;
+    color: var(--color-text-body);
+  }
+
+  a {
+    color: var(--color-text-strong);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      text-decoration-color var(--duration-fast) var(--ease-standard);
+
+    &:focus-visible {
+      outline-offset: 3px;
+    }
+
+    @include butler-mx.hover {
+      color: var(--color-text-accent);
+      text-decoration-color: var(--color-accent-active);
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  // From 728px container (= the 808px viewport minus the 40px tablet padding).
+  @container home-intro (inline-size >= 45.5rem) {
+    h1 {
+      font-size: var(--font-size-3xl);
+    }
+
+    p {
+      font-size: var(--font-size-xl);
+    }
+  }
+
+  @include butler-mx.feature("motion") {
+    :scope:not([data-reveal="wait"]) {
+      h1,
+      p {
+        animation: home-up var(--duration-slow) both;
+      }
+    }
+  }
+}

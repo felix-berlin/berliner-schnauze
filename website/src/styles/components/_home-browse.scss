@@ -1,0 +1,124 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Start page chips below the search (docs/design/startseite-v20/SPEC.md §5 item 8, §15, §17):
+// .try ("Probier mal:" word chips) and .links ("Oder stöber mal:" chips with an icon). Below the
+// tablet width .links is one swipeable row without a scrollbar that runs to the screen edge.
+@include mx.component("home-browse") {
+  :scope {
+    --_chip: 2.25rem; // 36px chip height, WCAG 2.5.8 exception with 8px spacing (SPEC §17)
+    --_bleed: calc(-1 * var(--space-6)); // runs into the 24px page padding (SPEC §5 item 8)
+    --_fade-size: var(--space-8);
+    --focus-ring-color: var(--color-accent-active);
+
+    container: home-browse / inline-size;
+  }
+
+  .try,
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+    margin: var(--space-3) 0 0;
+    font-size: var(--font-size-md);
+    color: var(--t3);
+
+    a {
+      display: inline-flex;
+      gap: var(--space-2);
+      align-items: center;
+      min-block-size: var(--_chip);
+      border-radius: var(--radius-pill);
+      color: var(--color-text-strong);
+      text-decoration: none;
+      transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        border-color var(--duration-fast) var(--ease-standard),
+        scale var(--duration-fast) var(--ease-standard);
+
+      &:focus-visible {
+        outline-offset: 3px;
+      }
+
+      &:active {
+        scale: 0.96;
+      }
+    }
+  }
+
+  .try a {
+    padding: var(--space-1) var(--space-3);
+    background: var(--card2);
+
+    @include butler-mx.hover {
+      background: var(--card3);
+    }
+  }
+
+  .links {
+    // Mobile: one row, swiped natively, snapping to the chips.
+    flex-wrap: nowrap;
+    margin-inline-end: var(--_bleed);
+    padding-inline-end: var(--space-6);
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: var(--_fade-size);
+    scrollbar-width: none;
+
+    > * {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+    }
+
+    // The hidden scrollbar needs another cue: fade the edges that have more chips beyond them.
+    // Without scroll-driven animations the chip cut off at the screen edge is the cue.
+    @supports (animation-timeline: scroll()) {
+      mask:
+        linear-gradient(currentcolor, currentcolor) no-clip subtract,
+        linear-gradient(to right, currentcolor, transparent) 0 0 / var(--home-browse-fade-start)
+          100% no-repeat no-clip,
+        linear-gradient(to right, transparent, currentcolor) 100% 0 / var(--home-browse-fade-end)
+          100% no-repeat no-clip;
+      animation:
+        home-browse-fade-start linear both,
+        home-browse-fade-end linear both;
+      animation-timeline: scroll(self inline);
+      animation-range:
+        0 var(--_fade-size),
+        calc(100% - var(--_fade-size)) 100%;
+    }
+
+    a {
+      padding: var(--space-1) var(--space-3);
+      border: 1px solid var(--line);
+
+      svg {
+        flex: 0 0 auto;
+        color: var(--t3);
+        transition: color var(--duration-fast) var(--ease-standard);
+      }
+
+      @include butler-mx.hover {
+        border-color: var(--color-accent-active);
+        background: var(--card2);
+
+        svg {
+          color: var(--color-accent-active);
+        }
+      }
+    }
+  }
+
+  // From 728px container (= the 808px viewport minus the 40px tablet padding): chips wrap.
+  @container home-browse (inline-size >= 45.5rem) {
+    .links {
+      flex-wrap: wrap;
+      margin-inline-end: 0;
+      padding-inline-end: 0;
+      overflow-x: visible;
+      mask: none;
+      animation: none;
+    }
+  }
+}

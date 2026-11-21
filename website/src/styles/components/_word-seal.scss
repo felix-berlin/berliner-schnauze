@@ -1,0 +1,132 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Word seal (docs/design/startseite-v20/SPEC.md §5.1/§5.2): a morse ring of the word around a play
+// button, or the initial letter without audio. Shared with the word page.
+// Parts: .ring of i[data-sym="d"|"l"] (data-state "on" | "now" while playing), .play, .initial.
+// State: root data-state="playing". Public: --word-seal-size (default 84px; all parts scale with it).
+@include mx.component("word-seal") {
+  :scope {
+    --_size: var(--word-seal-size, 5.25rem); // 84px, the mobile and word page seal; no size token
+    // Marks and button as fractions of the seal (mock: 120px -> dot 8, dash 18x6, button 60).
+    --_dot: calc(var(--_size) / 15);
+    --_dash: calc(var(--_size) * 0.15);
+    --_dash-thick: calc(var(--_size) / 20);
+    --_glow: 0 0 0 3px var(--color-focus-halo); // "Orange 35 %" of the spec; the nearest semantic tint
+    --_spin: 60s; // one turn per minute (SPEC §16), choreography, not a duration token
+    --_pop: 350ms;
+    --_pop-start: 500ms;
+    --_pop-step: 40ms;
+    --_pop-ease: cubic-bezier(0.3, 1.5, 0.6, 1);
+
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    inline-size: var(--_size);
+    block-size: var(--_size);
+  }
+
+  .ring {
+    position: absolute;
+    inset: 0;
+
+    @include butler-mx.feature("motion") {
+      animation: word-seal-spin var(--_spin) linear infinite;
+    }
+  }
+
+  :scope[data-state="playing"] .ring {
+    animation-play-state: paused;
+  }
+
+  i {
+    position: absolute;
+    display: block;
+    translate: -50% -50%;
+    background: var(--color-accent-active);
+    transition:
+      opacity var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-standard);
+
+    @include butler-mx.feature("motion") {
+      animation: word-seal-pop var(--_pop) var(--_pop-ease) both;
+      // --n: the mark's index, set inline (sibling-index() is not Baseline widely available yet).
+      animation-delay: calc(var(--_pop-start) + var(--n, 0) * var(--_pop-step));
+    }
+
+    &[data-sym="d"] {
+      inline-size: var(--_dot);
+      block-size: var(--_dot);
+      border-radius: var(--radius-pill);
+    }
+
+    &[data-sym="l"] {
+      inline-size: var(--_dash);
+      block-size: var(--_dash-thick);
+      border-radius: var(--radius-xs);
+    }
+  }
+
+  // Playing: all marks dim, the played ones light up, the current one glows (no glow on reduced motion).
+  :scope[data-state="playing"] i {
+    opacity: 0.25;
+
+    &[data-state] {
+      opacity: 1;
+    }
+
+    &[data-state="now"] {
+      @include butler-mx.feature("motion") {
+        box-shadow: var(--_glow);
+      }
+    }
+  }
+
+  .play {
+    --focus-ring-color: var(--color-accent-active);
+
+    display: grid;
+    place-items: center;
+    inline-size: calc(var(--_size) / 2);
+    block-size: calc(var(--_size) / 2);
+    min-inline-size: var(--size-tap-target);
+    min-block-size: var(--size-tap-target);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent-solid);
+    color: var(--color-text-on-accent);
+    cursor: pointer;
+    transition: scale var(--duration-fast) var(--ease-standard);
+
+    &:focus-visible {
+      outline-offset: 3px;
+    }
+
+    svg {
+      inline-size: 40%;
+      block-size: 40%;
+      fill: currentcolor;
+    }
+
+    // TODO(startseite): hover --orange-700 needs a semantic token; until then only the scale.
+    @include butler-mx.hover {
+      scale: 1.06;
+    }
+
+    &:active {
+      scale: 0.94;
+    }
+  }
+
+  .initial {
+    --_initial: calc(var(--_size) * 0.4); // 3rem at 120px, 2.1rem at 84px (SPEC §5.2)
+
+    font-family: var(--font-condensed);
+    font-size: var(--_initial);
+    font-weight: var(--font-weight-black);
+    line-height: 1;
+    color: var(--color-text-strong);
+  }
+}

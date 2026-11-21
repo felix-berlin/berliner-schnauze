@@ -1,0 +1,255 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Word of the day on the start page (docs/design/startseite-v20/SPEC.md §5, §16, §19).
+// Parts: .ipa (outline behind everything), .eye, .lemma-row (.lemma of .letter, .art, the word seal),
+// .meaning, .example, .no-audio, .go. The inline --i (letter index) and --chars (lemma length) feed
+// the stagger and the fitted lemma size.
+// Reveal: the load animation runs unless the root has data-reveal="wait"; the page's observer
+// removes that attribute on first view.
+@include mx.component("home-stage") {
+  :scope {
+    // Mobile values (< 808px viewport); the desktop ones follow in the container query below.
+    --_lemma: 5.5rem; // SPEC §4.5, far above the type scale
+    --_meaning: var(--font-size-3xl);
+    --_ipa: 8rem; // SPEC §5, outline size
+    --_ipa-opacity: 0.07;
+    --_seal: 5.25rem; // 84px seal (SPEC §5.1)
+    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
+    --_quote: 0.9375rem; // 15px translation and pill text, between the sm and md steps
+    --_track: 2px; // eyebrow letter spacing
+    --_rise: 700ms;
+    --_rise-step: 70ms;
+    --_rise-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --_up: 600ms;
+    --_up-start: 350ms;
+    --_up-meaning: 400ms;
+    --_up-example: 500ms;
+    --_fade: 1.4s;
+    --_fade-start: 200ms;
+    --_drift: 18s;
+    --_drift-start: 1.6s;
+    --focus-ring-color: var(--color-accent-active);
+
+    position: relative;
+    isolation: isolate;
+    container: home-stage / inline-size;
+  }
+
+  .ipa {
+    --_ipa-end: -0.06em; // cut off at the right edge (mock)
+
+    position: absolute;
+    inset-block: var(--space-4) auto;
+    inset-inline-end: var(--_ipa-end);
+    z-index: var(--z-below);
+    font-size: var(--_ipa);
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--color-text-strong);
+    opacity: var(--_ipa-opacity);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .eye {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+    margin: 0 0 var(--space-2);
+    font-size: var(--_small);
+    text-transform: uppercase;
+    letter-spacing: var(--_track);
+    color: var(--t3);
+
+    b {
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-accent);
+    }
+  }
+
+  .lemma-row {
+    --word-seal-size: var(--_seal);
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  .lemma {
+    // Long words shrink to fit the row (SPEC §19: 3.5rem floor), short ones keep the full size.
+    --_fit: clamp(3.5rem, 166cqi / var(--chars, 1), var(--_lemma));
+
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--_fit);
+    font-weight: var(--font-weight-bold);
+    line-height: 0.9;
+    color: var(--color-text-accent);
+  }
+
+  .letter {
+    display: inline-block;
+    white-space: pre;
+  }
+
+  .art {
+    font-size: var(--font-size-xl);
+    color: var(--t3);
+  }
+
+  .meaning {
+    margin: var(--space-5) 0 0;
+    font-size: var(--_meaning);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1;
+    color: var(--color-text-strong);
+  }
+
+  .example {
+    max-inline-size: 46ch;
+    margin: var(--space-4) 0 0;
+    font-size: var(--font-size-xl);
+    font-style: italic;
+    color: var(--color-text-body);
+
+    span {
+      display: block;
+      margin-block-start: var(--space-1);
+      font-size: var(--_quote);
+      font-style: normal;
+      color: var(--t3);
+    }
+  }
+
+  .no-audio {
+    display: inline-flex;
+    gap: var(--space-2);
+    align-items: center;
+    min-block-size: var(--size-tap-target);
+    margin-block-start: var(--space-5);
+    margin-inline-end: var(--space-6);
+    padding: var(--space-2) var(--space-4);
+    border: 1.5px dashed var(--t3);
+    border-radius: var(--radius-pill);
+    font-size: var(--_quote);
+    color: var(--t3);
+    text-decoration: none;
+    transition:
+      border-color var(--duration-fast) var(--ease-standard),
+      background-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
+
+    b {
+      color: var(--color-text-strong);
+    }
+
+    svg {
+      flex: 0 0 auto;
+      inline-size: 18px;
+      block-size: 18px;
+      color: var(--t3);
+      transition: color var(--duration-fast) var(--ease-standard);
+    }
+
+    @include butler-mx.hover {
+      border-style: solid;
+      border-color: var(--color-accent-active);
+      background: var(--card2);
+      color: var(--color-text-strong);
+
+      svg {
+        color: var(--color-accent-active);
+      }
+    }
+  }
+
+  .go {
+    display: inline-flex;
+    gap: var(--space-2);
+    align-items: center;
+    margin-block-start: var(--space-6);
+    padding-block-end: var(--space-1);
+    border-block-end: 2px solid var(--color-accent-active);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+    text-decoration: none;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard);
+
+    svg {
+      inline-size: 18px;
+      block-size: 18px;
+      transition: translate var(--duration-fast) var(--ease-standard);
+    }
+
+    @include butler-mx.hover {
+      border-block-end-color: var(--color-border-accent);
+      color: var(--color-text-accent);
+
+      svg {
+        translate: 4px 0;
+      }
+    }
+  }
+
+  a:focus-visible {
+    outline-offset: 3px;
+  }
+
+  // From 728px container (= the 808px viewport minus the 40px tablet padding).
+  @container home-stage (inline-size >= 45.5rem) {
+    .ipa,
+    .lemma-row,
+    .meaning {
+      --_lemma: 10rem;
+      --_meaning: 2.625rem; // SPEC §4.5, no token above 2.25rem
+      --_ipa: 26rem;
+      --_ipa-opacity: 0.1;
+      --_seal: 7.5rem; // 120px seal
+    }
+
+    .ipa {
+      --_ipa-bottom: -0.2em; // cut off below the stage (SPEC §5)
+
+      inset-block: auto var(--_ipa-bottom);
+    }
+  }
+
+  // Load animation (mock h19-*), only with motion allowed and once the page releases the reveal.
+  @include butler-mx.feature("motion") {
+    :scope:not([data-reveal="wait"]) {
+      .letter {
+        animation: home-rise var(--_rise) var(--_rise-ease) both;
+        // --i set inline: sibling-index() is not Baseline widely available yet
+        animation-delay: calc(var(--i, 0) * var(--_rise-step));
+      }
+
+      .art,
+      .meaning,
+      .example,
+      .go {
+        animation: home-up var(--_up) var(--_up-start) both;
+      }
+
+      .meaning {
+        animation-delay: var(--_up-meaning);
+      }
+
+      .example {
+        animation-delay: var(--_up-example);
+      }
+
+      .ipa {
+        animation:
+          home-fade var(--_fade) var(--_fade-start) both,
+          home-drift var(--_drift) var(--_drift-start) ease-in-out infinite alternate;
+      }
+    }
+  }
+}

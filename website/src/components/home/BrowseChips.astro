@@ -1,0 +1,49 @@
+---
+import type { HomeData } from "@services/payload/home.ts";
+import Audio from "virtual:icons/lucide/volume-1";
+import Idiom from "virtual:icons/lucide/message-circle";
+import Short from "virtual:icons/lucide/move-horizontal";
+import Rhyme from "virtual:icons/lucide/music";
+import Random from "virtual:icons/lucide/rotate-cw";
+
+interface Props {
+  tryWords: HomeData["tryWords"];
+  browseLinks: HomeData["browseLinks"];
+}
+
+const { tryWords, browseLinks } = Astro.props;
+const icons = { audio: Audio, idiom: Idiom, random: Random, rhyme: Rhyme, short: Short };
+---
+
+{
+  (tryWords.length > 0 || browseLinks.length > 0) && (
+    <div class="c-home-browse">
+      {tryWords.length > 0 && (
+        <p class="try">
+          Probier mal:
+          {tryWords.map((w) => (
+            <a href={`/wort/${w.slug}`}>{w.lemma}</a>
+          ))}
+        </p>
+      )}
+      {browseLinks.length > 0 && (
+        <p class="links">
+          <span>Oder stöber mal:</span>
+          {browseLinks.map((link) => {
+            const Icon = icons[link.icon];
+            return (
+              <a href={link.href}>
+                <Icon width="16" height="16" aria-hidden="true" />
+                {link.label}
+              </a>
+            );
+          })}
+        </p>
+      )}
+    </div>
+  )
+}
+
+<style lang="scss" is:global>
+  @use "@styles/components/home-browse";
+</style>

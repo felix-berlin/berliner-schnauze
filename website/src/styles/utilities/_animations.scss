@@ -177,4 +177,65 @@
       translate: 0 100%;
     }
   }
+
+  // Word seal: the morse ring turns, its marks pop in (word-seal).
+  @keyframes word-seal-spin {
+    to {
+      rotate: 360deg;
+    }
+  }
+  @keyframes word-seal-pop {
+    from {
+      scale: 0;
+    }
+  }
+
+  // Start page stage (home-stage, home-intro; mock h19-*): letters rise, text moves up, the IPA
+  // outline fades in and drifts.
+  @keyframes home-rise {
+    from {
+      opacity: 0;
+      translate: 0 45%;
+    }
+  }
+  @keyframes home-up {
+    from {
+      opacity: 0;
+      translate: 0 14px;
+    }
+  }
+  @keyframes home-fade {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes home-drift {
+    to {
+      translate: -2.5% 0;
+    }
+  }
+
+  // Start page browse chips: edge fades driven by the row's own scroll (home-browse). Registered so
+  // the mask band sizes interpolate.
+  @property --home-browse-fade-start {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0;
+  }
+  @property --home-browse-fade-end {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0;
+  }
+
+  @keyframes home-browse-fade-start {
+    to {
+      --home-browse-fade-start: var(--_fade-size);
+    }
+  }
+  @keyframes home-browse-fade-end {
+    from {
+      --home-browse-fade-end: var(--_fade-size);
+    }
+  }
 }
