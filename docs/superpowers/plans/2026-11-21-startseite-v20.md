@@ -37,32 +37,34 @@
 
 ## Dateistruktur
 
-| Datei | Verantwortung |
-|---|---|
-| `docs/design/startseite-v20/**` | entpackter Handoff (Referenz, Fonts, Punktraster) |
-| `website/tokens/semantic.{light,dark}.tokens.json` | neue Tokens |
-| `website/public/fonts/fira-sans-extra-condensed-*.woff2`, `website/src/styles/base/_fonts-home.scss` | Schrift |
-| `payload/src/collections/{Words,Themen,Posts}.ts`, `payload/src/globals/Home.ts`, `payload/src/migrations/*` | Felder |
-| `payload/src/lib/homeStats.ts` (+ Export `payload-app/home-stats`) | reine Berechnung: Morse, Altersgruppen, Bezirks-/Altersaggregate |
-| `payload/src/lib/homeStatsLoad.ts` | Loader: DB → Aggregate |
-| `payload/src/seed/home.ts`, `payload/src/seed/homeContent.ts` | Seed der Texte |
-| `website/src/pages/api/home-stats.ts` | gecachter Endpunkt |
-| `website/src/services/payload/home.ts` | `fetchHome()` |
-| `website/src/pages/index.astro` | Seite |
-| `website/src/components/home/*.{astro,vue}`, `website/src/components/{WordSeal,HomePoll}.vue` | Abschnitte |
-| `website/src/styles/components/_home-*.scss`, `_word-seal.scss`, `_home-poll.scss` | Styles |
-| `website/src/tests/unit/**`, `website/src/tests/e2e/home.spec.ts` | Tests |
+| Datei                                                                                                        | Verantwortung                                                    |
+| ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| `docs/design/startseite-v20/**`                                                                              | entpackter Handoff (Referenz, Fonts, Punktraster)                |
+| `website/tokens/semantic.{light,dark}.tokens.json`                                                           | neue Tokens                                                      |
+| `website/public/fonts/fira-sans-extra-condensed-*.woff2`, `website/src/styles/base/_fonts-home.scss`         | Schrift                                                          |
+| `payload/src/collections/{Words,Themen,Posts}.ts`, `payload/src/globals/Home.ts`, `payload/src/migrations/*` | Felder                                                           |
+| `payload/src/lib/homeStats.ts` (+ Export `payload-app/home-stats`)                                           | reine Berechnung: Morse, Altersgruppen, Bezirks-/Altersaggregate |
+| `payload/src/lib/homeStatsLoad.ts`                                                                           | Loader: DB → Aggregate                                           |
+| `payload/src/seed/home.ts`, `payload/src/seed/homeContent.ts`                                                | Seed der Texte                                                   |
+| `website/src/pages/api/home-stats.ts`                                                                        | gecachter Endpunkt                                               |
+| `website/src/services/payload/home.ts`                                                                       | `fetchHome()`                                                    |
+| `website/src/pages/index.astro`                                                                              | Seite                                                            |
+| `website/src/components/home/*.{astro,vue}`, `website/src/components/{WordSeal,HomePoll}.vue`                | Abschnitte                                                       |
+| `website/src/styles/components/_home-*.scss`, `_word-seal.scss`, `_home-poll.scss`                           | Styles                                                           |
+| `website/src/tests/unit/**`, `website/src/tests/e2e/home.spec.ts`                                            | Tests                                                            |
 
 ---
 
 ### Task 1: Handoff importieren, Tokens, Schrift
 
 **Files:**
+
 - Create: `docs/design/startseite-v20/` (Inhalt der ZIP außer `ds/`), `website/public/fonts/fira-sans-extra-condensed-{600,800,latin-ext-800}.woff2`, `website/src/styles/base/_fonts-home.scss`
 - Modify: `website/tokens/semantic.light.tokens.json`, `website/tokens/semantic.dark.tokens.json`, `website/src/styles/tokens/_tokens.generated.scss` (generiert), die Stelle, an der `base/` eingebunden wird (`website/src/styles/app.scss`)
 - Test: `website/src/tests/unit/styles/home-tokens.test.ts`
 
 **Interfaces:**
+
 - Produces: CSS-Variablen `--page, --card, --card2, --card3, --t3, --line, --d-bl, --d-ye, --d-gr, --ok` (Light/Dark), Band-Variablen `--band-dark-bg` (`#14191e`), Font-Familie `"Fira Sans Extra Condensed"` als `--font-condensed`.
 
 - [ ] **Step 1:** `unzip` der ZIP in ein leeres Verzeichnis, `design/`, `assets/`, `PROMPT.md`, `SPEC.md` nach `docs/design/startseite-v20/` kopieren (kein `ds/`, keine ZIP). Bestehende Änderungen in `website/tokens/*` (uncommitted, von Kalle) zuerst committen oder mitnehmen, nicht überschreiben.
@@ -75,11 +77,13 @@
 ### Task 2: Payload-Felder und Migration
 
 **Files:**
+
 - Modify: `payload/src/collections/Words.ts` (`ipa`), `Themen.ts` (`typischerSatz`), `Posts.ts` (`teaserZitat`, `teaserIpa`), `payload/src/globals/Home.ts`
 - Create: Migration über `pnpm cms:…` Skript laut `payload/CLAUDE.md` (Dateiname-Muster wie `20261113_…`), regenerierte Typen
 - Test: `payload/src/…` Config-Test, falls Projekt einen hat; sonst Migrationstest über `scripts/migration-dryrun.sh`
 
 **Interfaces:**
+
 - Produces: `Word.ipa?: string`, `Thema.typischerSatz?: string`, `Post.teaserZitat?: string`, `Post.teaserIpa?: string`; Global `home` zusätzlich: `intro` (textarea), `tryWords` (relationship → words, hasMany, max 4), `browseLinks` (array: `label`, `href`, `icon` select), `knowledge` (richText), `soundRules` (array ×6: `standard`, `berlin`, `example`, `rule`), `faq` (array: `question`, `answer` richText), `aboutText` (textarea). `facts` bleibt.
 
 - [ ] **Step 1:** Felder additiv hinzufügen (alle optional außer Pflichtfelder der Array-Zeilen); Admin-Beschreibungen auf Deutsch, `ipa` mit Hinweis „ohne eckige Klammern, IPA“.
@@ -90,10 +94,12 @@
 ### Task 3: `homeStats` reine Funktionen (TDD)
 
 **Files:**
+
 - Create: `payload/src/lib/homeStats.ts`, Export `"./home-stats": "./src/lib/homeStats.ts"` in `payload/package.json`
 - Test: `payload/src/lib/homeStats.test.ts` (Vitest, bestehendes Muster des Pakets; falls das Paket keinen Runner hat, Test unter `website/src/tests/unit/lib/homeStats.test.ts` mit Import `payload-app/home-stats`)
 
 **Interfaces (Produces):**
+
 ```ts
 export const MIN_GROUP = 10;
 export const MIN_WORD_VOTES = 30; // TODO(startseite)
@@ -104,9 +110,14 @@ export const AGE_GROUPS = ["u30", "30-49", "50-69", "70plus"] as const;
 export type AgeGroup = (typeof AGE_GROUPS)[number];
 export function ageGroup(age: (typeof import("./wordFeedback").AGES)[number]): AgeGroup;
 export type UsageCounts = { say: number; know: number; never: number };
-export function districtValue(counts: UsageCounts): number | null;       // say/total in %, gerundet; null wenn total < MIN_GROUP
-export function agePercents(byGroup: Record<AgeGroup, UsageCounts>): Record<AgeGroup, number | null>; // Anteil say je Gruppe, null unter MIN_GROUP
-export function typicalWord(perWord: { word: number; say: number; total: number }[], avgSay: number): number | null; // größter Abstand über Schnitt, nur total ≥ MIN_GROUP
+export function districtValue(counts: UsageCounts): number | null; // say/total in %, gerundet; null wenn total < MIN_GROUP
+export function agePercents(
+  byGroup: Record<AgeGroup, UsageCounts>,
+): Record<AgeGroup, number | null>; // Anteil say je Gruppe, null unter MIN_GROUP
+export function typicalWord(
+  perWord: { word: number; say: number; total: number }[],
+  avgSay: number,
+): number | null; // größter Abstand über Schnitt, nur total ≥ MIN_GROUP
 ```
 
 - [ ] **Step 1: Failing tests** (Assertions):
@@ -120,12 +131,15 @@ export function typicalWord(perWord: { word: number; say: number; total: number 
 ### Task 4: Loader, `/api/home-stats`, `fetchHome`
 
 **Files:**
+
 - Create: `payload/src/lib/homeStatsLoad.ts` (+ Export `payload-app/home-stats-load` oder im selben Modul, je nach Importgrenzen), `website/src/pages/api/home-stats.ts`, `website/src/services/payload/home.ts`
 - Test: `website/src/tests/unit/services/home.test.ts`, `website/src/tests/unit/server/home-stats-api.test.ts`
 
 **Interfaces:**
+
 - Consumes: Task 3, `trending(payload, {days, limit, type})` aus `payload-app/word-stats`, `berlinDay`, `pickWordOfTheDay`, `fetchAllWords`, `ttl()`, `setPageCache`, `siteRead()`.
 - Produces:
+
 ```ts
 export type HomeStats = {
   districts: { area: string; name: string; value: number | null; typical: { slug: string; berlinerisch: string } | null }[];
@@ -138,6 +152,7 @@ export type AgeWord = { word: WordRef; byGroup: Record<AgeGroup, number | null> 
 export const loadHomeStats: (payload: BasePayload) => Promise<HomeStats>;
 export const fetchHome: () => Promise<HomeData>;  // Global + Wort des Tages (inkl. morse: MorseMark[]) + Neu(5) + Themen(6) + Magazin + Mitmachen-Zahlen + Kennzahlen live
 ```
+
 - Regeln: nur `word-feedback`-Zeilen mit `usage`; Bezirke = die 12 aus `AREAS` ohne `brandenburg`/`elsewhere`; Berliner Schnitt über dieselben; Umfrage-Wort = eigene Tageswahl ohne Wort des Tages; Spielkarte = meistfalsch der letzten 7 Tage aus den BON-Daten, sonst `null`. Antwortform enthält keine IDs/Zeitstempel/Rohstimmen. Cache: `ttl` Beliebt/Aufwind 1 h, Bezirke/Alter 24 h.
 
 - [ ] **Step 1: Failing tests:** `GET /api/home-stats` liefert genau die Schlüssel von `HomeStats` (keine zusätzlichen), alle Bezirke mit Gruppe < 10 haben `value: null`; Fixture mit ausgedachten Daten (z. B. „Testbezirk“-Zählungen), nichts aus Prod. `fetchHome` gibt `word.morse` mit `length` ≤ 28 zurück und `null`-sichere Felder bei leerem Global.
@@ -146,11 +161,13 @@ export const fetchHome: () => Promise<HomeData>;  // Global + Wort des Tages (in
 ### Task 5: Seed-Skript für die Texte
 
 **Files:**
+
 - Create: `payload/src/seed/home.ts`, `payload/src/seed/homeContent.ts` (Texte aus `docs/design/startseite-v20/design/HomeV20.dc.html`: Intro, Wissens-Artikel als HTML, 6 FAQ, 6 Lautregeln, Über-Satz, 4 Probier-Wörter als Slugs, die in der Ziel-DB existieren, sonst übersprungen)
 - Modify: `payload/package.json` (`"seed:home"` nach Muster `seed:dev`)
 - Test: `payload/src/seed/home.test.ts` bzw. `website/src/tests/unit/…`
 
 **Interfaces:**
+
 - Consumes: `htmlToLexical(html, config)`.
 - Produces: `seedHome(payload): Promise<{ written: string[]; skipped: string[] }>`; idempotent, überschreibt keine bereits gefüllten Felder.
 
@@ -161,10 +178,12 @@ export const fetchHome: () => Promise<HomeData>;  // Global + Wort des Tages (in
 ### Task 6: Bühne (Intro, Wort des Tages, Siegel, IPA-Kontur, Suche, Chips)
 
 **Files:**
+
 - Create: `website/src/components/home/HomeIntro.astro`, `WordOfTheDayStage.vue`, `HomeSearch.vue`, `BrowseChips.astro`, `website/src/components/WordSeal.vue`, Styles `_home-stage.scss`, `_word-seal.scss`, `_home-search.scss`
 - Test: `website/src/tests/unit/components/WordSeal.test.ts`, `HomeSearch.test.ts`
 
 **Interfaces:**
+
 - Consumes: `HomeData.word` mit `morse: MorseMark[]`, Audio-URL, Dauer; Orama-Suche (`fetchSearchIndex`/`/api/search`).
 - Produces: `WordSeal` Props `{ word: string; morse: MorseMark[]; audioUrl?: string; duration?: number; initial?: string }`, Events `play`/`end`; Verhalten nach SPEC §5.1–5.2 (Dauer pro Zeichen = `duration / morse.length`, Label wechselt „{Wort} anhören“/„Anhalten“, `prefers-reduced-motion` ohne Schein). `HomeSearch` Props `{ placeholder?: string }`; Form GET `/suche`, `name="q"`.
 
@@ -175,11 +194,13 @@ export const fetchHome: () => Promise<HomeData>;  // Global + Wort des Tages (in
 ### Task 7: Mitforschen, Themen, Spiel, Frisch
 
 **Files:**
+
 - Create: `website/src/components/HomePoll.vue`, `components/home/{TopicRegister.astro,BonTeaser.vue,FreshLists.vue}`, Styles `_home-poll.scss`, `_home-topics.scss`, `_home-bon.scss`, `_home-fresh.scss`
 - Test: `HomePoll.test.ts`, `BonTeaser.test.ts`, `FreshLists.test.ts`, `website/src/tests/unit/utils/relativeTime.test.ts`
 - Modify: bestehender Relativzeit-Helfer, falls vorhanden, sonst Create `website/src/utils/relativeTime.ts`
 
 **Interfaces:**
+
 - Produces: `HomePoll` Props `{ wordId: number; lemma: string; meaning: string; slug: string; total: number }`, nutzt den bestehenden `word-feedback`-Endpunkt (`usage`), zeigt nach der Stimme 100 Punkte, Fokus auf Ergebnis-Überschrift, `aria-live="polite"`. `relativeTime(date: Date, now?: Date): string` → „vor 2 Tagen“, „vor 1 Woche“. `BonTeaser` Props `{ steps; roundsToday; card: {word; wrongShare} | null }`; ← / → nur bei Fokus im Bereich, Probekarte zählt nicht für Ranglisten (kein Aufruf an BON-Start).
 
 - [ ] **Step 1: Failing tests:** `relativeTime` (2 Tage, 1 Woche, heute); `HomePoll`: Klick auf Kachel sendet `usage` und zeigt Ergebnis, Punktzahl summiert auf 100, Stimme markiert; `BonTeaser`: ArrowRight beantwortet, ohne `card` kein Stapel, Multiplikator-Leiste aus `steps`; `FreshLists`: beide Panels im SSR-HTML, ←/→ wechselt Reiter (`tabindex="-1"` inaktiv).
@@ -189,10 +210,12 @@ export const fetchHome: () => Promise<HomeData>;  // Global + Wort des Tages (in
 ### Task 8: Ergebnis-Band (Karte und Altersprofil)
 
 **Files:**
+
 - Create: `website/src/components/home/{ResultsBand.vue,DotMap.vue,AgeDots.vue}`, `website/src/utils/dotMap.ts`, Styles `_home-results.scss`
 - Test: `website/src/tests/unit/utils/dotMap.test.ts`, `components/home/AgeDots.test.ts`, `ResultsBand.test.ts`
 
 **Interfaces:**
+
 - Produces: `dotStyle(v: number | null): { r: number; opacity: number; muted: boolean }` mit `r = 1.6 + 2.0*v/100`, `opacity = 0.18 + 0.82*clamp((v-30)/56, 0, 1)`; `null` → `muted: true` (Farbe `--d-gr` 20 %). `filledDots(percent: number | null): number` → `round(p/10)`, `null` → 0. `DotMap` Props `{ districts: HomeStats["districts"]; geometry: Geometry }`, Geometrie aus `docs/design/startseite-v20/assets/berlin-bezirke-punkte.json` nach `website/src/assets/` kopiert; SVG `role="group"`, jeder Bezirk `<g tabindex="0" aria-label="{Bezirk}, typisch: {Wort}. {v} Prozent sagen Sag ick selbst">`; Tooltip bei Hover/Fokus/Tap; unter `MIN_GROUP`: „{Bezirk} · noch zu wenig Stimmen“. `AgeDots` mit `aria-label` „unter 30: 3 %, 30–49: …, 50–69: …, 70+: …“. Beschriftungen/Achsenzeile mit den neuen Gruppen.
 
 - [ ] **Step 1: Failing tests:** `dotStyle(30)` → `opacity .18`, `dotStyle(86)` → `1`, `dotStyle(100)` clampt auf `1`, `dotStyle(0)` auf `.18`; `filledDots(67) === 7`, `filledDots(null) === 0`; `ResultsBand` blendet Reiter ohne Daten aus, beide leer: rendert nichts; Reiter per Tastatur.
@@ -202,10 +225,12 @@ export const fetchHome: () => Promise<HomeData>;  // Global + Wort des Tages (in
 ### Task 9: Wissen, FAQ, Magazin, Mitmachen, Mitnehmen
 
 **Files:**
+
 - Create: `components/home/{BerlinerischArticle.astro,FaqAbout.astro,MagazineQuote.astro,SuggestGap.astro,ToGoBar.vue}`, Styles `_home-knowledge.scss`, `_home-faq.scss`, `_home-magazine.scss`, `_home-gap.scss`, `_home-togo.scss`
 - Test: `ToGoBar.test.ts`, `website/src/tests/unit/pages/home-sections.test.ts`
 
 **Interfaces:**
+
 - Consumes: Kalle `components/kalle/BerlinerBaer.vue` (Variante `plain`, Pose `zeigen`, nicht ändern); bestehende App-Install-Logik aus `InstallApp.vue`/`FooterAppSection.vue` wiederverwenden (nicht neu schreiben); Anki-Link aus `fetchAnkiContent`.
 - Produces: `<details class="…__more">` immer im HTML; ein kleines Script setzt ab 808px `open` und die Summary wird per CSS ausgeblendet; Text einmal gerendert. Der Satz „Die Übersicht zeigt …“ (neutral). Magazin-Fallback: ohne `teaserZitat` erster Pull-Quote, ohne beides entfällt der Abschnitt (`TODO(startseite)`). `ToGoBar`: installierte App → linke Hälfte entfällt.
 
@@ -216,11 +241,13 @@ export const fetchHome: () => Promise<HomeData>;  // Global + Wort des Tages (in
 ### Task 10: Seite zusammensetzen, SEO, Bewegung
 
 **Files:**
+
 - Modify: `website/src/pages/index.astro` (alte Startseite ersetzen; `FactCard`, `GameCtaCard`, `WordOfTheDay`, `WordSearchLink`-Nutzung hier entfernen, die Komponenten nur löschen, wenn sonst unbenutzt), `website/src/pages/llms.txt.ts`
 - Create: `website/src/utils/revealOnView.ts` (IntersectionObserver, `threshold: .2`, einmalig), `website/src/utils/homeJsonLd.ts`
 - Test: `website/src/tests/unit/utils/homeJsonLd.test.ts`, `revealOnView.test.ts`
 
 **Interfaces:**
+
 - Produces: `homeJsonLd(data: HomeData): object[]` → `WebSite` (mit `SearchAction` auf `/suche?q={search_term_string}`), `Organization` (bestehend), `FAQPage` (die sichtbaren Fragen), `DefinedTerm` (Wort des Tages, `inDefinedTermSet`). `<title>` und Description nach SPEC §14, Zahl live. `revealOnView(root: ParentNode): () => void`; unter `prefers-reduced-motion: reduce` sofort Endzustand.
 
 - [ ] **Step 1: Failing tests:** JSON-LD enthält alle Fragen des Globals; Description enthält die Live-Zahl; `revealOnView` setzt Klasse einmalig und feuert nicht erneut; bei reduce sofort.
@@ -230,6 +257,7 @@ export const fetchHome: () => Promise<HomeData>;  // Global + Wort des Tages (in
 ### Task 11: E2E, Zugänglichkeit, Aufräumen
 
 **Files:**
+
 - Create: `website/src/tests/e2e/home.spec.ts`
 - Modify: Specs, die noch auf `/` für die Suche zeigen (`rg "goto\(\"/\"\)"` in `website/src/tests/e2e/` prüfen); Doku `website/CLAUDE.md` (Startseite-Abschnitt, falls vorhanden)
 

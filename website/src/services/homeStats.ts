@@ -11,6 +11,9 @@ const hourly = ttl(3_600_000, async () => loadHourlyStats(await getPayloadClient
 
 /** The start page aggregates; one cache for the page and GET /api/home-stats. */
 export const fetchHomeStats = async (): Promise<HomeStats> => {
-  const [{ districts, ageLists }, { popular, rising, bon }] = await Promise.all([daily(), hourly()]);
+  const [{ districts, ageLists }, { popular, rising, bon }] = await Promise.all([
+    daily(),
+    hourly(),
+  ]);
   return { ageLists, bon, districts, popular, rising };
 };

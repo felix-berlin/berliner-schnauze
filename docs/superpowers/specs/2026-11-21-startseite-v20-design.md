@@ -38,11 +38,11 @@ Die Startseite soll drei Dinge klarmachen: Was ist das (H1 + Erklärsatz), was k
 
 ## Ansätze
 
-| | Ansatz | Trade-off |
-|---|---|---|
-| **A (gewählt)** | Ein serverseitiger Home-Datensatz (Payload-Felder + Berechnung im Backend + `/api/home-stats`), Abschnitte in Scheiben | Größerer Server-Anteil vorab; dafür kein CLS, alles im HTML, Datenschutz an einer Stelle |
-| B | Jeder Abschnitt holt seine Daten im Browser | Schneller gebaut, aber Karte/Listen fehlen im ersten HTML; widerspricht SPEC §19 und „nicht im Frontend erzeugen“ |
-| C | Erst Oberfläche mit Mock-Daten, dann Backend | Zeigt früh etwas, Datenformen ändern sich später, doppelte Arbeit |
+|                 | Ansatz                                                                                                                 | Trade-off                                                                                                         |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| **A (gewählt)** | Ein serverseitiger Home-Datensatz (Payload-Felder + Berechnung im Backend + `/api/home-stats`), Abschnitte in Scheiben | Größerer Server-Anteil vorab; dafür kein CLS, alles im HTML, Datenschutz an einer Stelle                          |
+| B               | Jeder Abschnitt holt seine Daten im Browser                                                                            | Schneller gebaut, aber Karte/Listen fehlen im ersten HTML; widerspricht SPEC §19 und „nicht im Frontend erzeugen“ |
+| C               | Erst Oberfläche mit Mock-Daten, dann Backend                                                                           | Zeigt früh etwas, Datenformen ändern sich später, doppelte Arbeit                                                 |
 
 Gewählt: **A**, vom Nutzer bestätigt.
 
@@ -60,15 +60,16 @@ Gewählt: **A**, vom Nutzer bestätigt.
 
 Alles additiv. Migrationen nach `.claude/rules/` für Payload.
 
-| Was | Wo | Hinweis |
-|---|---|---|
-| `ipa` (text) | `Words` | optional; Anzeige in eckigen Klammern im Frontend |
-| `typischerSatz` (text) | `Themen` | optional; fehlt er, entfällt die Sprechblase |
-| `teaserZitat`, `teaserIpa` (text) | `Posts` | optional; Zwischenlösung wenn leer: erster Pull-Quote bzw. Abschnitt entfällt (`TODO(startseite)`) |
-| `intro`, Probier-Wörter (4, Relationship), Stöber-Links, Wissens-Text (richText), Lautregeln (6, array), FAQ (array: Frage, Antwort), Über-Satz | Global `home` (bestehend, Label „Startseite“) | Das heutige Feld `facts` bleibt bis zum Umschalten und wird danach entfernt (Contract-Schritt, eigener Auftrag) |
-| Aggregate | neues Modul in `payload/src/lib/` (z. B. `homeStats.ts`, exportiert über `payload-app/…` wie `word-stats`) | reine Funktionen + ein Loader; getestet ohne DB |
+| Was                                                                                                                                             | Wo                                                                                                         | Hinweis                                                                                                         |
+| ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `ipa` (text)                                                                                                                                    | `Words`                                                                                                    | optional; Anzeige in eckigen Klammern im Frontend                                                               |
+| `typischerSatz` (text)                                                                                                                          | `Themen`                                                                                                   | optional; fehlt er, entfällt die Sprechblase                                                                    |
+| `teaserZitat`, `teaserIpa` (text)                                                                                                               | `Posts`                                                                                                    | optional; Zwischenlösung wenn leer: erster Pull-Quote bzw. Abschnitt entfällt (`TODO(startseite)`)              |
+| `intro`, Probier-Wörter (4, Relationship), Stöber-Links, Wissens-Text (richText), Lautregeln (6, array), FAQ (array: Frage, Antwort), Über-Satz | Global `home` (bestehend, Label „Startseite“)                                                              | Das heutige Feld `facts` bleibt bis zum Umschalten und wird danach entfernt (Contract-Schritt, eigener Auftrag) |
+| Aggregate                                                                                                                                       | neues Modul in `payload/src/lib/` (z. B. `homeStats.ts`, exportiert über `payload-app/…` wie `word-stats`) | reine Funktionen + ein Loader; getestet ohne DB                                                                 |
 
 **Im Modul berechnet** (nichts davon im Browser):
+
 - **Morse-Ring:** Tabelle A–Z, Ä Ö Ü ß; Ring-Positionen wie SPEC §5.1; Länge begrenzt (siehe „Dem Builder überlassen“, Vorschlag ≤ 28 Zeichen ab Wortanfang). Rückgabe: `[{ sym: "d"|"l", left, top, rotate }]` plus Anzahl, damit die Wiedergabe-Kopplung `dauer / anzahl` einfach bleibt.
 - **Bezirksband:** je Bezirk Anteil „say“ in `word-feedback` (`usage = say`) nach `area`, Gruppen < `MIN_GROUP` ohne Wert; Bezirke aus `AREAS` (die 12 Bezirke, ohne `brandenburg`/`elsewhere`); „Typisches Wort“ je Bezirk = Wort mit dem größten Abstand über dem Berliner Schnitt, Mindestzahl Stimmen je Bezirk×Wort = `MIN_GROUP`.
 - **Altersprofil:** 4 Gruppen (s. o.), je Wort Anteile; Auswahl „Stirbt langsam aus“ = höchster Anteil 70+, „Lebt und wächst“ = höchster Anteil unter 30. Mindeststimmen je Wort gesamt: `MIN_WORD_VOTES` (Zwischenlösung, siehe unten).
@@ -99,15 +100,15 @@ Jede Scheibe endet mit grünem Lint/Typecheck/Tests; ausgeliefert wird erst nach
 
 ## Zwischenlösungen für offene Punkte (SPEC §20)
 
-| # | Punkt | Festlegung hier |
-|---|---|---|
-| 1 | Morse bei langen Wörtern | Vorschlag der SPEC: nur so viele Buchstaben, wie unter 28 Zeichen passen, ab Wortanfang. `TODO(startseite)` |
-| 2 | „Beliebt“ / „Im Aufwind“ | Definition wie SPEC §10 (Aufrufe 7 Tage; Zuwachs gegenüber Vorwoche). `TODO(startseite)` bestätigen |
-| 3 | Mindeststimmen Altersliste, Erhebung | Erhebung existiert (`area`, `age`). `MIN_GROUP = 10` je Gruppe; `MIN_WORD_VOTES = 30` je Wort für die Altersliste als Zwischenwert. `TODO(startseite)` |
-| 4 | `typischerSatz`, `teaserZitat`, `teaserIpa` | Als Felder angelegt (s. o), Zwischenlösung wenn leer: s. Tabelle |
-| 5 | „Die Übersicht rechts“ | Neutral: „Die Übersicht zeigt …“ |
-| 6 | Such-Modal vs. Inline | Inline-Liste, Enter → `/suche` |
-| 7 | Ortsteile | zurückgestellt |
+| #   | Punkt                                       | Festlegung hier                                                                                                                                        |
+| --- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Morse bei langen Wörtern                    | Vorschlag der SPEC: nur so viele Buchstaben, wie unter 28 Zeichen passen, ab Wortanfang. `TODO(startseite)`                                            |
+| 2   | „Beliebt“ / „Im Aufwind“                    | Definition wie SPEC §10 (Aufrufe 7 Tage; Zuwachs gegenüber Vorwoche). `TODO(startseite)` bestätigen                                                    |
+| 3   | Mindeststimmen Altersliste, Erhebung        | Erhebung existiert (`area`, `age`). `MIN_GROUP = 10` je Gruppe; `MIN_WORD_VOTES = 30` je Wort für die Altersliste als Zwischenwert. `TODO(startseite)` |
+| 4   | `typischerSatz`, `teaserZitat`, `teaserIpa` | Als Felder angelegt (s. o), Zwischenlösung wenn leer: s. Tabelle                                                                                       |
+| 5   | „Die Übersicht rechts“                      | Neutral: „Die Übersicht zeigt …“                                                                                                                       |
+| 6   | Such-Modal vs. Inline                       | Inline-Liste, Enter → `/suche`                                                                                                                         |
+| 7   | Ortsteile                                   | zurückgestellt                                                                                                                                         |
 
 ## Tests
 
