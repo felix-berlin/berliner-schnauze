@@ -9,6 +9,7 @@ import { htmlToLexical } from "../lib/htmlToLexical";
 import { assertDevDatabase } from "./dev";
 import {
   HOME_ABOUT_TEXT,
+  HOME_BROWSE_LINKS,
   HOME_FAQ,
   HOME_INTRO,
   HOME_KNOWLEDGE_HTML,
@@ -47,6 +48,7 @@ export async function seedHome(
       })),
     ),
   );
+  await fill("browseLinks", !home.browseLinks?.length, () => HOME_BROWSE_LINKS);
   await fill("aboutText", !home.aboutText, () => HOME_ABOUT_TEXT);
   await fill("tryWords", !home.tryWords?.length, async () => {
     const { docs } = await payload.find({

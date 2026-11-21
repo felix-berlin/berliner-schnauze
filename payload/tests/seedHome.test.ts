@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { seedHome } from "../src/seed/home";
 import { getTestPayload } from "./helpers/payload";
 
-const ALL = ["intro", "knowledge", "soundRules", "faq", "aboutText", "tryWords"];
+const ALL = ["intro", "knowledge", "soundRules", "faq", "aboutText", "tryWords", "browseLinks"];
 
 describe("seedHome", () => {
   it("writes empty fields once, never overwrites edited ones", async () => {
@@ -18,6 +18,7 @@ describe("seedHome", () => {
     await payload.updateGlobal({
       slug: "home",
       data: {
+        browseLinks: [],
         intro: null,
         knowledge: null,
         soundRules: [],
@@ -36,6 +37,16 @@ describe("seedHome", () => {
     expect(home.intro).toContain("{count}");
     expect(home.intro).not.toContain("1.700");
     expect(home.knowledge).toBeTruthy();
+    expect(home.browseLinks?.map((l) => l.icon)).toEqual([
+      "audio",
+      "idiom",
+      "short",
+      "rhyme",
+      "random",
+    ]);
+    expect(JSON.stringify(home.knowledge)).toContain('"url":"/wort/ick"');
+    expect(JSON.stringify(home.knowledge)).toContain('"url":"/wort/spaeti"');
+    expect(JSON.stringify(home.knowledge)).not.toContain("Übersicht rechts");
 
     const second = await seedHome(payload, slugs);
     expect(second.written).toEqual([]);
