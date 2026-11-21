@@ -15,6 +15,68 @@ describe("globals round-trip", () => {
     expect(doc.footer1?.[0]).toMatchObject({ title: "Impressum", link: "/impressum" });
   });
 
+  it("home keeps facts and stores the start page fields", async () => {
+    const payload = await getTestPayload();
+    const word = await payload.create({
+      collection: "words",
+      data: {
+        berlinerisch: "Test",
+        slug: `home-test-${Date.now()}`,
+        ipa: "tɛst",
+        _status: "published",
+      },
+    });
+    const rich = {
+      root: {
+        type: "root",
+        version: 1,
+        direction: null,
+        format: "" as const,
+        indent: 0,
+        children: [
+          {
+            type: "paragraph",
+            version: 1,
+            direction: null,
+            format: "",
+            indent: 0,
+            children: [
+              {
+                type: "text",
+                version: 1,
+                text: "x",
+                format: 0,
+                mode: "normal",
+                style: "",
+                detail: 0,
+              },
+            ],
+          },
+        ],
+      },
+    };
+    const facts = [{ headline: "Fakt", text: rich }];
+    await payload.updateGlobal({
+      slug: "home",
+      data: {
+        facts,
+        intro: "Hallo",
+        tryWords: [word.id],
+        browseLinks: [{ label: "Wörter", href: "/woerter", icon: "words" }],
+        soundRules: [{ standard: "ich", berlin: "ick", example: "ick bin", rule: "g/ch zu k" }],
+        faq: [{ question: "Was?", answer: rich }],
+        aboutText: "Über",
+      },
+    });
+    const doc = await payload.findGlobal({ slug: "home", depth: 0 });
+    expect(doc.facts?.[0]?.headline).toBe("Fakt");
+    expect(doc).toMatchObject({ intro: "Hallo", aboutText: "Über", tryWords: [word.id] });
+    expect(doc.browseLinks?.[0]).toMatchObject({ label: "Wörter", icon: "words" });
+    expect(doc.soundRules?.[0]).toMatchObject({ berlin: "ick" });
+    expect(doc.faq?.[0]?.question).toBe("Was?");
+    await payload.delete({ collection: "words", id: word.id });
+  });
+
   it("affiliate", async () => {
     const payload = await getTestPayload();
     const books = [

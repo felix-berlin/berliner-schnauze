@@ -50,6 +50,12 @@ export const Words: CollectionConfig = {
   },
   fields: [
     { name: "berlinerisch", type: "text", required: true },
+    {
+      name: "ipa",
+      label: "Lautschrift (IPA)",
+      type: "text",
+      admin: { description: "IPA ohne eckige Klammern, z. B. ˈɪç. Die Klammern setzt die Seite." },
+    },
     ...identityFields,
     { name: "article", type: "text" },
     { name: "translations", type: "array", fields: [{ name: "translation", type: "text" }] },
