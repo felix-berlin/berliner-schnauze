@@ -554,6 +554,31 @@
       "hex": "#14191e"
     }
   },
+  "band-text": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.788235, 0.811765, 0.839216],
+      "hex": "#c9cfd6"
+    }
+  },
+  "band-card2": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.137255, 0.164706, 0.192157],
+      "hex": "#232a31"
+    }
+  },
+  "band-line": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [1, 1, 1],
+      "hex": "#ffffff",
+      "alpha": 0.12
+    }
+  },
   "line": {
     "$type": "color",
     "$value": "{color.border.card}"

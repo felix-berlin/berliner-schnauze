@@ -24,6 +24,27 @@ describe("home palette tokens", () => {
     expect(pair(name)).toEqual([light, dark]);
   });
 
+  it.each([
+    ["band-text", "#c9cfd6"],
+    ["band-card2", "#232a31"],
+    ["band-line", "rgb(255 255 255 / 12%)"],
+  ])("builds the band token --%s as %s", (name, value) => {
+    expect(css).toContain(`--${name}: ${value};`);
+  });
+
+  it("uses the band tokens in the results band without colour exceptions", () => {
+    const scss = readFileSync(
+      new URL("../../../styles/components/_home-results.scss", import.meta.url),
+      "utf8",
+    );
+    for (const name of ["band-text", "band-card2", "band-line"]) {
+      expect(scss).toContain(`var(--${name})`);
+    }
+    expect(scss).not.toMatch(
+      /#c9cfd6|#232a31|colour inventory: "(#c9cfd6|--card2|rgb\(255 255 255)/,
+    );
+  });
+
   it("keeps the result band dark in both themes", () => {
     expect(css).toMatch(/^\s*--band-dark-bg: #14191e;/m);
   });

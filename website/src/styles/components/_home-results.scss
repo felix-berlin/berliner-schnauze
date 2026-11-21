@@ -25,18 +25,13 @@
     --_ms: 1ms; // unit for each dot's wave delay (--wave, ms from the geometry JSON)
     --_pop-ease: cubic-bezier(0.3, 1.5, 0.6, 1);
     --_dim: 0.12; // SPEC §11.1 the other districts on hover/focus
-    // TODO(startseite): the band's "Weiß 12 %" line (SPEC §4.3) has no token; --line is orange in dark.
-    // stylelint-disable-next-line function-disallowed-list -- colour inventory: "rgb(255 255 255 / 12%)" band line (SPEC §4.3), no token holds it
-    --_line: color-mix(in oklab, var(--color-text-on-active) 12%, transparent);
+    --_line: var(--band-line); // the band's "Weiß 12 %" line (SPEC §4.3); --line is orange in dark
     // stylelint-disable-next-line function-disallowed-list -- colour inventory: "--d-gr 45 %" empty age dot ring (SPEC §11.2), no token holds it
     --_ring: color-mix(in oklab, var(--d-gr) 45%, transparent);
     // Band palette (SPEC §4.3). Headings and the active tab #fff: --color-text-on-active is pure white.
     --_head: var(--color-text-on-active);
-    // TODO(startseite): band text #c9cfd6 and band --card2 #232a31 (SPEC §4.3) have no token.
-    // stylelint-disable-next-line color-no-hex -- colour inventory: "#c9cfd6" band text (SPEC §4.3), no token holds it
-    --_text: #c9cfd6;
-    // stylelint-disable-next-line color-no-hex -- colour inventory: "--card2 #232a31" band row hover (SPEC §4.3), no token holds it
-    --_card2: #232a31;
+    --_text: var(--band-text);
+    --_card2: var(--band-card2);
     --focus-ring-color: var(--color-accent-active);
 
     container: home-results / inline-size;
