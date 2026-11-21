@@ -26,7 +26,8 @@ import { trending } from "./wordStats";
 
 /** Structural copy of the site's WordRef without `id` (payload-app cannot import website types). */
 export type WordRef = { slug: string; berlinerisch: string };
-export type AgeWord = { word: WordRef; byGroup: Record<AgeGroup, number | null> };
+/** meaning: the published word's translations, only when it has any. */
+export type AgeWord = { word: WordRef; byGroup: Record<AgeGroup, number | null>; meaning?: string };
 export type HomeStats = {
   districts: {
     area: string;
@@ -157,23 +158,28 @@ const loadAgeLists = async (payload: BasePayload): Promise<HomeStats["ageLists"]
     word_id: number;
     slug: string;
     berlinerisch: string;
+    meaning: string | null;
     age: Age;
     usage: Usage;
     n: string;
   }>(
     payload,
-    sql`select f.word_id, w.slug, w.berlinerisch, f.age, f.usage, count(*) as n
+    sql`select f.word_id, w.slug, w.berlinerisch, ${MEANING} as meaning, f.age, f.usage, count(*) as n
         from ${VOTES} and f.age is not null
           and f.word_id in (select word_id from word_feedback
             where usage is not null and age is not null group by word_id having count(*) >= ${MIN_WORD_VOTES})
-        group by f.word_id, w.slug, w.berlinerisch, f.age, f.usage`,
+        group by f.word_id, w.id, w.slug, w.berlinerisch, f.age, f.usage`,
   );
-  const words = new Map<number, { word: WordRef; groups: Record<AgeGroup, UsageCounts> }>();
+  const words = new Map<
+    number,
+    { word: WordRef; meaning: string | null; groups: Record<AgeGroup, UsageCounts> }
+  >();
   for (const r of rows) {
     let w = words.get(r.word_id);
     if (!w) {
       w = {
         word: { slug: r.slug, berlinerisch: r.berlinerisch },
+        meaning: r.meaning,
         groups: Object.fromEntries(AGE_GROUPS.map((g) => [g, emptyCounts()])) as Record<
           AgeGroup,
           UsageCounts
@@ -195,7 +201,11 @@ const loadAgeLists = async (payload: BasePayload): Promise<HomeStats["ageLists"]
       .filter((x): x is { w: (typeof all)[number]; s: number } => x.s !== null)
       .sort((a, b) => b.s - a.s || a.w.id - b.w.id)
       .slice(0, AGE_LIST_SIZE)
-      .map(({ w }) => ({ word: w.word, byGroup: agePercents(w.groups) }));
+      .map(({ w }) => {
+        const out: AgeWord = { word: w.word, byGroup: agePercents(w.groups) };
+        if (w.meaning) out.meaning = w.meaning;
+        return out;
+      });
   return { dying: list("70plus"), growing: list("u30") };
 };
 

@@ -16,7 +16,9 @@ const word = (n: number, byGroup: Record<"u30" | "30-49" | "50-69" | "70plus", n
   word: { berlinerisch: `Testwort ${n}`, slug: `testwort-${n}` },
 });
 const ageLists = {
-  dying: [word(1, { "30-49": 8, "50-69": 22, "70plus": 67, u30: 3 })],
+  dying: [
+    { ...word(1, { "30-49": 8, "50-69": 22, "70plus": 67, u30: 3 }), meaning: "Bedeutung 1" },
+  ],
   growing: [word(2, { "30-49": 31, "50-69": 14, "70plus": 7, u30: 48 })],
 };
 const noValues = districts.map((d) => ({ ...d, value: null }));
@@ -57,6 +59,9 @@ describe("ResultsBand", () => {
       "Lebt und wächst",
     ]);
     expect(panel.get('a[href="/wort/testwort-1"]').text()).toContain("Testwort 1");
+    expect(panel.get('a[href="/wort/testwort-1"] small').text()).toBe("Bedeutung 1");
+    // The second word has no meaning.
+    expect(panel.get('a[href="/wort/testwort-2"]').find("small").exists()).toBe(false);
     expect(panel.findAll('[role="img"]').map((i) => i.attributes("data-variant"))).toEqual([
       "dying",
       "growing",

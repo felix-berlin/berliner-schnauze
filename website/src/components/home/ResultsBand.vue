@@ -82,7 +82,10 @@
           <ul class="list" role="list">
             <li v-for="w in l.words" :key="w.word.slug">
               <a :href="routeToWord(w.word.slug)">
-                <b>{{ w.word.berlinerisch }}</b>
+                <span class="word">
+                  <b>{{ w.word.berlinerisch }}</b>
+                  <small v-if="w.meaning">{{ w.meaning }}</small>
+                </span>
                 <AgeDots :by-group="w.byGroup" :variant="l.variant" />
               </a>
             </li>

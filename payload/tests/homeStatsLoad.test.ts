@@ -11,7 +11,12 @@ vi.mock("../src/lib/wordStats", async (importOriginal) => ({
   trending,
 }));
 
-import { loadHomeStats, loadHourlyStats, type HomeStats } from "../src/lib/homeStatsLoad";
+import {
+  loadDailyStats,
+  loadHomeStats,
+  loadHourlyStats,
+  type HomeStats,
+} from "../src/lib/homeStatsLoad";
 import { getTestPayload } from "./helpers/payload";
 
 // All data invented: test words "hs-…", visitors "hs-v…".
@@ -20,6 +25,7 @@ let stats: HomeStats;
 let n = 0;
 const wordIds: number[] = [];
 let a: number;
+let b: number;
 let e: number;
 
 const word = async (slug: string, published = true) => {
@@ -50,7 +56,7 @@ beforeAll(async () => {
   payload = await getTestPayload();
   await wipe();
   a = await word(`hs-a-${Date.now()}`);
-  const b = await word(`hs-b-${Date.now()}`);
+  b = await word(`hs-b-${Date.now()}`);
   e = await word(`hs-e-${Date.now()}`);
   const c = await word(`hs-c-${Date.now()}`);
   const draft = await word(`hs-d-${Date.now()}`, false);
@@ -198,6 +204,21 @@ describe("loadHomeStats", () => {
     expect(all.some((w) => w.word.slug.startsWith("hs-c-"))).toBe(false);
     expect(all.some((w) => w.word.slug.startsWith("hs-d-"))).toBe(false);
     expect(stats.ageLists.dying.length).toBeLessThanOrEqual(4);
+  });
+
+  it("adds the published word's meaning to an age word, none without a translation", async () => {
+    const find = (s: Pick<HomeStats, "ageLists">) =>
+      [...s.ageLists.dying, ...s.ageLists.growing].find((w) => w.word.slug.startsWith("hs-b-"));
+    expect(find(stats)).not.toHaveProperty("meaning");
+    await payload.update({
+      collection: "words",
+      id: b,
+      data: { translations: [{ translation: "Altersbedeutung" }, { translation: "zweite" }] },
+    });
+    expect(find(await loadDailyStats(payload))).toHaveProperty(
+      "meaning",
+      "Altersbedeutung, zweite",
+    );
   });
 
   it("counts today's finished BON rounds and the most wrongly answered card", () => {

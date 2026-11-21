@@ -30,14 +30,20 @@
     --_line: color-mix(in oklab, var(--color-text-on-active) 12%, transparent);
     // stylelint-disable-next-line function-disallowed-list -- colour inventory: "--d-gr 45 %" empty age dot ring (SPEC §11.2), no token holds it
     --_ring: color-mix(in oklab, var(--d-gr) 45%, transparent);
+    // Band palette (SPEC §4.3). Headings and the active tab #fff: --color-text-on-active is pure white.
+    --_head: var(--color-text-on-active);
+    // TODO(startseite): band text #c9cfd6 and band --card2 #232a31 (SPEC §4.3) have no token.
+    // stylelint-disable-next-line color-no-hex -- colour inventory: "#c9cfd6" band text (SPEC §4.3), no token holds it
+    --_text: #c9cfd6;
+    // stylelint-disable-next-line color-no-hex -- colour inventory: "--card2 #232a31" band row hover (SPEC §4.3), no token holds it
+    --_card2: #232a31;
     --focus-ring-color: var(--color-accent-active);
 
     container: home-results / inline-size;
     // Dark in both themes: the light-dark() tokens (--t3, --d-*, text) resolve to their dark values.
     color-scheme: dark;
-    // TODO(startseite): band text #c9cfd6 has no token; --color-text-body (dark) is nearest.
     background: var(--band-dark-bg);
-    color: var(--color-text-body);
+    color: var(--_text);
   }
 
   .head {
@@ -62,7 +68,7 @@
     font-weight: var(--font-weight-black);
     line-height: 0.95;
     text-transform: uppercase;
-    color: var(--color-text-strong);
+    color: var(--_head);
   }
 
   .sub {
@@ -79,7 +85,7 @@
 
   h3 {
     margin: 0 0 var(--space-2);
-    color: var(--color-text-strong);
+    color: var(--_head);
   }
 
   .tabs {
@@ -109,7 +115,7 @@
     }
 
     &[aria-selected="true"] {
-      color: var(--color-text-strong);
+      color: var(--_head);
 
       &::after {
         transform: none;
@@ -117,7 +123,7 @@
     }
 
     @include butler-mx.hover {
-      color: var(--color-text-strong);
+      color: var(--_head);
     }
   }
 
@@ -194,7 +200,7 @@
       font-family: var(--font-condensed);
       font-size: var(--font-size-xl);
       font-variant-numeric: tabular-nums;
-      color: var(--color-text-strong);
+      color: var(--_head);
     }
   }
 
@@ -236,7 +242,7 @@
     }
 
     &:focus-visible circle {
-      stroke: var(--color-text-strong);
+      stroke: var(--_head);
       stroke-width: 1;
     }
   }
@@ -295,22 +301,35 @@
       margin-inline: calc(-1 * var(--space-3));
       padding: var(--space-3);
       border-radius: var(--radius-sm);
-      color: var(--color-text-body);
+      color: var(--_text);
       text-decoration: none;
       transition: background-color var(--duration-fast) var(--ease-standard);
 
+      // --card3 resolves to #46525e under the band's dark scheme, the band's own value (mock).
       &:active {
         background: var(--card3);
       }
 
       @include butler-mx.hover {
-        background: var(--card2);
+        background: var(--_card2);
       }
     }
 
     b {
       font-size: var(--font-size-xl);
-      color: var(--color-text-strong);
+      color: var(--_head);
+    }
+
+    // Meaning below the word (SPEC §11.2).
+    .word {
+      display: flex;
+      flex-direction: column;
+      min-inline-size: 0;
+    }
+
+    small {
+      font-size: var(--font-size-md); // 0.875rem in the mock, nearest step
+      color: var(--t3);
     }
   }
 
