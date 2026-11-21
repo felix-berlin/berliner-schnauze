@@ -119,6 +119,28 @@ describe("typicalWord", () => {
     expect(typicalWord(words)).toBe(3);
   });
 
+  it("never picks a word that only sits at its Berlin share (one district only)", () => {
+    // a word with enough votes in one district only has that district's share as its Berlin share: gap 0
+    expect(typicalWord([{ word: 1, say: 9, total: 10, citySay: 0.9 }])).toBeNull();
+  });
+
+  it("returns null when every word is below its Berlin share", () => {
+    const words = [
+      { word: 1, say: 5, total: 10, citySay: 0.6 },
+      { word: 2, say: 2, total: 10, citySay: 0.3 },
+    ];
+    expect(typicalWord(words)).toBeNull();
+  });
+
+  it("lets a positive gap win over zero and negative ones", () => {
+    const words = [
+      { word: 1, say: 9, total: 10, citySay: 0.9 }, // 0
+      { word: 2, say: 3, total: 10, citySay: 0.5 }, // -0.2
+      { word: 3, say: 5, total: 10, citySay: 0.45 }, // +0.05
+    ];
+    expect(typicalWord(words)).toBe(3);
+  });
+
   it("returns null for an empty list or when nothing has enough votes", () => {
     expect(typicalWord([])).toBeNull();
     expect(typicalWord([{ word: 1, say: 3, total: 3, citySay: 0.1 }])).toBeNull();

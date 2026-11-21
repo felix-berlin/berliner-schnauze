@@ -266,9 +266,11 @@ const loadTrending = async (
         ? [{ word, views: r.views, sayShare: districtValue(counts.get(r.word) ?? emptyCounts()) }]
         : [];
     }),
+    // "Im Aufwind" shows growth only.
     rising: rising.flatMap((r) => {
       const word = byId.get(r.word);
-      return word ? [{ word, delta: r.views - (r.previous ?? 0) }] : [];
+      const delta = r.views - (r.previous ?? 0);
+      return word && delta > 0 ? [{ word, delta }] : [];
     }),
   };
 };

@@ -120,13 +120,14 @@ export const agePercents = (
 
 /**
  * Word whose say share in the district is furthest above its own Berlin share (`citySay`, 0..1 across the 12
- * districts); entries below MIN_GROUP votes are ignored, ties go to the lower word id.
+ * districts); only a gap above 0 counts, so null when no word beats its own share. Entries below MIN_GROUP votes are
+ * ignored, ties go to the lower word id.
  */
 export function typicalWord(
   perWord: { word: number; say: number; total: number; citySay: number }[],
 ): number | null {
   let best: number | null = null;
-  let gap = -Infinity;
+  let gap = 0;
   for (const { word, say, total, citySay } of perWord) {
     if (total < MIN_GROUP) continue;
     const g = say / total - citySay;
