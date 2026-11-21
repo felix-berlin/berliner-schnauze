@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.14.2](https://github.com/felix-berlin/berliner-schnauze/compare/v4.14.1...v4.14.2) (2026-11-21)
+
+
+### Bug Fixes
+
+* **home:** never leave the BON trial card column empty ([ca77909](https://github.com/felix-berlin/berliner-schnauze/commit/ca77909bfaeed4561ecf7453f7fc77195401c067))
+
 ## [4.14.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.14.0...v4.14.1) (2026-11-21)
 
 
