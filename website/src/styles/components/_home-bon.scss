@@ -85,28 +85,42 @@
   .actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-3) var(--space-6);
+    gap: var(--space-3);
     align-items: center;
   }
 
+  // White button of the band (mock .h18__btn.h19__btn--w): 48px, 20px side padding, dark text, tinted hover.
   .play {
+    --_btn-height: 3rem; // 48px (mock)
+
     display: inline-flex;
     gap: var(--space-2);
     align-items: center;
-    min-block-size: var(--size-tap-target);
-    padding: var(--space-3) var(--space-6);
+    min-block-size: var(--_btn-height);
+    padding: 0 var(--space-5);
     border-radius: var(--radius-sm);
     background: var(--color-text-on-active);
-    color: var(--color-accent-solid);
+    color: var(--color-text-strong);
     font-weight: var(--font-weight-bold);
     text-decoration: none;
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-standard);
+
+    @include butler-mx.hover {
+      background: var(--color-control-bg);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
   }
 
   .board,
   .links a {
     display: inline-flex;
     align-items: center;
-    min-block-size: var(--size-tap-target);
+    min-block-size: 3rem; // 48px (mock .h19__lnk)
     color: inherit;
     text-decoration: underline;
     text-underline-offset: 4px;

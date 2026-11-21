@@ -8,9 +8,9 @@
           <b>Als App uffs Handy</b>
           <span>Offline, mit Wort des Tages. Ohne Store.</span>
         </p>
-        <InstallApp v-if="mounted" data-variant="primary lg">App installieren</InstallApp>
+        <InstallApp v-if="mounted" data-variant="primary lg soft">App installieren</InstallApp>
         <!-- Server stand-in, same size: InstallApp reads matchMedia once its store mounts and starts disabled anyway. -->
-        <button v-else class="c-button" data-variant="primary lg" type="button" disabled>
+        <button v-else class="c-button" data-variant="primary lg soft" type="button" disabled>
           App installieren
         </button>
       </div>
@@ -20,7 +20,7 @@
           <b>Anki-Deck zum Lernen</b>
           <span>Lite für lau, volles Deck einmal kaufen.</span>
         </p>
-        <a class="c-button" data-variant="lg" href="/anki">Deck laden</a>
+        <a class="c-button" data-variant="secondary lg soft" href="/anki">Deck laden</a>
       </div>
     </div>
   </section>

@@ -59,6 +59,7 @@
 
     h3 {
       margin: 0;
+      font-family: var(--font-family-body); // mock: h1-h3 use the body font, the global h3 would be the display font
       font-size: var(--_q);
       font-weight: var(--font-weight-bold);
       color: var(--color-text-strong);

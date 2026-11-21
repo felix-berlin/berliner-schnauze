@@ -53,14 +53,23 @@
     margin: var(--space-3) 0 0;
   }
 
+  // Highlighted box (mock .h20__todo): card2 fill, 4px radius, the count big in the accent colour.
   .todo {
+    display: inline-block;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-sm);
+    background: var(--card2);
+
     b {
       font-family: var(--font-condensed);
+      font-size: var(--font-size-xl);
       font-weight: var(--font-weight-black);
-      color: var(--color-text-strong);
+      color: var(--color-text-accent);
     }
 
     a {
+      margin-inline-start: var(--space-1);
+      font-weight: var(--font-weight-bold);
       color: var(--color-text-strong);
       text-decoration: underline;
       text-decoration-color: var(--color-accent-active);
@@ -74,12 +83,14 @@
     }
   }
 
-  // Public c-button knobs: the secondary is dashed at rest (SPEC §12.4); the primary's border is its fill colour.
+  // Public c-button knobs: the secondary (variant secondary) is dashed at rest (SPEC §12.4), the icon is the mock's 18px plus.
   .actions {
-    --button-border-style: dashed;
-    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §12.4 mock 1.5px dashed rim, no token
-    --button-border-width: 1.5px;
     --button-gap: var(--space-2);
+
+    svg {
+      inline-size: 18px;
+      block-size: 18px;
+    }
 
     display: flex;
     flex-wrap: wrap;

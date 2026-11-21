@@ -35,13 +35,13 @@ const recordHref = gap.randomSlug && `/wort/${gap.randomSlug}`;
         )
       }
       <div class="actions">
-        <a class="c-button" data-variant="primary lg center-icon" href="/wort-vorschlagen">
+        <a class="c-button" data-variant="primary lg center-icon soft" href="/wort-vorschlagen">
           <Plus aria-hidden="true" />
           Wort vorschlagen
         </a>
         {
           recordHref && (
-            <a class="c-button" data-variant="lg center-icon" href={recordHref}>
+            <a class="c-button" data-variant="secondary lg center-icon soft" href={recordHref}>
               <Plus aria-hidden="true" />
               Aussprache einsprechen
             </a>
