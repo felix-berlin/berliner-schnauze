@@ -483,9 +483,9 @@ describe("colour scheme contract", () => {
   it("flags the follow-ups that become due when the legacy list is empty", () => {
     const due =
       "Legacy list is empty. Now: (1) set the root color-scheme in base/_colors.scss to 'light dark', " +
-        "(2) remove the global 0.01ms reduced-motion net in base/_body.scss and its rule-file sentence, " +
-        "(3) delete this test and the root-default test above. " +
-        "See docs/superpowers/plans/2026-11-21-design-system-modern-web-alignment.md, 'Outcome and follow-ups'.",;
+      "(2) remove the global 0.01ms reduced-motion net in base/_body.scss and its rule-file sentence, " +
+      "(3) delete this test and the root-default test above. " +
+      "See docs/superpowers/plans/2026-11-21-design-system-modern-web-alignment.md, 'Outcome and follow-ups'.";
     if (legacyFiles.length === 0) throw new Error(due);
     expect(legacyFiles.length).toBeGreaterThan(0);
   });
