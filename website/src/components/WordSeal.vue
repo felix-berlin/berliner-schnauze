@@ -62,13 +62,18 @@ const knownDuration = (): number | undefined => {
   return d && Number.isFinite(d) ? d : undefined;
 };
 
+const stepDelay = (): number => {
+  const d = knownDuration();
+  return d ? (d * 1000) / props.morse.length : FALLBACK_STEP_MS;
+};
+
 const tick = (): void => {
   const n = props.morse.length;
   const d = knownDuration();
   // Known duration: follow the playback position; else advance one mark per fallback step.
   const next = d ? Math.floor(((audio.value?.currentTime ?? 0) * n) / d) : step.value + 1;
   step.value = Math.min(n - 1, Math.max(step.value, next));
-  timer = setTimeout(tick, d ? (d * 1000) / n : FALLBACK_STEP_MS);
+  timer = setTimeout(tick, stepDelay());
 };
 
 const rest = (): void => {
@@ -92,10 +97,6 @@ async function toggle(): Promise<void> {
   }
   playing.value = true;
   emit("play");
-  if (props.morse.length) {
-    step.value = 0;
-    timer = setTimeout(tick, FALLBACK_STEP_MS);
-  }
   try {
     await el.play();
   } catch (error) {
@@ -104,7 +105,12 @@ async function toggle(): Promise<void> {
     if (error instanceof DOMException && error.name === "AbortError") return;
     reportError(new Error(`[seal] playback failed: ${props.audioUrl}`, { cause: error }));
     createToastNotify({ message: "Die Aufnahme lässt sich nich abspielen.", status: "error" });
+    return;
   }
+  // Marks start with the sound, not with the click: the file only loads now (preload="none").
+  if (!playing.value || !props.morse.length) return;
+  step.value = 0;
+  timer = setTimeout(tick, stepDelay());
 }
 
 onBeforeUnmount(() => clearTimeout(timer));

@@ -82,6 +82,7 @@
 
   .lemma {
     // Long words shrink to fit the row (SPEC §19: 3.5rem floor), short ones keep the full size.
+    // TODO(startseite): replaces §19's 12vw, which would undercut §4.5's 5.5rem for short words on mobile.
     --_fit: clamp(3.5rem, 166cqi / var(--chars, 1), var(--_lemma));
 
     margin: 0;

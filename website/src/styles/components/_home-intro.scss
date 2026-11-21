@@ -24,9 +24,11 @@
   }
 
   p {
+    --_text: 1.0625rem; // SPEC §4.5 mobile size, between the base and lg steps
+
     max-inline-size: 62ch;
     margin: 0;
-    font-size: var(--font-size-lg);
+    font-size: var(--_text);
     line-height: 1.5;
     color: var(--color-text-body);
   }

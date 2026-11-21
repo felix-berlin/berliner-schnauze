@@ -71,6 +71,23 @@ describe("WordSeal", () => {
     expect(w.findAll('i[data-state="now"]')).toHaveLength(1);
   });
 
+  it("starts the marks only when playback starts, not on the click", async () => {
+    let start!: () => void;
+    vi.mocked(HTMLMediaElement.prototype.play).mockReturnValue(
+      new Promise<void>((resolve) => (start = resolve)),
+    );
+    const w = seal();
+    await w.get("button").trigger("click");
+    // slow connection: the file is still loading
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(onMarks(w)).toBe(0);
+    start();
+    await flushPromises();
+    expect(onMarks(w)).toBe(1);
+    await vi.advanceTimersByTimeAsync(120);
+    expect(onMarks(w)).toBe(2);
+  });
+
   it("spreads the marks over the audio duration once it is known", async () => {
     const w = seal();
     const audio = w.get("audio").element as HTMLAudioElement;
