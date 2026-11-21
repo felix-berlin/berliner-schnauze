@@ -326,4 +326,39 @@ describe("loadHomeStats", () => {
     const banned = keys.filter((k) => /^(id|visitor|createdAt|updatedAt|finishedAt)$|Id$/.test(k));
     expect(banned).toEqual([]);
   });
+
+  describe("trial card fallbacks", () => {
+    const oldGame = (word: string) =>
+      payload.create({
+        collection: "bon-games",
+        data: {
+          visitor: "hs-old",
+          token: "hs-t-old",
+          status: "finished",
+          finishedAt: new Date(Date.now() - 10 * 86_400_000).toISOString(),
+          cards: Array.from({ length: 12 }, (_, i) => ({
+            id: i,
+            word,
+            isReal: false,
+            answer: i < 6,
+          })),
+          batches: [],
+        } as never,
+      });
+
+    it("falls back to the hardest card of all time when the week has none", async () => {
+      await payload.db.deleteMany({ collection: "bon-games", where: {} });
+      await oldGame("Altwort");
+      const { bon } = await loadHourlyStats(payload);
+      expect(bon.card).toEqual({ word: "Altwort", wrongShare: 50, isReal: false });
+    });
+
+    it("falls back to a published word without a wrong share when no card qualifies", async () => {
+      await payload.db.deleteMany({ collection: "bon-games", where: {} });
+      const { bon } = await loadHourlyStats(payload);
+      expect(bon.card).toMatchObject({ isReal: true });
+      expect(bon.card?.slug).toBeTruthy();
+      expect(bon.card?.wrongShare).toBeUndefined();
+    });
+  });
 });

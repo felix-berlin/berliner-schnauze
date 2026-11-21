@@ -37,16 +37,19 @@
           >
             <p class="label">Is ditt Berlinerisch?</p>
             <p class="word">{{ card.word }}</p>
-            <p class="note">Die am häufigsten falsch jeratene Karte</p>
+            <p v-if="card.wrongShare !== undefined" class="note">
+              Die am häufigsten falsch jeratene Karte
+            </p>
           </div>
           <!-- The trial card never calls the BON API: it does not count for the ranking (SPEC §9). -->
           <div class="status" role="status">
             <div v-if="result" class="result" :data-state="result.correct ? 'ok' : 'wrong'">
               <p ref="resultHeading" class="head" tabindex="-1">{{ result.head }}</p>
               <p class="text">
-                <b>{{ card.word }}</b> {{ result.fact }} {{ card.wrongShare }} % haben hier „{{
-                  result.wrongLabel
-                }}“ jetippt.
+                <b>{{ card.word }}</b> {{ result.fact }}
+                <template v-if="card.wrongShare !== undefined"
+                  >{{ card.wrongShare }} % haben hier „{{ result.wrongLabel }}“ jetippt.</template
+                >
               </p>
               <div class="links">
                 <a v-if="card.isReal && card.slug" :href="routeToWord(card.slug)"

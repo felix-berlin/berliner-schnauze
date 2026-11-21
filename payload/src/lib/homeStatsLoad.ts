@@ -29,7 +29,8 @@ import { trending } from "./wordStats";
 export type AgeWord = { word: WordRef; byGroup: Record<AgeGroup, number | null>; meaning?: string };
 export type District = { area: Area; name: string; value: number | null; typical: WordRef | null };
 export type BonStep = { from: number; mult: number };
-type BonCardBase = { word: string; wrongShare: number };
+/** wrongShare is missing on the pool card shown while no card has enough answers. */
+type BonCardBase = { word: string; wrongShare?: number };
 /** Slug and meaning exist only for a real card whose word is published (`card.slug` narrows to that case). */
 export type BonCard =
   | (BonCardBase & { isReal: true; slug: string; meaning?: string })
@@ -220,20 +221,38 @@ const toCard = (card: {
     : { ...base, isReal: card.is_real };
 };
 
+/** A published word picked by day (stable for 24 h, no per-request randomness), as a card without statistics. */
+const poolCard = async (payload: BasePayload, day: string): Promise<BonCard | null> => {
+  const [row] = await query<{ word: string; slug: string; meaning: string | null }>(
+    payload,
+    sql`select w.berlinerisch as word, w.slug, ${MEANING} as meaning from words w
+        where ${PUBLISHED_WORD} and w.slug is not null
+        order by md5(w.slug || ${day}) limit 1`,
+  );
+  return row
+    ? {
+        word: row.word,
+        isReal: true,
+        slug: row.slug,
+        ...(row.meaning ? { meaning: row.meaning } : {}),
+      }
+    : null;
+};
+
 const loadBon = async (payload: BasePayload): Promise<HomeStats["bon"]> => {
   const today = berlinDay();
   const end = dayStart(addDays(today, 1)).toISOString();
   const todayStart = dayStart(today).toISOString();
   const weekStart = dayStart(addDays(today, 1 - DAYS)).toISOString();
-  const [[rounds], [card]] = await Promise.all([
-    query<{ n: string }>(
-      payload,
-      sql`select count(*) as n from bon_games where status = 'finished'
-          and finished_at >= ${todayStart}::timestamptz and finished_at < ${end}::timestamptz`,
-    ),
-    // TODO(startseite): "most wrongly answered" read as the highest wrong count (share breaks ties); confirm.
-    // Real cards carry the word's slug (bonPool); slug and meaning come from the published word only.
-    query<{
+  const rounds = await query<{ n: string }>(
+    payload,
+    sql`select count(*) as n from bon_games where status = 'finished'
+        and finished_at >= ${todayStart}::timestamptz and finished_at < ${end}::timestamptz`,
+  ).then(([r]) => r);
+  // TODO(startseite): "most wrongly answered" read as the highest wrong count (share breaks ties); confirm.
+  // Real cards carry the word's slug (bonPool); slug and meaning come from the published word only.
+  const hardest = async (since: string) => {
+    const [row] = await query<{
       word: string;
       is_real: boolean;
       wrong: string;
@@ -249,18 +268,25 @@ const loadBon = async (payload: BasePayload): Promise<HomeStats["bon"]> => {
               count(*) as total
             from bon_games g, jsonb_array_elements(g.cards) c
             where g.status = 'finished'
-              and g.finished_at >= ${weekStart}::timestamptz and g.finished_at < ${end}::timestamptz
+              and g.finished_at >= ${since}::timestamptz and g.finished_at < ${end}::timestamptz
               and jsonb_typeof(c->'answer') = 'boolean' and jsonb_typeof(c->'isReal') = 'boolean'
             group by c->>'word', (c->>'isReal')::boolean having count(*) >= ${MIN_GROUP}
             order by wrong desc, total, word
             limit 1) top
           left join words w on top.is_real and w.slug = top.card_slug and ${PUBLISHED_WORD}`,
-    ),
-  ]);
+    );
+    return row && Number(row.wrong) > 0 ? toCard(row) : null;
+  };
+  // This week's hardest card, else the hardest of all time (same MIN_GROUP floor), else one published word of the
+  // day without a wrong share: the trial column never stays empty on a young game.
+  const card =
+    (await hardest(weekStart)) ??
+    (await hardest(new Date(0).toISOString())) ??
+    (await poolCard(payload, today));
   return {
     roundsToday: Number(rounds?.n ?? 0),
     steps: MULTIPLIER_STEPS.map(({ from, mult }) => ({ from, mult })),
-    card: card && Number(card.wrong) > 0 ? toCard(card) : null,
+    card,
   };
 };
 
