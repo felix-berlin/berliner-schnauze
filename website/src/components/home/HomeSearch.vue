@@ -157,6 +157,7 @@ const open = ref(false);
 const active = ref(-1);
 const result = shallowRef<null | Result>(null);
 const failed = ref(false);
+let reported = false; // one Sentry report per page, not one per debounced keystroke
 
 const options = computed(() =>
   result.value ? [...result.value.lemma, ...result.value.meaning] : [],
@@ -220,7 +221,10 @@ async function runSearch(raw: string) {
   } catch (err) {
     failed.value = true;
     result.value = null;
-    reportError(err);
+    if (!reported) {
+      reported = true;
+      reportError(err);
+    }
   }
 }
 

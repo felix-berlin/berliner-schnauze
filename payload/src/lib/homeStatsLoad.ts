@@ -10,14 +10,14 @@ import {
   ageGroup,
   agePercents,
   districtValue,
-  MIN_GROUP,
   MIN_WORD_VOTES,
   typicalWord,
   type AgeGroup,
   type UsageCounts,
   type WordRef,
 } from "./homeStats";
-import { AREAS, type Age, type Area, type Usage } from "./wordFeedback";
+import { PUBLISHED_WORD } from "./statsQueries";
+import { AREAS, MIN_GROUP, type Age, type Area, type Usage } from "./wordFeedback";
 import { trending } from "./wordStats";
 
 // Start page aggregates (`payload-app/home-stats-load`). Only aggregates leave this module: no ids, timestamps,
@@ -25,7 +25,6 @@ import { trending } from "./wordStats";
 // words, words_translations, bon_games, word_id, usage, area, age, _status, cards, status, finished_at) must
 // follow any rename.
 
-export type { WordRef };
 /** meaning: the published word's translations, only when it has any. */
 export type AgeWord = { word: WordRef; byGroup: Record<AgeGroup, number | null>; meaning?: string };
 export type District = { area: Area; name: string; value: number | null; typical: WordRef | null };
@@ -86,7 +85,7 @@ const MEANING = sql`(select string_agg(t.translation, ', ' order by t._order) fr
   where t._parent_id = w.id and coalesce(t.translation, '') <> '')`;
 
 // Votes of published words with a usage answer; every feedback query starts here.
-const VOTES = sql`word_feedback f join words w on w.id = f.word_id and w._status = 'published' and w.deleted_at is null
+const VOTES = sql`word_feedback f join words w on w.id = f.word_id and ${PUBLISHED_WORD}
   where f.usage is not null`;
 
 const loadDistricts = async (payload: BasePayload): Promise<District[]> => {
@@ -255,7 +254,7 @@ const loadBon = async (payload: BasePayload): Promise<HomeStats["bon"]> => {
             group by c->>'word', (c->>'isReal')::boolean having count(*) >= ${MIN_GROUP}
             order by wrong desc, total, word
             limit 1) top
-          left join words w on top.is_real and w.slug = top.card_slug and w._status = 'published' and w.deleted_at is null`,
+          left join words w on top.is_real and w.slug = top.card_slug and ${PUBLISHED_WORD}`,
     ),
   ]);
   return {
@@ -285,7 +284,7 @@ const loadTrending = async (
     query<{ id: number; slug: string; berlinerisch: string; meaning: string | null }>(
       payload,
       sql`select w.id, w.slug, w.berlinerisch, ${MEANING} as meaning
-          from words w where w._status = 'published' and w.deleted_at is null and w.id in (${inList(ids)})`,
+          from words w where ${PUBLISHED_WORD} and w.id in (${inList(ids)})`,
     ),
     query<{ word_id: number; usage: Usage; n: string }>(
       payload,

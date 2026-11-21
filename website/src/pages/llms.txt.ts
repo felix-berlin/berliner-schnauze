@@ -6,7 +6,7 @@ import { fetchAllThemen } from "@services/payload/themen.ts";
 import { fetchAllWords } from "@services/payload/words.ts";
 import { setPageCache } from "@utils/cacheHeaders.ts";
 import { withCount } from "@utils/homeIntro.ts";
-import { reportError } from "@utils/reportError.ts";
+import { reportAndFallback } from "@utils/reportError.ts";
 import { docPath } from "payload-app/routes";
 
 const oneLine = (text: string | null | undefined): string =>
@@ -36,10 +36,7 @@ export const GET: APIRoute = async ({ site: origin }) => {
     fetchAllThemen(),
     fetchAllPosts(),
     // The start page texts are optional here: without them the index is served without that block.
-    fetchHome().catch((error: unknown) => {
-      reportError(new Error("[llms.txt] home texts unavailable", { cause: error }));
-      return null;
-    }),
+    reportAndFallback("[llms.txt] home texts", null, fetchHome),
   ]);
   const { faq = [], intro, knowledgeHtml, soundRules = [] } = home ?? {};
   const link = (title: string, path: string, note?: string) =>

@@ -4,12 +4,12 @@ import {
   ageGroup,
   agePercents,
   districtValue,
-  MIN_GROUP,
   morseRing,
   typicalWord,
   type AgeGroup,
   type UsageCounts,
 } from "../src/lib/homeStats";
+import { MIN_GROUP } from "../src/lib/wordFeedback";
 
 describe("morseRing", () => {
   it("counts the marks of the word", () => {

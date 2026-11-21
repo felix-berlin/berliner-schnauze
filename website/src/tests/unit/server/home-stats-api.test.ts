@@ -47,11 +47,13 @@ describe("GET /api/home-stats", () => {
     const res = await get();
     expect(res.status).toBe(502);
     expect(res.headers.get("Cache-Control")).toBe("no-store");
-    expect(String(error.mock.calls[0][0])).toContain("[home-stats]");
+    expect(String(error.mock.calls[0][0])).toContain("[home] stats unavailable");
     error.mockRestore();
   });
 
   it("returns exactly the HomeStats keys with a page cache header", async () => {
+    // the failure above paused retries for 60 s (shared with the page)
+    vi.advanceTimersByTime(60_001);
     const res = await get();
     expect(res.status).toBe(200);
     const body = await res.json();

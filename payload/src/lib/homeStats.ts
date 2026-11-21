@@ -1,9 +1,7 @@
-import type { AGES, Usage } from "./wordFeedback";
+import { MIN_GROUP, type AGES, type Usage } from "./wordFeedback";
 
-// Pure helpers for the start page (`payload-app/home-stats`): Morse ring, age groups and the privacy threshold.
+// Pure helpers for the start page (`payload-app/home-stats`): Morse ring, age groups and the word-vote threshold.
 
-/** Fewer votes than this in a group are never shown. */
-export const MIN_GROUP = 10;
 /** Votes (with an age) a word needs before it enters the age lists. TODO(startseite): interim value, to be decided. */
 export const MIN_WORD_VOTES = 30;
 

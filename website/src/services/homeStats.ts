@@ -10,8 +10,7 @@ import { loadDailyStats, loadHourlyStats } from "payload-app/home-stats-load";
 const daily = ttl(24 * 3_600_000, async () => loadDailyStats(await getPayloadClient()));
 const hourly = ttl(3_600_000, async () => loadHourlyStats(await getPayloadClient()));
 
-/** The start page aggregates; one cache for the page and GET /api/home-stats. */
-export const fetchHomeStats = async (): Promise<HomeStats> => {
+const fetchHomeStats = async (): Promise<HomeStats> => {
   const [{ districts, ageLists }, { popular, rising, bon }] = await Promise.all([
     daily(),
     hourly(),
@@ -23,8 +22,8 @@ const FAILURE_PAUSE_MS = 60_000;
 let failedAt = 0;
 
 /**
- * The stats for the page: null when they fail (docs/design/startseite-v20/SPEC.md §13: the sections drop). A failed first load is not cached by
- * `ttl`, so a short pause here keeps every page view from re-running the failing queries.
+ * The start page aggregates, shared by the page and GET /api/home-stats; null when they fail (docs/design/startseite-v20/SPEC.md §13:
+ * the sections drop). A failed first load is not cached by `ttl`, so a short pause here keeps every caller from re-running the failing queries.
  */
 export const fetchHomeStatsOrNull = async (): Promise<HomeStats | null> => {
   if (Date.now() - failedAt < FAILURE_PAUSE_MS) return null;
@@ -32,7 +31,7 @@ export const fetchHomeStatsOrNull = async (): Promise<HomeStats | null> => {
     return await fetchHomeStats();
   } catch (error) {
     failedAt = Date.now();
-    reportError(new Error("[home] stats unavailable", { cause: error }));
+    reportError(error, "[home] stats unavailable");
     return null;
   }
 };

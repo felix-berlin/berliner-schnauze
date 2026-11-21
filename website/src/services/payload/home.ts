@@ -6,7 +6,7 @@ import { fetchAllPosts, type SitePost } from "@services/payload/posts.ts";
 import { fetchHomeGlobal } from "@services/payload/site.ts";
 import { fetchAllThemen } from "@services/payload/themen.ts";
 import { fetchAllWords, type SiteWord, translationTexts } from "@services/payload/words.ts";
-import { reportError } from "@utils/reportError.ts";
+import { reportAndFallback, reportError } from "@utils/reportError.ts";
 import { pickWordOfTheDay } from "@utils/wordOfTheDay.ts";
 import { type MorseMark, morseRing } from "payload-app/home-stats";
 import { lexicalToHtml } from "payload-app/lexical-html";
@@ -36,7 +36,7 @@ export type BrowseLink = {
 };
 
 /** Own daily pick for the poll, never the word of the day; totalVotes counts usage answers. */
-export type HomePollWord = {
+type HomePollWord = {
   slug: string;
   lemma: string;
   meaning: string;
@@ -125,67 +125,70 @@ const plain = (html: string) =>
     .replace(/\s+/g, " ")
     .trim();
 
+/** `{ [key]: value }` when the value is set, else nothing: keeps absent optional fields out of the object. */
+const opt = <K extends string, V>(key: K, value: V | null | undefined | "") =>
+  value ? ({ [key]: value } as { [P in K]: V }) : {};
+
 const toHomeWord = (word: SiteWord, now: Date): HomeWord => {
   const example = word.examples.find((e) => e.example);
   const audioUrl = word.berlinerischAudio[0]?.audio.url;
   return {
-    ...(word.article ? { article: word.article } : {}),
-    ...(audioUrl ? { audioUrl } : {}),
+    ...opt("article", word.article),
+    ...opt("audioUrl", audioUrl),
     dateLabel: dateFormat.format(now),
-    ...(example?.example
-      ? {
-          example: {
-            text: example.example,
-            ...(example.exampleExplanation ? { translation: example.exampleExplanation } : {}),
-          },
-        }
-      : {}),
-    ...(word.ipa ? { ipa: word.ipa } : {}),
+    ...opt(
+      "example",
+      example?.example && {
+        text: example.example,
+        ...opt("translation", example.exampleExplanation),
+      },
+    ),
+    ...opt("ipa", word.ipa),
     lemma: word.berlinerisch,
     meaning: meaning(word),
     morse: morseRing(word.berlinerisch),
     slug: word.slug,
-    ...(word.wordTypes[0] ? { wordType: word.wordTypes[0].name } : {}),
+    ...opt("wordType", word.wordTypes[0]?.name),
   };
 };
 
-const quoteOf = (post: SitePost): string =>
-  post.teaserZitat ||
-  plain(
-    /<blockquote[^>]*>([\s\S]*?)<\/blockquote>/.exec(
-      post.blocks.filter((b) => typeof b === "string").join(" "),
-    )?.[1] ?? "",
-  );
+const blocksHtml = (post: SitePost) => post.blocks.filter((b) => typeof b === "string").join(" ");
+
+const quoteOf = (post: SitePost, html: string): string =>
+  post.teaserZitat || plain(/<blockquote[^>]*>([\s\S]*?)<\/blockquote>/.exec(html)?.[1] ?? "");
 
 /** The latest post that has a teaser quote or a pull quote; posts without one are skipped, not the whole section. */
 const toMagazine = (posts: SitePost[]): HomeMagazine | null => {
-  const post = posts.find((p) => quoteOf(p));
-  if (!post) return null;
-  const html = post.blocks.filter((b) => typeof b === "string").join(" ");
-  const text = plain(html) || post.excerpt || "";
-  return {
-    excerpt: text.split(" ").slice(0, EXCERPT_WORDS).join(" "),
-    ...(post.teaserIpa ? { ipa: post.teaserIpa } : {}),
-    others: posts
-      .filter((p) => p !== post)
-      .slice(0, OTHER_POSTS)
-      .map(({ slug, title }) => ({ slug, title })),
-    quote: quoteOf(post),
-    readingMinutes: post.readingTime,
-    slug: post.slug,
-    title: post.title,
-  };
+  for (const post of posts) {
+    const html = blocksHtml(post);
+    const quote = quoteOf(post, html);
+    if (!quote) continue;
+    const text = plain(html) || post.excerpt || "";
+    return {
+      excerpt: text.split(" ").slice(0, EXCERPT_WORDS).join(" "),
+      ...opt("ipa", post.teaserIpa),
+      others: posts
+        .filter((p) => p !== post)
+        .slice(0, OTHER_POSTS)
+        .map(({ slug, title }) => ({ slug, title })),
+      quote,
+      readingMinutes: post.readingTime,
+      slug: post.slug,
+      title: post.title,
+    };
+  }
+  return null;
 };
 
-/** An optional part of the page: a failing source drops its section instead of taking the whole page down. */
-const optional = async <T>(what: string, fallback: T, run: () => Promise<T>): Promise<T> => {
-  try {
-    return await run();
-  } catch (error) {
-    reportError(new Error(`[home] ${what} unavailable`, { cause: error }));
-    return fallback;
-  }
-};
+const countVotes = (payload: Awaited<ReturnType<typeof getPayloadClient>>, wordId?: number) =>
+  payload
+    .count({
+      collection: "word-feedback",
+      where: wordId
+        ? { and: [{ word: { equals: wordId } }, { usage: { exists: true } }] }
+        : { usage: { exists: true } },
+    })
+    .then((r) => r.totalDocs);
 
 const load = async (): Promise<HomeData> => {
   const now = new Date();
@@ -194,15 +197,9 @@ const load = async (): Promise<HomeData> => {
   const [words, themen, posts, global, votes] = await Promise.all([
     fetchAllWords(),
     fetchAllThemen(),
-    optional("posts", [] as SitePost[], fetchAllPosts),
+    reportAndFallback("[home] posts", [] as SitePost[], fetchAllPosts),
     fetchHomeGlobal(),
-    optional(
-      "votes",
-      0,
-      async () =>
-        (await payload.count({ collection: "word-feedback", where: { usage: { exists: true } } }))
-          .totalDocs,
-    ),
+    reportAndFallback("[home] votes", 0, () => countVotes(payload)),
   ]);
 
   const wordOfTheDay = pickWordOfTheDay(words, now);
@@ -217,16 +214,8 @@ const load = async (): Promise<HomeData> => {
         lemma: pollWord.berlinerisch,
         meaning: meaning(pollWord),
         slug: pollWord.slug,
-        totalVotes: await optional(
-          "poll votes",
-          0,
-          async () =>
-            (
-              await payload.count({
-                collection: "word-feedback",
-                where: { and: [{ word: { equals: pollWord.id } }, { usage: { exists: true } }] },
-              })
-            ).totalDocs,
+        totalVotes: await reportAndFallback("[home] poll votes", 0, () =>
+          countVotes(payload, pollWord.id),
         ),
         wordId: pollWord.id,
       }
@@ -251,7 +240,7 @@ const load = async (): Promise<HomeData> => {
     try {
       return [{ answerHtml: lexicalToHtml(answer), question }];
     } catch (error) {
-      reportError(new Error(`[home] FAQ "${question}" skipped`, { cause: error }));
+      reportError(error, `[home] FAQ "${question}" skipped`);
       return [];
     }
   });
@@ -277,7 +266,7 @@ const load = async (): Promise<HomeData> => {
           name: t.name,
           slug: t.slug,
         },
-        t.typischerSatz ? { saying: t.typischerSatz } : {},
+        opt("saying", t.typischerSatz),
       ),
     );
 
@@ -288,7 +277,7 @@ const load = async (): Promise<HomeData> => {
         topics: themen.length,
         votes,
       },
-      ...(global.aboutText ? { text: global.aboutText } : {}),
+      ...opt("text", global.aboutText),
     },
     browseLinks: (global.browseLinks ?? []).map(({ href, icon, label }) => ({
       href,
@@ -297,16 +286,13 @@ const load = async (): Promise<HomeData> => {
     })),
     faq,
     gap: {
-      ...(gapWord ? { randomSlug: gapWord.slug } : {}),
+      ...opt("randomSlug", gapWord?.slug),
       wordsWithoutAudio: withoutAudio.length,
     },
-    ...(global.intro ? { intro: global.intro } : {}),
-    ...(knowledgeHtml ? { knowledgeHtml } : {}),
+    ...opt("intro", global.intro),
+    ...opt("knowledgeHtml", knowledgeHtml),
     magazine: toMagazine(posts),
     newest: words
-      .filter((w) => w.publishedAt)
-      .toSorted((a, b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? ""))
-      .slice(0, NEWEST)
       .flatMap((w) =>
         w.publishedAt
           ? [
@@ -318,10 +304,12 @@ const load = async (): Promise<HomeData> => {
               },
             ]
           : [],
-      ),
+      )
+      .toSorted((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+      .slice(0, NEWEST),
     poll,
     soundRules: (global.soundRules ?? []).map(({ berlin, example, rule, standard }) =>
-      Object.assign({ berlin, standard }, example ? { example } : {}, rule ? { rule } : {}),
+      Object.assign({ berlin, standard }, opt("example", example), opt("rule", rule)),
     ),
     topics,
     tryWords,

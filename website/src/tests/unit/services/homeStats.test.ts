@@ -22,7 +22,7 @@ describe("fetchHomeStatsOrNull", () => {
   it("degrades to null with a tagged report, pauses retries, then recovers", async () => {
     expect(await fetchHomeStatsOrNull()).toBeNull();
     expect(reportError).toHaveBeenCalledTimes(1);
-    expect(reportError.mock.calls[0][0].message).toBe("[home] stats unavailable");
+    expect(reportError.mock.calls[0][1]).toBe("[home] stats unavailable");
 
     // within the pause the failing queries do not run again
     expect(await fetchHomeStatsOrNull()).toBeNull();
