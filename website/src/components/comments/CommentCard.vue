@@ -42,7 +42,7 @@
         <p :id="`${uid}-text`" class="text" :data-state="long && !expanded ? 'clamped' : undefined">
           {{ comment.text }}
         </p>
-        <!-- Proposal in the spec (§9, long comments): cut at about 600 characters to 8 lines. -->
+        <!-- Long comments (docs/design/wortseite/SPEC.md §9): cut at about 600 characters to 8 lines. -->
         <button
           v-if="long"
           class="c-textlink"
@@ -278,7 +278,7 @@ const { comment, parentVisible = true } = defineProps<{
 
 const ctx = inject(commentsKey)!;
 const uid = useId();
-// One action open per comment at a time (spec §9a).
+// One action open per comment at a time (docs/design/wortseite/SPEC.md §9a).
 const mode = ref<"delete" | "edit" | "reply" | "report" | null>(null);
 const reason = ref<ReportReason | "">("");
 const note = ref("");
@@ -292,7 +292,7 @@ const menuButton = useTemplateRef<HTMLButtonElement>("menuButton");
 const placeholder = useTemplateRef<HTMLElement>("placeholder");
 const reported = computed(() => ctx.isReported(comment.id));
 const initial = computed(() => comment.authorName.trim().charAt(0).toUpperCase());
-// Proposal (spec): long comments are cut to 8 lines from about 600 characters.
+// Long comments are cut to 8 lines from about 600 characters.
 const LONG = 600;
 const long = computed(() => (comment.text?.length ?? 0) > LONG);
 const expanded = ref(false);

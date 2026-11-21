@@ -1,15 +1,15 @@
 ---
-import type { HomeData } from "@services/payload/home.ts";
+import type { HomeMagazine } from "@services/payload/home.ts";
 
 interface Props {
-  magazine: HomeData["magazine"];
+  magazine: HomeMagazine | null;
 }
 
 const OTHERS = 2;
 const { magazine } = Astro.props;
 ---
 
-{/* fetchHome falls back to the first pull quote; without any quote the section drops (SPEC §12.3). */}
+{/* fetchHome falls back to the first pull quote; without any quote the section drops (docs/design/startseite-v20/SPEC.md §12.3). */}
 {
   magazine?.quote && (
     <article class="c-home-magazine" aria-labelledby="home-magazine-title" data-reveal="wait">

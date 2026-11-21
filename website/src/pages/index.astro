@@ -1,7 +1,5 @@
 ---
 import '@styles/pages/_home.scss';
-import type { HomeStats } from 'payload-app/home-stats-load';
-
 import HomePoll from '@components/HomePoll.vue';
 import BerlinerischArticle from '@components/home/BerlinerischArticle.astro';
 import BonTeaser from '@components/home/BonTeaser.vue';
@@ -17,14 +15,13 @@ import ToGoBar from '@components/home/ToGoBar.vue';
 import TopicRegister from '@components/home/TopicRegister.astro';
 import WordOfTheDayStage from '@components/home/WordOfTheDayStage.vue';
 import Layout from '@layouts/Layout.astro';
-import { fetchHomeStats } from '@services/homeStats.ts';
+import { fetchHomeStatsOrNull } from '@services/homeStats.ts';
 import { fetchHome } from '@services/payload/home.ts';
 import { fetchAllWords } from '@services/payload/words.ts';
 import { SITE_URL } from 'astro:env/client';
 import { defaultOgImage } from '@utils/defaultOgImage';
 import { jsonLd, seoData } from '@utils/helpers';
 import { homeDescription, homeJsonLd } from '@utils/homeJsonLd';
-import { reportError } from '@utils/reportError.ts';
 
 // Old share links (/?q=…) pointed at the search that used to live here. Redirect only real page loads:
 // ClientRouter fetches carry ?q= to every target (useSearchQuerySync) and must stay on the home page.
@@ -40,18 +37,15 @@ if (query && Astro.request.headers.get('sec-fetch-mode') === 'navigate') {
   });
 }
 
-// Stats failing must not take the page down: its sections drop (SPEC §13).
+// Stats failing must not take the page down: its sections drop (docs/design/startseite-v20/SPEC.md §13).
 const [home, words, stats] = await Promise.all([
   fetchHome(),
   fetchAllWords(),
-  fetchHomeStats().catch((error: unknown): HomeStats | null => {
-    reportError(error);
-    return null;
-  }),
+  fetchHomeStatsOrNull(),
 ]);
 
 // Lemma -> slug of the published words: the intro and the article link only words that exist.
-const linkable = Object.fromEntries(words.map((w) => [w.berlinerisch, w.slug]));
+const linkable = new Map(words.map((w) => [w.berlinerisch, w.slug]));
 
 const MIN_LIST = 3; // SPEC §19: below three entries a list drops
 const popular = stats?.popular ?? [];

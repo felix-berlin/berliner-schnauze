@@ -39,6 +39,17 @@ test.describe("Startseite (/)", () => {
     ).toHaveValue("aasen");
   });
 
+  test("?q= bleibt auf der Startseite, wenn es kein echter Seitenaufruf ist (ClientRouter-Fetch)", async ({
+    request,
+  }) => {
+    const res = await request.get("/?q=aasen", {
+      headers: { "Sec-Fetch-Mode": "cors" },
+      maxRedirects: 0,
+    });
+
+    expect(res.status()).toBe(200);
+  });
+
   test("Logo-Klick von /suche führt zur Startseite, nicht zurück", async ({ page }) => {
     await page.goto("/suche?q=aasen");
     await expect(

@@ -1,5 +1,5 @@
 ---
-import type { HomeData } from "@services/payload/home.ts";
+import type { BrowseLink, HomeTryWord } from "@services/payload/home.ts";
 import Audio from "virtual:icons/lucide/volume-1";
 import Idiom from "virtual:icons/lucide/message-circle";
 import Short from "virtual:icons/lucide/move-horizontal";
@@ -7,8 +7,8 @@ import Rhyme from "virtual:icons/lucide/music";
 import Random from "virtual:icons/lucide/rotate-cw";
 
 interface Props {
-  tryWords: HomeData["tryWords"];
-  browseLinks: HomeData["browseLinks"];
+  tryWords: HomeTryWord[];
+  browseLinks: BrowseLink[];
 }
 
 const { tryWords, browseLinks } = Astro.props;

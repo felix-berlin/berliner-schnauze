@@ -23,7 +23,7 @@
       <span v-if="word.article || word.wordType" class="art"
         >, {{ word.article || word.wordType }}</span
       >
-      <WordSeal :word="word.lemma" :morse="word.morse" :audio-url="word.audio?.url" />
+      <WordSeal :word="word.lemma" :morse="word.morse" :audio-url="word.audioUrl" />
     </div>
     <p class="meaning">{{ word.meaning }}</p>
     <p v-if="word.example" class="example">
@@ -33,7 +33,7 @@
     </p>
     <!-- TODO(startseite): no recording route yet; stays a focusable non-link with a tooltip until it exists. -->
     <button
-      v-if="!word.audio"
+      v-if="!word.audioUrl"
       v-tooltip="{
         content: 'Kommt bald! Det Einsprechen is noch in Arbeit, Moment ma.',
         placement: 'top',

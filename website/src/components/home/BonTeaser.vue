@@ -1,5 +1,5 @@
 <template>
-  <!-- keydown on the root: the arrow keys answer only while the focus is inside the teaser (SPEC §9). -->
+  <!-- keydown on the root: the arrow keys answer only while the focus is inside the teaser (docs/design/startseite-v20/SPEC.md §9). -->
   <div class="c-home-bon" @keydown="onKey">
     <div class="inner">
       <div class="intro">
@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import type { HomeStats } from "payload-app/home-stats-load";
+import type { BonCard, BonStep } from "payload-app/home-stats-load";
 
 import { routeToWord } from "@utils/helpers.ts";
 import {
@@ -100,9 +100,9 @@ import {
 const IconArrowRight = defineAsyncComponent(() => import("virtual:icons/lucide/arrow-right"));
 
 const props = defineProps<{
-  steps: HomeStats["bon"]["steps"];
+  steps: BonStep[];
   roundsToday: number;
-  card: HomeStats["bon"]["card"];
+  card: BonCard | null;
 }>();
 
 const GAME = "/games/berliner-oder-nicht";

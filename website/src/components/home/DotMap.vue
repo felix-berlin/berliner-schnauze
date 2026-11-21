@@ -3,7 +3,7 @@
   <div class="map" :data-wave="wave">
     <svg
       ref="svg"
-      :viewBox="geometry.viewBox"
+      :viewBox="`0 0 ${geometry.viewBox.width} ${geometry.viewBox.height}`"
       role="group"
       aria-label="Berlin-Karte aus Punkten: Anteil „Sag ick selbst“ je Bezirk"
       @keydown.esc="active = null"
@@ -11,7 +11,7 @@
       @pointerleave="onPointer($event, null)"
       @click="onTap"
     >
-      <!-- Ranking order (SPEC §17): focus walks from the most to the least berlinert district. -->
+      <!-- Ranking order (docs/design/startseite-v20/SPEC.md §17): focus walks from the most to the least berlinert district. -->
       <g
         v-for="d in shapes"
         :key="d.slug"
@@ -53,13 +53,13 @@
 
 <script setup lang="ts">
 import type { Geometry } from "@utils/dotMap.ts";
-import type { HomeStats } from "payload-app/home-stats-load";
+import type { District } from "payload-app/home-stats-load";
 
 import { dotStyle, nearestDistrict } from "@utils/dotMap.ts";
 import { useIntersectionObserver } from "@vueuse/core";
 import { computed, onMounted, ref, useTemplateRef } from "vue";
 
-const props = defineProps<{ districts: HomeStats["districts"]; geometry: Geometry }>();
+const props = defineProps<{ districts: District[]; geometry: Geometry }>();
 
 // Tooltip below the district when it sits in the top quarter of the map.
 const BELOW = 25;
@@ -69,7 +69,7 @@ const focused = ref<string | null>(null);
 const svg = useTemplateRef<SVGSVGElement>("svg");
 
 const shapes = computed(() => {
-  const [, , w = 1, h = 1] = props.geometry.viewBox.split(" ").map(Number);
+  const { height: h, width: w } = props.geometry.viewBox;
   const byArea = new Map(props.districts.map((d) => [d.area, d]));
   return props.geometry.bezirke
     .map((b) => {
@@ -77,8 +77,8 @@ const shapes = computed(() => {
       const value = data?.value ?? null;
       const name = data?.name ?? b.name;
       const typical = data?.typical?.berlinerisch;
-      const xs = b.dots.map((d) => d[0]!);
-      const ys = b.dots.map((d) => d[1]!);
+      const xs = b.dots.map((d) => d[0]);
+      const ys = b.dots.map((d) => d[1]);
       const top = (Math.min(...ys) / h) * 100;
       const below = top < BELOW;
       return Object.assign(dotStyle(value), {

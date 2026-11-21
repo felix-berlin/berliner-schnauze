@@ -37,6 +37,9 @@ const INDEX = [
 const fetchSearchIndex = vi.fn(() => Promise.resolve(INDEX));
 vi.mock("@services/searchIndex.ts", () => ({ fetchSearchIndex }));
 
+const reportError = vi.fn();
+vi.mock("@utils/reportError.ts", () => ({ reportError }));
+
 const navigate = vi.fn();
 vi.mock("@utils/homeSearch.ts", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@utils/homeSearch.ts")>()),
@@ -71,6 +74,7 @@ beforeEach(() => {
   vi.useFakeTimers();
   fetchSearchIndex.mockClear();
   navigate.mockClear();
+  reportError.mockClear();
 });
 
 afterEach(() => {
@@ -249,5 +253,17 @@ describe("HomeSearch", () => {
     const status = w.get('[role="status"]');
     expect(status.text()).toContain("Nüscht jefunden");
     expect(status.text()).not.toContain("Meintest du");
+  });
+
+  it("says so and reports when the index cannot load, instead of showing an empty list", async () => {
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+    fetchSearchIndex.mockRejectedValue(new Error("offline"));
+    const w = await mountSearch();
+    await type(w, "kroem");
+    expect(w.get('[role="status"]').text()).toContain("nich erreichbar");
+    expect(options(w)).toHaveLength(0);
+    expect(reportError).toHaveBeenCalledTimes(1);
+    fetchSearchIndex.mockImplementation(() => Promise.resolve(INDEX));
+    consoleError.mockRestore();
   });
 });

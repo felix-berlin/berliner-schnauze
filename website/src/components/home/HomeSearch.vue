@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO(startseite): the header search modal stays as is; whether this list replaces it on the start page is open (SPEC §8). -->
   <form class="c-home-search" role="search" method="get" action="/suche" @submit="onSubmit">
     <label :for="inputId" class="u-sr-only">Wort suchen</label>
     <IconSearch class="lens" aria-hidden="true" />
@@ -76,8 +75,14 @@
       </p>
     </div>
 
-    <!-- Always rendered, so screen readers pick up the no-hit message when it appears. -->
+    <!-- Always rendered, so screen readers pick up the no-hit and error messages when they appear. -->
     <div role="status">
+      <div v-if="showFailed" class="popup" @mousedown.prevent>
+        <p class="none">
+          <b>Die Suche is jerade nich erreichbar.</b>
+          <span>Versuch's jleich nochmal.</span>
+        </p>
+      </div>
       <div v-if="showNoHit && result" class="popup" @mousedown.prevent>
         <p class="none">
           <b>Nüscht jefunden für „{{ result.q }}“</b>
@@ -116,10 +121,13 @@ import {
   searchUrl,
   suggestUrl,
 } from "@utils/homeSearch.ts";
+import { reportError } from "@utils/reportError.ts";
 import { useEventListener, watchDebounced } from "@vueuse/core";
 import { computed, defineAsyncComponent, ref, shallowRef, useId, useTemplateRef } from "vue";
 
 import type { OramaSearchIndex } from "@/pages/api/search/index.json";
+
+// TODO(startseite): the header search modal stays as is; whether this list replaces it on the start page is open (docs/design/startseite-v20/SPEC.md §8).
 
 const IconSearch = defineAsyncComponent(() => import("virtual:icons/lucide/search"));
 const IconArrowRight = defineAsyncComponent(() => import("virtual:icons/lucide/arrow-right"));
@@ -148,6 +156,7 @@ const query = ref("");
 const open = ref(false);
 const active = ref(-1);
 const result = shallowRef<null | Result>(null);
+const failed = ref(false);
 
 const options = computed(() =>
   result.value ? [...result.value.lemma, ...result.value.meaning] : [],
@@ -156,6 +165,7 @@ const visible = computed(
   () => open.value && !!result.value && query.value.trim().length >= MIN_QUERY,
 );
 const showList = computed(() => visible.value && options.value.length > 0);
+const showFailed = computed(() => failed.value && query.value.trim().length >= MIN_QUERY);
 const showNoHit = computed(() => visible.value && result.value?.count === 0);
 const activeId = computed(() =>
   showList.value && active.value >= 0 ? optionId(active.value) : undefined,
@@ -179,6 +189,7 @@ const meaningParts = (key: string, text: string) =>
 
 async function runSearch(raw: string) {
   const q = raw.trim();
+  failed.value = false;
   if (q.length < MIN_QUERY) {
     result.value = null;
     return;
@@ -207,7 +218,9 @@ async function runSearch(raw: string) {
     active.value = -1;
     open.value = document.activeElement === field.value;
   } catch (err) {
-    console.error("[HomeSearch] search failed:", err);
+    failed.value = true;
+    result.value = null;
+    reportError(err);
   }
 }
 
@@ -215,7 +228,7 @@ watchDebounced(query, (q) => void runSearch(q), { debounce: 150 });
 
 function onFocus() {
   // Lazy: the index loads on first focus, never on mount. Errors surface on the next search.
-  getWordDb().catch(() => {});
+  getWordDb().catch((err: unknown) => console.error("[HomeSearch] index preload failed:", err));
   if (result.value) open.value = true;
 }
 

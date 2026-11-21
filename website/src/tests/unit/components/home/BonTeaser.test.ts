@@ -72,7 +72,7 @@ describe("BonTeaser", () => {
 
     await button(w, "Nochmal die Probekarte")!.trigger("click");
     expect(status(w)).toBe("");
-    expect(button(w, "Ja, Berlinerisch")).toBeDefined();
+    expect(button(w, "Ja, Berlinerisch")?.exists()).toBe(true);
   });
 
   it("resolves a fake word without a lookup link", async () => {

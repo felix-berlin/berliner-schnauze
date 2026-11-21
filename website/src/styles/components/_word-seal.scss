@@ -3,7 +3,7 @@
 
 // Word seal (docs/design/startseite-v20/SPEC.md §5.1/§5.2): a morse ring of the word around a play
 // button, or the initial letter without audio. Shared with the word page.
-// Parts: .ring of i[data-sym="d"|"l"] (data-state "on" | "now" while playing), .play, .initial.
+// Parts: .ring of i[data-sym="dot"|"dash"] (data-state "on" | "now" while playing), .play, .initial.
 // State: root data-state="playing". Public: --word-seal-size (default 84px; all parts scale with it).
 @include mx.component("word-seal") {
   :scope {
@@ -55,13 +55,13 @@
       animation-delay: calc(var(--_pop-start) + var(--n, 0) * var(--_pop-step));
     }
 
-    &[data-sym="d"] {
+    &[data-sym="dot"] {
       inline-size: var(--_dot);
       block-size: var(--_dot);
       border-radius: var(--radius-pill);
     }
 
-    &[data-sym="l"] {
+    &[data-sym="dash"] {
       inline-size: var(--_dash);
       block-size: var(--_dash-thick);
       border-radius: var(--radius-xs);

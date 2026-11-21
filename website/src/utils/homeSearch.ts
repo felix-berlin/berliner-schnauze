@@ -1,8 +1,9 @@
-import type { OramaSearchIndex } from "@/pages/api/search/index.json";
-
 /** Start page search rules (docs/design/startseite-v20/SPEC.md §8). */
 export const MIN_QUERY = 2;
 export const MAX_HITS = 6;
+
+/** The part of a search index entry the start page reads (an OramaSearchIndex entry fits). */
+type HitDoc = { slug: string; wordProperties: { berlinerisch: string; translations: string[] } };
 
 export type HomeHit = { lemma: string; meaning: string; slug: string };
 export type TextPart = { mark: boolean; text: string };
@@ -27,7 +28,7 @@ export function highlight(text: string, query: string): TextPart[] {
  * without a literal match) and "Gefunden über Hochdeutsch" (only a meaning contains the query,
  * shown as the meaning).
  */
-export function groupHits(docs: OramaSearchIndex[], query: string) {
+export function groupHits(docs: HitDoc[], query: string) {
   const q = query.trim();
   const lemma: HomeHit[] = [];
   const meaning: HomeHit[] = [];
@@ -42,7 +43,7 @@ export function groupHits(docs: OramaSearchIndex[], query: string) {
 
 export const searchUrl = (query: string) => `/suche?q=${encodeURIComponent(query.trim())}`;
 
-// TODO(startseite): wort-vorschlagen does not read ?wort= yet.
+// shortcut: /wort-vorschlagen does not read ?wort= yet, so the word is not prefilled; add the prefill there or drop the param.
 export const suggestUrl = (query: string) =>
   `/wort-vorschlagen?wort=${encodeURIComponent(query.trim())}`;
 

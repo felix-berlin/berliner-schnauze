@@ -76,4 +76,18 @@ describe("ttl with NO_TTL_CACHE=1", () => {
     expect(load).toHaveBeenCalledTimes(2);
     vi.unstubAllEnvs();
   });
+
+  it("warns once when it is set in production", async () => {
+    vi.resetModules();
+    const { ttl: fresh } = await import("@services/cache.ts");
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.stubEnv("NO_TTL_CACHE", "1");
+    vi.stubEnv("NODE_ENV", "production");
+    fresh(1, async () => 1);
+    fresh(1, async () => 1);
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0][0]).toContain("NO_TTL_CACHE=1 in production");
+    vi.unstubAllEnvs();
+    warn.mockRestore();
+  });
 });

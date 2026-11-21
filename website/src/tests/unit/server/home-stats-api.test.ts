@@ -47,7 +47,7 @@ describe("GET /api/home-stats", () => {
     const res = await get();
     expect(res.status).toBe(502);
     expect(res.headers.get("Cache-Control")).toBe("no-store");
-    expect(error.mock.calls[0][0]).toContain("[home-stats]");
+    expect(String(error.mock.calls[0][0])).toContain("[home-stats]");
     error.mockRestore();
   });
 

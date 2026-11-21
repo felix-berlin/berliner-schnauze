@@ -1,9 +1,12 @@
+import type { Home } from "payload-app";
+
 import { ttl } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { fetchAllPosts, type SitePost } from "@services/payload/posts.ts";
 import { fetchHomeGlobal } from "@services/payload/site.ts";
 import { fetchAllThemen } from "@services/payload/themen.ts";
 import { fetchAllWords, type SiteWord, translationTexts } from "@services/payload/words.ts";
+import { reportError } from "@utils/reportError.ts";
 import { pickWordOfTheDay } from "@utils/wordOfTheDay.ts";
 import { type MorseMark, morseRing } from "payload-app/home-stats";
 import { lexicalToHtml } from "payload-app/lexical-html";
@@ -19,61 +22,79 @@ export type HomeWord = {
   ipa?: string;
   meaning: string;
   example?: { text: string; translation?: string };
-  audio?: { url: string };
+  audioUrl?: string;
   /** Morse ring marks of the lemma, capped by morseRing. */
   morse: MorseMark[];
   /** German date in Europe/Berlin, e.g. "Samstag, 21. November". */
   dateLabel: string;
 };
 
+export type BrowseLink = {
+  label: string;
+  href: string;
+  icon: NonNullable<NonNullable<Home["browseLinks"]>[number]["icon"]>;
+};
+
+/** Own daily pick for the poll, never the word of the day; totalVotes counts usage answers. */
+export type HomePollWord = {
+  slug: string;
+  lemma: string;
+  meaning: string;
+  wordId: number;
+  totalVotes: number;
+};
+
+export type HomeTopic = {
+  slug: string;
+  name: string;
+  count: number;
+  examples: string[];
+  saying?: string;
+};
+
+export type HomeNewestWord = { slug: string; lemma: string; meaning: string; publishedAt: string };
+
+/** Teaser of the latest post plus up to 3 more. */
+export type HomeMagazine = {
+  slug: string;
+  title: string;
+  quote?: string;
+  ipa?: string;
+  /** First ~90 words as plain text. */
+  excerpt: string;
+  readingMinutes: number;
+  others: { slug: string; title: string }[];
+};
+
+export type HomeTryWord = { slug: string; lemma: string };
+export type HomeGap = { wordsWithoutAudio: number; randomSlug?: string };
+/** Counts for the about tiles; the word count is `wordCount`. */
+export type HomeAbout = { text?: string; counts: { topics: number; audio: number; votes: number } };
+export type HomeSoundRule = { standard: string; berlin: string; example?: string; rule?: string };
+export type HomeFaq = { question: string; answerHtml: string };
+
+/** A section that is missing as a whole is null (word, poll, magazine); a missing sub-field is optional. */
 export type HomeData = {
   /** Published words. */
   wordCount: number;
   word: HomeWord | null;
   /** Up to 4 published words picked in the home global. */
-  tryWords: { slug: string; lemma: string }[];
-  browseLinks: {
-    label: string;
-    href: string;
-    icon: "audio" | "idiom" | "short" | "rhyme" | "random";
-  }[];
-  /** Own daily pick for the poll, never the word of the day; totalVotes counts usage answers. */
-  poll: {
-    slug: string;
-    lemma: string;
-    meaning: string;
-    wordId: number;
-    totalVotes: number;
-  } | null;
+  tryWords: HomeTryWord[];
+  browseLinks: BrowseLink[];
+  poll: HomePollWord | null;
   /** Top 6 topics by word count. */
-  topics: {
-    slug: string;
-    name: string;
-    count: number;
-    examples: string[];
-    saying?: string;
-  }[];
+  topics: HomeTopic[];
   /** The 5 newest published words. */
-  newest: { slug: string; lemma: string; meaning: string; publishedAt: string }[];
-  /** Teaser of the latest post plus up to 3 more. */
-  magazine: {
-    slug: string;
-    title: string;
-    quote?: string;
-    ipa?: string;
-    /** First ~90 words as plain text. */
-    excerpt: string;
-    readingMinutes: number;
-    others: { slug: string; title: string }[];
-  } | null;
+  newest: HomeNewestWord[];
+  magazine: HomeMagazine | null;
   /** Words still missing audio; randomSlug is a daily pick among them. */
-  gap: { wordsWithoutAudio: number; randomSlug?: string };
-  about: { text?: string; counts: { words: number; topics: number; audio: number; votes: number } };
+  gap: HomeGap;
+  about: HomeAbout;
   intro?: string;
   /** Rich text of the global as html. */
   knowledgeHtml?: string;
-  soundRules: { standard: string; berlin: string; example?: string; rule?: string }[];
-  faq: { question: string; answerHtml: string }[];
+  soundRules: HomeSoundRule[];
+  faq: HomeFaq[];
 };
 
 const TRY_WORDS = 4;
@@ -109,7 +130,7 @@ const toHomeWord = (word: SiteWord, now: Date): HomeWord => {
   const audioUrl = word.berlinerischAudio[0]?.audio.url;
   return {
     ...(word.article ? { article: word.article } : {}),
-    ...(audioUrl ? { audio: { url: audioUrl } } : {}),
+    ...(audioUrl ? { audioUrl } : {}),
     dateLabel: dateFormat.format(now),
     ...(example?.example
       ? {
@@ -137,7 +158,7 @@ const quoteOf = (post: SitePost): string =>
   );
 
 /** The latest post that has a teaser quote or a pull quote; posts without one are skipped, not the whole section. */
-const toMagazine = (posts: SitePost[]): HomeData["magazine"] => {
+const toMagazine = (posts: SitePost[]): HomeMagazine | null => {
   const post = posts.find((p) => quoteOf(p));
   if (!post) return null;
   const html = post.blocks.filter((b) => typeof b === "string").join(" ");
@@ -156,15 +177,32 @@ const toMagazine = (posts: SitePost[]): HomeData["magazine"] => {
   };
 };
 
+/** An optional part of the page: a failing source drops its section instead of taking the whole page down. */
+const optional = async <T>(what: string, fallback: T, run: () => Promise<T>): Promise<T> => {
+  try {
+    return await run();
+  } catch (error) {
+    reportError(new Error(`[home] ${what} unavailable`, { cause: error }));
+    return fallback;
+  }
+};
+
 const load = async (): Promise<HomeData> => {
   const now = new Date();
   const payload = await getPayloadClient();
+  // Words, topics and the global are the page itself and may fail it; posts and vote counts only feed optional parts.
   const [words, themen, posts, global, votes] = await Promise.all([
     fetchAllWords(),
     fetchAllThemen(),
-    fetchAllPosts(),
+    optional("posts", [] as SitePost[], fetchAllPosts),
     fetchHomeGlobal(),
-    payload.count({ collection: "word-feedback", where: { usage: { exists: true } } }),
+    optional(
+      "votes",
+      0,
+      async () =>
+        (await payload.count({ collection: "word-feedback", where: { usage: { exists: true } } }))
+          .totalDocs,
+    ),
   ]);
 
   const wordOfTheDay = pickWordOfTheDay(words, now);
@@ -174,29 +212,56 @@ const load = async (): Promise<HomeData> => {
   );
   const withoutAudio = words.filter((w) => w.berlinerischAudio.length === 0);
   const gapWord = pickWordOfTheDay(withoutAudio, now);
-  const poll = pollWord
+  const poll: HomePollWord | null = pollWord
     ? {
         lemma: pollWord.berlinerisch,
         meaning: meaning(pollWord),
         slug: pollWord.slug,
-        totalVotes: (
-          await payload.count({
-            collection: "word-feedback",
-            where: { and: [{ word: { equals: pollWord.id } }, { usage: { exists: true } }] },
-          })
-        ).totalDocs,
+        totalVotes: await optional(
+          "poll votes",
+          0,
+          async () =>
+            (
+              await payload.count({
+                collection: "word-feedback",
+                where: { and: [{ word: { equals: pollWord.id } }, { usage: { exists: true } }] },
+              })
+            ).totalDocs,
+        ),
         wordId: pollWord.id,
       }
     : null;
 
-  const bySlugId = new Map(words.map((w) => [w.id, w]));
-  const tryWords = (global.tryWords ?? [])
-    .flatMap((w) => bySlugId.get(typeof w === "object" ? w.id : w) ?? [])
+  const byId = new Map(words.map((w) => [w.id, w]));
+  const pickedIds = (global.tryWords ?? []).map((w) => (typeof w === "object" ? w.id : w));
+  const dropped = pickedIds.filter((id) => !byId.has(id));
+  if (dropped.length > 0) {
+    console.warn(`[home] try-words dropped (unpublished or deleted), ids: ${dropped.join(", ")}`);
+  }
+  const tryWords = pickedIds
+    .flatMap((id) => byId.get(id) ?? [])
     .slice(0, TRY_WORDS)
     .map((w) => ({ lemma: w.berlinerisch, slug: w.slug }));
 
   // A rich text saved empty in the admin is a truthy root with one empty paragraph: drop it like a missing one.
   const knowledgeHtml = hasLexicalText(global.knowledge) ? lexicalToHtml(global.knowledge) : "";
+
+  const faq = (global.faq ?? []).flatMap(({ answer, question }): HomeFaq[] => {
+    if (!question.trim() || !hasLexicalText(answer)) return [];
+    try {
+      return [{ answerHtml: lexicalToHtml(answer), question }];
+    } catch (error) {
+      reportError(new Error(`[home] FAQ "${question}" skipped`, { cause: error }));
+      return [];
+    }
+  });
+
+  // seed:home is dev-only: a production database shows these sections only once an editor filled them.
+  if (import.meta.env.PROD && (!global.intro || !knowledgeHtml || faq.length === 0)) {
+    console.warn(
+      "[home] CMS texts missing (intro, knowledge or FAQ): the sections stay out of the page",
+    );
+  }
 
   const topics = themen
     .toSorted((a, b) => b.count - a.count)
@@ -221,8 +286,7 @@ const load = async (): Promise<HomeData> => {
       counts: {
         audio: words.length - withoutAudio.length,
         topics: themen.length,
-        votes: votes.totalDocs,
-        words: words.length,
+        votes,
       },
       ...(global.aboutText ? { text: global.aboutText } : {}),
     },
@@ -231,10 +295,7 @@ const load = async (): Promise<HomeData> => {
       icon: icon ?? "random",
       label,
     })),
-    faq: (global.faq ?? []).map(({ answer, question }) => ({
-      answerHtml: lexicalToHtml(answer),
-      question,
-    })),
+    faq,
     gap: {
       ...(gapWord ? { randomSlug: gapWord.slug } : {}),
       wordsWithoutAudio: withoutAudio.length,
@@ -246,12 +307,18 @@ const load = async (): Promise<HomeData> => {
       .filter((w) => w.publishedAt)
       .toSorted((a, b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? ""))
       .slice(0, NEWEST)
-      .map((w) => ({
-        lemma: w.berlinerisch,
-        meaning: meaning(w),
-        publishedAt: w.publishedAt!,
-        slug: w.slug,
-      })),
+      .flatMap((w) =>
+        w.publishedAt
+          ? [
+              {
+                lemma: w.berlinerisch,
+                meaning: meaning(w),
+                publishedAt: w.publishedAt,
+                slug: w.slug,
+              },
+            ]
+          : [],
+      ),
     poll,
     soundRules: (global.soundRules ?? []).map(({ berlin, example, rule, standard }) =>
       Object.assign({ berlin, standard }, example ? { example } : {}, rule ? { rule } : {}),

@@ -54,7 +54,7 @@ describe("fetchHome", () => {
   it("returns safe empty values for an empty global and no words", async () => {
     const home = await load();
     expect(home).toMatchObject({
-      about: { counts: { audio: 0, topics: 0, words: 0 } },
+      about: { counts: { audio: 0, topics: 0, votes: 7 } },
       browseLinks: [],
       faq: [],
       gap: { wordsWithoutAudio: 0 },
@@ -87,7 +87,7 @@ describe("fetchHome", () => {
     expect(home.poll).toMatchObject({ totalVotes: 7 });
     expect(home.poll!.slug).not.toBe(home.word!.slug);
     expect(home.gap.wordsWithoutAudio).toBe(2);
-    expect(home.about.counts).toMatchObject({ audio: 1, votes: 7, words: 3 });
+    expect(home.about.counts).toMatchObject({ audio: 1, votes: 7 });
   });
 
   it("maps optional word fields and omits missing audio and ipa", async () => {
@@ -106,9 +106,9 @@ describe("fetchHome", () => {
     }
     const full = words.find((w) => w.slug === "aasen");
     const plain = words.find((w) => w.slug === "kiez");
-    expect(full).toMatchObject({ audio: { url: "https://cms.example/a.mp3" }, ipa: "ˈaːzn̩" });
+    expect(full).toMatchObject({ audioUrl: "https://cms.example/a.mp3", ipa: "ˈaːzn̩" });
     expect(plain).not.toHaveProperty("ipa");
-    expect(plain).not.toHaveProperty("audio");
+    expect(plain).not.toHaveProperty("audioUrl");
   });
 
   it("lists the 5 newest published words by publishedAt descending", async () => {

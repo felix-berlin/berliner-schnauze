@@ -4,5 +4,9 @@
  */
 export const reportError = (error: unknown): void => {
   console.error(error);
-  import("@sentry/astro").then((sentry) => sentry.captureException(error)).catch(() => {});
+  import("@sentry/astro")
+    .then((sentry) => sentry.captureException(error))
+    .catch((sentryError: unknown) =>
+      console.error("[reportError] Sentry unavailable:", sentryError),
+    );
 };

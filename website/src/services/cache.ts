@@ -1,3 +1,5 @@
+let warned = false;
+
 /**
  * Memoizes `load` for `ms`. After that the stale value is served while a single background refresh runs, so
  * a request never waits for a reload; only the very first load blocks. A failed first load is not kept, a
@@ -5,7 +7,15 @@
  */
 export const ttl = <T>(ms: number, load: () => Promise<T>): (() => Promise<T>) => {
   // Dev opt-in (`NO_TTL_CACHE=1 pnpm dev`): seed or CMS edits show up on the next request, at the price of a slow page.
-  if (process.env.NO_TTL_CACHE === "1") return load;
+  if (process.env.NO_TTL_CACHE === "1") {
+    if (!warned && process.env.NODE_ENV === "production") {
+      warned = true;
+      console.warn(
+        "[cache] NO_TTL_CACHE=1 in production: every request hits the CMS and the database",
+      );
+    }
+    return load;
+  }
   let value: Promise<T> | undefined;
   let loadedAt = 0;
   let refreshing = false;

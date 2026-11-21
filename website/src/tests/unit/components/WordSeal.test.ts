@@ -6,14 +6,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { vTooltip } from "@/directives/tooltip";
 
-const mark = (sym: MorseMark["sym"]): MorseMark => ({
-  left: "50%",
-  rotate: "0deg",
-  sym,
-  top: "5%",
-});
+const mark = (sym: MorseMark["sym"]): MorseMark => ({ angle: 0, sym, x: 50, y: 5 });
 // Invented ring: three marks.
-const morse = [mark("l"), mark("d"), mark("d")];
+const morse = [mark("dash"), mark("dot"), mark("dot")];
 
 const seal = (props: Partial<InstanceType<typeof WordSeal>["$props"]> = {}) =>
   mount(WordSeal, {
@@ -39,7 +34,7 @@ describe("WordSeal", () => {
     const w = seal();
     const marks = w.findAll("i[data-sym]");
     expect(marks).toHaveLength(3);
-    expect(marks.map((i) => i.attributes("data-sym"))).toEqual(["l", "d", "d"]);
+    expect(marks.map((i) => i.attributes("data-sym"))).toEqual(["dash", "dot", "dot"]);
     const ring = marks[0]!.element.parentElement!;
     expect(ring.getAttribute("aria-label")).toBe("Morsecode von Kiez");
     expect(ring.getAttribute("tabindex")).toBe("0");

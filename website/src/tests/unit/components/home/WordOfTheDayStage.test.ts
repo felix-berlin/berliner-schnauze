@@ -9,7 +9,7 @@ import { vTooltip } from "@/directives/tooltip";
 // Invented word.
 const word: HomeWord = {
   article: "der",
-  audio: { url: "/kiez.mp3" },
+  audioUrl: "/kiez.mp3",
   dateLabel: "Samstag, 21. November",
   example: {
     text: "In meen Kiez kennt jeder jeden.",
@@ -18,7 +18,7 @@ const word: HomeWord = {
   ipa: "kiːts",
   lemma: "Kiez",
   meaning: "Viertel, Wohngegend",
-  morse: [{ left: "50%", rotate: "0deg", sym: "d", top: "5%" }],
+  morse: [{ angle: 0, sym: "dot", x: 50, y: 5 }],
   slug: "kiez",
 };
 
@@ -50,7 +50,7 @@ describe("WordOfTheDayStage", () => {
 
   it("shows the no-audio pill only without audio", () => {
     expect(stage().text()).not.toContain("Noch keene Hörprobe.");
-    const pill = stage({ audio: undefined }).get("button.no-audio");
+    const pill = stage({ audioUrl: undefined }).get("button.no-audio");
     expect(pill.text()).toContain("Noch keene Hörprobe.");
     expect(pill.text()).toContain("Sprichste „Kiez“ ein?");
   });
@@ -59,7 +59,7 @@ describe("WordOfTheDayStage", () => {
     const outline = stage()
       .findAll('[aria-hidden="true"]')
       .find((e) => e.text() === "[kiːts]");
-    expect(outline).toBeDefined();
+    expect(outline?.text()).toBe("[kiːts]");
     expect(stage({ ipa: undefined }).text()).not.toContain("[");
   });
 

@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import type { HomeData } from "@services/payload/home.ts";
+import type { HomeNewestWord } from "@services/payload/home.ts";
 import type { HomeStats } from "payload-app/home-stats-load";
 
 import { routeToWord } from "@utils/helpers.ts";
@@ -100,10 +100,8 @@ import { computed, defineAsyncComponent, ref, useId, useTemplateRef } from "vue"
 
 const IconTrendingUp = defineAsyncComponent(() => import("virtual:icons/lucide/trending-up"));
 
-// TODO(startseite): "Gerade beliebt" = most viewed words of the last 7 days, sayShare = share „Sag ick selbst“;
-// "Im Aufwind" = largest view growth against the week before. Definitions to be confirmed (SPEC §10).
 const props = defineProps<{
-  newest: HomeData["newest"];
+  newest: HomeNewestWord[];
   popular: HomeStats["popular"];
   rising: HomeStats["rising"];
 }>();

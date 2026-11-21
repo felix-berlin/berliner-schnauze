@@ -8,33 +8,42 @@ const text = "Über {count} Wörter. Von Atze bis Zicke, mit Atze und Zickenkrie
 
 describe("linkIntro", () => {
   it("replaces {count} with the German formatted number", () => {
-    expect(linkIntro("Über {count} Wörter", 1734, {})).toBe("Über 1.734 Wörter");
+    expect(linkIntro("Über {count} Wörter", 1734, new Map())).toBe("Über 1.734 Wörter");
   });
 
   it("links the first whole-word Atze and Zicke when they are linkable", () => {
-    expect(linkIntro(text, 1700, { Atze: "atze", Zicke: "zicke" })).toBe(
+    expect(
+      linkIntro(
+        text,
+        1700,
+        new Map([
+          ["Atze", "atze"],
+          ["Zicke", "zicke"],
+        ]),
+      ),
+    ).toBe(
       'Über 1.700 Wörter. Von <a href="/wort/atze">Atze</a> bis <a href="/wort/zicke">Zicke</a>, mit Atze und Zickenkrieg.',
     );
   });
 
   it("links only the words in the linkable map", () => {
-    expect(linkIntro(text, 1700, { Zicke: "zicke" })).toBe(
+    expect(linkIntro(text, 1700, new Map([["Zicke", "zicke"]]))).toBe(
       'Über 1.700 Wörter. Von Atze bis <a href="/wort/zicke">Zicke</a>, mit Atze und Zickenkrieg.',
     );
   });
 
   it("does not link a word that only appears inside another word", () => {
-    expect(linkIntro("Zickenkrieg", 1, { Zicke: "zicke" })).toBe("Zickenkrieg");
+    expect(linkIntro("Zickenkrieg", 1, new Map([["Zicke", "zicke"]]))).toBe("Zickenkrieg");
   });
 
   it("escapes HTML in the text and the slug", () => {
-    expect(linkIntro('<b>"Atze"</b> & Co', 1, { Atze: 'a"b' })).toBe(
+    expect(linkIntro('<b>"Atze"</b> & Co', 1, new Map([["Atze", 'a"b']]))).toBe(
       '&lt;b&gt;&quot;<a href="/wort/a&quot;b">Atze</a>&quot;&lt;/b&gt; &amp; Co',
     );
   });
 
   it("leaves the text intact when nothing links", () => {
-    expect(linkIntro("Von Atze bis Zicke.", 1, {})).toBe("Von Atze bis Zicke.");
+    expect(linkIntro("Von Atze bis Zicke.", 1, new Map())).toBe("Von Atze bis Zicke.");
   });
 });
 
@@ -50,7 +59,7 @@ describe("HomeIntro.astro and BrowseChips.astro", () => {
   it("renders the one h1 and the linked intro sentence", async () => {
     const html = await intro({
       intro: "Über {count} Wörter, von Atze",
-      linkable: { Atze: "atze" },
+      linkable: new Map([["Atze", "atze"]]),
       wordCount: 1700,
     });
     expect(html.match(/<h1/g)).toHaveLength(1);

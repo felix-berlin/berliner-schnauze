@@ -157,11 +157,6 @@ export const $toggleWordListFilterFlyout = () => {
   $showWordListFilterFlyout.set(!$showWordListFilterFlyout.get());
 };
 
-/**
- * Set the active letter to filter the word list
- *
- * @param letter the letter to filter by
- */
 export const setLetterFilter = (letter: string) => {
   vt(() => $wordSearch.setKey("activeLetterFilter", letter));
 
@@ -209,10 +204,6 @@ onMount($searchMeta, () => {
     }
   });
 });
-
-/**
- * ORAMA
- */
 
 function buildWhere(wordSearch: WordList): Record<string, unknown> {
   const where: Record<string, unknown> = {};

@@ -6,7 +6,7 @@ interface Props {
   intro?: string;
   wordCount: number;
   /** Published lemma -> slug, built by the page; only these words become links. */
-  linkable: Record<string, string>;
+  linkable: ReadonlyMap<string, string>;
 }
 
 const { intro, wordCount, linkable } = Astro.props;

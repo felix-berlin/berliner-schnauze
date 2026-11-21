@@ -29,11 +29,11 @@ export function splitKnowledge(html: string): [lead: string, more: string] {
 export function linkIntro(
   text: string,
   wordCount: number,
-  linkable: Record<string, string>,
+  linkable: ReadonlyMap<string, string>,
 ): string {
   let html = withCount(escapeHtml(text), wordCount);
   for (const lemma of LINKED) {
-    const slug = linkable[lemma];
+    const slug = linkable.get(lemma);
     if (!slug) continue;
     html = html.replace(
       new RegExp(`(?<![\\p{L}\\p{N}])${lemma}(?![\\p{L}\\p{N}])`, "u"),

@@ -1,17 +1,17 @@
 ---
-import type { HomeData } from "@services/payload/home.ts";
+import type { HomeAbout, HomeFaq } from "@services/payload/home.ts";
 
 import { withCount } from "@utils/homeIntro.ts";
 
 interface Props {
-  faq: HomeData["faq"];
-  about: HomeData["about"];
+  faq: HomeFaq[];
+  about: HomeAbout;
   wordCount: number;
 }
 
 const { faq, about, wordCount } = Astro.props;
 const figures = [
-  { label: "Wörter und Redewendungen", value: about.counts.words },
+  { label: "Wörter und Redewendungen", value: wordCount },
   { label: "Themen", value: about.counts.topics },
   { label: "Hörproben", value: about.counts.audio },
   { label: "Stimmen in der Umfrage", value: about.counts.votes },
@@ -24,7 +24,7 @@ const figures = [
       faq.length > 0 && (
         <div class="questions">
           <h2>Häufig jefragt</h2>
-          {/* h3 in the summary is binding (SPEC §12.2, §14) although JAWS/TalkBack drop it there; see the report. */}
+          {/* h3 in the summary is binding (docs/design/startseite-v20/SPEC.md §12.2, §14). Trade-off: JAWS/TalkBack drop a heading inside <summary>, the question stays reachable as the summary's name. */}
           {faq.map((f, i) => (
             <details class="faq" open={i === 0}>
               <summary>

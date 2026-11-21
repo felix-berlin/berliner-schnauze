@@ -1,5 +1,5 @@
 <template>
-  <!-- Dark band in both themes (SPEC §4.3, §11); drops when neither tab has data. -->
+  <!-- Dark band in both themes (docs/design/startseite-v20/SPEC.md §4.3, §11); drops when neither tab has data. -->
   <div v-if="tabs.length" class="c-home-results" data-theme="dark">
     <header class="head">
       <p class="eyebrow" aria-hidden="true"><s>Wo wird noch Berlinerisch gesprochen?</s></p>
@@ -101,22 +101,22 @@
 </template>
 
 <script setup lang="ts">
-import type { Geometry } from "@utils/dotMap.ts";
-import type { HomeStats } from "payload-app/home-stats-load";
+import type { District, HomeStats } from "payload-app/home-stats-load";
 
 import geometryJson from "@assets/berlin-bezirke-punkte.json";
 import AgeDots from "@components/home/AgeDots.vue";
 import DotMap from "@components/home/DotMap.vue";
+import { toGeometry } from "@utils/dotMap.ts";
 import { routeToWord } from "@utils/helpers.ts";
 import { computed, ref, useId, useTemplateRef } from "vue";
 
 // MIN_GROUP is applied server-side: a district below it has value null, an age group null, a word is missing.
 const props = defineProps<{
-  districts: HomeStats["districts"];
+  districts: District[];
   ageLists: HomeStats["ageLists"];
 }>();
 
-const geometry: Geometry = geometryJson;
+const geometry = toGeometry(geometryJson);
 
 type Key = "district" | "age";
 const uid = useId();

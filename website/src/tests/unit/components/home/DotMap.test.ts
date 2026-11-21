@@ -18,7 +18,7 @@ const geometry: Geometry = {
     { dots: [[50, 50, 60]], name: "Pankow", slug: "pankow" },
     { dots: [[80, 80, 90]], name: "Spandau", slug: "spandau" },
   ],
-  viewBox: "0 0 100 100",
+  viewBox: { height: 100, width: 100 },
 };
 const districts = [
   {

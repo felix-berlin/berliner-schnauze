@@ -6,6 +6,7 @@ import { fetchAllThemen } from "@services/payload/themen.ts";
 import { fetchAllWords } from "@services/payload/words.ts";
 import { setPageCache } from "@utils/cacheHeaders.ts";
 import { withCount } from "@utils/homeIntro.ts";
+import { reportError } from "@utils/reportError.ts";
 import { docPath } from "payload-app/routes";
 
 const oneLine = (text: string | null | undefined): string =>
@@ -34,8 +35,13 @@ export const GET: APIRoute = async ({ site: origin }) => {
     fetchAllWords(),
     fetchAllThemen(),
     fetchAllPosts(),
-    fetchHome(),
+    // The start page texts are optional here: without them the index is served without that block.
+    fetchHome().catch((error: unknown) => {
+      reportError(new Error("[llms.txt] home texts unavailable", { cause: error }));
+      return null;
+    }),
   ]);
+  const { faq = [], intro, knowledgeHtml, soundRules = [] } = home ?? {};
   const link = (title: string, path: string, note?: string) =>
     `- [${title}](${new URL(path, site)})${note ? `: ${note}` : ""}`;
   const count = words.length.toLocaleString("de-DE");
@@ -51,31 +57,26 @@ export const GET: APIRoute = async ({ site: origin }) => {
     "Sprache der Seite: Deutsch (de-DE). Die Einträge sind redaktionell gepflegt; sichtbare Datumsangaben auf jeder Wortseite zeigen Erstellung und letzte Änderung.",
     "",
     // The start page text (SPEC startseite-v20 §14): intro, "Wat is Berlinerisch?", sound rules, FAQ.
-    ...(home.intro ? [withCount(home.intro, home.wordCount), ""] : []),
-    ...(home.knowledgeHtml
-      ? [
-          "## Wat is Berlinerisch?",
-          "",
-          toMarkdown(withCount(home.knowledgeHtml, home.wordCount)),
-          "",
-        ]
+    ...(intro ? [withCount(intro, words.length), ""] : []),
+    ...(knowledgeHtml
+      ? ["## Wat is Berlinerisch?", "", toMarkdown(withCount(knowledgeHtml, words.length)), ""]
       : []),
-    ...(home.soundRules.length > 0
+    ...(soundRules.length > 0
       ? [
           "### Lautregeln (Hochdeutsch → Berlinerisch)",
           "",
-          ...home.soundRules.map(
+          ...soundRules.map(
             (r) =>
               `- ${r.standard} → ${r.berlin}${r.example ? `: ${r.example}` : ""}${r.rule ? ` (${r.rule})` : ""}`,
           ),
           "",
         ]
       : []),
-    ...(home.faq.length > 0
+    ...(faq.length > 0
       ? [
           "## Häufig jefragt",
           "",
-          ...home.faq.flatMap((f) => [`### ${f.question}`, "", toMarkdown(f.answerHtml), ""]),
+          ...faq.flatMap((f) => [`### ${f.question}`, "", toMarkdown(f.answerHtml), ""]),
         ]
       : []),
     "## Wörterbuch",

@@ -1,15 +1,15 @@
 ---
-import type { HomeData } from "@services/payload/home.ts";
+import type { HomeSoundRule } from "@services/payload/home.ts";
 
 import { splitKnowledge, withCount } from "@utils/homeIntro.ts";
 
 interface Props {
   /** Trusted CMS html from fetchHome, with a `{count}` placeholder; without it the section drops. */
   knowledgeHtml?: string;
-  soundRules: HomeData["soundRules"];
+  soundRules: HomeSoundRule[];
   wordCount: number;
   /** Published lemma -> slug, built by the page; only these words become chips. */
-  linkable: Record<string, string>;
+  linkable: ReadonlyMap<string, string>;
 }
 
 // TODO(startseite): the "Typisch Berlin" chips are the mock's list; no CMS field holds them yet.
@@ -17,7 +17,7 @@ const TYPICAL = ["Schrippe", "Stulle", "Bulette", "Kiez", "Späti", "jwd", "Atze
 
 const { knowledgeHtml, soundRules, wordCount, linkable } = Astro.props;
 const [lead, more] = splitKnowledge(withCount(knowledgeHtml ?? "", wordCount));
-const typical = TYPICAL.filter((lemma) => linkable[lemma]);
+const typical = TYPICAL.filter((lemma) => linkable.has(lemma));
 ---
 
 {
@@ -37,7 +37,7 @@ const typical = TYPICAL.filter((lemma) => linkable[lemma]);
               <Fragment set:html={more} />
             </details>
             <script is:inline data-astro-rerun>
-              // One DOM for all widths (SPEC §12.1): open from 808px (= the 45.5rem container query that hides the
+              // One DOM for all widths (docs/design/startseite-v20/SPEC.md §12.1): open from 808px (= the 45.5rem container query that hides the
               // summary), before first paint since this runs while parsing. Re-runs after a view transition swap.
               (() => {
                 const more = document.currentScript.previousElementSibling;
@@ -80,7 +80,7 @@ const typical = TYPICAL.filter((lemma) => linkable[lemma]);
                 <p class="label">Typisch Berlin</p>
                 <p class="tags">
                   {typical.map((lemma) => (
-                    <a href={`/wort/${linkable[lemma]}`}>{lemma}</a>
+                    <a href={`/wort/${linkable.get(lemma)}`}>{lemma}</a>
                   ))}
                 </p>
               </>

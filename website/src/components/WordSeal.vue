@@ -16,9 +16,9 @@
         :data-sym="mark.sym"
         :data-state="n < step ? 'on' : n === step ? 'now' : undefined"
         :style="{
-          insetInlineStart: mark.left,
-          insetBlockStart: mark.top,
-          rotate: mark.rotate,
+          insetInlineStart: `${mark.x}%`,
+          insetBlockStart: `${mark.y}%`,
+          rotate: `${mark.angle}deg`,
           '--n': n,
         }"
       ></i>

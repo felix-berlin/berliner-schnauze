@@ -1,5 +1,5 @@
 <template>
-  <!-- A part of c-home-results (styled there). Columns left to right: under 30 … 70+; dots fill bottom up (SPEC §11.2). -->
+  <!-- A part of c-home-results (styled there). Columns left to right: under 30 … 70+; dots fill bottom up (docs/design/startseite-v20/SPEC.md §11.2). -->
   <span class="age" role="img" :aria-label="label" :data-variant="variant">
     <span v-for="g in AGE_GROUPS" :key="g" class="col">
       <i v-for="n in 10" :key="n" :data-state="n <= filledDots(byGroup[g]) ? 'on' : undefined" />

@@ -18,7 +18,7 @@ const plain = (html: string) =>
     .replace(/\s+/g, " ")
     .trim();
 
-/** JSON-LD of the start page (SPEC §14): WebSite + SearchAction, Organization, FAQPage, DefinedTerm. */
+/** JSON-LD of the start page (docs/design/startseite-v20/SPEC.md §14): WebSite + SearchAction, Organization, FAQPage, DefinedTerm. */
 export const homeJsonLd = ({ faq, word }: Pick<HomeData, "faq" | "word">): object[] => [
   {
     "@context": "https://schema.org",

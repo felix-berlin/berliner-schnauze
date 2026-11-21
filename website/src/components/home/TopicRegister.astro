@@ -1,14 +1,14 @@
 ---
-import type { HomeData } from "@services/payload/home.ts";
+import type { HomeTopic } from "@services/payload/home.ts";
 
 interface Props {
-  topics: HomeData["topics"];
+  topics: HomeTopic[];
 }
 
 const { topics } = Astro.props;
 ---
 
-{/* SPEC §19: below three topics the whole register drops. */}
+{/* docs/design/startseite-v20/SPEC.md §19: below three topics the whole register drops. */}
 {
   topics.length >= 3 && (
     <div class="c-home-topics">
