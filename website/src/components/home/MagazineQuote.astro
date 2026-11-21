@@ -12,7 +12,7 @@ const { magazine } = Astro.props;
 {/* fetchHome falls back to the first pull quote; without any quote the section drops (SPEC §12.3). */}
 {
   magazine?.quote && (
-    <article class="c-home-magazine" aria-labelledby="home-magazine-title">
+    <article class="c-home-magazine" aria-labelledby="home-magazine-title" data-reveal="wait">
       {magazine.ipa && (
         <span class="ipa" aria-hidden="true">{`[${magazine.ipa}]`}</span>
       )}

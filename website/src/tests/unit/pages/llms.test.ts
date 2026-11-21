@@ -15,6 +15,18 @@ const data = vi.hoisted(() => ({
 vi.mock("@services/payload/words.ts", () => ({ fetchAllWords: async () => data.words }));
 vi.mock("@services/payload/themen.ts", () => ({ fetchAllThemen: async () => data.themen }));
 vi.mock("@services/payload/posts.ts", () => ({ fetchAllPosts: async () => data.posts }));
+vi.mock("@services/payload/home.ts", () => ({
+  fetchHome: async () => ({
+    faq: [{ answerHtml: "<p>Eine <b>erfundene</b> Antwort &amp; mehr.</p>", question: "Testfrage?" }],
+    intro: "Erfundenes Intro mit {count} Wörtern.",
+    knowledgeHtml: "<p>Erster Absatz.</p><h3>Unterpunkt</h3><p>Zweiter Absatz.</p>",
+    soundRules: [
+      { berlin: "j", example: "jut", rule: "g wird j", standard: "g" },
+      { berlin: "ick", standard: "ich" },
+    ],
+    wordCount: 1234,
+  }),
+}));
 
 import { GET } from "@/pages/llms.txt.ts";
 
@@ -51,5 +63,14 @@ describe("llms.txt", () => {
   it("falls back to the production origin without a configured site", async () => {
     const body = await (await get()).text();
     expect(body).toContain("https://berliner-schnauze.wtf/wort");
+  });
+
+  it("carries the start page intro, knowledge text, sound rules and FAQ", async () => {
+    const body = await (await get(new URL("https://berliner-schnauze.wtf"))).text();
+    expect(body).toContain("Erfundenes Intro mit 1.234 Wörtern.");
+    expect(body).toContain("## Wat is Berlinerisch?\n\nErster Absatz.\n\n### Unterpunkt\n\nZweiter Absatz.");
+    expect(body).toContain("- g → j: jut (g wird j)");
+    expect(body).toContain("- ich → ick");
+    expect(body).toContain("### Testfrage?\n\nEine erfundene Antwort & mehr.");
   });
 });

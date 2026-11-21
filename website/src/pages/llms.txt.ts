@@ -1,21 +1,40 @@
 import type { APIRoute } from "astro";
 
+import { fetchHome } from "@services/payload/home.ts";
 import { fetchAllPosts } from "@services/payload/posts.ts";
 import { fetchAllThemen } from "@services/payload/themen.ts";
 import { fetchAllWords } from "@services/payload/words.ts";
 import { setPageCache } from "@utils/cacheHeaders.ts";
+import { withCount } from "@utils/homeIntro.ts";
 import { docPath } from "payload-app/routes";
 
 const oneLine = (text: string | null | undefined): string =>
   (text ?? "").replace(/\s+/g, " ").trim();
 
+/** CMS html (p, h3, inline tags) as Markdown text: h3 become ###, links and emphasis drop to their text. */
+const toMarkdown = (html: string): string =>
+  html
+    .replace(/<h3[^>]*>/g, "\n\n### ")
+    .replace(/<\/(p|h3|li)>|<br\s*\/?>/g, "\n\n")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&")
+    .split(/\n{2,}/)
+    .map((block) => block.replace(/\s+/g, " ").trim())
+    .filter(Boolean)
+    .join("\n\n");
+
 /** llmstxt.org index of the site, built from the CMS so counts and lists never go stale. */
 export const GET: APIRoute = async ({ site: origin }) => {
   const site = origin ?? "https://berliner-schnauze.wtf";
-  const [words, themen, posts] = await Promise.all([
+  const [words, themen, posts, home] = await Promise.all([
     fetchAllWords(),
     fetchAllThemen(),
     fetchAllPosts(),
+    fetchHome(),
   ]);
   const link = (title: string, path: string, note?: string) =>
     `- [${title}](${new URL(path, site)})${note ? `: ${note}` : ""}`;
@@ -31,6 +50,34 @@ export const GET: APIRoute = async ({ site: origin }) => {
     "",
     "Sprache der Seite: Deutsch (de-DE). Die Einträge sind redaktionell gepflegt; sichtbare Datumsangaben auf jeder Wortseite zeigen Erstellung und letzte Änderung.",
     "",
+    // The start page text (SPEC startseite-v20 §14): intro, "Wat is Berlinerisch?", sound rules, FAQ.
+    ...(home.intro ? [withCount(home.intro, home.wordCount), ""] : []),
+    ...(home.knowledgeHtml
+      ? [
+          "## Wat is Berlinerisch?",
+          "",
+          toMarkdown(withCount(home.knowledgeHtml, home.wordCount)),
+          "",
+        ]
+      : []),
+    ...(home.soundRules.length > 0
+      ? [
+          "### Lautregeln (Hochdeutsch → Berlinerisch)",
+          "",
+          ...home.soundRules.map(
+            (r) =>
+              `- ${r.standard} → ${r.berlin}${r.example ? `: ${r.example}` : ""}${r.rule ? ` (${r.rule})` : ""}`,
+          ),
+          "",
+        ]
+      : []),
+    ...(home.faq.length > 0
+      ? [
+          "## Häufig jefragt",
+          "",
+          ...home.faq.flatMap((f) => [`### ${f.question}`, "", toMarkdown(f.answerHtml), ""]),
+        ]
+      : []),
     "## Wörterbuch",
     "",
     link("Wort-Index", "/wort", `alle ${count} Einträge von A bis Z`),
