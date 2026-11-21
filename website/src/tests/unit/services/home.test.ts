@@ -188,4 +188,17 @@ describe("fetchHome", () => {
     expect(magazine!.excerpt.split(" ")).toHaveLength(90);
     expect(magazine!.excerpt).not.toContain("<");
   });
+
+  it("skips newer posts without a quote and lists them under the others", async () => {
+    fetchAllPosts.mockResolvedValue([
+      { blocks: ["<p>Kein Zitat</p>"], readingTime: 1, slug: "neu", title: "Neu" },
+      { blocks: [], readingTime: 2, slug: "alt", teaserZitat: "Dit is dit", title: "Alt" },
+    ]);
+    const { magazine } = await load();
+    expect(magazine).toMatchObject({
+      others: [{ slug: "neu", title: "Neu" }],
+      quote: "Dit is dit",
+      slug: "alt",
+    });
+  });
 });

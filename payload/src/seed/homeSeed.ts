@@ -5,7 +5,9 @@
  */
 import type { Payload } from "payload";
 
+import { PRESERVE_CONTENT_MODIFIED_AT } from "../fields/contentModified";
 import { htmlToLexical } from "../lib/htmlToLexical";
+import { lexicalToHtml } from "../lib/lexicalHtml";
 import { hasLexicalText } from "../lib/routes";
 import {
   HOME_ABOUT_TEXT,
@@ -83,6 +85,36 @@ export async function seedHome(
     topicsFilled.push(slug);
   }
   if (topicsFilled.length) written.push(`topicSayings(${topicsFilled.length})`);
+
+  // Magazine teaser: the latest published post without a teaser quote gets its own first sentence (a dev stand-in;
+  // the site drops the section when a post has neither a teaser quote nor a pull quote, SPEC §12.3).
+  const [post] = (
+    await payload.find({
+      collection: "posts",
+      depth: 0,
+      limit: 1,
+      sort: "-publishedAt",
+      where: { _status: { equals: "published" } },
+    })
+  ).docs;
+  if (post && !post.teaserZitat) {
+    const first = /<p[^>]*>(.*?)<\/p>/s.exec(lexicalToHtml(post.content))?.[1] ?? "";
+    const plain = first
+      .replace(/<[^>]*>/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    const sentence = /^.{20,160}?[.!?](?=\s|$)/.exec(plain)?.[0];
+    if (sentence) {
+      await payload.update({
+        collection: "posts",
+        context: { [PRESERVE_CONTENT_MODIFIED_AT]: true },
+        data: { teaserZitat: sentence },
+        depth: 0,
+        id: post.id,
+      });
+      written.push("teaserZitat");
+    }
+  }
 
   if (written.length) await payload.updateGlobal({ slug: "home", data, depth: 0 });
   return { written, skipped };

@@ -128,18 +128,28 @@ const toHomeWord = (word: SiteWord, now: Date): HomeWord => {
   };
 };
 
+const quoteOf = (post: SitePost): string =>
+  post.teaserZitat ||
+  plain(
+    /<blockquote[^>]*>([\s\S]*?)<\/blockquote>/.exec(
+      post.blocks.filter((b) => typeof b === "string").join(" "),
+    )?.[1] ?? "",
+  );
+
+/** The latest post that has a teaser quote or a pull quote; posts without one are skipped, not the whole section. */
 const toMagazine = (posts: SitePost[]): HomeData["magazine"] => {
-  const [post, ...rest] = posts;
+  const post = posts.find((p) => quoteOf(p));
   if (!post) return null;
   const html = post.blocks.filter((b) => typeof b === "string").join(" ");
-  const quote =
-    post.teaserZitat || plain(/<blockquote[^>]*>([\s\S]*?)<\/blockquote>/.exec(html)?.[1] ?? "");
   const text = plain(html) || post.excerpt || "";
   return {
     excerpt: text.split(" ").slice(0, EXCERPT_WORDS).join(" "),
     ...(post.teaserIpa ? { ipa: post.teaserIpa } : {}),
-    others: rest.slice(0, OTHER_POSTS).map(({ slug, title }) => ({ slug, title })),
-    ...(quote ? { quote } : {}),
+    others: posts
+      .filter((p) => p !== post)
+      .slice(0, OTHER_POSTS)
+      .map(({ slug, title }) => ({ slug, title })),
+    quote: quoteOf(post),
     readingMinutes: post.readingTime,
     slug: post.slug,
     title: post.title,
