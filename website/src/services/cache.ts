@@ -4,6 +4,8 @@
  * failed refresh keeps the stale value and is retried by the next call.
  */
 export const ttl = <T>(ms: number, load: () => Promise<T>): (() => Promise<T>) => {
+  // Dev opt-in (`NO_TTL_CACHE=1 pnpm dev`): seed or CMS edits show up on the next request, at the price of a slow page.
+  if (process.env.NO_TTL_CACHE === "1") return load;
   let value: Promise<T> | undefined;
   let loadedAt = 0;
   let refreshing = false;

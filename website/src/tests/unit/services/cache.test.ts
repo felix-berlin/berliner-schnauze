@@ -65,3 +65,15 @@ describe("ttl", () => {
     expect(await get()).toBe("ok");
   });
 });
+
+describe("ttl with NO_TTL_CACHE=1", () => {
+  it("loads on every call", async () => {
+    vi.stubEnv("NO_TTL_CACHE", "1");
+    const load = vi.fn(async () => 1);
+    const get = ttl(60_000, load);
+    await get();
+    await get();
+    expect(load).toHaveBeenCalledTimes(2);
+    vi.unstubAllEnvs();
+  });
+});

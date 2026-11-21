@@ -13,17 +13,18 @@
     --_drop: 5.2rem; // SPEC §12.3 drop cap like §12.1
     --_fade: 15.5rem; // SPEC §12.3 excerpt height before the fade
     --_track: 2px; // .others label letter spacing (mock)
-    --_ipa-start: -0.05em; // cut off at the left edge (mock)
+    --_ipa-start: calc(50% - 50vw - 0.05em); // cut off at the screen's left edge (mock), not the column's
     --_ipa-mid: 50%; // vertically centred from the tablet width on
     --_under: 2px; // gap between .go and its underline (mock)
     --_rise: 600ms; // SPEC §16 quote
     --_rise-start: 100ms;
+    --_ipa-fade: 1.2s; // outline fade-in (mock h19-fade)
+    --_drift: 20s; // outline drift (mock h19-drift)
     --focus-ring-color: var(--color-accent-active);
 
     container: home-magazine / inline-size;
     position: relative;
-    // The outline is far wider than the section: clip it here, not with overflow (keeps focus rings).
-    overflow: clip;
+    // The outline starts at the screen edge, outside this column: the page's clip-path and the viewport clip it.
   }
 
   .ipa {
@@ -77,6 +78,7 @@
     font-size: var(--font-size-2xl);
 
     a {
+      font-family: var(--font-family-body); // an h3 would take the display font (mock: body)
       color: var(--color-text-strong);
       text-decoration: underline;
       text-decoration-color: var(--color-accent-active);
@@ -163,7 +165,7 @@
       --_ipa: 30rem; // SPEC §12.3 outline behind the quote
 
       inset-block-start: var(--_ipa-mid);
-      translate: 0 -50%;
+      transform: translateY(-50%); // not `translate`: the drift animation owns that
     }
 
     blockquote p {
@@ -178,6 +180,13 @@
   }
 
   @include butler-mx.feature("motion") {
+    // The outline fades in and drifts sideways like the stage's (mock h19-fade, h19-drift).
+    .ipa {
+      animation:
+        home-fade var(--_ipa-fade) both,
+        home-drift var(--_drift) var(--_ipa-fade) ease-in-out infinite alternate;
+    }
+
     :scope:not([data-reveal="wait"]) blockquote p {
       animation: home-up var(--_rise) var(--_rise-start) ease both;
     }
