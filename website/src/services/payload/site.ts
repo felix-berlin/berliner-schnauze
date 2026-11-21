@@ -89,6 +89,9 @@ const inlineHtml = (html: string): string =>
     ? html.slice(3, -4)
     : html;
 
+/** The raw home global (cached for a minute); fetchHome maps it. */
+export const fetchHomeGlobal = home;
+
 export const fetchHomeFacts = async (): Promise<Fact[]> =>
   ((await home()).facts ?? []).map(({ headline, text }) => ({
     headline,

@@ -5,7 +5,7 @@ import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { fetchAllWords } from "@services/payload/words.ts";
 
 /** A thema as the site renders it: the Payload doc with a slug and the number of public words in it. */
-export type SiteThema = Pick<Theman, "description" | "id" | "meta" | "name"> & {
+export type SiteThema = Pick<Theman, "description" | "id" | "meta" | "name" | "typischerSatz"> & {
   count: number;
   slug: string;
 };
@@ -22,8 +22,10 @@ const loadThemen = async (): Promise<SiteThema[]> => {
     for (const { id } of word.themen) counts.set(id, (counts.get(id) ?? 0) + 1);
 
   return docs
-    .flatMap(({ description, id, meta, name, slug }) =>
-      slug ? [{ count: counts.get(id) ?? 0, description, id, meta, name, slug }] : [],
+    .flatMap(({ description, id, meta, name, slug, typischerSatz }) =>
+      slug
+        ? [{ count: counts.get(id) ?? 0, description, id, meta, name, slug, typischerSatz }]
+        : [],
     )
     .sort((a, b) => a.name.localeCompare(b.name, "de"));
 };

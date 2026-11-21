@@ -11,7 +11,14 @@ export type ArticleBlock = string | SiteMedia;
 /** A post as the site renders it: the Payload doc, its rich text as article blocks and the reading time. */
 export type SitePost = Pick<
   Post,
-  "contentModifiedAt" | "excerpt" | "id" | "meta" | "publishedAt" | "title"
+  | "contentModifiedAt"
+  | "excerpt"
+  | "id"
+  | "meta"
+  | "publishedAt"
+  | "teaserIpa"
+  | "teaserZitat"
+  | "title"
 > & {
   blocks: ArticleBlock[];
   featuredImage: SiteMedia | null;
@@ -83,6 +90,8 @@ const toSitePost = ({
   meta,
   publishedAt,
   slug,
+  teaserIpa,
+  teaserZitat,
   title,
 }: StoredPost): SitePost | undefined => {
   if (!slug || !title) return undefined;
@@ -97,6 +106,8 @@ const toSitePost = ({
     publishedAt,
     readingTime: readingTime(blocks),
     slug,
+    teaserIpa,
+    teaserZitat,
     title,
   };
 };
