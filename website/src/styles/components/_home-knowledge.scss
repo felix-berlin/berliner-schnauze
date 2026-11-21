@@ -281,7 +281,10 @@
 
     .side {
       position: sticky;
-      inset-block-start: var(--space-6);
+      inset-block-start: calc(var(--site-header-height) + var(--space-4)); // below the sticky header
+      align-self: start;
+      max-block-size: calc(100dvh - var(--site-header-height) - 2 * var(--space-4));
+      overflow-y: auto;
     }
 
     .rules {
