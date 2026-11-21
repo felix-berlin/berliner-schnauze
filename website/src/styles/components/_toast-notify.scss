@@ -43,7 +43,10 @@
     }
 
     :scope.toast-move {
-      transition: transform var(--_move) ease;
+      @include butler-mx.feature("motion") {
+        transition: transform var(--_move) ease;
+      }
+
       will-change: transform;
     }
 

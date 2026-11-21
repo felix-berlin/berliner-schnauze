@@ -116,8 +116,10 @@
     background: var(--color-accent-active); // colour inventory R2
     transform-origin: bottom;
     transform: scaleY(var(--fill-pct, 0));
-    transition: transform var(--duration-slow) var(--ease-standard);
 
+    @include butler-mx.feature("motion") {
+      transition: transform var(--duration-slow) var(--ease-standard);
+    }
     @include butler-mx.feature("no-motion") {
       transition: none;
     }

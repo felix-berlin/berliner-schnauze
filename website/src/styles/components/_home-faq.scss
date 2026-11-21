@@ -206,7 +206,9 @@
 
   @include butler-mx.feature("motion") {
     .plus::after {
-      transition: rotate var(--_open) var(--ease-standard);
+      @include butler-mx.feature("motion") {
+        transition: rotate var(--_open) var(--ease-standard);
+      }
     }
 
     .faq[open] .answer {

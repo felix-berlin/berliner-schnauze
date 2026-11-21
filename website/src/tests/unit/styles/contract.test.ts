@@ -447,4 +447,16 @@ describe("colour scheme contract", () => {
       .map(rel);
     expect(bad).toEqual([]);
   });
+
+  it("guards animations and spatial transitions of migrated files for reduced motion", () => {
+    const motion =
+      /^\s*(animation(-name)?:\s*(?!none)|transition:\s*(transform|translate|scale|rotate)\b)/m;
+    const guard = /feature\("(no-)?motion"\)|prefers-reduced-motion/;
+    // _inputs: the switch thumb shares one transition list with colour transitions, covered by the base net.
+    const unguarded = styleFiles
+      .filter((p) => !legacyFiles.includes(rel(p)) && !p.endsWith("base/_inputs.scss"))
+      .filter((p) => motion.test(read(p)) && !guard.test(read(p)))
+      .map(rel);
+    expect(unguarded).toEqual([]);
+  });
 });

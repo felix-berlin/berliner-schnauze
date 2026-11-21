@@ -406,7 +406,9 @@
 
   @include butler-mx.feature("motion") {
     [role="tab"]::after {
-      transition: transform var(--_tab-line) var(--ease-standard);
+      @include butler-mx.feature("motion") {
+        transition: transform var(--_tab-line) var(--ease-standard);
+      }
     }
 
     .list a {

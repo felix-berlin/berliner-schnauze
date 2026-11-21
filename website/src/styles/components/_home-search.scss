@@ -244,7 +244,10 @@
     svg {
       inline-size: 18px;
       block-size: 18px;
-      transition: translate var(--duration-fast) var(--ease-standard);
+
+      @include butler-mx.feature("motion") {
+        transition: translate var(--duration-fast) var(--ease-standard);
+      }
     }
 
     @include butler-mx.hover {

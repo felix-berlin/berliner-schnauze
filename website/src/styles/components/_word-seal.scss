@@ -98,7 +98,10 @@
     background: var(--color-accent-solid);
     color: var(--color-text-on-accent);
     cursor: pointer;
-    transition: scale var(--duration-fast) var(--ease-standard);
+
+    @include butler-mx.feature("motion") {
+      transition: scale var(--duration-fast) var(--ease-standard);
+    }
 
     &:focus-visible {
       outline-offset: 3px;

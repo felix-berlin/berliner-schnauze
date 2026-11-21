@@ -74,20 +74,23 @@
 
     // The hidden scrollbar needs another cue: fade the edges that have more chips beyond them.
     // Without scroll-driven animations the chip cut off at the screen edge is the cue.
-    @supports (animation-timeline: scroll()) {
-      mask:
-        linear-gradient(currentcolor, currentcolor) no-clip subtract,
-        linear-gradient(to right, currentcolor, transparent) 0 0 / var(--home-browse-fade-start)
-          100% no-repeat no-clip,
-        linear-gradient(to right, transparent, currentcolor) 100% 0 / var(--home-browse-fade-end)
-          100% no-repeat no-clip;
-      animation:
-        home-browse-fade-start linear both,
-        home-browse-fade-end linear both;
-      animation-timeline: scroll(self inline);
-      animation-range:
-        0 var(--_fade-size),
-        calc(100% - var(--_fade-size)) 100%;
+    // Reduced motion: no scroll-driven fade either; the cut-off chip stays the cue.
+    @include butler-mx.feature("motion") {
+      @supports (animation-timeline: scroll()) {
+        mask:
+          linear-gradient(currentcolor, currentcolor) no-clip subtract,
+          linear-gradient(to right, currentcolor, transparent) 0 0 / var(--home-browse-fade-start)
+            100% no-repeat no-clip,
+          linear-gradient(to right, transparent, currentcolor) 100% 0 / var(--home-browse-fade-end)
+            100% no-repeat no-clip;
+        animation:
+          home-browse-fade-start linear both,
+          home-browse-fade-end linear both;
+        animation-timeline: scroll(self inline);
+        animation-range:
+          0 var(--_fade-size),
+          calc(100% - var(--_fade-size)) 100%;
+      }
     }
 
     a {
