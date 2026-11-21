@@ -1,6 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 
-import { resultCount } from "./helpers";
+import { dismissToasts, resultCount } from "./helpers";
 
 // CI runs against the small invented data set of `pnpm --filter payload-app seed:e2e`:
 // assertions target its slugs (aasen, anmachen, wa, ...) and never hardcode totals.
@@ -11,6 +11,8 @@ const cards = (page: Page) => page.locator(".c-word-list article");
 const clearButton = (page: Page) => page.getByRole("button", { name: "Wortsuche löschen" });
 
 test.describe("Search behaviour (/suche)", () => {
+  test.beforeEach(async ({ page }) => dismissToasts(page));
+
   test("?q= Deep-Link füllt das Suchfeld und filtert die Liste", async ({ page }) => {
     await page.goto("/suche");
     const total = await resultCount(page).textContent();

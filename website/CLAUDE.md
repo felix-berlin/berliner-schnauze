@@ -10,7 +10,7 @@ Single test file: `pnpm vitest run src/tests/unit/path/to/file.test.ts`. Update 
 
 ```bash
 # once: throwaway DB on bs-dev-postgres (127.0.0.1:5433), named bsw_<workspace>_e2e (a fixed bs_e2e would collide between worktrees)
-#   migrate + seed it with DATABASE_URL pointing there: NODE_ENV=production pnpm --filter payload-app migrate; pnpm --filter payload-app seed:e2e
+#   migrate + seed it with DATABASE_URL pointing there: NODE_ENV=production pnpm --filter payload-app migrate; pnpm --filter payload-app seed:e2e   (Infisical overwrites NODE_ENV: set it inside the injected shell, otherwise Payload pushes the schema and asks interactively)
 E2E_BUILD=1 pnpm build        # then: node server/index.mjs with E2E_SERVER=1, PORT=$E2E_PORT, DATABASE_URL (the e2e DB), PAYLOAD_SECRET, PAYLOAD_SERVER_URL=http://localhost:$E2E_PORT
 ../scripts/with-env.sh npx playwright test <file> --project=chromium
 ```

@@ -6,14 +6,26 @@ import { dismissToasts } from "./helpers";
 // Start page v20 (docs/design/startseite-v20/SPEC.md). Runs against the e2e seed: it carries invented votes and BON
 // games above MIN_GROUP, so the aggregate sections (BON trial card, results band) are always there.
 const searchField = (page: Page) => page.getByRole("combobox", { name: "Wort suchen" });
-const readyIslands = (page: Page) => expect(page.locator("astro-island[ssr]")).toHaveCount(0);
+/** Waits until no island is left unhydrated; the failure message names the pending ones. */
+const readyIslands = (page: Page) =>
+  expect
+    .poll(() =>
+      page.evaluate(() =>
+        [...document.querySelectorAll("astro-island[ssr]")].map((i) =>
+          i.getAttribute("component-url"),
+        ),
+      ),
+    )
+    .toEqual([]);
 
-/** Scrolls once so every client:visible island hydrates. */
+/** Brings every pending client:visible island into view so it hydrates (stepwise scrolling misses observers in WebKit). */
 const hydrate = async (page: Page) => {
   await page.evaluate(async () => {
-    for (let y = 0; y <= document.documentElement.scrollHeight; y += window.innerHeight / 2) {
-      window.scrollTo({ behavior: "instant", top: y });
-      await new Promise((r) => setTimeout(r, 80));
+    for (const island of document.querySelectorAll("astro-island[ssr]")) {
+      (island.firstElementChild ?? island).scrollIntoView({ behavior: "instant", block: "center" });
+      // Stay until it hydrated: an observer callback that arrives after scrolling on never fires again.
+      for (let i = 0; i < 60 && island.hasAttribute("ssr"); i++)
+        await new Promise((r) => setTimeout(r, 50));
     }
     window.scrollTo({ behavior: "instant", top: 0 });
   });
@@ -135,7 +147,8 @@ test.describe("Startseite v20 (/)", () => {
     const running = await page.evaluate(() =>
       document
         .getAnimations()
-        .filter((a) => a.playState === "running")
+        // The reduced-motion reset leaves 0.01 ms transitions, which Firefox still reports as running when sampled.
+        .filter((a) => a.playState === "running" && a.effect!.getComputedTiming().duration! > 1)
         .map((a) => (a.effect as KeyframeEffect | null)?.target)
         .filter((el) => el && !el.closest("[class*='seal']"))
         .map((el) => (el as Element).className),
@@ -188,6 +201,8 @@ test.describe("Startseite v20 (/)", () => {
     test(`axe ohne Verstöße ${width}px ${colorScheme}`, async ({ page }) => {
       await page.setViewportSize({ height: 900, width });
       await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
+      // Reload under the scheme: WebKit keeps `light-dark()` colours of the FAQ container when it flips after load.
+      await page.reload();
       await hydrate(page);
       const { violations } = await new AxeBuilder({ page }).include("main").analyze();
       expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(" | ")}`)).toEqual(

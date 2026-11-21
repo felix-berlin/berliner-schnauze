@@ -1,8 +1,10 @@
 import { test, expect } from "@playwright/test";
 
-import { resultCount } from "./helpers";
+import { dismissToasts, resultCount } from "./helpers";
 
 test.describe("Search Edge Cases (/suche)", () => {
+  test.beforeEach(async ({ page }) => dismissToasts(page));
+
   test("Suche ohne Treffer zeigt Empty-State-Nachricht", async ({ page }) => {
     // 1. Go to '/'
     await page.goto("/suche");
