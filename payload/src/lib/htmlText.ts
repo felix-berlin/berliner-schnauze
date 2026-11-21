@@ -12,7 +12,7 @@ export const stripTags = (html: string, replacement = ""): string => {
   let previous: string;
   do {
     previous = text;
-    text = text.replace(/<[^>]*>/g, replacement);
+    text = text.replace(/<[^<>]*>/g, replacement);
   } while (text !== previous);
   return text;
 };

@@ -3,8 +3,8 @@ import { describe, expect, it } from "vitest";
 import { decodeEntities, htmlToText, stripTags } from "../src/lib/htmlText";
 
 describe("htmlText", () => {
-  it("drops tags, nested openers included", () => {
-    expect(stripTags("a<scr<b>ipt>b")).toBe("aipt>b");
+  it("drops tags, nested openers reassemble and go too", () => {
+    expect(stripTags("a<scr<b>ipt>b")).toBe("ab");
     expect(stripTags("<p>x</p><br/>y", " ")).toBe(" x  y");
   });
 
