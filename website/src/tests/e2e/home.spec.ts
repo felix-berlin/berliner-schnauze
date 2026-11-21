@@ -148,7 +148,9 @@ test.describe("Startseite v20 (/)", () => {
       document
         .getAnimations()
         // The reduced-motion reset leaves 0.01 ms transitions, which Firefox still reports as running when sampled.
-        .filter((a) => a.playState === "running" && a.effect!.getComputedTiming().duration! > 1)
+        .filter(
+          (a) => a.playState === "running" && Number(a.effect!.getComputedTiming().duration) > 1,
+        )
         .map((a) => (a.effect as KeyframeEffect | null)?.target)
         .filter((el) => el && !el.closest("[class*='seal']"))
         .map((el) => (el as Element).className),
