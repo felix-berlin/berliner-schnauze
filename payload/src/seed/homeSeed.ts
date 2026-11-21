@@ -139,6 +139,80 @@ export async function seedHome(
   }
   if (latest.length) written.push(`teaserIpa(${latest.length})`);
 
+  const ipaDays = await seedWordOfTheDayIpa(payload);
+  if (ipaDays) written.push(`wordIpa(${ipaDays})`);
+
   if (written.length) await payload.updateGlobal({ slug: "home", data, depth: 0 });
   return { written, skipped };
+}
+
+// DEV PLACEHOLDER, not phonetics: a rough letter-to-sound guess so the stage outline has something to show.
+const IPA_RULES: [RegExp, string][] = [
+  [/sch/g, "ʃ"],
+  [/ch/g, "ç"],
+  [/ei/g, "aɪ"],
+  [/au/g, "aʊ"],
+  [/ie/g, "iː"],
+  [/ä/g, "ɛ"],
+  [/ö/g, "œ"],
+  [/ü/g, "ʏ"],
+  [/ß/g, "s"],
+  [/z/g, "ts"],
+  [/w/g, "v"],
+  [/v/g, "f"],
+];
+const roughIpa = (lemma: string) =>
+  IPA_RULES.reduce(
+    (t, [re, to]) => t.replace(re, to),
+    lemma.toLowerCase().replace(/[^a-zäöüß]/g, ""),
+  );
+
+/**
+ * Gives the words of the next 30 days (the site picks one per Berlin day by sorted slug, utils/wordOfTheDay.ts) a
+ * placeholder IPA when they have none. Both candidate lists are covered: published words and, with SHOW_TEST_DATA,
+ * drafts too. Returns how many words were written.
+ */
+async function seedWordOfTheDayIpa(payload: Payload): Promise<number> {
+  const DAYS = 30;
+  const MS_PER_DAY = 86_400_000;
+  const all = await payload.find({
+    collection: "words",
+    depth: 0,
+    draft: true,
+    limit: 0,
+    pagination: false,
+    select: { berlinerisch: true, ipa: true, slug: true },
+  });
+  const published = await payload.find({
+    collection: "words",
+    depth: 0,
+    limit: 0,
+    pagination: false,
+    select: { berlinerisch: true, ipa: true, slug: true },
+  });
+  const today = Math.floor(Date.now() / MS_PER_DAY);
+  const picks = new Map<string, (typeof all.docs)[number]>();
+  for (const list of [all.docs, published.docs]) {
+    const sorted = [...list].sort((a, b) => ((a.slug ?? "") < (b.slug ?? "") ? -1 : 1));
+    if (!sorted.length) continue;
+    for (let d = 0; d < DAYS; d++) {
+      const word = sorted[(today + d) % sorted.length];
+      picks.set(String(word.id), word);
+    }
+  }
+  let written = 0;
+  for (const word of picks.values()) {
+    const ipa = roughIpa(word.berlinerisch ?? "");
+    if (word.ipa || !ipa) continue;
+    await payload.update({
+      collection: "words",
+      context: { [PRESERVE_CONTENT_MODIFIED_AT]: true },
+      data: { ipa },
+      depth: 0,
+      draft: true,
+      id: word.id,
+    });
+    written++;
+  }
+  return written;
 }
