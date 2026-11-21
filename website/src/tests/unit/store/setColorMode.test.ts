@@ -1,6 +1,7 @@
 import { THEME_COLORS } from "@utils/themeColors";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { runInThisContext } from "node:vm";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // The inline script of SetColorMode.astro runs on every page, so test its real source.
@@ -13,7 +14,10 @@ describe("SetColorMode inline script", () => {
   let listener: (() => void) | undefined;
   let systemDark = false;
 
-  const run = () => new Function("THEME_COLORS", script)(THEME_COLORS);
+  const run = () => {
+    Object.assign(globalThis, { THEME_COLORS });
+    runInThisContext(`(() => {${script}})()`);
+  };
 
   beforeEach(() => {
     listener = undefined;
