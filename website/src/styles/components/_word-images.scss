@@ -9,7 +9,8 @@
 @include mx.component("word-images") {
   :scope {
     --_focus-room: 0.3125rem; // room for the 2px dashed focus ring (offset 2px) that overflow-x would clip
-    --textlink-font-size: var(--font-size-sm);
+    --_size: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
+    --textlink-font-size: var(--_size);
 
     flex-direction: column;
     align-items: flex-start;

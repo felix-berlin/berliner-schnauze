@@ -4,12 +4,14 @@
 // links is an aria-hidden span, so it is not read out. The links are textlinks (inline, hit-area).
 @include mx.component("word-themes") {
   :scope {
+    --_size: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size tokens are 12.8px and 12px
+
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
     gap: 0 var(--space-2);
     margin: 0;
     color: var(--color-text-muted);
-    font-size: var(--font-size-xs);
+    font-size: var(--_size);
   }
 }
