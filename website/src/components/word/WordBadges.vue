@@ -14,9 +14,9 @@
       v-if="trendBadge"
       class="tip-wrap"
       :data-open="open ? '' : undefined"
-      @focusin="place"
+      @focusin="enter"
       @focusout="dismissed = false"
-      @mouseenter="place"
+      @mouseenter="enter"
       @mouseleave="dismissed = false"
     >
       <a class="trend" :aria-describedby="tipId" href="/wort" @click="onClick">
@@ -62,6 +62,11 @@ const root = useTemplateRef<HTMLElement>("root");
 const tip = useTemplateRef<HTMLElement>("tip");
 const EDGE = 16;
 
+const enter = (): void => {
+  dismissed.value = false;
+  place();
+};
+
 const place = (): void => {
   const box = tip.value;
   const right = (root.value?.closest("header") ?? document.documentElement).getBoundingClientRect()
@@ -96,7 +101,8 @@ const onClick = (event: MouseEvent): void => {
 useEventListener(globalThis.document, "keydown", (e: KeyboardEvent) => {
   if (e.key !== "Escape") return;
   open.value = false;
-  dismissed.value = true;
+  // Only an Esc aimed at the tooltip (badge focused or hovered) dismisses it, not e.g. one that closes a dialog.
+  dismissed.value = root.value?.matches(":focus-within, :hover") ?? false;
 });
 useEventListener(globalThis.document, "click", (e: MouseEvent) => {
   if (!(e.target instanceof Element) || !e.target.closest(".tip-wrap")) open.value = false;

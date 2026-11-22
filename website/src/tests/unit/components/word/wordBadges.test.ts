@@ -32,6 +32,7 @@ describe("WordBadges tooltip", () => {
   it("opens again after the focus leaves", async () => {
     const wrapper = mountBadges();
     const link = wrapper.get("a[aria-describedby]");
+    (link.element as HTMLElement).focus();
     esc();
     await link.trigger("focusout");
     expect(wrapper.attributes("data-dismissed")).toBeUndefined();
@@ -39,10 +40,33 @@ describe("WordBadges tooltip", () => {
 
   it("opens again after the pointer leaves", async () => {
     const wrapper = mountBadges();
+    const link = wrapper.get("a[aria-describedby]");
+    (link.element as HTMLElement).focus();
     esc();
-    wrapper
-      .get("a[aria-describedby]")
-      .element.parentElement!.dispatchEvent(new MouseEvent("mouseleave"));
+    link.element.parentElement!.dispatchEvent(new MouseEvent("mouseleave"));
+    await wrapper.vm.$nextTick();
+    expect(wrapper.attributes("data-dismissed")).toBeUndefined();
+  });
+
+  it("ignores an Esc while the badge is neither focused nor hovered", async () => {
+    const wrapper = mountBadges();
+    esc();
+    await wrapper.vm.$nextTick();
+    expect(wrapper.attributes("data-dismissed")).toBeUndefined();
+  });
+
+  it("resets a dismissal on focusin and mouseenter", async () => {
+    const wrapper = mountBadges();
+    const link = wrapper.get("a[aria-describedby]");
+    (link.element as HTMLElement).focus();
+    esc();
+    await wrapper.vm.$nextTick();
+    expect(wrapper.attributes("data-dismissed")).toBe("");
+    await link.trigger("focusin");
+    expect(wrapper.attributes("data-dismissed")).toBeUndefined();
+    esc();
+    await wrapper.vm.$nextTick();
+    link.element.parentElement!.dispatchEvent(new MouseEvent("mouseenter"));
     await wrapper.vm.$nextTick();
     expect(wrapper.attributes("data-dismissed")).toBeUndefined();
   });
