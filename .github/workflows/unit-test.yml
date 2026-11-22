@@ -24,7 +24,7 @@ jobs:
       pull-requests: read
     outputs:
       code: ${{ steps.f.outputs.code }}
-      payload: ${{ steps.f.outputs.payload }}
+      payload: ${{ steps.p.outputs.payload }}
     steps:
       # Pushes are diffed with git, pull requests via the API (no checkout needed there).
       - name: Checkout ✅
@@ -34,6 +34,8 @@ jobs:
         id: f
         uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
         with:
+          # every: a file counts as code only if it matches "**" and no "!" pattern; the default (some) matches "**" for every file
+          predicate-quantifier: every
           filters: |
             code:
               - "**"
@@ -52,6 +54,13 @@ jobs:
               - "!scripts/orca-*.sh"
               - "!scripts/*anki*"
               - "!scripts/test_*.py"
+
+      # Own step: the payload patterns are positive only and need the default quantifier (some).
+      - name: Detect schema-relevant changes
+        id: p
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        with:
+          filters: |
             # What can change the database schema or the migration run; the website cannot.
             payload:
               - "payload/**"
