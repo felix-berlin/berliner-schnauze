@@ -17,7 +17,7 @@
     container: word-poll / inline-size;
   }
 
-  :scope .body {
+  :scope > .body {
     display: grid;
     gap: var(--space-4);
   }

@@ -148,6 +148,23 @@ export const loadFeedback = (wordId: number): Promise<void> => {
   })());
 };
 
+/**
+ * A fresh GET (no-store) for the poll: the state replaces the store only when no answer landed meanwhile, so a slower
+ * GET cannot overwrite a newer PATCH result. Returns the answer either way (null on failure).
+ */
+export const refreshFeedback = async (wordId: number): Promise<WordFeedbackState | null> => {
+  const startedAt = stateVersion;
+  try {
+    const res = await fetch(`${ENDPOINT}?word=${wordId}`, { cache: "no-store" });
+    if (!res.ok) return null;
+    const state = (await res.json()) as WordFeedbackState;
+    if (loadedFor === wordId && stateVersion === startedAt) $feedback.set(state);
+    return state;
+  } catch {
+    return null;
+  }
+};
+
 type SendOptions = {
   /** Replaces the generic text when the server sent no reason of its own. */
   fallbackMessage?: string;

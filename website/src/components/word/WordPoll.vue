@@ -145,6 +145,7 @@
           <button
             v-for="o in choices"
             :key="o.value"
+            :aria-describedby="online ? undefined : 'word-poll-offline'"
             :aria-disabled="pending || !online"
             :aria-pressed="answers[step] === o.value"
             class="c-choice"
@@ -180,7 +181,7 @@
         <div class="columns">
           <div class="all">
             <h4 class="h" data-autofocus tabindex="-1">Wat sagen alle?</h4>
-            <div class="matrix" aria-hidden="true">
+            <div class="matrix" data-matrix aria-hidden="true">
               <span
                 v-for="(u, i) in result.matrix"
                 :key="i"
@@ -205,7 +206,9 @@
           <div v-if="regions.length || ages.length" class="who">
             <h4 class="h">Wer sagt’s noch?</h4>
             <template v-for="g in groups" :key="g.id">
-              <p :id="`word-poll-${g.id}`" class="c-word-label">{{ g.label }}</p>
+              <p v-if="g.rows.length" :id="`word-poll-${g.id}`" class="c-word-label">
+                {{ g.label }}
+              </p>
               <ul
                 v-if="g.rows.length"
                 class="rows"
@@ -214,7 +217,7 @@
               >
                 <li v-for="r in g.rows" :key="r.key">
                   <span class="name">{{ r.label }}</span>
-                  <span class="dots" aria-hidden="true">
+                  <span class="dots" data-dots aria-hidden="true">
                     <span
                       v-for="n in DOTS"
                       :key="n"
@@ -267,10 +270,12 @@
           aria-describedby="word-poll-confirm-text"
           @keydown.esc.stop="cancelDelete"
         >
-          <p id="word-poll-confirm-text" class="text">
+          <p class="text">
             <b id="word-poll-confirm-title">Wirklich löschen?</b>
-            Deine Stimme und deine Angaben zu „{{ label }}“ werden entfernt. Dit lässt sich nich
-            rückgängig machen.
+            <span id="word-poll-confirm-text">
+              Deine Stimme und deine Angaben zu „{{ label }}“ werden entfernt. Dit lässt sich nich
+              rückgängig machen.
+            </span>
           </p>
           <div class="actions">
             <button
@@ -278,6 +283,7 @@
               class="c-button"
               data-variant="primary"
               :aria-busy="pending"
+              :aria-describedby="online ? undefined : 'word-poll-offline'"
               :aria-disabled="pending || !online"
               type="button"
               @click="remove"
@@ -293,7 +299,6 @@
 </template>
 
 <script setup lang="ts">
-import type { WordFeedbackState } from "@utils/wordFeedbackSchema.ts";
 import type { Area, Usage } from "payload-app/word-feedback";
 
 import BerlinAreaMap from "@components/word-feedback/BerlinAreaMap.vue";
@@ -307,7 +312,9 @@ import {
   $sendError,
   answerUsage,
   loadFeedback,
+  refreshFeedback,
   sendFeedback,
+  setRemember,
   type Profile,
 } from "@stores/wordFeedback.ts";
 import { trackEvent } from "@utils/analytics";
@@ -345,13 +352,14 @@ const yes = useTemplateRef<HTMLButtonElement>("yes");
 
 type View = "questions" | "result" | "vote";
 const view = ref<View | null>(null); // null = derived from the loaded own vote
-const current = computed<View>(
-  () => view.value ?? (feedback.value?.mine?.usage ? "result" : "vote"),
-);
+// The store is module state: after a navigation it can still hold the previous word until this word's GET is in.
+const loaded = ref(false);
+const mineNow = computed(() => (loaded.value ? feedback.value?.mine : null));
+const current = computed<View>(() => view.value ?? (mineNow.value?.usage ? "result" : "vote"));
 
 const result = ref<PollResult>(props.initial);
 watch(
-  () => feedback.value?.result,
+  () => (loaded.value ? feedback.value?.result : undefined),
   (r) => r && (result.value = r as PollResult),
   { immediate: true },
 );
@@ -371,7 +379,7 @@ const explainOpen = ref(true);
 const enter = ref<"back" | "forward">();
 
 const own = computed<Usage | null>(
-  () => (feedback.value?.mine?.usage as Usage | null | undefined) ?? null,
+  () => (mineNow.value?.usage as Usage | null | undefined) ?? null,
 );
 
 // ---- answers (what is stored for this device and word)
@@ -385,7 +393,7 @@ const fromMine = (m: Record<string, unknown> | null | undefined): Answers =>
 const answers = ref<Answers>({});
 let synced = false;
 watch(
-  () => feedback.value?.mine,
+  mineNow,
   (m) => {
     if (m && !synced) {
       synced = true;
@@ -440,11 +448,8 @@ const goTo = (to: ProfileStep, dir: "back" | "forward" = "forward") => {
 const refresh = async () => {
   refreshing.value = true;
   try {
-    const res = await fetch(`${ENDPOINT}?word=${props.wordId}`, { cache: "no-store" });
-    if (!res.ok) return;
-    const state = (await res.json()) as WordFeedbackState;
-    if (state.result) result.value = state.result;
-    $feedback.set(state);
+    const state = await refreshFeedback(props.wordId);
+    if (state?.result) result.value = state.result;
   } catch {
     // The shown numbers stay as they are.
   } finally {
@@ -452,7 +457,10 @@ const refresh = async () => {
   }
 };
 
-onMounted(() => loadFeedback(props.wordId));
+onMounted(async () => {
+  await loadFeedback(props.wordId);
+  loaded.value = true;
+});
 
 // ---- A: vote
 const startQuestions = () => {
@@ -642,6 +650,9 @@ const remove = async () => {
   }
   confirming.value = false;
   answers.value = {};
+  // The remembered profile (old opt-in) belongs to the deleted answers too: a later vote must not send it back.
+  setRemember(false);
+  $profile.set({});
   failedUsage.value = null;
   deleted.value = true;
   view.value = "vote";

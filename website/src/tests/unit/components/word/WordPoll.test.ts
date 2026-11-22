@@ -13,6 +13,7 @@ vi.mock("@composables/useOnline.ts", async () => {
   };
 });
 const store = vi.hoisted(() => ({
+  actual: undefined as unknown as typeof import("@stores/wordFeedback.ts"),
   answerUsage: vi.fn(),
   loadFeedback: vi.fn(),
   sendFeedback: vi.fn(),
@@ -20,7 +21,13 @@ const store = vi.hoisted(() => ({
 vi.mock("@stores/wordFeedback.ts", async () => {
   const actual =
     await vi.importActual<typeof import("@stores/wordFeedback.ts")>("@stores/wordFeedback.ts");
-  return { ...actual, ...store };
+  store.actual = actual;
+  return {
+    ...actual,
+    answerUsage: store.answerUsage,
+    loadFeedback: store.loadFeedback,
+    sendFeedback: store.sendFeedback,
+  };
 });
 vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));
 
@@ -60,10 +67,10 @@ const state = (m: ReturnType<typeof mine> | null, res = result()) =>
     totals: { dislike: 0, know: 0, like: 0, never: 0, say: 0 },
   }) as never;
 
-type Route = (url: string, init?: RequestInit) => { body?: unknown; ok?: boolean };
+type Route = (init?: RequestInit) => { body?: unknown; ok?: boolean };
 let route: Route;
 const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
-  const r = route(url, init);
+  const r = route(init);
   return { json: async () => r.body ?? {}, ok: r.ok ?? true, status: r.ok === false ? 502 : 200 };
 });
 
@@ -76,7 +83,7 @@ const mountIt = async (initial = result()) => {
           emits: ["update:modelValue"],
           props: ["modelValue"],
           template:
-            '<button type="button" class="map-stub" @click="$emit(\'update:modelValue\', \'pankow\')">map</button>',
+            '<div><button type="button" data-testid="map" @click="$emit(\'update:modelValue\', \'pankow\')">Pankow</button><button type="button" data-testid="map-brandenburg" @click="$emit(\'update:modelValue\', \'brandenburg\')">Brandenburg</button><button type="button" data-testid="map-mitte" @click="$emit(\'update:modelValue\', \'mitte\')">Mitte</button></div>',
         },
       },
     },
@@ -101,7 +108,7 @@ describe("WordPoll", () => {
     store.loadFeedback.mockImplementation(async () => {});
     store.answerUsage.mockResolvedValue(true);
     store.sendFeedback.mockResolvedValue(true);
-    route = (url, init) => {
+    route = (init) => {
       if (init?.method === "DELETE") return { body: { deleted: true } };
       return { body: state(null) };
     };
@@ -189,7 +196,7 @@ describe("WordPoll", () => {
 
     it("Ergebnis zeigen keeps the given answers", async () => {
       const w = await startB();
-      await w.find(".map-stub").trigger("click");
+      await w.find('[data-testid="map"]').trigger("click");
       await flushPromises();
       expect(store.sendFeedback).toHaveBeenCalledTimes(1);
       await button(w, "Ergebnis zeigen").trigger("click");
@@ -209,20 +216,28 @@ describe("WordPoll", () => {
       expect(w.text()).toContain("Uffjewachsen oder zujezogen?");
     });
 
-    it("follows the old skip rules: Brandenburg has no Kiez and no half", async () => {
+    it("a Berlin borough offers its Kiez", async () => {
       const w = await startB();
-      store.sendFeedback.mockResolvedValue(true);
-      // Pankow offers Kiez
-      await w.find(".map-stub").trigger("click");
+      await w.find('[data-testid="map"]').trigger("click");
       await flushPromises();
       expect(w.text()).toContain("Welcher Kiez?");
+    });
+
+    it("Brandenburg has no Kiez and, even grown up there, no half", async () => {
+      const w = await startB();
+      await w.find('[data-testid="map-brandenburg"]').trigger("click");
+      await flushPromises();
+      expect(w.text()).toContain("Uffjewachsen oder zujezogen?");
+      await button(w, "Hier uffjewachsen").trigger("click");
+      await flushPromises();
+      expect(w.text()).toContain("Wie alt biste?");
     });
 
     it("a failed answer stays on the step and shows the strip", async () => {
       const w = await startB();
       store.sendFeedback.mockResolvedValue(false);
       $sendError.set("Jenug jestimmt für heute.");
-      await w.find(".map-stub").trigger("click");
+      await w.find('[data-testid="map"]').trigger("click");
       await flushPromises();
       expect(w.text()).toContain("Wo wohnste?");
       expect(w.find('[role="alert"]').text()).toContain("Jenug jestimmt für heute.");
@@ -246,10 +261,10 @@ describe("WordPoll", () => {
 
     it("draws 100 aria-hidden dots with one ringed own dot", async () => {
       const w = await startC();
-      const matrix = w.find(".matrix");
+      const matrix = w.find("[data-matrix]");
       expect(matrix.attributes("aria-hidden")).toBe("true");
-      expect(matrix.findAll(".dot")).toHaveLength(100);
-      expect(matrix.findAll('.dot[data-own="true"]')).toHaveLength(1);
+      expect(matrix.findAll("[data-usage]")).toHaveLength(100);
+      expect(matrix.findAll('[data-own="true"]')).toHaveLength(1);
     });
 
     it("hides a region row under 10 votes", async () => {
@@ -265,9 +280,9 @@ describe("WordPoll", () => {
     it("a row has 20 dots (1 dot = 5 %), round(pct / 5) of them filled", async () => {
       const w = await startC();
       const ost = w.findAll("li").find((li) => li.text().startsWith("Ost"))!;
-      expect(ost.findAll(".dot")).toHaveLength(20);
-      expect(ost.findAll('.dot[data-filled="true"]')).toHaveLength(15);
-      expect(ost.find(".dots").attributes("aria-hidden")).toBe("true");
+      expect(ost.findAll("[data-filled]")).toHaveLength(20);
+      expect(ost.findAll('[data-filled="true"]')).toHaveLength(15);
+      expect(ost.find("[data-dots]").attributes("aria-hidden")).toBe("true");
       expect(ost.text()).toContain("74 %");
     });
 
@@ -339,7 +354,7 @@ describe("WordPoll", () => {
 
     it("Ja, löschen calls DELETE with the word id and returns to A with the status", async () => {
       const { w } = await open();
-      route = (_url, init) =>
+      route = (init) =>
         init?.method === "DELETE" ? { body: { deleted: true } } : { body: state(null) };
       await button(w, "Ja, löschen").trigger("click");
       await flushPromises();
@@ -353,7 +368,7 @@ describe("WordPoll", () => {
 
     it("a failed delete keeps the dialog and shows the error", async () => {
       const { w } = await open();
-      route = (_url, init) => (init?.method === "DELETE" ? { ok: false } : { body: state(null) });
+      route = (init) => (init?.method === "DELETE" ? { ok: false } : { body: state(null) });
       await button(w, "Ja, löschen").trigger("click");
       await flushPromises();
       expect(w.find('[role="alertdialog"]').exists()).toBe(true);
@@ -377,6 +392,134 @@ describe("WordPoll", () => {
       expect(yes.attributes("aria-busy")).toBe("true");
       finish();
       await flushPromises();
+    });
+  });
+
+  describe("with the real store (request bodies)", () => {
+    type Mine = Record<string, string | null>;
+    let server: Mine;
+    let bodies: Record<string, unknown>[];
+    const useRealStore = () => {
+      store.loadFeedback.mockImplementation(store.actual.loadFeedback);
+      store.answerUsage.mockImplementation(store.actual.answerUsage);
+      store.sendFeedback.mockImplementation(store.actual.sendFeedback);
+    };
+    beforeEach(() => {
+      useRealStore();
+      server = {};
+      bodies = [];
+      localStorage.clear();
+      route = (init) => {
+        if (init?.method === "PATCH") {
+          const body = JSON.parse(init.body as string) as Record<string, string | null>;
+          bodies.push(body);
+          const { word: _word, ...rest } = body;
+          server = { ...server, ...rest };
+          return { body: state(mine(server)) };
+        }
+        if (init?.method === "DELETE") {
+          server = {};
+          return { body: { deleted: true } };
+        }
+        return { body: state(server.usage ? mine(server) : null) };
+      };
+    });
+
+    it("delete clears the remembered profile: the next vote carries none and starts at A then B", async () => {
+      store.actual.setRemember(true);
+      const w = await mountIt();
+      await button(w, "Sag ick selbst").trigger("click");
+      await flushPromises();
+      await w.find('[data-testid="map"]').trigger("click");
+      await flushPromises();
+      await button(w, "Ergebnis zeigen").trigger("click");
+      await flushPromises();
+      expect(store.actual.$profile.get().area).toBe("pankow");
+
+      await button(w, "Stimme und Angaben löschen").trigger("click");
+      await button(w, "Ja, löschen").trigger("click");
+      await flushPromises();
+      expect(store.actual.$profile.get()).toEqual({});
+      expect(store.actual.$remember.get()).toBe(false);
+      expect(localStorage.getItem("bs-word-feedback-profile")).toBeNull();
+
+      bodies.length = 0;
+      await button(w, "Sag ick selbst").trigger("click");
+      await flushPromises();
+      expect(bodies).toEqual([{ usage: "say", word: 7 }]);
+      expect(w.text()).toContain("Wo wohnste?");
+      expect(w.text()).not.toContain("Wat sagen alle?");
+    });
+
+    it("sends the shape the API accepts: area alone, locality with its area, half null on a new origin", async () => {
+      const w = await mountIt();
+      await button(w, "Sag ick selbst").trigger("click");
+      await flushPromises();
+      bodies.length = 0;
+      await w.find('[data-testid="map"]').trigger("click");
+      await flushPromises();
+      await button(w, "Prenzlauer Berg").trigger("click");
+      await flushPromises();
+      await button(w, "Hier uffjewachsen").trigger("click");
+      await flushPromises();
+      await button(w, "Ost").trigger("click");
+      await flushPromises();
+      await button(w, "überspringen").trigger("click");
+      await flushPromises();
+      expect(bodies).toEqual([
+        { area: "pankow", word: 7 },
+        { area: "pankow", locality: "prenzlauer-berg", word: 7 },
+        { origin: "grewUp", word: 7 },
+        { half: "east", origin: "grewUp", word: 7 },
+      ]);
+    });
+
+    it("a new area drops the stored locality and a non-grewUp origin drops the half", async () => {
+      server = {
+        area: "pankow",
+        half: "east",
+        locality: "prenzlauer-berg",
+        origin: "grewUp",
+        usage: "say",
+      };
+      $feedback.set(state(mine(server)));
+      const w = await mountIt();
+      await button(w, "ändern").trigger("click");
+      await flushPromises();
+      bodies.length = 0;
+      await w.find('[data-testid="map-mitte"]').trigger("click");
+      await flushPromises();
+      expect(bodies[0]).toEqual({ area: "mitte", locality: null, word: 7 });
+      await button(w, "überspringen").trigger("click");
+      await flushPromises();
+      await button(w, "Zujezogen, über 10 Jahre her").trigger("click");
+      await flushPromises();
+      expect(bodies[1]).toEqual({ half: null, origin: "movedOver10", word: 7 });
+    });
+  });
+
+  describe("another word after a navigation", () => {
+    it("shows nothing of the previous word's data while its own state loads", async () => {
+      $feedback.set(state(mine({ area: "pankow", usage: "say" }), result({ total: 999 })));
+      let finish!: () => void;
+      store.loadFeedback.mockImplementation(
+        () =>
+          new Promise<void>((resolve) => {
+            finish = () => {
+              $feedback.set(state(null, result({ total: 5 })));
+              resolve();
+            };
+          }),
+      );
+      const w = await mountIt(result({ total: 3 }));
+      expect(w.text()).not.toContain("Deine Angaben");
+      expect(w.text()).not.toContain("999");
+      expect(w.text()).toContain("Is dit Wort bei dir noch im Einsatz?");
+      finish();
+      await flushPromises();
+      expect(w.text()).toContain("Is dit Wort bei dir noch im Einsatz?");
+      expect(w.text()).not.toContain("Deine Angaben");
+      expect(w.text()).toContain("5 Stimmen");
     });
   });
 
