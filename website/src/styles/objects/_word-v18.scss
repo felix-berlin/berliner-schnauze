@@ -159,4 +159,12 @@
       font-size: var(--font-size-4xl);
     }
   }
+
+  // Jeschichten (SPEC §8.1): two stories below the "word" breakpoint, three from it. The same breakpoint drives the
+  // count in WordStories.vue; this rule only avoids the flash before the island hydrates.
+  @include mx.breakpoint("word", "max") {
+    .o-word-v18 [data-narrow-hidden] {
+      display: none;
+    }
+  }
 }

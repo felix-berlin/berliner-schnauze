@@ -82,7 +82,8 @@ const voices = voiceSources(model.word.berlinerischAudio);
 <WordMobileBar audio={voices.m ?? voices.w} wordId={draft ? undefined : model.word.id} />
 
 <script>
-  import { initContributeTriggers } from '@components/word/contributeTriggers.ts';
+  import { watchContributeTriggers } from '@components/word/contributeTriggers.ts';
 
-  initContributeTriggers();
+  // Re-wired on every navigation (ClientRouter), dropped before the swap.
+  watchContributeTriggers();
 </script>

@@ -38,7 +38,13 @@
       class="list"
       :data-collapsed="!expanded || undefined"
     >
-      <li v-for="(s, i) in shown" :key="s.id" class="item" :tabindex="i === limit ? -1 : undefined">
+      <li
+        v-for="(s, i) in shown"
+        :key="s.id"
+        class="item"
+        :data-narrow-hidden="(!expanded && i >= 2) || undefined"
+        :tabindex="i === limit ? -1 : undefined"
+      >
         <blockquote class="quote">„{{ s.text }}“</blockquote>
         <div class="meta">
           <span class="by">{{ meta(s) }}</span>
@@ -64,7 +70,7 @@
     <p class="note" role="status">{{ note }}</p>
 
     <button
-      v-if="!expanded && (items.length > limit || hasMore)"
+      v-if="(!expanded && items.length > limit) || hasMore"
       class="all"
       type="button"
       :aria-busy="loading"
@@ -72,7 +78,7 @@
       :aria-expanded="false"
       @click="expand"
     >
-      Alle {{ total }} Jeschichten lesen
+      {{ loading ? "Lade …" : `Alle ${total} Jeschichten lesen` }}
     </button>
 
     <p class="foot">Jede Jeschichte wird vor der Veröffentlichung jeprüft.</p>
@@ -88,7 +94,16 @@ import { agoLabel, type Story } from "@lib/story.ts";
 import { useStore } from "@nanostores/vue";
 import { openContributeForm, openForm } from "@stores/contribute.ts";
 import MessageCircle from "virtual:icons/lucide/message-circle";
-import { computed, nextTick, onMounted, reactive, ref, useId, useTemplateRef } from "vue";
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  useId,
+  useTemplateRef,
+} from "vue";
 
 const props = defineProps<{
   /** The word as written ("Schrippe"), for the gap text. */
@@ -126,17 +141,24 @@ const pending = ref<{ id: number; text: string }[]>([]);
 const busy = reactive(new Set<string>());
 const note = ref("");
 
-// Post-hydration only, so the server markup (three) never mismatches; the CSS hides the third on a narrow card meanwhile.
+// Post-hydration only, so the server markup (three) never mismatches. The "word" breakpoint (808px) of the page shell,
+// which also hides the third story before hydration (objects/_word-v18.scss): SPEC §3, mobile 2, from tablet 3.
+const NARROW = "(width < 50.5rem)";
 const mobile = ref(false);
 const limit = computed(() => (mobile.value ? 2 : 3));
 const expanded = ref(false);
 const loading = ref(false);
 const shown = computed(() => (expanded.value ? items.value : items.value.slice(0, limit.value)));
 
+let narrow: MediaQueryList | undefined;
+const onNarrow = (e: MediaQueryListEvent) => (mobile.value = e.matches);
+// Stories the visitor reacted to since the page loaded: a late `/mine` answer must not overwrite them.
+const touched = new Set<string>();
+
 onMounted(async () => {
-  const query = window.matchMedia("(max-width: 35.99rem)");
-  mobile.value = query.matches;
-  query.addEventListener("change", (e) => (mobile.value = e.matches));
+  narrow = window.matchMedia(NARROW);
+  mobile.value = narrow.matches;
+  narrow.addEventListener("change", onNarrow);
   try {
     const res = await fetch(`/api/stories/mine?word=${encodeURIComponent(props.word)}`, {
       cache: "no-store",
@@ -146,12 +168,15 @@ onMounted(async () => {
       pending?: { id: number; text: string }[];
       reactions?: Record<string, -1 | 1>;
     };
-    Object.assign(mine, data.reactions ?? {});
+    for (const [id, vote] of Object.entries(data.reactions ?? {})) {
+      if (!touched.has(id)) mine[id] = vote;
+    }
     pending.value = data.pending ?? [];
   } catch {
     // Own state is a convenience: without it nothing is pressed and no chip shows.
   }
 });
+onBeforeUnmount(() => narrow?.removeEventListener("change", onNarrow));
 
 const preview = (text: string): string =>
   text.length > PREVIEW ? `${text.slice(0, PREVIEW)}…` : text;
@@ -167,9 +192,10 @@ const meta = (s: Story): string =>
 
 const count = (s: Story, value: -1 | 1): number => (value === 1 ? s.jenau : s.anders);
 
+// Never below 0: the page is cached for a minute, so a count can be older than the visitor's own reaction.
 const shift = (s: Story, vote: number, by: 1 | -1): void => {
-  if (vote === 1) s.jenau += by;
-  if (vote === -1) s.anders += by;
+  if (vote === 1) s.jenau = Math.max(0, s.jenau + by);
+  if (vote === -1) s.anders = Math.max(0, s.anders + by);
 };
 
 const react = async (s: Story, value: -1 | 1): Promise<void> => {
@@ -177,6 +203,7 @@ const react = async (s: Story, value: -1 | 1): Promise<void> => {
   if (!online.value || busy.has(s.id)) return;
   const before = { anders: s.anders, jenau: s.jenau, mine: mine[s.id] ?? 0 };
   const next = before.mine === value ? 0 : value;
+  touched.add(s.id);
   shift(s, before.mine, -1);
   shift(s, next, 1);
   mine[s.id] = next;
@@ -224,21 +251,29 @@ const loadPage = async (): Promise<boolean> => {
   }
 };
 
-// "Alle lesen" expands in place: it loads the remaining pages first, so the button keeps the focus meanwhile.
+// TODO(wortseite): SPEC §21.1 is open (expand in place or a subpage /wort/{slug}/jeschichten); this expands in place.
+// TODO(wortseite): SPEC §19 lists WordReport.vue; it is replaced by WordReportLine.astro + ContributeForm type="error".
+// "Alle lesen" reveals what is loaded at once, then loads the remaining pages one after another (`hasMore` decides).
+// A failed page keeps the button (it retries) and leaves the pages already loaded in place.
 const expand = async (): Promise<void> => {
   if (loading.value) return;
   loading.value = true;
   note.value = "";
+  expanded.value = true;
+  const firstNew = items.value.length > limit.value;
+  if (firstNew) void focusFirstNew();
   while (hasMore.value && page < MAX_PAGES) {
     // oxlint-disable-next-line no-await-in-loop -- pages depend on each other (`hasMore`), so they load one after another
     if (!(await loadPage())) {
       note.value = FAILED;
-      loading.value = false;
-      return;
+      break;
     }
   }
   loading.value = false;
-  expanded.value = true;
+  if (!firstNew) void focusFirstNew();
+};
+
+const focusFirstNew = async (): Promise<void> => {
   await nextTick();
   list.value?.querySelector<HTMLElement>("li[tabindex]")?.focus();
 };

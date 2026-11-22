@@ -3,7 +3,8 @@
 
 // Jeschichten card body (SPEC §8.1): the prompt box ("Frage der Woche" + "Erzähl’s"), the list with the reactions and
 // "Alle {n} Jeschichten lesen". Parts: .prompt (.question, .text, .ask), .empty, .list (.item, .quote, .meta, .by,
-// .reactions, .react, .num), .all, .note, .foot. A collapsed list shows two items on a narrow card (SPEC: mobile 2).
+// .reactions, .react, .num), .all, .note, .foot. The third story of a collapsed list carries data-narrow-hidden: the page
+// shell (objects/_word-v18.scss) hides it below the "word" breakpoint (SPEC: mobile 2).
 @include mx.component("word-stories") {
   :scope {
     --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
@@ -65,6 +66,11 @@
     }
   }
 
+  // Without JS the button would do nothing (like the contribute buttons of the cards).
+  html:not([data-js]) :scope .ask {
+    display: none;
+  }
+
   .empty {
     margin: 0;
     color: var(--color-text-muted);
@@ -113,7 +119,7 @@
     gap: var(--space-2);
   }
 
-  // Reaction (SPEC §4.3): pill, 44px on a narrow card, 36px from 36rem.
+  // Reaction (SPEC §4.3): pill, 44px touch height at every width (the 36px desktop size is below the tap target here).
   .react {
     display: inline-flex;
     align-items: center;
@@ -127,10 +133,6 @@
     border: 1px solid var(--color-border-card);
     border-radius: var(--radius-pill);
     cursor: pointer;
-
-    @container word-stories (inline-size >= 36rem) {
-      min-block-size: 2.25rem; // SPEC §4.3: 36px on desktop and tablet
-    }
 
     @include butler-mx.hover {
       &:not([aria-disabled="true"]) {
@@ -174,8 +176,9 @@
     }
   }
 
+  // The status stays rendered when empty (a live region must exist before its text does); it only gives back its grid gap.
   .note:empty {
-    display: none;
+    margin-block-end: calc(var(--space-4) * -1);
   }
 
   .note,
@@ -183,11 +186,5 @@
     margin: 0;
     font-size: var(--_small);
     color: var(--color-text-muted);
-  }
-
-  @container word-stories (inline-size < 36rem) {
-    .list[data-collapsed] .item:nth-child(n + 3) {
-      display: none;
-    }
   }
 }

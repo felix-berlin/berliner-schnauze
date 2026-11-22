@@ -30,9 +30,18 @@ const story = (id: number, extra: Record<string, unknown> = {}) => ({
 const items = (n: number, from = 1) => Array.from({ length: n }, (_, i) => story(from + i));
 
 type Route = (url: string, init?: RequestInit) => unknown;
+// The page shell's "word" breakpoint: 808px = 50.5rem, a viewport query (`width < 50.5rem`).
+const removed = vi.fn();
+const viewport = (width: number) =>
+  vi.stubGlobal("matchMedia", (query: string) => ({
+    addEventListener() {},
+    matches: query === "(width < 50.5rem)" && width < 808,
+    removeEventListener: removed,
+  }));
+
 let route: Route;
 const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
-  const result = route(url, init) as { body?: unknown; ok?: boolean } | undefined;
+  const result = (await route(url, init)) as { body?: unknown; ok?: boolean } | undefined;
   if (result?.ok === false) return { json: async () => result.body ?? {}, ok: false, status: 502 };
   return { json: async () => result?.body ?? {}, ok: true, status: 200 };
 });
@@ -65,11 +74,7 @@ beforeEach(() => {
     url.startsWith("/api/stories/mine") ? { body: { pending: [], reactions: {} } } : {};
   fetchMock.mockClear();
   vi.stubGlobal("fetch", fetchMock);
-  vi.stubGlobal("matchMedia", () => ({
-    addEventListener() {},
-    matches: false,
-    removeEventListener() {},
-  }));
+  viewport(1280);
   __state.value = true;
   openForm.set(null);
 });
@@ -101,15 +106,64 @@ describe("WordStories list", () => {
     expect(w.find("button.all").exists()).toBe(false);
   });
 
-  it("shows two stories on mobile", async () => {
-    vi.stubGlobal("matchMedia", () => ({
-      addEventListener() {},
-      matches: true,
-      removeEventListener() {},
-    }));
-    const w = await mountIt();
+  it("follows the 808px breakpoint: two stories below it, three from it", async () => {
+    viewport(700); // tablet portrait below the "word" breakpoint, still two
+    expect((await mountIt({ items: items(5) })).findAll("li.item")).toHaveLength(2);
+    viewport(808);
+    expect((await mountIt({ items: items(5) })).findAll("li.item")).toHaveLength(3);
+  });
+
+  it("keeps the third story reachable on mobile: two shown, the button reveals all three", async () => {
+    viewport(390);
+    const w = await mountIt({ items: items(3) });
     expect(w.findAll("li.item")).toHaveLength(2);
-    expect(w.find("button.all").exists()).toBe(true);
+    await w.find("button.all").trigger("click");
+    await flushPromises();
+    expect(w.findAll("li.item")).toHaveLength(3);
+    expect(w.find("button.all").exists()).toBe(false);
+  });
+
+  it("marks the third collapsed story for the breakpoint rule and removes the media listener on unmount", async () => {
+    const w = await mountIt({ items: items(3) });
+    expect(w.findAll("li.item")[2]!.attributes("data-narrow-hidden")).toBeDefined();
+    expect(w.findAll("li.item")[1]!.attributes("data-narrow-hidden")).toBeUndefined();
+    w.unmount();
+    expect(removed).toHaveBeenCalledWith("change", expect.any(Function));
+  });
+
+  it("keeps the button for a retry when a further page fails, and loads it on the second try", async () => {
+    let fail = true;
+    route = (url) => {
+      if (url.startsWith("/api/stories/mine")) return { body: { pending: [], reactions: {} } };
+      return fail ? { ok: false } : { body: { hasMore: false, items: [story(50)], page: 2 } };
+    };
+    const w = await mountIt({ items: items(20), total: 21 });
+    await w.find("button.all").trigger("click");
+    await flushPromises();
+    expect(w.text()).toContain("Ditt hat nich jeklappt.");
+    expect(w.findAll("li.item")).toHaveLength(20); // what was loaded is shown
+    expect(w.find("button.all").text()).toBe("Alle 21 Jeschichten lesen");
+    fail = false;
+    await w.find("button.all").trigger("click");
+    await flushPromises();
+    expect(w.findAll("li.item")).toHaveLength(21);
+    expect(w.find("button.all").exists()).toBe(false);
+  });
+
+  it("shows a loading state on the button while the further pages load", async () => {
+    let release: (v: unknown) => void = () => {};
+    route = (url) =>
+      url.startsWith("/api/stories/mine")
+        ? { body: { pending: [], reactions: {} } }
+        : new Promise((resolve) => (release = resolve));
+    const w = await mountIt({ items: items(20), total: 21 });
+    await w.find("button.all").trigger("click");
+    expect(w.find("button.all").text()).toBe("Lade …");
+    expect(w.find("button.all").attributes("aria-busy")).toBe("true");
+    expect(w.findAll("li.item")).toHaveLength(20); // already revealed
+    release({ body: { hasMore: false, items: [story(50)], page: 2 } });
+    await flushPromises();
+    expect(w.findAll("li.item")).toHaveLength(21);
   });
 
   it("shows the gap state with the prompt and opens the form from the ask button", async () => {
@@ -194,6 +248,75 @@ describe("WordStories reactions", () => {
     );
     await button.trigger("click");
     expect(fetchMock.mock.calls.some(([u]) => u === "/api/comment-votes")).toBe(false);
+  });
+});
+
+describe("WordStories reactions, edge cases", () => {
+  it("sends one request for a double click (busy guard)", async () => {
+    let release: (v: unknown) => void = () => {};
+    route = (url) =>
+      url.startsWith("/api/stories/mine")
+        ? { body: { pending: [], reactions: {} } }
+        : new Promise((resolve) => (release = resolve));
+    const w = await mountIt();
+    await react(w, 0, "Jenau!").trigger("click");
+    await react(w, 0, "Jenau!").trigger("click");
+    expect(fetchMock.mock.calls.filter(([u]) => u === "/api/comment-votes")).toHaveLength(1);
+    release({ body: { downvotes: 1, myVote: 1, upvotes: 5 } });
+    await flushPromises();
+  });
+
+  it("works without the own state when /mine fails", async () => {
+    route = (url) => (url.startsWith("/api/stories/mine") ? { ok: false } : {});
+    const w = await mountIt();
+    expect(w.findAll("li.item")).toHaveLength(3);
+    expect(react(w, 0, "Jenau!").attributes("aria-pressed")).toBe("false");
+    expect(w.text()).not.toContain("Wird jeprüft");
+  });
+
+  it("does not let a late /mine answer overwrite a reaction made meanwhile", async () => {
+    let release: (v: unknown) => void = () => {};
+    route = (url, init) => {
+      if (url.startsWith("/api/stories/mine")) return new Promise((resolve) => (release = resolve));
+      const value = JSON.parse(init?.body as string).value;
+      return { body: { downvotes: 1, myVote: value, upvotes: 4 + value } };
+    };
+    const w = await mountIt();
+    await react(w, 0, "Jenau!").trigger("click");
+    await flushPromises();
+    release({ body: { pending: [], reactions: { "1": -1, "2": 1 } } }); // stale for story 1
+    await flushPromises();
+    expect(react(w, 0, "Jenau!").attributes("aria-pressed")).toBe("true");
+    expect(react(w, 0, "Kenn ick anders").attributes("aria-pressed")).toBe("false");
+    expect(react(w, 1, "Jenau!").attributes("aria-pressed")).toBe("true"); // untouched stories take it
+  });
+
+  it("never shows a count below 0", async () => {
+    let release: (v: unknown) => void = () => {};
+    route = (url) =>
+      url.startsWith("/api/stories/mine")
+        ? { body: { pending: [], reactions: { "1": 1 } } }
+        : new Promise((resolve) => (release = resolve));
+    const w = await mountIt({ items: [story(1, { jenau: 0 })] });
+    await react(w, 0, "Jenau!").trigger("click"); // withdraws a reaction the cached count does not contain
+    expect(react(w, 0, "Jenau!").text()).toContain("0");
+    expect(react(w, 0, "Jenau!").attributes("aria-label")).toBe("Jenau!, 0");
+    release({ ok: false });
+    await flushPromises();
+  });
+
+  it("keeps the status region rendered when it is empty and fills it on a failed reaction", async () => {
+    route = (url) =>
+      url.startsWith("/api/stories/mine")
+        ? { body: { pending: [], reactions: {} } }
+        : { ok: false };
+    const w = await mountIt();
+    const region = w.find("[role=status]");
+    expect(region.exists()).toBe(true);
+    expect(region.text()).toBe("");
+    await react(w, 0, "Jenau!").trigger("click");
+    await flushPromises();
+    expect(w.find("[role=status]").text()).toBe("Ditt hat nich jeklappt.");
   });
 });
 

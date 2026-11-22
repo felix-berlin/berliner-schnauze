@@ -1,5 +1,8 @@
 // @vitest-environment jsdom
-import { initContributeTriggers } from "@components/word/contributeTriggers.ts";
+import {
+  initContributeTriggers,
+  watchContributeTriggers,
+} from "@components/word/contributeTriggers.ts";
 import { rememberSubmission } from "@lib/ownSubmissions.ts";
 import { openForm } from "@stores/contribute.ts";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -56,6 +59,54 @@ describe("initContributeTriggers", () => {
   it("cleans up: no listener, no chips update afterwards", () => {
     cleanup();
     button("[data-contribute=fact]").click();
+    expect(openForm.get()).toBeNull();
+  });
+});
+
+describe("watchContributeTriggers (ClientRouter)", () => {
+  const dom = `<section data-form="example"><button data-contribute="example" aria-expanded="false">Ergänzen</button><div data-own="example" data-word="schrippe"></div></section>`;
+  let unwatch: () => void;
+
+  beforeEach(() => {
+    localStorage.clear();
+    openForm.set(null);
+    document.body.innerHTML = dom;
+    unwatch = watchContributeTriggers();
+  });
+  afterEach(() => unwatch());
+
+  const navigate = () => {
+    document.dispatchEvent(new Event("astro:before-swap"));
+    document.body.innerHTML = dom; // the next word page
+    document.dispatchEvent(new Event("astro:page-load"));
+  };
+
+  it("wires on every page load and leaves exactly one listener after several navigations", () => {
+    document.dispatchEvent(new Event("astro:page-load"));
+    navigate();
+    navigate();
+    const seen: (null | string)[] = [];
+    const stop = openForm.listen((v) => seen.push(v));
+    document.querySelector<HTMLElement>("[data-contribute]")!.click();
+    stop();
+    expect(seen).toEqual(["example"]);
+    expect(document.querySelector("[data-contribute]")!.getAttribute("aria-expanded")).toBe("true");
+  });
+
+  it("renders the own chips after a navigation, not only on the first page", () => {
+    document.dispatchEvent(new Event("astro:page-load"));
+    rememberSubmission("schrippe", "example", "Zwee Schrippen");
+    navigate();
+    expect(document.querySelector("[data-own]")!.textContent).toContain("Wird jeprüft");
+  });
+
+  it("resets the open form before the swap and stops wiring until the next page load", () => {
+    document.dispatchEvent(new Event("astro:page-load"));
+    document.querySelector<HTMLElement>("[data-contribute]")!.click();
+    expect(openForm.get()).toBe("example");
+    document.dispatchEvent(new Event("astro:before-swap"));
+    expect(openForm.get()).toBeNull();
+    document.querySelector<HTMLElement>("[data-contribute]")!.click();
     expect(openForm.get()).toBeNull();
   });
 });

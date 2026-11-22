@@ -63,3 +63,28 @@ export const initContributeTriggers = (root: Document | HTMLElement = document):
     unsubscribe();
   };
 };
+
+/**
+ * ClientRouter lifecycle: a bundled script runs once per tab, so the wiring starts on every `astro:page-load` and is
+ * dropped on `astro:before-swap`; the store's open form is reset there too (it is module-global and would otherwise
+ * open the form of the next word on its own). Returns the removal of both listeners.
+ */
+export const watchContributeTriggers = (doc: Document = document): (() => void) => {
+  let stop = () => {};
+  const end = () => {
+    stop();
+    stop = () => {};
+    openForm.set(null);
+  };
+  const start = () => {
+    stop();
+    stop = initContributeTriggers(doc);
+  };
+  doc.addEventListener("astro:page-load", start);
+  doc.addEventListener("astro:before-swap", end);
+  return () => {
+    doc.removeEventListener("astro:page-load", start);
+    doc.removeEventListener("astro:before-swap", end);
+    stop();
+  };
+};
