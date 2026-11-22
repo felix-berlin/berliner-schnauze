@@ -1,6 +1,7 @@
 ---
 import '@styles/components/_word-wissen.scss';
 import SectionCard from '@components/word/SectionCard.astro';
+import { FACT_KIND_LABEL } from '@lib/contribute.ts';
 import type { WordPageModel } from '@services/payload/wordPage.ts';
 
 interface Props {
@@ -11,13 +12,6 @@ interface Props {
 }
 
 const { book, facts = [], word } = Astro.props;
-const KIND_LABEL: Record<string, string> = {
-  anekdote: 'Anekdote',
-  gebrauch: 'Gebrauch heute',
-  geschichte: 'Geschichte',
-  herkunft: 'Herkunft',
-  sonstiges: 'Sonstiges',
-};
 const gap = {
   cta: 'Wissenswertes ergänzen',
   text: `Noch nüscht Wissenswertes zu „${word}“. Weeßte wat über Herkunft, Geschichte oder haste ’ne Anekdote?`,
@@ -32,7 +26,7 @@ const gap = {
         <dl class='facts'>
           {facts.map((f) => (
             <div class='fact'>
-              <dt class='c-word-label'>{KIND_LABEL[f.kind] ?? f.kind}</dt>
+              <dt class='c-word-label'>{FACT_KIND_LABEL[f.kind] ?? f.kind}</dt>
               <dd class='text'>{f.text}</dd>
               {f.contributor && <dd class='by'>{f.contributor.name ?? 'aus der Community'}</dd>}
             </div>

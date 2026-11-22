@@ -1,0 +1,250 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Contribution form of the word page (docs/design/wortseite SPEC §13): one component for example, Jeschichte,
+// Wissenswertes, Verwandte and the error report. Parts: .title, .row, .label, .optional, .chips, .chip, .combo,
+// .listbox, .option, .under, .hint, .counter (data-state="over"), .error, .strip, .foot, .actions, .thanks.
+// Root data-state: open | thanks. Without JS nothing renders (the island is client:visible).
+@include mx.component("contribute-form") {
+  :scope {
+    // SPEC §4.2: hints, counters and the foot line are 13px, labels of fields 14px; no token at those sizes.
+    --_small: 0.8125rem;
+    --_label: 0.875rem;
+    // SPEC §13: padding 20px 22px.
+    --_pad-block: var(--space-5);
+    --_pad-inline: 1.375rem;
+
+    container: contribute-form / inline-size;
+    margin-block: var(--space-4);
+    padding: var(--_pad-block) var(--_pad-inline);
+    background: var(--color-surface-chip);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-body);
+
+    // SPEC §16: opacity and a 6px lift, 250-300ms; reduced motion removes the animation (the feature guard).
+    @include butler-mx.feature("motion") {
+      animation: contribute-form-in var(--duration-base) ease both;
+    }
+  }
+
+  form {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .title {
+    margin: 0;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-lg);
+    color: var(--color-text-strong);
+  }
+
+  .row {
+    // Fixed height with the resize handle (the mock): four lines plus padding and border.
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- four text lines plus padding and border
+    --textarea-min-block-size: calc(4lh + 1.2rem + 2px);
+
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .label {
+    font-size: var(--_label);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+  }
+
+  .optional {
+    font-size: var(--_small);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-muted);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  // Chip (SPEC §4.3): 36px, pill, card surface; selected = ink rim and text on the warm ground.
+  .chip {
+    min-block-size: 2.25rem; // SPEC §4.3: 36px, no token
+    padding-inline: var(--space-3);
+    font: inherit;
+    font-size: var(--font-size-md);
+    color: var(--color-text-body);
+    background: var(--color-surface-sheet);
+    border: 1px solid var(--color-border-card);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) ease,
+      border-color var(--duration-fast) ease;
+
+    @include butler-mx.hover {
+      background: var(--color-surface-chip);
+    }
+
+    &[aria-pressed="true"] {
+      color: var(--color-text-strong);
+      font-weight: var(--font-weight-bold);
+      background: var(--color-surface-tint-warm);
+      border-color: var(--color-text-strong);
+    }
+  }
+
+  .under {
+    display: flex;
+    gap: var(--space-2);
+    align-items: baseline;
+  }
+
+  .hint,
+  .counter,
+  .foot {
+    margin: 0;
+    font-size: var(--_small);
+    color: var(--color-text-muted);
+  }
+
+  .counter {
+    margin-inline-start: auto;
+    white-space: nowrap;
+
+    &[data-state="over"] {
+      color: var(--color-status-danger);
+      font-weight: var(--font-weight-bold);
+    }
+  }
+
+  .error {
+    font-size: var(--_small);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-status-danger);
+  }
+
+  // Word picker (SPEC §10): a listbox under the field, matching prefix bold, meaning small on the right.
+  .combo {
+    display: grid; // stretches the input to the row width
+  }
+
+  .listbox {
+    // In flow, like the mock: the chips below move down while the list is open.
+    margin: 0;
+    padding: var(--space-1);
+    list-style: none;
+    background: var(--color-surface-sheet);
+    border: 1px solid var(--color-border-card);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-paper-lift);
+  }
+
+  .option {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    justify-content: space-between;
+    min-block-size: var(--size-tap-target);
+    padding-inline: var(--space-3);
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+
+    // The active option is marked by rim and ground, not by colour alone.
+    &[aria-selected="true"] {
+      background: var(--color-surface-chip);
+      border-inline-start: 3px solid var(--color-accent-solid);
+    }
+
+    @include butler-mx.hover {
+      background: var(--color-surface-chip);
+    }
+  }
+
+  .meaning {
+    font-size: var(--_small);
+    color: var(--color-text-muted);
+  }
+
+  // Error and waiting strips (SPEC §13): a line in the danger colour, calm variant without it.
+  .strip {
+    display: flex;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    background: var(--color-surface-sheet);
+    border-inline-start: 3px solid var(--color-status-danger);
+    border-radius: var(--radius-xs);
+
+    &[data-variant="calm"] {
+      border-inline-start-color: var(--color-border-card);
+    }
+
+    svg {
+      flex: none;
+      margin-block-start: var(--space-1); // aligns the icon with the first text line
+    }
+
+    .body {
+      display: grid;
+      gap: var(--space-1);
+    }
+
+    .detail {
+      color: var(--color-text-muted);
+    }
+  }
+
+  .actions {
+    --button-min-block-size: var(--size-tap-target);
+    --button-padding: 0 var(--space-5);
+    --button-font-size: var(--font-size-base);
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  .thanks {
+    display: flex;
+    gap: var(--space-5);
+    align-items: center;
+
+    // Focused by script so the status is announced and the focus is not lost with the form; no ring on a non-control.
+    &:focus {
+      outline: none;
+    }
+
+    .bear {
+      flex: none;
+      inline-size: 5.5rem; // the bear's 88px
+    }
+
+    .text {
+      display: grid;
+      gap: var(--space-2);
+      justify-items: start;
+    }
+
+    .head,
+    .note {
+      margin: 0;
+    }
+
+    .head {
+      font-size: var(--font-size-lg);
+      color: var(--color-text-strong);
+    }
+
+    .note {
+      font-size: var(--font-size-md);
+      color: var(--color-text-muted);
+    }
+  }
+
+  @keyframes contribute-form-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+}
