@@ -1,11 +1,12 @@
-import type { Comment } from "payload-app";
 import type { APIRoute } from "astro";
+import type { Comment } from "payload-app";
 
 import { getPayloadClient } from "@services/payload.ts";
+import { hashEditKey, visitorId } from "@services/payload/comments.ts";
 import { fetchStories } from "@services/payload/stories.ts";
 import { wordIdBySlug } from "@services/payload/wordId.ts";
-import { hashEditKey, visitorId } from "@services/payload/comments.ts";
 import { captchaGate, positiveInt, reply } from "@utils/apiReply.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { requestIp } from "@utils/rateLimit.ts";
 import { createHash, randomBytes } from "node:crypto";
 import { visibleName } from "payload-app/bon-names";
@@ -41,10 +42,10 @@ export const GET: APIRoute = async ({ url }) => {
     if (wordId === null) return reply({ error: "Wort nicht gefunden" }, 404);
 
     const body = await fetchStories(wordId, limit);
-    // Same shape for everyone (own reactions are asked separately), so the proxy may cache it briefly.
+    // Same shape for everyone (own reactions come from GET /api/stories/mine), so the proxy may cache it briefly.
     return Response.json(body, { headers: { "Cache-Control": "public, max-age=60" } });
   } catch (error) {
-    console.error("[stories] listing failed:", error);
+    logRouteError("stories", error);
     return reply({ error: "Die Jeschichten konnten nicht geladen werden." }, 502);
   }
 };
@@ -94,7 +95,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     });
     return reply({ editKey, ok: true }, 201);
   } catch (error) {
-    console.error("[stories] storing failed:", error);
+    logRouteError("stories", error);
     return reply({ error: "Deine Jeschichte konnte leider nicht gesendet werden." }, 502);
   }
 };

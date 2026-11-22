@@ -49,6 +49,6 @@ const memo = ttlBy(60_000, MAX_WORDS, load);
 
 /**
  * The published top-level Jeschichten of a word: newest `limit`, the featured one and the total. The same for every
- * visitor (own reactions are asked separately), so it is cached for a minute per word.
+ * visitor (own reactions come from GET /api/stories/mine), so it is cached for a minute per word.
  */
 export const fetchStories = (wordId: number, limit: number) => memo(`${wordId}:${limit}`);
