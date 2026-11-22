@@ -28,7 +28,7 @@ jobs:
     steps:
       # Pushes are diffed with git, pull requests via the API (no checkout needed there).
       - name: Checkout ✅
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Detect code changes
         id: f
