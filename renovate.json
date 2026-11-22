@@ -3,7 +3,7 @@
   "extends": ["config:best-practices", ":semanticCommitTypeAll(chore)"],
   "timezone": "Europe/Berlin",
   "schedule": ["before 6am every weekday"],
-  "minimumReleaseAge": "3 days",
+  "minimumReleaseAge": "2 days",
   "internalChecksFilter": "strict",
   "prConcurrentLimit": 0,
   "prHourlyLimit": 0,
@@ -23,7 +23,7 @@
       "description": "Only stable (non-0.x) patch updates automerge; minor/major stay PRs for review",
       "matchUpdateTypes": ["patch"],
       "automerge": true,
-      "minimumReleaseAge": "3 days",
+      "minimumReleaseAge": "2 days",
       "matchCurrentVersion": "!/^0/"
     },
     {
