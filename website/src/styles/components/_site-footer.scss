@@ -47,6 +47,7 @@
     --focus-ring-color: var(--band-text-strong);
 
     container: site-footer / inline-size;
+    overflow-x: clip; // the tilted sign and the entry swing (rotate -9deg) must never add horizontal page scroll
     color-scheme: only dark;
     color: var(--band-text);
     accent-color: var(--color-accent-active);

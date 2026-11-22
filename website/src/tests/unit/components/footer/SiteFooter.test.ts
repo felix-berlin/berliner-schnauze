@@ -1,5 +1,6 @@
 // @vitest-environment node
 import SiteFooter from "@components/footer/SiteFooter.astro";
+import { JSDOM } from "jsdom";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { version } from "../../../../../package.json";
@@ -40,11 +41,16 @@ beforeEach(() => {
   ]);
 });
 
-const textOf = (html: string) =>
-  html
-    .replace(/<script[\s\S]*?<\/script>/g, "")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/\s+/g, " ");
+// Visible text of the rendered HTML (parsed, scripts dropped), text nodes joined by a space.
+const textOf = (html: string) => {
+  const { document: doc, NodeFilter } = new JSDOM(html).window;
+  doc.querySelectorAll("script").forEach((script) => script.remove());
+  const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
+  const parts: string[] = [];
+  for (let node = walker.nextNode(); node; node = walker.nextNode())
+    parts.push(node.textContent ?? "");
+  return parts.join(" ").replace(/\s+/g, " ");
+};
 
 describe("SiteFooter", () => {
   it("links to the internal pages, the support page, settings and the legal pages", async () => {

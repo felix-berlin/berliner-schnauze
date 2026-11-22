@@ -92,7 +92,7 @@ test.describe("Startseite (/)", () => {
     await page.goto("/");
 
     const footer = page.getByRole("contentinfo");
-    await expect(footer.getByRole("link", { name: "Wort Index" })).toHaveAttribute("href", "/wort");
+    await expect(footer.getByRole("link", { name: "Wort-Index" })).toHaveAttribute("href", "/wort");
     await expect(footer.getByRole("link", { exact: true, name: "GitHub" })).toHaveAttribute(
       "href",
       "https://github.com/felix-berlin/berliner-schnauze",
