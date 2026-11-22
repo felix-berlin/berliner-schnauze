@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { count, create, find, verifyTurnstile } = vi.hoisted(() => ({
-  count: vi.fn(),
+const { create, find, verifyTurnstile } = vi.hoisted(() => ({
   create: vi.fn(),
   find: vi.fn(),
   verifyTurnstile: vi.fn(),
@@ -9,7 +8,7 @@ const { count, create, find, verifyTurnstile } = vi.hoisted(() => ({
 vi.mock("@services/turnstile.ts", () => ({ verifyTurnstile }));
 vi.mock("@services/cache.ts", () => ({ ttlBy: (_ms: number, _max: number, fn: unknown) => fn }));
 vi.mock("@services/payload.ts", () => ({
-  getPayloadClient: async () => ({ count, create, find }),
+  getPayloadClient: async () => ({ create, find }),
   siteRead: () => ({ context: { siteRead: "published" }, overrideAccess: false }),
 }));
 
@@ -43,7 +42,6 @@ const row = (extra: Record<string, unknown> = {}) => ({
 beforeEach(() => {
   verifyTurnstile.mockReset().mockResolvedValue("pass");
   create.mockReset().mockResolvedValue(row({ status: "pending" }));
-  count.mockReset().mockResolvedValue({ totalDocs: 0 });
   find
     .mockReset()
     .mockImplementation(async ({ collection }) =>
@@ -125,15 +123,16 @@ describe("GET /api/stories", () => {
   });
 
   it("maps rows to stories without private fields", async () => {
-    count.mockResolvedValue({ totalDocs: 7 });
     find.mockImplementation(async ({ collection, where }) => {
       if (collection === "words") return { docs: [{ id: 5 }] };
-      return { docs: [where.featured ? row({ id: 2 }) : row({ bezirk: "mitte", id: 3 })] };
+      return where.featured
+        ? { docs: [row({ id: 2 })] }
+        : { docs: [row({ bezirk: "mitte", id: 3 })], hasNextPage: false, totalDocs: 6 };
     });
     const res = await get("?word=icke");
     expect(res.headers.get("Cache-Control")).toBe("public, max-age=60");
     const body = await res.json();
-    expect(body.total).toBe(7);
+    expect(body).toMatchObject({ hasMore: false, page: 1, total: 7 });
     expect(body.featured).toEqual({
       anders: 1,
       createdAt: "2026-01-01T00:00:00.000Z",
@@ -161,10 +160,14 @@ describe("GET /api/stories", () => {
     expect((await (await get("?word=icke")).json()).featured).toBeNull();
   });
 
-  it("queries only published top-level rows, newest first", async () => {
-    count.mockResolvedValue({ totalDocs: 2 }); // the featured query is skipped for 0
+  it("queries only published top-level rows, newest first, without the featured one", async () => {
+    find.mockImplementation(async ({ collection, where }) =>
+      collection === "words"
+        ? { docs: [{ id: 5 }] }
+        : { docs: where.featured ? [row({ id: 2 })] : [] },
+    );
     await get("?word=icke");
-    const [items, featured] = commentFinds();
+    const [featured, items] = commentFinds();
     for (const q of [items, featured])
       expect(q.where).toMatchObject({
         parent: { exists: false },
@@ -172,19 +175,54 @@ describe("GET /api/stories", () => {
         word: { equals: 5 },
       });
     expect(items.sort).toBe("-createdAt");
+    expect(items.where.id).toEqual({ not_equals: 2 });
     expect(featured.where.featured).toEqual({ equals: true });
-    expect(count.mock.calls[0][0].where).toMatchObject({
-      parent: { exists: false },
-      status: { equals: "published" },
-    });
   });
 
-  it.each([
-    ["", 3],
-    ["&limit=10", 10],
-    ["&limit=500", 100],
-  ])("limit %s -> %i", async (qs, limit) => {
-    await get(`?word=icke${qs}`);
-    expect(commentFinds()[0].limit).toBe(limit);
+  describe("paging", () => {
+    // 45 published stories, ids 45..1 newest first, id 40 is featured: 44 in the lists.
+    const all = Array.from({ length: 45 }, (_, i) => row({ id: 45 - i }));
+    beforeEach(() => {
+      find.mockImplementation(async ({ collection, limit, page, where }) => {
+        if (collection === "words") return { docs: [{ id: 5 }] };
+        if (where.featured) return { docs: [row({ id: 40 })] };
+        const rest = all.filter((r) => r.id !== where.id.not_equals);
+        const docs = rest.slice((page - 1) * limit, page * limit);
+        return { docs, hasNextPage: page * limit < rest.length, totalDocs: rest.length };
+      });
+    });
+
+    it("page 1 carries the featured story, 20 items without it and hasMore", async () => {
+      const body = await (await get("?word=icke")).json();
+      expect(body).toMatchObject({ hasMore: true, page: 1, total: 45 });
+      expect(body.items).toHaveLength(20);
+      expect(body.featured.id).toBe("40");
+      expect(body.items.map((i: { id: string }) => i.id)).not.toContain("40");
+    });
+
+    it("page 2 returns the next 20, no featured, still hasMore", async () => {
+      const body = await (await get("?word=icke&page=2")).json();
+      expect(body).toMatchObject({ featured: null, hasMore: true, page: 2, total: 45 });
+      expect(body.items).toHaveLength(20);
+      expect(body.items[0].id).toBe("24"); // 45..41 and 39..25 were on page 1
+      expect(commentFinds().at(-1)).toMatchObject({ limit: 20, page: 2 });
+    });
+
+    it("the last page has hasMore false", async () => {
+      const body = await (await get("?word=icke&page=3")).json();
+      expect(body.items).toHaveLength(4);
+      expect(body.hasMore).toBe(false);
+    });
+
+    it("a page beyond the end is empty", async () => {
+      const body = await (await get("?word=icke&page=9")).json();
+      expect(body).toMatchObject({ featured: null, hasMore: false, items: [], page: 9 });
+    });
+
+    it.each(["0", "-3", "abc", "1.5", ""])("page=%s falls back to page 1", async (page) => {
+      const body = await (await get(`?word=icke&page=${page}`)).json();
+      expect(body.page).toBe(1);
+      expect(body.featured.id).toBe("40");
+    });
   });
 });

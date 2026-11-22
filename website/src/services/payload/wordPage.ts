@@ -19,8 +19,6 @@ import { berlinParts, pickWordOfTheDay } from "@utils/wordOfTheDay.ts";
 import { storyPrompt } from "payload-app/story-prompt";
 import { hypher } from "payload-app/word-derived";
 
-/** Stories shown on the page (desktop; the mobile view shows fewer of them). */
-const STORY_LIMIT = 3;
 const WRITTEN_LIMIT = 5;
 const WRITTEN_SIMILARITY = 0.85;
 
@@ -94,7 +92,7 @@ export const fetchWordPage = async (slug: string): Promise<WordPageModel | null>
   const refs = await fetchWordRefs(); // memoized per words array: wordHelper keys its indexes on it
   const { after, before } = alphabeticNeighbors(refs, ref, 1);
   const [stories, trend, wordPage, affiliate, poll] = await Promise.all([
-    fetchStories(word.id, STORY_LIMIT),
+    fetchStories(word.id, 1),
     getWordTrend(word.id),
     fetchWordPageGlobal(),
     fetchAffiliateData(),

@@ -14,8 +14,10 @@ export const toStory = (c: Comment): Story => ({
   text: c.text,
 });
 
+export const STORIES_PAGE_SIZE = 20;
+
 const load = async (key: string) => {
-  const [wordId, limit] = key.split(":").map(Number) as [number, number];
+  const [wordId, page] = key.split(":").map(Number) as [number, number];
   // Comment collections are login-only: default overrideAccess, own status filter, depth 0 (website/CLAUDE.md).
   const payload = await getPayloadClient();
   const where = {
@@ -23,32 +25,38 @@ const load = async (key: string) => {
     status: { equals: "published" },
     word: { equals: wordId },
   } as const;
-  const [items, { totalDocs }] = await Promise.all([
-    payload.find({ collection: "comments", depth: 0, limit, sort: "-createdAt", where }),
-    payload.count({ collection: "comments", where }),
-  ]);
-  const featured = totalDocs
-    ? (
-        await payload.find({
-          collection: "comments",
-          depth: 0,
-          limit: 1,
-          where: { ...where, featured: { equals: true } },
-        })
-      ).docs[0]
-    : undefined;
+  const featured = (
+    await payload.find({
+      collection: "comments",
+      depth: 0,
+      limit: 1,
+      where: { ...where, featured: { equals: true } },
+    })
+  ).docs[0];
+  // The featured story is shown apart from the list on every page, so it never repeats in `items`.
+  const list = await payload.find({
+    collection: "comments",
+    depth: 0,
+    limit: STORIES_PAGE_SIZE,
+    page,
+    sort: "-createdAt",
+    where: featured ? { ...where, id: { not_equals: featured.id } } : where,
+  });
   return {
-    featured: featured ? toStory(featured) : null,
-    items: items.docs.map(toStory),
-    total: totalDocs,
+    featured: featured && page === 1 ? toStory(featured) : null,
+    hasMore: list.hasNextPage,
+    items: list.docs.map(toStory),
+    page,
+    total: list.totalDocs + (featured ? 1 : 0),
   };
 };
 
-const MAX_WORDS = 500;
-const memo = ttlBy(60_000, MAX_WORDS, load);
+const MAX_KEYS = 500;
+const memo = ttlBy(60_000, MAX_KEYS, load);
 
 /**
- * The published top-level Jeschichten of a word: newest `limit`, the featured one and the total. The same for every
- * visitor (own reactions come from GET /api/stories/mine), so it is cached for a minute per word.
+ * One page (`STORIES_PAGE_SIZE`, 1-based) of the published top-level Jeschichten of a word, newest first and without
+ * the featured one, which comes apart on page 1 only. `total` counts the featured one. The same for every visitor
+ * (own reactions come from GET /api/stories/mine), so it is cached for a minute per word and page.
  */
-export const fetchStories = (wordId: number, limit: number) => memo(`${wordId}:${limit}`);
+export const fetchStories = (wordId: number, page: number) => memo(`${wordId}:${page}`);

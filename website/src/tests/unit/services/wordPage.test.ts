@@ -43,7 +43,13 @@ const words = (bbb: object = {}) => [word(1, "aaa"), word(2, "bbb", bbb), word(3
 beforeEach(() => {
   vi.resetAllMocks();
   m.fetchAffiliateData.mockResolvedValue({ books: [], disclaimers: [] });
-  m.fetchStories.mockResolvedValue({ featured: null, items: [], total: 0 });
+  m.fetchStories.mockResolvedValue({
+    featured: null,
+    hasMore: false,
+    items: [],
+    page: 1,
+    total: 0,
+  });
   m.fetchWordPageGlobal.mockResolvedValue({ storyPrompt: null });
   m.find.mockResolvedValue({ docs: [] });
 });
@@ -158,12 +164,18 @@ describe("fetchWordPage", () => {
       jenau: 2,
       text: "Invented.",
     };
-    m.fetchStories.mockResolvedValue({ featured: story, items: [story], total: 4 });
+    m.fetchStories.mockResolvedValue({
+      featured: story,
+      hasMore: false,
+      items: [{ ...story, id: "6" }],
+      page: 1,
+      total: 4,
+    });
     const model = (await fetchWordPage("bbb"))!;
     expect(model.storyPrompt).toBe("Wo haste „bbb“ zuletzt jehört?");
-    expect(model.stories).toEqual({ items: [story], total: 4 });
+    expect(model.stories).toEqual({ items: [{ ...story, id: "6" }], total: 4 });
     expect(model.featuredStoryId).toBe("5");
-    expect(m.fetchStories).toHaveBeenCalledWith(2, 3);
+    expect(m.fetchStories).toHaveBeenCalledWith(2, 1);
     m.fetchWordPageGlobal.mockResolvedValue({ storyPrompt: "Kennste {Wort}?" });
     expect((await fetchWordPage("bbb"))!.storyPrompt).toBe("Kennste bbb?");
   });

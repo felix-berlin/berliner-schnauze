@@ -16,8 +16,6 @@ import { z } from "zod";
 
 const TEXT_MAX = 500;
 const NAME_MAX = 40;
-const DEFAULT_LIMIT = 3;
-const MAX_LIMIT = 100;
 
 const storyCreateSchema = z.object({
   bezirk: z.enum(STORY_BEZIRKE as [string, ...string[]], "Ungültiger Bezirk").optional(),
@@ -33,14 +31,14 @@ const storyCreateSchema = z.object({
 
 export const GET: APIRoute = async ({ url }) => {
   const slug = url.searchParams.get("word");
-  const limit = Math.min(positiveInt(url.searchParams.get("limit"), DEFAULT_LIMIT) ?? 0, MAX_LIMIT);
-  if (!slug || !limit) return reply({ error: "Ungültige Anfrage" }, 400);
+  const page = positiveInt(url.searchParams.get("page"), 1) ?? 1; // anything invalid is page 1
+  if (!slug) return reply({ error: "Ungültige Anfrage" }, 400);
 
   try {
     const wordId = await wordIdBySlug(slug);
     if (wordId === null) return reply({ error: "Wort nicht gefunden" }, 404);
 
-    const body = await fetchStories(wordId, limit);
+    const body = await fetchStories(wordId, page);
     // Same shape for everyone (own reactions come from GET /api/stories/mine), so the proxy may cache it briefly.
     return Response.json(body, { headers: { "Cache-Control": "public, max-age=60" } });
   } catch (error) {
