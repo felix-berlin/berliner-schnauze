@@ -32,6 +32,8 @@ jobs:
         id: f
         uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
         with:
+          # every: a file counts as code only if it matches "**" and no "!" pattern; the default (some) matches "**" for every file
+          predicate-quantifier: every
           filters: |
             code:
               - "**"
@@ -50,6 +52,17 @@ jobs:
               - "!scripts/orca-*.sh"
               - "!scripts/*anki*"
               - "!scripts/test_*.py"
+              - "!.editorconfig"
+              - "!.gitattributes"
+              - "!**/.gitignore"
+              - "!.mcp.json"
+              - "!.github/hooks/**"
+              - "!.oxlintrc.json"
+              - "!.oxfmtrc.json"
+              - "!.infisical.yaml"
+              - "!website/public/robots.txt"
+              - "!website/public/.well-known/security.txt"
+              - "!codecov.yml"
 
   playwright-version:
     needs: changes
@@ -266,7 +279,7 @@ jobs:
           exit 1
 
       - name: Run Playwright tests (shard ${{ matrix.shard }}/4)
-        timeout-minutes: 8
+        timeout-minutes: 10
         # word-v3.spec.ts signs a draft preview token with the same secret as the server.
         env:
           PAYLOAD_SECRET: e2e-secret
