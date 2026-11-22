@@ -126,6 +126,13 @@ describe("fetchWordPage", () => {
     expect(written.map((w) => w.label).sort()).toEqual(["schnauzen", "schnauzer"]);
   });
 
+  it("builds the model from an editor's draft instead of the public row", async () => {
+    m.fetchAllWords.mockResolvedValue(words());
+    const draft = { ...(words().find((w) => w.slug === "bbb") as object), berlinerisch: "Entwurf" };
+    const model = (await fetchWordPage("bbb", draft as never))!;
+    expect(model.word.berlinerisch).toBe("Entwurf");
+  });
+
   it("passes updatedAt through unchanged", async () => {
     m.fetchAllWords.mockResolvedValue(words({ updatedAt: "2026-02-03T04:05:06.789Z" }));
     expect((await fetchWordPage("bbb"))!.updatedAt).toBe("2026-02-03T04:05:06.789Z");

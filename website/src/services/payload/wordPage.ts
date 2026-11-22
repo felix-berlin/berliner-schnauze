@@ -81,9 +81,12 @@ const fetchPoll = ttlBy(60_000, 500, async (wordId: number) => {
   return buildPollResult(docs);
 });
 
-/** The page model of a public word, or null for an unknown slug. */
-export const fetchWordPage = async (slug: string): Promise<WordPageModel | null> => {
-  const word = await fetchWordBySlug(slug);
+/** The page model of a public word, or null for an unknown slug. An editor's draft of that word replaces the public row. */
+export const fetchWordPage = async (
+  slug: string,
+  draft?: SiteWord,
+): Promise<WordPageModel | null> => {
+  const word = draft ?? (await fetchWordBySlug(slug));
   if (!word) return null;
   const words = await fetchAllWords();
 
