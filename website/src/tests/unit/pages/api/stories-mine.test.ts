@@ -121,4 +121,14 @@ describe("GET /api/stories/mine", () => {
     );
     expect(await (await get("?word=icke", "me")).json()).toEqual({ pending: [own], reactions: {} });
   });
+
+  it("502 and a log line without the error message when the read fails", async () => {
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    find.mockRejectedValue(new Error("select ... 'secret-value'"));
+    const res = await get("?word=icke", "me");
+    expect(res.status).toBe(502);
+    expect(await res.json()).toEqual({ error: "Deine Reaktionen konnten nicht geladen werden." });
+    expect(log).toHaveBeenCalledWith("[stories] failed: Error");
+    expect(JSON.stringify(log.mock.calls)).not.toContain("secret-value");
+  });
 });

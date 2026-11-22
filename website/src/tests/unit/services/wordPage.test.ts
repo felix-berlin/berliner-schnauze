@@ -101,6 +101,31 @@ describe("fetchWordPage", () => {
     expect(model.related[2]).not.toHaveProperty("url");
   });
 
+  it("keeps facts with a kind and a text, drops the others, and maps their contributor", async () => {
+    const facts = [
+      { contributorName: "Invented Name", contributorSuggestion: 5, kind: "herkunft", text: "A" },
+      { kind: "etymologie", text: "B" },
+      { kind: "herkunft", text: "" },
+      { text: "no kind" },
+    ];
+    m.fetchAllWords.mockResolvedValue(words({ facts }));
+    expect((await fetchWordPage("bbb"))!.facts).toEqual([
+      { contributor: { name: "Invented Name", suggestionId: "5" }, kind: "herkunft", text: "A" },
+      { kind: "etymologie", text: "B" },
+    ]);
+  });
+
+  it("lists similarly written words, the most similar first", async () => {
+    m.fetchAllWords.mockResolvedValue([
+      word(1, "schnauzen"),
+      word(2, "schnauze"),
+      word(3, "schnauzer"),
+      word(4, "kiez"),
+    ]);
+    const { written } = (await fetchWordPage("schnauze"))!;
+    expect(written.map((w) => w.label).sort()).toEqual(["schnauzen", "schnauzer"]);
+  });
+
   it("passes updatedAt through unchanged", async () => {
     m.fetchAllWords.mockResolvedValue(words({ updatedAt: "2026-02-03T04:05:06.789Z" }));
     expect((await fetchWordPage("bbb"))!.updatedAt).toBe("2026-02-03T04:05:06.789Z");

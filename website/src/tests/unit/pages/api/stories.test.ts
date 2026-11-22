@@ -99,6 +99,18 @@ describe("POST /api/stories", () => {
     expect((await res.json()).field).toBe("name");
   });
 
+  it("502 and a log line without the error message when the create fails", async () => {
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    create.mockRejectedValue(new Error("insert ... 'secret-value'"));
+    const res = await post(valid);
+    expect(res.status).toBe(502);
+    expect(await res.json()).toEqual({
+      error: "Deine Jeschichte konnte leider nicht gesendet werden.",
+    });
+    expect(log).toHaveBeenCalledWith("[stories] failed: Error");
+    expect(JSON.stringify(log.mock.calls)).not.toContain("secret-value");
+  });
+
   it("403 without a passed captcha", async () => {
     verifyTurnstile.mockResolvedValue("fail");
     expect((await post(valid)).status).toBe(403);
@@ -177,6 +189,18 @@ describe("GET /api/stories", () => {
     expect(items.sort).toBe("-createdAt");
     expect(items.where.id).toEqual({ not_equals: 2 });
     expect(featured.where.featured).toEqual({ equals: true });
+  });
+
+  it("502 and a log line without the error message when the read fails", async () => {
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    find.mockRejectedValue(
+      Object.assign(new Error("select ... 'secret-value'"), { code: "ECONN" }),
+    );
+    const res = await get("?word=icke");
+    expect(res.status).toBe(502);
+    expect(await res.json()).toEqual({ error: "Die Jeschichten konnten nicht geladen werden." });
+    expect(log).toHaveBeenCalledWith("[stories] failed: Error", "code=ECONN");
+    expect(JSON.stringify(log.mock.calls)).not.toContain("secret-value");
   });
 
   describe("paging", () => {
