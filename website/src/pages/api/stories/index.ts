@@ -72,7 +72,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     // Per-word handle, like the comment POST: one visitor, one tag per word, not linkable across words.
     const authorTag = authorTagOf(visitorId(cookies, true)!, wordId);
     const editKey = randomBytes(32).toString("base64url");
-    await (
+    const created = await (
       await getPayloadClient()
     ).create({
       collection: "comments",
@@ -87,7 +87,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
       },
       depth: 0,
     });
-    return reply({ editKey, ok: true }, 201);
+    return reply({ editKey, id: created.id, ok: true }, 201);
   } catch (error) {
     logRouteError("stories", error);
     return reply({ error: "Deine Jeschichte konnte leider nicht gesendet werden." }, 502);

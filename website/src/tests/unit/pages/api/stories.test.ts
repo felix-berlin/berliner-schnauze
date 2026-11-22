@@ -58,6 +58,8 @@ describe("POST /api/stories", () => {
     expect(res.status).toBe(201);
     const body = await res.json();
     expect(body.ok).toBe(true);
+    expect(body.id).toBe(9);
+    expect(Object.keys(body).toSorted()).toEqual(["editKey", "id", "ok"]);
     expect(body.editKey.length).toBeGreaterThanOrEqual(32);
     expect(JSON.stringify(body)).not.toContain("secret-hash");
     const args = create.mock.calls[0][0];
