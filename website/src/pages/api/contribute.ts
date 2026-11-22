@@ -5,6 +5,7 @@ import { wordIdBySlug } from "@services/payload/wordId.ts";
 import { captchaGate, reply } from "@utils/apiReply.ts";
 import { logRouteError } from "@utils/logError.ts";
 import { requestIp } from "@utils/rateLimit.ts";
+import { visibleLine } from "@utils/visibleText.ts";
 import { z } from "zod";
 
 const TOO_LONG = "Ditt is ein bisken zu lang.";
@@ -12,7 +13,7 @@ const MISSING = "Ohne Text wird dett nüscht.";
 const text = (max: number) => z.string().trim().min(1, MISSING).max(max, TOO_LONG);
 
 const base = {
-  name: z.string().trim().max(40, TOO_LONG).optional(),
+  name: visibleLine.pipe(z.string().max(40, TOO_LONG)).optional(),
   word: z.string().min(1).max(200),
 };
 // Values mirror the select options of the suggestions collection.

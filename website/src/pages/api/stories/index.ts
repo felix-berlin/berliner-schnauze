@@ -8,8 +8,8 @@ import { wordIdBySlug } from "@services/payload/wordId.ts";
 import { captchaGate, positiveInt, reply } from "@utils/apiReply.ts";
 import { logRouteError } from "@utils/logError.ts";
 import { requestIp } from "@utils/rateLimit.ts";
+import { visible } from "@utils/visibleText.ts";
 import { createHash, randomBytes } from "node:crypto";
-import { visibleName } from "payload-app/bon-names";
 import { COMMENT_MIN } from "payload-app/comments";
 import { STORY_BEZIRKE } from "payload-app/story-bezirk";
 import { z } from "zod";
@@ -19,7 +19,6 @@ const NAME_MAX = 40;
 const DEFAULT_LIMIT = 3;
 const MAX_LIMIT = 100;
 
-const visible = z.string().transform(visibleName).pipe(z.string().trim());
 const storyCreateSchema = z.object({
   bezirk: z.enum(STORY_BEZIRKE as [string, ...string[]], "Ungültiger Bezirk").optional(),
   name: visible.pipe(z.string().max(NAME_MAX, "Ditt is ein bisken zu lang.")).default(""),

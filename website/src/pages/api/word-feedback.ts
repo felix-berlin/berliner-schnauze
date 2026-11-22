@@ -231,7 +231,7 @@ export const DELETE: APIRoute = async ({ clientAddress, cookies, request, url })
     }
     return reply({ deleted: true }, 200);
   } catch (error) {
-    console.error("[word-feedback] delete all failed:", error);
+    console.error(`[word-feedback] delete ${word ? `word ${word}` : "all"} failed:`, error);
     return reply({ error: "Das hat leider nicht geklappt." }, 502);
   }
 };

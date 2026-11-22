@@ -24,8 +24,20 @@ const post = (body: unknown) =>
     }),
   } as unknown as APIContext);
 const example = { text: "Ick bin da.", turnstileToken: "tok", type: "example", word: "icke" };
-const fact = { kind: "herkunft", text: "Kommt aus dem Jiddischen.", turnstileToken: "tok", type: "fact", word: "icke" };
-const related = { relatedText: "Molle", relation: "gleich", turnstileToken: "tok", type: "related", word: "icke" };
+const fact = {
+  kind: "herkunft",
+  text: "Kommt aus dem Jiddischen.",
+  turnstileToken: "tok",
+  type: "fact",
+  word: "icke",
+};
+const related = {
+  relatedText: "Molle",
+  relation: "gleich",
+  turnstileToken: "tok",
+  type: "related",
+  word: "icke",
+};
 
 beforeEach(() => {
   verifyTurnstile.mockReset().mockResolvedValue("pass");
@@ -50,12 +62,26 @@ describe("POST /api/contribute", () => {
     });
   });
 
+  it("cleans the name: invisible characters dropped, whitespace and newlines collapsed", async () => {
+    await post({ ...example, name: "  Ick\u200Be\r\nXY\n\n  Z " });
+    expect(create.mock.calls[0][0].data.userName).toBe("Icke XY Z");
+  });
+
   it("creates a fact and a related word on the target word, leaving `word` empty", async () => {
     expect((await post(fact)).status).toBe(201);
-    expect(create.mock.calls[0][0].data).toMatchObject({ kind: "herkunft", targetWord: 5, type: "fact" });
+    expect(create.mock.calls[0][0].data).toMatchObject({
+      kind: "herkunft",
+      targetWord: 5,
+      type: "fact",
+    });
     expect((await post(related)).status).toBe(201);
     const data = create.mock.calls[1][0].data;
-    expect(data).toMatchObject({ relatedText: "Molle", relation: "gleich", targetWord: 5, type: "related" });
+    expect(data).toMatchObject({
+      relatedText: "Molle",
+      relation: "gleich",
+      targetWord: 5,
+      type: "related",
+    });
     expect(data).not.toHaveProperty("word");
     expect(data).not.toHaveProperty("turnstileToken");
   });
