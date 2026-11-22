@@ -19,7 +19,7 @@
 
     container: footer-farewell / inline-size;
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto; // minmax(0, …): the text must not widen the row past a 300px screen
     gap: var(--space-6);
     align-items: end;
     color: var(--band-text);
