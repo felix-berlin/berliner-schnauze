@@ -505,8 +505,8 @@ importers:
         specifier: 18.1.0
         version: 18.1.0
       stylelint-config-recommended-scss:
-        specifier: 17.0.1
-        version: 17.0.1(postcss@8.5.33)(stylelint@18.1.0)
+        specifier: 18.0.0
+        version: 18.0.0(postcss@8.5.33)(stylelint@18.1.0)
       stylelint-config-standard:
         specifier: 41.1.0
         version: 41.1.0(stylelint@18.1.0)
@@ -8635,21 +8635,15 @@ packages:
       babel-plugin-macros:
         optional: true
 
-  stylelint-config-recommended-scss@17.0.1:
-    resolution: {integrity: sha512-x5DVehzJudcwF0od3sGpgkln2PLLranFE7twwbp7dqDINCyZvwzFkMc6TLhNOvazRiVBJYATQLouJY0xPGB8WA==}
-    engines: {node: '>=20'}
+  stylelint-config-recommended-scss@18.0.0:
+    resolution: {integrity: sha512-hmjPUaXCBzhrlwjY/4Ou5I4yPeBUHdUzwNgIuZgSm3WaoyPaMIKrvzc2oH4WiV0o/UVclGOvkGqhYOpzO8W2CQ==}
+    engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
     peerDependencies:
       postcss: ^8.3.3
-      stylelint: ^17.0.0
+      stylelint: ^18.0.0
     peerDependenciesMeta:
       postcss:
         optional: true
-
-  stylelint-config-recommended@18.0.0:
-    resolution: {integrity: sha512-mxgT2XY6YZ3HWWe3Di8umG6aBmWmHTblTgu/f10rqFXnyWxjKWwNdjSWkgkwCtxIKnqjSJzvFmPT5yabVIRxZg==}
-    engines: {node: '>=20.19.0'}
-    peerDependencies:
-      stylelint: ^17.0.0
 
   stylelint-config-recommended@19.0.0:
     resolution: {integrity: sha512-Y15XB19RManqBOpbRC42tF8R/Hfe314xYLzedRlnnYxYzZ0777RakDQIGcqYfrz9jWGoVyjaGTdpSl9F+roOOw==}
@@ -18405,18 +18399,14 @@ snapshots:
       '@babel/core': 7.29.13(supports-color@7.2.0)
       babel-plugin-macros: 3.1.0
 
-  stylelint-config-recommended-scss@17.0.1(postcss@8.5.33)(stylelint@18.1.0):
+  stylelint-config-recommended-scss@18.0.0(postcss@8.5.33)(stylelint@18.1.0):
     dependencies:
       postcss-scss: 4.0.9(postcss@8.5.33)
       stylelint: 18.1.0
-      stylelint-config-recommended: 18.0.0(stylelint@18.1.0)
+      stylelint-config-recommended: 19.0.0(stylelint@18.1.0)
       stylelint-scss: 7.5.0(stylelint@18.1.0)
     optionalDependencies:
       postcss: 8.5.33
-
-  stylelint-config-recommended@18.0.0(stylelint@18.1.0):
-    dependencies:
-      stylelint: 18.1.0
 
   stylelint-config-recommended@19.0.0(stylelint@18.1.0):
     dependencies:
