@@ -52,11 +52,19 @@ export const pickFooterWords = (
   excludeSlug?: string,
   count = 30,
   random: Random = Math.random,
-): FooterWord[] =>
-  shuffle(words, random)
-    .filter((word) => word.slug !== excludeSlug)
-    .flatMap((word) => toFooterWord(word) ?? [])
-    .slice(0, count);
+): FooterWord[] => {
+  // Partial Fisher–Yates: stops once `count` words are found, so ~6000 words are not fully shuffled per request.
+  const pool = [...words];
+  const picked: FooterWord[] = [];
+  for (let i = pool.length; i > 0 && picked.length < count; i--) {
+    const j = Math.floor(random() * i);
+    [pool[j], pool[i - 1]] = [pool[i - 1]!, pool[j]!];
+    const word = pool[i - 1]!;
+    const footerWord = word.slug === excludeSlug ? null : toFooterWord(word);
+    if (footerWord) picked.push(footerWord);
+  }
+  return picked;
+};
 
 /**
  * Walks the words in shuffled order starting with the first one (the server-rendered word). Every word shows once
