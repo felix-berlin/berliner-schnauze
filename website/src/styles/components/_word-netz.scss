@@ -1,4 +1,5 @@
 @use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
 // Verwandte Wörter card body (SPEC §10). The root is the container: below 36rem the list .all grouped by
 // relation, from there the SVG .net inside .tablet, the visually hidden .net-list (visible while it has focus)
@@ -184,7 +185,7 @@
     color: var(--color-text-strong);
     text-decoration: none;
 
-    &:hover {
+    @include butler-mx.hover {
       background: var(--color-surface-tint-warm);
     }
   }

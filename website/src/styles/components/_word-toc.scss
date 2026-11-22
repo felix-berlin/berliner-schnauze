@@ -7,6 +7,7 @@
 // data-state="done". The page shell places and sticks it.
 @include mx.component("word-toc") {
   :scope {
+    --_pill-pad: 0.875rem; // SPEC §3: pill padding 0 14px, the exact middle of two space steps
     // SPEC §4.2: counter 13px, no font-size token at that size
     --_label-size: 0.8125rem;
 
@@ -92,7 +93,7 @@
     @container word-toc (inline-size >= 30rem) {
       display: inline-flex;
       gap: var(--space-2);
-      padding-inline: var(--space-4);
+      padding-inline: var(--_pill-pad);
       border: 1px solid var(--color-border-card);
       border-radius: var(--radius-pill);
       background: var(--color-surface-sheet);

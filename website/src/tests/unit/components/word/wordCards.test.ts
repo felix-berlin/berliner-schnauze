@@ -40,17 +40,19 @@ describe("v18 word cards", () => {
       "Noch keen Beispiel für „Testwort“. Kennste ’n Satz, in dem dit Wort vorkommt?",
     );
     expect(e).toContain("Beispiel ergänzen");
-    expect(e).toContain('data-contribute="beispiel"');
+    expect(e).toContain('data-contribute="example"');
     const f = await facts({ facts: [], word: "Testwort" });
     expect(f).toContain(
       "Noch nüscht Wissenswertes zu „Testwort“. Weeßte wat über Herkunft, Geschichte oder haste ’ne Anekdote?",
     );
     expect(f).toContain("Wissenswertes ergänzen");
+    expect(f).toContain('data-contribute="fact"');
     const n = await network({ model: model() });
     expect(n).toContain(
       "Noch keen Wort mit „Testwort“ verknüpft. Kennste eens mit gleicher Bedeutung, ’n Gegenteil oder ’ne Redewendung?",
     );
     expect(n).toContain("Wort verknüpfen");
+    expect(n).toContain('data-contribute="related"');
   });
 
   it("renders the neighbours even when there are no related words", async () => {

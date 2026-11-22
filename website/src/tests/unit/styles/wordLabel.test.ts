@@ -16,6 +16,26 @@ describe("v18 label class", () => {
     const dir = "src/components/word";
     const files = readdirSync(dir).filter((f) => /\.(astro|vue)$/.test(f));
     expect(files.length).toBeGreaterThan(10);
-    for (const f of files) expect(read(`${dir}/${f}`), f).not.toMatch(/\bc-label\b/);
+    for (const f of files) expect(read(`${dir}/${f}`)).not.toMatch(/\bc-label\b/);
+  });
+});
+
+describe("v18 minimum text size", () => {
+  // SPEC §4.2/§22: no text under 13px; --font-size-sm is 12.8px and --font-size-xs 12px.
+  const files = [
+    "wissen",
+    "zahlen",
+    "footer-callout-book",
+    "analyse",
+    "rows",
+    "fehler",
+    "links",
+    "mobile-bar",
+    "netz",
+    "beispiele",
+    "word-label",
+  ].map((n) => (n.startsWith("footer") || n === "word-label" ? n : `word-${n}`));
+  it.each(files)("%s uses no font-size-sm or font-size-xs", (name) => {
+    expect(read(`src/styles/components/_${name}.scss`)).not.toMatch(/font-size-(sm|xs)\b/);
   });
 });

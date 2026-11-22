@@ -26,5 +26,14 @@ const { audio, wordId } = Astro.props;
 <script>
   import { initMobileBar } from '@components/word/mobileBar.ts';
 
-  document.addEventListener('astro:page-load', () => initMobileBar());
+  // The page is swapped by ClientRouter: drop the previous button's listener and watcher before the swap.
+  let stop = () => {};
+  document.addEventListener('astro:page-load', () => {
+    stop();
+    stop = initMobileBar();
+  });
+  document.addEventListener('astro:before-swap', () => {
+    stop();
+    stop = () => {};
+  });
 </script>

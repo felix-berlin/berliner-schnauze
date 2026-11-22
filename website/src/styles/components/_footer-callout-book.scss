@@ -4,6 +4,7 @@
 // Same band as footer-callout (page ground, rule above). Parts: .inner, .cover, .text (.title, .lead, .actions, .disclosure).
 @include mx.component("footer-callout-book") {
   :scope {
+    --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
     --_pad: 5.5rem; // SPEC §4 88px, between the space-12 and space-16 steps
     --_title: 3.5rem; // same h2 size as footer-callout, above the 4xl step
     --_cover: 8.25rem; // mock: 132px cover, no token
@@ -58,7 +59,7 @@
   // Board label (mock .f20__bl): small capitals in the accent text colour, the affiliate note quiet next to it.
   // Singular because the callout shows one book (the mock lists several: "Buchtipps · Affiliate-Links").
   .label {
-    font-size: var(--font-size-sm);
+    font-size: var(--_small);
     font-weight: var(--font-weight-bold);
     letter-spacing: 2px; // mock: 2px tracking, no tracking token
     text-transform: uppercase;
@@ -95,7 +96,7 @@
   }
 
   .disclosure {
-    font-size: var(--font-size-sm);
+    font-size: var(--_small);
     color: var(--color-text-muted);
   }
 }

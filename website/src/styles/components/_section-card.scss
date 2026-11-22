@@ -1,4 +1,5 @@
 @use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
 // Section card: a numbered paper card with header (.num, .title), .body and .footer.
 // Variants: unnumbered; word (word page: sheet surface, no numbers, no header rule, paddings follow
@@ -128,7 +129,7 @@
       border-radius: var(--radius-pill);
       cursor: pointer;
 
-      &:hover {
+      @include butler-mx.hover {
         background: var(--color-surface-tint-warm);
       }
     }
@@ -180,7 +181,7 @@
       flex: none;
       cursor: pointer;
 
-      &:hover {
+      @include butler-mx.hover {
         background: var(--color-surface-chip);
       }
     }

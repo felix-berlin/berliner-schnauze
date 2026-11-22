@@ -23,7 +23,7 @@ const gap = {
   existing VoiceButtons island (only when a file exists); "Einsprechen" does not exist yet: aria-disabled, the
   tooltip is linked with aria-describedby and closes on Esc (script below).
 -->
-<SectionCard anchor={false} id='beispiele' title='Beispiele' level={3} contribute='beispiel' gap={items.length ? undefined : gap}>
+<SectionCard anchor={false} id='beispiele' title='Beispiele' level={3} contribute='example' gap={items.length ? undefined : gap}>
   {items.length > 0 && (
     <ol class='c-word-beispiele'>
       {items.map((item, index) => {

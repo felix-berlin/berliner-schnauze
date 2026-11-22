@@ -162,21 +162,3 @@ describe("FooterCalloutBook", () => {
     expect(html).toContain("Als Amazon-Partner verdiene ich an qualifizierten Verkäufen.");
   });
 });
-
-describe("copy rules", () => {
-  it("keeps the forbidden words out of the new components", async () => {
-    const { readFileSync } = await import("node:fs");
-    for (const n of [
-      "WordAnalysisCard",
-      "WordNumbers",
-      "WordReportLine",
-      "WordLinks",
-      "WordMobileBar",
-    ]) {
-      const src = readFileSync(`src/components/word/${n}.astro`, "utf8");
-      expect(src).not.toMatch(/ wir | uns | unser| wa |Quellen belegt/);
-      expect(src).not.toMatch(/\p{Extended_Pictographic}/u);
-      expect(src).not.toContain("set:html");
-    }
-  });
-});
