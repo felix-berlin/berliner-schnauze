@@ -64,6 +64,7 @@ jobs:
               - "!.infisical.yaml"
               - "!website/public/robots.txt"
               - "!website/public/.well-known/security.txt"
+              - "!codecov.yml"
 
       # Own step: the payload patterns are positive only and need the default quantifier (some).
       - name: Detect schema-relevant changes

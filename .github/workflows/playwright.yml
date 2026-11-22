@@ -62,6 +62,7 @@ jobs:
               - "!.infisical.yaml"
               - "!website/public/robots.txt"
               - "!website/public/.well-known/security.txt"
+              - "!codecov.yml"
 
   playwright-version:
     needs: changes
