@@ -5,8 +5,8 @@
 // below the row. Parts: .row, .reactions, .pill (.num), .more, .menu (.item, .ico, .text, .title, .sub, .rule), .note,
 // .live, .cite (.head, .heading, .close, .tabs, .panel, .hint, .quote, .send, .foot).
 // The menu is plain absolute positioning opening upward, not a popover: it must stay in the page flow of the head
-// (no top layer), and anchor positioning is not Baseline widely available (Firefox). The head clips its overflow, so the
-// menu is limited to the width of the actions container.
+// (no top layer), and anchor positioning is not Baseline widely available (Firefox). The head clips its overflow: the
+// menu is limited to the container width, and the component shifts it right when its left edge would leave the head.
 @include mx.component("word-actions") {
   :scope {
     --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px

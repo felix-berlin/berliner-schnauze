@@ -139,7 +139,7 @@ describe("WordActions menu", () => {
 
   it("opens with ArrowDown on the trigger", async () => {
     wrapper = await mountIt();
-    trigger(wrapper).element.focus();
+    (trigger(wrapper).element as HTMLElement).focus();
     await key(trigger(wrapper).element, "ArrowDown");
     expect(document.activeElement).toBe(items(wrapper)[0]!.element);
   });
@@ -159,11 +159,49 @@ describe("WordActions menu", () => {
     await openMenu(wrapper);
     await key(items(wrapper)[0]!.element, "Tab");
     expect(wrapper.find('[role="menu"]').exists()).toBe(false);
+    // Focus continues from the menu button (the browser then moves on to the next control).
+    expect(document.activeElement).toBe(trigger(wrapper).element);
+  });
+
+  it("Esc works after a click on non-focusable menu padding (focus on body)", async () => {
+    wrapper = await mountIt();
+    await trigger(wrapper).trigger("click", { detail: 1 });
+    (document.activeElement as HTMLElement | null)?.blur();
+    await key(document.body, "Escape");
+    expect(wrapper.find('[role="menu"]').exists()).toBe(false);
+  });
+
+  it("an Esc aimed at another part of the page leaves the menu alone", async () => {
+    const other = document.createElement("input");
+    document.body.append(other);
+    wrapper = await mountIt();
+    await openMenu(wrapper);
+    await key(other, "Escape");
+    expect(wrapper.find('[role="menu"]').exists()).toBe(true);
+  });
+
+  it("keeps the menu inside the left edge of the head on a narrow screen", async () => {
+    const head = document.createElement("header");
+    document.body.append(head);
+    wrapper = mount(WordActions, { attachTo: head, props });
+    await flushPromises();
+    const rect = (left: number) =>
+      ({ bottom: 0, height: 0, left, right: left + 290, top: 0, width: 290 }) as DOMRect;
+    const spy = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(function (this: HTMLElement) {
+        return this.getAttribute("role") === "menu" ? rect(-10) : rect(0);
+      });
+    await openMenu(wrapper);
+    await flushPromises();
+    const inset = (wrapper.get('[role="menu"]').element as HTMLElement).style.insetInlineEnd;
+    expect(Number.parseFloat(inset)).toBeLessThan(0);
+    spy.mockRestore();
   });
 
   it("a stray Esc does nothing and leaves nothing stuck", async () => {
     wrapper = await mountIt();
-    trigger(wrapper).element.focus();
+    (trigger(wrapper).element as HTMLElement).focus();
     await key(trigger(wrapper).element, "Escape");
     expect(trigger(wrapper).attributes("aria-expanded")).toBe("false");
     expect(wrapper.find('[role="region"]').exists()).toBe(false);
@@ -257,6 +295,9 @@ describe("WordActions citing", () => {
       "false",
     ]);
     expect(tabs(wrapper).map((t) => t.attributes("tabindex"))).toEqual(["-1", "0", "-1"]);
+    const panelId = wrapper.get('[role="tabpanel"]').attributes("id");
+    expect(panelId).toBeTruthy();
+    expect(tabs(wrapper).every((t) => t.attributes("aria-controls") === panelId)).toBe(true);
     expect(text(wrapper)).toContain("Berliner Schnauze. (2026, 5. Januar). Testwort.");
     expect(wrapper.text()).toContain("Für Schule und Uni (APA 7)");
     expect(wrapper.text()).toContain(
@@ -393,6 +434,53 @@ describe("WordActions share", () => {
     expect(writeText).toHaveBeenCalledWith(URL_);
     expect(live().textContent).toBe("Link kopiert");
   });
+
+  it("flips the visible Teilen label to Link kopiert for 2 s", async () => {
+    clipboard(vi.fn().mockResolvedValue(undefined));
+    wrapper = await mountIt();
+    const pill = wrapper.findAll("button").find((b) => b.text() === "Teilen")!;
+    await pill.trigger("click");
+    await flushPromises();
+    expect(pill.text()).toBe("Link kopiert");
+    vi.advanceTimersByTime(2000);
+    await flushPromises();
+    expect(pill.text()).toBe("Teilen");
+  });
+
+  it("a copy from the menu does not touch the Teilen label", async () => {
+    clipboard(vi.fn().mockResolvedValue(undefined));
+    wrapper = await mountIt();
+    await openMenu(wrapper);
+    await items(wrapper)[0]!.trigger("click");
+    await flushPromises();
+    expect(wrapper.findAll("button").some((b) => b.text() === "Teilen")).toBe(true);
+  });
+
+  it("denied clipboard: opens the menu and really marks the link before saying so", async () => {
+    clipboard(() => Promise.reject(new DOMException("denied", "NotAllowedError")));
+    wrapper = await mountIt();
+    await wrapper
+      .findAll("button")
+      .find((b) => b.text() === "Teilen")!
+      .trigger("click");
+    await flushPromises();
+    expect(wrapper.find('[role="menu"]').exists()).toBe(true);
+    expect(window.getSelection()!.toString()).toBe("berliner-schnauze.wtf/wort/testwort");
+    expect(live().textContent).toBe("Markiert. Mit Strg+C kopieren.");
+  });
+
+  it("clears the Teilen timer on unmount", async () => {
+    clipboard(vi.fn().mockResolvedValue(undefined));
+    wrapper = await mountIt();
+    await wrapper
+      .findAll("button")
+      .find((b) => b.text() === "Teilen")!
+      .trigger("click");
+    await flushPromises();
+    wrapper.unmount();
+    wrapper = undefined;
+    expect(vi.getTimerCount()).toBe(0);
+  });
 });
 
 describe("WordActions reactions", () => {
@@ -423,6 +511,14 @@ describe("WordActions reactions", () => {
     expect(thumbs(wrapper)[0]!.attributes("aria-label")).toBe("Daumen hoch, 12");
   });
 
+  it("never shows a negative count", async () => {
+    $feedback.set(state(0, "like"));
+    wrapper = await mountIt();
+    reaction.toggle.mockReturnValue(new Promise(() => {}));
+    await thumbs(wrapper)[0]!.trigger("click"); // takes the stored like back: 0 - 1
+    expect(thumbs(wrapper)[0]!.attributes("aria-label")).toBe("Daumen hoch, 0");
+  });
+
   it("offline: aria-disabled, the verbatim hint, no request", async () => {
     online.value = false;
     wrapper = await mountIt();
@@ -437,7 +533,7 @@ describe("WordActions reactions", () => {
   it("without a word id (draft) there are no thumbs but Teilen and the menu stay", async () => {
     wrapper = await mountIt({ wordId: undefined });
     expect(wrapper.find('[role="group"]').exists()).toBe(false);
-    expect(trigger(wrapper).exists()).toBe(true);
+    expect(wrapper.find('button[aria-haspopup="menu"]').exists()).toBe(true);
   });
 });
 

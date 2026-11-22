@@ -1,5 +1,5 @@
 <template>
-  <div class="c-word-actions" @keydown.esc="onEsc">
+  <div ref="root" class="c-word-actions">
     <div class="row">
       <div
         v-if="wordId !== undefined"
@@ -23,8 +23,13 @@
       </div>
 
       <button class="pill" type="button" @click="share">
-        <Share2 aria-hidden="true" height="18" width="18" />
-        Teilen
+        <component
+          :is="copied === 'share' ? Check : Share2"
+          aria-hidden="true"
+          height="18"
+          width="18"
+        />
+        {{ copied === "share" ? "Link kopiert" : "Teilen" }}
       </button>
 
       <div ref="more" class="more">
@@ -47,6 +52,7 @@
           aria-label="Mehr"
           class="menu"
           role="menu"
+          :style="{ insetInlineEnd: shift ? `${-shift}px` : undefined }"
           @keydown="onMenuKey"
         >
           <button class="item" role="menuitem" tabindex="-1" type="button" @click="copyLink">
@@ -120,6 +126,7 @@
           v-for="f in FORMATS"
           :id="`${uid}-${f.value}`"
           :key="f.value"
+          :aria-controls="`${uid}-panel`"
           :aria-selected="format === f.value"
           :tabindex="format === f.value ? 0 : -1"
           role="tab"
@@ -129,7 +136,13 @@
           {{ f.label }}
         </button>
       </div>
-      <div :aria-labelledby="`${uid}-${format}`" class="panel" role="tabpanel" tabindex="0">
+      <div
+        :id="`${uid}-panel`"
+        :aria-labelledby="`${uid}-${format}`"
+        class="panel"
+        role="tabpanel"
+        tabindex="0"
+      >
         <p class="hint">{{ HINTS[format] }}</p>
         <code ref="citeText" class="quote">{{ citation }}</code>
       </div>
@@ -161,7 +174,16 @@ import Share2 from "virtual:icons/lucide/share-2";
 import ThumbsDown from "virtual:icons/lucide/thumbs-down";
 import ThumbsUp from "virtual:icons/lucide/thumbs-up";
 import X from "virtual:icons/lucide/x";
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, useTemplateRef } from "vue";
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  useId,
+  useTemplateRef,
+  watch,
+} from "vue";
 
 const props = defineProps<{
   /** Meaning shown after the word in "Wort kopieren"; empty = the word alone. */
@@ -195,6 +217,7 @@ const COPIED_MS = 2000;
 
 const uid = useId();
 const online = useOnline();
+const root = useTemplateRef<HTMLElement>("root");
 const more = useTemplateRef<HTMLElement>("more");
 const trigger = useTemplateRef<HTMLButtonElement>("trigger");
 const menu = useTemplateRef<HTMLElement>("menu");
@@ -210,7 +233,7 @@ const wordCopy = computed(() => (props.meaning ? `${props.word} – ${props.mean
 const live = ref("");
 let lastMessage = "";
 let timer: ReturnType<typeof setTimeout> | undefined;
-const copied = ref<"cite" | "link" | "word" | null>(null);
+const copied = ref<"cite" | "link" | "share" | "word" | null>(null);
 
 // A screen reader skips a message equal to the previous one: a no-break space makes the repeat differ.
 const announce = (message: string): void => {
@@ -218,7 +241,7 @@ const announce = (message: string): void => {
   lastMessage = message;
 };
 
-const flash = (what: "cite" | "link" | "word", message: string): void => {
+const flash = (what: "cite" | "link" | "share" | "word", message: string): void => {
   copied.value = what;
   announce(message);
   clearTimeout(timer);
@@ -240,15 +263,15 @@ const select = (el: HTMLElement | null): void => {
 /** Writes to the clipboard; when that is denied or missing, the text is marked for Strg+C instead. */
 const copy = async (
   text: string,
-  what: "cite" | "link" | "word",
+  what: "cite" | "link" | "share" | "word",
   message: string,
-  source: () => HTMLElement | null,
+  source: () => HTMLElement | null | Promise<HTMLElement | null>,
 ): Promise<void> => {
   try {
     await navigator.clipboard.writeText(text);
     flash(what, message);
   } catch {
-    select(source());
+    select(await source());
     announce(MARKED);
   }
 };
@@ -267,12 +290,17 @@ const share = async (): Promise<void> => {
       if (error instanceof DOMException && error.name === "AbortError") return;
     }
   }
-  // The link is not on screen here, so a denied clipboard has nothing to mark; the menu item does.
-  await copy(props.url, "link", "Link kopiert", () => null);
+  // Denied: the menu shows the link text; it is selected there so "Markiert" is true.
+  await copy(props.url, "share", "Link kopiert", async () => {
+    menuOpen.value = true;
+    await nextTick();
+    return linkText.value;
+  });
 };
 
 // --- menu (APG menu button) --------------------------------------------------------------------------
 const menuOpen = ref(false);
+const citeOpen = ref(false);
 
 const entries = (): HTMLElement[] => [
   ...(menu.value?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? []),
@@ -304,7 +332,8 @@ const onTriggerKey = (event: KeyboardEvent): void => {
 };
 
 const onMenuKey = (event: KeyboardEvent): void => {
-  if (event.key === "Tab") return closeMenu();
+  // Tab closes the menu; focus continues from the menu button (the browser then moves to the next control).
+  if (event.key === "Tab") return closeMenu(true);
   const list = entries();
   const at = list.indexOf(document.activeElement as HTMLElement);
   const target = {
@@ -318,19 +347,43 @@ const onMenuKey = (event: KeyboardEvent): void => {
   list[target]?.focus();
 };
 
+// The menu is right aligned to its button; on a narrow screen that can push it past the left edge of the head,
+// which clips it. Measured after it opened, shifted right just enough (SPEC §5.1 keeps the right alignment otherwise).
+const EDGE = 16;
+const shift = ref(0);
+watch(
+  menuOpen,
+  (open) => {
+    shift.value = 0;
+    const box = menu.value;
+    if (!open || !box) return;
+    const head = more.value?.closest("header")?.getBoundingClientRect().left ?? 0;
+    shift.value = Math.max(0, Math.max(EDGE, head + EDGE) - box.getBoundingClientRect().left);
+  },
+  { flush: "post" },
+);
+
 // Click outside closes (the listener is removed with the component by VueUse).
 useEventListener(globalThis.document, "click", (event: MouseEvent) => {
   if (menuOpen.value && !more.value?.contains(event.target as Node)) closeMenu();
 });
 
-// Esc acts on what is open inside this island: the menu first, then the panel. Otherwise nothing.
-const onEsc = (): void => {
-  if (menuOpen.value) closeMenu(true);
-  else if (citeOpen.value) closeCite(true);
-};
+// Esc acts on what is open inside this island: the menu first, then the panel. The listener exists only while
+// something is open (a stray Esc does nothing) and ignores Esc aimed at other parts of the page.
+const anyOpen = computed(() => menuOpen.value || citeOpen.value);
+useEventListener(
+  computed(() => (anyOpen.value ? globalThis.document : undefined)),
+  "keydown",
+  (event: KeyboardEvent) => {
+    if (event.key !== "Escape") return;
+    const target = event.target as Node | null;
+    if (target !== document.body && !root.value?.contains(target)) return;
+    if (menuOpen.value) closeMenu(true);
+    else closeCite(true);
+  },
+);
 
 // --- citing ------------------------------------------------------------------------------------------
-const citeOpen = ref(false);
 const format = ref<CitationFormat>("apa");
 // Set when the panel opens, so no date is part of the server HTML.
 const today = ref(new Date());
@@ -377,7 +430,7 @@ const onTabKey = (event: KeyboardEvent): void => {
 
 // --- report -----------------------------------------------------------------------------------------
 const report = (): void => {
-  closeMenu();
+  closeMenu(true);
   const reduce = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
   document
     .getElementById("fehler")
@@ -401,7 +454,10 @@ onMounted(() => {
 const count = (reaction: Reaction): number | string => {
   const total = feedback.value?.totals[reaction];
   if (total === undefined) return "–";
-  return total + Number(current.value === reaction) - Number(stored.value === reaction);
+  return Math.max(
+    0,
+    total + Number(current.value === reaction) - Number(stored.value === reaction),
+  );
 };
 
 const react = async (reaction: Reaction): Promise<void> => {
