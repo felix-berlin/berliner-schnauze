@@ -519,7 +519,8 @@ export async function seedE2e(payload: Payload): Promise<void> {
   }
 
   // Invented Jeschichten for "anmachen" (the v18 word page shows 2 on mobile and 3 from 808px, so it needs more than 3).
-  // Published and without links, so no editor mail goes out.
+  // skipCommentHooks: a create would otherwise mail the editors (the comment-count hooks only react to votes and
+  // reports, which the seed does not create, so there is nothing to recount).
   for (const [i, bezirk] of ["neukoelln", "pankow", "mitte", "spandau", "lichtenberg"].entries()) {
     const body = `Erfundene Jeschichte ${i + 1} zu anmachen.`;
     const { docs } = await payload.find({
@@ -538,6 +539,7 @@ export async function seedE2e(payload: Payload): Promise<void> {
           text: body,
           word: wordIds.get("anmachen")!,
         },
+        context: { skipCommentHooks: true },
         depth: 0,
       });
   }
