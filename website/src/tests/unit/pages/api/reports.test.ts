@@ -41,7 +41,13 @@ describe("POST /api/reports", () => {
     expect(create).toHaveBeenCalledOnce();
     expect(create.mock.calls[0][0]).toMatchObject({
       collection: "reports",
-      data: { email: "secret@example.com", kind: "spelling", status: "open", text: "Da fehlt ein k.", word: 5 },
+      data: {
+        email: "secret@example.com",
+        kind: "spelling",
+        status: "open",
+        text: "Da fehlt ein k.",
+        word: 5,
+      },
     });
     expect(create.mock.calls[0][0].data).not.toHaveProperty("turnstileToken");
   });
@@ -67,7 +73,15 @@ describe("POST /api/reports", () => {
   });
 
   it("accepts all seven kinds", async () => {
-    for (const kind of ["meaning", "spelling", "example", "audio", "fact", "inappropriate", "other"])
+    for (const kind of [
+      "meaning",
+      "spelling",
+      "example",
+      "audio",
+      "fact",
+      "inappropriate",
+      "other",
+    ])
       expect((await post({ ...valid, kind })).status).toBe(201);
   });
 

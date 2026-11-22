@@ -15,13 +15,16 @@ describe("rateLimit", () => {
     expect(rateLimitRule("/wort/wat", "GET")).toBeUndefined();
   });
 
-  it.each(["/api/contribute", "/api/reports"])("%s: POST only, the request after the limit waits", (path) => {
-    const rule = rateLimitRule(path, "POST")!;
-    expect(rateLimitRule(path, "GET")).toBeUndefined();
-    const client = `t-${path}`;
-    for (let i = 0; i < rule.max; i++) expect(rateLimited(client, rule, 0)).toBe(0);
-    expect(rateLimited(client, rule, 0)).toBeGreaterThan(0);
-  });
+  it.each(["/api/contribute", "/api/reports"])(
+    "%s: POST only, the request after the limit waits",
+    (path) => {
+      const rule = rateLimitRule(path, "POST")!;
+      expect(rateLimitRule(path, "GET")).toBeUndefined();
+      const client = `t-${path}`;
+      for (let i = 0; i < rule.max; i++) expect(rateLimited(client, rule, 0)).toBe(0);
+      expect(rateLimited(client, rule, 0)).toBeGreaterThan(0);
+    },
+  );
 
   it("counts per client within the window and starts over after it", () => {
     const rule = { max: 2, prefix: "/test-a", windowMs: 1000 };
