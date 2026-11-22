@@ -80,7 +80,7 @@ for (const size of SIZES) {
             content: ".o-scroll-to-top { visibility: hidden !important; }",
           });
           // Word of the day: the word changes daily and the countdown ("Neues Wort in: …") ticks every second.
-          const wotd = page.locator(".c-word-of-the-day");
+          const wotd = page.locator(".c-home-stage");
           // Trend box and badge: rank and counts come from the last 7 days (the seed writes them relative to its
           // own day, and other specs' page views add to them). Footer dates: the seed stamps them.
           const timeDependent = [
@@ -88,10 +88,12 @@ for (const size of SIZES) {
             page.locator(".c-word-trend"),
             page.getByText("Im Trend · Platz"),
             page.locator(".c-word-page-footer time"),
+            // Footer word sign: a random word per request.
+            page.locator(".c-footer-word-sign"),
             // Anki: the demo card shows a random word.
             page.locator(".c-anki-flashcard"),
           ];
-          if (path === "/") await expect(wotd.locator(".word")).toBeVisible();
+          if (path === "/") await expect(wotd.locator(".lemma")).toBeVisible();
           const name = `${path === "/" ? "home" : path.slice(1).replaceAll("/", "-")}-${size.width}-${theme}.png`;
           await expect(page).toHaveScreenshot(name, {
             fullPage: true,
