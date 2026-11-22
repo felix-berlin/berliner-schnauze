@@ -5,7 +5,7 @@
 export type OwnSubmission = { at: number; preview: string; type: "example" | "fact" | "related" };
 
 const KEY = "bs-own-submissions";
-const STORY_KEYS = "bs-story-keys";
+const COMMENT_KEYS = "bs-comment-keys";
 const KEEP_MS = 14 * 24 * 60 * 60_000;
 const MAX_PER_WORD = 20;
 const PREVIEW = 60;
@@ -64,11 +64,16 @@ export const rememberSubmission = (
 };
 
 /**
- * Keeps the edit key of a sent Jeschichte. `POST /api/stories` answers without the row id, so the keys are listed
- * per word instead of per comment id like `bs-comment-keys`; the first edit UI maps them to a story.
+ * Keeps the edit key of a sent Jeschichte in the format of the comment form (`bs-comment-keys`, keyed by row id), so
+ * the existing edit flow finds it; that code drops it when the edit window is over.
  */
-export const rememberStoryKey = (word: string, editKey: string, now = Date.now()): void => {
-  const all = read<{ at: number; key: string }>(STORY_KEYS);
-  all[word] = [{ at: now, key: editKey }, ...(all[word] ?? [])].slice(0, MAX_PER_WORD);
-  write(STORY_KEYS, all);
+export const rememberEditKey = (id: number, key: string, now = Date.now()): void => {
+  try {
+    const parsed: unknown = JSON.parse(localStorage.getItem(COMMENT_KEYS) ?? "{}");
+    const all =
+      typeof parsed === "object" && parsed !== null && !Array.isArray(parsed) ? parsed : {};
+    write(COMMENT_KEYS, { ...all, [id]: { createdAt: now, key } });
+  } catch {
+    // Unreadable storage: the story itself was sent; only editing it later is lost.
+  }
 };

@@ -111,6 +111,7 @@
             :id="`${uid}-${f.key}`"
             v-model="v[f.key]"
             class="c-input"
+            :aria-invalid="refused?.field === f.key ? true : undefined"
             :type="f.control"
             :aria-describedby="describedBy(f)"
             :autocapitalize="f.control === 'email' ? 'none' : undefined"
@@ -183,13 +184,14 @@
 import BerlinerBaer from "@components/kalle/BerlinerBaer.vue";
 import TurnStile from "@components/TurnStile.vue";
 import { OFFLINE_HINT, useOnline } from "@composables/useOnline.ts";
+import { BEZIRK_NAMES } from "@lib/bezirkNames.ts";
 import {
   FACT_KIND_LABEL,
   FACT_KIND_ORDER,
   REPORT_KIND_LABEL,
   REPORT_KIND_ORDER,
 } from "@lib/contribute.ts";
-import { rememberStoryKey, rememberSubmission } from "@lib/ownSubmissions.ts";
+import { rememberEditKey, rememberSubmission } from "@lib/ownSubmissions.ts";
 import { RELATION_LABEL, RELATION_ORDER } from "@lib/wordNetwork.ts";
 import { suggestWords, type WordSuggestion } from "@lib/wordSuggest.ts";
 import { useStore } from "@nanostores/vue";
@@ -200,8 +202,6 @@ import { TURNSTILE_SITE_KEY } from "astro:env/client";
 import CircleAlert from "virtual:icons/lucide/circle-alert";
 import Hourglass from "virtual:icons/lucide/hourglass";
 import { computed, nextTick, reactive, ref, useId, useTemplateRef, watch } from "vue";
-
-import { BERLIN_AREAS } from "@/data/berlinAreas.ts";
 
 type FormType = "error" | "example" | "fact" | "related" | "story";
 type Field = {
@@ -292,9 +292,9 @@ const options = (labels: Record<string, string>, order: readonly string[]) =>
 // The 12 Bezirke alphabetically, then "outside" (SPEC §8.2); the values are the STORY_BEZIRKE keys.
 const BEZIRK_OPTIONS = [
   { label: "Keene Angabe", value: "" },
-  ...BERLIN_AREAS.map((a) => ({ label: a.name, value: a.key })).toSorted((a, b) =>
-    a.label.localeCompare(b.label, "de"),
-  ),
+  ...Object.entries(BEZIRK_NAMES)
+    .map(([value, label]) => ({ label, value }))
+    .toSorted((a, b) => a.label.localeCompare(b.label, "de")),
   { label: "Nich aus Berlin", value: "outside" },
 ];
 
@@ -452,37 +452,18 @@ watch(v, () => {
   waiting.value = "";
 });
 
-// --- open / close ---------------------------------------------------------------------------------
-const FIRST_FIELD = "textarea, input, select, [aria-pressed]";
-watch(
-  isOpen,
-  (open) => {
-    if (open) root.value?.querySelector<HTMLElement>(FIRST_FIELD)?.focus();
-    else if (done.value) again();
-  },
-  { flush: "post", immediate: true },
-);
-
-const cancel = (): void => {
-  closeContributeForm(props.type);
-  // The trigger lives outside this island (SectionCard, WordReportLine): hand the focus back to it.
-  const selector = props.type === "error" ? "[data-report]" : `[data-contribute="${props.type}"]`;
-  void nextTick(() => document.querySelector<HTMLElement>(selector)?.focus());
-};
-
-const again = (): void => {
-  Object.assign(v, blank());
-  done.value = false;
-  failed.value = false;
-  reason.value = "";
-  void nextTick(() => root.value?.querySelector<HTMLElement>(FIRST_FIELD)?.focus());
-};
-
 // --- Turnstile ------------------------------------------------------------------------------------
 // A token works once; the widget issues the next one after reset().
 const token = ref("");
 const captchaFailed = ref(false);
 let sendWhenReady = false;
+// Closing unmounts the widget: a click waiting for its token must not fire on the next widget, and a token from before
+// the close may be spent or expired.
+const dropPendingCaptcha = (): void => {
+  sendWhenReady = false;
+  token.value = "";
+  waiting.value = "";
+};
 const onToken = (value: string): void => {
   token.value = value;
   if (value) {
@@ -496,6 +477,40 @@ const onToken = (value: string): void => {
 };
 const onCaptchaError = (): void => {
   captchaFailed.value = true;
+};
+
+// --- open / close ---------------------------------------------------------------------------------
+const FIRST_FIELD = "textarea, input, select, [aria-pressed]";
+watch(
+  isOpen,
+  (open) => {
+    if (open) root.value?.querySelector<HTMLElement>(FIRST_FIELD)?.focus();
+    else {
+      dropPendingCaptcha();
+      if (done.value) again();
+    }
+  },
+  { flush: "post", immediate: true },
+);
+
+const cancel = (): void => {
+  dropPendingCaptcha();
+  closeContributeForm(props.type);
+  // The trigger lives outside this island (SectionCard, WordReportLine): hand the focus back to the first visible one.
+  const selector = props.type === "error" ? "[data-report]" : `[data-contribute="${props.type}"]`;
+  void nextTick(() =>
+    [...document.querySelectorAll<HTMLElement>(selector)]
+      .find((el) => el.checkVisibility?.() ?? true)
+      ?.focus(),
+  );
+};
+
+const again = (): void => {
+  Object.assign(v, blank());
+  done.value = false;
+  failed.value = false;
+  reason.value = "";
+  void nextTick(() => root.value?.querySelector<HTMLElement>(FIRST_FIELD)?.focus());
 };
 
 // --- related: the word picker ---------------------------------------------------------------------
@@ -603,9 +618,21 @@ const refuse = (): void => {
   document.getElementById(`${uid}-${field}`)?.focus();
 };
 
-const fail = (why = ""): void => {
+const fail = (why = "", field?: string): void => {
   failed.value = true;
   reason.value = why;
+  // A 400 about an optional field (e-mail, name ...) marks that field like a refused click does.
+  const key =
+    field === "kind" && props.type === "error"
+      ? "reportKind"
+      : field === "relatedText"
+        ? "target"
+        : field;
+  const target = fields.value.find((f) => f.key === key && f.control !== "chips");
+  if (target && why) {
+    refused.value = { field: target.key, message: why };
+    void nextTick(() => document.getElementById(`${uid}-${target.key}`)?.focus());
+  }
 };
 
 const onSubmit = async (): Promise<void> => {
@@ -631,15 +658,19 @@ const onSubmit = async (): Promise<void> => {
     });
     const data = (await res.json().catch(() => null)) as null | {
       editKey?: string;
+      error?: string;
+      field?: string;
+      id?: number;
       message?: string;
     };
-    if (res.status === 429) fail("Ma langsam, Keule – versuch's gleich nochmal.");
-    else if (!res.ok) {
+    if (!res.ok) {
       // Only the status goes to Sentry, never the input (the report carries an e-mail address).
       if (res.status >= 500) reportError(new Error(`[contribute] ${props.type} -> ${res.status}`));
-      fail(res.status < 500 ? (data?.message ?? "") : "");
+      // The server's German text (field message, captcha refusal, rate limit) when it sent one.
+      const fallback = res.status === 429 ? "Ma langsam, Keule – versuch's gleich nochmal." : "";
+      fail(data?.message ?? data?.error ?? fallback, data?.field);
     } else {
-      succeed(data?.editKey);
+      succeed(data?.editKey, data?.id);
     }
   } catch (error) {
     // fetch() rejects with a TypeError when offline; anything else is a bug worth reporting.
@@ -653,9 +684,9 @@ const onSubmit = async (): Promise<void> => {
   }
 };
 
-const succeed = (editKey?: string): void => {
+const succeed = (editKey?: string, id?: number): void => {
   if (props.type === "story") {
-    if (editKey) rememberStoryKey(props.word, editKey);
+    if (editKey && typeof id === "number") rememberEditKey(id, editKey);
   } else if (props.type !== "error") {
     rememberSubmission(props.word, props.type, props.type === "related" ? v.target : v.text);
   }

@@ -279,13 +279,16 @@ describe("ContributeForm thanks", () => {
     expect(ownSubmissions("schrippe")).toMatchObject([{ preview: "Ein Satz", type: "example" }]);
     expect(localStorage.getItem("bs-own-submissions")).not.toContain("Kalle");
 
-    fetchMock.mockResolvedValue(okResponse({ editKey: "edit-1", ok: true }));
+    fetchMock.mockResolvedValue(okResponse({ editKey: "edit-1", id: 42, ok: true }));
     const s = make("story");
     await open("story");
     await byLabel(s, "Deine Jeschichte").setValue("Eene Jeschichte");
     await submit(s).trigger("click");
     await flushPromises();
-    expect(localStorage.getItem("bs-story-keys")).toContain("edit-1");
+    const keys = JSON.parse(localStorage.getItem("bs-comment-keys") ?? "{}");
+    expect(keys["42"]).toMatchObject({ key: "edit-1" });
+    expect(typeof keys["42"].createdAt).toBe("number");
+    expect(localStorage.getItem("bs-story-keys")).toBeNull();
   });
 });
 
@@ -501,5 +504,151 @@ describe("ContributeForm captcha timing", () => {
       JSON.parse((fetchMock.mock.calls[0] as [string, RequestInit])[1].body as string)
         .turnstileToken,
     ).toBe("late-token");
+  });
+});
+
+describe("ContributeForm close and reopen", () => {
+  const late = defineComponent({
+    emits: ["token", "error"],
+    methods: {
+      issue(value = "tok") {
+        this.$emit("token", value);
+      },
+      reset() {},
+    },
+    template: "<div />",
+  });
+  const issue = (w: VueWrapper, value?: string) =>
+    (w.findComponent(late).vm as unknown as { issue: (v?: string) => void }).issue(value);
+  const cancel = (w: VueWrapper) =>
+    w
+      .findAll("button")
+      .find((b) => b.text() === "Abbrechen")!
+      .trigger("click");
+
+  it("a click before the token, cancel and reopen: the new widget's first token does not send", async () => {
+    const w = mountForm("example", { BerlinerBaer: true, TurnStile: late });
+    await open("example");
+    await byLabel(w, "Satz uff Berlinerisch").setValue("Satz");
+    await submit(w).trigger("click");
+    await cancel(w);
+    await open("example");
+    issue(w);
+    await flushPromises();
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(w.find("[role=status]").exists()).toBe(false);
+  });
+
+  it("closing by another form also drops the pending send", async () => {
+    const w = mountForm("example", { BerlinerBaer: true, TurnStile: late });
+    await open("example");
+    await byLabel(w, "Satz uff Berlinerisch").setValue("Satz");
+    await submit(w).trigger("click");
+    await open("fact");
+    await open("example");
+    issue(w);
+    await flushPromises();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("a token from before the close is not reused after reopening", async () => {
+    const w = mountForm("example", { BerlinerBaer: true, TurnStile: late });
+    await open("example");
+    await byLabel(w, "Satz uff Berlinerisch").setValue("Satz");
+    issue(w, "old-token");
+    await cancel(w);
+    await open("example");
+    await submit(w).trigger("click");
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(w.find("[role=status]").text()).toContain("Moment noch");
+  });
+
+  it("cancel returns the focus to the first visible trigger", async () => {
+    const hidden = document.createElement("button");
+    hidden.dataset.contribute = "example";
+    hidden.hidden = true;
+    const shown = document.createElement("button");
+    shown.dataset.contribute = "example";
+    document.body.append(hidden, shown);
+    const original = Element.prototype.checkVisibility;
+    Element.prototype.checkVisibility = function (this: Element) {
+      return !(this as HTMLElement).hidden;
+    };
+    const w = make("example");
+    await open("example");
+    await cancel(w);
+    await nextTick();
+    expect(document.activeElement).toBe(shown);
+    Element.prototype.checkVisibility = original;
+    hidden.remove();
+    shown.remove();
+  });
+});
+
+describe("ContributeForm errors", () => {
+  const sendWith = async (
+    type: Props["type"],
+    response: unknown,
+    fill?: (w: VueWrapper) => Promise<void>,
+  ) => {
+    fetchMock.mockResolvedValue(response);
+    const w = make(type);
+    await open(type);
+    await byLabel(
+      w,
+      type === "error" ? "Wat stimmt nich, und wat wär richtig?" : "Satz uff Berlinerisch",
+    ).setValue("Satz");
+    await fill?.(w);
+    await submit(w).trigger("click");
+    await flushPromises();
+    return w;
+  };
+
+  it("refused click marks the field aria-invalid and describes it with the error", async () => {
+    const w = make("example");
+    await open("example");
+    await submit(w).trigger("click");
+    const area = byLabel(w, "Satz uff Berlinerisch");
+    expect(area.attributes("aria-invalid")).toBe("true");
+    expect(area.attributes("aria-describedby")).toContain("error");
+  });
+
+  it.each([
+    [403, "Captcha nicht bestanden"],
+    [503, "Die Captcha-Prüfung ist gerade gestört, bitte versuch es später nochmal."],
+    [429, "Zu viele Anfragen, versuch es später nochmal."],
+  ])("%i shows the server's own text", async (status, error) => {
+    const w = await sendWith("example", { json: async () => ({ error }), ok: false, status });
+    expect(w.find("[role=alert]").text()).toContain(error);
+    expect(submit(w).text()).toBe("Nochmal absenden");
+  });
+
+  it("429 without a body falls back to the generic rate-limit text", async () => {
+    const w = await sendWith("example", {
+      json: async () => {
+        throw new Error("no json");
+      },
+      ok: false,
+      status: 429,
+    });
+    expect(w.find("[role=alert]").text()).toContain("Ma langsam, Keule");
+  });
+
+  it("a 400 on the optional e-mail marks that field and moves the focus there", async () => {
+    const w = await sendWith(
+      "error",
+      {
+        json: async () => ({ field: "email", message: "Irgendwas läuft hier nicht" }),
+        ok: false,
+        status: 400,
+      },
+      async (f) => {
+        await byLabel(f, "Deine E-Mail").setValue("kaputt");
+      },
+    );
+    const mail = byLabel(w, "Deine E-Mail");
+    expect(mail.attributes("aria-invalid")).toBe("true");
+    expect(document.activeElement).toBe(mail.element);
+    expect(w.text()).toContain("Irgendwas läuft hier nicht");
   });
 });
