@@ -93,6 +93,20 @@ describe("watchContributeTriggers (ClientRouter)", () => {
     expect(document.querySelector("[data-contribute]")!.getAttribute("aria-expanded")).toBe("true");
   });
 
+  it("leaves one listener after two page loads without a swap in between", () => {
+    document.dispatchEvent(new Event("astro:page-load"));
+    document.dispatchEvent(new Event("astro:page-load"));
+    const seen: (null | string)[] = [];
+    const stop = openForm.listen((v) => seen.push(v));
+    document.querySelector<HTMLElement>("[data-contribute]")!.click();
+    stop();
+    expect(seen).toEqual(["example"]);
+    // Two live listeners would each call the cleanup once: after before-swap a click must do nothing.
+    document.dispatchEvent(new Event("astro:before-swap"));
+    document.querySelector<HTMLElement>("[data-contribute]")!.click();
+    expect(openForm.get()).toBeNull();
+  });
+
   it("renders the own chips after a navigation, not only on the first page", () => {
     document.dispatchEvent(new Event("astro:page-load"));
     rememberSubmission("schrippe", "example", "Zwee Schrippen");

@@ -10,6 +10,7 @@
     --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
 
     container: word-stories / inline-size;
+    position: relative; // anchor of the empty status region
     display: grid;
     gap: var(--space-4);
   }
@@ -176,9 +177,14 @@
     }
   }
 
-  // The status stays rendered when empty (a live region must exist before its text does); it only gives back its grid gap.
+  // The status stays rendered when empty (a live region must exist before its text does) but takes no grid cell and no
+  // gap: out of flow, clipped, still in the accessibility tree. Text puts it back in flow.
   .note:empty {
-    margin-block-end: calc(var(--space-4) * -1);
+    position: absolute;
+    inline-size: 1px; // the clipping technique's size, not a scale step
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
   }
 
   .note,

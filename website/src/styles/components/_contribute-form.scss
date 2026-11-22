@@ -28,6 +28,7 @@
   }
 
   form {
+    position: relative; // anchor of the empty live regions
     display: grid;
     gap: var(--space-4);
   }
@@ -165,9 +166,14 @@
     color: var(--color-text-muted);
   }
 
-  // The live regions around the strips stay rendered when empty (a region must exist before its text does); they give back their grid gap.
+  // The live regions around the strips stay rendered when empty (a region must exist before its text does) but take
+  // no grid cell and no gap: out of flow, clipped, still in the accessibility tree. Text puts them back in flow.
   .live:empty {
-    margin-block-end: calc(var(--space-4) * -1);
+    position: absolute;
+    inline-size: 1px; // the clipping technique's size, not a scale step
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
   }
 
   // Error and waiting strips (SPEC §13): a line in the danger colour, calm variant without it.
