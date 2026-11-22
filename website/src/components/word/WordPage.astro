@@ -2,6 +2,7 @@
 import '@styles/objects/_word-v18.scss';
 
 import SectionCard from '@components/word/SectionCard.astro';
+import WordPoll from '@components/word/WordPoll.vue';
 import WordStories from '@components/word/WordStories.vue';
 import WordExamplesCard from '@components/word/WordExamplesCard.astro';
 import WordFactsCard from '@components/word/WordFactsCard.astro';
@@ -52,7 +53,7 @@ const voices = voiceSources(model.word.berlinerischAudio);
 
     <h2 class='band'>Im Gebrauch</h2>
     <div class='anchor' id='beispiele'><slot name='beispiele'><WordExamplesCard word={model.word.berlinerisch} slug={model.word.slug} examples={model.word.examples} /></slot></div>
-    <div class='anchor' id='sagste'><slot name='sagste' /></div>
+    <div class='anchor' id='sagste'><slot name='sagste'><WordPoll client:visible initial={model.poll} label={model.word.berlinerisch} slug={model.word.slug} wordId={model.word.id} /></slot></div>
     <div class='anchor' id='jeschichten'><slot name='jeschichten'>
       <SectionCard anchor={false} id='jeschichten' title='Jeschichten' level={3} meta={model.stories.total > 0 ? `${model.stories.total} Jeschichten` : 'Noch keene'}>
         <WordStories client:visible label={model.word.berlinerisch} prompt={model.storyPrompt} word={model.word.slug} initial={{ featured: model.featured ?? null, items: model.stories.items, total: model.stories.total }} />

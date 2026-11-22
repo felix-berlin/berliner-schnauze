@@ -45,6 +45,14 @@ describe("WordPage mobile bar", () => {
     expect(html).toContain('href="#sagste"');
   });
 
+  it("mounts the poll in the sagste slot with the shared result only, no own vote", async () => {
+    const html = await render({ model });
+    const slot = html.slice(html.indexOf('id="sagste"'), html.indexOf('id="jeschichten"'));
+    expect(slot).toContain("Sagste det noch?");
+    expect(slot).toContain("Is dit Wort bei dir noch im Einsatz?");
+    expect(slot).not.toContain("deine Stimme");
+  });
+
   it("counts no plays for a draft preview", async () => {
     const html = await render({ draft: true, model });
     expect(html).toContain("c-word-mobile-bar");
