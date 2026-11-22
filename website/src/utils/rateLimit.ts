@@ -1,3 +1,5 @@
+import { isE2eServer } from "@utils/e2eServer.ts";
+
 type Rule = { max: number; method?: string; prefix: string; windowMs: number; key?: string };
 
 /**
@@ -48,9 +50,11 @@ export const rateLimitRule = (pathname: string, method: string): Rule | undefine
 
 /**
  * Fixed window: counts a hit for `client` on `rule` and returns the seconds to wait when it is over the limit,
- * else 0.
+ * else 0. The e2e server (`isE2eServer`) never limits: every spec comes from one address, and this one function
+ * serves the middleware rules and the in-route caps (`rateLimitedBy`) alike.
  */
 export const rateLimited = (client: string, rule: Rule, now = Date.now()): number => {
+  if (isE2eServer()) return 0;
   // A full scan, so at most once a minute; still too many live clients after it: the oldest go first (Map order).
   if (hits.size > 10_000 && now - lastPrune >= 60_000) {
     lastPrune = now;

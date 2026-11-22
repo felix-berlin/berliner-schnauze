@@ -5,7 +5,11 @@ import {
   rateLimitRule,
   resetRateLimits,
 } from "@utils/rateLimit.ts";
-import { describe, expect, it } from "vitest";
+import { rateLimitedBy } from "@utils/rateLimit.ts";
+import { describe, expect, it, vi } from "vitest";
+
+const e2e = vi.hoisted(() => ({ on: false }));
+vi.mock("@utils/e2eServer.ts", () => ({ isE2eServer: () => e2e.on }));
 
 describe("rateLimit", () => {
   it("limits only the expensive routes, suggest-word only on POST", () => {
@@ -165,5 +169,26 @@ describe("networkKey", () => {
     expect(networkKey("2001:db8::1")).toBe("2001:0db8:0000:0000");
     expect(networkKey("2001:0DB8:0:0:ffff::2")).toBe("2001:0db8:0000:0000");
     expect(networkKey("2001:db8:1:2:3:4:5:6")).toBe("2001:0db8:0001:0002");
+  });
+});
+
+describe("rateLimit on the e2e server", () => {
+  it("never limits, neither a path rule nor an in-route cap", () => {
+    resetRateLimits();
+    e2e.on = true;
+    try {
+      const rule = rateLimitRule("/api/contribute", "POST")!;
+      for (let i = 0; i < rule.max + 5; i++) expect(rateLimited("e2e-client", rule, 0)).toBe(0);
+      for (let i = 0; i < 25; i++) expect(rateLimitedBy("e2e-client", "cap", 2, 60_000)).toBe(0);
+    } finally {
+      e2e.on = false;
+    }
+  });
+
+  it("limits as before once the flag is off, and the e2e hits were not counted", () => {
+    resetRateLimits();
+    expect(rateLimitedBy("c", "cap", 2, 60_000)).toBe(0);
+    expect(rateLimitedBy("c", "cap", 2, 60_000)).toBe(0);
+    expect(rateLimitedBy("c", "cap", 2, 60_000)).toBeGreaterThan(0);
   });
 });

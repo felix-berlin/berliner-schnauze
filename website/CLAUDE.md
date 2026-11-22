@@ -15,7 +15,7 @@ E2E_BUILD=1 pnpm build        # then: node server/index.mjs with E2E_SERVER=1, P
 ../scripts/with-env.sh npx playwright test <file> --project=chromium
 ```
 
-`E2E_SERVER=1` (`src/utils/e2eServer.ts`, honoured only with a localhost `PAYLOAD_SERVER_URL`) makes the server deterministic: /anki shows a fixed "120+ Std. Coding-Zeit" instead of live Wakapi hours, and the in-memory rate limits are off (every spec comes from one address; the limits have unit tests). The seed can be rerun on a fresh database any time: it overwrites its upload files in `payload/media` instead of storing `stimme-m-1.wav` beside the old ones. Reseed before the visual baseline: the trend data is written relative to the seed's day.
+`E2E_SERVER=1` (`src/utils/e2eServer.ts`, honoured only with a localhost `PAYLOAD_SERVER_URL`) makes the server deterministic: /anki shows a fixed "120+ Std. Coding-Zeit" instead of live Wakapi hours, and every in-memory rate limit is off, the middleware rules and the per-route caps alike (`rateLimited` in `utils/rateLimit.ts` returns 0 under `isE2eServer()`, `rateLimitedBy` goes through it; every spec comes from one address; the limits have unit tests). The seed can be rerun on a fresh database any time: it overwrites its upload files in `payload/media` instead of storing `stimme-m-1.wav` beside the old ones. Reseed before the visual baseline: the trend data is written relative to the seed's day.
 
 `scripts/with-env.sh` re-sources `.env.worktree` after Infisical, so it overrides `DATABASE_URL` and cannot be pointed at the e2e DB; use the recipe's own env (Infisical + `DATABASE_URL` set after sourcing `.env.worktree`) for migrate, seed and the server.
 
