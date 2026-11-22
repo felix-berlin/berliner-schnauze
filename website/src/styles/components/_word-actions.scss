@@ -1,0 +1,285 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Action row of the word head (SPEC §5, §5.1, §5.2): Daumen hoch/runter, Teilen, the ⋮ menu and the citing panel
+// below the row. Parts: .row, .reactions, .pill (.num), .more, .menu (.item, .ico, .text, .title, .sub, .rule), .note,
+// .live, .cite (.head, .heading, .close, .tabs, .panel, .hint, .quote, .send, .foot).
+// The menu is plain absolute positioning opening upward, not a popover: it must stay in the page flow of the head
+// (no top layer), and anchor positioning is not Baseline widely available (Firefox). The head clips its overflow, so the
+// menu is limited to the width of the actions container.
+@include mx.component("word-actions") {
+  :scope {
+    --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
+    --_menu-min: 18.125rem; // SPEC §5.1: min-width 290px
+    --_above: 100%; // the menu starts on the top edge of the button
+
+    container: word-actions / inline-size;
+    position: relative;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .reactions {
+    display: contents;
+  }
+
+  // Reaction/Teilen/⋮ pill (SPEC §4.3): 44px everywhere (the 36px desktop size of §17 is an exception, not a rule; no viewport @media here).
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-block-size: var(--size-tap-target);
+    min-inline-size: var(--size-tap-target);
+    padding-inline: var(--space-3);
+    font: inherit;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+    background: transparent;
+    border: 1px solid var(--color-border-card);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+
+    @include butler-mx.hover {
+      &:not([aria-disabled="true"]) {
+        border-color: var(--color-border-control-hover);
+      }
+    }
+
+    &[aria-pressed="true"],
+    &[aria-expanded="true"] {
+      background: var(--color-surface-chip);
+      border-color: var(--color-accent-active);
+    }
+
+    &[aria-disabled="true"] {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+  }
+
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .more {
+    position: relative;
+  }
+
+  // Opens upward (the head would clip it below), right aligned to the ⋮ button (SPEC §5.1).
+  .menu {
+    position: absolute;
+    inset-block-end: var(--_above);
+    margin-block-end: var(--space-2);
+    inset-inline-end: 0;
+    z-index: var(--z-raised);
+    min-inline-size: min(var(--_menu-min), 100cqi);
+    max-inline-size: 100cqi;
+    padding: var(--space-1); // SPEC §5.1: 6px, the nearer step below
+    background: var(--color-surface-sheet);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border-card); // the 1px ring of SPEC §5.1
+    box-shadow: var(--shadow-paper-lift); // the one raised-surface shadow (DESIGN.md)
+
+    @include butler-mx.feature("motion") {
+      animation: word-actions-in var(--duration-fast) ease both; // SPEC §16: menu 180ms
+    }
+  }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    inline-size: 100%;
+    min-block-size: var(--size-tap-target);
+    padding: var(--space-2) var(--space-3);
+    font: inherit;
+    text-align: start;
+    color: var(--color-text-strong);
+    background: transparent;
+    border: 0;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+
+    @include butler-mx.feature("motion") {
+      transition: background-color var(--duration-fast) ease;
+    }
+    @include butler-mx.hover {
+      background: var(--color-surface-chip);
+
+      .ico {
+        color: var(--color-text-strong);
+      }
+    }
+
+    &:focus-visible {
+      background: var(--color-surface-chip);
+    }
+  }
+
+  .ico {
+    flex: none;
+    margin-block-start: var(--space-1); // aligns the icon with the title line
+    color: var(--color-text-muted);
+  }
+
+  .text {
+    display: grid;
+    min-inline-size: 0;
+  }
+
+  .title {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .sub {
+    font-size: var(--_small);
+    color: var(--color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .rule {
+    margin: var(--space-2) var(--space-3);
+    border: 0;
+    border-block-start: 1px solid var(--color-border-card);
+  }
+
+  .note {
+    margin: var(--space-2) 0 0;
+    font-size: var(--_small);
+    color: var(--color-text-muted);
+  }
+
+  // The status is always in the DOM (a live region must exist before its text does) and never shown: the menu item
+  // and the button show the same words. Out of flow and clipped, still in the accessibility tree.
+  .live {
+    position: absolute;
+    inline-size: 1px; // the clipping technique's size, not a scale step
+    block-size: 1px;
+    margin: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  // Citing panel (SPEC §5.2): below the row, card2 ground, padding 18/20.
+  .cite {
+    display: grid;
+    gap: var(--space-3);
+    margin-block-start: var(--space-4);
+    padding: var(--space-5); // SPEC §5.2: 18px 20px, the 20px step
+    background: var(--color-surface-tint-warm);
+    border-radius: var(--radius-sm);
+
+    @include butler-mx.feature("motion") {
+      animation: word-actions-in var(--duration-base) ease both; // SPEC §16: 250-300ms
+    }
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .heading {
+    margin: 0;
+    font-family: var(--font-family-body); // no Fraktur on this page
+    font-size: var(--font-size-lg);
+    color: var(--color-text-strong);
+  }
+
+  .close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--size-tap-target);
+    block-size: var(--size-tap-target);
+    margin-inline-end: calc(-1 * var(--space-3));
+    color: var(--color-text-muted);
+    background: transparent;
+    border: 0;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+
+    @include butler-mx.hover {
+      color: var(--color-text-strong);
+    }
+  }
+
+  // Segment of pills (SPEC §5.2); the selected one is raised.
+  .tabs {
+    display: inline-flex;
+    justify-self: start;
+    max-inline-size: 100%;
+    padding: var(--space-1);
+    background: var(--color-surface-wash);
+    border-radius: var(--radius-pill);
+
+    [role="tab"] {
+      min-block-size: 2.5rem; // 40px inside the 44px segment; the segment is the target, no token step
+      padding-inline: var(--space-4);
+      font: inherit;
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-body);
+      background: transparent;
+      border: 0;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+
+      &[aria-selected="true"] {
+        color: var(--color-text-strong);
+        background: var(--color-surface-sheet);
+      }
+    }
+  }
+
+  .panel {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .hint,
+  .foot {
+    margin: 0;
+    font-size: var(--_small);
+    color: var(--color-text-muted);
+  }
+
+  .quote {
+    display: block;
+    padding: var(--space-3) var(--space-3);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §5.2: the citation is monospace, no font token for it
+    font-family: monospace;
+    font-size: var(--font-size-md);
+    line-height: 1.55;
+    color: var(--color-text-strong);
+    background: var(--color-surface-sheet);
+    border-radius: var(--radius-sm);
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    user-select: all;
+  }
+
+  // Primary button (SPEC §4.3) placed through its public properties: 44px, 0 24px.
+  .send {
+    --button-min-block-size: var(--size-tap-target);
+    --button-padding: 0 var(--space-6);
+
+    justify-self: start;
+  }
+
+  @keyframes word-actions-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+}

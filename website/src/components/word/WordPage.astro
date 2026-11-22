@@ -48,7 +48,7 @@ const voices = voiceSources(model.word.berlinerischAudio);
 
   <div class='main'>
     <div class='anchor' id='bedeutung'>
-      <slot name='bedeutung'><WordHead model={model} /></slot>
+      <slot name='bedeutung'><WordHead draft={draft} model={model} /></slot>
     </div>
 
     <h2 class='band'>Im Gebrauch</h2>

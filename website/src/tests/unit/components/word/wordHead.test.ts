@@ -100,6 +100,29 @@ describe("WordHead.astro", () => {
     expect(html).toContain("Wort des Tages");
   });
 
+  it("mounts the actions with the canonical word URL, the meaning and the update date, no per-visitor data", async () => {
+    const html = await render({
+      model: model({
+        updatedAt: "2026-01-05T10:00:00.000Z",
+        word: { ...model().word, id: 7 } as never,
+      }),
+    });
+    expect(html).toContain("WordActions.vue");
+    expect(html).toMatch(/&quot;url&quot;:\[0,&quot;https?:\/\/[^&]+\/wort\/testwort&quot;\]/);
+    expect(html).not.toContain("wort-v18");
+    expect(html).toContain("&quot;meaning&quot;:[0,&quot;Prüfung&quot;]");
+    expect(html).toContain("&quot;updatedAt&quot;:[0,&quot;2026-01-05T10:00:00.000Z&quot;]");
+    expect(html).toContain("&quot;wordId&quot;:[0,7]");
+  });
+
+  it("gives a draft preview no word id (no reactions)", async () => {
+    const html = await render({
+      draft: true,
+      model: model({ updatedAt: "2026-01-05T10:00:00.000Z" }),
+    });
+    expect(html).not.toMatch(/&quot;wordId&quot;:\[0,\d/);
+  });
+
   it("shows the word as h1 with its article, the syllables and the meaning", async () => {
     const html = await render({ model: model({ stress: "erste Silbe" }) });
     expect(html).toMatch(/<h1[^>]*>[\s\S]*Testwort/);
