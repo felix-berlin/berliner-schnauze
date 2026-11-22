@@ -11,7 +11,12 @@
       <div :key="current.slug" class="body">
         <p class="label">Wort für unterwegs</p>
         <p class="head">
-          <a class="lemma" :href="`/wort/${current.slug}`">{{ current.lemma }}</a>
+          <a
+            class="lemma"
+            :data-long="current.lemma.length > LONG_LEMMA || undefined"
+            :href="`/wort/${current.slug}`"
+            >{{ current.lemma }}</a
+          >
           <span v-if="current.kind" class="kind">{{ current.kind }}</span>
         </p>
         <p class="meaning">{{ current.meaning }}</p>
@@ -32,6 +37,9 @@ import { trackEvent } from "@utils/analytics";
 import { createWordCycle, type FooterWord } from "@utils/footerWords";
 import { useIntersectionObserver } from "@vueuse/core";
 import { defineAsyncComponent, onMounted, ref, shallowRef, useTemplateRef } from "vue";
+
+// Lemmas longer than this get the smaller fluid size (the longest e2e seed word has 36 letters).
+const LONG_LEMMA = 14;
 
 const props = defineProps<{ words: FooterWord[] }>();
 

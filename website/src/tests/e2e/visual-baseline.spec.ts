@@ -5,7 +5,7 @@ import { test, expect, type Page } from "@playwright/test";
 // Screenshot baseline for the design-system migration (docs/superpowers/specs/2026-11-13-design-system-design.md §10,
 // wave 0): later CSS refactors must not change a pixel unless the snapshot update names the reason. Run against the
 // e2e seed database and a fresh build; a stale service worker serves old CSS, so it is blocked. The server must run
-// with E2E_SERVER=1 (fixed Wakapi hours in the footer, no rate limits; src/utils/e2eServer.ts) on a fresh seed.
+// with E2E_SERVER=1 (fixed Wakapi hours on /anki, no rate limits; src/utils/e2eServer.ts) on a fresh seed.
 // Chromium project only: playwright.config.ts gives every other project a testIgnore for this file.
 test.use({ reducedMotion: "reduce", serviceWorkers: "block" });
 

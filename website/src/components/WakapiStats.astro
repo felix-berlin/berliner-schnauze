@@ -1,7 +1,0 @@
----
-import { getWakapiStats } from '@services/wakapiStats';
-
-const { hours, minutes } = await getWakapiStats();
----
-
-{(hours > 0 || minutes > 0) && <p>{hours}+ Std. Coding-Zeit</p>}

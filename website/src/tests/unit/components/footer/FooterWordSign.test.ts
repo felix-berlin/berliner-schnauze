@@ -31,6 +31,16 @@ describe("FooterWordSign", () => {
     expect(wrapper.text()).toContain("Wort für unterwegs");
   });
 
+  it("flags only long lemmas so they get the smaller fluid size", () => {
+    const long = mount(FooterWordSign, {
+      props: { words: [word("l", { lemma: "x".repeat(20) })] },
+    });
+    expect(long.get("a").attributes("data-long")).toBeDefined();
+    expect(
+      mount(FooterWordSign, { props: { words } }).get("a").attributes("data-long"),
+    ).toBeUndefined();
+  });
+
   it("is a polite live region", () => {
     expect(mount(FooterWordSign, { props: { words } }).attributes("aria-live")).toBe("polite");
   });

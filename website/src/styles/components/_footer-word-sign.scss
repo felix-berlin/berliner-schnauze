@@ -10,8 +10,8 @@
   :scope {
     --_width: 25rem; // SPEC sign width 400px
     --_label: 0.8125rem; // SPEC 13px label: --font-size-sm is 12.8px, below the 13px minimum
-    --_lemma: 2.75rem; // SPEC lemma size, above the 4xl step
-    --_lemma-narrow: 2.25rem; // SPEC mobile lemma size, = --font-size-4xl
+    --_lemma: clamp(1.75rem, 11cqi, 2.75rem); // fluid with the sign: SPEC 44px at 400px wide, 36px mobile
+    --_lemma-long: clamp(1.5rem, 7cqi, 2rem); // long lemmas (data-long): smaller so they wrap at most twice
     --_tilt: -1.5deg; // SPEC rest angle
     --_pad-inline: 1.75rem; // SPEC 28px side padding, between the space-6 and space-8 steps
     --_swing: 1.1s; // SPEC §9 entry swing, no duration token this long
@@ -85,8 +85,8 @@
     text-underline-offset: var(--space-1);
     text-decoration-thickness: var(--radius-xs); // SPEC hover underline 3px
 
-    @container footer-word-sign (inline-size < 25rem) {
-      font-size: var(--_lemma-narrow);
+    &[data-long] {
+      font-size: var(--_lemma-long);
     }
 
     &:hover {

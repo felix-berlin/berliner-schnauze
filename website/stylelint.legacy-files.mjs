@@ -5,7 +5,6 @@ export default [
   "src/styles/components/_alert.scss",
   "src/styles/components/_app-settings.scss",
   "src/styles/components/_berliner-oder-nicht.scss",
-  "src/styles/components/_carbon-badge.scss",
   "src/styles/components/_color-mode-picker.scss",
   "src/styles/components/_confirm-dialog.scss",
   "src/styles/components/_custom-multiselect.scss",
