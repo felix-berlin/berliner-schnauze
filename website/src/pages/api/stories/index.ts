@@ -1,8 +1,8 @@
-import type { Story } from "@lib/story.ts";
 import type { Comment } from "payload-app";
 import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
+import { fetchStories } from "@services/payload/stories.ts";
 import { wordIdBySlug } from "@services/payload/wordId.ts";
 import { hashEditKey, visitorId } from "@services/payload/comments.ts";
 import { captchaGate, positiveInt, reply } from "@utils/apiReply.ts";
@@ -31,16 +31,6 @@ const storyCreateSchema = z.object({
   word: z.string().min(1).max(200),
 });
 
-const toStory = (c: Comment): Story => ({
-  anders: c.downvotes ?? 0,
-  ...(c.bezirk ? { bezirk: c.bezirk } : {}),
-  createdAt: c.createdAt,
-  id: String(c.id),
-  jenau: c.upvotes ?? 0,
-  ...(c.authorName?.trim() ? { name: c.authorName.trim() } : {}),
-  text: c.text,
-});
-
 export const GET: APIRoute = async ({ url }) => {
   const slug = url.searchParams.get("word");
   const limit = Math.min(positiveInt(url.searchParams.get("limit"), DEFAULT_LIMIT) ?? 0, MAX_LIMIT);
@@ -50,28 +40,7 @@ export const GET: APIRoute = async ({ url }) => {
     const wordId = await wordIdBySlug(slug);
     if (wordId === null) return reply({ error: "Wort nicht gefunden" }, 404);
 
-    // Comment collections are login-only: default overrideAccess, own status filter, depth 0 (website/CLAUDE.md).
-    const payload = await getPayloadClient();
-    const where = {
-      parent: { exists: false },
-      status: { equals: "published" },
-      word: { equals: wordId },
-    } as const;
-    const [items, featured, { totalDocs }] = await Promise.all([
-      payload.find({ collection: "comments", depth: 0, limit, sort: "-createdAt", where }),
-      payload.find({
-        collection: "comments",
-        depth: 0,
-        limit: 1,
-        where: { ...where, featured: { equals: true } },
-      }),
-      payload.count({ collection: "comments", where }),
-    ]);
-    const body = {
-      featured: featured.docs[0] ? toStory(featured.docs[0]) : null,
-      items: items.docs.map(toStory),
-      total: totalDocs,
-    };
+    const body = await fetchStories(wordId, limit);
     // Same shape for everyone (own reactions are asked separately), so the proxy may cache it briefly.
     return Response.json(body, { headers: { "Cache-Control": "public, max-age=60" } });
   } catch (error) {
