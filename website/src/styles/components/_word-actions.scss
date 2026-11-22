@@ -138,6 +138,11 @@
     font-weight: var(--font-weight-bold);
   }
 
+  // The text that is marked when the clipboard is denied: selectable as a whole even inside a button (Firefox).
+  .pick {
+    user-select: all;
+  }
+
   .sub {
     font-size: var(--_small);
     color: var(--color-text-muted);

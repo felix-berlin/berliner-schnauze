@@ -67,7 +67,7 @@
               <b class="title">{{ copied === "link" ? "Link kopiert" : "Link kopieren" }}</b>
               <span class="sub">
                 <template v-if="copied === 'link'">Jetzt einfügen, wo de willst</template>
-                <span v-else ref="linkText">{{ displayUrl }}</span>
+                <span v-else ref="linkText" class="pick">{{ displayUrl }}</span>
               </span>
             </span>
           </button>
@@ -83,7 +83,9 @@
               <b class="title">{{ copied === "word" ? "Wort kopiert" : "Wort kopieren" }}</b>
               <span class="sub">
                 <template v-if="copied === 'word'">Jetzt einfügen, wo de willst</template>
-                <template v-else>„<span ref="wordText">{{ wordCopy }}</span>“ als Text</template>
+                <template v-else
+                  >„<span ref="wordText" class="pick">{{ wordCopy }}</span>“ als Text</template
+                >
               </span>
             </span>
           </button>
@@ -213,6 +215,7 @@ const HINTS: Record<CitationFormat, string> = {
   wikipedia: "Vorlage „Internetquelle“ für Einzelnachweise",
 };
 const MARKED = "Markiert. Mit Strg+C kopieren.";
+const FAILED = "Ditt hat nich jeklappt.";
 const COPIED_MS = 2000;
 
 const uid = useId();
@@ -251,13 +254,15 @@ const flash = (what: "cite" | "link" | "share" | "word", message: string): void 
   }, COPIED_MS);
 };
 
-const select = (el: HTMLElement | null): void => {
-  if (!el) return;
+/** Marks the element's text; false when there is nothing to mark. */
+const select = (el: HTMLElement | null): boolean => {
+  if (!el?.isConnected) return false;
   const range = document.createRange();
   range.selectNodeContents(el);
   const selection = globalThis.getSelection();
   selection?.removeAllRanges();
   selection?.addRange(range);
+  return true;
 };
 
 /** Writes to the clipboard; when that is denied or missing, the text is marked for Strg+C instead. */
@@ -271,8 +276,11 @@ const copy = async (
     await navigator.clipboard.writeText(text);
     flash(what, message);
   } catch {
-    select(await source());
-    announce(MARKED);
+    // A fresh "kopiert" title hides the text span: bring it back before marking it.
+    copied.value = null;
+    await nextTick();
+    // Only claim "Markiert" when a selection really exists.
+    announce(select(await source()) ? MARKED : FAILED);
   }
 };
 
@@ -351,16 +359,27 @@ const onMenuKey = (event: KeyboardEvent): void => {
 // which clips it. Measured after it opened, shifted right just enough (SPEC §5.1 keeps the right alignment otherwise).
 const EDGE = 16;
 const shift = ref(0);
+const place = (): void => {
+  const box = menu.value;
+  if (!menuOpen.value || !box) return void (shift.value = 0);
+  const head = more.value?.closest("header")?.getBoundingClientRect().left ?? 0;
+  // The measured left includes the current shift; take it out to get the natural position.
+  const natural = box.getBoundingClientRect().left - shift.value;
+  shift.value = Math.max(0, Math.max(EDGE, head + EDGE) - natural);
+};
 watch(
   menuOpen,
-  (open) => {
+  () => {
     shift.value = 0;
-    const box = menu.value;
-    if (!open || !box) return;
-    const head = more.value?.closest("header")?.getBoundingClientRect().left ?? 0;
-    shift.value = Math.max(0, Math.max(EDGE, head + EDGE) - box.getBoundingClientRect().left);
+    place();
   },
   { flush: "post" },
+);
+// A rotation or resize while open moves the button: measure again (the listener exists only while open).
+useEventListener(
+  computed(() => (menuOpen.value ? globalThis.window : undefined)),
+  "resize",
+  place,
 );
 
 // Click outside closes (the listener is removed with the component by VueUse).

@@ -199,6 +199,33 @@ describe("WordActions menu", () => {
     spy.mockRestore();
   });
 
+  it("recomputes the shift when the window is resized while open", async () => {
+    const head = document.createElement("header");
+    document.body.append(head);
+    wrapper = mount(WordActions, { attachTo: head, props });
+    await flushPromises();
+    let base = -10;
+    // The mocked left follows the applied shift like a real layout does.
+    const spy = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(function (this: HTMLElement) {
+        const left =
+          this.getAttribute("role") === "menu"
+            ? base - (Number.parseFloat(this.style.insetInlineEnd) || 0)
+            : 0;
+        return { bottom: 0, height: 0, left, right: left + 290, top: 0, width: 290 } as DOMRect;
+      });
+    await openMenu(wrapper);
+    await flushPromises();
+    const menuEl = wrapper.get('[role="menu"]').element as HTMLElement;
+    expect(Number.parseFloat(menuEl.style.insetInlineEnd)).toBe(-26);
+    base = -40;
+    window.dispatchEvent(new Event("resize"));
+    await flushPromises();
+    expect(Number.parseFloat(menuEl.style.insetInlineEnd)).toBe(-56);
+    spy.mockRestore();
+  });
+
   it("a stray Esc does nothing and leaves nothing stuck", async () => {
     wrapper = await mountIt();
     (trigger(wrapper).element as HTMLElement).focus();
@@ -469,6 +496,36 @@ describe("WordActions share", () => {
     expect(live().textContent).toBe("Markiert. Mit Strg+C kopieren.");
   });
 
+  it("denied right after a successful copy still marks the link (the text span is back)", async () => {
+    const writeText = vi
+      .fn()
+      .mockResolvedValueOnce(undefined)
+      .mockRejectedValueOnce(new DOMException("denied", "NotAllowedError"));
+    clipboard(writeText);
+    wrapper = await mountIt();
+    await openMenu(wrapper);
+    await items(wrapper)[0]!.trigger("click");
+    await flushPromises();
+    expect(items(wrapper)[0]!.text()).toContain("Link kopiert");
+    await items(wrapper)[0]!.trigger("click");
+    await flushPromises();
+    expect(window.getSelection()!.toString()).toBe("berliner-schnauze.wtf/wort/testwort");
+    expect(live().textContent).toBe("Markiert. Mit Strg+C kopieren.");
+  });
+
+  it("never says Markiert when there is nothing to mark", async () => {
+    clipboard(() => Promise.reject(new DOMException("denied", "NotAllowedError")));
+    wrapper = await mountIt();
+    window.getSelection()!.removeAllRanges();
+    await openMenu(wrapper);
+    // Drop the text span from the DOM so the source is missing.
+    wrapper.get('[role="menuitem"] .sub span').element.remove();
+    await items(wrapper)[0]!.trigger("click");
+    await flushPromises();
+    expect(live().textContent).not.toContain("Markiert");
+    expect(live().textContent).toBe("Ditt hat nich jeklappt.");
+  });
+
   it("clears the Teilen timer on unmount", async () => {
     clipboard(vi.fn().mockResolvedValue(undefined));
     wrapper = await mountIt();
@@ -538,6 +595,34 @@ describe("WordActions reactions", () => {
 });
 
 describe("WordActions lifecycle", () => {
+  // Net count of document keydown listeners: added minus removed (the same function may be registered again).
+  const liveKeydown = (
+    add: { mock: { calls: unknown[][] } },
+    remove: { mock: { calls: unknown[][] } },
+  ) =>
+    add.mock.calls.filter(([type]) => type === "keydown").length -
+    remove.mock.calls.filter(([type]) => type === "keydown").length;
+
+  it("holds the Esc listener only while something is open, across cycles and unmount", async () => {
+    const add = vi.spyOn(document, "addEventListener");
+    const remove = vi.spyOn(document, "removeEventListener");
+    wrapper = await mountIt();
+    expect(liveKeydown(add, remove)).toBe(0);
+    for (let i = 0; i < 3; i++) {
+      await openMenu(wrapper);
+      expect(liveKeydown(add, remove)).toBe(1);
+      await key(items(wrapper)[0]!.element, "Escape");
+      expect(liveKeydown(add, remove)).toBe(0);
+    }
+    await openMenu(wrapper);
+    expect(liveKeydown(add, remove)).toBe(1);
+    wrapper.unmount();
+    wrapper = undefined;
+    expect(liveKeydown(add, remove)).toBe(0);
+    add.mockRestore();
+    remove.mockRestore();
+  });
+
   it("removes its document listener on unmount", async () => {
     const add = vi.spyOn(document, "addEventListener");
     const remove = vi.spyOn(document, "removeEventListener");
