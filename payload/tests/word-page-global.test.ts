@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
 
 import { STORY_PROMPT_DEFAULT, storyPrompt } from "../src/lib/storyPrompt";
 import { getTestPayload } from "./helpers/payload";
@@ -22,6 +22,16 @@ describe("storyPrompt", () => {
 });
 
 describe("word-page global and v18 fields", () => {
+  const wordIds: number[] = [];
+  const themaIds: number[] = [];
+  afterAll(async () => {
+    const payload = await getTestPayload();
+    for (const id of wordIds) await payload.delete({ collection: "words", id }).catch(() => {});
+    for (const id of themaIds) await payload.delete({ collection: "themen", id }).catch(() => {});
+    await payload.updateGlobal({ slug: "affiliate", data: { books: [] } });
+    await payload.updateGlobal({ slug: "word-page", data: { storyPrompt: null } });
+  });
+
   it("stores storyPrompt", async () => {
     const payload = await getTestPayload();
     await payload.updateGlobal({ slug: "word-page", data: { storyPrompt: "Und {Wort}?" } });
@@ -37,6 +47,7 @@ describe("word-page global and v18 fields", () => {
       data: { berlinerisch: "Bolle", slug: `${slug}-b`, _status: "draft" },
       draft: true,
     });
+    wordIds.push(other.id);
     const word = await payload.create({
       collection: "words",
       data: {
@@ -54,6 +65,7 @@ describe("word-page global and v18 fields", () => {
       draft: true,
       depth: 0,
     });
+    wordIds.push(word.id);
     expect(word.stress).toBe("ˈʃtʊlə");
     expect(word.grammar).toMatchObject({ plural: "Stullen", diminutive: other.id });
     expect(word.facts?.[0]).toMatchObject({ kind: "herkunft", contributorName: "Anna" });
@@ -63,16 +75,12 @@ describe("word-page global and v18 fields", () => {
       collection: "themen",
       data: { name: "Essen", slug: `${slug}-t` } as never,
     });
+    themaIds.push(thema.id);
     await payload.updateGlobal({
       slug: "affiliate",
       data: { books: [{ title: "Buch", themen: [thema.id] }] },
     });
     const aff = await payload.findGlobal({ slug: "affiliate", depth: 0 });
     expect(aff.books?.[0]?.themen).toEqual([thema.id]);
-
-    await payload.delete({ collection: "words", id: word.id });
-    await payload.delete({ collection: "words", id: other.id });
-    await payload.updateGlobal({ slug: "affiliate", data: { books: [] } });
-    await payload.delete({ collection: "themen", id: thema.id });
   });
 });

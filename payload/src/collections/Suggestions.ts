@@ -112,7 +112,12 @@ export const Suggestions: CollectionConfig = {
       name: "targetWord",
       type: "relationship",
       relationTo: "words",
-      validate: requiredFor(["example"], relationship as Validate<any, any, any, any>),
+      // Create only: the FK nulls it when the word is deleted, and the suggestion must stay saveable then.
+      validate: ((value: unknown, options: any) =>
+        requiredFor(
+          options.operation === "create" ? ["example"] : [],
+          relationship as Validate<any, any, any, any>,
+        )(value, options)) as Validate<any, any, any, any>,
       admin: {
         position: "sidebar",
         description:

@@ -96,4 +96,22 @@ describe("suggestion types", () => {
     });
     expect(upd.text).toBe("Ick bin hier.");
   });
+
+  it("stays editable after its target word is deleted, but a new example still needs a target", async () => {
+    const slug = `${MARK}-gone`;
+    const word = await payload.create({
+      collection: "words",
+      data: { berlinerisch: "Weg", slug, _status: "published" },
+    });
+    const doc = await create({ type: "example", text: "Ick bin da.", targetWord: word.id });
+    await payload.delete({ collection: "words", id: word.id });
+    const upd = await payload.update({
+      collection: "suggestions",
+      id: doc.id,
+      data: { status: "rejected" },
+      depth: 0,
+    });
+    expect(upd.status).toBe("rejected");
+    await expect(create({ type: "example", text: "Ick bin da." })).rejects.toThrow();
+  });
 });

@@ -20,12 +20,13 @@ const audioRows = (name: string): Field => ({
   fields: [gender, { name: "audio", type: "upload", relationTo: "media" }],
 });
 
-/** comments.word, word_feedback.word_id and word_stats.word_id are required (not-null FK): take the word's comments, feedback and daily stats along. Top-level comments first, their hook removes the replies. */
+/** comments.word, word_feedback.word_id, word_stats.word_id and reports.word_id are required (not-null FK): take the word's comments, feedback, daily stats and reports along. Top-level comments first, their hook removes the replies. */
 const deleteComments: CollectionBeforeDeleteHook = async ({ id, req }) => {
   const where = { word: { equals: id } };
-  // Feedback and stats have no hooks: one SQL delete each instead of one payload.delete per row (it throws on failure).
+  // Feedback, stats and reports have no hooks: one SQL delete each instead of one payload.delete per row (it throws on failure).
   await req.payload.db.deleteMany({ collection: "word-feedback", where, req });
   await req.payload.db.deleteMany({ collection: "word-stats", where, req });
+  await req.payload.db.deleteMany({ collection: "reports", where, req });
   // A bulk delete reports per-document failures in `errors` instead of throwing: a row left behind would only
   // surface later as an opaque not-null FK error on the word delete.
   const { errors } = await req.payload.delete({
