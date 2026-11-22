@@ -198,7 +198,7 @@
       color: var(--color-text-body);
 
       &::before {
-        content: "+";
+        content: "+" / "";
         font-weight: var(--font-weight-bold);
         color: var(--color-accent-active);
       }

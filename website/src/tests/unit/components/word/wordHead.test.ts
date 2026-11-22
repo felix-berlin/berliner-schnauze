@@ -89,6 +89,17 @@ describe("WordHead.astro", () => {
     expect(html).toContain("2 weitere Jeschichten");
   });
 
+  it("passes trend and word of the day on to the badges", async () => {
+    const html = await render({
+      model: model({
+        trend: { change: null, kind: "beliebt", rank: 7, views7: 5 },
+        wotd: { date: "2026-11-22" },
+      }),
+    });
+    expect(html).toContain("Gerade beliebt · Platz 7");
+    expect(html).toContain("Wort des Tages");
+  });
+
   it("shows the word as h1 with its article, the syllables and the meaning", async () => {
     const html = await render({ model: model({ stress: "erste Silbe" }) });
     expect(html).toMatch(/<h1[^>]*>[\s\S]*Testwort/);
