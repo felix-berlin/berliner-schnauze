@@ -3,7 +3,7 @@
   "extends": ["config:best-practices", ":semanticCommitTypeAll(chore)"],
   "timezone": "Europe/Berlin",
   "schedule": ["before 6am every weekday"],
-  "minimumReleaseAge": "3 days",
+  "minimumReleaseAge": "2 days",
   "internalChecksFilter": "strict",
   "prConcurrentLimit": 0,
   "prHourlyLimit": 0,
@@ -23,7 +23,7 @@
       "description": "Only stable (non-0.x) patch updates automerge; minor/major stay PRs for review",
       "matchUpdateTypes": ["patch"],
       "automerge": true,
-      "minimumReleaseAge": "3 days",
+      "minimumReleaseAge": "2 days",
       "matchCurrentVersion": "!/^0/"
     },
     {
@@ -111,6 +111,26 @@
       "matchUpdateTypes": ["digest", "pin"],
       "minimumReleaseAge": null,
       "automerge": false
+    },
+    {
+      "description": "astro check does not support TypeScript 7 yet (PR #1860); drop once astro check or @astrojs/ts-content-mapper supports it",
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "<7"
+    },
+    {
+      "description": "Payload's graphql peer is ^16.8.1 (PR #1840); drop once Payload accepts 17",
+      "matchPackageNames": ["graphql"],
+      "allowedVersions": "<17"
+    },
+    {
+      "description": "Override for the @actions/http-client chain (declares undici ^6), only the audit fix is wanted (PR #1901)",
+      "matchPackageNames": ["undici@6"],
+      "allowedVersions": "<7"
+    },
+    {
+      "description": "11.15+ calls getModuleInfo().isEntry in an SSR transform, which throws in `astro sync` with CI=true on Vite 8 (PR #1907, still in 11.16.0); drop once fixed upstream",
+      "matchPackageNames": ["@sentry/astro"],
+      "allowedVersions": "<11.15.0"
     },
     {
       "description": "Node major follows the image/CI, bumped by hand",
