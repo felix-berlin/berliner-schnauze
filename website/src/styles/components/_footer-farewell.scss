@@ -1,0 +1,172 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Footer v21 farewell on the dark band (docs/superpowers/specs/2026-11-22-footer-v21-design.md; handoff SPEC §5, §9).
+// Parts: .text (.bye struck through, .title, .sentence), .kalle (the waving bear), .sign (holds the word sign, a nested
+// component placed here by grid). data-variant: sign (word sign shown) or plain (Kalle on the right, no sign).
+// Layout: below 808px and on tablet text and Kalle sit side by side with the sign underneath; from 1000px with a sign
+// text, Kalle and sign sit right of the text and Kalle overlaps the sign.
+@include mx.component("footer-farewell") {
+  :scope {
+    --_title: 2.6rem; // SPEC mobile; tablet 3.25rem, desktop 3.5rem, above the 4xl step
+    --_overlap: 1.875rem; // SPEC: Kalle overlaps the sign by 30px
+    --_strike-top: 55%; // strike line through the middle of the x-height
+    --_gap-sign: 3.5rem; // SPEC 56px gap between text and Kalle, between the space-12 and space-16 steps
+    --_reveal: 0.5s; // SPEC §9 durations
+    --_strike-delay: 0.25s; // SPEC §9
+    --_rise-delay: 0.45s; // SPEC §9
+    --_reveal-ease: cubic-bezier(0.6, 0, 0.3, 1); // SPEC §9 strike-through
+
+    container: footer-farewell / inline-size;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto; // minmax(0, …): the text must not widen the row past a 300px screen
+    gap: var(--space-6);
+    align-items: end;
+    color: var(--band-text);
+  }
+
+  .text {
+    grid-column: 1;
+  }
+
+  .kalle {
+    grid-column: 2;
+    align-self: end;
+  }
+
+  .sign {
+    --_sign-width: 100%; // SPEC mobile: full width
+    --footer-word-sign-width: var(--_sign-width);
+
+    grid-column: 1 / -1;
+
+    @container footer-farewell (inline-size >= 50.5rem) {
+      --_sign-width: 25rem; // SPEC 400px
+    }
+  }
+
+  .bye {
+    position: relative;
+    display: inline-block;
+    margin: 0 0 var(--space-1);
+    font-size: var(--font-size-lg);
+    color: var(--band-text-quiet);
+
+    // The strike-through is its own line so it can draw in (SPEC §9).
+    &::after {
+      position: absolute;
+      inset-inline: 0;
+      inset-block-start: var(--_strike-top);
+      block-size: 2px; // SPEC strike line, no border token this thin
+      content: "";
+      background: var(--color-accent-active);
+      transform-origin: left center;
+    }
+  }
+
+  .title {
+    margin: 0;
+    font-family: var(--font-condensed);
+    font-size: var(--_title);
+    font-weight: 800; // Fira 800, no weight token between bold and black
+    line-height: 0.9;
+    color: var(--band-text-strong);
+    text-transform: uppercase;
+    letter-spacing: 0.5px; // SPEC tracking
+
+    @container footer-farewell (inline-size >= 50.5rem) {
+      --_title: 3.25rem;
+    }
+    @container footer-farewell (inline-size >= 62.5rem) {
+      --_title: 3.5rem;
+    }
+  }
+
+  .sentence {
+    max-inline-size: 38ch;
+    margin: var(--space-4) 0 0;
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+
+    @container footer-farewell (inline-size >= 50.5rem) {
+      font-size: var(--font-size-lg);
+    }
+  }
+
+  :scope[data-variant="sign"] {
+    @container footer-farewell (inline-size >= 62.5rem) {
+      grid-template-columns: 1fr auto auto;
+      column-gap: 0;
+      align-items: center;
+    }
+  }
+
+  // Desktop with sign: text | Kalle | sign in one row, Kalle in front of the sign's edge.
+  :scope[data-variant="sign"] .text {
+    @container footer-farewell (inline-size >= 62.5rem) {
+      margin-inline-end: var(--_gap-sign);
+    }
+  }
+
+  :scope[data-variant="sign"] .kalle {
+    @container footer-farewell (inline-size >= 62.5rem) {
+      position: relative;
+      z-index: var(--z-raised);
+      margin-inline-end: calc(-1 * var(--_overlap));
+    }
+  }
+
+  :scope[data-variant="sign"] .sign {
+    @container footer-farewell (inline-size >= 62.5rem) {
+      grid-column: 3;
+    }
+  }
+
+  // Entry (SPEC §9): armed only once a hydrated page set data-state, so no JS or reduced motion shows the end state.
+  :scope[data-state="armed"] {
+    @include butler-mx.feature("motion") {
+      .bye::after {
+        transform: scaleX(0);
+      }
+
+      .title {
+        opacity: 0;
+        translate: 0 14px;
+      }
+    }
+  }
+
+  :scope[data-state="in"] {
+    @include butler-mx.feature("motion") {
+      .bye::after {
+        animation: footer-farewell-strike var(--_reveal) var(--_strike-delay) var(--_reveal-ease)
+          backwards;
+      }
+
+      .title {
+        animation: footer-farewell-rise var(--_reveal) var(--_rise-delay) ease backwards;
+      }
+    }
+  }
+
+  @keyframes footer-farewell-strike {
+    0% {
+      transform: scaleX(0);
+    }
+
+    100% {
+      transform: scaleX(1);
+    }
+  }
+  @keyframes footer-farewell-rise {
+    0% {
+      opacity: 0;
+      translate: 0 14px;
+    }
+
+    100% {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+}

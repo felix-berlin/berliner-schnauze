@@ -2,6 +2,129 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.15.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.15.0...v4.15.1) (2026-11-22)
+
+
+### Bug Fixes
+
+* **dev:** keep footer farewell row inside 300px screens ([942cd2b](https://github.com/felix-berlin/berliner-schnauze/commit/942cd2b37ab703b093263661f0ad04bf02994bf2))
+
+# [4.15.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.14.2...v4.15.0) (2026-11-22)
+
+
+### Bug Fixes
+
+* **footer:** clip horizontal overflow of the sign, update the old footer e2e, parse HTML in the test helper ([6d74e28](https://github.com/felix-berlin/berliner-schnauze/commit/6d74e2884b383acf936c31a83410db647e2d1f22))
+* **footer:** review fixes for hydration, error reporting and naming ([b94ddfe](https://github.com/felix-berlin/berliner-schnauze/commit/b94ddfea7d057fdffa4da75db9cc6be4c0dd0aba))
+
+
+### Features
+
+* **footer:** add app callout store ([83a6839](https://github.com/felix-berlin/berliner-schnauze/commit/83a683991a4064b36453c9361efa613fa8bf7350))
+* **footer:** add band and sign tokens ([ad7172d](https://github.com/felix-berlin/berliner-schnauze/commit/ad7172dee45d7780d5d835320c3b0477f4a5755d))
+* **footer:** add farewell and closing callouts ([782f870](https://github.com/felix-berlin/berliner-schnauze/commit/782f8706b7de5920bd6e09c1e7a1937f0b3f6481))
+* **footer:** add footer words service ([119bf75](https://github.com/felix-berlin/berliner-schnauze/commit/119bf756da11b026e2500c49e71dd789f205ace5))
+* **footer:** add word pick and cycle logic ([5cf994c](https://github.com/felix-berlin/berliner-schnauze/commit/5cf994c666f9fd26d48ef68075ccf78dfe911ce3))
+* **footer:** add word sign ([4290b01](https://github.com/felix-berlin/berliner-schnauze/commit/4290b01c02e586c78a88f2f08e642924b079c3ef))
+* **footer:** replace the footer with v21 ([da197cb](https://github.com/felix-berlin/berliner-schnauze/commit/da197cbb24490873874818360431fed6ce013eb5))
+* **footer:** take the page and legal links from the CMS menus, steady the reduced-motion e2e ([31fb61e](https://github.com/felix-berlin/berliner-schnauze/commit/31fb61ee33132fad04f06f67abc608f5145d8b08))
+
+
+### Performance Improvements
+
+* **footer:** pick sign words without copying the list and skip the pick on callout pages ([10e1d7f](https://github.com/felix-berlin/berliner-schnauze/commit/10e1d7fcf84138f1c3f5458c3230f9858fb023c3))
+
+## [4.14.2](https://github.com/felix-berlin/berliner-schnauze/compare/v4.14.1...v4.14.2) (2026-11-21)
+
+
+### Bug Fixes
+
+* **home:** never leave the BON trial card column empty ([ca77909](https://github.com/felix-berlin/berliner-schnauze/commit/ca77909bfaeed4561ecf7453f7fc77195401c067))
+
+## [4.14.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.14.0...v4.14.1) (2026-11-21)
+
+
+### Bug Fixes
+
+* **home:** keep the search list above the band below the stage ([6bb506c](https://github.com/felix-berlin/berliner-schnauze/commit/6bb506cd1cdf7f834989b86669f9f2e59f647372))
+
+# [4.14.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.13.0...v4.14.0) (2026-11-21)
+
+
+### Bug Fixes
+
+* **cms:** link seeded home texts and seed browse links ([d3e9f48](https://github.com/felix-berlin/berliner-schnauze/commit/d3e9f48edb3a544e0d678065786534fe9e617764))
+* **cms:** stop seed:home from running the dev seed instead of itself ([d276889](https://github.com/felix-berlin/berliner-schnauze/commit/d27688989af0de857d153b8b3fe8eedec8883aa1))
+* **cms:** use real chip icons for home browse links ([8a64390](https://github.com/felix-berlin/berliner-schnauze/commit/8a64390760bf441dbbd8b4c83e95f739126d3475))
+* **dev:** declare light dark color scheme in head and on root ([cdfd341](https://github.com/felix-berlin/berliner-schnauze/commit/cdfd34192323d6ea93d624fb7a91cc561d876448))
+* **dev:** follow system scheme changes and share theme-color values ([041fbb5](https://github.com/felix-berlin/berliner-schnauze/commit/041fbb54f768a1a7da196f91f61fb16b736ec8b6))
+* **dev:** include css and fonts in the sonda client report ([1a5ce89](https://github.com/felix-berlin/berliner-schnauze/commit/1a5ce89c253845ec2ab851ce39a0f069f7c8adb0))
+* **dev:** keep the light root default, cover aria-current in forced colors ([1ae882d](https://github.com/felix-berlin/berliner-schnauze/commit/1ae882d3e75dd41cfc5f6975a407622989bb6be1))
+* **dev:** keep the stats seed within the payload tsconfig lib ([a0bf20d](https://github.com/felix-berlin/berliner-schnauze/commit/a0bf20da9d4465c61b4b2917cfc6b7a948cb132d))
+* **dev:** opt into OS text scale and drop the last px font size ([cff1240](https://github.com/felix-berlin/berliner-schnauze/commit/cff1240d3af5f025717e1172daeb92fda934112e))
+* **dev:** scope spatial motion to no-preference in migrated components ([4097878](https://github.com/felix-berlin/berliner-schnauze/commit/40978786bf2f7c0ef2cd2797db52d69fe0f3bf36))
+* **dev:** seed votes for the most viewed words so the popular list shows shares ([e7def3d](https://github.com/felix-berlin/berliner-schnauze/commit/e7def3d58fda4c0a7baecc3d5c0aa0086dcfb4fc))
+* **dev:** skip empty sonda reports from the image-service build ([e4635b3](https://github.com/felix-berlin/berliner-schnauze/commit/e4635b348c256a223dded741b4808616f391e83e))
+* **dev:** stop thinning the global scrollbar ([1a33b6b](https://github.com/felix-berlin/berliner-schnauze/commit/1a33b6bbf898c672ff920aa036078c004941c3ce))
+* **dev:** write the placeholder IPA to published words directly so the seed repeats cleanly ([ba840df](https://github.com/felix-berlin/berliner-schnauze/commit/ba840df822d955623bd9dcfa1baf15ce722687fc))
+* **e2e:** compare the animation duration as a number ([f0093cd](https://github.com/felix-berlin/berliner-schnauze/commit/f0093cd095ebbbe377855e97b4fbc247dd58890b))
+* **home:** anchor the magazine outline to the screen edge, add NO_TTL_CACHE for dev ([f3f3c16](https://github.com/felix-berlin/berliner-schnauze/commit/f3f3c163d4d0e843c78532dc3ed0541a2824daa5))
+* **home:** button variants secondary and soft, faq font, gap box, band actions ([591886a](https://github.com/felix-berlin/berliner-schnauze/commit/591886a3bb116424f6a40469ba5a543fa159fa89))
+* **home:** compare typical words against their own Berlin average ([1e65f49](https://github.com/felix-berlin/berliner-schnauze/commit/1e65f494d9871c03aa854faf67617caeb541deb2))
+* **home:** degrade the start page per source and tighten its types and tests ([c1225e4](https://github.com/felix-berlin/berliner-schnauze/commit/c1225e4978435c5d8e63c1fc6ca939a156d1f602))
+* **home:** drop the topic register below three topics ([4fd7445](https://github.com/felix-berlin/berliner-schnauze/commit/4fd7445d491bf78227f727df89d15547d303f956))
+* **home:** give the dot map districts an explicit group role ([99f715b](https://github.com/felix-berlin/berliner-schnauze/commit/99f715be316483b8182923ac5f438f9cca060a49))
+* **home:** hide trashed words from the start-page stats and harden the seeds ([a4b97db](https://github.com/felix-berlin/berliner-schnauze/commit/a4b97dba019f3ef26517232fc363187c803ffb18))
+* **home:** keep the sticky rules box below the site header ([723d4cc](https://github.com/felix-berlin/berliner-schnauze/commit/723d4cc9a1c2be3e97e3959f60cc9e325dc12a4a))
+* **home:** keep the trial card swipeable ([9edfa63](https://github.com/felix-berlin/berliner-schnauze/commit/9edfa6301095988986d46d301c92fd70bc7451b8))
+* **home:** make inline search render on the server ([831c8a8](https://github.com/felix-berlin/berliner-schnauze/commit/831c8a824823ad4d51d6d6417ec9760aada0e5fb))
+* **home:** make the tag-stripping regex linear (CodeQL polynomial-redos) ([f6c444b](https://github.com/felix-berlin/berliner-schnauze/commit/f6c444b817e516d8e36fdebc7cff072f2c708adb))
+* **home:** poll result card uses the body font and the ok-bg tint ([6e890f9](https://github.com/felix-berlin/berliner-schnauze/commit/6e890f981bc873b3d874073f3581e89d511e5434))
+* **home:** read the standard form in sound rules aloud ([80942a8](https://github.com/felix-berlin/berliner-schnauze/commit/80942a8179c47849445b9e0b25bdb8ba8460a46a))
+* **home:** require a typical word to exceed its Berlin average ([12cc389](https://github.com/felix-berlin/berliner-schnauze/commit/12cc3892d9ddc96048cdee36a2243d1d0e64dd7e))
+* **home:** show age word meanings and exact band colours ([0f693ed](https://github.com/felix-berlin/berliner-schnauze/commit/0f693ed6784f62e29c9c3d221ebacc5a008b349e))
+* **home:** show rising meanings and let the result card grow ([d853bcc](https://github.com/felix-berlin/berliner-schnauze/commit/d853bcc342164d6fca72f2f8cfdad7a5cc68f6e6))
+* **home:** show the stage outline uncut at the bottom ([240b120](https://github.com/felix-berlin/berliner-schnauze/commit/240b120dd4536d44004a3d111244ec6aa861b7db))
+* **home:** space the morse marks by their real length so dots and dashes read apart ([8849091](https://github.com/felix-berlin/berliner-schnauze/commit/8849091ffe261fbb8a188afc1e79592df4a3e932))
+* **home:** strip html through one shared helper (CodeQL) ([ebda520](https://github.com/felix-berlin/berliner-schnauze/commit/ebda520ca8f8bdcbdbd5a048403640baa6a51738))
+* **home:** sync seal marks with audio playback start ([f29aadd](https://github.com/felix-berlin/berliner-schnauze/commit/f29aadd351553dcb1a5ef443148cf1b2bad0caa6))
+* **home:** the disabled install button keeps the primary look via button knobs ([0f2378d](https://github.com/felix-berlin/berliner-schnauze/commit/0f2378de52244753401b006fcc2c356ee1c2bdab))
+* **home:** the knowledge text shows on desktop whatever the details state ([08911e0](https://github.com/felix-berlin/berliner-schnauze/commit/08911e04ed383219250a49bbcdd44541ff949e4c))
+* **home:** the magazine teaser skips posts without a quote instead of dropping ([b9dd4b1](https://github.com/felix-berlin/berliner-schnauze/commit/b9dd4b188b0e96a70be5dda30ca27adba2649b45))
+* **home:** the magazine teaser spans the full width and the dev outline is short ([897903d](https://github.com/felix-berlin/berliner-schnauze/commit/897903db5d425350d064e509452cc6a32de62a62))
+* **home:** the play button keeps dark text on white in dark mode ([09f0d49](https://github.com/felix-berlin/berliner-schnauze/commit/09f0d49cced16e4063f438accd8ada5e13d7c3b0))
+* **home:** the recording button is a coming-soon tooltip button ([410adef](https://github.com/felix-berlin/berliner-schnauze/commit/410adef56feb468fe984e6113da0fedc20599007))
+* **home:** the stage outline sits at the bottom of the whole band, not of the word block ([65d7467](https://github.com/felix-berlin/berliner-schnauze/commit/65d746707ee86264a99ed20f726b27f439f7dfa6))
+* **home:** the stage outline spans the whole screen instead of the centred column ([fc586f3](https://github.com/felix-berlin/berliner-schnauze/commit/fc586f3f500d9775a28d027ff975adf6fff08663))
+* **home:** the whole district area is the dot map hover and tap target ([b17dc45](https://github.com/felix-berlin/berliner-schnauze/commit/b17dc4555a84b0f64427c991d3a7063958706ca7))
+* **home:** tooltips for the morse ring and the missing recording, stage spacing ([00ce35e](https://github.com/felix-berlin/berliner-schnauze/commit/00ce35edf7a9d018033c99438886c1b39e6ce795))
+* **search:** redirect old /?q= page loads to /suche ([8ca6243](https://github.com/felix-berlin/berliner-schnauze/commit/8ca62431f9aabd3f71aa05e63ddba40b21fe65bb))
+
+
+### Features
+
+* **cms:** add home page fields and word ipa ([58be1f4](https://github.com/felix-berlin/berliner-schnauze/commit/58be1f410b176db06617fc485163d35842bfa8ef))
+* **cms:** seed home page texts ([4e952ac](https://github.com/felix-berlin/berliner-schnauze/commit/4e952ac93085eb3661e602674118e9e40289b93b))
+* **dev:** add seed:home-stats for invented votes in the worktree database ([44f3b8e](https://github.com/felix-berlin/berliner-schnauze/commit/44f3b8e5a647534fa6db06021e60db67b7aec3fc))
+* **dev:** keep hover and selected states visible in forced colors ([f53ba7c](https://github.com/felix-berlin/berliner-schnauze/commit/f53ba7c06b9d6e1d0d6dc464eeb333fa7068739b))
+* **dev:** seed placeholder IPA for the next 30 words of the day ([eb194d4](https://github.com/felix-berlin/berliner-schnauze/commit/eb194d4f8a883d27037d43f3e3f35d011de4511b))
+* **dev:** seed topic speech bubbles for the start page ([af60d89](https://github.com/felix-berlin/berliner-schnauze/commit/af60d89c229082f3220770802a158f7b90548f1d))
+* **dev:** tint native form controls with the accent token ([ba34ac2](https://github.com/felix-berlin/berliner-schnauze/commit/ba34ac2e1d45c643089a2155edff55221a183681))
+* **home:** add fetchHome service ([4b73b68](https://github.com/felix-berlin/berliner-schnauze/commit/4b73b68fc8d0fe979667eac60f38a4a981bf5bde))
+* **home:** add game teaser and fresh lists ([71a42f4](https://github.com/felix-berlin/berliner-schnauze/commit/71a42f4bba9b59e3d66204a9dab0dfd99bea5bb4))
+* **home:** add home stats helpers ([951ea6f](https://github.com/felix-berlin/berliner-schnauze/commit/951ea6f2e97c70bb244cc7ed5ff813caa70d83c1))
+* **home:** add home stats loader and endpoint ([c296044](https://github.com/felix-berlin/berliner-schnauze/commit/c296044b62e4a6654e45c687b8b3d337617f4e5e))
+* **home:** add inline search ([9c8fd12](https://github.com/felix-berlin/berliner-schnauze/commit/9c8fd12d112dd33989a998e3b5090b671ed8b34a))
+* **home:** add knowledge, faq, magazine, gap and to-go sections ([ab0460d](https://github.com/felix-berlin/berliner-schnauze/commit/ab0460d289177a0a202ea64252c3d01077ac3c76))
+* **home:** add palette v13 tokens and condensed font ([7a4bd3d](https://github.com/felix-berlin/berliner-schnauze/commit/7a4bd3db5f7fb9a151aa3ffb9da47722830ec9b0))
+* **home:** add poll and topic register ([51feff1](https://github.com/felix-berlin/berliner-schnauze/commit/51feff1d3c74e46dfc375455613c59cea2546442))
+* **home:** add results band with dot map and age profile ([7075ecd](https://github.com/felix-berlin/berliner-schnauze/commit/7075ecd445911587db96585eda9df891f83273f1))
+* **home:** add stage, word seal and browse chips ([41b8d7c](https://github.com/felix-berlin/berliner-schnauze/commit/41b8d7cc0c31fbb57c9f9bd2599478f70837fde5))
+* **home:** assemble start page, seo and reveal motion ([659dd62](https://github.com/felix-berlin/berliner-schnauze/commit/659dd626b047df51cebaf336c99d23ef69924995))
+* **kalle:** add BerlinerBaer component, tokens and generator ([b25d455](https://github.com/felix-berlin/berliner-schnauze/commit/b25d455318db3ffb8287eab49575560aba0a8715))
+* **search:** add /suche page with the word search ([9a68cb1](https://github.com/felix-berlin/berliner-schnauze/commit/9a68cb11f83ee2a848e60fc58d1eee6682452d6e))
+* **search:** move the word search off the home page ([32b5eb3](https://github.com/felix-berlin/berliner-schnauze/commit/32b5eb3e4affb0dbebac57eaac2c4fc91b0fdd1e))
+
 # [4.13.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.12.8...v4.13.0) (2026-11-19)
 
 

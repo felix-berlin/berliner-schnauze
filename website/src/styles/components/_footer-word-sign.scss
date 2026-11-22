@@ -1,0 +1,231 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Footer v21 word sign, the only card in the footer (docs/superpowers/specs/2026-11-22-footer-v21-design.md; "SPEC" is
+// the handoff SPEC.md that doc quotes, §5.1, §8, §9). Parts: .inner (padding, responds to the sign's own width) holding
+// .body (label, .head with .lemma link and .kind, .meaning, .example) and .actions (the "Noch eens" button).
+// Public: --footer-word-sign-width. A size-containment root has no intrinsic width, so a parent that sizes it by
+// content (e.g. an auto grid column) must set it; the fallback is min(25rem, 100%). _footer-farewell.scss sets it.
+// The sign is paper-coloured on the dark footer band, so it uses the fixed --sign-* tokens.
+@include mx.component("footer-word-sign") {
+  :scope {
+    --_width: 25rem; // SPEC sign width 400px
+    --_label: 0.8125rem; // SPEC 13px label: --font-size-sm is 12.8px, below the 13px minimum
+    --_lemma: clamp(1.75rem, 11cqi, 2.75rem); // fluid with the sign's own width: SPEC 44px at 400px, about 36px on phones
+    --_lemma-long: clamp(1.5rem, 7cqi, 2rem); // long lemmas (data-long, > 14 letters): smaller so they wrap onto fewer lines; a 36-letter word still takes three
+    --_tilt: -1.5deg; // SPEC rest angle
+    --_pad-inline: 1.75rem; // SPEC 28px side padding, between the space-6 and space-8 steps
+    --_swing: 1.1s; // SPEC §9 entry swing, no duration token this long
+    --_swing-delay: 0.6s; // SPEC §9
+    --_swing-ease: cubic-bezier(0.3, 1.4, 0.5, 1); // SPEC §9 overshoot
+    --_flip: 0.45s; // SPEC §9 flip on "Noch eens"
+    --_flip-ease: cubic-bezier(0.2, 0.8, 0.2, 1); // SPEC §9
+    --_reserve: 20rem; // two-line lemma + two-line meaning and example + button; a swap keeps the height unless a lemma wraps onto a third line (about 17+ letters)
+    --focus-ring-color: var(--sign-accent);
+
+    container: footer-word-sign / inline-size;
+    box-sizing: border-box;
+    inline-size: var(--footer-word-sign-width, min(var(--_width), 100%));
+    min-block-size: var(--_reserve);
+    color: var(--sign-text);
+    background: var(--sign-bg);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-paper-lift);
+
+    @include butler-mx.feature("motion") {
+      rotate: var(--_tilt);
+    }
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-block-size: inherit;
+    padding: var(--space-6) var(--_pad-inline) var(--space-5); // SPEC 24/28/22px
+
+    @container footer-word-sign (inline-size < 25rem) {
+      padding: var(--space-5); // SPEC mobile 20px
+    }
+  }
+
+  .body {
+    display: grid;
+    flex: 1;
+    gap: var(--space-2);
+    align-content: start;
+  }
+
+  .label {
+    margin: 0;
+    font-size: var(--_label);
+    font-weight: var(--font-weight-bold);
+    color: var(--sign-text-quiet);
+    text-transform: uppercase;
+    letter-spacing: 2px; // SPEC label tracking, no letter-spacing token
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-3);
+    align-items: baseline;
+    margin: 0;
+  }
+
+  .lemma {
+    display: inline-block;
+    min-block-size: var(--size-tap-target);
+    font-size: var(--_lemma);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1;
+    color: var(--sign-accent);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+    text-underline-offset: var(--space-1);
+    text-decoration-thickness: var(--radius-xs); // SPEC hover underline 3px
+
+    &[data-long] {
+      font-size: var(--_lemma-long);
+    }
+
+    &:hover {
+      text-decoration-line: underline;
+    }
+  }
+
+  .kind {
+    font-size: var(--font-size-xl);
+    color: var(--sign-text-quiet);
+  }
+
+  .meaning,
+  .example {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+  }
+
+  .meaning {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.3;
+  }
+
+  .example {
+    font-style: italic;
+    font-size: var(--font-size-lg);
+    line-height: 1.4;
+    color: var(--sign-text-example);
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-block-start: var(--space-3);
+    border-block-start: 1px solid var(--sign-line);
+  }
+
+  button {
+    display: inline-flex;
+    gap: var(--space-2);
+    align-items: center;
+    min-block-size: var(--size-tap-target);
+    padding-inline: var(--space-4);
+    font: inherit;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--sign-text);
+    cursor: pointer;
+    background: transparent;
+    border: 1.5px dashed var(--sign-border); // SPEC 1.5px dashed
+    border-radius: var(--radius-sm);
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard);
+
+    &:hover {
+      background: var(--sign-bg-hover);
+      border-style: solid;
+      border-color: var(--sign-accent);
+    }
+
+    &[hidden] {
+      display: none;
+    }
+
+    svg {
+      @include butler-mx.feature("motion") {
+        transition: rotate var(--duration-base) var(--ease-standard);
+      }
+    }
+
+    &:hover svg {
+      @include butler-mx.feature("motion") {
+        rotate: -120deg;
+      }
+    }
+
+    &:active {
+      @include butler-mx.feature("motion") {
+        scale: 0.97;
+      }
+    }
+  }
+
+  // Entry: only once a hydrated page armed it (no JS: the sign stays visible as rendered).
+  :scope[data-state="armed"] {
+    @include butler-mx.feature("motion") {
+      opacity: 0;
+      rotate: -9deg;
+      translate: 0 -12px; // SPEC §9 start pose
+    }
+  }
+
+  :scope[data-state="in"] {
+    @include butler-mx.feature("motion") {
+      animation: footer-word-sign-swing var(--_swing) var(--_swing-delay) var(--_swing-ease)
+        backwards;
+    }
+  }
+
+  // A swapped word flips in (SPEC §9: rotateX 80deg to 0, opacity .2 to 1, 0.45s).
+  :scope[data-swapped] .body {
+    @include butler-mx.feature("motion") {
+      animation: footer-word-sign-flip var(--_flip) var(--_flip-ease);
+    }
+  }
+
+  @keyframes footer-word-sign-swing {
+    0% {
+      opacity: 0;
+      rotate: -9deg;
+      translate: 0 -12px;
+    }
+
+    60% {
+      rotate: 1.5deg;
+    }
+
+    100% {
+      opacity: 1;
+      rotate: -1.5deg;
+      translate: 0 0;
+    }
+  }
+  @keyframes footer-word-sign-flip {
+    0% {
+      opacity: 0.2;
+      transform: rotateX(80deg);
+    }
+
+    100% {
+      opacity: 1;
+      transform: rotateX(0);
+    }
+  }
+}

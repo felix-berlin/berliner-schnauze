@@ -1,5 +1,7 @@
 import type { Payload, PayloadRequest } from "payload";
 
+import { sql } from "@payloadcms/db-postgres";
+
 import { htmlToLexical } from "../lib/htmlToLexical";
 
 /** What /anki, the home page and /spenden showed while these texts lived in the Astro pages. */
@@ -104,7 +106,9 @@ export const DONATION_HIGHLIGHTS = ["Keene Werbung", "Keene Tracker", "Open Sour
 /** Fills the anki and home globals and the donation highlights with the texts above. */
 export async function seedSiteContent(
   payload: Payload,
-  req?: Partial<PayloadRequest>,
+  req: Partial<PayloadRequest> | undefined,
+  // The migration's own handle (its transaction sees the tables it just created).
+  db: { execute: (query: ReturnType<typeof sql>) => Promise<unknown> },
 ): Promise<void> {
   const facts = [];
   for (const { headline, html } of HOME_FACTS) {
@@ -112,10 +116,33 @@ export async function seedSiteContent(
     facts.push({ headline, text: await htmlToLexical(`<p>${html}</p>`, payload.config) });
   }
   await payload.updateGlobal({ slug: "anki", data: ANKI_CONTENT, req });
-  await payload.updateGlobal({ slug: "home", data: { facts }, req });
+  // Raw SQL, not the Local API: this runs inside an old migration, and the Local API reads every `home` column,
+  // including those later migrations add (a fresh database would fail here). Only when no `home` row exists yet:
+  // a restored dump or a repeated run must not create a second singleton.
+  const existing = (await db.execute(sql`SELECT "id" FROM "home" LIMIT 1`)) as {
+    rows: unknown[];
+  };
+  if (!existing.rows.length) await insertHome(db, facts);
   await payload.updateGlobal({
     slug: "company",
     data: { donationHighlights: DONATION_HIGHLIGHTS },
     req,
   });
+}
+
+async function insertHome(
+  db: { execute: (query: ReturnType<typeof sql>) => Promise<unknown> },
+  facts: { headline: string; text: unknown }[],
+): Promise<void> {
+  const { rows } = (await db.execute(
+    sql`INSERT INTO "home" ("updated_at", "created_at") VALUES (now(), now()) RETURNING "id"`,
+  )) as { rows: { id: number }[] };
+  const homeId = rows[0]?.id;
+  if (homeId === undefined) throw new Error("seedSiteContent: the home insert returned no id");
+  for (const [i, fact] of facts.entries()) {
+    // oxlint-disable-next-line no-await-in-loop -- five rows
+    await db.execute(
+      sql`INSERT INTO "home_facts" ("_order", "_parent_id", "id", "headline", "text") VALUES (${i + 1}, ${homeId}, ${crypto.randomUUID()}, ${fact.headline}, ${JSON.stringify(fact.text)}::jsonb)`,
+    );
+  }
 }

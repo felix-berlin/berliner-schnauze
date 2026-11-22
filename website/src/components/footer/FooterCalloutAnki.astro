@@ -1,0 +1,43 @@
+---
+import '@styles/components/_footer-callout.scss';
+import ArrowUpRight from '~icons/lucide/arrow-up-right';
+
+interface Props {
+  /** Full-deck checkout link; without it there is no button. */
+  checkoutUrl?: string;
+  price?: string;
+  wordCount: number;
+}
+
+const { checkoutUrl, price, wordCount } = Astro.props;
+const titleId = 'footer-callout-anki';
+---
+
+<section class='c-footer-callout' aria-labelledby={titleId}>
+  <div class='inner u-max-body-width'>
+    <div class='text'>
+      <h2 id={titleId} class='title'>Na los, ab uff die Karten.</h2>
+      <p class='lead'>
+        {wordCount.toLocaleString('de-DE')} Wörter Berliner Schnauze{price && ` für ${price}`}. Weniger als 'ne
+        Currywurst mit Pommes — und neue Wörter kriegste ohne Aufpreis nachgeliefert.
+      </p>
+    </div>
+    {
+      checkoutUrl && (
+        <div class='actions'>
+          <a
+            class='c-button'
+            data-variant='primary center-icon raised xl'
+            href={checkoutUrl}
+            data-track='Click Buy Full|farewell'
+            target='_blank'
+            rel='noopener'
+          >
+            <span>Full-Deck kaufen{price && ` ᛫ ${price}`}</span>
+            <ArrowUpRight width='20' height='20' />
+          </a>
+        </div>
+      )
+    }
+  </div>
+</section>

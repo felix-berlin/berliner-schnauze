@@ -1,0 +1,119 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Start page "Mitmachen" (docs/design/startseite-v20/SPEC.md §12.4, §15-17). Parts: .inner (the dashed box)
+// with .kalle (disc around the BerlinerBaer) and .body (.eyebrow, h2, p, .todo, .actions of c-button links).
+@include mx.component("home-gap") {
+  :scope {
+    --_h2: 2.2rem; // SPEC §12.4 mobile h2 (mock)
+    --_bob: 3.2s; // SPEC §16 Kalle
+    --focus-ring-color: var(--color-accent-active);
+
+    container: home-gap / inline-size;
+  }
+
+  .inner {
+    display: grid;
+    gap: var(--space-6);
+    justify-items: start;
+    padding: var(--space-6);
+    border: 2px dashed var(--color-border-control);
+    border-radius: var(--radius-sm);
+  }
+
+  .kalle {
+    padding: var(--space-4) var(--space-3) var(--space-1);
+    border-radius: var(--radius-pill);
+    background: var(--card2);
+  }
+
+  .eyebrow {
+    margin: 0 0 var(--space-1);
+    font-size: var(--font-size-lg);
+    color: var(--t3);
+
+    s {
+      text-decoration-color: var(--color-accent-active);
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  h2 {
+    margin: 0;
+    font-family: var(--font-condensed);
+    font-size: var(--_h2);
+    font-weight: var(--font-weight-black);
+    line-height: 0.95;
+    text-transform: uppercase;
+    color: var(--color-text-strong);
+  }
+
+  p {
+    max-inline-size: 52ch;
+    margin: var(--space-3) 0 0;
+  }
+
+  // Highlighted box (mock .h20__todo): card2 fill, 4px radius, the count big in the accent colour.
+  .todo {
+    display: inline-block;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-sm);
+    background: var(--card2);
+
+    b {
+      font-family: var(--font-condensed);
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-black);
+      color: var(--color-text-accent);
+    }
+
+    a {
+      margin-inline-start: var(--space-1);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-strong);
+      text-decoration: underline;
+      text-decoration-color: var(--color-accent-active);
+      text-underline-offset: 3px;
+      transition: color var(--duration-fast) var(--ease-standard);
+
+      @include butler-mx.hover {
+        color: var(--color-text-accent);
+        text-decoration-thickness: 2px;
+      }
+    }
+  }
+
+  // Public c-button knobs: the secondary (variant secondary) is dashed at rest (SPEC §12.4), the icon is the mock's 18px plus.
+  .actions {
+    --button-gap: var(--space-2);
+
+    svg {
+      inline-size: 18px;
+      block-size: 18px;
+    }
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-block-start: var(--space-6);
+  }
+
+  @container home-gap (inline-size >= 45.5rem) {
+    .inner {
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: var(--space-12);
+      align-items: center;
+      padding: var(--space-12);
+    }
+
+    h2 {
+      --_h2: 3rem; // SPEC §12.4 (mock)
+    }
+  }
+
+  @include butler-mx.feature("motion") {
+    .kalle {
+      animation: home-bob var(--_bob) ease-in-out infinite;
+    }
+  }
+}

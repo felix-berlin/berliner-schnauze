@@ -27,6 +27,21 @@ export const usageBars = <V extends string>(
     };
   });
 
+/** Whole shares of `counts` that sum to exactly `total` (largest remainder); all 0 without votes. */
+export const largestRemainder = (counts: readonly number[], total = 100): number[] => {
+  const sum = counts.reduce((a, b) => a + b, 0);
+  if (!sum) return counts.map(() => 0);
+  const exact = counts.map((n) => (n / sum) * total);
+  const out = exact.map(Math.floor);
+  let left = total - out.reduce((a, b) => a + b, 0);
+  // Ties go to the earlier answer, so the result is stable.
+  for (const i of exact.map((_, i) => i).sort((a, b) => exact[b] - out[b] - (exact[a] - out[a]))) {
+    if (left-- <= 0) break;
+    out[i]++;
+  }
+  return out;
+};
+
 /** Always one segment per step in `all`, so the bar does not jump when optional steps come or go. */
 export const progressSegments = (
   all: readonly string[],

@@ -53,6 +53,24 @@ export const navigation = {
   ],
   footer1: [
     {
+      title: "Wort-Index",
+      link: "/wort",
+      rel: null,
+      description: null,
+    },
+    {
+      title: "Themen",
+      link: "/themen",
+      rel: null,
+      description: null,
+    },
+    {
+      title: "Berliner oder nich?",
+      link: "/games/berliner-oder-nicht",
+      rel: null,
+      description: null,
+    },
+    {
       title: "Magazin",
       link: "/magazin",
       rel: null,
@@ -61,36 +79,6 @@ export const navigation = {
     {
       title: "Wort vorschlagen",
       link: "/wort-vorschlagen",
-      rel: null,
-      description: null,
-    },
-    {
-      title: "Wort Index",
-      link: "/wort",
-      rel: null,
-      description: null,
-    },
-    {
-      title: "Offline-Cache",
-      link: "/settings/cache",
-      rel: null,
-      description: null,
-    },
-    {
-      title: "Was ist neu?",
-      link: "/changelog",
-      rel: null,
-      description: null,
-    },
-    {
-      title: "tech. Changelog",
-      link: "/technischer-changelog",
-      rel: null,
-      description: null,
-    },
-    {
-      title: "tech. Fehler melden",
-      link: "https://github.com/felix-berlin/berliner-schnauze/issues/new",
       rel: null,
       description: null,
     },

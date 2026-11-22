@@ -5,10 +5,12 @@ import sentry from "@sentry/astro";
 import { AstroPWAIntegration as AstroPWA } from "@vite-pwa/astro";
 import matomo from "astro-matomo";
 import { defineConfig, envField, fontProviders } from "astro/config";
+import { readdir } from "node:fs/promises";
+import { join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { visualizer } from "rollup-plugin-visualizer";
+import { SondaVitePlugin } from "sonda";
 import Icons from "unplugin-icons/vite";
-import { loadEnv } from "vite";
+import { loadEnv, perEnvironmentPlugin } from "vite";
 
 import { sassAliasImporter } from "./sass-aliases.mjs";
 
@@ -19,7 +21,7 @@ const {
   SENTRY_PROJECT,
   PWA_DEBUG,
   CODECOV_TOKEN,
-  BUNDLE_ANALYZER_OPEN,
+  BUNDLE_ANALYZE,
   IMAGOR_HOST,
   E2E_BUILD,
 } = env;
@@ -35,12 +37,54 @@ const uploadsArtifacts = !isE2eBuild && Boolean(process.env.CI);
 
 const SITE_ORIGIN = import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf";
 
-const visualizerPlugin = visualizer({
-  open: BUNDLE_ANALYZER_OPEN === "true",
-  template: "treemap",
-  gzipSize: true,
-  brotliSize: true,
+// `pnpm build:analyze` sets BUNDLE_ANALYZE: Sonda writes one HTML treemap + JSON per Vite environment
+// (client, ssr, prerender) to website/.sonda/sonda_<env>.*, overwritten per run.
+const analyzeBundle = Boolean(BUNDLE_ANALYZE);
+// Not sonda/astro: Astro 7 builds all environments in one builder and calls astro:build:setup once (target "server"),
+// so its single plugin instance writes every environment into the same sonda_server report.
+let finishClientReport = async () => {};
+const sondaPlugin = perEnvironmentPlugin("sonda", (environment) => {
+  if (!analyzeBundle) return false;
+  const isClient = environment.name === "client";
+  const sonda = SondaVitePlugin({
+    format: ["html", "json"],
+    filename: `sonda_${environment.name}`,
+    open: isClient ? "html" : false, // tiny-open reaches the Windows browser from WSL
+    gzip: true,
+    brotli: true,
+  });
+  // Astro's image-service builder fires closeBundle for client/ssr without building them: an empty report (and an
+  // opened browser tab) would follow. Report only environments that wrote output.
+  let wrote = false;
+  return {
+    ...sonda,
+    writeBundle(output, bundle) {
+      wrote = true;
+      // The client report waits for astro:build:done: Astro moves the CSS in from the server build only afterwards.
+      if (isClient)
+        finishClientReport = () =>
+          addLooseAssets(sonda, output.dir, bundle).then(() => sonda.closeBundle());
+      return sonda.writeBundle(output, bundle);
+    },
+    closeBundle() {
+      if (wrote && !isClient) return sonda.closeBundle();
+    },
+  };
 });
+
+// shortcut: Sonda 0.14 drops every non-chunk output (CSS, fonts, images) from its report, so the other files in _astro/
+// go in as entry-less chunks and get their sizes. Upgrade when Sonda reports plain assets itself.
+async function addLooseAssets(sonda, dir, bundle) {
+  const files = await readdir(resolve(dir, "_astro"), { recursive: true, withFileTypes: true });
+  const loose = files
+    .filter((file) => file.isFile())
+    .map((file) => relative(dir, join(file.parentPath, file.name)))
+    .filter((path) => bundle[path]?.type !== "chunk");
+  return sonda.writeBundle(
+    { dir },
+    Object.fromEntries(loose.map((path) => [path, { type: "chunk", facadeModuleId: null }])),
+  );
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -116,6 +160,83 @@ export default defineConfig({
             weight: 900,
             style: "normal",
             src: ["./src/assets/fonts/BerlinX-Bold.woff2"],
+          },
+        ],
+      },
+    },
+    {
+      provider: fontProviders.local(),
+      name: "Fira Sans Extra Condensed",
+      cssVariable: "--font-condensed",
+      // Metric-adjusted Arial fallback (Astro generates size-adjust/overrides) against CLS.
+      fallbacks: ["Arial Narrow", "Arial", "sans-serif"],
+      display: "swap",
+      optimizedFallbacks: true,
+      options: {
+        variants: [
+          {
+            weight: 600,
+            style: "normal",
+            src: [
+              "./node_modules/@fontsource/fira-sans-extra-condensed/files/fira-sans-extra-condensed-latin-600-normal.woff2",
+            ],
+            unicodeRange: [
+              "U+0000-00FF",
+              "U+0131",
+              "U+0152-0153",
+              "U+02BB-02BC",
+              "U+02C6",
+              "U+02DA",
+              "U+02DC",
+              "U+0304",
+              "U+0308",
+              "U+0329",
+              "U+2000-206F",
+              "U+20AC",
+              "U+2122",
+              "U+2191",
+              "U+2193",
+              "U+2212",
+              "U+2215",
+              "U+FEFF",
+              "U+FFFD",
+            ],
+          },
+          {
+            weight: 800,
+            style: "normal",
+            src: [
+              "./node_modules/@fontsource/fira-sans-extra-condensed/files/fira-sans-extra-condensed-latin-800-normal.woff2",
+            ],
+            unicodeRange: [
+              "U+0000-00FF",
+              "U+0131",
+              "U+0152-0153",
+              "U+02BB-02BC",
+              "U+02C6",
+              "U+02DA",
+              "U+02DC",
+              "U+0304",
+              "U+0308",
+              "U+0329",
+              "U+2000-206F",
+              "U+20AC",
+              "U+2122",
+              "U+2191",
+              "U+2193",
+              "U+2212",
+              "U+2215",
+              "U+FEFF",
+              "U+FFFD",
+            ],
+          },
+          {
+            weight: 800,
+            style: "normal",
+            src: [
+              "./node_modules/@fontsource/fira-sans-extra-condensed/files/fira-sans-extra-condensed-latin-ext-800-normal.woff2",
+            ],
+            unicodeRange: ["U+0100-02AF"],
           },
         ],
       },
@@ -255,11 +376,6 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
-      BUNDLE_ANALYZER_OPEN: envField.boolean({
-        context: "server",
-        access: "public",
-        default: false,
-      }),
       PUBLIC_VAPID_PUBLIC_KEY: envField.string({
         context: "client",
         access: "public",
@@ -302,6 +418,7 @@ export default defineConfig({
   },
   compressHTML: true,
   integrations: [
+    { name: "sonda-client-report", hooks: { "astro:build:done": () => finishClientReport() } },
     // Server SDK + source map upload. The client SDK stays our own lazy init (src/plugins/sentryBrowser.ts): with
     // enabled.client the integration would inject an eager one. Source maps only for CI deploy builds.
     sentry({
@@ -618,7 +735,7 @@ export default defineConfig({
           }
         },
       }), // chooses the compiler automatically
-      visualizerPlugin,
+      sondaPlugin,
     ],
 
     css: {
@@ -631,7 +748,7 @@ export default defineConfig({
     },
 
     build: {
-      sourcemap: uploadsArtifacts, // only needed for the Sentry source map upload (~9s), which is skipped for local and e2e builds
+      sourcemap: uploadsArtifacts || analyzeBundle, // Sentry upload (~9s, skipped for local and e2e builds) and Sonda need them
       target: "esnext",
       cssMinify: "esbuild",
       rolldownOptions: {

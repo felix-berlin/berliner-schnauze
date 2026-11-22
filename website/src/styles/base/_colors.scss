@@ -1,5 +1,8 @@
 @layer base {
   // Colour values live in the tokens (src/styles/tokens); light-dark() follows this switch.
+  // Default stays "light": legacy files still hide dark overrides behind the .dark class, which only
+  // SetColorMode sets, so "light dark" would render a dark system half dark without JS. Switch the
+  // default to "light dark" once the legacy list is empty (dark-mode guide).
   html {
     color-scheme: light;
 

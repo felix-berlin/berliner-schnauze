@@ -5,9 +5,26 @@ import { test, expect } from "@playwright/test";
 
 import { resultCount } from "./helpers";
 
-test.describe("Filter Sidebar (/)", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/");
+test.describe("Filter Sidebar (/suche)", () => {
+  test.beforeEach(async ({ page, browserName }) => {
+    await page.goto("/suche");
+    // Playwright's WebKit is "unsupported": its persistent toasts arrive ~2 s after load and cover the toggle. Close them once
+    // up front; a locator handler would close them mid-test, and that click counts as outside and shuts the mobile filter drawer.
+    if (browserName === "webkit") {
+      const closeToast = page.getByRole("button", { name: "Benachrichtigung schließen" });
+      await closeToast
+        .first()
+        .waitFor({ state: "visible", timeout: 5_000 })
+        .catch(() => {});
+      await expect
+        .poll(async () => {
+          await closeToast.evaluateAll((buttons) =>
+            buttons.forEach((b) => (b as HTMLElement).click()),
+          );
+          return closeToast.count();
+        })
+        .toBe(0);
+    }
     // On narrow viewports the filter sidebar sits behind a "Filter öffnen" toggle.
     const filterToggle = page.getByRole("button", { name: "Filter öffnen" });
     const opensBehindToggle = await filterToggle

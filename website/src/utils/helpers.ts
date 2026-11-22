@@ -31,22 +31,22 @@ export const randomElement = (elements: any[]): any => {
   return elements[Math.floor(Math.random() * elements.length)];
 };
 
-/** Returns a shuffled copy of `arr` (Fisher–Yates). */
-export function shuffle<T>(arr: readonly T[]): T[] {
+/** Returns a shuffled copy of `arr` (Fisher–Yates); `random` is injectable for tests. */
+export function shuffle<T>(arr: readonly T[], random: () => number = Math.random): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
 }
 
 /** `k` random items of `arr`, as `shuffle(arr).slice(0, k)` but without copying the whole array (a partial Fisher–Yates). */
-export function sample<T>(arr: readonly T[], k: number): T[] {
+export function sample<T>(arr: readonly T[], k: number, random: () => number = Math.random): T[] {
   const moved = new Map<number, number>(); // index -> index of the item now there
   const picked: T[] = [];
   for (let i = 0; i < Math.min(k, arr.length); i++) {
-    const j = i + Math.floor(Math.random() * (arr.length - i));
+    const j = i + Math.floor(random() * (arr.length - i));
     picked.push(arr[moved.get(j) ?? j]);
     moved.set(j, moved.get(i) ?? i);
   }

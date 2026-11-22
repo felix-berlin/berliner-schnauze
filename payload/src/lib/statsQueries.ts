@@ -23,6 +23,9 @@ export const num = (value: unknown, what: string): number => {
   return n;
 };
 
+/** A published word that is not in the trash; raw SQL bypasses Payload's trash filter, so every query on `words w` needs it. */
+export const PUBLISHED_WORD = sql`w._status = 'published' and w.deleted_at is null`;
+
 const TOP = 10;
 const BERLIN_DAY = (column: string) =>
   sql`to_char(${sql.identifier(column)} at time zone 'Europe/Berlin', 'YYYY-MM-DD')`;
@@ -72,7 +75,6 @@ export const loadStats = async (
       group by 1
     `,
     );
-  const published = sql`w._status = 'published' and w.deleted_at is null`;
   const feedbackWindow = sql`f.created_at >= ${from}::timestamptz and f.created_at < ${to}::timestamptz`;
 
   // One scan of word_feedback gives the daily reaction count and the split (its columns sum to the split).
@@ -103,7 +105,7 @@ export const loadStats = async (
           round(100.0 * count(*) filter (where f.usage = 'say')
             / nullif(count(*) filter (where f.usage is not null), 0)) as say_share
         from word_feedback f join words w on w.id = f.word_id
-        where ${feedbackWindow} and ${published}
+        where ${feedbackWindow} and ${PUBLISHED_WORD}
         group by w.id
       )
       (select 'liked' as list, id, berlinerisch, slug, like_share as value, reaction_votes as votes
@@ -122,7 +124,7 @@ export const loadStats = async (
         sql`
         select w.id, w.berlinerisch, w.slug, sum(s.views) as value
         from word_stats s join words w on w.id = s.word_id
-        where s.day >= ${range.from} and s.day <= ${range.to} and ${published}
+        where s.day >= ${range.from} and s.day <= ${range.to} and ${PUBLISHED_WORD}
         group by w.id having sum(s.views) > 0
         order by value desc, w.id limit ${TOP}
       `,

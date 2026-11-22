@@ -26,6 +26,7 @@ import * as migration_20261111_165631_bon_name_reports from './20261111_165631_b
 import * as migration_20261113_120000_hash_visitor_ids_catchup from './20261113_120000_hash_visitor_ids_catchup';
 import * as migration_20261114_143627_bon_games_lookup_indexes from './20261114_143627_bon_games_lookup_indexes';
 import * as migration_20261119_211428_trash_and_live_link from './20261119_211428_trash_and_live_link';
+import * as migration_20261121_012437_home_page_fields_word_ipa from './20261121_012437_home_page_fields_word_ipa';
 
 export const migrations = [
   {
@@ -166,6 +167,11 @@ export const migrations = [
   {
     up: migration_20261119_211428_trash_and_live_link.up,
     down: migration_20261119_211428_trash_and_live_link.down,
-    name: '20261119_211428_trash_and_live_link'
+    name: '20261119_211428_trash_and_live_link',
+  },
+  {
+    up: migration_20261121_012437_home_page_fields_word_ipa.up,
+    down: migration_20261121_012437_home_page_fields_word_ipa.down,
+    name: '20261121_012437_home_page_fields_word_ipa',
   },
 ];

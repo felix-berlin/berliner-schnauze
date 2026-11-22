@@ -11,7 +11,7 @@
       <b class="name">{{ comment.authorName }}</b>
       <span class="t-small">
         <a class="permalink" :href="`#kommentar-${comment.id}`">
-          <time :datetime="comment.createdAt">{{ relativeTime }}</time>
+          <time :datetime="comment.createdAt">{{ relativeTimeLabel }}</time>
         </a>
         <template v-if="comment.edited && comment.state === 'visible'"> · bearbeitet</template>
       </span>
@@ -42,7 +42,7 @@
         <p :id="`${uid}-text`" class="text" :data-state="long && !expanded ? 'clamped' : undefined">
           {{ comment.text }}
         </p>
-        <!-- Proposal in the spec (§9, long comments): cut at about 600 characters to 8 lines. -->
+        <!-- Long comments (docs/design/wortseite/SPEC.md §9): cut at about 600 characters to 8 lines. -->
         <button
           v-if="long"
           class="c-textlink"
@@ -246,6 +246,7 @@ import {
   type CommentMenuEntry,
   type ReportReason,
 } from "@utils/commentMenu.ts";
+import { relativeTime } from "@utils/relativeTime";
 import { useClipboard } from "@vueuse/core";
 import Check from "virtual:icons/lucide/check";
 import CircleAlert from "virtual:icons/lucide/circle-alert";
@@ -277,7 +278,7 @@ const { comment, parentVisible = true } = defineProps<{
 
 const ctx = inject(commentsKey)!;
 const uid = useId();
-// One action open per comment at a time (spec §9a).
+// One action open per comment at a time (docs/design/wortseite/SPEC.md §9a).
 const mode = ref<"delete" | "edit" | "reply" | "report" | null>(null);
 const reason = ref<ReportReason | "">("");
 const note = ref("");
@@ -291,7 +292,7 @@ const menuButton = useTemplateRef<HTMLButtonElement>("menuButton");
 const placeholder = useTemplateRef<HTMLElement>("placeholder");
 const reported = computed(() => ctx.isReported(comment.id));
 const initial = computed(() => comment.authorName.trim().charAt(0).toUpperCase());
-// Proposal (spec): long comments are cut to 8 lines from about 600 characters.
+// Long comments are cut to 8 lines from about 600 characters.
 const LONG = 600;
 const long = computed(() => (comment.text?.length ?? 0) > LONG);
 const expanded = ref(false);
@@ -331,19 +332,9 @@ const placeholderText = computed(() =>
         : "Kommentar entfernt",
 );
 
-const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
-  ["year", 31_536_000],
-  ["month", 2_592_000],
-  ["day", 86_400],
-  ["hour", 3600],
-  ["minute", 60],
-];
-const rtf = new Intl.RelativeTimeFormat("de", { numeric: "auto" });
-const relativeTime = computed(() => {
-  const seconds = (new Date(comment.createdAt).getTime() - Date.now()) / 1000;
-  const [unit, size] = UNITS.find(([, s]) => Math.abs(seconds) >= s) ?? ["second", 1];
-  return rtf.format(unit === "second" ? 0 : Math.round(seconds / size), unit);
-});
+const relativeTimeLabel = computed(() =>
+  relativeTime(new Date(comment.createdAt), new Date(), { numeric: "auto", precise: true }),
+);
 
 // „Link kopieren“: icon turns into a check and the label into „Link kopiert“ for 2s, then the menu closes.
 const { copy } = useClipboard();

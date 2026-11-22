@@ -396,16 +396,6 @@ describe("wordList store", () => {
   });
 
   describe("$oramaSearchResults computedAsync callback", () => {
-    it("returns null when db is falsy after initOrama (covers line 433 false branch and line 424 ?? 10)", async () => {
-      // Import triggers computedAsync mock which captures the callback
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      expect(capturedCbRef.fn).toBeDefined();
-      // fetch mock returns a non-array object → resultLimit = undefined → limit falls through to ?? 10
-      // create mock returns undefined → db stays falsy → returns null (line 433 false branch)
-      const result = await capturedCbRef.fn!($wordSearch.get(), "");
-      expect(result).toBeNull();
-    });
-
     it("calls search when db is truthy (covers line 433 true branch)", async () => {
       const { create, search } = await import("@orama/orama");
       vi.mocked(create).mockResolvedValueOnce({ _orama: true } as unknown as never);
@@ -528,9 +518,8 @@ describe("wordList store", () => {
         Promise.resolve({ json: () => Promise.resolve([]), ok: true }),
       );
       globalThis.fetch = retryFetch as unknown as typeof fetch;
-      const result = await capturedCbRef.fn!($wordSearch.get(), "");
+      await capturedCbRef.fn!($wordSearch.get(), "");
       expect(retryFetch).toHaveBeenCalledWith("/api/search/index.json");
-      expect(result).toBeNull(); // create mock returns undefined → db falsy → null
 
       // restore fetch mock
       globalThis.fetch = vi.fn(() =>

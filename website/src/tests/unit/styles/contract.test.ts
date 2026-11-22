@@ -403,3 +403,90 @@ describe("style layer contract", () => {
     expect(legacyFiles.filter((p) => !existsSync(join(website, p)))).toEqual([]);
   });
 });
+
+// Modern web guidance alignment (plan 2026-11-21): document-level colour scheme.
+describe("colour scheme contract", () => {
+  it("declares meta color-scheme 'light dark' in the head", () => {
+    expect(read(join(src, "components/BaseHead.astro"))).toMatch(
+      /<meta[^>]*name=['"]color-scheme['"][^>]*content=['"]light dark['"]|<meta[^>]*content=['"]light dark['"][^>]*name=['"]color-scheme['"]/,
+    );
+  });
+
+  it("keeps 'light' as the root default while legacy files still depend on the .dark class", () => {
+    // Without JS no .dark class is set; "light dark" would make the tokens dark but the legacy overrides light.
+    const colors = read(join(src, "styles/base/_colors.scss"));
+    expect(colors).toMatch(/html\s*\{\s*color-scheme:\s*light;/);
+  });
+
+  it("tints native controls with the accent token", () => {
+    expect(read(join(src, "styles/base/_inputs.scss"))).toMatch(
+      /html\s*\{\s*accent-color:\s*var\(--color-accent-solid\);/,
+    );
+  });
+
+  it("keeps hover and selected states visible in forced colors", () => {
+    const forced = read(join(src, "styles/base/_forced-colors.scss"));
+    expect(forced).toContain('feature("forced-colors")');
+    expect(forced).toMatch(/:hover[\s\S]*outline:\s*2px dashed Highlight/);
+    expect(forced).toContain('[aria-current]:not([aria-current="false"])');
+    expect(forced).toMatch(/\[aria-pressed="true"\][\s\S]*outline:\s*2px solid Highlight/);
+    expect(read(join(src, "styles/base/index.scss"))).toContain('@forward "forced-colors"');
+  });
+
+  it("allows scrollbar-width other than auto only next to a named scroll alternative", () => {
+    const bad = styleFiles
+      .filter((p) => !legacyFiles.includes(rel(p)))
+      .filter((p) =>
+        read(p)
+          .split("\n")
+          .some(
+            (line, i, lines) =>
+              /scrollbar-width:\s*(thin|none)/.test(line) &&
+              !/scroll alternative:/.test(lines[i - 1] ?? ""),
+          ),
+      )
+      .map(rel);
+    expect(bad).toEqual([]);
+  });
+
+  it("guards animations and spatial transitions of migrated files for reduced motion", () => {
+    const motion =
+      /^\s*(animation(-name)?:\s*(?!none)|transition:\s*(transform|translate|scale|rotate)\b)/m;
+    const guard = /feature\("(no-)?motion"\)|prefers-reduced-motion/;
+    // _inputs: the switch thumb shares one transition list with colour transitions, covered by the base net.
+    const unguarded = styleFiles
+      .filter((p) => !legacyFiles.includes(rel(p)) && !p.endsWith("base/_inputs.scss"))
+      .filter((p) => motion.test(read(p)) && !guard.test(read(p)))
+      .map(rel);
+    expect(unguarded).toEqual([]);
+  });
+
+  it("opts into OS text scale and never fixes the root font size", () => {
+    expect(read(join(src, "components/BaseHead.astro"))).toMatch(
+      /<meta[^>]*content=['"]scale['"][^>]*name=['"]text-scale['"]/,
+    );
+    const rootSize = styleFiles.filter((p) =>
+      /(?:^|\n)\s*(?:html|:root)\s*\{[^}]*font-size/.test(read(p)),
+    );
+    expect(rootSize.map(rel)).toEqual([]);
+  });
+
+  it("sets no px font sizes in migrated styles", () => {
+    const bad = styleFiles
+      .filter((p) => !legacyFiles.includes(rel(p)))
+      .filter((p) => /font-size:\s*[\d.]+px/.test(read(p)))
+      .map(rel);
+    expect(bad).toEqual([]);
+  });
+
+  // Tripwire: fails once the legacy list is empty, so the two deferred steps are not forgotten.
+  it("flags the follow-ups that become due when the legacy list is empty", () => {
+    const due =
+      "Legacy list is empty. Now: (1) set the root color-scheme in base/_colors.scss to 'light dark', " +
+      "(2) remove the global 0.01ms reduced-motion net in base/_body.scss and its rule-file sentence, " +
+      "(3) delete this test and the root-default test above. " +
+      "See docs/superpowers/plans/2026-11-21-design-system-modern-web-alignment.md, 'Outcome and follow-ups'.";
+    if (legacyFiles.length === 0) throw new Error(due);
+    expect(legacyFiles.length).toBeGreaterThan(0);
+  });
+});

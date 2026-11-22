@@ -1,0 +1,97 @@
+---
+import type { HomeSoundRule } from "@services/payload/home.ts";
+
+import { splitKnowledge, withCount } from "@utils/homeIntro.ts";
+
+interface Props {
+  /** Trusted CMS html from fetchHome, with a `{count}` placeholder; without it the section drops. */
+  knowledgeHtml?: string;
+  soundRules: HomeSoundRule[];
+  wordCount: number;
+  /** Published lemma -> slug, built by the page; only these words become chips. */
+  linkable: ReadonlyMap<string, string>;
+}
+
+// TODO(startseite): the "Typisch Berlin" chips are the mock's list; no CMS field holds them yet.
+const TYPICAL = ["Schrippe", "Stulle", "Bulette", "Kiez", "Späti", "jwd", "Atze", "Molle"];
+
+const { knowledgeHtml, soundRules, wordCount, linkable } = Astro.props;
+const [lead, more] = splitKnowledge(withCount(knowledgeHtml ?? "", wordCount));
+const typical = TYPICAL.filter((lemma) => linkable.has(lemma));
+---
+
+{
+  knowledgeHtml && (
+    <div class="c-home-knowledge" data-reveal="wait">
+      <h2>Wat is Berlinerisch?</h2>
+      <div class="grid">
+        {/* The drop cap is the first paragraph's ::first-letter, so screen readers read the whole word. */}
+        <article class="text">
+          <Fragment set:html={lead} />
+          {more && (
+            <details class="more">
+              <summary>
+                Mehr über Berlinerisch
+                <span class="chevron" aria-hidden="true" />
+              </summary>
+              <Fragment set:html={more} />
+            </details>
+            <script is:inline data-astro-rerun>
+              // One DOM for all widths (docs/design/startseite-v20/SPEC.md §12.1): open from 808px (= the 45.5rem container query that hides the
+              // summary), before first paint since this runs while parsing. Re-runs after a view transition swap.
+              (() => {
+                const more = document.currentScript.previousElementSibling;
+                const wide = matchMedia("(min-width: 808px)");
+                const sync = () =>
+                  more.isConnected
+                    ? (more.open = wide.matches)
+                    : wide.removeEventListener("change", sync);
+                sync();
+                wide.addEventListener("change", sync);
+              })();
+            </script>
+          )}
+        </article>
+        {soundRules.length > 0 && (
+          <aside class="side" aria-labelledby="home-knowledge-glance">
+            <h3 id="home-knowledge-glance">Berlinerisch auf einen Blick</h3>
+            <p class="label">Hochdeutsch durchgestrichen, Berlinerisch darunter</p>
+            {/* role="list": Safari drops list semantics of an unstyled list (list-style: none). */}
+            <ul class="rules" role="list">
+              {soundRules.map((r) => (
+                <li class="rule">
+                  <span class="sound">
+                    <s aria-hidden="true">{r.standard}</s>
+                    <b>{r.berlin}</b>
+                    {/* The struck form is decoration; screen readers get the pairing as text. */}
+                    <span class="u-sr-only">{` statt ${r.standard}`}</span>
+                  </span>
+                  {(r.example || r.rule) && (
+                    <span class="example">
+                      {r.example && <i>{r.example}</i>}
+                      {r.rule && <small>{r.rule}</small>}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+            {typical.length > 0 && (
+              <>
+                <p class="label">Typisch Berlin</p>
+                <p class="tags">
+                  {typical.map((lemma) => (
+                    <a href={`/wort/${linkable.get(lemma)}`}>{lemma}</a>
+                  ))}
+                </p>
+              </>
+            )}
+          </aside>
+        )}
+      </div>
+    </div>
+  )
+}
+
+<style lang="scss" is:global>
+  @use "@styles/components/home-knowledge";
+</style>

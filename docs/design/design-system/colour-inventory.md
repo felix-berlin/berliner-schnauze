@@ -2,6 +2,8 @@
 
 **Status: decided.** Every row's decision column is filled in and applied to `website/tokens/*.tokens.json`, which is now the source of truth; the instructions below describe how the table was filled.
 
+**Format note (2026-11-21):** colour values stay hex / `rgb()` / `color(srgb …)` in the generated file; `oklch` and relative colour syntax are not adopted (no reliable gamut mapping for lightness changes, no benefit for fixed brand values). Promoted since: `band-text`, `band-card2`, `band-line` (home result band). The remaining `rgb()` one-offs in migrated files are the rows of this table that were decided as private one-offs.
+
 Fill in the **decision** column of every row, one of three answers:
 
 1. an existing semantic token (`color.surface.chip`); the "nearest existing token" column shows exact matches, "≈" in "merge proposal" shows tokens within 5 points;

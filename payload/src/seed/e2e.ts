@@ -8,9 +8,11 @@ import type { Word } from "../payload-types";
 
 import { LOCAL_DB_HOSTS } from "../lib/localDb";
 import { berlinDay } from "../lib/wordStats";
+import { PNG, WAV } from "./fixtures";
+import { seedHome } from "./homeSeed";
+import { seedHomeStats } from "./homeStatsSeed";
 import { affiliate, company, navigation } from "./siteData";
 
-/** Slugs the e2e specs navigate to directly. */
 export const E2E_WORD_SLUGS = [
   "aasen",
   "akademiebusen",
@@ -283,7 +285,6 @@ const WORDS: SeedWord[] = [
   },
 ];
 
-/** Slugs of all seeded words and themen. */
 export const seededSlugs = () => ({
   themen: THEMEN.map(([slug]) => slug),
   words: WORDS.map((w) => w.slug),
@@ -320,31 +321,6 @@ const lexical = (...children: unknown[]) =>
   ({
     root: { children, direction: "ltr", format: "", indent: 0, type: "root", version: 1 },
   }) as never;
-
-// 1x1 PNG
-const PNG = Buffer.from(
-  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
-  "base64",
-);
-
-// 0.3 s of silence (8 kHz, 8 bit mono WAV): a real, playable audio file for the voice buttons.
-const WAV = (() => {
-  const data = Buffer.alloc(2400, 128);
-  const head = Buffer.alloc(44);
-  head.write("RIFF", 0);
-  head.writeUInt32LE(36 + data.length, 4);
-  head.write("WAVEfmt ", 8);
-  head.writeUInt32LE(16, 16);
-  head.writeUInt16LE(1, 20);
-  head.writeUInt16LE(1, 22);
-  head.writeUInt32LE(8000, 24);
-  head.writeUInt32LE(8000, 28);
-  head.writeUInt16LE(1, 32);
-  head.writeUInt16LE(8, 34);
-  head.write("data", 36);
-  head.writeUInt32LE(data.length, 40);
-  return Buffer.concat([head, data]);
-})();
 
 /** `find` by `where`, then `update` or `create`: the seed can run any number of times. */
 async function upsert(
@@ -595,6 +571,10 @@ export async function seedE2e(payload: Payload): Promise<void> {
   await payload.updateGlobal({ data: navigation as never, slug: "navigation" });
   await payload.updateGlobal({ data: company as never, slug: "company" });
   await payload.updateGlobal({ data: affiliate as never, slug: "affiliate" });
+  const home = await seedHome(payload);
+  if (home.unavailable.length)
+    console.warn(`seed e2e: home unavailable: ${home.unavailable.join(", ")}`);
+  await seedHomeStats(payload);
 }
 
 // CLI entry (`payload run src/seed/e2e.ts`); tests import this module without running it.

@@ -2,7 +2,6 @@ import type { Affiliate, Config } from "payload-app";
 
 import { ttl } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
-import { lexicalToHtml } from "payload-app/lexical-html";
 
 const global = <S extends keyof Config["globals"]>(slug: S) =>
   ttl(60_000, async () => (await getPayloadClient()).findGlobal({ depth: 0, slug }));
@@ -77,23 +76,8 @@ export const fetchSocialMenu = async (): Promise<SocialMenuItem[]> =>
     relMe ? { link: profile, rel: "me", title: label } : { link: profile, title: label },
   );
 
-export interface Fact {
-  headline: string;
-  /** The rich text as html, a single paragraph without its <p> (the card wraps it). */
-  html: string;
-}
-
-/** Unwraps a single paragraph; several stay as they are (the card's <p> then holds block html). */
-const inlineHtml = (html: string): string =>
-  html.startsWith("<p>") && html.endsWith("</p>") && !html.includes("<p", 1)
-    ? html.slice(3, -4)
-    : html;
-
-export const fetchHomeFacts = async (): Promise<Fact[]> =>
-  ((await home()).facts ?? []).map(({ headline, text }) => ({
-    headline,
-    html: inlineHtml(lexicalToHtml(text)),
-  }));
+/** The raw home global (cached for a minute); fetchHome maps it. */
+export const fetchHomeGlobal = home;
 
 export interface AnkiContent {
   faqs: { a: string; q: string }[];

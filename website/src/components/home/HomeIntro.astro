@@ -1,0 +1,22 @@
+---
+import { linkIntro } from "@utils/homeIntro.ts";
+
+interface Props {
+  /** Intro sentence from the CMS, with a `{count}` placeholder. */
+  intro?: string;
+  wordCount: number;
+  /** Published lemma -> slug, built by the page; only these words become links. */
+  linkable: ReadonlyMap<string, string>;
+}
+
+const { intro, wordCount, linkable } = Astro.props;
+---
+
+<header class="c-home-intro">
+  <h1>Berliner Wörterbuch</h1>
+  {intro && <p set:html={linkIntro(intro, wordCount, linkable)} />}
+</header>
+
+<style lang="scss" is:global>
+  @use "@styles/components/home-intro";
+</style>

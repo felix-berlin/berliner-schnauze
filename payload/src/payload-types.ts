@@ -299,6 +299,10 @@ export interface Theman {
   id: number;
   name: string;
   description?: string | null;
+  /**
+   * Ein Satz für die Sprechblase auf der Startseite. Leer: keine Sprechblase.
+   */
+  typischerSatz?: string | null;
   slug?: string | null;
   meta?: SeoMetaGroup;
   updatedAt: string;
@@ -330,6 +334,10 @@ export interface SeoMetaGroup {
 export interface Word {
   id: number;
   berlinerisch: string;
+  /**
+   * IPA ohne eckige Klammern, z. B. ˈɪç. Die Klammern setzt die Seite.
+   */
+  ipa?: string | null;
   slug?: string | null;
   article?: string | null;
   translations?:
@@ -414,6 +422,14 @@ export interface Post {
   id: number;
   title: string;
   excerpt?: string | null;
+  /**
+   * Zitat für den Teaser auf der Startseite. Leer: erster Pull-Quote des Beitrags.
+   */
+  teaserZitat?: string | null;
+  /**
+   * IPA ohne eckige Klammern. Leer: der Abschnitt entfällt.
+   */
+  teaserIpa?: string | null;
   publishedAt?: string | null;
   contentModifiedAt?: string | null;
   featuredImage?: (number | null) | Media;
@@ -1155,6 +1171,7 @@ export interface WordTypesSelect<T extends boolean = true> {
 export interface ThemenSelect<T extends boolean = true> {
   name?: T;
   description?: T;
+  typischerSatz?: T;
   slug?: T;
   meta?: T | SeoMetaGroupSelect<T>;
   updatedAt?: T;
@@ -1179,6 +1196,7 @@ export interface SeoMetaGroupSelect<T extends boolean = true> {
  */
 export interface WordsSelect<T extends boolean = true> {
   berlinerisch?: T;
+  ipa?: T;
   slug?: T;
   article?: T;
   translations?:
@@ -1258,6 +1276,8 @@ export interface AudioArraySelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   excerpt?: T;
+  teaserZitat?: T;
+  teaserIpa?: T;
   publishedAt?: T;
   contentModifiedAt?: T;
   featuredImage?: T;
@@ -1660,6 +1680,74 @@ export interface Home {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Kurzer Text unter der Überschrift der Startseite.
+   */
+  intro?: string | null;
+  /**
+   * Bis zu 4 Wörter zum Ausprobieren.
+   */
+  tryWords?: (number | Word)[] | null;
+  browseLinks?:
+    | {
+        label: string;
+        /**
+         * Interner Pfad (/wort/ick) oder https://-Adresse.
+         */
+        href: string;
+        icon: 'audio' | 'idiom' | 'short' | 'rhyme' | 'random';
+        id?: string | null;
+      }[]
+    | null;
+  knowledge?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Sechs Regeln, Standarddeutsch gegen Berlinerisch.
+   */
+  soundRules?:
+    | {
+        standard: string;
+        berlin: string;
+        example: string;
+        rule: string;
+        id?: string | null;
+      }[]
+    | null;
+  faq?:
+    | {
+        question: string;
+        answer: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  aboutText?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1830,6 +1918,34 @@ export interface HomeSelect<T extends boolean = true> {
         text?: T;
         id?: T;
       };
+  intro?: T;
+  tryWords?: T;
+  browseLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        icon?: T;
+        id?: T;
+      };
+  knowledge?: T;
+  soundRules?:
+    | T
+    | {
+        standard?: T;
+        berlin?: T;
+        example?: T;
+        rule?: T;
+        id?: T;
+      };
+  faq?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  aboutText?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

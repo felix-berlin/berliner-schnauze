@@ -12,7 +12,7 @@ const activeCard = (page: Page) => page.locator(".c-word-list article.is-active"
 
 // "anmach" yields a small, stable result set that includes the required slug `anmachen`.
 const searchAndFocusList = async (page: Page) => {
-  await page.goto("/");
+  await page.goto("/suche");
   const results = resultCount(page);
   const unfiltered = await results.textContent();
   await searchbox(page).fill("anmach");
@@ -23,7 +23,7 @@ const searchAndFocusList = async (page: Page) => {
   await expect(page.locator(".c-word-list article").first()).toBeVisible();
 };
 
-test.describe("Search keyboard navigation and dropdown (/)", () => {
+test.describe("Search keyboard navigation and dropdown (/suche)", () => {
   test("Pfeiltasten bewegen die aktive Markierung", async ({ page }) => {
     await searchAndFocusList(page);
 
@@ -90,6 +90,6 @@ test.describe("Search keyboard navigation and dropdown (/)", () => {
     await expect(
       page.getByRole("button", { name: "Link zum Wort kopieren" }).first(),
     ).toBeVisible();
-    await expect(page).toHaveURL(/\/(\?.*)?$/);
+    await expect(page).toHaveURL(/\/suche(\?.*)?$/);
   });
 });
