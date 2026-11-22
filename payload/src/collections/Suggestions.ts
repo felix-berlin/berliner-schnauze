@@ -114,9 +114,13 @@ const titleValue: FieldHook = ({ siblingData }) => {
  */
 const notOverMcp: FieldAccess = ({ req }) => req.payloadAPI !== "MCP";
 
+/** Payload's `Validate` generics differ per field type; the wrappers below only forward to the stock validator. */
+// oxlint-disable-next-line typescript/no-explicit-any
+type AnyValidate = Validate<any, any, any, any>;
+
 /** Required only for the given suggestion types: runs the stock validator with `required` switched per type. */
 const requiredFor =
-  (types: string[], base: Validate<any, any, any, any>): Validate<any, any, any, any> =>
+  (types: string[], base: AnyValidate): AnyValidate =>
   (value, options) => {
     const type = (options.siblingData as { type?: string } | undefined)?.type ?? "word";
     return base(value, { ...options, required: types.includes(type) });
@@ -124,11 +128,7 @@ const requiredFor =
 
 /** Like `requiredFor`, with a per-type character limit (one column, the limit differs by type). */
 const limitFor =
-  (
-    limits: Record<string, number>,
-    types: string[],
-    base: Validate<any, any, any, any>,
-  ): Validate<any, any, any, any> =>
+  (limits: Record<string, number>, types: string[], base: AnyValidate): AnyValidate =>
   (value, options) => {
     const type = (options.siblingData as { type?: string } | undefined)?.type ?? "word";
     const max = limits[type];
@@ -187,24 +187,24 @@ export const Suggestions: CollectionConfig = {
       name: "berlinerWord",
       type: "text",
       maxLength: 100,
-      validate: requiredFor(["word"], text as Validate<any, any, any, any>),
+      validate: requiredFor(["word"], text as AnyValidate),
     },
     {
       name: "translation",
       type: "text",
       maxLength: 300,
-      validate: requiredFor(["word"], text as Validate<any, any, any, any>),
+      validate: requiredFor(["word"], text as AnyValidate),
     },
     {
       name: "targetWord",
       type: "relationship",
       relationTo: "words",
       // Create only: the FK nulls it when the word is deleted, and the suggestion must stay saveable then.
-      validate: ((value: unknown, options: any) =>
-        requiredFor(
-          options.operation === "create" ? ["example"] : [],
-          relationship as Validate<any, any, any, any>,
-        )(value, options)) as Validate<any, any, any, any>,
+      validate: ((value: unknown, options: Parameters<AnyValidate>[1]) =>
+        requiredFor(options.operation === "create" ? ["example"] : [], relationship as AnyValidate)(
+          value,
+          options,
+        )) as AnyValidate,
       admin: {
         position: "sidebar",
         description:
@@ -221,7 +221,7 @@ export const Suggestions: CollectionConfig = {
         anekdote: "Anekdote",
         sonstiges: "Sonstiges",
       }),
-      validate: requiredFor(["fact"], select as Validate<any, any, any, any>),
+      validate: requiredFor(["fact"], select as AnyValidate),
     },
     {
       name: "relation",
@@ -232,13 +232,13 @@ export const Suggestions: CollectionConfig = {
         verwandt: "Verwandt",
         redewendung: "Redewendung",
       }),
-      validate: requiredFor(["related"], select as Validate<any, any, any, any>),
+      validate: requiredFor(["related"], select as AnyValidate),
     },
     {
       name: "relatedText",
       type: "text",
       maxLength: 60,
-      validate: requiredFor(["related"], text as Validate<any, any, any, any>),
+      validate: requiredFor(["related"], text as AnyValidate),
     },
     {
       name: "text",
@@ -247,11 +247,7 @@ export const Suggestions: CollectionConfig = {
       admin: {
         description: "Beispielsatz (max. 200 Zeichen) oder Text zum Wissenswerten (max. 1000).",
       },
-      validate: limitFor(
-        { example: 200 },
-        ["example", "fact"],
-        textarea as Validate<any, any, any, any>,
-      ),
+      validate: limitFor({ example: 200 }, ["example", "fact"], textarea as AnyValidate),
     },
     { name: "highdeutsch", type: "text", maxLength: 200 },
     { name: "example", type: "textarea", maxLength: 1000 },
