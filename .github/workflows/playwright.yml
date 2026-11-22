@@ -115,7 +115,7 @@ jobs:
           ENABLE_ANALYTICS: "false"
         run: pnpm run build
 
-      # dist/ is served by `node server/index.mjs` in every shard job. Same public-repo
+      # dist/ is the input of docker-smoke (the e2e shards build their own copy). Same public-repo
       # caveat as the report below: the build holds no secrets, only public HTML/JS.
       - name: Upload build
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
@@ -124,7 +124,7 @@ jobs:
           path: website/dist
           retention-days: 1
 
-  # Builds the production image from the same dist/ the e2e shards use and
+  # Builds the production image from the build job's dist/ (built with the e2e flags, like the shards' copy) and
   # checks routing, security headers, redirects and caching in the running container.
   docker-smoke:
     needs: build
@@ -170,7 +170,7 @@ jobs:
           cache-from: type=gha,scope=cms-amd64
 
   test:
-    needs: [build, playwright-version]
+    needs: playwright-version
     timeout-minutes: 15
     runs-on: ubuntu-latest
     permissions:
@@ -229,11 +229,13 @@ jobs:
           env-slug: "staging" # never prod: e2e errors would land in the prod Sentry, suggestions could send real mail
           domain: "https://infisical.kasimir.dev"
 
-      - name: Download build
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
-        with:
-          name: dist
-          path: website/dist
+      # Each shard builds its own dist/ (~15 s) instead of waiting for the build job's upload (~1:40 of queue and
+      # setup on the critical path). Same flags as the build job: no source-map upload, analytics off.
+      - name: Build site
+        env:
+          E2E_BUILD: "1"
+          ENABLE_ANALYTICS: "false"
+        run: pnpm run build
 
       # Step-level env wins over what the Infisical action exports: the e2e run must never touch a real database.
       - name: Migrate and seed the database
@@ -266,7 +268,7 @@ jobs:
           exit 1
 
       - name: Run Playwright tests (shard ${{ matrix.shard }}/4)
-        timeout-minutes: 8
+        timeout-minutes: 10
         # word-v3.spec.ts signs a draft preview token with the same secret as the server.
         env:
           PAYLOAD_SECRET: e2e-secret
