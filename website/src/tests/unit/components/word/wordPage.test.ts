@@ -22,6 +22,7 @@ const model = {
     berlinerischAudio: [{ audio: { url: "https://example.test/a.mp3" }, gender: "male" }],
     derived: { nlpTags: [] },
     examples: [],
+    images: [],
     id: 42,
     slug: "testwort",
     themen: [],
@@ -78,5 +79,47 @@ describe("WordPage mobile bar", () => {
     expect(html).toContain('data-form="example"');
     expect(html).toContain("data-report");
     expect(await render({ model })).toContain("Noch keene");
+  });
+});
+
+describe("WordPage images", () => {
+  let render: (props: Record<string, unknown>) => Promise<string>;
+  beforeAll(async () => {
+    render = await createAstroRender((await import("@components/word/WordPage.astro")).default);
+  }, 60_000);
+
+  const withImages = {
+    ...model,
+    word: {
+      ...model.word,
+      images: [
+        {
+          alt: "Ein Bild",
+          caption: "Credit: Erfunden",
+          height: 600,
+          id: 1,
+          url: "/e2e/galerie.png",
+          width: 800,
+        },
+        { alt: "Zwei", caption: null, height: 600, id: 2, url: "/e2e/galerie-2.png", width: 800 },
+      ],
+    },
+  } as unknown as WordPageModel;
+
+  it("puts the strip and the hero copy into the head and mounts the lightbox", async () => {
+    const html = await render({ model: withImages });
+    const head = html.slice(html.indexOf("c-word-head"), html.indexOf('id="beispiele"'));
+    expect(head).toContain('data-variant="images"');
+    expect(head.match(/c-word-images/g)?.length).toBe(2);
+    expect(head).toContain("Foto: ");
+    expect(html).toContain("Lightbox");
+    expect(html).toContain('data-lightbox-index="1"');
+  });
+
+  it("renders no images block and no lightbox without images, the head stays single-column", async () => {
+    const html = await render({ model: { ...model, word: { ...model.word, images: [] } } });
+    expect(html).not.toContain("c-word-images");
+    expect(html).not.toContain("Lightbox");
+    expect(html).not.toContain('data-variant="images"');
   });
 });

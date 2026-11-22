@@ -452,22 +452,63 @@ test.describe("loading skeleton (SPEC §15)", () => {
   });
 });
 
-test.describe("axe", () => {
-  for (const width of [390, 834, 1280]) {
-    for (const dark of [false, true]) {
-      test(`no violations at ${width}px ${dark ? "dark" : "light"}`, async ({ page }) => {
-        await open(page, WORD, width);
-        await setDark(page, dark);
-        // The footer fades in with the scroll: at the top it is half transparent and its title fails the contrast check.
-        await page.evaluate(() =>
-          window.scrollTo({ behavior: "instant", top: document.documentElement.scrollHeight }),
-        );
-        await page.waitForTimeout(1200);
-        const { violations } = await new AxeBuilder({ page }).analyze();
-        expect(
-          violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(" | ")}`),
-        ).toEqual([]);
-      });
-    }
+test.describe("images", () => {
+  const IMAGES = "/wort/akademiebusen";
+
+  for (const [width, variant] of [
+    [390, "strip"],
+    [834, "hero"],
+    [1280, "hero"],
+  ] as const) {
+    test(`shows the ${variant} copy at ${width}px and the lightbox opens, closes with Esc and returns the focus`, async ({
+      page,
+    }) => {
+      await open(page, IMAGES, width);
+      const images = page.locator(`.c-word-images[data-variant="${variant}"]`);
+      await expect(images).toBeVisible();
+      await expect(page.locator(`.c-word-images:not([data-variant="${variant}"])`)).toBeHidden();
+      const first = images.locator("button.open").first();
+      const box = await first.locator("img").boundingBox();
+      expect(Math.abs((box?.width ?? 0) / (box?.height ?? 1) - 4 / 3)).toBeLessThan(0.05);
+      await first.focus();
+      await page.keyboard.press("Enter");
+      const dialog = page.getByRole("dialog");
+      await expect(dialog).toBeVisible();
+      await page.keyboard.press("ArrowRight");
+      await page.keyboard.press("Escape");
+      await expect(dialog).toBeHidden();
+      await expect(first).toBeFocused();
+    });
   }
+
+  test("a word without images renders no image block and keeps a single-column head", async ({
+    page,
+  }) => {
+    await open(page, "/wort/anmachen", 1280);
+    await expect(page.locator(".c-word-images")).toHaveCount(0);
+    await expect(page.locator(".c-word-head")).not.toHaveAttribute("data-variant", "images");
+  });
+});
+
+test.describe("axe", () => {
+  for (const path of [WORD, "/wort/akademiebusen"])
+    for (const width of [390, 834, 1280]) {
+      for (const dark of [false, true]) {
+        test(`${path} has no violations at ${width}px ${dark ? "dark" : "light"}`, async ({
+          page,
+        }) => {
+          await open(page, path, width);
+          await setDark(page, dark);
+          // The footer fades in with the scroll: at the top it is half transparent and its title fails the contrast check.
+          await page.evaluate(() =>
+            window.scrollTo({ behavior: "instant", top: document.documentElement.scrollHeight }),
+          );
+          await page.waitForTimeout(1200);
+          const { violations } = await new AxeBuilder({ page }).analyze();
+          expect(
+            violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(" | ")}`),
+          ).toEqual([]);
+        });
+      }
+    }
 });

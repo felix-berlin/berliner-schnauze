@@ -55,6 +55,9 @@
 
       .images {
         order: 5;
+        margin-block-start: var(--space-6);
+        --word-images-strip-display: flex;
+        --word-images-hero-display: none;
       }
 
       .actions {
@@ -102,6 +105,12 @@
       @container word-head (inline-size >= 35rem) {
         grid-column: 2;
         grid-row: 1 / -1;
+        // SPEC §5: the image column sits on the card2 ground and shows the hero copy of WordImages
+        --word-images-strip-display: none;
+        --word-images-hero-display: flex;
+
+        padding: var(--_pad-top) var(--_pad-x);
+        background: var(--color-surface-chip);
         // bleeds over the head padding to the card edge (end, top, bottom)
         margin: calc(-1 * var(--_pad-top)) calc(-1 * var(--_pad-x)) calc(-1 * var(--_pad-bottom)) 0;
       }

@@ -1,6 +1,8 @@
 ---
 import '@styles/objects/_word-v18.scss';
 
+import Lightbox from '@components/word/Lightbox.vue';
+import WordImages from '@components/word/WordImages.astro';
 import SectionCard from '@components/word/SectionCard.astro';
 import WordPoll from '@components/word/WordPoll.vue';
 import WordStories from '@components/word/WordStories.vue';
@@ -18,6 +20,8 @@ import { grammarRows, klangRows } from '@lib/wordAnalysis.ts';
 import { tocItems } from '@lib/wordToc.ts';
 import type { WordPageModel } from '@services/payload/wordPage.ts';
 import { voiceSources } from '@composables/useVoicePlayer.ts';
+import { toWordImages } from '@utils/wordImages.ts';
+import { getImage } from 'astro:assets';
 import type { WordRef } from '@utils/wordHelper';
 
 interface Props {
@@ -32,6 +36,14 @@ const { draft = false, model, words = [] } = Astro.props;
 const grammar = grammarRows(model);
 const klang = klangRows(model);
 const voices = voiceSources(model.word.berlinerischAudio);
+const images = toWordImages(model.word.images, model.word.berlinerisch);
+// Large version for the lightbox (the strip and hero sizes come from WordImages); never upscale a smaller source.
+const lightboxImages = await Promise.all(
+  images.map(async ({ alt, credit, height, src, width }) => {
+    const target = Math.min(1600, width);
+    return { alt, credit, src: (await getImage({ format: 'webp', height: Math.round((target * height) / width), src, width: target })).src };
+  }),
+);
 ---
 
 <!--
@@ -48,7 +60,19 @@ const voices = voiceSources(model.word.berlinerischAudio);
 
   <div class='main'>
     <div class='anchor' id='bedeutung'>
-      <slot name='bedeutung'><WordHead draft={draft} model={model} /></slot>
+      <slot name='bedeutung'>
+        {images.length > 0 ? (
+          <WordHead draft={draft} model={model}>
+            {/* Both copies (strip, hero) are in the HTML; _word-head.scss shows one by the head's own width. */}
+            <Fragment slot='images'>
+              <WordImages images={images} learnMore={model.word.learnMore} placement='strip' />
+              <WordImages images={images} learnMore={model.word.learnMore} placement='hero' />
+            </Fragment>
+          </WordHead>
+        ) : (
+          <WordHead draft={draft} model={model} />
+        )}
+      </slot>
     </div>
 
     <h2 class='band'>Im Gebrauch</h2>
@@ -79,6 +103,8 @@ const voices = voiceSources(model.word.berlinerischAudio);
     <slot name='weiter'><WordLinks words={words} excludeSlug={model.word.slug} /></slot>
   </div>
 </article>
+{/* Only the lightbox needs JS: the buttons are server-rendered and open the dialog once this hydrates. */}
+{images.length > 0 && <Lightbox client:idle images={lightboxImages} />}
 <!-- Sibling of the article: a sticky bar rests where its parent (the page column) ends, below the content. -->
 <WordMobileBar audio={voices.m ?? voices.w} wordId={draft ? undefined : model.word.id} />
 
