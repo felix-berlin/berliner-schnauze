@@ -1,0 +1,151 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Table of contents of the word page v18 (WordToc.vue). The root is the container: below 30rem wide (the
+// 220px desktop column) it is a rail with dots, from 30rem (tablet, full width) a horizontal pill bar.
+// Parts .inner, .label, .list, .link (active: aria-current="true"), .dot, .count; earlier entries carry
+// data-state="done". The page shell places and sticks it.
+@include mx.component("word-toc") {
+  :scope {
+    // SPEC §4.2: label 13px, no font-size token at that size
+    --_label-size: 0.8125rem;
+
+    container: word-toc / inline-size;
+  }
+
+  .inner {
+    background: var(--color-surface-sheet);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-paper-lift);
+    padding-block: var(--space-3);
+
+    @container word-toc (inline-size >= 30rem) {
+      padding: 0;
+      background: none;
+      box-shadow: none;
+      border-radius: 0;
+    }
+  }
+
+  .label {
+    margin: 0;
+    padding: 0 var(--space-4) var(--space-2);
+    font-size: var(--_label-size);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 1.5px; // SPEC §4.2 label, no tracking token
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+
+    @container word-toc (inline-size >= 30rem) {
+      display: none;
+    }
+  }
+
+  .list {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    // Dotted rail behind the dots.
+    &::before {
+      content: "";
+      position: absolute;
+      inset-block: calc(var(--size-tap-target) / 2); // first and last dot centre
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- centre of the 16px dot minus half the 2px line, no token
+      inset-inline-start: calc(var(--space-4) + 7px);
+      border-inline-start: 2px dashed var(--color-border-card);
+    }
+
+    @container word-toc (inline-size >= 30rem) {
+      display: flex;
+      gap: var(--space-2);
+      overflow-x: auto;
+      // scroll alternative: the active pill scrolls itself into view and every pill is focusable
+      scrollbar-width: none;
+
+      &::before {
+        display: none;
+      }
+
+      li {
+        flex: none;
+      }
+    }
+  }
+
+  .link {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1rem 1fr auto;
+    align-items: center;
+    gap: var(--space-3);
+    min-block-size: var(--size-tap-target);
+    padding-inline: var(--space-4);
+    font-size: var(--font-size-md);
+    color: var(--color-text-body);
+    text-decoration: none;
+
+    @include butler-mx.hover {
+      color: var(--color-text-accent);
+    }
+
+    &[aria-current="true"] {
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-strong);
+    }
+
+    @container word-toc (inline-size >= 30rem) {
+      display: inline-flex;
+      gap: var(--space-2);
+      padding-inline: var(--space-4);
+      border: 1px solid var(--color-border-card);
+      border-radius: var(--radius-pill);
+      background: var(--color-surface-sheet);
+      white-space: nowrap;
+
+      &[aria-current="true"] {
+        background: var(--color-text-strong);
+        border-color: var(--color-text-strong);
+        color: var(--color-surface-sheet);
+      }
+    }
+  }
+
+  .dot {
+    box-sizing: border-box;
+    position: relative;
+    inline-size: 1rem;
+    block-size: 1rem;
+    border: 2px solid var(--color-text-muted);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-sheet);
+
+    .link[data-state="done"] & {
+      background: var(--color-text-muted);
+    }
+
+    .link[aria-current="true"] & {
+      border-color: var(--color-text-accent);
+      background: var(--color-text-accent);
+    }
+
+    @container word-toc (inline-size >= 30rem) {
+      display: none;
+    }
+  }
+
+  .count {
+    font-size: var(--_label-size);
+    color: var(--color-text-muted);
+
+    .link[aria-current="true"] & {
+      color: inherit;
+    }
+
+    @container word-toc (inline-size >= 30rem) {
+      font-size: var(--font-size-md);
+    }
+  }
+}

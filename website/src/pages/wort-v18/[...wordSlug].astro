@@ -1,0 +1,16 @@
+---
+import WordPage from '@components/word/WordPage.astro';
+import Layout from '@layouts/Layout.astro';
+import { fetchWordPage } from '@services/payload/wordPage.ts';
+
+// Preview route of the v18 page: 404 in production until the switch (plan Task 20); /wort/<slug> is untouched.
+const enabled = import.meta.env.DEV || process.env.WORD_V18_PREVIEW === '1';
+const { wordSlug } = Astro.params;
+const model = enabled && wordSlug ? await fetchWordPage(wordSlug) : null;
+if (!model) return Astro.rewrite('/404');
+---
+
+<Layout content={{ title: model.word.berlinerisch }} footerExcludeSlug={model.word.slug}>
+  <Fragment slot='head'><meta name='robots' content='noindex' /></Fragment>
+  <WordPage model={model} />
+</Layout>
