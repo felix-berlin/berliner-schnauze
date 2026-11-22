@@ -62,7 +62,10 @@ const applyRules: CollectionBeforeChangeHook = ({ data, operation, originalDoc, 
 
 /** One featured Jeschichte per word; hidden or removed rows do not count, so they never block a new one. */
 const singleFeatured: CollectionBeforeChangeHook = async ({ data, originalDoc, req }) => {
-  if (!data.featured) return data;
+  // Judge the resulting state: republishing an already featured row must be checked too.
+  const featured = data.featured ?? originalDoc?.featured;
+  const status = data.status ?? originalDoc?.status ?? "published";
+  if (!featured || status !== "published") return data;
   const word = idOf(data.word) ?? idOf(originalDoc?.word);
   const others = await req.payload.find({
     collection: "comments",

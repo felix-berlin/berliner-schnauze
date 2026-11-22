@@ -317,7 +317,7 @@ describe("comments", () => {
 describe("featured comments", () => {
   it("allows one published featured comment per word", async () => {
     const first = await make({ featured: true });
-    await expect(make({ featured: true })).rejects.toThrow();
+    await expect(make({ featured: true })).rejects.toThrow(/field is invalid: featured/);
     // another word is unaffected
     await make({ featured: true }, otherWordId);
     await payload.update({ collection: "comments", id: first.id, data: { featured: false } });
@@ -328,5 +328,15 @@ describe("featured comments", () => {
     const first = await make({ featured: true });
     await payload.update({ collection: "comments", id: first.id, data: { status: "hidden" } });
     expect((await make({ featured: true })).featured).toBe(true);
+  });
+
+  it("checks the resulting state when a featured row is republished", async () => {
+    await make({ featured: true });
+    // pending/hidden featured rows are allowed next to a published one
+    const held = await make({ featured: true, status: "hidden" });
+    expect(held.featured).toBe(true);
+    await expect(
+      payload.update({ collection: "comments", id: held.id, data: { status: "published" } }),
+    ).rejects.toThrow(/field is invalid: featured/);
   });
 });

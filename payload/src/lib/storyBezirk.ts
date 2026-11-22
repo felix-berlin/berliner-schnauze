@@ -6,4 +6,5 @@ export const STORY_BEZIRKE: readonly string[] = [
   "outside",
 ];
 
+/** Loose by design; the exact union is `Comment["bezirk"]` in payload-types. */
 export type StoryBezirk = (typeof STORY_BEZIRKE)[number];
