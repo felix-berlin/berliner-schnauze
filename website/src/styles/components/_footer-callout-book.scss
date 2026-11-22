@@ -55,6 +55,23 @@
     }
   }
 
+  // Board label (mock .f20__bl): small capitals in the accent text colour, the affiliate note quiet next to it.
+  // Singular because the callout shows one book (the mock lists several: "Buchtipps · Affiliate-Links").
+  .label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 2px; // mock: 2px tracking, no tracking token
+    text-transform: uppercase;
+    color: var(--color-text-accent);
+
+    span {
+      font-weight: var(--font-weight-regular);
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--color-text-muted);
+    }
+  }
+
   .title {
     font-family: var(--font-condensed);
     font-size: var(--_title);

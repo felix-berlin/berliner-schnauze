@@ -21,9 +21,13 @@ interface Props {
   model: WordPageModel;
   /** Source of the random word in "Und nu?". */
   words?: WordRef[];
+  /** A draft preview has no public numbers: plays are not counted. */
+  draft?: boolean;
 }
 
-const { model, words = [] } = Astro.props;
+const { draft = false, model, words = [] } = Astro.props;
+const grammar = grammarRows(model);
+const klang = klangRows(model);
 const voices = voiceSources(model.word.berlinerischAudio);
 ---
 
@@ -54,14 +58,19 @@ const voices = voiceSources(model.word.berlinerischAudio);
     <div class='anchor' id='verwandt'><slot name='verwandt'><WordNetworkCard model={model} /></slot></div>
 
     <h2 class='band anchor' id='analyse'>Sprachliche Analyse</h2>
+    {/* A wrapper only with content, so an empty card takes no grid cell and no gap. */}
     <div class='pair'>
-      <div class='anchor' id='grammatik'><slot name='grammatik'><WordAnalysisCard id='grammatik' title='Grammatik' rows={grammarRows(model)} /></slot></div>
-      <div class='anchor' id='klang'><slot name='klang'><WordAnalysisCard id='klang' title='Klang' rows={klangRows(model)} /></slot></div>
+      {(Astro.slots.has('grammatik') || grammar.length > 0) && (
+        <div class='anchor' id='grammatik'><slot name='grammatik'><WordAnalysisCard id='grammatik' title='Grammatik' rows={grammar} /></slot></div>
+      )}
+      {(Astro.slots.has('klang') || klang.length > 0) && (
+        <div class='anchor' id='klang'><slot name='klang'><WordAnalysisCard id='klang' title='Klang' rows={klang} /></slot></div>
+      )}
     </div>
     <div class='anchor' id='zahlen'><slot name='zahlen'><WordNumbers model={model} /></slot></div>
     <div class='anchor' id='fehler'><slot name='fehler'><WordReportLine word={model.word.berlinerisch} /></slot></div>
-    <slot name='weiter'><WordLinks words={words} /></slot>
+    <slot name='weiter'><WordLinks words={words} excludeSlug={model.word.slug} /></slot>
   </div>
 </article>
 <!-- Sibling of the article: a sticky bar rests where its parent (the page column) ends, below the content. -->
-<WordMobileBar audio={voices.m ?? voices.w} />
+<WordMobileBar audio={voices.m ?? voices.w} wordId={draft ? undefined : model.word.id} />

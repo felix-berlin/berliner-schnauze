@@ -28,11 +28,21 @@
       gap: var(--space-4);
       min-block-size: 3.5rem; // SPEC §11: the summary is 56px
       padding-inline: var(--_fold-inline);
+      border-radius: var(--radius-sm);
       list-style: none;
       cursor: pointer;
 
       &::-webkit-details-marker {
         display: none;
+      }
+
+      @include butler-mx.hover {
+        background: var(--color-surface-chip);
+      }
+
+      // The global ring sits on the summary's edge: inset keeps it inside the rounded card.
+      &:focus-visible {
+        outline-offset: calc(-1 * var(--space-1));
       }
     }
 

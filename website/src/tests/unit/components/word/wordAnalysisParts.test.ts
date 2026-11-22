@@ -72,6 +72,9 @@ describe("WordNumbers", () => {
     for (const label of ["Buchstaben", "Silben", "Vokale", "Konsonanten"]) {
       expect(html).toContain(`<dt>${label}</dt>`);
     }
+    expect(html).toContain("<dd>8</dd>");
+    expect(html).toContain("<dd>2</dd>");
+    expect(html).toContain("<dd>6</dd>");
     expect(html).toContain("Jeder Punkt: 2 % Häufigkeit im Deutschen. Gelb: Vokale.");
   });
 });
@@ -126,6 +129,22 @@ describe("WordMobileBar", () => {
   });
 });
 
+describe("WordLinks random pick", () => {
+  it("never picks the current word", async () => {
+    const render = await load("WordLinks");
+    for (let i = 0; i < 20; i++) {
+      const html = await render({
+        excludeSlug: "eins",
+        words: [
+          { berlinerisch: "Eins", slug: "eins" },
+          { berlinerisch: "Zwei", slug: "zwei" },
+        ],
+      });
+      expect(html).toContain('data-content-target="/wort/zwei"');
+    }
+  });
+});
+
 describe("FooterCalloutBook", () => {
   let render: Render;
   beforeAll(async () => {
@@ -155,7 +174,8 @@ describe("copy rules", () => {
       "WordMobileBar",
     ]) {
       const src = readFileSync(`src/components/word/${n}.astro`, "utf8");
-      expect(src).not.toMatch(/ wir | uns | unser|Quellen belegt/);
+      expect(src).not.toMatch(/ wir | uns | unser| wa |Quellen belegt/);
+      expect(src).not.toMatch(/\p{Extended_Pictographic}/u);
       expect(src).not.toContain("set:html");
     }
   });
