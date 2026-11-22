@@ -40,3 +40,23 @@ export const ttl = <T>(ms: number, load: () => Promise<T>): (() => Promise<T>) =
     return value;
   };
 };
+
+/**
+ * `ttl` per key, at most `max` keys (the oldest is dropped first), so a crawl over many keys cannot grow it
+ * without limit. Only for data that is the same for every visitor.
+ */
+export const ttlBy = <K, T>(
+  ms: number,
+  max: number,
+  load: (key: K) => Promise<T>,
+): ((key: K) => Promise<T>) => {
+  const memos = new Map<K, () => Promise<T>>();
+  return (key) => {
+    let memo = memos.get(key);
+    if (!memo) {
+      if (memos.size >= max) memos.delete(memos.keys().next().value as K);
+      memos.set(key, (memo = ttl(ms, () => load(key))));
+    }
+    return memo();
+  };
+};

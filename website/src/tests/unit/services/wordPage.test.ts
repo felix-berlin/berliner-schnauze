@@ -167,4 +167,12 @@ describe("fetchWordPage", () => {
     m.fetchWordPageGlobal.mockResolvedValue({ storyPrompt: "Kennste {Wort}?" });
     expect((await fetchWordPage("bbb"))!.storyPrompt).toBe("Kennste bbb?");
   });
+
+  it("builds the poll result once per word within the TTL", async () => {
+    const all = [word(50, "ddd")];
+    m.fetchAllWords.mockResolvedValue(all);
+    await fetchWordPage("ddd");
+    await fetchWordPage("ddd");
+    expect(m.find).toHaveBeenCalledTimes(1);
+  });
 });

@@ -2,6 +2,7 @@ import type { Story } from "@lib/story.ts";
 
 import { type PollResult, buildPollResult } from "@lib/pollResult.ts";
 import { pickBook } from "@lib/wordBook.ts";
+import { ttlBy } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { fetchAffiliateData, fetchWordPageGlobal } from "@services/payload/site.ts";
 import { fetchStories } from "@services/payload/stories.ts";
@@ -67,6 +68,21 @@ const contributor = (name?: string | null, suggestion?: number): Contributor | u
     ? undefined
     : { ...(name ? { name } : {}), suggestionId: String(suggestion) };
 
+/** One find, aggregated in code; no visitor data in it (own usage is never part of the model), so it is shared. */
+const fetchPoll = ttlBy(60_000, 500, async (wordId: number) => {
+  const { docs } = await (
+    await getPayloadClient()
+  ).find({
+    collection: "word-feedback",
+    depth: 0,
+    limit: 0,
+    pagination: false,
+    select: { age: true, area: true, half: true, usage: true },
+    where: { word: { equals: wordId } },
+  });
+  return buildPollResult(docs);
+});
+
 /** The page model of a public word, or null for an unknown slug. */
 export const fetchWordPage = async (slug: string): Promise<WordPageModel | null> => {
   const word = await fetchWordBySlug(slug);
@@ -77,20 +93,12 @@ export const fetchWordPage = async (slug: string): Promise<WordPageModel | null>
   const ref = toWordRef(word);
   const refs = await fetchWordRefs(); // memoized per words array: wordHelper keys its indexes on it
   const { after, before } = alphabeticNeighbors(refs, ref, 1);
-  const payload = await getPayloadClient();
-  const [stories, trend, wordPage, affiliate, { docs: feedback }] = await Promise.all([
+  const [stories, trend, wordPage, affiliate, poll] = await Promise.all([
     fetchStories(word.id, STORY_LIMIT),
     getWordTrend(word.id),
     fetchWordPageGlobal(),
     fetchAffiliateData(),
-    payload.find({
-      collection: "word-feedback",
-      depth: 0,
-      limit: 0,
-      pagination: false,
-      select: { age: true, area: true, half: true, usage: true },
-      where: { word: { equals: word.id } },
-    }),
+    fetchPoll(word.id),
   ]);
   const book = pickBook(affiliate.books, word.themen[0]?.id);
   const { day, month, year } = berlinParts(now);
@@ -112,7 +120,7 @@ export const fetchWordPage = async (slug: string): Promise<WordPageModel | null>
       ...(word.grammar?.plural && { plural: word.grammar.plural }),
     },
     ...(word.ipa && { ipa: word.ipa }),
-    poll: buildPollResult(feedback),
+    poll,
     related: (word.related ?? []).flatMap(
       ({ contributorName, contributorSuggestion, label, note, relation, word: target }) => {
         const text = target?.berlinerisch ?? label;

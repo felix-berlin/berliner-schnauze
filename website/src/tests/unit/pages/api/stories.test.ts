@@ -7,6 +7,7 @@ const { count, create, find, verifyTurnstile } = vi.hoisted(() => ({
   verifyTurnstile: vi.fn(),
 }));
 vi.mock("@services/turnstile.ts", () => ({ verifyTurnstile }));
+vi.mock("@services/cache.ts", () => ({ ttlBy: (_ms: number, _max: number, fn: unknown) => fn }));
 vi.mock("@services/payload.ts", () => ({
   getPayloadClient: async () => ({ count, create, find }),
   siteRead: () => ({ context: { siteRead: "published" }, overrideAccess: false }),
@@ -43,12 +44,15 @@ beforeEach(() => {
   verifyTurnstile.mockReset().mockResolvedValue("pass");
   create.mockReset().mockResolvedValue(row({ status: "pending" }));
   count.mockReset().mockResolvedValue({ totalDocs: 0 });
-  find.mockReset().mockImplementation(async ({ collection }) =>
-    collection === "words" ? { docs: [{ id: 5 }] } : { docs: [] },
-  );
+  find
+    .mockReset()
+    .mockImplementation(async ({ collection }) =>
+      collection === "words" ? { docs: [{ id: 5 }] } : { docs: [] },
+    );
 });
 
-const commentFinds = () => find.mock.calls.map((c) => c[0]).filter((a) => a.collection === "comments");
+const commentFinds = () =>
+  find.mock.calls.map((c) => c[0]).filter((a) => a.collection === "comments");
 
 describe("POST /api/stories", () => {
   it("201 with editKey and creates a review-held comment", async () => {
@@ -158,6 +162,7 @@ describe("GET /api/stories", () => {
   });
 
   it("queries only published top-level rows, newest first", async () => {
+    count.mockResolvedValue({ totalDocs: 2 }); // the featured query is skipped for 0
     await get("?word=icke");
     const [items, featured] = commentFinds();
     for (const q of [items, featured])
