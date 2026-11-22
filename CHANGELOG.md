@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.15.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.14.2...v4.15.0) (2026-11-22)
+
+
+### Bug Fixes
+
+* **footer:** clip horizontal overflow of the sign, update the old footer e2e, parse HTML in the test helper ([6d74e28](https://github.com/felix-berlin/berliner-schnauze/commit/6d74e2884b383acf936c31a83410db647e2d1f22))
+* **footer:** review fixes for hydration, error reporting and naming ([b94ddfe](https://github.com/felix-berlin/berliner-schnauze/commit/b94ddfea7d057fdffa4da75db9cc6be4c0dd0aba))
+
+
+### Features
+
+* **footer:** add app callout store ([83a6839](https://github.com/felix-berlin/berliner-schnauze/commit/83a683991a4064b36453c9361efa613fa8bf7350))
+* **footer:** add band and sign tokens ([ad7172d](https://github.com/felix-berlin/berliner-schnauze/commit/ad7172dee45d7780d5d835320c3b0477f4a5755d))
+* **footer:** add farewell and closing callouts ([782f870](https://github.com/felix-berlin/berliner-schnauze/commit/782f8706b7de5920bd6e09c1e7a1937f0b3f6481))
+* **footer:** add footer words service ([119bf75](https://github.com/felix-berlin/berliner-schnauze/commit/119bf756da11b026e2500c49e71dd789f205ace5))
+* **footer:** add word pick and cycle logic ([5cf994c](https://github.com/felix-berlin/berliner-schnauze/commit/5cf994c666f9fd26d48ef68075ccf78dfe911ce3))
+* **footer:** add word sign ([4290b01](https://github.com/felix-berlin/berliner-schnauze/commit/4290b01c02e586c78a88f2f08e642924b079c3ef))
+* **footer:** replace the footer with v21 ([da197cb](https://github.com/felix-berlin/berliner-schnauze/commit/da197cbb24490873874818360431fed6ce013eb5))
+* **footer:** take the page and legal links from the CMS menus, steady the reduced-motion e2e ([31fb61e](https://github.com/felix-berlin/berliner-schnauze/commit/31fb61ee33132fad04f06f67abc608f5145d8b08))
+
+
+### Performance Improvements
+
+* **footer:** pick sign words without copying the list and skip the pick on callout pages ([10e1d7f](https://github.com/felix-berlin/berliner-schnauze/commit/10e1d7fcf84138f1c3f5458c3230f9858fb023c3))
+
 ## [4.14.2](https://github.com/felix-berlin/berliner-schnauze/compare/v4.14.1...v4.14.2) (2026-11-21)
 
 
