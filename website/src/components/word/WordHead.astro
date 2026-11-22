@@ -54,7 +54,7 @@ const hasImages = Astro.slots.has('images');
 
     {main && (
       <div class='meaning'>
-        <p class='c-label'>Bedeutung</p>
+        <p class='c-word-label'>Bedeutung</p>
         <p class='main'>{main}</p>
         {more.length > 0 && (
           <ul class='list'>{more.map((m) => <li>{m}</li>)}</ul>

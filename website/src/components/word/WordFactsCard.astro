@@ -32,7 +32,7 @@ const gap = {
         <dl class='facts'>
           {facts.map((f) => (
             <div class='fact'>
-              <dt class='c-label'>{KIND_LABEL[f.kind] ?? f.kind}</dt>
+              <dt class='c-word-label'>{KIND_LABEL[f.kind] ?? f.kind}</dt>
               <dd class='text'>{f.text}</dd>
               {f.contributor && <dd class='by'>{f.contributor.name ?? 'aus der Community'}</dd>}
             </div>
@@ -43,7 +43,7 @@ const gap = {
         <aside class='book'>
           {book.cover && <img class='cover' src={book.cover} alt='' width='48' height='64' loading='lazy' />}
           <div class='info'>
-            <p class='c-label'>Zum Weiterlesen · Affiliate-Link</p>
+            <p class='c-word-label'>Zum Weiterlesen · Affiliate-Link</p>
             <a class='title' href={book.url} rel='sponsored noopener'>{book.title}</a>
             <p class='note'>Passt zum Thema dieses Worts. Als Amazon-Partner verdiene ich an qualifizierten Verkäufen.</p>
           </div>
