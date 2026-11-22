@@ -331,9 +331,10 @@ describe("featured comments", () => {
   });
 
   it("checks the resulting state when a featured row is republished", async () => {
+    // anonymous creates are always published, so hide the first featured row afterwards
+    const held = await make({ featured: true });
+    await payload.update({ collection: "comments", id: held.id, data: { status: "hidden" } });
     await make({ featured: true });
-    // pending/hidden featured rows are allowed next to a published one
-    const held = await make({ featured: true, status: "hidden" });
     expect(held.featured).toBe(true);
     await expect(
       payload.update({ collection: "comments", id: held.id, data: { status: "published" } }),
