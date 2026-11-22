@@ -1,12 +1,18 @@
 import type { APIRoute } from "astro";
 
 import { getPayloadClient, siteRead } from "@services/payload.ts";
-import { hashEditKey, listComments, toPublic, visitorId } from "@services/payload/comments.ts";
+import {
+  authorTagOf,
+  hashEditKey,
+  listComments,
+  toPublic,
+  visitorId,
+} from "@services/payload/comments.ts";
 import { captchaGate, orNull, positiveInt, reply } from "@utils/apiReply.ts";
 import { commentCreateSchema } from "@utils/commentSchema.ts";
 import { logRouteError } from "@utils/logError.ts";
 import { requestIp } from "@utils/rateLimit.ts";
-import { createHash, randomBytes } from "node:crypto";
+import { randomBytes } from "node:crypto";
 import { pickPseudonym } from "payload-app/comments";
 
 /** Only published words have comments (siteRead hides drafts). */
@@ -68,10 +74,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     }
 
     // Per-word handle: the same visitor keeps one pseudonym within a word, but cannot be linked across words.
-    const authorTag = createHash("sha256")
-      .update(`${visitorId(cookies, true)}:${wordId}`)
-      .digest("hex")
-      .slice(0, 16);
+    const authorTag = authorTagOf(visitorId(cookies, true)!, wordId);
     let pseudonym: string | undefined;
     if (!authorName) {
       const word = { equals: wordId };

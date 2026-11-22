@@ -2,14 +2,14 @@ import type { APIRoute } from "astro";
 import type { Comment } from "payload-app";
 
 import { getPayloadClient } from "@services/payload.ts";
-import { hashEditKey, visitorId } from "@services/payload/comments.ts";
+import { authorTagOf, hashEditKey, visitorId } from "@services/payload/comments.ts";
 import { fetchStories } from "@services/payload/stories.ts";
 import { wordIdBySlug } from "@services/payload/wordId.ts";
 import { captchaGate, positiveInt, reply } from "@utils/apiReply.ts";
 import { logRouteError } from "@utils/logError.ts";
 import { requestIp } from "@utils/rateLimit.ts";
 import { visible } from "@utils/visibleText.ts";
-import { createHash, randomBytes } from "node:crypto";
+import { randomBytes } from "node:crypto";
 import { COMMENT_MIN } from "payload-app/comments";
 import { STORY_BEZIRKE } from "payload-app/story-bezirk";
 import { z } from "zod";
@@ -70,10 +70,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     if (wordId === null) return reply({ error: "Wort nicht gefunden" }, 404);
 
     // Per-word handle, like the comment POST: one visitor, one tag per word, not linkable across words.
-    const authorTag = createHash("sha256")
-      .update(`${visitorId(cookies, true)}:${wordId}`)
-      .digest("hex")
-      .slice(0, 16);
+    const authorTag = authorTagOf(visitorId(cookies, true)!, wordId);
     const editKey = randomBytes(32).toString("base64url");
     await (
       await getPayloadClient()
