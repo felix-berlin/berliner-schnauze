@@ -54,7 +54,7 @@ describe("FooterWordSign", () => {
   });
 
   it("swaps to another word, never repeating one before all were shown, and keeps focus on the button", async () => {
-    const wrapper = mount(FooterWordSign, { props: { words }, attachTo: document.body });
+    const wrapper = mount(FooterWordSign, { attachTo: document.body, props: { words } });
     await flushPromises();
     const button = wrapper.get("button");
     (button.element as HTMLButtonElement).focus();

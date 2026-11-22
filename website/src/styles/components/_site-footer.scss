@@ -1,0 +1,288 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Footer v21 dark band (docs/superpowers/specs/2026-11-22-footer-v21-design.md; handoff SPEC §2, §6-§9). Parts: .farewell
+// (holds the FooterFarewell island), .columns (.col: h2, .links, .text, .support, .small, .small-links, .social) and
+// .legal. The band is dark in both themes. The three columns reveal on first view (data-state armed/in, set by the
+// script in SiteFooter.astro; without it everything stays visible).
+@mixin underline-grow {
+  color: var(--band-text);
+  text-decoration: none;
+  background: linear-gradient(var(--color-accent-active), var(--color-accent-active)) 0 100% / 0 2px
+    no-repeat;
+
+  @include butler-mx.hover {
+    color: var(--band-text-strong);
+    background-size: 100% 2px;
+  }
+  @include butler-mx.feature("motion") {
+    transition: background-size var(--duration-base) var(--ease-standard);
+  }
+}
+@mixin underline-small {
+  color: var(--band-text);
+  text-decoration: underline;
+  text-decoration-color: var(--band-text-quiet);
+  text-underline-offset: var(--space-1);
+
+  @include butler-mx.hover {
+    color: var(--band-text-strong);
+    text-decoration-color: var(--color-accent-active);
+  }
+}
+
+@include mx.component("site-footer") {
+  :scope {
+    --_small: 0.8125rem; // SPEC 13px small print: --font-size-sm is 12.8px, below the 13px minimum
+    --_col-pad: 3.5rem; // SPEC 56px, between the space-12 and space-16 steps
+    --_gap-narrow: 2.5rem; // SPEC mobile column gap 40px, between the space-8 and space-12 steps
+    --_legal-top: 1.375rem; // SPEC legal line padding 22px
+    --_legal-bottom: 1.75rem; // SPEC legal line padding 28px
+    --_stagger: 60ms; // SPEC §9 column stagger
+    --_reveal: 0.45s; // SPEC §9 column reveal
+    --focus-ring-color: var(--band-text-strong);
+
+    container: site-footer / inline-size;
+    color-scheme: only dark;
+    color: var(--band-text);
+    accent-color: var(--color-accent-active);
+    background: var(--band-dark-bg);
+    font-size: var(--font-size-base);
+  }
+
+  .farewell {
+    padding-block: var(--space-16);
+    border-block-end: 1px solid var(--band-line);
+  }
+
+  .columns {
+    display: grid;
+    gap: var(--_gap-narrow);
+    padding-block: var(--_col-pad);
+
+    @container site-footer (inline-size >= 50.5rem) {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-12);
+
+      .col:last-child {
+        grid-column: 1 / -1;
+      }
+    }
+    @container site-footer (inline-size >= 62.5rem) {
+      grid-template-columns: 0.9fr 1.2fr 1.2fr;
+      align-items: start;
+
+      .col:last-child {
+        grid-column: auto;
+      }
+    }
+  }
+
+  h2 {
+    margin: 0 0 var(--space-4);
+    font-family: var(--font-condensed);
+    font-size: var(--font-size-xl);
+    font-weight: 600; // Fira 600, no weight token between regular and bold
+    line-height: 1.2;
+    color: var(--band-text-strong);
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .links {
+    display: grid;
+    gap: var(--space-3);
+    font-size: var(--font-size-lg);
+    line-height: 1.4;
+
+    a {
+      @include underline-grow;
+
+      display: inline-flex;
+      align-items: center;
+      align-self: start;
+      justify-self: start;
+
+      @container site-footer (inline-size < 50.5rem) {
+        min-block-size: var(--size-tap-target);
+      }
+    }
+  }
+
+  .text {
+    max-inline-size: 36ch;
+    margin: 0 0 var(--space-5);
+    line-height: 1.6;
+  }
+
+  .col:last-child .text {
+    max-inline-size: 44ch;
+  }
+
+  .support {
+    --button-bg: transparent;
+    --button-color: var(--band-text-strong);
+    --button-border-color: var(--band-text);
+    --button-min-block-size: var(--size-tap-target);
+    --button-padding: 0 var(--space-5);
+    --button-gap: var(--space-2);
+    --button-font-size: var(--font-size-base);
+
+    display: flex;
+
+    .heart {
+      color: var(--color-accent-icon);
+    }
+  }
+
+  .small {
+    max-inline-size: 36ch;
+    margin: var(--space-3) 0 0;
+    font-size: var(--_small);
+    color: var(--band-text-quiet);
+  }
+
+  .small-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-5);
+    font-size: var(--font-size-md);
+
+    a {
+      @include underline-small;
+
+      display: inline-flex;
+      align-items: center;
+      min-block-size: var(--size-tap-target);
+    }
+  }
+
+  .social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-4);
+    align-items: center;
+    padding-block-start: var(--space-2);
+    margin-block-start: var(--space-2);
+    font-size: var(--font-size-md);
+    border-block-start: 1px solid var(--band-line);
+
+    p {
+      margin: 0;
+      color: var(--band-text-quiet);
+    }
+
+    ul {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 var(--space-5);
+
+      @container site-footer (inline-size >= 50.5rem) {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0 var(--space-4);
+      }
+    }
+
+    // The label takes its own line on narrow widths so the profile links get two columns.
+    @container site-footer (inline-size < 50.5rem) {
+      display: grid;
+    }
+
+    a {
+      @include underline-small;
+
+      display: inline-flex;
+      align-items: center;
+      min-block-size: var(--size-tap-target);
+    }
+  }
+
+  .legal-wrap {
+    border-block-start: 1px solid var(--band-line);
+  }
+
+  .legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-5);
+    align-items: center;
+    padding-block: var(--_legal-top) var(--_legal-bottom);
+    font-size: var(--font-size-md);
+    color: var(--band-text-quiet);
+
+    a {
+      @include underline-small;
+
+      display: inline-flex;
+      align-items: center;
+      min-block-size: var(--size-tap-target);
+    }
+
+    // Narrow: the project line on its own row, then version, imprint, privacy and settings side by side, no dots.
+    .project {
+      flex-basis: 100%;
+    }
+
+    @container site-footer (inline-size >= 50.5rem) {
+      gap: 0 var(--space-3);
+
+      li + li::before {
+        display: inline-block;
+        inline-size: 4px; // SPEC 4px round separator, no size token
+        block-size: 4px;
+        margin-inline-end: var(--space-3);
+        vertical-align: middle;
+        content: "";
+        background: var(--band-dot);
+        border-radius: var(--radius-pill);
+      }
+
+      .project {
+        flex-basis: auto;
+      }
+
+      a {
+        min-block-size: 0;
+      }
+    }
+  }
+
+  // Reveal (SPEC §9): armed by the page script, plays once.
+  :scope[data-state="armed"] .col {
+    @include butler-mx.feature("motion") {
+      opacity: 0;
+      translate: 0 14px;
+    }
+  }
+
+  :scope[data-state="in"] .col {
+    @include butler-mx.feature("motion") {
+      animation: site-footer-rise var(--_reveal) ease backwards;
+
+      &:nth-child(2) {
+        animation-delay: var(--_stagger);
+      }
+
+      &:nth-child(3) {
+        animation-delay: calc(var(--_stagger) * 2);
+      }
+    }
+  }
+
+  @keyframes site-footer-rise {
+    0% {
+      opacity: 0;
+      translate: 0 14px;
+    }
+
+    100% {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+}

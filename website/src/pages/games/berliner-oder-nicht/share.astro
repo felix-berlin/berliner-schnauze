@@ -6,8 +6,9 @@ const page = {
   description: 'Sieh dir das Spielergebnis an — Berliner oder nicht? Das Swipe-Game.',
   title: 'Spielergebnis – Berliner oder nicht? | Berliner Schnauze',
 }
+// TODO(footer): Spiel-Aufruf (Rangliste), Text noch offen (footer spec §4); until then no callout.
 ---
 
-<Layout content={page}>
+<Layout content={page} footerAufruf='keiner'>
   <BonShareView client:only="vue" />
 </Layout>

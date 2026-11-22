@@ -1,0 +1,139 @@
+---
+import '@styles/components/_site-footer.scss';
+import HeartIcon from '~icons/lucide/heart';
+import { fetchFooterWords } from '@services/payload/footerWords.ts';
+import { fetchSocialMenu } from '@services/payload/site.ts';
+import { fetchAllWords } from '@services/payload/words.ts';
+
+import { version } from '../../../package.json';
+import FooterCalloutApp from './FooterCalloutApp.vue';
+import FooterFarewell from './FooterFarewell.vue';
+
+interface Props {
+  /** The word of the page itself, never shown on the sign. */
+  excludeSlug?: string;
+  /** sign: word sign · callout: the page's own callout sits above (slot `aufruf`) · app: install callout where possible */
+  mode: 'app' | 'callout' | 'sign';
+}
+
+const { excludeSlug, mode } = Astro.props;
+
+// Each read degrades on its own: a broken word list or social menu must not take the page down.
+const [words, socialMenu, wordCount] = await Promise.all([
+  fetchFooterWords(excludeSlug),
+  fetchSocialMenu().catch((error) => {
+    console.error('[footer] social menu unavailable', error);
+    return [];
+  }),
+  fetchAllWords().then((all) => all.length).catch(() => 0),
+]);
+const knownWords = Math.floor(wordCount / 100) * 100;
+
+const pages = [
+  { href: '/wort', title: 'Wort-Index' },
+  { href: '/themen', title: 'Themen' },
+  { href: '/games/berliner-oder-nicht', title: 'Berliner oder nich?' },
+  { href: '/magazin', title: 'Magazin' },
+  { href: '/wort-vorschlagen', title: 'Wort vorschlagen' },
+];
+---
+
+<slot name='aufruf' />
+{mode === 'app' && <FooterCalloutApp client:only='vue' />}
+
+<footer class='c-site-footer js-site-footer' data-theme='dark'>
+  <div class='farewell u-max-body-width'>
+    <FooterFarewell client:visible mode={mode} words={words} />
+  </div>
+
+  <div class='columns-wrap js-footer-ground'>
+    <div class='columns u-max-body-width'>
+      <div class='col'>
+        <h2>Kiek ooch ma hier</h2>
+        <nav aria-label='Weitere Seiten'>
+          <ul class='links'>
+            {pages.map((page) => <li><a href={page.href}>{page.title}</a></li>)}
+          </ul>
+        </nav>
+      </div>
+
+      <div class='col'>
+        <h2>Unterstütz dit Projekt</h2>
+        <p class='text'>
+          Berliner Schnauze is een unabhängiges Projekt, jebaut in der Freizeit. Wenn dir dit
+          Wörterbuch jefällt, spendier mir ’ne Molle.
+        </p>
+        <div class='support'>
+          <a class='c-button' data-variant='center-icon' href='/spenden'>
+            <HeartIcon aria-hidden='true' class='heart' height='16' width='16' />
+            Unterstützen
+          </a>
+        </div>
+        <p class='small'>über GitHub Sponsors, Ko-fi, PayPal oder Krypto</p>
+      </div>
+
+      <div class='col'>
+        <h2>Über ditt Wörterbuch</h2>
+        <p class='text'>
+          {knownWords > 0 ? `Über ${knownWords.toLocaleString('de-DE')} Berliner Wörter` : 'Berliner Wörter'}
+          und Redewendungen mit Bedeutung und Beispielen. Jedet Wort wird vor der Veröffentlichung
+          jeprüft.
+        </p>
+        <ul class='small-links'>
+          {/* TODO(footer): „So arbeite ick“ once the page exists (SPEC §13.3) */}
+          <li>
+            <a
+              href='https://github.com/felix-berlin/berliner-schnauze/issues/new'
+              rel='noopener'
+              target='_blank'>Fehler melden</a
+            >
+          </li>
+        </ul>
+        {
+          socialMenu.length > 0 && (
+            <div class='social'>
+              <p>Folg mir</p>
+              <ul>
+                {socialMenu.map((item) => (
+                  <li>
+                    <a href={item.link} rel={item.rel ? `${item.rel} noopener` : 'noopener'} target='_blank'>
+                      {item.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class='legal-wrap'>
+    <ul class='legal u-max-body-width'>
+      <li class='project'>
+        Ein Projekt von <a href='https://webshaped.de'>Webshaped / Felix Scholze</a>
+      </li>
+      <li><a href='/changelog'>Version {version}</a></li>
+      <li><a href='/impressum'>Impressum</a></li>
+      <li><a href='/datenschutz'>Datenschutz</a></li>
+      <li><a href='/settings'>Einstellungen</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+  // One-time reveal when the footer first scrolls into view (SPEC §9). Armed only here, so without JS or with
+  // reduced motion everything stays visible as rendered. The footer is re-rendered on every navigation.
+  document.addEventListener('astro:page-load', () => {
+    const footer = document.querySelector<HTMLElement>('.js-site-footer');
+    if (!footer || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    footer.dataset.state = 'armed';
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry?.isIntersecting) return;
+      footer.dataset.state = 'in';
+      observer.disconnect();
+    });
+    observer.observe(footer);
+  });
+</script>

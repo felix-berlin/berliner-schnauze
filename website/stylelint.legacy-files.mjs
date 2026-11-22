@@ -12,7 +12,6 @@ export default [
   "src/styles/components/_donation-page.scss",
   "src/styles/components/_donation-wallets.scss",
   "src/styles/components/_filter-search.scss",
-  "src/styles/components/_footer-app-section.scss",
   "src/styles/components/_form.scss",
   "src/styles/components/_magazin-article.scss",
   "src/styles/components/_magazin-overview.scss",

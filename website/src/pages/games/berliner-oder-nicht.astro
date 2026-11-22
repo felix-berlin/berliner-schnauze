@@ -24,9 +24,10 @@ const gameSchema = jsonLd({
   publisher: { '@id': `${SITE_URL}/#organization` },
   url: `${SITE_URL}/games/berliner-oder-nicht`,
 });
+// TODO(footer): Spiel-Aufruf (Rangliste), Text noch offen (footer spec §4); until then no callout.
 ---
 
-<Layout content={page}>
+<Layout content={page} footerAufruf='keiner'>
   <Fragment slot='head'>
     <script set:html={gameSchema} type='application/ld+json' />
     {/* Classic inline script: runs while the head is parsed, before Matomo's deferred module and its first page view. */}
