@@ -1,0 +1,62 @@
+@use "@styles/mixins" as mx;
+
+// Footer v21 closing callout above the dark band (docs/superpowers/specs/2026-11-22-footer-v21-design.md; handoff
+// SPEC §4). One look for the app and the Anki callout. Parts: .inner (the split; carries the padding because the root
+// is the container) of .text (.title, .lead) and .actions (one c-button).
+@include mx.component("footer-callout") {
+  :scope {
+    --_pad-top: 5.5rem; // SPEC §4 88px, between the space-12 and space-16 steps
+    --_pad-bottom: 6rem; // SPEC §4 96px
+    --_title: 3.5rem; // SPEC h2 size, above the 4xl step
+    --focus-ring-color: var(--color-accent-active);
+
+    container: footer-callout / inline-size;
+    color: var(--color-text-body);
+    background: var(--page);
+    border-block-start: 1px solid var(--color-border-card);
+  }
+
+  .inner {
+    display: grid;
+    gap: var(--space-6);
+    padding-block: var(--_pad-top) var(--_pad-bottom);
+
+    @container footer-callout (inline-size < 50.5rem) {
+      --_pad-top: var(--space-16);
+      --_pad-bottom: var(--space-16);
+    }
+    @container footer-callout (inline-size >= 62.5rem) {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+  }
+
+  .title {
+    margin: 0;
+    font-family: var(--font-condensed);
+    font-size: var(--_title);
+    font-weight: 800; // Fira 800, no weight token between bold and black
+    line-height: 0.95;
+    color: var(--color-text-strong);
+    text-transform: uppercase;
+
+    @container footer-callout (inline-size < 62.5rem) {
+      --_title: 3rem; // SPEC tablet
+    }
+    @container footer-callout (inline-size < 50.5rem) {
+      --_title: 2.4rem; // SPEC mobile
+    }
+  }
+
+  .lead {
+    max-inline-size: 60ch;
+    margin: var(--space-4) 0 0;
+    font-size: var(--font-size-lg);
+    line-height: 1.5;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-start;
+  }
+}
