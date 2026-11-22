@@ -88,13 +88,18 @@
   .o-word-v18 .anchor {
     scroll-margin-block-start: var(--_anchor);
 
-    // Card paddings (SPEC §3: 24/28/32; 28 has no token step, the smaller 24 stays on tablet).
+    // Card paddings (SPEC §3: 24/28/32); the 28px of the tablet is written out as in _word-head.scss.
 
     --section-card-gutter: var(--space-6);
     --section-card-header-block: var(--space-6);
 
     @include mx.breakpoint("word") {
       scroll-margin-block-start: var(--_anchor-bar);
+
+      // stylelint-disable declaration-property-value-disallowed-list -- SPEC §3: tablet card padding 28px, as in _word-head.scss
+      --section-card-gutter: 1.75rem;
+      --section-card-header-block: 1.75rem;
+      // stylelint-enable declaration-property-value-disallowed-list
     }
     @include mx.breakpoint("desktop") {
       scroll-margin-block-start: var(--_anchor);

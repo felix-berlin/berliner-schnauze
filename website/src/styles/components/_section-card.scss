@@ -133,18 +133,34 @@
       }
     }
 
+    // Gap hint (SPEC §4 "Lücken-Hinweis", mock luecke-*): dashed box on the chip surface, text left, button right;
+    // it stacks when the card is narrow.
     .gap {
+      container: section-card-gap / inline-size;
+      margin: 0 var(--_inline) var(--_inline);
+    }
+
+    .gap-box {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       gap: var(--space-4);
-      padding: 0 var(--_inline) var(--_inline);
+      padding: var(--space-4);
+      background: var(--color-surface-chip);
+      border: 1px dashed var(--color-border-inner);
+      border-radius: var(--radius-sm);
+
+      @container section-card-gap (inline-size >= 36rem) {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
     }
 
     .text {
       margin: 0;
       line-height: 1.6;
-      color: var(--color-text-muted);
+      color: var(--_ink);
     }
 
     // Outline button (SPEC §4.3): 44px, 0 16px, 4px radius, 1.5px orange-500 rim, chip surface on hover.
@@ -161,6 +177,7 @@
       // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §4.3: 1.5px rim, no border-width token
       border: 1.5px solid var(--color-accent-active);
       border-radius: var(--radius-sm);
+      flex: none;
       cursor: pointer;
 
       &:hover {

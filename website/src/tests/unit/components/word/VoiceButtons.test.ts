@@ -28,6 +28,18 @@ describe("VoiceButtons", () => {
     ).toBe(false);
   });
 
+  it("puts the female voice first with order wm (SPEC §6), the default keeps male first", () => {
+    const texts = (order?: "mw" | "wm") =>
+      mount(VoiceButtons, {
+        props: { sources: { m: "/m.mp3", w: "/w.mp3" }, ...(order && { order }) },
+      })
+        .findAll("button")
+        .map((b) => b.text());
+    expect(texts("wm")).toEqual(["Weiblich", "Männlich"]);
+    expect(texts("mw")).toEqual(["Männlich", "Weiblich"]);
+    expect(texts()).toEqual(["Männlich", "Weiblich"]);
+  });
+
   it("marks only the playing voice as pressed and toggles the clicked one with its file and word", async () => {
     const w = mount(VoiceButtons, { props: { sources: { m: "/m.mp3", w: "/w.mp3" }, wordId: 4 } });
     const [male, female] = w.findAll("button");

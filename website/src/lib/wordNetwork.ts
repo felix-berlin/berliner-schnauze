@@ -18,10 +18,8 @@ const NET_SIZE = 4;
 export const pickNetwork = <T extends { label: string; relation?: string | undefined }>(
   related: readonly T[],
 ): { net: T[]; rest: T[] } => {
-  const rank = (r: T) => {
-    const i = RELATION_ORDER.findIndex((k) => k === r.relation);
-    return i === -1 ? RELATION_ORDER.length : i;
-  };
+  // An unknown relation is labelled "Verwandt", so it ranks there too.
+  const rank = (r: T) => RELATION_ORDER.indexOf(relationKey(r.relation));
   const sorted = related.toSorted(
     (a, b) => rank(a) - rank(b) || a.label.localeCompare(b.label, "de"),
   );
