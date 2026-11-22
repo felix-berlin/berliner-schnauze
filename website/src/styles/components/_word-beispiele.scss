@@ -70,7 +70,7 @@
     color: var(--color-accent-active); // SPEC §4.1: only the plus is orange
   }
 
-  // Tooltip (SPEC §14): above the row, 13px, shown on hover, focus and tap; data-dismissed (Esc) wins.
+  // Tooltip (SPEC §14): above the row, 13px, shown on hover, focus and tap ([data-open]); data-dismissed (Esc) wins.
   .tip {
     --_tip-size: 0.8125rem; // SPEC §4.2: 13px minimum
 
@@ -92,7 +92,7 @@
     transition: opacity var(--duration-base) var(--ease-standard);
   }
 
-  .record:not([data-dismissed]):is(:focus-within, :has(.record-button:active)) .tip {
+  .record:not([data-dismissed]):is(:focus-within, [data-open]) .tip {
     visibility: visible;
     opacity: 1;
   }

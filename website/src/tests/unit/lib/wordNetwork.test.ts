@@ -18,6 +18,16 @@ describe("pickNetwork", () => {
     expect(rest.map((r) => r.label)).toEqual(["Beta", "Zeta"]);
   });
 
+  it("ranks an unknown relation like the verwandt label it gets", () => {
+    const { net } = pickNetwork([
+      entry("Z", "redewendung"),
+      entry("B"),
+      entry("A", "verwandt"),
+      entry("G", "gleich"),
+    ]);
+    expect(net.map((r) => r.label)).toEqual(["G", "A", "B", "Z"]);
+  });
+
   it("keeps everything in the net up to four entries and sorts unknown relations last", () => {
     const { net, rest } = pickNetwork([entry("B"), entry("A", "verwandt")]);
     expect(net.map((r) => r.label)).toEqual(["A", "B"]);

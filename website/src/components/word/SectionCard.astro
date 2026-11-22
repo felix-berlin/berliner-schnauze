@@ -10,7 +10,7 @@ interface Props {
   count?: number;
   /** Replaces the body when the card has no content (SPEC §6/§9/§10): invitation text and the label of the outline button. */
   gap?: { text: string; cta: string };
-  /** Renders the "Ergänzen" pill and the gap button; wired in Task 17 through `data-contribute`. */
+  /** Renders the "Ergänzen" pill (only while the card has content) and the gap button; wired in Task 17 through `data-contribute`. */
   contribute?: ContributeType;
   /** false: the surrounding wrapper owns the anchor id and its scroll margin (v18 page); the id then only names the heading. */
   anchor?: boolean;
@@ -28,7 +28,7 @@ const headingId = `heading-${id}`;
   <div class='header'>
     <Heading class='title' id={headingId}>{title}</Heading>
     {count !== undefined && count > 0 && <span class='count'>{count}</span>}
-    {contribute && (
+    {contribute && !gap && (
       <button class='add' type='button' data-contribute={contribute}>
         <span class='plus' aria-hidden='true'>+</span> Ergänzen
       </button>
@@ -36,10 +36,12 @@ const headingId = `heading-${id}`;
   </div>
   {gap && (
     <div class='gap'>
-      <p class='text'>{gap.text}</p>
-      <button class='cta' type='button' data-contribute={contribute}>
-        <span class='plus' aria-hidden='true'>+</span> {gap.cta}
-      </button>
+      <div class='gap-box'>
+        <p class='text'>{gap.text}</p>
+        <button class='cta' type='button' data-contribute={contribute}>
+          <span class='plus' aria-hidden='true'>+</span> {gap.cta}
+        </button>
+      </div>
     </div>
   )}
   {body && <div class='body' data-slot set:html={body} />}

@@ -65,6 +65,46 @@ describe("v18 word cards", () => {
     expect(html).toContain("Noch keen Wort mit");
   });
 
+  it("renders Einsprechen as aria-disabled, linked to its tooltip text", async () => {
+    const html = await examples({
+      examples: [{ example: "Satz.", exampleAudio: [] }],
+      word: "Testwort",
+    });
+    expect(html).toMatch(
+      /<button[^>]*aria-disabled="true"[^>]*aria-describedby="einsprechen-tip-0"/,
+    );
+    expect(html).toMatch(
+      /id="einsprechen-tip-0"[^>]*role="tooltip"[^>]*>Kommt bald\. Einsprechen is noch in Arbeit\./,
+    );
+  });
+
+  it("puts four related words in the net, the rest only in the list, and links only entries with a page", async () => {
+    const rel = (label: string, relation: string, url?: string) => ({
+      label,
+      relation,
+      ...(url && { url }),
+    });
+    const html = await network({
+      model: model({
+        related: [
+          rel("Eins", "gleich", "/wort/eins"),
+          rel("Zwei", "gleich", "/wort/zwei"),
+          rel("Drei", "gegenteil", "/wort/drei"),
+          rel("Vier", "verwandt", "/wort/vier"),
+          rel("Fuenf", "redewendung", "/wort/fuenf"),
+          rel("NurText", "redewendung"),
+        ],
+      }),
+    });
+    const net = html.slice(html.indexOf("<svg"), html.indexOf("</svg>"));
+    for (const w of ["Eins", "Zwei", "Drei", "Vier"]) expect(net).toContain(`>${w}<`);
+    expect(net).not.toContain("Fuenf");
+    const rest = html.slice(html.indexOf('class="rest"'));
+    expect(rest).toContain('href="/wort/fuenf"');
+    expect(rest).toMatch(/<span>NurText<\/span>/);
+    expect(html).not.toContain('href="undefined"');
+  });
+
   it("shows the book block only with a book and escapes visitor text", async () => {
     const withBook = await facts({
       book: { title: "Testbuch", url: "https://example.test/b" },
