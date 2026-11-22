@@ -1,0 +1,193 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Jeschichten card body (SPEC §8.1): the prompt box ("Frage der Woche" + "Erzähl’s"), the list with the reactions and
+// "Alle {n} Jeschichten lesen". Parts: .prompt (.question, .text, .ask), .empty, .list (.item, .quote, .meta, .by,
+// .reactions, .react, .num), .all, .note, .foot. A collapsed list shows two items on a narrow card (SPEC: mobile 2).
+@include mx.component("word-stories") {
+  :scope {
+    --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
+
+    container: word-stories / inline-size;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .prompt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-4);
+    padding: var(--space-4);
+    background: var(--color-surface-chip);
+    border-radius: var(--radius-sm);
+  }
+
+  .question {
+    flex: 1 1 14rem;
+  }
+
+  .text {
+    margin: var(--space-1) 0 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+  }
+
+  // Outline button (SPEC §4.3): 44px, 0 16px, 4px radius, 1.5px orange-500 rim.
+  .ask {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex: none;
+    min-block-size: var(--size-tap-target);
+    padding-inline: var(--space-4);
+    font: inherit;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+    background: transparent;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §4.3: 1.5px rim, no border-width token
+    border: 1.5px solid var(--color-accent-active);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+
+    @include butler-mx.feature("motion") {
+      transition: background-color var(--duration-base);
+    }
+    @include butler-mx.hover {
+      background: var(--color-surface-chip);
+    }
+
+    .icon {
+      // SPEC §8.1: the icon sits 2.5px higher, no token at that size
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §8.1: optical offset of 2.5px
+      translate: 0 -2.5px;
+    }
+  }
+
+  .empty {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .item {
+    padding-block: var(--space-4);
+    border-block-start: 1px solid var(--color-border-card);
+
+    &:first-child {
+      border-block-start: 0;
+    }
+
+    &:focus-visible {
+      outline-offset: var(--space-1);
+    }
+  }
+
+  .quote {
+    margin: 0;
+    font-size: var(--font-size-md);
+    line-height: 1.55;
+    color: var(--color-text-strong);
+    overflow-wrap: anywhere;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+    margin-block-start: var(--space-2);
+    font-size: var(--_small);
+    color: var(--color-text-muted);
+  }
+
+  .reactions {
+    display: inline-flex;
+    gap: var(--space-2);
+  }
+
+  // Reaction (SPEC §4.3): pill, 44px on a narrow card, 36px from 36rem.
+  .react {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-block-size: var(--size-tap-target);
+    padding-inline: var(--space-3);
+    font: inherit;
+    font-size: var(--_small);
+    color: var(--color-text-body);
+    background: transparent;
+    border: 1px solid var(--color-border-card);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+
+    @container word-stories (inline-size >= 36rem) {
+      min-block-size: 2.25rem; // SPEC §4.3: 36px on desktop and tablet
+    }
+
+    @include butler-mx.hover {
+      &:not([aria-disabled="true"]) {
+        border-color: var(--color-accent-active);
+        color: var(--color-text-strong);
+      }
+    }
+
+    &[aria-pressed="true"] {
+      color: var(--color-text-strong);
+      background: var(--color-surface-chip);
+      border-color: var(--color-accent-active);
+    }
+
+    &[aria-disabled="true"] {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+  }
+
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  // Textlink with the orange line (SPEC §8.1).
+  .all {
+    justify-self: start;
+    min-block-size: var(--size-tap-target);
+    padding: 0;
+    font: inherit;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+    background: none;
+    border: 0;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §8.1: 2px orange line, no border-width token
+    border-block-end: 2px solid var(--color-accent-active);
+    cursor: pointer;
+
+    &[aria-busy="true"] {
+      cursor: progress;
+    }
+  }
+
+  .note:empty {
+    display: none;
+  }
+
+  .note,
+  .foot {
+    margin: 0;
+    font-size: var(--_small);
+    color: var(--color-text-muted);
+  }
+
+  @container word-stories (inline-size < 36rem) {
+    .list[data-collapsed] .item:nth-child(n + 3) {
+      display: none;
+    }
+  }
+}
