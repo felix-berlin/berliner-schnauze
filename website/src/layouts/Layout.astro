@@ -4,6 +4,7 @@ import type { SeoProps } from '@components/BaseHead.astro';
 
 import BaseHead from '@components/BaseHead.astro';
 import SiteFooter from '@components/footer/SiteFooter.astro';
+import { resolveFooterMode, type FooterCalloutOption } from '@utils/footerMode.ts';
 import MainHeader from '@components/header/MainHeader.astro';
 import Modal from '@components/Modal.vue';
 import ScrollToTop from '@components/ScrollToTop.vue';
@@ -16,8 +17,8 @@ export interface DefaultLayoutProps {
     title: string;
   };
   contentClasses?: Array<string> | string;
-  /** Closing callout above the footer: 'app' (install, where possible; default) or 'keiner'. A `footer-aufruf` slot wins. */
-  footerAufruf?: 'app' | 'keiner';
+  /** Closing callout above the footer: 'app' offers the install callout where possible (default), 'none' shows only the word sign. A `footer-callout` slot wins over both. */
+  footerCallout?: FooterCalloutOption;
   /** Slug of the page's own word, kept off the footer's word sign. */
   footerExcludeSlug?: string;
 }
@@ -26,15 +27,11 @@ const {
   bodyClasses,
   content: { seo, title },
   contentClasses,
-  footerAufruf = 'app',
+  footerCallout = 'app',
   footerExcludeSlug,
 } = Astro.props as DefaultLayoutProps;
 
-const footerMode = Astro.slots.has('footer-aufruf')
-  ? 'callout'
-  : footerAufruf === 'keiner'
-    ? 'sign'
-    : 'app';
+const footerMode = resolveFooterMode(Astro.slots.has('footer-callout'), footerCallout);
 
 ---
 
@@ -55,7 +52,7 @@ const footerMode = Astro.slots.has('footer-aufruf')
     <ToastNotifyContainer client:only='vue' />
     <Modal client:idle />
     <SiteFooter excludeSlug={footerExcludeSlug} mode={footerMode}>
-      <slot name='footer-aufruf' slot='aufruf' />
+      <slot name='footer-callout' slot='callout' />
     </SiteFooter>
   </body>
 </html>

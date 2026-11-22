@@ -1,9 +1,10 @@
 ---
 import '@styles/components/_site-footer.scss';
 import HeartIcon from '~icons/lucide/heart';
-import { fetchFooterWords } from '@services/payload/footerWords.ts';
+import { fetchFooterData } from '@services/payload/footerWords.ts';
 import { fetchSocialMenu } from '@services/payload/site.ts';
-import { fetchAllWords } from '@services/payload/words.ts';
+import type { FooterMode } from '@utils/footerMode.ts';
+import { reportAndFallback } from '@utils/reportError.ts';
 
 import { version } from '../../../package.json';
 import FooterCalloutApp from './FooterCalloutApp.vue';
@@ -12,21 +13,19 @@ import FooterFarewell from './FooterFarewell.vue';
 interface Props {
   /** The word of the page itself, never shown on the sign. */
   excludeSlug?: string;
-  /** sign: word sign · callout: the page's own callout sits above (slot `aufruf`) · app: install callout where possible */
-  mode: 'app' | 'callout' | 'sign';
+  mode: FooterMode;
 }
 
 const { excludeSlug, mode } = Astro.props;
 
-// Each read degrades on its own: a broken word list or social menu must not take the page down.
-const [words, socialMenu, wordCount] = await Promise.all([
-  fetchFooterWords(excludeSlug),
-  fetchSocialMenu().catch((error) => {
-    console.error('[footer] social menu unavailable', error);
-    return [];
-  }),
-  fetchAllWords().then((all) => all.length).catch(() => 0),
+// Each read degrades on its own and is reported: a CMS outage already fails the page elsewhere, so these fallbacks
+// cover footer-specific breakage that nothing else would reveal.
+const [{ words: signWords, wordCount }, socialMenu] = await Promise.all([
+  fetchFooterData(excludeSlug),
+  reportAndFallback('[footer] social menu', [], fetchSocialMenu),
 ]);
+// A page callout replaces the sign, so its words are not sent to the island.
+const words = mode === 'callout' ? [] : signWords;
 const knownWords = Math.floor(wordCount / 100) * 100;
 
 const pages = [
@@ -38,12 +37,12 @@ const pages = [
 ];
 ---
 
-<slot name='aufruf' />
+<slot name='callout' />
 {mode === 'app' && <FooterCalloutApp client:only='vue' />}
 
 <footer class='c-site-footer js-site-footer' data-theme='dark'>
   <div class='farewell u-max-body-width'>
-    <FooterFarewell client:visible mode={mode} words={words} />
+    <FooterFarewell client:visible={{ rootMargin: '300px' }} mode={mode} words={words} />
   </div>
 
   <div class='columns-wrap js-footer-ground'>

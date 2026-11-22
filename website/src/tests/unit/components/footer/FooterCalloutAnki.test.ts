@@ -16,7 +16,7 @@ describe("FooterCalloutAnki", () => {
     const html = await render({
       checkoutUrl: "https://example.test/buy",
       price: "5,99 €",
-      words: 5901,
+      wordCount: 5901,
     });
     expect(html).toContain("Na los, ab uff die Karten.");
     expect(html).toContain("5.901 Wörter Berliner Schnauze für 5,99 €");
@@ -27,14 +27,14 @@ describe("FooterCalloutAnki", () => {
   });
 
   it("leaves out the price and the button without a checkout link", async () => {
-    const html = await render({ words: 1200 });
+    const html = await render({ wordCount: 1200 });
     expect(html).toContain("1.200 Wörter Berliner Schnauze.");
     expect(html).not.toContain("kaufen");
     expect(html).not.toContain("<a ");
   });
 
   it("labels the section by its heading", async () => {
-    const html = await render({ words: 10 });
+    const html = await render({ wordCount: 10 });
     const id = /aria-labelledby="([^"]+)"/.exec(html)?.[1];
     expect(id).toBeTruthy();
     expect(html).toContain(`id="${id}"`);

@@ -7,13 +7,11 @@ import { createAstroRender } from "../../helpers/astro";
 
 vi.mock("@styles/components/_site-footer.scss", () => ({}));
 
-const { fetchFooterWords, fetchAllWords, fetchSocialMenu } = vi.hoisted(() => ({
-  fetchAllWords: vi.fn(),
-  fetchFooterWords: vi.fn(),
+const { fetchFooterData, fetchSocialMenu } = vi.hoisted(() => ({
+  fetchFooterData: vi.fn(),
   fetchSocialMenu: vi.fn(),
 }));
-vi.mock("@services/payload/footerWords.ts", () => ({ fetchFooterWords }));
-vi.mock("@services/payload/words.ts", () => ({ fetchAllWords }));
+vi.mock("@services/payload/footerWords.ts", () => ({ fetchFooterData }));
 vi.mock("@services/payload/site.ts", () => ({ fetchSocialMenu }));
 
 const sampleWords = [
@@ -32,8 +30,8 @@ beforeAll(async () => {
 }, 30_000);
 
 beforeEach(() => {
-  fetchFooterWords.mockReset().mockResolvedValue(sampleWords);
-  fetchAllWords.mockReset().mockResolvedValue(Array.from({ length: 1734 }, () => ({})));
+  vi.restoreAllMocks();
+  fetchFooterData.mockReset().mockResolvedValue({ wordCount: 1734, words: sampleWords });
   fetchSocialMenu.mockReset().mockResolvedValue([
     { link: "https://git.example/me", rel: "me", title: "GitHub" },
     { link: "https://masto.example/@me", rel: "me", title: "Mastodon" },
@@ -105,7 +103,7 @@ describe("SiteFooter", () => {
 
   it("asks for the words without the page's own word and shows the word sign", async () => {
     const html = await render({ excludeSlug: "foo", mode: "sign" });
-    expect(fetchFooterWords).toHaveBeenCalledWith("foo");
+    expect(fetchFooterData).toHaveBeenCalledWith("foo");
     expect(html).toContain("Probewort");
     expect(html).toContain("Wort für unterwegs");
   });
@@ -117,25 +115,35 @@ describe("SiteFooter", () => {
   });
 
   it("renders without a sign when there are no words", async () => {
-    fetchFooterWords.mockResolvedValue([]);
+    fetchFooterData.mockResolvedValue({ wordCount: 1734, words: [] });
     const text = textOf(await render({ mode: "sign" }));
     expect(text).not.toContain("Wort für unterwegs");
     expect(text).toContain("Tschüssi, wa!");
   });
 
-  it("does not fail the page when the word count or the social menu cannot be read", async () => {
-    fetchAllWords.mockRejectedValue(new Error("down"));
-    fetchSocialMenu.mockRejectedValue(new Error("down"));
+  it("sends no words to the island when a page callout replaces the sign", async () => {
+    const html = await render({ mode: "callout" });
+    expect(html).not.toContain("Probewort");
+  });
+
+  it("does not fail the page when the word list or the social menu cannot be read, and reports the menu", async () => {
+    fetchFooterData.mockResolvedValue({ wordCount: 0, words: [] });
+    const logged = vi.spyOn(console, "error").mockImplementation(() => {});
+    const failure = new Error("down");
+    fetchSocialMenu.mockRejectedValue(failure);
     const html = await render({ mode: "sign" });
     const text = textOf(html);
     expect(text).toContain("Berliner Wörter und Redewendungen");
     expect(text).not.toContain("Über 0");
+    const [reported] = logged.mock.calls[0] as [Error];
+    expect(reported.message).toBe("[footer] social menu unavailable");
+    expect(reported.cause).toBe(failure);
     expect(html).toContain('href="/impressum"');
     expect(html).not.toContain("Folg mir");
   });
 
   it("adds the app callout island only in app mode", async () => {
-    expect(await render({ mode: "app" })).toContain("FooterCalloutApp");
-    expect(await render({ mode: "sign" })).not.toContain("FooterCalloutApp");
+    expect(await render({ mode: "app" })).toContain("FooterCalloutApp.vue");
+    expect(await render({ mode: "sign" })).not.toContain("FooterCalloutApp.vue");
   });
 });

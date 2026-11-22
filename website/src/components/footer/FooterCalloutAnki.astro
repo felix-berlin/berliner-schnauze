@@ -6,10 +6,10 @@ interface Props {
   /** Full-deck checkout link; without it there is no button. */
   checkoutUrl?: string;
   price?: string;
-  words: number;
+  wordCount: number;
 }
 
-const { checkoutUrl, price, words } = Astro.props;
+const { checkoutUrl, price, wordCount } = Astro.props;
 const titleId = 'footer-callout-anki';
 ---
 
@@ -18,7 +18,7 @@ const titleId = 'footer-callout-anki';
     <div class='text'>
       <h2 id={titleId} class='title'>Na los, ab uff die Karten.</h2>
       <p class='lead'>
-        {words.toLocaleString('de-DE')} Wörter Berliner Schnauze{price && ` für ${price}`}. Weniger als 'ne
+        {wordCount.toLocaleString('de-DE')} Wörter Berliner Schnauze{price && ` für ${price}`}. Weniger als 'ne
         Currywurst mit Pommes — und neue Wörter kriegste ohne Aufpreis nachgeliefert.
       </p>
     </div>

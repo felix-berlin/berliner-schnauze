@@ -5,7 +5,8 @@ import { $showAppCallout } from "@stores/footerCallout.ts";
 import { $isPwaInstalled, $showInstallButton } from "@stores/installApp.ts";
 import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { nextTick } from "vue";
+import { createSSRApp, h, nextTick } from "vue";
+import { renderToString } from "vue/server-renderer";
 
 vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));
 
@@ -68,6 +69,34 @@ describe("FooterFarewell", () => {
     $isPwaInstalled.set(true);
     await nextTick();
     expect(wrapper.text()).toContain(SIGN);
+  });
+
+  it("renders the sign on the server even when the app is already installable, so hydration matches", async () => {
+    $showInstallButton.set(true);
+    const html = await renderToString(
+      createSSRApp({ render: () => h(FooterFarewell, { mode: "app", words }) }),
+    );
+    expect(html).toContain('data-variant="sign"');
+    expect(html).toContain(SIGN);
+    expect(html).not.toContain("data-state");
+  });
+
+  it("keeps the plain variant for a callout page and for app mode without words", async () => {
+    $showInstallButton.set(true);
+    expect(mountFarewell({ mode: "callout" }).attributes("data-variant")).toBe("plain");
+    expect(mountFarewell({ mode: "app", words: [] }).attributes("data-variant")).toBe("plain");
+  });
+
+  it("arms the entry animation only after mount and sizes Kalle 150 on the server, 120 on a narrow screen", async () => {
+    const html = await renderToString(
+      createSSRApp({ render: () => h(FooterFarewell, { mode: "sign", words }) }),
+    );
+    expect(html).not.toContain("data-state");
+    expect(html).toContain('data-size="150"');
+    const wrapper = mountFarewell({ mode: "sign" });
+    await nextTick();
+    expect(wrapper.attributes("data-state")).toBe("armed");
+    expect(wrapper.get('[data-testid="kalle"]').attributes("data-size")).toBe("120");
   });
 
   it("does not switch in sign mode when the app can be installed", async () => {

@@ -20,6 +20,7 @@
 </template>
 
 <script setup lang="ts">
+import type { FooterMode } from "@utils/footerMode";
 import type { FooterWord } from "@utils/footerWords";
 
 import BerlinerBaer from "@components/kalle/BerlinerBaer.vue";
@@ -32,8 +33,7 @@ import FooterWordSign from "./FooterWordSign.vue";
 
 const props = defineProps<{
   words: FooterWord[];
-  /** sign: always the sign · callout: a page callout sits above, no sign · app: sign until the app callout shows */
-  mode: "app" | "callout" | "sign";
+  mode: FooterMode;
 }>();
 
 const SENTENCE_SIGN =
@@ -41,17 +41,20 @@ const SENTENCE_SIGN =
 const SENTENCE_PLAIN = "Schön, dass de da warst. Komm jut nach Hause.";
 
 const appCallout = useStore($showAppCallout);
+const mounted = ref(false);
+// The install store is already set when this island hydrates (the browser event fires early), so until mounted it
+// is ignored: the first client render must match the server's, or the plain variant sticks to the sign layout.
 const showSign = computed(
   () =>
     props.mode !== "callout" &&
     props.words.length > 0 &&
-    !(props.mode === "app" && appCallout.value),
+    !(props.mode === "app" && mounted.value && appCallout.value),
 );
 
-// SPEC §5.1: Kalle 150px, below the 808px layout 120px (a prop, so it cannot follow a container query).
-// The server (and the first client render, for a clean hydration) uses the desktop size.
+// SPEC §5.1: Kalle is 150px, 120px below the 808px layout. The size is a prop, so it follows the viewport
+// (50.5rem) while the CSS follows the container at the same breakpoint. The server (and the first client render,
+// for a clean hydration) uses the desktop size.
 const wide = useMediaQuery("(min-width: 50.5rem)");
-const mounted = ref(false);
 const kalleSize = computed(() => (!mounted.value || wide.value ? 150 : 120));
 
 // The entry animation is armed only once hydrated (no JS: everything stays visible as rendered).

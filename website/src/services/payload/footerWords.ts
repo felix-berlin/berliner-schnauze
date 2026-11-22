@@ -1,15 +1,17 @@
 import { fetchAllWords } from "@services/payload/words.ts";
 import { pickFooterWords, type FooterWord } from "@utils/footerWords.ts";
+import { reportAndFallback } from "@utils/reportError.ts";
 
 /**
- * About 30 random words for the footer sign, picked per request from the cached word list (memory only, no extra
- * query). A failing word list never fails the page: the footer then renders without a sign.
+ * What the footer needs from the word list, read once per request (from the cached list, no extra query): about 30
+ * random words for the sign and the total for the "Über N Wörter" line. A failing list never fails the page: it is
+ * reported and the footer renders without a sign and without a count.
  */
-export const fetchFooterWords = async (excludeSlug?: string): Promise<FooterWord[]> => {
-  try {
-    return pickFooterWords(await fetchAllWords(), excludeSlug);
-  } catch (error) {
-    console.error("[footer] words unavailable", error);
-    return [];
-  }
+export const fetchFooterData = async (
+  excludeSlug?: string,
+): Promise<{ words: FooterWord[]; wordCount: number }> => {
+  const all = await reportAndFallback("[footer] word list", null, fetchAllWords);
+  return all
+    ? { wordCount: all.length, words: pickFooterWords(all, excludeSlug) }
+    : { wordCount: 0, words: [] };
 };
