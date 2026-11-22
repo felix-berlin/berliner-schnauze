@@ -96,7 +96,8 @@ export const fetchWordPage = async (
   const { after, before } = alphabeticNeighbors(refs, ref, 1);
   const [stories, trend, wordPage, affiliate, poll] = await Promise.all([
     fetchStories(word.id, 1),
-    getWordTrend(word.id),
+    // A draft has no public numbers.
+    draft ? undefined : getWordTrend(word.id),
     fetchWordPageGlobal(),
     fetchAffiliateData(),
     fetchPoll(word.id),

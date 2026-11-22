@@ -22,6 +22,16 @@ describe("tocItems", () => {
     ]);
   });
 
+  it("leaves out the poll and the Jeschichten of a draft", () => {
+    expect(tocItems(model(), true).map((i) => i.id)).toEqual([
+      "bedeutung",
+      "beispiele",
+      "wissenswertes",
+      "verwandt",
+      "analyse",
+    ]);
+  });
+
   it("adds a count for examples, stories and related words when greater than 0", () => {
     const items = tocItems(
       model({

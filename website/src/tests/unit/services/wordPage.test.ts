@@ -155,6 +155,16 @@ describe("fetchWordPage", () => {
     expect(m.getWordTrend).toHaveBeenCalledWith(2);
   });
 
+  it("does not look up the trend of a draft", async () => {
+    m.fetchAllWords.mockResolvedValue(words());
+    m.getWordTrend.mockClear();
+    m.getWordTrend.mockResolvedValue({ bars: [], change: 1, rank: 1, views: 9 });
+    const draft = words().find((w) => w.slug === "bbb");
+    const model = (await fetchWordPage("bbb", draft as never))!;
+    expect(model).not.toHaveProperty("trend");
+    expect(m.getWordTrend).not.toHaveBeenCalled();
+  });
+
   it("sets wotd only when the word is today's pick", async () => {
     m.fetchAllWords.mockResolvedValue(words());
     m.pick.mockReturnValue(word(2, "bbb"));

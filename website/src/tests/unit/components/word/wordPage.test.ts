@@ -60,6 +60,16 @@ describe("WordPage mobile bar", () => {
     expect(html).not.toContain("data-word-id");
   });
 
+  it("shows a draft neither the poll nor the Jeschichten nor their links", async () => {
+    const html = await render({ draft: true, model });
+    expect(html).not.toContain('id="sagste"');
+    expect(html).not.toContain('id="jeschichten"');
+    expect(html).not.toContain('href="#sagste"');
+    expect(html).not.toContain("WordPoll");
+    expect(html).not.toContain("WordStories");
+    expect(await render({ model })).toContain('id="sagste"');
+  });
+
   it("does not take a grid cell for a card without rows", async () => {
     const html = await render({ model });
     expect(html).not.toContain('id="grammatik"'); // no Grammatik rows in this model

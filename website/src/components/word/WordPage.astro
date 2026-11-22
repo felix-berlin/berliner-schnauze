@@ -55,7 +55,7 @@ const lightboxImages = await Promise.all(
   <!-- No JS, no form: the contribute buttons stay hidden until this flag is set (see _word-v18.scss). -->
   <script is:inline>document.documentElement.dataset.js = '';</script>
   <div class='toc'>
-    <WordToc client:idle items={tocItems(model)} />
+    <WordToc client:idle items={tocItems(model, draft)} />
   </div>
 
   <div class='main'>
@@ -77,12 +77,13 @@ const lightboxImages = await Promise.all(
 
     <h2 class='band'>Im Gebrauch</h2>
     <div class='anchor' id='beispiele'><slot name='beispiele'><WordExamplesCard word={model.word.berlinerisch} slug={model.word.slug} examples={model.word.examples} /></slot></div>
-    <div class='anchor' id='sagste'><slot name='sagste'><WordPoll client:visible initial={model.poll} label={model.word.berlinerisch} slug={model.word.slug} wordId={model.word.id} /></slot></div>
-    <div class='anchor' id='jeschichten'><slot name='jeschichten'>
+    {/* A draft preview has no poll and no Jeschichten: both would vote and post against the live word. */}
+    {!draft && <div class='anchor' id='sagste'><slot name='sagste'><WordPoll client:visible initial={model.poll} label={model.word.berlinerisch} slug={model.word.slug} wordId={model.word.id} /></slot></div>}
+    {!draft && <div class='anchor' id='jeschichten'><slot name='jeschichten'>
       <SectionCard anchor={false} id='jeschichten' title='Jeschichten' level={3} meta={model.stories.total > 0 ? `${model.stories.total} Jeschichten` : 'Noch keene'}>
         <WordStories client:visible label={model.word.berlinerisch} prompt={model.storyPrompt} word={model.word.slug} initial={{ featured: model.featured ?? null, items: model.stories.items, total: model.stories.total }} />
       </SectionCard>
-    </slot></div>
+    </slot></div>}
 
     <h2 class='band'>Wissen</h2>
     <div class='anchor' id='wissenswertes'><slot name='wissenswertes'><WordFactsCard word={model.word.berlinerisch} slug={model.word.slug} facts={model.facts} book={model.book} /></slot></div>
@@ -106,7 +107,7 @@ const lightboxImages = await Promise.all(
 {/* Only the lightbox needs JS: the buttons are server-rendered and open the dialog once this hydrates. */}
 {images.length > 0 && <Lightbox client:idle images={lightboxImages} />}
 <!-- Sibling of the article: a sticky bar rests where its parent (the page column) ends, below the content. -->
-<WordMobileBar audio={voices.m ?? voices.w} wordId={draft ? undefined : model.word.id} />
+<WordMobileBar audio={voices.m ?? voices.w} poll={!draft} wordId={draft ? undefined : model.word.id} />
 
 <script>
   import { watchContributeTriggers } from '@components/word/contributeTriggers.ts';

@@ -137,6 +137,17 @@ const schemaJson = () => {
   });
 };
 
+// The old page's breadcrumb trail emitted this list through astro-breadcrumbs; the v18 design has no visible trail.
+const breadcrumbJson = jsonLd({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { name: 'Start', url: canonicalUrl('/', Astro.site) },
+    { name: 'Wort', url: canonicalUrl('/wort', Astro.site) },
+    { name: berlinerisch, url: canonicalUrl(Astro.url.pathname, Astro.site) },
+  ].map(({ name, url }, i) => ({ '@type': 'ListItem', item: { '@id': url, name }, position: i + 1 })),
+});
+
 const content = seoData({
   seo: {
     // An editor-set SEO title/description (CMS) wins over the generated ones.
@@ -156,6 +167,7 @@ const content = seoData({
   <Layout content={content} footerExcludeSlug={word.slug}>
     <Fragment slot='head'>
       <script set:html={schemaJson()} type='application/ld+json' />
+      <script set:html={breadcrumbJson} type='application/ld+json' />
       {!draft && <meta name='word-pulse' content={String(word.id)} />}
     </Fragment>
     <WordPage draft={!!draft} model={model} words={words} />
@@ -165,6 +177,7 @@ const content = seoData({
   <Layout content={content} footerExcludeSlug={word.slug}>
     <Fragment slot='head'>
       <script set:html={schemaJson()} type='application/ld+json' />
+      <script set:html={breadcrumbJson} type='application/ld+json' />
       {!draft && <meta name='word-pulse' content={String(word.id)} />}
     </Fragment>
     <WordPage draft={!!draft} model={model} words={words} />
@@ -180,8 +193,18 @@ const content = seoData({
     const id = Number(document.head.querySelector<HTMLMetaElement>('meta[name="word-pulse"]')?.content);
     if (!id) return;
     reportWord(id, 'view');
+    // Only the related words count (pills, network, list), not the neighbours or the similarly written words.
     document.getElementById('verwandt')?.addEventListener('click', (e) => {
-      if ((e.target as Element).closest('a')) reportWord(id, 'click');
+      if ((e.target as Element).closest(':is(.pills, .net, .net-list) a')) reportWord(id, 'click');
     });
+  });
+</script>
+
+<script>
+  // Old comment links (#kommentare, #antworten, #kommentar-<id>) now lead to the Jeschichten.
+  document.addEventListener('astro:page-load', () => {
+    if (!/^#(kommentare|antworten|kommentar-\d+)$/.test(location.hash)) return;
+    history.replaceState(history.state, '', `${location.pathname}${location.search}#jeschichten`);
+    document.getElementById('jeschichten')?.scrollIntoView();
   });
 </script>
