@@ -531,6 +531,30 @@ export interface Comment {
    * Freigegeben: weitere Meldungen blenden den Kommentar nicht mehr aus.
    */
   reviewed?: boolean | null;
+  /**
+   * Bezirk der Jeschichte (optional).
+   */
+  bezirk?:
+    | (
+        | 'mitte'
+        | 'friedrichshain-kreuzberg'
+        | 'pankow'
+        | 'charlottenburg-wilmersdorf'
+        | 'spandau'
+        | 'steglitz-zehlendorf'
+        | 'tempelhof-schoeneberg'
+        | 'neukoelln'
+        | 'treptow-koepenick'
+        | 'marzahn-hellersdorf'
+        | 'lichtenberg'
+        | 'reinickendorf'
+        | 'outside'
+      )
+    | null;
+  /**
+   * Als Jeschichte des Wortes hervorgehoben (max. eine pro Wort).
+   */
+  featured?: boolean | null;
   editKeyHash?: string | null;
   editedAt?: string | null;
   upvotes?: number | null;
@@ -1333,6 +1357,8 @@ export interface CommentsSelect<T extends boolean = true> {
   status?: T;
   removalReason?: T;
   reviewed?: T;
+  bezirk?: T;
+  featured?: T;
   editKeyHash?: T;
   editedAt?: T;
   upvotes?: T;

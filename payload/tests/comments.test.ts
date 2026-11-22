@@ -313,3 +313,20 @@ describe("comments", () => {
     }
   });
 });
+
+describe("featured comments", () => {
+  it("allows one published featured comment per word", async () => {
+    const first = await make({ featured: true });
+    await expect(make({ featured: true })).rejects.toThrow();
+    // another word is unaffected
+    await make({ featured: true }, otherWordId);
+    await payload.update({ collection: "comments", id: first.id, data: { featured: false } });
+    expect((await make({ featured: true })).featured).toBe(true);
+  });
+
+  it("ignores hidden featured comments", async () => {
+    const first = await make({ featured: true });
+    await payload.update({ collection: "comments", id: first.id, data: { status: "hidden" } });
+    expect((await make({ featured: true })).featured).toBe(true);
+  });
+});
