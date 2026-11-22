@@ -141,7 +141,7 @@ export const loadStats = async (
     ),
     feedbackPerDay,
     perDay("comments", "created_at", sql`status = 'published'`),
-    perDay("suggestions", "created_at", sql`true`),
+    perDay("suggestions", "created_at", sql`coalesce(type, 'word') = 'word'`),
     perDay("bon_games", "finished_at", sql`true`),
     viewedWords,
     votedWords,
