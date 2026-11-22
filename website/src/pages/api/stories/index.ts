@@ -2,7 +2,8 @@ import type { Story } from "@lib/story.ts";
 import type { Comment } from "payload-app";
 import type { APIRoute } from "astro";
 
-import { getPayloadClient, siteRead } from "@services/payload.ts";
+import { getPayloadClient } from "@services/payload.ts";
+import { wordIdBySlug } from "@services/payload/wordId.ts";
 import { hashEditKey, visitorId } from "@services/payload/comments.ts";
 import { captchaGate, positiveInt, reply } from "@utils/apiReply.ts";
 import { requestIp } from "@utils/rateLimit.ts";
@@ -39,22 +40,6 @@ const toStory = (c: Comment): Story => ({
   ...(c.authorName?.trim() ? { name: c.authorName.trim() } : {}),
   text: c.text,
 });
-
-/** Only published words have Jeschichten (siteRead hides drafts); null for an unknown slug. */
-const wordIdBySlug = async (slug: string) =>
-  (
-    await (
-      await getPayloadClient()
-    ).find({
-      collection: "words",
-      depth: 0,
-      limit: 1,
-      pagination: false,
-      select: {},
-      where: { slug: { equals: slug } },
-      ...siteRead(),
-    })
-  ).docs[0]?.id ?? null;
 
 export const GET: APIRoute = async ({ url }) => {
   const slug = url.searchParams.get("word");

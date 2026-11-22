@@ -7,6 +7,8 @@ type Rule = { max: number; method?: string; prefix: string; windowMs: number; ke
  */
 const RULES: Rule[] = [
   { max: 5, method: "POST", prefix: "/api/suggest-word", windowMs: 10 * 60_000 },
+  { max: 5, method: "POST", prefix: "/api/contribute", windowMs: 10 * 60_000 },
+  { max: 5, method: "POST", prefix: "/api/reports", windowMs: 10 * 60_000 },
   { max: 60, prefix: "/og/", windowMs: 60_000 },
   { max: 20, prefix: "/api/preview", windowMs: 60_000 },
   { max: 5, method: "POST", prefix: "/api/comments", windowMs: 10 * 60_000 },
