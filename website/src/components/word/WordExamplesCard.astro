@@ -56,31 +56,7 @@ const gap = {
 </SectionCard>
 
 <script>
-  // Tooltip of the disabled "Einsprechen" (SPEC §14): tap toggles it (iOS Safari does not focus a tapped button),
-  // Esc or a second tap closes it and it stays closed until a NEW focus or pointer entry (WCAG 1.4.13).
-  const ROOT = '.c-word-beispiele .record';
-  const record = (t: EventTarget | null) => (t as HTMLElement | null)?.closest<HTMLElement>(ROOT) ?? null;
-  const close = (el: HTMLElement) => {
-    el.removeAttribute('data-open');
-    el.dataset.dismissed = '';
-  };
-  document.addEventListener('click', (e) => {
-    const el = record(e.target);
-    document.querySelectorAll<HTMLElement>(`${ROOT}[data-open]`).forEach((o) => o !== el && o.removeAttribute('data-open'));
-    if (!el) return;
-    if (el.hasAttribute('data-open')) return close(el);
-    el.removeAttribute('data-dismissed');
-    el.setAttribute('data-open', '');
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape') return;
-    document.querySelectorAll<HTMLElement>(ROOT).forEach((el) => {
-      if (el.matches(':focus-within, :hover, [data-open]')) close(el);
-    });
-  });
-  document.addEventListener('focusin', (e) => record(e.target)?.removeAttribute('data-dismissed'));
-  document.addEventListener('mouseover', (e) => {
-    const el = record(e.target);
-    if (el && !el.contains(e.relatedTarget as Node | null)) el.removeAttribute('data-dismissed');
-  });
+  import { initRecordTooltip } from '@components/word/recordTooltip.ts';
+
+  initRecordTooltip();
 </script>

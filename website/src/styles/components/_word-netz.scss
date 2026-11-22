@@ -119,7 +119,7 @@
     &:focus-within {
       inset-block-start: 0;
       inset-inline: 0;
-      z-index: var(--z-sticky);
+      z-index: var(--z-raised); // below the sticky anchor bar (--z-sticky)
       inline-size: auto;
       block-size: auto;
       margin: 0;
