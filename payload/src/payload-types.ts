@@ -491,8 +491,21 @@ export interface Page {
  */
 export interface Suggestion {
   id: number;
-  berlinerWord: string;
-  translation: string;
+  type?: ('word' | 'example' | 'fact' | 'related') | null;
+  berlinerWord?: string | null;
+  translation?: string | null;
+  /**
+   * Das Wort, zu dem Beispiel, Wissenswertes oder Verwandtes eingereicht wurde. Nicht „Wort“ (das sperrt den Vorschlag).
+   */
+  targetWord?: (number | null) | Word;
+  kind?: ('herkunft' | 'geschichte' | 'gebrauch' | 'anekdote' | 'sonstiges') | null;
+  relation?: ('gleich' | 'gegenteil' | 'verwandt' | 'redewendung') | null;
+  relatedText?: string | null;
+  /**
+   * Beispielsatz (max. 200 Zeichen) oder Text zum Wissenswerten (max. 1000).
+   */
+  text?: string | null;
+  highdeutsch?: string | null;
   example?: string | null;
   userName?: string | null;
   userMail?: string | null;
@@ -1351,8 +1364,15 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "suggestions_select".
  */
 export interface SuggestionsSelect<T extends boolean = true> {
+  type?: T;
   berlinerWord?: T;
   translation?: T;
+  targetWord?: T;
+  kind?: T;
+  relation?: T;
+  relatedText?: T;
+  text?: T;
+  highdeutsch?: T;
   example?: T;
   userName?: T;
   userMail?: T;

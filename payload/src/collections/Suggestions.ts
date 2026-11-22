@@ -1,4 +1,6 @@
-import type { CollectionAfterChangeHook, CollectionConfig, FieldAccess } from "payload";
+import type { CollectionAfterChangeHook, CollectionConfig, FieldAccess, Validate } from "payload";
+
+import { relationship, select, text, textarea } from "payload/shared";
 
 import { authenticatedOnly } from "../access";
 import { adoptSuggestion } from "../hooks/adoptSuggestion";
@@ -36,6 +38,30 @@ const mailEditors: CollectionAfterChangeHook = ({ doc, operation, req }) => {
  */
 const notOverMcp: FieldAccess = ({ req }) => req.payloadAPI !== "MCP";
 
+/** Required only for the given suggestion types: runs the stock validator with `required` switched per type. */
+const requiredFor =
+  (types: string[], base: Validate<any, any, any, any>): Validate<any, any, any, any> =>
+  (value, options) => {
+    const type = (options.siblingData as { type?: string } | undefined)?.type ?? "word";
+    return base(value, { ...options, required: types.includes(type) });
+  };
+
+/** Like `requiredFor`, with a per-type character limit (one column, the limit differs by type). */
+const limitFor =
+  (
+    limits: Record<string, number>,
+    types: string[],
+    base: Validate<any, any, any, any>,
+  ): Validate<any, any, any, any> =>
+  (value, options) => {
+    const type = (options.siblingData as { type?: string } | undefined)?.type ?? "word";
+    const max = limits[type];
+    return requiredFor(types, base)(value, { ...options, ...(max ? { maxLength: max } : {}) });
+  };
+
+const labelled = (labels: Record<string, string>) =>
+  Object.entries(labels).map(([value, label]) => ({ value, label }));
+
 /** Words suggested through the site's form. The site creates them through the Local API (after Turnstile). */
 export const Suggestions: CollectionConfig = {
   slug: "suggestions",
@@ -56,8 +82,86 @@ export const Suggestions: CollectionConfig = {
         components: { Field: "/components/SuggestionLockNotice#SuggestionLockNotice" },
       },
     },
-    { name: "berlinerWord", type: "text", required: true, maxLength: 100 },
-    { name: "translation", type: "text", required: true, maxLength: 300 },
+    {
+      name: "type",
+      type: "select",
+      defaultValue: "word",
+      index: true,
+      options: labelled({
+        word: "Neues Wort",
+        example: "Beispielsatz",
+        fact: "Wissenswertes",
+        related: "Verwandtes Wort",
+      }),
+      admin: { position: "sidebar" },
+    },
+    // Only for type "word": nullable in the database (additive for the rolling release), enforced by validate.
+    {
+      name: "berlinerWord",
+      type: "text",
+      maxLength: 100,
+      validate: requiredFor(["word"], text as Validate<any, any, any, any>),
+    },
+    {
+      name: "translation",
+      type: "text",
+      maxLength: 300,
+      validate: requiredFor(["word"], text as Validate<any, any, any, any>),
+    },
+    {
+      name: "targetWord",
+      type: "relationship",
+      relationTo: "words",
+      validate: requiredFor(["example"], relationship as Validate<any, any, any, any>),
+      admin: {
+        position: "sidebar",
+        description:
+          "Das Wort, zu dem Beispiel, Wissenswertes oder Verwandtes eingereicht wurde. Nicht „Wort“ (das sperrt den Vorschlag).",
+      },
+    },
+    {
+      name: "kind",
+      type: "select",
+      options: labelled({
+        herkunft: "Herkunft",
+        geschichte: "Geschichte",
+        gebrauch: "Gebrauch",
+        anekdote: "Anekdote",
+        sonstiges: "Sonstiges",
+      }),
+      validate: requiredFor(["fact"], select as Validate<any, any, any, any>),
+    },
+    {
+      name: "relation",
+      type: "select",
+      options: labelled({
+        gleich: "Gleich",
+        gegenteil: "Gegenteil",
+        verwandt: "Verwandt",
+        redewendung: "Redewendung",
+      }),
+      validate: requiredFor(["related"], select as Validate<any, any, any, any>),
+    },
+    {
+      name: "relatedText",
+      type: "text",
+      maxLength: 60,
+      validate: requiredFor(["related"], text as Validate<any, any, any, any>),
+    },
+    {
+      name: "text",
+      type: "textarea",
+      maxLength: 1000,
+      admin: {
+        description: "Beispielsatz (max. 200 Zeichen) oder Text zum Wissenswerten (max. 1000).",
+      },
+      validate: limitFor(
+        { example: 200 },
+        ["example", "fact"],
+        textarea as Validate<any, any, any, any>,
+      ),
+    },
+    { name: "highdeutsch", type: "text", maxLength: 200 },
     { name: "example", type: "textarea", maxLength: 1000 },
     {
       name: "userName",

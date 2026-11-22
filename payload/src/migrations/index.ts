@@ -29,6 +29,7 @@ import * as migration_20261119_211428_trash_and_live_link from './20261119_21142
 import * as migration_20261121_012437_home_page_fields_word_ipa from './20261121_012437_home_page_fields_word_ipa';
 import * as migration_20261122_165037_comments_bezirk_featured from './20261122_165037_comments_bezirk_featured';
 import * as migration_20261122_170310_reports from './20261122_170310_reports';
+import * as migration_20261122_171522_suggestions_types from './20261122_171522_suggestions_types';
 
 export const migrations = [
   {
@@ -184,6 +185,11 @@ export const migrations = [
   {
     up: migration_20261122_170310_reports.up,
     down: migration_20261122_170310_reports.down,
-    name: '20261122_170310_reports'
+    name: '20261122_170310_reports',
+  },
+  {
+    up: migration_20261122_171522_suggestions_types.up,
+    down: migration_20261122_171522_suggestions_types.down,
+    name: '20261122_171522_suggestions_types'
   },
 ];
