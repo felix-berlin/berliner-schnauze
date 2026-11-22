@@ -16,7 +16,7 @@ Der alte Footer (Bär-Foto, Fraktur-Satz, vier Linkspalten, orange Streifen) wir
 
 1. **Ansatz A:** `transition:persist` am Footer entfällt. Der Footer rendert bei jeder Navigation neu (neues Wort, Wort der Seite ausgeschlossen, Aufruf der Seite, Einblend-Animation läuft erneut).
 2. **Die Seite ist nicht mehr statisch:** Die Wortliste (SPEC §5.3: rund 30 zufällige veröffentlichte Wörter) wird **pro Request auf dem Server** gezogen, nicht zur Build-Zeit. Keine API-Abfrage pro Klick: die Liste steht als Prop im HTML.
-3. **Alles, was die SPEC nicht nennt, entfällt:** CarbonBadge, WakapiStats, „Hergestellt mit 🐻-Kräften“, App-Install-Sektion im Footer, CMS-Menüs `footer1`/`footer2` und das Funding-Menü aus dem CMS (Unterstützen führt nur auf `/spenden`), alter Bär, `o-footer-*`-Styles.
+3. **Alles, was die SPEC nicht nennt, entfällt:** CarbonBadge, WakapiStats, „Hergestellt mit 🐻-Kräften“, App-Install-Sektion im Footer und das Funding-Menü aus dem CMS (Unterstützen führt nur auf `/spenden`), alter Bär, `o-footer-*`-Styles.
 4. **Einstellungen-Link immer zeigen:** Link „Einstellungen“ → `/settings` in der Fußzeile, unabhängig vom Installationsstatus. (Ergänzung zur SPEC §7, ohne Mock; Position siehe Aufbau.)
 5. **Design System zuerst:** Tokens wiederverwenden, neue nur wo nötig. Browser-Floor laut CLAUDE.md (Baseline widely available, Firefox ≥ 146), neuere Features nur als Progressive Enhancement mit Fallback.
 
@@ -44,7 +44,7 @@ Aufruf-Zuordnung (SPEC §4): Anki → Anki-Aufruf · Startseite → `none` · Sp
 
 Fußzeile (SPEC §7 + Entscheidung 4): „Ein Projekt von Webshaped / Felix Scholze“ · Version (aus `package.json`, → `/changelog`) · Impressum · Datenschutz · **Einstellungen** (→ `/settings`). Mobil zwei Zeilen wie SPEC §7 beschrieben, Einstellungen steht in Zeile 2.
 
-Linkziele: Wort-Index `/wort`, Themen `/themen`, Berliner oder nich? `/games/berliner-oder-nicht`, Magazin `/magazin`, Wort vorschlagen `/wort-vorschlagen`, Unterstützen `/spenden`, Fehler melden GitHub-Issues (`…/issues/new`, aus dem bisherigen Menü), Social aus `fetchSocialMenu()` (GitHub, Mastodon, Bluesky, Facebook; `rel="me"` bleibt), „So arbeite ick“ entfällt (`TODO(footer):`). Wortzahl live aus dem Global „Startseite (Fakten)“.
+Linkziele (Spalte „Kiek ooch ma hier“ und Legal-Zeile kommen aus den CMS-Menüs `footer1` und `footer2`; fest bleiben Version, Einstellungen, Unterstützen und Fehler melden; Seed-Stand): Wort-Index `/wort`, Themen `/themen`, Berliner oder nich? `/games/berliner-oder-nicht`, Magazin `/magazin`, Wort vorschlagen `/wort-vorschlagen`, Unterstützen `/spenden`, Fehler melden GitHub-Issues (`…/issues/new`, aus dem bisherigen Menü), Social aus `fetchSocialMenu()` (GitHub, Mastodon, Bluesky, Facebook; `rel="me"` bleibt), „So arbeite ick“ entfällt (`TODO(footer):`). Wortzahl live aus dem Global „Startseite (Fakten)“.
 
 ## Tokens
 

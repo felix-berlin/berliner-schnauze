@@ -2,7 +2,7 @@
 import '@styles/components/_site-footer.scss';
 import HeartIcon from '~icons/lucide/heart';
 import { fetchFooterData } from '@services/payload/footerWords.ts';
-import { fetchSocialMenu } from '@services/payload/site.ts';
+import { fetchMenu, fetchSocialMenu, type MenuItem } from '@services/payload/site.ts';
 import type { FooterMode } from '@utils/footerMode.ts';
 import { reportAndFallback } from '@utils/reportError.ts';
 
@@ -20,20 +20,20 @@ const { excludeSlug, mode } = Astro.props;
 
 // Each read degrades on its own and is reported: a CMS outage already fails the page elsewhere, so these fallbacks
 // cover footer-specific breakage that nothing else would reveal.
-const [{ words, wordCount }, socialMenu] = await Promise.all([
+const [{ words, wordCount }, socialMenu, pages, legalLinks] = await Promise.all([
   // A page callout replaces the sign: no words are picked or sent to the island.
   fetchFooterData(excludeSlug, mode === 'callout' ? 0 : undefined),
   reportAndFallback('[footer] social menu', [], fetchSocialMenu),
+  reportAndFallback('[footer] page menu', [], () => fetchMenu('footer1')),
+  reportAndFallback('[footer] legal menu', [], () => fetchMenu('footer2')),
 ]);
 const knownWords = Math.floor(wordCount / 100) * 100;
 
-const pages = [
-  { href: '/wort', title: 'Wort-Index' },
-  { href: '/themen', title: 'Themen' },
-  { href: '/games/berliner-oder-nicht', title: 'Berliner oder nich?' },
-  { href: '/magazin', title: 'Magazin' },
-  { href: '/wort-vorschlagen', title: 'Wort vorschlagen' },
-];
+// Links to other sites open in a new tab; a CMS `rel` (e.g. `me`) is kept next to `noopener`.
+const linkAttrs = ({ link, rel }: Pick<MenuItem, 'link' | 'rel'>) =>
+  /^https?:/.test(link)
+    ? { href: link, rel: rel ? `${rel} noopener` : 'noopener', target: '_blank' }
+    : { href: link, rel };
 ---
 
 <slot name='callout' />
@@ -48,11 +48,15 @@ const pages = [
     <div class='columns u-max-body-width'>
       <div class='col'>
         <h2>Kiek ooch ma hier</h2>
-        <nav aria-label='Weitere Seiten'>
-          <ul class='links'>
-            {pages.map((page) => <li><a href={page.href}>{page.title}</a></li>)}
-          </ul>
-        </nav>
+        {
+          pages.length > 0 && (
+            <nav aria-label='Weitere Seiten'>
+              <ul class='links'>
+                {pages.map((page) => <li><a {...linkAttrs(page)}>{page.title}</a></li>)}
+              </ul>
+            </nav>
+          )
+        }
       </div>
 
       <div class='col'>
@@ -113,8 +117,7 @@ const pages = [
         Ein Projekt von <a href='https://webshaped.de' rel='noopener' target='_blank'>Webshaped / Felix Scholze</a>
       </li>
       <li><a href='/changelog'>Version {version}</a></li>
-      <li><a href='/impressum'>Impressum</a></li>
-      <li><a href='/datenschutz'>Datenschutz</a></li>
+      {legalLinks.map((item) => <li><a {...linkAttrs(item)}>{item.title}</a></li>)}
       <li><a href='/settings'>Einstellungen</a></li>
     </ul>
   </div>

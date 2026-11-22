@@ -8,12 +8,13 @@ import { createAstroRender } from "../../helpers/astro";
 
 vi.mock("@styles/components/_site-footer.scss", () => ({}));
 
-const { fetchFooterData, fetchSocialMenu } = vi.hoisted(() => ({
+const { fetchFooterData, fetchMenu, fetchSocialMenu } = vi.hoisted(() => ({
   fetchFooterData: vi.fn(),
+  fetchMenu: vi.fn(),
   fetchSocialMenu: vi.fn(),
 }));
 vi.mock("@services/payload/footerWords.ts", () => ({ fetchFooterData }));
-vi.mock("@services/payload/site.ts", () => ({ fetchSocialMenu }));
+vi.mock("@services/payload/site.ts", () => ({ fetchMenu, fetchSocialMenu }));
 
 const sampleWords = [
   {
@@ -33,6 +34,20 @@ beforeAll(async () => {
 beforeEach(() => {
   vi.restoreAllMocks();
   fetchFooterData.mockReset().mockResolvedValue({ wordCount: 1734, words: sampleWords });
+  fetchMenu.mockReset().mockImplementation(async (menu: string) =>
+    menu === "footer1"
+      ? [
+          { link: "/wort", title: "Wort-Index" },
+          { link: "/themen", title: "Themen" },
+          { link: "/games/berliner-oder-nicht", title: "Berliner oder nich?" },
+          { link: "/magazin", title: "Magazin" },
+          { link: "/wort-vorschlagen", title: "Wort vorschlagen" },
+        ]
+      : [
+          { link: "/impressum", title: "Impressum" },
+          { link: "/datenschutz", title: "Datenschutz" },
+        ],
+  );
   fetchSocialMenu.mockReset().mockResolvedValue([
     { link: "https://git.example/me", rel: "me", title: "GitHub" },
     { link: "https://masto.example/@me", rel: "me", title: "Mastodon" },
@@ -71,6 +86,37 @@ describe("SiteFooter", () => {
     }
     expect(html).toContain('href="https://github.com/felix-berlin/berliner-schnauze/issues/new"');
     expect(html).toContain('href="https://webshaped.de"');
+  });
+
+  it("takes the page and legal links from the CMS menus and opens other sites in a new tab", async () => {
+    fetchMenu.mockImplementation(async (menu: string) =>
+      menu === "footer1"
+        ? [
+            { link: "/eigene-seite", title: "Eigene Seite" },
+            { link: "https://extern.example/x", rel: "me", title: "Extern" },
+          ]
+        : [{ link: "/recht", title: "Recht" }],
+    );
+    const html = await render({ mode: "sign" });
+    expect(html).toContain('href="/eigene-seite"');
+    expect(html).toContain("Recht");
+    expect(html).not.toContain('href="/impressum"');
+    expect(html).toMatch(
+      /<a[^>]*href="https:\/\/extern\.example\/x"[^>]*rel="me noopener"[^>]*target="_blank"/,
+    );
+    expect(html).toContain('href="/changelog"');
+    expect(html).toContain('href="/settings"');
+  });
+
+  it("drops the page column links but keeps the footer when a menu cannot be read, and reports it", async () => {
+    const logged = vi.spyOn(console, "error").mockImplementation(() => {});
+    fetchMenu.mockRejectedValue(new Error("down"));
+    const html = await render({ mode: "sign" });
+    expect(html).not.toContain('aria-label="Weitere Seiten"');
+    expect(html).toContain('href="/settings"');
+    const messages = logged.mock.calls.map(([error]) => (error as Error).message);
+    expect(messages).toContain("[footer] page menu unavailable");
+    expect(messages).toContain("[footer] legal menu unavailable");
   });
 
   it("lists the social profiles as text links that open in a new tab, keeping rel=me", async () => {

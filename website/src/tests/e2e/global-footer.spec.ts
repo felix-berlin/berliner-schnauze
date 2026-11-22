@@ -177,10 +177,14 @@ test.describe("Footer v21", () => {
       const running = await footer(page).evaluate((root) =>
         document
           .getAnimations()
+          // Animations only: reduced motion does not forbid the colour transitions of hover and focus states.
           .filter(
-            (a) => a.effect instanceof KeyframeEffect && root.contains(a.effect.target as Node),
+            (a): a is CSSAnimation =>
+              a instanceof CSSAnimation &&
+              a.effect instanceof KeyframeEffect &&
+              root.contains(a.effect.target as Node),
           )
-          .map((a) => (a as CSSAnimation).animationName ?? a.id),
+          .map((a) => a.animationName),
       );
       expect(running).toEqual([]);
       await expect(sign(page)).toHaveCSS("opacity", "1");
