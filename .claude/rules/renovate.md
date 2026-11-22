@@ -14,3 +14,14 @@ paths:
 - Packages that must move together are grouped (astro, payload + next/react, vue, sentry, test tooling, …). A new dependency family gets a group rule there, not a separate PR stream.
 - `minimumReleaseAgeExclude` in `pnpm-workspace.yaml` is a short-lived exception for one specific version: remove it once the version is old enough.
 - The CI step running `scripts/migration-upgrade-test.sh` sets `pnpm_config_minimum_release_age: 0`: the base ref is installed without the age gate, so a base lockfile with too-young packages cannot fail the upgrade test. The PR's own install keeps the gate.
+
+## Held-back versions (`allowedVersions`)
+
+A version Renovate must not propose gets an `allowedVersions` rule with a `description` that names the reason and the exit condition. Renovate then closes or regenerates the open PR. Re-check each entry when its blocker ships; remove the rule and the line here together.
+
+| Package | Held at | Why | Remove when |
+|---|---|---|---|
+| `typescript` | `<7` | `astro check` rejects TypeScript 7 (PR #1860) | `astro check` or `@astrojs/ts-content-mapper` supports TS 7 |
+| `graphql` | `<17` | Payload's peer is `^16.8.1` (PR #1840) | Payload accepts graphql 17 |
+| `undici@6` | `<7` | pnpm override for `@actions/http-client` (declares `^6`); only the audit fix is wanted (PR #1901) | the parents ship an undici 7+ range |
+| `@sentry/astro` | `<11.15.0` | 11.15+ reads `getModuleInfo().isEntry` in an SSR transform; `CI=true astro sync` fails on Vite 8 (PR #1907, reproduced on 11.16.0 too) | a Sentry release passes `CI=true pnpm exec astro sync` in `website/` |
