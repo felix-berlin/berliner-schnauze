@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.15.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.15.0...v4.15.1) (2026-11-22)
+
+
+### Bug Fixes
+
+* **dev:** keep footer farewell row inside 300px screens ([942cd2b](https://github.com/felix-berlin/berliner-schnauze/commit/942cd2b37ab703b093263661f0ad04bf02994bf2))
+
 # [4.15.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.14.2...v4.15.0) (2026-11-22)
 
 
