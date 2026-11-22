@@ -49,13 +49,18 @@ const showSign = computed(
 );
 
 // SPEC §5.1: Kalle 150px, below the 808px layout 120px (a prop, so it cannot follow a container query).
+// The server (and the first client render, for a clean hydration) uses the desktop size.
 const wide = useMediaQuery("(min-width: 50.5rem)");
-const kalleSize = computed(() => (wide.value ? 150 : 120));
+const mounted = ref(false);
+const kalleSize = computed(() => (!mounted.value || wide.value ? 150 : 120));
 
 // The entry animation is armed only once hydrated (no JS: everything stays visible as rendered).
 const state = ref<"armed" | "in" | undefined>(undefined);
 const root = useTemplateRef<HTMLElement>("root");
-onMounted(() => (state.value = "armed"));
+onMounted(() => {
+  mounted.value = true;
+  state.value = "armed";
+});
 const { stop } = useIntersectionObserver(root, ([entry]) => {
   if (entry?.isIntersecting && state.value === "armed") {
     state.value = "in";

@@ -3,7 +3,8 @@
 
 // Footer v21 word sign, the only card in the footer (docs/superpowers/specs/2026-11-22-footer-v21-design.md; handoff
 // SPEC §5.1, §8, §9). Parts: .inner (padding, responds to the sign's own width) holding .body (label, .head with .lemma
-// link and .kind, .meaning, .example) and .actions (the "Noch eens" button). The sign is paper-coloured on the dark
+// link and .kind, .meaning, .example) and .actions (the "Noch eens" button). Public: --footer-word-sign-width (a size
+// containment root has no intrinsic width, so a parent that sizes it by content, e.g. an auto grid column, sets it). The sign is paper-coloured on the dark
 // footer band, so it uses the fixed --sign-* tokens.
 @include mx.component("footer-word-sign") {
   :scope {
@@ -23,7 +24,7 @@
 
     container: footer-word-sign / inline-size;
     box-sizing: border-box;
-    inline-size: min(var(--_width), 100%);
+    inline-size: var(--footer-word-sign-width, min(var(--_width), 100%));
     min-block-size: var(--_reserve);
     color: var(--sign-text);
     background: var(--sign-bg);
@@ -72,6 +73,8 @@
   }
 
   .lemma {
+    display: inline-block;
+    min-block-size: var(--size-tap-target);
     font-size: var(--_lemma);
     font-weight: var(--font-weight-bold);
     line-height: 1.1;

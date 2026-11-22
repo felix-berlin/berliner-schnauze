@@ -35,7 +35,14 @@
   }
 
   .sign {
+    --_sign-width: 100%; // SPEC mobile: full width
+    --footer-word-sign-width: var(--_sign-width);
+
     grid-column: 1 / -1;
+
+    @container footer-farewell (inline-size >= 50.5rem) {
+      --_sign-width: 25rem; // SPEC 400px
+    }
   }
 
   .bye {

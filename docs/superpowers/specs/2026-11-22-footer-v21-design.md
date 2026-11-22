@@ -27,16 +27,16 @@ Der alte Footer (Bär-Foto, Fraktur-Satz, vier Linkspalten, orange Streifen) wir
 
 ## Aufbau (Komponenten)
 
-| Datei | Art | Aufgabe |
-|---|---|---|
-| `components/footer/SiteFooter.astro` | Astro | Band, drei Spalten, Fußzeile; Slot `aufruf` (benannt) erzeugt die Section darüber; entscheidet Schild ja/nein |
-| `components/footer/FooterWordSign.vue` | Vue, `client:visible` | Schild; Prop `words` (Liste), „Noch eens“ (gemischt, ohne Wiederholung bis die Liste durch ist); `aria-live="polite"`; Klapp-Animation |
-| `components/footer/FooterCalloutApp.vue` | Vue (Insel) | „Hol dir de Schnauze uffs Handy“ + „App installieren“, nur wenn installierbar (`$showInstallButton`) und nicht installiert |
-| `components/footer/FooterCalloutAnki.astro` | Astro | „Na los, ab uff die Karten.“ + Kaufen-Button, aus `anki.astro` verschoben (Wortzahl/Preis live wie bisher) |
-| `components/kalle/BerlinerBaer.vue` | vorhanden | `mood="wave"`, `size` 150 / 120, ohne `disc`, `aria-hidden` |
-| `services/payload/footerWords.ts` | Service | `fetchFooterWords(excludeSlug?)`: mischt ~30 Wörter aus dem gecachten `fetchAllWords()` (nur Speicher) → `{slug, lemma, artikel/wortart, bedeutung, beispiel?}`, gekürzt auf das Nötige |
-| `utils/footerWords.ts` | Util (rein, testbar) | mischen ohne Wiederholung, Seitenwort ausschließen, Bedeutung kürzen |
-| `styles/layouts/_footer.scss` (ersetzt), `styles/components/_footer-word-sign.scss`, `_footer-callout.scss` | SCSS | nur Tokens |
+| Datei                                                                                                       | Art                   | Aufgabe                                                                                                                                                                                 |
+| ----------------------------------------------------------------------------------------------------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/footer/SiteFooter.astro`                                                                        | Astro                 | Band, drei Spalten, Fußzeile; Slot `aufruf` (benannt) erzeugt die Section darüber; entscheidet Schild ja/nein                                                                           |
+| `components/footer/FooterWordSign.vue`                                                                      | Vue, `client:visible` | Schild; Prop `words` (Liste), „Noch eens“ (gemischt, ohne Wiederholung bis die Liste durch ist); `aria-live="polite"`; Klapp-Animation                                                  |
+| `components/footer/FooterCalloutApp.vue`                                                                    | Vue (Insel)           | „Hol dir de Schnauze uffs Handy“ + „App installieren“, nur wenn installierbar (`$showInstallButton`) und nicht installiert                                                              |
+| `components/footer/FooterCalloutAnki.astro`                                                                 | Astro                 | „Na los, ab uff die Karten.“ + Kaufen-Button, aus `anki.astro` verschoben (Wortzahl/Preis live wie bisher)                                                                              |
+| `components/kalle/BerlinerBaer.vue`                                                                         | vorhanden             | `mood="wave"`, `size` 150 / 120, ohne `disc`, `aria-hidden`                                                                                                                             |
+| `services/payload/footerWords.ts`                                                                           | Service               | `fetchFooterWords(excludeSlug?)`: mischt ~30 Wörter aus dem gecachten `fetchAllWords()` (nur Speicher) → `{slug, lemma, artikel/wortart, bedeutung, beispiel?}`, gekürzt auf das Nötige |
+| `utils/footerWords.ts`                                                                                      | Util (rein, testbar)  | mischen ohne Wiederholung, Seitenwort ausschließen, Bedeutung kürzen                                                                                                                    |
+| `styles/layouts/_footer.scss` (ersetzt), `styles/components/_footer-word-sign.scss`, `_footer-callout.scss` | SCSS                  | nur Tokens                                                                                                                                                                              |
 
 `Layout.astro`: Slot `footer-farewell` wird zu `footer-aufruf` (Prop-/Slot-Weitergabe an `SiteFooter`); `Footer.astro`, `FooterAppSection.vue`, `WordPageFooter`-Anteile, `_footer-app-section.scss` und die alten Tests/E2E (`global-footer.spec.ts`, `FooterAppSection.test.ts`) werden entfernt bzw. ersetzt. Die Wortseite übergibt ihren Slug an den Footer (Ausschluss), alle anderen Seiten nichts.
 
