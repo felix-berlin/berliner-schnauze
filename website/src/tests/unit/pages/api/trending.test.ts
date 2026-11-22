@@ -96,9 +96,9 @@ describe("GET /api/trending", () => {
 
   it("502, logged and not cached, when trending throws", async () => {
     const error = vi.spyOn(console, "error").mockImplementation(() => {});
-    trending.mockRejectedValueOnce(new Error("db down"));
+    trending.mockRejectedValueOnce(new Error("db down: secret-value"));
     expect((await get("type=engaged&days=7")).status).toBe(502);
-    expect(error).toHaveBeenCalled();
+    expect(error).toHaveBeenCalledWith("[trending] failed: Error");
     expect((await get("type=engaged&days=7")).status).toBe(200);
   });
 });

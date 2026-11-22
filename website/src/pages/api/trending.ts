@@ -4,6 +4,7 @@ import { ttl } from "@services/cache.ts";
 import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { toWordRef } from "@services/payload/wordRefs.ts";
 import { positiveInt, reply } from "@utils/apiReply.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { TREND_TYPES, trending, type TrendType } from "payload-app/word-stats";
 
 const TTL = 5 * 60_000;
@@ -62,7 +63,7 @@ export const GET: APIRoute = async ({ url }) => {
       { headers: { "Cache-Control": "public, max-age=300" } },
     );
   } catch (error) {
-    console.error(`[trending] ${key} failed:`, error);
+    logRouteError("trending", error);
     return reply({ error: "Die Liste konnte leider nicht jeladen werden." }, 502);
   }
 };

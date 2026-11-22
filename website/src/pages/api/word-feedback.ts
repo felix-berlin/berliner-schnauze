@@ -4,6 +4,7 @@ import { buildPollResult } from "@lib/pollResult.ts";
 import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { sha256, visitorId } from "@services/payload/comments.ts";
 import { isUniqueViolation, orNull, positiveInt, reply } from "@utils/apiReply.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { clientIp, rateLimitedBy } from "@utils/rateLimit.ts";
 import {
   feedbackPatchSchema,
@@ -88,7 +89,7 @@ export const GET: APIRoute = async ({ cookies, url }) => {
     ]);
     return reply({ ...shown, result: buildPollResult(rows, mine?.usage ?? undefined) }, 200);
   } catch (error) {
-    console.error(`[word-feedback] read ${word} failed:`, error);
+    logRouteError("word-feedback read", error);
     return reply({ error: "Die Zahlen wollten leider nich laden." }, 502);
   }
 };
@@ -170,11 +171,11 @@ export const PATCH: APIRoute = async ({ clientAddress, cookies, request }) => {
     try {
       return reply(await state(payload, word, toMine(doc)), 200);
     } catch (error) {
-      console.error(`[word-feedback] state after write ${word} failed:`, error);
+      logRouteError("word-feedback state", error);
       return reply({ error: "Is jespeichert, aber die Zahlen wollten nich laden." }, 502);
     }
   } catch (error) {
-    console.error(`[word-feedback] write ${word} failed:`, error);
+    logRouteError("word-feedback write", error);
     return reply({ error: "Die Stimme konnte leider nicht gezählt werden." }, 502);
   }
 };
@@ -231,7 +232,7 @@ export const DELETE: APIRoute = async ({ clientAddress, cookies, request, url })
     }
     return reply({ deleted: true }, 200);
   } catch (error) {
-    console.error(`[word-feedback] delete ${word ? `word ${word}` : "all"} failed:`, error);
+    logRouteError("word-feedback delete", error);
     return reply({ error: "Das hat leider nicht geklappt." }, 502);
   }
 };

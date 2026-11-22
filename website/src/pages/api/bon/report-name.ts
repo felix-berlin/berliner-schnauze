@@ -3,6 +3,7 @@ import type { APIRoute } from "astro";
 import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { clientIp, rateLimitedBy, refundHit } from "@utils/rateLimit.ts";
 import { z } from "zod";
 
@@ -49,7 +50,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     return new Response(null, { status: 204 });
   } catch (error) {
     if (key) refundHit(network, key);
-    console.error("[bon] report-name failed:", error);
+    logRouteError("bon report-name", error);
     return reply({ error: "Die Meldung konnte leider nich jesendet werden." }, 502);
   }
 };

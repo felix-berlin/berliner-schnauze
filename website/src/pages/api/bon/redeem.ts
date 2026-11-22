@@ -4,6 +4,7 @@ import { findPlayer, playerStats, setPlayerCookie } from "@services/bonPlayer.ts
 import { getPayloadClient } from "@services/payload.ts";
 import { reply } from "@utils/apiReply.ts";
 import { redeemSchema } from "@utils/bonSchema.ts";
+import { logRouteError } from "@utils/logError.ts";
 
 export const POST: APIRoute = async ({ cookies, request }) => {
   const input = redeemSchema.safeParse(await request.json().catch(() => undefined));
@@ -15,7 +16,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
     setPlayerCookie(cookies, player.code);
     return reply({ playerName: player.name, ...(await playerStats(payload, player.id)) }, 200);
   } catch (error) {
-    console.error("[bon] redeem failed:", error);
+    logRouteError("bon redeem", error);
     return reply({ error: "Der Code wollte leider nich jeprüft werden." }, 502);
   }
 };

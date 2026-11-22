@@ -4,6 +4,7 @@ import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { hashEditKey, listComments, toPublic, visitorId } from "@services/payload/comments.ts";
 import { captchaGate, orNull, positiveInt, reply } from "@utils/apiReply.ts";
 import { commentCreateSchema } from "@utils/commentSchema.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { requestIp } from "@utils/rateLimit.ts";
 import { createHash, randomBytes } from "node:crypto";
 import { pickPseudonym } from "payload-app/comments";
@@ -30,7 +31,7 @@ export const GET: APIRoute = async ({ cookies, url }) => {
     if (!(await publishedWord(wordId))) return reply({ error: "Wort nicht gefunden" }, 404);
     return reply(await listComments(wordId, sort, page, visitorId(cookies, false)), 200);
   } catch (error) {
-    console.error("[comments] listing failed:", error);
+    logRouteError("comments", error);
     return reply({ error: "Die Kommentare konnten nicht geladen werden." }, 502);
   }
 };
@@ -116,7 +117,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
       201,
     );
   } catch (error) {
-    console.error("[comments] storing failed:", error);
+    logRouteError("comments", error);
     return reply({ error: "Dein Kommentar konnte leider nicht gesendet werden." }, 502);
   }
 };

@@ -4,6 +4,7 @@ import { getPayloadClient } from "@services/payload.ts";
 import { visitorId, voterKey } from "@services/payload/comments.ts";
 import { captchaGate, isUniqueViolation, orNull, reply } from "@utils/apiReply.ts";
 import { reportSchema } from "@utils/commentSchema.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { clientIp, rateLimitedBy, requestIp } from "@utils/rateLimit.ts";
 
 /**
@@ -49,7 +50,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     }
     return reply({ reported: true }, 200);
   } catch (error) {
-    console.error(`[comments] report on ${commentId} failed:`, error);
+    logRouteError("comments report", error);
     return reply({ error: "Die Meldung konnte leider nicht gesendet werden." }, 502);
   }
 };

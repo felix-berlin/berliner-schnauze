@@ -4,6 +4,7 @@ import { getPayloadClient } from "@services/payload.ts";
 import { getThread, hashEditKey, toPublic, visitorId } from "@services/payload/comments.ts";
 import { orNull, positiveInt, reply } from "@utils/apiReply.ts";
 import { commentEditSchema } from "@utils/commentSchema.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { timingSafeEqual } from "node:crypto";
 import { SELF_DELETED } from "payload-app/comments";
 import { EDIT_WINDOW_MS } from "payload-app/comments";
@@ -41,7 +42,7 @@ const own =
       if (!found) return forbidden();
       return answer(await applyChange(found.payload, id, change(input.data)));
     } catch (error) {
-      console.error("[comments] own update failed:", error);
+      logRouteError("comments own update", error);
       return reply({ error: "Das hat leider nicht geklappt." }, 502);
     }
   };
@@ -78,7 +79,7 @@ export const GET: APIRoute = async ({ cookies, params }) => {
     const comment = await getThread(id, visitorId(cookies, false));
     return comment ? reply({ comment }, 200) : reply({ error: "Kommentar nicht gefunden" }, 404);
   } catch (error) {
-    console.error("[comments] thread failed:", error);
+    logRouteError("comments thread", error);
     return reply({ error: "Der Kommentar konnte nicht geladen werden." }, 502);
   }
 };
