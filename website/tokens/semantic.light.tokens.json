@@ -579,6 +579,90 @@
       "alpha": 0.12
     }
   },
+  "band-text-strong": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [1.0, 1.0, 1.0],
+      "hex": "#ffffff"
+    }
+  },
+  "band-text-quiet": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.658824, 0.698039, 0.737255],
+      "hex": "#a8b2bc"
+    }
+  },
+  "band-dot": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.364706, 0.407843, 0.45098],
+      "hex": "#5d6873"
+    }
+  },
+  "sign-bg": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [1.0, 0.972549, 0.941176],
+      "hex": "#fff8f0"
+    }
+  },
+  "sign-text": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.168627, 0.2, 0.231373],
+      "hex": "#2b333b"
+    }
+  },
+  "sign-text-quiet": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.364706, 0.407843, 0.45098],
+      "hex": "#5d6873"
+    }
+  },
+  "sign-text-example": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.239216, 0.27451, 0.309804],
+      "hex": "#3d464f"
+    }
+  },
+  "sign-accent": {
+    "$type": "color",
+    "$value": "{color.orange.600}"
+  },
+  "sign-line": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.909804, 0.862745, 0.803922],
+      "hex": "#e8dccd"
+    }
+  },
+  "sign-border": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.72549, 0.67451, 0.611765],
+      "hex": "#b9ac9c"
+    }
+  },
+  "sign-bg-hover": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.960784, 0.913725, 0.854902],
+      "hex": "#f5e9da"
+    }
+  },
   "line": {
     "$type": "color",
     "$value": "{color.border.card}"
