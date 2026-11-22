@@ -23,7 +23,8 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     max-inline-size: var(--_max-width);
-    padding: var(--space-4) var(--space-4) calc(var(--space-16) + var(--space-8));
+    // The mobile bar follows the article and rests below the content, so no room for it is reserved here.
+    padding: var(--space-4) var(--space-4) var(--space-8);
     // The page column (u-max-body-width) pads its sides; the wrap owns its padding so the pill bar can run edge to edge.
     margin-inline: calc(-1 * var(--page-gutter));
 
@@ -82,6 +83,33 @@
     }
     @include mx.breakpoint("desktop") {
       padding-block-start: 0;
+    }
+  }
+
+  // Grammatik and Klang: stacked with 8px (the closed folds) below 808px, side by side from there (SPEC §3).
+  .o-word-v18 .pair {
+    display: grid;
+    gap: var(--space-2);
+
+    @include mx.breakpoint("word") {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-4);
+      align-items: start;
+    }
+  }
+
+  // The sticky bar (below 808px) must not hide a focused element: keep it clear on scroll.
+  html:has(.o-word-v18) {
+    --_bar: calc(4.5rem + env(safe-area-inset-bottom, 0px)); // bar height 72px plus the safe area, no token
+
+    scroll-padding-block-end: var(--_bar);
+
+    @include mx.breakpoint("word") {
+      --word-mobile-bar-display: none;
+      --word-analyse-wide-display: block;
+      --word-analyse-fold-display: none;
+
+      scroll-padding-block-end: 0;
     }
   }
 
