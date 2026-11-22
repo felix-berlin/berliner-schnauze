@@ -1,7 +1,7 @@
 <template>
   <nav class="c-word-toc" aria-label="Auf dieser Seite">
     <div class="inner">
-      <p class="label" aria-hidden="true">Auf dieser Seite</p>
+      <div class="label" aria-hidden="true"><p class="c-label">Auf dieser Seite</p></div>
       <ol class="list">
         <li v-for="(item, i) in items" :key="item.id">
           <a

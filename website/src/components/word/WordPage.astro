@@ -1,6 +1,7 @@
 ---
 import '@styles/objects/_word-v18.scss';
 
+import WordHead from '@components/word/WordHead.astro';
 import WordToc from '@components/word/WordToc.vue';
 import { tocItems } from '@lib/wordToc.ts';
 import type { WordPageModel } from '@services/payload/wordPage.ts';
@@ -14,7 +15,7 @@ const { model } = Astro.props;
 
 <!--
   Shell of the v18 word page (SPEC §2): the table of contents and the main column with the anchors in page
-  order. Each section is a named slot; the cards fill them in later tasks (head 12, cards 13, analysis 14).
+  order. Each section is a named slot; the cards fill them in later tasks (cards 13, analysis 14; the head of task 12 is the default of `bedeutung`).
   The wrappers own the anchor ids (and the scroll margin): a card placed in a slot must not repeat the id.
 -->
 <article class='o-word-v18'>
@@ -24,7 +25,7 @@ const { model } = Astro.props;
 
   <div class='main'>
     <div class='anchor' id='bedeutung'>
-      <slot name='bedeutung'><h1>{model.word.berlinerisch}</h1></slot>
+      <slot name='bedeutung'><WordHead model={model} /></slot>
     </div>
 
     <h2 class='band'>Im Gebrauch</h2>

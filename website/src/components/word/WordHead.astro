@@ -1,0 +1,96 @@
+---
+import '@styles/components/_word-head.scss';
+import WordBadges from '@components/word/WordBadges.vue';
+import WordOTon from '@components/word/WordOTon.astro';
+import WordSeal from '@components/WordSeal.vue';
+import { voiceSources } from '@composables/useVoicePlayer.ts';
+import type { WordPageModel } from '@services/payload/wordPage.ts';
+import { translationTexts } from '@services/payload/words.ts';
+import { posBadge, resolvePos } from '@utils/wordPos.ts';
+import { morseRing } from 'payload-app/home-stats';
+
+interface Props {
+  model: WordPageModel;
+}
+
+const { model } = Astro.props;
+const { stories, word } = model;
+
+const [main, ...more] = translationTexts(word);
+const pos = resolvePos(word.wordTypes[0]?.name, word.derived.nlpTags);
+const kind = [pos && posBadge(pos.pos, pos.auto).text, word.berolinismus && 'Berolinismus']
+  .filter(Boolean)
+  .join(' · ');
+const same = model.related.filter((r) => r.relation === 'gleich');
+const voices = voiceSources(word.berlinerischAudio);
+const hasImages = Astro.slots.has('images');
+---
+
+<!--
+  Word head (SPEC §5). DOM order is the focus order (§17); on mobile the CSS `order` moves the images
+  and the action row up (§5 mobile order). The "+" image tile is not rendered (decision 3). Slots: `actions`
+  (reactions, share, menu: a later task) and `images`.
+-->
+<header class='c-word-head' data-variant={hasImages ? 'images' : undefined}>
+  <div class='inner'>
+    <div class='lemma'>
+      <h1 class='title'>
+        <dfn class='headword'>{word.berlinerisch}</dfn>{word.article && <span class='article'>, {word.article}</span>}
+      </h1>
+      <WordSeal client:visible word={word.berlinerisch} morse={morseRing(word.berlinerisch)} audioUrl={voices.m ?? voices.w} />
+    </div>
+
+    <p class='meta'>
+      <span class='syllables'>{model.syllables.map((s, i) => (<Fragment>{i > 0 && <span class='dot' aria-hidden='true'>·</span>}{s}</Fragment>))}</span>
+      {word.ipa && <span class='ipa'>[{word.ipa}]</span>}
+      {kind && <span class='kind'>{kind}</span>}
+    </p>
+
+    {(model.wotd || model.trend) && (
+      <div class='badges'>
+        <WordBadges client:visible slug={word.slug} trend={model.trend} wotd={model.wotd} />
+      </div>
+    )}
+
+    {main && (
+      <div class='meaning'>
+        <p class='c-label'>Bedeutung</p>
+        <p class='main'>{main}</p>
+        {more.length > 0 && (
+          <ul class='list'>{more.map((m) => <li>{m}</li>)}</ul>
+        )}
+      </div>
+    )}
+
+    {same.length > 0 && (
+      <p class='same'>
+        Gleiche Bedeutung wie{' '}
+        {same.map((r, i) => (
+          <Fragment>
+            {i > 0 && (i === same.length - 1 ? ' und ' : ', ')}
+            {r.url ? <a href={r.url}>{r.label}</a> : r.label}
+            {r.note && <span class='note'> ({r.note})</span>}
+          </Fragment>
+        ))}
+      </p>
+    )}
+
+    {word.themen.length > 0 && (
+      <ul class='themes'>
+        {word.themen.map((t) => (
+          <li><a href={`/themen/${t.slug}`}>{t.name}</a></li>
+        ))}
+      </ul>
+    )}
+
+    {model.featured && (
+      <div class='oton'>
+        <WordOTon story={model.featured} more={Math.max(0, stories.total - 1)} />
+      </div>
+    )}
+
+    {Astro.slots.has('actions') && <div class='actions' data-slot><slot name='actions' /></div>}
+    {hasImages && <div class='images' data-slot><slot name='images' /></div>}
+    {word.ipa && <p class='ipa-bg' aria-hidden='true'>[{word.ipa}]</p>}
+  </div>
+</header>
