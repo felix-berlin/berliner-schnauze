@@ -38,7 +38,7 @@ const flattenParent: CollectionBeforeValidateHook = async ({ data, originalDoc, 
  * The site's comments are held when their text or name contains a link (also on edit); an editor's changes are never
  * held, and an editor releasing a hidden comment marks it reviewed.
  */
-const applyRules: CollectionBeforeChangeHook = ({ data, operation, originalDoc, req }) => {
+const applyRules: CollectionBeforeChangeHook = ({ context, data, operation, originalDoc, req }) => {
   if (!req.user) {
     // A self-delete wipes text and name; it must never land back in the review queue.
     if (data.status === "deleted") return data;
@@ -46,7 +46,8 @@ const applyRules: CollectionBeforeChangeHook = ({ data, operation, originalDoc, 
     const linked =
       containsLink(text) || containsLink(data.authorName ?? originalDoc?.authorName ?? "");
     if (operation === "create" && data.text !== undefined) {
-      data.status = linked ? "pending" : "published";
+      // `context.review`: Jeschichten wait for an editor even without a link.
+      data.status = linked || context.review ? "pending" : "published";
     } else if (operation === "update") {
       const textChanged = data.text !== undefined && data.text !== originalDoc?.text;
       const nameChanged =

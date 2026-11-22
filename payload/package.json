@@ -10,6 +10,7 @@
     },
     "./word-derived": "./src/lib/wordDerived.ts",
     "./comments": "./src/lib/comments.ts",
+    "./story-bezirk": "./src/lib/storyBezirk.ts",
     "./word-feedback": "./src/lib/wordFeedback.ts",
     "./bon-rules": "./src/lib/bonRules.ts",
     "./bon-player": "./src/lib/bonPlayer.ts",
