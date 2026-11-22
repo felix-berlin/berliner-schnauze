@@ -71,6 +71,7 @@
   }
 
   .o-word-v18 .main {
+    container: word-main / inline-size;
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
@@ -87,11 +88,19 @@
   .o-word-v18 .anchor {
     scroll-margin-block-start: var(--_anchor);
 
+    // Card paddings (SPEC §3: 24/28/32; 28 has no token step, the smaller 24 stays on tablet).
+
+    --section-card-gutter: var(--space-6);
+    --section-card-header-block: var(--space-6);
+
     @include mx.breakpoint("word") {
       scroll-margin-block-start: var(--_anchor-bar);
     }
     @include mx.breakpoint("desktop") {
       scroll-margin-block-start: var(--_anchor);
+
+      --section-card-gutter: var(--space-8);
+      --section-card-header-block: var(--space-8);
     }
   }
 
