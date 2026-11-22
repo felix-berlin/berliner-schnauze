@@ -8,6 +8,17 @@ import { renderToString } from "vue/server-renderer";
 
 vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));
 
+const observer = vi.hoisted(() => ({
+  notify: undefined as undefined | ((entries: { isIntersecting: boolean }[]) => void),
+}));
+vi.mock("@vueuse/core", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@vueuse/core")>()),
+  useIntersectionObserver: (_target: unknown, callback: typeof observer.notify) => {
+    observer.notify = callback;
+    return { stop: vi.fn() };
+  },
+}));
+
 const word = (slug: string, over: Partial<FooterWord> = {}): FooterWord => ({
   example: `Beispiel ${slug}`,
   kind: "der",
@@ -76,6 +87,29 @@ describe("FooterWordSign", () => {
     }
     expect(new Set(seen).size).toBe(3);
     wrapper.unmount();
+  });
+
+  it("does not repeat a word across the reshuffle after all were shown", async () => {
+    const wrapper = mount(FooterWordSign, { props: { words } });
+    await flushPromises();
+    const shown = [wrapper.get("a").text()];
+    for (let i = 0; i < 6; i++) {
+      await wrapper.get("button").trigger("click");
+      shown.push(wrapper.get("a").text());
+    }
+    shown.slice(1).forEach((lemma, i) => expect(lemma).not.toBe(shown[i]));
+  });
+
+  it("arms the entry once mounted and plays it when the sign comes into view", async () => {
+    const wrapper = mount(FooterWordSign, { props: { words } });
+    await flushPromises();
+    expect(wrapper.attributes("data-state")).toBe("armed");
+    observer.notify?.([{ isIntersecting: false }]);
+    await flushPromises();
+    expect(wrapper.attributes("data-state")).toBe("armed");
+    observer.notify?.([{ isIntersecting: true }]);
+    await flushPromises();
+    expect(wrapper.attributes("data-state")).toBe("in");
   });
 
   it("has no Noch eens button for a single word", async () => {

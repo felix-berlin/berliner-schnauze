@@ -38,7 +38,7 @@ import { createWordCycle, type FooterWord } from "@utils/footerWords";
 import { useIntersectionObserver } from "@vueuse/core";
 import { defineAsyncComponent, onMounted, ref, shallowRef, useTemplateRef } from "vue";
 
-// Lemmas longer than this get the smaller fluid size (the longest e2e seed word has 36 letters).
+// Lemmas longer than this get the smaller fluid size (data-long, see _footer-word-sign.scss) so they stay short.
 const LONG_LEMMA = 14;
 
 const props = defineProps<{ words: FooterWord[] }>();

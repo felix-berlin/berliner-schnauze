@@ -93,7 +93,7 @@ for (const size of SIZES) {
             // Anki: the demo card shows a random word.
             page.locator(".c-anki-flashcard"),
           ];
-          if (path === "/") await expect(wotd.locator(".lemma")).toBeVisible();
+          if (path === "/") await expect(wotd.getByRole("heading", { level: 2 })).toBeVisible();
           const name = `${path === "/" ? "home" : path.slice(1).replaceAll("/", "-")}-${size.width}-${theme}.png`;
           await expect(page).toHaveScreenshot(name, {
             fullPage: true,

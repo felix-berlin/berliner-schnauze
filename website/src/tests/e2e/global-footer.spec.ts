@@ -44,6 +44,7 @@ test.describe("Footer v21", () => {
     expect(await external.count()).toBeGreaterThanOrEqual(2);
     for (const link of await external.all()) {
       await expect(link).toHaveAttribute("target", "_blank");
+      await expect(link).toHaveAttribute("rel", /noopener/);
     }
   });
 
@@ -72,7 +73,7 @@ test.describe("Footer v21", () => {
       await expect(button).toBeFocused();
       const after = await sign(page).evaluate((el) => (el as HTMLElement).offsetHeight);
       const second = (await lemma(page).textContent()) ?? "";
-      // A lemma that wraps onto a third line (the 36-letter seed word) may grow the sign; ordinary words must not.
+      // Lemmas of up to 16 letters fit the reserved two-line height; longer ones (the 36-letter seed word) may grow the sign.
       if (first.length <= 16 && second.length <= 16) expect(after).toBe(before);
     }
     expect(seen.size).toBeGreaterThan(1);
@@ -90,6 +91,8 @@ test.describe("Footer v21", () => {
     page,
   }) => {
     await page.goto("/");
+    await expect(page.locator(".c-footer-callout")).toHaveCount(0);
+    await page.goto("/games/berliner-oder-nicht");
     await expect(page.locator(".c-footer-callout")).toHaveCount(0);
     await page.goto("/anki");
     await expect(page.locator(".c-footer-callout")).toHaveCount(1);
@@ -146,6 +149,25 @@ test.describe("Footer v21", () => {
     expect(tooSmall).toEqual([]);
   });
 
+  test("arms the entry animation and plays it once the footer is reached", async ({ page }) => {
+    await reachFooter(page);
+    await expect(sign(page)).toHaveAttribute("data-state", "in");
+  });
+
+  test.describe("without JavaScript", () => {
+    test.use({ javaScriptEnabled: false });
+
+    test("renders the footer, the sign and the farewell fully visible, without the swap button", async ({
+      page,
+    }) => {
+      await page.goto("/");
+      await expect(footer(page).locator('a[href="/impressum"]')).toBeAttached();
+      await expect(sign(page).getByText("Wort für unterwegs")).toBeVisible();
+      await expect(swapButton(page)).toBeHidden();
+      await expect(footer(page).getByText("Tschüssi, wa!")).toHaveCSS("opacity", "1");
+    });
+  });
+
   test.describe("reduced motion", () => {
     test.use({ reducedMotion: "reduce" });
 
@@ -170,10 +192,13 @@ test.describe("Footer v21", () => {
     for (const path of ["/", "/anki", "/wort/wa"]) {
       test(`passes axe on ${path} (${colorScheme})`, async ({ page }) => {
         await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
-        await reachFooter(page, path).catch(async () => {
+        if (path === "/anki") {
           // /anki has no sign: only wait for the footer itself.
+          await page.goto(path);
           await footer(page).scrollIntoViewIfNeeded();
-        });
+        } else {
+          await reachFooter(page, path);
+        }
         const { violations } = await new AxeBuilder({ page }).include("footer").analyze();
         expect(
           violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(" | ")}`),
