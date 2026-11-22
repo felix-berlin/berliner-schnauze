@@ -32,7 +32,7 @@ const tagOf = (visitor: string) =>
 const own = { createdAt: "2026-11-20T10:00:00.000Z", id: 21, text: "Meine offene Jeschichte" };
 const pendingRows = [
   { ...own, authorTag: tagOf("me") },
-  { createdAt: "2026-11-21T10:00:00.000Z", id: 22, text: "Fremde", authorTag: tagOf("other") },
+  { authorTag: tagOf("other"), createdAt: "2026-11-21T10:00:00.000Z", id: 22, text: "Fremde" },
 ];
 
 beforeEach(() => {
