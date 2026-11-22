@@ -3,6 +3,7 @@ import type { APIRoute } from "astro";
 import { getPayloadClient } from "@services/payload.ts";
 import { wordIdBySlug } from "@services/payload/wordId.ts";
 import { captchaGate, reply } from "@utils/apiReply.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { requestIp } from "@utils/rateLimit.ts";
 import { z } from "zod";
 
@@ -14,7 +15,11 @@ const reportSchema = z.object({
     ["meaning", "spelling", "example", "audio", "fact", "inappropriate", "other"],
     "Was stimmt nich?",
   ),
-  text: z.string().trim().min(1, "Ohne Text wird dett nüscht.").max(1000, "Ditt is ein bisken zu lang."),
+  text: z
+    .string()
+    .trim()
+    .min(1, "Ohne Text wird dett nüscht.")
+    .max(1000, "Ditt is ein bisken zu lang."),
   word: z.string().min(1).max(200),
 });
 
@@ -48,7 +53,7 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
     });
     return reply({ ok: true }, 201);
   } catch (error) {
-    console.error("[reports] storing failed:", error);
+    logRouteError("reports", error);
     return reply({ error: "Deine Meldung konnte leider nicht gesendet werden." }, 502);
   }
 };

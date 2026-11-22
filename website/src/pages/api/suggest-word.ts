@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
 import { captchaGate, reply } from "@utils/apiReply.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { requestIp } from "@utils/rateLimit.ts";
 import { suggestWordSchema } from "@utils/suggestWordSchema.ts";
 
@@ -25,7 +26,7 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
   try {
     await (await getPayloadClient()).create({ collection: "suggestions", data: suggestion.data });
   } catch (error) {
-    console.error("[suggest-word] storing failed:", error);
+    logRouteError("suggest-word", error);
     return reply({ error: "Dein Wort konnte leider nicht gesendet werden." }, 502);
   }
   return reply({ sent: true }, 200);

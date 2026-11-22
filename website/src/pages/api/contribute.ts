@@ -3,6 +3,7 @@ import type { APIRoute } from "astro";
 import { getPayloadClient } from "@services/payload.ts";
 import { wordIdBySlug } from "@services/payload/wordId.ts";
 import { captchaGate, reply } from "@utils/apiReply.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { requestIp } from "@utils/rateLimit.ts";
 import { z } from "zod";
 
@@ -71,7 +72,7 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
     });
     return reply({ ok: true }, 201);
   } catch (error) {
-    console.error("[contribute] storing failed:", error);
+    logRouteError("contribute", error);
     return reply({ error: "Dein Beitrag konnte leider nicht gesendet werden." }, 502);
   }
 };
