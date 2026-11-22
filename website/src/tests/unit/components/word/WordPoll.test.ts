@@ -233,6 +233,17 @@ describe("WordPoll", () => {
       expect(w.text()).toContain("Wie alt biste?");
     });
 
+    it("answering the last question shows the result", async () => {
+      const w = await startB();
+      await w.find('[data-testid="map-brandenburg"]').trigger("click");
+      await flushPromises();
+      await button(w, "Hier uffjewachsen").trigger("click");
+      await flushPromises();
+      await button(w, "30–39").trigger("click");
+      await flushPromises();
+      expect(w.text()).toContain("Wat sagen alle?");
+    });
+
     it("a failed answer stays on the step and shows the strip", async () => {
       const w = await startB();
       store.sendFeedback.mockResolvedValue(false);

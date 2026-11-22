@@ -540,6 +540,8 @@ const answer = async (key: ProfileStep, value: string | null) => {
     answers.value = next;
     // Keeps a remembered profile (old opt-in) in step; without the opt-in it lives in memory only.
     $profile.set({ ...$profile.get(), ...patch } as Profile);
+    // Released before moving on: showResult() ignores a call while a request is pending (last question).
+    pending.value = false;
     advance(key);
   } finally {
     pending.value = false;
