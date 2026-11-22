@@ -9,11 +9,14 @@ import RotateCw from '~icons/lucide/rotate-cw';
 interface Props {
   /** Source of the random word; without words that link is left out. */
   words?: WordRef[];
+  /** The word of the page itself is never the random pick. */
+  excludeSlug?: string;
 }
 
-const { words = [] } = Astro.props;
+const { excludeSlug, words = [] } = Astro.props;
+const candidates = words.filter((w) => w.slug !== excludeSlug);
 // Picked once on the server, like RandomWordButton (which is a c-* component and so cannot take this component's styles).
-const random = words.length > 0 ? routeToWord(randomElement(words).slug) : undefined;
+const random = candidates.length > 0 ? routeToWord(randomElement(candidates).slug) : undefined;
 ---
 
 {/* Weiter-Links (SPEC §2 row 10): a quiet line of three links, rule above. */}
