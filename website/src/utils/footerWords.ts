@@ -1,5 +1,7 @@
 import type { SiteWord } from "@services/payload/words.ts";
 
+import { shuffle } from "@utils/helpers.ts";
+
 /** What the footer sign needs from a word, nothing more. */
 export type FooterWord = {
   example: string | null;
@@ -36,15 +38,6 @@ export const toFooterWord = (word: FooterSourceWord): FooterWord | null => {
 };
 
 type Random = () => number;
-
-const shuffle = <T>(items: readonly T[], random: Random): T[] => {
-  const out = [...items];
-  for (let i = out.length - 1; i > 0; i--) {
-    const j = Math.floor(random() * (i + 1));
-    [out[i], out[j]] = [out[j]!, out[i]!];
-  }
-  return out;
-};
 
 /** A random selection of at most `count` showable words, without `excludeSlug` (the page's own word). */
 export const pickFooterWords = (

@@ -23,7 +23,7 @@
         <p v-if="current.example" class="example">„{{ current.example }}“</p>
       </div>
       <div v-if="words.length > 1" class="actions">
-        <button :hidden="!ready" type="button" @click="swap">
+        <button :hidden="!state" type="button" @click="swap">
           <RotateCcwIcon aria-hidden="true" height="16" width="16" />
           Noch eens
         </button>
@@ -33,10 +33,10 @@
 </template>
 
 <script setup lang="ts">
+import { useRevealOnView } from "@composables/useRevealOnView";
 import { trackEvent } from "@utils/analytics";
 import { createWordCycle, type FooterWord } from "@utils/footerWords";
-import { useIntersectionObserver } from "@vueuse/core";
-import { defineAsyncComponent, onMounted, ref, shallowRef, useTemplateRef } from "vue";
+import { defineAsyncComponent, ref, shallowRef, useTemplateRef } from "vue";
 
 // Lemmas longer than this get the smaller fluid size (data-long, see _footer-word-sign.scss) so they stay short.
 const LONG_LEMMA = 14;
@@ -49,21 +49,9 @@ const cycle = createWordCycle(props.words);
 const current = shallowRef<FooterWord | null>(cycle.current);
 // The server renders the sign visible and without the button; only a hydrated page arms the entry
 // animation and shows "Noch eens" (no JS: the sign stays as rendered).
-const ready = ref(false);
 const swapped = ref(false);
-const state = ref<"armed" | "in" | undefined>(undefined);
-
 const root = useTemplateRef<HTMLElement>("root");
-onMounted(() => {
-  ready.value = true;
-  state.value = "armed";
-});
-const { stop } = useIntersectionObserver(root, ([entry]) => {
-  if (entry?.isIntersecting && state.value === "armed") {
-    state.value = "in";
-    stop();
-  }
-});
+const state = useRevealOnView(root);
 
 const swap = () => {
   current.value = cycle.next();

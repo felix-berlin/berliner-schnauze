@@ -19,7 +19,11 @@
     transition: background-size var(--duration-base) var(--ease-standard);
   }
 }
+// Small text link: underlined, and as tall as a tap target.
 @mixin underline-small {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--size-tap-target);
   color: var(--band-text);
   text-decoration: underline;
   text-decoration-color: var(--band-text-quiet);
@@ -154,10 +158,6 @@
 
     a {
       @include underline-small;
-
-      display: inline-flex;
-      align-items: center;
-      min-block-size: var(--size-tap-target);
     }
   }
 
@@ -195,10 +195,6 @@
 
     a {
       @include underline-small;
-
-      display: inline-flex;
-      align-items: center;
-      min-block-size: var(--size-tap-target);
     }
   }
 
@@ -217,10 +213,6 @@
 
     a {
       @include underline-small;
-
-      display: inline-flex;
-      align-items: center;
-      min-block-size: var(--size-tap-target);
     }
 
     // Narrow: the project line on its own row, then version, imprint, privacy and settings side by side, no dots.

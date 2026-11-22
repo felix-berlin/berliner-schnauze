@@ -24,10 +24,11 @@ import type { FooterMode } from "@utils/footerMode";
 import type { FooterWord } from "@utils/footerWords";
 
 import BerlinerBaer from "@components/kalle/BerlinerBaer.vue";
+import { useRevealOnView } from "@composables/useRevealOnView";
 import { useStore } from "@nanostores/vue";
 import { $showAppCallout } from "@stores/footerCallout.ts";
-import { useIntersectionObserver, useMediaQuery } from "@vueuse/core";
-import { computed, onMounted, ref, useTemplateRef } from "vue";
+import { useMediaQuery } from "@vueuse/core";
+import { computed, useTemplateRef } from "vue";
 
 import FooterWordSign from "./FooterWordSign.vue";
 
@@ -41,9 +42,11 @@ const SENTENCE_SIGN =
 const SENTENCE_PLAIN = "Schön, dass de da warst. Komm jut nach Hause.";
 
 const appCallout = useStore($showAppCallout);
-const mounted = ref(false);
+const root = useTemplateRef<HTMLElement>("root");
+const state = useRevealOnView(root);
 // The install store is already set when this island hydrates (the browser event fires early), so until mounted it
 // is ignored: the first client render must match the server's, or the plain variant sticks to the sign layout.
+const mounted = computed(() => state.value !== undefined);
 const showSign = computed(
   () =>
     props.mode !== "callout" &&
@@ -56,20 +59,6 @@ const showSign = computed(
 // for a clean hydration) uses the desktop size.
 const wide = useMediaQuery("(min-width: 50.5rem)");
 const kalleSize = computed(() => (!mounted.value || wide.value ? 150 : 120));
-
-// The entry animation is armed only once hydrated (no JS: everything stays visible as rendered).
-const state = ref<"armed" | "in" | undefined>(undefined);
-const root = useTemplateRef<HTMLElement>("root");
-onMounted(() => {
-  mounted.value = true;
-  state.value = "armed";
-});
-const { stop } = useIntersectionObserver(root, ([entry]) => {
-  if (entry?.isIntersecting && state.value === "armed") {
-    state.value = "in";
-    stop();
-  }
-});
 </script>
 
 <style lang="scss">
