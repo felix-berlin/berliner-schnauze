@@ -52,6 +52,16 @@ jobs:
               - "!scripts/orca-*.sh"
               - "!scripts/*anki*"
               - "!scripts/test_*.py"
+              - "!.editorconfig"
+              - "!.gitattributes"
+              - "!**/.gitignore"
+              - "!.mcp.json"
+              - "!.github/hooks/**"
+              - "!.oxlintrc.json"
+              - "!.oxfmtrc.json"
+              - "!.infisical.yaml"
+              - "!website/public/robots.txt"
+              - "!website/public/.well-known/security.txt"
 
   playwright-version:
     needs: changes

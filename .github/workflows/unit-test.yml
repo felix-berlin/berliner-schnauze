@@ -54,6 +54,16 @@ jobs:
               - "!scripts/orca-*.sh"
               - "!scripts/*anki*"
               - "!scripts/test_*.py"
+              - "!.editorconfig"
+              - "!.gitattributes"
+              - "!**/.gitignore"
+              - "!.mcp.json"
+              - "!.github/hooks/**"
+              - "!.oxlintrc.json"
+              - "!.oxfmtrc.json"
+              - "!.infisical.yaml"
+              - "!website/public/robots.txt"
+              - "!website/public/.well-known/security.txt"
 
       # Own step: the payload patterns are positive only and need the default quantifier (some).
       - name: Detect schema-relevant changes
