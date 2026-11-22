@@ -103,7 +103,7 @@ describe("SiteFooter", () => {
 
   it("asks for the words without the page's own word and shows the word sign", async () => {
     const html = await render({ excludeSlug: "foo", mode: "sign" });
-    expect(fetchFooterData).toHaveBeenCalledWith("foo");
+    expect(fetchFooterData).toHaveBeenCalledWith("foo", undefined);
     expect(html).toContain("Probewort");
     expect(html).toContain("Wort für unterwegs");
   });
@@ -121,9 +121,9 @@ describe("SiteFooter", () => {
     expect(text).toContain("Tschüssi, wa!");
   });
 
-  it("sends no words to the island when a page callout replaces the sign", async () => {
-    const html = await render({ mode: "callout" });
-    expect(html).not.toContain("Probewort");
+  it("asks for no words when a page callout replaces the sign", async () => {
+    await render({ mode: "callout" });
+    expect(fetchFooterData).toHaveBeenCalledWith(undefined, 0);
   });
 
   it("does not fail the page when the word list or the social menu cannot be read, and reports the menu", async () => {

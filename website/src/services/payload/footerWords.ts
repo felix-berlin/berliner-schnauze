@@ -9,9 +9,10 @@ import { reportAndFallback } from "@utils/reportError.ts";
  */
 export const fetchFooterData = async (
   excludeSlug?: string,
+  count?: number,
 ): Promise<{ words: FooterWord[]; wordCount: number }> => {
   const all = await reportAndFallback("[footer] word list", null, fetchAllWords);
   return all
-    ? { wordCount: all.length, words: pickFooterWords(all, excludeSlug) }
+    ? { wordCount: all.length, words: pickFooterWords(all, excludeSlug, count) }
     : { wordCount: 0, words: [] };
 };

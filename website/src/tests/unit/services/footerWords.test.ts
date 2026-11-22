@@ -35,6 +35,11 @@ describe("fetchFooterData", () => {
     expect(wordCount).toBe(200);
   });
 
+  it("picks no words for a count of 0 but still counts the list", async () => {
+    fetchAllWords.mockResolvedValue(["a", "b"].map(word));
+    expect(await fetchFooterData(undefined, 0)).toEqual({ wordCount: 2, words: [] });
+  });
+
   it("returns an empty footer and reports the error when the words cannot be read", async () => {
     const logged = vi.spyOn(console, "error").mockImplementation(() => {});
     const failure = new Error("db down");

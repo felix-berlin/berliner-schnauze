@@ -20,12 +20,11 @@ const { excludeSlug, mode } = Astro.props;
 
 // Each read degrades on its own and is reported: a CMS outage already fails the page elsewhere, so these fallbacks
 // cover footer-specific breakage that nothing else would reveal.
-const [{ words: signWords, wordCount }, socialMenu] = await Promise.all([
-  fetchFooterData(excludeSlug),
+const [{ words, wordCount }, socialMenu] = await Promise.all([
+  // A page callout replaces the sign: no words are picked or sent to the island.
+  fetchFooterData(excludeSlug, mode === 'callout' ? 0 : undefined),
   reportAndFallback('[footer] social menu', [], fetchSocialMenu),
 ]);
-// A page callout replaces the sign, so its words are not sent to the island.
-const words = mode === 'callout' ? [] : signWords;
 const knownWords = Math.floor(wordCount / 100) * 100;
 
 const pages = [

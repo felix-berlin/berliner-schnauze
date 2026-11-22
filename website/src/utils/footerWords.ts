@@ -46,13 +46,14 @@ export const pickFooterWords = (
   count = 30,
   random: Random = Math.random,
 ): FooterWord[] => {
-  // Partial Fisher–Yates: stops once `count` words are found, so ~6000 words are not fully shuffled per request.
-  const pool = [...words];
+  // Lazy partial Fisher–Yates (as `sample` in helpers, which cannot skip unshowable words): stops once `count` words
+  // are found and never copies or shuffles the ~6000 words per request.
+  const moved = new Map<number, number>(); // index -> index of the word now there
   const picked: FooterWord[] = [];
-  for (let i = pool.length; i > 0 && picked.length < count; i--) {
-    const j = Math.floor(random() * i);
-    [pool[j], pool[i - 1]] = [pool[i - 1]!, pool[j]!];
-    const word = pool[i - 1]!;
+  for (let i = 0; i < words.length && picked.length < count; i++) {
+    const j = i + Math.floor(random() * (words.length - i));
+    const word = words[moved.get(j) ?? j]!;
+    moved.set(j, moved.get(i) ?? i);
     const footerWord = word.slug === excludeSlug ? null : toFooterWord(word);
     if (footerWord) picked.push(footerWord);
   }
