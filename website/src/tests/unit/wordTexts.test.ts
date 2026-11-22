@@ -17,10 +17,9 @@ const collect = (entry: string, seen = new Set<string>()): Set<string> => {
   return seen;
 };
 
-const files = [
-  ...collect("word/WordPage.astro"),
-  "word/WordMobileBar.astro",
-].map((f) => `components/${f}`);
+const files = [...collect("word/WordPage.astro"), "word/WordMobileBar.astro"].map(
+  (f) => `components/${f}`,
+);
 const copyFiles = [
   "lib/contribute.ts",
   "lib/pollResult.ts",
@@ -47,10 +46,17 @@ describe("visitor copy of the v18 word page", () => {
   });
 
   it("forbids what the spec forbids", () => {
-    for (const bad of [" wir ", "Wir sind", " uns ", "Uns jefällt", "unser Wort", "Dit kennste wa?"])
-      expect(FORBIDDEN.test(bad), bad).toBe(true);
+    for (const bad of [
+      " wir ",
+      "Wir sind",
+      " uns ",
+      "Uns jefällt",
+      "unser Wort",
+      "Dit kennste wa?",
+    ])
+      expect(FORBIDDEN.test(bad)).toBe(true);
     for (const ok of ["Awards", "Verunserung", "was", "kuckwa-nich", "Wasser"])
-      expect(FORBIDDEN.test(ok), ok).toBe(false);
+      expect(FORBIDDEN.test(ok)).toBe(false);
     expect(QUELLEN.test("mit Quellen belegt")).toBe(true);
   });
 
