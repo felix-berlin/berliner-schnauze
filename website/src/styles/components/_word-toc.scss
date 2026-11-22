@@ -7,7 +7,7 @@
 // data-state="done". The page shell places and sticks it.
 @include mx.component("word-toc") {
   :scope {
-    // SPEC §4.2: label 13px, no font-size token at that size
+    // SPEC §4.2: counter 13px, no font-size token at that size
     --_label-size: 0.8125rem;
 
     container: word-toc / inline-size;
@@ -28,14 +28,7 @@
   }
 
   .label {
-    margin: 0;
     padding: 0 var(--space-4) var(--space-2);
-    font-size: var(--_label-size);
-    font-weight: var(--font-weight-bold);
-    letter-spacing: 1.5px; // SPEC §4.2 label, no tracking token
-    line-height: 1.4;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
 
     @container word-toc (inline-size >= 30rem) {
       display: none;

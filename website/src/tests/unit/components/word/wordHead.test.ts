@@ -1,0 +1,130 @@
+// @vitest-environment node
+import type { WordPageModel } from "@services/payload/wordPage.ts";
+
+import WordBadges from "@components/word/WordBadges.vue";
+import { beforeAll, describe, expect, it } from "vitest";
+import { createSSRApp } from "vue";
+import { renderToString } from "vue/server-renderer";
+
+import { createAstroRender } from "../../helpers";
+
+// Invented data only.
+const story = {
+  anders: 0,
+  bezirk: "pankow",
+  createdAt: "2026-01-01T00:00:00.000Z",
+  id: "s1",
+  jenau: 2,
+  name: "Testkind",
+  text: "Meine Tante hat jeden Sonntag Testwörter jeholt.",
+} as const;
+
+const model = (over: Partial<WordPageModel> = {}) =>
+  ({
+    grammar: {},
+    related: [],
+    rhymes: [],
+    stories: { items: [], total: 0 },
+    syllables: ["Test", "wort"],
+    word: {
+      article: "die",
+      berlinerisch: "Testwort",
+      berlinerischAudio: [],
+      derived: { nlpTags: [] },
+      slug: "testwort",
+      themen: [{ id: 1, name: "Testthema", slug: "testthema" }],
+      translations: [{ translation: "Prüfung" }],
+      wordTypes: [{ id: 1, name: "Substantiv" }],
+    },
+    ...over,
+  }) as unknown as WordPageModel;
+
+const badges = (props: Record<string, unknown>) =>
+  renderToString(createSSRApp(WordBadges, { slug: "testwort", ...props }));
+
+describe("WordOTon.astro", () => {
+  let render: (props: Record<string, unknown>) => Promise<string>;
+  beforeAll(async () => {
+    const { default: WordOTon } = await import("@components/word/WordOTon.astro");
+    render = await createAstroRender(WordOTon);
+  }, 30_000);
+
+  it("renders nothing without a featured story", async () => {
+    expect((await render({ more: 0, story: null })).trim()).toBe("");
+  });
+
+  it("shows quote, label and author with the district", async () => {
+    const html = await render({ more: 0, story });
+    expect(html).toContain("Meine Tante hat jeden Sonntag Testwörter jeholt.");
+    expect(html).toContain("O-Ton");
+    expect(html).toContain("Testkind · aus Pankow");
+  });
+
+  it("has no link to further stories when there are none", async () => {
+    expect(await render({ more: 0, story })).not.toContain("weitere");
+  });
+
+  it("links to #jeschichten with the number of further stories", async () => {
+    const html = await render({ more: 2, story });
+    expect(html).toContain('href="#jeschichten"');
+    expect(html).toMatch(/2 weitere Jeschichten\s*<span[^>]*>→<\/span>|2 weitere Jeschichten →/);
+  });
+});
+
+describe("WordHead.astro", () => {
+  let render: (props: Record<string, unknown>) => Promise<string>;
+  beforeAll(async () => {
+    const { default: WordHead } = await import("@components/word/WordHead.astro");
+    render = await createAstroRender(WordHead);
+  }, 30_000);
+
+  it("renders no O-Ton without a featured story", async () => {
+    expect(await render({ model: model() })).not.toContain("O-Ton");
+  });
+
+  it("derives the link text from the story total (3 stories: 2 more)", async () => {
+    const html = await render({
+      model: model({ featured: story, stories: { items: [story], total: 3 } }),
+    });
+    expect(html).toContain("2 weitere Jeschichten");
+  });
+
+  it("shows the word as h1 with its article, the syllables and the meaning", async () => {
+    const html = await render({ model: model({ stress: "erste Silbe" }) });
+    expect(html).toMatch(/<h1[^>]*>[\s\S]*Testwort/);
+    expect(html).toContain(", die");
+    expect(html).toContain("Prüfung");
+    expect(html).toContain("Testthema");
+  });
+});
+
+describe("WordBadges.vue", () => {
+  it("renders nothing without data", async () => {
+    expect(await badges({})).not.toContain("<a");
+  });
+
+  it("shows the trend badge text and tooltip for the beliebt trend", async () => {
+    const html = await badges({ trend: { kind: "beliebt", rank: 4, views7: 120 } });
+    expect(html).toContain("Gerade beliebt · Platz 4");
+    expect(html).toContain("120 Aufrufe in den letzten 7 Tagen. Zur Liste „Gerade beliebt“");
+    expect(html).toContain('role="tooltip"');
+  });
+
+  it("supports the Im Aufwind variant", async () => {
+    const html = await badges({ trend: { change: 40, kind: "aufwind", views7: 90 } });
+    expect(html).toContain("Im Aufwind · +40 %");
+    expect(html).toContain(
+      "+40 % Aufrufe zur Vorwoche, 90 Aufrufe in 7 Tagen. Zur Liste „Im Aufwind“",
+    );
+  });
+
+  it("renders the word of the day and the trend together", async () => {
+    const html = await badges({
+      trend: { kind: "beliebt", rank: 4, views7: 120 },
+      wotd: { date: "2026-11-22" },
+    });
+    expect(html).toContain("Wort des Tages");
+    expect(html).toContain("heute");
+    expect(html).toContain("Gerade beliebt · Platz 4");
+  });
+});
