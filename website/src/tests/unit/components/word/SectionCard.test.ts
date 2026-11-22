@@ -37,4 +37,24 @@ describe("SectionCard.astro", () => {
     expect(html).not.toContain("<footer");
     expect(await render(props)).not.toContain('class="body"');
   });
+
+  it("renders no id with anchor false, the pill as a real button and the gap with its button", async () => {
+    const html = await render(
+      { ...props, anchor: false, contribute: "beispiel", gap: { cta: "Los", text: "Nüscht da." } },
+      { default: "<p>Nachbar</p>" },
+    );
+    expect(html).not.toMatch(/<section[^>]* id=/);
+    expect(html).toContain('id="heading-demo"');
+    expect(html).toMatch(
+      /<button[^>]*type="button"[^>]*data-contribute="beispiel"[^>]*>[\s\S]*Ergänzen/,
+    );
+    expect(html).toContain("Nüscht da.");
+    expect(html).toContain("Los");
+    expect(html).toContain("<p>Nachbar</p>");
+  });
+
+  it("shows a count only above zero", async () => {
+    expect(await render({ ...props, count: 3 })).toContain(">3<");
+    expect(await render({ ...props, count: 0 })).not.toContain('class="count"');
+  });
 });

@@ -1,0 +1,107 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Beispiele card body (SPEC §6): an ordered list; each .item has .quote (.sentence), .plain (label + translation)
+// and .actions (the audio pills island plus .record with the disabled "Einsprechen" button and its .tip).
+@include mx.component("word-beispiele") {
+  :scope {
+    --_gap: var(--space-4);
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .item {
+    display: grid;
+    gap: var(--space-2);
+    padding-block: var(--_gap);
+    border-block-start: 1px solid var(--color-border-card);
+
+    &:first-child {
+      padding-block-start: 0;
+      border-block-start: 0;
+    }
+  }
+
+  .quote {
+    margin: 0;
+  }
+
+  .sentence {
+    margin: 0;
+    font-size: var(--font-size-xl); // SPEC §4.2: 20px
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--color-text-strong);
+  }
+
+  .plain {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .actions {
+    position: relative; // the tooltip anchors to the row start, so it never leaves the card on a narrow screen
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  // Dashed pill "+ Einsprechen": looks like a button, aria-disabled (focusable), does nothing yet.
+  .record-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-block-size: var(--size-tap-target);
+    padding-inline: var(--space-3);
+    font: inherit;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-muted);
+    background: transparent;
+    border: 1px dashed var(--color-border-inner);
+    border-radius: var(--radius-pill);
+    cursor: not-allowed;
+  }
+
+  .plus {
+    color: var(--color-accent-active); // SPEC §4.1: only the plus is orange
+  }
+
+  // Tooltip (SPEC §14): above the row, 13px, shown on hover, focus and tap; data-dismissed (Esc) wins.
+  .tip {
+    --_tip-size: 0.8125rem; // SPEC §4.2: 13px minimum
+
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    translate: 0 calc(-100% - var(--space-1));
+    z-index: var(--z-sticky);
+    inline-size: max-content;
+    max-inline-size: min(15rem, 80cqi);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--_tip-size);
+    line-height: 1.45;
+    color: var(--color-text-on-active);
+    background: var(--color-surface-inverse);
+    border-radius: var(--radius-sm);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity var(--duration-base) var(--ease-standard);
+  }
+
+  .record:not([data-dismissed]):is(:focus-within, :has(.record-button:active)) .tip {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  // Hover only on hover devices, so a tap does not leave a sticky tooltip.
+  @include butler-mx.hover {
+    .record:not([data-dismissed]):hover .tip {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+}
