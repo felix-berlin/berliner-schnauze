@@ -59,7 +59,7 @@ const gap = {
         <div class='all'>
           {groups(model.related).map((g) => (
             <Fragment>
-              <p class='c-label'>{g.label}</p>
+              <p class='c-word-label'>{g.label}</p>
               <ul class='pills'>
                 {g.items.map((r) => (
                   <li>{r.url ? <a href={r.url}>{r.label}</a> : <span>{r.label}</span>}
@@ -97,7 +97,7 @@ const gap = {
             <div class='rest'>
               {groups(rest).map((g) => (
                 <Fragment>
-                  <p class='c-label'>{g.label}</p>
+                  <p class='c-word-label'>{g.label}</p>
                   <ul class='pills'>
                     {g.items.map((r) => (
                       <li>{r.url ? <a href={r.url}>{r.label}</a> : <span>{r.label}</span>}{r.note && <small>{r.note}</small>}</li>
@@ -111,18 +111,18 @@ const gap = {
       </Fragment>
     )}
 
-    {written && <p class='written'><span class='c-label'>Ähnlich jeschrieben</span> {written}</p>}
+    {written && <p class='written'><span class='c-word-label'>Ähnlich jeschrieben</span> {written}</p>}
 
     {(model.before || model.after) && (
       <div class='neighbours'>
-        <p class='c-label'>Im Wörterbuch davor und danach</p>
+        <p class='c-word-label'>Im Wörterbuch davor und danach</p>
         <div class='tiles'>
           {model.before && (
-            <a class='tile' href={model.before.url}><span class='c-label'>Vorheriges Wort</span><span class='name'><span aria-hidden='true'>← </span>{model.before.label}</span></a>
+            <a class='tile' href={model.before.url}><span class='c-word-label'>Vorheriges Wort</span><span class='name'><span aria-hidden='true'>← </span>{model.before.label}</span></a>
           )}
           <span class='now' aria-hidden='true'>{word}</span>
           {model.after && (
-            <a class='tile' href={model.after.url}><span class='c-label'>Nächstes Wort</span><span class='name'>{model.after.label}<span aria-hidden='true'> →</span></span></a>
+            <a class='tile' href={model.after.url}><span class='c-word-label'>Nächstes Wort</span><span class='name'>{model.after.label}<span aria-hidden='true'> →</span></span></a>
           )}
         </div>
       </div>

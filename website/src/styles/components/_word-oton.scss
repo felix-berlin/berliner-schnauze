@@ -3,7 +3,7 @@
 
 // O-Ton of the word head (SPEC §8.3): the featured Jeschichte, no surface, only a 3px orange line on the
 // start side. Parts .quote, .by (with the shared label and .who), .more (with .arrow).
-// The label inside .by is the shared c-label component: it is placed, never restyled, from here.
+// The label inside .by is the shared c-word-label component: it is placed, never restyled, from here.
 @include mx.component("word-oton") {
   :scope {
     // SPEC §8.3: 3px line, no border-width token

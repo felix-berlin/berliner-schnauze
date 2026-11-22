@@ -7,7 +7,7 @@
 @use "components";
 @use "components/tooltip";
 // The one label class of the word page v18 (SPEC §4.2), used by several components.
-@use "components/label";
+@use "components/word-label";
 // Header buttons (menu, search, install) sit in the persisted header on every page.
 @use "components/header-control";
 
