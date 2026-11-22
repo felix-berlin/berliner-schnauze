@@ -3,17 +3,28 @@ import '@styles/objects/_word-v18.scss';
 
 import WordExamplesCard from '@components/word/WordExamplesCard.astro';
 import WordFactsCard from '@components/word/WordFactsCard.astro';
+import WordAnalysisCard from '@components/word/WordAnalysisCard.astro';
 import WordHead from '@components/word/WordHead.astro';
+import WordLinks from '@components/word/WordLinks.astro';
+import WordMobileBar from '@components/word/WordMobileBar.astro';
 import WordNetworkCard from '@components/word/WordNetworkCard.astro';
+import WordNumbers from '@components/word/WordNumbers.astro';
+import WordReportLine from '@components/word/WordReportLine.astro';
 import WordToc from '@components/word/WordToc.vue';
+import { grammarRows, klangRows } from '@lib/wordAnalysis.ts';
 import { tocItems } from '@lib/wordToc.ts';
 import type { WordPageModel } from '@services/payload/wordPage.ts';
+import { voiceSources } from '@composables/useVoicePlayer.ts';
+import type { WordRef } from '@utils/wordHelper';
 
 interface Props {
   model: WordPageModel;
+  /** Source of the random word in "Und nu?". */
+  words?: WordRef[];
 }
 
-const { model } = Astro.props;
+const { model, words = [] } = Astro.props;
+const voices = voiceSources(model.word.berlinerischAudio);
 ---
 
 <!--
@@ -43,10 +54,14 @@ const { model } = Astro.props;
     <div class='anchor' id='verwandt'><slot name='verwandt'><WordNetworkCard model={model} /></slot></div>
 
     <h2 class='band anchor' id='analyse'>Sprachliche Analyse</h2>
-    <div class='anchor' id='grammatik'><slot name='grammatik' /></div>
-    <div class='anchor' id='klang'><slot name='klang' /></div>
-    <div class='anchor' id='zahlen'><slot name='zahlen' /></div>
-    <div class='anchor' id='fehler'><slot name='fehler' /></div>
-    <slot name='weiter' />
+    <div class='pair'>
+      <div class='anchor' id='grammatik'><slot name='grammatik'><WordAnalysisCard id='grammatik' title='Grammatik' rows={grammarRows(model)} /></slot></div>
+      <div class='anchor' id='klang'><slot name='klang'><WordAnalysisCard id='klang' title='Klang' rows={klangRows(model)} /></slot></div>
+    </div>
+    <div class='anchor' id='zahlen'><slot name='zahlen'><WordNumbers model={model} /></slot></div>
+    <div class='anchor' id='fehler'><slot name='fehler'><WordReportLine word={model.word.berlinerisch} /></slot></div>
+    <slot name='weiter'><WordLinks words={words} /></slot>
   </div>
 </article>
+<!-- Sibling of the article: a sticky bar rests where its parent (the page column) ends, below the content. -->
+<WordMobileBar audio={voices.m ?? voices.w} />

@@ -1,0 +1,62 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Mobile action bar of the word page (SPEC §3, WordMobileBar.astro): sticky at the bottom of the page article,
+// below the "word" breakpoint (808px) only. Parts: .listen (orange, "Anhören", needs JS) and .poll (link to #sagste).
+// It sits in the article's bottom padding at the end of the page, so it never covers the footer or the last content.
+@include mx.component("word-mobile-bar") {
+  :scope {
+    // Public: the page sets --word-mobile-bar-display: none from the "word" breakpoint (a component has no viewport query).
+    --_bleed: calc(-1 * var(--page-gutter, 0px)); // cancels the side padding of the page column: full bleed
+    --_pad-bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px)); // clear of the home indicator
+
+    display: var(--word-mobile-bar-display, flex);
+    margin-inline: var(--_bleed);
+    gap: var(--space-2);
+    position: sticky;
+    inset-block-end: 0;
+    z-index: var(--z-sticky);
+    padding: var(--space-3) var(--space-4) var(--_pad-bottom);
+    background: var(--color-surface-sheet);
+    border-block-start: 1px solid var(--color-border-card);
+    box-shadow: var(--shadow-paper-lift);
+  }
+
+  .listen,
+  .poll {
+    display: inline-flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-block-size: 3rem; // SPEC §3: 48px
+    padding-inline: var(--space-3);
+    font: inherit;
+    font-weight: var(--font-weight-bold);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  .poll {
+    color: var(--color-text-strong);
+    background: var(--color-surface-chip);
+    border: 1px solid var(--color-border-card);
+  }
+
+  // SPEC §4.1: "Anhören" mobile is one of the few solid orange fills.
+  .listen {
+    color: var(--color-text-on-accent);
+    background: var(--color-accent-solid);
+    border: 1px solid var(--color-accent-solid);
+
+    @include butler-mx.hover {
+      filter: brightness(0.92);
+    }
+  }
+
+  // The listen button needs JS (the shared player), the poll link works without.
+  html:not([data-js]) :scope .listen {
+    display: none;
+  }
+}

@@ -1,0 +1,34 @@
+---
+import '@styles/components/_word-zahlen.scss';
+import SectionCard from '@components/word/SectionCard.astro';
+import { numbers } from '@lib/wordAnalysis.ts';
+import type { WordPageModel } from '@services/payload/wordPage.ts';
+
+interface Props {
+  model: WordPageModel;
+}
+
+const { columns, figures } = numbers(Astro.props.model);
+---
+
+{/* „In Zahlen“ (SPEC §11): dot columns (1 dot = 2 % frequency in German, vowels gold) are decoration; the four figures are the accessible version. */}
+<SectionCard anchor={false} id='zahlen' title='In Zahlen' level={3}>
+  <div class='c-word-zahlen'>
+    <div class='inner'>
+    <div class='chart'>
+      <ul class='cols' aria-hidden='true'>
+        {columns.map((col) => (
+          <li class='col' data-kind={col.vowel ? 'vowel' : undefined}>
+            <span class='dots'>{Array.from({ length: col.dots }, () => <i class='dot' />)}</span>
+            <b>{col.ch}</b>
+          </li>
+        ))}
+      </ul>
+      <p class='legend'>Jeder Punkt: 2 % Häufigkeit im Deutschen. Gelb: Vokale.</p>
+    </div>
+    <dl class='figures'>
+      {figures.map((f) => <div class='figure'><dt>{f.label}</dt><dd>{f.value}</dd></div>)}
+    </dl>
+    </div>
+  </div>
+</SectionCard>
