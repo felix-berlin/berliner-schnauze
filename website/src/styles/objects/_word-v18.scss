@@ -1,0 +1,120 @@
+@use "@styles/mixins" as mx;
+
+// Word page v18 shell (WordPage.astro): the grid of table of contents + main column, the band headings
+// and the anchor targets. Mobile: one column, no table of contents. From the "word" breakpoint (808px) the
+// table of contents is a sticky pill bar above the column (tablet); from "desktop" (1000px) a 220px sticky
+// column left of it. Parts: .toc (wrapper of the WordToc island), .main, .band, .anchor.
+// The pill bar needs a header that scrolls away (SPEC §3: top: 0), so the site header is static here.
+@layer objects {
+  html:has(.o-word-v18) .o-header {
+    position: static;
+  }
+
+  .o-word-v18 {
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: toc column is exactly 220px, no token
+    --_toc-width: 220px;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: wrap max width 1208px incl. padding
+    --_max-width: 1208px;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: anchors land 16px below the top (mobile, desktop)
+    --_anchor: var(--space-4);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: tablet anchors clear the pill bar, 72px
+    --_anchor-bar: 4.5rem;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    max-inline-size: var(--_max-width);
+    padding: var(--space-4) var(--space-4) calc(var(--space-16) + var(--space-8));
+    // The page column (u-max-body-width) pads its sides; the wrap owns its padding so the pill bar can run edge to edge.
+    margin-inline: calc(-1 * var(--page-gutter));
+
+    > * {
+      min-inline-size: 0;
+    }
+
+    @include mx.breakpoint("word") {
+      padding: 0 var(--space-6) var(--space-16);
+    }
+    @include mx.breakpoint("desktop") {
+      margin-inline: auto;
+      grid-template-columns: var(--_toc-width) minmax(0, 1fr);
+      gap: var(--space-8);
+      padding-block-start: var(--space-8);
+      align-items: start;
+    }
+  }
+
+  .o-word-v18 .toc {
+    display: none;
+
+    @include mx.breakpoint("word") {
+      display: block;
+      position: sticky;
+      inset-block-start: 0;
+      z-index: var(--z-sticky);
+      // Full bleed up to the viewport edge; the padding keeps the pills on the column.
+      margin-inline: calc(-1 * var(--space-6));
+      margin-block-end: var(--space-4);
+      padding: var(--space-3) var(--space-6);
+      background: var(--color-surface-paper);
+      border-block-end: 1px solid var(--color-border-card);
+    }
+    @include mx.breakpoint("desktop") {
+      inset-block-start: var(--space-4);
+      margin: 0;
+      padding: 0;
+      background: none;
+      box-shadow: none;
+      // A long list on a short window scrolls inside the column instead of being cut off.
+      max-block-size: calc(100dvh - 2 * var(--space-4));
+      overflow-y: auto;
+    }
+  }
+
+  .o-word-v18 .main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-inline-size: 0;
+
+    @include mx.breakpoint("word") {
+      padding-block-start: var(--space-2);
+    }
+    @include mx.breakpoint("desktop") {
+      padding-block-start: 0;
+    }
+  }
+
+  .o-word-v18 .anchor {
+    scroll-margin-block-start: var(--_anchor);
+
+    @include mx.breakpoint("word") {
+      scroll-margin-block-start: var(--_anchor-bar);
+    }
+    @include mx.breakpoint("desktop") {
+      scroll-margin-block-start: var(--_anchor);
+    }
+  }
+
+  // Band heading (h2): Fira 700, capitals, a rule to the right edge.
+  .o-word-v18 .band {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-block: var(--space-6) 0;
+    font-family: var(--font-condensed);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    color: var(--color-text-strong);
+
+    &::after {
+      content: "";
+      flex: 1;
+      border-block-start: 1px solid var(--color-border-card);
+    }
+
+    @include mx.breakpoint("word") {
+      font-size: var(--font-size-4xl);
+    }
+  }
+}

@@ -1,0 +1,46 @@
+---
+import '@styles/objects/_word-v18.scss';
+
+import WordToc from '@components/word/WordToc.vue';
+import { tocItems } from '@lib/wordToc.ts';
+import type { WordPageModel } from '@services/payload/wordPage.ts';
+
+interface Props {
+  model: WordPageModel;
+}
+
+const { model } = Astro.props;
+---
+
+<!--
+  Shell of the v18 word page (SPEC §2): the table of contents and the main column with the anchors in page
+  order. Each section is a named slot; the cards fill them in later tasks (head 12, cards 13, analysis 14).
+  The wrappers own the anchor ids (and the scroll margin): a card placed in a slot must not repeat the id.
+-->
+<article class='o-word-v18'>
+  <div class='toc'>
+    <WordToc client:idle items={tocItems(model)} />
+  </div>
+
+  <div class='main'>
+    <div class='anchor' id='bedeutung'>
+      <slot name='bedeutung'><h1>{model.word.berlinerisch}</h1></slot>
+    </div>
+
+    <h2 class='band'>Im Gebrauch</h2>
+    <div class='anchor' id='beispiele'><slot name='beispiele' /></div>
+    <div class='anchor' id='sagste'><slot name='sagste' /></div>
+    <div class='anchor' id='jeschichten'><slot name='jeschichten' /></div>
+
+    <h2 class='band'>Wissen</h2>
+    <div class='anchor' id='wissenswertes'><slot name='wissenswertes' /></div>
+    <div class='anchor' id='verwandt'><slot name='verwandt' /></div>
+
+    <h2 class='band anchor' id='analyse'>Sprachliche Analyse</h2>
+    <div class='anchor' id='grammatik'><slot name='grammatik' /></div>
+    <div class='anchor' id='klang'><slot name='klang' /></div>
+    <div class='anchor' id='zahlen'><slot name='zahlen' /></div>
+    <div class='anchor' id='fehler'><slot name='fehler' /></div>
+    <slot name='weiter' />
+  </div>
+</article>
