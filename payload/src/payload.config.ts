@@ -28,6 +28,7 @@ import { Anki } from "./globals/Anki";
 import { Company } from "./globals/Company";
 import { Home } from "./globals/Home";
 import { Navigation } from "./globals/Navigation";
+import { WordPage } from "./globals/WordPage";
 import { withIndexNow } from "./hooks/indexNow";
 import { withSlugRedirects } from "./hooks/redirectOldSlug";
 import { retentionTask } from "./jobs/retention";
@@ -74,7 +75,7 @@ export default buildConfig({
   ]
     .map(withSlugRedirects)
     .map(withIndexNow),
-  globals: [Navigation, Affiliate, Company, Home, Anki],
+  globals: [Navigation, Affiliate, Company, Home, Anki, WordPage],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,

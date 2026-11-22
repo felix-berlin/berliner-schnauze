@@ -1,0 +1,78 @@
+import { describe, expect, it } from "vitest";
+
+import { STORY_PROMPT_DEFAULT, storyPrompt } from "../src/lib/storyPrompt";
+import { getTestPayload } from "./helpers/payload";
+
+describe("storyPrompt", () => {
+  it("falls back to the default for missing, empty and blank templates", () => {
+    expect(storyPrompt(undefined, "Schrippe")).toBe("Wo haste „Schrippe“ zuletzt jehört?");
+    expect(storyPrompt(null, "Schrippe")).toBe("Wo haste „Schrippe“ zuletzt jehört?");
+    expect(storyPrompt("", "Schrippe")).toBe(storyPrompt(undefined, "Schrippe"));
+    expect(storyPrompt("  \n", "Schrippe")).toBe(storyPrompt(undefined, "Schrippe"));
+    expect(STORY_PROMPT_DEFAULT).toBe("Wo haste „{Wort}“ zuletzt jehört?");
+  });
+
+  it("replaces every {Wort}", () => {
+    expect(storyPrompt("{Wort}? Echt, {Wort}!", "Kiez")).toBe("Kiez? Echt, Kiez!");
+  });
+
+  it("does not treat $ in the word as a replace pattern", () => {
+    expect(storyPrompt("Was is {Wort}?", "a$&b$1")).toBe("Was is a$&b$1?");
+  });
+});
+
+describe("word-page global and v18 fields", () => {
+  it("stores storyPrompt", async () => {
+    const payload = await getTestPayload();
+    await payload.updateGlobal({ slug: "word-page", data: { storyPrompt: "Und {Wort}?" } });
+    const doc = await payload.findGlobal({ slug: "word-page" });
+    expect(doc.storyPrompt).toBe("Und {Wort}?");
+  });
+
+  it("stores the new word fields and book themes", async () => {
+    const payload = await getTestPayload();
+    const slug = `v18-fields-${Date.now()}`;
+    const other = await payload.create({
+      collection: "words",
+      data: { berlinerisch: "Bolle", slug: `${slug}-b`, _status: "draft" },
+      draft: true,
+    });
+    const word = await payload.create({
+      collection: "words",
+      data: {
+        berlinerisch: "Stulle",
+        slug,
+        _status: "draft",
+        stress: "ˈʃtʊlə",
+        grammar: { plural: "Stullen", diminutive: other.id },
+        facts: [{ kind: "herkunft", text: "Aus dem Niederdeutschen", contributorName: "Anna" }],
+        related: [
+          { word: other.id, relation: "verwandt", note: "n" },
+          { label: "Brot", relation: "gleich" },
+        ],
+      },
+      draft: true,
+      depth: 0,
+    });
+    expect(word.stress).toBe("ˈʃtʊlə");
+    expect(word.grammar).toMatchObject({ plural: "Stullen", diminutive: other.id });
+    expect(word.facts?.[0]).toMatchObject({ kind: "herkunft", contributorName: "Anna" });
+    expect(word.related?.[1]).toMatchObject({ label: "Brot", relation: "gleich" });
+
+    const thema = await payload.create({
+      collection: "themen",
+      data: { name: "Essen", slug: `${slug}-t` } as never,
+    });
+    await payload.updateGlobal({
+      slug: "affiliate",
+      data: { books: [{ title: "Buch", themen: [thema.id] }] },
+    });
+    const aff = await payload.findGlobal({ slug: "affiliate", depth: 0 });
+    expect(aff.books?.[0]?.themen).toEqual([thema.id]);
+
+    await payload.delete({ collection: "words", id: word.id });
+    await payload.delete({ collection: "words", id: other.id });
+    await payload.updateGlobal({ slug: "affiliate", data: { books: [] } });
+    await payload.delete({ collection: "themen", id: thema.id });
+  });
+});

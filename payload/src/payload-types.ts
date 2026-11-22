@@ -151,6 +151,7 @@ export interface Config {
     company: Company;
     home: Home;
     anki: Anki;
+    'word-page': WordPage;
     'payload-jobs-stats': PayloadJobsStat;
   };
   globalsSelect: {
@@ -159,6 +160,7 @@ export interface Config {
     company: CompanySelect<false> | CompanySelect<true>;
     home: HomeSelect<false> | HomeSelect<true>;
     anki: AnkiSelect<false> | AnkiSelect<true>;
+    'word-page': WordPageSelect<false> | WordPageSelect<true>;
     'payload-jobs-stats': PayloadJobsStatsSelect<false> | PayloadJobsStatsSelect<true>;
   };
   locale: null;
@@ -357,6 +359,34 @@ export interface Word {
   examples?: WordExamplesArray;
   berlinerischAudio?: AudioArray;
   relatedWords?: (number | Word)[] | null;
+  stress?: string | null;
+  grammar?: {
+    plural?: string | null;
+    diminutive?: (number | null) | Word;
+  };
+  facts?:
+    | {
+        kind?: ('herkunft' | 'geschichte' | 'gebrauch' | 'anekdote' | 'sonstiges') | null;
+        text?: string | null;
+        contributorName?: string | null;
+        contributorSuggestion?: (number | null) | Suggestion;
+        id?: string | null;
+      }[]
+    | null;
+  related?:
+    | {
+        word?: (number | null) | Word;
+        /**
+         * Wird genutzt, wenn kein Wort verknüpft ist.
+         */
+        label?: string | null;
+        relation?: ('gleich' | 'gegenteil' | 'verwandt' | 'redewendung') | null;
+        note?: string | null;
+        contributorName?: string | null;
+        contributorSuggestion?: (number | null) | Suggestion;
+        id?: string | null;
+      }[]
+    | null;
   wikimediaFiles?:
     | {
         wikimediaFile?: string | null;
@@ -415,6 +445,46 @@ export interface Word {
   createdAt: string;
   deletedAt?: string | null;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "suggestions".
+ */
+export interface Suggestion {
+  id: number;
+  type?: ('word' | 'example' | 'fact' | 'related') | null;
+  berlinerWord?: string | null;
+  translation?: string | null;
+  /**
+   * Das Wort, zu dem Beispiel, Wissenswertes oder Verwandtes eingereicht wurde. Nicht „Wort“ (das sperrt den Vorschlag).
+   */
+  targetWord?: (number | null) | Word;
+  kind?: ('herkunft' | 'geschichte' | 'gebrauch' | 'anekdote' | 'sonstiges') | null;
+  relation?: ('gleich' | 'gegenteil' | 'verwandt' | 'redewendung') | null;
+  relatedText?: string | null;
+  /**
+   * Beispielsatz (max. 200 Zeichen) oder Text zum Wissenswerten (max. 1000).
+   */
+  text?: string | null;
+  highdeutsch?: string | null;
+  example?: string | null;
+  userName?: string | null;
+  userMail?: string | null;
+  status?: ('new' | 'accepted' | 'rejected') | null;
+  /**
+   * Das Wort, das aus diesem Vorschlag entstanden ist. Beim Wechsel auf „Übernommen“ ohne Wort legt das CMS einen Entwurf an; ein hier gewähltes Wort wird stattdessen verknüpft.
+   */
+  word?: (number | null) | Word;
+  /**
+   * Wörter mit gleicher oder ähnlicher Schreibweise (automatisch beim Anlegen und beim Ändern des Berliner Worts).
+   */
+  similarWords?: (number | Word)[] | null;
+  /**
+   * Wird aus dem Wort abgeleitet: gesperrt, solange das verknüpfte Wort veröffentlicht ist.
+   */
+  lockedByWord?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -484,46 +554,6 @@ export interface Page {
   updatedAt: string;
   createdAt: string;
   deletedAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "suggestions".
- */
-export interface Suggestion {
-  id: number;
-  type?: ('word' | 'example' | 'fact' | 'related') | null;
-  berlinerWord?: string | null;
-  translation?: string | null;
-  /**
-   * Das Wort, zu dem Beispiel, Wissenswertes oder Verwandtes eingereicht wurde. Nicht „Wort“ (das sperrt den Vorschlag).
-   */
-  targetWord?: (number | null) | Word;
-  kind?: ('herkunft' | 'geschichte' | 'gebrauch' | 'anekdote' | 'sonstiges') | null;
-  relation?: ('gleich' | 'gegenteil' | 'verwandt' | 'redewendung') | null;
-  relatedText?: string | null;
-  /**
-   * Beispielsatz (max. 200 Zeichen) oder Text zum Wissenswerten (max. 1000).
-   */
-  text?: string | null;
-  highdeutsch?: string | null;
-  example?: string | null;
-  userName?: string | null;
-  userMail?: string | null;
-  status?: ('new' | 'accepted' | 'rejected') | null;
-  /**
-   * Das Wort, das aus diesem Vorschlag entstanden ist. Beim Wechsel auf „Übernommen“ ohne Wort legt das CMS einen Entwurf an; ein hier gewähltes Wort wird stattdessen verknüpft.
-   */
-  word?: (number | null) | Word;
-  /**
-   * Wörter mit gleicher oder ähnlicher Schreibweise (automatisch beim Anlegen und beim Ändern des Berliner Worts).
-   */
-  similarWords?: (number | Word)[] | null;
-  /**
-   * Wird aus dem Wort abgeleitet: gesperrt, solange das verknüpfte Wort veröffentlicht ist.
-   */
-  lockedByWord?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1271,6 +1301,33 @@ export interface WordsSelect<T extends boolean = true> {
   examples?: T | WordExamplesArraySelect<T>;
   berlinerischAudio?: T | AudioArraySelect<T>;
   relatedWords?: T;
+  stress?: T;
+  grammar?:
+    | T
+    | {
+        plural?: T;
+        diminutive?: T;
+      };
+  facts?:
+    | T
+    | {
+        kind?: T;
+        text?: T;
+        contributorName?: T;
+        contributorSuggestion?: T;
+        id?: T;
+      };
+  related?:
+    | T
+    | {
+        word?: T;
+        label?: T;
+        relation?: T;
+        note?: T;
+        contributorName?: T;
+        contributorSuggestion?: T;
+        id?: T;
+      };
   wikimediaFiles?:
     | T
     | {
@@ -1672,6 +1729,7 @@ export interface Affiliate {
         imageAlt?: string | null;
         badge?: string | null;
         badgeModifier?: string | null;
+        themen?: (number | Theman)[] | null;
         id?: string | null;
       }[]
     | null;
@@ -1873,6 +1931,19 @@ export interface Anki {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "word-page".
+ */
+export interface WordPage {
+  id: number;
+  /**
+   * Frage der Woche. {Wort} wird durch das Wort ersetzt. Leer = Standardtext.
+   */
+  storyPrompt?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs-stats".
  */
 export interface PayloadJobsStat {
@@ -1940,6 +2011,7 @@ export interface AffiliateSelect<T extends boolean = true> {
         imageAlt?: T;
         badge?: T;
         badgeModifier?: T;
+        themen?: T;
         id?: T;
       };
   disclaimers?:
@@ -2060,6 +2132,16 @@ export interface AnkiSelect<T extends boolean = true> {
         answer?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "word-page_select".
+ */
+export interface WordPageSelect<T extends boolean = true> {
+  storyPrompt?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

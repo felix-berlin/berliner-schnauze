@@ -85,6 +85,64 @@ export const Words: CollectionConfig = {
     },
     audioRows("berlinerischAudio"),
     { name: "relatedWords", type: "relationship", relationTo: "words", hasMany: true },
+    { name: "stress", label: "Betonung", type: "text" },
+    {
+      name: "grammar",
+      label: "Grammatik",
+      type: "group",
+      fields: [
+        { name: "plural", type: "text" },
+        { name: "diminutive", type: "relationship", relationTo: "words" },
+      ],
+    },
+    {
+      name: "facts",
+      label: "Fakten",
+      type: "array",
+      fields: [
+        {
+          name: "kind",
+          type: "select",
+          options: [
+            { label: "Herkunft", value: "herkunft" },
+            { label: "Geschichte", value: "geschichte" },
+            { label: "Gebrauch", value: "gebrauch" },
+            { label: "Anekdote", value: "anekdote" },
+            { label: "Sonstiges", value: "sonstiges" },
+          ],
+        },
+        { name: "text", type: "textarea", maxLength: 1000 },
+        { name: "contributorName", type: "text", maxLength: 40 },
+        { name: "contributorSuggestion", type: "relationship", relationTo: "suggestions" },
+      ],
+    },
+    {
+      name: "related",
+      label: "Verwandte Wörter",
+      type: "array",
+      fields: [
+        { name: "word", type: "relationship", relationTo: "words" },
+        {
+          name: "label",
+          type: "text",
+          maxLength: 60,
+          admin: { description: "Wird genutzt, wenn kein Wort verknüpft ist." },
+        },
+        {
+          name: "relation",
+          type: "select",
+          options: [
+            { label: "Gleich", value: "gleich" },
+            { label: "Gegenteil", value: "gegenteil" },
+            { label: "Verwandt", value: "verwandt" },
+            { label: "Redewendung", value: "redewendung" },
+          ],
+        },
+        { name: "note", type: "text", maxLength: 60 },
+        { name: "contributorName", type: "text", maxLength: 40 },
+        { name: "contributorSuggestion", type: "relationship", relationTo: "suggestions" },
+      ],
+    },
     {
       name: "wikimediaFiles",
       type: "array",

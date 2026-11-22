@@ -17,6 +17,7 @@ export const Affiliate: GlobalConfig = {
         { name: "imageAlt", type: "text" },
         { name: "badge", type: "text" },
         { name: "badgeModifier", type: "text" },
+        { name: "themen", type: "relationship", relationTo: "themen", hasMany: true },
       ],
     },
     {
