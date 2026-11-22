@@ -265,7 +265,7 @@ describe("ContributeForm thanks", () => {
       .find((b) => b.text() === "Noch wat ergänzen")!
       .trigger("click");
     await nextTick();
-    expect(w.find("[role=status]").exists()).toBe(false);
+    expect(w.find("[role=status]").text()).toBe("");
     expect((byLabel(w, "Satz uff Berlinerisch").element as HTMLTextAreaElement).value).toBe("");
   });
 
@@ -536,7 +536,7 @@ describe("ContributeForm close and reopen", () => {
     issue(w);
     await flushPromises();
     expect(fetchMock).not.toHaveBeenCalled();
-    expect(w.find("[role=status]").exists()).toBe(false);
+    expect(w.find("[role=status]").text()).toBe("");
   });
 
   it("closing by another form also drops the pending send", async () => {

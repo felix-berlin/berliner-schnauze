@@ -165,6 +165,11 @@
     color: var(--color-text-muted);
   }
 
+  // The live regions around the strips stay rendered when empty (a region must exist before its text does); they give back their grid gap.
+  .live:empty {
+    margin-block-end: calc(var(--space-4) * -1);
+  }
+
   // Error and waiting strips (SPEC §13): a line in the danger colour, calm variant without it.
   .strip {
     display: flex;

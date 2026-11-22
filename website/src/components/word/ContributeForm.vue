@@ -147,18 +147,23 @@
         @token="onToken"
       />
 
-      <div v-if="failed" class="strip" role="alert">
-        <CircleAlert aria-hidden="true" height="18" width="18" />
-        <span class="body">
-          <b>Ditt hat nich jeklappt.</b>
-          <span> Deine Eingaben sind noch da, versuch’s gleich nochmal.</span>
-          <span v-if="reason" class="detail">{{ reason }}</span>
-        </span>
+      <!-- The regions are always rendered: a live region is only announced when it exists before its text does. -->
+      <div class="live" role="alert">
+        <div v-if="failed" class="strip">
+          <CircleAlert aria-hidden="true" height="18" width="18" />
+          <span class="body">
+            <b>Ditt hat nich jeklappt.</b>
+            <span> Deine Eingaben sind noch da, versuch’s gleich nochmal.</span>
+            <span v-if="reason" class="detail">{{ reason }}</span>
+          </span>
+        </div>
       </div>
       <!-- Nothing was sent (captcha still running): a calm status, not the error strip. -->
-      <div v-if="waiting" class="strip" data-variant="calm" role="status">
-        <Hourglass aria-hidden="true" height="18" width="18" />
-        <span class="body">{{ waiting }}</span>
+      <div class="live" role="status">
+        <div v-if="waiting" class="strip" data-variant="calm">
+          <Hourglass aria-hidden="true" height="18" width="18" />
+          <span class="body">{{ waiting }}</span>
+        </div>
       </div>
 
       <p class="foot">{{ cfg.foot }}</p>
