@@ -187,6 +187,22 @@
     }
   }
 
+  // Open form and the visitor's own open suggestions (contribute script): under the header, in place of the gap.
+  .extra {
+    display: grid;
+    gap: var(--space-3);
+    padding-inline: var(--_inline);
+
+    // Only the form or the chip list take room; the empty mount points take none.
+    &:has([id^="contribute-"], [data-own] > *) {
+      padding-block-end: var(--space-4);
+    }
+  }
+
+  :scope[data-state="form-open"] .gap {
+    display: none;
+  }
+
   // Without JS the contribute buttons would do nothing: hidden until WordPage sets html[data-js].
   html:not([data-js]) :scope [data-contribute] {
     display: none;

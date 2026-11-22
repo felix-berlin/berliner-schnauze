@@ -1,6 +1,7 @@
 <template>
   <div
     v-if="isOpen"
+    :id="`contribute-${type}`"
     ref="root"
     class="c-contribute-form"
     :data-state="done ? 'thanks' : 'open'"

@@ -34,6 +34,15 @@ describe("v18 word cards", () => {
     );
   }, 30_000);
 
+  it("mounts the form, the own-list point and collapsed triggers when the card knows the slug", async () => {
+    const html = await examples({ examples: [], slug: "testwort", word: "Testwort" });
+    expect(html).toContain('data-own="example"');
+    expect(html).toContain('data-word="testwort"');
+    expect(html).toContain('data-form="example"');
+    expect(html).toContain('aria-expanded="false"');
+    expect(await examples({ examples: [], word: "Testwort" })).not.toContain("data-own=");
+  });
+
   it("renders the gap text and the call to action of an empty card verbatim", async () => {
     const e = await examples({ examples: [], word: "Testwort" });
     expect(e).toContain(

@@ -3,7 +3,7 @@
 
 // „Stimmt wat nich?“ line (SPEC §12, WordReportLine.astro): a rule above, text left and an outline button
 // right (stacked below 36rem). Parts: .inner (the row; the root is the container), .text, .report. Without JS (html:not([data-js])) the button is hidden:
-// it is wired in a later task, like the contribute buttons.
+// `initContributeTriggers` wires it, like the contribute buttons.
 @include mx.component("word-fehler") {
   :scope {
     container: word-fehler / inline-size;

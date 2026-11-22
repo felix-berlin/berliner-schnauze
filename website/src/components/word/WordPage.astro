@@ -1,6 +1,8 @@
 ---
 import '@styles/objects/_word-v18.scss';
 
+import SectionCard from '@components/word/SectionCard.astro';
+import WordStories from '@components/word/WordStories.vue';
 import WordExamplesCard from '@components/word/WordExamplesCard.astro';
 import WordFactsCard from '@components/word/WordFactsCard.astro';
 import WordAnalysisCard from '@components/word/WordAnalysisCard.astro';
@@ -37,7 +39,7 @@ const voices = voiceSources(model.word.berlinerischAudio);
   The wrappers own the anchor ids (and the scroll margin): a card placed in a slot must not repeat the id.
 -->
 <article class='o-word-v18'>
-  <!-- No JS, no form: the contribute buttons (wired in Task 17) stay hidden until this flag is set (see _word-v18.scss). -->
+  <!-- No JS, no form: the contribute buttons stay hidden until this flag is set (see _word-v18.scss). -->
   <script is:inline>document.documentElement.dataset.js = '';</script>
   <div class='toc'>
     <WordToc client:idle items={tocItems(model)} />
@@ -49,12 +51,16 @@ const voices = voiceSources(model.word.berlinerischAudio);
     </div>
 
     <h2 class='band'>Im Gebrauch</h2>
-    <div class='anchor' id='beispiele'><slot name='beispiele'><WordExamplesCard word={model.word.berlinerisch} examples={model.word.examples} /></slot></div>
+    <div class='anchor' id='beispiele'><slot name='beispiele'><WordExamplesCard word={model.word.berlinerisch} slug={model.word.slug} examples={model.word.examples} /></slot></div>
     <div class='anchor' id='sagste'><slot name='sagste' /></div>
-    <div class='anchor' id='jeschichten'><slot name='jeschichten' /></div>
+    <div class='anchor' id='jeschichten'><slot name='jeschichten'>
+      <SectionCard anchor={false} id='jeschichten' title='Jeschichten' level={3} meta={model.stories.total > 0 ? `${model.stories.total} Jeschichten` : 'Noch keene'}>
+        <WordStories client:visible label={model.word.berlinerisch} prompt={model.storyPrompt} word={model.word.slug} initial={{ featured: model.featured ?? null, items: model.stories.items, total: model.stories.total }} />
+      </SectionCard>
+    </slot></div>
 
     <h2 class='band'>Wissen</h2>
-    <div class='anchor' id='wissenswertes'><slot name='wissenswertes'><WordFactsCard word={model.word.berlinerisch} facts={model.facts} book={model.book} /></slot></div>
+    <div class='anchor' id='wissenswertes'><slot name='wissenswertes'><WordFactsCard word={model.word.berlinerisch} slug={model.word.slug} facts={model.facts} book={model.book} /></slot></div>
     <div class='anchor' id='verwandt'><slot name='verwandt'><WordNetworkCard model={model} /></slot></div>
 
     <h2 class='band anchor' id='analyse'>Sprachliche Analyse</h2>
@@ -68,9 +74,15 @@ const voices = voiceSources(model.word.berlinerischAudio);
       )}
     </div>
     <div class='anchor' id='zahlen'><slot name='zahlen'><WordNumbers model={model} /></slot></div>
-    <div class='anchor' id='fehler'><slot name='fehler'><WordReportLine word={model.word.berlinerisch} /></slot></div>
+    <div class='anchor' id='fehler'><slot name='fehler'><WordReportLine word={model.word.berlinerisch} slug={model.word.slug} /></slot></div>
     <slot name='weiter'><WordLinks words={words} excludeSlug={model.word.slug} /></slot>
   </div>
 </article>
 <!-- Sibling of the article: a sticky bar rests where its parent (the page column) ends, below the content. -->
 <WordMobileBar audio={voices.m ?? voices.w} wordId={draft ? undefined : model.word.id} />
+
+<script>
+  import { initContributeTriggers } from '@components/word/contributeTriggers.ts';
+
+  initContributeTriggers();
+</script>

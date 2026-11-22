@@ -1,21 +1,25 @@
 ---
 import '@styles/components/_word-fehler.scss';
+import ContributeForm from '@components/word/ContributeForm.vue';
 import Flag from '~icons/lucide/flag';
 
 interface Props {
   word: string;
+  /** Slug of the word: with it the line mounts the report form. */
+  slug?: string;
 }
 
-const { word } = Astro.props;
+const { slug, word } = Astro.props;
 ---
 
-{/* „Stimmt wat nich?“ (SPEC §12, rest state): one line with a rule above, no card. The button is wired in Task 17 (`data-report`), hidden without JS. */}
+{/* „Stimmt wat nich?“ (SPEC §12, rest state): one line with a rule above, no card. `data-report` is wired by `initContributeTriggers`; hidden without JS. */}
 <section class='c-word-fehler' aria-labelledby='fehler-title'>
   <div class='inner'>
   <p class='text'><b id='fehler-title'>Stimmt wat nich?</b> Wenn dir bei „{word}“ wat falsch vorkommt, sag Bescheid.</p>
-  <button class='report' type='button' data-report>
+  <button class='report' type='button' data-report aria-expanded='false'>
     <Flag aria-hidden='true' height='18' width='18' />
     Fehler melden
   </button>
   </div>
+  {slug && <ContributeForm client:idle type='error' word={slug} />}
 </section>

@@ -56,4 +56,19 @@ describe("WordPage mobile bar", () => {
     expect(html).not.toContain('id="grammatik"'); // no Grammatik rows in this model
     expect(html).toContain('id="klang"');
   });
+
+  it("mounts the Jeschichten card with its count and the report form, and wires the triggers", async () => {
+    const html = await render({
+      model: {
+        ...model,
+        stories: { items: [], total: 4 },
+        storyPrompt: "Wo haste „Testwort“ jehört?",
+      },
+    });
+    expect(html).toContain("4 Jeschichten");
+    expect(html).toContain("Wo haste");
+    expect(html).toContain('data-form="example"');
+    expect(html).toContain("data-report");
+    expect(await render({ model })).toContain("Noch keene");
+  });
 });

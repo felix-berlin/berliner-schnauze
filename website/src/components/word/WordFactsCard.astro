@@ -6,12 +6,14 @@ import type { WordPageModel } from '@services/payload/wordPage.ts';
 
 interface Props {
   word: string;
+  /** Slug of the word, for the form. */
+  slug?: string;
   facts?: WordPageModel['facts'];
   /** Shown only with a book (chosen by the first theme of the word). */
   book?: WordPageModel['book'];
 }
 
-const { book, facts = [], word } = Astro.props;
+const { book, facts = [], slug, word } = Astro.props;
 const gap = {
   cta: 'Wissenswertes ergänzen',
   text: `Noch nüscht Wissenswertes zu „${word}“. Weeßte wat über Herkunft, Geschichte oder haste ’ne Anekdote?`,
@@ -19,7 +21,7 @@ const gap = {
 ---
 
 <!-- Wissenswertes card (SPEC §9): facts as a description list; the book block (rule above) only with a book. -->
-<SectionCard anchor={false} id='wissenswertes' title='Wissenswertes' level={3} contribute='fact' gap={facts.length ? undefined : gap}>
+<SectionCard anchor={false} id='wissenswertes' title='Wissenswertes' level={3} contribute='fact' slug={slug} gap={facts.length ? undefined : gap}>
   {(facts.length > 0 || book) && (
     <div class='c-word-wissen'>
       {facts.length > 0 && (
