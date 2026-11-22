@@ -8,6 +8,7 @@ import { getPolarFullDeckPrice, getPolarFullDeckPriceAmount } from '@services/po
 import { getLiteDeckDownloadUrl } from '@services/githubRelease.ts';
 import { routeToWord, shuffle, jsonLd } from '@utils/helpers.ts';
 import { stripTags } from '@utils/article.ts';
+import FooterCalloutAnki from '@components/footer/FooterCalloutAnki.astro';
 import Layout from '@layouts/Layout.astro';
 import { defaultOgImage } from '@utils/defaultOgImage';
 import AnkiFlashcardDemo from '@components/anki/AnkiFlashcardDemo.vue';
@@ -452,42 +453,12 @@ const { faqs, fullFeatures, liteFeatures, steps } = await fetchAnkiContent({
     </section>
   </div>
 
-  <!-- FINAL CTA -->
-  <section
-    slot='footer-farewell'
-    class='o-anki-farewell'
-    aria-labelledby='anki-final-title'
-  >
-    <div class='c-anki-heading' data-variant='loose'>
-      <h2 id='anki-final-title' class='title'>Na los, ab uff die Karten.</h2>
-      <p class='lead'>
-        {fmt(TOTAL_WORDS)} Wörter Berliner Schnauze{PRICE && ` für ${PRICE}`}. Weniger als 'ne
-        Currywurst mit Pommes — und neue Wörter kriegste ohne Aufpreis nachgeliefert.
-      </p>
-      <div class='actions'>
-        {
-          ANKI_DECK_FULL_CHECKOUT && (
-            <a
-              class='c-button' data-variant='primary center-icon raised xl'
-              href={ANKI_DECK_FULL_CHECKOUT} data-track='Click Buy Full|farewell'
-              target='_blank'
-              rel='noopener'
-            >
-              <span>Full-Deck kaufen{PRICE && ` ᛫ ${PRICE}`}</span>
-              <ArrowUpRight width='20' height='20' />
-            </a>
-          )
-        }
-        {
-          LITE_URL && (
-            <a class='c-button' data-variant='paper center-icon xl' href={LITE_URL} data-track='Download Lite|farewell' download>
-              <Download width='20' height='20' /><span>Erst mal Lite</span>
-            </a>
-          )
-        }
-      </div>
-    </div>
-  </section>
+  <FooterCalloutAnki
+    slot='footer-callout'
+    checkoutUrl={ANKI_DECK_FULL_CHECKOUT}
+    price={PRICE}
+    wordCount={TOTAL_WORDS}
+  />
 </Layout>
 
 <script>

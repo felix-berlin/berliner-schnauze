@@ -68,7 +68,7 @@ const content = {
 };
 ---
 
-<Layout content={seoData(content)} contentClasses='o-home'>
+<Layout content={seoData(content)} contentClasses='o-home' footerCallout='none'>
   <Fragment slot='head'>
     {homeJsonLd(home).map((item) => <script set:html={jsonLd(item)} type='application/ld+json' />)}
   </Fragment>

@@ -6,8 +6,9 @@ const page = {
   description: 'Die Bestenliste von Berliner oder nicht? — wer kennt den Berliner Dialekt am besten?',
   title: 'Rangliste – Berliner oder nicht? | Berliner Schnauze',
 }
+// TODO(footer): game callout (leaderboard), copy still open (footer design doc); until then no callout.
 ---
 
-<Layout content={page}>
+<Layout content={page} footerCallout='none'>
   <BonLeaderboard client:load />
 </Layout>

@@ -5,7 +5,7 @@ import { test, expect, type Page } from "@playwright/test";
 // Screenshot baseline for the design-system migration (docs/superpowers/specs/2026-11-13-design-system-design.md §10,
 // wave 0): later CSS refactors must not change a pixel unless the snapshot update names the reason. Run against the
 // e2e seed database and a fresh build; a stale service worker serves old CSS, so it is blocked. The server must run
-// with E2E_SERVER=1 (fixed Wakapi hours in the footer, no rate limits; src/utils/e2eServer.ts) on a fresh seed.
+// with E2E_SERVER=1 (fixed Wakapi hours on /anki, no rate limits; src/utils/e2eServer.ts) on a fresh seed.
 // Chromium project only: playwright.config.ts gives every other project a testIgnore for this file.
 test.use({ reducedMotion: "reduce", serviceWorkers: "block" });
 
@@ -80,7 +80,7 @@ for (const size of SIZES) {
             content: ".o-scroll-to-top { visibility: hidden !important; }",
           });
           // Word of the day: the word changes daily and the countdown ("Neues Wort in: …") ticks every second.
-          const wotd = page.locator(".c-word-of-the-day");
+          const wotd = page.locator(".c-home-stage");
           // Trend box and badge: rank and counts come from the last 7 days (the seed writes them relative to its
           // own day, and other specs' page views add to them). Footer dates: the seed stamps them.
           const timeDependent = [
@@ -88,10 +88,12 @@ for (const size of SIZES) {
             page.locator(".c-word-trend"),
             page.getByText("Im Trend · Platz"),
             page.locator(".c-word-page-footer time"),
+            // Footer word sign: a random word per request.
+            page.locator(".c-footer-word-sign"),
             // Anki: the demo card shows a random word.
             page.locator(".c-anki-flashcard"),
           ];
-          if (path === "/") await expect(wotd.locator(".word")).toBeVisible();
+          if (path === "/") await expect(wotd.getByRole("heading", { level: 2 })).toBeVisible();
           const name = `${path === "/" ? "home" : path.slice(1).replaceAll("/", "-")}-${size.width}-${theme}.png`;
           await expect(page).toHaveScreenshot(name, {
             fullPage: true,
