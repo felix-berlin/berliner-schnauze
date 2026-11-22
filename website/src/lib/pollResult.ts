@@ -33,10 +33,10 @@ export const dotsFor = (pct: number): number => Math.round(pct / 5);
 
 /** Largest-remainder rounding of the three counts to 100 parts (ties go to say, know, never). */
 function hundredParts(counts: number[], total: number): number[] {
-  const quotas = counts.map((c) => (c * 100) / total);
-  const parts = quotas.map(Math.floor);
-  const order = quotas
-    .map((q, i) => ({ i, rest: q - Math.floor(q) }))
+  // Integer remainders: float noise could break ties wrongly.
+  const parts = counts.map((c) => Math.floor((c * 100) / total));
+  const order = counts
+    .map((c, i) => ({ i, rest: (c * 100) % total }))
     .sort((a, b) => b.rest - a.rest || a.i - b.i);
   for (let left = 100 - parts.reduce((a, b) => a + b, 0), k = 0; left > 0; left--, k++) {
     parts[order[k]!.i]!++;

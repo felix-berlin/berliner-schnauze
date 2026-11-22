@@ -22,7 +22,10 @@ describe("buildPollResult matrix", () => {
   it.each([
     [33, 33, 34],
     [1, 1, 98],
-    [1, 1, 1],
+    [50, 50, 0],
+    [1, 0, 0],
+    [33, 33, 33],
+    [1, 1, 4],
   ])("has 100 entries ordered say, know, never for %i/%i/%i", (s, k, n) => {
     const r = buildPollResult(mix(s, k, n));
     expect(r.matrix).toHaveLength(100);
@@ -33,7 +36,14 @@ describe("buildPollResult matrix", () => {
     expect(order).toBe(sorted.join(","));
     expect(r.shares.selbst + r.shares.kenn + r.shares.nie).toBe(100);
     expect(count(r.matrix, "say")).toBe(r.shares.selbst);
+    expect(count(r.matrix, "know")).toBe(r.shares.kenn);
+    expect(count(r.matrix, "never")).toBe(r.shares.nie);
     expect(r.total).toBe(s + k + n);
+  });
+
+  it("breaks exact remainder ties in say, know, never order (1/1/4 gives 17/17/66)", () => {
+    const { shares } = buildPollResult(mix(1, 1, 4));
+    expect([shares.selbst, shares.kenn, shares.nie]).toEqual([17, 17, 66]);
   });
 
   it("assigns the largest remainders (1/1/1 gives 34/33/33)", () => {
@@ -80,6 +90,12 @@ describe("buildPollResult groups", () => {
       { key: "west", n: 10, selbst: 0 },
       { key: "umland", n: 10, selbst: 0 },
     ]);
+  });
+
+  // Intended: half and area are independent questions, so one row can count in both ost and umland.
+  it("counts a row with half east and area brandenburg in ost and umland", () => {
+    const r = buildPollResult(rows(10, { area: "brandenburg", half: "east", usage: "say" }));
+    expect(r.byRegion.map((g) => g.key)).toEqual(["ost", "umland"]);
   });
 
   it("counts only rows with a usage in n", () => {
