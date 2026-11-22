@@ -32,6 +32,8 @@ jobs:
         id: f
         uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
         with:
+          # every: a file counts as code only if it matches "**" and no "!" pattern; the default (some) matches "**" for every file
+          predicate-quantifier: every
           filters: |
             code:
               - "**"
@@ -50,6 +52,17 @@ jobs:
               - "!scripts/orca-*.sh"
               - "!scripts/*anki*"
               - "!scripts/test_*.py"
+              - "!.editorconfig"
+              - "!.gitattributes"
+              - "!**/.gitignore"
+              - "!.mcp.json"
+              - "!.github/hooks/**"
+              - "!.oxlintrc.json"
+              - "!.oxfmtrc.json"
+              - "!.infisical.yaml"
+              - "!website/public/robots.txt"
+              - "!website/public/.well-known/security.txt"
+              - "!codecov.yml"
 
   playwright-version:
     needs: changes
@@ -115,7 +128,7 @@ jobs:
           ENABLE_ANALYTICS: "false"
         run: pnpm run build
 
-      # dist/ is the input of docker-smoke (the e2e shards build their own copy). Same public-repo
+      # dist/ is served by `node server/index.mjs` in every shard job. Same public-repo
       # caveat as the report below: the build holds no secrets, only public HTML/JS.
       - name: Upload build
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
@@ -124,7 +137,7 @@ jobs:
           path: website/dist
           retention-days: 1
 
-  # Builds the production image from the build job's dist/ (built with the e2e flags, like the shards' copy) and
+  # Builds the production image from the same dist/ the e2e shards use and
   # checks routing, security headers, redirects and caching in the running container.
   docker-smoke:
     needs: build
@@ -170,7 +183,7 @@ jobs:
           cache-from: type=gha,scope=cms-amd64
 
   test:
-    needs: playwright-version
+    needs: [build, playwright-version]
     timeout-minutes: 15
     runs-on: ubuntu-latest
     permissions:
@@ -229,13 +242,11 @@ jobs:
           env-slug: "staging" # never prod: e2e errors would land in the prod Sentry, suggestions could send real mail
           domain: "https://infisical.kasimir.dev"
 
-      # Each shard builds its own dist/ (~15 s) instead of waiting for the build job's upload (~1:40 of queue and
-      # setup on the critical path). Same flags as the build job: no source-map upload, analytics off.
-      - name: Build site
-        env:
-          E2E_BUILD: "1"
-          ENABLE_ANALYTICS: "false"
-        run: pnpm run build
+      - name: Download build
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: dist
+          path: website/dist
 
       # Step-level env wins over what the Infisical action exports: the e2e run must never touch a real database.
       - name: Migrate and seed the database
