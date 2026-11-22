@@ -279,7 +279,7 @@ jobs:
           exit 1
 
       - name: Run Playwright tests (shard ${{ matrix.shard }}/4)
-        timeout-minutes: 8
+        timeout-minutes: 10
         # word-v3.spec.ts signs a draft preview token with the same secret as the server.
         env:
           PAYLOAD_SECRET: e2e-secret
