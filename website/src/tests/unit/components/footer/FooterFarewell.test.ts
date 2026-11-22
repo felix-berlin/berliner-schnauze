@@ -31,6 +31,9 @@ const mountFarewell = (props: { mode: "sign" | "callout" | "app"; words?: Footer
     props: { words, ...props },
   });
 
+// The root element's own tag: the real BerlinerBaer child renders its own data-state in SSR, only the root must not.
+const rootTag = (html: string) => html.match(/^<[^>]+>/)?.[0] ?? "";
+
 describe("FooterFarewell", () => {
   afterEach(() => {
     $showInstallButton.set(false);
@@ -78,7 +81,7 @@ describe("FooterFarewell", () => {
     );
     expect(html).toContain('data-variant="sign"');
     expect(html).toContain(SIGN);
-    expect(html).not.toContain("data-state");
+    expect(rootTag(html)).not.toContain("data-state");
   });
 
   it("keeps the plain variant for a callout page and for app mode without words", async () => {
@@ -91,8 +94,9 @@ describe("FooterFarewell", () => {
     const html = await renderToString(
       createSSRApp({ render: () => h(FooterFarewell, { mode: "sign", words }) }),
     );
-    expect(html).not.toContain("data-state");
-    expect(html).toContain('data-size="150"');
+    expect(rootTag(html)).not.toContain("data-state");
+    // The real BerlinerBaer (no stub in an SSR app) writes its size into the style.
+    expect(html).toContain("width:150px");
     const wrapper = mountFarewell({ mode: "sign" });
     await nextTick();
     expect(wrapper.attributes("data-state")).toBe("armed");
