@@ -5,6 +5,7 @@
 // One dot is 2 % frequency; vowel columns (data-kind="vowel") are gold. Two columns from 40rem of the card.
 @include mx.component("word-zahlen") {
   :scope {
+    --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
     --_dot: 0.75rem; // SPEC §11 dot size 12px, no token
     --_col: 1.25rem; // one letter column
 
@@ -73,7 +74,7 @@
 
   .legend {
     margin: 0;
-    font-size: var(--font-size-sm);
+    font-size: var(--_small);
     color: var(--color-text-muted);
   }
 
@@ -94,7 +95,7 @@
     border-radius: var(--radius-sm);
 
     dt {
-      font-size: var(--font-size-sm);
+      font-size: var(--_small);
       color: var(--color-text-muted);
     }
 

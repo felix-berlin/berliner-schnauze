@@ -52,7 +52,7 @@ const gap = {
   carries the information and is reachable by keyboard (it becomes visible on focus), and the rest as a list. The
   lists are switched with display: none, so a screen reader never hears a word twice. Neighbours always render.
 -->
-<SectionCard anchor={false} id='verwandt' title='Verwandte Wörter' level={3} contribute='verknuepfen' gap={model.related.length ? undefined : gap}>
+<SectionCard anchor={false} id='verwandt' title='Verwandte Wörter' level={3} contribute='related' gap={model.related.length ? undefined : gap}>
   <div class='c-word-netz'>
     {model.related.length > 0 && (
       <Fragment>

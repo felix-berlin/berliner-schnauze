@@ -4,6 +4,8 @@
 // ("Zum Weiterlesen", rule above, only with a book): .cover, .info, .title, .note.
 @include mx.component("word-wissen") {
   :scope {
+    --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
+
     display: grid;
     gap: var(--space-4);
   }
@@ -28,7 +30,7 @@
   }
 
   .by {
-    font-size: var(--font-size-sm);
+    font-size: var(--_small);
     color: var(--color-text-muted);
   }
 

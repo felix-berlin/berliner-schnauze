@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { initScrollSpy } from "@utils/scrollSpy";
-import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 const props = defineProps<{ items: { id: string; label: string; count?: number }[] }>();
 
@@ -37,8 +37,10 @@ watch(current, async () => {
     ?.scrollIntoView({ block: "nearest", inline: "nearest" });
 });
 
+let stopSpy: () => void = () => {};
+
 onMounted(() => {
-  initScrollSpy({
+  stopSpy = initScrollSpy({
     getSectionId: (link) => link.getAttribute("href")?.slice(1),
     linkSelector: "a",
     navSelector: ".c-word-toc",
@@ -49,6 +51,8 @@ onMounted(() => {
     rootMargin: "-20% 0px -70% 0px",
   });
 });
+
+onBeforeUnmount(() => stopSpy());
 </script>
 
 <style lang="scss">
