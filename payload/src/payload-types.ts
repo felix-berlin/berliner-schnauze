@@ -102,6 +102,7 @@ export interface Config {
     comments: Comment;
     'comment-votes': CommentVote;
     'comment-reports': CommentReport;
+    reports: Report;
     'word-feedback': WordFeedback;
     'word-stats': WordStat;
     'bon-games': BonGame;
@@ -127,6 +128,7 @@ export interface Config {
     comments: CommentsSelect<false> | CommentsSelect<true>;
     'comment-votes': CommentVotesSelect<false> | CommentVotesSelect<true>;
     'comment-reports': CommentReportsSelect<false> | CommentReportsSelect<true>;
+    reports: ReportsSelect<false> | ReportsSelect<true>;
     'word-feedback': WordFeedbackSelect<false> | WordFeedbackSelect<true>;
     'word-stats': WordStatsSelect<false> | WordStatsSelect<true>;
     'bon-games': BonGamesSelect<false> | BonGamesSelect<true>;
@@ -585,6 +587,20 @@ export interface CommentReport {
   comment: number | Comment;
   visitor: string;
   reason?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reports".
+ */
+export interface Report {
+  id: number;
+  word: number | Word;
+  kind?: ('meaning' | 'spelling' | 'example' | 'audio' | 'fact' | 'inappropriate' | 'other') | null;
+  text: string;
+  email?: string | null;
+  status?: ('open' | 'closed') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1054,6 +1070,10 @@ export interface PayloadLockedDocument {
         value: number | CommentReport;
       } | null)
     | ({
+        relationTo: 'reports';
+        value: number | Report;
+      } | null)
+    | ({
         relationTo: 'word-feedback';
         value: number | WordFeedback;
       } | null)
@@ -1387,6 +1407,19 @@ export interface CommentReportsSelect<T extends boolean = true> {
   comment?: T;
   visitor?: T;
   reason?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reports_select".
+ */
+export interface ReportsSelect<T extends boolean = true> {
+  word?: T;
+  kind?: T;
+  text?: T;
+  email?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

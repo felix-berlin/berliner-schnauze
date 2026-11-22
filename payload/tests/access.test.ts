@@ -16,6 +16,7 @@ const lockedCollections = [
   "comments",
   "comment-votes",
   "comment-reports",
+  "reports",
   "word-feedback",
   "bon-games",
   "bon-players",

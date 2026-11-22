@@ -15,6 +15,7 @@ import { CommentVotes } from "./collections/CommentVotes";
 import { Media } from "./collections/Media";
 import { Pages } from "./collections/Pages";
 import { Posts } from "./collections/Posts";
+import { Reports } from "./collections/Reports";
 import { Suggestions } from "./collections/Suggestions";
 import { Themen } from "./collections/Themen";
 import { Users } from "./collections/Users";
@@ -65,6 +66,7 @@ export default buildConfig({
     Comments,
     CommentVotes,
     CommentReports,
+    Reports,
     WordFeedback,
     WordStats,
     BonGames,

@@ -28,6 +28,7 @@ import * as migration_20261114_143627_bon_games_lookup_indexes from './20261114_
 import * as migration_20261119_211428_trash_and_live_link from './20261119_211428_trash_and_live_link';
 import * as migration_20261121_012437_home_page_fields_word_ipa from './20261121_012437_home_page_fields_word_ipa';
 import * as migration_20261122_165037_comments_bezirk_featured from './20261122_165037_comments_bezirk_featured';
+import * as migration_20261122_170310_reports from './20261122_170310_reports';
 
 export const migrations = [
   {
@@ -178,6 +179,11 @@ export const migrations = [
   {
     up: migration_20261122_165037_comments_bezirk_featured.up,
     down: migration_20261122_165037_comments_bezirk_featured.down,
-    name: '20261122_165037_comments_bezirk_featured'
+    name: '20261122_165037_comments_bezirk_featured',
+  },
+  {
+    up: migration_20261122_170310_reports.up,
+    down: migration_20261122_170310_reports.down,
+    name: '20261122_170310_reports'
   },
 ];

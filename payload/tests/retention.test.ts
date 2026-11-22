@@ -26,6 +26,7 @@ afterAll(async () => {
     collection: "suggestions",
     where: { berlinerWord: { equals: "Aufbewahrungstest" } },
   });
+  await payload.delete({ collection: "reports", where: { word: { equals: wordId } } });
   await payload.delete({ collection: "words", where: { id: { equals: wordId } } });
 });
 
@@ -50,6 +51,21 @@ const suggest = (status: string, extra = {}) =>
   });
 
 describe("runRetention", () => {
+  it("clears the e-mail of open reports after 90 days and keeps younger ones", async () => {
+    const mk = () =>
+      payload.create({
+        collection: "reports",
+        data: { word: wordId, kind: "other", text: "x", email: "a@b.de" } as never,
+      });
+    const r = await mk();
+    await runRetention(payload, days(30));
+    expect((await payload.findByID({ collection: "reports", id: r.id })).email).toBe("a@b.de");
+    await runRetention(payload, days(100));
+    const after = await payload.findByID({ collection: "reports", id: r.id });
+    expect(after.email ?? null).toBeNull();
+    expect(after.text).toBe("x");
+  });
+
   it("clears name and mail of finished suggestions, even when locked, and keeps open ones", async () => {
     const done = await suggest("rejected");
     const open = await suggest("new");

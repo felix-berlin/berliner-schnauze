@@ -46,6 +46,20 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
     data: { userName: null, userMail: null },
   });
 
+  // Open reports keep their text; the sender's mail goes after the same period as a suggestion's.
+  const reportsCleared =
+    (await payload.db.updateMany({
+      collection: "reports",
+      where: {
+        and: [
+          { status: { equals: "open" } },
+          { email: { exists: true } },
+          { updatedAt: { less_than: ago(SUGGESTION_PII_DAYS) } },
+        ],
+      },
+      data: { email: null },
+    })) ?? [];
+
   // The answers stay (they are statistics); the per-word visitor hash goes, so the row no longer points at a browser.
   const unlinked =
     (await payload.db.updateMany({
@@ -123,6 +137,7 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
   }
   return {
     feedbackUnlinked: unlinked.length,
+    reportsCleared: reportsCleared.length,
     suggestionsCleared: cleared?.length ?? 0,
     commentsDeleted: deleted,
     commentsScrubbed: scrubbed,
