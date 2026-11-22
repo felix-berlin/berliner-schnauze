@@ -518,6 +518,30 @@ export async function seedE2e(payload: Payload): Promise<void> {
     }
   }
 
+  // Invented Jeschichten for "anmachen" (the v18 word page shows 2 on mobile and 3 from 808px, so it needs more than 3).
+  // Published and without links, so no editor mail goes out.
+  for (const [i, bezirk] of ["neukoelln", "pankow", "mitte", "spandau", "lichtenberg"].entries()) {
+    const body = `Erfundene Jeschichte ${i + 1} zu anmachen.`;
+    const { docs } = await payload.find({
+      collection: "comments",
+      depth: 0,
+      limit: 1,
+      where: { text: { equals: body }, word: { equals: wordIds.get("anmachen")! } },
+    });
+    if (!docs[0])
+      await payload.create({
+        collection: "comments",
+        data: {
+          authorName: `Tester ${i + 1}`,
+          bezirk,
+          status: "published",
+          text: body,
+          word: wordIds.get("anmachen")!,
+        },
+        depth: 0,
+      });
+  }
+
   await upsert(
     payload,
     "posts",
