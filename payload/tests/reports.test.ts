@@ -53,6 +53,22 @@ describe("reports", () => {
     expect(closed.email ?? null).toBeNull();
   });
 
+  it("clears the e-mail on a later update of a closed report", async () => {
+    const r = await report({ email: "a@b.de" });
+    await payload.update({ collection: "reports", id: r.id, data: { status: "closed" } });
+    const again = await payload.update({
+      collection: "reports",
+      id: r.id,
+      data: { email: "c@d.de" },
+    });
+    expect(again.email ?? null).toBeNull();
+  });
+
+  it("clears the e-mail of a report created closed", async () => {
+    const r = await report({ email: "a@b.de", status: "closed" });
+    expect(r.email ?? null).toBeNull();
+  });
+
   it("is not readable without login", async () => {
     await expect(payload.find({ collection: "reports", overrideAccess: false })).rejects.toThrow(
       /not allowed|forbidden/i,

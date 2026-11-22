@@ -54,7 +54,8 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
         and: [
           { status: { equals: "open" } },
           { email: { exists: true } },
-          { updatedAt: { less_than: ago(SUGGESTION_PII_DAYS) } },
+          // Age of the report: an admin edit must not restart the clock.
+          { createdAt: { less_than: ago(SUGGESTION_PII_DAYS) } },
         ],
       },
       data: { email: null },

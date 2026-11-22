@@ -51,19 +51,26 @@ const suggest = (status: string, extra = {}) =>
   });
 
 describe("runRetention", () => {
-  it("clears the e-mail of open reports after 90 days and keeps younger ones", async () => {
-    const mk = () =>
+  it("clears the e-mail of open reports by age since creation, not last edit", async () => {
+    const mk = (createdAt: Date) =>
       payload.create({
         collection: "reports",
-        data: { word: wordId, kind: "other", text: "x", email: "a@b.de" } as never,
+        data: {
+          word: wordId,
+          kind: "other",
+          text: "x",
+          email: "a@b.de",
+          createdAt: createdAt.toISOString(),
+        } as never,
       });
-    const r = await mk();
-    await runRetention(payload, days(30));
-    expect((await payload.findByID({ collection: "reports", id: r.id })).email).toBe("a@b.de");
-    await runRetention(payload, days(100));
-    const after = await payload.findByID({ collection: "reports", id: r.id });
-    expect(after.email ?? null).toBeNull();
-    expect(after.text).toBe("x");
+    // Both rows were just written, so updatedAt is recent for both: only createdAt tells them apart.
+    const old = await mk(days(-100));
+    const young = await mk(days(-30));
+    await runRetention(payload);
+    const o = await payload.findByID({ collection: "reports", id: old.id });
+    expect(o.email ?? null).toBeNull();
+    expect(o.text).toBe("x");
+    expect((await payload.findByID({ collection: "reports", id: young.id })).email).toBe("a@b.de");
   });
 
   it("clears name and mail of finished suggestions, even when locked, and keeps open ones", async () => {

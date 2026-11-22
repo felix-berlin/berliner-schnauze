@@ -3,8 +3,10 @@ import type { CollectionBeforeChangeHook, CollectionConfig } from "payload";
 import { authenticatedOnly } from "../access";
 
 /** A closed report no longer needs a way to reach the sender. */
-const dropEmailWhenClosed: CollectionBeforeChangeHook = ({ data }) => {
-  if (data.status === "closed") data.email = null;
+const dropEmailWhenClosed: CollectionBeforeChangeHook = ({ data, originalDoc }) => {
+  // Resulting state: an update may omit `status` on an already closed report.
+  const status = data.status ?? originalDoc?.status;
+  if (status === "closed") data.email = null;
   return data;
 };
 
