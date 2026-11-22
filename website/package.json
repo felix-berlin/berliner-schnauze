@@ -91,7 +91,7 @@
     "eslint-plugin-astro": "3.2.1",
     "jsdom": "31.0.1",
     "postcss-html": "2.0.1",
-    "postcss-preset-env": "11.6.2",
+    "postcss-preset-env": "11.6.3",
     "postcss-scss": "4.0.9",
     "sass": "1.108.2",
     "sonda": "0.14.0",
