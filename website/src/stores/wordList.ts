@@ -309,6 +309,116 @@ export const $oramaSearchResults = computedAsync(
   },
 );
 
+/** Retrieve a local dictionary shortlist for the Prompt API to rank against a natural-language query. */
+export async function findSemanticCandidates(query: string) {
+  const { db } = await getWordDb();
+  const where = buildWhere($wordSearch.get());
+  const currentResults = $oramaSearchResults.get();
+  const normalSearchCandidates =
+    normalize($searchQuery.get()) === normalize(query) && currentResults.state === "ready"
+      ? (currentResults.value?.hits ?? [])
+          .filter((hit) => matchTier(hit.document.wordProperties, normalize(query)) < 4)
+          .slice(0, 20)
+          .map((hit) => ({
+            document: hit.document as unknown as OramaSearchIndex,
+            id: hit.id,
+            score: hit.score,
+          }))
+      : [];
+  const stopWords = new Set([
+    "aber",
+    "also",
+    "auch",
+    "aus",
+    "bei",
+    "bin",
+    "bis",
+    "das",
+    "dass",
+    "dem",
+    "den",
+    "der",
+    "des",
+    "die",
+    "ein",
+    "eine",
+    "einem",
+    "einen",
+    "einer",
+    "eines",
+    "für",
+    "hat",
+    "hast",
+    "haben",
+    "ich",
+    "im",
+    "in",
+    "ist",
+    "jemand",
+    "mit",
+    "man",
+    "mich",
+    "mir",
+    "nach",
+    "nicht",
+    "oder",
+    "sie",
+    "sehr",
+    "sind",
+    "und",
+    "uns",
+    "viel",
+    "viele",
+    "vom",
+    "von",
+    "war",
+    "was",
+    "wie",
+    "wir",
+    "zu",
+    "zum",
+  ]);
+  const uniqueTerms = [
+    ...parts(query).filter((part) => part.length > 3 && !stopWords.has(part)),
+    normalize(query),
+  ].filter((term, index, all) => term && all.indexOf(term) === index);
+  const combined = new Map<string, { document: OramaSearchIndex; id: string; score: number }>();
+
+  for (const [termIndex, term] of uniqueTerms.entries()) {
+    const result = await search(db, {
+      ...FULL_TEXT,
+      limit: termIndex === 0 ? 30 : 20,
+      term,
+      tolerance: termIndex === 0 ? FULL_TEXT.tolerance : 0,
+      ...(Object.keys(where).length > 0 ? { where } : {}),
+    });
+    for (const hit of result.hits) {
+      const doc = hit.document as unknown as OramaSearchIndex;
+      const score = hit.score / (termIndex + 1);
+      const previous = combined.get(hit.id);
+      if (previous) {
+        previous.score += score;
+      } else {
+        combined.set(hit.id, {
+          document: doc,
+          id: hit.id,
+          score,
+        });
+      }
+    }
+  }
+
+  const rankedCandidates = [...combined.values()].toSorted((a, b) => b.score - a.score);
+  const seen = new Set<string>();
+  return [...normalSearchCandidates, ...rankedCandidates]
+    .filter((candidate) => {
+      if (seen.has(candidate.id)) return false;
+      seen.add(candidate.id);
+      return true;
+    })
+    .slice(0, 50);
+}
+
 export const $searchResultCount = computed($oramaSearchResults, (oramaSearchResults) => {
   if (oramaSearchResults.status !== "ready") return 0;
   return oramaSearchResults.value?.count ?? 0;

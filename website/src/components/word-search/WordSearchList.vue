@@ -2,7 +2,7 @@
   <!-- TODO: replace by <search></search>  -->
   <div class="c-word-search-list" :class="props.cssClass" role="search">
     <WordSearchFilterToggle />
-    <SearchWords />
+    <SearchWords :semantic="true" />
 
     <SearchResultCount />
 
