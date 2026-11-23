@@ -131,8 +131,7 @@
   :scope[data-variant~="outline"] {
     --_bg: var(--button-bg, transparent);
     --_color: var(--button-color, var(--color-text-strong));
-    // Owner feedback: orange-500 read as red, the rim takes the lighter icon orange (SPEC §4.3 names orange-500).
-    --_border-color: var(--button-border-color, var(--color-accent-icon));
+    --_border-color: var(--button-border-color, var(--color-accent-active));
 
     display: var(--button-display, inline-flex);
     align-items: center;
@@ -225,6 +224,11 @@
 
   .icon {
     translate: var(--button-icon-translate, none);
+  }
+
+  // Mock .w18__gbtn svg: the icon of an outline button is orange, the label stays ink.
+  :scope[data-variant~="outline"] .icon {
+    color: var(--button-plus-color, var(--color-accent-active));
   }
 
   // Small radius for buttons that sit in a card or band (start page, mock: 4px). The default stays square.
