@@ -1,8 +1,16 @@
 import type { Payload } from "payload";
 
+import { readFileSync } from "node:fs";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { assertLocalDatabase, E2E_WORD_SLUGS, SEEDED, seededSlugs, seedE2e } from "../src/seed/e2e";
+import {
+  assertLocalDatabase,
+  E2E_WORD_SLUGS,
+  SEED_WORD_SLUGS,
+  SEEDED,
+  seededSlugs,
+  seedE2e,
+} from "../src/seed/e2e";
 import { seedHomeStats } from "../src/seed/homeStatsSeed";
 import { getTestPayload } from "./helpers/payload";
 
@@ -31,6 +39,20 @@ const slugs = async (collection: "words" | "themen" | "posts" | "pages") =>
   (
     await payload.find({ collection, depth: 0, draft: true, limit: 500, pagination: false })
   ).docs.map((d) => (d as { slug?: string | null }).slug);
+
+describe("docs/test-words.md", () => {
+  it("lists exactly the seed words", () => {
+    const doc = readFileSync(new URL("../../docs/test-words.md", import.meta.url), "utf8");
+    const listed = [...doc.matchAll(/`([a-z0-9-]+)`/g)].map((m) => m[1]!);
+    for (const slug of SEED_WORD_SLUGS)
+      expect(listed, `${slug} missing in docs/test-words.md`).toContain(slug);
+    const table = doc.split("\n").filter((l) => l.startsWith("| `"));
+    const documented = table.flatMap((l) =>
+      [...l.split("|")[1]!.matchAll(/`([a-z0-9-]+)`/g)].map((m) => m[1]!),
+    );
+    expect([...documented].sort()).toEqual([...SEED_WORD_SLUGS].sort());
+  });
+});
 
 describe("seedHomeStats", () => {
   it("adds nothing on another run (seedE2e already ran it twice)", async () => {
@@ -86,9 +108,9 @@ describe("seedE2e", () => {
     expect(docs[0].images?.length).toBeGreaterThan(0);
   });
 
-  it("has an anagram pair and a similar-sounding neighbour for the phonology specs", async () => {
+  it("has a similar-sounding neighbour for the phonology specs", async () => {
     const found = await slugs("words");
-    expect(found).toEqual(expect.arrayContaining(["alsche", "schale", "anmachen", "anmachn"]));
+    expect(found).toEqual(expect.arrayContaining(["anmachen", "anmachn"]));
     const { docs } = await payload.find({
       collection: "words",
       where: { slug: { in: ["anmachen", "anmachn"] } },

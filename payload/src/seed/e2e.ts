@@ -17,12 +17,8 @@ export const E2E_WORD_SLUGS = [
   "aasen",
   "akademiebusen",
   "alex",
-  "alsche",
   "anmachen",
   "ballast-der-republik",
-  "bildeins",
-  "bildzwei",
-  "schale",
   "wa",
 ] as const;
 
@@ -140,25 +136,12 @@ const WORDS: SeedWord[] = [
     translations: ["Zierfransen am Kleid"],
   },
   {
-    berlinerisch: "Bildeins",
-    images: 1,
-    learnMore: "https://example.org/mehr",
-    slug: "bildeins",
-    translations: ["Testwort mit einem Bild"],
-  },
-  {
-    berlinerisch: "Bildzwei",
-    images: 2,
-    slug: "bildzwei",
-    translations: ["Testwort mit zwei Bildern"],
-  },
-  {
     // THE FULL WORD of the v18 word page: every card has data here, so one page shows every feature (head with IPA,
     // stress, voices, four images and the "Gleiche Bedeutung" line; word of the day on the pinned e2e day, trend badge
     // "Platz 4", O-Ton and four Jeschichten; examples with voices; Wissenswertes with credits; grammar with plural and
     // diminutive; all four relation kinds, one without a word of its own; sources and "Mehr lesen"; a book; the poll
-    // with its 120 votes). It is the word of the day on E2E_PINNED_DAY (slug 5 of the 34 sorted ones): adding a word
-    // moves it, so extend this word instead of adding one.
+    // with its 120 votes). It is the word of the day on E2E_PINNED_DAY (index 4 of the 28 sorted ones: day number 20472 mod
+    // the word count, so the count must stay a divisor of 20468 (28 or 34)). Extend this word instead of adding one.
     alternativeWords: ["abjehaun"],
     article: "die",
     berlinerisch: "Abjang",
@@ -217,13 +200,6 @@ const WORDS: SeedWord[] = [
     slug: "alex",
     themen: ["berlin-orte"],
     translations: ["Kurzform für den Alexanderplatz"],
-  },
-  { berlinerisch: "Alsche", slug: "alsche", translations: ["Testwort für Anagramme"] },
-  {
-    berlinerisch: "schale",
-    slug: "schale",
-    themen: ["essen-trinken"],
-    translations: ["flaches Gefäß"],
   },
   {
     alternativeWords: ["anknipsen"],
@@ -284,12 +260,6 @@ const WORDS: SeedWord[] = [
     translations: ["wer sich aufdringlich nähern will"],
   },
   {
-    berlinerisch: "Bordstein",
-    slug: "bordstein",
-    themen: ["berlin-orte"],
-    translations: ["Kante der Straße"],
-  },
-  {
     berlinerisch: "abbeißen",
     slug: "abbeissen",
     themen: ["essen-trinken"],
@@ -307,13 +277,6 @@ const WORDS: SeedWord[] = [
     slug: "bammel",
     themen: ["gefuehle-charakter"],
     translations: ["Angst"],
-  },
-  {
-    berlinerisch: "Berolina",
-    berolinismus: true,
-    slug: "berolina",
-    themen: ["berlin-orte"],
-    translations: ["Frauenfigur als Stadtsymbol"],
   },
   {
     berlinerisch: "Bulette",
@@ -362,6 +325,9 @@ const WORDS: SeedWord[] = [
     translations: ["Lastkahn auf der Spree"],
   },
 ];
+
+/** Every seed word, for the test that keeps `docs/test-words.md` in step. */
+export const SEED_WORD_SLUGS = WORDS.map((w) => w.slug);
 
 export const seededSlugs = () => ({
   themen: THEMEN.map(([slug]) => slug),

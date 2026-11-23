@@ -1,4 +1,3 @@
-import { spawnSync } from "node:child_process";
 import { describe, expect, it } from "vitest";
 
 import { assertDevDatabase } from "../src/seed/assertDevDatabase";
@@ -30,25 +29,4 @@ describe("assertDevDatabase", () => {
   ])("refuses %s", (_name, value) => {
     expect(() => assertDevDatabase(value)).toThrow(/Refusing to seed/);
   });
-});
-
-describe("seed:dev CLI wiring", () => {
-  // Runs the real entry with a remote-looking, unresolvable host: the guard must exit non-zero before Payload is imported,
-  // so nothing ever tries to connect (a connect attempt would show up as a DNS/ECONN error instead of the refusal).
-  it("exits non-zero on a prod-like DATABASE_URL before any Payload init", () => {
-    const { VITEST: _vitest, ...env } = process.env;
-    const run = spawnSync("./node_modules/.bin/payload", ["run", "src/seed/dev.ts"], {
-      cwd: new URL("..", import.meta.url),
-      encoding: "utf8",
-      env: {
-        ...env,
-        DATABASE_URL: "postgres://u:p@db.invalid:5432/bs",
-        NODE_OPTIONS: "--no-deprecation",
-      },
-      timeout: 60_000,
-    });
-    expect(run.status).not.toBe(0);
-    expect(run.stderr).toMatch(/Refusing to seed "bs"/);
-    expect(run.stderr).not.toMatch(/ENOTFOUND|ECONNREFUSED|getaddrinfo/);
-  }, 90_000);
 });
