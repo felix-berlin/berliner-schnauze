@@ -55,8 +55,8 @@ describe("pickBook", () => {
 
   it("falls back to the first alleThemen book with a web link; a Thema match wins", () => {
     const all = [
-      { href: "javascript:x", alleThemen: true, title: "Bad" },
-      { href: "https://shop.example/e", alleThemen: true, title: "E" },
+      { alleThemen: true, href: "javascript:x", title: "Bad" },
+      { alleThemen: true, href: "https://shop.example/e", title: "E" },
       ...books,
     ] as typeof books;
     expect(pickBook(all, undefined)?.title).toBe("E");
