@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1](https://github.com/felix-berlin/berliner-schnauze/compare/v5.0.0...v5.0.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* **ci:** restore the hasLexicalText import, skip the upgrade rollback without a new migration ([b1f850a](https://github.com/felix-berlin/berliner-schnauze/commit/b1f850a5efce906ef74f2c572352a0d870f618eb))
+* **word:** keep the contribute buttons after a client navigation ([a7cc902](https://github.com/felix-berlin/berliner-schnauze/commit/a7cc902e3f905418a5f23c9e43e1880c10e1246f))
+
 # [5.0.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.15.1...v5.0.0) (2026-11-23)
 
 
