@@ -19,7 +19,8 @@
     --_footer-block: 0;
     --_footer-inline: 0;
 
-    // The word page publishes its anchor offset (below header + tab bar); elsewhere just below the header.
+    // Public --word-anchor-offset: a page may publish its anchor offset (below its sticky chrome); the v18 word
+    // page sets none, so every card lands just below the header.
     scroll-margin-block-start: var(
       --word-anchor-offset,
       calc(var(--site-header-height) + var(--space-4))
