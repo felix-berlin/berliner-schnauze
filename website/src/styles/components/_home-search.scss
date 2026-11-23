@@ -6,7 +6,6 @@
 // (.label per group, a[role="option"]), .all and .keys, or the no-hit box (.none, .add).
 @include mx.component("home-search") {
   :scope {
-    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
     --_label-track: 2px; // group label letter spacing (mock)
     --_clear: 2.25rem; // 36px round clear button (SPEC §8)
     --_submit: 3.25rem; // 52px minimum submit height (SPEC §8)
@@ -175,7 +174,7 @@
 
   .label {
     margin: var(--space-2) var(--space-3) var(--space-1);
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     text-transform: uppercase;
     letter-spacing: var(--_label-track);
     color: var(--t3);
@@ -225,7 +224,7 @@
     border-radius: var(--radius-xs);
     background: var(--card3);
     font: inherit;
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     color: var(--color-text-strong);
   }
 
@@ -267,7 +266,7 @@
     align-items: center;
     margin: 0;
     padding: var(--space-1) var(--space-3) var(--space-2);
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     color: var(--t3);
   }
 

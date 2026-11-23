@@ -12,7 +12,6 @@
 @include mx.component("home-results") {
   :scope {
     --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
-    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
     --_tab: var(--font-size-2xl); // 1.5rem tabs and h3 (SPEC §4.5), nearest step
     --_track: 2px; // eyebrow and rank label letter spacing (mock)
     --_under: -1px; // the tab line sits on the tablist's 1px border
@@ -168,7 +167,7 @@
 
   .label {
     margin: var(--space-6) 0 var(--space-1);
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     letter-spacing: var(--_track);
     text-transform: uppercase;
     color: var(--t3);
@@ -202,7 +201,7 @@
   .fine,
   .axis {
     margin: var(--space-4) 0 0;
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     color: var(--t3);
   }
 
@@ -250,7 +249,7 @@
     display: grid;
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-sm);
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     white-space: nowrap;
     // White card in the dark band: light scheme makes the tokens resolve to light.
     color-scheme: light;

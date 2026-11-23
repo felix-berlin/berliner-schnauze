@@ -188,14 +188,9 @@
 <script setup lang="ts">
 import BerlinerBaer from "@components/kalle/BerlinerBaer.vue";
 import TurnStile from "@components/TurnStile.vue";
-import { OFFLINE_HINT, useOnline } from "@composables/useOnline.ts";
 import { BEZIRK_NAMES } from "@lib/bezirkNames.ts";
-import {
-  FACT_KIND_LABEL,
-  FACT_KIND_ORDER,
-  REPORT_KIND_LABEL,
-  REPORT_KIND_ORDER,
-} from "@lib/contribute.ts";
+import { FACT_KIND_LABEL, REPORT_KIND_LABEL } from "@lib/contribute.ts";
+import { OFFLINE_HINT } from "@lib/offlineHint.ts";
 import { rememberSubmission } from "@lib/ownSubmissions.ts";
 import { RELATION_LABEL, RELATION_ORDER } from "@lib/wordNetwork.ts";
 import { suggestWords, type WordSuggestion } from "@lib/wordSuggest.ts";
@@ -203,6 +198,7 @@ import { useStore } from "@nanostores/vue";
 import { closeContributeForm, openForm } from "@stores/contribute.ts";
 import { captchaWaitToast } from "@utils/captchaToast.ts";
 import { reportError } from "@utils/reportError.ts";
+import { useOnline } from "@vueuse/core";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
 import {
   EXAMPLE_MAX,
@@ -216,6 +212,7 @@ import {
   SUBMISSION_NAME_MAX,
   TOO_LONG,
 } from "payload-app/submission-limits";
+import { FACT_KINDS, REPORT_KINDS } from "payload-app/suggestion-enums";
 import CircleAlert from "virtual:icons/lucide/circle-alert";
 import Hourglass from "virtual:icons/lucide/hourglass";
 import { computed, nextTick, reactive, ref, useId, useTemplateRef, watch } from "vue";
@@ -374,7 +371,7 @@ const fields = computed<Field[]>(() => {
           control: "chips",
           key: "kind",
           label: "Wat für Wissen?",
-          options: options(FACT_KIND_LABEL, FACT_KIND_ORDER),
+          options: options(FACT_KIND_LABEL, FACT_KINDS),
         },
         {
           control: "textarea",
@@ -402,7 +399,7 @@ const fields = computed<Field[]>(() => {
           control: "chips",
           key: "reportKind",
           label: "Wat stimmt nich?",
-          options: options(REPORT_KIND_LABEL, REPORT_KIND_ORDER),
+          options: options(REPORT_KIND_LABEL, REPORT_KINDS),
         },
         {
           control: "textarea",

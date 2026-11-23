@@ -177,12 +177,7 @@
     font-weight: var(--font-weight-bold);
     letter-spacing: normal; // a control resets the page tracking (as the buttons it replaces did)
 
-    &::before {
-      content: "";
-      position: absolute;
-      inset: calc(-1 * var(--_reach));
-    }
-
+    @include mx.hit-band;
     @include butler-mx.hover {
       --_bg: var(--button-bg, var(--color-surface-card3, var(--color-surface-tint-warm)));
       --_border-style: solid;

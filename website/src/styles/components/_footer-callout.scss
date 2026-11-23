@@ -11,7 +11,6 @@
     --_pad-top: 5.5rem; // SPEC §4 88px, between the space-12 and space-16 steps
     --_pad-bottom: 6rem; // SPEC §4 96px
     --_title: 3.5rem; // SPEC h2 size, above the 4xl step
-    --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
     --focus-ring-color: var(--color-accent-active);
 
     container: footer-callout / inline-size;
@@ -108,7 +107,7 @@
 
     // Board label (mock .f20__bl): small capitals in the accent text colour, the affiliate note quiet next to it.
     .label {
-      font-size: var(--_small);
+      font-size: var(--font-size-label);
       font-weight: var(--font-weight-bold);
       letter-spacing: 2px; // mock: 2px tracking, no tracking token
       text-transform: uppercase;
@@ -130,7 +129,7 @@
     }
 
     .disclosure {
-      font-size: var(--_small);
+      font-size: var(--font-size-label);
       color: var(--color-text-muted);
     }
   }
@@ -201,7 +200,7 @@
     small {
       display: block;
       margin-block-start: var(--space-1);
-      font-size: var(--_small);
+      font-size: var(--font-size-label);
       color: var(--color-text-muted);
     }
   }

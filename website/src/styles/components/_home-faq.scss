@@ -7,7 +7,6 @@
 @include mx.component("home-faq") {
   :scope {
     --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
-    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
     --_q: 1.2rem; // SPEC §12.2 question (mock), between the lg and xl steps
     --_plus: 28px; // SPEC §12.2 plus circle
     --_bar: 12px; // plus bar length
@@ -162,7 +161,7 @@
     }
 
     span {
-      font-size: var(--_small);
+      font-size: var(--font-size-label);
       color: var(--t3);
     }
   }

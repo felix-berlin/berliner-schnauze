@@ -9,7 +9,6 @@
   :scope {
     --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
     --_name: 1.75rem; // SPEC §4.5 mobile topic name, between the 2xl and 3xl steps
-    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
     --_shift: 12px; // hover shift of name and examples (SPEC §7)
     --_bubble-radius: 18px; // SPEC §4.6 exception for the speech bubble
     --_bubble-max: 20rem; // 320px bubble width (mock)
@@ -138,7 +137,7 @@
     small {
       margin-block-start: var(--space-1);
       font-family: var(--font-family-body);
-      font-size: var(--_small);
+      font-size: var(--font-size-label);
       font-weight: var(--font-weight-regular);
       color: var(--t3);
     }

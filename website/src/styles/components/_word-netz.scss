@@ -7,7 +7,6 @@
 // Pills: .pills (li with a link or span and a small note). SVG parts: .curve, .center, .center-text, .ring, .word, .relation.
 @include mx.component("word-netz") {
   :scope {
-    --_relation-size: 0.8125rem; // SPEC §10: 13px, the minimum text size, no token
     --_hidden: 1px; // size of the visually hidden clip, not a scale step
 
     container: word-netz / inline-size;
@@ -125,7 +124,7 @@
   }
 
   .relation {
-    font-size: var(--_relation-size);
+    font-size: var(--font-size-label);
     fill: var(--color-text-muted);
   }
 
@@ -228,8 +227,7 @@
     font-weight: var(--font-weight-bold);
 
     small {
-      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §4.2: 13px minimum, no token
-      font-size: 0.8125rem;
+      font-size: var(--font-size-label);
       font-weight: var(--font-weight-regular);
       color: var(--color-text-muted);
     }

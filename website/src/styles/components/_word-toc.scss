@@ -10,8 +10,6 @@
     --_pill-pad: 0.875rem; // SPEC §3: pill padding 0 14px, the exact middle of two space steps
     --_row: 2.25rem; // mock .w12__toc a: rows about 36px; the hit band below reaches 44px
     --_reach: calc((var(--size-tap-target) - var(--_row)) / 2);
-    // SPEC §4.2: counter 13px, no font-size token at that size
-    --_label-size: 0.8125rem;
 
     container: word-toc / inline-size;
   }
@@ -36,7 +34,7 @@
     // mock .w10__toc small: 13px capitals, 2px tracking, muted, regular weight
     .title {
       margin: 0;
-      font-size: var(--_label-size);
+      font-size: var(--font-size-label);
       letter-spacing: 2px; // mock, no token
       text-transform: uppercase;
       color: var(--color-text-muted);
@@ -110,13 +108,7 @@
     text-decoration: none;
 
     // Looks 36px, hits 44px.
-    &::before {
-      content: "";
-      position: absolute;
-      inset-block: calc(-1 * var(--_reach));
-      inset-inline: 0;
-    }
-
+    @include mx.hit-band("block");
     @include butler-mx.hover {
       color: var(--color-text-accent);
       background: var(--color-surface-card3, var(--color-surface-wash));
@@ -180,7 +172,7 @@
   }
 
   .count {
-    font-size: var(--_label-size);
+    font-size: var(--font-size-label);
     color: var(--color-text-muted);
 
     .link[aria-current="true"] & {

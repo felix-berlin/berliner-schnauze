@@ -8,7 +8,6 @@
 @include mx.component("home-fresh") {
   :scope {
     --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
-    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
     --_tab: var(--font-size-2xl); // 1.5rem tabs and h3 (SPEC §4.5), nearest step
     --_rank: 1.75rem; // SPEC §10 rank digits, between the 2xl and 3xl steps
     --_dot: 8px;
@@ -171,7 +170,7 @@
     time {
       grid-row: 1 / 3;
       grid-column: 2;
-      font-size: var(--_small);
+      font-size: var(--font-size-label);
       color: var(--t3);
     }
   }

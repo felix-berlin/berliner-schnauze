@@ -8,7 +8,6 @@
 @include mx.component("home-poll") {
   :scope {
     --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
-    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
     --_track: 2px; // eyebrow and card label letter spacing
     --_tile: 4.5rem; // 72px minimum tile height (SPEC §6)
     --_icon: 2.75rem; // 44px icon circle
@@ -74,7 +73,7 @@
     small {
       display: block;
       margin-block-end: var(--space-1);
-      font-size: var(--_small);
+      font-size: var(--font-size-label);
       text-transform: uppercase;
       letter-spacing: var(--_track);
     }
@@ -175,7 +174,7 @@
       }
 
       span {
-        font-size: var(--_small);
+        font-size: var(--font-size-label);
         color: var(--t3);
       }
     }
@@ -287,7 +286,7 @@
 
     small {
       margin-inline-start: var(--space-2);
-      font-size: var(--_small);
+      font-size: var(--font-size-label);
       color: var(--color-text-accent);
     }
 

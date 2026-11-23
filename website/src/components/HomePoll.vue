@@ -60,7 +60,7 @@
           <p class="hint">
             {{
               votes
-                ? `Schon ${votes.toLocaleString("de-DE")} ${votes === 1 ? "Stimme" : "Stimmen"} – wat sagst du? Dit Ergebnis siehste danach.`
+                ? `Schon ${plural(votes)} – wat sagst du? Dit Ergebnis siehste danach.`
                 : "Noch keener hat abjestimmt – mach den Anfang!"
             }}
           </p>
@@ -104,11 +104,12 @@
 import type { Usage } from "payload-app/word-feedback";
 
 import { USAGE_OPTIONS } from "@components/word-feedback/usageOptions";
+import { dotsFromShares } from "@lib/largestRemainder.ts";
 import { useStore } from "@nanostores/vue";
 import { $feedback, $sendError, answerUsage, loadFeedback } from "@stores/wordFeedback.ts";
 import { trackEvent } from "@utils/analytics";
 import { routeToWord } from "@utils/helpers.ts";
-import { largestRemainder } from "@utils/wordFeedbackView";
+import { largestRemainder, plural } from "@utils/wordFeedbackView";
 import { computed, defineAsyncComponent, nextTick, onMounted, ref, useTemplateRef } from "vue";
 
 const IconArrowRight = defineAsyncComponent(() => import("virtual:icons/lucide/arrow-right"));
@@ -145,12 +146,10 @@ const result = computed(() => {
   if (!f || !mine) return null;
   const shares = largestRemainder(USAGE_OPTIONS.map((o) => f.totals[o.value]));
   // shortcut: the own dot is the first of its group; a group rounded to 0 dots has no mark.
-  const dots = USAGE_OPTIONS.flatMap((o, i) =>
-    Array.from({ length: shares[i] }, (_, n) => ({
-      mine: o.value === mine && n === 0,
-      usage: o.value,
-    })),
-  );
+  const dots = dotsFromShares(
+    USAGE_OPTIONS.map((o) => o.value),
+    shares,
+  ).map((usage, i, all) => ({ mine: usage === mine && all.indexOf(usage) === i, usage }));
   return {
     dots,
     label: USAGE_OPTIONS.map((o, i) => `${shares[i]} Prozent ${SHARE_TEXT[o.value]}`).join(", "),

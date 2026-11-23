@@ -91,12 +91,13 @@
 <script setup lang="ts">
 import BerlinerBaer from "@components/kalle/BerlinerBaer.vue";
 import ContributeForm from "@components/word/ContributeForm.vue";
-import { OFFLINE_HINT, useOnline } from "@composables/useOnline.ts";
 import { BEZIRK_NAMES } from "@lib/bezirkNames.ts";
+import { OFFLINE_HINT } from "@lib/offlineHint.ts";
 import { agoLabel, type Story } from "@lib/story.ts";
 import { useStore } from "@nanostores/vue";
 import { openContributeForm, openForm } from "@stores/contribute.ts";
 import { reportError } from "@utils/reportError.ts";
+import { useOnline } from "@vueuse/core";
 import { useMediaQuery } from "@vueuse/core";
 import MessageCircle from "virtual:icons/lucide/message-circle";
 import { computed, nextTick, onMounted, reactive, ref, useId, useTemplateRef } from "vue";

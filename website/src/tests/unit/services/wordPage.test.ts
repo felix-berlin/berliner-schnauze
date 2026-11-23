@@ -231,7 +231,6 @@ describe("fetchWordPage", () => {
     m.fetchAllWords.mockResolvedValue(words());
     m.getWordTrend.mockResolvedValue({
       bars: [0, 0, 0, 0, 0, 0, 4],
-      change: null,
       rank: 3,
       views: 40,
     });
@@ -245,7 +244,7 @@ describe("fetchWordPage", () => {
   it("does not look up the trend of a draft", async () => {
     m.fetchAllWords.mockResolvedValue(words());
     m.getWordTrend.mockClear();
-    m.getWordTrend.mockResolvedValue({ bars: [], change: 1, rank: 1, views: 9 });
+    m.getWordTrend.mockResolvedValue({ bars: [], rank: 1, views: 9 });
     const draft = words().find((w) => w.slug === "bbb");
     const model = (await fetchWordPage("bbb", draft as never))!;
     expect(model).not.toHaveProperty("trend");

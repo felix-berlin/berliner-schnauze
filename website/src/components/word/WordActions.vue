@@ -185,13 +185,14 @@
 <script setup lang="ts">
 import DropdownPopover from "@components/DropdownPopover.vue";
 import { menuItems, onMenuKeydown } from "@composables/useMenuKeys.ts";
-import { OFFLINE_HINT, useOnline } from "@composables/useOnline.ts";
 import { useWordReaction } from "@composables/useWordReaction.ts";
+import { OFFLINE_HINT } from "@lib/offlineHint.ts";
 import { formatCitation, type CitationFormat } from "@lib/wordCite.ts";
 import { openContributeForm } from "@stores/contribute.ts";
 import { trackEvent } from "@utils/analytics";
 import { reportError } from "@utils/reportError.ts";
 import { reportWord } from "@utils/wordPulse.ts";
+import { useOnline } from "@vueuse/core";
 import { useEventListener } from "@vueuse/core";
 import Check from "virtual:icons/lucide/check";
 import Copy from "virtual:icons/lucide/copy";

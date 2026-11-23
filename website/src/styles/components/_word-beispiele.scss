@@ -15,12 +15,8 @@
     display: grid;
     gap: var(--space-2);
     padding-block: var(--_gap);
-    border-block-start: 1px solid var(--color-border-card);
 
-    &:first-child {
-      padding-block-start: 0;
-      border-block-start: 0;
-    }
+    @include mx.row-divider;
   }
 
   .quote {

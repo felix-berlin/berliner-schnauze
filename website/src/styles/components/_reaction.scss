@@ -68,12 +68,7 @@
     letter-spacing: normal; // a control resets the page tracking (the buttons the pill replaces did)
     justify-content: center;
 
-    &::before {
-      content: "";
-      position: absolute;
-      inset: calc(-1 * var(--_reach));
-    }
-
+    @include mx.hit-band;
     @include butler-mx.hover {
       &:not(:disabled, [aria-disabled="true"]) {
         border-color: var(--color-border-control-hover);
@@ -94,12 +89,10 @@
   }
 
   :scope[data-variant~="compact"] {
-    --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
-
     gap: var(--space-1);
     min-inline-size: 0;
     color: var(--color-text-body);
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     font-weight: inherit;
 
     @include butler-mx.hover {

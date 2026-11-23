@@ -1,7 +1,7 @@
-import { useOnline } from "@composables/useOnline.ts";
 import { useStore } from "@nanostores/vue";
 import { $feedback, loadFeedback } from "@stores/wordFeedback.ts";
 import { toggleReaction, type Reaction } from "@utils/wordReaction.ts";
+import { useOnline } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 
 /** Like/dislike of one word: optimistic ±1 on the stored totals, rolled back when the request fails. No id (draft): inert. */

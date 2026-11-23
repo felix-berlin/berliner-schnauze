@@ -1,9 +1,4 @@
-import {
-  FACT_KINDS,
-  REPORT_KINDS,
-  type FactKind,
-  type ReportKind,
-} from "payload-app/suggestion-enums";
+import type { FactKind, ReportKind } from "payload-app/suggestion-enums";
 
 /** The contribution forms of the word page (SPEC §13); `data-contribute` carries the value, the same names as the ContributeForm types (the report form "error" has its own `data-report` button). */
 export type ContributeType = "example" | "fact" | "related" | "story";
@@ -27,7 +22,3 @@ export const REPORT_KIND_LABEL: Record<ReportKind, string> = {
   other: "Sonstiges",
   spelling: "Schreibung",
 };
-
-/** Chip order of the forms (SPEC §9, §12); the label maps above are key-sorted. */
-export const FACT_KIND_ORDER = FACT_KINDS;
-export const REPORT_KIND_ORDER = REPORT_KINDS;

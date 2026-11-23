@@ -318,7 +318,7 @@ import type { Area, Usage } from "payload-app/word-feedback";
 
 import BerlinAreaMap from "@components/word-feedback/BerlinAreaMap.vue";
 import { USAGE_OPTIONS } from "@components/word-feedback/usageOptions";
-import { OFFLINE_HINT, useOnline } from "@composables/useOnline.ts";
+import { OFFLINE_HINT } from "@lib/offlineHint.ts";
 import { type PollResult, type Region, MIN_GROUP, dotsFor } from "@lib/pollResult.ts";
 import { useStore } from "@nanostores/vue";
 import {
@@ -343,6 +343,7 @@ import {
   progressSegments,
   type ProfileStep,
 } from "@utils/wordFeedbackView";
+import { useOnline } from "@vueuse/core";
 import { AREA_LOCALITIES, LOCALITY_NAMES } from "payload-app/word-feedback";
 import CircleAlert from "virtual:icons/lucide/circle-alert";
 import Trash2 from "virtual:icons/lucide/trash-2";

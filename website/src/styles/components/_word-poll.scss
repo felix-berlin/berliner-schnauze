@@ -12,7 +12,6 @@
     --_dot-gap: 2px; // SPEC §11.2 gap between dots, no space token that small
     --_name-size: 4.5rem; // widest row label ("unter 20") with room, one-off
     --_pct-size: 3.5rem; // "100 %" in Fira 800, 20px
-    --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
 
     container: word-poll / inline-size;
   }
@@ -264,7 +263,7 @@
   .mine {
     margin-inline-start: var(--space-2);
     color: var(--color-text-accent);
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
   }
 
   .pct {
@@ -306,9 +305,7 @@
   }
 
   .foot {
-    margin: 0;
-    color: var(--color-text-muted);
-    font-size: var(--_small);
+    @include mx.foot-note;
   }
 
   .mine-row {

@@ -5,17 +5,17 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 const online = vi.hoisted(() => ({ value: true }));
-vi.mock("@composables/useOnline.ts", async () => {
+vi.mock("@vueuse/core", async (importOriginal) => {
   const { ref: vueRef } = await import("vue");
   const state = vueRef(true);
   online.value = true;
   return {
-    OFFLINE_HINT: "Du bist offline. Abstimmen und Mitmachen jeht wieder, sobald du Netz hast.",
+    ...(await importOriginal<typeof import("@vueuse/core")>()),
     __state: state,
     useOnline: () => state,
   };
 });
-const { __state } = (await import("@composables/useOnline.ts")) as unknown as {
+const { __state } = (await import("@vueuse/core")) as unknown as {
   __state: ReturnType<typeof ref<boolean>>;
 };
 

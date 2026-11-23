@@ -8,7 +8,6 @@
   :scope {
     // SPEC §8.3: 3px line, no border-width token
     --_line: 3px;
-    --_who: 0.8125rem; // SPEC: 13px, no token at that size
 
     margin: 0;
     padding-block: var(--space-1);
@@ -33,7 +32,7 @@
   }
 
   .who {
-    font-size: var(--_who);
+    font-size: var(--font-size-label);
     color: var(--color-text-muted);
   }
 

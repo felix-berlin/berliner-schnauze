@@ -10,7 +10,6 @@
 @include mx.component("home-knowledge") {
   :scope {
     --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
-    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
     --_h3: 1.6rem; // SPEC §12.1 text h3 (mock), between the 2xl and 3xl steps
     --_drop: 5.2rem; // SPEC §12.1 drop cap
     --_berlin: 1.6rem; // SPEC §12.1 rule's Berlin form
@@ -153,7 +152,7 @@
 
   .label {
     margin: var(--space-1) 0 var(--space-4);
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     text-transform: uppercase;
     letter-spacing: var(--_track);
     color: var(--t3);
@@ -219,7 +218,7 @@
     }
 
     small {
-      font-size: var(--_small);
+      font-size: var(--font-size-label);
       color: var(--t3);
     }
   }

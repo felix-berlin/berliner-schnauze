@@ -14,7 +14,7 @@ const load = async (): Promise<Map<number, WordTrend>> => {
     type: "viewed",
   });
   if (!ranked.length) return new Map();
-  const since = new Date(Date.parse(`${today}T00:00:00Z`) - (2 * TREND_DAYS - 1) * 864e5)
+  const since = new Date(Date.parse(`${today}T00:00:00Z`) - (TREND_DAYS - 1) * 864e5)
     .toISOString()
     .slice(0, 10);
   const { docs } = await payload.find({
@@ -35,7 +35,7 @@ const load = async (): Promise<Map<number, WordTrend>> => {
 
 const getTop = ttl(60_000, load);
 
-/** Rank, views, change and daily bars of a word in the top 10 of the week; `undefined` outside it (or on a stats error). */
+/** Rank, views and daily bars of a word in the top 10 of the week; `undefined` outside it (or on a stats error). */
 export const getWordTrend = async (wordId: number): Promise<WordTrend | undefined> => {
   try {
     return (await getTop()).get(wordId);

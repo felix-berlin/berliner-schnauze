@@ -8,7 +8,6 @@
   :scope {
     // SPEC §5: badges are 28px high
     --_height: 1.75rem;
-    --_size: 0.8125rem; // SPEC §4.2: 13px minimum, no token at that size
     // SPEC §5: glow ring orange 22 %, wash orange 16 % (on the sheet, so it stays orange in both themes)
     // stylelint-disable-next-line function-disallowed-list -- colour inventory: "Orange 22 %" glow ring (SPEC §5), no token holds it
     --_glow: 0 0 0 3px color-mix(in srgb, var(--color-accent-solid) 22%, transparent);
@@ -29,7 +28,7 @@
     min-block-size: var(--_height);
     padding-inline: var(--space-3);
     border-radius: var(--radius-pill);
-    font-size: var(--_size);
+    font-size: var(--font-size-label);
     font-weight: var(--font-weight-bold);
     letter-spacing: 0.3px; // SPEC mock badge tracking, no token
     text-decoration: none;
@@ -42,7 +41,7 @@
     box-shadow: var(--_glow);
 
     small {
-      font-size: var(--_size);
+      font-size: var(--font-size-label);
       font-weight: 400;
       opacity: 0.85;
 

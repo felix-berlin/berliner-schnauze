@@ -87,8 +87,7 @@
     // Count: right edge of the header, baseline with the title (SPEC mock .w10__ch), 13px text minimum.
     .count {
       margin-inline-start: auto;
-      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §4.2: 13px minimum, the small size tokens are 12.8px and 12px
-      font-size: 0.8125rem;
+      font-size: var(--font-size-label);
       color: var(--color-text-muted);
     }
 

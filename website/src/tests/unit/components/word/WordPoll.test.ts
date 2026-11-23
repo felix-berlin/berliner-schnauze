@@ -4,11 +4,11 @@ import { AGES } from "payload-app/word-feedback";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const online = vi.hoisted(() => ({ ref: undefined as undefined | { value: boolean } }));
-vi.mock("@composables/useOnline.ts", async () => {
+vi.mock("@vueuse/core", async (importOriginal) => {
   const { ref } = await import("vue");
   online.ref = ref(true);
   return {
-    OFFLINE_HINT: "Du bist offline. Abstimmen und Mitmachen jeht wieder, sobald du Netz hast.",
+    ...(await importOriginal<typeof import("@vueuse/core")>()),
     useOnline: () => online.ref,
   };
 });
