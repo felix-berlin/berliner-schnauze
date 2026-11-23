@@ -22,7 +22,13 @@ export const notifyEditors = (
 ): void => {
   // At most MAX_PER_HOUR mails an hour per process; the first one over the cap is a single summary, the rest is logged.
   const now = Date.now();
-  if (now - windowStart > 3_600_000) [windowStart, sent] = [now, 0];
+  if (now - windowStart > 3_600_000) {
+    // Once per window: mails swallowed by the cap (beyond the one summary mail) are a loud error, not a quiet warn.
+    const dropped = sent - MAX_PER_HOUR - 1;
+    if (dropped > 0)
+      req.payload.logger.error(`mail cap swallowed ${dropped} editor mail(s) in the last hour`);
+    [windowStart, sent] = [now, 0];
+  }
   if (++sent > MAX_PER_HOUR) {
     if (sent > MAX_PER_HOUR + 1) {
       req.payload.logger.warn(`"${subject}": mail cap reached, not mailed`);
@@ -36,7 +42,9 @@ export const notifyEditors = (
   }
   const to = process.env.SUGGEST_MAIL_TO;
   if (!to) {
-    req.payload.logger.warn(`"${subject}": SUGGEST_MAIL_TO is not set, no editor was mailed`);
+    // In production a missing recipient means every suggestion and comment goes unnoticed: make it loud.
+    const log = process.env.NODE_ENV === "production" ? "error" : "warn";
+    req.payload.logger[log](`"${subject}": SUGGEST_MAIL_TO is not set, no editor was mailed`);
     return;
   }
   Promise.resolve(

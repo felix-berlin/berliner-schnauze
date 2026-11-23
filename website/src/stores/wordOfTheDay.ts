@@ -68,7 +68,7 @@ const readPersisted = <T>(key: keyof WordOfTheDay, fallback: T): T => {
 };
 
 onMount($wordOfTheDay, () => {
-  // Server-rendered subscribers (e.g. IsWordOfTheDay in WordHero.astro) would otherwise
+  // Server-rendered subscribers (e.g. IsWordOfTheDay in SingleWord.vue) would otherwise
   // fire this fetch on every server render.
   if (import.meta.env.SSR) return;
 

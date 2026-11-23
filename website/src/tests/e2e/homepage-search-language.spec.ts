@@ -26,16 +26,16 @@ test.describe("Search language handling (/suche)", () => {
     await page.goto("/suche");
 
     const lower = await search(page, "straße");
-    expect(lower).toMatch(/^\d+ Ergebnisse$/);
+    expect(lower).toMatch(/^\d+ Ergebnis(se)?$/);
     await expect(page.locator(".c-word-list a[href^='/wort/']").first()).toBeVisible();
     expect(await search(page, "Straße")).toBe(lower);
 
     // Dokumentiertes Ist-Verhalten: "strasse" liefert aktuell dieselbe Anzahl wie "straße".
     // Bewusst nicht als Vertrag geprüft, nur dass kein Fehlerzustand entsteht.
-    expect(await search(page, "strasse")).toMatch(/^\d+ Ergebnisse$/);
+    expect(await search(page, "strasse")).toMatch(/^\d+ Ergebnis(se)?$/);
 
     for (const single of ["ä", "ü"]) {
-      expect(await search(page, single)).toMatch(/^[1-9]\d* Ergebnisse$/);
+      expect(await search(page, single)).toMatch(/^[1-9]\d* Ergebnis(se)?$/);
     }
   });
 

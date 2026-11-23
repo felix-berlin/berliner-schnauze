@@ -5,24 +5,30 @@ import type { WordImage } from '@utils/wordImages.ts';
 
 interface Props {
   images: WordImage[];
-  /** strip: below the hero (< 808px). hero: inside the hero (from 808px). Both are in the page, CSS shows one. */
+  /** strip: below the head's grid. hero: in its image column. Both are in the page, CSS shows one (see below). */
   placement: 'strip' | 'hero';
-  learnMore?: string | null | undefined;
 }
 
-const { images, placement, learnMore } = Astro.props;
+// Which copy shows is decided by the word-head container query (inline-size >= 35rem, _word-head.scss), not by a
+// viewport breakpoint. Every image is shown at 4:3 on purpose (CSS aspect-ratio crops, whatever the source ratio).
+const { images, placement } = Astro.props;
 const hero = placement === 'hero';
 const widths = hero ? [220, 330, 440, 660] : [320, 480, 640, 800];
-// The hero copy sits in the image column once .o-word-main is >= 45.5rem wide (about a 1000px viewport, see _word-hero.scss); below that the 70vw/380px split mirrors it.
-const sizes = hero ? '(max-width: 999px) 70vw, 380px' : '82vw';
+// sizes approximate the rendered width of the first image (measured at 607..1600px): the hero column is 40% of the head
+// minus its 24px padding on both sides; the head is the viewport minus the page shell (about 47px with a classic
+// scrollbar), and from 1000px the 220px table of contents plus gaps take another ~300px, until the column caps at ~356px.
+const sizes = hero ? '(max-width: 999px) calc(40vw - 67px), (max-width: 1250px) calc(40vw - 190px), 360px' : '82vw';
 // Both copies are in the HTML and CSS hides one. Every <img> is lazy (a lazy image in a display:none copy is never fetched),
 // the visible copy's first image is the LCP candidate: a media-scoped preload fetches it early on its own viewport only.
 const first = images[0];
 const preload = first
   ? await getImage({ format: 'webp', height: first.height, sizes, src: first.src, width: first.width, widths })
   : undefined;
-// Must match the CSS switch (objects/_word.scss, mx.breakpoint("word") = 808px).
-const preloadMedia = hero ? '(min-width: 808px)' : '(max-width: 807.98px)';
+// A <link media> cannot see the head's container query. The head is the viewport minus the page shell (2 x 16px wrap
+// padding, plus up to 15px of classic scrollbar) below 1000px and wider than 35rem (560px) from there on, so the switch
+// lies between 592px and 607px of viewport. Each copy is preloaded only outside that band; inside it nothing is preloaded
+// and the lazy <img> alone fetches the copy that shows. Keep in step with _word-head.scss and objects/_word-v18.scss.
+const preloadMedia = hero ? '(min-width: 608px)' : '(max-width: 591.98px)';
 ---
 
 {preload?.srcSet.attribute && (
@@ -60,16 +66,4 @@ const preloadMedia = hero ? '(min-width: 808px)' : '(max-width: 807.98px)';
       ))
     }
   </div>
-  {
-    learnMore && (
-      <a
-        class='c-textlink t-small' data-variant='inline tap'
-        href={learnMore}
-        rel='noopener noreferrer'
-        target='_blank'
-      >
-        Erfahre mehr über dieses Wort
-      </a>
-    )
-  }
 </section>

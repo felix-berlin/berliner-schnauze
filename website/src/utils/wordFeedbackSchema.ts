@@ -6,7 +6,7 @@ import {
   HALVES,
   ORIGINS,
   LOCALITIES,
-  LOCALITY_AREA,
+  profileRules,
   REACTIONS,
   USAGES,
   type Age,
@@ -34,10 +34,8 @@ export const feedbackPatchSchema = z
     usage: opt(USAGES),
     word: z.number().int().positive(),
   })
-  .refine((v) => v.half == null || v.origin === "grewUp", { message: "half needs origin grewUp" })
-  .refine((v) => v.locality == null || LOCALITY_AREA[v.locality] === v.area, {
-    message: "locality needs its own area",
-  });
+  .refine(profileRules.halfFitsOrigin, { message: "half needs origin grewUp" })
+  .refine(profileRules.localityFitsArea, { message: "locality needs its own area" });
 
 export type MyFeedback = {
   age: Age | null;

@@ -81,11 +81,12 @@ describe("v18 word cards", () => {
       examples: [{ example: "Satz.", exampleAudio: [] }],
       word: "Testwort",
     });
+    expect(html).toMatch(/<button[^>]* data-record[ >]/); // the hook recordTooltips selects, not a styling class
     expect(html).toMatch(
       /<button[^>]*aria-disabled="true"[^>]*data-tip-lead="Kommt bald\."[^>]*data-tip="Einsprechen is noch in Arbeit\."[^>]*aria-describedby="einsprechen-tip-0"/,
     );
     expect(html).toMatch(
-      /id="einsprechen-tip-0"[^>]*role="tooltip"[^>]*>Kommt bald\. Einsprechen is noch in Arbeit\./,
+      /id="einsprechen-tip-0"[^>]*>Kommt bald\. Einsprechen is noch in Arbeit\./,
     );
   });
 
@@ -114,6 +115,30 @@ describe("v18 word cards", () => {
     expect(rest).toContain('href="/wort/fuenf"');
     expect(rest).toMatch(/<span>NurText<\/span>/);
     expect(html).not.toContain('href="undefined"');
+  });
+
+  it("shows notes, contributors and similar spellings, with and without a link", async () => {
+    const html = await network({
+      model: model({
+        related: [
+          { label: "Eins", note: "Notiz", relation: "gleich", url: "/wort/eins" },
+          { contributor: { name: "Testkind" }, label: "Zwei", relation: "gleich" },
+          { contributor: {}, label: "Drei", note: "Nur so", relation: "gegenteil" },
+          { label: "Vier", relation: "verwandt" },
+          { label: "Fuenf", note: "Rest", relation: "redewendung", url: "/wort/fuenf" },
+          { label: "Sechs", relation: "redewendung" },
+        ],
+        written: [{ label: "Testwart" }, { label: "Testwurt" }],
+      }),
+    });
+    expect(html).toContain("Notiz");
+    expect(html).toContain("vorjeschlagen von Testkind");
+    expect(html).toContain("Nur so · vorjeschlagen von aus der Community");
+    expect(html).toContain("Gegenteil, Nur so");
+    expect(html).toMatch(/<g class="node"/);
+    expect(html).toContain("Ähnlich jeschrieben");
+    expect(html).toContain("Testwart, Testwurt");
+    expect(html).toContain("<small>Rest</small>");
   });
 
   it("shows the book block only with a book and the source of a fact", async () => {

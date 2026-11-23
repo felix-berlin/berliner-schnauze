@@ -1,7 +1,8 @@
 import { createHash } from "node:crypto";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { find } = vi.hoisted(() => ({ find: vi.fn() }));
+const { fetchWordBySlug, find } = vi.hoisted(() => ({ fetchWordBySlug: vi.fn(), find: vi.fn() }));
+vi.mock("@services/payload/words.ts", () => ({ fetchWordBySlug }));
 vi.mock("@services/payload.ts", () => ({
   getPayloadClient: async () => ({ find }),
   siteRead: () => ({ context: { siteRead: "published" }, overrideAccess: false }),
@@ -36,6 +37,7 @@ const pendingRows = [
 ];
 
 beforeEach(() => {
+  fetchWordBySlug.mockReset().mockResolvedValue({ id: 5 });
   find.mockReset().mockImplementation(async ({ collection, where }) => {
     if (collection === "words") return { docs: [{ id: 5 }] };
     if (collection === "comments" && where.status.equals === "pending")
@@ -52,7 +54,7 @@ describe("GET /api/stories/mine", () => {
   });
 
   it("404 for an unknown word", async () => {
-    find.mockResolvedValue({ docs: [] });
+    fetchWordBySlug.mockResolvedValue(undefined);
     expect((await get("?word=nix", "me")).status).toBe(404);
   });
 
@@ -71,7 +73,8 @@ describe("GET /api/stories/mine", () => {
 
   it("is empty without a cookie and asks only published top-level comments of the word", async () => {
     expect(await (await get("?word=icke")).json()).toEqual({ pending: [], reactions: {} });
-    expect(find.mock.calls.filter((c) => c[0].collection === "comments")).toHaveLength(0);
+    expect(find).not.toHaveBeenCalled(); // not even the word lookup
+    expect(fetchWordBySlug).not.toHaveBeenCalled();
     await get("?word=icke", "me");
     const q = find.mock.calls
       .map((c) => c[0])
@@ -130,5 +133,18 @@ describe("GET /api/stories/mine", () => {
     expect(await res.json()).toEqual({ error: "Deine Reaktionen konnten nicht geladen werden." });
     expect(log).toHaveBeenCalledWith("[stories] failed: Error");
     expect(JSON.stringify(log.mock.calls)).not.toContain("secret-value");
+  });
+
+  it("does not return a pending story of another word of the same visitor", async () => {
+    const tag5 = tagOf("me");
+    fetchWordBySlug.mockImplementation(async (slug: string) => ({ id: slug === "a" ? 5 : 6 }));
+    find.mockImplementation(async ({ collection, where }) => {
+      if (collection === "comments" && where.status.equals === "pending")
+        return { docs: pendingRows.filter((r) => r.authorTag === where.authorTag.equals) };
+      return { docs: [] };
+    });
+    expect(tag5).toBe(pendingRows[0]!.authorTag);
+    expect((await (await get("?word=a", "me")).json()).pending).toEqual([own]);
+    expect((await (await get("?word=b", "me")).json()).pending).toEqual([]);
   });
 });

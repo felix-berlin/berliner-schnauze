@@ -4,7 +4,7 @@
 // children. Variants = position: top-right, top-left, top-center, bottom-right, bottom-left,
 // bottom-center. Sets --toast-notify-offscreen on itself so each toast slides in from its edge.
 // Public: --toast-container-top (the sticky chrome the top toasts stay below; default: the site
-// header; the word page adds its tab bar on narrow screens).
+// header; no page sets it at the moment).
 @include mx.component("toast-container") {
   :scope {
     --_edge: var(--space-5);

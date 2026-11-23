@@ -7,8 +7,6 @@
 // shell (objects/_word-v18.scss) hides it below the "word" breakpoint (SPEC: mobile 2).
 @include mx.component("word-stories") {
   :scope {
-    --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
-
     container: word-stories / inline-size;
     position: relative; // anchor of the empty status region
     display: grid;
@@ -58,11 +56,8 @@
 
   .item {
     padding-block: var(--space-4);
-    border-block-start: 1px solid var(--color-border-card);
 
-    &:first-child {
-      border-block-start: 0;
-    }
+    @include mx.row-divider(false);
 
     &:focus-visible {
       outline-offset: var(--space-1);
@@ -84,7 +79,7 @@
     justify-content: space-between;
     gap: var(--space-2) var(--space-4);
     margin-block-start: var(--space-2);
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     color: var(--color-text-muted);
   }
 
@@ -114,8 +109,6 @@
 
   .note,
   .foot {
-    margin: 0;
-    font-size: var(--_small);
-    color: var(--color-text-muted);
+    @include mx.foot-note;
   }
 }

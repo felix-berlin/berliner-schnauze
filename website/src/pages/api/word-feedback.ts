@@ -3,6 +3,7 @@ import type { APIRoute } from "astro";
 import { buildPollResult } from "@lib/pollResult.ts";
 import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { sha256, visitorId } from "@services/payload/comments.ts";
+import { sharedPollRows } from "@services/payload/pollRows.ts";
 import { isUniqueViolation, orNull, positiveInt, reply } from "@utils/apiReply.ts";
 import { logRouteError } from "@utils/logError.ts";
 import { clientIp, rateLimitedBy } from "@utils/rateLimit.ts";
@@ -12,11 +13,12 @@ import {
   type WordFeedbackState,
 } from "@utils/wordFeedbackSchema.ts";
 import {
+  compareFromRows,
   feedbackCompare,
   feedbackTotals,
-  LOCALITY_AREA,
+  profileRules,
+  totalsFromRows,
   type FeedbackCompare,
-  type Locality,
 } from "payload-app/word-feedback";
 
 const DAY = 24 * 60 * 60_000;
@@ -74,20 +76,20 @@ export const GET: APIRoute = async ({ cookies, url }) => {
     const payload = await getPayloadClient();
     const doc = await findMine(payload, word, visitorId(cookies, false));
     const mine = doc ? toMine(doc) : null;
-    // One find, aggregated in code. The result is the same for everyone; only mine/own depend on the cookie, so the
-    // answer stays per visitor and uncached (no-store), as before.
-    const [shown, { docs: rows }] = await Promise.all([
-      state(payload, word, mine),
-      payload.find({
-        collection: "word-feedback",
-        depth: 0,
-        limit: 0,
-        pagination: false,
-        select: { age: true, area: true, half: true, usage: true },
-        where: { word: { equals: word } },
-      }),
-    ]);
-    return reply({ ...shown, result: buildPollResult(rows, mine?.usage ?? undefined) }, 200);
+    // The shared rows are cached for 60 s (`sharedPollRows`, no visitor data); mine (the own row, read above) is
+    // never cached and applied on top, so the answer stays per visitor and `no-store`.
+    const rows = await sharedPollRows(word);
+    return reply(
+      {
+        compare: mine?.usage
+          ? compareFromRows(rows, mine.area ?? null, mine.locality ?? null)
+          : NO_COMPARE,
+        mine,
+        result: buildPollResult(rows, mine?.usage ?? undefined),
+        totals: totalsFromRows(rows),
+      } satisfies WordFeedbackState,
+      200,
+    );
   } catch (error) {
     logRouteError("word-feedback read", error);
     return reply({ error: "Die Zahlen wollten leider nich laden." }, 502);
@@ -128,22 +130,19 @@ export const PATCH: APIRoute = async ({ clientAddress, cookies, request }) => {
       return reply({ error: "Jenug jestimmt für heute." }, 429);
 
     // Only the keys the client sent; a non-grewUp origin drops the stale half.
-    const data: Record<string, string | null> = Object.fromEntries(
-      Object.entries(sent).filter(([, v]) => v !== undefined),
-    ) as Record<string, string | null>;
-    if (data.origin !== undefined && data.origin !== "grewUp") data.half = null;
+    const data = profileRules.cascade(
+      Object.fromEntries(Object.entries(sent).filter(([, v]) => v !== undefined)) as Record<
+        string,
+        string | null
+      >,
+    );
 
     // A new area drops a stored Locality of another area (also area: null), unless the body sets it.
     const change = (row: { id: number; locality?: string | null; visitor?: string | null }) =>
       payload.update({
         collection: "word-feedback",
         data: {
-          ...(data.area !== undefined &&
-          data.locality === undefined &&
-          row.locality &&
-          LOCALITY_AREA[row.locality as Locality] !== data.area
-            ? { ...data, locality: null }
-            : data),
+          ...profileRules.cascade(data, row),
           // A row from before the per-word hash moves to it.
           ...(row.visitor && row.visitor !== visitor ? { visitor } : {}),
         },
@@ -167,12 +166,19 @@ export const PATCH: APIRoute = async ({ clientAddress, cookies, request }) => {
         doc = await change(raced);
       }
     }
-    // The vote is stored by now: a failing count must not read as "not counted".
+    // The shared rows are stale now: the voter's next read must count the vote.
+    sharedPollRows.forget(word);
+    // The vote is stored by now: a failing count must not read as "not counted". 200 with `stored` and the own
+    // row but no totals; the client keeps its numbers and shows the message.
+    const mine = toMine(doc);
     try {
-      return reply(await state(payload, word, toMine(doc)), 200);
+      return reply(await state(payload, word, mine), 200);
     } catch (error) {
       logRouteError("word-feedback state", error);
-      return reply({ error: "Is jespeichert, aber die Zahlen wollten nich laden." }, 502);
+      return reply(
+        { error: "Is jespeichert, aber die Zahlen wollten nich laden.", mine, stored: true },
+        200,
+      );
     }
   } catch (error) {
     logRouteError("word-feedback write", error);
@@ -210,6 +216,7 @@ export const DELETE: APIRoute = async ({ clientAddress, cookies, request, url })
         },
       });
       if (errors.length) throw new Error(`${errors.length} row(s) not deleted`);
+      sharedPollRows.forget(word);
       return reply({ deleted: true }, 200);
     }
     const { docs } = await payload.find({
@@ -218,6 +225,8 @@ export const DELETE: APIRoute = async ({ clientAddress, cookies, request, url })
       limit: 0,
       pagination: false,
       select: {},
+      // A trashed word keeps its rows: the erasure must reach them too.
+      trash: true,
     });
     // The hash is one way: recompute it for every word instead of searching by cookie.
     const hashes = [legacyVisitor(cookie), ...docs.map((w) => feedbackVisitor(cookie, w.id))];

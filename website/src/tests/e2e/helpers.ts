@@ -17,5 +17,5 @@ export const dismissToasts = async (page: Page): Promise<void> => {
   );
 };
 
-/** The "N Ergebnisse" line above the word list; visible once the list replaced its skeleton. */
-export const resultCount = (page: Page) => page.getByText(/\d+ Ergebnisse/);
+/** The "N Ergebnisse" (or "1 Ergebnis") line above the word list; visible once the list replaced its skeleton. */
+export const resultCount = (page: Page) => page.getByText(/\d+ Ergebnis(se)?/);

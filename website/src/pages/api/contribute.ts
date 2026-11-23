@@ -2,40 +2,45 @@ import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
 import { wordIdBySlug } from "@services/payload/wordId.ts";
-import { captchaGate, reply } from "@utils/apiReply.ts";
+import { parseSubmission, reply, submitFailure } from "@utils/apiReply.ts";
 import { logRouteError } from "@utils/logError.ts";
-import { requestIp } from "@utils/rateLimit.ts";
+import { trimmedText, wordSlugField } from "@utils/submissionSchema.ts";
 import { visibleLine } from "@utils/visibleText.ts";
+import {
+  EXAMPLE_MAX,
+  FACT_MAX,
+  HIGHDEUTSCH_MAX,
+  RELATED_MAX,
+  SUBMISSION_NAME_MAX,
+  TOO_LONG,
+} from "payload-app/submission-limits";
+import { FACT_KINDS, RELATIONS } from "payload-app/suggestion-enums";
 import { z } from "zod";
 
-const TOO_LONG = "Ditt is ein bisken zu lang.";
-const MISSING = "Ohne Text wird dett nüscht.";
-const text = (max: number) => z.string().trim().min(1, MISSING).max(max, TOO_LONG);
-
 const base = {
-  name: visibleLine.pipe(z.string().max(40, TOO_LONG)).optional(),
-  word: z.string().min(1).max(200),
+  name: visibleLine.pipe(z.string().max(SUBMISSION_NAME_MAX, TOO_LONG)).optional(),
+  word: wordSlugField,
 };
-// Values mirror the select options of the suggestions collection.
+// Values come from the shared tuples the suggestions collection builds its select options from.
 const contributeSchema = z.discriminatedUnion(
   "type",
   [
     z.object({
       ...base,
-      highdeutsch: z.string().trim().max(200, TOO_LONG).optional(),
-      text: text(200),
+      highdeutsch: z.string().trim().max(HIGHDEUTSCH_MAX, TOO_LONG).optional(),
+      text: trimmedText(EXAMPLE_MAX),
       type: z.literal("example"),
     }),
     z.object({
       ...base,
-      kind: z.enum(["herkunft", "geschichte", "gebrauch", "anekdote", "sonstiges"], "Welche Art?"),
-      text: text(1000),
+      kind: z.enum(FACT_KINDS, "Welche Art?"),
+      text: trimmedText(FACT_MAX),
       type: z.literal("fact"),
     }),
     z.object({
       ...base,
-      relatedText: text(60),
-      relation: z.enum(["gleich", "gegenteil", "verwandt", "redewendung"], "Welche Beziehung?"),
+      relatedText: trimmedText(RELATED_MAX),
+      relation: z.enum(RELATIONS, "Welche Beziehung?"),
       type: z.literal("related"),
     }),
   ],
@@ -44,22 +49,10 @@ const contributeSchema = z.discriminatedUnion(
 
 /** Stores an example, a fact or a related word as a suggestion on a published word; the editors review it in the CMS. */
 export const POST: APIRoute = async ({ clientAddress, request }) => {
-  const body: unknown = await request.json().catch(() => undefined);
-  if (typeof body !== "object" || body === null) return reply({ error: "Ungültige Anfrage" }, 400);
+  const parsed = await parseSubmission(request, clientAddress, contributeSchema);
+  if ("response" in parsed) return parsed.response;
 
-  const input = contributeSchema.safeParse(body);
-  if (!input.success) {
-    const issue = input.error.issues[0]!;
-    return reply({ field: String(issue.path[0] ?? ""), message: issue.message }, 400);
-  }
-
-  const blocked = await captchaGate(
-    body,
-    requestIp(request.headers.get("x-forwarded-for"), clientAddress),
-  );
-  if (blocked) return blocked;
-
-  const { name, word, ...fields } = input.data;
+  const { name, word, ...fields } = parsed.data;
   try {
     const targetWord = await wordIdBySlug(word);
     if (targetWord === null) return reply({ error: "Wort nicht gefunden" }, 404);
@@ -74,6 +67,6 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
     return reply({ ok: true }, 201);
   } catch (error) {
     logRouteError("contribute", error);
-    return reply({ error: "Dein Beitrag konnte leider nicht gesendet werden." }, 502);
+    return submitFailure(error, "Dein Beitrag konnte leider nicht gesendet werden.");
   }
 };

@@ -8,9 +8,6 @@
     --band-text: #c9cfd6;
     --band-text-quiet: #a8b2bc;
     --band-text-strong: #ffffff;
-    --card: light-dark(#ffffff, #2e363f);
-    --card2: light-dark(#fbf1e6, #38424c);
-    --card3: light-dark(#f5dfca, #46525e);
     --color-accent-active: var(--color-orange-500);
     --color-accent-icon: var(--color-orange-400);
     --color-accent-solid: var(--color-orange-600);
@@ -49,6 +46,8 @@
     --color-ink-800: #181c20;
     --color-ink-900: #111418;
     --color-ink-base: #2b333b;
+    --color-ipa-initial: light-dark(rgb(43 51 59 / 12%), rgb(255 255 255 / 9%));
+    --color-ipa-outline: light-dark(rgb(60 67 75 / 35%), rgb(249 249 249 / 28%));
     --color-mascot-brow: light-dark(#6f7d8a, #5c6975);
     --color-mascot-cap: #8b6f4e;
     --color-mascot-cap2: #69523a;
@@ -120,6 +119,12 @@
     --color-text-on-active: var(--color-white-pure);
     --color-text-on-overlay: var(--color-white-100);
     --color-text-strong: light-dark(var(--color-ink-400m), var(--color-white-100));
+    --color-warm-card2: light-dark(#fbf1e6, #38424c);
+    --color-warm-card3: light-dark(#f5dfca, #46525e);
+    --color-warm-ground: light-dark(#efe6db, #1b2127);
+    --color-warm-muted: light-dark(#5f6b77, #a8b2bc);
+    --color-warm-quiet: light-dark(#535e69, #a8b2bc);
+    --color-warm-sheet: light-dark(#ffffff, #2e363f);
     --color-white-100: #f9f9f9;
     --color-white-200: #f5f5f5;
     --color-white-pure: #ffffff;
@@ -137,6 +142,7 @@
     --font-size-3xl: 2rem;
     --font-size-4xl: 2.25rem;
     --font-size-base: 1rem;
+    --font-size-label: 0.8125rem;
     --font-size-lg: 1.1rem;
     --font-size-md: 0.9rem;
     --font-size-sm: 0.8rem;
@@ -148,13 +154,13 @@
     --line: var(--color-border-card);
     --ok: light-dark(#2e7d4f, #6cc08b);
     --ok-bg: light-dark(#e6f2ea, rgb(108 192 139 / 12%));
-    --page: light-dark(#efe6db, #1b2127);
     --radius-none: 0;
     --radius-pill: 999px;
     --radius-sm: 4px;
     --radius-xs: 3px;
     --radius-xxs: 2px;
     --shadow-hover-glow: 0 0 12px 0 light-dark(color(srgb 0.887059 0.604706 0.527059), var(--color-orange-500));
+    --shadow-menu: 0 14px 32px 0 rgb(0 0 0 / 28%), 0 0 0 1px var(--color-border-card);
     --shadow-paper-lift: 0 0.5px 0.6px 0 rgb(0 0 0 / 8%), 0 4px 5px 0 rgb(0 0 0 / 16%);
     --sign-accent: var(--color-orange-600);
     --sign-bg: #fff8f0;
@@ -174,7 +180,6 @@
     --space-5: 1.25rem;
     --space-6: 1.5rem;
     --space-8: 2rem;
-    --t3: light-dark(#535e69, #a8b2bc);
     --z-below: -1;
     --z-header: 100;
     --z-raised: 1;

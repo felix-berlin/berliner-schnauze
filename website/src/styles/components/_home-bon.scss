@@ -8,7 +8,6 @@
 @include mx.component("home-bon") {
   :scope {
     --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
-    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
     --_word: var(--font-size-4xl); // mobile card word (2.25rem)
     --_answer: 3.5rem; // 56px answer buttons (SPEC §9)
     --_stack: 21.25rem; // 340px card stack (mock)
@@ -65,7 +64,7 @@
       padding: var(--space-2) var(--space-3);
       border-radius: var(--radius-sm);
       background: var(--_glass);
-      font-size: var(--_small);
+      font-size: var(--font-size-label);
 
       // TODO(startseite): the mock uses orange-700 text here; nearest semantic token is --color-accent-solid.
       &:last-child {
@@ -201,7 +200,7 @@
   .card,
   .result {
     border-radius: var(--radius-sm);
-    background: var(--card2);
+    background: var(--color-warm-card2);
   }
 
   .back {
@@ -235,8 +234,8 @@
   .label,
   .note {
     margin: 0;
-    font-size: var(--_small);
-    color: var(--t3);
+    font-size: var(--font-size-label);
+    color: var(--color-warm-quiet);
   }
 
   .label {
@@ -300,8 +299,8 @@
     border: 0;
     background: none;
     font: inherit;
-    font-size: var(--_small);
-    color: var(--t3);
+    font-size: var(--font-size-label);
+    color: var(--color-warm-quiet);
     text-decoration: underline;
     cursor: pointer;
   }
@@ -336,7 +335,7 @@
 
   .hint {
     margin: var(--space-3) 0 0;
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     color: var(--_dim);
   }
 

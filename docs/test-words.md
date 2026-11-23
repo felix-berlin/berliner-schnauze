@@ -8,7 +8,8 @@ database are production data and stay untouched. How to start it for a manual ch
 `/wort/wa` or `/wort/ab`.
 
 The seed holds exactly 28 words: the word of the day on the pinned e2e day is `abjang` only for a count of 28 or 34, so
-add a word only by dropping one. `payload/tests/seed.test.ts` fails when this table and the seed drift apart.
+add a word only by dropping one. `abjang` must also stay at sorted index 4 (the day number modulo 28), so a new filler word
+must not sort before "abjang". `payload/tests/seed.test.ts` fails when this table and the seed drift apart.
 
 | Slug                                         | What it is for                                                                                                                                                                                                                                                                                  |
 | -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

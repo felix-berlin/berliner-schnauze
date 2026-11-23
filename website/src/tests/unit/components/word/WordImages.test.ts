@@ -40,16 +40,6 @@ describe("WordImages.astro", () => {
     expect(result.match(/<figcaption/g)).toHaveLength(1);
   });
 
-  it("renders the learn-more link", async () => {
-    const result = await render({
-      images: [image(1)],
-      learnMore: "https://de.wikipedia.org/x",
-      placement: "strip",
-    });
-    expect(result).toContain('href="https://de.wikipedia.org/x"');
-    expect(result).toContain("Erfahre mehr über dieses Wort");
-  });
-
   it("loads every image lazily in both placements", async () => {
     // The media-scoped preload of the first image needs the Imagor srcset, which the container has no service for: checked in the browser sweep.
     for (const placement of ["hero", "strip"]) {

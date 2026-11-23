@@ -7,6 +7,18 @@ import type {
 import { authenticatedOnly } from "../access";
 import { notifyEditors } from "../lib/notifyEditors";
 import { requiredSelect } from "../lib/requiredField";
+import { REPORT_TEXT_MAX } from "../lib/submissionLimits";
+import { REPORT_KINDS } from "../lib/suggestionEnums";
+
+const REPORT_KIND_LABEL: Record<(typeof REPORT_KINDS)[number], string> = {
+  audio: "Audio",
+  example: "Beispiel",
+  fact: "Fakt",
+  inappropriate: "Unangemessen",
+  meaning: "Bedeutung",
+  other: "Sonstiges",
+  spelling: "Schreibweise",
+};
 
 /** A closed report no longer needs a way to reach the sender. */
 const dropEmailWhenClosed: CollectionBeforeChangeHook = ({ data, originalDoc }) => {
@@ -55,17 +67,9 @@ export const Reports: CollectionConfig = {
       type: "select",
       label: "Art",
       validate: requiredSelect,
-      options: [
-        { label: "Bedeutung", value: "meaning" },
-        { label: "Schreibweise", value: "spelling" },
-        { label: "Beispiel", value: "example" },
-        { label: "Audio", value: "audio" },
-        { label: "Fakt", value: "fact" },
-        { label: "Unangemessen", value: "inappropriate" },
-        { label: "Sonstiges", value: "other" },
-      ],
+      options: REPORT_KINDS.map((value) => ({ label: REPORT_KIND_LABEL[value], value })),
     },
-    { name: "text", type: "textarea", required: true, maxLength: 1000, label: "Text" },
+    { name: "text", type: "textarea", required: true, maxLength: REPORT_TEXT_MAX, label: "Text" },
     {
       name: "email",
       type: "email",

@@ -1,34 +1,14 @@
 import type { SiteWord } from "@services/payload/words.ts";
 
+import { berlinNumbers, berlinParts } from "@utils/berlinTime.ts";
 import { isE2eServer } from "@utils/e2eServer.ts";
 
-const BERLIN = "Europe/Berlin";
+export { berlinParts };
 
-const berlinFormat = new Intl.DateTimeFormat("en-GB", {
-  day: "2-digit",
-  hour: "2-digit",
-  hourCycle: "h23",
-  minute: "2-digit",
-  month: "2-digit",
-  second: "2-digit",
-  timeZone: BERLIN,
-  year: "numeric",
-});
-
-/** Y/M/D and time of day in Berlin, zero-padded: the day flips at local midnight, like the visitors' own clock. */
-export const berlinParts = (date: Date) =>
-  Object.fromEntries(berlinFormat.formatToParts(date).map((p) => [p.type, p.value])) as Record<
-    "day" | "hour" | "minute" | "month" | "second" | "year",
-    string
-  >;
-
-const berlinNumbers = (date: Date) =>
-  Object.fromEntries(Object.entries(berlinParts(date)).map(([k, v]) => [k, Number(v)])) as Record<
-    keyof ReturnType<typeof berlinParts>,
-    number
-  >;
-
-/** Fixed day of the e2e server (noon, so the Berlin day is the same in every zone). */
+/**
+ * Fixed day of the e2e server (noon, so the Berlin day is the same in every zone). Coupled to the e2e seed:
+ * it has exactly 28 words and abjang must stay at sorted index 4 (see payload/src/seed/e2e.ts).
+ */
 export const E2E_PINNED_DAY = new Date("2026-01-19T12:00:00Z");
 
 const MS_PER_DAY = 86_400_000;

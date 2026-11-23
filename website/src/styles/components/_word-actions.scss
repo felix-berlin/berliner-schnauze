@@ -7,8 +7,6 @@
 // (theme bare, placement top-end), both slot content the scope of this file does not reach.
 @include mx.component("word-actions") {
   :scope {
-    --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
-
     container: word-actions / inline-size;
     position: relative;
   }
@@ -26,7 +24,7 @@
 
   .note {
     margin: var(--space-2) 0 0;
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     color: var(--color-text-muted);
   }
 
@@ -71,15 +69,22 @@
     border-radius: var(--radius-pill);
 
     [role="tab"] {
-      min-block-size: 2.5rem; // 40px inside the 44px segment; the segment is the target, no token step
+      position: relative;
+
+      --_reach: var(--space-1);
+
+      min-block-size: 2.5rem; // 40px look; the hit band below reaches 48px, no token step
       padding-inline: var(--space-4);
       font: inherit;
-      font-size: var(--font-size-sm);
+      font-size: var(--font-size-label);
       color: var(--color-text-body);
       background: transparent;
       border: 0;
       border-radius: var(--radius-pill);
       cursor: pointer;
+
+      // Looks 40px, hits 48px: the band fills the segment padding (as c-choice segment/chip).
+      @include mx.hit-band("block");
 
       &[aria-selected="true"] {
         color: var(--color-surface-sheet);
@@ -96,9 +101,7 @@
 
   .hint,
   .foot {
-    margin: 0;
-    font-size: var(--_small);
-    color: var(--color-text-muted);
+    @include mx.foot-note;
   }
 
   .quote {
@@ -106,7 +109,7 @@
     padding: var(--space-3) var(--space-3);
     // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §5.2: the citation is monospace, no font token for it
     font-family: monospace;
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-label);
     line-height: 1.55;
     color: var(--color-text-strong);
     background: var(--color-surface-sheet);

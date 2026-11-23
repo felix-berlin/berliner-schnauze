@@ -46,15 +46,43 @@ export const disclosureFor = (
   return cms ?? (amazon ? AMAZON_FALLBACK : undefined);
 };
 
-/** The first book listed for the word's first Thema (`themen` hold ids or populated Themen); undefined without one. */
+export type MoreBook = { title: string; url: string; cover?: string; note?: string };
+
+/** The footer's "Ooch jut" column: up to two other books with a title and a web link (the picked one is left out). */
+export const pickMoreBooks = (
+  books: readonly AffiliateBook[],
+  picked: AffiliateBook | undefined,
+  limit = 2,
+): MoreBook[] =>
+  books
+    .flatMap((b): MoreBook[] =>
+      b !== picked && b.title && isWebUrl(b.href)
+        ? [
+            {
+              title: b.title,
+              url: b.href,
+              ...(b.imageUrl && { cover: b.imageUrl }),
+              ...(b.description && { note: b.description }),
+            },
+          ]
+        : [],
+    )
+    .slice(0, limit);
+
+/**
+ * The first book listed for the word's first Thema (`themen` hold ids or populated Themen); else the first book
+ * marked `alleThemen`, which fits every word, also one without a Thema.
+ */
 export const pickBook = (
   books: readonly AffiliateBook[],
   firstThemaId: number | undefined,
-): AffiliateBook | undefined =>
-  firstThemaId === undefined
-    ? undefined
-    : books.find(
-        (b) =>
-          isWebUrl(b.href) &&
+): AffiliateBook | undefined => {
+  const linked = books.filter((b) => isWebUrl(b.href));
+  return (
+    (firstThemaId === undefined
+      ? undefined
+      : linked.find((b) =>
           b.themen?.some((t) => (typeof t === "object" ? t.id : t) === firstThemaId),
-      );
+        )) ?? linked.find((b) => b.alleThemen)
+  );
+};

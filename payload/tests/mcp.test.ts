@@ -198,6 +198,98 @@ describe("mcp endpoint", () => {
     }
   });
 
+  const rich = (t: string) => ({
+    root: {
+      type: "root",
+      children: [
+        { type: "paragraph", children: [{ type: "text", text: t, version: 1 }], version: 1 },
+      ],
+      direction: null,
+      format: "",
+      indent: 0,
+      version: 1,
+    },
+  });
+  const madeWithCredits = async () =>
+    (await getTestPayload()).create({
+      collection: "words",
+      draft: true,
+      data: {
+        berlinerisch: WORD,
+        facts: [{ kind: "herkunft", text: rich("alt"), contributorName: "Anna Geheim" }],
+        related: [{ label: "Brot", relation: "gleich", contributorName: "Bert Geheim" }],
+      } as never,
+    });
+  const credits = async (id: number) =>
+    (await (await getTestPayload()).findByID({ collection: "words", id, draft: true })) as {
+      facts?: { text?: unknown; contributorName?: string | null }[];
+      related?: { contributorName?: string | null }[];
+    };
+  const cleanWord = async () =>
+    (await getTestPayload()).delete({
+      collection: "words",
+      where: { berlinerisch: { like: WORD } },
+    });
+
+  it("never shows contributorName of facts and related rows, with or without select", async () => {
+    const made = await madeWithCredits();
+    try {
+      for (const select of [undefined, { facts: true, related: true }]) {
+        const body = await rpc("tools/call", `Bearer ${KEY}`, {
+          name: "findWords",
+          arguments: {
+            where: JSON.stringify({ id: { equals: made.id } }),
+            draft: true,
+            ...(select && { select }),
+          },
+        });
+        expect(text(body)).toContain("alt");
+        expect(text(body)).not.toMatch(/Geheim/);
+      }
+    } finally {
+      await cleanWord();
+    }
+  });
+
+  it("keeps an existing contributorName when an MCP update rewrites the facts", async () => {
+    const made = await madeWithCredits();
+    try {
+      const body = await rpc("tools/call", `Bearer ${KEY}`, {
+        name: "updateWords",
+        arguments: {
+          id: made.id,
+          draft: true,
+          facts: [{ kind: "geschichte", text: rich("neu"), contributorName: "Hacker" }],
+        },
+      });
+      expect(text(body)).toContain("updated successfully");
+      const after = await credits(made.id);
+      expect(JSON.stringify(after.facts?.[0]?.text)).toContain("neu");
+      expect(after.facts?.[0]?.contributorName).toBe("Anna Geheim");
+    } finally {
+      await cleanWord();
+    }
+  });
+
+  it("keeps an existing contributorName of related rows when an MCP update rewrites them", async () => {
+    const made = await madeWithCredits();
+    try {
+      const body = await rpc("tools/call", `Bearer ${KEY}`, {
+        name: "updateWords",
+        arguments: {
+          id: made.id,
+          draft: true,
+          related: [{ label: "Schrippe", relation: "gleich", contributorName: "Hacker" }],
+        },
+      });
+      expect(text(body)).toContain("updated successfully");
+      const after = await credits(made.id);
+      expect(after.related?.[0]?.contributorName).toBe("Bert Geheim");
+    } finally {
+      await cleanWord();
+    }
+  });
+
   it("cannot move a published word to the trash", async () => {
     const payload = await getTestPayload();
     const live = await payload.create({

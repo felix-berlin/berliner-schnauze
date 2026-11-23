@@ -4,11 +4,11 @@ import { AGES } from "payload-app/word-feedback";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const online = vi.hoisted(() => ({ ref: undefined as undefined | { value: boolean } }));
-vi.mock("@composables/useOnline.ts", async () => {
+vi.mock("@vueuse/core", async (importOriginal) => {
   const { ref } = await import("vue");
   online.ref = ref(true);
   return {
-    OFFLINE_HINT: "Du bist offline. Abstimmen und Mitmachen jeht wieder, sobald du Netz hast.",
+    ...(await importOriginal<typeof import("@vueuse/core")>()),
     useOnline: () => online.ref,
   };
 });
@@ -272,10 +272,10 @@ describe("WordPoll", () => {
 
     it("draws 100 aria-hidden dots with one ringed own dot", async () => {
       const w = await startC();
-      const matrix = w.find("[data-matrix]");
+      const matrix = w.find('.c-usage-dots[data-variant="matrix"]');
       expect(matrix.attributes("aria-hidden")).toBe("true");
       expect(matrix.findAll("[data-usage]")).toHaveLength(100);
-      expect(matrix.findAll('[data-own="true"]')).toHaveLength(1);
+      expect(matrix.findAll('[data-state="mine"]')).toHaveLength(1);
     });
 
     it("hides a region row under 10 votes", async () => {
@@ -293,7 +293,7 @@ describe("WordPoll", () => {
       const ost = w.findAll("li").find((li) => li.text().startsWith("Ost"))!;
       expect(ost.findAll("[data-filled]")).toHaveLength(20);
       expect(ost.findAll('[data-filled="true"]')).toHaveLength(15);
-      expect(ost.find("[data-dots]").attributes("aria-hidden")).toBe("true");
+      expect(ost.find(".c-usage-dots").attributes("aria-hidden")).toBe("true");
       expect(ost.text()).toContain("74 %");
     });
 
@@ -543,5 +543,236 @@ describe("WordPoll", () => {
   it("loads the own answers after hydration, never from props", async () => {
     await mountIt();
     expect(store.loadFeedback).toHaveBeenCalledWith(7);
+  });
+});
+
+describe("WordPoll refresh", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    document.body.innerHTML = "";
+    online.ref!.value = true;
+    $feedback.set(state(null));
+    $profile.set({});
+    $sendError.set(null);
+    store.loadFeedback.mockImplementation(async () => {});
+    store.sendFeedback.mockResolvedValue(true);
+    store.answerUsage.mockImplementation(async () => {
+      $feedback.set(state(mine({ usage: "say" })));
+      return true;
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    vi.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  it("says so when the numbers could not be refreshed", async () => {
+    route = () => ({ ok: false });
+    const w = await mountIt();
+    await button(w, "Sag ick selbst").trigger("click");
+    await flushPromises();
+    await button(w, "Ergebnis zeigen").trigger("click");
+    await flushPromises();
+    expect(w.text()).toContain("Zahlen konnten nich aktualisiert werden.");
+  });
+
+  it("fetches the state once after a stored-but-unsynced vote", async () => {
+    store.answerUsage.mockResolvedValue("unsynced");
+    route = () => ({ body: state(mine({ usage: "say" })) });
+    const w = await mountIt();
+    await button(w, "Sag ick selbst").trigger("click");
+    await flushPromises();
+    const gets = fetchMock.mock.calls.filter(([, init]) => !init?.method);
+    expect(gets).toHaveLength(1);
+    await button(w, "Ergebnis zeigen").trigger("click");
+    await flushPromises();
+    expect(w.text()).not.toContain("Is jespeichert"); // the refresh answered, the hint is gone
+  });
+});
+
+describe("WordPoll coverage gaps", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    document.body.innerHTML = "";
+    online.ref!.value = true;
+    $feedback.set(state(null));
+    $profile.set({});
+    $sendError.set(null);
+    store.loadFeedback.mockImplementation(async () => {});
+    store.answerUsage.mockResolvedValue(true);
+    store.sendFeedback.mockResolvedValue(true);
+    route = () => ({ body: state(null) });
+    vi.stubGlobal("fetch", fetchMock);
+    vi.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  const startB = async () => {
+    store.answerUsage.mockImplementation(async () => {
+      $feedback.set(state(mine({ usage: "say" })));
+      return true;
+    });
+    const w = await mountIt();
+    await button(w, "Sag ick selbst").trigger("click");
+    await flushPromises();
+    return w;
+  };
+  const startC = async (res = result(), m = mine(voted)) => {
+    $feedback.set(state(m, res));
+    return mountIt(res);
+  };
+
+  it("shows the empty-count wording and a singular Stimme", async () => {
+    $feedback.set(state(null, result({ total: 0 })));
+    const empty = await mountIt(result({ total: 0 }));
+    expect(empty.text()).toContain("Noch keene Stimme");
+    expect(empty.text()).toContain("Noch keener hat abjestimmt – mach den Anfang!");
+    document.body.innerHTML = "";
+    $feedback.set(state(null, result({ total: 1 })));
+    const one = await mountIt(result({ total: 1 }));
+    expect(one.text()).toContain("1 Stimme");
+    expect(one.text()).not.toContain("1 Stimmen");
+  });
+
+  it("toggles the explanation of the questions", async () => {
+    const w = await startB();
+    await button(w, "überspringen").trigger("click"); // origin: the explanation is closed
+    await flushPromises();
+    const toggle = button(w, "Warum frag ick dit?");
+    expect(toggle.attributes("aria-expanded")).toBe("false");
+    await toggle.trigger("click");
+    expect(toggle.attributes("aria-expanded")).toBe("true");
+  });
+
+  it("goes one question back, and stays put while an answer is pending", async () => {
+    const w = await startB();
+    expect(w.text()).not.toContain("← Zurück");
+    await button(w, "überspringen").trigger("click");
+    await flushPromises();
+    expect(w.text()).toContain("Uffjewachsen oder zujezogen?");
+    await button(w, "← Zurück").trigger("click");
+    await flushPromises();
+    expect(w.text()).toContain("Wo wohnste?");
+    await button(w, "überspringen").trigger("click");
+    await flushPromises();
+    let done!: (v: boolean) => void;
+    store.sendFeedback.mockReturnValue(new Promise<boolean>((r) => (done = r)));
+    await button(w, "Hier uffjewachsen").trigger("click");
+    await button(w, "← Zurück").trigger("click");
+    await button(w, "überspringen").trigger("click");
+    await button(w, "Ergebnis zeigen").trigger("click");
+    expect(w.text()).toContain("Uffjewachsen oder zujezogen?");
+    done(false);
+    await flushPromises();
+  });
+
+  it("sends nothing for an unchanged answer and moves on", async () => {
+    const w = await startC();
+    await button(w, "ändern").trigger("click");
+    await flushPromises();
+    await w.find('[data-testid="map"]').trigger("click"); // pankow again
+    await flushPromises();
+    expect(store.sendFeedback).not.toHaveBeenCalled();
+    expect(w.text()).toContain("Welcher Kiez?");
+  });
+
+  it("ignores an answer while offline, and locks the choices with the hint", async () => {
+    const w = await startB();
+    await button(w, "überspringen").trigger("click");
+    await flushPromises();
+    online.ref!.value = false;
+    await flushPromises();
+    const choice = button(w, "Hier uffjewachsen");
+    expect(choice.attributes("aria-describedby")).toBe("word-poll-offline");
+    await choice.trigger("click");
+    expect(store.sendFeedback).not.toHaveBeenCalled();
+  });
+
+  it("fetches the state once after a stored-but-unsynced answer", async () => {
+    const w = await startB();
+    store.sendFeedback.mockResolvedValue("unsynced");
+    route = () => ({ body: state(mine({ usage: "say" })) });
+    const gets = () => fetchMock.mock.calls.filter(([, init]) => !init?.method).length;
+    const before = gets();
+    await w.find('[data-testid="map-brandenburg"]').trigger("click");
+    await flushPromises();
+    expect(gets() - before).toBe(1);
+    expect(w.text()).toContain("Uffjewachsen oder zujezogen?");
+  });
+
+  it("fails a vote when the state cannot be loaded, without sending it", async () => {
+    $feedback.set(null as never);
+    const w = await mountIt();
+    await button(w, "Sag ick selbst").trigger("click");
+    await flushPromises();
+    expect(store.loadFeedback).toHaveBeenCalledTimes(2);
+    expect(store.answerUsage).not.toHaveBeenCalled();
+    expect(w.find('[role="alert"]').text()).toContain("Deine Stimme is nich anjekommen.");
+  });
+
+  it("shows the result straight away when the vote answers come with stored answers", async () => {
+    store.answerUsage.mockImplementation(async () => {
+      $feedback.set(state(mine({ ...voted })));
+      return true;
+    });
+    const w = await mountIt();
+    await button(w, "Sag ick selbst").trigger("click");
+    await flushPromises();
+    expect(w.text()).toContain("Wat sagen alle?");
+  });
+
+  it("does not retry a failed vote while offline", async () => {
+    store.answerUsage.mockResolvedValue(false);
+    const w = await mountIt();
+    await button(w, "Sag ick selbst").trigger("click");
+    await flushPromises();
+    online.ref!.value = false;
+    await flushPromises();
+    await button(w, "Nochmal versuchen").trigger("click");
+    expect(store.answerUsage).toHaveBeenCalledTimes(1);
+  });
+
+  it("shows no comparison without groups, and an unknown age key as it is", async () => {
+    const none = await startC(result({ byAge: [], byRegion: [] }));
+    expect(none.text()).not.toContain("Wer sagt’s noch?");
+    document.body.innerHTML = "";
+    const odd = await startC(result({ byAge: [group("99+", 40)], byRegion: [] }));
+    expect(odd.text()).toContain("99+");
+  });
+
+  it("names the given answers for Brandenburg, elsewhere, a Kiez and an unknown area", async () => {
+    const names = async (m: Record<string, unknown>) => {
+      document.body.innerHTML = "";
+      return (await startC(result(), mine({ usage: "say", ...m }))).find(".given").text();
+    };
+    expect(await names({ area: "brandenburg" })).toContain("Brandenburg");
+    expect(await names({ area: "elsewhere" })).toContain("Woanders");
+    expect(await names({ area: "pankow", locality: "prenzlauer-berg" })).toContain(
+      "Pankow (Prenzlauer Berg)",
+    );
+    expect(await names({ origin: "grewUp" })).toContain("Hier uffjewachsen");
+  });
+
+  it("ignores Esc, Ja and Abbrechen while the delete is pending or offline", async () => {
+    const w = await startC();
+    await button(w, "Stimme und Angaben löschen").trigger("click");
+    await flushPromises();
+    let finish!: () => void;
+    fetchMock.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          finish = () => resolve({ json: async () => ({}), ok: true, status: 200 } as never);
+        }),
+    );
+    await button(w, "Ja, löschen").trigger("click");
+    await w.find('[role="alertdialog"]').trigger("keydown", { key: "Escape" });
+    expect(w.find('[role="alertdialog"]').exists()).toBe(true);
+    finish();
+    await flushPromises();
+    document.body.innerHTML = "";
+    const offline = await startC();
+    await button(offline, "Stimme und Angaben löschen").trigger("click");
+    online.ref!.value = false;
+    await flushPromises();
+    expect(button(offline, "Ja, löschen").attributes("aria-describedby")).toBe("word-poll-offline");
+    await button(offline, "Ja, löschen").trigger("click");
+    expect(fetchMock.mock.calls.filter(([, i]) => i?.method === "DELETE")).toHaveLength(1);
   });
 });

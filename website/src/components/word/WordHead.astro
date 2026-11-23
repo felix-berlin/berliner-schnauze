@@ -97,7 +97,7 @@ const hasImages = Astro.slots.has('images');
 
     <div class='actions' data-slot>
       <slot name='actions'>
-        <WordActions client:idle meaning={main} slug={word.slug} updatedAt={model.updatedAt} url={url} word={word.berlinerisch} wordId={draft ? undefined : word.id} />
+        <WordActions client:idle learnMore={word.learnMore || undefined} meaning={main} slug={word.slug} updatedAt={model.updatedAt} url={url} word={word.berlinerisch} wordId={draft ? undefined : word.id} />
       </slot>
     </div>
     {hasImages && <div class='images' data-slot><slot name='images' /></div>}

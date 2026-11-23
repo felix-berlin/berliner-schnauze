@@ -24,7 +24,7 @@ const gap = {
 ---
 
 <!-- Wissenswertes card (SPEC §9): facts as a description list; the book block (rule above) only with a book. -->
-<SectionCard anchor={false} id='wissenswertes' title='Wissenswertes' level={3} contribute='fact' slug={slug} gap={facts.length ? undefined : gap}>
+<SectionCard id='wissenswertes' title='Wissenswertes' contribute='fact' slug={slug} gap={facts.length ? undefined : gap}>
   {(facts.length > 0 || book) && (
     <div class='c-word-wissen'>
       {facts.length > 0 && (
@@ -34,7 +34,7 @@ const gap = {
               <dt class='c-word-label'>{FACT_KIND_LABEL[f.kind] ?? f.kind}</dt>
               <dd class='text' set:html={f.html} />
               {f.source && <dd class='source'>Quelle: {f.source}</dd>}
-              {f.contributor && <dd class='by'>{f.contributor.name ?? 'aus der Community'}</dd>}
+              {f.contributor && <dd class='by'>{f.contributor.name ? `Beitrag von ${f.contributor.name}` : 'Beitrag aus der Community'}</dd>}
             </div>
           ))}
         </dl>

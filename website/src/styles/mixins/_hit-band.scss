@@ -1,0 +1,16 @@
+// Invisible tap band: the control looks smaller than 44px, the ::before band reaches --_reach beyond it
+// (set on the element: (44px - look) / 2, plus the border width where the band starts at the padding box).
+// The caller sets position: relative. axis "block" keeps the band as wide as the control.
+@mixin hit-band($axis: "both") {
+  &::before {
+    content: "";
+    position: absolute;
+
+    @if $axis == "block" {
+      inset-block: calc(-1 * var(--_reach));
+      inset-inline: 0;
+    } @else {
+      inset: calc(-1 * var(--_reach));
+    }
+  }
+}

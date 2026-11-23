@@ -1,6 +1,7 @@
 import type { MyFeedback, WordFeedbackState } from "@utils/wordFeedbackSchema.ts";
 
 import { createToastNotify } from "@stores/toastNotify.ts";
+import { safeGet, safeGetJson, safeSet } from "@utils/safeStorage.ts";
 import { atom } from "nanostores";
 import {
   AGES,
@@ -58,47 +59,23 @@ export const parseProfile = (raw: unknown): Profile => {
   return out as Profile;
 };
 
-const safeJsonParse = (s: string): unknown => {
-  try {
-    return JSON.parse(s);
-  } catch {
-    return undefined;
-  }
-};
-
 const PROFILE_KEY = "bs-word-feedback-profile";
 const REMEMBER_KEY = "bs-word-feedback-remember";
-// localStorage can be missing (SSR) or throw (blocked): the profile then lives in memory only.
-const read = (key: string): string | null => {
-  try {
-    return localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-};
-const write = (key: string, value: string | null) => {
-  try {
-    if (value === null) localStorage.removeItem(key);
-    else localStorage.setItem(key, value);
-  } catch {
-    /* in memory only */
-  }
-};
-
+// Storage can be missing (SSR) or blocked: the profile then lives in memory only (safeStorage stays silent).
 /** The visitor ticked "remember my answers": only then the profile is kept in the browser (§ 25 TDDDG). */
-export const $remember = atom(read(REMEMBER_KEY) === "yes");
+export const $remember = atom(safeGet(REMEMBER_KEY) === "yes");
 export const $profile = atom<Profile>(
-  $remember.get() ? parseProfile(safeJsonParse(read(PROFILE_KEY) ?? "")) : {},
+  $remember.get() ? parseProfile(safeGetJson(PROFILE_KEY)) : {},
 );
-const persist = () => write(PROFILE_KEY, $remember.get() ? JSON.stringify($profile.get()) : null);
+const persist = () => safeSet(PROFILE_KEY, $remember.get() ? JSON.stringify($profile.get()) : null);
 // A profile saved before the opt-in existed has no consent behind it: drop it.
-if (!$remember.get()) write(PROFILE_KEY, null);
+if (!$remember.get()) safeSet(PROFILE_KEY, null);
 $profile.listen(persist);
 
 export const setRemember = (on: boolean) => {
   $remember.set(on);
-  write(REMEMBER_KEY, on ? "yes" : null);
-  write(PROFILE_KEY, on ? JSON.stringify($profile.get()) : null);
+  safeSet(REMEMBER_KEY, on ? "yes" : null);
+  safeSet(PROFILE_KEY, on ? JSON.stringify($profile.get()) : null);
 };
 
 export const nextStep = (
@@ -156,11 +133,15 @@ export const refreshFeedback = async (wordId: number): Promise<WordFeedbackState
   const startedAt = stateVersion;
   try {
     const res = await fetch(`${ENDPOINT}?word=${wordId}`, { cache: "no-store" });
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.error(`[word-feedback] refresh ${wordId} failed: ${res.status}`);
+      return null;
+    }
     const state = (await res.json()) as WordFeedbackState;
     if (loadedFor === wordId && stateVersion === startedAt) $feedback.set(state);
     return state;
-  } catch {
+  } catch (error) {
+    console.error(`[word-feedback] refresh ${wordId} failed:`, error);
     return null;
   }
 };
@@ -172,11 +153,18 @@ type SendOptions = {
   silent?: boolean;
 };
 
+/**
+ * `false`: not stored. `true`: stored and the state updated. `"unsynced"`: stored, but the server could not read the
+ * totals back (the own answer `mine` is applied, the numbers are stale); truthy like `true`, so `if (!result)` still
+ * means "failed".
+ */
+export type SendResult = boolean | "unsynced";
+
 export const sendFeedback = async (
   wordId: number,
   patch: Partial<MyFeedback>,
   { fallbackMessage = "Hat nich jeklappt, versuch's nochma.", silent = false }: SendOptions = {},
-): Promise<boolean> => {
+): Promise<SendResult> => {
   const seq = ++sent;
   $sendError.set(null);
   const fail = (message: string | null, status?: number) => {
@@ -204,17 +192,32 @@ export const sendFeedback = async (
     const state = (await res.json().catch((error) => {
       console.error(`[word-feedback] send ${wordId}: unreadable response body`, error);
       return null;
-    })) as WordFeedbackState | null;
+    })) as (Partial<WordFeedbackState> & { error?: string; stored?: boolean }) | null;
+    const unsynced = !!state?.stored && !state.totals;
     // The user may have navigated to another word while the PATCH was in flight; a failed GET left no word set.
     if (
       state &&
       (loadedFor === wordId || (loadedFor === null && failedFor === wordId)) &&
       seq > applied
     ) {
-      loadedFor = wordId;
-      applied = seq;
-      stateVersion++;
-      $feedback.set(state);
+      const current = $feedback.get();
+      if (!unsynced) {
+        loadedFor = wordId;
+        applied = seq;
+        stateVersion++;
+        $feedback.set(state as WordFeedbackState);
+      } else if (current && state.mine !== undefined) {
+        // Stored, but no totals came back: only the own answer is new, the numbers stay as they were.
+        applied = seq;
+        stateVersion++;
+        $feedback.set({ ...current, mine: state.mine });
+      }
+    }
+    if (unsynced) {
+      console.error(`[word-feedback] send ${wordId}: stored, totals not read back`);
+      if (!silent)
+        createToastNotify({ message: state?.error ?? fallbackMessage, status: "warning" });
+      return "unsynced";
     }
     return true;
   } catch (error) {
@@ -223,7 +226,7 @@ export const sendFeedback = async (
   }
 };
 
-export const answerUsage = (wordId: number, usage: Usage, silent = false): Promise<boolean> =>
+export const answerUsage = (wordId: number, usage: Usage, silent = false): Promise<SendResult> =>
   sendFeedback(wordId, { usage, ...parseProfile($profile.get()) }, { silent });
 
 /** Deletes this browser's answers to one word; the caller owns the failure message and the local profile. */
@@ -231,27 +234,18 @@ export const deleteFeedback = async (wordId: number): Promise<boolean> => {
   try {
     const res = await fetch(`${ENDPOINT}?word=${wordId}`, { method: "DELETE" });
     if (!res.ok) throw new Error(String(res.status));
+    // The own answer is gone: the card must not keep showing it (the totals follow with the next refresh).
+    const current = $feedback.get();
+    if (current && loadedFor === wordId) {
+      stateVersion++;
+      const { result, ...rest } = current;
+      const next = result && { ...result };
+      if (next) delete next.own;
+      $feedback.set({ ...rest, mine: null, ...(next && { result: next }) });
+    }
     return true;
   } catch (error) {
     console.error(`[word-feedback] delete ${wordId} failed:`, error);
     return false;
   }
-};
-
-/** Deletes every answer tied to this browser (all words) and forgets the stored profile. */
-export const deleteAllFeedback = async (wordId: number): Promise<boolean> => {
-  try {
-    const res = await fetch(ENDPOINT, { method: "DELETE" });
-    if (!res.ok) throw new Error(String(res.status));
-  } catch (error) {
-    console.error("[word-feedback] delete all failed:", error);
-    createToastNotify({ message: "Hat nich jeklappt, versuch's nochma.", status: "error" });
-    return false;
-  }
-  $profile.set({});
-  setRemember(false);
-  loadedFor = null;
-  stateVersion++;
-  await loadFeedback(wordId);
-  return true;
 };

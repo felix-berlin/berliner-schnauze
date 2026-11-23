@@ -25,25 +25,43 @@ const load = async (key: string) => {
     status: { equals: "published" },
     word: { equals: wordId },
   } as const;
-  const featured = (
-    await payload.find({
-      collection: "comments",
-      depth: 0,
-      limit: 1,
-      where: { ...where, featured: { equals: true } },
-    })
-  ).docs[0];
+  const findFeatured = async () =>
+    (
+      await payload.find({
+        collection: "comments",
+        depth: 0,
+        limit: 1,
+        where: { ...where, featured: { equals: true } },
+      })
+    ).docs[0];
+  const newestFirst = { collection: "comments", depth: 0, sort: "-createdAt" } as const;
+
   // The featured story is shown apart from the list on every page, so it never repeats in `items`.
+  if (page === 1) {
+    // Both reads at once: one row more than a page, so the list still has a full page once the featured one is dropped.
+    const [featured, list] = await Promise.all([
+      findFeatured(),
+      payload.find({ ...newestFirst, limit: STORIES_PAGE_SIZE + 1, where }),
+    ]);
+    const rows = list.docs.filter((c) => c.id !== featured?.id);
+    return {
+      featured: featured ? toStory(featured) : null,
+      hasMore: list.totalDocs - (featured ? 1 : 0) > STORIES_PAGE_SIZE,
+      items: rows.slice(0, STORIES_PAGE_SIZE).map(toStory),
+      page,
+      total: list.totalDocs,
+    };
+  }
+  // Later pages page through the list without the featured row, so the rows keep their place across pages.
+  const featured = await findFeatured();
   const list = await payload.find({
-    collection: "comments",
-    depth: 0,
+    ...newestFirst,
     limit: STORIES_PAGE_SIZE,
     page,
-    sort: "-createdAt",
     where: featured ? { ...where, id: { not_equals: featured.id } } : where,
   });
   return {
-    featured: featured && page === 1 ? toStory(featured) : null,
+    featured: null,
     hasMore: list.hasNextPage,
     items: list.docs.map(toStory),
     page,
@@ -59,4 +77,15 @@ const memo = ttlBy(60_000, MAX_KEYS, load);
  * the featured one, which comes apart on page 1 only. `total` counts the featured one. The same for every visitor
  * (own reactions come from GET /api/stories/mine), so it is cached for a minute per word and page.
  */
-export const fetchStories = (wordId: number, page: number) => memo(`${wordId}:${page}`);
+export const fetchStories = async (wordId: number, page: number) => {
+  const first = await memo(`${wordId}:1`);
+  if (page === 1) return first;
+  // Far-out pages would each fill a cache slot (MAX_KEYS) and push real words out: answer them empty, uncached.
+  const lastPage = Math.max(
+    1,
+    Math.ceil((first.total - (first.featured ? 1 : 0)) / STORIES_PAGE_SIZE),
+  );
+  return page > lastPage
+    ? { featured: null, hasMore: false, items: [], page, total: first.total }
+    : memo(`${wordId}:${page}`);
+};

@@ -19,6 +19,23 @@ export const AREAS = [
   "brandenburg",
   "elsewhere",
 ] as const;
+/** Display name of every area: the single source for the Bezirk names (map, stories, home stats). */
+export const AREA_NAMES: Record<(typeof AREAS)[number], string> = {
+  mitte: "Mitte",
+  "friedrichshain-kreuzberg": "Friedrichshain-Kreuzberg",
+  pankow: "Pankow",
+  "charlottenburg-wilmersdorf": "Charlottenburg-Wilmersdorf",
+  spandau: "Spandau",
+  "steglitz-zehlendorf": "Steglitz-Zehlendorf",
+  "tempelhof-schoeneberg": "Tempelhof-Schöneberg",
+  neukoelln: "Neukölln",
+  "treptow-koepenick": "Treptow-Köpenick",
+  "marzahn-hellersdorf": "Marzahn-Hellersdorf",
+  lichtenberg: "Lichtenberg",
+  reinickendorf: "Reinickendorf",
+  brandenburg: "Brandenburg",
+  elsewhere: "Woanders",
+};
 export const ORIGINS = ["grewUp", "movedOver10", "movedUnder10"] as const;
 export const HALVES = ["east", "west", "both"] as const;
 export const AGES = [
@@ -239,3 +256,102 @@ export async function feedbackCompare(
   ]);
   return { east, west, moved, area: areaShare, locality: localityShare };
 }
+
+/**
+ * The consistency rules of a profile (the optional answers besides usage/reaction), shared by the PATCH schema and
+ * the PATCH handler so they cannot drift apart. The client `profilePatch` mirrors the cascades.
+ */
+/** Areas outside Berlin: no east/west half. */
+export const NOT_BERLIN = new Set<string>(["brandenburg", "elsewhere"]);
+
+export const profileRules = {
+  /** Cascades for a partial update: a non-grewUp origin drops the half, a new area drops another area's locality. */
+  cascade<
+    T extends {
+      area?: string | null;
+      half?: string | null;
+      locality?: string | null;
+      origin?: string | null;
+    },
+  >(
+    sent: T,
+    stored?: { locality?: string | null } | null,
+  ): T | (T & { half?: null; locality?: null }) {
+    const data =
+      sent.origin !== undefined && sent.origin !== "grewUp" ? { ...sent, half: null } : sent;
+    return sent.area !== undefined &&
+      sent.locality === undefined &&
+      stored?.locality &&
+      LOCALITY_AREA[stored.locality as Locality] !== sent.area
+      ? { ...data, locality: null }
+      : data;
+  },
+  /**
+   * The PATCH body for one answer in the poll: `cascade` plus what the client knows on top. A half implies
+   * origin grewUp, a locality carries its area, a new area drops the old locality (`hadLocality`) and outside
+   * Berlin the half.
+   */
+  patch(
+    key: string,
+    value: string | null,
+    ctx: { area: string | null | undefined; hadLocality: unknown },
+  ): Record<string, string | null | undefined> {
+    const sent: Record<string, string | null | undefined> = {
+      [key]: value,
+      ...(key === "half" && value ? { origin: "grewUp" } : {}),
+      ...(key === "locality" && value ? { area: ctx.area } : {}),
+    };
+    return {
+      ...profileRules.cascade(sent),
+      ...(key === "area" && NOT_BERLIN.has(value ?? "") ? { half: null } : {}),
+      ...(key === "area" && ctx.hadLocality ? { locality: null } : {}),
+    };
+  },
+  /** A half only counts for someone who grew up in Berlin. */
+  halfFitsOrigin: (v: { half?: string | null; origin?: string | null }) =>
+    v.half == null || v.origin === "grewUp",
+  /** A locality needs its own area. */
+  localityFitsArea: (v: { area?: string | null; locality?: string | null }) =>
+    v.locality == null || LOCALITY_AREA[v.locality as Locality] === v.area,
+};
+
+/** The columns of a `word-feedback` row that the in-memory counts below read. */
+export type FeedbackCountRow = {
+  area?: string | null;
+  half?: string | null;
+  locality?: string | null;
+  origin?: string | null;
+  reaction?: string | null;
+  usage?: string | null;
+};
+
+/** `feedbackTotals` over rows already loaded (the cacheable shared part of the word-feedback GET). */
+export const totalsFromRows = (rows: FeedbackCountRow[]): FeedbackTotals => ({
+  dislike: rows.filter((r) => r.reaction === "dislike").length,
+  know: rows.filter((r) => r.usage === "know").length,
+  like: rows.filter((r) => r.reaction === "like").length,
+  never: rows.filter((r) => r.usage === "never").length,
+  say: rows.filter((r) => r.usage === "say").length,
+});
+
+/** `feedbackCompare` over rows already loaded; same `MIN_GROUP` rule as `share`. */
+export const compareFromRows = (
+  rows: FeedbackCountRow[],
+  area: Area | null,
+  locality: Locality | null = null,
+): FeedbackCompare => {
+  const voted = rows.filter((r) => r.usage);
+  const of = (group: (r: FeedbackCountRow) => boolean): number | null => {
+    const g = voted.filter(group);
+    return g.length < MIN_GROUP
+      ? null
+      : Math.round((g.filter((r) => r.usage === "say").length / g.length) * 100);
+  };
+  return {
+    area: area ? of((r) => r.area === area) : null,
+    east: of((r) => r.half === "east"),
+    locality: locality ? of((r) => r.locality === locality) : null,
+    moved: of((r) => r.origin === "movedOver10" || r.origin === "movedUnder10"),
+    west: of((r) => r.half === "west"),
+  };
+};

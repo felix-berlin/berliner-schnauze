@@ -7,12 +7,7 @@
     </a>
     <a
       v-if="trendBadge"
-      v-tooltip="{
-        content: trendBadge.tip,
-        placement: 'bottom-start',
-        touch: 'toggle',
-        variant: 'ink',
-      }"
+      v-tooltip="{ ...tooltipInk, content: trendBadge.tip, placement: 'bottom-start' }"
       class="trend"
       href="/wort"
     >
@@ -27,29 +22,20 @@ import CalendarDays from "virtual:icons/lucide/calendar-days";
 import TrendingUp from "virtual:icons/lucide/trending-up";
 import { computed } from "vue";
 
-// "Im Aufwind" is implemented but gets no data yet (the page model has no rising trend).
-type Trend =
-  | { kind: "beliebt"; rank: number; views7: number }
-  | { kind: "aufwind"; change: number; views7: number };
+import { tooltipInk } from "@/directives/tooltip";
 
 const { trend, wotd } = defineProps<{
   slug: string;
-  trend?: Trend | undefined;
+  trend?: { rank: number; views7: number } | undefined;
   wotd?: { date: string } | undefined;
 }>();
 
-const trendBadge = computed(() =>
-  trend?.kind === "beliebt"
-    ? {
-        text: `Gerade beliebt · Platz ${trend.rank}`,
-        tip: `${trend.views7} Aufrufe in den letzten 7 Tagen. Zur Liste „Gerade beliebt“`,
-      }
-    : trend?.kind === "aufwind"
-      ? {
-          text: `Im Aufwind · +${trend.change} %`,
-          tip: `+${trend.change} % Aufrufe zur Vorwoche, ${trend.views7} Aufrufe in 7 Tagen. Zur Liste „Im Aufwind“`,
-        }
-      : undefined,
+const trendBadge = computed(
+  () =>
+    trend && {
+      text: `Gerade beliebt · Platz ${trend.rank}`,
+      tip: `${trend.views7} Aufrufe in den letzten 7 Tagen. Zur Liste „Gerade beliebt“`,
+    },
 );
 </script>
 

@@ -17,7 +17,7 @@ import {
   type WordRef,
 } from "./homeStats";
 import { PUBLISHED_WORD } from "./statsQueries";
-import { AREAS, MIN_GROUP, type Age, type Area, type Usage } from "./wordFeedback";
+import { AREA_NAMES, AREAS, MIN_GROUP, type Age, type Area, type Usage } from "./wordFeedback";
 import { trending } from "./wordStats";
 
 // Start page aggregates (`payload-app/home-stats-load`). Only aggregates leave this module: no ids, timestamps,
@@ -51,21 +51,9 @@ export type HomeStats = {
 export type DailyStats = Pick<HomeStats, "districts" | "ageLists">;
 export type HourlyStats = Pick<HomeStats, "popular" | "rising" | "bon">;
 
-const DISTRICT_NAMES = {
-  mitte: "Mitte",
-  "friedrichshain-kreuzberg": "Friedrichshain-Kreuzberg",
-  pankow: "Pankow",
-  "charlottenburg-wilmersdorf": "Charlottenburg-Wilmersdorf",
-  spandau: "Spandau",
-  "steglitz-zehlendorf": "Steglitz-Zehlendorf",
-  "tempelhof-schoeneberg": "Tempelhof-Schöneberg",
-  neukoelln: "Neukölln",
-  "treptow-koepenick": "Treptow-Köpenick",
-  "marzahn-hellersdorf": "Marzahn-Hellersdorf",
-  lichtenberg: "Lichtenberg",
-  reinickendorf: "Reinickendorf",
-} as const;
-const DISTRICTS = AREAS.filter((a) => a in DISTRICT_NAMES) as (keyof typeof DISTRICT_NAMES)[];
+const DISTRICTS = AREAS.filter(
+  (a): a is Exclude<Area, "brandenburg" | "elsewhere"> => a !== "brandenburg" && a !== "elsewhere",
+);
 
 const AGE_LIST_SIZE = 4;
 const TOP_SIZE = 5;
@@ -140,7 +128,7 @@ const loadDistricts = async (payload: BasePayload): Promise<District[]> => {
     const hit = rows.find((r) => r.word_id === best);
     return {
       area,
-      name: DISTRICT_NAMES[area],
+      name: AREA_NAMES[area],
       value: districtValue(counts.get(area) ?? emptyCounts()),
       typical: hit ? { slug: hit.slug, berlinerisch: hit.berlinerisch } : null,
     };

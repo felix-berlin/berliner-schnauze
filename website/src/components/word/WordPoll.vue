@@ -190,16 +190,10 @@
         <div class="columns">
           <div class="all">
             <h4 class="h" data-autofocus tabindex="-1">Wat sagen alle?</h4>
-            <div class="matrix" data-matrix aria-hidden="true">
-              <span
-                v-for="(u, i) in result.matrix"
-                :key="i"
-                class="dot"
-                :data-usage="u"
-                :data-own="i === ownIndex ? 'true' : undefined"
-                :style="{ '--i': i }"
-              />
-            </div>
+            <UsageDots
+              :dots="result.matrix.map((usage, i) => ({ mine: i === ownIndex, usage }))"
+              variant="matrix"
+            />
             <ul class="legend">
               <li v-for="o in USAGE_OPTIONS" :key="o.value">
                 <span class="swatch" aria-hidden="true" :data-usage="o.value" />
@@ -226,20 +220,18 @@
               >
                 <li v-for="r in g.rows" :key="r.key">
                   <span class="name">{{ r.label }}</span>
-                  <span class="dots" data-dots aria-hidden="true">
-                    <span
-                      v-for="n in DOTS"
-                      :key="n"
-                      class="dot"
-                      :data-filled="n <= dotsFor(r.selbst) ? 'true' : 'false'"
-                      :style="{ '--i': n }"
-                    />
-                  </span>
+                  <UsageDots :dots="rowDots(r.selbst)" variant="row" />
                   <span class="pct">{{ r.selbst }} %</span>
                 </li>
               </ul>
             </template>
             <p class="foot">1 Punkt = 5 % · nur Gruppen ab 10 Stimmen</p>
+            <p v-if="unsynced" class="foot" role="status">
+              Is jespeichert, Zahlen laden gleich nach.
+            </p>
+            <p v-else-if="stale" class="foot" role="status">
+              Zahlen konnten nich aktualisiert werden.
+            </p>
           </div>
         </div>
 
@@ -310,10 +302,11 @@
 <script setup lang="ts">
 import type { Area, Usage } from "payload-app/word-feedback";
 
+import UsageDots, { type UsageDot } from "@components/UsageDots.vue";
 import BerlinAreaMap from "@components/word-feedback/BerlinAreaMap.vue";
 import { USAGE_OPTIONS } from "@components/word-feedback/usageOptions";
-import { OFFLINE_HINT, useOnline } from "@composables/useOnline.ts";
-import { type PollResult, MIN_GROUP, dotsFor } from "@lib/pollResult.ts";
+import { OFFLINE_HINT } from "@lib/offlineHint.ts";
+import { type PollResult, type Region, MIN_GROUP, dotsFor } from "@lib/pollResult.ts";
 import { useStore } from "@nanostores/vue";
 import {
   $feedback,
@@ -337,6 +330,7 @@ import {
   progressSegments,
   type ProfileStep,
 } from "@utils/wordFeedbackView";
+import { useOnline } from "@vueuse/core";
 import { AREA_LOCALITIES, LOCALITY_NAMES } from "payload-app/word-feedback";
 import CircleAlert from "virtual:icons/lucide/circle-alert";
 import Trash2 from "virtual:icons/lucide/trash-2";
@@ -348,8 +342,6 @@ import { BERLIN_AREAS } from "@/data/berlinAreas";
 // "Sagste det noch?": A vote, B questions, C result (SPEC 7). The own answers load after hydration from the
 // no-store GET (never from props: the page HTML is shared and cached); `initial` is the shared result.
 const props = defineProps<{ initial: PollResult; label: string; slug: string; wordId: number }>();
-
-const DOTS = 20;
 
 const online = useOnline();
 const feedback = useStore($feedback);
@@ -377,6 +369,8 @@ const total = computed(() => result.value.total);
 
 const pending = ref(false);
 const refreshing = ref(false);
+const unsynced = ref(false); // stored, but the totals were not read back yet
+const stale = ref(false); // the last refresh failed: the shown numbers may be old
 const pendingUsage = ref<Usage | null>(null);
 const failedUsage = ref<Usage | null>(null);
 const voteFailed = computed(() => !!failedUsage.value);
@@ -458,10 +452,11 @@ const goTo = (to: ProfileStep, dir: "back" | "forward" = "forward") => {
 const refresh = async () => {
   refreshing.value = true;
   try {
+    // refreshFeedback logs its own failure and answers null; the shown numbers stay as they are.
     const state = await refreshFeedback(props.wordId);
+    stale.value = !state;
+    if (state) unsynced.value = false;
     if (state?.result) result.value = state.result;
-  } catch {
-    // The shown numbers stay as they are.
   } finally {
     refreshing.value = false;
   }
@@ -496,9 +491,15 @@ const vote = async (usage: Usage) => {
     }
     trackEvent("Word Feedback", "usage", usage);
     // silent: the strip is the one channel for a failed vote.
-    if (!(await answerUsage(props.wordId, usage, true))) {
+    const sent: boolean | "unsynced" = await answerUsage(props.wordId, usage, true);
+    if (!sent) {
       failedUsage.value = usage;
       return;
+    }
+    // Stored, but the server could not read the totals back: fetch the state once instead of showing the old one.
+    if (sent === "unsynced") {
+      unsynced.value = true;
+      await refresh();
     }
     failedUsage.value = null;
     deleted.value = false;
@@ -508,7 +509,7 @@ const vote = async (usage: Usage) => {
       view.value = "result";
       void focusQuestion();
     } else startQuestions();
-    void refresh();
+    if (sent !== "unsynced") void refresh();
   } finally {
     pending.value = false;
     pendingUsage.value = null;
@@ -533,9 +534,14 @@ const answer = async (key: ProfileStep, value: string | null) => {
       area: answers.value.area,
       hadLocality,
     }) as Parameters<typeof sendFeedback>[1];
-    if (!(await sendFeedback(props.wordId, patch, { silent: true }))) {
+    const sent = await sendFeedback(props.wordId, patch, { silent: true });
+    if (!sent) {
       answerFailed.value = true;
       return;
+    }
+    if (sent === "unsynced") {
+      unsynced.value = true;
+      void refresh();
     }
     const next: Answers = { ...answers.value };
     for (const [k, v] of Object.entries(patch)) {
@@ -583,11 +589,14 @@ const change = () => {
 
 // ---- C: result
 const ownIndex = computed(() => (own.value ? result.value.matrix.indexOf(own.value) : -1));
+// A row: 20 dots, one per 5 %, the first dotsFor(share) filled.
+const rowDots = (selbst: number): UsageDot[] =>
+  Array.from({ length: 20 }, (_, i) => ({ filled: i < dotsFor(selbst) }));
 const share = (u: Usage) =>
   result.value.shares[{ know: "kenn", never: "nie", say: "selbst" }[u] as "kenn"];
 const labelOf = (key: string, list: { label: string; value: string }[]) =>
   list.find((o) => o.value === key)?.label ?? key;
-const regionLabel = { ost: "Ost", umland: "Umland", west: "West" } as Record<string, string>;
+const regionLabel: Record<Region, string> = { ost: "Ost", umland: "Umland", west: "West" };
 // The server leaves small groups out already; hold the same line here.
 const regions = computed(() => result.value.byRegion.filter((g) => g.n >= MIN_GROUP));
 const ages = computed(() => result.value.byAge.filter((g) => g.n >= MIN_GROUP));
@@ -597,7 +606,7 @@ const groups = computed(() => [
     label: "„Sag ick selbst“ nach Wohnort",
     rows: regions.value.map((g) => ({
       key: g.key,
-      label: regionLabel[g.key] ?? g.key,
+      label: regionLabel[g.key],
       selbst: g.selbst,
     })),
   },

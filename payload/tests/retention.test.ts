@@ -318,4 +318,48 @@ describe("runRetention edge cases", () => {
       spy.mockRestore();
     }
   });
+
+  it("keeps running the later steps when the suggestion step fails, then throws at the end", async () => {
+    const stale = await make({});
+    await payload.update({ collection: "comments", id: stale.id, data: { status: "pending" } });
+    const mk = (visitor: string) =>
+      payload.create({
+        collection: "word-feedback",
+        data: { word: wordId, visitor, usage: "say", area: "pankow" } as never,
+      });
+    const old = await mk("v-old-suggestion-fail");
+    const original = payload.db.updateMany.bind(payload.db);
+    const spy = vi
+      .spyOn(payload.db, "updateMany")
+      .mockImplementation(async (args) =>
+        args.collection === "suggestions" ? Promise.reject(new Error("locked")) : original(args),
+      );
+    const logged = vi.spyOn(payload.logger, "error").mockImplementation(() => undefined);
+    try {
+      const result = await runRetention(payload, days(500));
+      expect(result.failedSteps).toEqual(["suggestions"]);
+      expect(logged).toHaveBeenCalledWith(
+        expect.objectContaining({ msg: "retention: suggestions failed" }),
+      );
+      expect(
+        (await payload.findByID({ collection: "word-feedback", id: old.id })).visitor ?? null,
+      ).toBeNull();
+      expect(
+        (await payload.find({ collection: "comments", where: { id: { equals: stale.id } } }))
+          .totalDocs,
+      ).toBe(0);
+      const handler = retentionTask.handler as (args: never) => Promise<unknown>;
+      vi.useFakeTimers({ toFake: ["Date"] });
+      vi.setSystemTime(days(500));
+      try {
+        await expect(handler({ req: { payload } } as never)).rejects.toThrow(/suggestions/);
+      } finally {
+        vi.useRealTimers();
+      }
+    } finally {
+      spy.mockRestore();
+      logged.mockRestore();
+      await payload.delete({ collection: "word-feedback", id: old.id });
+    }
+  });
 });

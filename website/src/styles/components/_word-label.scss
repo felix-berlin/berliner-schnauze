@@ -4,13 +4,11 @@
 // "Bedeutung", "O-Ton", the table of contents heading and every later card label. Root only, no parts.
 @include mx.component("word-label") {
   :scope {
-    // SPEC §4.2: exactly 13px, no font-size token at that size
-    --_size: 0.8125rem;
     // SPEC §4.2: 1.5px tracking, no tracking token
     --_tracking: 1.5px;
 
     margin: 0;
-    font-size: var(--_size);
+    font-size: var(--font-size-label);
     font-weight: var(--font-weight-bold);
     letter-spacing: var(--_tracking);
     line-height: 1.4;

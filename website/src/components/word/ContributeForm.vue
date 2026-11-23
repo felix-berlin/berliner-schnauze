@@ -125,13 +125,11 @@
 
           <div class="under">
             <span v-if="f.hint" :id="`${uid}-${f.key}-hint`" class="hint">{{ f.hint }}</span>
-            <!-- The live region stays in the DOM, so the count is announced when it appears (SPEC §13). -->
-            <span
-              class="counter"
-              aria-live="polite"
-              :data-state="tooLong(f) ? 'over' : undefined"
-              >{{ counter(f) }}</span
-            >
+            <span class="counter" :data-state="tooLong(f) ? 'over' : undefined">{{
+              counter(f)
+            }}</span>
+            <!-- Live region stays in the DOM; its text only changes on a state change (near, over), not per keystroke. -->
+            <span class="u-sr-only" aria-live="polite">{{ counterNote(f) }}</span>
           </div>
           <span v-if="refused?.field === f.key" :id="`${uid}-${f.key}-error`" class="error">{{
             refused.message
@@ -144,7 +142,7 @@
         appearance="interaction-only"
         :site-key="TURNSTILE_SITE_KEY"
         :wrapper-id="`turnstile-${type}`"
-        @error="onCaptchaError"
+        @error="onError"
         @token="onToken"
       />
 
@@ -190,15 +188,12 @@
 <script setup lang="ts">
 import BerlinerBaer from "@components/kalle/BerlinerBaer.vue";
 import TurnStile from "@components/TurnStile.vue";
-import { OFFLINE_HINT, useOnline } from "@composables/useOnline.ts";
+import { useGuardedAction } from "@composables/useGuardedAction.ts";
+import { useTurnstile } from "@composables/useTurnstile.ts";
 import { BEZIRK_NAMES } from "@lib/bezirkNames.ts";
-import {
-  FACT_KIND_LABEL,
-  FACT_KIND_ORDER,
-  REPORT_KIND_LABEL,
-  REPORT_KIND_ORDER,
-} from "@lib/contribute.ts";
-import { rememberEditKey, rememberSubmission } from "@lib/ownSubmissions.ts";
+import { FACT_KIND_LABEL, REPORT_KIND_LABEL } from "@lib/contribute.ts";
+import { OFFLINE_HINT } from "@lib/offlineHint.ts";
+import { rememberSubmission } from "@lib/ownSubmissions.ts";
 import { RELATION_LABEL, RELATION_ORDER } from "@lib/wordNetwork.ts";
 import { suggestWords, type WordSuggestion } from "@lib/wordSuggest.ts";
 import { useStore } from "@nanostores/vue";
@@ -206,9 +201,22 @@ import { closeContributeForm, openForm } from "@stores/contribute.ts";
 import { captchaWaitToast } from "@utils/captchaToast.ts";
 import { reportError } from "@utils/reportError.ts";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
+import {
+  EXAMPLE_MAX,
+  FACT_MAX,
+  HIGHDEUTSCH_MAX,
+  MISSING,
+  RELATED_MAX,
+  REPORT_EMAIL_MAX,
+  REPORT_TEXT_MAX,
+  STORY_TEXT_MAX,
+  SUBMISSION_NAME_MAX,
+  TOO_LONG,
+} from "payload-app/submission-limits";
+import { FACT_KINDS, REPORT_KINDS } from "payload-app/suggestion-enums";
 import CircleAlert from "virtual:icons/lucide/circle-alert";
 import Hourglass from "virtual:icons/lucide/hourglass";
-import { computed, nextTick, reactive, ref, useId, useTemplateRef, watch } from "vue";
+import { computed, nextTick, onMounted, reactive, ref, useId, useTemplateRef, watch } from "vue";
 
 type FormType = "error" | "example" | "fact" | "related" | "story";
 type Field = {
@@ -241,17 +249,20 @@ const props = defineProps<{
 }>();
 
 // SPEC §13 limits; the server enforces the same (api/contribute, stories, reports).
-const LIMIT = { email: 200, highdeutsch: 200, name: 40, target: 60 };
+const LIMIT = {
+  email: REPORT_EMAIL_MAX,
+  highdeutsch: HIGHDEUTSCH_MAX,
+  name: SUBMISSION_NAME_MAX,
+  target: RELATED_MAX,
+};
 const TEXT_MAX: Record<FormType, number> = {
-  error: 1000,
-  example: 200,
-  fact: 1000,
+  error: REPORT_TEXT_MAX,
+  example: EXAMPLE_MAX,
+  fact: FACT_MAX,
   related: 0,
-  story: 500,
+  story: STORY_TEXT_MAX,
 };
 const COUNTER_FROM = 0.8;
-const TOO_LONG = "Ditt is ein bisken zu lang.";
-const MISSING = "Ohne Text wird dett nüscht.";
 const COMMUNITY = "Leer lassen, dann steht da „aus der Community“.";
 
 const NAME_HINT: Record<Exclude<FormType, "error">, string> = {
@@ -361,7 +372,7 @@ const fields = computed<Field[]>(() => {
           control: "chips",
           key: "kind",
           label: "Wat für Wissen?",
-          options: options(FACT_KIND_LABEL, FACT_KIND_ORDER),
+          options: options(FACT_KIND_LABEL, FACT_KINDS),
         },
         {
           control: "textarea",
@@ -389,7 +400,7 @@ const fields = computed<Field[]>(() => {
           control: "chips",
           key: "reportKind",
           label: "Wat stimmt nich?",
-          options: options(REPORT_KIND_LABEL, REPORT_KIND_ORDER),
+          options: options(REPORT_KIND_LABEL, REPORT_KINDS),
         },
         {
           control: "textarea",
@@ -426,14 +437,13 @@ const blank = (): Record<Key, string> => ({
 const v = reactive(blank());
 
 const uid = useId();
-const online = useOnline();
+const { busy, canRun, online, run } = useGuardedAction();
 const $open = useStore(openForm);
 const isOpen = computed(() => $open.value === props.type);
 const root = useTemplateRef<HTMLElement>("root");
 const thanks = useTemplateRef<HTMLElement>("thanks");
-const turnstile = useTemplateRef<{ reset: () => void }>("turnstile");
 
-const sending = ref(false);
+const sending = computed(() => busy.has("send"));
 const done = ref(false);
 const failed = ref(false);
 const reason = ref("");
@@ -447,6 +457,12 @@ const over = computed(() => fields.value.some(tooLong));
 const ready = computed(() => v[requiredKey].trim().length > 0 && !over.value);
 const counter = (f: Field): string =>
   f.max && v[f.key].length >= f.max * COUNTER_FROM ? `${v[f.key].length} / ${f.max}` : "";
+const counterNote = (f: Field): string =>
+  tooLong(f)
+    ? "Ditt is zu lang."
+    : f.max && v[f.key].length >= f.max * COUNTER_FROM
+      ? "Fast am Limit."
+      : "";
 const describedBy = (f: Field): string | undefined => {
   const ids = [
     f.hint && `${uid}-${f.key}-hint`,
@@ -460,30 +476,28 @@ watch(v, () => {
 });
 
 // --- Turnstile ------------------------------------------------------------------------------------
-// A token works once; the widget issues the next one after reset().
-const token = ref("");
-const captchaFailed = ref(false);
+// A token works once; the widget issues the next one after spend().
 let sendWhenReady = false;
+const {
+  failed: captchaFailed,
+  clear: clearToken,
+  onError,
+  onToken,
+  spend,
+  token,
+} = useTurnstile(() => {
+  waiting.value = "";
+  if (sendWhenReady) {
+    sendWhenReady = false;
+    void onSubmit();
+  }
+});
 // Closing unmounts the widget: a click waiting for its token must not fire on the next widget, and a token from before
 // the close may be spent or expired.
 const dropPendingCaptcha = (): void => {
   sendWhenReady = false;
-  token.value = "";
+  clearToken();
   waiting.value = "";
-};
-const onToken = (value: string): void => {
-  token.value = value;
-  if (value) {
-    captchaFailed.value = false;
-    waiting.value = "";
-    if (sendWhenReady) {
-      sendWhenReady = false;
-      void onSubmit();
-    }
-  }
-};
-const onCaptchaError = (): void => {
-  captchaFailed.value = true;
 };
 
 // --- open / close ---------------------------------------------------------------------------------
@@ -499,6 +513,10 @@ watch(
   },
   { flush: "post", immediate: true },
 );
+// Lazy shell: the form mounts after the click that opened it, so the immediate run above found no root yet.
+onMounted(() => {
+  if (isOpen.value) root.value?.querySelector<HTMLElement>(FIRST_FIELD)?.focus();
+});
 
 const cancel = (): void => {
   dropPendingCaptcha();
@@ -643,16 +661,17 @@ const fail = (why = "", field?: string): void => {
 };
 
 const onSubmit = async (): Promise<void> => {
-  // aria-disabled, not :disabled: the button keeps the focus while sending or offline. The flag is set
-  // before the first await, so a double click cannot send twice.
-  if (sending.value || !online.value) return;
+  if (!canRun("send")) return;
   if (!ready.value) return refuse();
   if (!token.value) {
     waiting.value = captchaWaitToast(captchaFailed.value).message;
     sendWhenReady = !captchaFailed.value; // the click is not lost: it sends as soon as the token arrives
     return;
   }
-  sending.value = true;
+  await run("send", send);
+};
+
+const send = async (): Promise<void> => {
   failed.value = false;
   reason.value = "";
   waiting.value = "";
@@ -664,10 +683,8 @@ const onSubmit = async (): Promise<void> => {
       method: "POST",
     });
     const data = (await res.json().catch(() => null)) as null | {
-      editKey?: string;
       error?: string;
       field?: string;
-      id?: number;
       message?: string;
     };
     if (!res.ok) {
@@ -677,24 +694,20 @@ const onSubmit = async (): Promise<void> => {
       const fallback = res.status === 429 ? "Ma langsam, Keule – versuch's gleich nochmal." : "";
       fail(data?.message ?? data?.error ?? fallback, data?.field);
     } else {
-      succeed(data?.editKey, data?.id);
+      succeed();
     }
   } catch (error) {
-    // fetch() rejects with a TypeError when offline; anything else is a bug worth reporting.
-    if (!(error instanceof TypeError)) reportError(error);
+    // Offline (per navigator.onLine) is expected; anything else, a TypeError from our own code included, is reported.
+    if (online.value) reportError(error);
     fail();
   } finally {
-    sending.value = false;
     // The token is spent; the widget issues the next one.
-    token.value = "";
-    turnstile.value?.reset();
+    spend();
   }
 };
 
-const succeed = (editKey?: string, id?: number): void => {
-  if (props.type === "story") {
-    if (editKey && typeof id === "number") rememberEditKey(id, editKey);
-  } else if (props.type !== "error") {
+const succeed = (): void => {
+  if (props.type !== "story" && props.type !== "error") {
     rememberSubmission(props.word, props.type, props.type === "related" ? v.target : v.text);
   }
   Object.assign(v, blank());

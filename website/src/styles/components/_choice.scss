@@ -7,7 +7,7 @@
 // Variant pill (data-variant="pill"): voice button (SPEC §6): 36px pill on card2 with a 26px play circle (.icon), a hit band
 // reaches 44px.
 // Variant chip (SPEC §4.3 "Chip (Auswahl)"): 36px pill on the card surface with a 44px hit band; pressed = ink rim and
-// text on the warm ground (not the orange fill).
+// text in the card colour on an ink ground (mock + state boards; not the orange fill).
 // Variant segment: one chip of a small connected control (36px look, 44px hit band; neighbours
 // overlap by their border).
 // Public (a parent's layout knobs, the old :where() let parents override these): --choice-display,
@@ -76,12 +76,14 @@
   :scope[data-variant~="tile"] {
     inline-size: 100%;
     min-block-size: var(--choice-min-block-size, 4.5rem);
-    padding: var(--choice-padding-block, var(--space-3))
-      var(--choice-padding-inline, var(--space-4));
+    // minus the 1px border below, so the tile keeps its size
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- the 1px border compensation has no token step
+    padding: calc(var(--choice-padding-block, var(--space-3)) - 1px)
+      calc(var(--choice-padding-inline, var(--space-4)) - 1px);
     justify-content: var(--choice-justify, flex-start);
     gap: var(--space-3);
     text-align: start;
-    border: 0;
+    border: 1px solid transparent; // painted by background only; forced colours turns the transparent border into a visible outline
     border-radius: var(--radius-sm);
 
     &:not([aria-pressed="true"]) {
@@ -128,7 +130,9 @@
 
   // Variant answer (mock .w18__poll .c-choice): a poll answer as a flat, borderless card2 tile, bold.
   :scope[data-variant~="answer"] {
-    border: 0;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- 1px border compensation, no token step
+    padding-inline: calc(var(--choice-padding-inline, var(--space-4)) - 1px);
+    border: 1px solid transparent; // see tile: visible in forced colours only
     border-radius: var(--radius-sm);
     color: var(--color-text-strong);
     letter-spacing: 0;
@@ -151,15 +155,11 @@
     &[aria-pressed="true"] {
       color: var(--color-text-on-accent);
     }
-
-    &[aria-disabled="true"] {
-      border-style: none;
-    }
   }
 
   :scope[data-variant~="pill"] {
     --_h: 2.25rem; // SPEC §4.3 / mock .w17__vb: 36px, no token
-    --_bleed: calc((var(--size-tap-target) - var(--_h)) / 2);
+    --_reach: calc((var(--size-tap-target) - var(--_h)) / 2);
 
     position: relative;
     min-block-size: var(--_h);
@@ -173,12 +173,7 @@
     letter-spacing: 0;
 
     // Looks 36px, hits 44px.
-    &::before {
-      content: "";
-      position: absolute;
-      inset: calc(-1 * var(--_bleed));
-    }
-
+    @include mx.hit-band;
     @include butler-mx.hover {
       &:not(:disabled, [aria-disabled="true"]) {
         box-shadow: none;
@@ -209,8 +204,8 @@
 
   :scope[data-variant~="chip"] {
     --_h: 2.25rem; // SPEC §4.3: 36px, no token
-    --_bleed: calc((var(--size-tap-target) - var(--_h)) / 2);
     --_border: 1px;
+    --_reach: calc((var(--size-tap-target) - var(--_h)) / 2 + var(--_border));
 
     position: relative;
     min-block-size: var(--choice-min-block-size, var(--_h));
@@ -222,30 +217,29 @@
     letter-spacing: normal;
 
     // Looks 36px, hits 44px (positioned from the padding box, hence the border width).
-    &::before {
-      content: "";
-      position: absolute;
-      inset-block: calc(-1 * (var(--_bleed) + var(--_border)));
-      inset-inline: 0;
-    }
-
+    @include mx.hit-band("block");
     @include butler-mx.hover {
       &:not(:disabled, [aria-disabled="true"]) {
         border-style: solid;
         box-shadow: none;
-        background: var(--color-surface-chip);
+
+        &:not([aria-pressed="true"]) {
+          background: var(--color-surface-chip);
+        }
       }
     }
 
+    // Mock .w18__chips and the state boards: the chosen chip is inked in, text in the card colour.
     &[aria-pressed="true"] {
       border-color: var(--color-text-strong);
-      background: var(--color-surface-card3, var(--color-surface-tint-warm));
-      color: var(--color-text-strong);
+      background: var(--color-text-strong);
+      color: var(--color-surface-sheet);
     }
   }
 
   :scope[data-variant~="segment"] {
     --_border: 1px;
+    --_reach: calc(var(--space-1) + var(--_border));
 
     position: relative;
     min-block-size: var(--choice-min-block-size, 2.25rem); // one-off: mock 36px
@@ -258,12 +252,7 @@
 
     // Looks 36px, hits 44px: the invisible band reaches 4px beyond the border box above and below
     // (36 + 2 x 4 = 44; positioned from the padding box, hence the extra border width).
-    &::before {
-      content: "";
-      position: absolute;
-      inset-block: calc(-1 * (var(--space-1) + var(--_border)));
-      inset-inline: 0;
-    }
+    @include mx.hit-band("block");
 
     // The ring sits 2px outside the chip; a later neighbour (positioned) must not paint over it.
     &:focus-visible {
@@ -302,8 +291,7 @@
 
     span {
       color: var(--color-text-muted);
-      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §4.2: 13px minimum, the xs token is 12px
-      font-size: 0.8125rem;
+      font-size: var(--font-size-label);
     }
   }
 }

@@ -8,7 +8,6 @@
 @include mx.component("home-fresh") {
   :scope {
     --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
-    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
     --_tab: var(--font-size-2xl); // 1.5rem tabs and h3 (SPEC §4.5), nearest step
     --_rank: 1.75rem; // SPEC §10 rank digits, between the 2xl and 3xl steps
     --_dot: 8px;
@@ -85,7 +84,7 @@
     padding: var(--space-2) 0 var(--space-3);
     border: 0;
     background: none;
-    color: var(--t3);
+    color: var(--color-warm-quiet);
     cursor: pointer;
     transition: color var(--duration-fast) var(--ease-standard);
 
@@ -135,11 +134,11 @@
         color var(--duration-fast) var(--ease-standard);
 
       &:active {
-        background: var(--card3);
+        background: var(--color-warm-card3);
       }
 
       @include butler-mx.hover {
-        background: var(--card2);
+        background: var(--color-warm-card2);
 
         b {
           color: var(--color-text-accent);
@@ -165,14 +164,14 @@
 
     .meaning {
       grid-row: 2;
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
 
     time {
       grid-row: 1 / 3;
       grid-column: 2;
-      font-size: var(--_small);
-      color: var(--t3);
+      font-size: var(--font-size-label);
+      color: var(--color-warm-quiet);
     }
   }
 
@@ -181,7 +180,7 @@
     font-size: var(--_rank);
     font-weight: var(--font-weight-black);
     font-variant-numeric: tabular-nums;
-    color: var(--t3);
+    color: var(--color-warm-quiet);
   }
 
   .list[data-variant="ranked"] a {
@@ -200,7 +199,7 @@
 
     small {
       font-size: var(--font-size-md); // 0.875rem in the mock, nearest step
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
   }
 
@@ -211,7 +210,7 @@
     i {
       inline-size: var(--_dot);
       block-size: var(--_dot);
-      border: 1.5px solid var(--card3);
+      border: 1.5px solid var(--color-warm-card3);
       border-radius: var(--radius-pill);
 
       &[data-state="on"] {

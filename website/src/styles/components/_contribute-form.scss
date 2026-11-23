@@ -7,8 +7,7 @@
 // Root data-state: open | thanks. Without JS nothing renders (the island is client:visible).
 @include mx.component("contribute-form") {
   :scope {
-    // SPEC §4.2: hints, counters and the foot line are 13px, labels of fields 14px; no token at those sizes.
-    --_small: 0.8125rem;
+    // SPEC §4.2: labels of fields are 14px; no token at that size (hints, counters and the foot line use font-size-label).
     --_label: 0.875rem;
     // SPEC §13: padding 20px 22px.
     --_pad-block: var(--space-5);
@@ -46,7 +45,7 @@
     --textarea-min-block-size: calc(4lh + 1.2rem + 2px);
 
     display: grid;
-    gap: var(--space-1);
+    gap: var(--space-2); // mock .w18__f: 6px, the legend 8px; the 4px step sat the label on the field
   }
 
   .label {
@@ -56,12 +55,15 @@
   }
 
   .optional {
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     font-weight: var(--font-weight-regular);
     color: var(--color-text-muted);
   }
 
   .chips {
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w18__chips button: 15px, no token
+    --choice-font-size: 0.9375rem;
+
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
@@ -76,9 +78,7 @@
   .hint,
   .counter,
   .foot {
-    margin: 0;
-    font-size: var(--_small);
-    color: var(--color-text-muted);
+    @include mx.foot-note;
   }
 
   .counter {
@@ -92,7 +92,7 @@
   }
 
   .error {
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     font-weight: var(--font-weight-bold);
     color: var(--color-status-danger);
   }
@@ -135,7 +135,7 @@
   }
 
   .meaning {
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     color: var(--color-text-muted);
   }
 

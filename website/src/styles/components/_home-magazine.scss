@@ -6,7 +6,6 @@
 // .others of p + a). Reveal: the quote rises unless the root has data-reveal="wait" (the page's observer).
 @include mx.component("home-magazine") {
   :scope {
-    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
     --_quote: 2.4rem; // SPEC §12.3 mobile quote
     --_ipa: 13rem; // SPEC §12.3 mobile outline
     --_ipa-opacity: 0.08; // mock
@@ -95,7 +94,7 @@
   .meta {
     margin: var(--space-2) 0 0;
     font-size: var(--font-size-md);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
   }
 
   .excerpt {
@@ -144,10 +143,10 @@
 
     p {
       margin: 0;
-      font-size: var(--_small);
+      font-size: var(--font-size-label);
       text-transform: uppercase;
       letter-spacing: var(--_track);
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
 
     a {

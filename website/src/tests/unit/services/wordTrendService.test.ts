@@ -25,7 +25,7 @@ describe("getWordTrend", () => {
     expect(find).not.toHaveBeenCalled();
   });
 
-  it("asks for 14 days ending today and only the ranked words", async () => {
+  it("asks for 7 days ending today and only the ranked words", async () => {
     trending.mockResolvedValue([{ views: 10, word: 5 }]);
     find.mockResolvedValue({ docs: [] });
     await getWordTrend(5);
@@ -36,7 +36,7 @@ describe("getWordTrend", () => {
     expect(find).toHaveBeenCalledWith(
       expect.objectContaining({
         where: {
-          day: { greater_than_equal: "2026-10-26", less_than_equal: "2026-11-08" },
+          day: { greater_than_equal: "2026-11-02", less_than_equal: "2026-11-08" },
           word: { in: [5] },
         },
       }),
@@ -53,7 +53,6 @@ describe("getWordTrend", () => {
     });
     expect(await getWordTrend(5)).toEqual({
       bars: [0, 0, 0, 0, 0, 0, 4],
-      change: null,
       rank: 1,
       views: 4,
     });

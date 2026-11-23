@@ -1,5 +1,6 @@
 import ContributeForm from "@components/word/ContributeForm.vue";
 import { ownSubmissions } from "@lib/ownSubmissions.ts";
+import { suggestWords } from "@lib/wordSuggest.ts";
 import { openForm } from "@stores/contribute.ts";
 import { flushPromises, mount, type VueWrapper } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -115,7 +116,7 @@ describe("ContributeForm states", () => {
     expect(openForm.get()).toBeNull();
   });
 
-  it("shows the counter from 80 % of the limit, live and polite", async () => {
+  it("shows the counter from 80 % of the limit; the live text changes on state changes only", async () => {
     const w = make("example");
     await open("example");
     const area = byLabel(w, "Satz uff Berlinerisch");
@@ -123,7 +124,39 @@ describe("ContributeForm states", () => {
     expect(w.text()).not.toContain("159 / 200");
     await area.setValue("x".repeat(160));
     expect(w.text()).toContain("160 / 200");
-    expect(w.find("[aria-live=polite]").exists()).toBe(true);
+    const live = () => w.find("[aria-live=polite]");
+    expect(w.find(".counter").attributes("aria-live")).toBeUndefined();
+    expect(live().text()).toBe("Fast am Limit.");
+    await area.setValue("x".repeat(170));
+    expect(live().text()).toBe("Fast am Limit."); // another keystroke, same text: nothing new is announced
+    await area.setValue("x".repeat(201));
+    expect(live().text()).toBe("Ditt is zu lang.");
+    await area.setValue("x");
+    expect(live().text()).toBe("");
+  });
+
+  it("a TypeError is reported while online, an offline failure is not", async () => {
+    const send = async () => {
+      const w = make("example");
+      await open("example");
+      await byLabel(w, "Satz uff Berlinerisch").setValue("Satz");
+      await submit(w).trigger("click");
+      await flushPromises();
+    };
+    fetchMock.mockRejectedValue(new TypeError("boom"));
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    await send();
+    expect(spy.mock.calls.flat().some((a) => a instanceof TypeError)).toBe(true);
+    spy.mockClear();
+    fetchMock.mockImplementation(async () => {
+      // the connection drops while the request is in flight
+      vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
+      window.dispatchEvent(new Event("offline"));
+      throw new TypeError("offline");
+    });
+    await send();
+    expect(spy).not.toHaveBeenCalled();
+    spy.mockRestore();
   });
 
   it("over the limit keeps Absenden aria-disabled", async () => {
@@ -269,7 +302,7 @@ describe("ContributeForm thanks", () => {
     expect((byLabel(w, "Satz uff Berlinerisch").element as HTMLTextAreaElement).value).toBe("");
   });
 
-  it("remembers a sent suggestion for the chip, a sent story's edit key separately", async () => {
+  it("remembers a sent suggestion for the chip, a sent story leaves no edit key behind", async () => {
     const w = make("example");
     await open("example");
     await byLabel(w, "Satz uff Berlinerisch").setValue("Ein Satz");
@@ -279,15 +312,13 @@ describe("ContributeForm thanks", () => {
     expect(ownSubmissions("schrippe")).toMatchObject([{ preview: "Ein Satz", type: "example" }]);
     expect(localStorage.getItem("bs-own-submissions")).not.toContain("Kalle");
 
-    fetchMock.mockResolvedValue(okResponse({ editKey: "edit-1", id: 42, ok: true }));
+    fetchMock.mockResolvedValue(okResponse({ id: 42, ok: true }));
     const s = make("story");
     await open("story");
     await byLabel(s, "Deine Jeschichte").setValue("Eene Jeschichte");
     await submit(s).trigger("click");
     await flushPromises();
-    const keys = JSON.parse(localStorage.getItem("bs-comment-keys") ?? "{}");
-    expect(keys["42"]).toMatchObject({ key: "edit-1" });
-    expect(typeof keys["42"].createdAt).toBe("number");
+    expect(localStorage.getItem("bs-comment-keys")).toBeNull();
     expect(localStorage.getItem("bs-story-keys")).toBeNull();
   });
 });
@@ -650,5 +681,162 @@ describe("ContributeForm errors", () => {
     expect(mail.attributes("aria-invalid")).toBe("true");
     expect(document.activeElement).toBe(mail.element);
     expect(w.text()).toContain("Irgendwas läuft hier nicht");
+  });
+});
+
+describe("ContributeForm word picker keys and edge cases", () => {
+  const combo = (w: VueWrapper) => byLabel(w, "Welchet Wort?");
+  const press = async (w: VueWrapper, key: string, init: KeyboardEventInit = {}) => {
+    const event = new KeyboardEvent("keydown", { bubbles: true, cancelable: true, key, ...init });
+    combo(w).element.dispatchEvent(event);
+    await nextTick();
+    return event;
+  };
+  const typed = async (w: VueWrapper, text: string) => {
+    await combo(w).setValue(text);
+    await flushPromises();
+  };
+  const openRelated = async () => {
+    const w = make("related");
+    await open("related");
+    return w;
+  };
+  const listbox = (w: VueWrapper) => w.find("[role=listbox]");
+
+  it("walks the suggestions with the arrows (wrapping), takes one with Enter and does not submit", async () => {
+    const w = await openRelated();
+    await typed(w, "Schuster");
+    expect(combo(w).attributes("aria-expanded")).toBe("true");
+    expect(combo(w).attributes("aria-activedescendant")).toBeUndefined();
+    expect((await press(w, "ArrowDown")).defaultPrevented).toBe(true);
+    expect(w.findAll("[role=option]")[0]!.attributes("aria-selected")).toBe("true");
+    expect(combo(w).attributes("aria-activedescendant")).toBe(
+      w.findAll("[role=option]")[0]!.attributes("id"),
+    );
+    await press(w, "ArrowUp"); // wraps to the last
+    expect(w.findAll("[role=option]")[1]!.attributes("aria-selected")).toBe("true");
+    await press(w, "ArrowDown"); // and round again
+    expect(w.findAll("[role=option]")[0]!.attributes("aria-selected")).toBe("true");
+    expect((await press(w, "Enter")).defaultPrevented).toBe(true);
+    expect((combo(w).element as HTMLInputElement).value).toBe("Schusterjunge");
+    expect(listbox(w).attributes("style")).toContain("display: none");
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("Enter without an active suggestion is left to the form, other keys are ignored", async () => {
+    const w = await openRelated();
+    await typed(w, "Schuster");
+    expect((await press(w, "Enter")).defaultPrevented).toBe(false);
+    expect((await press(w, "a")).defaultPrevented).toBe(false);
+    expect((await press(w, "ArrowDown", { isComposing: true })).defaultPrevented).toBe(false);
+  });
+
+  it("Esc closes an open list without leaving the form, a second Esc is not swallowed", async () => {
+    const w = await openRelated();
+    await typed(w, "Schuster");
+    const first = await press(w, "Escape");
+    expect(first.defaultPrevented).toBe(false);
+    expect(listbox(w).attributes("style")).toContain("display: none");
+    expect(w.find("form").exists()).toBe(true);
+    const bubbled = vi.fn();
+    document.addEventListener("keydown", bubbled);
+    await press(w, "Escape");
+    document.removeEventListener("keydown", bubbled);
+    expect(bubbled).toHaveBeenCalled();
+  });
+
+  it("ignores the arrows without suggestions and closes the list on blur", async () => {
+    const w = await openRelated();
+    expect((await press(w, "ArrowDown")).defaultPrevented).toBe(false);
+    await typed(w, "Schuster");
+    await combo(w).trigger("blur");
+    expect(combo(w).attributes("aria-expanded")).toBe("false");
+  });
+
+  it("keeps only the answer of the latest query when an earlier one arrives late", async () => {
+    let late!: (v: { label: string; meaning: string; slug: string }[]) => void;
+    vi.mocked(suggestWords).mockImplementationOnce(
+      () => new Promise((resolve) => (late = resolve)),
+    );
+    const w = await openRelated();
+    await combo(w).setValue("Sch"); // pending
+    await typed(w, "Schuster"); // answered by the default mock
+    late([{ label: "Veraltet", meaning: "alt", slug: "veraltet" }]);
+    await flushPromises();
+    expect(w.text()).not.toContain("Veraltet");
+    expect(w.findAll("[role=option]")).toHaveLength(2);
+  });
+
+  it("offers nothing for a short term and nothing when the index fails", async () => {
+    const w = await openRelated();
+    await typed(w, "S");
+    expect(w.findAll("[role=option]")).toHaveLength(0);
+    vi.mocked(suggestWords).mockRejectedValueOnce(new Error("no index"));
+    await typed(w, "Semmel");
+    expect(w.findAll("[role=option]")).toHaveLength(0);
+    expect(combo(w).attributes("aria-expanded")).toBe("false");
+  });
+
+  it("a refused empty click marks the combo, and typing clears the mark", async () => {
+    const w = await openRelated();
+    await submit(w).trigger("click");
+    expect(combo(w).attributes("aria-invalid")).toBe("true");
+    expect(combo(w).attributes("aria-describedby")).toContain("error");
+    await typed(w, "Semmel");
+    expect(combo(w).attributes("aria-invalid")).toBeUndefined();
+  });
+
+  it("a too long text is refused with the length message, not the missing one", async () => {
+    const w = make("example");
+    await open("example");
+    await byLabel(w, "Satz uff Berlinerisch").setValue("x".repeat(201));
+    await submit(w).trigger("click");
+    expect(w.text()).toContain("Ditt is zu lang.");
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("a 400 about the related word or the report kind marks the matching control", async () => {
+    fetchMock.mockResolvedValue({
+      json: async () => ({ field: "relatedText", message: "Dit Wort jibt et nich." }),
+      ok: false,
+      status: 400,
+    });
+    const w = await openRelated();
+    await typed(w, "Semmel");
+    await submit(w).trigger("click");
+    await flushPromises();
+    expect(combo(w).attributes("aria-invalid")).toBe("true");
+    expect(w.text()).toContain("Dit Wort jibt et nich.");
+    fetchMock.mockResolvedValue({
+      json: async () => ({ field: "kind", message: "Art kenn ick nich." }),
+      ok: false,
+      status: 400,
+    });
+    const e = make("error");
+    await open("error");
+    await byLabel(e, "Wat stimmt nich, und wat wär richtig?").setValue("Stimmt nich.");
+    await submit(e).trigger("click");
+    await flushPromises();
+    expect(e.text()).toContain("Art kenn ick nich.");
+  });
+
+  it("Abbrechen of the report form hands the focus to the first visible report trigger", async () => {
+    const hidden = document.createElement("button");
+    hidden.setAttribute("data-report", "");
+    hidden.checkVisibility = () => false;
+    const visible = document.createElement("button");
+    visible.setAttribute("data-report", "");
+    visible.checkVisibility = () => true;
+    document.body.append(hidden, visible);
+    const w = make("error");
+    await open("error");
+    await w
+      .findAll("button")
+      .find((b) => b.text() === "Abbrechen")!
+      .trigger("click");
+    await flushPromises();
+    expect(document.activeElement).toBe(visible);
+    hidden.remove();
+    visible.remove();
   });
 });

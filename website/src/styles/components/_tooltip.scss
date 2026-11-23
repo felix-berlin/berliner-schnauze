@@ -78,7 +78,6 @@
     --_pad: var(--space-2) var(--space-3);
     --_max: 15rem; // SPEC §14: 240-260px
     --_fade: 0.15s;
-    --_size: 0.8125rem; // SPEC §4.2: 13px minimum, no token at that size
     --_shift: var(--space-1);
 
     // Safe margin: the flip fallbacks otherwise leave the panel flush against the viewport edge.
@@ -88,7 +87,7 @@
     --_lift: drop-shadow(0 8px 10px rgb(0 0 0 / 22%));
 
     color: var(--color-surface-sheet);
-    font-size: var(--_size);
+    font-size: var(--font-size-label);
     line-height: 1.45;
 
     @include butler-mx.feature("motion") {

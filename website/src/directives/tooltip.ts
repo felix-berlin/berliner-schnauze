@@ -22,7 +22,15 @@ export type TooltipOptions = {
   touch?: "toggle";
   /** "ink": the word-page look (handoff SPEC §14): ink ground, paper text, 150 ms + 4px motion. */
   variant?: "ink";
+  /** "keep": an existing aria-describedby (e.g. a static server-side description) stays and is not removed on cleanup. */
+  describedBy?: "keep";
 };
+
+/** The word-page look for a tooltip on a touch-toggle trigger: spread it into the options. */
+export const tooltipInk = {
+  touch: "toggle",
+  variant: "ink",
+} as const satisfies Partial<TooltipOptions>;
 
 export type TooltipValue = string | TooltipOptions;
 
@@ -39,6 +47,7 @@ type TooltipState = {
   touching: boolean;
   visible: boolean;
   domRemovalTimer: ReturnType<typeof setTimeout> | null;
+  keepDescribedBy: boolean;
   onHide: () => void;
   onKeyDown: (e: KeyboardEvent) => void;
   onPanelPointerEnter: () => void;
@@ -122,13 +131,14 @@ export function syncTooltipArrow(el: HTMLElement, panel: HTMLElement, arrow: HTM
   arrow.style.left = `${-ARROW_HALF}px`;
 }
 
-type Normalized = Required<Omit<TooltipOptions, "lead" | "touch" | "variant">> &
-  Pick<TooltipOptions, "lead" | "touch" | "variant">;
+type Normalized = Required<Omit<TooltipOptions, "describedBy" | "lead" | "touch" | "variant">> &
+  Pick<TooltipOptions, "describedBy" | "lead" | "touch" | "variant">;
 
 function normalize(value: TooltipValue): Normalized {
   const opts = typeof value === "string" ? { content: value } : value;
   return {
     content: opts.content ?? "",
+    describedBy: opts.describedBy,
     disabled: opts.disabled ?? false,
     lead: opts.lead,
     offset: opts.offset ?? 8,
@@ -243,13 +253,15 @@ function mountTooltip(el: TooltipEl, value: TooltipValue): void {
   panel.appendChild(arrow);
 
   el.style.setProperty("anchor-name", anchorName);
-  el.setAttribute("aria-describedby", id);
+  const keepDescribedBy = opts.describedBy === "keep" && el.hasAttribute("aria-describedby");
+  if (!keepDescribedBy) el.setAttribute("aria-describedby", id);
 
   const state: TooltipState = {
     anchorName,
     arrow,
     domRemovalTimer: null,
     hideTimer: null,
+    keepDescribedBy,
     onClick(e: MouseEvent) {
       const touched = state.touching || (e as PointerEvent).pointerType === "touch";
       state.touching = false;
@@ -318,7 +330,7 @@ function unmountTooltip(el: TooltipEl): void {
   if (state.domRemovalTimer !== null) clearTimeout(state.domRemovalTimer);
   removeListeners(el, state);
   el.style.removeProperty("anchor-name");
-  el.removeAttribute("aria-describedby");
+  if (!state.keepDescribedBy) el.removeAttribute("aria-describedby");
   state.panel.remove();
   delete el._tooltip;
 }

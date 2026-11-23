@@ -1,4 +1,4 @@
-/** One word type for badge, sidebar and grammar card; "(geraten)" is added to the badge text only. */
+/** One word type for badge (WordHead) and grammar card (WordAnalysisCard); "(geraten)" is added to the badge text only. */
 export const resolvePos = (
   editorial: string | undefined,
   nlpTags: Record<string, string[]>[],

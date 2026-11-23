@@ -96,7 +96,7 @@ describe("WordHead.astro", () => {
   it("passes trend and word of the day on to the badges", async () => {
     const html = await render({
       model: model({
-        trend: { change: null, kind: "beliebt", rank: 7, views7: 5 },
+        trend: { rank: 7, views7: 5 },
         wotd: { date: "2026-11-22" },
       }),
     });
@@ -127,6 +127,44 @@ describe("WordHead.astro", () => {
     expect(html).not.toMatch(/&quot;wordId&quot;:\[0,\d/);
   });
 
+  it("lists further meanings, the IPA, the kind and the same-meaning words with joiners, links and notes", async () => {
+    const html = await render({
+      model: model({
+        related: [
+          { label: "Eins", note: "ugs.", relation: "gleich", url: "/wort/eins" },
+          { label: "Zwei", relation: "gleich" },
+          { label: "Drei", relation: "gleich", url: "/wort/drei" },
+          { label: "Anders", relation: "gegenteil" },
+        ],
+        word: {
+          ...model().word,
+          berolinismus: true,
+          ipa: "tɛstvɔʁt",
+          translations: [{ translation: "Prüfung" }, { translation: "Probe" }],
+        } as never,
+      }),
+    });
+    expect(html).toContain("<li>Probe</li>");
+    expect(html).toContain("[tɛstvɔʁt]");
+    expect(html).toContain("Substantiv · Berolinismus");
+    expect(html).toMatch(/Gleiche Bedeutung wie\s+<a href="\/wort\/eins">Eins<\/a>/);
+    expect(html).toContain("(ugs.)");
+    expect(html).toContain(", Zwei");
+    expect(html).toMatch(/ und\s*<a href="\/wort\/drei">Drei<\/a>/);
+    expect(html).not.toContain("Anders</a>");
+  });
+
+  it("leaves out meaning, meta and themes of a word without them", async () => {
+    const html = await render({
+      model: model({
+        word: { ...model().word, themen: [], translations: [], wordTypes: [] } as never,
+      }),
+    });
+    expect(html).not.toContain("Bedeutung");
+    expect(html).not.toContain("themes");
+    expect(html).not.toContain("ipa");
+  });
+
   it("shows the word as h1 with its article, the syllables and the meaning", async () => {
     const html = await render({ model: model({ stress: "erste Silbe" }) });
     expect(html).toMatch(/<h1[^>]*>[\s\S]*Testwort/);
@@ -143,18 +181,13 @@ describe("WordBadges.vue", () => {
 
   // The tooltip text itself is built on the client by v-tooltip (see wordBadges.test.ts).
   it("shows the trend badge text for the beliebt trend", async () => {
-    const html = await badges({ trend: { kind: "beliebt", rank: 4, views7: 120 } });
+    const html = await badges({ trend: { rank: 4, views7: 120 } });
     expect(html).toContain("Gerade beliebt · Platz 4");
-  });
-
-  it("supports the Im Aufwind variant", async () => {
-    const html = await badges({ trend: { change: 40, kind: "aufwind", views7: 90 } });
-    expect(html).toContain("Im Aufwind · +40 %");
   });
 
   it("renders the word of the day and the trend together", async () => {
     const html = await badges({
-      trend: { kind: "beliebt", rank: 4, views7: 120 },
+      trend: { rank: 4, views7: 120 },
       wotd: { date: "2026-11-22" },
     });
     expect(html).toContain("Wort des Tages");

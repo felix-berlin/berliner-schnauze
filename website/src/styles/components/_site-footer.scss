@@ -37,7 +37,6 @@
 
 @include mx.component("site-footer") {
   :scope {
-    --_small: 0.8125rem; // SPEC 13px small print: --font-size-sm is 12.8px, below the 13px minimum
     --_col-pad: 3.5rem; // SPEC 56px, between the space-12 and space-16 steps
     --_gap-narrow: 2.5rem; // SPEC mobile column gap 40px, between the space-8 and space-12 steps
     --_legal-top: 1.375rem; // SPEC legal line padding 22px
@@ -147,7 +146,7 @@
   .small {
     max-inline-size: 36ch;
     margin: var(--space-3) 0 0;
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     color: var(--band-text-quiet);
   }
 

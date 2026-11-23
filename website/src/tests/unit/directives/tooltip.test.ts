@@ -571,6 +571,34 @@ describe("vTooltip touch toggle, Esc semantics and ink variant", () => {
     expect(el.hasAttribute("aria-describedby")).toBe(false);
   });
 
+  it('describedBy "keep" leaves an existing aria-describedby alone, also after cleanup', async () => {
+    const { attachTooltip, tooltipInk } = await import("@/directives/tooltip");
+    const el = document.createElement("button");
+    el.setAttribute("aria-describedby", "static");
+    document.body.appendChild(el);
+    const stop = attachTooltip(el, { ...tooltipInk, content: "x", describedBy: "keep" });
+    expect(el.getAttribute("aria-describedby")).toBe("static");
+    el.dispatchEvent(new Event("focusin"));
+    expect(el.getAttribute("aria-describedby")).toBe("static");
+    stop();
+    expect(el.getAttribute("aria-describedby")).toBe("static");
+  });
+
+  it('describedBy "keep" still points at the panel when there is no description', async () => {
+    const { attachTooltip } = await import("@/directives/tooltip");
+    const el = document.createElement("button");
+    document.body.appendChild(el);
+    const stop = attachTooltip(el, { content: "x", describedBy: "keep" });
+    expect(el.getAttribute("aria-describedby")).toMatch(/^tooltip-/);
+    stop();
+    expect(el.hasAttribute("aria-describedby")).toBe(false);
+  });
+
+  it("tooltipInk is the touch-toggle ink preset", async () => {
+    const { tooltipInk } = await import("@/directives/tooltip");
+    expect(tooltipInk).toEqual({ touch: "toggle", variant: "ink" });
+  });
+
   it("drops a stale touching flag after pointerup so a later keyboard focus opens it", () => {
     vi.useFakeTimers();
     const button = toggle().find("button").element;

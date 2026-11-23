@@ -1,38 +1,14 @@
+import { BERLIN, berlinNumbers } from "@utils/berlinTime.ts";
+
 export type CitationFormat = "short" | "apa" | "wikipedia";
 
-const MONTHS = [
-  "Januar",
-  "Februar",
-  "März",
-  "April",
-  "Mai",
-  "Juni",
-  "Juli",
-  "August",
-  "September",
-  "Oktober",
-  "November",
-  "Dezember",
-];
-
-// Calendar day in Europe/Berlin, so a date near midnight does not shift with the server/client zone.
-const berlin = new Intl.DateTimeFormat("en-CA", {
-  day: "2-digit",
-  month: "2-digit",
-  timeZone: "Europe/Berlin",
-  year: "numeric",
-});
-
-const parts = (d: Date) => {
-  const [year, month, day] = berlin.format(d).split("-").map(Number) as [number, number, number];
-  return { day, month, year };
-};
+const parts = berlinNumbers;
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
 const long = (d: Date) => {
-  const { year, month, day } = parts(d);
-  return { day, month: MONTHS[month - 1]!, year };
+  const { year, day } = parts(d);
+  return { day, month: d.toLocaleString("de-DE", { month: "long", timeZone: BERLIN }), year };
 };
 
 const iso = (d: Date) => {

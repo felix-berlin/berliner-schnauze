@@ -1765,6 +1765,10 @@ export interface Affiliate {
         imageAlt?: string | null;
         badge?: string | null;
         badgeModifier?: string | null;
+        /**
+         * Das Buch erscheint bei jedem Wort, auch ohne Thema. Ein Buch, das zum ersten Thema des Wortes passt, hat Vorrang.
+         */
+        alleThemen?: boolean | null;
         themen?: (number | Theman)[] | null;
         id?: string | null;
       }[]
@@ -2047,6 +2051,7 @@ export interface AffiliateSelect<T extends boolean = true> {
         imageAlt?: T;
         badge?: T;
         badgeModifier?: T;
+        alleThemen?: T;
         themen?: T;
         id?: T;
       };

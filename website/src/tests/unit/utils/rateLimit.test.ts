@@ -30,6 +30,16 @@ describe("rateLimit", () => {
     },
   );
 
+  it.each([
+    ["/api/stories", "POST", 5, 10 * 60_000],
+    ["/api/stories", "GET", 120, 60_000],
+    ["/api/comment-reports", "POST", 10, 60 * 60_000],
+    ["/api/preview", "GET", 20, 60_000],
+    ["/api/preview", "POST", 20, 60_000],
+  ])("%s %s allows %d per window of %d ms", (path, method, max, windowMs) => {
+    expect(rateLimitRule(path, method)).toMatchObject({ max, windowMs });
+  });
+
   it("counts per client within the window and starts over after it", () => {
     const rule = { max: 2, prefix: "/test-a", windowMs: 1000 };
     expect(rateLimited("a", rule, 0)).toBe(0);

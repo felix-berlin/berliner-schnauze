@@ -5,17 +5,17 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 const online = vi.hoisted(() => ({ value: true }));
-vi.mock("@composables/useOnline.ts", async () => {
+vi.mock("@vueuse/core", async (importOriginal) => {
   const { ref: vueRef } = await import("vue");
   const state = vueRef(true);
   online.value = true;
   return {
-    OFFLINE_HINT: "Du bist offline. Abstimmen und Mitmachen jeht wieder, sobald du Netz hast.",
+    ...(await importOriginal<typeof import("@vueuse/core")>()),
     __state: state,
     useOnline: () => state,
   };
 });
-const { __state } = (await import("@composables/useOnline.ts")) as unknown as {
+const { __state } = (await import("@vueuse/core")) as unknown as {
   __state: ReturnType<typeof ref<boolean>>;
 };
 
@@ -291,6 +291,7 @@ describe("WordStories reactions, edge cases", () => {
     expect(w.findAll("li.item")).toHaveLength(3);
     expect(react(w, 0, "Jenau!").attributes("aria-pressed")).toBe("false");
     expect(w.text()).not.toContain("Wird jeprüft");
+    expect(w.text()).toContain("Deine eijenen Jeschichten konnten nich jeladen werden.");
   });
 
   it("does not let a late /mine answer overwrite a reaction made meanwhile", async () => {
@@ -357,5 +358,134 @@ describe("WordStories own pending", () => {
     const w = await mountIt();
     expect(w.text()).toContain("Wird jeprüft");
     expect(w.text()).toContain("Meine <i>neue</i> Jeschichte");
+  });
+});
+
+describe("WordStories states", () => {
+  it("binds aria-expanded of „Alle … lesen“ to the expanded state", async () => {
+    route = (url) =>
+      url.startsWith("/api/stories/mine")
+        ? { body: { pending: [], reactions: {} } }
+        : { body: { hasMore: true, items: [story(50)], page: 2 } };
+    const w = await mountIt({ items: items(5), total: 9 });
+    expect(w.find("button.all").attributes("aria-expanded")).toBe("false");
+    await w.find("button.all").trigger("click");
+    await flushPromises();
+    expect(w.find("button.all").attributes("aria-expanded")).toBe("true");
+  });
+
+  it("leaves aria-expanded of the ask button to the trigger wiring (no Vue binding)", async () => {
+    const w = await mountIt();
+    const ask = w.find("button.ask");
+    expect(ask.attributes("data-contribute")).toBe("story");
+    ask.element.setAttribute("aria-expanded", "true"); // contributeTriggers.ts writes it
+    await w.vm.$forceUpdate();
+    expect(ask.attributes("aria-expanded")).toBe("true");
+  });
+
+  it("shows the relative age after mount", async () => {
+    const w = await mountIt();
+    expect(w.find(".by").text()).toMatch(/vor 3 Tagen$/);
+  });
+
+  it("shows the server text of a failed reaction, e.g. the rate limit", async () => {
+    route = (url) =>
+      url.startsWith("/api/stories/mine")
+        ? { body: { pending: [], reactions: {} } }
+        : { body: { error: "Ma langsam, Keule." }, ok: false };
+    const w = await mountIt();
+    await react(w, 0, "Jenau!").trigger("click");
+    await flushPromises();
+    expect(w.text()).toContain("Ma langsam, Keule.");
+    expect(react(w, 0, "Jenau!").text()).toContain("4");
+  });
+});
+
+describe("WordStories coverage gaps", () => {
+  const voteRoute =
+    (vote: Route): Route =>
+    (url, init) =>
+      url.startsWith("/api/stories/mine")
+        ? { body: { pending: [], reactions: {} } }
+        : vote(url, init);
+
+  it("rolls back with the generic message when the network call itself throws", async () => {
+    const w = await mountIt();
+    fetchMock.mockImplementationOnce(async () => {
+      throw new TypeError("offline");
+    });
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    await react(w, 0, "Jenau!").trigger("click");
+    await flushPromises();
+    expect(react(w, 0, "Jenau!").text()).toContain("4");
+    expect(w.find("[role=status]").text()).toBe("Ditt hat nich jeklappt.");
+  });
+
+  it("shows a client error of a reaction with its own text and a bare failure with the generic one", async () => {
+    vi.stubGlobal("fetch", async (url: string) =>
+      url.startsWith("/api/stories/mine")
+        ? { json: async () => ({}), ok: true, status: 200 }
+        : { json: async () => Promise.reject(new Error("no json")), ok: false, status: 429 },
+    );
+    const w = await mountIt();
+    await react(w, 0, "Jenau!").trigger("click");
+    await flushPromises();
+    expect(w.find("[role=status]").text()).toBe("Ditt hat nich jeklappt.");
+  });
+
+  it("copes with an own-state answer without reactions or pending, and cuts a long pending text", async () => {
+    route = (url) => (url.startsWith("/api/stories/mine") ? { body: {} } : {});
+    expect((await mountIt()).text()).not.toContain("Wird jeprüft");
+    const long = "x".repeat(100);
+    route = (url) =>
+      url.startsWith("/api/stories/mine")
+        ? {
+            body: {
+              pending: [
+                { id: 9, text: long },
+                { id: 10, text: "kurz" },
+              ],
+            },
+          }
+        : {};
+    const w = await mountIt();
+    expect(w.text()).toContain(`${"x".repeat(80)}…`);
+    expect(w.text()).not.toContain("x".repeat(81));
+    expect(w.text()).toContain("kurz");
+  });
+
+  it("names the author and the district, and falls back for an unknown district", async () => {
+    const w = await mountIt({
+      items: [story(1, { bezirk: "pankow", name: "Testkind" }), story(2, { bezirk: "nirgendwo" })],
+    });
+    expect(w.findAll(".by")[0]?.text()).toMatch(/^Testkind · aus Pankow · /);
+    expect(w.findAll(".by")[1]?.text()).toMatch(/^aus der Community · vor/);
+  });
+
+  it("loads the next page only once for a double click on the read-all button", async () => {
+    let release: (v: unknown) => void = () => {};
+    route = voteRoute(() => new Promise((resolve) => (release = resolve)));
+    const w = await mountIt({ items: items(20), total: 21 });
+    await w.find("button.all").trigger("click");
+    await w.find("button.all").trigger("click");
+    expect(fetchMock.mock.calls.filter(([u]) => u.startsWith("/api/stories?"))).toHaveLength(1);
+    release({ body: { hasMore: false, items: [story(50)], page: 2 } });
+    await flushPromises();
+  });
+
+  it("moves focus to the first story that arrived when only the further pages bring new ones", async () => {
+    route = voteRoute(() => ({ body: { hasMore: false, items: [story(50)], page: 2 } }));
+    const w = await mountIt({ items: items(3), total: 4 });
+    await w.find("button.all").trigger("click");
+    await flushPromises();
+    expect(w.findAll("li.item")).toHaveLength(4);
+    expect(document.activeElement).toBe(w.findAll("li.item")[3]!.element);
+  });
+
+  it("hides the status line for the offline hint without stories", async () => {
+    const w = await mountIt({ items: [], total: 0 });
+    __state.value = false;
+    await flushPromises();
+    expect(w.text()).not.toContain("offline");
   });
 });

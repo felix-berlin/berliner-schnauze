@@ -31,8 +31,6 @@ export const sha256 = (text: string): string => createHash("sha256").update(text
 
 export const voterKey = (visitor: string): string => sha256(`votes:${visitor}`);
 
-export const hashEditKey = sha256;
-
 /** Per-word handle on a comment (`authorTag`): one visitor, one tag per word, not linkable across words. */
 export const authorTagOf = (visitor: string, wordId: number): string =>
   sha256(`${visitor}:${wordId}`).slice(0, 16);

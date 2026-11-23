@@ -19,10 +19,8 @@
   }
 
   .chip {
-    --_small: 0.8125rem; // SPEC §4.2: 13px text minimum, no token at that size
-
     padding-inline: var(--space-2);
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     font-weight: var(--font-weight-bold);
     line-height: 1.5rem;
     color: var(--color-text-muted);
