@@ -242,8 +242,6 @@ const loadPage = async (): Promise<boolean> => {
   }
 };
 
-// TODO(wortseite): SPEC §21.1 is open (expand in place or a subpage /wort/{slug}/jeschichten); this expands in place.
-// TODO(wortseite): SPEC §19 lists WordReport.vue; it is replaced by WordReportLine.astro + ContributeForm type="error".
 // "Alle lesen" reveals what is loaded at once, then loads the remaining pages one after another (`hasMore` decides).
 // A failed page keeps the button (it retries) and leaves the pages already loaded in place.
 const expand = async (): Promise<void> => {
