@@ -33,7 +33,8 @@ const gap = {
           {facts.map((f) => (
             <div class='fact'>
               <dt class='c-word-label'>{KIND_LABEL[f.kind] ?? f.kind}</dt>
-              <dd class='text'>{f.text}</dd>
+              <dd class='text' set:html={f.html} />
+              {f.source && <dd class='source'>Quelle: {f.source}</dd>}
               {f.contributor && <dd class='by'>{f.contributor.name ?? 'aus der Community'}</dd>}
             </div>
           ))}
