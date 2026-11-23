@@ -1,0 +1,386 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// "Sagste det noch?" of the v18 word page (SPEC §7). Sits on the same root as the section card (c-section-card
+// c-word-poll), so its part names avoid the card's (.header, .title, .count, .body).
+// Parts: .notice (live regions), .lead, .tiles, .teaser (A); .step (.segments, .progress, .question, .why,
+// .why-toggle, .options, .nav with .res) (B); .result (.columns, .all, .who, .matrix, .legend, .rows, .dot, .dots, .foot,
+// .mine-row, .confirm) (C). Data colours: --d-bl say, --d-ye know, --d-gr never (SPEC §4).
+@include mx.component("word-poll") {
+  :scope {
+    --_stagger: 20ms; // SPEC §16: dots fill 20ms apart
+    --_dot-gap: 2px; // SPEC §11.2 gap between dots, no space token that small
+    --_name-size: 4.5rem; // widest row label ("unter 20") with room, one-off
+    --_pct-size: 3.5rem; // "100 %" in Fira 800, 20px
+    --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
+
+    container: word-poll / inline-size;
+  }
+
+  :scope > .body {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  // The live regions stay in the DOM (u-sr-only-empty clips the empty ones: no grid cell, no gap).
+  .notice {
+    display: grid;
+    gap: var(--space-2);
+    outline: none;
+  }
+
+  .lead {
+    margin: 0;
+    color: var(--color-text-strong);
+    font-size: var(--font-size-base);
+  }
+
+  .teaser {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-md);
+  }
+
+  .tiles {
+    --_min: 170px; // one-off tile width
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--_min), 100%), 1fr));
+    gap: var(--space-2);
+  }
+
+  // ---- B
+  .step {
+    display: grid;
+    gap: var(--space-3);
+
+    @include butler-mx.feature("motion") {
+      &[data-enter] {
+        animation: word-poll-in var(--duration-base) ease;
+      }
+    }
+  }
+
+  .segments {
+    display: flex;
+    gap: var(--space-1);
+  }
+
+  .segment {
+    --_radius: 1px; // below radius-xxs
+    --_dash-offset: 2px; // centres the dashed line on the 4px bar
+
+    flex: 1;
+    block-size: 4px;
+    border-radius: var(--_radius);
+    background: var(--color-border-inner);
+
+    &[data-state="done"] {
+      background: var(--color-accent-solid);
+    }
+
+    &[data-state="current"] {
+      background: var(--color-accent-icon);
+    }
+
+    &[data-state="skipped"] {
+      block-size: 0;
+      margin-block-start: var(--_dash-offset);
+      border-block-start: 1px dashed var(--color-border-card);
+      background: none;
+    }
+  }
+
+  .progress {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-4);
+  }
+
+  .question {
+    margin: 0;
+    color: var(--color-text-strong);
+    font-family: inherit;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .why {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-surface-chip);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-md);
+    line-height: 1.5;
+
+    b {
+      color: var(--color-text-strong);
+    }
+
+    .note {
+      color: var(--color-text-muted);
+    }
+  }
+
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .options:is([data-kind="locality"], [data-kind="origin"], [data-kind="half"], [data-kind="age"]) {
+    --_min: 180px; // one-off answer width
+    --choice-justify: flex-start;
+    --choice-text-align: start;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(var(--_min), 100%), 1fr));
+    overflow-wrap: anywhere;
+  }
+
+  .options[data-kind="origin"] {
+    --_min: 240px;
+  }
+
+  .options[data-kind="age"] {
+    --_min: 96px;
+  }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    padding-block-start: var(--space-3);
+    border-block-start: 1px solid var(--color-border-inner);
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
+  // ---- C
+  .result {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .columns {
+    display: grid;
+    gap: var(--space-6);
+
+    @container word-poll (inline-size >= 40rem) {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+    }
+  }
+
+  .all,
+  .who {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+  }
+
+  .h {
+    margin: 0;
+    color: var(--color-text-strong);
+    font-family: inherit;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .matrix {
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    gap: var(--_dot-gap);
+    padding: var(--_dot-gap);
+  }
+
+  .dot {
+    aspect-ratio: 1;
+    border-radius: var(--radius-pill);
+    background: var(--d-bl);
+
+    @include butler-mx.feature("motion") {
+      animation: word-poll-dot var(--duration-fast) ease-out backwards;
+      animation-delay: calc(var(--i) * var(--_stagger));
+    }
+  }
+
+  .matrix .dot {
+    @include butler-mx.feature("motion") {
+      // 100 dots: a fifth of the row offset keeps the fill under half a second
+      animation-delay: calc(var(--i) * var(--_stagger) / 5);
+    }
+
+    &[data-usage="know"] {
+      background: var(--d-ye);
+    }
+
+    &[data-usage="never"] {
+      background: var(--d-gr);
+    }
+
+    &[data-own="true"] {
+      outline: 2px solid var(--color-text-strong);
+      outline-offset: 1px;
+    }
+  }
+
+  .legend {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: var(--space-2);
+    }
+  }
+
+  .swatch {
+    inline-size: 0.75rem; // one-off: legend marker
+    block-size: 0.75rem;
+    border-radius: var(--radius-pill);
+    background: var(--d-bl);
+
+    &[data-usage="know"] {
+      background: var(--d-ye);
+    }
+
+    &[data-usage="never"] {
+      background: var(--d-gr);
+    }
+  }
+
+  .mine {
+    margin-inline-start: var(--space-2);
+    color: var(--color-text-accent);
+    font-size: var(--_small);
+  }
+
+  .pct {
+    color: var(--color-text-strong);
+    font-family: var(--font-condensed);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w16 .w12__row em / .w12__legend b: Fira 800, 20px
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+  }
+
+  .rows {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: grid;
+      grid-template-columns: var(--_name-size) 1fr var(--_pct-size);
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .dots {
+      display: grid;
+      grid-template-columns: repeat(20, 1fr);
+      gap: var(--_dot-gap);
+    }
+
+    // Filled = share (all in the colour of "Sag ick selbst"), empty = ring.
+    .dot[data-filled="false"] {
+      background: none;
+      border: 1px solid var(--color-border-card);
+    }
+  }
+
+  .foot {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--_small);
+  }
+
+  .mine-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-4);
+    padding-block-start: var(--space-3);
+    border-block-start: 1px solid var(--color-border-inner);
+    font-size: var(--font-size-md);
+
+    .given {
+      margin: 0;
+    }
+
+    .trash {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      color: var(--color-text-muted);
+
+      --link-color: var(--color-text-muted);
+      --link-decoration-line: none;
+    }
+  }
+
+  .confirm {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    border-inline-start: 3px solid var(--color-accent-active);
+    border-start-end-radius: var(--radius-sm);
+    border-end-end-radius: var(--radius-sm);
+    background: var(--color-surface-chip);
+
+    @include butler-mx.feature("motion") {
+      animation: word-poll-in var(--duration-base) ease;
+    }
+
+    .text {
+      flex: 1 1 16rem;
+      margin: 0;
+
+      b {
+        color: var(--color-text-strong);
+      }
+    }
+
+    .actions {
+      --button-min-block-size: var(--size-tap-target); // mock .w18__delok: 44px
+      --button-padding: 0 var(--space-4);
+
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-3);
+    }
+  }
+
+  @keyframes word-poll-in {
+    from {
+      opacity: 0;
+      translate: 0 -6px;
+    }
+  }
+  @keyframes word-poll-dot {
+    from {
+      opacity: 0;
+    }
+  }
+}

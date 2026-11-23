@@ -86,6 +86,7 @@
   .play {
     --focus-ring-color: var(--color-accent-active);
 
+    position: relative; // above the absolutely positioned ring, which would swallow the clicks
     display: grid;
     place-items: center;
     inline-size: calc(var(--_size) / 2);

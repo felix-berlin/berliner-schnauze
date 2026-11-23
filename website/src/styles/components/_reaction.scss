@@ -3,6 +3,9 @@
 
 // Reaktion (docs/design/wortseite/SPEC.md §5/§9): thumbs up/down, "hilfreich". Borderless until hover.
 // Part .count (the number; fixed minimum width, so the count arriving does not shift the row).
+// Variants (space-separated): pill = SPEC §4.3 "Reaktion" (word page: thumbs, Teilen, the ⋮ button, story votes),
+// 36px look on the desktop (--word-control-block, set by the page shell) and 44px elsewhere, the hit band always
+// reaches 44px; compact (with pill) = the 13px story vote.
 // Public: --reaction-padding-inline, --reaction-disabled-cursor.
 @include mx.component("reaction") {
   :scope {
@@ -45,5 +48,64 @@
   .count {
     min-inline-size: 1.5ch;
     font-variant-numeric: tabular-nums;
+  }
+
+  :scope[data-variant~="pill"] {
+    --_h: var(--word-control-block, var(--size-tap-target));
+    --_bleed: calc((var(--size-tap-target) - var(--_h)) / 2);
+    --_reach: calc(var(--_bleed) + 2px); // plus the border: the band is positioned from the padding box
+
+    position: relative;
+    gap: var(--space-2);
+    min-block-size: var(--_h);
+    min-inline-size: var(--_h);
+    padding-inline: var(--space-3);
+    border: 1px solid var(--color-border-card);
+    border-radius: var(--radius-pill);
+    color: var(--color-text-strong);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: normal; // a control resets the page tracking (the buttons the pill replaces did)
+    justify-content: center;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: calc(-1 * var(--_reach));
+    }
+
+    @include butler-mx.hover {
+      &:not(:disabled, [aria-disabled="true"]) {
+        border-color: var(--color-border-control-hover);
+        color: var(--color-text-strong);
+      }
+    }
+
+    &[aria-pressed="true"],
+    &[aria-expanded="true"] {
+      border-color: var(--color-accent-active);
+      background: var(--color-surface-chip);
+      color: var(--color-text-strong);
+    }
+
+    .count {
+      min-inline-size: 0;
+    }
+  }
+
+  :scope[data-variant~="compact"] {
+    --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
+
+    gap: var(--space-1);
+    min-inline-size: 0;
+    color: var(--color-text-body);
+    font-size: var(--_small);
+    font-weight: inherit;
+
+    @include butler-mx.hover {
+      &:not(:disabled, [aria-disabled="true"]) {
+        border-color: var(--color-accent-active);
+      }
+    }
   }
 }

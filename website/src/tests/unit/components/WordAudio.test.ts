@@ -50,7 +50,7 @@ describe("WordAudio.vue", () => {
     const wrapper = mount(WordAudio, { props: { sources: { m: "/m.mp3" } } });
     const buttons = wrapper.findAll("button");
     expect(buttons).toHaveLength(1);
-    expect(buttons[0]!.text()).toBe("Männlich");
+    expect(buttons[0]!.text()).toBe("männlich");
   });
 
   it("renders nothing without a voice", async () => {
@@ -64,7 +64,7 @@ describe("WordAudio.vue", () => {
     const wrapper = mount(WordAudio, { props: { sources: { m: "/m.mp3", w: "/w.mp3" } } });
     const group = wrapper.find("[role=group]");
     expect(wrapper.find(`#${group.attributes("aria-labelledby")}`).text()).toBe("Anhören");
-    expect(wrapper.findAll("button").map((b) => b.text())).toEqual(["Männlich", "Weiblich"]);
+    expect(wrapper.findAll("button").map((b) => b.text())).toEqual(["männlich", "weiblich"]);
   });
 
   it("starts a voice, stops it with a second click and reports the pulse", async () => {

@@ -34,6 +34,15 @@ describe("v18 word cards", () => {
     );
   }, 30_000);
 
+  it("mounts the form, the own-list point and collapsed triggers when the card knows the slug", async () => {
+    const html = await examples({ examples: [], slug: "testwort", word: "Testwort" });
+    expect(html).toContain('data-own="example"');
+    expect(html).toContain('data-word="testwort"');
+    expect(html).toContain('data-form="example"');
+    expect(html).toContain('aria-expanded="false"');
+    expect(await examples({ examples: [], word: "Testwort" })).not.toContain("data-own=");
+  });
+
   it("renders the gap text and the call to action of an empty card verbatim", async () => {
     const e = await examples({ examples: [], word: "Testwort" });
     expect(e).toContain(
@@ -67,13 +76,13 @@ describe("v18 word cards", () => {
     expect(html).toContain("Noch keen Wort mit");
   });
 
-  it("renders Einsprechen as aria-disabled, linked to its tooltip text", async () => {
+  it("renders Einsprechen as aria-disabled with a hidden description until the tooltip attaches", async () => {
     const html = await examples({
       examples: [{ example: "Satz.", exampleAudio: [] }],
       word: "Testwort",
     });
     expect(html).toMatch(
-      /<button[^>]*aria-disabled="true"[^>]*aria-describedby="einsprechen-tip-0"/,
+      /<button[^>]*aria-disabled="true"[^>]*data-tip-lead="Kommt bald\."[^>]*data-tip="Einsprechen is noch in Arbeit\."[^>]*aria-describedby="einsprechen-tip-0"/,
     );
     expect(html).toMatch(
       /id="einsprechen-tip-0"[^>]*role="tooltip"[^>]*>Kommt bald\. Einsprechen is noch in Arbeit\./,
@@ -109,12 +118,19 @@ describe("v18 word cards", () => {
 
   it("shows the book block only with a book and the source of a fact", async () => {
     const withBook = await facts({
-      book: { title: "Testbuch", url: "https://example.test/b" },
+      book: {
+        disclosure: "CMS-Hinweis zum Partnerlink.",
+        title: "Testbuch",
+        url: "https://example.test/b",
+      },
       facts: [{ html: "<p>Text</p>", kind: "herkunft", source: "Testbuch, Autor" }],
       word: "Testwort",
     });
     expect(withBook).toContain("Testbuch");
-    expect(withBook).toContain('rel="sponsored noopener"');
+    expect(withBook).toContain('rel="sponsored noopener noreferrer"');
+    expect(withBook).toContain("data-book-link");
+    expect(withBook).toContain("CMS-Hinweis zum Partnerlink.");
+    expect(withBook).not.toContain("Amazon-Partner");
     expect(withBook).toContain("<p>Text</p>");
     expect(withBook).toContain("Quelle: Testbuch, Autor");
     const without = await facts({
@@ -122,5 +138,10 @@ describe("v18 word cards", () => {
       word: "Testwort",
     });
     expect(without).not.toContain("Zum Weiterlesen");
+    const hostile = await facts({
+      book: { title: "Testbuch", url: "javascript:alert(1)" },
+      word: "Testwort",
+    });
+    expect(hostile).not.toContain("javascript:");
   });
 });

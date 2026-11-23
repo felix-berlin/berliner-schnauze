@@ -1,4 +1,10 @@
-import { compareRows, plural, progressSegments, usageBars } from "@utils/wordFeedbackView";
+import {
+  compareRows,
+  plural,
+  profilePatch,
+  progressSegments,
+  usageBars,
+} from "@utils/wordFeedbackView";
 import { describe, expect, it } from "vitest";
 
 const options = [
@@ -64,5 +70,37 @@ describe("edge cases", () => {
     expect(usageBars([{ label: "Sag ich", value: "say" }], { know: 3 }, 3)).toEqual([
       { label: "Sag ich", percent: 0, text: "0 Stimmen", value: "say" },
     ]);
+  });
+});
+
+describe("profilePatch", () => {
+  const ctx = { area: "pankow", hadLocality: false };
+  it("sends the plain answer", () => {
+    expect(profilePatch("age", "30s", ctx)).toEqual({ age: "30s" });
+  });
+  it("drops the half unless the origin is grewUp", () => {
+    expect(profilePatch("origin", "moved", ctx)).toEqual({ half: null, origin: "moved" });
+    expect(profilePatch("origin", "grewUp", ctx)).toEqual({ origin: "grewUp" });
+  });
+  it("a half comes with origin grewUp", () => {
+    expect(profilePatch("half", "east", ctx)).toEqual({ half: "east", origin: "grewUp" });
+    expect(profilePatch("half", null, ctx)).toEqual({ half: null });
+  });
+  it("a locality comes with its area", () => {
+    expect(profilePatch("locality", "kiez", ctx)).toEqual({ area: "pankow", locality: "kiez" });
+    expect(profilePatch("locality", null, ctx)).toEqual({ locality: null });
+  });
+  it("a new area clears an old locality; outside Berlin it also clears the half", () => {
+    expect(profilePatch("area", "mitte", { ...ctx, hadLocality: true })).toEqual({
+      area: "mitte",
+      locality: null,
+    });
+    expect(profilePatch("area", "mitte", ctx)).toEqual({ area: "mitte" });
+    expect(profilePatch("area", "brandenburg", ctx)).toEqual({ area: "brandenburg", half: null });
+    expect(profilePatch("area", "elsewhere", { ...ctx, hadLocality: true })).toEqual({
+      area: "elsewhere",
+      half: null,
+      locality: null,
+    });
   });
 });

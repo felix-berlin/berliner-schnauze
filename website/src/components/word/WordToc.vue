@@ -1,8 +1,8 @@
 <template>
   <nav class="c-word-toc" aria-label="Auf dieser Seite">
     <div class="inner">
-      <div class="label" aria-hidden="true"><p class="c-word-label">Auf dieser Seite</p></div>
-      <ol class="list">
+      <div class="label" aria-hidden="true"><p class="title">Auf dieser Seite</p></div>
+      <ol class="list" :style="{ '--toc-progress': progress }">
         <li v-for="(item, i) in items" :key="item.id">
           <a
             class="link"
@@ -28,6 +28,10 @@ const props = defineProps<{ items: { id: string; label: string; count?: number }
 
 const current = ref(props.items[0]?.id);
 const currentIndex = computed(() => props.items.findIndex((i) => i.id === current.value));
+// 0..1 along the rail: the orange line grows to the active dot.
+const progress = computed(() =>
+  props.items.length > 1 ? Math.max(0, currentIndex.value) / (props.items.length - 1) : 0,
+);
 
 // Narrow bar: keep the active pill in view. block "nearest" so the page itself never scrolls.
 watch(current, async () => {

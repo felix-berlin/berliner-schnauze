@@ -71,9 +71,9 @@ test("a card's part styles stop at its slot (Review Focus 4, spec §7.1)", async
       own: getComputedStyle(own).fontSize,
     };
   });
-  // Positive control: the card's own title is styled (--font-size-xl = 1.25rem = 20px), so the
+  // Positive control: the card's own title is styled (its size follows the card width, so only "not the body size" is asserted), so the
   // difference below comes from the slot boundary, not from a renamed or resized title.
-  expect(sizes.own).toBe("20px");
+  expect(sizes.own).not.toBe("16px");
   expect(sizes.foreign).not.toBe(sizes.own);
 });
 
@@ -127,7 +127,7 @@ test("one focus ring: dashed on the word page, solid elsewhere, form controls in
   const focus = await resolveColor(page, "--color-focus-ring");
   // The text field draws its ring in --color-border-active (= --color-text-accent unless invalid).
   const accent = await resolveColor(page, "--color-text-accent");
-  expect(await rings(".o-word-page")).toEqual([
+  expect(await rings(".o-word-v18")).toEqual([
     `dashed 2px ${focus}`,
     `dashed 2px ${accent}`,
     `dashed 2px ${focus}`,

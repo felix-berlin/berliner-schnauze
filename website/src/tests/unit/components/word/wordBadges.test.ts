@@ -1,87 +1,50 @@
 import WordBadges from "@components/word/WordBadges.vue";
 import { mount } from "@vue/test-utils";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { vTooltip } from "@/directives/tooltip";
 
 const trend = { kind: "beliebt", rank: 4, views7: 120 } as const;
 
 const mountBadges = () =>
-  mount(WordBadges, { attachTo: document.body, props: { slug: "testwort", trend } });
+  mount(WordBadges, {
+    attachTo: document.body,
+    global: { directives: { tooltip: vTooltip } },
+    props: { slug: "testwort", trend },
+  });
 
-const esc = () => document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
-
-describe("WordBadges tooltip", () => {
+describe("WordBadges trend tooltip", () => {
+  beforeEach(() => {
+    HTMLElement.prototype.showPopover = vi.fn();
+    HTMLElement.prototype.hidePopover = vi.fn();
+  });
   afterEach(() => {
     document.body.innerHTML = "";
     vi.restoreAllMocks();
   });
 
-  it("is not dismissed at first", () => {
-    expect(mountBadges().attributes("data-dismissed")).toBeUndefined();
-  });
-
-  it("is dismissed by Esc while the link keeps focus", async () => {
+  it("uses the shared ink tooltip under the badge with the SPEC text", async () => {
     const wrapper = mountBadges();
-    const link = wrapper.get("a[aria-describedby]");
-    (link.element as HTMLElement).focus();
-    esc();
-    await wrapper.vm.$nextTick();
-    expect(document.activeElement).toBe(link.element);
-    expect(wrapper.attributes("data-dismissed")).toBe("");
-  });
-
-  it("opens again after the focus leaves", async () => {
-    const wrapper = mountBadges();
-    const link = wrapper.get("a[aria-describedby]");
-    (link.element as HTMLElement).focus();
-    esc();
-    await link.trigger("focusout");
-    expect(wrapper.attributes("data-dismissed")).toBeUndefined();
-  });
-
-  it("opens again after the pointer leaves", async () => {
-    const wrapper = mountBadges();
-    const link = wrapper.get("a[aria-describedby]");
-    (link.element as HTMLElement).focus();
-    esc();
-    link.element.parentElement!.dispatchEvent(new MouseEvent("mouseleave"));
-    await wrapper.vm.$nextTick();
-    expect(wrapper.attributes("data-dismissed")).toBeUndefined();
-  });
-
-  it("ignores an Esc while the badge is neither focused nor hovered", async () => {
-    const wrapper = mountBadges();
-    esc();
-    await wrapper.vm.$nextTick();
-    expect(wrapper.attributes("data-dismissed")).toBeUndefined();
-  });
-
-  it("resets a dismissal on focusin and mouseenter", async () => {
-    const wrapper = mountBadges();
-    const link = wrapper.get("a[aria-describedby]");
-    (link.element as HTMLElement).focus();
-    esc();
-    await wrapper.vm.$nextTick();
-    expect(wrapper.attributes("data-dismissed")).toBe("");
-    await link.trigger("focusin");
-    expect(wrapper.attributes("data-dismissed")).toBeUndefined();
-    esc();
-    await wrapper.vm.$nextTick();
-    link.element.parentElement!.dispatchEvent(new MouseEvent("mouseenter"));
-    await wrapper.vm.$nextTick();
-    expect(wrapper.attributes("data-dismissed")).toBeUndefined();
+    const link = wrapper.get("a.trend");
+    await link.trigger("pointerenter");
+    const panel = document.getElementById(link.attributes("aria-describedby")!)!;
+    expect(panel.getAttribute("role")).toBe("tooltip");
+    expect(panel.dataset["variant"]).toBe("bottom-start ink");
+    expect(panel.textContent).toContain("120 Aufrufe in den letzten 7 Tagen");
   });
 
   it("keeps the tap behaviour: first tap shows the tooltip, second follows the link", async () => {
-    vi.stubGlobal("matchMedia", () => ({ matches: true }));
     const wrapper = mountBadges();
-    const link = wrapper.get("a[aria-describedby]");
-    const first = new MouseEvent("click", { bubbles: true, cancelable: true });
-    link.element.dispatchEvent(first);
-    expect(first.defaultPrevented).toBe(true);
-    await wrapper.vm.$nextTick();
-    const second = new MouseEvent("click", { bubbles: true, cancelable: true });
-    link.element.dispatchEvent(second);
-    expect(second.defaultPrevented).toBe(false);
-    vi.unstubAllGlobals();
+    const link = wrapper.get("a.trend");
+    const tap = () => {
+      const e = new MouseEvent("click", { bubbles: true, cancelable: true });
+      Object.defineProperty(e, "pointerType", { value: "touch" });
+      link.element.dispatchEvent(e);
+      return e;
+    };
+    expect(tap().defaultPrevented).toBe(true);
+    expect(HTMLElement.prototype.showPopover).toHaveBeenCalledOnce();
+    expect(tap().defaultPrevented).toBe(false);
+    expect(HTMLElement.prototype.hidePopover).toHaveBeenCalled();
   });
 });

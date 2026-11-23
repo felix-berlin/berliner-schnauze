@@ -79,7 +79,7 @@
   }
 
   // v18 word page (SPEC §4.3, §6): condensed title, optional count, the "Ergänzen" pill, gap with outline button.
-  // Parts: .count, .add (pill), .gap (.text, .cta), both buttons carry a decorative .plus.
+  // Parts: .count, .gap (.text); the "Ergänzen" pill and the gap button are c-buttons (pill, outline).
   :scope[data-variant~="v18"] {
     --_title-size: 1.375rem; // SPEC §3: card heading 22px mobile, no token at that size
     --_ink: var(--color-text-strong);
@@ -89,7 +89,7 @@
     box-shadow: var(--shadow-paper-lift);
 
     .header {
-      align-items: center;
+      align-items: baseline;
       flex-wrap: wrap;
       padding-block-end: var(--space-4);
     }
@@ -102,53 +102,43 @@
       line-height: 1.1;
     }
 
+    // Count: right edge of the header, baseline with the title (SPEC mock .w10__ch), 13px text minimum.
     .count {
-      font-size: var(--font-size-md);
+      margin-inline-start: auto;
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §4.2: 13px minimum, the small size tokens are 12.8px and 12px
+      font-size: 0.8125rem;
       color: var(--color-text-muted);
     }
 
-    .plus {
-      color: var(--color-accent-active); // SPEC §4.1: the plus icon is orange, nothing else on the pill
-      font-weight: var(--font-weight-bold);
+    // The "Ergänzen" pill (c-button) sits at the right edge: the title, or else the count, takes the free space.
+    .title:has(+ [data-contribute]) {
+      margin-inline-end: auto;
     }
 
-    // Pill (SPEC §4.3): 36px, 0 12px, round, chip surface, hover one step darker.
-    .add {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-1);
-      margin-inline-start: auto;
-      min-block-size: 2.25rem; // SPEC §4.3: 36px, no token
-      padding-inline: var(--space-3); // SPEC §4.3: 12px
-      font: inherit;
-      font-size: var(--font-size-md);
-      font-weight: var(--font-weight-bold);
-      color: var(--_ink);
-      background: var(--color-surface-chip);
-      border: 0;
-      border-radius: var(--radius-pill);
-      cursor: pointer;
-
-      @include butler-mx.hover {
-        background: var(--color-surface-tint-warm);
-      }
+    .count:has(+ [data-contribute]) {
+      margin-inline-end: var(--space-2);
     }
 
     // Gap hint (SPEC §4 "Lücken-Hinweis", mock luecke-*): dashed box on the chip surface, text left, button right;
     // it stacks when the card is narrow.
     .gap {
       container: section-card-gap / inline-size;
-      margin: 0 var(--_inline) var(--_inline);
+      // Padding, not margin: a bottom margin collapses out of the borderless card and the box touches its edge.
+      margin-inline: var(--_inline);
+      padding-block-end: var(--_inline);
     }
 
     .gap-box {
+      --button-gap: var(--space-1);
+
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       gap: var(--space-4);
-      padding: var(--space-4);
-      background: var(--color-surface-chip);
-      border: 1px dashed var(--color-border-inner);
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC mock .w18__gap: 20px 22px, no token
+      padding: 1.25rem 1.375rem;
+      // SPEC mock: transparent, 1.5px dashed rim in --t3 at 55 %
+      border: 1.5px dashed color-mix(in srgb, var(--color-text-muted) 55%, transparent); // stylelint-disable-line declaration-property-value-disallowed-list, function-disallowed-list -- SPEC mock .w18__gap rim: 1.5px, t3 at 55 %, no token
       border-radius: var(--radius-sm);
 
       @container section-card-gap (inline-size >= 36rem) {
@@ -163,38 +153,32 @@
       line-height: 1.6;
       color: var(--_ink);
     }
+  }
 
-    // Outline button (SPEC §4.3): 44px, 0 16px, 4px radius, 1.5px orange-500 rim, chip surface on hover.
-    .cta {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-1);
-      min-block-size: var(--size-tap-target);
-      padding-inline: var(--space-4);
-      font: inherit;
-      font-weight: var(--font-weight-bold);
-      color: var(--_ink);
-      background: transparent;
-      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §4.3: 1.5px rim, no border-width token
-      border: 1.5px solid var(--color-accent-active);
-      border-radius: var(--radius-sm);
-      flex: none;
-      cursor: pointer;
+  // Open form and the visitor's own open suggestions (contribute script): under the header, in place of the gap.
+  .extra {
+    display: grid;
+    gap: var(--space-3);
+    padding-inline: var(--_inline);
 
-      @include butler-mx.hover {
-        background: var(--color-surface-chip);
-      }
+    // Only the form or the chip list take room; the empty mount points take none.
+    &:has([id^="contribute-"], [data-own] > *) {
+      padding-block-end: var(--space-4);
     }
   }
 
-  // Without JS the contribute buttons would do nothing: hidden until WordPage sets html[data-js].
-  html:not([data-js]) :scope [data-contribute] {
+  :scope[data-state="form-open"] .gap {
     display: none;
+  }
+
+  // Without JS the contribute buttons would do nothing: hidden until WordPage sets html[data-js] (c-button reads this).
+  html:not([data-js]) :scope :is(.header, .gap-box) {
+    --button-display: none;
   }
 
   @container word-main (inline-size >= 36rem) {
     :scope[data-variant~="v18"] {
-      --_title-size: var(--font-size-2xl);
+      --_title-size: 1.5rem; // SPEC §3: card heading 24px, the 2xl token is 25.6px
     }
   }
 

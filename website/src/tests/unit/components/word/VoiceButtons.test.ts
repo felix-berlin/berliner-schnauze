@@ -3,7 +3,7 @@ import { mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const player = vi.hoisted(() => ({
-  isVoicePlaying: vi.fn((key: string) => key === "voice-1-Weiblich"),
+  isVoicePlaying: vi.fn((key: string) => key === "voice-1-weiblich"),
   newVoiceKey: vi.fn(() => "voice-1"),
   toggleVoice: vi.fn(),
 }));
@@ -17,7 +17,7 @@ describe("VoiceButtons", () => {
       mount(VoiceButtons, { props: { sources: { m: "/m.mp3", w: "/w.mp3" } } })
         .findAll("button")
         .map((b) => b.text()),
-    ).toEqual(["Männlich", "Weiblich"]);
+    ).toEqual(["männlich", "weiblich"]);
     expect(
       mount(VoiceButtons, { props: { sources: { w: "/w.mp3" } } }).findAll("button"),
     ).toHaveLength(1);
@@ -35,9 +35,9 @@ describe("VoiceButtons", () => {
       })
         .findAll("button")
         .map((b) => b.text());
-    expect(texts("wm")).toEqual(["Weiblich", "Männlich"]);
-    expect(texts("mw")).toEqual(["Männlich", "Weiblich"]);
-    expect(texts()).toEqual(["Männlich", "Weiblich"]);
+    expect(texts("wm")).toEqual(["weiblich", "männlich"]);
+    expect(texts("mw")).toEqual(["männlich", "weiblich"]);
+    expect(texts()).toEqual(["männlich", "weiblich"]);
   });
 
   it("marks only the playing voice as pressed and toggles the clicked one with its file and word", async () => {
@@ -46,6 +46,6 @@ describe("VoiceButtons", () => {
     expect(male!.attributes("aria-pressed")).toBe("false");
     expect(female!.attributes("aria-pressed")).toBe("true");
     await male!.trigger("click");
-    expect(player.toggleVoice).toHaveBeenCalledWith("voice-1-Männlich", "/m.mp3", 4);
+    expect(player.toggleVoice).toHaveBeenCalledWith("voice-1-männlich", "/m.mp3", 4);
   });
 });

@@ -1,19 +1,23 @@
 ---
 import '@styles/components/_word-head.scss';
+import WordActions from '@components/word/WordActions.vue';
 import WordBadges from '@components/word/WordBadges.vue';
 import WordOTon from '@components/word/WordOTon.astro';
 import WordSeal from '@components/WordSeal.vue';
 import { voiceSources } from '@composables/useVoicePlayer.ts';
 import type { WordPageModel } from '@services/payload/wordPage.ts';
 import { translationTexts } from '@services/payload/words.ts';
+import { canonicalUrl, routeToWord } from '@utils/helpers.ts';
 import { posBadge, resolvePos } from '@utils/wordPos.ts';
 import { morseRing } from 'payload-app/home-stats';
 
 interface Props {
   model: WordPageModel;
+  /** A draft preview has no public numbers: no reactions. */
+  draft?: boolean;
 }
 
-const { model } = Astro.props;
+const { draft = false, model } = Astro.props;
 const { stories, word } = model;
 
 const [main, ...more] = translationTexts(word);
@@ -23,13 +27,15 @@ const kind = [pos && posBadge(pos.pos, pos.auto).text, word.berolinismus && 'Ber
   .join(' · ');
 const same = model.related.filter((r) => r.relation === 'gleich');
 const voices = voiceSources(word.berlinerischAudio);
+// The canonical URL the page head will carry at /wort/<slug> (also on the preview route), for sharing and citing.
+const url = canonicalUrl(routeToWord(word.slug), Astro.site ?? new URL(Astro.url.origin));
 const hasImages = Astro.slots.has('images');
 ---
 
 <!--
   Word head (SPEC §5). DOM order is the focus order (§17); on mobile the CSS `order` moves the images
   and the action row up (§5 mobile order). The "+" image tile is not rendered (decision 3). Slots: `actions`
-  (reactions, share, menu: a later task) and `images`.
+  (default: WordActions, reactions, share, menu, citing; client:idle because the pills must work early but are not above the fold on mobile) and `images`.
 -->
 <header class='c-word-head' data-variant={hasImages ? 'images' : undefined}>
   <div class='inner'>
@@ -89,7 +95,11 @@ const hasImages = Astro.slots.has('images');
       </div>
     )}
 
-    {Astro.slots.has('actions') && <div class='actions' data-slot><slot name='actions' /></div>}
+    <div class='actions' data-slot>
+      <slot name='actions'>
+        <WordActions client:idle meaning={main} slug={word.slug} updatedAt={model.updatedAt} url={url} word={word.berlinerisch} wordId={draft ? undefined : word.id} />
+      </slot>
+    </div>
     {hasImages && <div class='images' data-slot><slot name='images' /></div>}
     {word.ipa && <p class='ipa-bg' aria-hidden='true'>[{word.ipa}]</p>}
   </div>

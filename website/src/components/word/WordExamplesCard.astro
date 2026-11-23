@@ -7,10 +7,12 @@ import type { WordExample } from '@services/payload/words.ts';
 
 interface Props {
   word: string;
+  /** Slug of the word, for the form. */
+  slug?: string;
   examples?: WordExample[];
 }
 
-const { word, examples = [] } = Astro.props;
+const { slug, word, examples = [] } = Astro.props;
 const items = examples.filter((e) => e.example);
 const gap = {
   cta: 'Beispiel ergänzen',
@@ -21,9 +23,9 @@ const gap = {
 <!--
   Beispiele card (SPEC §6). Wrapper-owned anchor (WordPage), so the card renders no id. The audio pills are the
   existing VoiceButtons island (only when a file exists); "Einsprechen" does not exist yet: aria-disabled, the
-  tooltip is linked with aria-describedby and closes on Esc (script below).
+  tooltip is the shared v-tooltip (attached by the script below).
 -->
-<SectionCard anchor={false} id='beispiele' title='Beispiele' level={3} contribute='example' gap={items.length ? undefined : gap}>
+<SectionCard anchor={false} id='beispiele' title='Beispiele' level={3} contribute='example' slug={slug} gap={items.length ? undefined : gap}>
   {items.length > 0 && (
     <ol class='c-word-beispiele'>
       {items.map((item, index) => {
@@ -32,7 +34,7 @@ const gap = {
         return (
           <li class='item'>
             <blockquote class='quote'>
-              <p class='sentence'>{item.example}</p>
+              <p class='sentence'><q>{item.example}</q></p>
             </blockquote>
             {item.exampleExplanation && (
               <p class='plain'><span class='c-word-label'>Hochdeutsch</span> {item.exampleExplanation}</p>
@@ -42,10 +44,10 @@ const gap = {
                 <VoiceButtons order='wm' aria-label={`Beispiel ${index + 1} anhören`} client:visible sources={sources} />
               )}
               <span class='record'>
-                <button class='record-button' type='button' aria-disabled='true' aria-describedby={tip}>
+                <button class='c-button record-button' data-variant='pill dashed' type='button' aria-disabled='true' data-tip-lead='Kommt bald.' data-tip='Einsprechen is noch in Arbeit.' aria-describedby={tip}>
                   <span class='plus' aria-hidden='true'>+</span> Einsprechen
                 </button>
-                <span class='tip' id={tip} role='tooltip'>Kommt bald. Einsprechen is noch in Arbeit.</span>
+                <span class='u-sr-only' id={tip} role='tooltip'>Kommt bald. Einsprechen is noch in Arbeit.</span>
               </span>
             </div>
           </li>
@@ -56,7 +58,7 @@ const gap = {
 </SectionCard>
 
 <script>
-  import { initRecordTooltip } from '@components/word/recordTooltip.ts';
+  import { wireRecordTooltips } from '@components/word/recordTooltips.ts';
 
-  initRecordTooltip();
+  wireRecordTooltips();
 </script>

@@ -1,9 +1,10 @@
 ---
-import '@styles/components/_footer-callout-book.scss';
+import '@styles/components/_footer-callout.scss';
+import { AFFILIATE_REL, ctaFor, isWebUrl } from '@lib/wordBook.ts';
 import ArrowUpRight from '~icons/lucide/arrow-up-right';
 
 interface Props {
-  book: { title: string; url: string; cover?: string | undefined };
+  book: { title: string; url: string; cover?: string | undefined; disclosure?: string | undefined };
 }
 
 const { book } = Astro.props;
@@ -11,20 +12,28 @@ const titleId = 'footer-callout-buch';
 ---
 
 {/* Footer v21 callout "buch" (handoff FooterV21, slot buch): the word's book above the dark band. Only passed with a book. */}
-<section class='c-footer-callout-book' aria-labelledby={titleId}>
-  <div class='inner u-max-body-width' data-variant={book.cover ? undefined : 'plain'}>
+{isWebUrl(book.url) && (
+<section class='c-footer-callout' data-variant={book.cover ? 'book' : 'book plain'} aria-labelledby={titleId}>
+  <div class='inner u-max-body-width'>
     {book.cover && <img class='cover' src={book.cover} alt='' width='132' height='198' loading='lazy' />}
     <div class='text'>
       <p class='label'>Buchtipp <span>· Affiliate-Link</span></p>
       <h2 id={titleId} class='title'>Mehr Berlinerisch zum Blättern</h2>
       <p class='lead'><b>{book.title}</b></p>
       <div class='actions'>
-        <a class='c-button' data-variant='primary center-icon raised lg' href={book.url} rel='sponsored noopener' target='_blank'>
-          <span>Bei Amazon ansehen</span>
+        <a class='c-button' data-variant='primary center-icon raised lg' href={book.url} rel={AFFILIATE_REL} target='_blank' data-book-link data-book-title={book.title}>
+          <span>{ctaFor(book.url)}</span>
           <ArrowUpRight aria-hidden='true' height='18' width='18' />
         </a>
-        <small class='disclosure'>Als Amazon-Partner verdiene ich an qualifizierten Verkäufen.</small>
+        {book.disclosure && <small class='disclosure'>{book.disclosure}</small>}
       </div>
     </div>
   </div>
 </section>
+)}
+
+<script>
+  import { trackBookClicks } from '@lib/bookClickTracking.ts';
+
+  trackBookClicks();
+</script>

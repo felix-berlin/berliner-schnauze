@@ -2,9 +2,10 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 // Link (docs/design/wortseite/SPEC.md): text action on a <button>. 44px hit area.
+// Public: --link-color, --link-decoration-line, --link-decoration-style (the word page draws it solid, SPEC §4.3).
 @include mx.component("link") {
   :scope {
-    --_color: var(--color-text-muted);
+    --_color: var(--link-color, var(--color-text-muted));
 
     display: inline-flex;
     align-items: center;
@@ -16,7 +17,8 @@
     font: inherit;
     font-size: var(--font-size-sm);
     letter-spacing: inherit;
-    text-decoration: underline dashed from-font;
+    text-decoration: var(--link-decoration-line, underline) var(--link-decoration-style, dashed)
+      from-font;
     text-underline-position: from-font;
     cursor: pointer;
 

@@ -148,6 +148,23 @@ export const loadFeedback = (wordId: number): Promise<void> => {
   })());
 };
 
+/**
+ * A fresh GET (no-store) for the poll: the state replaces the store only when no answer landed meanwhile, so a slower
+ * GET cannot overwrite a newer PATCH result. Returns the answer either way (null on failure).
+ */
+export const refreshFeedback = async (wordId: number): Promise<WordFeedbackState | null> => {
+  const startedAt = stateVersion;
+  try {
+    const res = await fetch(`${ENDPOINT}?word=${wordId}`, { cache: "no-store" });
+    if (!res.ok) return null;
+    const state = (await res.json()) as WordFeedbackState;
+    if (loadedFor === wordId && stateVersion === startedAt) $feedback.set(state);
+    return state;
+  } catch {
+    return null;
+  }
+};
+
 type SendOptions = {
   /** Replaces the generic text when the server sent no reason of its own. */
   fallbackMessage?: string;
@@ -208,6 +225,18 @@ export const sendFeedback = async (
 
 export const answerUsage = (wordId: number, usage: Usage, silent = false): Promise<boolean> =>
   sendFeedback(wordId, { usage, ...parseProfile($profile.get()) }, { silent });
+
+/** Deletes this browser's answers to one word; the caller owns the failure message and the local profile. */
+export const deleteFeedback = async (wordId: number): Promise<boolean> => {
+  try {
+    const res = await fetch(`${ENDPOINT}?word=${wordId}`, { method: "DELETE" });
+    if (!res.ok) throw new Error(String(res.status));
+    return true;
+  } catch (error) {
+    console.error(`[word-feedback] delete ${wordId} failed:`, error);
+    return false;
+  }
+};
 
 /** Deletes every answer tied to this browser (all words) and forgets the stored profile. */
 export const deleteAllFeedback = async (wordId: number): Promise<boolean> => {

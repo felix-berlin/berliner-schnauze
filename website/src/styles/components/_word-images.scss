@@ -26,6 +26,13 @@
   :scope[data-variant="hero"] {
     container: hero-images / inline-size;
     display: var(--word-images-hero-display, none);
+    gap: var(--space-4); // mock .w16 .w10__gal: gap 16px
+  }
+
+  // Credit line: 13px, the SPEC minimum (the typography class has 12px).
+  figcaption {
+    font-size: var(--_size);
+    color: var(--color-text-muted);
   }
 
   .strip {
@@ -79,7 +86,7 @@
   :scope[data-variant="hero"] {
     .strip {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr)); // mock .w10__thumbs: 4 squares, 8px apart
       gap: var(--space-2);
       overflow: visible;
 
@@ -99,10 +106,44 @@
     .open {
       box-shadow: var(--shadow-paper-lift);
     }
+
+    // Thumbnails: squares (mock .w10__thumbs button, 83px at 1280).
+    .strip > figure:not(:first-child) .open img {
+      aspect-ratio: 1;
+    }
+
+    // Wide head (mock .w10__fig): the main image fills the column down to the thumbnails; the photo is out of
+    // flow, so its natural height never stretches the card.
+    @container word-head (inline-size >= 56rem) {
+      flex: 1;
+      align-self: stretch;
+
+      .strip {
+        flex: 1;
+        grid-template-rows: 1fr auto;
+      }
+
+      .strip > figure:first-child {
+        min-block-size: 0;
+
+        .open {
+          position: relative;
+          flex: 1;
+          min-block-size: 18.75rem; // mock .w10__fig min-height 300px
+
+          img {
+            position: absolute;
+            inset: 0;
+            block-size: 100%;
+            aspect-ratio: auto;
+          }
+        }
+      }
+    }
   }
 
-  // Narrow image column: two tiles per row instead of three slivers.
-  @container hero-images (inline-size < 18rem) {
+  // Very narrow image column: two tiles per row (below 14rem the 4 squares would fall under 44px).
+  @container hero-images (inline-size < 14rem) {
     :scope[data-variant="hero"] .strip {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }

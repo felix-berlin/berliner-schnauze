@@ -23,6 +23,7 @@ const model = {
     derived: { nlpTags: [] },
     examples: [],
     id: 42,
+    images: [],
     slug: "testwort",
     themen: [],
     translations: [],
@@ -45,15 +46,90 @@ describe("WordPage mobile bar", () => {
     expect(html).toContain('href="#sagste"');
   });
 
+  it("mounts the poll in the sagste slot with the shared result only, no own vote", async () => {
+    const html = await render({ model });
+    const slot = html.slice(html.indexOf('id="sagste"'), html.indexOf('id="jeschichten"'));
+    expect(slot).toContain("Sagste det noch?");
+    expect(slot).toContain("Is dit Wort bei dir noch im Einsatz?");
+    expect(slot).not.toContain("deine Stimme");
+  });
+
   it("counts no plays for a draft preview", async () => {
     const html = await render({ draft: true, model });
     expect(html).toContain("c-word-mobile-bar");
     expect(html).not.toContain("data-word-id");
   });
 
+  it("shows a draft neither the poll nor the Jeschichten nor their links", async () => {
+    const html = await render({ draft: true, model });
+    expect(html).not.toContain('id="sagste"');
+    expect(html).not.toContain('id="jeschichten"');
+    expect(html).not.toContain('href="#sagste"');
+    expect(html).not.toContain("WordPoll");
+    expect(html).not.toContain("WordStories");
+    expect(await render({ model })).toContain('id="sagste"');
+  });
+
   it("does not take a grid cell for a card without rows", async () => {
     const html = await render({ model });
     expect(html).not.toContain('id="grammatik"'); // no Grammatik rows in this model
     expect(html).toContain('id="klang"');
+  });
+
+  it("mounts the Jeschichten card with its count and the report form, and wires the triggers", async () => {
+    const html = await render({
+      model: {
+        ...model,
+        stories: { items: [], total: 4 },
+        storyPrompt: "Wo haste „Testwort“ jehört?",
+      },
+    });
+    expect(html).toContain("4 Jeschichten");
+    expect(html).toContain("Wo haste");
+    expect(html).toContain('data-form="example"');
+    expect(html).toContain("data-report");
+    expect(await render({ model })).toContain("Noch keene");
+  });
+});
+
+describe("WordPage images", () => {
+  let render: (props: Record<string, unknown>) => Promise<string>;
+  beforeAll(async () => {
+    render = await createAstroRender((await import("@components/word/WordPage.astro")).default);
+  }, 60_000);
+
+  const withImages = {
+    ...model,
+    word: {
+      ...model.word,
+      images: [
+        {
+          alt: "Ein Bild",
+          caption: "Credit: Erfunden",
+          height: 600,
+          id: 1,
+          url: "/e2e/galerie.png",
+          width: 800,
+        },
+        { alt: "Zwei", caption: null, height: 600, id: 2, url: "/e2e/galerie-2.png", width: 800 },
+      ],
+    },
+  } as unknown as WordPageModel;
+
+  it("puts the strip and the hero copy into the head and mounts the lightbox", async () => {
+    const html = await render({ model: withImages });
+    const head = html.slice(html.indexOf("c-word-head"), html.indexOf('id="beispiele"'));
+    expect(head).toContain('data-variant="images"');
+    expect(head.match(/c-word-images/g)?.length).toBe(2);
+    expect(head).toContain("Foto: ");
+    expect(html).toContain("Lightbox");
+    expect(html).toContain('data-lightbox-index="1"');
+  });
+
+  it("renders no images block and no lightbox without images, the head stays single-column", async () => {
+    const html = await render({ model: { ...model, word: { ...model.word, images: [] } } });
+    expect(html).not.toContain("c-word-images");
+    expect(html).not.toContain("Lightbox");
+    expect(html).not.toContain('data-variant="images"');
   });
 });

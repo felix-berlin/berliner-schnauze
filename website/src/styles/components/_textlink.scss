@@ -8,7 +8,8 @@
 // rows, where the inline-link exception of WCAG 2.5.8 does not apply).
 // Public (the old :where() let parents override these): --textlink-gap, --textlink-mark-color (an
 // aria-hidden mark inside the link, e.g. an arrow), --textlink-display, --textlink-min-block-size, --textlink-padding-inline, --textlink-font-size, --textlink-color, --textlink-padding-start, --textlink-place-self
-// (a stretching flex/grid parent keeps the link at its own width with start).
+// (a stretching flex/grid parent keeps the link at its own width with start), --textlink-decoration-style (dashed),
+// --textlink-decoration-color, --textlink-decoration-thickness, --textlink-underline-offset (analysis rows: solid orange line).
 @include mx.component("textlink") {
   :scope {
     --_color: var(--color-text-muted);
@@ -27,7 +28,11 @@
     font-size: var(--textlink-font-size, var(--font-size-sm));
     gap: var(--textlink-gap, normal);
     letter-spacing: inherit;
-    text-decoration: underline dashed from-font;
+    text-decoration-line: underline;
+    text-decoration-style: var(--textlink-decoration-style, dashed);
+    text-decoration-color: var(--textlink-decoration-color, currentcolor);
+    text-decoration-thickness: var(--textlink-decoration-thickness, from-font);
+    text-underline-offset: var(--textlink-underline-offset, auto);
     text-underline-position: from-font;
     cursor: pointer;
 

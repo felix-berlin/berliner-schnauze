@@ -154,11 +154,32 @@ describe("FooterCalloutBook", () => {
   }, 30_000);
 
   it("shows the book with its affiliate link and disclosure", async () => {
-    const html = await render({ book: { title: "Testbuch", url: "https://example.test/b" } });
+    const html = await render({
+      book: {
+        disclosure: "CMS-Hinweis zum Partnerlink.",
+        title: "Testbuch",
+        url: "https://example.test/b",
+      },
+    });
     expect(html).toContain("Mehr Berlinerisch zum Blättern");
     expect(html).toContain("Testbuch");
     expect(html).toContain('href="https://example.test/b"');
-    expect(html).toContain('rel="sponsored noopener"');
-    expect(html).toContain("Als Amazon-Partner verdiene ich an qualifizierten Verkäufen.");
+    expect(html).toContain('rel="sponsored noopener noreferrer"');
+    expect(html).toContain("data-book-link");
+    expect(html).toContain("Bei example.test ansehen");
+    expect(html).toContain("CMS-Hinweis zum Partnerlink.");
+    expect(html).not.toContain("Amazon");
+  });
+
+  it("names Amazon only for an Amazon link and shows no disclosure without one", async () => {
+    const amazon = await render({ book: { title: "T", url: "https://www.amazon.de/dp/X" } });
+    expect(amazon).toContain("Bei Amazon ansehen");
+    const plain = await render({ book: { title: "T", url: "https://example.test/b" } });
+    expect(plain).not.toContain("disclosure");
+  });
+
+  it("renders no link for a hostile url", async () => {
+    const html = await render({ book: { title: "T", url: "javascript:alert(1)" } });
+    expect(html).not.toContain("javascript:");
   });
 });

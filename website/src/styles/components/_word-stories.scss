@@ -1,0 +1,121 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Jeschichten card body (SPEC §8.1): the prompt box ("Frage der Woche" + "Erzähl’s"), the list with the reactions and
+// "Alle {n} Jeschichten lesen". Parts: .prompt (.question, .text; the "Erzähl’s" button is an outline c-button), .empty, .list (.item, .quote, .meta,
+// .by, .reactions; the votes are pill compact c-reactions), .all, .note, .foot. The third story of a collapsed list carries data-narrow-hidden: the page
+// shell (objects/_word-v18.scss) hides it below the "word" breakpoint (SPEC: mobile 2).
+@include mx.component("word-stories") {
+  :scope {
+    --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
+
+    container: word-stories / inline-size;
+    position: relative; // anchor of the empty status region
+    display: grid;
+    grid-template-columns: minmax(0, 1fr); // the headword inside the texts can be 36 letters long
+    gap: var(--space-4);
+    overflow-wrap: anywhere;
+  }
+
+  .prompt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-4);
+    padding: var(--space-4);
+    background: var(--color-surface-chip);
+    border-radius: var(--radius-sm);
+    // SPEC §8.1: the icon of the "Erzähl’s" button sits 2.5px higher, no token at that size
+    --button-icon-translate: 0 -2.5px; // stylelint-disable-line declaration-property-value-disallowed-list -- SPEC §8.1: optical offset
+  }
+
+  .question {
+    flex: 1 1 14rem;
+  }
+
+  .text {
+    margin: var(--space-1) 0 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+  }
+
+  // Without JS the button would do nothing (like the contribute buttons of the cards).
+  html:not([data-js]) :scope .prompt {
+    --button-display: none; // c-button (outline) reads it
+  }
+
+  .empty {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .item {
+    padding-block: var(--space-4);
+    border-block-start: 1px solid var(--color-border-card);
+
+    &:first-child {
+      border-block-start: 0;
+    }
+
+    &:focus-visible {
+      outline-offset: var(--space-1);
+    }
+  }
+
+  .quote {
+    margin: 0;
+    font-size: var(--font-size-md);
+    line-height: 1.55;
+    color: var(--color-text-strong);
+    overflow-wrap: anywhere;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+    margin-block-start: var(--space-2);
+    font-size: var(--_small);
+    color: var(--color-text-muted);
+  }
+
+  .reactions {
+    display: inline-flex;
+    gap: var(--space-2);
+  }
+
+  // Textlink with the orange line (SPEC §8.1).
+  .all {
+    justify-self: start;
+    min-block-size: var(--size-tap-target);
+    padding: 0;
+    font: inherit;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+    background: none;
+    border: 0;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §8.1: 2px orange line, no border-width token
+    border-block-end: 2px solid var(--color-accent-active);
+    cursor: pointer;
+
+    &[aria-busy="true"] {
+      cursor: progress;
+    }
+  }
+
+  .note,
+  .foot {
+    margin: 0;
+    font-size: var(--_small);
+    color: var(--color-text-muted);
+  }
+}

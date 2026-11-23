@@ -462,3 +462,122 @@ describe("vTooltip DOM removal", () => {
     wrapper.unmount();
   });
 });
+
+describe("vTooltip touch toggle, Esc semantics and ink variant", () => {
+  const esc = () => document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+  const touchEvent = (type: string, target: Element) => {
+    const e = new MouseEvent(type, { bubbles: true, cancelable: true });
+    Object.defineProperty(e, "pointerType", { value: "touch" });
+    target.dispatchEvent(e);
+    return e;
+  };
+  const touchTap = (button: Element) => {
+    touchEvent("pointerdown", button);
+    touchEvent("pointerenter", button);
+    touchEvent("focusin", button);
+    const click = touchEvent("click", button);
+    touchEvent("pointerleave", button);
+    return click;
+  };
+  const toggle = (extra = {}) =>
+    mountWithDirective({ content: "Tip", touch: "toggle", variant: "ink", ...extra });
+
+  it("adds the ink variant next to the placement", async () => {
+    const panel = await showAndGetPanel(mountWithDirective({ content: "T", variant: "ink" }));
+    expect(panel.dataset.variant).toBe("top ink");
+  });
+
+  it("opens on a tap, survives the touch pointer leaving and its focus, closes on the second tap", () => {
+    vi.useFakeTimers();
+    const button = toggle().find("button").element;
+    touchTap(button);
+    vi.advanceTimersByTime(500);
+    expect(mockShowPopover).toHaveBeenCalledOnce();
+    expect(mockHidePopover).not.toHaveBeenCalled();
+    touchTap(button);
+    expect(mockHidePopover).toHaveBeenCalledOnce();
+  });
+
+  it("prevents the first tap on a link only and lets the second one through", () => {
+    const wrapper = mount(
+      { template: "<a v-tooltip=\"{ content: 'T', touch: 'toggle' }\" href=\"/x\">l</a>" },
+      { global: { directives: { tooltip: vTooltip } } },
+    );
+    mountedWrappers.push(wrapper);
+    expect(touchTap(wrapper.element).defaultPrevented).toBe(true);
+    expect(touchTap(wrapper.element).defaultPrevented).toBe(false);
+  });
+
+  it("closes an open tooltip on a tap elsewhere but not on a tap inside the panel", () => {
+    const button = toggle().find("button").element;
+    touchTap(button);
+    document.body
+      .querySelector("[popover]")!
+      .dispatchEvent(new Event("pointerdown", { bubbles: true }));
+    expect(mockHidePopover).not.toHaveBeenCalled();
+    document.body.dispatchEvent(new Event("pointerdown", { bubbles: true }));
+    expect(mockHidePopover).toHaveBeenCalledOnce();
+  });
+
+  it("ignores a mouse click and does not toggle without the touch option", async () => {
+    const wrapper = toggle();
+    await wrapper.find("button").trigger("click");
+    expect(mockShowPopover).not.toHaveBeenCalled();
+    const plain = mountWithDirective("Plain");
+    expect(touchTap(plain.find("button").element).defaultPrevented).toBe(false);
+  });
+
+  it("closes on Esc and stays closed until a NEW focus or pointer entry", async () => {
+    const wrapper = mountWithDirective("Tip");
+    const button = wrapper.find("button");
+    await button.trigger("focusin");
+    esc();
+    expect(mockHidePopover).toHaveBeenCalledOnce();
+    await button.trigger("mousemove"); // same hover or focus persisting: no reopen
+    expect(mockShowPopover).toHaveBeenCalledOnce();
+    await button.trigger("focusin");
+    expect(mockShowPopover).toHaveBeenCalledTimes(2);
+    esc();
+    await button.trigger("pointerenter");
+    expect(mockShowPopover).toHaveBeenCalledTimes(3);
+  });
+
+  it("does nothing for a stray Esc and removes its listeners on unmount", async () => {
+    const wrapper = mountWithDirective("Tip");
+    esc();
+    expect(mockHidePopover).not.toHaveBeenCalled();
+    await wrapper.find("button").trigger("focusin");
+    wrapper.unmount();
+    mountedWrappers.length = 0;
+    mockHidePopover.mockClear();
+    esc();
+    document.body.dispatchEvent(new Event("pointerdown", { bubbles: true }));
+    expect(mockHidePopover).not.toHaveBeenCalled();
+    expect(document.body.querySelector("[popover]")).toBeNull();
+  });
+
+  it("renders a bold lead-in as text and attachTooltip is idempotent", async () => {
+    const { attachTooltip } = await import("@/directives/tooltip");
+    const el = document.createElement("button");
+    document.body.appendChild(el);
+    const stop = attachTooltip(el, { content: "<i>x</i>", lead: "Lead." });
+    attachTooltip(el, { content: "second" })();
+    el.dispatchEvent(new Event("focusin"));
+    const panel = document.body.querySelector("[popover]")!;
+    expect(document.body.querySelectorAll("[popover]")).toHaveLength(1);
+    expect(panel.querySelector("b")?.textContent).toBe("Lead.");
+    expect(panel.querySelector("i")).toBeNull();
+    stop();
+    expect(el.hasAttribute("aria-describedby")).toBe(false);
+  });
+
+  it("drops a stale touching flag after pointerup so a later keyboard focus opens it", () => {
+    vi.useFakeTimers();
+    const button = toggle().find("button").element;
+    touchEvent("pointerdown", button);
+    touchEvent("pointerup", button);
+    vi.advanceTimersByTime(600);
+    button.dispatchEvent(new Event("focusin"));
+    expect(mockShowPopover).toHaveBeenCalledOnce();
+  });
+});

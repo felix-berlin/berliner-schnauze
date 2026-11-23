@@ -4,7 +4,8 @@
 // Tooltip panel: a manual popover placed with CSS Anchor Positioning (position-anchor set inline per
 // instance by TooltipPopover.vue and the v-tooltip directive). Variants = placement: top, top-start,
 // top-end, bottom, bottom-start, bottom-end, left, right. Part: .arrow (positioned by JS).
-// Public: --tooltip-offset (gap to the trigger, set inline from the offset option).
+// Variant "ink" (word page, handoff SPEC §14; combine with a placement, e.g. "top ink"): ink ground, paper text,
+// 13px, 150 ms fade + 4px shift. Public: --tooltip-offset (gap to the trigger, set inline from the offset option).
 @include mx.component("tooltip") {
   :scope {
     // drop-shadow unifies panel + arrow into one silhouette (no double shadow where the arrow overlaps).
@@ -15,6 +16,7 @@
     --_pad: 0.25em 0.6em; // em: follows the tooltip text
     --_max: 20rem; // one-off reading width
     --_center: 50%;
+    --_bg: var(--color-surface-floating);
     --_fade: 0.1s; // faster than every duration token: a tooltip must not lag the pointer
 
     // UA popover reset: browsers add margin/border/overflow/size to [popover]
@@ -27,7 +29,7 @@
       flip-block,
       flip-inline,
       flip-block flip-inline;
-    background: var(--color-surface-floating);
+    background: var(--_bg);
     color: var(--color-text-body);
     padding: var(--_pad);
     border-radius: var(--radius-sm);
@@ -70,43 +72,85 @@
     }
   }
 
+  // Ink look. Ground and text are the SPEC "ink-strong" / "card" pair (text-strong on sheet, as the active TOC pill).
+  :scope[data-variant~="ink"] {
+    --_bg: var(--color-text-strong);
+    --_pad: var(--space-2) var(--space-3);
+    --_max: 15rem; // SPEC §14: 240-260px
+    --_fade: 0.15s;
+    --_size: 0.8125rem; // SPEC §4.2: 13px minimum, no token at that size
+    --_shift: var(--space-1);
+
+    // Safe margin: the flip fallbacks otherwise leave the panel flush against the viewport edge.
+    inset-inline: var(--space-4);
+    // SPEC shadow 0 8px 20px 22 %; drop-shadow takes the blur as a standard deviation, hence half
+    // stylelint-disable-next-line function-disallowed-list -- SPEC §14 tooltip shadow, no token holds it
+    --_lift: drop-shadow(0 8px 10px rgb(0 0 0 / 22%));
+
+    color: var(--color-surface-sheet);
+    font-size: var(--_size);
+    line-height: 1.45;
+
+    @include butler-mx.feature("motion") {
+      translate: 0 var(--_shift);
+
+      &:popover-open {
+        translate: 0 0;
+      }
+
+      @starting-style {
+        &:popover-open {
+          translate: 0 var(--_shift);
+        }
+      }
+
+      transition-property: opacity, translate, display, overlay;
+    }
+  }
+
+  :scope[data-variant~="ink"][data-variant~="bottom"],
+  :scope[data-variant~="ink"][data-variant~="bottom-start"],
+  :scope[data-variant~="ink"][data-variant~="bottom-end"] {
+    --_shift: calc(-1 * var(--space-1));
+  }
+
   // Offset margin direction matches the placement.
-  :scope[data-variant="top"] {
+  :scope[data-variant~="top"] {
     position-area: block-start;
     margin-block-end: var(--_offset);
   }
 
-  :scope[data-variant="top-start"] {
+  :scope[data-variant~="top-start"] {
     position-area: block-start span-inline-end;
     margin-block-end: var(--_offset);
   }
 
-  :scope[data-variant="top-end"] {
+  :scope[data-variant~="top-end"] {
     position-area: block-start span-inline-start;
     margin-block-end: var(--_offset);
   }
 
-  :scope[data-variant="bottom"] {
+  :scope[data-variant~="bottom"] {
     position-area: block-end;
     margin-block-start: var(--_offset);
   }
 
-  :scope[data-variant="bottom-start"] {
+  :scope[data-variant~="bottom-start"] {
     position-area: block-end span-inline-end;
     margin-block-start: var(--_offset);
   }
 
-  :scope[data-variant="bottom-end"] {
+  :scope[data-variant~="bottom-end"] {
     position-area: block-end span-inline-start;
     margin-block-start: var(--_offset);
   }
 
-  :scope[data-variant="left"] {
+  :scope[data-variant~="left"] {
     position-area: inline-start;
     margin-inline-end: var(--_offset);
   }
 
-  :scope[data-variant="right"] {
+  :scope[data-variant~="right"] {
     position-area: inline-end;
     margin-inline-start: var(--_offset);
   }
@@ -118,7 +162,7 @@
     position: absolute;
     inline-size: var(--_size);
     block-size: var(--_size);
-    background: var(--color-surface-floating);
+    background: var(--_bg);
     rotate: 45deg;
   }
 }

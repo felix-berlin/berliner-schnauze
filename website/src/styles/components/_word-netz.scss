@@ -177,16 +177,49 @@
   }
 
   .tile {
-    display: grid;
-    gap: var(--space-1);
-    padding: var(--space-3) var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
     background: var(--color-surface-chip);
     border-radius: var(--radius-sm);
     color: var(--color-text-strong);
     text-decoration: none;
 
     @include butler-mx.hover {
-      background: var(--color-surface-tint-warm);
+      background: var(--color-surface-card3, var(--color-surface-tint-warm));
+    }
+  }
+
+  // mock .w17__abr: the "next" tile sits at the right edge; the hint line is regular 13px, the word bold.
+  .tile:last-child {
+    justify-content: flex-end;
+    text-align: end;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    font-weight: var(--font-weight-bold);
+
+    small {
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §4.2: 13px minimum, no token
+      font-size: 0.8125rem;
+      font-weight: var(--font-weight-regular);
+      color: var(--color-text-muted);
+    }
+  }
+
+  .arrow {
+    display: none;
+    color: var(--color-text-accent);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w17__abr b: 1.15rem, no token
+    font-size: 1.15rem;
+  }
+
+  @container word-netz (inline-size >= 36rem) {
+    .arrow {
+      display: block;
     }
   }
 

@@ -1,7 +1,7 @@
 import type { Story } from "@lib/story.ts";
 
 import { type PollResult, buildPollResult } from "@lib/pollResult.ts";
-import { pickBook } from "@lib/wordBook.ts";
+import { disclosureFor, pickBook } from "@lib/wordBook.ts";
 import { ttlBy } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { fetchAffiliateData, fetchWordPageGlobal } from "@services/payload/site.ts";
@@ -54,7 +54,7 @@ export type WordPageModel = {
   featured?: Story;
   featuredStoryId?: string;
   storyPrompt: string;
-  book?: { title: string; url: string; cover?: string };
+  book?: { title: string; url: string; cover?: string; disclosure?: string };
   poll: PollResult;
   updatedAt: string;
 };
@@ -84,9 +84,12 @@ const fetchPoll = ttlBy(60_000, 500, async (wordId: number) => {
   return buildPollResult(docs);
 });
 
-/** The page model of a public word, or null for an unknown slug. */
-export const fetchWordPage = async (slug: string): Promise<WordPageModel | null> => {
-  const word = await fetchWordBySlug(slug);
+/** The page model of a public word, or null for an unknown slug. An editor's draft of that word replaces the public row. */
+export const fetchWordPage = async (
+  slug: string,
+  draft?: SiteWord,
+): Promise<WordPageModel | null> => {
+  const word = draft ?? (await fetchWordBySlug(slug));
   if (!word) return null;
   const words = await fetchAllWords();
 
@@ -96,12 +99,14 @@ export const fetchWordPage = async (slug: string): Promise<WordPageModel | null>
   const { after, before } = alphabeticNeighbors(refs, ref, 1);
   const [stories, trend, wordPage, affiliate, poll] = await Promise.all([
     fetchStories(word.id, 1),
-    getWordTrend(word.id),
+    // A draft has no public numbers.
+    draft ? undefined : getWordTrend(word.id),
     fetchWordPageGlobal(),
     fetchAffiliateData(),
     fetchPoll(word.id),
   ]);
   const book = pickBook(affiliate.books, word.themen[0]?.id);
+  const disclosure = book?.href ? disclosureFor(book.href, affiliate.disclaimers) : undefined;
   const { day, month, year } = berlinParts(now);
 
   return {
@@ -109,7 +114,12 @@ export const fetchWordPage = async (slug: string): Promise<WordPageModel | null>
     ...(before[0] && { before: link(before[0]) }),
     ...(book?.title &&
       book.href && {
-        book: { title: book.title, url: book.href, ...(book.imageUrl && { cover: book.imageUrl }) },
+        book: {
+          title: book.title,
+          url: book.href,
+          ...(book.imageUrl && { cover: book.imageUrl }),
+          ...(disclosure && { disclosure }),
+        },
       }),
     facts: (word.facts ?? []).flatMap(
       ({ contributorName, contributorSuggestion, kind, source, text }) => {

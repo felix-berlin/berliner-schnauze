@@ -1,11 +1,13 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Variants (space-separated in data-variant): primary, secondary, soft, lg, xl, center-icon, filter, paper, raised. A
+// Variants (space-separated in data-variant): primary, secondary, soft, lg, xl, center-icon, filter, paper, raised,
+// outline, pill (+ dashed). Parts: .center, .plus, .icon (outline and pill). A
 // pressed filter button is aria-pressed="true". Public: --button-padding, --button-bg, --button-color,
 // --button-border-color, --button-border-style, --button-border-width, --button-display,
 // --button-disabled-bg, --button-disabled-color, --button-disabled-border-color, --button-disabled-border-style,
-// --button-font-size, --button-min-block-size, --button-transition, --button-flex, --button-gap.
+// --button-font-size, --button-min-block-size, --button-transition, --button-flex, --button-gap, --button-display,
+// --button-plus-color, --button-icon-translate.
 // Locked but focusable (busy, offline): aria-disabled="true"; aria-busy="true" shows the progress cursor.
 @include mx.component("button") {
   :scope {
@@ -122,6 +124,102 @@
 
       box-shadow: none;
     }
+  }
+
+  // Outline button (SPEC §4.3, the only allowed style next to primary and pill): 44px, 0 16px, 4px radius, 1.5px
+  // orange rim, ink text, chip surface on hover (the rim stays solid, no glow).
+  :scope[data-variant~="outline"] {
+    --_bg: var(--button-bg, transparent);
+    --_color: var(--button-color, var(--color-text-strong));
+    --_border-color: var(--button-border-color, var(--color-accent-active));
+
+    display: var(--button-display, inline-flex);
+    align-items: center;
+    gap: var(--button-gap, var(--space-2));
+    flex: var(--button-flex, none);
+    min-block-size: var(--button-min-block-size, var(--size-tap-target));
+    padding: var(--button-padding, 0 var(--space-4));
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §4.3: 1.5px rim, no border-width token
+    border-width: var(--button-border-width, 1.5px);
+    border-radius: var(--radius-sm);
+    font: inherit;
+    font-size: var(--button-font-size, inherit);
+    font-weight: var(--font-weight-bold);
+
+    @include butler-mx.hover {
+      --_bg: var(--color-surface-chip);
+      --_border-style: solid;
+
+      box-shadow: none;
+    }
+  }
+
+  // Pill (SPEC §4.3 "Pille"): 36px look with a 44px hit band, round, chip surface, one step darker on hover.
+  // + dashed: the ghost pill of a feature that is not there yet (transparent, dashed rim, quiet text).
+  :scope[data-variant~="pill"] {
+    --_h: 2.25rem; // SPEC §4.3: 36px, no token
+    --_reach: calc((var(--size-tap-target) - var(--_h)) / 2); // the band grows to 44px
+    --_bg: var(--button-bg, var(--color-surface-chip));
+    --_color: var(--button-color, var(--color-text-strong));
+    --_border-color: var(--button-border-color, transparent);
+
+    position: relative;
+    display: var(--button-display, inline-flex);
+    align-items: center;
+    gap: var(--button-gap, var(--space-1));
+    flex: var(--button-flex, none);
+    min-block-size: var(--button-min-block-size, var(--_h));
+    padding: var(--button-padding, 0 var(--space-3)); // SPEC §4.3: 12px
+    border-width: var(--button-border-width, 0);
+    border-radius: var(--radius-pill);
+    font: inherit;
+    font-size: var(--button-font-size, var(--font-size-md));
+    font-weight: var(--font-weight-bold);
+    letter-spacing: normal; // a control resets the page tracking (as the buttons it replaces did)
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: calc(-1 * var(--_reach));
+    }
+
+    @include butler-mx.hover {
+      --_bg: var(--button-bg, var(--color-surface-card3, var(--color-surface-tint-warm)));
+      --_border-style: solid;
+
+      box-shadow: none;
+    }
+  }
+
+  :scope[data-variant~="dashed"] {
+    --_bg: var(--button-bg, transparent);
+    --_color: var(--button-color, var(--color-text-body));
+    --_border-color: var(--button-border-color, var(--color-border-card));
+    --_border-style: dashed;
+    --_reach: calc((var(--size-tap-target) - var(--_h)) / 2 + 2px); // plus the border: the band starts at the padding box
+
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock: 1.5px dashed rule
+    border-width: var(--button-border-width, 1.5px);
+    font-weight: normal;
+
+    @include butler-mx.hover {
+      --_bg: var(--button-bg, transparent);
+      --_border-style: dashed;
+    }
+  }
+
+  // The decorative plus and icon of outline and pill buttons.
+  .plus {
+    color: var(--button-plus-color, var(--color-accent-active)); // SPEC §4.1: the plus is orange
+    font-weight: var(--font-weight-bold);
+  }
+
+  :scope[data-variant~="dashed"] .plus {
+    font-weight: inherit;
+  }
+
+  .icon {
+    translate: var(--button-icon-translate, none);
   }
 
   // Small radius for buttons that sit in a card or band (start page, mock: 4px). The default stays square.

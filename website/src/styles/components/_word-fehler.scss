@@ -1,9 +1,9 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// „Stimmt wat nich?“ line (SPEC §12, WordReportLine.astro): a rule above, text left and an outline button
-// right (stacked below 36rem). Parts: .inner (the row; the root is the container), .text, .report. Without JS (html:not([data-js])) the button is hidden:
-// it is wired in a later task, like the contribute buttons.
+// „Stimmt wat nich?“ line (SPEC §12, WordReportLine.astro): a rule above, text left and an outline c-button
+// right (stacked below 36rem). Parts: .inner (the row; the root is the container), .text. Without JS (html:not([data-js])) the button is hidden:
+// `initContributeTriggers` wires it, like the contribute buttons.
 @include mx.component("word-fehler") {
   :scope {
     container: word-fehler / inline-size;
@@ -35,32 +35,8 @@
     }
   }
 
-  // Outline button (SPEC §4.3): 44px, 0 16px, 4px radius, 1.5px orange-500 rim.
-  .report {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    flex: none;
-    min-block-size: var(--size-tap-target);
-    padding-inline: var(--space-4);
-    font: inherit;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-strong);
-    background: transparent;
-    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §4.3: 1.5px rim, no border-width token
-    border: 1.5px solid var(--color-accent-active);
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-
-    @include butler-mx.feature("motion") {
-      transition: background-color var(--duration-base);
-    }
-    @include butler-mx.hover {
-      background: var(--color-surface-chip);
-    }
-  }
-
-  html:not([data-js]) :scope .report {
-    display: none;
+  // Without JS the button would do nothing: c-button (outline) reads --button-display.
+  html:not([data-js]) :scope .inner {
+    --button-display: none;
   }
 }
