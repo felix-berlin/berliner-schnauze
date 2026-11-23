@@ -12,6 +12,7 @@ import { authenticatedOnly } from "../access";
 import { COMMENT_MAX, containsLink, idOf, NAME_MAX } from "../lib/comments";
 import { commentAdminLink, notifyEditors } from "../lib/notifyEditors";
 import { siteUrl } from "../lib/routes";
+import { STORY_BEZIRKE } from "../lib/storyBezirk";
 
 /** Replies are one level deep: a reply to a reply goes to the top-level comment; a parent must belong to the same word. */
 const flattenParent: CollectionBeforeValidateHook = async ({ data, originalDoc, req }) => {
@@ -55,6 +56,46 @@ const applyRules: CollectionBeforeChangeHook = ({ data, operation, originalDoc, 
     }
   } else if (originalDoc?.status === "hidden" && data.status === "published") {
     data.reviewed = true;
+  }
+  return data;
+};
+
+/**
+ * At most one published featured Jeschichte per word; rows in any other status do not count, so they never block a new
+ * one. The database backs this with a partial unique index (migration `comments_one_featured`), the hook gives the
+ * readable message. A reply cannot be featured.
+ */
+const singleFeatured: CollectionBeforeChangeHook = async ({ data, originalDoc, req }) => {
+  // Judge the resulting state: republishing an already featured row must be checked too.
+  const featured = data.featured ?? originalDoc?.featured;
+  const status = data.status ?? originalDoc?.status ?? "published";
+  if (!featured || status !== "published") return data;
+  if (idOf(data.parent) ?? idOf(originalDoc?.parent)) {
+    throw new ValidationError({
+      errors: [{ path: "featured", message: "Eine Antwort kann nicht hervorgehoben werden." }],
+    });
+  }
+  const word = idOf(data.word) ?? idOf(originalDoc?.word);
+  if (word == null) return data;
+  const others = await req.payload.find({
+    collection: "comments",
+    where: {
+      word: { equals: word },
+      featured: { equals: true },
+      status: { equals: "published" },
+      ...(originalDoc?.id ? { id: { not_equals: originalDoc.id } } : {}),
+    },
+    limit: 1,
+    depth: 0,
+    pagination: false,
+    req,
+  });
+  if (others.docs.length) {
+    throw new ValidationError({
+      errors: [
+        { path: "featured", message: "Für dieses Wort ist bereits eine Jeschichte hervorgehoben." },
+      ],
+    });
   }
   return data;
 };
@@ -154,7 +195,7 @@ export const Comments: CollectionConfig = {
   },
   hooks: {
     beforeValidate: [flattenParent],
-    beforeChange: [applyRules],
+    beforeChange: [applyRules, singleFeatured],
     afterChange: [mailEditors],
     beforeDelete: [deleteDependents],
   },
@@ -197,6 +238,25 @@ export const Comments: CollectionConfig = {
       admin: {
         position: "sidebar",
         description: "Freigegeben: weitere Meldungen blenden den Kommentar nicht mehr aus.",
+      },
+    },
+    {
+      name: "bezirk",
+      type: "select",
+      index: true,
+      options: STORY_BEZIRKE.map((value) => ({ label: value, value })),
+      admin: { position: "sidebar", description: "Bezirk der Jeschichte (optional)." },
+    },
+    {
+      name: "featured",
+      type: "checkbox",
+      defaultValue: false,
+      // Editors only: no site request may pick the featured slot (the site creates with overrideAccess, which skips this).
+      access: { create: ({ req }) => Boolean(req.user), update: ({ req }) => Boolean(req.user) },
+      admin: {
+        position: "sidebar",
+        description:
+          "Als Jeschichte des Wortes hervorgehoben (höchstens eine veröffentlichte pro Wort, keine Antworten).",
       },
     },
     { name: "editKeyHash", type: "text", admin: { hidden: true } },

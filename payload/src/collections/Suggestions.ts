@@ -1,40 +1,87 @@
-import type { CollectionAfterChangeHook, CollectionConfig, FieldAccess } from "payload";
+import type { CollectionAfterChangeHook, CollectionConfig } from "payload";
 
-import { authenticatedOnly } from "../access";
+import { relationship, select, text, textarea } from "payload/shared";
+
+import type { AnyValidate } from "../lib/requiredField";
+
+import { authenticatedOnly, notOverMcp } from "../access";
 import { adoptSuggestion } from "../hooks/adoptSuggestion";
 import { lockedByWordValue, refuseWhenLocked, updateUnlocked } from "../hooks/suggestionLock";
 import { notifyEditors } from "../lib/notifyEditors";
 
+const TYPE_LABEL: Record<string, string> = {
+  example: "Beispielsatz",
+  fact: "Wissenswertes",
+  related: "Verwandtes Wort",
+  word: "Neues Wort",
+};
+
 /** Mails the editors about a new suggestion; a failed mail is logged, the suggestion stays in the admin. */
-const mailEditors: CollectionAfterChangeHook = ({ doc, operation, req }) => {
+const mailEditors: CollectionAfterChangeHook = async ({ doc, operation, req }) => {
   if (operation !== "create") return doc;
+  const type: string = doc.type ?? "word";
   const similar = (req.context.similarWords as string[] | undefined) ?? [];
-  const rows: [string, string | null | undefined][] = [
-    ["Berliner Wort", doc.berlinerWord],
-    ["Übersetzung", doc.translation],
-    ["Beispiel", doc.example],
-    ["Name", doc.userName],
-    ["E-Mail", doc.userMail],
-    ...(similar.length ? [["Ähnliche Wörter", similar.join(", ")] as [string, string]] : []),
-  ];
+  // The other types name the word they are for; show its headword, not an id.
+  const target = doc.targetWord
+    ? await req.payload
+        .findByID({
+          collection: "words",
+          depth: 0,
+          id: typeof doc.targetWord === "object" ? doc.targetWord.id : doc.targetWord,
+          req,
+        })
+        .then((w) => w.berlinerisch)
+        .catch(() => null)
+    : null;
+  const rows: [string, string | null | undefined][] =
+    type === "word"
+      ? [
+          ["Berliner Wort", doc.berlinerWord],
+          ["Übersetzung", doc.translation],
+          ["Beispiel", doc.example],
+        ]
+      : [
+          ["Zu Wort", target],
+          ["Text", doc.text],
+          ["Art", doc.kind],
+          ["Beziehung", doc.relation],
+          ["Verwandtes Wort", doc.relatedText],
+          ["Hochdeutsch", doc.highdeutsch],
+        ];
+  rows.push(["Name", doc.userName], ["E-Mail", doc.userMail]);
+  if (similar.length) rows.push(["Ähnliche Wörter", similar.join(", ")]);
   notifyEditors(
     req,
-    "Wortvorschlag - Berliner Schnauze",
+    `${TYPE_LABEL[type] ?? "Vorschlag"} - Berliner Schnauze`,
     [
-      "Ein neues Berliner Wort wurde eingereicht:",
+      `Ein neuer Vorschlag wurde eingereicht (${TYPE_LABEL[type] ?? type}):`,
       "",
-      ...rows.map(([label, value]) => `${label}: ${value ?? ""}`),
+      ...rows.filter(([, value]) => value).map(([label, value]) => `${label}: ${value}`),
     ],
     doc.userMail ?? undefined,
   );
   return doc;
 };
 
-/**
- * The sender's name and mail never reach an MCP client (and so the model): Payload drops the fields from every MCP
- * read, write result and query, whatever the plugin's output format or `select` (its tools run with overrideAccess: false).
- */
-const notOverMcp: FieldAccess = ({ req }) => req.payloadAPI !== "MCP";
+/** Required only for the given suggestion types: runs the stock validator with `required` switched per type. */
+const requiredFor =
+  (types: string[], base: AnyValidate): AnyValidate =>
+  (value, options) => {
+    const type = (options.siblingData as { type?: string } | undefined)?.type ?? "word";
+    return base(value, { ...options, required: types.includes(type) });
+  };
+
+/** Like `requiredFor`, with a per-type character limit (one column, the limit differs by type). */
+const limitFor =
+  (limits: Record<string, number>, types: string[], base: AnyValidate): AnyValidate =>
+  (value, options) => {
+    const type = (options.siblingData as { type?: string } | undefined)?.type ?? "word";
+    const max = limits[type];
+    return requiredFor(types, base)(value, { ...options, ...(max ? { maxLength: max } : {}) });
+  };
+
+const labelled = (labels: Record<string, string>) =>
+  Object.entries(labels).map(([value, label]) => ({ value, label }));
 
 /** Words suggested through the site's form. The site creates them through the Local API (after Turnstile). */
 export const Suggestions: CollectionConfig = {
@@ -43,7 +90,7 @@ export const Suggestions: CollectionConfig = {
   access: { ...authenticatedOnly, update: updateUnlocked },
   admin: {
     useAsTitle: "berlinerWord",
-    defaultColumns: ["berlinerWord", "translation", "status", "createdAt"],
+    defaultColumns: ["type", "berlinerWord", "text", "status", "createdAt"],
     group: "Community",
   },
   hooks: { beforeChange: [refuseWhenLocked, adoptSuggestion], afterChange: [mailEditors] },
@@ -56,9 +103,96 @@ export const Suggestions: CollectionConfig = {
         components: { Field: "/components/SuggestionLockNotice#SuggestionLockNotice" },
       },
     },
-    { name: "berlinerWord", type: "text", required: true, maxLength: 100 },
-    { name: "translation", type: "text", required: true, maxLength: 300 },
-    { name: "example", type: "textarea", maxLength: 1000 },
+    {
+      name: "type",
+      type: "select",
+      defaultValue: "word",
+      index: true,
+      options: labelled({
+        word: "Neues Wort",
+        example: "Beispielsatz",
+        fact: "Wissenswertes",
+        related: "Verwandtes Wort",
+      }),
+      admin: { position: "sidebar" },
+    },
+    // Only for type "word": nullable in the database (additive for the rolling release), enforced by validate.
+    {
+      name: "berlinerWord",
+      type: "text",
+      maxLength: 100,
+      validate: requiredFor(["word"], text as AnyValidate),
+    },
+    {
+      name: "translation",
+      type: "text",
+      maxLength: 300,
+      validate: requiredFor(["word"], text as AnyValidate),
+    },
+    {
+      name: "targetWord",
+      type: "relationship",
+      relationTo: "words",
+      // Create only: the FK nulls it when the word is deleted, and the suggestion must stay saveable then.
+      validate: ((value: unknown, options: Parameters<AnyValidate>[1]) =>
+        requiredFor(
+          options.operation === "create" ? ["example", "fact", "related"] : [],
+          relationship as AnyValidate,
+        )(value, options)) as AnyValidate,
+      admin: {
+        position: "sidebar",
+        description:
+          "Das Wort, zu dem Beispiel, Wissenswertes oder Verwandtes eingereicht wurde. Nicht „Wort“ (das sperrt den Vorschlag).",
+      },
+    },
+    {
+      name: "kind",
+      type: "select",
+      options: labelled({
+        herkunft: "Herkunft",
+        geschichte: "Geschichte",
+        gebrauch: "Gebrauch",
+        anekdote: "Anekdote",
+        sonstiges: "Sonstiges",
+      }),
+      validate: requiredFor(["fact"], select as AnyValidate),
+    },
+    {
+      name: "relation",
+      type: "select",
+      options: labelled({
+        gleich: "Gleich",
+        gegenteil: "Gegenteil",
+        verwandt: "Verwandt",
+        redewendung: "Redewendung",
+      }),
+      validate: requiredFor(["related"], select as AnyValidate),
+    },
+    {
+      name: "relatedText",
+      type: "text",
+      maxLength: 60,
+      validate: requiredFor(["related"], text as AnyValidate),
+    },
+    {
+      name: "text",
+      type: "textarea",
+      maxLength: 1000,
+      admin: {
+        description: "Beispielsatz (max. 200 Zeichen) oder Text zum Wissenswerten (max. 1000).",
+      },
+      validate: limitFor({ example: 200 }, ["example", "fact"], textarea as AnyValidate),
+    },
+    { name: "highdeutsch", type: "text", maxLength: 200 },
+    {
+      name: "example",
+      type: "textarea",
+      maxLength: 1000,
+      admin: {
+        description:
+          "Nur bei „Neues Wort“: optionaler Beispielsatz. Für „Beispielsatz“ siehe Feld Text.",
+      },
+    },
     {
       name: "userName",
       type: "text",
@@ -75,7 +209,11 @@ export const Suggestions: CollectionConfig = {
         { label: "Übernommen", value: "accepted" },
         { label: "Abgelehnt", value: "rejected" },
       ],
-      admin: { position: "sidebar" },
+      admin: {
+        position: "sidebar",
+        description:
+          "Beispielsatz, Wissenswertes und Verwandtes übernimmt das CMS nicht selbst: erst von Hand ins Wort eintragen (dort „Vorschlag“ verknüpfen), dann hier auf „Übernommen“ setzen.",
+      },
     },
     {
       name: "word",

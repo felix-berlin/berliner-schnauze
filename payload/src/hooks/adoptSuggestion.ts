@@ -24,6 +24,7 @@ export const adoptSuggestion: CollectionBeforeChangeHook = async ({
   req,
 }) => {
   const d = { ...originalDoc, ...data };
+  if ((d.type ?? "word") !== "word") return data; // example/fact/related are moderated by hand, never adopted
   const berlinerWord: string = d.berlinerWord ?? "";
 
   // The admin form sends every field on each save: only a new suggestion or a changed spelling needs a new search.

@@ -313,3 +313,38 @@ describe("comments", () => {
     }
   });
 });
+
+describe("featured comments", () => {
+  it("does not feature a reply", async () => {
+    const parent = await make();
+    await expect(make({ featured: true, parent: parent.id })).rejects.toThrow(
+      /field is invalid: featured/,
+    );
+  });
+
+  it("allows one published featured comment per word", async () => {
+    const first = await make({ featured: true });
+    await expect(make({ featured: true })).rejects.toThrow(/field is invalid: featured/);
+    // another word is unaffected
+    await make({ featured: true }, otherWordId);
+    await payload.update({ collection: "comments", id: first.id, data: { featured: false } });
+    expect((await make({ featured: true })).featured).toBe(true);
+  });
+
+  it("ignores hidden featured comments", async () => {
+    const first = await make({ featured: true });
+    await payload.update({ collection: "comments", id: first.id, data: { status: "hidden" } });
+    expect((await make({ featured: true })).featured).toBe(true);
+  });
+
+  it("checks the resulting state when a featured row is republished", async () => {
+    // anonymous creates are always published, so hide the first featured row afterwards
+    const held = await make({ featured: true });
+    await payload.update({ collection: "comments", id: held.id, data: { status: "hidden" } });
+    await make({ featured: true });
+    expect(held.featured).toBe(true);
+    await expect(
+      payload.update({ collection: "comments", id: held.id, data: { status: "published" } }),
+    ).rejects.toThrow(/field is invalid: featured/);
+  });
+});
