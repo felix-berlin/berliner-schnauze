@@ -25,7 +25,7 @@ describe("v18 minimum text size", () => {
   const files = [
     "wissen",
     "zahlen",
-    "footer-callout-book",
+    "footer-callout",
     "analyse",
     "rows",
     "fehler",
