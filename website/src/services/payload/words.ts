@@ -59,8 +59,6 @@ export type SiteWord = Omit<
   | "facts"
   | "grammar"
   | "images"
-  | "infoText"
-  | "sources"
   | "related"
   | "relatedWords"
   | "slug"
@@ -141,9 +139,7 @@ export const toWord = ({
   facts,
   grammar,
   images,
-  infoText: _infoText,
   related,
-  sources: _sources,
   relatedWords,
   themen,
   wordTypes,

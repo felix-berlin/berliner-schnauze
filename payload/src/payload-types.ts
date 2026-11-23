@@ -413,30 +413,8 @@ export interface Word {
         id?: string | null;
       }[]
     | null;
-  /**
-   * Veraltet: steht jetzt unter Wissenswertes.
-   */
-  infoText?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
   learnMore?: string | null;
   berolinismus?: boolean | null;
-  /**
-   * Veraltet: steht jetzt je Eintrag unter Wissenswertes.
-   */
-  sources?: string[] | null;
   images?: (number | Media)[] | null;
   wordTypes?: (number | WordType)[] | null;
   themen?: (number | Theman)[] | null;
@@ -1371,10 +1349,8 @@ export interface WordsSelect<T extends boolean = true> {
         caption?: T;
         id?: T;
       };
-  infoText?: T;
   learnMore?: T;
   berolinismus?: T;
-  sources?: T;
   images?: T;
   wordTypes?: T;
   themen?: T;

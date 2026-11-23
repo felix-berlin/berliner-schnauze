@@ -1,24 +1,10 @@
 import { MigrateDownArgs, MigrateUpArgs, sql } from "@payloadcms/db-postgres";
 
-// Data only. Copies the old origin text (`infoText`) of every published word, with the word's `sources`, into the
-// v18 "Wissenswertes" (`facts`, kind herkunft): the word page no longer shows `infoText`. Same code as
-// `payload run src/scripts/infoTextToFacts.ts` (lib/copyInfoTextToFacts.ts). Idempotent; a word with a newer draft is
-// skipped and logged (publish or discard the draft, then run the script once more); a word that fails to save is
-// logged and does not stop the deploy. `infoText`/`sources` stay (expand/contract); the old web ignores `facts`.
-export async function up({ payload }: MigrateUpArgs): Promise<void> {
-  const { copyInfoTextToFacts } = await import("../lib/copyInfoTextToFacts");
-  const { samples, skippedDrafts, stats } = await copyInfoTextToFacts(payload, {
-    kind: "herkunft",
-    write: true,
-  });
-  payload.logger.info({ msg: "[infoText] copied infoText into facts", stats });
-  if (skippedDrafts.length)
-    payload.logger.warn(
-      `[infoText] skipped, newer draft (publish or discard it, then run src/scripts/infoTextToFacts.ts): ${skippedDrafts.join(", ")}`,
-    );
-  if (stats.failed) payload.logger.error(`[infoText] ${stats.failed} word(s) failed to save`);
-  payload.logger.info(`[infoText] samples: ${samples.join(" || ")}`);
-}
+// Data only, done: on production this migration copied the old origin text (`infoText`) of every published word,
+// with the word's `sources`, into the v18 "Wissenswertes" (`facts`, kind herkunft). The columns and the copy code are
+// gone since the contract release (`drop_v18_legacy_columns`), so `up` has nothing left to do; a database that never ran
+// it keeps no origin text (restore it from a backup taken before the contract).
+export async function up(_: MigrateUpArgs): Promise<void> {}
 
 // Removes the copies that are still identical to the word's `infoText` (a rolled-back deploy shows the old text
 // again). A fact an editor changed since is kept: the `words_facts` guard of 20261122_172739_word_v18_fields then

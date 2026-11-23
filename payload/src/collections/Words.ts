@@ -206,22 +206,8 @@ export const Words: CollectionConfig = {
         { name: "caption", type: "text" },
       ],
     },
-    // Deprecated: replaced by `facts` (copied by `src/scripts/infoTextToFacts.ts`). Hidden in the admin and unused by the
-    // site; the columns stay until that script has run on production, then a contract release drops them.
-    {
-      name: "infoText",
-      type: "richText",
-      admin: { hidden: true, description: "Veraltet: steht jetzt unter Wissenswertes." },
-    },
     { name: "learnMore", type: "text" },
     { name: "berolinismus", type: "checkbox" },
-    // Deprecated with `infoText`: the source of a fact is `facts[].source` now.
-    {
-      name: "sources",
-      type: "text",
-      hasMany: true,
-      admin: { hidden: true, description: "Veraltet: steht jetzt je Eintrag unter Wissenswertes." },
-    },
     { name: "images", type: "upload", relationTo: "media", hasMany: true },
     { name: "wordTypes", type: "relationship", relationTo: "word-types", hasMany: true },
     { name: "themen", type: "relationship", relationTo: "themen", hasMany: true },
