@@ -115,11 +115,12 @@ export default defineConfig({
   },
   // Spike (#1950): in-process page cache, one web container only (a second one would keep its own copy).
   // Pages opt in with `Astro.cache.set()`; nothing is cached by default. The query string is ignored in the key
-  // so `?x=1..n` cannot fill the cache with copies of one page. A word page is ~116 KB of HTML: 1000 entries
-  // are roughly 120 MB of heap, the LRU keeps the visited words. Requests with a preview cookie skip the cache.
+  // so `?x=1..n` cannot fill the cache with copies of one page. A word page is ~116 KB of HTML: 500 entries
+  // are roughly 60 MB of heap (the web container has mem_limit 512m and idles at ~270 MB, so 1000 would leave
+  // little room), the LRU keeps the visited words. Requests with a preview cookie skip the cache.
   cache: {
     provider: {
-      config: { max: 1000, query: { include: [] } },
+      config: { max: 500, query: { include: [] } },
       entrypoint: new URL("./src/lib/previewAwareCache.ts", import.meta.url),
     },
   },
