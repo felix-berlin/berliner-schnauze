@@ -46,6 +46,8 @@ const articleJson = () =>
     headline: post.title,
     url: canonicalUrl(`/magazin/${post.slug}`, Astro.site),
   });
+// A draft never reaches the cache (previewAwareCache skips the preview cookie); this is the second guard.
+if (!draft) Astro.cache.set({ maxAge: 60, swr: 300 });
 ---
 
 <Layout content={seoProps} contentClasses='o-magazin-article'>

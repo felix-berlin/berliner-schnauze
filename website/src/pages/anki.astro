@@ -122,6 +122,7 @@ const { faqs, fullFeatures, liteFeatures, steps } = await fetchAnkiContent({
   liteWords: fmt(LITE_WORDS),
   totalWords: fmt(TOTAL_WORDS),
 });
+Astro.cache.set({ maxAge: 300, swr: 600 });
 ---
 
 <Layout content={page}>

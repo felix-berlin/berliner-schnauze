@@ -17,6 +17,7 @@ const pageContent = {
   seo: { ...metaToSeo(page.meta), opengraphType: "website" },
   title: page.title,
 };
+Astro.cache.set({ maxAge: 300, swr: 3600 });
 ---
 
 <Layout content={pageContent}>

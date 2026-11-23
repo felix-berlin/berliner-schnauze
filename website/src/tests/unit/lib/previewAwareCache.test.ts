@@ -7,13 +7,13 @@ vi.mock("astro/cache/memory", () => ({
 
 import factory from "@lib/previewAwareCache.ts";
 
-const context = (cookie?: string) =>
+const context = (cookie?: string, path = "/wort/aalen") =>
   ({
     logger: { error() {}, info() {}, warn() {} },
-    request: new Request("https://example.test/wort/aalen", {
+    request: new Request(`https://example.test${path}`, {
       headers: cookie ? { cookie } : {},
     }),
-    url: new URL("https://example.test/wort/aalen"),
+    url: new URL(`https://example.test${path}`),
   }) as never;
 
 describe("previewAwareCache", () => {
@@ -31,5 +31,16 @@ describe("previewAwareCache", () => {
     const response = await provider.onRequest!(context("a=1; bs_preview=token"), next);
     expect(await response.text()).toBe("rendered");
     expect(inner).not.toHaveBeenCalled();
+  });
+
+  it("renders the start page with ?q= (old share link redirect) but caches / and other ?q= paths", async () => {
+    inner.mockClear();
+    expect(await (await provider.onRequest!(context(undefined, "/?q=foo"), next)).text()).toBe(
+      "rendered",
+    );
+    expect(inner).not.toHaveBeenCalled();
+    await provider.onRequest!(context(undefined, "/"), next);
+    await provider.onRequest!(context(undefined, "/suche?q=foo"), next);
+    expect(inner).toHaveBeenCalledTimes(2);
   });
 });
