@@ -11,6 +11,7 @@ test.use({ reducedMotion: "reduce", serviceWorkers: "block" });
 
 const PAGES = [
   "/",
+  "/wort/abjang",
   "/wort/anmachen",
   "/wort/wa",
   "/games/berliner-oder-nicht",
