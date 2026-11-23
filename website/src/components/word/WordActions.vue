@@ -164,6 +164,8 @@ import { formatCitation, type CitationFormat } from "@lib/wordCite.ts";
 import { useStore } from "@nanostores/vue";
 import { openContributeForm } from "@stores/contribute.ts";
 import { $feedback, loadFeedback } from "@stores/wordFeedback.ts";
+import { trackEvent } from "@utils/analytics";
+import { reportWord } from "@utils/wordPulse.ts";
 import { toggleReaction, type Reaction } from "@utils/wordReaction.ts";
 import { useEventListener } from "@vueuse/core";
 import Check from "virtual:icons/lucide/check";
@@ -271,10 +273,12 @@ const copy = async (
   what: "cite" | "link" | "share" | "word",
   message: string,
   source: () => HTMLElement | null | Promise<HTMLElement | null>,
+  onCopied?: () => void,
 ): Promise<void> => {
   try {
     await navigator.clipboard.writeText(text);
     flash(what, message);
+    onCopied?.();
   } catch {
     // A fresh "kopiert" title hides the text span: bring it back before marking it.
     copied.value = null;
@@ -284,14 +288,29 @@ const copy = async (
   }
 };
 
-const copyLink = () => copy(props.url, "link", "Link kopiert", () => linkText.value);
-const copyWord = () => copy(wordCopy.value, "word", "Wort kopiert", () => wordText.value);
+// Same Matomo events as the old menu (WordOptionDropdown).
+const trackLinkCopied = (): void =>
+  trackEvent("Word Copy Link", "Word link copied", `Word: ${props.slug}`);
+
+const copyLink = () =>
+  copy(props.url, "link", "Link kopiert", () => linkText.value, trackLinkCopied);
+const copyWord = () =>
+  copy(
+    wordCopy.value,
+    "word",
+    "Wort kopiert",
+    () => wordText.value,
+    () => trackEvent("Word Copy", "Word copied", `Word: ${props.word}`),
+  );
 
 // --- share -----------------------------------------------------------------------------------------
 const share = async (): Promise<void> => {
   if (typeof navigator.share === "function") {
     try {
       await navigator.share({ title: props.word, url: props.url });
+      // Feeds the trending lists; a draft (no id) has none.
+      if (props.wordId !== undefined) reportWord(props.wordId, "share");
+      trackEvent("Word Share", "Word shared", `Word: ${props.slug}`);
       return;
     } catch (error) {
       // The visitor closed the sheet: nothing to do. Any other failure falls back to copying.
@@ -299,11 +318,17 @@ const share = async (): Promise<void> => {
     }
   }
   // Denied: the menu shows the link text; it is selected there so "Markiert" is true.
-  await copy(props.url, "share", "Link kopiert", async () => {
-    menuOpen.value = true;
-    await nextTick();
-    return linkText.value;
-  });
+  await copy(
+    props.url,
+    "share",
+    "Link kopiert",
+    async () => {
+      menuOpen.value = true;
+      await nextTick();
+      return linkText.value;
+    },
+    trackLinkCopied,
+  );
 };
 
 // --- menu (APG menu button) --------------------------------------------------------------------------

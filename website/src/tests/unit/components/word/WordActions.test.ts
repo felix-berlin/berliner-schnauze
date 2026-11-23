@@ -39,6 +39,11 @@ vi.mock("@stores/wordFeedback.ts", async () => {
   return { ...actual, loadFeedback: load };
 });
 
+const pulse = vi.hoisted(() => ({ report: vi.fn() }));
+vi.mock("@utils/wordPulse.ts", () => ({ reportWord: pulse.report }));
+const analytics = vi.hoisted(() => ({ track: vi.fn() }));
+vi.mock("@utils/analytics", () => ({ trackEvent: analytics.track }));
+
 const URL_ = "https://berliner-schnauze.wtf/wort/testwort";
 // Invented data only.
 const props = {
@@ -635,5 +640,79 @@ describe("WordActions lifecycle", () => {
       expect(remove.mock.calls.some(([t, f]) => t === type && f === fn)).toBe(true);
     add.mockRestore();
     remove.mockRestore();
+  });
+});
+
+describe("WordActions telemetry (trending lists, Matomo)", () => {
+  const teilen = (w: Wrapper) =>
+    w
+      .findAll("button")
+      .find((b) => b.text() === "Teilen")!
+      .trigger("click");
+  const setShare = (value: unknown) =>
+    Object.defineProperty(navigator, "share", { configurable: true, value });
+
+  it("a finished share reports the share pulse and the Matomo event", async () => {
+    setShare(vi.fn().mockResolvedValue(undefined));
+    wrapper = await mountIt();
+    await teilen(wrapper);
+    await flushPromises();
+    expect(pulse.report).toHaveBeenCalledExactlyOnceWith(7, "share");
+    expect(analytics.track).toHaveBeenCalledWith("Word Share", "Word shared", "Word: testwort");
+  });
+
+  it("a dismissed share sheet reports nothing", async () => {
+    setShare(vi.fn().mockRejectedValue(new DOMException("closed", "AbortError")));
+    wrapper = await mountIt();
+    await teilen(wrapper);
+    await flushPromises();
+    expect(pulse.report).not.toHaveBeenCalled();
+    expect(analytics.track).not.toHaveBeenCalled();
+  });
+
+  it("a share without word id (draft) tracks the event but sends no pulse", async () => {
+    setShare(vi.fn().mockResolvedValue(undefined));
+    wrapper = await mountIt({ wordId: undefined });
+    await teilen(wrapper);
+    await flushPromises();
+    expect(pulse.report).not.toHaveBeenCalled();
+    expect(analytics.track).toHaveBeenCalledWith("Word Share", "Word shared", "Word: testwort");
+  });
+
+  it("the copy fallback of the Teilen button counts as a link copy, not as a share", async () => {
+    wrapper = await mountIt();
+    await teilen(wrapper);
+    await flushPromises();
+    expect(pulse.report).not.toHaveBeenCalled();
+    expect(analytics.track).toHaveBeenCalledWith(
+      "Word Copy Link",
+      "Word link copied",
+      "Word: testwort",
+    );
+  });
+
+  it("copying link and word tracks the old Matomo events", async () => {
+    wrapper = await mountIt();
+    await openMenu(wrapper);
+    await items(wrapper)[0]!.trigger("click");
+    await items(wrapper)[1]!.trigger("click");
+    await flushPromises();
+    expect(analytics.track).toHaveBeenCalledWith(
+      "Word Copy Link",
+      "Word link copied",
+      "Word: testwort",
+    );
+    expect(analytics.track).toHaveBeenCalledWith("Word Copy", "Word copied", "Word: Testwort");
+    expect(pulse.report).not.toHaveBeenCalled();
+  });
+
+  it("a denied clipboard reports nothing", async () => {
+    clipboard(() => Promise.reject(new DOMException("denied", "NotAllowedError")));
+    wrapper = await mountIt();
+    await openMenu(wrapper);
+    await items(wrapper)[0]!.trigger("click");
+    await flushPromises();
+    expect(analytics.track).not.toHaveBeenCalled();
+    expect(pulse.report).not.toHaveBeenCalled();
   });
 });
