@@ -1,13 +1,13 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Auswahl (docs/design/wortseite/SPEC.md): one answer out of several. State via aria-pressed.
+// Auswahl (v18 handoff SPEC): one answer out of several. State via aria-pressed.
 // Variant tile (data-variant="tile"): poll answer (SPEC §7): borderless card2 tile, 72px, round dashed icon, parts .icon and .text.
 // Variant answer: poll answer, flat borderless card2 tile (bold, no icon).
 // Variant pill (data-variant="pill"): voice button (SPEC §6): 36px pill on card2 with a 26px play circle (.icon), a hit band
 // reaches 44px.
 // Variant chip (SPEC §4.3 "Chip (Auswahl)"): 36px pill on the card surface with a 44px hit band; pressed = ink rim and
-// text on the warm ground (not the orange fill).
+// text in the card colour on an ink ground (mock + state boards; not the orange fill).
 // Variant segment: one chip of a small connected control (36px look, 44px hit band; neighbours
 // overlap by their border).
 // Public (a parent's layout knobs, the old :where() let parents override these): --choice-display,
@@ -76,12 +76,14 @@
   :scope[data-variant~="tile"] {
     inline-size: 100%;
     min-block-size: var(--choice-min-block-size, 4.5rem);
-    padding: var(--choice-padding-block, var(--space-3))
-      var(--choice-padding-inline, var(--space-4));
+    // minus the 1px border below, so the tile keeps its size
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- the 1px border compensation has no token step
+    padding: calc(var(--choice-padding-block, var(--space-3)) - 1px)
+      calc(var(--choice-padding-inline, var(--space-4)) - 1px);
     justify-content: var(--choice-justify, flex-start);
     gap: var(--space-3);
     text-align: start;
-    border: 0;
+    border: 1px solid transparent; // painted by background only; forced colours turns the transparent border into a visible outline
     border-radius: var(--radius-sm);
 
     &:not([aria-pressed="true"]) {
@@ -128,7 +130,9 @@
 
   // Variant answer (mock .w18__poll .c-choice): a poll answer as a flat, borderless card2 tile, bold.
   :scope[data-variant~="answer"] {
-    border: 0;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- 1px border compensation, no token step
+    padding-inline: calc(var(--choice-padding-inline, var(--space-4)) - 1px);
+    border: 1px solid transparent; // see tile: visible in forced colours only
     border-radius: var(--radius-sm);
     color: var(--color-text-strong);
     letter-spacing: 0;
@@ -150,10 +154,6 @@
 
     &[aria-pressed="true"] {
       color: var(--color-text-on-accent);
-    }
-
-    &[aria-disabled="true"] {
-      border-style: none;
     }
   }
 
@@ -233,14 +233,18 @@
       &:not(:disabled, [aria-disabled="true"]) {
         border-style: solid;
         box-shadow: none;
-        background: var(--color-surface-chip);
+
+        &:not([aria-pressed="true"]) {
+          background: var(--color-surface-chip);
+        }
       }
     }
 
+    // Mock .w18__chips and the state boards: the chosen chip is inked in, text in the card colour.
     &[aria-pressed="true"] {
       border-color: var(--color-text-strong);
-      background: var(--color-surface-card3, var(--color-surface-tint-warm));
-      color: var(--color-text-strong);
+      background: var(--color-text-strong);
+      color: var(--color-surface-sheet);
     }
   }
 
@@ -271,7 +275,7 @@
     }
   }
 
-  // Icon in a dashed square; on hover it tips and the colour softens (docs/design/wortseite/SPEC.md §10/§13).
+  // Icon in a dashed square; on hover it tips and the colour softens (v18 handoff SPEC §10/§13).
   .icon {
     display: flex;
     align-items: center;

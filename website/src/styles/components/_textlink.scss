@@ -1,7 +1,7 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Text link (docs/design/wortseite/SPEC.md): link look on <a> or <button>, 44px hit area.
+// Text link (v18 handoff SPEC): link look on <a> or <button>, 44px hit area.
 // Variant inline (data-variant="inline"): in running text, no hit-area padding, inherits size
 // and colour. Variant tap (data-variant="inline tap"): that look as a 44px inline-flex row (link
 // lists). Variant hit-area: a 44px target around a small link without changing the layout (flex

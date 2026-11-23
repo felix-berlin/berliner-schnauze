@@ -1,4 +1,5 @@
 @use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
 // Footer v21 closing callout above the dark band (docs/superpowers/specs/2026-11-22-footer-v21-design.md; handoff
 // SPEC §4). One look for the app and the Anki callout. Parts: .inner (the split; carries the padding because the root
@@ -134,7 +135,89 @@
     }
   }
 
+  // "Ooch jut" (mock .f20__more): the other books in a column right of the tip with a rule on its start side;
+  // below 62.5rem it spans the row under the tip with a rule above. Parts .more (.label, ul, .thumb).
+  :scope[data-variant~="book"] .more {
+    grid-column: 1 / -1;
+    padding-block-start: var(--space-5);
+    border-block-start: 1px solid var(--color-border-card);
+
+    @container footer-callout (inline-size >= 62.5rem) {
+      grid-column: auto;
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      inline-size: 18.75rem; // mock: 300px column
+      padding: 0 0 0 var(--space-8);
+      border-block-start: 0;
+      border-inline-start: 1px solid var(--color-border-card);
+    }
+
+    .label {
+      margin: 0 0 var(--space-3);
+    }
+
+    ul {
+      display: grid;
+      gap: var(--space-3);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    a {
+      display: flex;
+      gap: var(--space-3);
+      align-items: center;
+      min-block-size: var(--size-tap-target);
+      color: var(--color-text-strong);
+      text-decoration: none;
+
+      @include butler-mx.hover {
+        b {
+          text-decoration: underline;
+          text-underline-offset: var(--space-1);
+        }
+      }
+    }
+
+    .thumb {
+      flex: none;
+      inline-size: 2.75rem; // mock .f20__mc: 44px wide, 2:3
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      background: var(--color-surface-chip);
+      border-radius: var(--radius-xs);
+    }
+
+    b {
+      display: block;
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .f20__more b: 15px, no token
+      font-size: 0.9375rem;
+      line-height: 1.35;
+    }
+
+    small {
+      display: block;
+      margin-block-start: var(--space-1);
+      font-size: var(--_small);
+      color: var(--color-text-muted);
+    }
+  }
+
   :scope[data-variant~="plain"] .inner {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  // The "Ooch jut" column becomes the last track of the split on wide containers.
+  @container footer-callout (inline-size >= 62.5rem) {
+    :scope[data-variant~="book"] .inner:has(.more) {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+    }
+
+    :scope[data-variant~="plain"] .inner:has(.more) {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
   }
 }

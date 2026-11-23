@@ -131,4 +131,17 @@ describe("GET /api/stories/mine", () => {
     expect(log).toHaveBeenCalledWith("[stories] failed: Error");
     expect(JSON.stringify(log.mock.calls)).not.toContain("secret-value");
   });
+
+  it("does not return a pending story of another word of the same visitor", async () => {
+    const tag5 = tagOf("me");
+    find.mockImplementation(async ({ collection, where }) => {
+      if (collection === "words") return { docs: [{ id: where.slug.equals === "a" ? 5 : 6 }] };
+      if (collection === "comments" && where.status.equals === "pending")
+        return { docs: pendingRows.filter((r) => r.authorTag === where.authorTag.equals) };
+      return { docs: [] };
+    });
+    expect(tag5).toBe(pendingRows[0]!.authorTag);
+    expect((await (await get("?word=a", "me")).json()).pending).toEqual([own]);
+    expect((await (await get("?word=b", "me")).json()).pending).toEqual([]);
+  });
 });

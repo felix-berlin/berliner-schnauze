@@ -167,12 +167,17 @@ export const PATCH: APIRoute = async ({ clientAddress, cookies, request }) => {
         doc = await change(raced);
       }
     }
-    // The vote is stored by now: a failing count must not read as "not counted".
+    // The vote is stored by now: a failing count must not read as "not counted". 200 with `stored` and the own
+    // row but no totals; the client keeps its numbers and shows the message.
+    const mine = toMine(doc);
     try {
-      return reply(await state(payload, word, toMine(doc)), 200);
+      return reply(await state(payload, word, mine), 200);
     } catch (error) {
       logRouteError("word-feedback state", error);
-      return reply({ error: "Is jespeichert, aber die Zahlen wollten nich laden." }, 502);
+      return reply(
+        { error: "Is jespeichert, aber die Zahlen wollten nich laden.", mine, stored: true },
+        200,
+      );
     }
   } catch (error) {
     logRouteError("word-feedback write", error);
@@ -218,6 +223,8 @@ export const DELETE: APIRoute = async ({ clientAddress, cookies, request, url })
       limit: 0,
       pagination: false,
       select: {},
+      // A trashed word keeps its rows: the erasure must reach them too.
+      trash: true,
     });
     // The hash is one way: recompute it for every word instead of searching by cookie.
     const hashes = [legacyVisitor(cookie), ...docs.map((w) => feedbackVisitor(cookie, w.id))];

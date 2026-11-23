@@ -2,10 +2,11 @@ import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
 import { wordIdBySlug } from "@services/payload/wordId.ts";
-import { captchaGate, reply } from "@utils/apiReply.ts";
+import { captchaGate, reply, submitFailure } from "@utils/apiReply.ts";
 import { logRouteError } from "@utils/logError.ts";
 import { requestIp } from "@utils/rateLimit.ts";
 import { visibleLine } from "@utils/visibleText.ts";
+import { FACT_KINDS, RELATIONS } from "payload-app/suggestion-enums";
 import { z } from "zod";
 
 const TOO_LONG = "Ditt is ein bisken zu lang.";
@@ -16,7 +17,7 @@ const base = {
   name: visibleLine.pipe(z.string().max(40, TOO_LONG)).optional(),
   word: z.string().min(1).max(200),
 };
-// Values mirror the select options of the suggestions collection.
+// Values come from the shared tuples the suggestions collection builds its select options from.
 const contributeSchema = z.discriminatedUnion(
   "type",
   [
@@ -28,14 +29,14 @@ const contributeSchema = z.discriminatedUnion(
     }),
     z.object({
       ...base,
-      kind: z.enum(["herkunft", "geschichte", "gebrauch", "anekdote", "sonstiges"], "Welche Art?"),
+      kind: z.enum(FACT_KINDS, "Welche Art?"),
       text: text(1000),
       type: z.literal("fact"),
     }),
     z.object({
       ...base,
       relatedText: text(60),
-      relation: z.enum(["gleich", "gegenteil", "verwandt", "redewendung"], "Welche Beziehung?"),
+      relation: z.enum(RELATIONS, "Welche Beziehung?"),
       type: z.literal("related"),
     }),
   ],
@@ -74,6 +75,6 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
     return reply({ ok: true }, 201);
   } catch (error) {
     logRouteError("contribute", error);
-    return reply({ error: "Dein Beitrag konnte leider nicht gesendet werden." }, 502);
+    return submitFailure(error, "Dein Beitrag konnte leider nicht gesendet werden.");
   }
 };

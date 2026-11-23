@@ -103,4 +103,30 @@ describe("POST /api/reports", () => {
     expect(res.status).toBe(502);
     expect(JSON.stringify(await res.json())).not.toContain("leaked");
   });
+
+  it.each([
+    ["fail", 403],
+    ["unavailable", 503],
+  ])("captcha %s answers %d and stores nothing", async (outcome, status) => {
+    verifyTurnstile.mockResolvedValue(outcome);
+    expect((await post(valid)).status).toBe(status);
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it("400 for a Payload 4xx (validation / hook refusal), 502 stays for 5xx", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    create.mockRejectedValueOnce(Object.assign(new Error("hook"), { status: 400 }));
+    expect((await post(valid)).status).toBe(400);
+    create.mockRejectedValueOnce(Object.assign(new Error("boom"), { status: 500 }));
+    expect((await post(valid)).status).toBe(502);
+  });
+
+  it.each(["a@example.com\r\nBcc: x@example.org", "a@example.com\nX: y", "a b@example.com"])(
+    "400 for an e-mail with line breaks or whitespace (%j)",
+    async (email) => {
+      const res = await post({ ...valid, email });
+      expect(res.status).toBe(400);
+      expect(create).not.toHaveBeenCalled();
+    },
+  );
 });

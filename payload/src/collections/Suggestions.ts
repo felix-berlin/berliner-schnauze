@@ -6,19 +6,32 @@ import { authenticatedOnly, notOverMcp } from "../access";
 import { adoptSuggestion } from "../hooks/adoptSuggestion";
 import { lockedByWordValue, refuseWhenLocked, updateUnlocked } from "../hooks/suggestionLock";
 import { notifyEditors } from "../lib/notifyEditors";
+import { FACT_KINDS, RELATIONS } from "../lib/suggestionEnums";
 
-const TYPE_LABEL: Record<string, string> = {
+const TYPES = ["word", "example", "fact", "related"] as const;
+const TYPE_LABEL: Record<(typeof TYPES)[number], string> = {
   example: "Beispielsatz",
   fact: "Wissenswertes",
   related: "Verwandtes Wort",
   word: "Neues Wort",
 };
-const RELATION_LABEL: Record<string, string> = {
+const RELATION_LABEL: Record<(typeof RELATIONS)[number], string> = {
   gegenteil: "Gegenteil",
   gleich: "Gleich",
   redewendung: "Redewendung",
   verwandt: "Verwandt",
 };
+const FACT_KIND_LABEL: Record<(typeof FACT_KINDS)[number], string> = {
+  anekdote: "Anekdote",
+  gebrauch: "Gebrauch",
+  geschichte: "Geschichte",
+  herkunft: "Herkunft",
+  sonstiges: "Sonstiges",
+};
+// The stored value stays a free string at runtime (old rows), so the lookups take any string.
+const typeLabel = (type: string) => TYPE_LABEL[type as (typeof TYPES)[number]] ?? type;
+const relationLabel = (relation: string) =>
+  RELATION_LABEL[relation as (typeof RELATIONS)[number]] ?? relation;
 
 /** Mails the editors about a new suggestion; a failed mail is logged, the suggestion stays in the admin. */
 const mailEditors: CollectionAfterChangeHook = async ({ doc, operation, req }) => {
@@ -35,7 +48,13 @@ const mailEditors: CollectionAfterChangeHook = async ({ doc, operation, req }) =
             req,
             select: { berlinerisch: true },
           })
-          .catch(() => null)
+          .catch((error: unknown) => {
+            // The mail goes out without the word's name; the lookup failing must not block the suggestion.
+            req.payload.logger.warn(
+              `suggestion mail: word ${String(targetId)} lookup failed (${error instanceof Error ? error.name : typeof error})`,
+            );
+            return null;
+          })
       : null;
     const rows: [string, string | null | undefined][] = [
       ["Zu Wort", target?.berlinerisch],
@@ -53,7 +72,7 @@ const mailEditors: CollectionAfterChangeHook = async ({ doc, operation, req }) =
         : []),
       ...(type === "related"
         ? [
-            ["Beziehung", RELATION_LABEL[doc.relation] ?? doc.relation],
+            ["Beziehung", relationLabel(doc.relation)],
             ["Verwandtes Wort", doc.relatedText],
           ]
         : []),
@@ -62,9 +81,9 @@ const mailEditors: CollectionAfterChangeHook = async ({ doc, operation, req }) =
     ] as [string, string | null | undefined][];
     notifyEditors(
       req,
-      `${TYPE_LABEL[type] ?? type} - Berliner Schnauze`,
+      `${typeLabel(type)} - Berliner Schnauze`,
       [
-        `Ein neuer Beitrag (${TYPE_LABEL[type] ?? type}) wurde eingereicht:`,
+        `Ein neuer Beitrag (${typeLabel(type)}) wurde eingereicht:`,
         "",
         ...rows.map(([label, value]) => `${label}: ${value ?? ""}`),
       ],
@@ -99,7 +118,7 @@ const titleValue: FieldHook = ({ siblingData }) => {
   const d = siblingData as Record<string, string | undefined>;
   if ((d.type ?? "word") === "word") return d.berlinerWord ?? "";
   const body = (d.type === "related" ? d.relatedText : d.text) ?? "";
-  return `${TYPE_LABEL[d.type ?? ""] ?? d.type}: ${body.length > 60 ? `${body.slice(0, 59)}…` : body}`;
+  return `${typeLabel(d.type ?? "")}: ${body.length > 60 ? `${body.slice(0, 59)}…` : body}`;
 };
 
 /** Payload's `Validate` generics differ per field type; the wrappers below only forward to the stock validator. */
@@ -123,8 +142,8 @@ const limitFor =
     return requiredFor(types, base)(value, { ...options, ...(max ? { maxLength: max } : {}) });
   };
 
-const labelled = (labels: Record<string, string>) =>
-  Object.entries(labels).map(([value, label]) => ({ value, label }));
+const labelled = <K extends string>(keys: readonly K[], labels: Record<K, string>) =>
+  keys.map((value) => ({ value, label: labels[value] }));
 
 /** Words suggested through the site's form. The site creates them through the Local API (after Turnstile). */
 export const Suggestions: CollectionConfig = {
@@ -162,12 +181,7 @@ export const Suggestions: CollectionConfig = {
       type: "select",
       defaultValue: "word",
       index: true,
-      options: labelled({
-        word: "Neues Wort",
-        example: "Beispielsatz",
-        fact: "Wissenswertes",
-        related: "Verwandtes Wort",
-      }),
+      options: labelled(TYPES, TYPE_LABEL),
       admin: { position: "sidebar" },
     },
     // Only for type "word": nullable in the database (additive for the rolling release), enforced by validate.
@@ -202,24 +216,13 @@ export const Suggestions: CollectionConfig = {
     {
       name: "kind",
       type: "select",
-      options: labelled({
-        herkunft: "Herkunft",
-        geschichte: "Geschichte",
-        gebrauch: "Gebrauch",
-        anekdote: "Anekdote",
-        sonstiges: "Sonstiges",
-      }),
+      options: labelled(FACT_KINDS, FACT_KIND_LABEL),
       validate: requiredFor(["fact"], select as AnyValidate),
     },
     {
       name: "relation",
       type: "select",
-      options: labelled({
-        gleich: "Gleich",
-        gegenteil: "Gegenteil",
-        verwandt: "Verwandt",
-        redewendung: "Redewendung",
-      }),
+      options: labelled(RELATIONS, RELATION_LABEL),
       validate: requiredFor(["related"], select as AnyValidate),
     },
     {

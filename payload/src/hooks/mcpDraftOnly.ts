@@ -29,3 +29,30 @@ export const mcpUpdateDraftOnly: CollectionBeforeOperationHook = ({ args, operat
   }
   return args;
 };
+
+type Credited = { contributorName?: string | null };
+const CREDITED_ARRAYS = ["facts", "related"] as const;
+
+/**
+ * `contributorName` (a public credit) is hidden from MCP, and the MCP tool schema has no row `id`, so an MCP update
+ * replaces `facts` / `related` wholesale and the credit of every row would be lost. Merge it back from the stored
+ * document by row index; a row beyond the old length has none. Moving or deleting rows through MCP can therefore shift
+ * a credit to its neighbour: the editors review MCP drafts before publishing.
+ */
+export const mcpKeepCredits: CollectionBeforeChangeHook = ({
+  data,
+  operation,
+  originalDoc,
+  req,
+}) => {
+  if (req.payloadAPI !== "MCP" || operation !== "update") return data;
+  for (const field of CREDITED_ARRAYS) {
+    const rows: unknown = data[field];
+    if (!Array.isArray(rows)) continue;
+    const stored: Credited[] = Array.isArray(originalDoc?.[field]) ? originalDoc[field] : [];
+    data[field] = rows.map((row: Credited, index) =>
+      Object.assign({}, row, { contributorName: stored[index]?.contributorName ?? null }),
+    );
+  }
+  return data;
+};

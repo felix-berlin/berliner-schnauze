@@ -42,7 +42,7 @@
     }
   }
 
-  // Type scale v3 (docs/design/wortseite/SPEC.md §4): the only sizes besides the headword.
+  // Type scale v3 (v18 handoff SPEC §4): the only sizes besides the headword.
   :where(.t-label) {
     margin: 0;
     font-size: var(--font-size-xs);

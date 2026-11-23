@@ -4,7 +4,10 @@
  * facts are what the page shows now. `infoText` and `sources` stay untouched (a later release drops them).
  *
  * Without `--write` it only counts and prints samples. Idempotent: a word that already has a fact with the identical
- * text is skipped. A save keeps `contentModifiedAt` (no sitemap lastmod churn). Drafts are not touched.
+ * text is skipped. A save keeps `contentModifiedAt` (no sitemap lastmod churn). A word with a newer draft is SKIPPED
+ * and listed (`hasDraft`): an update merges into the latest version, so it would publish that draft and replace its
+ * draft-only facts. Publish or discard the draft, then run the script again. The decision per word lives in
+ * `lib/infoTextToFact.ts` (unit-tested).
  *
  * Usage: `pnpm --filter payload-app exec payload run src/scripts/infoTextToFacts.ts -- [--kind=herkunft] [--write]`
  * (run with the database of the target environment; kinds: herkunft, geschichte, gebrauch, anekdote, sonstiges).
@@ -12,23 +15,23 @@
 // Makes this file a module (top-level await).
 export {};
 
-const [{ getPayload }, { default: config }, { PRESERVE_CONTENT_MODIFIED_AT }, { hasLexicalText }] =
-  await Promise.all([
-    import("payload"),
-    import("../payload.config"),
-    import("../fields/contentModified"),
-    import("../lib/routes"),
-  ]);
-
-const KINDS = ["herkunft", "geschichte", "gebrauch", "anekdote", "sonstiges"] as const;
-type Kind = (typeof KINDS)[number];
-const SOURCE_MAX = 200;
+const [
+  { getPayload },
+  { default: config },
+  { PRESERVE_CONTENT_MODIFIED_AT },
+  { decideInfoTextFact, parseFactKind },
+] = await Promise.all([
+  import("payload"),
+  import("../payload.config"),
+  import("../fields/contentModified"),
+  import("../lib/infoTextToFact"),
+]);
 
 const args = process.argv.slice(2).filter((a) => a !== "--");
 const write = args.includes("--write");
-const kindArg = args.find((a) => a.startsWith("--kind="))?.slice("--kind=".length) ?? "herkunft";
-if (!KINDS.includes(kindArg as Kind)) throw new Error(`--kind must be one of ${KINDS.join(", ")}`);
-const kind = kindArg as Kind;
+const kind = parseFactKind(
+  args.find((a) => a.startsWith("--kind="))?.slice("--kind=".length) ?? "herkunft",
+);
 
 /** Counts nodes of one type in a Lexical state (to name what a copy keeps: links, lists, italics). */
 const count = (node: unknown, test: (n: Record<string, unknown>) => boolean): number =>
@@ -48,7 +51,24 @@ const words = await payload.find({
   where: { _status: { equals: "published" }, infoText: { exists: true } },
 });
 
+// Ids of words whose latest version is a draft (a newer draft than the published one).
+const draftVersions = await payload.findVersions({
+  collection: "words",
+  depth: 0,
+  limit: 0,
+  overrideAccess: true,
+  pagination: false,
+  where: { latest: { equals: true }, "version._status": { equals: "draft" } },
+});
+const withDraft = new Set(
+  draftVersions.docs.map((v) => {
+    const parent = v.parent as unknown as number | { id: number };
+    return String(typeof parent === "object" ? parent.id : parent);
+  }),
+);
+
 const stats = {
+  hasDraft: 0,
   alreadyThere: 0,
   copied: 0,
   empty: 0,
@@ -59,19 +79,21 @@ const stats = {
   tooLongSource: 0,
 };
 const samples: string[] = [];
+const skippedDrafts: string[] = [];
 for (const word of words.docs) {
-  if (!hasLexicalText(word.infoText)) {
-    stats.empty++;
+  const decision = decideInfoTextFact(word, kind, withDraft.has(String(word.id)));
+  if (decision.action === "hasDraft") {
+    stats.hasDraft++;
+    skippedDrafts.push(word.slug ?? String(word.id));
     continue;
   }
-  const text = JSON.stringify(word.infoText);
-  if ((word.facts ?? []).some((f) => JSON.stringify(f.text) === text)) {
-    stats.alreadyThere++;
+  if (decision.action !== "copy") {
+    stats[decision.action]++;
     continue;
   }
-  const source = (word.sources ?? []).join("; ");
+  const { facts, source, tooLongSource } = decision;
   if (!source) stats.noSource++;
-  if (source.length > SOURCE_MAX) stats.tooLongSource++;
+  if (tooLongSource) stats.tooLongSource++;
   stats.links += count(word.infoText, (n) => n.type === "link");
   stats.lists += count(word.infoText, (n) => n.type === "list");
   if (samples.length < 5) samples.push(`${word.slug} | ${source || "(no source)"}`);
@@ -86,10 +108,7 @@ for (const word of words.docs) {
       context: { [PRESERVE_CONTENT_MODIFIED_AT]: true },
       data: {
         contentModifiedAt: word.contentModifiedAt,
-        facts: [
-          ...(word.facts ?? []),
-          { kind, ...(source && { source: source.slice(0, SOURCE_MAX) }), text: word.infoText },
-        ],
+        facts,
       },
       depth: 0,
       draft: false,
@@ -104,5 +123,9 @@ for (const word of words.docs) {
 }
 
 console.log(`[infoText] ${write ? "written" : "dry run (pass --write)"}, kind ${kind}`, stats);
+if (skippedDrafts.length)
+  console.log(
+    `[infoText] skipped, newer draft (publish or discard it first): ${skippedDrafts.join(", ")}`,
+  );
 console.log(`[infoText] samples:\n${samples.join("\n")}`);
 process.exit(stats.failed > 0 ? 1 : 0);

@@ -1,6 +1,6 @@
 @use "@styles/mixins" as mx;
 
-// Icon-Button (docs/design/wortseite/SPEC.md): 44x44, no frame until hover.
+// Icon-Button (v18 handoff SPEC): 44x44, no frame until hover.
 // Public: --icon-button-bg, --icon-button-color, --icon-button-hover-border.
 @include mx.component("icon-button") {
   :scope {

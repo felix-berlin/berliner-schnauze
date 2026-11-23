@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { ownSubmissions, rememberEditKey, rememberSubmission } from "@lib/ownSubmissions.ts";
+import { ownSubmissions, rememberSubmission } from "@lib/ownSubmissions.ts";
 import { beforeEach, describe, expect, it } from "vitest";
 
 const DAY = 24 * 60 * 60_000;
@@ -32,14 +32,5 @@ describe("ownSubmissions", () => {
     expect(ownSubmissions("schrippe")).toEqual([]);
     rememberSubmission("schrippe", "example", "ok");
     expect(ownSubmissions("schrippe")).toHaveLength(1);
-  });
-
-  it("keeps a story edit key in the comment key format", () => {
-    rememberEditKey(7, "abc", 5);
-    rememberEditKey(8, "def", 6);
-    expect(JSON.parse(localStorage.getItem("bs-comment-keys") ?? "{}")).toEqual({
-      "7": { createdAt: 5, key: "abc" },
-      "8": { createdAt: 6, key: "def" },
-    });
   });
 });

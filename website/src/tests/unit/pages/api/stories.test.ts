@@ -53,19 +53,18 @@ const commentFinds = () =>
   find.mock.calls.map((c) => c[0]).filter((a) => a.collection === "comments");
 
 describe("POST /api/stories", () => {
-  it("201 with editKey and creates a review-held comment", async () => {
+  it("201 and creates a review-held comment without an edit key", async () => {
     const res = await post({ ...valid, bezirk: "mitte", name: "Icke" });
     expect(res.status).toBe(201);
     const body = await res.json();
     expect(body.ok).toBe(true);
     expect(body.id).toBe(9);
-    expect(Object.keys(body).toSorted()).toEqual(["editKey", "id", "ok"]);
-    expect(body.editKey.length).toBeGreaterThanOrEqual(32);
+    expect(Object.keys(body).toSorted()).toEqual(["id", "ok"]);
     expect(JSON.stringify(body)).not.toContain("secret-hash");
     const args = create.mock.calls[0][0];
     expect(args.context).toEqual({ review: true });
     expect(args.data).toMatchObject({ authorName: "Icke", bezirk: "mitte", word: 5 });
-    expect(args.data.editKeyHash).toMatch(/^[0-9a-f]{64}$/);
+    expect(args.data).not.toHaveProperty("editKeyHash");
     expect(args.data.authorTag).toMatch(/^[0-9a-f]{16}$/);
     expect(args.data).not.toHaveProperty("status");
     expect(args.data).not.toHaveProperty("turnstileToken");
@@ -74,6 +73,49 @@ describe("POST /api/stories", () => {
   it("stores HTML in name as text", async () => {
     await post({ ...valid, name: "<b>Icke</b>" });
     expect(create.mock.calls[0][0].data.authorName).toBe("<b>Icke</b>");
+  });
+
+  it("collapses line breaks in the name (no forged mail lines)", async () => {
+    await post({ ...valid, name: "Icke\r\nBcc: x@example.org" });
+    expect(create.mock.calls[0][0].data.authorName).toBe("Icke Bcc: x@example.org");
+  });
+
+  it("ignores a featured flag in the body", async () => {
+    await post({ ...valid, featured: true });
+    expect(create.mock.calls[0][0].data).not.toHaveProperty("featured");
+  });
+
+  it("gives the same visitor a different authorTag on two words", async () => {
+    find.mockImplementation(async ({ collection, where }) =>
+      collection === "words"
+        ? { docs: [{ id: where.slug.equals === "icke" ? 5 : 6 }] }
+        : { docs: [] },
+    );
+    const same = { get: () => ({ value: "v-1" }), set: vi.fn() };
+    const send = (word: string) =>
+      POST({
+        clientAddress: "1.2.3.4",
+        cookies: same,
+        request: new Request(url, { body: JSON.stringify({ ...valid, word }), method: "POST" }),
+      } as unknown as APIContext);
+    await send("icke");
+    await send("keule");
+    const [a, b] = create.mock.calls.map((c) => c[0].data.authorTag);
+    expect(a).not.toBe(b);
+  });
+
+  it("400 for a Payload 4xx (validation / hook refusal), 502 stays for 5xx", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    create.mockRejectedValueOnce(Object.assign(new Error("hook"), { status: 400 }));
+    expect((await post(valid)).status).toBe(400);
+    create.mockRejectedValueOnce(Object.assign(new Error("boom"), { status: 500 }));
+    expect((await post(valid)).status).toBe(502);
+  });
+
+  it("503 when the captcha check is unavailable", async () => {
+    verifyTurnstile.mockResolvedValue("unavailable");
+    expect((await post(valid)).status).toBe(503);
+    expect(create).not.toHaveBeenCalled();
   });
 
   it("400 with field for 501 characters", async () => {
@@ -240,9 +282,10 @@ describe("GET /api/stories", () => {
       expect(body.hasMore).toBe(false);
     });
 
-    it("a page beyond the end is empty", async () => {
+    it("a page beyond the end is empty and does not query (or cache) that page", async () => {
       const body = await (await get("?word=icke&page=9")).json();
-      expect(body).toMatchObject({ featured: null, hasMore: false, items: [], page: 9 });
+      expect(body).toMatchObject({ featured: null, hasMore: false, items: [], page: 9, total: 45 });
+      expect(commentFinds().some((q) => q.page === 9)).toBe(false);
     });
 
     it.each(["0", "-3", "abc", "1.5", ""])("page=%s falls back to page 1", async (page) => {

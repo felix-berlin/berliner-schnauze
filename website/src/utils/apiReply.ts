@@ -19,6 +19,17 @@ export const isUniqueViolation = (error: unknown, columns = "comment_id, visitor
   return e?.name === "ValidationError" && e.data?.errors?.[0]?.path === columns;
 };
 
+/**
+ * The answer to a failed submit: a Payload error below 500 (validation, a hook refusing the input) is the visitor's
+ * input and answers 400 with a short text; a 5xx or unknown error stays 502 with the route's own message.
+ */
+export const submitFailure = (error: unknown, message: string) => {
+  const status = (error as { status?: unknown })?.status;
+  return typeof status === "number" && status >= 400 && status < 500
+    ? reply({ error: "Ditt kann so nich jespeichert werden, prüf mal deine Eingabe." }, 400)
+    : reply({ error: message }, 502);
+};
+
 /** Positive integer from a string (≤ 9 digits), else undefined; `null` yields `fallback`. */
 export const positiveInt = (v: string | null | undefined, fallback?: number) =>
   v == null ? fallback : /^[1-9]\d{0,8}$/.test(v) ? Number(v) : undefined;

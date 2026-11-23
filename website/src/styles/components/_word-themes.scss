@@ -1,6 +1,6 @@
 @use "@styles/mixins" as mx;
 
-// Themes row under the hero badges (docs/design/wortseite/SPEC.md §5, v3.1). The "·" between the
+// Themes row under the hero badges (v18 handoff SPEC §5, v3.1). The "·" between the
 // links is an aria-hidden span, so it is not read out. The links are textlinks (inline, hit-area).
 @include mx.component("word-themes") {
   :scope {

@@ -63,8 +63,10 @@ const applyRules: CollectionBeforeChangeHook = ({ context, data, operation, orig
 
 /**
  * At most one published featured Jeschichte per word; rows in any other status do not count, so they never block a new
- * one. The database backs this with a partial unique index (migration `comments_one_featured`), the hook gives the
- * readable message. A reply cannot be featured.
+ * one. The database backs this with a partial unique index `comments_one_featured_per_word_idx`, which exists ONLY in
+ * migration `20261122_165037_comments_bezirk_featured` (Payload cannot declare a partial index): dev and test
+ * databases created by schema push have just this hook, and a `migrate:create` or a push may drop the index again.
+ * The hook gives the readable message. A reply cannot be featured.
  */
 const singleFeatured: CollectionBeforeChangeHook = async ({ data, originalDoc, req }) => {
   // Judge the resulting state: republishing an already featured row must be checked too.
@@ -127,7 +129,15 @@ const mailEditors: CollectionAfterChangeHook = async ({
             req,
             select: { berlinerisch: true, slug: true },
           })
-          .catch(() => ({ id: doc.word }));
+          .catch((err: unknown) => {
+            // The mail still goes out, with the id instead of the spelling.
+            req.payload.logger.warn({
+              err,
+              msg: "comment mail: word lookup failed",
+              wordId: doc.word,
+            });
+            return { id: doc.word };
+          });
   const subject = becamePending
     ? "Kommentar bearbeitet, wartet auf Freigabe – Berliner Schnauze"
     : `Neuer Kommentar${doc.status === "pending" ? " (wartet auf Freigabe)" : ""} – Berliner Schnauze`;

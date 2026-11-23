@@ -68,8 +68,8 @@ const lightboxImages = await Promise.all(
           <WordHead draft={draft} model={model}>
             {/* Both copies (strip, hero) are in the HTML; _word-head.scss shows one by the head's own width. */}
             <Fragment slot='images'>
-              <WordImages images={images} learnMore={model.word.learnMore} placement='strip' />
-              <WordImages images={images} learnMore={model.word.learnMore} placement='hero' />
+              <WordImages images={images} placement='strip' />
+              <WordImages images={images} placement='hero' />
             </Fragment>
           </WordHead>
         ) : (

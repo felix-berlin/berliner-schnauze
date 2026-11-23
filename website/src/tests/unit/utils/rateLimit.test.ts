@@ -30,6 +30,16 @@ describe("rateLimit", () => {
     },
   );
 
+  it.each([
+    ["/api/stories", "POST", 5, 10 * 60_000],
+    ["/api/stories", "GET", 120, 60_000],
+    ["/api/comment-reports", "POST", 10, 60 * 60_000],
+    ["/api/preview", "GET", 20, 60_000],
+    ["/api/preview", "POST", 20, 60_000],
+  ])("%s %s allows %d per window of %d ms", (path, method, max, windowMs) => {
+    expect(rateLimitRule(path, method)).toMatchObject({ max, windowMs });
+  });
+
   it("counts per client within the window and starts over after it", () => {
     const rule = { max: 2, prefix: "/test-a", windowMs: 1000 };
     expect(rateLimited("a", rule, 0)).toBe(0);
@@ -37,23 +47,6 @@ describe("rateLimit", () => {
     expect(rateLimited("a", rule, 200)).toBe(1);
     expect(rateLimited("b", rule, 200)).toBe(0);
     expect(rateLimited("a", rule, 1000)).toBe(0);
-  });
-
-  it("GET and POST /api/comments count separately", () => {
-    const get = rateLimitRule("/api/comments", "GET")!;
-    const post = rateLimitRule("/api/comments", "POST")!;
-    const client = "t-get-post";
-    for (let i = 0; i < 6; i++) expect(rateLimited(client, get, 0)).toBe(0);
-    expect(rateLimited(client, post, 0)).toBe(0);
-  });
-
-  it("PATCH and DELETE share 10 per 5 min", () => {
-    const patch = rateLimitRule("/api/comments/abc", "PATCH")!;
-    const del = rateLimitRule("/api/comments/abc", "DELETE")!;
-    const client = "t-own";
-    for (let i = 0; i < 5; i++) expect(rateLimited(client, patch, 0)).toBe(0);
-    for (let i = 0; i < 5; i++) expect(rateLimited(client, del, 0)).toBe(0);
-    expect(rateLimited(client, patch, 0)).toBeGreaterThan(0);
   });
 
   it("limits GET /api/word-feedback to 60 per minute, PATCH not here", () => {

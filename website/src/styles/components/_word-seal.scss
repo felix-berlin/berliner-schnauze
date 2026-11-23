@@ -111,6 +111,10 @@
     svg {
       inline-size: 40%;
       block-size: 40%;
+    }
+
+    // The lucide path carries fill="none" itself, which beats a fill on the svg: the glyph is filled here (SPEC mock).
+    svg path {
       fill: currentcolor;
     }
 

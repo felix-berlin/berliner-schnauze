@@ -1,22 +1,27 @@
 import { attachTooltip } from "@/directives/tooltip";
 
-const SELECTOR = ".c-word-beispiele .record-button[data-tip]";
+const SELECTOR = ".c-word-beispiele [data-record][data-tip]";
 
 /**
- * Attaches the shared ink tooltip to the disabled "Einsprechen" buttons. The server markup carries a visually hidden
- * description (aria-describedby) for the time before this runs; the tooltip replaces it. Returns the cleanup.
+ * Attaches the shared ink tooltip to the disabled "Einsprechen" buttons. The tooltip panel only exists while it shows,
+ * so the visually hidden description from the server markup stays the button's aria-describedby (browse mode and
+ * screen readers get the text at any time). Returns the cleanup.
  */
 export const initRecordTooltips = (root: ParentNode = document): (() => void) => {
   const stops = [...root.querySelectorAll<HTMLElement>(SELECTOR)].map((button) => {
-    const fallback = document.getElementById(button.getAttribute("aria-describedby") ?? "");
+    const described = button.getAttribute("aria-describedby");
     const stop = attachTooltip(button, {
       content: button.dataset["tip"] ?? "",
       lead: button.dataset["tipLead"],
       touch: "toggle",
       variant: "ink",
     });
-    if (fallback?.classList.contains("u-sr-only")) fallback.remove();
-    return stop;
+    // attachTooltip points aria-describedby at its lazily created panel; keep the static description instead.
+    if (described) button.setAttribute("aria-describedby", described);
+    return () => {
+      stop();
+      if (described) button.setAttribute("aria-describedby", described);
+    };
   });
   return () => stops.forEach((stop) => stop());
 };

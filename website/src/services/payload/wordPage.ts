@@ -1,7 +1,8 @@
 import type { Story } from "@lib/story.ts";
+import type { FactKind } from "payload-app/suggestion-enums";
 
 import { type PollResult, buildPollResult } from "@lib/pollResult.ts";
-import { disclosureFor, pickBook } from "@lib/wordBook.ts";
+import { disclosureFor, type MoreBook, pickBook, pickMoreBooks } from "@lib/wordBook.ts";
 import { ttlBy } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { fetchAffiliateData, fetchWordPageGlobal } from "@services/payload/site.ts";
@@ -14,6 +15,7 @@ import {
   type SiteWord,
 } from "@services/payload/words.ts";
 import { getWordTrend } from "@services/payload/wordTrend.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { alphabeticNeighbors, similarSoundingWords, similarWords } from "@utils/wordHelper.ts";
 import { berlinParts, pickWordOfTheDay } from "@utils/wordOfTheDay.ts";
 import { lexicalToHtml } from "payload-app/lexical-html";
@@ -36,7 +38,7 @@ export type WordPageModel = {
   written: Link[];
   grammar: { plural?: string; diminutive?: Link };
   /** `html` is the rich text of the fact (CMS content, already escaped by `lexicalToHtml`). */
-  facts: { contributor?: Contributor; html: string; kind: string; source?: string }[];
+  facts: { contributor?: Contributor; html: string; kind: FactKind; source?: string }[];
   /** `url` is missing for an entry that is only text (no linked word). */
   related: {
     label: string;
@@ -52,9 +54,9 @@ export type WordPageModel = {
   trend?: { kind: "beliebt"; rank: number; views7: number; change: number | null };
   stories: { total: number; items: Story[] };
   featured?: Story;
-  featuredStoryId?: string;
   storyPrompt: string;
-  book?: { title: string; url: string; cover?: string; disclosure?: string };
+  /** `more`: further books for the footer column next to the book tip (empty without any). */
+  book?: { title: string; url: string; cover?: string; disclosure?: string; more: MoreBook[] };
   poll: PollResult;
   updatedAt: string;
 };
@@ -84,6 +86,21 @@ const fetchPoll = ttlBy(60_000, 500, async (wordId: number) => {
   return buildPollResult(docs);
 });
 
+/**
+ * An optional part of the page: when its source fails the page still renders with `fallback` (the failure is logged
+ * without values), like the start page. Only the word itself may fail the page.
+ */
+const soft = async <T>(what: string, fallback: T, run: () => Promise<T>): Promise<T> => {
+  try {
+    return await run();
+  } catch (error) {
+    logRouteError(`word page ${what}`, error);
+    return fallback;
+  }
+};
+
+const NO_STORIES = { featured: null, hasMore: false, items: [], page: 1, total: 0 };
+
 /** The page model of a public word, or null for an unknown slug. An editor's draft of that word replaces the public row. */
 export const fetchWordPage = async (
   slug: string,
@@ -97,15 +114,17 @@ export const fetchWordPage = async (
   const ref = toWordRef(word);
   const refs = await fetchWordRefs(); // memoized per words array: wordHelper keys its indexes on it
   const { after, before } = alphabeticNeighbors(refs, ref, 1);
-  const [stories, trend, wordPage, affiliate, poll] = await Promise.all([
-    fetchStories(word.id, 1),
+  const [stories, trend, promptTemplate, affiliate, poll] = await Promise.all([
+    soft("stories", NO_STORIES, () => fetchStories(word.id, 1)),
     // A draft has no public numbers.
-    draft ? undefined : getWordTrend(word.id),
-    fetchWordPageGlobal(),
-    fetchAffiliateData(),
-    fetchPoll(word.id),
+    draft ? undefined : soft("trend", undefined, () => getWordTrend(word.id)),
+    soft("global", null, async () => (await fetchWordPageGlobal()).storyPrompt),
+    soft("affiliate", { books: [], disclaimers: [] }, fetchAffiliateData),
+    // The card refetches the numbers in the browser, so an empty result is a safe stand-in.
+    soft("poll", buildPollResult([]), () => fetchPoll(word.id)),
   ]);
   const book = pickBook(affiliate.books, word.themen[0]?.id);
+  const moreBooks = pickMoreBooks(affiliate.books, book);
   const disclosure = book?.href ? disclosureFor(book.href, affiliate.disclaimers) : undefined;
   const { day, month, year } = berlinParts(now);
 
@@ -115,6 +134,7 @@ export const fetchWordPage = async (
     ...(book?.title &&
       book.href && {
         book: {
+          more: moreBooks,
           title: book.title,
           url: book.href,
           ...(book.imageUrl && { cover: book.imageUrl }),
@@ -136,7 +156,7 @@ export const fetchWordPage = async (
           : [];
       },
     ),
-    ...(stories.featured && { featured: stories.featured, featuredStoryId: stories.featured.id }),
+    ...(stories.featured && { featured: stories.featured }),
     grammar: {
       ...(word.grammar?.diminutive && { diminutive: link(word.grammar.diminutive) }),
       ...(word.grammar?.plural && { plural: word.grammar.plural }),
@@ -162,9 +182,8 @@ export const fetchWordPage = async (
     rhymes: similarSoundingWords(refs, ref).map(link),
     ...(word.stress && { stress: word.stress }),
     stories: { items: stories.items, total: stories.total },
-    storyPrompt: storyPrompt(wordPage.storyPrompt, word.berlinerisch),
+    storyPrompt: storyPrompt(promptTemplate, word.berlinerisch),
     syllables: hypher.hyphenate(word.berlinerisch),
-    // TODO(wortseite): "Im Aufwind" needs a rising memo and a rule
     ...(trend && {
       trend: {
         change: trend.change,

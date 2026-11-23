@@ -5,7 +5,7 @@ import { visitorId, voterKey } from "@services/payload/comments.ts";
 import { captchaGate, isUniqueViolation, orNull, reply } from "@utils/apiReply.ts";
 import { reportSchema } from "@utils/commentSchema.ts";
 import { logRouteError } from "@utils/logError.ts";
-import { clientIp, rateLimitedBy, requestIp } from "@utils/rateLimit.ts";
+import { clientIp, rateLimitedBy, refundHit, requestIp } from "@utils/rateLimit.ts";
 
 /**
  * Reports are idempotent: a repeat on the same comment (same IP within 24 h, or same visitor cookie) answers like
@@ -32,8 +32,8 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     if (comment?.status !== "published") return reply({ error: "Kommentar nicht gefunden" }, 404);
 
     const ip = clientIp(request.headers.get("x-forwarded-for"), clientAddress);
-    const again = rateLimitedBy(ip, `comment-report ${commentId}`, 1, 24 * 60 * 60_000);
-    // ponytail: a failed create below still burns this IP's 24 h slot; fine for a soft limit.
+    const perComment = `comment-report ${commentId}`;
+    const again = rateLimitedBy(ip, perComment, 1, 24 * 60 * 60_000);
     if (again > 0) return reply({ reported: true }, 200);
     // One client can not sweep many comments out of sight with a handful of IPs.
     if (rateLimitedBy(ip, "comment-report-all", 10, 24 * 60 * 60_000) > 0)
@@ -46,7 +46,12 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
         depth: 0,
       });
     } catch (error) {
-      if (!isUniqueViolation(error)) throw error;
+      if (!isUniqueViolation(error)) {
+        // Nothing was stored: give both hits back, or the retry would answer "reported" for a lost report.
+        refundHit(ip, perComment);
+        refundHit(ip, "comment-report-all");
+        throw error;
+      }
     }
     return reply({ reported: true }, 200);
   } catch (error) {

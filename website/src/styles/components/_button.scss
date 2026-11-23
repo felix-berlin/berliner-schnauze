@@ -212,6 +212,10 @@
   .plus {
     color: var(--button-plus-color, var(--color-accent-active)); // SPEC §4.1: the plus is orange
     font-weight: var(--font-weight-bold);
+    // The text glyph is narrow: give it the mock's 15px icon box so the label keeps its distance.
+    inline-size: 1rem;
+    text-align: center;
+    line-height: 1;
   }
 
   :scope[data-variant~="dashed"] .plus {
@@ -220,6 +224,11 @@
 
   .icon {
     translate: var(--button-icon-translate, none);
+  }
+
+  // Mock .w18__gbtn svg: the icon of an outline button is orange, the label stays ink.
+  :scope[data-variant~="outline"] .icon {
+    color: var(--button-plus-color, var(--color-accent-active));
   }
 
   // Small radius for buttons that sit in a card or band (start page, mock: 4px). The default stays square.

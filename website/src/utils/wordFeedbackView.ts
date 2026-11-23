@@ -1,4 +1,4 @@
-// Pure display maths of the word feedback card (WordFeedbackCard.vue): result bars, step segments, comparison rows.
+// Pure display maths of the word feedback card (WordPoll.vue): result bars, step segments, comparison rows.
 
 type Totals = Partial<Record<string, number>>;
 type Compare = {

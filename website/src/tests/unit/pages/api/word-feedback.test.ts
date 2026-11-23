@@ -234,8 +234,11 @@ describe("PATCH /api/word-feedback", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     count.mockRejectedValue(new Error("count down"));
     const res = await patch({ usage: "say", word: 7 }, "v-1");
-    expect(res.status).toBe(502);
-    expect((await res.json()).error).toContain("jespeichert");
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.error).toContain("jespeichert");
+    expect(body).toMatchObject({ mine: { usage: "say" }, stored: true });
+    expect(body).not.toHaveProperty("totals");
     expect(create).toHaveBeenCalledOnce();
   });
 
@@ -315,6 +318,22 @@ describe("DELETE /api/word-feedback", () => {
   it("does nothing without a cookie", async () => {
     expect((await del_(undefined)).status).toBe(200);
     expect(del).not.toHaveBeenCalled();
+  });
+
+  it("finds the words including the trashed ones, so the erasure is complete", async () => {
+    find.mockResolvedValue({ docs: [{ id: 1 }] });
+    del.mockResolvedValue({ docs: [], errors: [] });
+    await del_("v-1", "10.0.0.11");
+    expect(find).toHaveBeenCalledWith(
+      expect.objectContaining({ collection: "words", trash: true }),
+    );
+  });
+
+  it("429 on the 21st delete per IP and day", async () => {
+    find.mockResolvedValue({ docs: [] });
+    del.mockResolvedValue({ docs: [], errors: [] });
+    for (let i = 0; i < 20; i++) expect((await del_("v-1", "10.0.0.12")).status).toBe(200);
+    expect((await del_("v-1", "10.0.0.12")).status).toBe(429);
   });
 
   it("502 when the delete fails", async () => {

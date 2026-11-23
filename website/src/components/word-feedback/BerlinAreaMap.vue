@@ -59,18 +59,18 @@
           </tspan>
         </text>
       </svg>
-      <div class="elsewhere">
-        <button
-          type="button"
-          class="c-choice"
-          :data-variant="variant"
-          :aria-pressed="modelValue === 'elsewhere'"
-          @click="emit('update:modelValue', 'elsewhere')"
-        >
-          Woanders
-        </button>
-      </div>
     </details>
+    <div class="elsewhere">
+      <button
+        type="button"
+        class="c-choice"
+        :data-variant="variant"
+        :aria-pressed="modelValue === 'elsewhere'"
+        @click="emit('update:modelValue', 'elsewhere')"
+      >
+        Woanders
+      </button>
+    </div>
     <details
       class="list"
       :open="listOpen"
