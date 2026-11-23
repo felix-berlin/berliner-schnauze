@@ -3,13 +3,15 @@
  * of a deleted comment go with it (the collections' delete hooks recount the parents).
  *
  * Without `--delete` it only exports and counts. The export holds pseudonyms and author tags: write it OUTSIDE the
- * repository (the script refuses a path below the working tree) and treat it as personal data.
+ * repository (the script refuses a path below the repository root, derived from this file's location) and treat it as personal data.
  *
  * Usage: `pnpm --filter payload-app exec payload run src/scripts/removeCommentReplies.ts -- <export.json> [--delete]`
  * (run with the database of the target environment; `--delete` is not reversible without the export).
  */
-import { mkdirSync, writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { chmodSync, mkdirSync, writeFileSync } from "node:fs";
+import { dirname } from "node:path";
+
+import { resolveExportPath } from "../lib/exportPath";
 
 const [{ getPayload }, { default: config }] = await Promise.all([
   import("payload"),
@@ -20,11 +22,7 @@ const args = process.argv.slice(2).filter((a) => a !== "--");
 const doDelete = args.includes("--delete");
 const target = args.find((a) => !a.startsWith("--"));
 if (!target) throw new Error("Usage: removeCommentReplies.ts <export.json> [--delete]");
-const file = resolve(target);
-const repoRoot = resolve(process.cwd(), "..");
-if (file.startsWith(`${repoRoot}/`)) {
-  throw new Error(`Refusing to write the export inside the repository: ${file}`);
-}
+const file = resolveExportPath(target); // refuses a path inside the repository
 
 const payload = await getPayload({ config });
 const where = { parent: { exists: true } } as const;
@@ -37,8 +35,10 @@ const replies = await payload.find({
   pagination: false,
   where,
 });
+// The export must succeed before anything is deleted: a throw here ends the script (mode 0600 even over an old file).
 mkdirSync(dirname(file), { recursive: true });
 writeFileSync(file, JSON.stringify(replies.docs, null, 2), { mode: 0o600 });
+chmodSync(file, 0o600);
 console.log(`[replies] exported ${replies.docs.length} to ${file}`);
 
 if (doDelete) {

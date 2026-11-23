@@ -52,8 +52,10 @@ export const adoptSuggestion: CollectionBeforeChangeHook = async ({
       data.similarWords = similar.map((w) => w.id);
       req.context.similarWords = similar.map((w) => `${w.berlinerisch} (${w.slug})`);
     } catch (err) {
-      // The list is a convenience: never lose the suggestion over it. The mail then has no line (see the log).
+      // The list is a convenience: never lose the suggestion over it. The mail says the search failed (it joins this
+      // array into its "Ähnliche Wörter" line), so editors do not read "no duplicates" into silence.
       req.payload.logger.error({ err, msg: "suggestion: similar-words search failed" });
+      req.context.similarWords = ["(Suche fehlgeschlagen)"];
     }
   }
 

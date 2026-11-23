@@ -13,8 +13,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
    DROP INDEX IF EXISTS "comments_one_featured_per_word_idx";
-  DROP INDEX "comments_bezirk_idx";
-  ALTER TABLE "comments" DROP COLUMN "bezirk";
-  ALTER TABLE "comments" DROP COLUMN "featured";
-  DROP TYPE "public"."enum_comments_bezirk";`)
+  DROP INDEX IF EXISTS "comments_bezirk_idx";
+  ALTER TABLE "comments" DROP COLUMN IF EXISTS "bezirk";
+  ALTER TABLE "comments" DROP COLUMN IF EXISTS "featured";
+  DROP TYPE IF EXISTS "public"."enum_comments_bezirk";`)
 }

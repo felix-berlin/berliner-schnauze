@@ -1,6 +1,9 @@
 /**
  * Seeds a small, invented data set for the Playwright e2e run (CI cannot use real word data: the repo is
  * public). Idempotent. Usage: `pnpm --filter payload-app seed:e2e` against a throwaway database.
+ *
+ * Keep exactly 28 words, and `abjang` at sorted index 4: the e2e server pins the word of the day to that index
+ * (`pickWordOfTheDay`), so a new filler word must not sort before "abjang" (`tests/seed.test.ts` checks both).
  */
 import type { Payload } from "payload";
 

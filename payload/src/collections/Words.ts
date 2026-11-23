@@ -1,4 +1,6 @@
-import type { CollectionBeforeDeleteHook, CollectionConfig, Field, Validate } from "payload";
+import type { CollectionBeforeDeleteHook, CollectionConfig, Field, PayloadRequest } from "payload";
+
+import { text } from "payload/shared";
 
 import { draftsAccess, notOverMcp } from "../access";
 import {
@@ -9,9 +11,9 @@ import {
 import { identityFields } from "../fields/identity";
 import { liveLinkField } from "../fields/liveLink";
 import { setDerivedWordFields } from "../hooks/deriveWordFields";
-import { mcpDraftOnly, mcpUpdateDraftOnly } from "../hooks/mcpDraftOnly";
+import { mcpDraftOnly, mcpKeepCredits, mcpUpdateDraftOnly } from "../hooks/mcpDraftOnly";
 import { previewUrl } from "../lib/preview";
-import { requiredSelect, requiredRichText } from "../lib/requiredField";
+import { requiredSelect, requiredRichText, type AnyValidate } from "../lib/requiredField";
 
 const gender: Field = { name: "gender", type: "select", options: ["male", "female"] };
 const audioRows = (name: string): Field => ({
@@ -56,7 +58,13 @@ export const Words: CollectionConfig = {
   versions: { drafts: true },
   hooks: {
     beforeOperation: [mcpUpdateDraftOnly],
-    beforeChange: [mcpDraftOnly, preserveOnTrash, touchContentModifiedAt, setDerivedWordFields],
+    beforeChange: [
+      mcpDraftOnly,
+      mcpKeepCredits,
+      preserveOnTrash,
+      touchContentModifiedAt,
+      setDerivedWordFields,
+    ],
     beforeDelete: [deleteComments],
   },
   fields: [
@@ -146,11 +154,25 @@ export const Words: CollectionConfig = {
           name: "label",
           type: "text",
           maxLength: 60,
-          // A row needs a linked word or a label, else the list shows an empty entry.
-          validate: ((value, { siblingData }) =>
-            value || (siblingData as { word?: unknown })?.word
-              ? true
-              : "Wort verknüpfen oder Bezeichnung eintragen.") as Validate,
+          // A row needs a linked word or a label, else the list shows an empty entry. Deleting the linked word nulls
+          // `word_id` (FK on delete set null): such an existing row stays saveable, only a new row is checked.
+          validate: (async (value, options) => {
+            const stock = text as AnyValidate; // keeps maxLength
+            const { siblingData, operation, id, req } = options as {
+              siblingData: { id?: string; word?: unknown };
+              operation?: string;
+              id?: number | string;
+              req: PayloadRequest;
+            };
+            if (value || siblingData?.word) return stock(value, options);
+            if (operation === "update" && id != null && siblingData?.id) {
+              const original = await req.payload
+                .findByID({ collection: "words", id, depth: 0, draft: true, req })
+                .catch(() => null);
+              if (original?.related?.some((r) => r.id === siblingData.id)) return true;
+            }
+            return "Wort verknüpfen oder Bezeichnung eintragen.";
+          }) as AnyValidate,
           admin: { description: "Wird genutzt, wenn kein Wort verknüpft ist." },
         },
         {

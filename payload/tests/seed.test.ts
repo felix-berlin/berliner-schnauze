@@ -47,10 +47,26 @@ describe("docs/test-words.md", () => {
     for (const slug of SEED_WORD_SLUGS)
       expect(listed, `${slug} missing in docs/test-words.md`).toContain(slug);
     const table = doc.split("\n").filter((l) => l.startsWith("| `"));
+    expect(
+      table.length,
+      "docs/test-words.md: expected table rows starting with | `slug` | (one row per seed word, slugs in backticks in the first cell)",
+    ).toBeGreaterThan(0);
     const documented = table.flatMap((l) =>
       [...l.split("|")[1]!.matchAll(/`([a-z0-9-]+)`/g)].map((m) => m[1]!),
     );
     expect([...documented].sort()).toEqual([...SEED_WORD_SLUGS].sort());
+  });
+});
+
+describe("seed word count", () => {
+  // website/src/utils/wordOfTheDay.ts (pickWordOfTheDay) is not importable here (Astro aliases), so this repeats its
+  // rule: sorted slugs, indexed by the UTC day number of E2E_PINNED_DAY (2026-01-19, Berlin) modulo the word count.
+  it("has exactly 28 words and puts abjang on the pinned word-of-the-day index", () => {
+    expect(SEED_WORD_SLUGS).toHaveLength(28);
+    const sorted = [...SEED_WORD_SLUGS].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+    const dayNumber = Math.floor(Date.UTC(2026, 0, 19) / 86_400_000);
+    expect(sorted[dayNumber % sorted.length]).toBe("abjang");
+    expect(sorted.indexOf("abjang")).toBe(4); // a new word must not sort before "abjang"
   });
 });
 
