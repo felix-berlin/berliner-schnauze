@@ -91,7 +91,11 @@ type SeedWord = {
   learnMore?: string;
   related?: string[];
   /** Entries of the `related` array: the head shows the "gleich" ones as "Gleiche Bedeutung wie ...". */
-  relations?: { note?: string; relation: "gleich" | "gegenteil" | "verwandt" | "redewendung"; slug: string }[];
+  relations?: {
+    note?: string;
+    relation: "gleich" | "gegenteil" | "verwandt" | "redewendung";
+    slug: string;
+  }[];
   slug: string;
   sources?: string[];
   themen?: string[];

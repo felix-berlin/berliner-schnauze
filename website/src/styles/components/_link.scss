@@ -17,7 +17,8 @@
     font: inherit;
     font-size: var(--font-size-sm);
     letter-spacing: inherit;
-    text-decoration: var(--link-decoration-line, underline) var(--link-decoration-style, dashed) from-font;
+    text-decoration: var(--link-decoration-line, underline) var(--link-decoration-style, dashed)
+      from-font;
     text-underline-position: from-font;
     cursor: pointer;
 
