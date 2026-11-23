@@ -113,6 +113,16 @@ export default defineConfig({
   security: {
     allowedDomains: [{ hostname: "berliner-schnauze.wtf", protocol: "https" }],
   },
+  // Spike (#1950): in-process page cache, one web container only (a second one would keep its own copy).
+  // Pages opt in with `Astro.cache.set()`; nothing is cached by default. The query string is ignored in the key
+  // so `?x=1..n` cannot fill the cache with copies of one page. A word page is ~116 KB of HTML: 1000 entries
+  // are roughly 120 MB of heap, the LRU keeps the visited words. Requests with a preview cookie skip the cache.
+  cache: {
+    provider: {
+      config: { max: 1000, query: { include: [] } },
+      entrypoint: new URL("./src/lib/previewAwareCache.ts", import.meta.url),
+    },
+  },
   // No Astro.session usage anywhere in the codebase — opt out to tree-shake
   // the session runtime out of the server build.
   session: false,
