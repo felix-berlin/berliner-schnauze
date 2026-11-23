@@ -130,7 +130,7 @@ const WORDS: SeedWord[] = [
   },
   {
     // Rich head for the visual checks: invented IPA, four images, related words, voices, and the word of the day on
-    // the pinned e2e day (the 5th slug of 34 sorted ones, see E2E_PINNED_DAY).
+    // the pinned e2e day (slug 5 of the 34 sorted ones on E2E_PINNED_DAY; adding a word moves it).
     alternativeWords: ["abjehaun"],
     berlinerisch: "Abjang",
     berolinismus: true,
@@ -417,7 +417,19 @@ export async function seedE2e(payload: Payload): Promise<void> {
     });
     imageMedia.push(
       found.docs[0]
-        ? await payload.update({ collection: "media", data, depth: 0, id: found.docs[0].id })
+        ? await payload.update({
+            collection: "media",
+            data,
+            depth: 0,
+            file: {
+              data: PNG_4X3,
+              mimetype: "image/png",
+              name: wpPath.slice(4),
+              size: PNG_4X3.length,
+            },
+            id: found.docs[0].id,
+            overwriteExistingFiles: true,
+          })
         : await payload.create({
             collection: "media",
             data: { ...data, wpPath },

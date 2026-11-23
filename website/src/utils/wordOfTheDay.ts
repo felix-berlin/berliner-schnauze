@@ -29,7 +29,7 @@ const berlinNumbers = (date: Date) =>
   >;
 
 /** Fixed day of the e2e server (noon, so the Berlin day is the same in every zone). */
-export const E2E_PINNED_DAY = new Date("2026-01-15T12:00:00Z");
+export const E2E_PINNED_DAY = new Date("2026-01-19T12:00:00Z");
 
 const MS_PER_DAY = 86_400_000;
 
