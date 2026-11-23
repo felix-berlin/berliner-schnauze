@@ -11,7 +11,7 @@ import { liveLinkField } from "../fields/liveLink";
 import { setDerivedWordFields } from "../hooks/deriveWordFields";
 import { mcpDraftOnly, mcpUpdateDraftOnly } from "../hooks/mcpDraftOnly";
 import { previewUrl } from "../lib/preview";
-import { requiredSelect, requiredTextarea } from "../lib/requiredField";
+import { requiredSelect, requiredRichText } from "../lib/requiredField";
 
 const gender: Field = { name: "gender", type: "select", options: ["male", "female"] };
 const audioRows = (name: string): Field => ({
@@ -114,11 +114,16 @@ export const Words: CollectionConfig = {
             { label: "Sonstiges", value: "sonstiges" },
           ],
         },
+        // Rich text like `infoText` (the old origin text moves here with its formatting).
+        { name: "text", type: "richText", validate: requiredRichText },
         {
-          name: "text",
-          type: "textarea",
-          maxLength: 1000,
-          validate: requiredTextarea,
+          name: "source",
+          type: "text",
+          maxLength: 200,
+          admin: {
+            description:
+              "Quelle genau dieses Eintrags (z. B. Buch, Autor). Die Seite nennt sie vor der Namensnennung.",
+          },
         },
         {
           name: "contributorName",

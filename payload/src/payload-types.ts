@@ -367,7 +367,25 @@ export interface Word {
   facts?:
     | {
         kind?: ('herkunft' | 'geschichte' | 'gebrauch' | 'anekdote' | 'sonstiges') | null;
-        text?: string | null;
+        text?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        /**
+         * Quelle genau dieses Eintrags (z. B. Buch, Autor). Die Seite nennt sie vor der Namensnennung.
+         */
+        source?: string | null;
         contributorName?: string | null;
         contributorSuggestion?: (number | null) | Suggestion;
         id?: string | null;
@@ -1323,6 +1341,7 @@ export interface WordsSelect<T extends boolean = true> {
     | {
         kind?: T;
         text?: T;
+        source?: T;
         contributorName?: T;
         contributorSuggestion?: T;
         id?: T;
