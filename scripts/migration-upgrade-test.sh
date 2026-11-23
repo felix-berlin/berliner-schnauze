@@ -30,8 +30,14 @@ echo "== upgrade: this checkout on top of $BASE_REF"
 pnpm --filter payload-app migrate
 pnpm --filter payload-app verify:db
 
-echo "== rollback of the new migrations, then forward again"
-pnpm --filter payload-app migrate:down
-pnpm --filter payload-app migrate
-pnpm --filter payload-app verify:db
+# migrate:down undoes the LAST BATCH: without a new migration that is the base's own batch (the whole history on a
+# fresh database), whose down guards rightly refuse on the seed rows. Roll back only what this checkout adds.
+if git diff --quiet "$BASE_REF" -- 'payload/src/migrations/*.ts' ':!payload/src/migrations/index.ts'; then
+  echo "== no new migration against $BASE_REF: rollback skipped"
+else
+  echo "== rollback of the new migrations, then forward again"
+  pnpm --filter payload-app migrate:down
+  pnpm --filter payload-app migrate
+  pnpm --filter payload-app verify:db
+fi
 echo "== upgrade test passed"

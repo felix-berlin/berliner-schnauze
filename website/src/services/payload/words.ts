@@ -12,6 +12,7 @@ import { ttl } from "@services/cache.ts";
 import { getPayloadClient, mediaUrl, siteDocs, siteRead } from "@services/payload.ts";
 import { SHOW_TEST_DATA } from "astro:env/client";
 import { lexicalToHtml } from "payload-app/lexical-html";
+import { hasLexicalText } from "payload-app/routes";
 import { type DerivedWordFields, deriveWordFields } from "payload-app/word-derived";
 
 const PAGE_SIZE = 1000;
