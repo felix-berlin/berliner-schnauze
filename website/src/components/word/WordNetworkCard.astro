@@ -1,0 +1,132 @@
+---
+import '@styles/components/_word-netz.scss';
+import SectionCard from '@components/word/SectionCard.astro';
+import { RELATION_LABEL, RELATION_ORDER, pickNetwork, relationKey } from '@lib/wordNetwork.ts';
+import type { WordPageModel } from '@services/payload/wordPage.ts';
+
+interface Props {
+  model: WordPageModel;
+}
+
+type Related = WordPageModel['related'][number];
+
+const { model } = Astro.props;
+const word = model.word.berlinerisch;
+const { net, rest } = pickNetwork(model.related);
+
+// SVG net (viewBox 640x230, mock .w12__net): the word in the middle, up to four nodes on curves, left/right alternating.
+// The ring sits on the inner side of its label (left nodes: label ends 14 before the ring, right nodes: it starts 14 after),
+// the curve runs from the centre of the net to the ring and is hidden behind the centre pill at its start.
+const SLOTS = [
+  { side: 'l', x: 150, y: 37 },
+  { side: 'r', x: 490, y: 37 },
+  { side: 'l', x: 150, y: 193 },
+  { side: 'r', x: 490, y: 193 },
+] as const;
+const nodes = net.map((r, i) => {
+  const { side, x, y } = SLOTS[i]!;
+  const dir = side === 'l' ? -1 : 1;
+  return Object.assign({}, r, {
+    anchor: side === 'l' ? 'end' : 'start',
+    curve: `M320 115 C${320 + dir * 60} 115 ${x - dir * 60} ${y} ${x} ${y}`,
+    textX: x + dir * 14,
+    x,
+    y,
+  });
+});
+
+const groups = (items: Related[]) =>
+  RELATION_ORDER.map((key) => ({
+    items: items.filter((r) => relationKey(r.relation) === key),
+    label: RELATION_LABEL[key],
+  })).filter((g) => g.items.length > 0);
+const written = model.written.map((w) => w.label).join(', ');
+const gap = {
+  cta: 'Wort verknüpfen',
+  text: `Noch keen Wort mit „${word}“ verknüpft. Kennste eens mit gleicher Bedeutung, ’n Gegenteil oder ’ne Redewendung?`,
+};
+---
+
+<!--
+  Verwandte Wörter card (SPEC §10). Below ~36rem of column width a list grouped by relation; from there the SVG net
+  (decorative, aria-hidden, its links are not focusable) plus a visually hidden list of the same four words that
+  carries the information and is reachable by keyboard (it becomes visible on focus), and the rest as a list. The
+  lists are switched with display: none, so a screen reader never hears a word twice. Neighbours always render.
+-->
+<SectionCard id='verwandt' title='Verwandte Wörter' contribute='related' slug={model.word.slug} gap={model.related.length ? undefined : gap}>
+  <div class='c-word-netz'>
+    {model.related.length > 0 && (
+      <Fragment>
+        <div class='all'>
+          {groups(model.related).map((g) => (
+            <Fragment>
+              <p class='c-word-label'>{g.label}</p>
+              <ul class='pills'>
+                {g.items.map((r) => (
+                  <li>{r.url ? <a href={r.url}>{r.label}</a> : <span>{r.label}</span>}
+                    {(r.note || r.contributor) && <small>{r.note}{r.note && r.contributor && ' · '}{r.contributor && `vorjeschlagen von ${r.contributor.name ?? 'aus der Community'}`}</small>}</li>
+                ))}
+              </ul>
+            </Fragment>
+          ))}
+        </div>
+
+        <div class='tablet'>
+          <svg class='net' viewBox='0 0 640 230' aria-hidden='true' focusable='false'>
+            {nodes.map((n) => {
+              // The curve belongs to the node: hovering the strand lights up the whole node (the wide transparent path is its hit area).
+              const inner = (
+                <Fragment>
+                  <path class='hit' d={n.curve} fill='none' />
+                  <path class='curve' d={n.curve} fill='none' />
+                  <circle class='ring' cx={n.x} cy={n.y} r='6' />
+                  <text class='word' x={n.textX} y={n.y - 2} text-anchor={n.anchor}>{n.label}</text>
+                  <text class='relation' x={n.textX} y={n.y + 16} text-anchor={n.anchor}>{RELATION_LABEL[relationKey(n.relation)]}</text>
+                </Fragment>
+              );
+              return n.url ? <a class='node' href={n.url} tabindex='-1'>{inner}</a> : <g class='node'>{inner}</g>;
+            })}
+            <rect class='center' x='245' y='93' width='150' height='44' rx='22' />
+            <text class='center-text' x='320' y='121' text-anchor='middle'>{word}</text>
+          </svg>
+          <ul class='net-list'>
+            {net.map((r) => (
+              <li>{r.url ? <a href={r.url}>{r.label}</a> : r.label} <small>{RELATION_LABEL[relationKey(r.relation)]}{r.note && `, ${r.note}`}</small></li>
+            ))}
+          </ul>
+          {rest.length > 0 && (
+            <div class='rest'>
+              {groups(rest).map((g) => (
+                <Fragment>
+                  <p class='c-word-label'>{g.label}</p>
+                  <ul class='pills'>
+                    {g.items.map((r) => (
+                      <li>{r.url ? <a href={r.url}>{r.label}</a> : <span>{r.label}</span>}{r.note && <small>{r.note}</small>}</li>
+                    ))}
+                  </ul>
+                </Fragment>
+              ))}
+            </div>
+          )}
+        </div>
+      </Fragment>
+    )}
+
+    {written && <p class='written'><span class='c-word-label'>Ähnlich jeschrieben</span> {written}</p>}
+
+    {(model.before || model.after) && (
+      <div class='neighbours'>
+        <p class='c-word-label'>Im Wörterbuch davor und danach</p>
+        <div class='tiles'>
+          {model.before && (
+            <a class='tile' href={model.before.url}><span class='arrow' aria-hidden='true'>←</span><span class='text'><small>Vorheriges Wort</small><span class='name'>{model.before.label}</span></span></a>
+          )}
+          <span class='now' aria-hidden='true'>{word}</span>
+          {model.after && (
+            <a class='tile' href={model.after.url}><span class='text'><small>Nächstes Wort</small><span class='name'>{model.after.label}</span></span><span class='arrow' aria-hidden='true'>→</span></a>
+          )}
+        </div>
+      </div>
+    )}
+  </div>
+</SectionCard>

@@ -29,6 +29,13 @@ describe("pickWordOfTheDay", () => {
     expect(pickWordOfTheDay([...words].reverse(), date)).toEqual(pickWordOfTheDay(words, date));
   });
 
+  it("pins the day on the e2e server only", () => {
+    const a = new Date("2026-10-16T12:00:00Z");
+    const b = new Date("2026-10-17T12:00:00Z");
+    expect(pickWordOfTheDay(words, a, true)).toBe(pickWordOfTheDay(words, b, true));
+    expect(pickWordOfTheDay(words, a, false)).not.toBe(pickWordOfTheDay(words, b, false));
+  });
+
   it("returns undefined without words", () => {
     expect(pickWordOfTheDay([], new Date())).toBeUndefined();
   });

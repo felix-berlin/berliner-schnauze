@@ -1,0 +1,76 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// O-Ton of the word head (SPEC §8.3): the featured Jeschichte, no surface, only a 3px orange line on the
+// start side. Parts .quote, .by (with the shared label and .who), .more (with .arrow).
+// The label inside .by is the shared c-word-label component: it is placed, never restyled, from here.
+@include mx.component("word-oton") {
+  :scope {
+    // SPEC §8.3: 3px line, no border-width token
+    --_line: 3px;
+
+    margin: 0;
+    padding-block: var(--space-1);
+    padding-inline-start: var(--space-4);
+    border-inline-start: var(--_line) solid var(--color-accent-active);
+  }
+
+  .quote {
+    margin: 0;
+    font-size: var(--font-size-base);
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--color-text-strong);
+  }
+
+  .by {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-3);
+    margin-block-start: var(--space-1);
+  }
+
+  .who {
+    font-size: var(--font-size-label);
+    color: var(--color-text-muted);
+  }
+
+  .more {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    position: relative;
+    margin-block-start: var(--space-2);
+    font-size: var(--font-size-md);
+    font-weight: 600; // SPEC §8.3, no weight token between regular and bold
+    color: var(--color-text-muted);
+    // SPEC: 1px line in currentColor under text and arrow alike; a text-decoration breaks at the flex gap.
+    border-block-end: 1px solid currentcolor;
+    text-decoration: none;
+
+    // The line hugs the text, so the 44px tap target is an invisible band around it.
+    &::after {
+      content: "";
+      position: absolute;
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- centres the 44px band on the text line
+      inset-block: calc((var(--size-tap-target) - 100%) / -2);
+      inset-inline: 0;
+    }
+
+    @include butler-mx.feature("motion") {
+      .arrow {
+        transition: translate var(--duration-fast) ease;
+      }
+    }
+    @include butler-mx.hover {
+      color: var(--color-text-strong);
+
+      @include butler-mx.feature("motion") {
+        .arrow {
+          translate: var(--space-1) 0;
+        }
+      }
+    }
+  }
+}

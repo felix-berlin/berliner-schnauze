@@ -1,0 +1,120 @@
+---
+import '@styles/objects/_word-v18.scss';
+
+import Lightbox from '@components/word/Lightbox.vue';
+import WordImages from '@components/word/WordImages.astro';
+import SectionCard from '@components/word/SectionCard.astro';
+import WordPoll from '@components/word/WordPoll.vue';
+import WordStories from '@components/word/WordStories.vue';
+import WordExamplesCard from '@components/word/WordExamplesCard.astro';
+import WordFactsCard from '@components/word/WordFactsCard.astro';
+import WordAnalysisCard from '@components/word/WordAnalysisCard.astro';
+import WordHead from '@components/word/WordHead.astro';
+import WordLinks from '@components/word/WordLinks.astro';
+import WordMobileBar from '@components/word/WordMobileBar.astro';
+import WordNetworkCard from '@components/word/WordNetworkCard.astro';
+import WordNumbers from '@components/word/WordNumbers.astro';
+import WordReportLine from '@components/word/WordReportLine.astro';
+import WordToc from '@components/word/WordToc.vue';
+import { grammarRows, klangRows } from '@lib/wordAnalysis.ts';
+import { tocItems } from '@lib/wordToc.ts';
+import type { WordPageModel } from '@services/payload/wordPage.ts';
+import { voiceSources } from '@composables/useVoicePlayer.ts';
+import { toWordImages } from '@utils/wordImages.ts';
+import { getImage } from 'astro:assets';
+import type { WordRef } from '@utils/wordHelper';
+
+interface Props {
+  model: WordPageModel;
+  /** Source of the random word in "Und nu?". */
+  words?: WordRef[];
+  /** A draft preview has no public numbers: plays are not counted. */
+  draft?: boolean;
+}
+
+const { draft = false, model, words = [] } = Astro.props;
+const grammar = grammarRows(model);
+const klang = klangRows(model);
+const voices = voiceSources(model.word.berlinerischAudio);
+// Decorative first sound of the IPA (stress and bracket marks skipped); without IPA the first letter of the word.
+const initial = [...(model.word.ipa || model.word.berlinerisch)].find((ch) => /[\p{Ll}\p{Lu}\p{Lo}]/u.test(ch));
+const images = toWordImages(model.word.images, model.word.berlinerisch);
+// Large version for the lightbox (the strip and hero sizes come from WordImages); never upscale a smaller source.
+const lightboxImages = await Promise.all(
+  images.map(async ({ alt, credit, height, src, width }) => {
+    const target = Math.min(1600, width);
+    return { alt, credit, src: (await getImage({ format: 'webp', height: Math.round((target * height) / width), src, width: target })).src };
+  }),
+);
+---
+
+<!--
+  Shell of the v18 word page (SPEC §2): the table of contents and the main column with the anchors in page
+  order. Each section is a named slot; its default content is the matching card (the head for `bedeutung`).
+  The wrappers own the anchor ids (and the scroll margin): a card placed in a slot must not repeat the id.
+-->
+<article class='o-word-v18'>
+  {initial && <span class='initial' aria-hidden='true'>{initial}</span>}
+  <!-- No JS, no form: the contribute buttons stay hidden until this flag is set (see _word-v18.scss). -->
+  <script is:inline>document.documentElement.dataset.js = '';</script>
+  <div class='toc'>
+    <WordToc client:idle items={tocItems(model, draft)} />
+  </div>
+
+  <div class='main'>
+    <div class='anchor' id='bedeutung'>
+      <slot name='bedeutung'>
+        {images.length > 0 ? (
+          <WordHead draft={draft} model={model}>
+            {/* Both copies (strip, hero) are in the HTML; _word-head.scss shows one by the head's own width. */}
+            <Fragment slot='images'>
+              <WordImages images={images} placement='strip' />
+              <WordImages images={images} placement='hero' />
+            </Fragment>
+          </WordHead>
+        ) : (
+          <WordHead draft={draft} model={model} />
+        )}
+      </slot>
+    </div>
+
+    <h2 class='band'>Im Gebrauch</h2>
+    <div class='anchor' id='beispiele'><slot name='beispiele'><WordExamplesCard word={model.word.berlinerisch} slug={model.word.slug} examples={model.word.examples} /></slot></div>
+    {/* A draft preview has no poll and no Jeschichten: both would vote and post against the live word. */}
+    {!draft && <div class='anchor' id='sagste'><slot name='sagste'><WordPoll client:visible initial={model.poll} label={model.word.berlinerisch} slug={model.word.slug} wordId={model.word.id} /></slot></div>}
+    {!draft && <div class='anchor' id='jeschichten'><slot name='jeschichten'>
+      <SectionCard id='jeschichten' title='Jeschichten' meta={model.stories.total > 0 ? `${model.stories.total} Jeschichten` : 'Noch keene'}>
+        <WordStories client:visible label={model.word.berlinerisch} prompt={model.storyPrompt} word={model.word.slug} initial={{ featured: model.featured ?? null, items: model.stories.items, total: model.stories.total }} />
+      </SectionCard>
+    </slot></div>}
+
+    <h2 class='band'>Wissen</h2>
+    <div class='anchor' id='wissenswertes'><slot name='wissenswertes'><WordFactsCard word={model.word.berlinerisch} slug={model.word.slug} facts={model.facts} book={model.book} /></slot></div>
+    <div class='anchor' id='verwandt'><slot name='verwandt'><WordNetworkCard model={model} /></slot></div>
+
+    <h2 class='band anchor' id='analyse'>Sprachliche Analyse</h2>
+    {/* A wrapper only with content, so an empty card takes no grid cell and no gap. */}
+    <div class='pair'>
+      {(Astro.slots.has('grammatik') || grammar.length > 0) && (
+        <div class='anchor' id='grammatik'><slot name='grammatik'><WordAnalysisCard id='grammatik' title='Grammatik' rows={grammar} /></slot></div>
+      )}
+      {(Astro.slots.has('klang') || klang.length > 0) && (
+        <div class='anchor' id='klang'><slot name='klang'><WordAnalysisCard id='klang' title='Klang' rows={klang} /></slot></div>
+      )}
+    </div>
+    <div class='anchor' id='zahlen'><slot name='zahlen'><WordNumbers model={model} /></slot></div>
+    <div class='anchor' id='fehler'><slot name='fehler'><WordReportLine word={model.word.berlinerisch} slug={model.word.slug} /></slot></div>
+    <slot name='weiter'><WordLinks words={words} excludeSlug={model.word.slug} /></slot>
+  </div>
+</article>
+{/* Only the lightbox needs JS: the buttons are server-rendered and open the dialog once this hydrates. */}
+{images.length > 0 && <Lightbox client:idle images={lightboxImages} />}
+<!-- Sibling of the article: a sticky bar rests where its parent (the page column) ends, below the content. -->
+<WordMobileBar audio={voices.m ?? voices.w} poll={!draft} wordId={draft ? undefined : model.word.id} />
+
+<script>
+  import { watchContributeTriggers } from '@components/word/contributeTriggers.ts';
+
+  // Re-wired on every navigation (ClientRouter), dropped before the swap.
+  watchContributeTriggers();
+</script>

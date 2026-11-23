@@ -6,6 +6,7 @@ import { getPayloadClient } from "@services/payload.ts";
 import { reply } from "@utils/apiReply.ts";
 import { dealBatch, toPublic } from "@utils/bonDeck.ts";
 import { nextSchema } from "@utils/bonSchema.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { LIVES } from "payload-app/bon-rules";
 
 export const POST: APIRoute = async ({ request }) => {
@@ -42,7 +43,7 @@ export const POST: APIRoute = async ({ request }) => {
       });
       return reply({ cards: cards.map((c, i) => toPublic(c, game.cards.length + i)) }, 200);
     } catch (error) {
-      console.error("[bon] next failed:", error);
+      logRouteError("bon next", error);
       return reply({ error: "Die Karten wollten leider nich kommen." }, 502);
     }
   });

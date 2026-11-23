@@ -54,7 +54,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.375rem;
-      font-size: 0.8125rem;
+      font-size: var(--font-size-label);
       font-weight: 500;
       padding: 0.2rem 0.625rem;
       border: 1px solid currentColor;
@@ -106,7 +106,7 @@
     }
 
     &__hint {
-      font-size: 0.8125rem;
+      font-size: var(--font-size-label);
       line-height: 1.55;
       color: var(--color-muted);
 
@@ -121,7 +121,7 @@
       border: none;
       padding: 0;
       cursor: pointer;
-      font-size: 0.8125rem;
+      font-size: var(--font-size-label);
       color: var(--color-muted);
       text-decoration: underline;
       text-underline-offset: 3px;
@@ -185,7 +185,7 @@
     }
 
     &__nav-card-desc {
-      font-size: 0.8125rem;
+      font-size: var(--font-size-label);
       color: var(--color-muted);
     }
 

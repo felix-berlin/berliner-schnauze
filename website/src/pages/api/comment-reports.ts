@@ -2,27 +2,22 @@ import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
 import { visitorId, voterKey } from "@services/payload/comments.ts";
-import { captchaGate, isUniqueViolation, orNull, reply } from "@utils/apiReply.ts";
+import { isUniqueViolation, orNull, parseSubmission, reply } from "@utils/apiReply.ts";
 import { reportSchema } from "@utils/commentSchema.ts";
-import { clientIp, rateLimitedBy, requestIp } from "@utils/rateLimit.ts";
+import { logRouteError } from "@utils/logError.ts";
+import { clientIp, rateLimitedBy, refundHit } from "@utils/rateLimit.ts";
 
 /**
  * Reports are idempotent: a repeat on the same comment (same IP within 24 h, or same visitor cookie) answers like
  * the first, so nothing leaks.
  */
 export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
-  const body: unknown = await request.json().catch(() => undefined);
-  if (typeof body !== "object" || body === null) return reply({ error: "Ungültige Anfrage" }, 400);
-  const input = reportSchema.safeParse(body);
-  if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
+  const parsed = await parseSubmission(request, clientAddress, reportSchema, {
+    plainInvalid: true,
+  });
+  if ("response" in parsed) return parsed.response;
 
-  const blocked = await captchaGate(
-    body,
-    requestIp(request.headers.get("x-forwarded-for"), clientAddress),
-  );
-  if (blocked) return blocked;
-
-  const { commentId, reason } = input.data;
+  const { commentId, reason } = parsed.data;
   try {
     const payload = await getPayloadClient();
     const comment = await orNull(
@@ -31,8 +26,8 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     if (comment?.status !== "published") return reply({ error: "Kommentar nicht gefunden" }, 404);
 
     const ip = clientIp(request.headers.get("x-forwarded-for"), clientAddress);
-    const again = rateLimitedBy(ip, `comment-report ${commentId}`, 1, 24 * 60 * 60_000);
-    // ponytail: a failed create below still burns this IP's 24 h slot; fine for a soft limit.
+    const perComment = `comment-report ${commentId}`;
+    const again = rateLimitedBy(ip, perComment, 1, 24 * 60 * 60_000);
     if (again > 0) return reply({ reported: true }, 200);
     // One client can not sweep many comments out of sight with a handful of IPs.
     if (rateLimitedBy(ip, "comment-report-all", 10, 24 * 60 * 60_000) > 0)
@@ -45,11 +40,16 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
         depth: 0,
       });
     } catch (error) {
-      if (!isUniqueViolation(error)) throw error;
+      if (!isUniqueViolation(error)) {
+        // Nothing was stored: give both hits back, or the retry would answer "reported" for a lost report.
+        refundHit(ip, perComment);
+        refundHit(ip, "comment-report-all");
+        throw error;
+      }
     }
     return reply({ reported: true }, 200);
   } catch (error) {
-    console.error(`[comments] report on ${commentId} failed:`, error);
+    logRouteError("comments report", error);
     return reply({ error: "Die Meldung konnte leider nicht gesendet werden." }, 502);
   }
 };

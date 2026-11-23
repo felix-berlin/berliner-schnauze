@@ -1,0 +1,18 @@
+@use "@styles/mixins" as mx;
+
+// The one label of the word page v18 (SPEC §4.2): 13px, 700, 1.5px tracking, capitals, muted. Used for
+// "Bedeutung", "O-Ton", the table of contents heading and every later card label. Root only, no parts.
+@include mx.component("word-label") {
+  :scope {
+    // SPEC §4.2: 1.5px tracking, no tracking token
+    --_tracking: 1.5px;
+
+    margin: 0;
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--_tracking);
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+}

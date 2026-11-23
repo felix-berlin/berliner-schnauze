@@ -16,6 +16,7 @@ vi.mock("@services/payload.ts", async (importOriginal) => ({
 import type { APIContext } from "astro";
 
 import { siteRead } from "@services/payload.ts";
+import { sharedPollRows } from "@services/payload/pollRows.ts";
 
 import { DELETE, GET, PATCH } from "@/pages/api/word-feedback.ts";
 
@@ -44,6 +45,7 @@ const uniqueViolation = Object.assign(new Error("The following field is invalid"
 });
 
 beforeEach(() => {
+  [7, 8].forEach((w) => sharedPollRows.forget(w));
   set.mockReset();
   count.mockReset().mockResolvedValue({ totalDocs: 0 });
   create.mockReset().mockImplementation(async ({ data }) => ({ id: 1, ...data }));
@@ -234,8 +236,11 @@ describe("PATCH /api/word-feedback", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     count.mockRejectedValue(new Error("count down"));
     const res = await patch({ usage: "say", word: 7 }, "v-1");
-    expect(res.status).toBe(502);
-    expect((await res.json()).error).toContain("jespeichert");
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.error).toContain("jespeichert");
+    expect(body).toMatchObject({ mine: { usage: "say" }, stored: true });
+    expect(body).not.toHaveProperty("totals");
     expect(create).toHaveBeenCalledOnce();
   });
 
@@ -250,13 +255,20 @@ describe("PATCH /api/word-feedback", () => {
 
 describe("GET /api/word-feedback", () => {
   it("without cookie: mine null, totals counted, no cookie set", async () => {
-    count.mockResolvedValue({ totalDocs: 2 });
+    find.mockResolvedValue({
+      docs: [
+        { reaction: "like", usage: "say" },
+        { reaction: "like", usage: "know" },
+        { reaction: "dislike", usage: "never" },
+      ],
+    });
     const res = await GET(
       ctx({ method: "GET", url: "https://berliner-schnauze.wtf/api/word-feedback?word=7" }),
     );
     const body = await res.json();
     expect(body.mine).toBeNull();
-    expect(body.totals).toEqual({ dislike: 2, know: 2, like: 2, never: 2, say: 2 });
+    expect(body.totals).toEqual({ dislike: 1, know: 1, like: 2, never: 1, say: 1 });
+    expect(count).not.toHaveBeenCalled();
     expect(set).not.toHaveBeenCalled();
   });
 
@@ -265,12 +277,42 @@ describe("GET /api/word-feedback", () => {
     find.mockResolvedValue({ docs: [{ id: 3, reaction: "like" }] });
     const noVote = await (await GET(ctx({ cookie: "v-1", method: "GET", url }))).json();
     expect(noVote.mine).toMatchObject({ reaction: "like", usage: null });
-    expect(count).toHaveBeenCalledTimes(5);
-    count.mockClear();
+    expect(noVote.compare.east).toBeNull();
     find.mockResolvedValue({ docs: [{ id: 3, usage: "say" }] });
     const voted = await (await GET(ctx({ cookie: "v-1", method: "GET", url }))).json();
     expect(voted.mine.usage).toBe("say");
-    expect(count.mock.calls.length).toBeGreaterThan(5);
+    expect(count).not.toHaveBeenCalled();
+  });
+
+  it("caches only the shared rows: a second visitor gets his own state, not the first one's", async () => {
+    const url = "https://berliner-schnauze.wtf/api/word-feedback?word=7";
+    const shared = [{ usage: "say" }, { usage: "know" }];
+    const mineFor = (id: number, usage: string) => ({ docs: [{ id, usage }] });
+    find.mockImplementation(async (a: { select?: unknown; where: { visitor?: unknown } }) =>
+      a.select ? { docs: shared } : a.where.visitor ? mineFor(3, "say") : { docs: [] },
+    );
+    const first = await (await GET(ctx({ cookie: "v-1", method: "GET", url }))).json();
+    find.mockImplementation(async (a: { select?: unknown }) =>
+      a.select ? { docs: shared } : { docs: [] },
+    );
+    const second = await (await GET(ctx({ cookie: "v-2", method: "GET", url }))).json();
+    expect(first.mine.usage).toBe("say");
+    expect(second.mine).toBeNull();
+    expect(second.result.own).toBeUndefined();
+    expect(find.mock.calls.filter(([a]) => a.select)).toHaveLength(1);
+  });
+
+  it("a vote forgets the cached rows, so the voter's next read counts it", async () => {
+    const url = "https://berliner-schnauze.wtf/api/word-feedback?word=7";
+    const table: { usage: string }[] = [];
+    find.mockImplementation(async (a: { select?: unknown }) =>
+      a.select ? { docs: [...table] } : { docs: [] },
+    );
+    expect((await (await GET(ctx({ method: "GET", url }))).json()).totals.say).toBe(0);
+    table.push({ usage: "say" });
+    expect((await (await GET(ctx({ method: "GET", url }))).json()).totals.say).toBe(0); // within the TTL
+    await patch({ usage: "say", word: 7 }, "v-1");
+    expect((await (await GET(ctx({ method: "GET", url }))).json()).totals.say).toBe(1);
   });
 
   it("502 with a read message on a failing read", async () => {
@@ -317,10 +359,179 @@ describe("DELETE /api/word-feedback", () => {
     expect(del).not.toHaveBeenCalled();
   });
 
+  it("finds the words including the trashed ones, so the erasure is complete", async () => {
+    find.mockResolvedValue({ docs: [{ id: 1 }] });
+    del.mockResolvedValue({ docs: [], errors: [] });
+    await del_("v-1", "10.0.0.11");
+    expect(find).toHaveBeenCalledWith(
+      expect.objectContaining({ collection: "words", trash: true }),
+    );
+  });
+
+  it("429 on the 21st delete per IP and day", async () => {
+    find.mockResolvedValue({ docs: [] });
+    del.mockResolvedValue({ docs: [], errors: [] });
+    for (let i = 0; i < 20; i++) expect((await del_("v-1", "10.0.0.12")).status).toBe(200);
+    expect((await del_("v-1", "10.0.0.12")).status).toBe(429);
+  });
+
   it("502 when the delete fails", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     find.mockResolvedValue({ docs: [{ id: 1 }] });
     del.mockRejectedValue(new Error("down"));
     expect((await del_("v-1", "10.0.0.10")).status).toBe(502);
+  });
+});
+
+type Row = {
+  age?: string;
+  area?: string;
+  id: number;
+  usage?: string;
+  visitor: string;
+  word: number;
+};
+
+/** A tiny in-memory word-feedback table behind the mocked find/delete, filtering by the where clauses the route sends. */
+const useTable = (rows: Row[]) => {
+  const hit = (
+    where: { visitor?: { in: string[] }; word?: { equals: number } } | undefined,
+    r: Row,
+  ) =>
+    (!where?.word || r.word === where.word.equals) &&
+    (!where?.visitor || where.visitor.in.includes(r.visitor));
+  find.mockImplementation(async ({ collection, where }) => ({
+    docs: collection === "word-feedback" ? rows.filter((r) => hit(where, r)) : [],
+  }));
+  del.mockImplementation(async ({ where }) => {
+    for (const r of rows.filter((x) => hit(where, x))) rows.splice(rows.indexOf(r), 1);
+    return { docs: [], errors: [] };
+  });
+  return rows;
+};
+const hashOf = async (word: number, cookie: string) => {
+  await patch({ usage: "say", word }, cookie);
+  return create.mock.calls.at(-1)![0].data.visitor as string;
+};
+const getResult = async (word: number, cookie?: string) =>
+  (
+    await GET(
+      ctx({
+        cookie,
+        method: "GET",
+        url: `https://berliner-schnauze.wtf/api/word-feedback?word=${word}`,
+      }),
+    )
+  ).json();
+
+describe("GET result and DELETE ?word", () => {
+  const remove = (word: number | undefined, cookie?: string, ip = "10.0.1.1") =>
+    DELETE(
+      ctx({
+        cookie,
+        ip,
+        method: "DELETE",
+        url: `https://berliner-schnauze.wtf/api/word-feedback${word ? `?word=${word}` : ""}`,
+      }),
+    );
+
+  it("GET returns a 100-dot matrix from one find of the word's rows", async () => {
+    const rows = [
+      { id: 1, usage: "say", visitor: "x", word: 7 },
+      { id: 2, usage: "know", visitor: "y", word: 7 },
+    ];
+    useTable(rows);
+    const { result } = await getResult(7, "v-1");
+    expect(result.total).toBe(2);
+    expect(result.matrix).toHaveLength(100);
+    const rowFinds = find.mock.calls.filter(([a]) => a.select);
+    expect(rowFinds).toHaveLength(1);
+    expect(rowFinds[0]![0]).toMatchObject({
+      depth: 0,
+      pagination: false,
+      select: expect.objectContaining({ age: true, area: true, half: true, usage: true }),
+      where: { word: { equals: 7 } },
+    });
+  });
+
+  it("GET returns an empty matrix with total 0 without votes", async () => {
+    useTable([]);
+    const { result } = await getResult(7);
+    expect(result.total).toBe(0);
+    expect(result.matrix).toEqual([]);
+  });
+
+  it("DELETE ?word removes this device's row for that word only", async () => {
+    const a = await hashOf(7, "v-1");
+    const b = await hashOf(8, "v-1");
+    const rows = useTable([
+      { age: "18-29", area: "pankow", id: 1, usage: "say", visitor: a, word: 7 },
+      { id: 2, usage: "say", visitor: "other", word: 7 },
+      { id: 3, usage: "say", visitor: b, word: 8 },
+    ]);
+    expect((await getResult(7, "v-1")).result.total).toBe(2);
+    const res = await remove(7, "v-1");
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ deleted: true });
+    expect(rows.map((r) => r.id)).toEqual([2, 3]);
+    const after = await getResult(7, "v-1");
+    expect(after.result.total).toBe(1);
+    expect(after.mine).toBeNull();
+    expect((await getResult(8, "v-1")).mine.usage).toBe("say");
+  });
+
+  it("DELETE ?word also removes a row with the legacy hash", async () => {
+    find.mockClear();
+    useTable([]);
+    await getResult(7, "v-1");
+    const [fresh, old] = find.mock.calls[0]![0].where.visitor.in;
+    const rows = useTable([{ id: 1, usage: "say", visitor: old, word: 7 }]);
+    expect(fresh).not.toBe(old);
+    await remove(7, "v-1");
+    expect(rows).toEqual([]);
+  });
+
+  it("DELETE ?word without a cookie answers deleted and deletes nothing", async () => {
+    const res = await remove(7, undefined, "10.0.1.2");
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ deleted: true });
+    expect(del).not.toHaveBeenCalled();
+  });
+
+  it("DELETE without word still deletes every row of the cookie", async () => {
+    const a = await hashOf(7, "v-1");
+    const b = await hashOf(8, "v-1");
+    find.mockReset().mockResolvedValue({ docs: [{ id: 7 }, { id: 8 }] });
+    del.mockResolvedValue({ docs: [], errors: [] });
+    expect((await remove(undefined, "v-1", "10.0.1.3")).status).toBe(200);
+    const hashes = del.mock.calls.flatMap((c) => c[0].where.visitor.in);
+    expect(hashes).toEqual(expect.arrayContaining([a, b]));
+    expect(del.mock.calls[0]![0].where.word).toBeUndefined();
+  });
+
+  it("DELETE ?word answers 404 for an unknown word and 400 for a bad one", async () => {
+    findByID.mockRejectedValue(Object.assign(new Error("nf"), { status: 404 }));
+    expect((await remove(7, "v-1", "10.0.1.4")).status).toBe(404);
+    expect(del).not.toHaveBeenCalled();
+    expect(
+      (
+        await DELETE(
+          ctx({
+            cookie: "v-1",
+            ip: "10.0.1.4",
+            method: "DELETE",
+            url: "https://berliner-schnauze.wtf/api/word-feedback?word=x",
+          }),
+        )
+      ).status,
+    ).toBe(400);
+  });
+
+  it("DELETE ?word does not answer deleted when the bulk delete reports an error", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    del.mockResolvedValue({ docs: [], errors: [{ id: 1, message: "x" }] });
+    const res = await remove(7, "v-1", "10.0.1.5");
+    expect(res.status).toBe(502);
+    expect(await res.json()).not.toHaveProperty("deleted");
   });
 });

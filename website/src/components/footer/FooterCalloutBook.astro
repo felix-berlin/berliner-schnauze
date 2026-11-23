@@ -1,0 +1,62 @@
+---
+import '@styles/components/_footer-callout.scss';
+import { AFFILIATE_REL, ctaFor, isWebUrl, type MoreBook } from '@lib/wordBook.ts';
+import ArrowUpRight from '~icons/lucide/arrow-up-right';
+
+interface Props {
+  book: {
+    title: string;
+    url: string;
+    cover?: string | undefined;
+    disclosure?: string | undefined;
+    /** Further books (mock "Ooch jut" column, right of the book on desktop, below it otherwise). */
+    more?: MoreBook[] | undefined;
+  };
+}
+
+const { book } = Astro.props;
+const more = (book.more ?? []).filter((b) => isWebUrl(b.url));
+const titleId = 'footer-callout-buch';
+---
+
+{/* Footer v21 callout "buch" (handoff FooterV21, slot buch): the word's book above the dark band. Only passed with a book. */}
+{isWebUrl(book.url) && (
+<section class='c-footer-callout' data-variant={book.cover ? 'book' : 'book plain'} aria-labelledby={titleId}>
+  <div class='inner u-max-body-width'>
+    {book.cover && <img class='cover' src={book.cover} alt='' width='132' height='198' loading='lazy' />}
+    <div class='text'>
+      <p class='label'>Buchtipp <span>· Affiliate-Link</span></p>
+      <h2 id={titleId} class='title'>Mehr Berlinerisch zum Blättern</h2>
+      <p class='lead'><b>{book.title}</b></p>
+      <div class='actions'>
+        <a class='c-button' data-variant='primary center-icon raised lg' href={book.url} rel={AFFILIATE_REL} target='_blank' data-book-link data-book-title={book.title}>
+          <span>{ctaFor(book.url)}</span>
+          <ArrowUpRight aria-hidden='true' height='18' width='18' />
+        </a>
+        {book.disclosure && <small class='disclosure'>{book.disclosure}</small>}
+      </div>
+    </div>
+    {more.length > 0 && (
+      <aside class='more' aria-label='Weitere Buchtipps'>
+        <p class='label'>Ooch jut</p>
+        <ul>
+          {more.map((b) => (
+            <li>
+              <a href={b.url} rel={AFFILIATE_REL} target='_blank' data-book-link data-book-title={b.title}>
+                {b.cover ? <img class='thumb' src={b.cover} alt='' width='44' height='66' loading='lazy' /> : <span class='thumb' aria-hidden='true' />}
+                <span><b>{b.title}</b>{b.note && <small>{b.note}</small>}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    )}
+  </div>
+</section>
+)}
+
+<script>
+  import { trackBookClicks } from '@lib/bookClickTracking.ts';
+
+  trackBookClicks();
+</script>

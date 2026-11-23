@@ -11,8 +11,17 @@
 
     container: berlin-area-map / inline-size;
     display: grid;
-    gap: var(--space-3);
-    justify-items: center;
+    // Three tracks: the wide row puts "Woanders" and the list switch side by side; everything else spans them.
+    grid-template-columns: max-content max-content 1fr;
+    gap: var(--space-3) var(--space-4);
+    align-items: center;
+    justify-items: start;
+  }
+
+  .map,
+  .list,
+  .credit {
+    grid-column: 1 / -1;
   }
 
   .map {
@@ -99,8 +108,7 @@
 
     display: none;
     grid-template-columns: minmax(var(--_min), max-content);
-    justify-content: center;
-    margin-block-start: var(--space-3);
+    justify-content: start;
   }
 
   .list {
@@ -112,15 +120,17 @@
     --choice-justify: flex-start;
     --choice-padding-block: var(--space-1);
     --choice-text-align: start;
+    --_min: 180px; // one-off tile width: one column on a phone, four at 1280 (mock .w17 list: auto-fill minmax(min(180px, 100%), 1fr))
 
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(var(--_min), 100%), 1fr));
     gap: var(--space-2);
     overflow-wrap: anywhere;
   }
 
   .credit {
     order: 2;
+    justify-self: center;
     margin: 0;
     color: var(--color-text-muted);
     font-size: var(--font-size-2xs);
@@ -141,18 +151,26 @@
       display: inline;
     }
 
+    // Mock: map, its credit, then one left-aligned row with "Woanders" and the switch to the list.
+    .credit {
+      order: 1;
+    }
+
     .elsewhere {
       display: grid;
+      order: 2;
+      grid-column: 1;
     }
 
     .list {
-      order: 1;
-      inline-size: min(100%, 40rem);
-    }
+      order: 2;
+      grid-column: 2;
+      inline-size: auto;
 
-    .list-items {
-      display: flex;
-      flex-wrap: wrap;
+      &[open] {
+        grid-column: 1 / -1;
+        inline-size: min(100%, 40rem);
+      }
     }
   }
 }

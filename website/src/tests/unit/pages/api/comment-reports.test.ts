@@ -101,8 +101,18 @@ describe("POST /api/comment-reports", () => {
   });
 
   it("502 on other errors", async () => {
-    vi.spyOn(console, "error").mockImplementation(() => {});
-    create.mockRejectedValue(new Error("db down"));
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    create.mockRejectedValue(new Error("db down: secret-value"));
     expect((await post({ commentId: id })).status).toBe(502);
+    expect(error).toHaveBeenCalledWith("[comments report] failed: Error");
+  });
+
+  it("a failed create gives the hits back: the retry is stored, not acknowledged as success", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    create.mockRejectedValueOnce(new Error("db down"));
+    expect((await post({ commentId: id })).status).toBe(502);
+    const retry = await post({ commentId: id });
+    expect(retry.status).toBe(200);
+    expect(create).toHaveBeenCalledTimes(2);
   });
 });

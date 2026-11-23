@@ -1,6 +1,6 @@
 @use "@styles/mixins" as mx;
 
-// Page band (docs/design/wortseite/SPEC.md §4): section headline outside a card, the only display-font use on the page.
+// Page band (v18 handoff SPEC §4): section headline outside a card, the only display-font use on the page.
 // Variant hero (data-variant="hero"): the big BON screen headline (4xl, tight leading).
 // Public: --band-font-size, --band-focus-offset (a focusable band, e.g. a
 // result title that takes the focus).

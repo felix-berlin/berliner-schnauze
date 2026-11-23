@@ -22,7 +22,7 @@
     align-items: center;
     margin: var(--space-3) 0 0;
     font-size: var(--font-size-md);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
 
     a {
       display: inline-flex;
@@ -49,10 +49,10 @@
 
   .try a {
     padding: var(--space-1) var(--space-3);
-    background: var(--card2);
+    background: var(--color-warm-card2);
 
     @include butler-mx.hover {
-      background: var(--card3);
+      background: var(--color-warm-card3);
     }
   }
 
@@ -99,13 +99,13 @@
 
       svg {
         flex: 0 0 auto;
-        color: var(--t3);
+        color: var(--color-warm-quiet);
         transition: color var(--duration-fast) var(--ease-standard);
       }
 
       @include butler-mx.hover {
         border-color: var(--color-accent-active);
-        background: var(--card2);
+        background: var(--color-warm-card2);
 
         svg {
           color: var(--color-accent-active);

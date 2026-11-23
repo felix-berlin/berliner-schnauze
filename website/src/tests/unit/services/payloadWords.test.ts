@@ -182,6 +182,45 @@ describe("toWord", () => {
     expect(toWord(doc as never).relatedWords).toEqual([{ berlinerisch: "wa", id: 13, slug: "wa" }]);
   });
 
+  it("unwraps the v18 relations: diminutive, related words and contributor suggestions as plain ids", async () => {
+    const { toWord } = await load();
+    const word = toWord({
+      ...doc,
+      facts: [
+        { contributorSuggestion: { id: 31 }, kind: "herkunft", text: lexical("Invented.") },
+        { kind: "herkunft", text: lexical("  ") },
+        { kind: "herkunft" },
+      ],
+      grammar: { diminutive: { berlinerisch: "Aaschen", id: 8, slug: "aaschen" }, plural: "Aasen" },
+      related: [
+        {
+          contributorSuggestion: 32,
+          relation: "verwandt",
+          word: { berlinerisch: "wa", id: 13, slug: "wa" },
+        },
+        { label: "free text", relation: "gleich", word: 14 }, // unpopulated word: dropped, label stays
+      ],
+    } as never);
+    expect(word.grammar).toEqual({
+      diminutive: { berlinerisch: "Aaschen", id: 8, slug: "aaschen" },
+      plural: "Aasen",
+    });
+    // The rich text is converted once here; a blank or missing one leaves `html` empty.
+    expect(word.facts).toEqual([
+      { contributorSuggestion: 31, html: "<p>Invented.</p>", kind: "herkunft" },
+      { contributorSuggestion: undefined, html: "", kind: "herkunft" },
+      { contributorSuggestion: undefined, html: "", kind: "herkunft" },
+    ]);
+    expect(word.related).toEqual([
+      {
+        contributorSuggestion: 32,
+        relation: "verwandt",
+        word: { berlinerisch: "wa", id: 13, slug: "wa" },
+      },
+      { label: "free text", relation: "gleich" },
+    ]);
+  });
+
   it("computes the derived fields, with a warning, when the stored group is unset (Payload: an object of nulls)", async () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const { toWord } = await load();
@@ -344,6 +383,7 @@ describe("fetchAllWords", () => {
     expect(loadPages.mock.calls[0][0]).toMatchObject({
       depth: 1,
       populate: {
+        suggestions: { type: true },
         themen: { name: true, slug: true },
         "word-types": { name: true },
         words: { berlinerisch: true, slug: true },

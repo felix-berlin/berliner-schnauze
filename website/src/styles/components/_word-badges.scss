@@ -1,0 +1,65 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Badges of the word head (SPEC §5 item 3, tooltip §14): word of the day (solid orange, the one orange
+// fill of the head) and trend (orange wash). Parts .wdt, .trend. The trend tooltip is the shared
+// v-tooltip (ink variant, under the badge, left aligned; hover, focus and tap).
+@include mx.component("word-badges") {
+  :scope {
+    // SPEC §5: badges are 28px high
+    --_height: 1.75rem;
+    // SPEC §5: glow ring orange 22 %, wash orange 16 % (on the sheet, so it stays orange in both themes)
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory: "Orange 22 %" glow ring (SPEC §5), no token holds it
+    --_glow: 0 0 0 3px color-mix(in srgb, var(--color-accent-solid) 22%, transparent);
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory: "Orange 16 %" trend wash (SPEC §5), no token holds it
+    --_wash: color-mix(in srgb, var(--color-accent-solid) 16%, var(--color-surface-sheet));
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .wdt,
+  .trend {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-block-size: var(--_height);
+    padding-inline: var(--space-3);
+    border-radius: var(--radius-pill);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.3px; // SPEC mock badge tracking, no token
+    text-decoration: none;
+    transition: background-color var(--duration-fast) ease;
+  }
+
+  .wdt {
+    background: var(--color-accent-solid);
+    color: var(--color-text-on-accent);
+    box-shadow: var(--_glow);
+
+    small {
+      font-size: var(--font-size-label);
+      font-weight: 400;
+      opacity: 0.85;
+
+      &::before {
+        content: "·" / "";
+        margin-inline-end: var(--space-2);
+      }
+    }
+  }
+
+  .trend {
+    background: var(--_wash);
+    color: var(--color-text-accent);
+  }
+
+  @include butler-mx.hover {
+    .wdt {
+      filter: brightness(0.9);
+    }
+  }
+}

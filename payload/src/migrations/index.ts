@@ -27,6 +27,14 @@ import * as migration_20261113_120000_hash_visitor_ids_catchup from './20261113_
 import * as migration_20261114_143627_bon_games_lookup_indexes from './20261114_143627_bon_games_lookup_indexes';
 import * as migration_20261119_211428_trash_and_live_link from './20261119_211428_trash_and_live_link';
 import * as migration_20261121_012437_home_page_fields_word_ipa from './20261121_012437_home_page_fields_word_ipa';
+import * as migration_20261122_165037_comments_bezirk_featured from './20261122_165037_comments_bezirk_featured';
+import * as migration_20261122_170310_reports from './20261122_170310_reports';
+import * as migration_20261122_171522_suggestions_types from './20261122_171522_suggestions_types';
+import * as migration_20261122_172739_word_v18_fields from './20261122_172739_word_v18_fields';
+import * as migration_20261123_184457_fk_names_payload_3_94 from './20261123_184457_fk_names_payload_3_94';
+import * as migration_20261123_190000_info_text_to_facts from './20261123_190000_info_text_to_facts';
+import * as migration_20261123_191000_remove_comment_replies from './20261123_191000_remove_comment_replies';
+import * as migration_20261123_192748_affiliate_alle_themen from './20261123_192748_affiliate_alle_themen';
 
 export const migrations = [
   {
@@ -173,5 +181,45 @@ export const migrations = [
     up: migration_20261121_012437_home_page_fields_word_ipa.up,
     down: migration_20261121_012437_home_page_fields_word_ipa.down,
     name: '20261121_012437_home_page_fields_word_ipa',
+  },
+  {
+    up: migration_20261122_165037_comments_bezirk_featured.up,
+    down: migration_20261122_165037_comments_bezirk_featured.down,
+    name: '20261122_165037_comments_bezirk_featured',
+  },
+  {
+    up: migration_20261122_170310_reports.up,
+    down: migration_20261122_170310_reports.down,
+    name: '20261122_170310_reports',
+  },
+  {
+    up: migration_20261122_171522_suggestions_types.up,
+    down: migration_20261122_171522_suggestions_types.down,
+    name: '20261122_171522_suggestions_types',
+  },
+  {
+    up: migration_20261122_172739_word_v18_fields.up,
+    down: migration_20261122_172739_word_v18_fields.down,
+    name: '20261122_172739_word_v18_fields',
+  },
+  {
+    up: migration_20261123_184457_fk_names_payload_3_94.up,
+    down: migration_20261123_184457_fk_names_payload_3_94.down,
+    name: '20261123_184457_fk_names_payload_3_94',
+  },
+  {
+    up: migration_20261123_190000_info_text_to_facts.up,
+    down: migration_20261123_190000_info_text_to_facts.down,
+    name: '20261123_190000_info_text_to_facts',
+  },
+  {
+    up: migration_20261123_191000_remove_comment_replies.up,
+    down: migration_20261123_191000_remove_comment_replies.down,
+    name: '20261123_191000_remove_comment_replies',
+  },
+  {
+    up: migration_20261123_192748_affiliate_alle_themen.up,
+    down: migration_20261123_192748_affiliate_alle_themen.down,
+    name: '20261123_192748_affiliate_alle_themen'
   },
 ];

@@ -1,0 +1,24 @@
+---
+import '@styles/components/_word-rows.scss';
+import type { AnalysisRow } from '@lib/wordAnalysis.ts';
+
+interface Props {
+  rows: AnalysisRow[];
+}
+
+const { rows } = Astro.props;
+---
+
+<dl class='c-word-rows'>
+  {rows.map((row) => (
+    <div class='row'>
+      <dt class='c-word-label'>{row.label}</dt>
+      <dd>
+        {row.text}
+        {row.links?.map((link, i) => (
+          <>{i > 0 && ', '}<a class='c-textlink' data-variant='inline tap' href={link.url}>{link.label}</a></>
+        ))}
+      </dd>
+    </div>
+  ))}
+</dl>

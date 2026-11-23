@@ -1,8 +1,11 @@
 import type { APIRoute } from "astro";
 
+import { buildPollResult } from "@lib/pollResult.ts";
 import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { sha256, visitorId } from "@services/payload/comments.ts";
+import { sharedPollRows } from "@services/payload/pollRows.ts";
 import { isUniqueViolation, orNull, positiveInt, reply } from "@utils/apiReply.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { clientIp, rateLimitedBy } from "@utils/rateLimit.ts";
 import {
   feedbackPatchSchema,
@@ -10,11 +13,12 @@ import {
   type WordFeedbackState,
 } from "@utils/wordFeedbackSchema.ts";
 import {
+  compareFromRows,
   feedbackCompare,
   feedbackTotals,
-  LOCALITY_AREA,
+  profileRules,
+  totalsFromRows,
   type FeedbackCompare,
-  type Locality,
 } from "payload-app/word-feedback";
 
 const DAY = 24 * 60 * 60_000;
@@ -71,9 +75,23 @@ export const GET: APIRoute = async ({ cookies, url }) => {
   try {
     const payload = await getPayloadClient();
     const doc = await findMine(payload, word, visitorId(cookies, false));
-    return reply(await state(payload, word, doc ? toMine(doc) : null), 200);
+    const mine = doc ? toMine(doc) : null;
+    // The shared rows are cached for 60 s (`sharedPollRows`, no visitor data); mine (the own row, read above) is
+    // never cached and applied on top, so the answer stays per visitor and `no-store`.
+    const rows = await sharedPollRows(word);
+    return reply(
+      {
+        compare: mine?.usage
+          ? compareFromRows(rows, mine.area ?? null, mine.locality ?? null)
+          : NO_COMPARE,
+        mine,
+        result: buildPollResult(rows, mine?.usage ?? undefined),
+        totals: totalsFromRows(rows),
+      } satisfies WordFeedbackState,
+      200,
+    );
   } catch (error) {
-    console.error(`[word-feedback] read ${word} failed:`, error);
+    logRouteError("word-feedback read", error);
     return reply({ error: "Die Zahlen wollten leider nich laden." }, 502);
   }
 };
@@ -112,22 +130,19 @@ export const PATCH: APIRoute = async ({ clientAddress, cookies, request }) => {
       return reply({ error: "Jenug jestimmt für heute." }, 429);
 
     // Only the keys the client sent; a non-grewUp origin drops the stale half.
-    const data: Record<string, string | null> = Object.fromEntries(
-      Object.entries(sent).filter(([, v]) => v !== undefined),
-    ) as Record<string, string | null>;
-    if (data.origin !== undefined && data.origin !== "grewUp") data.half = null;
+    const data = profileRules.cascade(
+      Object.fromEntries(Object.entries(sent).filter(([, v]) => v !== undefined)) as Record<
+        string,
+        string | null
+      >,
+    );
 
     // A new area drops a stored Locality of another area (also area: null), unless the body sets it.
     const change = (row: { id: number; locality?: string | null; visitor?: string | null }) =>
       payload.update({
         collection: "word-feedback",
         data: {
-          ...(data.area !== undefined &&
-          data.locality === undefined &&
-          row.locality &&
-          LOCALITY_AREA[row.locality as Locality] !== data.area
-            ? { ...data, locality: null }
-            : data),
+          ...profileRules.cascade(data, row),
           // A row from before the per-word hash moves to it.
           ...(row.visitor && row.visitor !== visitor ? { visitor } : {}),
         },
@@ -151,23 +166,36 @@ export const PATCH: APIRoute = async ({ clientAddress, cookies, request }) => {
         doc = await change(raced);
       }
     }
-    // The vote is stored by now: a failing count must not read as "not counted".
+    // The shared rows are stale now: the voter's next read must count the vote.
+    sharedPollRows.forget(word);
+    // The vote is stored by now: a failing count must not read as "not counted". 200 with `stored` and the own
+    // row but no totals; the client keeps its numbers and shows the message.
+    const mine = toMine(doc);
     try {
-      return reply(await state(payload, word, toMine(doc)), 200);
+      return reply(await state(payload, word, mine), 200);
     } catch (error) {
-      console.error(`[word-feedback] state after write ${word} failed:`, error);
-      return reply({ error: "Is jespeichert, aber die Zahlen wollten nich laden." }, 502);
+      logRouteError("word-feedback state", error);
+      return reply(
+        { error: "Is jespeichert, aber die Zahlen wollten nich laden.", mine, stored: true },
+        200,
+      );
     }
   } catch (error) {
-    console.error(`[word-feedback] write ${word} failed:`, error);
+    logRouteError("word-feedback write", error);
     return reply({ error: "Die Stimme konnte leider nicht gezählt werden." }, 502);
   }
 };
 
 const CHUNK = 1000;
 
-/** Deletes every row tied to this browser's cookie, over all words: the self-service for erasure and objection. */
-export const DELETE: APIRoute = async ({ clientAddress, cookies, request }) => {
+/**
+ * Deletes this browser's rows: only the row of `?word=` when given, else every row over all words (the
+ * self-service for erasure and objection).
+ */
+export const DELETE: APIRoute = async ({ clientAddress, cookies, request, url }) => {
+  const rawWord = url.searchParams.get("word");
+  const word = rawWord === null ? undefined : positiveInt(rawWord);
+  if (rawWord !== null && !word) return reply({ error: "Ungültige Eingabe" }, 400);
   const cookie = visitorId(cookies, false);
   if (!cookie) return reply({ deleted: true }, 200);
   const ip = clientIp(request.headers.get("x-forwarded-for"), clientAddress);
@@ -175,12 +203,30 @@ export const DELETE: APIRoute = async ({ clientAddress, cookies, request }) => {
     return reply({ error: "Jenug jestimmt für heute." }, 429);
   try {
     const payload = await getPayloadClient();
+    if (word) {
+      const found = await orNull(
+        payload.findByID({ collection: "words", depth: 0, id: word, ...siteRead() }),
+      );
+      if (!found) return reply({ error: "Wort nicht gefunden" }, 404);
+      const { errors } = await payload.delete({
+        collection: "word-feedback",
+        where: {
+          visitor: { in: [feedbackVisitor(cookie, word), legacyVisitor(cookie)] },
+          word: { equals: word },
+        },
+      });
+      if (errors.length) throw new Error(`${errors.length} row(s) not deleted`);
+      sharedPollRows.forget(word);
+      return reply({ deleted: true }, 200);
+    }
     const { docs } = await payload.find({
       collection: "words",
       depth: 0,
       limit: 0,
       pagination: false,
       select: {},
+      // A trashed word keeps its rows: the erasure must reach them too.
+      trash: true,
     });
     // The hash is one way: recompute it for every word instead of searching by cookie.
     const hashes = [legacyVisitor(cookie), ...docs.map((w) => feedbackVisitor(cookie, w.id))];
@@ -195,7 +241,7 @@ export const DELETE: APIRoute = async ({ clientAddress, cookies, request }) => {
     }
     return reply({ deleted: true }, 200);
   } catch (error) {
-    console.error("[word-feedback] delete all failed:", error);
+    logRouteError("word-feedback delete", error);
     return reply({ error: "Das hat leider nicht geklappt." }, 502);
   }
 };

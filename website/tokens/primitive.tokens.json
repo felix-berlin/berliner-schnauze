@@ -376,6 +376,12 @@
           "unit": "rem"
         }
       },
+      "label": {
+        "$value": {
+          "value": 0.8125,
+          "unit": "rem"
+        }
+      },
       "md": {
         "$value": {
           "value": 0.9,

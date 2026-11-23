@@ -4,13 +4,14 @@ import {
   loadFeedback,
   parseProfile,
   sendFeedback,
+  type SendResult,
 } from "@stores/wordFeedback.ts";
 import { trackEvent } from "@utils/analytics";
 
 export type Reaction = "dislike" | "like";
 
 /** Sets the reaction, or takes it back when it is the stored one. Used by the hero thumbs. */
-export const toggleReaction = async (wordId: number, reaction: Reaction): Promise<boolean> => {
+export const toggleReaction = async (wordId: number, reaction: Reaction): Promise<SendResult> => {
   // A failed GET left no state: retry it first, or sendFeedback would not store the answer.
   if (!$feedback.get()) await loadFeedback(wordId);
   const active = $feedback.get()?.mine?.reaction === reaction;

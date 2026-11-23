@@ -1,6 +1,6 @@
 @use "@styles/mixins" as mx;
 
-// Page states (docs/design/wortseite/SPEC.md §8/§9). Stripe + icon carry the colour, text never does.
+// Page states (v18 handoff SPEC §8/§9). Stripe + icon carry the colour, text never does.
 // Variants: offline, error, success, done. Part .body: bold line over the text; inside it .detail
 // (a muted extra line, e.g. the server's reason) and .actions (a row of buttons).
 // Public: --state-actions-margin-block-start.
@@ -37,6 +37,29 @@
 
   :scope:is([data-variant~="success"], [data-variant~="done"]) {
     --_stripe: var(--color-status-success);
+  }
+
+  // Mock .w18__thx / .w18__gone (poll): one flowing line, the thanks on a green wash, the deletion note without stripe.
+  :scope:is([data-variant~="success"], [data-variant~="done"]) {
+    line-height: 1.5;
+
+    .body {
+      display: block;
+
+      b::after {
+        content: " ";
+      }
+    }
+  }
+
+  :scope[data-variant~="success"] {
+    // stylelint-disable-next-line function-disallowed-list -- mock .w18__thx: the success colour at 12%, no token
+    background: color-mix(in srgb, var(--_stripe) 12%, transparent);
+  }
+
+  :scope[data-variant~="done"] {
+    border-inline-start: 0;
+    border-radius: var(--radius-sm);
   }
 
   .body {

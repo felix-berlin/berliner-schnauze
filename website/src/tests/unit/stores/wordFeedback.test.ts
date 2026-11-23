@@ -8,8 +8,9 @@ import {
   $profile,
   $sendError,
   answerUsage,
-  deleteAllFeedback,
+  deleteFeedback,
   loadFeedback,
+  refreshFeedback,
   nextStep,
   parseProfile,
   sendFeedback,
@@ -205,6 +206,21 @@ describe("sendFeedback", () => {
     $feedback.set(null);
     expect(await sendFeedback(1, { reaction: "like" })).toBe(true);
     expect($feedback.get()).toEqual(state);
+  });
+  it("stored but no totals: applies mine, keeps the numbers, answers unsynced (still truthy)", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(ok()));
+    await loadFeedback(1);
+    $feedback.set(state);
+    const mine = { ...state.totals, usage: "say" };
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(ok({ error: "Is jespeichert.", mine, stored: true })),
+    );
+    const result = await sendFeedback(1, { usage: "say" }, { silent: true });
+    expect(result).toBe("unsynced");
+    expect(result).toBeTruthy();
+    expect($feedback.get()).toEqual({ ...state, mine });
+    expect($sendError.get()).toBeNull();
   });
   it("failure keeps $feedback and toasts", async () => {
     $feedback.set(state);
@@ -415,24 +431,48 @@ describe("answerUsage", () => {
   });
 });
 
-describe("deleteAllFeedback", () => {
-  it("sends DELETE, forgets the profile and reloads the word", async () => {
-    $profile.set({ area: "pankow" });
-    const fetchMock = vi.fn().mockResolvedValueOnce({ ok: true }).mockResolvedValueOnce(ok());
+describe("deleteFeedback", () => {
+  it("deletes the answers of one word and reports success", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
     vi.stubGlobal("fetch", fetchMock);
-    expect(await deleteAllFeedback(7)).toBe(true);
-    expect(fetchMock.mock.calls[0]).toEqual(["/api/word-feedback", { method: "DELETE" }]);
-    expect($profile.get()).toEqual({});
-    expect(fetchMock.mock.calls[1][0]).toBe("/api/word-feedback?word=7");
+    expect(await deleteFeedback(7)).toBe(true);
+    expect(fetchMock).toHaveBeenCalledExactlyOnceWith("/api/word-feedback?word=7", {
+      method: "DELETE",
+    });
     vi.unstubAllGlobals();
   });
 
-  it("keeps everything and toasts when the delete fails", async () => {
+  it("keeps the local profile and stays silent when the delete fails or the network is gone", async () => {
     $profile.set({ area: "pankow" });
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 502 }));
-    expect(await deleteAllFeedback(7)).toBe(false);
+    expect(await deleteFeedback(7)).toBe(false);
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline")));
+    expect(await deleteFeedback(7)).toBe(false);
     expect($profile.get()).toEqual({ area: "pankow" });
-    expect(toast).toHaveBeenCalled();
+    expect(toast).not.toHaveBeenCalled();
+    vi.unstubAllGlobals();
+  });
+});
+
+describe("refreshFeedback", () => {
+  it("logs and answers null on a non-ok answer and on a network error", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 502 }));
+    expect(await refreshFeedback(7)).toBeNull();
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline")));
+    expect(await refreshFeedback(7)).toBeNull();
+    expect(console.error).toHaveBeenCalledTimes(2);
+    vi.unstubAllGlobals();
+  });
+});
+
+describe("deleteFeedback clears the own answer", () => {
+  it("sets mine to null in the loaded state", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(ok({ ...state, mine: { usage: "say" } })));
+    await loadFeedback(9);
+    expect($feedback.get()?.mine).toEqual({ usage: "say" });
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true }));
+    expect(await deleteFeedback(9)).toBe(true);
+    expect($feedback.get()?.mine).toBeNull();
     vi.unstubAllGlobals();
   });
 });

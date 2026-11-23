@@ -11,6 +11,7 @@ test.use({ reducedMotion: "reduce", serviceWorkers: "block" });
 
 const PAGES = [
   "/",
+  "/wort/abjang",
   "/wort/anmachen",
   "/wort/wa",
   "/games/berliner-oder-nicht",
@@ -81,13 +82,16 @@ for (const size of SIZES) {
           });
           // Word of the day: the word changes daily and the countdown ("Neues Wort in: …") ticks every second.
           const wotd = page.locator(".c-home-stage");
-          // Trend box and badge: rank and counts come from the last 7 days (the seed writes them relative to its
+          // Trend badge and numbers: rank and counts come from the last 7 days (the seed writes them relative to its
           // own day, and other specs' page views add to them). Footer dates: the seed stamps them.
           const timeDependent = [
             wotd,
-            page.locator(".c-word-trend"),
-            page.getByText("Im Trend · Platz"),
-            page.locator(".c-word-page-footer time"),
+            // Word page: trend badges, number tiles, poll result, reaction counts and the Jeschichten (relative dates).
+            page.locator(".c-word-badges"),
+            page.locator(".c-word-zahlen"),
+            page.locator(".c-word-poll"),
+            page.locator(".c-word-reactions"),
+            page.locator(".c-word-stories"),
             // Footer word sign: a random word per request.
             page.locator(".c-footer-word-sign"),
             // Anki: the demo card shows a random word.

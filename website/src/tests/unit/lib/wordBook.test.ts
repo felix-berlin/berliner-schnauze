@@ -1,0 +1,120 @@
+import {
+  ctaFor,
+  disclosureFor,
+  isAmazonLink,
+  isWebUrl,
+  pickBook,
+  pickMoreBooks,
+} from "@lib/wordBook.ts";
+import { describe, expect, it } from "vitest";
+
+const books = [
+  { href: "https://shop.example/a", themen: [1, 2], title: "A" },
+  { href: "https://shop.example/b", themen: [{ id: 3, name: "Essen", slug: "essen" }], title: "B" },
+  { href: "https://shop.example/c", themen: [3, 2], title: "C" },
+  { href: "https://shop.example/d", themen: null, title: "D" },
+] as Parameters<typeof pickBook>[0];
+
+describe("pickMoreBooks", () => {
+  it("leaves out the picked book and books without a web link, and stops at two", () => {
+    const withBad = [...books, { href: "javascript:alert(1)", title: "X" }] as typeof books;
+    expect(pickMoreBooks(withBad, pickBook(withBad, 2)).map((b) => b.title)).toEqual(["B", "C"]);
+    expect(pickMoreBooks(books, undefined, 1).map((b) => b.title)).toEqual(["A"]);
+  });
+
+  it("maps to fully typed entries: url from href, cover and note only when set", () => {
+    const rich = [
+      {
+        description: "Note",
+        href: "https://shop.example/e",
+        imageUrl: "https://i.example/e",
+        title: "E",
+      },
+    ] as typeof books;
+    expect(pickMoreBooks(rich, undefined)).toEqual([
+      { cover: "https://i.example/e", note: "Note", title: "E", url: "https://shop.example/e" },
+    ]);
+    expect(pickMoreBooks(books, undefined, 1)[0]).toEqual({
+      title: "A",
+      url: "https://shop.example/a",
+    });
+  });
+});
+
+describe("pickBook", () => {
+  it("returns the first book whose themen include the first Thema", () => {
+    expect(pickBook(books, 2)?.title).toBe("A");
+    expect(pickBook(books, 3)?.title).toBe("B"); // populated Thema objects match by id
+  });
+
+  it("is undefined without a first Thema or without a match", () => {
+    expect(pickBook(books, undefined)).toBeUndefined();
+    expect(pickBook(books, 99)).toBeUndefined();
+    expect(pickBook([], 1)).toBeUndefined();
+  });
+
+  it("falls back to the first alleThemen book with a web link; a Thema match wins", () => {
+    const all = [
+      { alleThemen: true, href: "javascript:x", title: "Bad" },
+      { alleThemen: true, href: "https://shop.example/e", title: "E" },
+      ...books,
+    ] as typeof books;
+    expect(pickBook(all, undefined)?.title).toBe("E");
+    expect(pickBook(all, 99)?.title).toBe("E");
+    expect(pickBook(all, 2)?.title).toBe("A");
+  });
+});
+
+describe("book link guard", () => {
+  const hostile = [
+    "javascript:alert(1)",
+    "JaVaScRiPt:alert(1)",
+    "data:text/html,<script>alert(1)</script>",
+    "vbscript:x",
+    "//evil.example/x",
+    "ftp://shop.example/x",
+    "https://",
+    "",
+    null,
+    undefined,
+  ];
+
+  it.each(hostile)("rejects %s", (href) => {
+    expect(isWebUrl(href)).toBe(false);
+  });
+
+  it("accepts http(s) with a host", () => {
+    expect(isWebUrl("https://www.amazon.de/dp/X")).toBe(true);
+    expect(isWebUrl("HTTP://shop.example/x")).toBe(true);
+    expect(isWebUrl("HTTPS://shop.example/x")).toBe(true);
+    expect(isWebUrl("hTtp://shop.example/x")).toBe(true);
+  });
+
+  it("pickBook skips a book with a hostile href and takes the next one", () => {
+    const list = [
+      { href: "javascript:alert(1)", themen: [1], title: "Bad" },
+      { href: "https://shop.example/ok", themen: [1], title: "Good" },
+    ] as Parameters<typeof pickBook>[0];
+    expect(pickBook(list, 1)?.title).toBe("Good");
+    expect(pickBook([list[0]!], 1)).toBeUndefined();
+  });
+
+  it("recognises Amazon by host only", () => {
+    expect(isAmazonLink("https://www.amazon.de/dp/X")).toBe(true);
+    expect(isAmazonLink("https://evil.example/amazon.de")).toBe(false);
+    expect(ctaFor("https://thalia.de/x")).toBe("Bei thalia.de ansehen");
+  });
+
+  it("prefers the CMS disclaimer; the fixed Amazon line only without one", () => {
+    const cms = [
+      { plattform: "Amazon", text: "CMS Amazon." },
+      { plattform: "thalia.de", text: "CMS Thalia." },
+    ];
+    expect(disclosureFor("https://www.amazon.de/dp/X", cms)).toBe("CMS Amazon.");
+    expect(disclosureFor("https://www.thalia.de/x", cms)).toBe("CMS Thalia.");
+    expect(disclosureFor("https://www.amazon.de/dp/X", [])).toBe(
+      "Als Amazon-Partner verdiene ich an qualifizierten Verkäufen.",
+    );
+    expect(disclosureFor("https://other.example/x", cms)).toBeUndefined();
+  });
+});

@@ -1,8 +1,8 @@
 import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
-import { captchaGate, reply } from "@utils/apiReply.ts";
-import { requestIp } from "@utils/rateLimit.ts";
+import { parseSubmission, reply, submitFailure } from "@utils/apiReply.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { suggestWordSchema } from "@utils/suggestWordSchema.ts";
 
 /**
@@ -10,23 +10,16 @@ import { suggestWordSchema } from "@utils/suggestWordSchema.ts";
  * suggestion in Payload, whose hook mails the editors.
  */
 export const POST: APIRoute = async ({ clientAddress, request }) => {
-  const body: unknown = await request.json().catch(() => undefined);
-  if (typeof body !== "object" || body === null) return reply({ error: "Ungültige Anfrage" }, 400);
-
-  const suggestion = suggestWordSchema.safeParse(body);
-  if (!suggestion.success) return reply({ error: "Ungültige Eingabe" }, 400);
-
-  const blocked = await captchaGate(
-    body,
-    requestIp(request.headers.get("x-forwarded-for"), clientAddress),
-  );
-  if (blocked) return blocked;
+  const parsed = await parseSubmission(request, clientAddress, suggestWordSchema, {
+    plainInvalid: true,
+  });
+  if ("response" in parsed) return parsed.response;
 
   try {
-    await (await getPayloadClient()).create({ collection: "suggestions", data: suggestion.data });
+    await (await getPayloadClient()).create({ collection: "suggestions", data: parsed.data });
   } catch (error) {
-    console.error("[suggest-word] storing failed:", error);
-    return reply({ error: "Dein Wort konnte leider nicht gesendet werden." }, 502);
+    logRouteError("suggest-word", error);
+    return submitFailure(error, "Dein Wort konnte leider nicht gesendet werden.");
   }
   return reply({ sent: true }, 200);
 };

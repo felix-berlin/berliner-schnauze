@@ -4,7 +4,7 @@
 // Licence: "ALKIS Berlin Bezirke" is Datenlizenz Deutschland - Zero - 2.0 (dl-de-zero-2.0, no attribution needed,
 //   https://daten.berlin.de/datensaetze/alkis-berlin-bezirke-wfs-ced31d7d). We still credit it under the map.
 // Geometry simplified (Douglas-Peucker) and projected equirectangular at 52.5 deg N.
-import type { Area } from "payload-app/word-feedback";
+import { AREA_NAMES, type Area } from "payload-app/word-feedback";
 
 export const MAP_W = 400;
 export const MAP_H = 329;
@@ -23,7 +23,7 @@ export const BERLIN_AREAS: ReadonlyArray<{
     key: "mitte",
     labelX: 165,
     labelY: 139,
-    name: "Mitte",
+    name: AREA_NAMES["mitte"],
     short: "Mitte",
   },
   {
@@ -31,7 +31,7 @@ export const BERLIN_AREAS: ReadonlyArray<{
     key: "friedrichshain-kreuzberg",
     labelX: 206,
     labelY: 174,
-    name: "Friedrichshain-Kreuzberg",
+    name: AREA_NAMES["friedrichshain-kreuzberg"],
     short: "Friedrichshain-|Kreuzberg",
   },
   {
@@ -39,7 +39,7 @@ export const BERLIN_AREAS: ReadonlyArray<{
     key: "pankow",
     labelX: 209,
     labelY: 77,
-    name: "Pankow",
+    name: AREA_NAMES["pankow"],
     short: "Pankow",
   },
   {
@@ -47,7 +47,7 @@ export const BERLIN_AREAS: ReadonlyArray<{
     key: "charlottenburg-wilmersdorf",
     labelX: 113,
     labelY: 176,
-    name: "Charlottenburg-Wilmersdorf",
+    name: AREA_NAMES["charlottenburg-wilmersdorf"],
     short: "Charlottenburg-|Wilmersdorf",
   },
   {
@@ -55,7 +55,7 @@ export const BERLIN_AREAS: ReadonlyArray<{
     key: "spandau",
     labelX: 50,
     labelY: 124,
-    name: "Spandau",
+    name: AREA_NAMES["spandau"],
     short: "Spandau",
   },
   {
@@ -63,7 +63,7 @@ export const BERLIN_AREAS: ReadonlyArray<{
     key: "steglitz-zehlendorf",
     labelX: 90,
     labelY: 235,
-    name: "Steglitz-Zehlendorf",
+    name: AREA_NAMES["steglitz-zehlendorf"],
     short: "Steglitz-|Zehlendorf",
   },
   {
@@ -71,7 +71,7 @@ export const BERLIN_AREAS: ReadonlyArray<{
     key: "tempelhof-schoeneberg",
     labelX: 168,
     labelY: 236,
-    name: "Tempelhof-Schöneberg",
+    name: AREA_NAMES["tempelhof-schoeneberg"],
     short: "Tempelhof-|Schöneberg",
   },
   {
@@ -79,7 +79,7 @@ export const BERLIN_AREAS: ReadonlyArray<{
     key: "neukoelln",
     labelX: 228,
     labelY: 241,
-    name: "Neukölln",
+    name: AREA_NAMES["neukoelln"],
     short: "Neukölln",
   },
   {
@@ -87,7 +87,7 @@ export const BERLIN_AREAS: ReadonlyArray<{
     key: "treptow-koepenick",
     labelX: 311,
     labelY: 240,
-    name: "Treptow-Köpenick",
+    name: AREA_NAMES["treptow-koepenick"],
     short: "Treptow-|Köpenick",
   },
   {
@@ -95,7 +95,7 @@ export const BERLIN_AREAS: ReadonlyArray<{
     key: "marzahn-hellersdorf",
     labelX: 292,
     labelY: 151,
-    name: "Marzahn-Hellersdorf",
+    name: AREA_NAMES["marzahn-hellersdorf"],
     short: "Marzahn-|Hellersdorf",
   },
   {
@@ -103,7 +103,7 @@ export const BERLIN_AREAS: ReadonlyArray<{
     key: "lichtenberg",
     labelX: 252,
     labelY: 130,
-    name: "Lichtenberg",
+    name: AREA_NAMES["lichtenberg"],
     short: "L'berg",
   },
   {
@@ -111,7 +111,7 @@ export const BERLIN_AREAS: ReadonlyArray<{
     key: "reinickendorf",
     labelX: 121,
     labelY: 78,
-    name: "Reinickendorf",
+    name: AREA_NAMES["reinickendorf"],
     short: "Reinickendorf",
   },
 ];

@@ -1,18 +1,19 @@
+import { isE2eServer } from "@utils/e2eServer.ts";
+
 type Rule = { max: number; method?: string; prefix: string; windowMs: number; key?: string };
 
 /**
  * Routes that cost real work per request (canvaskit, Turnstile + mail, token checks), per client.
- * First match wins. The method filters keep list/create (`/api/comments`, GET/POST) apart from own edit/delete
- * (`/api/comments/`, PATCH/DELETE, one shared counter); a thread link (`GET /api/comments/:id`) counts as a GET.
+ * First match wins; the method filter keeps GET and POST of one prefix apart.
  */
 const RULES: Rule[] = [
   { max: 5, method: "POST", prefix: "/api/suggest-word", windowMs: 10 * 60_000 },
+  { max: 5, method: "POST", prefix: "/api/contribute", windowMs: 10 * 60_000 },
+  { max: 5, method: "POST", prefix: "/api/reports", windowMs: 10 * 60_000 },
   { max: 60, prefix: "/og/", windowMs: 60_000 },
   { max: 20, prefix: "/api/preview", windowMs: 60_000 },
-  { max: 5, method: "POST", prefix: "/api/comments", windowMs: 10 * 60_000 },
-  { max: 120, method: "GET", prefix: "/api/comments", windowMs: 60_000 },
-  { key: "comment-own", max: 10, method: "PATCH", prefix: "/api/comments/", windowMs: 5 * 60_000 },
-  { key: "comment-own", max: 10, method: "DELETE", prefix: "/api/comments/", windowMs: 5 * 60_000 },
+  { max: 5, method: "POST", prefix: "/api/stories", windowMs: 10 * 60_000 },
+  { max: 120, method: "GET", prefix: "/api/stories", windowMs: 60_000 },
   { max: 30, method: "POST", prefix: "/api/comment-votes", windowMs: 60_000 },
   { max: 10, method: "POST", prefix: "/api/comment-reports", windowMs: 60 * 60_000 },
   // PATCH is capped per IP and word inside the route.
@@ -44,9 +45,11 @@ export const rateLimitRule = (pathname: string, method: string): Rule | undefine
 
 /**
  * Fixed window: counts a hit for `client` on `rule` and returns the seconds to wait when it is over the limit,
- * else 0.
+ * else 0. The e2e server (`isE2eServer`) never limits: every spec comes from one address, and this one function
+ * serves the middleware rules and the in-route caps (`rateLimitedBy`) alike.
  */
 export const rateLimited = (client: string, rule: Rule, now = Date.now()): number => {
+  if (isE2eServer()) return 0;
   // A full scan, so at most once a minute; still too many live clients after it: the oldest go first (Map order).
   if (hits.size > 10_000 && now - lastPrune >= 60_000) {
     lastPrune = now;

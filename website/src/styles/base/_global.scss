@@ -13,15 +13,15 @@
     outline-offset: 2px;
   }
 
-  // Word page and lightbox: one dashed ring for all components (SPEC.md §8); single overrides only change offset.
-  :where(.o-word-page, .c-lightbox) {
+  // Word page and lightbox: one dashed ring for all components (v18 handoff SPEC §8); single overrides only change offset.
+  :where(.o-word-v18, .c-lightbox) {
     --focus-ring-style: dashed;
     --focus-ring-color: var(--color-focus-ring);
   }
 
   // Word pages reserve the scrollbar track, so the lightbox's scroll lock does not shift the page
   // sideways (the dialog only exists while open, so it cannot be the :has() guard).
-  html:has(.o-word-page) {
+  html:has(.o-word-v18) {
     scrollbar-gutter: stable;
   }
 

@@ -1,0 +1,34 @@
+@use "@styles/mixins" as mx;
+
+// Label/value rows of the Grammatik and Klang cards (AnalysisRows.astro, SPEC §11): a dl of .row with a label (dt)
+// and a value (dd, text or links), a 1px rule between rows. Its own component because the card slot stops the
+// scope of the parent.
+@include mx.component("word-rows") {
+  :scope {
+    display: grid;
+    margin: 0;
+  }
+
+  .row {
+    display: grid;
+    gap: var(--space-1);
+    padding-block: var(--space-3);
+
+    @include mx.row-divider;
+
+    > * {
+      margin: 0;
+    }
+  }
+
+  dd {
+    // mock .w14__dl a: solid 1px orange line, 4px below the text
+    --textlink-decoration-style: solid;
+    --textlink-decoration-color: var(--color-accent-active);
+    --textlink-decoration-thickness: 1px; // stylelint-disable-line declaration-property-value-disallowed-list -- mock: 1px line, no token
+    --textlink-underline-offset: var(--space-1);
+
+    color: var(--color-text-strong);
+    overflow-wrap: anywhere;
+  }
+}

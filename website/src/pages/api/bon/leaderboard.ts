@@ -5,6 +5,7 @@ import { bonIdentity } from "@services/bonPlayer.ts";
 import { aroundOf, loadRanking, toPublicEntry } from "@services/bonRanking.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { reply } from "@utils/apiReply.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { z } from "zod";
 
 const digits = (max: number) =>
@@ -53,7 +54,7 @@ export const GET: APIRoute = async ({ cookies, url }) => {
       200,
     );
   } catch (error) {
-    console.error("[bon] leaderboard failed:", error);
+    logRouteError("bon leaderboard", error);
     return reply({ error: "Die Rangliste wollte leider nich kommen." }, 502);
   }
 };

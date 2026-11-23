@@ -37,6 +37,10 @@ describe("words trash", () => {
       data: { word: word.id, day: "2026-01-01", views: 3, audio: 0, shares: 0, clicks: 0 },
     });
 
+    const report = await payload.create({
+      collection: "reports",
+      data: { word: word.id, kind: "other", text: "stimmt nich" },
+    });
     await payload.update({
       collection: "words",
       id: word.id,
@@ -59,5 +63,9 @@ describe("words trash", () => {
     await payload.delete({ collection: "words", id: word.id, trash: true });
     expect((await count("comments")).totalDocs).toBe(0);
     expect((await count("word-stats")).totalDocs).toBe(0);
+    expect(
+      (await payload.count({ collection: "reports", where: { id: { equals: report.id } } }))
+        .totalDocs,
+    ).toBe(0);
   });
 });
