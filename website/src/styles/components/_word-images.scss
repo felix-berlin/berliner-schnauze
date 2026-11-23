@@ -26,6 +26,13 @@
   :scope[data-variant="hero"] {
     container: hero-images / inline-size;
     display: var(--word-images-hero-display, none);
+    gap: var(--space-4); // mock .w16 .w10__gal: gap 16px
+  }
+
+  // Credit line: 13px, the SPEC minimum (the typography class has 12px).
+  figcaption {
+    font-size: var(--_size);
+    color: var(--color-text-muted);
   }
 
   .strip {
@@ -79,7 +86,7 @@
   :scope[data-variant="hero"] {
     .strip {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr)); // mock .w10__thumbs: 4 squares, 8px apart
       gap: var(--space-2);
       overflow: visible;
 

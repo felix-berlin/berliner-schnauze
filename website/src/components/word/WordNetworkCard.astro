@@ -118,11 +118,11 @@ const gap = {
         <p class='c-word-label'>Im Wörterbuch davor und danach</p>
         <div class='tiles'>
           {model.before && (
-            <a class='tile' href={model.before.url}><span class='c-word-label'>Vorheriges Wort</span><span class='name'><span aria-hidden='true'>← </span>{model.before.label}</span></a>
+            <a class='tile' href={model.before.url}><span class='arrow' aria-hidden='true'>←</span><span class='text'><small>Vorheriges Wort</small><span class='name'>{model.before.label}</span></span></a>
           )}
           <span class='now' aria-hidden='true'>{word}</span>
           {model.after && (
-            <a class='tile' href={model.after.url}><span class='c-word-label'>Nächstes Wort</span><span class='name'>{model.after.label}<span aria-hidden='true'> →</span></span></a>
+            <a class='tile' href={model.after.url}><span class='text'><small>Nächstes Wort</small><span class='name'>{model.after.label}</span></span><span class='arrow' aria-hidden='true'>→</span></a>
           )}
         </div>
       </div>

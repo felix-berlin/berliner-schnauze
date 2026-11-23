@@ -26,6 +26,12 @@
   }
 
   dd {
+    // mock .w14__dl a: solid 1px orange line, 4px below the text
+    --textlink-decoration-style: solid;
+    --textlink-decoration-color: var(--color-accent-active);
+    --textlink-decoration-thickness: 1px; // stylelint-disable-line declaration-property-value-disallowed-list -- mock: 1px line, no token
+    --textlink-underline-offset: var(--space-1);
+
     color: var(--color-text-strong);
     overflow-wrap: anywhere;
   }

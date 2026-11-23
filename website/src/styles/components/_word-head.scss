@@ -15,7 +15,7 @@
     --_pad-bottom: 4.5rem;
     // SPEC §4.2: h1 48px mobile, 56px tablet, 72px desktop
     --_h1: 3rem;
-    --_main: var(--font-size-4xl); // SPEC §4.2: main meaning, 42px on desktop
+    --_main: 2.125rem; // mock .w10--m.w16 .w10__m1: 34px on mobile, no token
     --_ipa-bg: 8.5rem; // SPEC mock .w17__ipa: 136px outline, one-off size
 
     position: relative;
@@ -83,6 +83,7 @@
       --_pad-top: 1.75rem;
       --_pad-bottom: 6rem; // 96px
       --_h1: 3.5rem;
+      --_main: 2.625rem; // 42px (the tablet is the desktop base)
     }
     @container word-head (inline-size >= 56rem) {
       --_pad-x: var(--space-8);
@@ -111,7 +112,7 @@
         --word-images-strip-display: none;
         --word-images-hero-display: flex;
 
-        padding: var(--_pad-top) var(--_pad-x);
+        padding: var(--space-6); // mock .w16 .w10__gal: 24px
         background: var(--color-surface-chip);
         // bleeds over the head padding to the card edge (end, top, bottom)
         margin: calc(-1 * var(--_pad-top)) calc(-1 * var(--_pad-x)) calc(-1 * var(--_pad-bottom)) 0;
@@ -290,9 +291,8 @@
     line-height: 1;
     white-space: nowrap;
     color: transparent;
-    -webkit-text-stroke: 1.5px var(--color-text-strong); // mock: ink outline, faded by the opacity
-    // mock: .13 on the dark ground, .2 on the light one; opacity cannot follow light-dark(), so one value in between
-    opacity: 0.16;
+    // mock: ink outline at .2 (light) / .13 (dark); the page root supplies the colour with that alpha
+    -webkit-text-stroke: 1.5px var(--color-word-ipa-outline, var(--color-border-card));
     pointer-events: none;
     user-select: none;
 

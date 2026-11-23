@@ -8,6 +8,8 @@
 @include mx.component("word-toc") {
   :scope {
     --_pill-pad: 0.875rem; // SPEC §3: pill padding 0 14px, the exact middle of two space steps
+    --_row: 2.25rem; // mock .w12__toc a: rows about 36px; the hit band below reaches 44px
+    --_reach: calc((var(--size-tap-target) - var(--_row)) / 2);
     // SPEC §4.2: counter 13px, no font-size token at that size
     --_label-size: 0.8125rem;
 
@@ -31,6 +33,15 @@
   .label {
     padding: 0 var(--space-4) var(--space-2);
 
+    // mock .w10__toc small: 13px capitals, 2px tracking, muted, regular weight
+    .title {
+      margin: 0;
+      font-size: var(--_label-size);
+      letter-spacing: 2px; // mock, no token
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
     @container word-toc (inline-size >= 30rem) {
       display: none;
     }
@@ -42,14 +53,25 @@
     padding: 0;
     list-style: none;
 
-    // Dotted rail behind the dots.
-    &::before {
+    // Rail behind the dots (solid, mock .w16) and the orange progress line on top of it.
+    &::before,
+    &::after {
       content: "";
       position: absolute;
-      inset-block: calc(var(--size-tap-target) / 2); // first and last dot centre
+      inset-block: calc(var(--_row) / 2); // first and last dot centre
       // stylelint-disable-next-line declaration-property-value-disallowed-list -- centre of the 16px dot minus half the 2px line, no token
       inset-inline-start: calc(var(--space-4) + 7px);
-      border-inline-start: 2px dashed var(--color-border-card);
+      border-inline-start: 2px solid var(--color-border-card);
+    }
+
+    &::after {
+      border-inline-start-color: var(--color-accent-active);
+      transform-origin: top;
+      transform: scaleY(var(--toc-progress, 0));
+
+      @include butler-mx.feature("motion") {
+        transition: transform var(--duration-base) var(--ease-standard);
+      }
     }
 
     @container word-toc (inline-size >= 30rem) {
@@ -59,7 +81,8 @@
       // scroll alternative: the active pill scrolls itself into view and every pill is focusable
       scrollbar-width: none;
 
-      &::before {
+      &::before,
+      &::after {
         display: none;
       }
 
@@ -75,29 +98,54 @@
     grid-template-columns: 1rem 1fr auto;
     align-items: center;
     gap: var(--space-3);
-    min-block-size: var(--size-tap-target);
-    padding-inline: var(--space-4);
-    font-size: var(--font-size-md);
+    min-block-size: var(--_row);
+    // mock .w10__toc a: a 4px bar on the left edge, orange on the active row; the padding keeps the dots in place
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- the 4px bar width, no token
+    padding-inline: calc(var(--space-4) - 4px) var(--space-4);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock: 4px bar, no border-width token
+    border-inline-start: 4px solid transparent;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w12__toc a: 15.2px, no token
+    font-size: 0.95rem;
     color: var(--color-text-body);
     text-decoration: none;
 
+    // Looks 36px, hits 44px.
+    &::before {
+      content: "";
+      position: absolute;
+      inset-block: calc(-1 * var(--_reach));
+      inset-inline: 0;
+    }
+
     @include butler-mx.hover {
       color: var(--color-text-accent);
+      background: var(--color-surface-card3, var(--color-surface-wash));
     }
 
     &[aria-current="true"] {
       font-weight: var(--font-weight-bold);
       color: var(--color-text-strong);
+      background: var(--color-surface-card3, var(--color-surface-wash));
+      border-inline-start-color: var(--color-accent-active);
     }
 
     @container word-toc (inline-size >= 30rem) {
+      --_row: 2.5rem; // SPEC §3: pill 40px, hit band to 44px
+
       display: inline-flex;
-      gap: var(--space-2);
+      gap: var(--space-1);
       padding-inline: var(--_pill-pad);
       border: 1px solid var(--color-border-card);
       border-radius: var(--radius-pill);
       background: var(--color-surface-sheet);
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock pill: 15px, no token
+      font-size: 0.9375rem;
       white-space: nowrap;
+
+      @include butler-mx.hover {
+        background: var(--color-surface-sheet);
+        color: inherit;
+      }
 
       &[aria-current="true"] {
         background: var(--color-text-strong);
@@ -121,8 +169,9 @@
     }
 
     .link[aria-current="true"] & {
-      border-color: var(--color-text-accent);
-      background: var(--color-text-accent);
+      border-color: var(--color-accent-active);
+      background: var(--color-accent-active);
+      outline: 4px solid var(--color-surface-wash-strong); // mock: 4px ring, orange at 25 %
     }
 
     @container word-toc (inline-size >= 30rem) {

@@ -1,4 +1,5 @@
 @use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
 // Word page v18 shell (WordPage.astro): the grid of table of contents + main column, the band headings
 // and the anchor targets. Mobile: one column, no table of contents. From the "word" breakpoint (808px) the
@@ -31,6 +32,10 @@
     --color-surface-chip: light-dark(#fbf1e6, #38424c); // --card2
     --color-surface-card3: light-dark(#f5dfca, #46525e); // --card3: hover/selected of card2, never --t3 text on it
     --color-text-muted: light-dark(#5f6b77, #a8b2bc); // --t3
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w17__ipa: ink-strong at .2 / .13, no token
+    --color-word-ipa-outline: light-dark(rgb(60 67 75 / 20%), rgb(249 249 249 / 13%)); // mock .w17__ipa: ink-strong at .2 / .13
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w17__init: ink at .12 / .09, no token
+    --color-word-initial: light-dark(rgb(43 51 59 / 12%), rgb(255 255 255 / 9%)); // mock .w17__init
     // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w18__menu shadow, no token
     --shadow-menu: 0 14px 32px rgb(0 0 0 / 28%), 0 0 0 1px var(--color-border-card); // mock .w18__menu
     // stylelint-enable color-no-hex, function-disallowed-list
@@ -47,13 +52,23 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     max-inline-size: var(--_max-width);
-    // The mobile bar follows the article and rests below the content, so no room for it is reserved here.
-    padding: var(--space-4) var(--space-4) var(--space-8);
+    // mock .w10: tracking .5px (the site default is 1px) and the 17px of .w16; controls reset to 0 below
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock page tracking, no token
+    letter-spacing: 0.5px;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w16 text size 17px, no token
+    font-size: 1.0625rem;
+    // SPEC §3: 96px below the content on mobile (the sticky bar covers the end)
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: 96px, no space token that large
+    padding: var(--space-4) var(--space-4) 6rem;
     // The page column (u-max-body-width) pads its sides; the wrap owns its padding so the pill bar can run edge to edge.
     margin-inline: calc(-1 * var(--page-gutter));
 
     > * {
       min-inline-size: 0;
+    }
+
+    button {
+      letter-spacing: 0;
     }
 
     @include mx.breakpoint("word") {
@@ -172,7 +187,8 @@
     // SPEC §3 mock: 48px (mobile) / 64px (tablet, desktop) above a band, less the 16px gap of .main
     margin-block: var(--space-8) 0;
     font-family: var(--font-condensed);
-    font-size: var(--font-size-2xl);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: 28px on mobile, no token
+    font-size: 1.75rem;
     font-weight: var(--font-weight-bold);
     text-transform: uppercase;
     color: var(--color-text-strong);
@@ -186,6 +202,48 @@
     @include mx.breakpoint("word") {
       margin-block-start: var(--space-12);
       font-size: var(--font-size-4xl);
+    }
+  }
+
+  // Decorative first letter of the IPA behind the page (mock .w17__init): tablet and desktop only, fixed to the viewport
+  // foot, tilted, faded out towards the bottom. Fixed boxes add no scrollable overflow; the page cards cover it.
+  .o-word-v18 .initial {
+    display: none;
+
+    @include mx.breakpoint("word") {
+      // stylelint-disable declaration-property-value-disallowed-list -- mock .w17__init: 85rem glyph, 8deg tilt, foot offsets
+      display: block;
+      position: fixed;
+      inset-inline-start: -0.01em;
+      inset-block-end: -0.12em;
+      z-index: -1;
+      font-family: var(--font-condensed);
+      font-size: 85rem;
+      font-weight: var(--font-weight-black);
+      line-height: 0.8;
+      color: var(--color-word-initial);
+      rotate: 8deg;
+      transform-origin: 0 0;
+      mask-image: linear-gradient(175deg, var(--color-text-strong) 35%, transparent 95%); // the colour only supplies alpha
+      // stylelint-enable declaration-property-value-disallowed-list
+      pointer-events: none;
+      user-select: none;
+
+      // Fades in while the head scrolls away (mock production note); without scroll timelines it just stays.
+      @include butler-mx.feature("motion") {
+        @supports (animation-timeline: scroll()) {
+          animation: word-initial linear both;
+          animation-timeline: scroll(root);
+          animation-range: 250px 650px;
+        }
+      }
+    }
+  }
+
+  @keyframes word-initial {
+    from {
+      opacity: 0;
+      translate: 0 40px;
     }
   }
 

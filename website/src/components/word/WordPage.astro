@@ -36,6 +36,8 @@ const { draft = false, model, words = [] } = Astro.props;
 const grammar = grammarRows(model);
 const klang = klangRows(model);
 const voices = voiceSources(model.word.berlinerischAudio);
+// Decorative first sound of the IPA (stress and bracket marks skipped); without IPA the first letter of the word.
+const initial = [...(model.word.ipa || model.word.berlinerisch)].find((ch) => /[\p{Ll}\p{Lu}\p{Lo}]/u.test(ch));
 const images = toWordImages(model.word.images, model.word.berlinerisch);
 // Large version for the lightbox (the strip and hero sizes come from WordImages); never upscale a smaller source.
 const lightboxImages = await Promise.all(
@@ -52,6 +54,7 @@ const lightboxImages = await Promise.all(
   The wrappers own the anchor ids (and the scroll margin): a card placed in a slot must not repeat the id.
 -->
 <article class='o-word-v18'>
+  {initial && <span class='initial' aria-hidden='true'>{initial}</span>}
   <!-- No JS, no form: the contribute buttons stay hidden until this flag is set (see _word-v18.scss). -->
   <script is:inline>document.documentElement.dataset.js = '';</script>
   <div class='toc'>
