@@ -51,7 +51,7 @@ const open = async (page: Page, path = WORD, width = 1280) => {
 };
 
 // Every poll test votes as a fresh visitor; DELETE removes all rows of that cookie, so the e2e database stays clean.
-// The route caps deletes at 20 per IP and day (in memory), so only tests that voted clean up.
+// Only tests that voted clean up (the e2e server has no rate limit).
 let voted = false;
 test.beforeEach(() => {
   voted = false;
@@ -330,13 +330,11 @@ test.describe("tablet 834px", () => {
     await expect(area.locator("details.map")).toHaveAttribute("open", "");
 
     await page.evaluate(() => window.scrollTo({ behavior: "instant", top: 0 }));
-    for (const name of [/Like|Gefällt|Daumen hoch/i]) {
-      const reactions = page
-        .getByRole("group", { name: "Wie findste ditt Wort?" })
-        .getByRole("button");
-      const box = await reactions.first().boundingBox();
-      expect(box?.height ?? 0, String(name)).toBeGreaterThanOrEqual(43.5);
-    }
+    const reactions = page
+      .getByRole("group", { name: "Wie findste ditt Wort?" })
+      .getByRole("button");
+    const box = await reactions.first().boundingBox();
+    expect(box?.height ?? 0).toBeGreaterThanOrEqual(43.5);
   });
 });
 
@@ -438,13 +436,14 @@ test.describe("loading skeleton (SPEC §15)", () => {
       await route.continue();
     });
     const skeleton = page.getByLabel("Wort wird jeladen");
+    const requested = page.waitForRequest("**/wort/ab");
     await page.evaluate(() => {
       const a = document.createElement("a");
       a.href = "/wort/ab";
       document.body.append(a);
       a.click();
     });
-    await page.waitForTimeout(150);
+    await requested;
     await expect(skeleton).toHaveCount(0);
     await expect(skeleton).toBeVisible();
     await expect(page).toHaveURL(/\/wort\/ab$/, { timeout: 15_000 });
@@ -503,11 +502,16 @@ test.describe("axe", () => {
           await page.evaluate(() =>
             window.scrollTo({ behavior: "instant", top: document.documentElement.scrollHeight }),
           );
-          await page.waitForTimeout(1200);
-          const { violations } = await new AxeBuilder({ page }).analyze();
-          expect(
-            violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(" | ")}`),
-          ).toEqual([]);
+          // The footer callouts fade in over a moment (WebKit has no scroll-driven reveal): poll until axe sees the
+          // final colours. A real violation stays and fails after the timeout.
+          await expect
+            .poll(async () => {
+              const { violations } = await new AxeBuilder({ page }).analyze();
+              return violations.map(
+                (v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(" | ")}`,
+              );
+            })
+            .toEqual([]);
         });
       }
     }
