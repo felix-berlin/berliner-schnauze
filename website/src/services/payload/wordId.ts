@@ -1,4 +1,5 @@
 import { getPayloadClient, siteRead } from "@services/payload.ts";
+import { fetchWordBySlug } from "@services/payload/words.ts";
 
 /** Only published words resolve (siteRead hides drafts and trashed words); null for an unknown slug. */
 export const wordIdBySlug = async (slug: string) =>
@@ -15,3 +16,10 @@ export const wordIdBySlug = async (slug: string) =>
       ...siteRead(),
     })
   ).docs[0]?.id ?? null;
+
+/**
+ * The id from the in-memory slug index of the public words (no query; up to a minute behind the CMS, and with
+ * SHOW_TEST_DATA drafts resolve too). For read-only routes: the writes keep `wordIdBySlug`, which never rejects a
+ * word that was just published.
+ */
+export const cachedWordIdBySlug = async (slug: string) => (await fetchWordBySlug(slug))?.id ?? null;

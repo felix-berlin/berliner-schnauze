@@ -1,3 +1,5 @@
+import { safeGetJson, safeSet } from "@utils/safeStorage.ts";
+
 /**
  * The visitor's own open contributions, kept in this browser only (suggestions have no server marker; stories come
  * from `/api/stories/mine`). Id-less on purpose: type, a text preview and the time are enough for the "Wird jeprüft" chip.
@@ -10,22 +12,10 @@ const MAX_PER_WORD = 20;
 const PREVIEW = 60;
 
 const read = <T>(key: string): Record<string, T[]> => {
-  try {
-    const parsed: unknown = JSON.parse(localStorage.getItem(key) ?? "{}");
-    return typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)
-      ? (parsed as Record<string, T[]>)
-      : {};
-  } catch {
-    return {};
-  }
-};
-
-const write = (key: string, value: unknown): void => {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch {
-    // Storage blocked or full: the chip is a convenience, the submission itself already went out.
-  }
+  const parsed = safeGetJson(key);
+  return typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)
+    ? (parsed as Record<string, T[]>)
+    : {};
 };
 
 const valid = (s: unknown, now: number): s is OwnSubmission =>
@@ -59,5 +49,5 @@ export const rememberSubmission = (
     { at: now, preview: text.trim().slice(0, PREVIEW), type },
     ...(all[word] ?? []),
   ].slice(0, MAX_PER_WORD);
-  write(KEY, all);
+  safeSet(KEY, JSON.stringify(all));
 };

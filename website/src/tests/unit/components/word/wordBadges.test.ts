@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { vTooltip } from "@/directives/tooltip";
 
-const trend = { kind: "beliebt", rank: 4, views7: 120 } as const;
+const trend = { rank: 4, views7: 120 };
 
 const mountBadges = () =>
   mount(WordBadges, {

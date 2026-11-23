@@ -6,6 +6,16 @@ import { authenticatedOnly, notOverMcp } from "../access";
 import { adoptSuggestion } from "../hooks/adoptSuggestion";
 import { lockedByWordValue, refuseWhenLocked, updateUnlocked } from "../hooks/suggestionLock";
 import { notifyEditors } from "../lib/notifyEditors";
+import {
+  BERLINER_WORD_MAX,
+  EXAMPLE_MAX,
+  FACT_MAX,
+  HIGHDEUTSCH_MAX,
+  RELATED_MAX,
+  SUGGESTED_EXAMPLE_MAX,
+  SUGGESTER_NAME_MAX,
+  TRANSLATION_MAX,
+} from "../lib/submissionLimits";
 import { FACT_KINDS, RELATIONS } from "../lib/suggestionEnums";
 
 const TYPES = ["word", "example", "fact", "related"] as const;
@@ -188,13 +198,13 @@ export const Suggestions: CollectionConfig = {
     {
       name: "berlinerWord",
       type: "text",
-      maxLength: 100,
+      maxLength: BERLINER_WORD_MAX,
       validate: requiredFor(["word"], text as AnyValidate),
     },
     {
       name: "translation",
       type: "text",
-      maxLength: 300,
+      maxLength: TRANSLATION_MAX,
       validate: requiredFor(["word"], text as AnyValidate),
     },
     {
@@ -228,23 +238,23 @@ export const Suggestions: CollectionConfig = {
     {
       name: "relatedText",
       type: "text",
-      maxLength: 60,
+      maxLength: RELATED_MAX,
       validate: requiredFor(["related"], text as AnyValidate),
     },
     {
       name: "text",
       type: "textarea",
-      maxLength: 1000,
+      maxLength: FACT_MAX,
       admin: {
         description: "Beispielsatz (max. 200 Zeichen) oder Text zum Wissenswerten (max. 1000).",
       },
-      validate: limitFor({ example: 200 }, ["example", "fact"], textarea as AnyValidate),
+      validate: limitFor({ example: EXAMPLE_MAX }, ["example", "fact"], textarea as AnyValidate),
     },
-    { name: "highdeutsch", type: "text", maxLength: 200 },
+    { name: "highdeutsch", type: "text", maxLength: HIGHDEUTSCH_MAX },
     {
       name: "example",
       type: "textarea",
-      maxLength: 1000,
+      maxLength: SUGGESTED_EXAMPLE_MAX,
       admin: {
         description:
           "Nur bei „Neues Wort“: optionaler Beispielsatz. Für „Beispielsatz“ siehe Feld Text.",
@@ -253,7 +263,7 @@ export const Suggestions: CollectionConfig = {
     {
       name: "userName",
       type: "text",
-      maxLength: 100,
+      maxLength: SUGGESTER_NAME_MAX,
       access: { read: notOverMcp, update: notOverMcp },
     },
     { name: "userMail", type: "email", access: { read: notOverMcp, update: notOverMcp } },

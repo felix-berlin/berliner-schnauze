@@ -1,68 +1,5 @@
 <template>
   <DropdownPopover
-    v-if="variant === 'word'"
-    :name="`word-options-${slug ?? ''}`"
-    :offset="6"
-    placement="bottom-end"
-    theme="bare"
-    class="c-options-dropdown"
-  >
-    <template #default="{ triggerProps }">
-      <button
-        v-bind="triggerProps"
-        aria-haspopup="menu"
-        aria-label="Weitere Aktionen"
-        class="c-icon-button"
-        type="button"
-        @keydown.down.prevent="focusItem(0)"
-      >
-        <EllipsisVertical width="18" height="18" aria-hidden="true" />
-      </button>
-      <span aria-live="polite" class="u-sr-only" role="status">{{ announcement }}</span>
-    </template>
-
-    <template #panel>
-      <div
-        ref="menuEl"
-        aria-label="Weitere Aktionen"
-        class="c-word-menu"
-        role="menu"
-        @keydown="onMenuKeydown"
-      >
-        <button class="item" role="menuitem" type="button" @click="shareOrCopy">
-          <Share2 width="18" height="18" aria-hidden="true" />
-          <span>Wort teilen</span>
-        </button>
-        <button
-          v-if="clipBoardIsSupported"
-          :data-done="done === 'link'"
-          class="item"
-          role="menuitem"
-          type="button"
-          @click="copyLink"
-        >
-          <Check v-if="done === 'link'" width="18" height="18" aria-hidden="true" />
-          <Link v-else width="18" height="18" aria-hidden="true" />
-          <span>{{ done === "link" ? "Link kopiert" : "Link kopieren" }}</span>
-        </button>
-        <button
-          v-if="clipBoardIsSupported"
-          :data-done="done === 'word'"
-          class="item"
-          role="menuitem"
-          type="button"
-          @click="copyWord"
-        >
-          <Check v-if="done === 'word'" width="18" height="18" aria-hidden="true" />
-          <Copy v-else width="18" height="18" aria-hidden="true" />
-          <span>{{ done === "word" ? "Wort kopiert" : "Wort kopieren" }}</span>
-        </button>
-      </div>
-    </template>
-  </DropdownPopover>
-
-  <DropdownPopover
-    v-else
     :name="`word-options-${slug ?? ''}`"
     placement="bottom-end"
     theme="menu"
@@ -127,61 +64,18 @@ import { reportError } from "@utils/reportError.ts";
 import { reportWord } from "@utils/wordPulse.ts";
 import { useClipboard, useShare } from "@vueuse/core";
 import { SITE_URL } from "astro:env/client";
-import Check from "virtual:icons/lucide/check";
 import Copy from "virtual:icons/lucide/copy";
 import Link from "virtual:icons/lucide/link";
 import Share2 from "virtual:icons/lucide/share-2";
-import { defineAsyncComponent, onBeforeUnmount, ref } from "vue";
+import { defineAsyncComponent } from "vue";
 
 interface WordProps {
   berlinerisch: string;
   slug: string;
-  /** "word": the v3 word page menu (no toasts, in-menu "kopiert" state). Default: the list menu. */
-  variant?: "list" | "word";
   wordId?: number;
 }
 
-const { berlinerisch, slug, variant = "list", wordId } = defineProps<WordProps>();
-
-const menuEl = ref<HTMLElement | null>(null);
-const done = ref<"link" | "word" | null>(null);
-const announcement = ref("");
-let doneTimer: ReturnType<typeof setTimeout> | undefined;
-onBeforeUnmount(() => clearTimeout(doneTimer));
-
-/** Icon becomes a check and the label "…kopiert" for 2s; no toast, a live region speaks it. */
-const announce = (message: string, ms: number): void => {
-  announcement.value = message;
-  clearTimeout(doneTimer);
-  doneTimer = setTimeout(() => {
-    done.value = null;
-    announcement.value = "";
-  }, ms);
-};
-const markDone = (what: "link" | "word"): void => {
-  done.value = what;
-  announce(what === "link" ? "Link kopiert" : "Wort kopiert", 2000);
-};
-
-const items = (): HTMLElement[] =>
-  Array.from(menuEl.value?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? []);
-
-const focusItem = (index: number): void => {
-  const list = items();
-  list[(index + list.length) % list.length]?.focus();
-};
-
-// Esc and focus return to the trigger come from the popover itself (DropdownPopover.onToggle); Tab closes.
-const onMenuKeydown = (event: KeyboardEvent): void => {
-  const at = items().indexOf(document.activeElement as HTMLElement);
-  if (event.key === "ArrowDown") focusItem(at + 1);
-  else if (event.key === "ArrowUp") focusItem(at - 1);
-  else if (event.key === "Home") focusItem(0);
-  else if (event.key === "End") focusItem(-1);
-  else if (event.key === "Tab") menuEl.value?.closest<HTMLElement>("[popover]")?.hidePopover();
-  else return;
-  if (event.key !== "Tab") event.preventDefault();
-};
+const { berlinerisch, slug, wordId } = defineProps<WordProps>();
 
 const EllipsisVertical = defineAsyncComponent(
   () => import("virtual:icons/lucide/ellipsis-vertical"),
@@ -192,12 +86,6 @@ const { isSupported: shareIsSupported, share } = useShare();
 
 const COPY_FAILED = "Kopieren hat nich jeklappt";
 
-/** Tells the user a copy failed: live region in the word menu, toast in the list menu. */
-const failed = (): void => {
-  if (variant === "word") announce(COPY_FAILED, 4000);
-  else createToastNotify({ message: COPY_FAILED, status: "error" });
-};
-
 /** copy() swallows Clipboard API errors and without any clipboard support it does nothing: both count as failed, never as "kopiert". */
 const copyText = async (value: string): Promise<boolean> => {
   try {
@@ -206,7 +94,7 @@ const copyText = async (value: string): Promise<boolean> => {
     return true;
   } catch (error) {
     reportError(error);
-    failed();
+    createToastNotify({ message: COPY_FAILED, status: "error" });
     return false;
   }
 };
@@ -235,19 +123,10 @@ const shareWord = async (slug: string): Promise<void> => {
     return;
   }
   if (wordId !== undefined) reportWord(wordId, "share");
-  if (variant === "list") createToastNotify({ message: "Wort geteilt", status: "success" });
+  createToastNotify({ message: "Wort geteilt", status: "success" });
 
   trackEvent("Word Share", "Word shared", `Word: ${slug}`);
 };
-
-/** Word page menu: share where the browser can, otherwise copy the link instead. */
-const shareOrCopy = async (): Promise<void> => {
-  if (shareIsSupported.value) await shareWord(slug ?? "");
-  else await copyWordPageUrlToClipboard(slug ?? "");
-};
-
-const copyLink = () => copyWordPageUrlToClipboard(slug ?? "");
-const copyWord = () => copyNameToClipboard(berlinerisch ?? "");
 
 /**
  * Copy the word page url to the clipboard
@@ -258,8 +137,7 @@ const copyWord = () => copyNameToClipboard(berlinerisch ?? "");
  */
 const copyWordPageUrlToClipboard = async (slug: string): Promise<void> => {
   if (!(await copyText(SITE_URL + routeToWord(slug)))) return;
-  if (variant === "word") markDone("link");
-  else createToastNotify({ message: "Link kopiert", status: "success" });
+  createToastNotify({ message: "Link kopiert", status: "success" });
 
   trackEvent("Word Copy Link", "Word link copied", `Word: ${slug}`);
 };
@@ -273,8 +151,7 @@ const copyWordPageUrlToClipboard = async (slug: string): Promise<void> => {
  */
 const copyNameToClipboard = async (name: string): Promise<void> => {
   if (!(await copyText(name))) return;
-  if (variant === "word") markDone("word");
-  else createToastNotify({ message: "Wort kopiert", status: "success" });
+  createToastNotify({ message: "Wort kopiert", status: "success" });
 
   trackEvent("Word Copy", "Word copied", `Word: ${name}`);
 };
@@ -282,5 +159,4 @@ const copyNameToClipboard = async (name: string): Promise<void> => {
 
 <style lang="scss">
 @use "@styles/components/options-dropdown";
-@use "@styles/components/word-menu";
 </style>

@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
 import { authorTagOf, visitorId, voterKey } from "@services/payload/comments.ts";
-import { wordIdBySlug } from "@services/payload/wordId.ts";
+import { cachedWordIdBySlug } from "@services/payload/wordId.ts";
 import { reply } from "@utils/apiReply.ts";
 import { logRouteError } from "@utils/logError.ts";
 
@@ -15,11 +15,13 @@ export const GET: APIRoute = async ({ cookies, url }) => {
   const slug = url.searchParams.get("word");
   if (!slug) return reply({ error: "Ungültige Anfrage" }, 400);
 
+  // Without the cookie there is nothing of theirs to show: no query at all.
+  const visitor = visitorId(cookies, false);
+  if (!visitor) return reply({ pending: [], reactions: {} }, 200);
+
   try {
-    const wordId = await wordIdBySlug(slug);
+    const wordId = await cachedWordIdBySlug(slug);
     if (wordId === null) return reply({ error: "Wort nicht gefunden" }, 404);
-    const visitor = visitorId(cookies, false);
-    if (!visitor) return reply({ pending: [], reactions: {} }, 200);
 
     const payload = await getPayloadClient();
     const top = { parent: { exists: false }, word: { equals: wordId } } as const;

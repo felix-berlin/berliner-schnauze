@@ -29,9 +29,16 @@ export type WordExample = Omit<NonNullable<WordExamplesArray>[number], "exampleA
   exampleAudio: AudioRow[];
 };
 export type RelatedWord = Pick<PayloadWord, "berlinerisch" | "id"> & { slug: string };
-/** A fact with the contributor's suggestion as its id (the suggestion doc itself holds personal data, never read). */
-export type SiteFact = Omit<NonNullable<PayloadWord["facts"]>[number], "contributorSuggestion"> & {
+/**
+ * A fact with the contributor's suggestion as its id (the suggestion doc itself holds personal data, never read) and
+ * its rich text as HTML, converted once per cache window; `html` is empty for a blank text.
+ */
+export type SiteFact = Omit<
+  NonNullable<PayloadWord["facts"]>[number],
+  "contributorSuggestion" | "text"
+> & {
   contributorSuggestion?: number;
+  html: string;
 };
 /** A related entry: `word` only when it is a public word with a slug (otherwise `label` is the text). */
 export type SiteRelated = Omit<
@@ -148,9 +155,10 @@ export const toWord = ({
   examples: (examples ?? []).map(({ exampleAudio, ...e }) =>
     Object.assign(e, { exampleAudio: audioRows(exampleAudio) }),
   ),
-  facts: facts?.map(({ contributorSuggestion, ...f }) => ({
+  facts: facts?.map(({ contributorSuggestion, text, ...f }) => ({
     ...f,
     contributorSuggestion: suggestionId(contributorSuggestion),
+    html: hasLexicalText(text) ? lexicalToHtml(text) : "",
   })),
   grammar: grammar && { diminutive: toRelatedWord(grammar.diminutive), plural: grammar.plural },
   hasInfoText: hasLexicalText(infoText),

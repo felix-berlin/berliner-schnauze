@@ -1,6 +1,7 @@
 import type { MyFeedback, WordFeedbackState } from "@utils/wordFeedbackSchema.ts";
 
 import { createToastNotify } from "@stores/toastNotify.ts";
+import { safeGet, safeGetJson, safeSet } from "@utils/safeStorage.ts";
 import { atom } from "nanostores";
 import {
   AGES,
@@ -58,47 +59,23 @@ export const parseProfile = (raw: unknown): Profile => {
   return out as Profile;
 };
 
-const safeJsonParse = (s: string): unknown => {
-  try {
-    return JSON.parse(s);
-  } catch {
-    return undefined;
-  }
-};
-
 const PROFILE_KEY = "bs-word-feedback-profile";
 const REMEMBER_KEY = "bs-word-feedback-remember";
-// localStorage can be missing (SSR) or throw (blocked): the profile then lives in memory only.
-const read = (key: string): string | null => {
-  try {
-    return localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-};
-const write = (key: string, value: string | null) => {
-  try {
-    if (value === null) localStorage.removeItem(key);
-    else localStorage.setItem(key, value);
-  } catch {
-    /* in memory only */
-  }
-};
-
+// Storage can be missing (SSR) or blocked: the profile then lives in memory only (safeStorage stays silent).
 /** The visitor ticked "remember my answers": only then the profile is kept in the browser (§ 25 TDDDG). */
-export const $remember = atom(read(REMEMBER_KEY) === "yes");
+export const $remember = atom(safeGet(REMEMBER_KEY) === "yes");
 export const $profile = atom<Profile>(
-  $remember.get() ? parseProfile(safeJsonParse(read(PROFILE_KEY) ?? "")) : {},
+  $remember.get() ? parseProfile(safeGetJson(PROFILE_KEY)) : {},
 );
-const persist = () => write(PROFILE_KEY, $remember.get() ? JSON.stringify($profile.get()) : null);
+const persist = () => safeSet(PROFILE_KEY, $remember.get() ? JSON.stringify($profile.get()) : null);
 // A profile saved before the opt-in existed has no consent behind it: drop it.
-if (!$remember.get()) write(PROFILE_KEY, null);
+if (!$remember.get()) safeSet(PROFILE_KEY, null);
 $profile.listen(persist);
 
 export const setRemember = (on: boolean) => {
   $remember.set(on);
-  write(REMEMBER_KEY, on ? "yes" : null);
-  write(PROFILE_KEY, on ? JSON.stringify($profile.get()) : null);
+  safeSet(REMEMBER_KEY, on ? "yes" : null);
+  safeSet(PROFILE_KEY, on ? JSON.stringify($profile.get()) : null);
 };
 
 export const nextStep = (
@@ -271,22 +248,4 @@ export const deleteFeedback = async (wordId: number): Promise<boolean> => {
     console.error(`[word-feedback] delete ${wordId} failed:`, error);
     return false;
   }
-};
-
-/** Deletes every answer tied to this browser (all words) and forgets the stored profile. */
-export const deleteAllFeedback = async (wordId: number): Promise<boolean> => {
-  try {
-    const res = await fetch(ENDPOINT, { method: "DELETE" });
-    if (!res.ok) throw new Error(String(res.status));
-  } catch (error) {
-    console.error("[word-feedback] delete all failed:", error);
-    createToastNotify({ message: "Hat nich jeklappt, versuch's nochma.", status: "error" });
-    return false;
-  }
-  $profile.set({});
-  setRemember(false);
-  loadedFor = null;
-  stateVersion++;
-  await loadFeedback(wordId);
-  return true;
 };

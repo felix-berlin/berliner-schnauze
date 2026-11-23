@@ -8,7 +8,6 @@ import {
   $profile,
   $sendError,
   answerUsage,
-  deleteAllFeedback,
   deleteFeedback,
   loadFeedback,
   refreshFeedback,
@@ -429,28 +428,6 @@ describe("answerUsage", () => {
       word: 5,
     });
     expect(f.mock.calls[0][1].method).toBe("PATCH");
-  });
-});
-
-describe("deleteAllFeedback", () => {
-  it("sends DELETE, forgets the profile and reloads the word", async () => {
-    $profile.set({ area: "pankow" });
-    const fetchMock = vi.fn().mockResolvedValueOnce({ ok: true }).mockResolvedValueOnce(ok());
-    vi.stubGlobal("fetch", fetchMock);
-    expect(await deleteAllFeedback(7)).toBe(true);
-    expect(fetchMock.mock.calls[0]).toEqual(["/api/word-feedback", { method: "DELETE" }]);
-    expect($profile.get()).toEqual({});
-    expect(fetchMock.mock.calls[1][0]).toBe("/api/word-feedback?word=7");
-    vi.unstubAllGlobals();
-  });
-
-  it("keeps everything and toasts when the delete fails", async () => {
-    $profile.set({ area: "pankow" });
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 502 }));
-    expect(await deleteAllFeedback(7)).toBe(false);
-    expect($profile.get()).toEqual({ area: "pankow" });
-    expect(toast).toHaveBeenCalled();
-    vi.unstubAllGlobals();
   });
 });
 

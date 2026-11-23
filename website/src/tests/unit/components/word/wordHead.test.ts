@@ -96,7 +96,7 @@ describe("WordHead.astro", () => {
   it("passes trend and word of the day on to the badges", async () => {
     const html = await render({
       model: model({
-        trend: { change: null, kind: "beliebt", rank: 7, views7: 5 },
+        trend: { rank: 7, views7: 5 },
         wotd: { date: "2026-11-22" },
       }),
     });
@@ -143,18 +143,13 @@ describe("WordBadges.vue", () => {
 
   // The tooltip text itself is built on the client by v-tooltip (see wordBadges.test.ts).
   it("shows the trend badge text for the beliebt trend", async () => {
-    const html = await badges({ trend: { kind: "beliebt", rank: 4, views7: 120 } });
+    const html = await badges({ trend: { rank: 4, views7: 120 } });
     expect(html).toContain("Gerade beliebt · Platz 4");
-  });
-
-  it("supports the Im Aufwind variant", async () => {
-    const html = await badges({ trend: { change: 40, kind: "aufwind", views7: 90 } });
-    expect(html).toContain("Im Aufwind · +40 %");
   });
 
   it("renders the word of the day and the trend together", async () => {
     const html = await badges({
-      trend: { kind: "beliebt", rank: 4, views7: 120 },
+      trend: { rank: 4, views7: 120 },
       wotd: { date: "2026-11-22" },
     });
     expect(html).toContain("Wort des Tages");

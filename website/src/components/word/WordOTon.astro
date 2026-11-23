@@ -1,6 +1,6 @@
 ---
 import '@styles/components/_word-oton.scss';
-import { BERLIN_AREAS } from '@/data/berlinAreas.ts';
+import { BEZIRK_NAMES } from '@lib/bezirkNames.ts';
 import type { Story } from '@lib/story.ts';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const { more, story } = Astro.props;
-const district = BERLIN_AREAS.find((a) => a.key === story?.bezirk)?.name;
+const district = story?.bezirk ? BEZIRK_NAMES[story.bezirk] : undefined;
 const author = story?.name || 'aus der Community';
 ---
 

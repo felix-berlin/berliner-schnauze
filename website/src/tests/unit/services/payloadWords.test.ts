@@ -186,7 +186,11 @@ describe("toWord", () => {
     const { toWord } = await load();
     const word = toWord({
       ...doc,
-      facts: [{ contributorSuggestion: { id: 31 }, kind: "herkunft", text: "Invented." }],
+      facts: [
+        { contributorSuggestion: { id: 31 }, kind: "herkunft", text: lexical("Invented.") },
+        { kind: "herkunft", text: lexical("  ") },
+        { kind: "herkunft" },
+      ],
       grammar: { diminutive: { berlinerisch: "Aaschen", id: 8, slug: "aaschen" }, plural: "Aasen" },
       related: [
         {
@@ -201,8 +205,11 @@ describe("toWord", () => {
       diminutive: { berlinerisch: "Aaschen", id: 8, slug: "aaschen" },
       plural: "Aasen",
     });
+    // The rich text is converted once here; a blank or missing one leaves `html` empty.
     expect(word.facts).toEqual([
-      { contributorSuggestion: 31, kind: "herkunft", text: "Invented." },
+      { contributorSuggestion: 31, html: "<p>Invented.</p>", kind: "herkunft" },
+      { contributorSuggestion: undefined, html: "", kind: "herkunft" },
+      { contributorSuggestion: undefined, html: "", kind: "herkunft" },
     ]);
     expect(word.related).toEqual([
       {

@@ -204,6 +204,18 @@ import { closeContributeForm, openForm } from "@stores/contribute.ts";
 import { captchaWaitToast } from "@utils/captchaToast.ts";
 import { reportError } from "@utils/reportError.ts";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
+import {
+  EXAMPLE_MAX,
+  FACT_MAX,
+  HIGHDEUTSCH_MAX,
+  MISSING,
+  RELATED_MAX,
+  REPORT_EMAIL_MAX,
+  REPORT_TEXT_MAX,
+  STORY_TEXT_MAX,
+  SUBMISSION_NAME_MAX,
+  TOO_LONG,
+} from "payload-app/submission-limits";
 import CircleAlert from "virtual:icons/lucide/circle-alert";
 import Hourglass from "virtual:icons/lucide/hourglass";
 import { computed, nextTick, reactive, ref, useId, useTemplateRef, watch } from "vue";
@@ -239,17 +251,20 @@ const props = defineProps<{
 }>();
 
 // SPEC §13 limits; the server enforces the same (api/contribute, stories, reports).
-const LIMIT = { email: 200, highdeutsch: 200, name: 40, target: 60 };
+const LIMIT = {
+  email: REPORT_EMAIL_MAX,
+  highdeutsch: HIGHDEUTSCH_MAX,
+  name: SUBMISSION_NAME_MAX,
+  target: RELATED_MAX,
+};
 const TEXT_MAX: Record<FormType, number> = {
-  error: 1000,
-  example: 200,
-  fact: 1000,
+  error: REPORT_TEXT_MAX,
+  example: EXAMPLE_MAX,
+  fact: FACT_MAX,
   related: 0,
-  story: 500,
+  story: STORY_TEXT_MAX,
 };
 const COUNTER_FROM = 0.8;
-const TOO_LONG = "Ditt is ein bisken zu lang.";
-const MISSING = "Ohne Text wird dett nüscht.";
 const COMMUNITY = "Leer lassen, dann steht da „aus der Community“.";
 
 const NAME_HINT: Record<Exclude<FormType, "error">, string> = {

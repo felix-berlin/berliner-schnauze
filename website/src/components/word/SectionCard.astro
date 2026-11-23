@@ -6,33 +6,27 @@ import type { ContributeType } from '@lib/contribute.ts';
 interface Props {
   id: string;
   title: string;
-  level?: 2 | 3;
-  /** Number shown next to the title (muted), only when greater than 0. */
-  count?: number;
   /** Replaces the body when the card has no content (SPEC §6/§9/§10): invitation text and the label of the outline button. */
   gap?: { text: string; cta: string };
   /** Renders the "Ergänzen" pill (only while the card has content) and the gap button; wired through `data-contribute` by `initContributeTriggers`. */
   contribute?: ContributeType;
-  /** false: the surrounding wrapper owns the anchor id and its scroll margin (v18 page); the id then only names the heading. */
-  anchor?: boolean;
   /** Slug of the word: with `contribute` the card mounts its form and the list of the visitor's own open suggestions. */
   slug?: string;
-  /** Text next to the title instead of a count ("3 Jeschichten", "Noch keene"). */
+  /** Text next to the title ("3 Jeschichten", "Noch keene"). */
   meta?: string;
 }
 
-const { anchor = true, contribute, count, gap, id, level = 2, meta, slug, title } = Astro.props;
-const Heading = `h${level}` as 'h2' | 'h3';
+// The surrounding wrapper owns the anchor id and its scroll margin; the id here only names the heading.
+const { contribute, gap, id, meta, slug, title } = Astro.props;
 // Slots passed as `cond && …` still count as present, so test the rendered output.
 const body = (await Astro.slots.render('default'))?.trim();
 const footer = (await Astro.slots.render('footer'))?.trim();
 const headingId = `heading-${id}`;
 ---
 
-<section class='c-section-card' data-variant={anchor ? 'word' : 'sheet v18'} data-form={contribute && slug ? contribute : undefined} id={anchor ? id : undefined} aria-labelledby={headingId}>
+<section class='c-section-card' data-variant='sheet v18' data-form={contribute && slug ? contribute : undefined} aria-labelledby={headingId}>
   <div class='header'>
-    <Heading class='title' id={headingId}>{title}</Heading>
-    {count !== undefined && count > 0 && <span class='count'>{count}</span>}
+    <h3 class='title' id={headingId}>{title}</h3>
     {meta && <span class='count'>{meta}</span>}
     {contribute && !gap && (
       <button class='c-button' data-variant='pill' type='button' data-contribute={contribute} aria-expanded='false'>

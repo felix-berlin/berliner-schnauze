@@ -68,3 +68,62 @@ describe("fetchStories", () => {
     expect((await (await load()).fetchStories(1, 1)).featured?.id).toBe("7");
   });
 });
+
+// A small in-memory comments table: 45 published stories, newest first (ids 45..1), `featuredId` flagged.
+describe("fetchStories against a fake table", () => {
+  const fake = (featuredId?: number) => {
+    const rows = Array.from({ length: 45 }, (_, i) => ({
+      ...doc(45 - i),
+      featured: 45 - i === featuredId,
+    }));
+    find.mockImplementation(async ({ limit, page = 1, where }) => {
+      const hit = rows.filter(
+        (r) => (!where.featured || r.featured) && (!where.id || r.id !== where.id.not_equals),
+      );
+      const docs = hit.slice((page - 1) * limit, page * limit);
+      return { docs, hasNextPage: page * limit < hit.length, totalDocs: hit.length };
+    });
+  };
+  const ids = (b: { items: { id: string }[] }) => b.items.map((i) => i.id);
+
+  it("without a featured story: the 20 newest, 45 in total", async () => {
+    fake();
+    const { fetchStories } = await load();
+    const body = await fetchStories(1, 1);
+    expect(body).toMatchObject({ featured: null, hasMore: true, page: 1, total: 45 });
+    expect(ids(body)).toEqual(Array.from({ length: 20 }, (_, i) => String(45 - i)));
+  });
+
+  it("with a featured story on the first page: it leaves the list, the page stays full", async () => {
+    fake(44);
+    const { fetchStories } = await load();
+    const body = await fetchStories(1, 1);
+    expect(body).toMatchObject({ hasMore: true, page: 1, total: 45 });
+    expect(body.featured?.id).toBe("44");
+    expect(ids(body)).toEqual(["45", ...Array.from({ length: 19 }, (_, i) => String(43 - i))]);
+  });
+
+  it("with a featured story deeper in the list: page 1 is the 20 newest, page 2 skips it", async () => {
+    fake(10);
+    const { fetchStories } = await load();
+    const first = await fetchStories(1, 1);
+    expect(first.featured?.id).toBe("10");
+    expect(ids(first)).toEqual(Array.from({ length: 20 }, (_, i) => String(45 - i)));
+    const third = await fetchStories(1, 3);
+    expect(third).toMatchObject({ featured: null, hasMore: false, page: 3, total: 45 });
+    expect(ids(third)).toEqual(["4", "3", "2", "1"]);
+  });
+
+  it("no hasMore when the featured one is the only row over a page", async () => {
+    find.mockReset();
+    const rows = Array.from({ length: 21 }, (_, i) => ({ ...doc(21 - i), featured: i === 5 }));
+    find.mockImplementation(async ({ limit, where }) => {
+      const hit = rows.filter((r) => !where.featured || r.featured);
+      return { docs: hit.slice(0, limit), hasNextPage: false, totalDocs: hit.length };
+    });
+    const { fetchStories } = await load();
+    const body = await fetchStories(1, 1);
+    expect(body).toMatchObject({ hasMore: false, total: 21 });
+    expect(body.items).toHaveLength(20);
+  });
+});

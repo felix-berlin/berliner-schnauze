@@ -1,5 +1,6 @@
 import { ownSubmissions } from "@lib/ownSubmissions.ts";
 import { openContributeForm, openForm } from "@stores/contribute.ts";
+import { onPage } from "@utils/pageLifecycle.ts";
 
 const TRIGGER = "[data-contribute], [data-report]";
 
@@ -69,22 +70,5 @@ export const initContributeTriggers = (root: Document | HTMLElement = document):
  * dropped on `astro:before-swap`; the store's open form is reset there too (it is module-global and would otherwise
  * open the form of the next word on its own). Returns the removal of both listeners.
  */
-export const watchContributeTriggers = (doc: Document = document): (() => void) => {
-  let stop = () => {};
-  const end = () => {
-    stop();
-    stop = () => {};
-    openForm.set(null);
-  };
-  const start = () => {
-    stop();
-    stop = initContributeTriggers(doc);
-  };
-  doc.addEventListener("astro:page-load", start);
-  doc.addEventListener("astro:before-swap", end);
-  return () => {
-    doc.removeEventListener("astro:page-load", start);
-    doc.removeEventListener("astro:before-swap", end);
-    stop();
-  };
-};
+export const watchContributeTriggers = (doc: Document = document): (() => void) =>
+  onPage(() => initContributeTriggers(doc), { doc, onSwap: () => openForm.set(null) });

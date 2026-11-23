@@ -101,28 +101,18 @@ describe("fetchWordPage", () => {
     expect(model.related[2]).not.toHaveProperty("url");
   });
 
-  it("keeps facts with a kind and a text, drops the others, and maps source and contributor", async () => {
-    const rich = (text: string) => ({
-      root: {
-        children: [
-          { children: [{ text, type: "text", version: 1 }], type: "paragraph", version: 1 },
-        ],
-        type: "root",
-        version: 1,
-      },
-    });
+  it("keeps facts with a kind and an html, drops the others, and maps source and contributor", async () => {
     const facts = [
       {
         contributorName: "Invented Name",
         contributorSuggestion: 5,
+        html: "<p>A &lt;b&gt;</p>",
         kind: "herkunft",
         source: "Invented Book",
-        text: rich("A <b>"),
       },
-      { kind: "etymologie", text: rich("B") },
-      { kind: "herkunft", text: rich("  ") },
-      { kind: "herkunft" },
-      { text: rich("no kind") },
+      { html: "<p>B</p>", kind: "etymologie" },
+      { html: "", kind: "herkunft" },
+      { html: "<p>no kind</p>" },
     ];
     m.fetchAllWords.mockResolvedValue(words({ facts }));
     expect((await fetchWordPage("bbb"))!.facts).toEqual([
@@ -237,7 +227,7 @@ describe("fetchWordPage", () => {
     expect((await fetchWordPage("bbb"))!.updatedAt).toBe("2026-02-03T04:05:06.789Z");
   });
 
-  it("maps the weekly top 10 to a beliebt trend; a null change stays null, no percent", async () => {
+  it("maps the weekly top 10 to a trend with rank and weekly views only", async () => {
     m.fetchAllWords.mockResolvedValue(words());
     m.getWordTrend.mockResolvedValue({
       bars: [0, 0, 0, 0, 0, 0, 4],
@@ -246,8 +236,6 @@ describe("fetchWordPage", () => {
       views: 40,
     });
     expect((await fetchWordPage("bbb"))!.trend).toEqual({
-      change: null,
-      kind: "beliebt",
       rank: 3,
       views7: 40,
     });

@@ -2,9 +2,9 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 // Section card: a numbered paper card with header (.num, .title), .body and .footer.
-// Variants: unnumbered; word (word page: sheet surface, no numbers, no header rule, paddings follow
-// the word-main column); sheet (same look outside the word page, BON screens: all corners round,
-// the parent sets the paddings via --section-card-gutter / --section-card-header-block).
+// Variants: unnumbered; sheet (sheet surface, no numbers, no header rule: BON screens and the word page, all
+// corners round, the parent sets the paddings via --section-card-gutter / --section-card-header-block);
+// v18 (word page cards, on top of sheet).
 // Public: --section-card-header-padding, --section-card-body-padding,
 // --section-card-body-end, --section-card-footer-padding, --section-card-footer-align,
 // --section-card-footer-justify, --section-card-header-justify, --section-card-header-wrap,
@@ -19,12 +19,7 @@
     --_footer-block: 0;
     --_footer-inline: 0;
 
-    // Public --word-anchor-offset: a page may publish its anchor offset (below its sticky chrome); the v18 word
-    // page sets none, so every card lands just below the header.
-    scroll-margin-block-start: var(
-      --word-anchor-offset,
-      calc(var(--site-header-height) + var(--space-4))
-    );
+    scroll-margin-block-start: calc(var(--site-header-height) + var(--space-4));
     counter-increment: section-num;
 
     @include mx.paper-card;
@@ -43,9 +38,10 @@
     }
   }
 
-  :scope:is([data-variant~="word"], [data-variant~="sheet"]) {
-    --_inline: var(--space-4);
-    --_header-block: 0.875rem; // exact middle of space-3 and space-4, kept from the mock
+  // The screen decides (BON: from the "word" breakpoint, word page: its main column), so the parent sets the room.
+  :scope[data-variant~="sheet"] {
+    --_inline: var(--section-card-gutter, var(--space-4));
+    --_header-block: var(--section-card-header-block, 0.875rem); // 0.875rem: exact middle of space-3 and space-4, kept from the mock
     --_body-start: 0;
     --_body-end: var(--_inline);
     --_footer-block: var(--space-3);
@@ -53,6 +49,7 @@
 
     background: var(--color-surface-sheet);
     border-color: var(--color-border-card);
+    border-radius: var(--radius-sm);
 
     .num {
       display: none;
@@ -61,22 +58,6 @@
     .header {
       border-block-end: 0;
     }
-  }
-
-  // Word page (SPEC §3/§5): paddings follow the main column width.
-  @container word-main (inline-size >= 36rem) {
-    :scope[data-variant~="word"] {
-      --_inline: var(--space-6);
-      --_header-block: var(--space-4);
-    }
-  }
-
-  // Outside the word page the screen decides (BON: from the "word" breakpoint), so the parent sets the room.
-  :scope[data-variant~="sheet"] {
-    --_inline: var(--section-card-gutter, var(--space-4));
-    --_header-block: var(--section-card-header-block, 0.875rem);
-
-    border-radius: var(--radius-sm);
   }
 
   // v18 word page (SPEC §4.3, §6): condensed title, optional count, the "Ergänzen" pill, gap with outline button.

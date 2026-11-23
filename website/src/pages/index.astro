@@ -189,11 +189,9 @@ const content = {
 </Layout>
 
 <script>
+  import { onPage } from '@utils/pageLifecycle';
   import { revealOnView } from '@utils/revealOnView';
 
   // Re-runs per navigation (ClientRouter); the previous page's observer goes with its DOM.
-  document.addEventListener('astro:page-load', () => {
-    const stop = revealOnView(document);
-    document.addEventListener('astro:before-swap', stop, { once: true });
-  });
+  onPage(() => revealOnView(document));
 </script>

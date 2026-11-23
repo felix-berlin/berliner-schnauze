@@ -5,6 +5,7 @@ import { type PollResult, buildPollResult } from "@lib/pollResult.ts";
 import { disclosureFor, type MoreBook, pickBook, pickMoreBooks } from "@lib/wordBook.ts";
 import { ttlBy } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
+import { fetchPollRows } from "@services/payload/pollRows.ts";
 import { fetchAffiliateData, fetchWordPageGlobal } from "@services/payload/site.ts";
 import { fetchStories } from "@services/payload/stories.ts";
 import { fetchWordRefs, toWordRef } from "@services/payload/wordRefs.ts";
@@ -18,8 +19,6 @@ import { getWordTrend } from "@services/payload/wordTrend.ts";
 import { logRouteError } from "@utils/logError.ts";
 import { alphabeticNeighbors, similarSoundingWords, similarWords } from "@utils/wordHelper.ts";
 import { berlinParts, pickWordOfTheDay } from "@utils/wordOfTheDay.ts";
-import { lexicalToHtml } from "payload-app/lexical-html";
-import { hasLexicalText } from "payload-app/routes";
 import { storyPrompt } from "payload-app/story-prompt";
 import { hypher } from "payload-app/word-derived";
 
@@ -50,8 +49,7 @@ export type WordPageModel = {
   before?: Link;
   after?: Link;
   wotd?: { date: string };
-  /** `change` is the percent against the previous week; null when that week had no views (nothing to compare). */
-  trend?: { kind: "beliebt"; rank: number; views7: number; change: number | null };
+  trend?: { rank: number; views7: number };
   stories: { total: number; items: Story[] };
   featured?: Story;
   storyPrompt: string;
@@ -71,20 +69,10 @@ const contributor = (name?: string | null, suggestion?: number): Contributor | u
     ? undefined
     : { ...(name ? { name } : {}), suggestionId: String(suggestion) };
 
-/** One find, aggregated in code; no visitor data in it (own usage is never part of the model), so it is shared. */
-const fetchPoll = ttlBy(60_000, 500, async (wordId: number) => {
-  const { docs } = await (
-    await getPayloadClient()
-  ).find({
-    collection: "word-feedback",
-    depth: 0,
-    limit: 0,
-    pagination: false,
-    select: { age: true, area: true, half: true, usage: true },
-    where: { word: { equals: wordId } },
-  });
-  return buildPollResult(docs);
-});
+/** No visitor data in it (own usage is never part of the model), so it is shared. */
+const fetchPoll = ttlBy(60_000, 500, async (wordId: number) =>
+  buildPollResult(await fetchPollRows(await getPayloadClient(), wordId)),
+);
 
 /**
  * An optional part of the page: when its source fails the page still renders with `fallback` (the failure is logged
@@ -142,12 +130,12 @@ export const fetchWordPage = async (
         },
       }),
     facts: (word.facts ?? []).flatMap(
-      ({ contributorName, contributorSuggestion, kind, source, text }) => {
+      ({ contributorName, contributorSuggestion, html, kind, source }) => {
         const by = contributor(contributorName, contributorSuggestion);
-        return kind && hasLexicalText(text)
+        return kind && html
           ? [
               {
-                html: lexicalToHtml(text),
+                html,
                 kind,
                 ...(source && { source }),
                 ...(by && { contributor: by }),
@@ -186,8 +174,6 @@ export const fetchWordPage = async (
     syllables: hypher.hyphenate(word.berlinerisch),
     ...(trend && {
       trend: {
-        change: trend.change,
-        kind: "beliebt" as const,
         rank: trend.rank,
         views7: trend.views,
       },

@@ -1,46 +1,9 @@
-// Pure display maths of the word feedback card (WordPoll.vue): result bars, step segments, comparison rows.
+// Pure display maths of the word feedback card (WordPoll.vue): step segments, choices, profile patch.
 
-type Totals = Partial<Record<string, number>>;
-type Compare = {
-  area: number | null;
-  east: number | null;
-  locality: number | null;
-  moved: number | null;
-  west: number | null;
-};
+export const plural = (n: number) =>
+  `${n.toLocaleString("de-DE")} ${n === 1 ? "Stimme" : "Stimmen"}`;
 
-export const plural = (n: number) => `${n} ${n === 1 ? "Stimme" : "Stimmen"}`;
-
-/** One bar per usage option; `percent` is the rounded share of all votes (0 without votes). */
-export const usageBars = <V extends string>(
-  options: readonly { label: string; value: V }[],
-  totals: Totals | undefined,
-  total: number,
-) =>
-  options.map((o) => {
-    const n = totals?.[o.value] ?? 0;
-    return {
-      label: o.label,
-      percent: total ? Math.round((n / total) * 100) : 0,
-      text: plural(n),
-      value: o.value,
-    };
-  });
-
-/** Whole shares of `counts` that sum to exactly `total` (largest remainder); all 0 without votes. */
-export const largestRemainder = (counts: readonly number[], total = 100): number[] => {
-  const sum = counts.reduce((a, b) => a + b, 0);
-  if (!sum) return counts.map(() => 0);
-  const exact = counts.map((n) => (n / sum) * total);
-  const out = exact.map(Math.floor);
-  let left = total - out.reduce((a, b) => a + b, 0);
-  // Ties go to the earlier answer, so the result is stable.
-  for (const i of exact.map((_, i) => i).sort((a, b) => exact[b] - out[b] - (exact[a] - out[a]))) {
-    if (left-- <= 0) break;
-    out[i]++;
-  }
-  return out;
-};
+export { largestRemainder } from "@lib/largestRemainder.ts";
 
 /** Always one segment per step in `all`, so the bar does not jump when optional steps come or go. */
 export const progressSegments = (
@@ -54,22 +17,6 @@ export const progressSegments = (
     if (current === "done" || i < at) return { state: "done", step };
     return { state: i === at ? "current" : "open", step };
   });
-};
-
-/** Comparison groups below the minimum size come back as null and get no row. */
-export const compareRows = (
-  c: Compare | undefined,
-  areaName: string | null | undefined,
-  localityName: string | null | undefined,
-) => {
-  if (!c) return [];
-  return [
-    { label: "Ost-Berliner", share: c.east },
-    { label: "West-Berliner", share: c.west },
-    { label: "Zujezogene", share: c.moved },
-    { label: `in ${areaName}`, share: areaName ? c.area : null },
-    { label: `in ${localityName}`, share: localityName ? c.locality : null },
-  ].filter((r): r is { label: string; share: number } => r.share !== null);
 };
 
 export type Step = "age" | "area" | "done" | "half" | "locality" | "origin" | "usage";
@@ -108,8 +55,6 @@ export const CHOICES: Record<
     { label: "Zujezogen, unter 10 Jahren", value: "movedUnder10" },
   ],
 };
-/** Step order: decides the slide direction of the enter animation. */
-export const ORDER: Step[] = ["usage", "area", "locality", "origin", "half", "age", "done"];
 /** Always six segments, so the bar does not jump when the optional steps come or go. */
 export const ALL_STEPS = ["usage", "area", "locality", "origin", "half", "age"];
 

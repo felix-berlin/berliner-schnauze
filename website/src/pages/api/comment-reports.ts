@@ -2,28 +2,22 @@ import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
 import { visitorId, voterKey } from "@services/payload/comments.ts";
-import { captchaGate, isUniqueViolation, orNull, reply } from "@utils/apiReply.ts";
+import { isUniqueViolation, orNull, parseSubmission, reply } from "@utils/apiReply.ts";
 import { reportSchema } from "@utils/commentSchema.ts";
 import { logRouteError } from "@utils/logError.ts";
-import { clientIp, rateLimitedBy, refundHit, requestIp } from "@utils/rateLimit.ts";
+import { clientIp, rateLimitedBy, refundHit } from "@utils/rateLimit.ts";
 
 /**
  * Reports are idempotent: a repeat on the same comment (same IP within 24 h, or same visitor cookie) answers like
  * the first, so nothing leaks.
  */
 export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
-  const body: unknown = await request.json().catch(() => undefined);
-  if (typeof body !== "object" || body === null) return reply({ error: "Ungültige Anfrage" }, 400);
-  const input = reportSchema.safeParse(body);
-  if (!input.success) return reply({ error: "Ungültige Eingabe" }, 400);
+  const parsed = await parseSubmission(request, clientAddress, reportSchema, {
+    plainInvalid: true,
+  });
+  if ("response" in parsed) return parsed.response;
 
-  const blocked = await captchaGate(
-    body,
-    requestIp(request.headers.get("x-forwarded-for"), clientAddress),
-  );
-  if (blocked) return blocked;
-
-  const { commentId, reason } = input.data;
+  const { commentId, reason } = parsed.data;
   try {
     const payload = await getPayloadClient();
     const comment = await orNull(

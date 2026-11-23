@@ -19,6 +19,23 @@ export const AREAS = [
   "brandenburg",
   "elsewhere",
 ] as const;
+/** Display name of every area: the single source for the Bezirk names (map, stories, home stats). */
+export const AREA_NAMES: Record<(typeof AREAS)[number], string> = {
+  mitte: "Mitte",
+  "friedrichshain-kreuzberg": "Friedrichshain-Kreuzberg",
+  pankow: "Pankow",
+  "charlottenburg-wilmersdorf": "Charlottenburg-Wilmersdorf",
+  spandau: "Spandau",
+  "steglitz-zehlendorf": "Steglitz-Zehlendorf",
+  "tempelhof-schoeneberg": "Tempelhof-Schöneberg",
+  neukoelln: "Neukölln",
+  "treptow-koepenick": "Treptow-Köpenick",
+  "marzahn-hellersdorf": "Marzahn-Hellersdorf",
+  lichtenberg: "Lichtenberg",
+  reinickendorf: "Reinickendorf",
+  brandenburg: "Brandenburg",
+  elsewhere: "Woanders",
+};
 export const ORIGINS = ["grewUp", "movedOver10", "movedUnder10"] as const;
 export const HALVES = ["east", "west", "both"] as const;
 export const AGES = [

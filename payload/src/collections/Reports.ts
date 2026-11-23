@@ -7,6 +7,7 @@ import type {
 import { authenticatedOnly } from "../access";
 import { notifyEditors } from "../lib/notifyEditors";
 import { requiredSelect } from "../lib/requiredField";
+import { REPORT_TEXT_MAX } from "../lib/submissionLimits";
 import { REPORT_KINDS } from "../lib/suggestionEnums";
 
 const REPORT_KIND_LABEL: Record<(typeof REPORT_KINDS)[number], string> = {
@@ -68,7 +69,7 @@ export const Reports: CollectionConfig = {
       validate: requiredSelect,
       options: REPORT_KINDS.map((value) => ({ label: REPORT_KIND_LABEL[value], value })),
     },
-    { name: "text", type: "textarea", required: true, maxLength: 1000, label: "Text" },
+    { name: "text", type: "textarea", required: true, maxLength: REPORT_TEXT_MAX, label: "Text" },
     {
       name: "email",
       type: "email",

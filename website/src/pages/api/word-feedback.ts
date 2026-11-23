@@ -3,6 +3,7 @@ import type { APIRoute } from "astro";
 import { buildPollResult } from "@lib/pollResult.ts";
 import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { sha256, visitorId } from "@services/payload/comments.ts";
+import { fetchPollRows } from "@services/payload/pollRows.ts";
 import { isUniqueViolation, orNull, positiveInt, reply } from "@utils/apiReply.ts";
 import { logRouteError } from "@utils/logError.ts";
 import { clientIp, rateLimitedBy } from "@utils/rateLimit.ts";
@@ -76,16 +77,9 @@ export const GET: APIRoute = async ({ cookies, url }) => {
     const mine = doc ? toMine(doc) : null;
     // One find, aggregated in code. The result is the same for everyone; only mine/own depend on the cookie, so the
     // answer stays per visitor and uncached (no-store), as before.
-    const [shown, { docs: rows }] = await Promise.all([
+    const [shown, rows] = await Promise.all([
       state(payload, word, mine),
-      payload.find({
-        collection: "word-feedback",
-        depth: 0,
-        limit: 0,
-        pagination: false,
-        select: { age: true, area: true, half: true, usage: true },
-        where: { word: { equals: word } },
-      }),
+      fetchPollRows(payload, word),
     ]);
     return reply({ ...shown, result: buildPollResult(rows, mine?.usage ?? undefined) }, 200);
   } catch (error) {

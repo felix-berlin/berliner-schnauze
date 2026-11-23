@@ -50,7 +50,7 @@ const lightboxImages = await Promise.all(
 
 <!--
   Shell of the v18 word page (SPEC §2): the table of contents and the main column with the anchors in page
-  order. Each section is a named slot; the cards fill them in later tasks (analysis 14; the head of task 12 is the default of `bedeutung`).
+  order. Each section is a named slot; its default content is the matching card (the head for `bedeutung`).
   The wrappers own the anchor ids (and the scroll margin): a card placed in a slot must not repeat the id.
 -->
 <article class='o-word-v18'>
@@ -83,7 +83,7 @@ const lightboxImages = await Promise.all(
     {/* A draft preview has no poll and no Jeschichten: both would vote and post against the live word. */}
     {!draft && <div class='anchor' id='sagste'><slot name='sagste'><WordPoll client:visible initial={model.poll} label={model.word.berlinerisch} slug={model.word.slug} wordId={model.word.id} /></slot></div>}
     {!draft && <div class='anchor' id='jeschichten'><slot name='jeschichten'>
-      <SectionCard anchor={false} id='jeschichten' title='Jeschichten' level={3} meta={model.stories.total > 0 ? `${model.stories.total} Jeschichten` : 'Noch keene'}>
+      <SectionCard id='jeschichten' title='Jeschichten' meta={model.stories.total > 0 ? `${model.stories.total} Jeschichten` : 'Noch keene'}>
         <WordStories client:visible label={model.word.berlinerisch} prompt={model.storyPrompt} word={model.word.slug} initial={{ featured: model.featured ?? null, items: model.stories.items, total: model.stories.total }} />
       </SectionCard>
     </slot></div>}

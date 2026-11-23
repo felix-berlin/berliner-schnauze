@@ -23,7 +23,7 @@ const { id, rows, title } = Astro.props;
 {rows.length > 0 && (
   <div class='c-word-analyse'>
     <div class='wide'>
-      <SectionCard anchor={false} id={id} title={title} level={3}>
+      <SectionCard id={id} title={title}>
         <AnalysisRows rows={rows} />
       </SectionCard>
     </div>

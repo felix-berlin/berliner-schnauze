@@ -1,4 +1,7 @@
+import type { ZodType } from "zod";
+
 import { verifyTurnstile } from "@services/turnstile.ts";
+import { requestIp } from "@utils/rateLimit.ts";
 
 export const reply = (body: unknown, status: number) =>
   Response.json(body, { headers: { "Cache-Control": "no-store" }, status });
@@ -44,4 +47,36 @@ export const captchaGate = async (body: unknown, ip?: string): Promise<Response 
       503,
     );
   return captcha === "fail" ? reply({ error: "Captcha nicht bestanden" }, 403) : null;
+};
+
+/**
+ * The common start of a submit route: JSON object body, schema, then the captcha, in that order (nothing is looked up
+ * before the visitor passed). `{ response }` is the refusal to send; an invalid input answers the first issue as
+ * `{ field, message }`, or the plain "Ungültige Eingabe" with `plainInvalid`.
+ */
+export const parseSubmission = async <S extends ZodType>(
+  request: Request,
+  clientAddress: string,
+  schema: S,
+  { plainInvalid = false } = {},
+): Promise<{ data: S["_output"] } | { response: Response }> => {
+  const body: unknown = await request.json().catch(() => undefined);
+  if (typeof body !== "object" || body === null)
+    return { response: reply({ error: "Ungültige Anfrage" }, 400) };
+
+  const input = schema.safeParse(body);
+  if (!input.success) {
+    const issue = input.error.issues[0]!;
+    return {
+      response: plainInvalid
+        ? reply({ error: "Ungültige Eingabe" }, 400)
+        : reply({ field: String(issue.path[0] ?? ""), message: issue.message }, 400),
+    };
+  }
+
+  const blocked = await captchaGate(
+    body,
+    requestIp(request.headers.get("x-forwarded-for"), clientAddress),
+  );
+  return blocked ? { response: blocked } : { data: input.data };
 };
