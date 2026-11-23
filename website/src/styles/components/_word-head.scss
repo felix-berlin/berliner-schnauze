@@ -96,12 +96,13 @@
 
   :scope[data-variant="images"] .inner {
     @container word-head (inline-size >= 35rem) {
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      // the image column (with its bleed) is 2/5 of the head, like the mock's 3fr 2fr
+      grid-template-columns: minmax(0, 1fr) calc(100cqi * 2 / 5 - var(--_pad-x));
       column-gap: var(--_pad-x);
       grid-template-rows: repeat(8, auto) 1fr;
     }
     @container word-head (inline-size >= 56rem) {
-      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr) calc(100cqi / 2.25 - var(--_pad-x)); // mock 1.25fr 1fr over the whole head
     }
 
     .images {
@@ -112,6 +113,8 @@
         --word-images-strip-display: none;
         --word-images-hero-display: flex;
 
+        display: flex; // the hero copy of WordImages grows to the column height
+        flex-direction: column;
         padding: var(--space-6); // mock .w16 .w10__gal: 24px
         background: var(--color-surface-chip);
         // bleeds over the head padding to the card edge (end, top, bottom)
