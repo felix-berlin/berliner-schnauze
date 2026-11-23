@@ -131,7 +131,8 @@
   :scope[data-variant~="outline"] {
     --_bg: var(--button-bg, transparent);
     --_color: var(--button-color, var(--color-text-strong));
-    --_border-color: var(--button-border-color, var(--color-accent-active));
+    // Owner feedback: orange-500 read as red, the rim takes the lighter icon orange (SPEC §4.3 names orange-500).
+    --_border-color: var(--button-border-color, var(--color-accent-icon));
 
     display: var(--button-display, inline-flex);
     align-items: center;

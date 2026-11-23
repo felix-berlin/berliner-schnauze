@@ -33,7 +33,7 @@
     --color-surface-card3: light-dark(#f5dfca, #46525e); // --card3: hover/selected of card2, never --t3 text on it
     --color-text-muted: light-dark(#5f6b77, #a8b2bc); // --t3
     // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w17__ipa: ink-strong at .2 / .13, no token
-    --color-word-ipa-outline: light-dark(rgb(60 67 75 / 20%), rgb(249 249 249 / 13%)); // mock .w17__ipa: ink-strong at .2 / .13
+    --color-word-ipa-outline: light-dark(rgb(60 67 75 / 35%), rgb(249 249 249 / 28%)); // mock .w17__ipa: ink-strong at .2 / .13, raised: the mock values vanish on real screens (design feedback)
     // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w17__init: ink at .12 / .09, no token
     --color-word-initial: light-dark(rgb(43 51 59 / 12%), rgb(255 255 255 / 9%)); // mock .w17__init
     // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w18__menu shadow, no token
