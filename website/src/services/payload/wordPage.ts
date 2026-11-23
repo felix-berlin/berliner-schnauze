@@ -1,7 +1,7 @@
 import type { Story } from "@lib/story.ts";
 
 import { type PollResult, buildPollResult } from "@lib/pollResult.ts";
-import { disclosureFor, pickBook } from "@lib/wordBook.ts";
+import { disclosureFor, pickBook, pickMoreBooks } from "@lib/wordBook.ts";
 import { ttlBy } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { fetchAffiliateData, fetchWordPageGlobal } from "@services/payload/site.ts";
@@ -55,6 +55,8 @@ export type WordPageModel = {
   featuredStoryId?: string;
   storyPrompt: string;
   book?: { title: string; url: string; cover?: string; disclosure?: string };
+  /** Further books for the footer column next to the book tip; only set together with `book`. */
+  moreBooks?: { title: string; url: string; cover?: string; note?: string }[];
   poll: PollResult;
   updatedAt: string;
 };
@@ -106,6 +108,7 @@ export const fetchWordPage = async (
     fetchPoll(word.id),
   ]);
   const book = pickBook(affiliate.books, word.themen[0]?.id);
+  const moreBooks = pickMoreBooks(affiliate.books, book);
   const disclosure = book?.href ? disclosureFor(book.href, affiliate.disclaimers) : undefined;
   const { day, month, year } = berlinParts(now);
 
@@ -120,6 +123,17 @@ export const fetchWordPage = async (
           ...(book.imageUrl && { cover: book.imageUrl }),
           ...(disclosure && { disclosure }),
         },
+      }),
+    ...(book?.title &&
+      book.href &&
+      moreBooks.length > 0 && {
+        moreBooks: moreBooks.map((b) =>
+          Object.assign(
+            { title: b.title ?? "", url: b.href ?? "" },
+            b.imageUrl && { cover: b.imageUrl },
+            b.description && { note: b.description },
+          ),
+        ),
       }),
     facts: (word.facts ?? []).flatMap(
       ({ contributorName, contributorSuggestion, kind, source, text }) => {

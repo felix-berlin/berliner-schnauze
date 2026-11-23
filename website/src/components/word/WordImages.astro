@@ -7,10 +7,9 @@ interface Props {
   images: WordImage[];
   /** strip: below the hero (< 808px). hero: inside the hero (from 808px). Both are in the page, CSS shows one. */
   placement: 'strip' | 'hero';
-  learnMore?: string | null | undefined;
 }
 
-const { images, placement, learnMore } = Astro.props;
+const { images, placement } = Astro.props;
 const hero = placement === 'hero';
 const widths = hero ? [220, 330, 440, 660] : [320, 480, 640, 800];
 // The hero copy sits in the image column once .o-word-main is >= 45.5rem wide (about a 1000px viewport, see _word-hero.scss); below that the 70vw/380px split mirrors it.
@@ -60,16 +59,4 @@ const preloadMedia = hero ? '(min-width: 808px)' : '(max-width: 807.98px)';
       ))
     }
   </div>
-  {
-    learnMore && (
-      <a
-        class='c-textlink t-small' data-variant='inline tap'
-        href={learnMore}
-        rel='noopener noreferrer'
-        target='_blank'
-      >
-        Erfahre mehr über dieses Wort
-      </a>
-    )
-  }
 </section>

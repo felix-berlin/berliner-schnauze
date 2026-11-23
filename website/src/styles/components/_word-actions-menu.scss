@@ -60,7 +60,9 @@
 
   .text {
     display: grid;
+    gap: var(--space-1); // title and sub line breathe (mock .w18__mi: 2px, the step is 4px)
     min-inline-size: 0;
+    line-height: 1.3;
   }
 
   .title {

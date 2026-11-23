@@ -7,7 +7,7 @@
 // Variant pill (data-variant="pill"): voice button (SPEC §6): 36px pill on card2 with a 26px play circle (.icon), a hit band
 // reaches 44px.
 // Variant chip (SPEC §4.3 "Chip (Auswahl)"): 36px pill on the card surface with a 44px hit band; pressed = ink rim and
-// text on the warm ground (not the orange fill).
+// text in the card colour on an ink ground (mock + state boards; not the orange fill).
 // Variant segment: one chip of a small connected control (36px look, 44px hit band; neighbours
 // overlap by their border).
 // Public (a parent's layout knobs, the old :where() let parents override these): --choice-display,
@@ -233,14 +233,18 @@
       &:not(:disabled, [aria-disabled="true"]) {
         border-style: solid;
         box-shadow: none;
-        background: var(--color-surface-chip);
+
+        &:not([aria-pressed="true"]) {
+          background: var(--color-surface-chip);
+        }
       }
     }
 
+    // Mock .w18__chips and the state boards: the chosen chip is inked in, text in the card colour.
     &[aria-pressed="true"] {
       border-color: var(--color-text-strong);
-      background: var(--color-surface-card3, var(--color-surface-tint-warm));
-      color: var(--color-text-strong);
+      background: var(--color-text-strong);
+      color: var(--color-surface-sheet);
     }
   }
 

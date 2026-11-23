@@ -111,35 +111,6 @@
     .strip > figure:not(:first-child) .open img {
       aspect-ratio: 1;
     }
-
-    // Wide head (mock .w10__fig): the main image fills the column down to the thumbnails; the photo is out of
-    // flow, so its natural height never stretches the card.
-    @container word-head (inline-size >= 56rem) {
-      flex: 1;
-      align-self: stretch;
-
-      .strip {
-        flex: 1;
-        grid-template-rows: 1fr auto;
-      }
-
-      .strip > figure:first-child {
-        min-block-size: 0;
-
-        .open {
-          position: relative;
-          flex: 1;
-          min-block-size: 18.75rem; // mock .w10__fig min-height 300px
-
-          img {
-            position: absolute;
-            inset: 0;
-            block-size: 100%;
-            aspect-ratio: auto;
-          }
-        }
-      }
-    }
   }
 
   // Very narrow image column: two tiles per row (below 14rem the 4 squares would fall under 44px).

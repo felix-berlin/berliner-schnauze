@@ -47,6 +47,14 @@ export const disclosureFor = (
 };
 
 /** The first book listed for the word's first Thema (`themen` hold ids or populated Themen); undefined without one. */
+/** The footer's "Ooch jut" column: up to two other books with a web link (the picked one is left out). */
+export const pickMoreBooks = (
+  books: readonly AffiliateBook[],
+  picked: AffiliateBook | undefined,
+  limit = 2,
+): AffiliateBook[] =>
+  books.filter((b) => b !== picked && b.title && isWebUrl(b.href)).slice(0, limit);
+
 export const pickBook = (
   books: readonly AffiliateBook[],
   firstThemaId: number | undefined,

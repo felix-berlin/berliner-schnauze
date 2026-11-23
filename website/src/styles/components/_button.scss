@@ -212,6 +212,10 @@
   .plus {
     color: var(--button-plus-color, var(--color-accent-active)); // SPEC §4.1: the plus is orange
     font-weight: var(--font-weight-bold);
+    // The text glyph is narrow: give it the mock's 15px icon box so the label keeps its distance.
+    inline-size: 1rem;
+    text-align: center;
+    line-height: 1;
   }
 
   :scope[data-variant~="dashed"] .plus {

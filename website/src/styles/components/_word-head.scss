@@ -192,9 +192,16 @@
     color: var(--color-text-strong);
   }
 
+  // Mock .w12__syl i: an 8px orange circle, centred on the x-height; the "·" glyph of the body font is small and low.
   .dot {
-    color: var(--color-accent-active);
-    font-weight: var(--font-weight-bold);
+    display: inline-block;
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    margin-inline: var(--space-1);
+    border-radius: var(--radius-pill);
+    background: var(--color-accent-active);
+    vertical-align: middle;
+    font-size: 0; // hides the glyph, the span is aria-hidden anyway
   }
 
   .badges {
