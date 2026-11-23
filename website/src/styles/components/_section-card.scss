@@ -89,7 +89,7 @@
     box-shadow: var(--shadow-paper-lift);
 
     .header {
-      align-items: center;
+      align-items: baseline;
       flex-wrap: wrap;
       padding-block-end: var(--space-4);
     }
@@ -102,9 +102,17 @@
       line-height: 1.1;
     }
 
+    // Count: right edge of the header, baseline with the title (SPEC mock .w10__ch), 13px text minimum.
     .count {
-      font-size: var(--font-size-md);
+      margin-inline-start: auto;
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §4.2: 13px minimum, the small size tokens are 12.8px and 12px
+      font-size: 0.8125rem;
       color: var(--color-text-muted);
+    }
+
+    // The pill follows the count, which already owns the free space.
+    .count + .add {
+      margin-inline-start: var(--space-2);
     }
 
     .plus {
@@ -138,7 +146,9 @@
     // it stacks when the card is narrow.
     .gap {
       container: section-card-gap / inline-size;
-      margin: 0 var(--_inline) var(--_inline);
+      // Padding, not margin: a bottom margin collapses out of the borderless card and the box touches its edge.
+      margin-inline: var(--_inline);
+      padding-block-end: var(--_inline);
     }
 
     .gap-box {
@@ -146,9 +156,10 @@
       flex-direction: column;
       align-items: flex-start;
       gap: var(--space-4);
-      padding: var(--space-4);
-      background: var(--color-surface-chip);
-      border: 1px dashed var(--color-border-inner);
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC mock .w18__gap: 20px 22px, no token
+      padding: 1.25rem 1.375rem;
+      // SPEC mock: transparent, 1.5px dashed rim in --t3 at 55 %
+      border: 1.5px dashed color-mix(in srgb, var(--color-text-muted) 55%, transparent); // stylelint-disable-line declaration-property-value-disallowed-list, function-disallowed-list -- SPEC mock .w18__gap rim: 1.5px, t3 at 55 %, no token
       border-radius: var(--radius-sm);
 
       @container section-card-gap (inline-size >= 36rem) {
@@ -210,7 +221,7 @@
 
   @container word-main (inline-size >= 36rem) {
     :scope[data-variant~="v18"] {
-      --_title-size: var(--font-size-2xl);
+      --_title-size: 1.5rem; // SPEC §3: card heading 24px, the 2xl token is 25.6px
     }
   }
 

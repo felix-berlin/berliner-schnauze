@@ -116,7 +116,6 @@
     @include mx.breakpoint("word") {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: var(--space-4);
-      align-items: start;
     }
   }
 
@@ -164,7 +163,8 @@
     display: flex;
     align-items: center;
     gap: var(--space-4);
-    margin-block: var(--space-6) 0;
+    // SPEC §3 mock: 48px (mobile) / 64px (tablet, desktop) above a band, less the 16px gap of .main
+    margin-block: var(--space-8) 0;
     font-family: var(--font-condensed);
     font-size: var(--font-size-2xl);
     font-weight: var(--font-weight-bold);
@@ -178,6 +178,7 @@
     }
 
     @include mx.breakpoint("word") {
+      margin-block-start: var(--space-12);
       font-size: var(--font-size-4xl);
     }
   }

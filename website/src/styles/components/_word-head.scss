@@ -16,7 +16,7 @@
     // SPEC §4.2: h1 48px mobile, 56px tablet, 72px desktop
     --_h1: 3rem;
     --_main: var(--font-size-4xl); // SPEC §4.2: main meaning, 42px on desktop
-    --_ipa-bg: 5rem; // decorative outline, one-off size
+    --_ipa-bg: 8.5rem; // SPEC mock .w17__ipa: 136px outline, one-off size
 
     position: relative;
     container: word-head / inline-size;
@@ -123,10 +123,18 @@
     display: flex;
     align-items: center;
     gap: var(--space-4);
+    // The seal wraps below a word that fills the row, the word stays whole (SPEC §3 asks for one line; a long word
+    // would otherwise be squeezed by the seal and broken mid-letter).
     flex-wrap: wrap;
 
-    @container word-head (inline-size >= 35rem) {
-      flex-wrap: nowrap; // SPEC §3: word, article and seal on one line
+    // Mobile (mock .w10--m): 60px seal pushed to the right edge by the word taking the free space.
+    @container word-head (inline-size < 35rem) {
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w10--m seal: 60px, no token
+      --word-seal-size: 3.75rem;
+
+      .title {
+        flex: 1 1 auto;
+      }
     }
   }
 
@@ -136,7 +144,10 @@
     flex-wrap: wrap;
     margin: 0;
     min-inline-size: 0;
-    overflow-wrap: anywhere;
+    max-inline-size: 100%;
+    // Breaks only a word wider than the whole row (a 36-letter word must not widen the page); no hyphens: a headword
+    // keeps its spelling.
+    overflow-wrap: break-word;
     font-family: var(--font-family-body);
     font-size: var(--_h1);
     font-weight: var(--font-weight-bold);
@@ -146,8 +157,9 @@
   }
 
   .headword {
+    min-inline-size: 0; // a flex item: without it the word keeps its full width and overflows instead of breaking
     font-style: normal;
-    text-decoration: underline dashed;
+    text-decoration: underline solid;
     text-decoration-thickness: 3px; // SPEC §4.2: underline as in the mock, no token
     text-underline-offset: 10px; // as above
   }
@@ -268,15 +280,26 @@
   // Decorative outline of the IPA at the foot of the head; clipped by the head, hidden from assistive tech.
   .ipa-bg {
     position: absolute;
-    inset-inline-start: var(--_pad-x);
-    inset-block-end: calc(-1 * var(--space-4));
+    // stylelint-disable declaration-property-value-disallowed-list -- mock .w17__ipa: 20px from the edge, 0.36em below the foot
+    inset-inline-start: 1.25rem;
+    inset-block-end: -0.36em;
+    // stylelint-enable declaration-property-value-disallowed-list
     margin: 0;
+    font-weight: var(--font-weight-bold);
     font-size: var(--_ipa-bg);
     line-height: 1;
     white-space: nowrap;
     color: transparent;
-    -webkit-text-stroke: 1px var(--color-border-card);
+    -webkit-text-stroke: 1.5px var(--color-text-strong); // mock: ink outline, faded by the opacity
+    // mock: .13 on the dark ground, .2 on the light one; opacity cannot follow light-dark(), so one value in between
+    opacity: 0.16;
     pointer-events: none;
     user-select: none;
+
+    @container word-head (inline-size < 35rem) {
+      --_ipa-bg: 5.5rem; // mock .w10--m .w17__ipa
+
+      inset-inline-start: var(--space-3);
+    }
   }
 }
