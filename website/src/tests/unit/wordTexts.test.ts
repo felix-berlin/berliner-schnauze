@@ -21,6 +21,10 @@ const files = [...collect("word/WordPage.astro"), "word/WordMobileBar.astro"].ma
   (f) => `components/${f}`,
 );
 const copyFiles = [
+  "composable/useVoicePlayer.ts",
+  "lib/bezirkNames.ts",
+  "lib/ownSubmissions.ts",
+  "lib/wordSuggest.ts",
   "lib/contribute.ts",
   "lib/pollResult.ts",
   "lib/story.ts",
