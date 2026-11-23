@@ -138,6 +138,7 @@
 
         <BerlinAreaMap
           v-if="step === 'area'"
+          variant="answer"
           :model-value="(answers.area as Area | null | undefined) ?? null"
           @update:model-value="answer('area', $event)"
         />
@@ -149,6 +150,7 @@
             :aria-disabled="pending || !online"
             :aria-pressed="answers[step] === o.value"
             class="c-choice"
+            data-variant="answer"
             type="button"
             @click="answer(step, o.value)"
           >

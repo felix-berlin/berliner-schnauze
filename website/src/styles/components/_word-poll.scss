@@ -11,7 +11,7 @@
     --_stagger: 20ms; // SPEC §16: dots fill 20ms apart
     --_dot-gap: 2px; // SPEC §11.2 gap between dots, no space token that small
     --_name-size: 4.5rem; // widest row label ("unter 20") with room, one-off
-    --_pct-size: 3rem; // "100 %" in 700
+    --_pct-size: 3.5rem; // "100 %" in Fira 800, 20px
     --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
 
     container: word-poll / inline-size;
@@ -59,6 +59,12 @@
         animation: word-poll-in var(--duration-base) ease;
       }
     }
+  }
+
+  // SPEC §4.3 text link: solid underline in body colour (the trash link below is muted and has none).
+  :scope {
+    --link-color: var(--color-text-body);
+    --link-decoration-style: solid;
   }
 
   .segments {
@@ -269,7 +275,10 @@
 
   .pct {
     color: var(--color-text-strong);
-    font-weight: var(--font-weight-bold);
+    font-family: var(--font-condensed);
+    font-size: 1.25rem; // mock .w16 .w12__row em / .w12__legend b: Fira 800, 20px
+    font-weight: 800;
+    letter-spacing: 0.3px;
     font-variant-numeric: tabular-nums;
     text-align: end;
   }
@@ -326,6 +335,8 @@
       align-items: center;
       gap: var(--space-1);
       color: var(--color-text-muted);
+      --link-color: var(--color-text-muted);
+      --link-decoration-line: none;
     }
   }
 
@@ -355,6 +366,9 @@
     }
 
     .actions {
+      --button-min-block-size: var(--size-tap-target); // mock .w18__delok: 44px
+      --button-padding: 0 var(--space-4);
+
       display: flex;
       flex-wrap: wrap;
       align-items: center;

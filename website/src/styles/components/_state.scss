@@ -39,6 +39,28 @@
     --_stripe: var(--color-status-success);
   }
 
+  // Mock .w18__thx / .w18__gone (poll): one flowing line, the thanks on a green wash, the deletion note without stripe.
+  :scope:is([data-variant~="success"], [data-variant~="done"]) {
+    line-height: 1.5;
+
+    .body {
+      display: block;
+
+      b::after {
+        content: " ";
+      }
+    }
+  }
+
+  :scope[data-variant~="success"] {
+    background: color-mix(in srgb, var(--_stripe) 12%, transparent);
+  }
+
+  :scope[data-variant~="done"] {
+    border-inline-start: 0;
+    border-radius: var(--radius-sm);
+  }
+
   .body {
     // A retry button in a state box is a control, not running text: 44px hit area (WCAG 2.5.8).
     --textlink-display: inline-flex;

@@ -3,6 +3,7 @@
 
 // Auswahl (docs/design/wortseite/SPEC.md): one answer out of several. State via aria-pressed.
 // Variant tile (data-variant="tile"): poll answer (SPEC §7): borderless card2 tile, 72px, round dashed icon, parts .icon and .text.
+// Variant answer: poll answer, flat borderless card2 tile (bold, no icon).
 // Variant pill (data-variant="pill"): voice button (SPEC §6): 36px pill on card2 with a 26px play circle (.icon), a hit band
 // reaches 44px.
 // Variant chip (SPEC §4.3 "Chip (Auswahl)"): 36px pill on the card surface with a 44px hit band; pressed = ink rim and
@@ -122,6 +123,37 @@
     &[aria-pressed="true"] .text span {
       color: inherit;
       opacity: 0.9;
+    }
+  }
+
+  // Variant answer (mock .w18__poll .c-choice): a poll answer as a flat, borderless card2 tile, bold.
+  :scope[data-variant~="answer"] {
+    border: 0;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-strong);
+    letter-spacing: 0;
+
+    &:not([aria-pressed="true"]) {
+      background: var(--color-surface-chip);
+      font-weight: var(--font-weight-bold);
+    }
+
+    @include butler-mx.hover {
+      &:not(:disabled, [aria-disabled="true"]) {
+        box-shadow: none;
+
+        &:not([aria-pressed="true"]) {
+          background: var(--color-surface-card3, var(--color-surface-chip));
+        }
+      }
+    }
+
+    &[aria-pressed="true"] {
+      color: var(--color-text-on-accent);
+    }
+
+    &[aria-disabled="true"] {
+      border-style: none;
     }
   }
 
