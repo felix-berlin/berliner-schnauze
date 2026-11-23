@@ -173,4 +173,16 @@ describe("suggestion types", () => {
     expect(await title(related.id)).toContain("Molle");
     expect((await title(fact.id))!.length).toBeLessThan(100);
   });
+
+  it("needs a target word for a fact and a related word, like an example", async () => {
+    await expect(create({ type: "fact", kind: "herkunft", text: "Alt." })).rejects.toThrow(
+      /field is invalid: Target ?Word/i,
+    );
+    await expect(
+      create({ type: "related", relation: "gleich", relatedText: "Bolle" }),
+    ).rejects.toThrow(/field is invalid: Target ?Word/i);
+    expect(
+      (await create({ type: "fact", kind: "herkunft", text: "Alt.", targetWord: wordId })).type,
+    ).toBe("fact");
+  });
 });

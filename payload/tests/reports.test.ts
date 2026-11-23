@@ -74,4 +74,14 @@ describe("reports", () => {
       /not allowed|forbidden/i,
     );
   });
+
+  it("does not accept an emptied kind or status", async () => {
+    const r = await report();
+    await expect(
+      payload.update({ collection: "reports", id: r.id, data: { status: null } as never }),
+    ).rejects.toThrow(/field is invalid: Status/);
+    await expect(
+      payload.update({ collection: "reports", id: r.id, data: { kind: null } as never }),
+    ).rejects.toThrow(/field is invalid: Art/);
+  });
 });

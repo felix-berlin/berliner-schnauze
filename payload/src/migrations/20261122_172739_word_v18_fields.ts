@@ -111,6 +111,16 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
+  DO $$ BEGIN
+    IF EXISTS (SELECT 1 FROM "words_facts" WHERE true) THEN
+      RAISE EXCEPTION 'down refused: "words_facts" still holds facts. Export the rows first, then delete them.';
+    END IF;
+  END $$;
+  DO $$ BEGIN
+    IF EXISTS (SELECT 1 FROM "words_related" WHERE true) THEN
+      RAISE EXCEPTION 'down refused: "words_related" still holds related words. Export the rows first, then delete them.';
+    END IF;
+  END $$;
   DROP TABLE IF EXISTS "words_facts" CASCADE;
   DROP TABLE IF EXISTS "words_related" CASCADE;
   DROP TABLE IF EXISTS "_words_v_version_facts" CASCADE;

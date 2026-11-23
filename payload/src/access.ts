@@ -1,4 +1,4 @@
-import type { Access, PayloadRequest } from "payload";
+import type { Access, FieldAccess, PayloadRequest } from "payload";
 
 export const authenticated: Access = ({ req }) => Boolean(req.user);
 
@@ -50,3 +50,10 @@ export const usersCreate: Access = async ({ req }) => {
   const { totalDocs } = await req.payload.count({ collection: "users", overrideAccess: true });
   return totalDocs === 0;
 };
+
+/**
+ * Field access for personal data that must never reach an MCP client (and so the model): Payload drops the field from
+ * every MCP read, write result and query, whatever the plugin's output format or `select` (its tools run with
+ * overrideAccess: false). The site's Local API reads are not MCP and keep the field.
+ */
+export const notOverMcp: FieldAccess = ({ req }) => req.payloadAPI !== "MCP";

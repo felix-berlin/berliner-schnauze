@@ -25,8 +25,12 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   
   DROP INDEX IF EXISTS "suggestions_type_idx";
   DROP INDEX IF EXISTS "suggestions_target_word_idx";
-  -- rows of the new types have no spelling/translation: keep them (empty) instead of failing SET NOT NULL
-  UPDATE "suggestions" SET "berliner_word" = COALESCE("berliner_word", ''), "translation" = COALESCE("translation", '');
+  -- rows of the new types have no spelling/translation and would lose their content: refuse instead of blanking them
+  DO $$ BEGIN
+    IF EXISTS (SELECT 1 FROM "suggestions" WHERE "type" IS NOT NULL AND "type" <> 'word') THEN
+      RAISE EXCEPTION 'down refused: "suggestions" holds example/fact/related rows. Export the rows first, then delete them.';
+    END IF;
+  END $$;
   ALTER TABLE "suggestions" ALTER COLUMN "berliner_word" SET NOT NULL;
   ALTER TABLE "suggestions" ALTER COLUMN "translation" SET NOT NULL;
   ALTER TABLE "suggestions" DROP COLUMN IF EXISTS "type";

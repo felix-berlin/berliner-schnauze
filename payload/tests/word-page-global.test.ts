@@ -83,4 +83,29 @@ describe("word-page global and v18 fields", () => {
     const aff = await payload.findGlobal({ slug: "affiliate", depth: 0 });
     expect(aff.books?.[0]?.themen).toEqual([thema.id]);
   });
+
+  it("refuses a story prompt without {Wort}, accepts an empty one", async () => {
+    const payload = await getTestPayload();
+    await expect(
+      payload.updateGlobal({ slug: "word-page", data: { storyPrompt: "Und nu?" } }),
+    ).rejects.toThrow(/Frage unter dem/);
+    await expect(
+      payload.updateGlobal({ slug: "word-page", data: { storyPrompt: "" } }),
+    ).resolves.toBeTruthy();
+  });
+
+  it("refuses an empty fact row and a related row with neither word nor label", async () => {
+    const payload = await getTestPayload();
+    const slug = `v18-rows-${Date.now()}`;
+    const make = (extra: Record<string, unknown>) =>
+      payload.create({
+        collection: "words",
+        data: { berlinerisch: "Zeilentest", slug, _status: "published", ...extra } as never,
+      });
+    await expect(make({ facts: [{ kind: "herkunft" }] })).rejects.toThrow();
+    await expect(make({ facts: [{ text: "ohne Art" }] })).rejects.toThrow();
+    await expect(make({ related: [{ relation: "gleich" }] })).rejects.toThrow();
+    const ok = await make({ related: [{ label: "Bolle", relation: "gleich" }] });
+    wordIds.push(ok.id);
+  });
 });

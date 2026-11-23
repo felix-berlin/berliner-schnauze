@@ -26,7 +26,12 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
-   ALTER TABLE "reports" DISABLE ROW LEVEL SECURITY;
+  DO $$ BEGIN
+    IF EXISTS (SELECT 1 FROM "reports" WHERE true) THEN
+      RAISE EXCEPTION 'down refused: "reports" still holds reports. Export the rows first, then delete them.';
+    END IF;
+  END $$;
+  ALTER TABLE "reports" DISABLE ROW LEVEL SECURITY;
   DROP TABLE IF EXISTS "reports" CASCADE;
   ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT IF EXISTS "payload_locked_documents_rels_reports_fk";
   
