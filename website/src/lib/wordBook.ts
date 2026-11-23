@@ -69,15 +69,20 @@ export const pickMoreBooks = (
     )
     .slice(0, limit);
 
-/** The first book listed for the word's first Thema (`themen` hold ids or populated Themen); undefined without one. */
+/**
+ * The first book listed for the word's first Thema (`themen` hold ids or populated Themen); else the first book
+ * marked `alleThemen`, which fits every word, also one without a Thema.
+ */
 export const pickBook = (
   books: readonly AffiliateBook[],
   firstThemaId: number | undefined,
-): AffiliateBook | undefined =>
-  firstThemaId === undefined
-    ? undefined
-    : books.find(
-        (b) =>
-          isWebUrl(b.href) &&
+): AffiliateBook | undefined => {
+  const linked = books.filter((b) => isWebUrl(b.href));
+  return (
+    (firstThemaId === undefined
+      ? undefined
+      : linked.find((b) =>
           b.themen?.some((t) => (typeof t === "object" ? t.id : t) === firstThemaId),
-      );
+        )) ?? linked.find((b) => b.alleThemen)
+  );
+};

@@ -34,6 +34,7 @@ import * as migration_20261122_172739_word_v18_fields from './20261122_172739_wo
 import * as migration_20261123_184457_fk_names_payload_3_94 from './20261123_184457_fk_names_payload_3_94';
 import * as migration_20261123_190000_info_text_to_facts from './20261123_190000_info_text_to_facts';
 import * as migration_20261123_191000_remove_comment_replies from './20261123_191000_remove_comment_replies';
+import * as migration_20261123_192748_affiliate_alle_themen from './20261123_192748_affiliate_alle_themen';
 
 export const migrations = [
   {
@@ -209,11 +210,16 @@ export const migrations = [
   {
     up: migration_20261123_190000_info_text_to_facts.up,
     down: migration_20261123_190000_info_text_to_facts.down,
-    name: '20261123_190000_info_text_to_facts'
+    name: '20261123_190000_info_text_to_facts',
   },
   {
     up: migration_20261123_191000_remove_comment_replies.up,
     down: migration_20261123_191000_remove_comment_replies.down,
-    name: '20261123_191000_remove_comment_replies'
+    name: '20261123_191000_remove_comment_replies',
+  },
+  {
+    up: migration_20261123_192748_affiliate_alle_themen.up,
+    down: migration_20261123_192748_affiliate_alle_themen.down,
+    name: '20261123_192748_affiliate_alle_themen'
   },
 ];

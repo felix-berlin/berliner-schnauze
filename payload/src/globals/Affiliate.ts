@@ -17,7 +17,23 @@ export const Affiliate: GlobalConfig = {
         { name: "imageAlt", type: "text" },
         { name: "badge", type: "text" },
         { name: "badgeModifier", type: "text" },
-        { name: "themen", type: "relationship", relationTo: "themen", hasMany: true },
+        {
+          name: "alleThemen",
+          type: "checkbox",
+          label: "Auf allen Themen anzeigen",
+          defaultValue: false,
+          admin: {
+            description:
+              "Das Buch erscheint bei jedem Wort, auch ohne Thema. Ein Buch, das zum ersten Thema des Wortes passt, hat Vorrang.",
+          },
+        },
+        {
+          name: "themen",
+          type: "relationship",
+          relationTo: "themen",
+          hasMany: true,
+          admin: { condition: (_, sibling) => !sibling?.alleThemen },
+        },
       ],
     },
     {

@@ -52,6 +52,17 @@ describe("pickBook", () => {
     expect(pickBook(books, 99)).toBeUndefined();
     expect(pickBook([], 1)).toBeUndefined();
   });
+
+  it("falls back to the first alleThemen book with a web link; a Thema match wins", () => {
+    const all = [
+      { href: "javascript:x", alleThemen: true, title: "Bad" },
+      { href: "https://shop.example/e", alleThemen: true, title: "E" },
+      ...books,
+    ] as typeof books;
+    expect(pickBook(all, undefined)?.title).toBe("E");
+    expect(pickBook(all, 99)?.title).toBe("E");
+    expect(pickBook(all, 2)?.title).toBe("A");
+  });
 });
 
 describe("book link guard", () => {
