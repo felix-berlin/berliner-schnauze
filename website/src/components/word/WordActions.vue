@@ -164,6 +164,7 @@ import { useWordReaction } from "@composables/useWordReaction.ts";
 import { formatCitation, type CitationFormat } from "@lib/wordCite.ts";
 import { openContributeForm } from "@stores/contribute.ts";
 import { trackEvent } from "@utils/analytics";
+import { reportError } from "@utils/reportError.ts";
 import { reportWord } from "@utils/wordPulse.ts";
 import { useEventListener } from "@vueuse/core";
 import Check from "virtual:icons/lucide/check";
@@ -295,15 +296,24 @@ const copyWord = () =>
 // --- share -----------------------------------------------------------------------------------------
 const share = async (): Promise<void> => {
   if (typeof navigator.share === "function") {
+    let shared = false;
     try {
       await navigator.share({ title: props.word, url: props.url });
-      // Feeds the trending lists; a draft (no id) has none.
-      if (props.wordId !== undefined) reportWord(props.wordId, "share");
-      trackEvent("Word Share", "Word shared", `Word: ${props.slug}`);
-      return;
+      shared = true;
     } catch (error) {
       // The visitor closed the sheet: nothing to do. Any other failure falls back to copying.
       if (error instanceof DOMException && error.name === "AbortError") return;
+    }
+    if (shared) {
+      // Outside the try: a failing tracker must not turn a finished share into the copy fallback.
+      try {
+        // Feeds the trending lists; a draft (no id) has none.
+        if (props.wordId !== undefined) reportWord(props.wordId, "share");
+        trackEvent("Word Share", "Word shared", `Word: ${props.slug}`);
+      } catch (error) {
+        reportError(error);
+      }
+      return;
     }
   }
   // Denied: the menu shows the link text; it is selected there so "Markiert" is true.

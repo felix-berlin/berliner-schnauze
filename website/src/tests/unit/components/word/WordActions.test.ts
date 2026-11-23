@@ -715,4 +715,18 @@ describe("WordActions telemetry (trending lists, Matomo)", () => {
     expect(analytics.track).not.toHaveBeenCalled();
     expect(pulse.report).not.toHaveBeenCalled();
   });
+
+  it("a throwing tracker or pulse does not turn a finished share into the copy fallback", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    clipboard(writeText);
+    setShare(vi.fn().mockResolvedValue(undefined));
+    analytics.track.mockImplementationOnce(() => {
+      throw new Error("blocked");
+    });
+    wrapper = await mountIt();
+    await teilen(wrapper);
+    await flushPromises();
+    expect(writeText).not.toHaveBeenCalled();
+    expect(live().textContent).toBe("");
+  });
 });

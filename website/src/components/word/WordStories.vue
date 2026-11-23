@@ -133,10 +133,12 @@ const pending = ref<{ id: number; text: string }[]>([]);
 const busy = reactive(new Set<string>());
 const note = ref("");
 
-// useMediaQuery reports false until mounted, so the server markup (three) never mismatches. The "word" breakpoint (808px) of the page shell,
+// The query only counts once mounted: setup() already sees the client value, which would differ from the server markup (three). The "word" breakpoint (808px) of the page shell,
 // which also hides the third story before hydration (objects/_word-v18.scss): SPEC §3, mobile 2, from tablet 3.
 const NARROW = "(width < 50.5rem)";
-const mobile = useMediaQuery(NARROW);
+const narrow = useMediaQuery(NARROW);
+const mounted = ref(false);
+const mobile = computed(() => mounted.value && narrow.value);
 const limit = computed(() => (mobile.value ? 2 : 3));
 const expanded = ref(false);
 const loading = ref(false);
@@ -146,6 +148,7 @@ const shown = computed(() => (expanded.value ? items.value : items.value.slice(0
 const touched = new Set<string>();
 
 onMounted(async () => {
+  mounted.value = true;
   try {
     const res = await fetch(`/api/stories/mine?word=${encodeURIComponent(props.word)}`, {
       cache: "no-store",

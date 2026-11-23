@@ -113,6 +113,24 @@ describe("WordStories list", () => {
     expect((await mountIt({ items: items(5) })).findAll("li.item")).toHaveLength(3);
   });
 
+  it("renders three stories in the first (hydration) render even on a narrow viewport, two after mount", async () => {
+    viewport(390);
+    const w = mount(WordStories, {
+      attachTo: document.body,
+      global: { stubs: { BerlinerBaer: true, ContributeForm: true } },
+      props: {
+        initial: { featured: null, items: items(3), total: 3 } as never,
+        label: "Schrippe",
+        prompt: "p",
+        word: "schrippe",
+      },
+    });
+    // No await: the DOM is still the first render, the one the server markup must equal.
+    expect(w.findAll("li.item")).toHaveLength(3);
+    await flushPromises();
+    expect(w.findAll("li.item")).toHaveLength(2);
+  });
+
   it("keeps the third story reachable on mobile: two shown, the button reveals all three", async () => {
     viewport(390);
     const w = await mountIt({ items: items(3) });

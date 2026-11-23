@@ -42,6 +42,8 @@ describe("book link guard", () => {
   it("accepts http(s) with a host", () => {
     expect(isWebUrl("https://www.amazon.de/dp/X")).toBe(true);
     expect(isWebUrl("HTTP://shop.example/x")).toBe(true);
+    expect(isWebUrl("HTTPS://shop.example/x")).toBe(true);
+    expect(isWebUrl("hTtp://shop.example/x")).toBe(true);
   });
 
   it("pickBook skips a book with a hostile href and takes the next one", () => {

@@ -11,8 +11,13 @@ export const hostOf = (href?: string | null): string => {
 };
 
 /** CMS data: only http(s) links with a parseable host may become an href (no javascript:/data: URLs). */
-export const isWebUrl = (href?: string | null): href is string =>
-  /^https?:\/\//i.test(href ?? "") && hostOf(href) !== "";
+export const isWebUrl = (href?: string | null): href is string => {
+  try {
+    return ["http:", "https:"].includes(new URL(href ?? "").protocol) && hostOf(href) !== "";
+  } catch {
+    return false;
+  }
+};
 
 /** By hostname: "amazon." in a path or query must not count. */
 export const isAmazonLink = (href?: string | null): boolean =>
