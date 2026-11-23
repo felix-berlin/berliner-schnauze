@@ -1,6 +1,6 @@
-import type { CollectionBeforeDeleteHook, CollectionConfig, Field } from "payload";
+import type { CollectionBeforeDeleteHook, CollectionConfig, Field, Validate } from "payload";
 
-import { draftsAccess } from "../access";
+import { draftsAccess, notOverMcp } from "../access";
 import {
   contentModifiedAtField,
   preserveOnTrash,
@@ -11,6 +11,7 @@ import { liveLinkField } from "../fields/liveLink";
 import { setDerivedWordFields } from "../hooks/deriveWordFields";
 import { mcpDraftOnly, mcpUpdateDraftOnly } from "../hooks/mcpDraftOnly";
 import { previewUrl } from "../lib/preview";
+import { requiredSelect, requiredTextarea } from "../lib/requiredField";
 
 const gender: Field = { name: "gender", type: "select", options: ["male", "female"] };
 const audioRows = (name: string): Field => ({
@@ -104,6 +105,7 @@ export const Words: CollectionConfig = {
         {
           name: "kind",
           type: "select",
+          validate: requiredSelect,
           options: [
             { label: "Herkunft", value: "herkunft" },
             { label: "Geschichte", value: "geschichte" },
@@ -112,8 +114,20 @@ export const Words: CollectionConfig = {
             { label: "Sonstiges", value: "sonstiges" },
           ],
         },
-        { name: "text", type: "textarea", maxLength: 1000 },
-        { name: "contributorName", type: "text", maxLength: 40 },
+        {
+          name: "text",
+          type: "textarea",
+          maxLength: 1000,
+          validate: requiredTextarea,
+        },
+        {
+          name: "contributorName",
+          type: "text",
+          maxLength: 40,
+          // Public credit under the entry, copied by an editor from the suggestion; not covered by the 90-day clean-up of
+          // suggestions (name it in the privacy policy). Hidden from MCP like the suggestion's own name.
+          access: { read: notOverMcp, update: notOverMcp },
+        },
         { name: "contributorSuggestion", type: "relationship", relationTo: "suggestions" },
       ],
     },
@@ -127,6 +141,11 @@ export const Words: CollectionConfig = {
           name: "label",
           type: "text",
           maxLength: 60,
+          // A row needs a linked word or a label, else the list shows an empty entry.
+          validate: ((value, { siblingData }) =>
+            value || (siblingData as { word?: unknown })?.word
+              ? true
+              : "Wort verknüpfen oder Bezeichnung eintragen.") as Validate,
           admin: { description: "Wird genutzt, wenn kein Wort verknüpft ist." },
         },
         {
@@ -140,7 +159,14 @@ export const Words: CollectionConfig = {
           ],
         },
         { name: "note", type: "text", maxLength: 60 },
-        { name: "contributorName", type: "text", maxLength: 40 },
+        {
+          name: "contributorName",
+          type: "text",
+          maxLength: 40,
+          // Public credit under the entry, copied by an editor from the suggestion; not covered by the 90-day clean-up of
+          // suggestions (name it in the privacy policy). Hidden from MCP like the suggestion's own name.
+          access: { read: notOverMcp, update: notOverMcp },
+        },
         { name: "contributorSuggestion", type: "relationship", relationTo: "suggestions" },
       ],
     },
