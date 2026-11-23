@@ -12,6 +12,8 @@ export type TooltipPlacement =
 
 export type TooltipOptions = {
   content: string;
+  /** Bold lead-in before the content (static text, set via textContent). */
+  lead?: string;
   placement?: TooltipPlacement;
   offset?: number;
   disabled?: boolean;
@@ -31,6 +33,7 @@ type TooltipState = {
   onClick: (e: MouseEvent) => void;
   onDocPointerDown: (e: Event) => void;
   onPointerDown: (e: Event) => void;
+  onPointerUp: () => void;
   touch: boolean;
   /** A touch tap is under way: the focus it causes must not open the tooltip a second time. */
   touching: boolean;
@@ -54,6 +57,7 @@ export const HIDE_DELAY = 200;
 // Matches the CSS exit-transition duration in _tooltip.scss
 export const EXIT_ANIMATION_MS = 100;
 
+const TOUCH_FOCUS_MS = 500;
 const ARROW_SIZE = 8;
 const ARROW_HALF = ARROW_SIZE / 2;
 const ARROW_PADDING = 6;
@@ -118,14 +122,15 @@ export function syncTooltipArrow(el: HTMLElement, panel: HTMLElement, arrow: HTM
   arrow.style.left = `${-ARROW_HALF}px`;
 }
 
-type Normalized = Required<Omit<TooltipOptions, "touch" | "variant">> &
-  Pick<TooltipOptions, "touch" | "variant">;
+type Normalized = Required<Omit<TooltipOptions, "lead" | "touch" | "variant">> &
+  Pick<TooltipOptions, "lead" | "touch" | "variant">;
 
 function normalize(value: TooltipValue): Normalized {
   const opts = typeof value === "string" ? { content: value } : value;
   return {
     content: opts.content ?? "",
     disabled: opts.disabled ?? false,
+    lead: opts.lead,
     offset: opts.offset ?? 8,
     placement: opts.placement ?? "top",
     shown: opts.shown ?? false,
@@ -176,6 +181,11 @@ function hide(state: TooltipState): void {
 function applyPanel(panel: HTMLDivElement, anchorName: string, opts: Normalized): void {
   // textContent wipes child elements — always re-append arrow after calling this
   panel.textContent = opts.content;
+  if (opts.lead) {
+    const lead = document.createElement("b");
+    lead.textContent = opts.lead;
+    panel.prepend(lead, " ");
+  }
   panel.className = "c-tooltip";
   panel.dataset.variant = opts.variant ? `${opts.placement} ${opts.variant}` : opts.placement;
   panel.style.setProperty("position-anchor", anchorName);
@@ -191,6 +201,7 @@ function addListeners(el: HTMLElement, state: TooltipState): void {
     el.addEventListener("pointerdown", state.onPointerDown);
     el.addEventListener("pointercancel", state.onPointerDown);
     el.addEventListener("click", state.onClick);
+    el.addEventListener("pointerup", state.onPointerUp);
   }
   state.panel.addEventListener("pointerenter", state.onPanelPointerEnter);
   state.panel.addEventListener("pointerleave", state.onPanelPointerLeave);
@@ -204,6 +215,7 @@ function removeListeners(el: HTMLElement, state: TooltipState): void {
   el.removeEventListener("pointerdown", state.onPointerDown);
   el.removeEventListener("pointercancel", state.onPointerDown);
   el.removeEventListener("click", state.onClick);
+  el.removeEventListener("pointerup", state.onPointerUp);
   state.panel.removeEventListener("pointerenter", state.onPanelPointerEnter);
   state.panel.removeEventListener("pointerleave", state.onPanelPointerLeave);
   document.removeEventListener("keydown", state.onKeyDown);
@@ -211,6 +223,7 @@ function removeListeners(el: HTMLElement, state: TooltipState): void {
 }
 
 function mountTooltip(el: TooltipEl, value: TooltipValue): void {
+  if (el._tooltip) return; // idempotent: a second mount would leak the first panel and listeners
   const opts = normalize(value);
   const id = `tooltip-${++_counter}`;
   const anchorName = `--${id}`;
@@ -270,6 +283,10 @@ function mountTooltip(el: TooltipEl, value: TooltipValue): void {
     onPointerDown(e: Event) {
       state.touching = e.type === "pointerdown" && (e as PointerEvent).pointerType === "touch";
     },
+    onPointerUp() {
+      // The focus of the tap follows pointerup within the same gesture; after that a stale flag is dropped.
+      setTimeout(() => (state.touching = false), TOUCH_FOCUS_MS);
+    },
     onShow(e?: Event) {
       if (state.shown) return;
       if (
@@ -308,6 +325,7 @@ function unmountTooltip(el: TooltipEl): void {
 
 /** Tooltip for an element outside a Vue template (Astro card scripts). Returns the cleanup. */
 export function attachTooltip(el: HTMLElement, value: TooltipValue): () => void {
+  if ((el as TooltipEl)._tooltip) return () => {};
   mountTooltip(el, value);
   return () => unmountTooltip(el);
 }

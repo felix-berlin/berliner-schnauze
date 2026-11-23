@@ -30,6 +30,7 @@ const gap = {
     <ol class='c-word-beispiele'>
       {items.map((item, index) => {
         const sources = voiceSources(item.exampleAudio);
+        const tip = `einsprechen-tip-${index}`;
         return (
           <li class='item'>
             <blockquote class='quote'>
@@ -43,9 +44,10 @@ const gap = {
                 <VoiceButtons order='wm' aria-label={`Beispiel ${index + 1} anhören`} client:visible sources={sources} />
               )}
               <span class='record'>
-                <button class='c-button record-button' data-variant='pill dashed' type='button' aria-disabled='true' data-tip='Kommt bald. Einsprechen is noch in Arbeit.'>
+                <button class='c-button record-button' data-variant='pill dashed' type='button' aria-disabled='true' data-tip-lead='Kommt bald.' data-tip='Einsprechen is noch in Arbeit.' aria-describedby={tip}>
                   <span class='plus' aria-hidden='true'>+</span> Einsprechen
                 </button>
+                <span class='u-sr-only' id={tip} role='tooltip'>Kommt bald. Einsprechen is noch in Arbeit.</span>
               </span>
             </div>
           </li>
@@ -56,10 +58,7 @@ const gap = {
 </SectionCard>
 
 <script>
-  import { attachTooltip } from '@/directives/tooltip';
+  import { wireRecordTooltips } from '@components/word/recordTooltips.ts';
 
-  // The shared tooltip (ink look, tap toggles on touch) for the disabled "Einsprechen" buttons.
-  document.querySelectorAll<HTMLElement>('.c-word-beispiele .record-button[data-tip]').forEach((button) => {
-    attachTooltip(button, { content: button.dataset['tip'] ?? '', touch: 'toggle', variant: 'ink' });
-  });
+  wireRecordTooltips();
 </script>

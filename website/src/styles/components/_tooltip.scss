@@ -80,6 +80,9 @@
     --_fade: 0.15s;
     --_size: 0.8125rem; // SPEC §4.2: 13px minimum, no token at that size
     --_shift: var(--space-1);
+
+    // Safe margin: the flip fallbacks otherwise leave the panel flush against the viewport edge.
+    inset-inline: var(--space-4);
     // SPEC shadow 0 8px 20px 22 %; drop-shadow takes the blur as a standard deviation, hence half
     // stylelint-disable-next-line function-disallowed-list -- SPEC §14 tooltip shadow, no token holds it
     --_lift: drop-shadow(0 8px 10px rgb(0 0 0 / 22%));

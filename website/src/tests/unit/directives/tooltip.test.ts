@@ -555,4 +555,29 @@ describe("vTooltip touch toggle, Esc semantics and ink variant", () => {
     expect(mockHidePopover).not.toHaveBeenCalled();
     expect(document.body.querySelector("[popover]")).toBeNull();
   });
+
+  it("renders a bold lead-in as text and attachTooltip is idempotent", async () => {
+    const { attachTooltip } = await import("@/directives/tooltip");
+    const el = document.createElement("button");
+    document.body.appendChild(el);
+    const stop = attachTooltip(el, { content: "<i>x</i>", lead: "Lead." });
+    attachTooltip(el, { content: "second" })();
+    el.dispatchEvent(new Event("focusin"));
+    const panel = document.body.querySelector("[popover]")!;
+    expect(document.body.querySelectorAll("[popover]")).toHaveLength(1);
+    expect(panel.querySelector("b")?.textContent).toBe("Lead.");
+    expect(panel.querySelector("i")).toBeNull();
+    stop();
+    expect(el.hasAttribute("aria-describedby")).toBe(false);
+  });
+
+  it("drops a stale touching flag after pointerup so a later keyboard focus opens it", () => {
+    vi.useFakeTimers();
+    const button = toggle().find("button").element;
+    touchEvent("pointerdown", button);
+    touchEvent("pointerup", button);
+    vi.advanceTimersByTime(600);
+    button.dispatchEvent(new Event("focusin"));
+    expect(mockShowPopover).toHaveBeenCalledOnce();
+  });
 });
