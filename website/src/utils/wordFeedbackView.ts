@@ -1,3 +1,5 @@
+import { NOT_BERLIN, profileRules } from "payload-app/word-feedback";
+
 // Pure display maths of the word feedback card (WordPoll.vue): step segments, choices, profile patch.
 
 export const plural = (n: number) =>
@@ -59,21 +61,11 @@ export const CHOICES: Record<
 export const ALL_STEPS = ["usage", "area", "locality", "origin", "half", "age"];
 
 /** Areas outside Berlin: no half question. */
-export const NOT_BERLIN = new Set<string>(["brandenburg", "elsewhere"]);
+export { NOT_BERLIN };
 
-/**
- * The PATCH body for one profile answer. The API takes a half only with origin grewUp, a locality only with its
- * area, and a new area drops the old locality; outside Berlin it drops the half too.
- */
+/** The PATCH body for one profile answer: the rules live in `profileRules.patch` (`payload-app/word-feedback`). */
 export const profilePatch = (
   key: ProfileStep,
   value: string | null,
   ctx: { area: string | null | undefined; hadLocality: unknown },
-): Record<string, string | null | undefined> => ({
-  [key]: value,
-  ...(key === "origin" && value !== "grewUp" ? { half: null } : {}),
-  ...(key === "area" && NOT_BERLIN.has(value ?? "") ? { half: null } : {}),
-  ...(key === "half" && value ? { origin: "grewUp" } : {}),
-  ...(key === "locality" && value ? { area: ctx.area } : {}),
-  ...(key === "area" && ctx.hadLocality ? { locality: null } : {}),
-});
+): Record<string, string | null | undefined> => profileRules.patch(key, value, ctx);

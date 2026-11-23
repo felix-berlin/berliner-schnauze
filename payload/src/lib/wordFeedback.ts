@@ -261,6 +261,9 @@ export async function feedbackCompare(
  * The consistency rules of a profile (the optional answers besides usage/reaction), shared by the PATCH schema and
  * the PATCH handler so they cannot drift apart. The client `profilePatch` mirrors the cascades.
  */
+/** Areas outside Berlin: no east/west half. */
+export const NOT_BERLIN = new Set<string>(["brandenburg", "elsewhere"]);
+
 export const profileRules = {
   /** Cascades for a partial update: a non-grewUp origin drops the half, a new area drops another area's locality. */
   cascade<
@@ -282,6 +285,27 @@ export const profileRules = {
       LOCALITY_AREA[stored.locality as Locality] !== sent.area
       ? { ...data, locality: null }
       : data;
+  },
+  /**
+   * The PATCH body for one answer in the poll: `cascade` plus what the client knows on top. A half implies
+   * origin grewUp, a locality carries its area, a new area drops the old locality (`hadLocality`) and outside
+   * Berlin the half.
+   */
+  patch(
+    key: string,
+    value: string | null,
+    ctx: { area: string | null | undefined; hadLocality: unknown },
+  ): Record<string, string | null | undefined> {
+    const sent: Record<string, string | null | undefined> = {
+      [key]: value,
+      ...(key === "half" && value ? { origin: "grewUp" } : {}),
+      ...(key === "locality" && value ? { area: ctx.area } : {}),
+    };
+    return {
+      ...profileRules.cascade(sent),
+      ...(key === "area" && NOT_BERLIN.has(value ?? "") ? { half: null } : {}),
+      ...(key === "area" && ctx.hadLocality ? { locality: null } : {}),
+    };
   },
   /** A half only counts for someone who grew up in Berlin. */
   halfFitsOrigin: (v: { half?: string | null; origin?: string | null }) =>
