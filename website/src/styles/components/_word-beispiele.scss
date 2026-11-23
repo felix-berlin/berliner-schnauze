@@ -1,8 +1,7 @@
 @use "@styles/mixins" as mx;
-@use "@sass-butler/mixins" as butler-mx;
 
 // Beispiele card body (SPEC §6): an ordered list; each .item has .quote (.sentence), .plain (label + translation)
-// and .actions (the audio pills island plus .record with the disabled "Einsprechen" button and its .tip).
+// and .actions (the audio pills island plus .record with the disabled "Einsprechen" button ; its tooltip is the shared v-tooltip, attached by the card script).
 @include mx.component("word-beispiele") {
   :scope {
     --_gap: var(--space-4);
@@ -61,40 +60,5 @@
     --button-padding: 0 0.9rem 0 0.6rem;
     --button-gap: var(--space-2);
     --button-plus-color: var(--color-text-muted);
-  }
-
-  // Tooltip (SPEC §14): above the row, 13px, shown on hover, focus and tap ([data-open]); data-dismissed (Esc) wins.
-  .tip {
-    --_tip-size: 0.8125rem; // SPEC §4.2: 13px minimum
-
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline-start: 0;
-    translate: 0 calc(-100% - var(--space-1));
-    z-index: var(--z-sticky);
-    inline-size: max-content;
-    max-inline-size: min(15rem, 80cqi);
-    padding: var(--space-2) var(--space-3);
-    font-size: var(--_tip-size);
-    line-height: 1.45;
-    color: var(--color-text-on-active);
-    background: var(--color-surface-inverse);
-    border-radius: var(--radius-sm);
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity var(--duration-base) var(--ease-standard);
-  }
-
-  .record:not([data-dismissed]):is(:focus-within, [data-open]) .tip {
-    visibility: visible;
-    opacity: 1;
-  }
-
-  // Hover only on hover devices, so a tap does not leave a sticky tooltip.
-  @include butler-mx.hover {
-    .record:not([data-dismissed]):hover .tip {
-      visibility: visible;
-      opacity: 1;
-    }
   }
 }

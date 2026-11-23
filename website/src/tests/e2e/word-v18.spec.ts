@@ -393,8 +393,10 @@ test.describe("keyboard", () => {
     await open(page);
     const record = page.locator(".c-word-beispiele .record-button").first();
     await record.focus();
-    await expect(page.locator(".c-word-beispiele .tip").first()).toBeVisible();
-    await expect(page.locator(".c-word-beispiele .tip").first()).toContainText("Einsprechen");
+    const tip = page.getByRole("tooltip").filter({ hasText: "Einsprechen" });
+    await expect(tip).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(tip).toBeHidden();
   });
 });
 

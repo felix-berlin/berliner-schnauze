@@ -2,22 +2,18 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 // Badges of the word head (SPEC §5 item 3, tooltip §14): word of the day (solid orange, the one orange
-// fill of the head) and trend (orange wash). Parts .wdt, .tip-wrap, .trend, .tip. The tooltip sits under
-// the trend badge, left aligned, and shows on hover (hover devices), keyboard focus and tap
-// (root-less state: .tip-wrap[data-open]). Plain absolute positioning on purpose: anchor positioning
-// and interest invokers are not Baseline widely available, the layout needs neither.
+// fill of the head) and trend (orange wash). Parts .wdt, .trend. The trend tooltip is the shared
+// v-tooltip (ink variant, under the badge, left aligned; hover, focus and tap).
 @include mx.component("word-badges") {
   :scope {
     // SPEC §5: badges are 28px high
     --_height: 1.75rem;
     --_size: 0.8125rem; // SPEC §4.2: 13px minimum, no token at that size
-    --_tip-width: 15rem; // SPEC §14: max 240-260px
     // SPEC §5: glow ring orange 22 %, wash orange 16 % (on the sheet, so it stays orange in both themes)
     // stylelint-disable-next-line function-disallowed-list -- colour inventory: "Orange 22 %" glow ring (SPEC §5), no token holds it
     --_glow: 0 0 0 3px color-mix(in srgb, var(--color-accent-solid) 22%, transparent);
     // stylelint-disable-next-line function-disallowed-list -- colour inventory: "Orange 16 %" trend wash (SPEC §5), no token holds it
     --_wash: color-mix(in srgb, var(--color-accent-solid) 16%, var(--color-surface-sheet));
-    --_below: 100%; // the tooltip starts under the badge
 
     display: flex;
     flex-wrap: wrap;
@@ -62,60 +58,7 @@
     color: var(--color-text-accent);
   }
 
-  .tip-wrap {
-    position: relative;
-    display: inline-flex;
-  }
-
-  .tip {
-    position: absolute;
-    inset-block-start: var(--_below);
-    inset-inline-start: 0;
-    z-index: var(--z-raised);
-    inline-size: max-content;
-    max-inline-size: var(--_tip-width);
-    margin-block-start: var(--space-2);
-    padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-sm);
-    background-color: var(--color-text-strong);
-    color: var(--color-surface-sheet);
-    font-size: var(--_size);
-    line-height: 1.45;
-    box-shadow: var(--shadow-paper-lift);
-    opacity: 0;
-    visibility: hidden;
-    transition:
-      opacity var(--duration-fast) ease,
-      visibility var(--duration-fast) ease;
-
-    @include butler-mx.feature("motion") {
-      translate: 0 var(--space-1);
-      transition-property: opacity, visibility, translate;
-    }
-  }
-
-  // Bridges the gap to the badge so the pointer can reach the tooltip (WCAG 1.4.13 hoverable).
-  .tip::before {
-    content: "";
-    position: absolute;
-    inset: calc(-1 * var(--space-2)) 0 auto;
-    block-size: var(--space-2);
-  }
-
-  :scope:not([data-dismissed]) .tip-wrap:has(:focus-visible) .tip,
-  :scope:not([data-dismissed]) .tip-wrap[data-open] .tip {
-    opacity: 1;
-    visibility: visible;
-    translate: 0 0;
-  }
-
   @include butler-mx.hover {
-    :scope:not([data-dismissed]) .tip-wrap:hover .tip {
-      opacity: 1;
-      visibility: visible;
-      translate: 0 0;
-    }
-
     .wdt {
       filter: brightness(0.9);
     }

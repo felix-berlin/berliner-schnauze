@@ -6,6 +6,8 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { createSSRApp } from "vue";
 import { renderToString } from "vue/server-renderer";
 
+import { vTooltip } from "@/directives/tooltip";
+
 import { createAstroRender } from "../../helpers";
 
 // Invented data only.
@@ -40,7 +42,9 @@ const model = (over: Partial<WordPageModel> = {}) =>
   }) as unknown as WordPageModel;
 
 const badges = (props: Record<string, unknown>) =>
-  renderToString(createSSRApp(WordBadges, { slug: "testwort", ...props }));
+  renderToString(
+    createSSRApp(WordBadges, { slug: "testwort", ...props }).directive("tooltip", vTooltip),
+  );
 
 describe("WordOTon.astro", () => {
   let render: (props: Record<string, unknown>) => Promise<string>;
@@ -137,19 +141,15 @@ describe("WordBadges.vue", () => {
     expect(await badges({})).not.toContain("<a");
   });
 
-  it("shows the trend badge text and tooltip for the beliebt trend", async () => {
+  // The tooltip text itself is built on the client by v-tooltip (see wordBadges.test.ts).
+  it("shows the trend badge text for the beliebt trend", async () => {
     const html = await badges({ trend: { kind: "beliebt", rank: 4, views7: 120 } });
     expect(html).toContain("Gerade beliebt · Platz 4");
-    expect(html).toContain("120 Aufrufe in den letzten 7 Tagen. Zur Liste „Gerade beliebt“");
-    expect(html).toContain('role="tooltip"');
   });
 
   it("supports the Im Aufwind variant", async () => {
     const html = await badges({ trend: { change: 40, kind: "aufwind", views7: 90 } });
     expect(html).toContain("Im Aufwind · +40 %");
-    expect(html).toContain(
-      "+40 % Aufrufe zur Vorwoche, 90 Aufrufe in 7 Tagen. Zur Liste „Im Aufwind“",
-    );
   });
 
   it("renders the word of the day and the trend together", async () => {

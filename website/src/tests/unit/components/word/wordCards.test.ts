@@ -76,16 +76,13 @@ describe("v18 word cards", () => {
     expect(html).toContain("Noch keen Wort mit");
   });
 
-  it("renders Einsprechen as aria-disabled, linked to its tooltip text", async () => {
+  it("renders Einsprechen as aria-disabled, carrying its tooltip text for the shared tooltip", async () => {
     const html = await examples({
       examples: [{ example: "Satz.", exampleAudio: [] }],
       word: "Testwort",
     });
     expect(html).toMatch(
-      /<button[^>]*aria-disabled="true"[^>]*aria-describedby="einsprechen-tip-0"/,
-    );
-    expect(html).toMatch(
-      /id="einsprechen-tip-0"[^>]*role="tooltip"[^>]*>Kommt bald\. Einsprechen is noch in Arbeit\./,
+      /<button[^>]*aria-disabled="true"[^>]*data-tip="Kommt bald\. Einsprechen is noch in Arbeit\."/,
     );
   });
 
