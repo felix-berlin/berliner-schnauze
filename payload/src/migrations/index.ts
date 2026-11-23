@@ -31,6 +31,7 @@ import * as migration_20261122_165037_comments_bezirk_featured from './20261122_
 import * as migration_20261122_170310_reports from './20261122_170310_reports';
 import * as migration_20261122_171522_suggestions_types from './20261122_171522_suggestions_types';
 import * as migration_20261122_172739_word_v18_fields from './20261122_172739_word_v18_fields';
+import * as migration_20261123_184457_fk_names_payload_3_94 from './20261123_184457_fk_names_payload_3_94';
 
 export const migrations = [
   {
@@ -196,6 +197,11 @@ export const migrations = [
   {
     up: migration_20261122_172739_word_v18_fields.up,
     down: migration_20261122_172739_word_v18_fields.down,
-    name: '20261122_172739_word_v18_fields'
+    name: '20261122_172739_word_v18_fields',
+  },
+  {
+    up: migration_20261123_184457_fk_names_payload_3_94.up,
+    down: migration_20261123_184457_fk_names_payload_3_94.down,
+    name: '20261123_184457_fk_names_payload_3_94'
   },
 ];
