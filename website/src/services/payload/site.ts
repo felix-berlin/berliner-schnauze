@@ -11,6 +11,7 @@ const affiliate = global("affiliate");
 const company = global("company");
 const home = global("home");
 const anki = global("anki");
+const wordPage = global("word-page");
 
 export interface MenuItem {
   description?: string;
@@ -109,3 +110,6 @@ export const fetchAnkiContent = async (counts: {
     })),
   };
 };
+
+/** The word page global (cached for a minute): the weekly story question. */
+export const fetchWordPageGlobal = wordPage;

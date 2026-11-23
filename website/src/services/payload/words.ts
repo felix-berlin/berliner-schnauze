@@ -1,6 +1,7 @@
 import type {
   AudioArray,
   Media,
+  Suggestion,
   Theman,
   Word as PayloadWord,
   WordExamplesArray,
@@ -28,6 +29,15 @@ export type WordExample = Omit<NonNullable<WordExamplesArray>[number], "exampleA
   exampleAudio: AudioRow[];
 };
 export type RelatedWord = Pick<PayloadWord, "berlinerisch" | "id"> & { slug: string };
+/** A fact with the contributor's suggestion as its id (the suggestion doc itself holds personal data, never read). */
+export type SiteFact = Omit<NonNullable<PayloadWord["facts"]>[number], "contributorSuggestion"> & {
+  contributorSuggestion?: number;
+};
+/** A related entry: `word` only when it is a public word with a slug (otherwise `label` is the text). */
+export type SiteRelated = Omit<
+  NonNullable<PayloadWord["related"]>[number],
+  "contributorSuggestion" | "word"
+> & { contributorSuggestion?: number; word?: RelatedWord };
 
 /**
  * A public word as the pages render it: the Payload doc with its relations populated, relations and media rows as
@@ -39,8 +49,11 @@ export type SiteWord = Omit<
   | "berlinerischAudio"
   | "derived"
   | "examples"
+  | "facts"
+  | "grammar"
   | "images"
   | "infoText"
+  | "related"
   | "relatedWords"
   | "slug"
   | "themen"
@@ -49,9 +62,12 @@ export type SiteWord = Omit<
   berlinerischAudio: AudioRow[];
   derived: DerivedWordFields & { decomposition?: string[] | null };
   examples: WordExample[];
+  facts?: SiteFact[];
+  grammar?: { diminutive?: RelatedWord; plural?: string | null };
   images: SiteMedia[];
   hasInfoText: boolean;
   infoTextHtml: string | null;
+  related?: SiteRelated[];
   relatedWords: RelatedWord[];
   slug: string;
   themen: Pick<Theman, "id" | "name" | "slug">[];
@@ -61,6 +77,15 @@ export type SiteWord = Omit<
 const populated = <T extends object>(
   items: readonly (T | number | null)[] | null | undefined,
 ): T[] => (items ?? []).filter((item): item is T => typeof item === "object" && item !== null);
+
+/** A populated word with a slug as a RelatedWord; undefined for an id, a missing doc or a doc without a slug. */
+const toRelatedWord = (word: PayloadWord | number | null | undefined): RelatedWord | undefined =>
+  typeof word === "object" && word?.slug
+    ? { berlinerisch: word.berlinerisch, id: word.id, slug: word.slug }
+    : undefined;
+
+const suggestionId = (suggestion: Suggestion | number | null | undefined): number | undefined =>
+  (suggestion && typeof suggestion === "object" ? suggestion.id : suggestion) ?? undefined;
 
 /** A populated media doc as SiteMedia; null for an unpopulated id, a missing doc or a doc without a file. */
 export const toSiteMedia = (media: Media | number | null | undefined): SiteMedia | null => {
@@ -107,8 +132,11 @@ export const toWord = ({
   berlinerischAudio,
   derived,
   examples,
+  facts,
+  grammar,
   images,
   infoText,
+  related,
   relatedWords,
   themen,
   wordTypes,
@@ -120,9 +148,19 @@ export const toWord = ({
   examples: (examples ?? []).map(({ exampleAudio, ...e }) =>
     Object.assign(e, { exampleAudio: audioRows(exampleAudio) }),
   ),
+  facts: facts?.map(({ contributorSuggestion, ...f }) => ({
+    ...f,
+    contributorSuggestion: suggestionId(contributorSuggestion),
+  })),
+  grammar: grammar && { diminutive: toRelatedWord(grammar.diminutive), plural: grammar.plural },
   hasInfoText: hasLexicalText(infoText),
   images: (images ?? []).flatMap((m) => toSiteMedia(m) ?? []),
   infoTextHtml: lexicalToHtml(infoText) || null,
+  related: related?.map(({ contributorSuggestion, word, ...r }) => ({
+    ...r,
+    contributorSuggestion: suggestionId(contributorSuggestion),
+    word: toRelatedWord(word),
+  })),
   // siteRead() leaves a related word the site may not show unpopulated (an id), and populated() drops ids
   relatedWords: populated<PayloadWord>(relatedWords).flatMap(({ berlinerisch, id, slug }) =>
     slug ? [{ berlinerisch, id, slug }] : [],
@@ -137,6 +175,8 @@ export const translationTexts = (word: Pick<SiteWord, "translations">): string[]
 
 // Relations: only what toWord reads, not every related word in full.
 const WORD_POPULATE = {
+  // Only `type`: a suggestion holds the visitor's name and mail, which must never be read; toWord keeps just the id.
+  suggestions: { type: true },
   themen: { name: true, slug: true },
   "word-types": { name: true },
   words: { berlinerisch: true, slug: true },

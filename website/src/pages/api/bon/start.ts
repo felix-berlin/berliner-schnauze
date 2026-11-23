@@ -7,6 +7,7 @@ import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";
 import { dealBatch, toPublic } from "@utils/bonDeck.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { randomBytes } from "node:crypto";
 import { bonTag } from "payload-app/bon-ranking";
 
@@ -30,9 +31,9 @@ export const POST: APIRoute = async ({ cookies }) => {
         },
       })
       .then(({ errors }) => {
-        if (errors.length > 0) console.error("[bon] cleanup failed for some games:", errors);
+        if (errors.length > 0) console.error("[bon] cleanup failed for some games:", errors.length);
       })
-      .catch((error: unknown) => console.error("[bon] cleanup failed:", error));
+      .catch((error: unknown) => logRouteError("bon cleanup", error));
     const [player, pool] = await Promise.all([playerFromCookie(payload, cookies), loadPool()]);
     const cards = dealBatch(pool, new Set());
     const game = await payload.create({
@@ -57,7 +58,7 @@ export const POST: APIRoute = async ({ cookies }) => {
       200,
     );
   } catch (error) {
-    console.error("[bon] start failed:", error);
+    logRouteError("bon start", error);
     return reply({ error: "Die Karten wollten leider nich kommen." }, 502);
   }
 };

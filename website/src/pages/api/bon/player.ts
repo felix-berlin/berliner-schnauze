@@ -12,6 +12,7 @@ import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { isUniqueViolation, reply } from "@utils/apiReply.ts";
 import { renameSchema } from "@utils/bonSchema.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { rateLimitedBy, refundHit } from "@utils/rateLimit.ts";
 import { displayName, NAME_REPORT_LIMIT, nameCategory } from "payload-app/bon-names";
 import { generateCode } from "payload-app/bon-player";
@@ -86,14 +87,14 @@ export const POST: APIRoute = async ({ cookies }) => {
         // Deleting the player releases partly claimed games (ON DELETE SET NULL), so a retry starts clean.
         await payload
           .delete({ collection: "bon-players", where: { id: { equals: created.id } } })
-          .catch((e: unknown) => console.error("[bon] player cleanup failed:", e));
+          .catch((e: unknown) => logRouteError("bon player cleanup", e));
         throw error;
       }
     }
     setPlayerCookie(cookies, created.code);
     return reply({ code: created.code }, 200);
   } catch (error) {
-    console.error("[bon] player failed:", error);
+    logRouteError("bon player", error);
     return reply({ error: "Dein Code wollte leider nich kommen." }, 502);
   } finally {
     if (guard) claiming.delete(guard);
@@ -124,7 +125,7 @@ export const GET: APIRoute = async ({ cookies }) => {
     const name = displayName(latest ?? { playerName: who.playerName });
     return reply(named(name, who.identity), 200);
   } catch (error) {
-    console.error("[bon] player read failed:", error);
+    logRouteError("bon player read", error);
     return reply({ error: "Dein Name wollte leider nich kommen." }, 502);
   }
 };
@@ -187,7 +188,7 @@ export const PATCH: APIRoute = async ({ cookies, request }) => {
     }
     return reply(named(name, who.identity), 200);
   } catch (error) {
-    console.error("[bon] rename failed:", error);
+    logRouteError("bon rename", error);
     return reply({ error: "Dein Name is nich anjekommen." }, 502);
   }
 };

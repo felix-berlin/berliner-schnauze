@@ -40,6 +40,7 @@ const cleanup = async () => {
   const where = { slug: { like: prefix } };
   await payload.delete({ collection: "words", trash: true, where });
   await payload.delete({ collection: "suggestions", where: { berlinerWord: { like: prefix } } });
+  await payload.delete({ collection: "suggestions", where: { text: { like: prefix } } });
   await payload.delete({ collection: "bon-games", where: { visitor: { like: prefix } } });
 };
 
@@ -137,6 +138,16 @@ beforeAll(async () => {
       createdAt: "2020-06-06T10:00:00Z",
     } as never,
   });
+  // Only a word suggestion counts as a suggestion in the stats.
+  await payload.create({
+    collection: "suggestions",
+    data: {
+      type: "example",
+      text: `${prefix}e`,
+      targetWord: a.id,
+      createdAt: "2020-06-06T10:00:00Z",
+    } as never,
+  });
   await payload.create({
     collection: "bon-games",
     data: {
@@ -179,7 +190,7 @@ describe("loadStats", () => {
     expect(data.totals.audio).toBe(7); // the two in-range rows of c add 2
   });
 
-  it("counts only published comments, all suggestions and finished BON games", () => {
+  it("counts only published comments, word suggestions and finished BON games", () => {
     expect(data.totals.comments).toBe(1);
     expect(data.totals.suggestions).toBe(1);
     expect(data.totals.bonGames).toBe(1);

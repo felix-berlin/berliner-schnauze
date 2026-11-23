@@ -1035,7 +1035,7 @@ describe("POST /api/bon/player claim failures", () => {
     db.api.delete.mockRejectedValueOnce(new Error("delete down"));
     expect((await player(undefined, "v-1")).status).toBe(502);
     expect(set).not.toHaveBeenCalled();
-    expect(console.error).toHaveBeenCalledWith("[bon] player cleanup failed:", expect.any(Error));
+    expect(console.error).toHaveBeenCalledWith("[bon player cleanup] failed: Error");
   });
 
   it("a parallel call for the same visitor gets 409 and one player; the guard is released", async () => {
@@ -1749,9 +1749,7 @@ describe("bad bodies and storage failures", () => {
     const error = vi.spyOn(console, "error").mockImplementation(() => {});
     db.api.delete.mockResolvedValueOnce({ docs: [], errors: [{ message: "locked" }] } as never);
     expect((await start("v-1")).status).toBe(200);
-    expect(error).toHaveBeenCalledWith("[bon] cleanup failed for some games:", [
-      { message: "locked" },
-    ]);
+    expect(error).toHaveBeenCalledWith("[bon] cleanup failed for some games:", 1);
   });
 
   it("finish answers 409 when another request finished the game in between", async () => {

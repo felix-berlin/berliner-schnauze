@@ -82,6 +82,21 @@ describe("comments", () => {
     );
   });
 
+  it("holds a site comment created with context.review (Jeschichten)", async () => {
+    mails();
+    const c = await payload.create({
+      collection: "comments",
+      context: { review: true },
+      data: { word: wordId, text: "Ne kurze Jeschichte" } as never,
+    });
+    expect(c.status).toBe("pending");
+  });
+
+  it("keeps a link-free create without context.review published", async () => {
+    mails();
+    expect((await make({ text: "Ne kurze Jeschichte" })).status).toBe("published");
+  });
+
   it("holds a comment with a link in the name", async () => {
     mails();
     expect((await make({ authorName: "casino-bonus.com" })).status).toBe("pending");

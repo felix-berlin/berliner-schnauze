@@ -1,8 +1,10 @@
 import type { APIRoute } from "astro";
 
+import { buildPollResult } from "@lib/pollResult.ts";
 import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { sha256, visitorId } from "@services/payload/comments.ts";
 import { isUniqueViolation, orNull, positiveInt, reply } from "@utils/apiReply.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { clientIp, rateLimitedBy } from "@utils/rateLimit.ts";
 import {
   feedbackPatchSchema,
@@ -71,9 +73,23 @@ export const GET: APIRoute = async ({ cookies, url }) => {
   try {
     const payload = await getPayloadClient();
     const doc = await findMine(payload, word, visitorId(cookies, false));
-    return reply(await state(payload, word, doc ? toMine(doc) : null), 200);
+    const mine = doc ? toMine(doc) : null;
+    // One find, aggregated in code. The result is the same for everyone; only mine/own depend on the cookie, so the
+    // answer stays per visitor and uncached (no-store), as before.
+    const [shown, { docs: rows }] = await Promise.all([
+      state(payload, word, mine),
+      payload.find({
+        collection: "word-feedback",
+        depth: 0,
+        limit: 0,
+        pagination: false,
+        select: { age: true, area: true, half: true, usage: true },
+        where: { word: { equals: word } },
+      }),
+    ]);
+    return reply({ ...shown, result: buildPollResult(rows, mine?.usage ?? undefined) }, 200);
   } catch (error) {
-    console.error(`[word-feedback] read ${word} failed:`, error);
+    logRouteError("word-feedback read", error);
     return reply({ error: "Die Zahlen wollten leider nich laden." }, 502);
   }
 };
@@ -155,19 +171,25 @@ export const PATCH: APIRoute = async ({ clientAddress, cookies, request }) => {
     try {
       return reply(await state(payload, word, toMine(doc)), 200);
     } catch (error) {
-      console.error(`[word-feedback] state after write ${word} failed:`, error);
+      logRouteError("word-feedback state", error);
       return reply({ error: "Is jespeichert, aber die Zahlen wollten nich laden." }, 502);
     }
   } catch (error) {
-    console.error(`[word-feedback] write ${word} failed:`, error);
+    logRouteError("word-feedback write", error);
     return reply({ error: "Die Stimme konnte leider nicht gezählt werden." }, 502);
   }
 };
 
 const CHUNK = 1000;
 
-/** Deletes every row tied to this browser's cookie, over all words: the self-service for erasure and objection. */
-export const DELETE: APIRoute = async ({ clientAddress, cookies, request }) => {
+/**
+ * Deletes this browser's rows: only the row of `?word=` when given, else every row over all words (the
+ * self-service for erasure and objection).
+ */
+export const DELETE: APIRoute = async ({ clientAddress, cookies, request, url }) => {
+  const rawWord = url.searchParams.get("word");
+  const word = rawWord === null ? undefined : positiveInt(rawWord);
+  if (rawWord !== null && !word) return reply({ error: "Ungültige Eingabe" }, 400);
   const cookie = visitorId(cookies, false);
   if (!cookie) return reply({ deleted: true }, 200);
   const ip = clientIp(request.headers.get("x-forwarded-for"), clientAddress);
@@ -175,6 +197,21 @@ export const DELETE: APIRoute = async ({ clientAddress, cookies, request }) => {
     return reply({ error: "Jenug jestimmt für heute." }, 429);
   try {
     const payload = await getPayloadClient();
+    if (word) {
+      const found = await orNull(
+        payload.findByID({ collection: "words", depth: 0, id: word, ...siteRead() }),
+      );
+      if (!found) return reply({ error: "Wort nicht gefunden" }, 404);
+      const { errors } = await payload.delete({
+        collection: "word-feedback",
+        where: {
+          visitor: { in: [feedbackVisitor(cookie, word), legacyVisitor(cookie)] },
+          word: { equals: word },
+        },
+      });
+      if (errors.length) throw new Error(`${errors.length} row(s) not deleted`);
+      return reply({ deleted: true }, 200);
+    }
     const { docs } = await payload.find({
       collection: "words",
       depth: 0,
@@ -195,7 +232,7 @@ export const DELETE: APIRoute = async ({ clientAddress, cookies, request }) => {
     }
     return reply({ deleted: true }, 200);
   } catch (error) {
-    console.error("[word-feedback] delete all failed:", error);
+    logRouteError("word-feedback delete", error);
     return reply({ error: "Das hat leider nicht geklappt." }, 502);
   }
 };

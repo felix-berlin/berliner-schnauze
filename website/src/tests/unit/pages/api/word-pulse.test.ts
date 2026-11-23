@@ -64,9 +64,9 @@ describe("POST /api/word-pulse", () => {
 
   it("502 and a log line on a database error", async () => {
     const error = vi.spyOn(console, "error").mockImplementation(() => {});
-    bumpWordStat.mockRejectedValue(new Error("db down"));
+    bumpWordStat.mockRejectedValue(new Error("db down: secret-value"));
     expect((await post({ kind: "view", word: 7 })).status).toBe(502);
-    expect(error).toHaveBeenCalled();
+    expect(error).toHaveBeenCalledWith("[word-pulse] failed: Error");
   });
 
   it("counts the same word and kind once a day per IP, answering 200 both times", async () => {

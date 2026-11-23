@@ -470,6 +470,7 @@ export interface Word {
  */
 export interface Suggestion {
   id: number;
+  title?: string | null;
   type?: ('word' | 'example' | 'fact' | 'related') | null;
   berlinerWord?: string | null;
   translation?: string | null;
@@ -1449,6 +1450,7 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "suggestions_select".
  */
 export interface SuggestionsSelect<T extends boolean = true> {
+  title?: T;
   type?: T;
   berlinerWord?: T;
   translation?: T;

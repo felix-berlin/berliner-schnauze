@@ -7,12 +7,16 @@ type Rule = { max: number; method?: string; prefix: string; windowMs: number; ke
  */
 const RULES: Rule[] = [
   { max: 5, method: "POST", prefix: "/api/suggest-word", windowMs: 10 * 60_000 },
+  { max: 5, method: "POST", prefix: "/api/contribute", windowMs: 10 * 60_000 },
+  { max: 5, method: "POST", prefix: "/api/reports", windowMs: 10 * 60_000 },
   { max: 60, prefix: "/og/", windowMs: 60_000 },
   { max: 20, prefix: "/api/preview", windowMs: 60_000 },
   { max: 5, method: "POST", prefix: "/api/comments", windowMs: 10 * 60_000 },
   { max: 120, method: "GET", prefix: "/api/comments", windowMs: 60_000 },
   { key: "comment-own", max: 10, method: "PATCH", prefix: "/api/comments/", windowMs: 5 * 60_000 },
   { key: "comment-own", max: 10, method: "DELETE", prefix: "/api/comments/", windowMs: 5 * 60_000 },
+  { max: 5, method: "POST", prefix: "/api/stories", windowMs: 10 * 60_000 },
+  { max: 120, method: "GET", prefix: "/api/stories", windowMs: 60_000 },
   { max: 30, method: "POST", prefix: "/api/comment-votes", windowMs: 60_000 },
   { max: 10, method: "POST", prefix: "/api/comment-reports", windowMs: 60 * 60_000 },
   // PATCH is capped per IP and word inside the route.

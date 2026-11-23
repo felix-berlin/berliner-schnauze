@@ -42,6 +42,10 @@ export const voterKey = (visitor: string): string => sha256(`votes:${visitor}`);
 
 export const hashEditKey = sha256;
 
+/** Per-word handle on a comment (`authorTag`): one visitor, one tag per word, not linkable across words. */
+export const authorTagOf = (visitor: string, wordId: number): string =>
+  sha256(`${visitor}:${wordId}`).slice(0, 16);
+
 /** Maps a stored comment to what the browser may see; never carries editKeyHash or authorTag. */
 export const toPublic = (c: Comment, myVote: -1 | 0 | 1 = 0): PublicComment => {
   const state =

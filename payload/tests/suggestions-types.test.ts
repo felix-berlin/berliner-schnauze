@@ -1,6 +1,6 @@
 import type { Payload } from "payload";
 
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { getTestPayload } from "./helpers/payload";
 
@@ -17,6 +17,11 @@ beforeAll(async () => {
   });
   wordId = w.id;
 }, 60_000);
+
+afterEach(() => {
+  vi.restoreAllMocks();
+  delete process.env.SUGGEST_MAIL_TO;
+});
 
 afterAll(async () => {
   await payload.delete({ collection: "suggestions", where: { userName: { equals: MARK } } });
@@ -113,6 +118,60 @@ describe("suggestion types", () => {
     });
     expect(upd.status).toBe("rejected");
     await expect(create({ type: "example", text: "Ick bin da." })).rejects.toThrow();
+  });
+
+  it("mails a short type-specific text for a non-word suggestion, with the target word", async () => {
+    process.env.SUGGEST_MAIL_TO = "redaktion@example.com";
+    const send = vi.spyOn(payload, "sendEmail").mockResolvedValue(undefined);
+    await create({
+      type: "fact",
+      kind: "herkunft",
+      text: "Kommt aus dem Jiddischen.",
+      targetWord: wordId,
+      userMail: "fan@example.com",
+    });
+    await create({
+      type: "related",
+      relation: "gegenteil",
+      relatedText: "Molle",
+      targetWord: wordId,
+    });
+    const [fact, related] = send.mock.calls.map(
+      (c) => c[0] as { replyTo?: string; subject: string; text: string; to: string },
+    );
+    expect(send).toHaveBeenCalledTimes(2);
+    expect(fact!.to).toBe("redaktion@example.com");
+    expect(fact!.replyTo).toBe("fan@example.com");
+    expect(fact!.subject).toContain("Wissenswertes");
+    expect(fact!.text).toContain("Typentest");
+    expect(fact!.text).toContain("Kommt aus dem Jiddischen.");
+    expect(fact!.text).not.toContain("neues Berliner Wort");
+    expect(related!.text).toContain("Molle");
+    expect(related!.text).toContain("Gegenteil");
+  });
+
+  it("gives every type a title for the admin list", async () => {
+    const word = await create({ berlinerWord: "Titelwort", translation: "x" });
+    const example = await create({ type: "example", text: "Ick bin da.", targetWord: wordId });
+    const related = await create({
+      type: "related",
+      relation: "gleich",
+      relatedText: "Molle",
+      targetWord: wordId,
+    });
+    const fact = await create({
+      type: "fact",
+      kind: "herkunft",
+      text: "y".repeat(500),
+      targetWord: wordId,
+    });
+    const title = async (id: number) =>
+      ((await payload.findByID({ collection: "suggestions", id, depth: 0 })) as { title?: string })
+        .title;
+    expect(await title(word.id)).toBe("Titelwort");
+    expect(await title(example.id)).toContain("Ick bin da.");
+    expect(await title(related.id)).toContain("Molle");
+    expect((await title(fact.id))!.length).toBeLessThan(100);
   });
 
   it("needs a target word for a fact and a related word, like an example", async () => {

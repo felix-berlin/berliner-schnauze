@@ -1,8 +1,6 @@
-import type { CollectionAfterChangeHook, CollectionConfig } from "payload";
+import type { CollectionAfterChangeHook, CollectionConfig, FieldHook, Validate } from "payload";
 
 import { relationship, select, text, textarea } from "payload/shared";
-
-import type { AnyValidate } from "../lib/requiredField";
 
 import { authenticatedOnly, notOverMcp } from "../access";
 import { adoptSuggestion } from "../hooks/adoptSuggestion";
@@ -15,53 +13,98 @@ const TYPE_LABEL: Record<string, string> = {
   related: "Verwandtes Wort",
   word: "Neues Wort",
 };
+const RELATION_LABEL: Record<string, string> = {
+  gegenteil: "Gegenteil",
+  gleich: "Gleich",
+  redewendung: "Redewendung",
+  verwandt: "Verwandt",
+};
 
 /** Mails the editors about a new suggestion; a failed mail is logged, the suggestion stays in the admin. */
 const mailEditors: CollectionAfterChangeHook = async ({ doc, operation, req }) => {
   if (operation !== "create") return doc;
   const type: string = doc.type ?? "word";
+  if (type !== "word") {
+    const targetId = typeof doc.targetWord === "object" ? doc.targetWord?.id : doc.targetWord;
+    const target = targetId
+      ? await req.payload
+          .findByID({
+            collection: "words",
+            depth: 0,
+            id: targetId,
+            req,
+            select: { berlinerisch: true },
+          })
+          .catch(() => null)
+      : null;
+    const rows: [string, string | null | undefined][] = [
+      ["Zu Wort", target?.berlinerisch],
+      ...(type === "example"
+        ? [
+            ["Beispiel", doc.text],
+            ["Hochdeutsch", doc.highdeutsch],
+          ]
+        : []),
+      ...(type === "fact"
+        ? [
+            ["Art", doc.kind],
+            ["Text", doc.text],
+          ]
+        : []),
+      ...(type === "related"
+        ? [
+            ["Beziehung", RELATION_LABEL[doc.relation] ?? doc.relation],
+            ["Verwandtes Wort", doc.relatedText],
+          ]
+        : []),
+      ["Name", doc.userName],
+      ["E-Mail", doc.userMail],
+    ] as [string, string | null | undefined][];
+    notifyEditors(
+      req,
+      `${TYPE_LABEL[type] ?? type} - Berliner Schnauze`,
+      [
+        `Ein neuer Beitrag (${TYPE_LABEL[type] ?? type}) wurde eingereicht:`,
+        "",
+        ...rows.map(([label, value]) => `${label}: ${value ?? ""}`),
+      ],
+      doc.userMail ?? undefined,
+    );
+    return doc;
+  }
   const similar = (req.context.similarWords as string[] | undefined) ?? [];
-  // The other types name the word they are for; show its headword, not an id.
-  const target = doc.targetWord
-    ? await req.payload
-        .findByID({
-          collection: "words",
-          depth: 0,
-          id: typeof doc.targetWord === "object" ? doc.targetWord.id : doc.targetWord,
-          req,
-        })
-        .then((w) => w.berlinerisch)
-        .catch(() => null)
-    : null;
-  const rows: [string, string | null | undefined][] =
-    type === "word"
-      ? [
-          ["Berliner Wort", doc.berlinerWord],
-          ["Übersetzung", doc.translation],
-          ["Beispiel", doc.example],
-        ]
-      : [
-          ["Zu Wort", target],
-          ["Text", doc.text],
-          ["Art", doc.kind],
-          ["Beziehung", doc.relation],
-          ["Verwandtes Wort", doc.relatedText],
-          ["Hochdeutsch", doc.highdeutsch],
-        ];
-  rows.push(["Name", doc.userName], ["E-Mail", doc.userMail]);
-  if (similar.length) rows.push(["Ähnliche Wörter", similar.join(", ")]);
+  const rows: [string, string | null | undefined][] = [
+    ["Berliner Wort", doc.berlinerWord],
+    ["Übersetzung", doc.translation],
+    ["Beispiel", doc.example],
+    ["Name", doc.userName],
+    ["E-Mail", doc.userMail],
+    ...(similar.length ? [["Ähnliche Wörter", similar.join(", ")] as [string, string]] : []),
+  ];
   notifyEditors(
     req,
-    `${TYPE_LABEL[type] ?? "Vorschlag"} - Berliner Schnauze`,
+    "Wortvorschlag - Berliner Schnauze",
     [
-      `Ein neuer Vorschlag wurde eingereicht (${TYPE_LABEL[type] ?? type}):`,
+      "Ein neues Berliner Wort wurde eingereicht:",
       "",
-      ...rows.filter(([, value]) => value).map(([label, value]) => `${label}: ${value}`),
+      ...rows.map(([label, value]) => `${label}: ${value ?? ""}`),
     ],
     doc.userMail ?? undefined,
   );
   return doc;
 };
+
+/** The list title: the word itself, or the type with the start of its text. */
+const titleValue: FieldHook = ({ siblingData }) => {
+  const d = siblingData as Record<string, string | undefined>;
+  if ((d.type ?? "word") === "word") return d.berlinerWord ?? "";
+  const body = (d.type === "related" ? d.relatedText : d.text) ?? "";
+  return `${TYPE_LABEL[d.type ?? ""] ?? d.type}: ${body.length > 60 ? `${body.slice(0, 59)}…` : body}`;
+};
+
+/** Payload's `Validate` generics differ per field type; the wrappers below only forward to the stock validator. */
+// oxlint-disable-next-line typescript/no-explicit-any
+type AnyValidate = Validate<any, any, any, any>;
 
 /** Required only for the given suggestion types: runs the stock validator with `required` switched per type. */
 const requiredFor =
@@ -89,12 +132,23 @@ export const Suggestions: CollectionConfig = {
   // A suggestion whose word is live is locked (hooks/suggestionLock.ts).
   access: { ...authenticatedOnly, update: updateUnlocked },
   admin: {
+    // Payload refuses a virtual `useAsTitle`, so the document header keeps the word; `title` is the list column.
     useAsTitle: "berlinerWord",
-    defaultColumns: ["type", "berlinerWord", "text", "status", "createdAt"],
+    // The search runs on stored columns; `title` is virtual.
+    listSearchableFields: ["berlinerWord", "text", "relatedText"],
+    defaultColumns: ["title", "type", "translation", "status", "createdAt"],
     group: "Community",
   },
   hooks: { beforeChange: [refuseWhenLocked, adoptSuggestion], afterChange: [mailEditors] },
   fields: [
+    {
+      name: "title",
+      type: "text",
+      label: "Titel",
+      virtual: true,
+      hooks: { afterRead: [titleValue] },
+      admin: { position: "sidebar", readOnly: true },
+    },
     {
       name: "lockNotice",
       type: "ui",
