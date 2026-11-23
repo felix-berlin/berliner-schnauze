@@ -3,7 +3,7 @@
 
 // Action row of the word head (SPEC §5, §5.1, §5.2): Daumen hoch/runter, Teilen, the ⋮ menu and the citing panel
 // below the row. Parts: .row, .reactions, .note,
-// .live, .cite (.head, .heading, .close, .tabs, .tabpanel, .hint, .quote, .send, .foot).
+// .live, .cite (.head, .heading, .tabs, .tabpanel, .hint, .quote, .send, .foot).
 // Reactions, Teilen and the ⋮ button are c-reaction pills; the menu is c-word-actions-menu inside a DropdownPopover
 // (theme bare, placement top-end), both slot content the scope of this file does not reach.
 @include mx.component("word-actions") {
@@ -58,9 +58,12 @@
   }
 
   .head {
+    --icon-button-color: var(--color-text-muted);
+
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-inline-end: calc(-1 * var(--space-3)); // the 44px close button's glyph aligns with the panel padding
   }
 
   .heading {
@@ -68,24 +71,6 @@
     font-family: var(--font-family-body); // no Fraktur on this page
     font-size: var(--font-size-lg);
     color: var(--color-text-strong);
-  }
-
-  .close {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    inline-size: var(--size-tap-target);
-    block-size: var(--size-tap-target);
-    margin-inline-end: calc(-1 * var(--space-3));
-    color: var(--color-text-muted);
-    background: transparent;
-    border: 0;
-    border-radius: var(--radius-pill);
-    cursor: pointer;
-
-    @include butler-mx.hover {
-      color: var(--color-text-strong);
-    }
   }
 
   // Segment of pills (SPEC §5.2); the selected one is raised.

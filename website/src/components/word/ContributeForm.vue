@@ -28,7 +28,8 @@
             <button
               v-for="o in f.options"
               :key="o.value"
-              class="chip"
+              class="c-choice"
+              data-variant="chip"
               type="button"
               :aria-pressed="v[f.key] === o.value"
               @click="v[f.key] = o.value"
@@ -149,7 +150,7 @@
 
       <!-- The regions are always rendered: a live region is only announced when it exists before its text does. -->
       <div class="live" role="alert">
-        <div v-if="failed" class="strip">
+        <div v-if="failed" class="c-state" data-variant="error">
           <CircleAlert aria-hidden="true" height="18" width="18" />
           <span class="body">
             <b>Ditt hat nich jeklappt.</b>
@@ -160,7 +161,7 @@
       </div>
       <!-- Nothing was sent (captcha still running): a calm status, not the error strip. -->
       <div class="live" role="status">
-        <div v-if="waiting" class="strip" data-variant="calm">
+        <div v-if="waiting" class="c-state">
           <Hourglass aria-hidden="true" height="18" width="18" />
           <span class="body">{{ waiting }}</span>
         </div>

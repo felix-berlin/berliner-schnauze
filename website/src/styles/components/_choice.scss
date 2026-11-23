@@ -5,6 +5,8 @@
 // Variant tile (data-variant="tile"): poll answer (SPEC §7): borderless card2 tile, 72px, round dashed icon, parts .icon and .text.
 // Variant pill (data-variant="pill"): voice button (SPEC §6): 36px pill on card2 with a 26px play circle (.icon), a hit band
 // reaches 44px.
+// Variant chip (SPEC §4.3 "Chip (Auswahl)"): 36px pill on the card surface with a 44px hit band; pressed = ink rim and
+// text on the warm ground (not the orange fill).
 // Variant segment: one chip of a small connected control (36px look, 44px hit band; neighbours
 // overlap by their border).
 // Public (a parent's layout knobs, the old :where() let parents override these): --choice-display,
@@ -170,6 +172,43 @@
     &[aria-pressed="true"] .icon {
       background: var(--color-text-on-accent);
       color: var(--color-accent-solid);
+    }
+  }
+
+  :scope[data-variant~="chip"] {
+    --_h: 2.25rem; // SPEC §4.3: 36px, no token
+    --_bleed: calc((var(--size-tap-target) - var(--_h)) / 2);
+    --_border: 1px;
+
+    position: relative;
+    min-block-size: var(--choice-min-block-size, var(--_h));
+    padding: 0 var(--choice-padding-inline, var(--space-3));
+    border-color: var(--color-border-card);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-sheet);
+    font-size: var(--choice-font-size, var(--font-size-md));
+    letter-spacing: normal;
+
+    // Looks 36px, hits 44px (positioned from the padding box, hence the border width).
+    &::before {
+      content: "";
+      position: absolute;
+      inset-block: calc(-1 * (var(--_bleed) + var(--_border)));
+      inset-inline: 0;
+    }
+
+    @include butler-mx.hover {
+      &:not(:disabled, [aria-disabled="true"]) {
+        border-style: solid;
+        box-shadow: none;
+        background: var(--color-surface-chip);
+      }
+    }
+
+    &[aria-pressed="true"] {
+      border-color: var(--color-text-strong);
+      background: var(--color-surface-card3, var(--color-surface-tint-warm));
+      color: var(--color-text-strong);
     }
   }
 

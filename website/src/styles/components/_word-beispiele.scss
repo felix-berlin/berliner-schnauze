@@ -55,39 +55,12 @@
     gap: var(--space-2);
   }
 
-  // Dashed pill "+ Einsprechen" (mock .w17__vadd): 36px with a 44px hit band, aria-disabled (focusable), does nothing yet.
-  .record-button {
-    --_h: 2.25rem; // mock: 36px, no token
-    --_bleed: calc((var(--size-tap-target) - var(--_h)) / 2);
-    --_reach: calc(var(--_bleed) + 2px); // plus the border: the band is positioned from the padding box
-
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    min-block-size: var(--_h);
+  // Dashed pill "+ Einsprechen" (mock .w17__vadd): a c-button (pill dashed), aria-disabled (focusable), does nothing yet.
+  .record {
     // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock: padding 0 .9rem 0 .6rem
-    padding: 0 0.9rem 0 0.6rem;
-    font: inherit;
-    font-size: var(--font-size-md);
-    letter-spacing: 0;
-    color: var(--color-text-body);
-    background: transparent;
-    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock: 1.5px dashed rule
-    border: 1.5px dashed var(--color-border-card);
-    border-radius: var(--radius-pill);
-    opacity: 0.55; // mock: the disabled look
-    cursor: not-allowed;
-
-    &::before {
-      content: "";
-      position: absolute;
-      inset: calc(-1 * var(--_reach));
-    }
-  }
-
-  .plus {
-    color: var(--color-text-muted);
+    --button-padding: 0 0.9rem 0 0.6rem;
+    --button-gap: var(--space-2);
+    --button-plus-color: var(--color-text-muted);
   }
 
   // Tooltip (SPEC §14): above the row, 13px, shown on hover, focus and tap ([data-open]); data-dismissed (Esc) wins.

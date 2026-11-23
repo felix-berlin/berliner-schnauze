@@ -65,6 +65,7 @@
     color: var(--color-text-strong);
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-bold);
+    letter-spacing: normal; // a control resets the page tracking (the buttons the pill replaces did)
     justify-content: center;
 
     &::before {

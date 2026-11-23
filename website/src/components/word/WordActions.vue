@@ -125,7 +125,7 @@
         <h3 :id="`${uid}-head`" class="heading">Zitieren</h3>
         <button
           aria-label="Zitieren schließen"
-          class="close"
+          class="c-icon-button"
           type="button"
           @click="closeCite(true)"
         >

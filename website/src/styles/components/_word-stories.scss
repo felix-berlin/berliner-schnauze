@@ -2,8 +2,8 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 // Jeschichten card body (SPEC §8.1): the prompt box ("Frage der Woche" + "Erzähl’s"), the list with the reactions and
-// "Alle {n} Jeschichten lesen". Parts: .prompt (.question, .text, .ask), .empty, .list (.item, .quote, .meta, .by,
-// .reactions, .react, .num), .all, .note, .foot. The third story of a collapsed list carries data-narrow-hidden: the page
+// "Alle {n} Jeschichten lesen". Parts: .prompt (.question, .text; the "Erzähl’s" button is an outline c-button), .empty, .list (.item, .quote, .meta,
+// .by, .reactions; the votes are pill compact c-reactions), .all, .note, .foot. The third story of a collapsed list carries data-narrow-hidden: the page
 // shell (objects/_word-v18.scss) hides it below the "word" breakpoint (SPEC: mobile 2).
 @include mx.component("word-stories") {
   :scope {
@@ -25,6 +25,8 @@
     padding: var(--space-4);
     background: var(--color-surface-chip);
     border-radius: var(--radius-sm);
+    // SPEC §8.1: the icon of the "Erzähl’s" button sits 2.5px higher, no token at that size
+    --button-icon-translate: 0 -2.5px; // stylelint-disable-line declaration-property-value-disallowed-list -- SPEC §8.1: optical offset
   }
 
   .question {
@@ -38,40 +40,9 @@
     color: var(--color-text-strong);
   }
 
-  // Outline button (SPEC §4.3): 44px, 0 16px, 4px radius, 1.5px orange-500 rim.
-  .ask {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    flex: none;
-    min-block-size: var(--size-tap-target);
-    padding-inline: var(--space-4);
-    font: inherit;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-strong);
-    background: transparent;
-    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §4.3: 1.5px rim, no border-width token
-    border: 1.5px solid var(--color-accent-active);
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-
-    @include butler-mx.feature("motion") {
-      transition: background-color var(--duration-base);
-    }
-    @include butler-mx.hover {
-      background: var(--color-surface-chip);
-    }
-
-    .icon {
-      // SPEC §8.1: the icon sits 2.5px higher, no token at that size
-      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §8.1: optical offset of 2.5px
-      translate: 0 -2.5px;
-    }
-  }
-
   // Without JS the button would do nothing (like the contribute buttons of the cards).
-  html:not([data-js]) :scope .ask {
-    display: none;
+  html:not([data-js]) :scope .prompt {
+    --button-display: none; // c-button (outline) reads it
   }
 
   .empty {
@@ -120,56 +91,6 @@
   .reactions {
     display: inline-flex;
     gap: var(--space-2);
-  }
-
-  // Reaction (SPEC §4.3): pill, 36px look on the desktop (--word-control-block, set by the page shell), 44px elsewhere;
-  // the hit band always reaches 44px.
-  .react {
-    --_h: var(--word-control-block, var(--size-tap-target));
-    --_bleed: calc((var(--size-tap-target) - var(--_h)) / 2);
-    --_reach: calc(var(--_bleed) + 2px); // plus the border: the band is positioned from the padding box
-
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-    min-block-size: var(--_h);
-    padding-inline: var(--space-3);
-    font: inherit;
-    font-size: var(--_small);
-    color: var(--color-text-body);
-    background: transparent;
-    border: 1px solid var(--color-border-card);
-    border-radius: var(--radius-pill);
-    cursor: pointer;
-
-    &::before {
-      content: "";
-      position: absolute;
-      inset: calc(-1 * var(--_reach));
-    }
-
-    @include butler-mx.hover {
-      &:not([aria-disabled="true"]) {
-        border-color: var(--color-accent-active);
-        color: var(--color-text-strong);
-      }
-    }
-
-    &[aria-pressed="true"] {
-      color: var(--color-text-strong);
-      background: var(--color-surface-chip);
-      border-color: var(--color-accent-active);
-    }
-
-    &[aria-disabled="true"] {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
-  }
-
-  .num {
-    font-variant-numeric: tabular-nums;
   }
 
   // Textlink with the orange line (SPEC §8.1).

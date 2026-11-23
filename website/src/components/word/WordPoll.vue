@@ -170,7 +170,14 @@
           <button class="c-link" :aria-disabled="pending" type="button" @click="skip">
             überspringen
           </button>
-          <button class="res" :aria-disabled="pending" type="button" @click="showResult">
+          <button
+            :aria-busy="pending"
+            :aria-disabled="pending"
+            class="c-button res"
+            data-variant="outline"
+            type="button"
+            @click="showResult"
+          >
             Ergebnis zeigen <span aria-hidden="true">→</span>
           </button>
         </div>

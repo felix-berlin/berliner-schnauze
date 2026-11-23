@@ -2,8 +2,8 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 // Contribution form of the word page (docs/design/wortseite SPEC §13): one component for example, Jeschichte,
-// Wissenswertes, Verwandte and the error report. Parts: .title, .row, .label, .optional, .chips, .chip, .combo,
-// .listbox, .option, .under, .hint, .counter (data-state="over"), .error, .strip, .foot, .actions, .thanks.
+// Wissenswertes, Verwandte and the error report. Parts: .title, .row, .label, .optional, .chips (c-choice chips), .combo,
+// .listbox, .option, .under, .hint, .counter (data-state="over"), .error, .foot (the status boxes are c-state), .actions, .thanks.
 // Root data-state: open | thanks. Without JS nothing renders (the island is client:visible).
 @include mx.component("contribute-form") {
   :scope {
@@ -65,33 +65,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
-  }
-
-  // Chip (SPEC §4.3): 36px, pill, card surface; selected = ink rim and text on the warm ground.
-  .chip {
-    min-block-size: 2.25rem; // SPEC §4.3: 36px, no token
-    padding-inline: var(--space-3);
-    font: inherit;
-    font-size: var(--font-size-md);
-    color: var(--color-text-body);
-    background: var(--color-surface-sheet);
-    border: 1px solid var(--color-border-card);
-    border-radius: var(--radius-pill);
-    cursor: pointer;
-    transition:
-      background-color var(--duration-fast) ease,
-      border-color var(--duration-fast) ease;
-
-    @include butler-mx.hover {
-      background: var(--color-surface-chip);
-    }
-
-    &[aria-pressed="true"] {
-      color: var(--color-text-strong);
-      font-weight: var(--font-weight-bold);
-      background: var(--color-surface-card3, var(--color-surface-tint-warm));
-      border-color: var(--color-text-strong);
-    }
   }
 
   .under {
@@ -174,34 +147,6 @@
     block-size: 1px;
     overflow: hidden;
     clip-path: inset(50%);
-  }
-
-  // Error and waiting strips (SPEC §13): a line in the danger colour, calm variant without it.
-  .strip {
-    display: flex;
-    gap: var(--space-2);
-    padding: var(--space-3);
-    background: var(--color-surface-sheet);
-    border-inline-start: 3px solid var(--color-status-danger);
-    border-radius: var(--radius-xs);
-
-    &[data-variant="calm"] {
-      border-inline-start-color: var(--color-border-card);
-    }
-
-    svg {
-      flex: none;
-      margin-block-start: var(--space-1); // aligns the icon with the first text line
-    }
-
-    .body {
-      display: grid;
-      gap: var(--space-1);
-    }
-
-    .detail {
-      color: var(--color-text-muted);
-    }
   }
 
   .actions {

@@ -172,33 +172,6 @@
     flex: 1;
   }
 
-  // Outline button (SPEC §4.3): 44px, 0 16px, 4px radius, 1.5px orange-500 rim.
-  .res {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    min-block-size: var(--size-tap-target);
-    padding-inline: var(--space-4);
-    font: inherit;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-strong);
-    background: transparent;
-    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §4.3: 1.5px rim, no border-width token
-    border: 1.5px solid var(--color-accent-active);
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: background-color var(--duration-base);
-
-    @include butler-mx.hover {
-      background: var(--color-surface-chip);
-    }
-
-    &[aria-disabled="true"] {
-      opacity: 0.55;
-      cursor: progress;
-    }
-  }
-
   // ---- C
   .result {
     display: grid;

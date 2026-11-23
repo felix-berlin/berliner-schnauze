@@ -35,7 +35,7 @@ const headingId = `heading-${id}`;
     {count !== undefined && count > 0 && <span class='count'>{count}</span>}
     {meta && <span class='count'>{meta}</span>}
     {contribute && !gap && (
-      <button class='add' type='button' data-contribute={contribute} aria-expanded='false'>
+      <button class='c-button' data-variant='pill' type='button' data-contribute={contribute} aria-expanded='false'>
         <span class='plus' aria-hidden='true'>+</span> Ergänzen
       </button>
     )}
@@ -50,7 +50,7 @@ const headingId = `heading-${id}`;
     <div class='gap'>
       <div class='gap-box'>
         <p class='text'>{gap.text}</p>
-        <button class='cta' type='button' data-contribute={contribute} aria-expanded='false'>
+        <button class='c-button' data-variant='outline' type='button' data-contribute={contribute} aria-expanded='false'>
           <span class='plus' aria-hidden='true'>+</span> {gap.cta}
         </button>
       </div>

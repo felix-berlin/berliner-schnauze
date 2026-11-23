@@ -44,7 +44,7 @@ const gap = {
                 <VoiceButtons order='wm' aria-label={`Beispiel ${index + 1} anhören`} client:visible sources={sources} />
               )}
               <span class='record'>
-                <button class='record-button' type='button' aria-disabled='true' aria-describedby={tip}>
+                <button class='c-button record-button' data-variant='pill dashed' type='button' aria-disabled='true' aria-describedby={tip}>
                   <span class='plus' aria-hidden='true'>+</span> Einsprechen
                 </button>
                 <span class='tip' id={tip} role='tooltip'>Kommt bald. Einsprechen is noch in Arbeit.</span>

@@ -9,7 +9,8 @@
         <p class="text">{{ prompt }}</p>
       </div>
       <button
-        class="ask"
+        class="c-button ask"
+        data-variant="outline"
         type="button"
         data-contribute="story"
         :aria-expanded="formOpen"
@@ -52,14 +53,15 @@
             <button
               v-for="r in REACTIONS"
               :key="r.value"
-              class="react"
+              class="c-reaction"
+              data-variant="pill compact"
               type="button"
               :aria-disabled="!online || busy.has(s.id)"
               :aria-label="`${r.label}, ${count(s, r.value)}`"
               :aria-pressed="mine[s.id] === r.value"
               @click="react(s, r.value)"
             >
-              {{ r.label }} <b class="num">{{ count(s, r.value) }}</b>
+              {{ r.label }} <b class="count">{{ count(s, r.value) }}</b>
             </button>
           </span>
         </div>
