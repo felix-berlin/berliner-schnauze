@@ -93,17 +93,9 @@ import { BEZIRK_NAMES } from "@lib/bezirkNames.ts";
 import { agoLabel, type Story } from "@lib/story.ts";
 import { useStore } from "@nanostores/vue";
 import { openContributeForm, openForm } from "@stores/contribute.ts";
+import { useMediaQuery } from "@vueuse/core";
 import MessageCircle from "virtual:icons/lucide/message-circle";
-import {
-  computed,
-  nextTick,
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  ref,
-  useId,
-  useTemplateRef,
-} from "vue";
+import { computed, nextTick, onMounted, reactive, ref, useId, useTemplateRef } from "vue";
 
 const props = defineProps<{
   /** The word as written ("Schrippe"), for the gap text. */
@@ -141,24 +133,19 @@ const pending = ref<{ id: number; text: string }[]>([]);
 const busy = reactive(new Set<string>());
 const note = ref("");
 
-// Post-hydration only, so the server markup (three) never mismatches. The "word" breakpoint (808px) of the page shell,
+// useMediaQuery reports false until mounted, so the server markup (three) never mismatches. The "word" breakpoint (808px) of the page shell,
 // which also hides the third story before hydration (objects/_word-v18.scss): SPEC §3, mobile 2, from tablet 3.
 const NARROW = "(width < 50.5rem)";
-const mobile = ref(false);
+const mobile = useMediaQuery(NARROW);
 const limit = computed(() => (mobile.value ? 2 : 3));
 const expanded = ref(false);
 const loading = ref(false);
 const shown = computed(() => (expanded.value ? items.value : items.value.slice(0, limit.value)));
 
-let narrow: MediaQueryList | undefined;
-const onNarrow = (e: MediaQueryListEvent) => (mobile.value = e.matches);
 // Stories the visitor reacted to since the page loaded: a late `/mine` answer must not overwrite them.
 const touched = new Set<string>();
 
 onMounted(async () => {
-  narrow = window.matchMedia(NARROW);
-  mobile.value = narrow.matches;
-  narrow.addEventListener("change", onNarrow);
   try {
     const res = await fetch(`/api/stories/mine?word=${encodeURIComponent(props.word)}`, {
       cache: "no-store",
@@ -176,7 +163,6 @@ onMounted(async () => {
     // Own state is a convenience: without it nothing is pressed and no chip shows.
   }
 });
-onBeforeUnmount(() => narrow?.removeEventListener("change", onNarrow));
 
 const preview = (text: string): string =>
   text.length > PREVIEW ? `${text.slice(0, PREVIEW)}…` : text;

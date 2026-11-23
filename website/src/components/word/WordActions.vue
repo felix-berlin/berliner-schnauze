@@ -160,13 +160,11 @@
 
 <script setup lang="ts">
 import { OFFLINE_HINT, useOnline } from "@composables/useOnline.ts";
+import { useWordReaction } from "@composables/useWordReaction.ts";
 import { formatCitation, type CitationFormat } from "@lib/wordCite.ts";
-import { useStore } from "@nanostores/vue";
 import { openContributeForm } from "@stores/contribute.ts";
-import { $feedback, loadFeedback } from "@stores/wordFeedback.ts";
 import { trackEvent } from "@utils/analytics";
 import { reportWord } from "@utils/wordPulse.ts";
-import { toggleReaction, type Reaction } from "@utils/wordReaction.ts";
 import { useEventListener } from "@vueuse/core";
 import Check from "virtual:icons/lucide/check";
 import Copy from "virtual:icons/lucide/copy";
@@ -178,16 +176,7 @@ import Share2 from "virtual:icons/lucide/share-2";
 import ThumbsDown from "virtual:icons/lucide/thumbs-down";
 import ThumbsUp from "virtual:icons/lucide/thumbs-up";
 import X from "virtual:icons/lucide/x";
-import {
-  computed,
-  nextTick,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  useId,
-  useTemplateRef,
-  watch,
-} from "vue";
+import { computed, nextTick, onBeforeUnmount, ref, useId, useTemplateRef, watch } from "vue";
 
 const props = defineProps<{
   /** Meaning shown after the word in "Wort kopieren"; empty = the word alone. */
@@ -484,40 +473,7 @@ const report = (): void => {
 };
 
 // --- reactions ---------------------------------------------------------------------------------------
-const feedback = useStore($feedback);
-const stored = computed<Reaction | null>(() => feedback.value?.mine?.reaction ?? null);
-// What the visitor just chose, until the server answered; a failed request drops it (rollback).
-const optimistic = ref<{ reaction: Reaction | null } | null>(null);
-const current = computed(() => (optimistic.value ? optimistic.value.reaction : stored.value));
-const pending = ref(false);
-
-onMounted(() => {
-  if (props.wordId !== undefined) void loadFeedback(props.wordId);
-});
-
-const count = (reaction: Reaction): number | string => {
-  const total = feedback.value?.totals[reaction];
-  if (total === undefined) return "–";
-  return Math.max(
-    0,
-    total + Number(current.value === reaction) - Number(stored.value === reaction),
-  );
-};
-
-const react = async (reaction: Reaction): Promise<void> => {
-  // aria-disabled, not disabled: the button keeps the focus while the call runs or the page is offline.
-  if (props.wordId === undefined || !online.value || pending.value) return;
-  pending.value = true;
-  try {
-    if (!feedback.value) await loadFeedback(props.wordId);
-    optimistic.value = { reaction: stored.value === reaction ? null : reaction };
-    await toggleReaction(props.wordId, reaction);
-  } finally {
-    // Success: the store holds the answer. Failure: it still holds the old one.
-    optimistic.value = null;
-    pending.value = false;
-  }
-};
+const { count, current, pending, react } = useWordReaction(() => props.wordId);
 
 onBeforeUnmount(() => clearTimeout(timer));
 </script>

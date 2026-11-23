@@ -9,6 +9,7 @@ import {
   $sendError,
   answerUsage,
   deleteAllFeedback,
+  deleteFeedback,
   loadFeedback,
   nextStep,
   parseProfile,
@@ -433,6 +434,29 @@ describe("deleteAllFeedback", () => {
     expect(await deleteAllFeedback(7)).toBe(false);
     expect($profile.get()).toEqual({ area: "pankow" });
     expect(toast).toHaveBeenCalled();
+    vi.unstubAllGlobals();
+  });
+});
+
+describe("deleteFeedback", () => {
+  it("deletes the answers of one word and reports success", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+    vi.stubGlobal("fetch", fetchMock);
+    expect(await deleteFeedback(7)).toBe(true);
+    expect(fetchMock).toHaveBeenCalledExactlyOnceWith("/api/word-feedback?word=7", {
+      method: "DELETE",
+    });
+    vi.unstubAllGlobals();
+  });
+
+  it("keeps the local profile and stays silent when the delete fails or the network is gone", async () => {
+    $profile.set({ area: "pankow" });
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 502 }));
+    expect(await deleteFeedback(7)).toBe(false);
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline")));
+    expect(await deleteFeedback(7)).toBe(false);
+    expect($profile.get()).toEqual({ area: "pankow" });
+    expect(toast).not.toHaveBeenCalled();
     vi.unstubAllGlobals();
   });
 });

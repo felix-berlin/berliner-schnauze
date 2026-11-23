@@ -112,3 +112,23 @@ export const CHOICES: Record<
 export const ORDER: Step[] = ["usage", "area", "locality", "origin", "half", "age", "done"];
 /** Always six segments, so the bar does not jump when the optional steps come or go. */
 export const ALL_STEPS = ["usage", "area", "locality", "origin", "half", "age"];
+
+/** Areas outside Berlin: no half question. */
+export const NOT_BERLIN = new Set<string>(["brandenburg", "elsewhere"]);
+
+/**
+ * The PATCH body for one profile answer. The API takes a half only with origin grewUp, a locality only with its
+ * area, and a new area drops the old locality; outside Berlin it drops the half too.
+ */
+export const profilePatch = (
+  key: ProfileStep,
+  value: string | null,
+  ctx: { area: string | null | undefined; hadLocality: unknown },
+): Record<string, string | null | undefined> => ({
+  [key]: value,
+  ...(key === "origin" && value !== "grewUp" ? { half: null } : {}),
+  ...(key === "area" && NOT_BERLIN.has(value ?? "") ? { half: null } : {}),
+  ...(key === "half" && value ? { origin: "grewUp" } : {}),
+  ...(key === "locality" && value ? { area: ctx.area } : {}),
+  ...(key === "area" && ctx.hadLocality ? { locality: null } : {}),
+});

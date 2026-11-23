@@ -128,7 +128,8 @@ describe("WordStories list", () => {
     expect(w.findAll("li.item")[2]!.attributes("data-narrow-hidden")).toBeDefined();
     expect(w.findAll("li.item")[1]!.attributes("data-narrow-hidden")).toBeUndefined();
     w.unmount();
-    expect(removed).toHaveBeenCalledWith("change", expect.any(Function));
+    // VueUse registers the listener (passive) and removes it with the same options.
+    expect(removed).toHaveBeenCalledWith("change", expect.any(Function), { passive: true });
   });
 
   it("keeps the button for a retry when a further page fails, and loads it on the second try", async () => {

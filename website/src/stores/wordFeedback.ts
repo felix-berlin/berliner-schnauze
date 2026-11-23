@@ -226,6 +226,18 @@ export const sendFeedback = async (
 export const answerUsage = (wordId: number, usage: Usage, silent = false): Promise<boolean> =>
   sendFeedback(wordId, { usage, ...parseProfile($profile.get()) }, { silent });
 
+/** Deletes this browser's answers to one word; the caller owns the failure message and the local profile. */
+export const deleteFeedback = async (wordId: number): Promise<boolean> => {
+  try {
+    const res = await fetch(`${ENDPOINT}?word=${wordId}`, { method: "DELETE" });
+    if (!res.ok) throw new Error(String(res.status));
+    return true;
+  } catch (error) {
+    console.error(`[word-feedback] delete ${wordId} failed:`, error);
+    return false;
+  }
+};
+
 /** Deletes every answer tied to this browser (all words) and forgets the stored profile. */
 export const deleteAllFeedback = async (wordId: number): Promise<boolean> => {
   try {

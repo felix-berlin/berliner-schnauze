@@ -311,6 +311,7 @@ import {
   $profile,
   $sendError,
   answerUsage,
+  deleteFeedback,
   loadFeedback,
   refreshFeedback,
   sendFeedback,
@@ -321,7 +322,9 @@ import { trackEvent } from "@utils/analytics";
 import {
   ALL_STEPS,
   CHOICES,
+  NOT_BERLIN,
   QUESTIONS,
+  profilePatch,
   progressSegments,
   type ProfileStep,
 } from "@utils/wordFeedbackView";
@@ -337,9 +340,7 @@ import { BERLIN_AREAS } from "@/data/berlinAreas";
 // no-store GET (never from props: the page HTML is shared and cached); `initial` is the shared result.
 const props = defineProps<{ initial: PollResult; label: string; slug: string; wordId: number }>();
 
-const ENDPOINT = "/api/word-feedback";
 const DOTS = 20;
-const NOT_BERLIN = new Set<string>(["brandenburg", "elsewhere"]);
 
 const online = useOnline();
 const feedback = useStore($feedback);
@@ -519,15 +520,10 @@ const answer = async (key: ProfileStep, value: string | null) => {
   try {
     const dropsHalf = key === "area" && NOT_BERLIN.has(value ?? "");
     const hadLocality = answers.value.locality || $profile.get().locality;
-    // The API takes a half only with origin grewUp, a locality only with its area; a new area drops the old one.
-    const patch = {
-      [key]: value,
-      ...(key === "origin" && value !== "grewUp" ? { half: null } : {}),
-      ...(dropsHalf ? { half: null } : {}),
-      ...(key === "half" && value ? { origin: "grewUp" } : {}),
-      ...(key === "locality" && value ? { area: answers.value.area } : {}),
-      ...(key === "area" && hadLocality ? { locality: null } : {}),
-    } as Parameters<typeof sendFeedback>[1];
+    const patch = profilePatch(key, value, {
+      area: answers.value.area,
+      hadLocality,
+    }) as Parameters<typeof sendFeedback>[1];
     if (!(await sendFeedback(props.wordId, patch, { silent: true }))) {
       answerFailed.value = true;
       return;
@@ -640,13 +636,10 @@ const remove = async () => {
   pending.value = true;
   deleteFailed.value = false;
   try {
-    // The route takes the numeric word id (the brief said slug).
-    const res = await fetch(`${ENDPOINT}?word=${props.wordId}`, { method: "DELETE" });
-    if (!res.ok) throw new Error(String(res.status));
-  } catch (error) {
-    console.error(`[word-poll] delete ${props.wordId} failed:`, error);
-    deleteFailed.value = true;
-    return;
+    if (!(await deleteFeedback(props.wordId))) {
+      deleteFailed.value = true;
+      return;
+    }
   } finally {
     pending.value = false;
   }

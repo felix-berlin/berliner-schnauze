@@ -18,6 +18,7 @@ import {
   CHOICES,
   ORDER,
   compareRows,
+  profilePatch,
   progressSegments,
   usageBars,
   type ProfileStep,
@@ -173,15 +174,10 @@ export const useWordFeedbackFlow = (wordId: number) => {
       // The API only accepts a half in the same request as origin grewUp.
       // Likewise a locality only together with its area, and a new area drops the old one.
       const hadLocality = $profile.get().locality || feedback.value?.mine?.locality;
-      const patch = {
-        [key]: value,
-        ...(key === "origin" && value !== "grewUp" ? { half: null } : {}),
-        // Woanders/Brandenburg skip the half step: a half answered before "Zurück" must go too.
-        ...(dropsHalf ? { half: null } : {}),
-        ...(key === "half" && value ? { origin: "grewUp" } : {}),
-        ...(key === "locality" && value ? { area: $profile.get().area } : {}),
-        ...(key === "area" && hadLocality ? { locality: null } : {}),
-      } as Parameters<typeof sendFeedback>[1];
+      const patch = profilePatch(key, value, {
+        area: $profile.get().area,
+        hadLocality,
+      }) as Parameters<typeof sendFeedback>[1];
       if (await sendFeedback(wordId, patch)) {
         const next = { ...$profile.get(), ...patch } as Profile;
         // The sent null only clears the server row; for the profile the new area's locality is "not asked yet".
