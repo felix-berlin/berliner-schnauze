@@ -1,6 +1,9 @@
 /**
  * Seeds a small, invented data set for the Playwright e2e run (CI cannot use real word data: the repo is
  * public). Idempotent. Usage: `pnpm --filter payload-app seed:e2e` against a throwaway database.
+ *
+ * Keep exactly 28 words, and `abjang` at sorted index 4: the e2e server pins the word of the day to that index
+ * (`pickWordOfTheDay`), so a new filler word must not sort before "abjang" (`tests/seed.test.ts` checks both).
  */
 import type { Payload } from "payload";
 
@@ -8,7 +11,7 @@ import type { Word } from "../payload-types";
 
 import { LOCAL_DB_HOSTS } from "../lib/localDb";
 import { berlinDay } from "../lib/wordStats";
-import { PNG, WAV } from "./fixtures";
+import { PNG_4X3, WAV } from "./fixtures";
 import { seedHome } from "./homeSeed";
 import { seedHomeStats } from "./homeStatsSeed";
 import { affiliate, company, navigation } from "./siteData";
@@ -17,12 +20,8 @@ export const E2E_WORD_SLUGS = [
   "aasen",
   "akademiebusen",
   "alex",
-  "alsche",
   "anmachen",
   "ballast-der-republik",
-  "bildeins",
-  "bildzwei",
-  "schale",
   "wa",
 ] as const;
 
@@ -77,6 +76,8 @@ const THEMEN = [
 
 type SeedWord = {
   alternativeWords?: string[];
+  /** Grammatical article shown after the headword (", die"). */
+  article?: string;
   /** Voices of the word itself; `exampleVoices` on the first example. */
   voices?: ("female" | "male")[];
   berlinerisch: string;
@@ -84,11 +85,32 @@ type SeedWord = {
   examples?: { example: string; explanation?: string; voices?: ("female" | "male")[] }[];
   /** How many of the four seed images (see above) the word shows. */
   images?: number;
-  infoText?: string;
+  ipa?: string;
   learnMore?: string;
   related?: string[];
+  /**
+   * Entries of the `related` array: the head shows the "gleich" ones as "Gleiche Bedeutung wie ...". A row has a
+   * linked `slug` or only a `label` (a phrase without a word of its own); `by` is the public credit.
+   */
+  relations?: {
+    by?: string;
+    label?: string;
+    note?: string;
+    relation: "gleich" | "gegenteil" | "verwandt" | "redewendung";
+    slug?: string;
+  }[];
+  /** Wissenswertes: kind, text and an optional public credit (`by`). */
+  facts?: {
+    by?: string;
+    source?: string;
+    kind: "anekdote" | "gebrauch" | "geschichte" | "herkunft" | "sonstiges";
+    text: string;
+  }[];
+  /** Plural and the word the diminutive links to (any seed word: the layout is what counts). */
+  grammar?: { diminutive?: string; plural?: string };
+  /** Stressed syllable(s) as written in the Klang card. */
+  stress?: string;
   slug: string;
-  sources?: string[];
   themen?: string[];
   translations: string[];
 };
@@ -97,7 +119,6 @@ const WORDS: SeedWord[] = [
   {
     berlinerisch: "aasen",
     voices: ["male"],
-    infoText: "Erfundener Infotext: das Verb ist im Beispieldatensatz nur für die Tests da.",
     slug: "aasen",
     themen: ["alltag-wohnen"],
     translations: ["verschwenden", "vergeuden"],
@@ -115,31 +136,68 @@ const WORDS: SeedWord[] = [
     translations: ["Zierfransen am Kleid"],
   },
   {
-    berlinerisch: "Bildeins",
-    images: 1,
-    learnMore: "https://example.org/mehr",
-    slug: "bildeins",
-    translations: ["Testwort mit einem Bild"],
+    // THE FULL WORD of the v18 word page: every card has data here, so one page shows every feature (head with IPA,
+    // stress, voices, four images and the "Gleiche Bedeutung" line; word of the day on the pinned e2e day, trend badge
+    // "Platz 4", O-Ton and four Jeschichten; examples with voices; Wissenswertes with credits; grammar with plural and
+    // diminutive; all four relation kinds, one without a word of its own; "Mehr lesen"; a book; the poll
+    // with its 120 votes). It is the word of the day on E2E_PINNED_DAY (index 4 of the 28 sorted ones: day number 20472 mod
+    // the word count, so the count must stay a divisor of 20468 (28 or 34)). Extend this word instead of adding one.
+    alternativeWords: ["abjehaun"],
+    article: "die",
+    berlinerisch: "Abjang",
+    berolinismus: true,
+    examples: [
+      {
+        example: "Der Abjang war janz leise.",
+        explanation: "Der Weggang war ganz leise.",
+        voices: ["male", "female"],
+      },
+      { example: "Kurz vor Abjang noch ma winken.", explanation: "Kurz vor dem Weggehen winken." },
+    ],
+    facts: [
+      {
+        by: "Erfundene Person",
+        kind: "herkunft",
+        source: "Erfundenes Buch, Erfundene Autorin",
+        text: "Erfundene Herkunft: das Wort soll aus einem Spaß unter Kollegen entstanden sein.",
+      },
+      {
+        kind: "gebrauch",
+        source: "Erfundene Quelle eins",
+        text: "Erfundener Gebrauch: wird eher beim Abschied von Feiern gesagt als im Büro.",
+      },
+      {
+        by: "Noch eine erfundene Person",
+        kind: "anekdote",
+        text: "Erfundene Anekdote: Auf einer Party soll jemand drei Stunden lang „Abjang“ gerufen haben.",
+      },
+    ],
+    grammar: { diminutive: "abbeisser", plural: "die Abjänge" },
+    images: 4,
+    ipa: "ˈapjaŋ",
+    learnMore: "https://example.org/abjang",
+    related: ["anmachen", "alex", "wa"],
+    relations: [
+      { note: "erfundene Notiz", relation: "gleich", slug: "alex" },
+      { relation: "gleich", slug: "anmachen" },
+      { relation: "gegenteil", slug: "ab" },
+      { by: "Erfundene Person", relation: "verwandt", slug: "bolle" },
+      { label: "Abjang machen", note: "erfundene Redewendung", relation: "redewendung" },
+    ],
+    stress: "ˈAb",
+    slug: "abjang",
+    themen: ["bewegung-gehen", "alltag-wohnen"],
+    translations: ["Abgang", "leises Verschwinden"],
+    voices: ["male", "female"],
   },
-  {
-    berlinerisch: "Bildzwei",
-    images: 2,
-    slug: "bildzwei",
-    translations: ["Testwort mit zwei Bildern"],
-  },
+  // Sounds and is spelled almost like "abjang": fills "Reimt sich auf" and "Ähnlich jeschrieben" of the full word.
+  { berlinerisch: "Abjank", slug: "abjank", translations: ["erfundenes Testwort"] },
   {
     berlinerisch: "Alex",
     berolinismus: true,
     slug: "alex",
     themen: ["berlin-orte"],
     translations: ["Kurzform für den Alexanderplatz"],
-  },
-  { berlinerisch: "Alsche", slug: "alsche", translations: ["Testwort für Anagramme"] },
-  {
-    berlinerisch: "schale",
-    slug: "schale",
-    themen: ["essen-trinken"],
-    translations: ["flaches Gefäß"],
   },
   {
     alternativeWords: ["anknipsen"],
@@ -156,7 +214,6 @@ const WORDS: SeedWord[] = [
     learnMore: "https://example.org/anmachen",
     related: ["wa"],
     slug: "anmachen",
-    sources: ["Erfundene Testquelle"],
     themen: ["beziehungen-soziales", "alltag-wohnen"],
     translations: ["einschalten", "sich jemandem forsch nähern"],
   },
@@ -200,12 +257,6 @@ const WORDS: SeedWord[] = [
     translations: ["wer sich aufdringlich nähern will"],
   },
   {
-    berlinerisch: "Bordstein",
-    slug: "bordstein",
-    themen: ["berlin-orte"],
-    translations: ["Kante der Straße"],
-  },
-  {
     berlinerisch: "abbeißen",
     slug: "abbeissen",
     themen: ["essen-trinken"],
@@ -225,23 +276,10 @@ const WORDS: SeedWord[] = [
     translations: ["Angst"],
   },
   {
-    berlinerisch: "Berolina",
-    berolinismus: true,
-    slug: "berolina",
-    themen: ["berlin-orte"],
-    translations: ["Frauenfigur als Stadtsymbol"],
-  },
-  {
     berlinerisch: "Bulette",
     slug: "bulette",
     themen: ["essen-trinken"],
     translations: ["gebratene Hackfleischkugel"],
-  },
-  {
-    berlinerisch: "Büdchen",
-    slug: "buedchen",
-    themen: ["alltag-wohnen"],
-    translations: ["Kiosk an der Ecke"],
   },
   { berlinerisch: "Dette", slug: "dette", translations: ["das"] },
   { berlinerisch: "Icke", slug: "icke", translations: ["ich"] },
@@ -284,6 +322,9 @@ const WORDS: SeedWord[] = [
     translations: ["Lastkahn auf der Spree"],
   },
 ];
+
+/** Every seed word, for the test that keeps `docs/test-words.md` in step. */
+export const SEED_WORD_SLUGS = WORDS.map((w) => w.slug);
 
 export const seededSlugs = () => ({
   themen: THEMEN.map(([slug]) => slug),
@@ -394,11 +435,28 @@ export async function seedE2e(payload: Payload): Promise<void> {
     });
     imageMedia.push(
       found.docs[0]
-        ? await payload.update({ collection: "media", data, depth: 0, id: found.docs[0].id })
+        ? await payload.update({
+            collection: "media",
+            data,
+            depth: 0,
+            file: {
+              data: PNG_4X3,
+              mimetype: "image/png",
+              name: wpPath.slice(4),
+              size: PNG_4X3.length,
+            },
+            id: found.docs[0].id,
+            overwriteExistingFiles: true,
+          })
         : await payload.create({
             collection: "media",
             data: { ...data, wpPath },
-            file: { data: PNG, mimetype: "image/png", name: wpPath.slice(4), size: PNG.length },
+            file: {
+              data: PNG_4X3,
+              mimetype: "image/png",
+              name: wpPath.slice(4),
+              size: PNG_4X3.length,
+            },
             overwriteExistingFiles: true,
           }),
     );
@@ -439,25 +497,55 @@ export async function seedE2e(payload: Payload): Promise<void> {
     themaIds.set(slug, doc.id);
   }
 
+  // The suggestion the public credits ("Danke an ...") of facts and related rows point to.
+  const SUGGESTION_WORD = "Erfundener Vorschlag";
+  const suggestion =
+    (
+      await payload.find({
+        collection: "suggestions",
+        depth: 0,
+        limit: 1,
+        where: { berlinerWord: { equals: SUGGESTION_WORD } },
+      })
+    ).docs[0] ??
+    (await payload.create({
+      collection: "suggestions",
+      context: { skipCommentHooks: true },
+      data: {
+        berlinerWord: SUGGESTION_WORD,
+        translation: "nur für die Namensnennung",
+        type: "word",
+      },
+      depth: 0,
+    }));
+
   const wordIds = new Map<string, number>();
   for (const w of WORDS) {
     const data: Partial<Word> & Record<string, unknown> = {
       _status: "published",
       alternativeWords: (w.alternativeWords ?? []).map((alternativeWord) => ({ alternativeWord })),
+      article: w.article ?? null,
       berlinerisch: w.berlinerisch,
       berlinerischAudio: audioRows(w.voices),
       berolinismus: w.berolinismus ?? false,
+      facts: (w.facts ?? []).map(({ by, kind, source, text }) => ({
+        contributorName: by,
+        contributorSuggestion: by ? suggestion.id : undefined,
+        kind,
+        source,
+        text: lexical(paragraph(text)),
+      })),
+      stress: w.stress ?? null,
       examples: (w.examples ?? []).map((e) => ({
         example: e.example,
         exampleAudio: audioRows(e.voices),
         exampleExplanation: e.explanation,
       })),
       images: imageMedia.slice(0, w.images ?? 0).map((m) => m.id),
-      infoText: w.infoText ? lexical(paragraph(w.infoText)) : null,
+      ipa: w.ipa ?? null,
       learnMore: w.learnMore ?? null,
       publishedAt: "2025-01-01T00:00:00.000Z",
       slug: w.slug,
-      sources: w.sources ?? [],
       themen: (w.themen ?? []).map((t) => themaIds.get(t)!),
       translations: w.translations.map((translation) => ({ translation })),
     };
@@ -467,7 +555,23 @@ export async function seedE2e(payload: Payload): Promise<void> {
   for (const w of WORDS.filter((x) => x.related)) {
     await payload.update({
       collection: "words",
-      data: { relatedWords: w.related!.map((s) => wordIds.get(s)!) },
+      data: {
+        ...(w.grammar && {
+          grammar: {
+            diminutive: w.grammar.diminutive ? wordIds.get(w.grammar.diminutive)! : null,
+            plural: w.grammar.plural ?? null,
+          },
+        }),
+        related: (w.relations ?? []).map(({ by, label, note, relation, slug }) => ({
+          contributorName: by,
+          contributorSuggestion: by ? suggestion.id : undefined,
+          label,
+          note,
+          relation,
+          word: slug ? wordIds.get(slug)! : undefined,
+        })),
+        relatedWords: w.related!.map((s) => wordIds.get(s)!),
+      },
       depth: 0,
       draft: false,
       id: wordIds.get(w.slug)!,
@@ -479,6 +583,8 @@ export async function seedE2e(payload: Payload): Promise<void> {
     ["alex", [3, 5, 4, 8, 6, 9, 12], 10],
     ["anmachen", [1, 2, 3, 3, 4, 3, 4], 20],
     ["aasen", [1, 2, 1, 3, 2, 1, 2], 2],
+    // abjang: 4th of the week (11 views, more than a filler's 10), for the "Gerade beliebt · Platz 4" badge of the head.
+    ["abjang", [1, 1, 2, 1, 2, 2, 2], 4],
     // Eight fillers with 10 views each: with them "wa" (a few views from the pulse tests) is outside the top 10.
     ...["kiez", "kneipe", "bolle", "bulette", "bammel", "ulk", "zille", "stulle"].map(
       (s): [string, number[], number] => [s, [2, 1, 2, 1, 1, 2, 1], 0],
@@ -516,6 +622,59 @@ export async function seedE2e(payload: Payload): Promise<void> {
           depth: 0,
         });
     }
+  }
+
+  // Invented Jeschichten for "anmachen" (the v18 word page shows 2 on mobile and 3 from 808px, so it needs more than 3).
+  // skipCommentHooks: a create would otherwise mail the editors (the comment-count hooks only react to votes and
+  // reports, which the seed does not create, so there is nothing to recount).
+  for (const [i, bezirk] of (
+    ["neukoelln", "pankow", "mitte", "spandau", "lichtenberg"] as const
+  ).entries()) {
+    const body = `Erfundene Jeschichte ${i + 1} zu anmachen.`;
+    const { docs } = await payload.find({
+      collection: "comments",
+      depth: 0,
+      limit: 1,
+      where: { text: { equals: body }, word: { equals: wordIds.get("anmachen")! } },
+    });
+    if (!docs[0])
+      await payload.create({
+        collection: "comments",
+        data: {
+          authorName: `Tester ${i + 1}`,
+          bezirk,
+          status: "published",
+          text: body,
+          word: wordIds.get("anmachen")!,
+        },
+        context: { skipCommentHooks: true },
+        depth: 0,
+      });
+  }
+
+  // The O-Ton of "abjang": a featured Jeschichte (one per word), plus three more so the card has a list and the count reads 4.
+  for (const [i, bezirk] of (["pankow", "mitte", "spandau", "reinickendorf"] as const).entries()) {
+    const body = `Erfundene Jeschichte ${i + 1} zu abjang.`;
+    const { docs } = await payload.find({
+      collection: "comments",
+      depth: 0,
+      limit: 1,
+      where: { text: { equals: body }, word: { equals: wordIds.get("abjang")! } },
+    });
+    if (!docs[0])
+      await payload.create({
+        collection: "comments",
+        data: {
+          authorName: `Tester ${i + 1}`,
+          bezirk,
+          featured: i === 0,
+          status: "published",
+          text: body,
+          word: wordIds.get("abjang")!,
+        },
+        context: { skipCommentHooks: true },
+        depth: 0,
+      });
   }
 
   await upsert(
@@ -570,7 +729,16 @@ export async function seedE2e(payload: Payload): Promise<void> {
 
   await payload.updateGlobal({ data: navigation as never, slug: "navigation" });
   await payload.updateGlobal({ data: company as never, slug: "company" });
-  await payload.updateGlobal({ data: affiliate as never, slug: "affiliate" });
+  // The first book is the one of "bewegung-gehen", the first thema of the full word "abjang" (the footer book card).
+  await payload.updateGlobal({
+    data: {
+      ...affiliate,
+      books: affiliate.books.map((book, i) =>
+        Object.assign({}, book, i === 0 && { themen: [themaIds.get("bewegung-gehen")!] }),
+      ),
+    } as never,
+    slug: "affiliate",
+  });
   const home = await seedHome(payload);
   if (home.unavailable.length)
     console.warn(`seed e2e: home unavailable: ${home.unavailable.join(", ")}`);

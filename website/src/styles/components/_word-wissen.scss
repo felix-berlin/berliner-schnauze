@@ -1,0 +1,76 @@
+@use "@styles/mixins" as mx;
+
+// Wissenswertes card body (SPEC §9): .facts (a dl; each .fact has the label, .text, .source and .by) and the .book block
+// ("Zum Weiterlesen", rule above, only with a book): .cover, .info, .title, .note.
+@include mx.component("word-wissen") {
+  :scope {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .facts {
+    display: grid;
+    gap: var(--space-4);
+    margin: 0;
+  }
+
+  .fact {
+    display: grid;
+    gap: var(--space-1);
+
+    > * {
+      margin: 0;
+    }
+  }
+
+  .text {
+    line-height: 1.6;
+
+    // The rich text brings its own paragraphs; the grid gap spaces the fact.
+    :is(p, ul, ol) {
+      margin: 0;
+    }
+  }
+
+  .source,
+  .by {
+    font-size: var(--font-size-label);
+    color: var(--color-text-muted);
+  }
+
+  .book {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    padding-block-start: var(--space-4);
+    border-block-start: 1px solid var(--color-border-card);
+  }
+
+  .cover {
+    flex: none;
+    inline-size: 3rem; // SPEC §9: 48 x 64
+    block-size: 4rem;
+    object-fit: cover;
+    border-radius: var(--radius-xs);
+  }
+
+  .info {
+    display: grid;
+    gap: var(--space-1);
+    min-inline-size: 0;
+
+    > * {
+      margin: 0;
+    }
+  }
+
+  .title {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+  }
+
+  .note {
+    font-size: var(--font-size-md);
+    color: var(--color-text-muted);
+  }
+}

@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 
 import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { orNull, reply } from "@utils/apiReply.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { clientIp, rateLimitedBy } from "@utils/rateLimit.ts";
 import { wordPulseSchema } from "@utils/wordPulseSchema.ts";
 import { berlinDay, bumpWordStat } from "payload-app/word-stats";
@@ -54,7 +55,7 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
     }
     return reply({ ok: true }, 200);
   } catch (error) {
-    console.error(`[word-pulse] ${kind} ${word} failed:`, error);
+    logRouteError("word-pulse", error);
     return reply({ error: "Das konnte leider nicht jezählt werden." }, 502);
   }
 };

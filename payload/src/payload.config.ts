@@ -15,6 +15,7 @@ import { CommentVotes } from "./collections/CommentVotes";
 import { Media } from "./collections/Media";
 import { Pages } from "./collections/Pages";
 import { Posts } from "./collections/Posts";
+import { Reports } from "./collections/Reports";
 import { Suggestions } from "./collections/Suggestions";
 import { Themen } from "./collections/Themen";
 import { Users } from "./collections/Users";
@@ -27,6 +28,7 @@ import { Anki } from "./globals/Anki";
 import { Company } from "./globals/Company";
 import { Home } from "./globals/Home";
 import { Navigation } from "./globals/Navigation";
+import { WordPage } from "./globals/WordPage";
 import { withIndexNow } from "./hooks/indexNow";
 import { withSlugRedirects } from "./hooks/redirectOldSlug";
 import { retentionTask } from "./jobs/retention";
@@ -65,6 +67,7 @@ export default buildConfig({
     Comments,
     CommentVotes,
     CommentReports,
+    Reports,
     WordFeedback,
     WordStats,
     BonGames,
@@ -72,7 +75,7 @@ export default buildConfig({
   ]
     .map(withSlugRedirects)
     .map(withIndexNow),
-  globals: [Navigation, Affiliate, Company, Home, Anki],
+  globals: [Navigation, Affiliate, Company, Home, Anki, WordPage],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,

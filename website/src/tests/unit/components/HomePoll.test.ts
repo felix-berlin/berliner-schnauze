@@ -34,7 +34,7 @@ const mountIt = async (total = props.total) => {
 };
 type W = Awaited<ReturnType<typeof mountIt>>;
 const tile = (w: W, label: string) => w.findAll("button").find((b) => b.text().includes(label))!;
-const dots = (w: W) => w.findAll('[role="img"] > i');
+const dots = (w: W) => w.findAll('[role="img"] > [data-usage]');
 
 describe("HomePoll", () => {
   beforeEach(() => {

@@ -6,6 +6,7 @@ import { fetchAllPosts, type SitePost } from "@services/payload/posts.ts";
 import { fetchHomeGlobal } from "@services/payload/site.ts";
 import { fetchAllThemen } from "@services/payload/themen.ts";
 import { fetchAllWords, type SiteWord, translationTexts } from "@services/payload/words.ts";
+import { BERLIN, berlinDayKey } from "@utils/berlinTime.ts";
 import { reportAndFallback, reportError } from "@utils/reportError.ts";
 import { pickWordOfTheDay } from "@utils/wordOfTheDay.ts";
 import { type MorseMark, morseRing } from "payload-app/home-stats";
@@ -107,11 +108,9 @@ const EXCERPT_WORDS = 90;
 const dateFormat = new Intl.DateTimeFormat("de-DE", {
   day: "numeric",
   month: "long",
-  timeZone: "Europe/Berlin",
+  timeZone: BERLIN,
   weekday: "long",
 });
-
-const dayKey = (date: Date) => date.toLocaleDateString("sv-SE", { timeZone: "Europe/Berlin" });
 
 const meaning = (word: SiteWord) => translationTexts(word).join(", ");
 
@@ -314,7 +313,7 @@ const load = async (): Promise<HomeData> => {
 let cached: { day: string; get: () => Promise<HomeData> } | undefined;
 
 export const fetchHome = (): Promise<HomeData> => {
-  const day = dayKey(new Date());
+  const day = berlinDayKey(new Date());
   if (cached?.day !== day) cached = { day, get: ttl(60_000, load) };
   return cached.get();
 };

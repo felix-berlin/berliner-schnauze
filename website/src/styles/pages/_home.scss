@@ -12,7 +12,7 @@
   }
 
   .o-home {
-    --_surface: var(--page);
+    --_surface: var(--color-warm-ground);
     --_bleed: 0 0 0 100vmax var(--_surface); // spread to the screen edges
 
     background: var(--_surface);
@@ -21,7 +21,7 @@
   }
 
   .o-home-section {
-    --_surface: var(--page);
+    --_surface: var(--color-warm-ground);
     --_pad: var(--space-16); // SPEC §3 mobile 64px
     --_bleed: 0 0 0 100vmax var(--_surface); // spread to the screen edges
 
@@ -61,11 +61,11 @@
   }
 
   .o-home-section[data-surface="card"] {
-    --_surface: var(--card);
+    --_surface: var(--color-warm-sheet);
   }
 
   .o-home-section[data-surface="card2"] {
-    --_surface: var(--card2);
+    --_surface: var(--color-warm-card2);
   }
 
   .o-home-section[data-surface="accent"] {

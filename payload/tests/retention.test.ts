@@ -26,6 +26,7 @@ afterAll(async () => {
     collection: "suggestions",
     where: { berlinerWord: { equals: "Aufbewahrungstest" } },
   });
+  await payload.delete({ collection: "reports", where: { word: { equals: wordId } } });
   await payload.delete({ collection: "words", where: { id: { equals: wordId } } });
 });
 
@@ -50,6 +51,28 @@ const suggest = (status: string, extra = {}) =>
   });
 
 describe("runRetention", () => {
+  it("clears the e-mail of open reports by age since creation, not last edit", async () => {
+    const mk = (createdAt: Date) =>
+      payload.create({
+        collection: "reports",
+        data: {
+          word: wordId,
+          kind: "other",
+          text: "x",
+          email: "a@b.de",
+          createdAt: createdAt.toISOString(),
+        } as never,
+      });
+    // Both rows were just written, so updatedAt is recent for both: only createdAt tells them apart.
+    const old = await mk(days(-100));
+    const young = await mk(days(-30));
+    await runRetention(payload);
+    const o = await payload.findByID({ collection: "reports", id: old.id });
+    expect(o.email ?? null).toBeNull();
+    expect(o.text).toBe("x");
+    expect((await payload.findByID({ collection: "reports", id: young.id })).email).toBe("a@b.de");
+  });
+
   it("clears name and mail of finished suggestions, even when locked, and keeps open ones", async () => {
     const done = await suggest("rejected");
     const open = await suggest("new");
@@ -272,5 +295,71 @@ describe("runRetention edge cases", () => {
     expect(after.visitor ?? null).toBeNull();
     expect(after).toMatchObject({ usage: "say", area: "pankow" });
     await payload.delete({ collection: "word-feedback", id: row.id });
+  });
+
+  it("still purges comments when the report step fails, and reports the failure", async () => {
+    const stale = await make({});
+    await payload.update({ collection: "comments", id: stale.id, data: { status: "pending" } });
+    const original = payload.db.updateMany.bind(payload.db);
+    const spy = vi
+      .spyOn(payload.db, "updateMany")
+      .mockImplementation(async (args) =>
+        args.collection === "reports" ? Promise.reject(new Error("no table")) : original(args),
+      );
+    try {
+      const result = await runRetention(payload, later);
+      expect(result.reportsFailed).toBe(true);
+      expect(result.commentsDeleted + result.commentsScrubbed).toBeGreaterThan(0);
+      expect(
+        (await payload.find({ collection: "comments", where: { id: { equals: stale.id } } }))
+          .totalDocs,
+      ).toBe(0);
+    } finally {
+      spy.mockRestore();
+    }
+  });
+
+  it("keeps running the later steps when the suggestion step fails, then throws at the end", async () => {
+    const stale = await make({});
+    await payload.update({ collection: "comments", id: stale.id, data: { status: "pending" } });
+    const mk = (visitor: string) =>
+      payload.create({
+        collection: "word-feedback",
+        data: { word: wordId, visitor, usage: "say", area: "pankow" } as never,
+      });
+    const old = await mk("v-old-suggestion-fail");
+    const original = payload.db.updateMany.bind(payload.db);
+    const spy = vi
+      .spyOn(payload.db, "updateMany")
+      .mockImplementation(async (args) =>
+        args.collection === "suggestions" ? Promise.reject(new Error("locked")) : original(args),
+      );
+    const logged = vi.spyOn(payload.logger, "error").mockImplementation(() => undefined);
+    try {
+      const result = await runRetention(payload, days(500));
+      expect(result.failedSteps).toEqual(["suggestions"]);
+      expect(logged).toHaveBeenCalledWith(
+        expect.objectContaining({ msg: "retention: suggestions failed" }),
+      );
+      expect(
+        (await payload.findByID({ collection: "word-feedback", id: old.id })).visitor ?? null,
+      ).toBeNull();
+      expect(
+        (await payload.find({ collection: "comments", where: { id: { equals: stale.id } } }))
+          .totalDocs,
+      ).toBe(0);
+      const handler = retentionTask.handler as (args: never) => Promise<unknown>;
+      vi.useFakeTimers({ toFake: ["Date"] });
+      vi.setSystemTime(days(500));
+      try {
+        await expect(handler({ req: { payload } } as never)).rejects.toThrow(/suggestions/);
+      } finally {
+        vi.useRealTimers();
+      }
+    } finally {
+      spy.mockRestore();
+      logged.mockRestore();
+      await payload.delete({ collection: "word-feedback", id: old.id });
+    }
   });
 });

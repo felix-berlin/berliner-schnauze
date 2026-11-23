@@ -1,0 +1,34 @@
+---
+import '@styles/components/_word-mobile-bar.scss';
+import Play from '~icons/lucide/play';
+
+interface Props {
+  /** First voice file; without it only the poll link shows. */
+  audio?: string | undefined;
+  /** Show the link to the poll; a draft preview has none. */
+  poll?: boolean;
+  /** Undefined for drafts: no pulse. */
+  wordId?: number | undefined;
+}
+
+const { audio, poll = true, wordId } = Astro.props;
+---
+
+{/* Mobile action bar (SPEC §3, below 808px only): Anhören plays the voice, "Sagste det noch?" jumps to the poll anchor. */}
+<div class='c-word-mobile-bar' data-word-id={wordId}>
+  {audio && (
+    <button class='listen' type='button' aria-pressed='false' data-src={audio} data-listen>
+      <Play aria-hidden='true' height='14' width='14' />
+      Anhören
+    </button>
+  )}
+  {poll && <a class='poll' href='#sagste'>Sagste det noch?</a>}
+</div>
+
+<script>
+  import { initMobileBar } from '@components/word/mobileBar.ts';
+  import { onPage } from '@utils/pageLifecycle.ts';
+
+  // The page is swapped by ClientRouter: drop the previous button's listener and watcher before the swap.
+  onPage(() => initMobileBar());
+</script>

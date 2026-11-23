@@ -1,9 +1,10 @@
 @use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
 // Section card: a numbered paper card with header (.num, .title), .body and .footer.
-// Variants: unnumbered; word (word page: sheet surface, no numbers, no header rule, paddings follow
-// the word-main column); sheet (same look outside the word page, BON screens: all corners round,
-// the parent sets the paddings via --section-card-gutter / --section-card-header-block).
+// Variants: unnumbered; sheet (sheet surface, no numbers, no header rule: BON screens and the word page, all
+// corners round, the parent sets the paddings via --section-card-gutter / --section-card-header-block);
+// v18 (word page cards, on top of sheet).
 // Public: --section-card-header-padding, --section-card-body-padding,
 // --section-card-body-end, --section-card-footer-padding, --section-card-footer-align,
 // --section-card-footer-justify, --section-card-header-justify, --section-card-header-wrap,
@@ -18,11 +19,7 @@
     --_footer-block: 0;
     --_footer-inline: 0;
 
-    // The word page publishes its anchor offset (below header + tab bar); elsewhere just below the header.
-    scroll-margin-block-start: var(
-      --word-anchor-offset,
-      calc(var(--site-header-height) + var(--space-4))
-    );
+    scroll-margin-block-start: calc(var(--site-header-height) + var(--space-4));
     counter-increment: section-num;
 
     @include mx.paper-card;
@@ -41,9 +38,10 @@
     }
   }
 
-  :scope:is([data-variant~="word"], [data-variant~="sheet"]) {
-    --_inline: var(--space-4);
-    --_header-block: 0.875rem; // exact middle of space-3 and space-4, kept from the mock
+  // The screen decides (BON: from the "word" breakpoint, word page: its main column), so the parent sets the room.
+  :scope[data-variant~="sheet"] {
+    --_inline: var(--section-card-gutter, var(--space-4));
+    --_header-block: var(--section-card-header-block, 0.875rem); // 0.875rem: exact middle of space-3 and space-4, kept from the mock
     --_body-start: 0;
     --_body-end: var(--_inline);
     --_footer-block: var(--space-3);
@@ -51,6 +49,7 @@
 
     background: var(--color-surface-sheet);
     border-color: var(--color-border-card);
+    border-radius: var(--radius-sm);
 
     .num {
       display: none;
@@ -61,20 +60,107 @@
     }
   }
 
-  // Word page (SPEC §3/§5): paddings follow the main column width.
-  @container word-main (inline-size >= 36rem) {
-    :scope[data-variant~="word"] {
-      --_inline: var(--space-6);
-      --_header-block: var(--space-4);
+  // v18 word page (SPEC §4.3, §6): condensed title, optional count, the "Ergänzen" pill, gap with outline button.
+  // Parts: .count, .gap (.text); the "Ergänzen" pill and the gap button are c-buttons (pill, outline).
+  :scope[data-variant~="v18"] {
+    --_title-size: 1.375rem; // SPEC §3: card heading 22px mobile, no token at that size
+    --_ink: var(--color-text-strong);
+
+    // Like the word head: the paper lift instead of the dashed hairline.
+    border: 0;
+    box-shadow: var(--shadow-paper-lift);
+
+    .header {
+      align-items: baseline;
+      flex-wrap: wrap;
+      padding-block-end: var(--space-4);
+    }
+
+    .title {
+      font-family: var(--font-condensed);
+      font-weight: 600; // SPEC §4.2: Fira 600, no weight token between regular and bold
+      font-size: var(--_title-size);
+      letter-spacing: 0.3px; // SPEC §4.2, no tracking token
+      line-height: 1.1;
+    }
+
+    // Count: right edge of the header, baseline with the title (SPEC mock .w10__ch), 13px text minimum.
+    .count {
+      margin-inline-start: auto;
+      font-size: var(--font-size-label);
+      color: var(--color-text-muted);
+    }
+
+    // The "Ergänzen" pill (c-button) sits at the right edge: the title, or else the count, takes the free space.
+    .title:has(+ [data-contribute]) {
+      margin-inline-end: auto;
+    }
+
+    .count:has(+ [data-contribute]) {
+      margin-inline-end: var(--space-2);
+    }
+
+    // Gap hint (SPEC §4 "Lücken-Hinweis", mock luecke-*): dashed box on the chip surface, text left, button right;
+    // it stacks when the card is narrow.
+    .gap {
+      container: section-card-gap / inline-size;
+      // Padding, not margin: a bottom margin collapses out of the borderless card and the box touches its edge.
+      margin-inline: var(--_inline);
+      padding-block-end: var(--_inline);
+    }
+
+    .gap-box {
+      --button-gap: var(--space-1);
+
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-4);
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC mock .w18__gap: 20px 22px, no token
+      padding: 1.25rem 1.375rem;
+      // SPEC mock: transparent, 1.5px dashed rim in --t3 at 55 %
+      border: 1.5px dashed color-mix(in srgb, var(--color-text-muted) 55%, transparent); // stylelint-disable-line declaration-property-value-disallowed-list, function-disallowed-list -- SPEC mock .w18__gap rim: 1.5px, t3 at 55 %, no token
+      border-radius: var(--radius-sm);
+
+      @container section-card-gap (inline-size >= 36rem) {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .text {
+      margin: 0;
+      line-height: 1.6;
+      color: var(--_ink);
     }
   }
 
-  // Outside the word page the screen decides (BON: from the "word" breakpoint), so the parent sets the room.
-  :scope[data-variant~="sheet"] {
-    --_inline: var(--section-card-gutter, var(--space-4));
-    --_header-block: var(--section-card-header-block, 0.875rem);
+  // Open form and the visitor's own open suggestions (contribute script): under the header, in place of the gap.
+  .extra {
+    display: grid;
+    gap: var(--space-3);
+    padding-inline: var(--_inline);
 
-    border-radius: var(--radius-sm);
+    // Only the form or the chip list take room; the empty mount points take none.
+    &:has([id^="contribute-"], [data-own] > *) {
+      padding-block-end: var(--space-4);
+    }
+  }
+
+  :scope[data-state="form-open"] .gap {
+    display: none;
+  }
+
+  // Without JS the contribute buttons would do nothing: hidden until WordPage sets html[data-js] (c-button reads this).
+  html:not([data-js]) :scope :is(.header, .gap-box) {
+    --button-display: none;
+  }
+
+  @container word-main (inline-size >= 36rem) {
+    :scope[data-variant~="v18"] {
+      --_title-size: 1.5rem; // SPEC §3: card heading 24px, the 2xl token is 25.6px
+    }
   }
 
   .header {

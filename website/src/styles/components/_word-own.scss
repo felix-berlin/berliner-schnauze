@@ -1,0 +1,36 @@
+@use "@styles/mixins" as mx;
+
+// The visitor's own open contributions on a card (SPEC §13): a list of chips "Wird jeprüft" with a text preview.
+// Parts: .item, .chip, .text. Filled by the Jeschichten island and by the contribute script (own submissions).
+@include mx.component("word-own") {
+  :scope {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+
+  .chip {
+    padding-inline: var(--space-2);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.5rem;
+    color: var(--color-text-muted);
+    background: var(--color-surface-chip);
+    border-radius: var(--radius-pill);
+  }
+
+  .text {
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+    color: var(--color-text-muted);
+  }
+}

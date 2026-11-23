@@ -1,0 +1,137 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Action row of the word head (SPEC §5, §5.1, §5.2): Daumen hoch/runter, Teilen, the ⋮ menu and the citing panel
+// below the row. Parts: .row, .reactions, .note, .cite (.head, .heading, .tabs, .tabpanel, .hint, .quote, .send, .foot).
+// Reactions, Teilen and the ⋮ button are c-reaction pills; the menu is c-word-actions-menu inside a DropdownPopover
+// (theme bare, placement top-end), both slot content the scope of this file does not reach.
+@include mx.component("word-actions") {
+  :scope {
+    container: word-actions / inline-size;
+    position: relative;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .reactions {
+    display: contents;
+  }
+
+  .note {
+    margin: var(--space-2) 0 0;
+    font-size: var(--font-size-label);
+    color: var(--color-text-muted);
+  }
+
+  // Citing panel (SPEC §5.2): below the row, card2 ground, padding 18/20.
+  .cite {
+    display: grid;
+    gap: var(--space-3);
+    margin-block-start: var(--space-4);
+    padding: var(--space-5); // SPEC §5.2: 18px 20px, the 20px step
+    background: var(--color-surface-chip);
+    border-radius: var(--radius-sm);
+
+    @include butler-mx.feature("motion") {
+      animation: word-actions-in var(--duration-base) ease both; // SPEC §16: 250-300ms
+    }
+  }
+
+  .head {
+    --icon-button-color: var(--color-text-muted);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-inline-end: calc(-1 * var(--space-3)); // the 44px close button's glyph aligns with the panel padding
+  }
+
+  .heading {
+    margin: 0;
+    font-family: var(--font-family-body); // no Fraktur on this page
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+  }
+
+  // Segment of pills (SPEC §5.2); the selected one is raised.
+  .tabs {
+    display: inline-flex;
+    justify-self: start;
+    max-inline-size: 100%;
+    padding: var(--space-1);
+    background: var(--color-surface-sheet); // mock .w18__ctabs: the card ground
+    border-radius: var(--radius-pill);
+
+    [role="tab"] {
+      position: relative;
+
+      --_reach: var(--space-1);
+
+      min-block-size: 2.5rem; // 40px look; the hit band below reaches 48px, no token step
+      padding-inline: var(--space-4);
+      font: inherit;
+      font-size: var(--font-size-label);
+      color: var(--color-text-body);
+      background: transparent;
+      border: 0;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+
+      // Looks 40px, hits 48px: the band fills the segment padding (as c-choice segment/chip).
+      @include mx.hit-band("block");
+
+      &[aria-selected="true"] {
+        color: var(--color-surface-sheet);
+        background: var(--color-text-strong);
+        font-weight: var(--font-weight-bold);
+      }
+    }
+  }
+
+  .tabpanel {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .hint,
+  .foot {
+    @include mx.foot-note;
+  }
+
+  .quote {
+    display: block;
+    padding: var(--space-3) var(--space-3);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §5.2: the citation is monospace, no font token for it
+    font-family: monospace;
+    font-size: var(--font-size-label);
+    line-height: 1.55;
+    color: var(--color-text-strong);
+    background: var(--color-surface-sheet);
+    border-radius: var(--radius-sm);
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    user-select: all;
+  }
+
+  // Primary button (SPEC §4.3) placed through its public properties: 44px, 0 24px.
+  .send {
+    --button-min-block-size: var(--size-tap-target);
+    --button-padding: 0 var(--space-6);
+    --button-font-size: var(--font-size-base); // mock: the button inherits the 16px text size
+
+    justify-self: start;
+  }
+
+  @keyframes word-actions-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+}

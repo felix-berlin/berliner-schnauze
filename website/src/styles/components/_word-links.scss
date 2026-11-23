@@ -1,0 +1,39 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// „Und nu?“ links (SPEC §2 row 10, WordLinks.astro): a rule above and a wrapping row of three links. Parts: .list, .link
+// (an <a>, also the random-word component: 44px, orange icon, the rest is text).
+@include mx.component("word-links") {
+  :scope {
+    padding-block-start: var(--space-4);
+    border-block-start: 1px solid var(--color-border-card);
+  }
+
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-block-size: var(--size-tap-target);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+    text-decoration: none;
+
+    svg {
+      color: var(--color-accent-active); // SPEC §4.1: the icon only
+    }
+
+    @include butler-mx.hover {
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+  }
+}

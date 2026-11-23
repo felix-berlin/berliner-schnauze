@@ -1,3 +1,4 @@
+import { BERLIN } from "@utils/berlinTime.ts";
 import { SITE_NAME, SITE_URL } from "astro:env/client";
 
 import type { Seo } from "@/types/seo";
@@ -78,7 +79,7 @@ export const formattedDate = (date?: string, locale = "de-DE") => {
     day: "numeric",
     month: "long",
     // Payload dates are UTC; show the day it was in Berlin, whatever zone the server runs in.
-    timeZone: "Europe/Berlin",
+    timeZone: BERLIN,
     year: "numeric",
   });
 };

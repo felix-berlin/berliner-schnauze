@@ -1,0 +1,25 @@
+---
+import '@styles/components/_word-fehler.scss';
+import ContributeLazy from '@components/word/ContributeLazy.vue';
+import Flag from '~icons/lucide/flag';
+
+interface Props {
+  word: string;
+  /** Slug of the word: with it the line mounts the report form. */
+  slug?: string;
+}
+
+const { slug, word } = Astro.props;
+---
+
+{/* „Stimmt wat nich?“ (SPEC §12, rest state): one line with a rule above, no card. `data-report` is wired by `initContributeTriggers`; hidden without JS. */}
+<section class='c-word-fehler' aria-labelledby='fehler-title'>
+  <div class='inner'>
+  <p class='text'><b id='fehler-title'>Stimmt wat nich?</b> Wenn dir bei „{word}“ wat falsch vorkommt, sag Bescheid.</p>
+  <button class='c-button report' data-variant='outline' type='button' data-report aria-expanded='false'>
+    <Flag aria-hidden='true' class='icon' height='18' width='18' />
+    Fehler melden
+  </button>
+  </div>
+  {slug && <ContributeLazy client:idle type='error' word={slug} />}
+</section>

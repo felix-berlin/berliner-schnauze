@@ -1,24 +1,55 @@
 ---
 import '@styles/components/_section-card.scss';
+import ContributeLazy from '@components/word/ContributeLazy.vue';
+import type { ContributeType } from '@lib/contribute.ts';
 
 interface Props {
   id: string;
   title: string;
-  level?: 2 | 3;
+  /** Replaces the body when the card has no content (SPEC §6/§9/§10): invitation text and the label of the outline button. */
+  gap?: { text: string; cta: string };
+  /** Renders the "Ergänzen" pill (only while the card has content) and the gap button; wired through `data-contribute` by `initContributeTriggers`. */
+  contribute?: ContributeType;
+  /** Slug of the word: with `contribute` the card mounts its form and the list of the visitor's own open suggestions. */
+  slug?: string;
+  /** Text next to the title ("3 Jeschichten", "Noch keene"). */
+  meta?: string;
 }
 
-const { id, title, level = 2 } = Astro.props;
-const Heading = `h${level}` as 'h2' | 'h3';
+// The surrounding wrapper owns the anchor id and its scroll margin; the id here only names the heading.
+const { contribute, gap, id, meta, slug, title } = Astro.props;
 // Slots passed as `cond && …` still count as present, so test the rendered output.
 const body = (await Astro.slots.render('default'))?.trim();
 const footer = (await Astro.slots.render('footer'))?.trim();
 const headingId = `heading-${id}`;
 ---
 
-<section class='c-section-card' data-variant='word' id={id} aria-labelledby={headingId}>
+<section class='c-section-card' data-variant='sheet v18' data-form={contribute && slug ? contribute : undefined} aria-labelledby={headingId}>
   <div class='header'>
-    <Heading class='title' id={headingId}>{title}</Heading>
+    <h3 class='title' id={headingId}>{title}</h3>
+    {meta && <span class='count'>{meta}</span>}
+    {contribute && !gap && (
+      <button class='c-button' data-variant='pill' type='button' data-contribute={contribute} aria-expanded='false'>
+        <span class='plus' aria-hidden='true'>+</span> Ergänzen
+      </button>
+    )}
   </div>
+  {contribute && slug && (
+    <div class='extra'>
+      <ContributeLazy client:idle type={contribute} word={slug} />
+      <div data-own={contribute} data-word={slug}></div>
+    </div>
+  )}
+  {gap && (
+    <div class='gap'>
+      <div class='gap-box'>
+        <p class='text'>{gap.text}</p>
+        <button class='c-button' data-variant='outline' type='button' data-contribute={contribute} aria-expanded='false'>
+          <span class='plus' aria-hidden='true'>+</span> {gap.cta}
+        </button>
+      </div>
+    </div>
+  )}
   {body && <div class='body' data-slot set:html={body} />}
   {footer && <footer class='footer t-small' data-slot set:html={footer} />}
 </section>

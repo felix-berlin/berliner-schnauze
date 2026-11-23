@@ -24,13 +24,13 @@
   .kalle {
     padding: var(--space-4) var(--space-3) var(--space-1);
     border-radius: var(--radius-pill);
-    background: var(--card2);
+    background: var(--color-warm-card2);
   }
 
   .eyebrow {
     margin: 0 0 var(--space-1);
     font-size: var(--font-size-lg);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
 
     s {
       text-decoration-color: var(--color-accent-active);
@@ -58,7 +58,7 @@
     display: inline-block;
     padding: var(--space-3) var(--space-4);
     border-radius: var(--radius-sm);
-    background: var(--card2);
+    background: var(--color-warm-card2);
 
     b {
       font-family: var(--font-condensed);

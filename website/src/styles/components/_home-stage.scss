@@ -15,7 +15,6 @@
     --_ipa: 8rem; // SPEC §5, outline size
     --_ipa-opacity: 0.07;
     --_seal: 5.25rem; // 84px seal (SPEC §5.1)
-    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
     --_quote: 0.9375rem; // 15px translation and pill text, between the sm and md steps
     --_track: 2px; // eyebrow letter spacing
     --_rise: 700ms;
@@ -72,10 +71,10 @@
     gap: var(--space-3);
     align-items: center;
     margin: 0 0 var(--space-2);
-    font-size: var(--_small);
+    font-size: var(--font-size-label);
     text-transform: uppercase;
     letter-spacing: var(--_track);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
 
     b {
       font-weight: var(--font-weight-bold);
@@ -112,7 +111,7 @@
 
   .art {
     font-size: var(--font-size-xl);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
   }
 
   .meaning {
@@ -135,7 +134,7 @@
       margin-block-start: var(--space-1);
       font-size: var(--_quote);
       font-style: normal;
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
   }
 
@@ -147,10 +146,10 @@
     margin-block-start: var(--space-5);
     margin-inline-end: var(--space-6);
     padding: var(--space-2) var(--space-4);
-    border: 1.5px dashed var(--t3);
+    border: 1.5px dashed var(--color-warm-quiet);
     border-radius: var(--radius-pill);
     font-size: var(--_quote);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
     text-decoration: none;
     background: none;
     font-family: inherit;
@@ -169,14 +168,14 @@
       flex: 0 0 auto;
       inline-size: 18px;
       block-size: 18px;
-      color: var(--t3);
+      color: var(--color-warm-quiet);
       transition: color var(--duration-fast) var(--ease-standard);
     }
 
     @include butler-mx.hover {
       border-style: solid;
       border-color: var(--color-accent-active);
-      background: var(--card2);
+      background: var(--color-warm-card2);
       color: var(--color-text-strong);
 
       svg {

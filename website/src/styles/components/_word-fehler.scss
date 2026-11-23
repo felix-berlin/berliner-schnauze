@@ -1,0 +1,43 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// „Stimmt wat nich?“ line (SPEC §12, WordReportLine.astro): a rule above, text left and an outline c-button
+// right (stacked below 36rem). Parts: .inner (the row; the root is the container), .text. Without JS (html:not([data-js])) the button is hidden:
+// `initContributeTriggers` wires it, like the contribute buttons.
+@include mx.component("word-fehler") {
+  :scope {
+    container: word-fehler / inline-size;
+    margin-block: var(--space-2) var(--space-8); // mock .w18__err: 8px 0 32px
+    padding-block-start: var(--space-5);
+    border-block-start: 1px solid var(--color-border-card);
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+
+    @container word-fehler (inline-size >= 36rem) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-5);
+    }
+  }
+
+  .text {
+    margin: 0;
+    line-height: 1.5;
+    color: var(--color-text-body);
+
+    b {
+      color: var(--color-text-strong);
+    }
+  }
+
+  // Without JS the button would do nothing: c-button (outline) reads --button-display.
+  html:not([data-js]) :scope .inner {
+    --button-display: none;
+  }
+}

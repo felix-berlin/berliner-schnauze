@@ -67,9 +67,10 @@
 
     <TurnStile
       v-if="captchaOn"
+      ref="turnstile"
       :site-key="TURNSTILE_SITE_KEY"
       @token="onToken"
-      @error="captchaFailed = true"
+      @error="onError"
     />
   </form>
 </template>
@@ -77,6 +78,7 @@
 <script setup lang="ts">
 import TurnStile from "@components/TurnStile.vue";
 import { useContentTracking } from "@composables/useContentTracking";
+import { useTurnstile } from "@composables/useTurnstile.ts";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
 import { captchaWaitToast } from "@utils/captchaToast.ts";
@@ -130,15 +132,9 @@ const emptyForm = (): SuggestWord => ({
 const form = reactive<SuggestWord>({ ...emptyForm(), berlinerWord });
 const errors = ref<Partial<Record<FieldName, string>>>({});
 // The token is checked by the server; a token works once, so the widget is reset after every send.
-const turnstileToken = ref("");
+const { failed: captchaFailed, onError, onToken, spend, token: turnstileToken } = useTurnstile();
 // Cloudflare's script loads only once the form is used (privacy policy, "Spam-Schutz").
 const captchaOn = ref(false);
-// The check cannot run (script blocked, bad site key): waiting would never help.
-const captchaFailed = ref(false);
-const onToken = (value: string): void => {
-  turnstileToken.value = value;
-  if (value) captchaFailed.value = false;
-};
 const isSending = ref(false);
 
 const root = ref<HTMLFormElement | null>(null);
@@ -177,8 +173,7 @@ const onSubmit = async (): Promise<void> => {
     )
     .catch(() => "");
   isSending.value = false;
-  turnstileToken.value = "";
-  window.turnstile?.reset();
+  spend();
 
   if (failure !== undefined) {
     createToastNotify({

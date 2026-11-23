@@ -1,6 +1,6 @@
 @use "@styles/mixins" as mx;
 
-// Callout (docs/design/wortseite/SPEC.md §8): the only bordered box allowed inside a section card
+// Callout (v18 handoff SPEC §8): the only bordered box allowed inside a section card
 // besides the stat surfaces.
 @include mx.component("infotext") {
   :scope {

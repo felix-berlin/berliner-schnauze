@@ -4,6 +4,7 @@ import { getPayloadClient } from "@services/payload.ts";
 import { visitorId, voterKey } from "@services/payload/comments.ts";
 import { isUniqueViolation, orNull, reply } from "@utils/apiReply.ts";
 import { voteSchema } from "@utils/commentSchema.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { clientIp, rateLimitedBy } from "@utils/rateLimit.ts";
 
 /** One vote per visitor and comment; Payload's hooks recount the comment, we only read it back. */
@@ -65,7 +66,7 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
     const fresh = await payload.findByID({ collection: "comments", depth: 0, id: commentId });
     return reply({ downvotes: fresh.downvotes, myVote: value, upvotes: fresh.upvotes }, 200);
   } catch (error) {
-    console.error(`[comments] vote on ${commentId} failed:`, error);
+    logRouteError("comments vote", error);
     return reply({ error: "Die Stimme konnte leider nicht gezählt werden." }, 502);
   }
 };

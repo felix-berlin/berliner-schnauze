@@ -11,7 +11,7 @@
 
     container: home-togo / inline-size;
     padding-block: var(--_pad);
-    background: var(--card2);
+    background: var(--color-warm-card2);
   }
 
   .inner {
@@ -43,7 +43,7 @@
     flex: none;
     inline-size: var(--_icon);
     block-size: var(--_icon);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
   }
 
   .text {
@@ -58,7 +58,7 @@
 
     span {
       font-size: var(--font-size-md);
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
   }
 

@@ -1,0 +1,60 @@
+@use "@styles/mixins" as mx;
+
+// Beispiele card body (SPEC §6): an ordered list; each .item has .quote (.sentence), .plain (label + translation)
+// and .actions (the audio pills island plus .record with the disabled "Einsprechen" button ; its tooltip is the shared v-tooltip, attached by the card script).
+@include mx.component("word-beispiele") {
+  :scope {
+    --_gap: var(--space-4);
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .item {
+    display: grid;
+    gap: var(--space-2);
+    padding-block: var(--_gap);
+
+    @include mx.row-divider;
+  }
+
+  .quote {
+    margin: 0;
+  }
+
+  .sentence {
+    margin: 0;
+    // mock .w16 .w10__ex q: 22px (SPEC §4.2 says 20px; the mock is the measured ground truth), no token
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock example sentence 22px
+    font-size: 1.375rem;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--color-text-strong);
+
+    q {
+      quotes: "„" "“";
+    }
+  }
+
+  .plain {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .actions {
+    position: relative; // the tooltip anchors to the row start, so it never leaves the card on a narrow screen
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  // Dashed pill "+ Einsprechen" (mock .w17__vadd): a c-button (pill dashed), aria-disabled (focusable), does nothing yet.
+  .record {
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock: padding 0 .9rem 0 .6rem
+    --button-padding: 0 0.9rem 0 0.6rem;
+    --button-gap: var(--space-2);
+    --button-plus-color: var(--color-text-muted);
+  }
+}

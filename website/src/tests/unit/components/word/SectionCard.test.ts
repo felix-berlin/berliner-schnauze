@@ -13,14 +13,15 @@ describe("SectionCard.astro", () => {
 
   const props = { id: "demo", title: "Demo" };
 
-  it("renders an h2 by default and an h3 for level 3", async () => {
-    expect(await render(props, { default: "x" })).toMatch(/<h2 [^>]*>Demo<\/h2>/);
-    expect(await render({ ...props, level: 3 }, { default: "x" })).toMatch(/<h3 [^>]*>Demo<\/h3>/);
+  it("renders an h3 and the v18 sheet variant", async () => {
+    const html = await render(props, { default: "x" });
+    expect(html).toMatch(/<h3 [^>]*>Demo<\/h3>/);
+    expect(html).toContain('data-variant="sheet v18"');
   });
 
-  it("wires the section id, aria-labelledby and the heading id", async () => {
+  it("wires aria-labelledby and the heading id; the section itself has no id (the wrapper owns the anchor)", async () => {
     const html = await render(props, { default: "x" });
-    expect(html).toContain('id="demo"');
+    expect(html).not.toMatch(/<section[^>]* id=/);
     expect(html).toContain('aria-labelledby="heading-demo"');
     expect(html).toContain('id="heading-demo"');
   });
@@ -36,5 +37,33 @@ describe("SectionCard.astro", () => {
     expect(html).not.toContain('class="body"');
     expect(html).not.toContain("<footer");
     expect(await render(props)).not.toContain('class="body"');
+  });
+
+  it("renders the pill as a real button, and with a gap the gap box instead of the pill", async () => {
+    const card = { ...props, contribute: "example" };
+    const html = await render(card, { default: "<p>Nachbar</p>" });
+    expect(html).not.toMatch(/<section[^>]* id=/);
+    expect(html).toContain('id="heading-demo"');
+    expect(html).toMatch(
+      /<button[^>]*type="button"[^>]*data-contribute="example"[^>]*>[\s\S]*Ergänzen/,
+    );
+    const gap = await render(
+      { ...card, gap: { cta: "Los", text: "Nüscht da." } },
+      { default: "<p>Nachbar</p>" },
+    );
+    expect(gap).toContain("Nüscht da.");
+    expect(gap).toContain("Los");
+    expect(gap).toContain("<p>Nachbar</p>");
+    expect(gap).not.toContain("Ergänzen");
+  });
+
+  it("shows no pill while the gap is shown, only the gap button", async () => {
+    const html = await render({
+      ...props,
+      contribute: "fact",
+      gap: { cta: "Los", text: "Nüscht." },
+    });
+    expect(html).not.toContain('class="add"');
+    expect(html.match(/data-contribute="fact"/g)).toHaveLength(1);
   });
 });

@@ -1,0 +1,257 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Word page v18 shell (WordPage.astro): the grid of table of contents + main column, the band headings
+// and the anchor targets. Mobile: one column, no table of contents. From the "word" breakpoint (808px) the
+// table of contents is a sticky pill bar above the column (tablet); from "desktop" (1000px) a 220px sticky
+// column left of it. Parts: .toc (wrapper of the WordToc island), .main, .band, .anchor.
+// The pill bar needs a header that scrolls away (SPEC §3: top: 0), so the site header is static here.
+@layer objects {
+  html:has(.o-word-v18) .o-header {
+    position: static;
+  }
+
+  // Word page ground (SPEC §4 `--color-warm-ground`): a flat beige/blue-black, no dot grid. Scoped to this page: the site-wide
+  // body keeps its tokens. Value: `color.word.ground` in tokens/semantic.*.tokens.json.
+  html:has(.o-word-v18) {
+    --color-surface-ground: var(--color-warm-ground);
+  }
+
+  html:has(.o-word-v18) body {
+    background-color: var(--color-surface-ground);
+    background-image: none;
+  }
+
+  // Palette v13 of the word page (SPEC §4): the site-wide semantic tokens carry other values (in dark `sheet` equals
+  // `paper`, `chip` is darker than the card). This subtree maps them to the `color.warm.*` tokens (the values live in
+  // tokens/semantic.*.tokens.json; SPEC §17 contrast pairs are checked against them), so the partials keep the
+  // site names: sheet/chip/muted/card3 map to `color.warm.*`. The shared components (section-card, choice, button ...) are also used by
+  // BON/Anki/the site, so the remap stays until their look moves to the warm palette; card3 is read with a fallback.
+  .o-word-v18 {
+    --color-surface-sheet: var(--color-warm-sheet);
+    --color-surface-chip: var(--color-warm-card2);
+    --color-surface-card3: var(--color-warm-card3); // hover/selected of card2, never --t3 text on it
+    --color-text-muted: var(--color-warm-muted);
+
+    // SPEC §4.3 text link (überspringen, Zurück, Abbrechen ...): solid underline in body colour, not the site's dashed muted one.
+    --link-color: var(--color-text-body);
+    --link-decoration-style: solid;
+
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: toc column is exactly 220px, no token
+    --_toc-width: 220px;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: wrap max width 1208px incl. padding
+    --_max-width: 1208px;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: anchors land 16px below the top (mobile, desktop)
+    --_anchor: var(--space-4);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: tablet anchors clear the pill bar, 72px
+    --_anchor-bar: 4.5rem;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    max-inline-size: var(--_max-width);
+    // mock .w10: tracking .5px (the site default is 1px) and the 17px of .w16; controls reset to 0 below
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock page tracking, no token
+    letter-spacing: 0.5px;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w16 text size 17px, no token
+    font-size: 1.0625rem;
+    // SPEC §3: 96px below the content on mobile (the sticky bar covers the end)
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: 96px, no space token that large
+    padding: var(--space-4) var(--space-4) 6rem;
+    // The page column (u-max-body-width) pads its sides; the wrap owns its padding so the pill bar can run edge to edge.
+    margin-inline: calc(-1 * var(--page-gutter));
+
+    > * {
+      min-inline-size: 0;
+    }
+
+    button {
+      letter-spacing: 0;
+    }
+
+    @include mx.breakpoint("word") {
+      padding: 0 var(--space-6) var(--space-16);
+    }
+    @include mx.breakpoint("desktop") {
+      // SPEC §3: reactions and the action row are 36px on the desktop (the hit band keeps 44px).
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock: 36px, no token
+      --word-control-block: 2.25rem;
+
+      margin-inline: auto;
+      grid-template-columns: var(--_toc-width) minmax(0, 1fr);
+      gap: var(--space-8);
+      padding-block-start: var(--space-8);
+      align-items: start;
+    }
+  }
+
+  .o-word-v18 .toc {
+    display: none;
+
+    @include mx.breakpoint("word") {
+      display: block;
+      position: sticky;
+      inset-block-start: 0;
+      z-index: var(--z-sticky);
+      // Full bleed up to the viewport edge; the padding keeps the pills on the column.
+      margin-inline: calc(-1 * var(--space-6));
+      margin-block-end: var(--space-4);
+      padding: var(--space-3) var(--space-6);
+      background: var(--color-surface-ground);
+      border-block-end: 1px solid var(--color-border-card);
+    }
+    @include mx.breakpoint("desktop") {
+      inset-block-start: var(--space-4);
+      margin: 0;
+      padding: 0;
+      background: none;
+      box-shadow: none;
+      // A long list on a short window scrolls inside the column instead of being cut off.
+      max-block-size: calc(100dvh - 2 * var(--space-4));
+      overflow-y: auto;
+    }
+  }
+
+  .o-word-v18 .main {
+    container: word-main / inline-size;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-inline-size: 0;
+
+    @include mx.breakpoint("word") {
+      padding-block-start: var(--space-2);
+    }
+    @include mx.breakpoint("desktop") {
+      padding-block-start: 0;
+    }
+  }
+
+  // Grammatik and Klang: stacked with 8px (the closed folds) below 808px, side by side from there (SPEC §3).
+  .o-word-v18 .pair {
+    display: grid;
+    gap: var(--space-2);
+
+    @include mx.breakpoint("word") {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-4);
+    }
+  }
+
+  // The sticky bar (below 808px) must not hide a focused element: keep it clear on scroll.
+  html:has(.o-word-v18) {
+    --_bar: calc(4.5rem + env(safe-area-inset-bottom, 0px)); // bar height 72px plus the safe area, no token
+    --scroll-to-top-lift: var(--_bar); // the scroll-to-top button stays above the sticky bar
+
+    scroll-padding-block-end: var(--_bar);
+
+    @include mx.breakpoint("word") {
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- zero length, no token step
+      --scroll-to-top-lift: 0rem;
+      --word-mobile-bar-display: none;
+      --word-analyse-wide-display: block;
+      --word-analyse-fold-display: none;
+
+      scroll-padding-block-end: 0;
+    }
+  }
+
+  .o-word-v18 .anchor {
+    scroll-margin-block-start: var(--_anchor);
+
+    // Card paddings (SPEC §3: 24/28/32); the 28px of the tablet is written out as in _word-head.scss.
+
+    --section-card-gutter: var(--space-6);
+    --section-card-header-block: var(--space-6);
+
+    @include mx.breakpoint("word") {
+      scroll-margin-block-start: var(--_anchor-bar);
+
+      // stylelint-disable declaration-property-value-disallowed-list -- SPEC §3: tablet card padding 28px, as in _word-head.scss
+      --section-card-gutter: 1.75rem;
+      --section-card-header-block: 1.75rem;
+      // stylelint-enable declaration-property-value-disallowed-list
+    }
+    @include mx.breakpoint("desktop") {
+      scroll-margin-block-start: var(--_anchor);
+
+      --section-card-gutter: var(--space-8);
+      --section-card-header-block: var(--space-8);
+    }
+  }
+
+  // Band heading (h2): Fira 700, capitals, a rule to the right edge.
+  .o-word-v18 .band {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    // SPEC §3 mock: 48px (mobile) / 64px (tablet, desktop) above a band, less the 16px gap of .main
+    margin-block: var(--space-8) 0;
+    font-family: var(--font-condensed);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: 28px on mobile, no token
+    font-size: 1.75rem;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    color: var(--color-text-strong);
+
+    &::after {
+      content: "";
+      flex: 1;
+      border-block-start: 1px solid var(--color-border-card);
+    }
+
+    @include mx.breakpoint("word") {
+      margin-block-start: var(--space-12);
+      font-size: var(--font-size-4xl);
+    }
+  }
+
+  // Decorative first letter of the IPA behind the page (mock .w17__init; direct child only: the word seal has its own .initial): tablet and desktop only, fixed to the viewport
+  // foot, tilted, faded out towards the bottom. Fixed boxes add no scrollable overflow; the page cards cover it.
+  .o-word-v18 > .initial {
+    display: none;
+
+    @include mx.breakpoint("word") {
+      // stylelint-disable declaration-property-value-disallowed-list -- mock .w17__init: 85rem glyph, 8deg tilt, foot offsets
+      display: block;
+      position: fixed;
+      inset-inline-start: -0.01em;
+      inset-block-end: -0.12em;
+      z-index: -1;
+      font-family: var(--font-condensed);
+      font-size: 85rem;
+      font-weight: var(--font-weight-black);
+      line-height: 0.8;
+      color: var(--color-ipa-initial);
+      rotate: 8deg;
+      transform-origin: 0 0;
+      mask-image: linear-gradient(175deg, var(--color-text-strong) 35%, transparent 95%); // the colour only supplies alpha
+      // stylelint-enable declaration-property-value-disallowed-list
+      pointer-events: none;
+      user-select: none;
+
+      // Fades in while the head scrolls away (mock production note); without scroll timelines it just stays.
+      @include butler-mx.feature("motion") {
+        @supports (animation-timeline: scroll()) {
+          animation: word-initial linear both;
+          animation-timeline: scroll(root);
+          animation-range: 250px 650px;
+        }
+      }
+    }
+  }
+
+  @keyframes word-initial {
+    from {
+      opacity: 0;
+      translate: 0 40px;
+    }
+  }
+
+  // Jeschichten (SPEC §8.1): two stories below the "word" breakpoint, three from it. The same breakpoint drives the
+  // count in WordStories.vue; this rule only avoids the flash before the island hydrates.
+  @include mx.breakpoint("word", "max") {
+    .o-word-v18 [data-narrow-hidden] {
+      display: none;
+    }
+  }
+}

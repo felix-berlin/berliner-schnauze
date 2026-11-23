@@ -9,7 +9,9 @@
     --_center: 50%;
 
     position: fixed;
-    inset: auto auto var(--_edge) var(--_center);
+    // A page with a sticky bottom bar (the word page) sets --scroll-to-top-lift to the bar's height.
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- calc of the private edge and the page's lift length
+    inset: auto auto calc(var(--_edge) + var(--scroll-to-top-lift, 0rem)) var(--_center);
     translate: -50% 0;
     z-index: var(--z-raised);
     box-shadow: var(--shadow-paper-lift);

@@ -102,6 +102,7 @@ export interface Config {
     comments: Comment;
     'comment-votes': CommentVote;
     'comment-reports': CommentReport;
+    reports: Report;
     'word-feedback': WordFeedback;
     'word-stats': WordStat;
     'bon-games': BonGame;
@@ -127,6 +128,7 @@ export interface Config {
     comments: CommentsSelect<false> | CommentsSelect<true>;
     'comment-votes': CommentVotesSelect<false> | CommentVotesSelect<true>;
     'comment-reports': CommentReportsSelect<false> | CommentReportsSelect<true>;
+    reports: ReportsSelect<false> | ReportsSelect<true>;
     'word-feedback': WordFeedbackSelect<false> | WordFeedbackSelect<true>;
     'word-stats': WordStatsSelect<false> | WordStatsSelect<true>;
     'bon-games': BonGamesSelect<false> | BonGamesSelect<true>;
@@ -149,6 +151,7 @@ export interface Config {
     company: Company;
     home: Home;
     anki: Anki;
+    'word-page': WordPage;
     'payload-jobs-stats': PayloadJobsStat;
   };
   globalsSelect: {
@@ -157,6 +160,7 @@ export interface Config {
     company: CompanySelect<false> | CompanySelect<true>;
     home: HomeSelect<false> | HomeSelect<true>;
     anki: AnkiSelect<false> | AnkiSelect<true>;
+    'word-page': WordPageSelect<false> | WordPageSelect<true>;
     'payload-jobs-stats': PayloadJobsStatsSelect<false> | PayloadJobsStatsSelect<true>;
   };
   locale: null;
@@ -355,6 +359,52 @@ export interface Word {
   examples?: WordExamplesArray;
   berlinerischAudio?: AudioArray;
   relatedWords?: (number | Word)[] | null;
+  stress?: string | null;
+  grammar?: {
+    plural?: string | null;
+    diminutive?: (number | null) | Word;
+  };
+  facts?:
+    | {
+        kind?: ('herkunft' | 'geschichte' | 'gebrauch' | 'anekdote' | 'sonstiges') | null;
+        text?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        /**
+         * Quelle genau dieses Eintrags (z. B. Buch, Autor). Die Seite nennt sie vor der Namensnennung.
+         */
+        source?: string | null;
+        contributorName?: string | null;
+        contributorSuggestion?: (number | null) | Suggestion;
+        id?: string | null;
+      }[]
+    | null;
+  related?:
+    | {
+        word?: (number | null) | Word;
+        /**
+         * Wird genutzt, wenn kein Wort verknüpft ist.
+         */
+        label?: string | null;
+        relation?: ('gleich' | 'gegenteil' | 'verwandt' | 'redewendung') | null;
+        note?: string | null;
+        contributorName?: string | null;
+        contributorSuggestion?: (number | null) | Suggestion;
+        id?: string | null;
+      }[]
+    | null;
   wikimediaFiles?:
     | {
         wikimediaFile?: string | null;
@@ -363,24 +413,8 @@ export interface Word {
         id?: string | null;
       }[]
     | null;
-  infoText?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
   learnMore?: string | null;
   berolinismus?: boolean | null;
-  sources?: string[] | null;
   images?: (number | Media)[] | null;
   wordTypes?: (number | WordType)[] | null;
   themen?: (number | Theman)[] | null;
@@ -413,6 +447,53 @@ export interface Word {
   createdAt: string;
   deletedAt?: string | null;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "suggestions".
+ */
+export interface Suggestion {
+  id: number;
+  title?: string | null;
+  type?: ('word' | 'example' | 'fact' | 'related') | null;
+  berlinerWord?: string | null;
+  translation?: string | null;
+  /**
+   * Das Wort, zu dem Beispiel, Wissenswertes oder Verwandtes eingereicht wurde. Nicht „Wort“ (das sperrt den Vorschlag).
+   */
+  targetWord?: (number | null) | Word;
+  kind?: ('herkunft' | 'geschichte' | 'gebrauch' | 'anekdote' | 'sonstiges') | null;
+  relation?: ('gleich' | 'gegenteil' | 'verwandt' | 'redewendung') | null;
+  relatedText?: string | null;
+  /**
+   * Beispielsatz (max. 200 Zeichen) oder Text zum Wissenswerten (max. 1000).
+   */
+  text?: string | null;
+  highdeutsch?: string | null;
+  /**
+   * Nur bei „Neues Wort“: optionaler Beispielsatz. Für „Beispielsatz“ siehe Feld Text.
+   */
+  example?: string | null;
+  userName?: string | null;
+  userMail?: string | null;
+  /**
+   * Beispielsatz, Wissenswertes und Verwandtes übernimmt das CMS nicht selbst: erst von Hand ins Wort eintragen (dort „Vorschlag“ verknüpfen), dann hier auf „Übernommen“ setzen.
+   */
+  status?: ('new' | 'accepted' | 'rejected') | null;
+  /**
+   * Das Wort, das aus diesem Vorschlag entstanden ist. Beim Wechsel auf „Übernommen“ ohne Wort legt das CMS einen Entwurf an; ein hier gewähltes Wort wird stattdessen verknüpft.
+   */
+  word?: (number | null) | Word;
+  /**
+   * Wörter mit gleicher oder ähnlicher Schreibweise (automatisch beim Anlegen und beim Ändern des Berliner Worts).
+   */
+  similarWords?: (number | Word)[] | null;
+  /**
+   * Wird aus dem Wort abgeleitet: gesperrt, solange das verknüpfte Wort veröffentlicht ist.
+   */
+  lockedByWord?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -485,33 +566,6 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "suggestions".
- */
-export interface Suggestion {
-  id: number;
-  berlinerWord: string;
-  translation: string;
-  example?: string | null;
-  userName?: string | null;
-  userMail?: string | null;
-  status?: ('new' | 'accepted' | 'rejected') | null;
-  /**
-   * Das Wort, das aus diesem Vorschlag entstanden ist. Beim Wechsel auf „Übernommen“ ohne Wort legt das CMS einen Entwurf an; ein hier gewähltes Wort wird stattdessen verknüpft.
-   */
-  word?: (number | null) | Word;
-  /**
-   * Wörter mit gleicher oder ähnlicher Schreibweise (automatisch beim Anlegen und beim Ändern des Berliner Worts).
-   */
-  similarWords?: (number | Word)[] | null;
-  /**
-   * Wird aus dem Wort abgeleitet: gesperrt, solange das verknüpfte Wort veröffentlicht ist.
-   */
-  lockedByWord?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "comments".
  */
 export interface Comment {
@@ -531,6 +585,30 @@ export interface Comment {
    * Freigegeben: weitere Meldungen blenden den Kommentar nicht mehr aus.
    */
   reviewed?: boolean | null;
+  /**
+   * Bezirk der Jeschichte (optional).
+   */
+  bezirk?:
+    | (
+        | 'mitte'
+        | 'friedrichshain-kreuzberg'
+        | 'pankow'
+        | 'charlottenburg-wilmersdorf'
+        | 'spandau'
+        | 'steglitz-zehlendorf'
+        | 'tempelhof-schoeneberg'
+        | 'neukoelln'
+        | 'treptow-koepenick'
+        | 'marzahn-hellersdorf'
+        | 'lichtenberg'
+        | 'reinickendorf'
+        | 'outside'
+      )
+    | null;
+  /**
+   * Als Jeschichte des Wortes hervorgehoben (höchstens eine veröffentlichte pro Wort, keine Antworten).
+   */
+  featured?: boolean | null;
   editKeyHash?: string | null;
   editedAt?: string | null;
   upvotes?: number | null;
@@ -561,6 +639,23 @@ export interface CommentReport {
   comment: number | Comment;
   visitor: string;
   reason?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reports".
+ */
+export interface Report {
+  id: number;
+  word: number | Word;
+  kind?: ('meaning' | 'spelling' | 'example' | 'audio' | 'fact' | 'inappropriate' | 'other') | null;
+  text: string;
+  /**
+   * Wird nach 90 Tagen oder beim Erledigen automatisch gelöscht.
+   */
+  email?: string | null;
+  status?: ('open' | 'closed') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1030,6 +1125,10 @@ export interface PayloadLockedDocument {
         value: number | CommentReport;
       } | null)
     | ({
+        relationTo: 'reports';
+        value: number | Report;
+      } | null)
+    | ({
         relationTo: 'word-feedback';
         value: number | WordFeedback;
       } | null)
@@ -1214,6 +1313,34 @@ export interface WordsSelect<T extends boolean = true> {
   examples?: T | WordExamplesArraySelect<T>;
   berlinerischAudio?: T | AudioArraySelect<T>;
   relatedWords?: T;
+  stress?: T;
+  grammar?:
+    | T
+    | {
+        plural?: T;
+        diminutive?: T;
+      };
+  facts?:
+    | T
+    | {
+        kind?: T;
+        text?: T;
+        source?: T;
+        contributorName?: T;
+        contributorSuggestion?: T;
+        id?: T;
+      };
+  related?:
+    | T
+    | {
+        word?: T;
+        label?: T;
+        relation?: T;
+        note?: T;
+        contributorName?: T;
+        contributorSuggestion?: T;
+        id?: T;
+      };
   wikimediaFiles?:
     | T
     | {
@@ -1222,10 +1349,8 @@ export interface WordsSelect<T extends boolean = true> {
         caption?: T;
         id?: T;
       };
-  infoText?: T;
   learnMore?: T;
   berolinismus?: T;
-  sources?: T;
   images?: T;
   wordTypes?: T;
   themen?: T;
@@ -1307,8 +1432,16 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "suggestions_select".
  */
 export interface SuggestionsSelect<T extends boolean = true> {
+  title?: T;
+  type?: T;
   berlinerWord?: T;
   translation?: T;
+  targetWord?: T;
+  kind?: T;
+  relation?: T;
+  relatedText?: T;
+  text?: T;
+  highdeutsch?: T;
   example?: T;
   userName?: T;
   userMail?: T;
@@ -1333,6 +1466,8 @@ export interface CommentsSelect<T extends boolean = true> {
   status?: T;
   removalReason?: T;
   reviewed?: T;
+  bezirk?: T;
+  featured?: T;
   editKeyHash?: T;
   editedAt?: T;
   upvotes?: T;
@@ -1361,6 +1496,19 @@ export interface CommentReportsSelect<T extends boolean = true> {
   comment?: T;
   visitor?: T;
   reason?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reports_select".
+ */
+export interface ReportsSelect<T extends boolean = true> {
+  word?: T;
+  kind?: T;
+  text?: T;
+  email?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1593,6 +1741,11 @@ export interface Affiliate {
         imageAlt?: string | null;
         badge?: string | null;
         badgeModifier?: string | null;
+        /**
+         * Das Buch erscheint bei jedem Wort, auch ohne Thema. Ein Buch, das zum ersten Thema des Wortes passt, hat Vorrang.
+         */
+        alleThemen?: boolean | null;
+        themen?: (number | Theman)[] | null;
         id?: string | null;
       }[]
     | null;
@@ -1794,6 +1947,19 @@ export interface Anki {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "word-page".
+ */
+export interface WordPage {
+  id: number;
+  /**
+   * Fragetext unter dem Jeschichten-Formular; {Wort} wird durch das Wort ersetzt. Leer = Standardtext („Wo haste „{Wort}“ zuletzt jehört?“).
+   */
+  storyPrompt?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs-stats".
  */
 export interface PayloadJobsStat {
@@ -1861,6 +2027,8 @@ export interface AffiliateSelect<T extends boolean = true> {
         imageAlt?: T;
         badge?: T;
         badgeModifier?: T;
+        alleThemen?: T;
+        themen?: T;
         id?: T;
       };
   disclaimers?:
@@ -1981,6 +2149,16 @@ export interface AnkiSelect<T extends boolean = true> {
         answer?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "word-page_select".
+ */
+export interface WordPageSelect<T extends boolean = true> {
+  storyPrompt?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

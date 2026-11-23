@@ -10,7 +10,6 @@
 @include mx.component("footer-word-sign") {
   :scope {
     --_width: 25rem; // SPEC sign width 400px
-    --_label: 0.8125rem; // SPEC 13px label: --font-size-sm is 12.8px, below the 13px minimum
     --_lemma: clamp(1.75rem, 11cqi, 2.75rem); // fluid with the sign's own width: SPEC 44px at 400px, about 36px on phones
     --_lemma-long: clamp(1.5rem, 7cqi, 2rem); // long lemmas (data-long, > 14 letters): smaller so they wrap onto fewer lines; a 36-letter word still takes three
     --_tilt: -1.5deg; // SPEC rest angle
@@ -58,7 +57,7 @@
 
   .label {
     margin: 0;
-    font-size: var(--_label);
+    font-size: var(--font-size-label);
     font-weight: var(--font-weight-bold);
     color: var(--sign-text-quiet);
     text-transform: uppercase;

@@ -76,7 +76,6 @@ const doc = {
     },
     5,
   ],
-  infoText: lexical("Adjektiv zu Aas"),
   learnMore: "https://example.org/mehr",
   meta: {
     canonical: null,
@@ -94,7 +93,6 @@ const doc = {
     14,
   ],
   slug: "aasen",
-  sources: ["Meyer", "Schlobinski"],
   themen: [{ id: 2, name: "Essen", slug: "essen" }],
   translations: [
     { translation: "sehr" },
@@ -128,18 +126,13 @@ describe("toWord", () => {
       berolinismus: true,
       contentModifiedAt: "2026-09-20T17:24:19.000Z",
       derived: { soundexCode: "A250", syllablesCount: 2, wordComponents: ["asen"] },
-      hasInfoText: true,
-      infoTextHtml: "<p>Adjektiv zu Aas</p>",
       learnMore: "https://example.org/mehr",
       meta: { description: "Meta", title: "aasen" },
       publishedAt: "2025-04-09T08:12:37.000Z",
       slug: "aasen",
-      sources: ["Meyer", "Schlobinski"],
       themen: [{ id: 2, name: "Essen", slug: "essen" }],
       wordTypes: [{ id: 1, name: "Adjektiv" }],
     });
-    // the raw rich text is not kept: the html above is what the pages render
-    expect(word).not.toHaveProperty("infoText");
   });
 
   it("narrows audio rows to media with absolute urls", async () => {
@@ -182,6 +175,45 @@ describe("toWord", () => {
     expect(toWord(doc as never).relatedWords).toEqual([{ berlinerisch: "wa", id: 13, slug: "wa" }]);
   });
 
+  it("unwraps the v18 relations: diminutive, related words and contributor suggestions as plain ids", async () => {
+    const { toWord } = await load();
+    const word = toWord({
+      ...doc,
+      facts: [
+        { contributorSuggestion: { id: 31 }, kind: "herkunft", text: lexical("Invented.") },
+        { kind: "herkunft", text: lexical("  ") },
+        { kind: "herkunft" },
+      ],
+      grammar: { diminutive: { berlinerisch: "Aaschen", id: 8, slug: "aaschen" }, plural: "Aasen" },
+      related: [
+        {
+          contributorSuggestion: 32,
+          relation: "verwandt",
+          word: { berlinerisch: "wa", id: 13, slug: "wa" },
+        },
+        { label: "free text", relation: "gleich", word: 14 }, // unpopulated word: dropped, label stays
+      ],
+    } as never);
+    expect(word.grammar).toEqual({
+      diminutive: { berlinerisch: "Aaschen", id: 8, slug: "aaschen" },
+      plural: "Aasen",
+    });
+    // The rich text is converted once here; a blank or missing one leaves `html` empty.
+    expect(word.facts).toEqual([
+      { contributorSuggestion: 31, html: "<p>Invented.</p>", kind: "herkunft" },
+      { contributorSuggestion: undefined, html: "", kind: "herkunft" },
+      { contributorSuggestion: undefined, html: "", kind: "herkunft" },
+    ]);
+    expect(word.related).toEqual([
+      {
+        contributorSuggestion: 32,
+        relation: "verwandt",
+        word: { berlinerisch: "wa", id: 13, slug: "wa" },
+      },
+      { label: "free text", relation: "gleich" },
+    ]);
+  });
+
   it("computes the derived fields, with a warning, when the stored group is unset (Payload: an object of nulls)", async () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const { toWord } = await load();
@@ -217,9 +249,7 @@ describe("toWord", () => {
     expect(word).toMatchObject({
       berlinerischAudio: [],
       examples: [],
-      hasInfoText: false,
       images: [],
-      infoTextHtml: null,
       relatedWords: [],
       themen: [],
       wordTypes: [],
@@ -344,6 +374,7 @@ describe("fetchAllWords", () => {
     expect(loadPages.mock.calls[0][0]).toMatchObject({
       depth: 1,
       populate: {
+        suggestions: { type: true },
         themen: { name: true, slug: true },
         "word-types": { name: true },
         words: { berlinerisch: true, slug: true },

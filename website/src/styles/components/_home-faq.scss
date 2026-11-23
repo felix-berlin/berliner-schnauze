@@ -7,7 +7,6 @@
 @include mx.component("home-faq") {
   :scope {
     --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
-    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
     --_q: 1.2rem; // SPEC §12.2 question (mock), between the lg and xl steps
     --_plus: 28px; // SPEC §12.2 plus circle
     --_bar: 12px; // plus bar length
@@ -72,7 +71,7 @@
       }
 
       .plus {
-        background: var(--card3);
+        background: var(--color-warm-card3);
       }
     }
   }
@@ -83,7 +82,7 @@
     inline-size: var(--_plus);
     block-size: var(--_plus);
     border-radius: var(--radius-pill);
-    background: var(--card2);
+    background: var(--color-warm-card2);
     transition: background-color var(--duration-fast) var(--ease-standard);
 
     &::before,
@@ -122,7 +121,7 @@
   .about {
     padding: var(--space-6);
     border-radius: var(--radius-sm);
-    background: var(--card2);
+    background: var(--color-warm-card2);
 
     h3 {
       margin: 0 0 var(--space-2);
@@ -150,7 +149,7 @@
       flex-direction: column;
       padding: var(--space-3) var(--space-4);
       border-radius: var(--radius-sm);
-      background: var(--card);
+      background: var(--color-warm-sheet);
     }
 
     b {
@@ -162,8 +161,8 @@
     }
 
     span {
-      font-size: var(--_small);
-      color: var(--t3);
+      font-size: var(--font-size-label);
+      color: var(--color-warm-quiet);
     }
   }
 

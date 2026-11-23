@@ -2,6 +2,135 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1](https://github.com/felix-berlin/berliner-schnauze/compare/v5.0.0...v5.0.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* **ci:** restore the hasLexicalText import, skip the upgrade rollback without a new migration ([b1f850a](https://github.com/felix-berlin/berliner-schnauze/commit/b1f850a5efce906ef74f2c572352a0d870f618eb))
+* **word:** keep the contribute buttons after a client navigation ([a7cc902](https://github.com/felix-berlin/berliner-schnauze/commit/a7cc902e3f905418a5f23c9e43e1880c10e1246f))
+
+# [5.0.0](https://github.com/felix-berlin/berliner-schnauze/compare/v4.15.1...v5.0.0) (2026-11-23)
+
+
+* feat(word)!: replace the word page with v18 ([3b8215b](https://github.com/felix-berlin/berliner-schnauze/commit/3b8215b054a3e807947bfb2ce2d7ca7fcb608e41))
+* refactor(word)!: remove the old comment endpoints and the v3 design files ([89c3cdd](https://github.com/felix-berlin/berliner-schnauze/commit/89c3cdd1beb788bf8c96fe6c69227af090a7a477))
+
+
+### Bug Fixes
+
+* **api:** log failed routes without the query values ([d227c90](https://github.com/felix-berlin/berliner-schnauze/commit/d227c909c8bb0b04afe932be33540cfc721cad40))
+* **payload:** rename the contributor FKs of the word versions to the Payload 3.94 names ([114e669](https://github.com/felix-berlin/berliner-schnauze/commit/114e669db894e572d6eeb6a7c5273cade824ae0e))
+* **payload:** review findings (draft-safe infoTextToFacts, related labels, idempotent down, retention steps, MCP credits) ([b770f2b](https://github.com/felix-berlin/berliner-schnauze/commit/b770f2b75650890c236995d49f3e7290d847ca0d))
+* **payload:** roll the infoText copy back by removing the unedited facts ([4f27f0b](https://github.com/felix-berlin/berliner-schnauze/commit/4f27f0be795a6565ac48cf4ddcba45d6177f4682))
+* **word:** align the card gaps with the mock and fix touch targets and voice order ([14f5ae7](https://github.com/felix-berlin/berliner-schnauze/commit/14f5ae78cd36fceb4da61f19e4aaf23ebd39f8cc))
+* **word:** align the card gaps with the mock and fix touch targets and voice order ([911413e](https://github.com/felix-berlin/berliner-schnauze/commit/911413e99f8d2a809219a27def62136cfbd4a847))
+* **word:** align the card shell and gaps with the design ([c6412c8](https://github.com/felix-berlin/berliner-schnauze/commit/c6412c801371ebb6e4d8c2006117a7efa14587f4))
+* **word:** align the controls with the design ([cfae99b](https://github.com/felix-berlin/berliner-schnauze/commit/cfae99bdbd2e01e948ac8acd14ea92c2d46b258d))
+* **word:** apply the design feedback of the v18 word page (head, forms, net, poll map, footer books) ([c6565e9](https://github.com/felix-berlin/berliner-schnauze/commit/c6565e95bcfc1e412862eceffe68ed3d37b80dab))
+* **word:** apply the design palette to the word page ([bf6c428](https://github.com/felix-berlin/berliner-schnauze/commit/bf6c428093274fb0d1c37bc8a56701ea6cbf96f2))
+* **word:** break poll matrix ties with exact remainders ([e1b03ca](https://github.com/felix-berlin/berliner-schnauze/commit/e1b03ca67161604610844142201c155d315ebad6))
+* **word:** check featured uniqueness on the resulting state ([9a7a80d](https://github.com/felix-berlin/berliner-schnauze/commit/9a7a80d315595d33d1a21c9831906f046ee01aa4))
+* **word:** clean the contribute name and log the word of a failed delete ([ba2256f](https://github.com/felix-berlin/berliner-schnauze/commit/ba2256f4d7500848cc38ac9086155ed56735d2eb))
+* **word:** clear report mails on the resulting state and by age ([266de7f](https://github.com/felix-berlin/berliner-schnauze/commit/266de7f7d71b3d30e39da4926315705c2a85468e))
+* **word:** clear reports on word delete and relax the example target check ([cc1dbb7](https://github.com/felix-berlin/berliner-schnauze/commit/cc1dbb78966b3de9a40701c471b38388f69cb02a))
+* **word:** clear the remembered poll profile on delete and reset the store on navigation ([4ffebcd](https://github.com/felix-berlin/berliner-schnauze/commit/4ffebcd4c22a8d52a91010fff72ccda1d89a10e2))
+* **word:** count plays from the mobile bar and tidy the analysis row ([78c7ccb](https://github.com/felix-berlin/berliner-schnauze/commit/78c7ccbfa5dfd3c7e6352c4ab83dc56b5fcd57c5))
+* **word:** count plays from the mobile bar and tidy the analysis row ([26d922e](https://github.com/felix-berlin/berliner-schnauze/commit/26d922e4c8e520b1c44ec5717aad88739e0870e2))
+* **word:** enforce the 13px minimum and clean up listeners ([928149e](https://github.com/felix-berlin/berliner-schnauze/commit/928149efcac3b45054508841f6393f3156ebc76c))
+* **word:** enforce the 13px minimum and clean up listeners ([536e06b](https://github.com/felix-berlin/berliner-schnauze/commit/536e06bacb53857d63dff431520a15a14471ab33))
+* **word:** fill the image column like the design ([3beb1fa](https://github.com/felix-berlin/berliner-schnauze/commit/3beb1faa1531a94c90ad3efc46d491ea37d59d19))
+* **word:** finish the page chrome and details of the design ([4114006](https://github.com/felix-berlin/berliner-schnauze/commit/4114006efde7aba6492826fb7e4fe927f946dc52))
+* **word:** give the share fallback real feedback and harden the actions menu ([6a6b999](https://github.com/felix-berlin/berliner-schnauze/commit/6a6b999c587162870cc5201b6718fe8284cdb5d3))
+* **word:** harden the v18 data layer after review ([a802eb8](https://github.com/felix-berlin/berliner-schnauze/commit/a802eb83651c722f538adb1ac9b2c4519bf62fd1))
+* **word:** hide poll, trend and stories on draft previews ([1d9d1d4](https://github.com/felix-berlin/berliner-schnauze/commit/1d9d1d40023868d73b46ee1994a6069471dba637)), closes [#jeschichten](https://github.com/felix-berlin/berliner-schnauze/issues/jeschichten)
+* **word:** keep empty live regions out of the grid flow ([1170780](https://github.com/felix-berlin/berliner-schnauze/commit/11707805f7d0a9b94c05f24aedb682c6618ef9c5))
+* **word:** keep the live regions in the DOM ([40f4873](https://github.com/felix-berlin/berliner-schnauze/commit/40f4873cbef5332f0d777b4c22e8c5be431b5c8b))
+* **word:** keep the page initial off the word seal's own initial ([8454b96](https://github.com/felix-berlin/berliner-schnauze/commit/8454b96b927a2af73e808b7aaedb76302d83e573))
+* **word:** keep the story count stable during hydration ([9f7179e](https://github.com/felix-berlin/berliner-schnauze/commit/9f7179e2d3981bbd753f010d5d56b8a3a967e064))
+* **word:** lift scroll-to-top above the sticky bar, accept singular result count ([ced2480](https://github.com/felix-berlin/berliner-schnauze/commit/ced2480eb2ca2c4d0f22857d6f536581daeec1a9))
+* **word:** lighter outline rim and a visible IPA outline in the word head ([d674788](https://github.com/felix-berlin/berliner-schnauze/commit/d67478810b4e22e4bdee7bda463a1e4722be08ed))
+* **word:** list the Bezirke in one column on a phone ([6efc8f6](https://github.com/felix-berlin/berliner-schnauze/commit/6efc8f62dea2d5ff19690b33ddaada9afd7a8b76))
+* **word:** log failed routes without the query values ([0b8a532](https://github.com/felix-berlin/berliner-schnauze/commit/0b8a5329fd34727bd48e17c3b0027750d3766998))
+* **word:** make the badge tooltip dismissible and keep the badge wash orange ([fa4c439](https://github.com/felix-berlin/berliner-schnauze/commit/fa4c4398f7561034b36e5bfadf227bec42efcc20))
+* **word:** make the badge tooltip dismissible and keep the badge wash orange ([9bde226](https://github.com/felix-berlin/berliner-schnauze/commit/9bde2262911fc807cfdb44bab86d867a7c311992))
+* **word:** make the share fallback selection robust ([74b0505](https://github.com/felix-berlin/berliner-schnauze/commit/74b050583f76e0970fbee2b9cdc03541735e191f))
+* **word:** match the citing panel and the text links to the design ([44ff2a7](https://github.com/felix-berlin/berliner-schnauze/commit/44ff2a7882fc43fa2ec2b83e5cec0eb6574574e5))
+* **word:** match the poll states to the board ([b88af16](https://github.com/felix-berlin/berliner-schnauze/commit/b88af16c573752ce03973962cca1453664d5c052))
+* **word:** outline buttons keep the dark orange rim and get an orange icon ([9d6faae](https://github.com/felix-berlin/berliner-schnauze/commit/9d6faae1c96fe175c14f241cb9967ce00f8149bb))
+* **word:** raise the theme and image captions to the 13px minimum ([8a1f96e](https://github.com/felix-berlin/berliner-schnauze/commit/8a1f96ed092c8f299b1633f0091ce2e87522006f))
+* **word:** raise the theme and image captions to the 13px minimum ([6e5173b](https://github.com/felix-berlin/berliner-schnauze/commit/6e5173b146615b31382b0de31f8059e995dd77f8))
+* **word:** re-attach the record tooltips on every navigation and keep the tooltip inside the viewport ([0672bb6](https://github.com/felix-berlin/berliner-schnauze/commit/0672bb6b7db59a9dfb8f12c67db266e5b5e436c3))
+* **word:** re-init the contribute wiring on every navigation and align the breakpoint ([ce6e0b4](https://github.com/felix-berlin/berliner-schnauze/commit/ce6e0b408f9a39b8ebef33d2a6aa025a2f88cc12))
+* **word:** rename the v18 label class so the old forms keep theirs ([282d13e](https://github.com/felix-berlin/berliner-schnauze/commit/282d13e6f29ef952db273a15fe3d33c5339c3857))
+* **word:** rename the v18 label class so the old forms keep theirs ([475dba1](https://github.com/felix-berlin/berliner-schnauze/commit/475dba163e81f996df53528fa7767089f919a594))
+* **word:** report shares for the trending lists again ([4fb7bbd](https://github.com/felix-berlin/berliner-schnauze/commit/4fb7bbd463569630ae7c7993bf268f85114ad9e8))
+* **word:** reset the dismissed badge tooltip on focus and hover ([dec6172](https://github.com/felix-berlin/berliner-schnauze/commit/dec6172ba757af77c7d7d104e69e1796b4ba0982))
+* **word:** reset the dismissed badge tooltip on focus and hover ([9492f08](https://github.com/felix-berlin/berliner-schnauze/commit/9492f08bcefcd3ba3692d2fa490b7770d559a673))
+* **word:** reset the pending send on close, show server errors, drop the map geometry from the form ([cdba557](https://github.com/felix-berlin/berliner-schnauze/commit/cdba557d8649c2d7ae5b0c569afc7152c990d0dd))
+* **word:** restore the book link guard and disclosures ([a643e96](https://github.com/felix-berlin/berliner-schnauze/commit/a643e96bba76ebe8e375cbca48a2d5a317766994))
+* **word:** review findings (lost comment reports, dead edit key, soft page degrade, unsynced votes, a11y and sizes) ([9976111](https://github.com/felix-berlin/berliner-schnauze/commit/997611133833c0dcc11c0ed798b12e2587348e00))
+* **word:** show the poll result after the last question ([8cd2c4e](https://github.com/felix-berlin/berliner-schnauze/commit/8cd2c4edd925c6a10af14b1085291e3b6aebac83))
+* **word:** type the suggestion validators without explicit any ([227768d](https://github.com/felix-berlin/berliner-schnauze/commit/227768d0c88265b6a7ba7c5f85cc37b58f0c91fe))
+* **word:** use the dashed focus ring on the v18 page ([3ba5f9e](https://github.com/felix-berlin/berliner-schnauze/commit/3ba5f9e6443f417ce4227835b687bf697f65f8ec))
+* **word:** wrap a long headword and keep the seal button clickable ([0fa70ee](https://github.com/felix-berlin/berliner-schnauze/commit/0fa70eefd7fa48d2ebe0080ca117315266a6064f))
+
+
+### Features
+
+* **payload:** copy infoText into facts on deploy ([7f88a77](https://github.com/felix-berlin/berliner-schnauze/commit/7f88a77ee67b664657bc8df315089079ea557b02))
+* **payload:** delete the old comment replies on deploy ([780cf11](https://github.com/felix-berlin/berliner-schnauze/commit/780cf11307494cf948f644f360eaf89999f8dbb8))
+* **word:** add analysis, numbers, mobile bar and links ([0c35377](https://github.com/felix-berlin/berliner-schnauze/commit/0c35377a2098e3a5ea4de2f9985cb65bd338fd72))
+* **word:** add analysis, numbers, mobile bar and links ([94fec51](https://github.com/felix-berlin/berliner-schnauze/commit/94fec517bc4c499df7871164227b3cdbb39651e2))
+* **word:** add district and featured flag to comments ([d41b770](https://github.com/felix-berlin/berliner-schnauze/commit/d41b77059d04c94eeb8bcf972d75480b667ec4b7))
+* **word:** add example, fact and related suggestion types ([71be6c9](https://github.com/felix-berlin/berliner-schnauze/commit/71be6c95336eaeb4407af6886e21eefc14d377bb))
+* **word:** add Jeschichten and reactions ([ff84b7e](https://github.com/felix-berlin/berliner-schnauze/commit/ff84b7e9cb142838fe90cc84748e8f648f0e5647))
+* **word:** add the actions menu and citing ([be9ee46](https://github.com/felix-berlin/berliner-schnauze/commit/be9ee46c770ff4813853f2eb5b6cb6b70d565386))
+* **word:** add the citation formats ([56c0acc](https://github.com/felix-berlin/berliner-schnauze/commit/56c0accc340dc247340d7ea37908f8c132379e48))
+* **word:** add the contribute and report endpoints ([4c1b2b8](https://github.com/felix-berlin/berliner-schnauze/commit/4c1b2b830ec46d2323e19292048b751747b6fef7))
+* **word:** add the contribute store and online state ([fd8085d](https://github.com/felix-berlin/berliner-schnauze/commit/fd8085d6542faf9208697c40e5c94a1c03556dd5))
+* **word:** add the example, knowledge and related cards with gaps ([0d96152](https://github.com/felix-berlin/berliner-schnauze/commit/0d961522e929a54f2af13bf36b748e043dd68a5e))
+* **word:** add the example, knowledge and related cards with gaps ([f4bf08a](https://github.com/felix-berlin/berliner-schnauze/commit/f4bf08a10ad16b5960270c1a364eca33a82d9664))
+* **word:** add the reports collection ([6df3268](https://github.com/felix-berlin/berliner-schnauze/commit/6df32689c67315fe4656db306517ac87dc665c1f))
+* **word:** add the shared contribute form ([56bfdc3](https://github.com/felix-berlin/berliner-schnauze/commit/56bfdc369a57331091b70b32eb7fb0a630b4c152))
+* **word:** add the v18 page shell and table of contents ([5d14bd9](https://github.com/felix-berlin/berliner-schnauze/commit/5d14bd954fe884154ee16f50ec8267805fd98561))
+* **word:** add the v18 page shell and table of contents ([e8454be](https://github.com/felix-berlin/berliner-schnauze/commit/e8454be962d7ac051721bb2f7296d6dbecf304c2))
+* **word:** add the v18 word head, badges and O-Ton ([d1bf513](https://github.com/felix-berlin/berliner-schnauze/commit/d1bf513325161786a76b857679c1b570bea8c7f4))
+* **word:** add the v18 word head, badges and O-Ton ([3d8794b](https://github.com/felix-berlin/berliner-schnauze/commit/3d8794bd4c5203947104e0ecb32e9b09033f4e27))
+* **word:** add v18 word fields, book themes and the story prompt global ([eb797bb](https://github.com/felix-berlin/berliner-schnauze/commit/eb797bbad389d663f27acaa863c0244f33528110))
+* **word:** assemble the v18 word page model ([ff410e5](https://github.com/felix-berlin/berliner-schnauze/commit/ff410e5adf122a4574d47e1269274da8ebdc270c))
+* **word:** build the poll result with the group threshold ([4a4dbeb](https://github.com/felix-berlin/berliner-schnauze/commit/4a4dbeb1ab3a0e80440689af39236179c2055a76))
+* **word:** let a book show on all themen ([79d88b0](https://github.com/felix-berlin/berliner-schnauze/commit/79d88b0ccc4af1f058ff71bffad9271a38804dbd))
+* **word:** mail and list new suggestion types in the admin ([e164e4d](https://github.com/felix-berlin/berliner-schnauze/commit/e164e4d4390f4e007064275572ee7ce6816e9861))
+* **word:** page the Jeschichten ([618b9fa](https://github.com/felix-berlin/berliner-schnauze/commit/618b9fac8a7b6495704777f88b8d5fb17e340500))
+* **word:** rebuild the poll with the result and delete ([31a06d8](https://github.com/felix-berlin/berliner-schnauze/commit/31a06d8be3e45904bf3839465659ccf7465369b8))
+* **word:** return the Jeschichte id so the edit key can be used ([59f63e1](https://github.com/felix-berlin/berliner-schnauze/commit/59f63e1be004f8992d20922873a8eb0eed693d63))
+* **word:** return the poll result and delete a single word vote ([ef5a7a4](https://github.com/felix-berlin/berliner-schnauze/commit/ef5a7a42344d8a86ac45135de321b7bd053360a4))
+* **word:** return the visitor's own open submissions ([29bf128](https://github.com/felix-berlin/berliner-schnauze/commit/29bf1288f202f585ca397459c6385dc74fb584e9))
+* **word:** return the visitor's own reactions on Jeschichten ([d9d89f4](https://github.com/felix-berlin/berliner-schnauze/commit/d9d89f4cccdf5ef15495582cd27783b344be46c6))
+* **word:** rich-text facts with their own source, and copy infoText into them ([a02cefd](https://github.com/felix-berlin/berliner-schnauze/commit/a02cefdec81160e860afacf52687ba58f708a7d6))
+* **word:** serve Jeschichten from comments ([361fe9a](https://github.com/felix-berlin/berliner-schnauze/commit/361fe9a9d655a9d476dbf88b477898ecab390cf2))
+* **word:** show the word images in the head ([6b90c59](https://github.com/felix-berlin/berliner-schnauze/commit/6b90c5940b4378589be339393f4b1df7ccd908aa))
+* **word:** wire the contribute forms and the report ([c401d7c](https://github.com/felix-berlin/berliner-schnauze/commit/c401d7cf0333d401b0362c3848a7e22ed693785a))
+* **word:** Wissenswertes card shows rich text, then source, then credit ([342215f](https://github.com/felix-berlin/berliner-schnauze/commit/342215fa49c5ea73ec8c3df0ad265da0ee987da6))
+* **word:** Wissenswertes card shows rich text, then source, then credit ([8b411d9](https://github.com/felix-berlin/berliner-schnauze/commit/8b411d97e72b57fdf55b22df6090462cfe3bcfb6))
+* **word:** word page model carries the rich text and source of a fact ([82ccbb8](https://github.com/felix-berlin/berliner-schnauze/commit/82ccbb826c9bebe74da65f97c7e7943aaad8c2a3))
+
+
+### Performance Improvements
+
+* **word:** cache the poll result and Jeschichten per word ([c6285cb](https://github.com/felix-berlin/berliner-schnauze/commit/c6285cb99888b89341878b44ffe1dc43209d39a5))
+
+
+### BREAKING CHANGES
+
+* /api/comments no longer exists; clients with cached old JS get 404
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+* the word page markup and the comment UI are replaced
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
 ## [4.15.1](https://github.com/felix-berlin/berliner-schnauze/compare/v4.15.0...v4.15.1) (2026-11-22)
 
 

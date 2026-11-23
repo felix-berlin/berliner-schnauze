@@ -1,0 +1,64 @@
+---
+import '@styles/components/_word-beispiele.scss';
+import SectionCard from '@components/word/SectionCard.astro';
+import VoiceButtons from '@components/word/VoiceButtons.vue';
+import { voiceSources } from '@composables/useVoicePlayer.ts';
+import type { WordExample } from '@services/payload/words.ts';
+
+interface Props {
+  word: string;
+  /** Slug of the word, for the form. */
+  slug?: string;
+  examples?: WordExample[];
+}
+
+const { slug, word, examples = [] } = Astro.props;
+const items = examples.filter((e) => e.example);
+const gap = {
+  cta: 'Beispiel ergänzen',
+  text: `Noch keen Beispiel für „${word}“. Kennste ’n Satz, in dem dit Wort vorkommt?`,
+};
+---
+
+<!--
+  Beispiele card (SPEC §6). Wrapper-owned anchor (WordPage), so the card renders no id. The audio pills are the
+  existing VoiceButtons island (only when a file exists); "Einsprechen" does not exist yet: aria-disabled, the
+  tooltip is the shared v-tooltip (attached by the script below).
+-->
+<SectionCard id='beispiele' title='Beispiele' contribute='example' slug={slug} gap={items.length ? undefined : gap}>
+  {items.length > 0 && (
+    <ol class='c-word-beispiele'>
+      {items.map((item, index) => {
+        const sources = voiceSources(item.exampleAudio);
+        const tip = `einsprechen-tip-${index}`;
+        return (
+          <li class='item'>
+            <blockquote class='quote'>
+              <p class='sentence'><q>{item.example}</q></p>
+            </blockquote>
+            {item.exampleExplanation && (
+              <p class='plain'><span class='c-word-label'>Hochdeutsch</span> {item.exampleExplanation}</p>
+            )}
+            <div class='actions'>
+              {(sources.m || sources.w) && (
+                <VoiceButtons order='wm' aria-label={`Beispiel ${index + 1} anhören`} client:visible sources={sources} />
+              )}
+              <span class='record'>
+                <button class='c-button' data-record data-variant='pill dashed' type='button' aria-disabled='true' data-tip-lead='Kommt bald.' data-tip='Einsprechen is noch in Arbeit.' aria-describedby={tip}>
+                  <span class='plus' aria-hidden='true'>+</span> Einsprechen
+                </button>
+                <span class='u-sr-only' id={tip}>Kommt bald. Einsprechen is noch in Arbeit.</span>
+              </span>
+            </div>
+          </li>
+        );
+      })}
+    </ol>
+  )}
+</SectionCard>
+
+<script>
+  import { wireRecordTooltips } from '@components/word/recordTooltips.ts';
+
+  wireRecordTooltips();
+</script>

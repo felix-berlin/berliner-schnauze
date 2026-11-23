@@ -110,4 +110,12 @@ describe("POST /api/suggest-word", () => {
       "no-store",
     );
   });
+
+  it("answers 400 for a Payload 4xx, 502 for a 5xx", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    create.mockRejectedValueOnce(Object.assign(new Error("hook"), { status: 400 }));
+    expect((await post(valid)).status).toBe(400);
+    create.mockRejectedValueOnce(Object.assign(new Error("boom"), { status: 500 }));
+    expect((await post(valid)).status).toBe(502);
+  });
 });

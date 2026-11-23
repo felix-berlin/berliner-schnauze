@@ -1,8 +1,13 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Auswahl (docs/design/wortseite/SPEC.md): one answer out of several. State via aria-pressed.
-// Variant tile (data-variant="tile"): poll answer, a big choice on a chip ground, parts .icon and .text.
+// Auswahl (v18 handoff SPEC): one answer out of several. State via aria-pressed.
+// Variant tile (data-variant="tile"): poll answer (SPEC §7): borderless card2 tile, 72px, round dashed icon, parts .icon and .text.
+// Variant answer: poll answer, flat borderless card2 tile (bold, no icon).
+// Variant pill (data-variant="pill"): voice button (SPEC §6): 36px pill on card2 with a 26px play circle (.icon), a hit band
+// reaches 44px.
+// Variant chip (SPEC §4.3 "Chip (Auswahl)"): 36px pill on the card surface with a 44px hit band; pressed = ink rim and
+// text in the card colour on an ink ground (mock + state boards; not the orange fill).
 // Variant segment: one chip of a small connected control (36px look, 44px hit band; neighbours
 // overlap by their border).
 // Public (a parent's layout knobs, the old :where() let parents override these): --choice-display,
@@ -71,25 +76,41 @@
   :scope[data-variant~="tile"] {
     inline-size: 100%;
     min-block-size: var(--choice-min-block-size, 4.5rem);
-    padding: var(--choice-padding-block, var(--space-3))
-      var(--choice-padding-inline, var(--space-4));
+    // minus the 1px border below, so the tile keeps its size
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- the 1px border compensation has no token step
+    padding: calc(var(--choice-padding-block, var(--space-3)) - 1px)
+      calc(var(--choice-padding-inline, var(--space-4)) - 1px);
     justify-content: var(--choice-justify, flex-start);
     gap: var(--space-3);
     text-align: start;
+    border: 1px solid transparent; // painted by background only; forced colours turns the transparent border into a visible outline
+    border-radius: var(--radius-sm);
 
     &:not([aria-pressed="true"]) {
       background: var(--color-surface-chip);
     }
 
     @include butler-mx.hover {
-      &:not(:disabled, [aria-disabled="true"]) .icon {
-        border-color: var(--color-accent-icon);
-        color: var(--color-border-accent);
+      &:not(:disabled, [aria-disabled="true"]) {
+        box-shadow: none;
 
-        @include butler-mx.feature("motion") {
-          transform: rotate(-8deg) scale(1.08);
+        &:not([aria-pressed="true"]) {
+          background: var(--color-surface-card3, var(--color-surface-chip));
+        }
+
+        .icon {
+          border-color: var(--color-accent-icon);
+          color: var(--color-border-accent);
+
+          @include butler-mx.feature("motion") {
+            transform: rotate(-8deg) scale(1.08);
+          }
         }
       }
+    }
+
+    &[aria-disabled="true"] {
+      border-style: none;
     }
 
     &[aria-pressed="true"] .icon {
@@ -107,8 +128,118 @@
     }
   }
 
+  // Variant answer (mock .w18__poll .c-choice): a poll answer as a flat, borderless card2 tile, bold.
+  :scope[data-variant~="answer"] {
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- 1px border compensation, no token step
+    padding-inline: calc(var(--choice-padding-inline, var(--space-4)) - 1px);
+    border: 1px solid transparent; // see tile: visible in forced colours only
+    border-radius: var(--radius-sm);
+    color: var(--color-text-strong);
+    letter-spacing: 0;
+
+    &:not([aria-pressed="true"]) {
+      background: var(--color-surface-chip);
+      font-weight: var(--font-weight-bold);
+    }
+
+    @include butler-mx.hover {
+      &:not(:disabled, [aria-disabled="true"]) {
+        box-shadow: none;
+
+        &:not([aria-pressed="true"]) {
+          background: var(--color-surface-card3, var(--color-surface-chip));
+        }
+      }
+    }
+
+    &[aria-pressed="true"] {
+      color: var(--color-text-on-accent);
+    }
+  }
+
+  :scope[data-variant~="pill"] {
+    --_h: 2.25rem; // SPEC §4.3 / mock .w17__vb: 36px, no token
+    --_reach: calc((var(--size-tap-target) - var(--_h)) / 2);
+
+    position: relative;
+    min-block-size: var(--_h);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w17__vb: padding 0 .9rem 0 .4rem
+    padding: 0 0.9rem 0 0.4rem;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-chip);
+    color: var(--color-text-strong);
+    font-size: var(--font-size-md);
+    letter-spacing: 0;
+
+    // Looks 36px, hits 44px.
+    @include mx.hit-band;
+    @include butler-mx.hover {
+      &:not(:disabled, [aria-disabled="true"]) {
+        box-shadow: none;
+        background: var(--color-surface-card3, var(--color-surface-chip));
+      }
+    }
+
+    &[aria-pressed="true"] {
+      background: var(--color-accent-solid);
+      color: var(--color-text-on-accent);
+      font-weight: inherit;
+    }
+
+    .icon {
+      inline-size: 1.625rem; // mock: 26px circle
+      block-size: 1.625rem;
+      border: 0;
+      border-radius: var(--radius-pill);
+      background: var(--color-text-strong);
+      color: var(--color-surface-sheet);
+    }
+
+    &[aria-pressed="true"] .icon {
+      background: var(--color-text-on-accent);
+      color: var(--color-accent-solid);
+    }
+  }
+
+  :scope[data-variant~="chip"] {
+    --_h: 2.25rem; // SPEC §4.3: 36px, no token
+    --_border: 1px;
+    --_reach: calc((var(--size-tap-target) - var(--_h)) / 2 + var(--_border));
+
+    position: relative;
+    min-block-size: var(--choice-min-block-size, var(--_h));
+    padding: 0 var(--choice-padding-inline, var(--space-3));
+    border-color: var(--color-border-card);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-sheet);
+    font-size: var(--choice-font-size, var(--font-size-md));
+    letter-spacing: normal;
+
+    // Looks 36px, hits 44px (positioned from the padding box, hence the border width).
+    @include mx.hit-band("block");
+    @include butler-mx.hover {
+      &:not(:disabled, [aria-disabled="true"]) {
+        border-style: solid;
+        box-shadow: none;
+
+        &:not([aria-pressed="true"]) {
+          background: var(--color-surface-chip);
+        }
+      }
+    }
+
+    // Mock .w18__chips and the state boards: the chosen chip is inked in, text in the card colour.
+    &[aria-pressed="true"] {
+      border-color: var(--color-text-strong);
+      background: var(--color-text-strong);
+      color: var(--color-surface-sheet);
+    }
+  }
+
   :scope[data-variant~="segment"] {
     --_border: 1px;
+    --_reach: calc(var(--space-1) + var(--_border));
 
     position: relative;
     min-block-size: var(--choice-min-block-size, 2.25rem); // one-off: mock 36px
@@ -121,12 +252,7 @@
 
     // Looks 36px, hits 44px: the invisible band reaches 4px beyond the border box above and below
     // (36 + 2 x 4 = 44; positioned from the padding box, hence the extra border width).
-    &::before {
-      content: "";
-      position: absolute;
-      inset-block: calc(-1 * (var(--space-1) + var(--_border)));
-      inset-inline: 0;
-    }
+    @include mx.hit-band("block");
 
     // The ring sits 2px outside the chip; a later neighbour (positioned) must not paint over it.
     &:focus-visible {
@@ -134,16 +260,17 @@
     }
   }
 
-  // Icon in a dashed square; on hover it tips and the colour softens (docs/design/wortseite/SPEC.md §10/§13).
+  // Icon in a dashed square; on hover it tips and the colour softens (v18 handoff SPEC §10/§13).
   .icon {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    inline-size: 2.5rem;
-    block-size: 2.5rem;
-    border: 1px dashed var(--color-border-card);
-    border-radius: var(--radius-sm);
+    inline-size: 2.75rem; // mock .w17__ic: 44px
+    block-size: 2.75rem;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w17__ic: 1.5px dashed ring
+    border: 1.5px dashed var(--color-border-card);
+    border-radius: var(--radius-pill);
     color: var(--color-accent-icon);
     transition:
       color var(--duration-base) ease,
@@ -158,12 +285,13 @@
 
     b {
       color: inherit;
-      font-size: var(--font-size-base);
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w17__tile title: 17px, no token
+      font-size: 1.0625rem;
     }
 
     span {
       color: var(--color-text-muted);
-      font-size: var(--font-size-xs);
+      font-size: var(--font-size-label);
     }
   }
 }

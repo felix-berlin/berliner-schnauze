@@ -1,7 +1,7 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Skeleton (docs/design/wortseite/SPEC.md §9): shown by WordPageLoading after 300 ms, never for cached pages.
+// Skeleton (v18 handoff SPEC §9): shown by WordPageLoading after 300 ms, never for cached pages.
 // Shimmer moves background-position (keyframes c-shimmer in utilities/_animations.scss); with reduced
 // motion the bars stand still. Variants: line, title, badge (a hero badge), audio (an audio row).
 @include mx.component("skeleton") {

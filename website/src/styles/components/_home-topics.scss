@@ -9,7 +9,6 @@
   :scope {
     --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
     --_name: 1.75rem; // SPEC §4.5 mobile topic name, between the 2xl and 3xl steps
-    --_small: 0.8125rem; // 13px, the minimum text size; --font-size-sm (12.8px) is below it
     --_shift: 12px; // hover shift of name and examples (SPEC §7)
     --_bubble-radius: 18px; // SPEC §4.6 exception for the speech bubble
     --_bubble-max: 20rem; // 320px bubble width (mock)
@@ -31,7 +30,7 @@
   .eyebrow {
     margin: 0 0 var(--space-1);
     font-size: var(--font-size-lg);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
 
     s {
       text-decoration-color: var(--color-accent-active);
@@ -120,7 +119,7 @@
     grid-area: examples;
     margin-block-start: var(--space-1);
     font-size: var(--font-size-md);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
   }
 
   .count {
@@ -138,9 +137,9 @@
     small {
       margin-block-start: var(--space-1);
       font-family: var(--font-family-body);
-      font-size: var(--_small);
+      font-size: var(--font-size-label);
       font-weight: var(--font-weight-regular);
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
   }
 
@@ -195,7 +194,7 @@
         font-size: var(--font-size-lg);
         font-weight: var(--font-weight-black);
         font-variant-numeric: tabular-nums;
-        color: var(--t3);
+        color: var(--color-warm-quiet);
       }
 
       // The examples keep their line and only fade, so rows never change height.
@@ -252,7 +251,7 @@
       }
 
       .register:hover .row:not(:hover) .name {
-        color: var(--t3);
+        color: var(--color-warm-quiet);
       }
     }
   }

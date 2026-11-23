@@ -1,0 +1,186 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Table of contents of the word page v18 (WordToc.vue). The root is the container: below 30rem wide (the
+// 220px desktop column) it is a rail with dots, from 30rem (tablet, full width) a horizontal pill bar.
+// Parts .inner, .label, .list, .link (active: aria-current="true"), .dot, .count; earlier entries carry
+// data-state="done". The page shell places and sticks it.
+@include mx.component("word-toc") {
+  :scope {
+    --_pill-pad: 0.875rem; // SPEC §3: pill padding 0 14px, the exact middle of two space steps
+    --_row: 2.25rem; // mock .w12__toc a: rows about 36px; the hit band below reaches 44px
+    --_reach: calc((var(--size-tap-target) - var(--_row)) / 2);
+
+    container: word-toc / inline-size;
+  }
+
+  .inner {
+    background: var(--color-surface-sheet);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-paper-lift);
+    padding-block: var(--space-3);
+
+    @container word-toc (inline-size >= 30rem) {
+      padding: 0;
+      background: none;
+      box-shadow: none;
+      border-radius: 0;
+    }
+  }
+
+  .label {
+    padding: 0 var(--space-4) var(--space-2);
+
+    // mock .w10__toc small: 13px capitals, 2px tracking, muted, regular weight
+    .title {
+      margin: 0;
+      font-size: var(--font-size-label);
+      letter-spacing: 2px; // mock, no token
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    @container word-toc (inline-size >= 30rem) {
+      display: none;
+    }
+  }
+
+  .list {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    // Rail behind the dots (solid, mock .w16) and the orange progress line on top of it.
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      inset-block: calc(var(--_row) / 2); // first and last dot centre
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- centre of the 16px dot minus half the 2px line, no token
+      inset-inline-start: calc(var(--space-4) + 7px);
+      border-inline-start: 2px solid var(--color-border-card);
+    }
+
+    &::after {
+      border-inline-start-color: var(--color-accent-active);
+      transform-origin: top;
+      transform: scaleY(var(--toc-progress, 0));
+
+      @include butler-mx.feature("motion") {
+        transition: transform var(--duration-base) var(--ease-standard);
+      }
+    }
+
+    @container word-toc (inline-size >= 30rem) {
+      display: flex;
+      gap: var(--space-2);
+      overflow-x: auto;
+      // scroll alternative: the active pill scrolls itself into view and every pill is focusable
+      scrollbar-width: none;
+
+      &::before,
+      &::after {
+        display: none;
+      }
+
+      li {
+        flex: none;
+      }
+    }
+  }
+
+  .link {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1rem 1fr auto;
+    align-items: center;
+    gap: var(--space-3);
+    min-block-size: var(--_row);
+    // mock .w10__toc a: a 4px bar on the left edge, orange on the active row; the padding keeps the dots in place
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- the 4px bar width, no token
+    padding-inline: calc(var(--space-4) - 4px) var(--space-4);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock: 4px bar, no border-width token
+    border-inline-start: 4px solid transparent;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w12__toc a: 15.2px, no token
+    font-size: 0.95rem;
+    color: var(--color-text-body);
+    text-decoration: none;
+
+    // Looks 36px, hits 44px.
+    @include mx.hit-band("block");
+    @include butler-mx.hover {
+      color: var(--color-text-accent);
+      background: var(--color-surface-card3, var(--color-surface-wash));
+    }
+
+    &[aria-current="true"] {
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-strong);
+      background: var(--color-surface-card3, var(--color-surface-wash));
+      border-inline-start-color: var(--color-accent-active);
+    }
+
+    @container word-toc (inline-size >= 30rem) {
+      --_row: 2.5rem; // SPEC §3: pill 40px, hit band to 44px
+
+      display: inline-flex;
+      gap: var(--space-1);
+      padding-inline: var(--_pill-pad);
+      border: 1px solid var(--color-border-card);
+      border-radius: var(--radius-pill);
+      background: var(--color-surface-sheet);
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock pill: 15px, no token
+      font-size: 0.9375rem;
+      white-space: nowrap;
+
+      @include butler-mx.hover {
+        background: var(--color-surface-sheet);
+        color: inherit;
+      }
+
+      &[aria-current="true"] {
+        background: var(--color-text-strong);
+        border-color: var(--color-text-strong);
+        color: var(--color-surface-sheet);
+      }
+    }
+  }
+
+  .dot {
+    box-sizing: border-box;
+    position: relative;
+    inline-size: 1rem;
+    block-size: 1rem;
+    border: 2px solid var(--color-text-muted);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-sheet);
+
+    .link[data-state="done"] & {
+      background: var(--color-text-muted);
+    }
+
+    .link[aria-current="true"] & {
+      border-color: var(--color-accent-active);
+      background: var(--color-accent-active);
+      outline: 4px solid var(--color-surface-wash-strong); // mock: 4px ring, orange at 25 %
+    }
+
+    @container word-toc (inline-size >= 30rem) {
+      display: none;
+    }
+  }
+
+  .count {
+    font-size: var(--font-size-label);
+    color: var(--color-text-muted);
+
+    .link[aria-current="true"] & {
+      color: inherit;
+    }
+
+    @container word-toc (inline-size >= 30rem) {
+      font-size: var(--font-size-md);
+    }
+  }
+}

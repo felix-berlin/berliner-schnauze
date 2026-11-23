@@ -1,0 +1,75 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Rows of 20 dots coloured by usage (UsageDots.vue): the start page poll (100 dots, 5px gap, pop-in), the word page
+// result matrix (variant matrix: 2px gap, room for the own ring) and the share rows (variant row: filled dot = share,
+// empty = ring). A dot is a `.dot` with data-usage (say | know | never), data-state="mine" (ringed own vote) or
+// data-filled="false"; --i (its index) drives the stagger. Colours: mx.usage-fill.
+@include mx.component("usage-dots") {
+  :scope {
+    --_gap: 5px; // mock gap between the dots, no space token that small
+    --_pop: 320ms;
+    --_pop-ease: cubic-bezier(0.3, 1.5, 0.6, 1);
+    --_stagger: 7ms;
+
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    gap: var(--_gap);
+  }
+
+  :scope[data-variant="matrix"] {
+    --_gap: 2px; // SPEC §11.2: gap between dots
+
+    padding: var(--_gap); // room for the own ring
+  }
+
+  :scope[data-variant="row"] {
+    --_gap: 2px;
+    --_stagger: 20ms; // SPEC §16: dots fill 20ms apart
+  }
+
+  .dot {
+    @include mx.usage-fill;
+
+    display: block;
+    aspect-ratio: 1;
+    border-radius: var(--radius-pill);
+
+    &[data-state="mine"] {
+      outline: 2px solid var(--color-text-strong);
+      outline-offset: 1px;
+    }
+
+    &[data-filled="false"] {
+      background: none;
+      border: 1px solid var(--color-border-card);
+    }
+  }
+
+  @include butler-mx.feature("motion") {
+    :scope {
+      --_anim: home-pop var(--_pop) var(--_pop-ease) both;
+    }
+
+    :scope[data-variant="matrix"],
+    :scope[data-variant="row"] {
+      --_anim: usage-dots-fade var(--duration-fast) ease-out backwards;
+    }
+
+    // 100 dots: a fifth of the row offset keeps the fill under half a second
+    :scope[data-variant="matrix"] {
+      --_stagger: 4ms;
+    }
+
+    .dot {
+      animation: var(--_anim);
+      animation-delay: calc(var(--i, 0) * var(--_stagger));
+    }
+  }
+
+  @keyframes usage-dots-fade {
+    from {
+      opacity: 0;
+    }
+  }
+}

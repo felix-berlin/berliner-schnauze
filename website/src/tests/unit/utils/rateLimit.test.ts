@@ -5,7 +5,11 @@ import {
   rateLimitRule,
   resetRateLimits,
 } from "@utils/rateLimit.ts";
-import { describe, expect, it } from "vitest";
+import { rateLimitedBy } from "@utils/rateLimit.ts";
+import { describe, expect, it, vi } from "vitest";
+
+const e2e = vi.hoisted(() => ({ on: false }));
+vi.mock("@utils/e2eServer.ts", () => ({ isE2eServer: () => e2e.on }));
 
 describe("rateLimit", () => {
   it("limits only the expensive routes, suggest-word only on POST", () => {
@@ -15,6 +19,27 @@ describe("rateLimit", () => {
     expect(rateLimitRule("/wort/wat", "GET")).toBeUndefined();
   });
 
+  it.each(["/api/contribute", "/api/reports"])(
+    "%s: POST only, the request after the limit waits",
+    (path) => {
+      const rule = rateLimitRule(path, "POST")!;
+      expect(rateLimitRule(path, "GET")).toBeUndefined();
+      const client = `t-${path}`;
+      for (let i = 0; i < rule.max; i++) expect(rateLimited(client, rule, 0)).toBe(0);
+      expect(rateLimited(client, rule, 0)).toBeGreaterThan(0);
+    },
+  );
+
+  it.each([
+    ["/api/stories", "POST", 5, 10 * 60_000],
+    ["/api/stories", "GET", 120, 60_000],
+    ["/api/comment-reports", "POST", 10, 60 * 60_000],
+    ["/api/preview", "GET", 20, 60_000],
+    ["/api/preview", "POST", 20, 60_000],
+  ])("%s %s allows %d per window of %d ms", (path, method, max, windowMs) => {
+    expect(rateLimitRule(path, method)).toMatchObject({ max, windowMs });
+  });
+
   it("counts per client within the window and starts over after it", () => {
     const rule = { max: 2, prefix: "/test-a", windowMs: 1000 };
     expect(rateLimited("a", rule, 0)).toBe(0);
@@ -22,23 +47,6 @@ describe("rateLimit", () => {
     expect(rateLimited("a", rule, 200)).toBe(1);
     expect(rateLimited("b", rule, 200)).toBe(0);
     expect(rateLimited("a", rule, 1000)).toBe(0);
-  });
-
-  it("GET and POST /api/comments count separately", () => {
-    const get = rateLimitRule("/api/comments", "GET")!;
-    const post = rateLimitRule("/api/comments", "POST")!;
-    const client = "t-get-post";
-    for (let i = 0; i < 6; i++) expect(rateLimited(client, get, 0)).toBe(0);
-    expect(rateLimited(client, post, 0)).toBe(0);
-  });
-
-  it("PATCH and DELETE share 10 per 5 min", () => {
-    const patch = rateLimitRule("/api/comments/abc", "PATCH")!;
-    const del = rateLimitRule("/api/comments/abc", "DELETE")!;
-    const client = "t-own";
-    for (let i = 0; i < 5; i++) expect(rateLimited(client, patch, 0)).toBe(0);
-    for (let i = 0; i < 5; i++) expect(rateLimited(client, del, 0)).toBe(0);
-    expect(rateLimited(client, patch, 0)).toBeGreaterThan(0);
   });
 
   it("limits GET /api/word-feedback to 60 per minute, PATCH not here", () => {
@@ -154,5 +162,26 @@ describe("networkKey", () => {
     expect(networkKey("2001:db8::1")).toBe("2001:0db8:0000:0000");
     expect(networkKey("2001:0DB8:0:0:ffff::2")).toBe("2001:0db8:0000:0000");
     expect(networkKey("2001:db8:1:2:3:4:5:6")).toBe("2001:0db8:0001:0002");
+  });
+});
+
+describe("rateLimit on the e2e server", () => {
+  it("never limits, neither a path rule nor an in-route cap", () => {
+    resetRateLimits();
+    e2e.on = true;
+    try {
+      const rule = rateLimitRule("/api/contribute", "POST")!;
+      for (let i = 0; i < rule.max + 5; i++) expect(rateLimited("e2e-client", rule, 0)).toBe(0);
+      for (let i = 0; i < 25; i++) expect(rateLimitedBy("e2e-client", "cap", 2, 60_000)).toBe(0);
+    } finally {
+      e2e.on = false;
+    }
+  });
+
+  it("limits as before once the flag is off, and the e2e hits were not counted", () => {
+    resetRateLimits();
+    expect(rateLimitedBy("c", "cap", 2, 60_000)).toBe(0);
+    expect(rateLimitedBy("c", "cap", 2, 60_000)).toBe(0);
+    expect(rateLimitedBy("c", "cap", 2, 60_000)).toBeGreaterThan(0);
   });
 });

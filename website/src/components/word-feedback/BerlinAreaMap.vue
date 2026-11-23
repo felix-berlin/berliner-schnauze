@@ -59,17 +59,18 @@
           </tspan>
         </text>
       </svg>
-      <div class="elsewhere">
-        <button
-          type="button"
-          class="c-choice"
-          :aria-pressed="modelValue === 'elsewhere'"
-          @click="emit('update:modelValue', 'elsewhere')"
-        >
-          Woanders
-        </button>
-      </div>
     </details>
+    <div class="elsewhere">
+      <button
+        type="button"
+        class="c-choice"
+        :data-variant="variant"
+        :aria-pressed="modelValue === 'elsewhere'"
+        @click="emit('update:modelValue', 'elsewhere')"
+      >
+        Woanders
+      </button>
+    </div>
     <details
       class="list"
       :open="listOpen"
@@ -82,6 +83,7 @@
           :key="a.key"
           type="button"
           class="c-choice"
+          :data-variant="variant"
           :aria-pressed="modelValue === a.key"
           @click="emit('update:modelValue', a.key)"
         >
@@ -101,7 +103,10 @@ import { computed, ref, useTemplateRef, watch } from "vue";
 
 import { BERLIN_AREAS, MAP_H, MAP_VIEWBOX, MAP_W } from "@/data/berlinAreas";
 
-const props = defineProps<{ modelValue: Area | null }>();
+const props = defineProps<{
+  modelValue: Area | null;
+  /** data-variant of the choice buttons (e.g. "answer" on the word page). */ variant?: string;
+}>();
 const emit = defineEmits<{ "update:modelValue": [Area] }>();
 
 // The Bezirk shapes are only ~30-60 px tall on a phone: below NARROW_PX the list is primary and the map secondary.

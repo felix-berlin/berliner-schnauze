@@ -1,6 +1,6 @@
 {
   "name": "website",
-  "version": "4.15.1",
+  "version": "5.0.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -78,7 +78,7 @@
     "@types/jsdom": "30.0.0",
     "@types/node": "26.6.6",
     "@vite-pwa/assets-generator": "2.0.0",
-    "@vite-pwa/astro": "2.0.3",
+    "@vite-pwa/astro": "2.0.4",
     "@vitejs/plugin-vue": "6.0.11",
     "@vitest/coverage-v8": "5.1.1",
     "@vitest/ui": "5.1.1",

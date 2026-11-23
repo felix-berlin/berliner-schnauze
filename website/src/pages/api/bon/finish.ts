@@ -14,6 +14,7 @@ import { getPayloadClient } from "@services/payload.ts";
 import { visitorId } from "@services/payload/comments.ts";
 import { reply } from "@utils/apiReply.ts";
 import { finishSchema } from "@utils/bonSchema.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { ANONYM, NAME_REPORT_LIMIT } from "payload-app/bon-names";
 import { plausibleTiming, verifyRun } from "payload-app/bon-rules";
 
@@ -61,7 +62,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
                 })
                 .then((r) => r.docs[0]?.name || undefined)
                 .catch((error: unknown) => {
-                  console.error("[bon] player name lookup failed:", error);
+                  logRouteError("bon player name lookup", error);
                   lookupFailed = true;
                   return undefined;
                 });
@@ -134,13 +135,13 @@ export const POST: APIRoute = async ({ cookies, request }) => {
               depth: 0,
               id: playerId,
             })
-            .catch((error: unknown) => console.error("[bon] player name update failed:", error));
+            .catch((error: unknown) => logRouteError("bon player name update", error));
 
         // The same place the week's leaderboard shows: the identity's best game this week, among players.
         // The result is stored; a failed rank lookup must not hide it.
         const identity = bonIdentityOf(playerId, game.visitor);
         const week = await loadRanking("week").catch((error: unknown) => {
-          console.error("[bon] rank lookup failed:", error);
+          logRouteError("bon rank lookup", error);
           return undefined;
         });
         const index = week?.findIndex((e) => e.identity === identity) ?? -1;
@@ -156,7 +157,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
           200,
         );
       } catch (error) {
-        console.error("[bon] finish failed:", error);
+        logRouteError("bon finish", error);
         return reply({ error: "Dett Ergebnis konnte nich jespeichert werden." }, 502);
       }
     },

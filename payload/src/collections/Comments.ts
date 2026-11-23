@@ -12,6 +12,7 @@ import { authenticatedOnly } from "../access";
 import { COMMENT_MAX, containsLink, idOf, NAME_MAX } from "../lib/comments";
 import { commentAdminLink, notifyEditors } from "../lib/notifyEditors";
 import { siteUrl } from "../lib/routes";
+import { STORY_BEZIRKE } from "../lib/storyBezirk";
 
 /** Replies are one level deep: a reply to a reply goes to the top-level comment; a parent must belong to the same word. */
 const flattenParent: CollectionBeforeValidateHook = async ({ data, originalDoc, req }) => {
@@ -37,7 +38,7 @@ const flattenParent: CollectionBeforeValidateHook = async ({ data, originalDoc, 
  * The site's comments are held when their text or name contains a link (also on edit); an editor's changes are never
  * held, and an editor releasing a hidden comment marks it reviewed.
  */
-const applyRules: CollectionBeforeChangeHook = ({ data, operation, originalDoc, req }) => {
+const applyRules: CollectionBeforeChangeHook = ({ context, data, operation, originalDoc, req }) => {
   if (!req.user) {
     // A self-delete wipes text and name; it must never land back in the review queue.
     if (data.status === "deleted") return data;
@@ -45,7 +46,8 @@ const applyRules: CollectionBeforeChangeHook = ({ data, operation, originalDoc, 
     const linked =
       containsLink(text) || containsLink(data.authorName ?? originalDoc?.authorName ?? "");
     if (operation === "create" && data.text !== undefined) {
-      data.status = linked ? "pending" : "published";
+      // `context.review`: Jeschichten wait for an editor even without a link.
+      data.status = linked || context.review ? "pending" : "published";
     } else if (operation === "update") {
       const textChanged = data.text !== undefined && data.text !== originalDoc?.text;
       const nameChanged =
@@ -55,6 +57,48 @@ const applyRules: CollectionBeforeChangeHook = ({ data, operation, originalDoc, 
     }
   } else if (originalDoc?.status === "hidden" && data.status === "published") {
     data.reviewed = true;
+  }
+  return data;
+};
+
+/**
+ * At most one published featured Jeschichte per word; rows in any other status do not count, so they never block a new
+ * one. The database backs this with a partial unique index `comments_one_featured_per_word_idx`, which exists ONLY in
+ * migration `20261122_165037_comments_bezirk_featured` (Payload cannot declare a partial index): dev and test
+ * databases created by schema push have just this hook, and a `migrate:create` or a push may drop the index again.
+ * The hook gives the readable message. A reply cannot be featured.
+ */
+const singleFeatured: CollectionBeforeChangeHook = async ({ data, originalDoc, req }) => {
+  // Judge the resulting state: republishing an already featured row must be checked too.
+  const featured = data.featured ?? originalDoc?.featured;
+  const status = data.status ?? originalDoc?.status ?? "published";
+  if (!featured || status !== "published") return data;
+  if (idOf(data.parent) ?? idOf(originalDoc?.parent)) {
+    throw new ValidationError({
+      errors: [{ path: "featured", message: "Eine Antwort kann nicht hervorgehoben werden." }],
+    });
+  }
+  const word = idOf(data.word) ?? idOf(originalDoc?.word);
+  if (word == null) return data;
+  const others = await req.payload.find({
+    collection: "comments",
+    where: {
+      word: { equals: word },
+      featured: { equals: true },
+      status: { equals: "published" },
+      ...(originalDoc?.id ? { id: { not_equals: originalDoc.id } } : {}),
+    },
+    limit: 1,
+    depth: 0,
+    pagination: false,
+    req,
+  });
+  if (others.docs.length) {
+    throw new ValidationError({
+      errors: [
+        { path: "featured", message: "Für dieses Wort ist bereits eine Jeschichte hervorgehoben." },
+      ],
+    });
   }
   return data;
 };
@@ -85,7 +129,15 @@ const mailEditors: CollectionAfterChangeHook = async ({
             req,
             select: { berlinerisch: true, slug: true },
           })
-          .catch(() => ({ id: doc.word }));
+          .catch((err: unknown) => {
+            // The mail still goes out, with the id instead of the spelling.
+            req.payload.logger.warn({
+              err,
+              msg: "comment mail: word lookup failed",
+              wordId: doc.word,
+            });
+            return { id: doc.word };
+          });
   const subject = becamePending
     ? "Kommentar bearbeitet, wartet auf Freigabe – Berliner Schnauze"
     : `Neuer Kommentar${doc.status === "pending" ? " (wartet auf Freigabe)" : ""} – Berliner Schnauze`;
@@ -154,7 +206,7 @@ export const Comments: CollectionConfig = {
   },
   hooks: {
     beforeValidate: [flattenParent],
-    beforeChange: [applyRules],
+    beforeChange: [applyRules, singleFeatured],
     afterChange: [mailEditors],
     beforeDelete: [deleteDependents],
   },
@@ -197,6 +249,25 @@ export const Comments: CollectionConfig = {
       admin: {
         position: "sidebar",
         description: "Freigegeben: weitere Meldungen blenden den Kommentar nicht mehr aus.",
+      },
+    },
+    {
+      name: "bezirk",
+      type: "select",
+      index: true,
+      options: STORY_BEZIRKE.map((value) => ({ label: value, value })),
+      admin: { position: "sidebar", description: "Bezirk der Jeschichte (optional)." },
+    },
+    {
+      name: "featured",
+      type: "checkbox",
+      defaultValue: false,
+      // Editors only: no site request may pick the featured slot (the site creates with overrideAccess, which skips this).
+      access: { create: ({ req }) => Boolean(req.user), update: ({ req }) => Boolean(req.user) },
+      admin: {
+        position: "sidebar",
+        description:
+          "Als Jeschichte des Wortes hervorgehoben (höchstens eine veröffentlichte pro Wort, keine Antworten).",
       },
     },
     { name: "editKeyHash", type: "text", admin: { hidden: true } },

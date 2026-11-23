@@ -1,10 +1,12 @@
+import type { PollResult } from "@lib/pollResult.ts";
+
 import {
   AGES,
   AREAS,
   HALVES,
   ORIGINS,
   LOCALITIES,
-  LOCALITY_AREA,
+  profileRules,
   REACTIONS,
   USAGES,
   type Age,
@@ -32,10 +34,8 @@ export const feedbackPatchSchema = z
     usage: opt(USAGES),
     word: z.number().int().positive(),
   })
-  .refine((v) => v.half == null || v.origin === "grewUp", { message: "half needs origin grewUp" })
-  .refine((v) => v.locality == null || LOCALITY_AREA[v.locality] === v.area, {
-    message: "locality needs its own area",
-  });
+  .refine(profileRules.halfFitsOrigin, { message: "half needs origin grewUp" })
+  .refine(profileRules.localityFitsArea, { message: "locality needs its own area" });
 
 export type MyFeedback = {
   age: Age | null;
@@ -49,5 +49,7 @@ export type MyFeedback = {
 export type WordFeedbackState = {
   compare: FeedbackCompare;
   mine: MyFeedback | null;
+  /** Only the GET answer carries it (the poll result of the word); a PATCH answer does not. */
+  result?: PollResult;
   totals: FeedbackTotals;
 };

@@ -6,6 +6,7 @@ import { findGame, withGameLock, wrongAnswers } from "@services/bonGame.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { reply } from "@utils/apiReply.ts";
 import { answerSchema } from "@utils/bonSchema.ts";
+import { logRouteError } from "@utils/logError.ts";
 import { LIVES } from "payload-app/bon-rules";
 
 const NOT_FOUND = { error: "Spiel nich jefunden." };
@@ -61,7 +62,7 @@ export const POST: APIRoute = async ({ request }) => {
         });
         return replied(answered, wrongAnswers(stored));
       } catch (error) {
-        console.error("[bon] answer failed:", error);
+        logRouteError("bon answer", error);
         return reply({ error: "Die Antwort wollte leider nich ankommen." }, 502);
       }
     },
