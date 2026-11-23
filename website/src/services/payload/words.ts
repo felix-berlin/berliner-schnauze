@@ -60,6 +60,7 @@ export type SiteWord = Omit<
   | "grammar"
   | "images"
   | "infoText"
+  | "sources"
   | "related"
   | "relatedWords"
   | "slug"
@@ -72,8 +73,6 @@ export type SiteWord = Omit<
   facts?: SiteFact[];
   grammar?: { diminutive?: RelatedWord; plural?: string | null };
   images: SiteMedia[];
-  hasInfoText: boolean;
-  infoTextHtml: string | null;
   related?: SiteRelated[];
   relatedWords: RelatedWord[];
   slug: string;
@@ -142,8 +141,9 @@ export const toWord = ({
   facts,
   grammar,
   images,
-  infoText,
+  infoText: _infoText,
   related,
+  sources: _sources,
   relatedWords,
   themen,
   wordTypes,
@@ -161,9 +161,7 @@ export const toWord = ({
     html: hasLexicalText(text) ? lexicalToHtml(text) : "",
   })),
   grammar: grammar && { diminutive: toRelatedWord(grammar.diminutive), plural: grammar.plural },
-  hasInfoText: hasLexicalText(infoText),
   images: (images ?? []).flatMap((m) => toSiteMedia(m) ?? []),
-  infoTextHtml: lexicalToHtml(infoText) || null,
   related: related?.map(({ contributorSuggestion, word, ...r }) => ({
     ...r,
     contributorSuggestion: suggestionId(contributorSuggestion),

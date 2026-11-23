@@ -22,7 +22,7 @@ const wordFacts = (berlinerisch: string, d: SeoDoc): WordSeoFacts => ({
   berlinerisch,
   example: (d.examples ?? []).find((e) => e.example)?.example,
   hasAudio: (d.berlinerischAudio?.length ?? 0) > 0,
-  hasEtymology: hasLexicalText(d.infoText),
+  hasEtymology: (d.facts ?? []).some((f) => f.kind === "herkunft" && hasLexicalText(f.text)),
   hasExamples: (d.examples ?? []).some((e) => e.example),
   translations: (d.translations ?? []).flatMap((t) => t.translation || []),
 });

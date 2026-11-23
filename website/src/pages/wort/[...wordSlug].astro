@@ -27,7 +27,7 @@ const wordSeoFacts = {
   berlinerisch,
   example: word.examples.find((e) => e.example)?.example,
   hasAudio: word.berlinerischAudio.length > 0,
-  hasEtymology: word.hasInfoText,
+  hasEtymology: word.facts?.some((f) => f.kind === 'herkunft') ?? false,
   hasExamples: word.examples.some((e) => e.example),
   translations,
 };

@@ -413,6 +413,9 @@ export interface Word {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Veraltet: steht jetzt unter Wissenswertes.
+   */
   infoText?: {
     root: {
       type: string;
@@ -430,6 +433,9 @@ export interface Word {
   } | null;
   learnMore?: string | null;
   berolinismus?: boolean | null;
+  /**
+   * Veraltet: steht jetzt je Eintrag unter Wissenswertes.
+   */
   sources?: string[] | null;
   images?: (number | Media)[] | null;
   wordTypes?: (number | WordType)[] | null;

@@ -122,7 +122,7 @@ export const Words: CollectionConfig = {
             { label: "Sonstiges", value: "sonstiges" },
           ],
         },
-        // Rich text like `infoText` (the old origin text moves here with its formatting).
+        // Rich text: the old origin text (`infoText`) moves here with its formatting.
         { name: "text", type: "richText", validate: requiredRichText },
         {
           name: "source",
@@ -206,10 +206,22 @@ export const Words: CollectionConfig = {
         { name: "caption", type: "text" },
       ],
     },
-    { name: "infoText", type: "richText" },
+    // Deprecated: replaced by `facts` (copied by `src/scripts/infoTextToFacts.ts`). Hidden in the admin and unused by the
+    // site; the columns stay until that script has run on production, then a contract release drops them.
+    {
+      name: "infoText",
+      type: "richText",
+      admin: { hidden: true, description: "Veraltet: steht jetzt unter Wissenswertes." },
+    },
     { name: "learnMore", type: "text" },
     { name: "berolinismus", type: "checkbox" },
-    { name: "sources", type: "text", hasMany: true },
+    // Deprecated with `infoText`: the source of a fact is `facts[].source` now.
+    {
+      name: "sources",
+      type: "text",
+      hasMany: true,
+      admin: { hidden: true, description: "Veraltet: steht jetzt je Eintrag unter Wissenswertes." },
+    },
     { name: "images", type: "upload", relationTo: "media", hasMany: true },
     { name: "wordTypes", type: "relationship", relationTo: "word-types", hasMany: true },
     { name: "themen", type: "relationship", relationTo: "themen", hasMany: true },
