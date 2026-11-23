@@ -16,6 +16,8 @@ import {
 import { getWordTrend } from "@services/payload/wordTrend.ts";
 import { alphabeticNeighbors, similarSoundingWords, similarWords } from "@utils/wordHelper.ts";
 import { berlinParts, pickWordOfTheDay } from "@utils/wordOfTheDay.ts";
+import { lexicalToHtml } from "payload-app/lexical-html";
+import { hasLexicalText } from "payload-app/routes";
 import { storyPrompt } from "payload-app/story-prompt";
 import { hypher } from "payload-app/word-derived";
 
@@ -33,7 +35,8 @@ export type WordPageModel = {
   rhymes: Link[];
   written: Link[];
   grammar: { plural?: string; diminutive?: Link };
-  facts: { kind: string; text: string; contributor?: Contributor }[];
+  /** `html` is the rich text of the fact (CMS content, already escaped by `lexicalToHtml`). */
+  facts: { contributor?: Contributor; html: string; kind: string; source?: string }[];
   /** `url` is missing for an entry that is only text (no linked word). */
   related: {
     label: string;
@@ -118,10 +121,21 @@ export const fetchWordPage = async (
           ...(disclosure && { disclosure }),
         },
       }),
-    facts: (word.facts ?? []).flatMap(({ contributorName, contributorSuggestion, kind, text }) => {
-      const by = contributor(contributorName, contributorSuggestion);
-      return kind && text ? [{ kind, text, ...(by && { contributor: by }) }] : [];
-    }),
+    facts: (word.facts ?? []).flatMap(
+      ({ contributorName, contributorSuggestion, kind, source, text }) => {
+        const by = contributor(contributorName, contributorSuggestion);
+        return kind && hasLexicalText(text)
+          ? [
+              {
+                html: lexicalToHtml(text),
+                kind,
+                ...(source && { source }),
+                ...(by && { contributor: by }),
+              },
+            ]
+          : [];
+      },
+    ),
     ...(stories.featured && { featured: stories.featured, featuredStoryId: stories.featured.id }),
     grammar: {
       ...(word.grammar?.diminutive && { diminutive: link(word.grammar.diminutive) }),

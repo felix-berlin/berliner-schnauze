@@ -1,6 +1,8 @@
 import type { Validate } from "payload";
 
-import { select, textarea } from "payload/shared";
+import { select } from "payload/shared";
+
+import { hasLexicalText } from "./routes";
 
 /** Payload's `Validate` generics differ per field type; the wrappers below only forward to the stock validator. */
 // oxlint-disable-next-line typescript/no-explicit-any
@@ -13,5 +15,6 @@ export type AnyValidate = Validate<any, any, any, any>;
 export const requiredSelect: AnyValidate = (value, options) =>
   (select as AnyValidate)(value, { ...options, required: true });
 
-export const requiredTextarea: AnyValidate = (value, options) =>
-  (textarea as AnyValidate)(value, { ...options, required: true });
+/** Rich text with at least one character (an empty editor still holds one empty paragraph); no NOT NULL column. */
+export const requiredRichText: AnyValidate = (value) =>
+  hasLexicalText(value) || "Dieses Feld ist erforderlich.";

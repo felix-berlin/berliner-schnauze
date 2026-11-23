@@ -11,7 +11,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"_parent_id" integer NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
   	"kind" "enum_words_facts_kind",
-  	"text" varchar,
+  	"text" jsonb,
+  	"source" varchar,
   	"contributor_name" varchar,
   	"contributor_suggestion_id" integer
   );
@@ -33,7 +34,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"_parent_id" integer NOT NULL,
   	"id" serial PRIMARY KEY NOT NULL,
   	"kind" "enum__words_v_version_facts_kind",
-  	"text" varchar,
+  	"text" jsonb,
+  	"source" varchar,
   	"contributor_name" varchar,
   	"contributor_suggestion_id" integer,
   	"_uuid" varchar
