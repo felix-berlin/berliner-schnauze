@@ -51,7 +51,7 @@ const schemaJson = () =>
     numberOfItems: totalWordCount,
     url: canonicalUrl('/wort', Astro.site),
   });
-Astro.cache.set({ maxAge: 60, swr: 300 });
+Astro.cache?.set({ maxAge: 60, swr: 300 });
 ---
 
 <Layout content={seoData(content)} contentClasses="o-word-index">

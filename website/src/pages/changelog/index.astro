@@ -13,7 +13,7 @@ const seo: Seo = {
   opengraphDescription: 'Alle Neuigkeiten und Verbesserungen der Berliner Schnauze App.',
   opengraphTitle: 'Was ist neu? — Berliner Schnauze',
 };
-Astro.cache.set({ maxAge: 3600, swr: 86400 });
+Astro.cache?.set({ maxAge: 3600, swr: 86400 });
 ---
 
 <Layout content={{ title: 'Was ist neu?', seo }}>

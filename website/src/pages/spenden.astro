@@ -35,7 +35,7 @@ const page = {
   },
   title: 'Spenden - Berliner Schnauze',
 };
-Astro.cache.set({ maxAge: 60, swr: 300 });
+Astro.cache?.set({ maxAge: 60, swr: 300 });
 ---
 
 <Layout content={page}>

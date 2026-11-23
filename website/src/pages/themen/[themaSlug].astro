@@ -49,7 +49,7 @@ const itemListJson = () =>
     name: thema.name,
     numberOfItems: words.length,
   });
-Astro.cache.set({ maxAge: 60, swr: 300 });
+Astro.cache?.set({ maxAge: 60, swr: 300 });
 ---
 
 <Layout content={seoProps} contentClasses='o-thema'>
