@@ -31,6 +31,8 @@
     --color-surface-chip: light-dark(#fbf1e6, #38424c); // --card2
     --color-surface-card3: light-dark(#f5dfca, #46525e); // --card3: hover/selected of card2, never --t3 text on it
     --color-text-muted: light-dark(#5f6b77, #a8b2bc); // --t3
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w18__menu shadow, no token
+    --shadow-menu: 0 14px 32px rgb(0 0 0 / 28%), 0 0 0 1px var(--color-border-card); // mock .w18__menu
     // stylelint-enable color-no-hex, function-disallowed-list
 
     // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: toc column is exactly 220px, no token
@@ -58,6 +60,10 @@
       padding: 0 var(--space-6) var(--space-16);
     }
     @include mx.breakpoint("desktop") {
+      // SPEC §3: reactions and the action row are 36px on the desktop (the hit band keeps 44px).
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock: 36px, no token
+      --word-control-block: 2.25rem;
+
       margin-inline: auto;
       grid-template-columns: var(--_toc-width) minmax(0, 1fr);
       gap: var(--space-8);

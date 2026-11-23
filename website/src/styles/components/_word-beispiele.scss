@@ -30,10 +30,16 @@
 
   .sentence {
     margin: 0;
-    font-size: var(--font-size-xl); // SPEC §4.2: 20px
+    // mock .w16 .w10__ex q: 22px (SPEC §4.2 says 20px; the mock is the measured ground truth), no token
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock example sentence 22px
+    font-size: 1.375rem;
     font-style: italic;
     line-height: 1.4;
     color: var(--color-text-strong);
+
+    q {
+      quotes: "„" "“";
+    }
   }
 
   .plain {
@@ -49,25 +55,39 @@
     gap: var(--space-2);
   }
 
-  // Dashed pill "+ Einsprechen": looks like a button, aria-disabled (focusable), does nothing yet.
+  // Dashed pill "+ Einsprechen" (mock .w17__vadd): 36px with a 44px hit band, aria-disabled (focusable), does nothing yet.
   .record-button {
+    --_h: 2.25rem; // mock: 36px, no token
+    --_bleed: calc((var(--size-tap-target) - var(--_h)) / 2);
+    --_reach: calc(var(--_bleed) + 2px); // plus the border: the band is positioned from the padding box
+
+    position: relative;
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1);
-    min-block-size: var(--size-tap-target);
-    padding-inline: var(--space-3);
+    gap: var(--space-2);
+    min-block-size: var(--_h);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock: padding 0 .9rem 0 .6rem
+    padding: 0 0.9rem 0 0.6rem;
     font: inherit;
     font-size: var(--font-size-md);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-muted);
+    letter-spacing: 0;
+    color: var(--color-text-body);
     background: transparent;
-    border: 1px dashed var(--color-border-inner);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock: 1.5px dashed rule
+    border: 1.5px dashed var(--color-border-card);
     border-radius: var(--radius-pill);
+    opacity: 0.55; // mock: the disabled look
     cursor: not-allowed;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: calc(-1 * var(--_reach));
+    }
   }
 
   .plus {
-    color: var(--color-accent-active); // SPEC §4.1: only the plus is orange
+    color: var(--color-text-muted);
   }
 
   // Tooltip (SPEC §14): above the row, 13px, shown on hover, focus and tap ([data-open]); data-dismissed (Esc) wins.

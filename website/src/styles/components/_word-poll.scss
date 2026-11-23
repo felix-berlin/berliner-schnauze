@@ -22,7 +22,8 @@
     gap: var(--space-4);
   }
 
-  // The live regions stay in the DOM; empty ones give back their grid gap.
+  // The live regions stay in the DOM; empty ones take no grid cell and no gap (out of flow, clipped, still in the
+  // accessibility tree).
   .notice {
     display: grid;
     gap: var(--space-2);
@@ -30,7 +31,11 @@
 
     // v-if leaves comment nodes, so :empty never matches: look for an element instead.
     &:not(:has(> *)) {
-      margin-block: calc(-1 * var(--space-2));
+      position: absolute;
+      inline-size: 1px; // the clipping technique's size, not a scale step
+      block-size: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
     }
   }
 

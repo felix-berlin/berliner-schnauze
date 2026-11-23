@@ -122,12 +122,18 @@
     gap: var(--space-2);
   }
 
-  // Reaction (SPEC §4.3): pill, 44px touch height at every width (the 36px desktop size is below the tap target here).
+  // Reaction (SPEC §4.3): pill, 36px look on the desktop (--word-control-block, set by the page shell), 44px elsewhere;
+  // the hit band always reaches 44px.
   .react {
+    --_h: var(--word-control-block, var(--size-tap-target));
+    --_bleed: calc((var(--size-tap-target) - var(--_h)) / 2);
+    --_reach: calc(var(--_bleed) + 2px); // plus the border: the band is positioned from the padding box
+
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: var(--space-1);
-    min-block-size: var(--size-tap-target);
+    min-block-size: var(--_h);
     padding-inline: var(--space-3);
     font: inherit;
     font-size: var(--_small);
@@ -136,6 +142,12 @@
     border: 1px solid var(--color-border-card);
     border-radius: var(--radius-pill);
     cursor: pointer;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: calc(-1 * var(--_reach));
+    }
 
     @include butler-mx.hover {
       &:not([aria-disabled="true"]) {

@@ -2,7 +2,9 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 // Auswahl (docs/design/wortseite/SPEC.md): one answer out of several. State via aria-pressed.
-// Variant tile (data-variant="tile"): poll answer, a big choice on a chip ground, parts .icon and .text.
+// Variant tile (data-variant="tile"): poll answer (SPEC §7): borderless card2 tile, 72px, round dashed icon, parts .icon and .text.
+// Variant pill (data-variant="pill"): voice button (SPEC §6): 36px pill on card2 with a 26px play circle (.icon), a hit band
+// reaches 44px.
 // Variant segment: one chip of a small connected control (36px look, 44px hit band; neighbours
 // overlap by their border).
 // Public (a parent's layout knobs, the old :where() let parents override these): --choice-display,
@@ -76,20 +78,34 @@
     justify-content: var(--choice-justify, flex-start);
     gap: var(--space-3);
     text-align: start;
+    border: 0;
+    border-radius: var(--radius-sm);
 
     &:not([aria-pressed="true"]) {
       background: var(--color-surface-chip);
     }
 
     @include butler-mx.hover {
-      &:not(:disabled, [aria-disabled="true"]) .icon {
-        border-color: var(--color-accent-icon);
-        color: var(--color-border-accent);
+      &:not(:disabled, [aria-disabled="true"]) {
+        box-shadow: none;
 
-        @include butler-mx.feature("motion") {
-          transform: rotate(-8deg) scale(1.08);
+        &:not([aria-pressed="true"]) {
+          background: var(--color-surface-card3, var(--color-surface-chip));
+        }
+
+        .icon {
+          border-color: var(--color-accent-icon);
+          color: var(--color-border-accent);
+
+          @include butler-mx.feature("motion") {
+            transform: rotate(-8deg) scale(1.08);
+          }
         }
       }
+    }
+
+    &[aria-disabled="true"] {
+      border-style: none;
     }
 
     &[aria-pressed="true"] .icon {
@@ -104,6 +120,56 @@
     &[aria-pressed="true"] .text span {
       color: inherit;
       opacity: 0.9;
+    }
+  }
+
+  :scope[data-variant~="pill"] {
+    --_h: 2.25rem; // SPEC §4.3 / mock .w17__vb: 36px, no token
+    --_bleed: calc((var(--size-tap-target) - var(--_h)) / 2);
+
+    position: relative;
+    min-block-size: var(--_h);
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w17__vb: padding 0 .9rem 0 .4rem
+    padding: 0 0.9rem 0 0.4rem;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-chip);
+    color: var(--color-text-strong);
+    font-size: var(--font-size-md);
+    letter-spacing: 0;
+
+    // Looks 36px, hits 44px.
+    &::before {
+      content: "";
+      position: absolute;
+      inset: calc(-1 * var(--_bleed));
+    }
+
+    @include butler-mx.hover {
+      &:not(:disabled, [aria-disabled="true"]) {
+        box-shadow: none;
+        background: var(--color-surface-card3, var(--color-surface-chip));
+      }
+    }
+
+    &[aria-pressed="true"] {
+      background: var(--color-accent-solid);
+      color: var(--color-text-on-accent);
+      font-weight: inherit;
+    }
+
+    .icon {
+      inline-size: 1.625rem; // mock: 26px circle
+      block-size: 1.625rem;
+      border: 0;
+      border-radius: var(--radius-pill);
+      background: var(--color-text-strong);
+      color: var(--color-surface-sheet);
+    }
+
+    &[aria-pressed="true"] .icon {
+      background: var(--color-text-on-accent);
+      color: var(--color-accent-solid);
     }
   }
 
@@ -140,10 +206,11 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    inline-size: 2.5rem;
-    block-size: 2.5rem;
-    border: 1px dashed var(--color-border-card);
-    border-radius: var(--radius-sm);
+    inline-size: 2.75rem; // mock .w17__ic: 44px
+    block-size: 2.75rem;
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w17__ic: 1.5px dashed ring
+    border: 1.5px dashed var(--color-border-card);
+    border-radius: var(--radius-pill);
     color: var(--color-accent-icon);
     transition:
       color var(--duration-base) ease,
@@ -158,12 +225,14 @@
 
     b {
       color: inherit;
-      font-size: var(--font-size-base);
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w17__tile title: 17px, no token
+      font-size: 1.0625rem;
     }
 
     span {
       color: var(--color-text-muted);
-      font-size: var(--font-size-xs);
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §4.2: 13px minimum, the xs token is 12px
+      font-size: 0.8125rem;
     }
   }
 }
