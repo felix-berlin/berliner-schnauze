@@ -90,12 +90,28 @@ type SeedWord = {
   ipa?: string;
   learnMore?: string;
   related?: string[];
-  /** Entries of the `related` array: the head shows the "gleich" ones as "Gleiche Bedeutung wie ...". */
+  /**
+   * Entries of the `related` array: the head shows the "gleich" ones as "Gleiche Bedeutung wie ...". A row has a
+   * linked `slug` or only a `label` (a phrase without a word of its own); `by` is the public credit.
+   */
   relations?: {
+    by?: string;
+    label?: string;
     note?: string;
     relation: "gleich" | "gegenteil" | "verwandt" | "redewendung";
-    slug: string;
+    slug?: string;
   }[];
+  /** Wissenswertes: kind, text and an optional public credit (`by`). */
+  facts?: {
+    by?: string;
+    source?: string;
+    kind: "anekdote" | "gebrauch" | "geschichte" | "herkunft" | "sonstiges";
+    text: string;
+  }[];
+  /** Plural and the word the diminutive links to (any seed word: the layout is what counts). */
+  grammar?: { diminutive?: string; plural?: string };
+  /** Stressed syllable(s) as written in the Klang card. */
+  stress?: string;
   slug: string;
   sources?: string[];
   themen?: string[];
@@ -137,8 +153,12 @@ const WORDS: SeedWord[] = [
     translations: ["Testwort mit zwei Bildern"],
   },
   {
-    // Rich head for the visual checks: invented IPA, four images, related words, voices, and the word of the day on
-    // the pinned e2e day (slug 5 of the 34 sorted ones on E2E_PINNED_DAY; adding a word moves it).
+    // THE FULL WORD of the v18 word page: every card has data here, so one page shows every feature (head with IPA,
+    // stress, voices, four images and the "Gleiche Bedeutung" line; word of the day on the pinned e2e day, trend badge
+    // "Platz 4", O-Ton and four Jeschichten; examples with voices; Wissenswertes with credits; grammar with plural and
+    // diminutive; all four relation kinds, one without a word of its own; sources and "Mehr lesen"; a book; the poll
+    // with its 120 votes). It is the word of the day on E2E_PINNED_DAY (slug 5 of the 34 sorted ones): adding a word
+    // moves it, so extend this word instead of adding one.
     alternativeWords: ["abjehaun"],
     article: "die",
     berlinerisch: "Abjang",
@@ -151,18 +171,46 @@ const WORDS: SeedWord[] = [
       },
       { example: "Kurz vor Abjang noch ma winken.", explanation: "Kurz vor dem Weggehen winken." },
     ],
+    facts: [
+      {
+        by: "Erfundene Person",
+        kind: "herkunft",
+        source: "Erfundenes Buch, Erfundene Autorin",
+        text: "Erfundene Herkunft: das Wort soll aus einem Spaß unter Kollegen entstanden sein.",
+      },
+      {
+        kind: "gebrauch",
+        source: "Erfundene Quelle eins",
+        text: "Erfundener Gebrauch: wird eher beim Abschied von Feiern gesagt als im Büro.",
+      },
+      {
+        by: "Noch eine erfundene Person",
+        kind: "anekdote",
+        text: "Erfundene Anekdote: Auf einer Party soll jemand drei Stunden lang „Abjang“ gerufen haben.",
+      },
+    ],
+    grammar: { diminutive: "abbeisser", plural: "die Abjänge" },
     images: 4,
+    infoText: "Erfundener Infotext: ein Weggang, der so leise ist, dass ihn keiner bemerkt.",
     ipa: "ˈapjaŋ",
+    learnMore: "https://example.org/abjang",
     related: ["anmachen", "alex", "wa"],
     relations: [
       { note: "erfundene Notiz", relation: "gleich", slug: "alex" },
       { relation: "gleich", slug: "anmachen" },
+      { relation: "gegenteil", slug: "ab" },
+      { by: "Erfundene Person", relation: "verwandt", slug: "bolle" },
+      { label: "Abjang machen", note: "erfundene Redewendung", relation: "redewendung" },
     ],
+    sources: ["Erfundene Quelle eins", "Erfundene Quelle zwei"],
+    stress: "ˈAb",
     slug: "abjang",
     themen: ["bewegung-gehen", "alltag-wohnen"],
     translations: ["Abgang", "leises Verschwinden"],
     voices: ["male", "female"],
   },
+  // Sounds and is spelled almost like "abjang": fills "Reimt sich auf" and "Ähnlich jeschrieben" of the full word.
+  { berlinerisch: "Abjank", slug: "abjank", translations: ["erfundenes Testwort"] },
   {
     berlinerisch: "Alex",
     berolinismus: true,
@@ -272,12 +320,6 @@ const WORDS: SeedWord[] = [
     slug: "bulette",
     themen: ["essen-trinken"],
     translations: ["gebratene Hackfleischkugel"],
-  },
-  {
-    berlinerisch: "Büdchen",
-    slug: "buedchen",
-    themen: ["alltag-wohnen"],
-    translations: ["Kiosk an der Ecke"],
   },
   { berlinerisch: "Dette", slug: "dette", translations: ["das"] },
   { berlinerisch: "Icke", slug: "icke", translations: ["ich"] },
@@ -492,6 +534,28 @@ export async function seedE2e(payload: Payload): Promise<void> {
     themaIds.set(slug, doc.id);
   }
 
+  // The suggestion the public credits ("Danke an ...") of facts and related rows point to.
+  const SUGGESTION_WORD = "Erfundener Vorschlag";
+  const suggestion =
+    (
+      await payload.find({
+        collection: "suggestions",
+        depth: 0,
+        limit: 1,
+        where: { berlinerWord: { equals: SUGGESTION_WORD } },
+      })
+    ).docs[0] ??
+    (await payload.create({
+      collection: "suggestions",
+      context: { skipCommentHooks: true },
+      data: {
+        berlinerWord: SUGGESTION_WORD,
+        translation: "nur für die Namensnennung",
+        type: "word",
+      },
+      depth: 0,
+    }));
+
   const wordIds = new Map<string, number>();
   for (const w of WORDS) {
     const data: Partial<Word> & Record<string, unknown> = {
@@ -501,6 +565,14 @@ export async function seedE2e(payload: Payload): Promise<void> {
       berlinerisch: w.berlinerisch,
       berlinerischAudio: audioRows(w.voices),
       berolinismus: w.berolinismus ?? false,
+      facts: (w.facts ?? []).map(({ by, kind, source, text }) => ({
+        contributorName: by,
+        contributorSuggestion: by ? suggestion.id : undefined,
+        kind,
+        source,
+        text: lexical(paragraph(text)),
+      })),
+      stress: w.stress ?? null,
       examples: (w.examples ?? []).map((e) => ({
         example: e.example,
         exampleAudio: audioRows(e.voices),
@@ -523,10 +595,19 @@ export async function seedE2e(payload: Payload): Promise<void> {
     await payload.update({
       collection: "words",
       data: {
-        related: (w.relations ?? []).map(({ note, relation, slug }) => ({
+        ...(w.grammar && {
+          grammar: {
+            diminutive: w.grammar.diminutive ? wordIds.get(w.grammar.diminutive)! : null,
+            plural: w.grammar.plural ?? null,
+          },
+        }),
+        related: (w.relations ?? []).map(({ by, label, note, relation, slug }) => ({
+          contributorName: by,
+          contributorSuggestion: by ? suggestion.id : undefined,
+          label,
           note,
           relation,
-          word: wordIds.get(slug)!,
+          word: slug ? wordIds.get(slug)! : undefined,
         })),
         relatedWords: w.related!.map((s) => wordIds.get(s)!),
       },
@@ -687,7 +768,16 @@ export async function seedE2e(payload: Payload): Promise<void> {
 
   await payload.updateGlobal({ data: navigation as never, slug: "navigation" });
   await payload.updateGlobal({ data: company as never, slug: "company" });
-  await payload.updateGlobal({ data: affiliate as never, slug: "affiliate" });
+  // The first book is the one of "bewegung-gehen", the first thema of the full word "abjang" (the footer book card).
+  await payload.updateGlobal({
+    data: {
+      ...affiliate,
+      books: affiliate.books.map((book, i) =>
+        Object.assign({}, book, i === 0 && { themen: [themaIds.get("bewegung-gehen")!] }),
+      ),
+    } as never,
+    slug: "affiliate",
+  });
   const home = await seedHome(payload);
   if (home.unavailable.length)
     console.warn(`seed e2e: home unavailable: ${home.unavailable.join(", ")}`);
