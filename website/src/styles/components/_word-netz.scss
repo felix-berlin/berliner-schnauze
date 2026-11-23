@@ -1,0 +1,214 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Verwandte Wörter card body (SPEC §10). The root is the container: below 36rem the list .all grouped by
+// relation, from there the SVG .net inside .tablet, the visually hidden .net-list (visible while it has focus)
+// and the .rest list. Further: .written (similar spelling) and .neighbours (.tiles, .tile, .now).
+// Pills: .pills (li with a link or span and a small note). SVG parts: .curve, .center, .center-text, .ring, .word, .relation.
+@include mx.component("word-netz") {
+  :scope {
+    --_relation-size: 0.8125rem; // SPEC §10: 13px, the minimum text size, no token
+    --_hidden: 1px; // size of the visually hidden clip, not a scale step
+
+    container: word-netz / inline-size;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .all,
+  .rest {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-2);
+    padding: 0;
+    list-style: none;
+
+    // The link or text carries the padding, so the whole pill is the 44px touch target.
+    li {
+      display: inline-flex;
+      align-items: center;
+      background: var(--color-surface-chip);
+      border-radius: var(--radius-pill);
+    }
+
+    a,
+    span {
+      display: inline-flex;
+      align-items: center;
+      min-block-size: var(--size-tap-target);
+      padding-inline: var(--space-4);
+    }
+
+    a {
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-strong);
+    }
+
+    :is(a, span):has(+ small) {
+      padding-inline-end: var(--space-2);
+    }
+
+    small {
+      padding-inline-end: var(--space-4);
+      font-size: var(--font-size-md);
+      color: var(--color-text-muted);
+    }
+  }
+
+  .tablet {
+    position: relative; // anchors the focused .net-list overlay
+    display: none;
+  }
+
+  .net {
+    inline-size: 100%;
+    block-size: auto;
+    font-family: var(--font-family-body);
+  }
+
+  .curve {
+    stroke: var(--color-border-accent);
+    stroke-width: 1.5px; // SPEC §10: hairline curves
+  }
+
+  .center {
+    fill: var(--color-accent-solid); // SPEC §10: the word as the one orange pill
+  }
+
+  .center-text {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
+    fill: var(--color-text-on-accent);
+  }
+
+  .ring {
+    fill: var(--color-surface-sheet);
+    stroke: var(--color-accent-active);
+    stroke-width: 2px;
+  }
+
+  .word {
+    font-size: var(--font-size-base); // SPEC §10: 16px 600
+    font-weight: 600; // no weight token between regular and bold
+    fill: var(--color-text-strong);
+  }
+
+  .relation {
+    font-size: var(--_relation-size);
+    fill: var(--color-text-muted);
+  }
+
+  // Visually hidden list of the net words; it is the reachable alternative to the SVG, so focus shows it.
+  .net-list {
+    position: absolute;
+    inline-size: var(--_hidden);
+    block-size: var(--_hidden);
+    margin: calc(var(--_hidden) * -1);
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    list-style: none;
+
+    // On focus it overlays the top of the net (no layout shift) on the sheet surface.
+    &:focus-within {
+      inset-block-start: 0;
+      inset-inline: 0;
+      z-index: var(--z-raised); // below the sticky anchor bar (--z-sticky)
+      inline-size: auto;
+      block-size: auto;
+      margin: 0;
+      padding: var(--space-2) var(--space-3);
+      overflow: visible;
+      clip-path: none;
+      white-space: normal;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2) var(--space-4);
+      background: var(--color-surface-sheet);
+      border: 1px dashed var(--color-border-inner);
+      border-radius: var(--radius-sm);
+    }
+
+    small {
+      color: var(--color-text-muted);
+    }
+  }
+
+  @container word-netz (inline-size >= 36rem) {
+    .all {
+      display: none;
+    }
+
+    .tablet {
+      display: grid;
+      gap: var(--space-4);
+    }
+  }
+
+  .written {
+    margin: 0;
+    padding-block-start: var(--space-4);
+    border-block-start: 1px solid var(--color-border-card);
+    line-height: 1.6;
+  }
+
+  .neighbours {
+    display: grid;
+    gap: var(--space-2);
+    padding-block-start: var(--space-4);
+    border-block-start: 1px solid var(--color-border-card);
+
+    > p {
+      margin: 0;
+    }
+  }
+
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  .tile {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-surface-chip);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-strong);
+    text-decoration: none;
+
+    @include butler-mx.hover {
+      background: var(--color-surface-tint-warm);
+    }
+  }
+
+  .name {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .now {
+    display: none;
+  }
+
+  // Desktop: the current word sits between the tiles (decorative).
+  @container word-netz (inline-size >= 50rem) {
+    .tiles {
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+    }
+
+    .now {
+      display: block;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-accent);
+    }
+  }
+}

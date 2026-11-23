@@ -1,0 +1,33 @@
+---
+import '@styles/components/_word-oton.scss';
+import { BERLIN_AREAS } from '@/data/berlinAreas.ts';
+import type { Story } from '@lib/story.ts';
+
+interface Props {
+  /** The featured Jeschichte; nothing is rendered for null. */
+  story: Story | null;
+  /** Number of further Jeschichten; no link for 0. */
+  more: number;
+}
+
+const { more, story } = Astro.props;
+const district = BERLIN_AREAS.find((a) => a.key === story?.bezirk)?.name;
+const author = story?.name || 'aus der Community';
+---
+
+{
+  story && (
+    <figure class='c-word-oton'>
+      <blockquote class='quote'>„{story.text}“</blockquote>
+      <figcaption class='by'>
+        <span class='c-word-label'>O-Ton</span>
+        <span class='who'>{author}{district && ` · aus ${district}`}</span>
+      </figcaption>
+      {more > 0 && (
+        <a class='more' href='#jeschichten'>
+          {more} weitere Jeschichten <span class='arrow' aria-hidden='true'>→</span>
+        </a>
+      )}
+    </figure>
+  )
+}

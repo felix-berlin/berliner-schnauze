@@ -37,4 +37,38 @@ describe("SectionCard.astro", () => {
     expect(html).not.toContain("<footer");
     expect(await render(props)).not.toContain('class="body"');
   });
+
+  it("renders no id with anchor false, the pill as a real button, and with a gap the gap box instead of the pill", async () => {
+    const card = { ...props, anchor: false, contribute: "example" };
+    const html = await render(card, { default: "<p>Nachbar</p>" });
+    expect(html).not.toMatch(/<section[^>]* id=/);
+    expect(html).toContain('id="heading-demo"');
+    expect(html).toMatch(
+      /<button[^>]*type="button"[^>]*data-contribute="example"[^>]*>[\s\S]*Ergänzen/,
+    );
+    const gap = await render(
+      { ...card, gap: { cta: "Los", text: "Nüscht da." } },
+      { default: "<p>Nachbar</p>" },
+    );
+    expect(gap).toContain("Nüscht da.");
+    expect(gap).toContain("Los");
+    expect(gap).toContain("<p>Nachbar</p>");
+    expect(gap).not.toContain("Ergänzen");
+  });
+
+  it("shows no pill while the gap is shown, only the gap button", async () => {
+    const html = await render({
+      ...props,
+      anchor: false,
+      contribute: "fact",
+      gap: { cta: "Los", text: "Nüscht." },
+    });
+    expect(html).not.toContain('class="add"');
+    expect(html.match(/data-contribute="fact"/g)).toHaveLength(1);
+  });
+
+  it("shows a count only above zero", async () => {
+    expect(await render({ ...props, count: 3 })).toContain(">3<");
+    expect(await render({ ...props, count: 0 })).not.toContain('class="count"');
+  });
 });

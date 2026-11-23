@@ -1,0 +1,55 @@
+---
+import '@styles/components/_word-wissen.scss';
+import SectionCard from '@components/word/SectionCard.astro';
+import type { WordPageModel } from '@services/payload/wordPage.ts';
+
+interface Props {
+  word: string;
+  facts?: WordPageModel['facts'];
+  /** Shown only with a book (chosen by the first theme of the word). */
+  book?: WordPageModel['book'];
+}
+
+const { book, facts = [], word } = Astro.props;
+const KIND_LABEL: Record<string, string> = {
+  anekdote: 'Anekdote',
+  gebrauch: 'Gebrauch heute',
+  geschichte: 'Geschichte',
+  herkunft: 'Herkunft',
+  sonstiges: 'Sonstiges',
+};
+const gap = {
+  cta: 'Wissenswertes ergänzen',
+  text: `Noch nüscht Wissenswertes zu „${word}“. Weeßte wat über Herkunft, Geschichte oder haste ’ne Anekdote?`,
+};
+---
+
+<!-- Wissenswertes card (SPEC §9): facts as a description list; the book block (rule above) only with a book. -->
+<SectionCard anchor={false} id='wissenswertes' title='Wissenswertes' level={3} contribute='fact' gap={facts.length ? undefined : gap}>
+  {(facts.length > 0 || book) && (
+    <div class='c-word-wissen'>
+      {facts.length > 0 && (
+        <dl class='facts'>
+          {facts.map((f) => (
+            <div class='fact'>
+              <dt class='c-word-label'>{KIND_LABEL[f.kind] ?? f.kind}</dt>
+              <dd class='text' set:html={f.html} />
+              {f.source && <dd class='source'>Quelle: {f.source}</dd>}
+              {f.contributor && <dd class='by'>{f.contributor.name ?? 'aus der Community'}</dd>}
+            </div>
+          ))}
+        </dl>
+      )}
+      {book && (
+        <aside class='book'>
+          {book.cover && <img class='cover' src={book.cover} alt='' width='48' height='64' loading='lazy' />}
+          <div class='info'>
+            <p class='c-word-label'>Zum Weiterlesen · Affiliate-Link</p>
+            <a class='title' href={book.url} rel='sponsored noopener'>{book.title}</a>
+            <p class='note'>Passt zum Thema dieses Worts. Als Amazon-Partner verdiene ich an qualifizierten Verkäufen.</p>
+          </div>
+        </aside>
+      )}
+    </div>
+  )}
+</SectionCard>

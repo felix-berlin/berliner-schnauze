@@ -39,12 +39,12 @@ export function initScrollSpy({
   getSectionId,
   rootMargin = "-20% 0px -70% 0px",
   onActivate,
-}: ScrollSpyOptions): void {
+}: ScrollSpyOptions): () => void {
   observers.get(navSelector)?.disconnect();
   observers.delete(navSelector);
 
   const nav = document.querySelector<HTMLElement>(navSelector);
-  if (!nav) return;
+  if (!nav) return () => {};
 
   const links = new Map<string, HTMLAnchorElement>();
   nav.querySelectorAll<HTMLAnchorElement>(linkSelector).forEach((link) => {
@@ -55,7 +55,7 @@ export function initScrollSpy({
   const sections = [...links.keys()]
     .map((id) => document.getElementById(id))
     .filter((el): el is HTMLElement => el !== null);
-  if (!sections.length) return;
+  if (!sections.length) return () => {};
 
   let current: HTMLAnchorElement | null = null;
   const setActive = (id: string) => {
@@ -81,6 +81,11 @@ export function initScrollSpy({
 
   sections.forEach((section) => observer.observe(section));
   observers.set(navSelector, observer);
+  // Returns a stop function (a component unmounting under ClientRouter must not leave the observer on detached nodes).
+  return () => {
+    observer.disconnect();
+    if (observers.get(navSelector) === observer) observers.delete(navSelector);
+  };
 }
 
 /**

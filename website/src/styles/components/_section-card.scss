@@ -1,4 +1,5 @@
 @use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
 // Section card: a numbered paper card with header (.num, .title), .body and .footer.
 // Variants: unnumbered; word (word page: sheet surface, no numbers, no header rule, paddings follow
@@ -75,6 +76,126 @@
     --_header-block: var(--section-card-header-block, 0.875rem);
 
     border-radius: var(--radius-sm);
+  }
+
+  // v18 word page (SPEC §4.3, §6): condensed title, optional count, the "Ergänzen" pill, gap with outline button.
+  // Parts: .count, .add (pill), .gap (.text, .cta), both buttons carry a decorative .plus.
+  :scope[data-variant~="v18"] {
+    --_title-size: 1.375rem; // SPEC §3: card heading 22px mobile, no token at that size
+    --_ink: var(--color-text-strong);
+
+    // Like the word head: the paper lift instead of the dashed hairline.
+    border: 0;
+    box-shadow: var(--shadow-paper-lift);
+
+    .header {
+      align-items: center;
+      flex-wrap: wrap;
+      padding-block-end: var(--space-4);
+    }
+
+    .title {
+      font-family: var(--font-condensed);
+      font-weight: 600; // SPEC §4.2: Fira 600, no weight token between regular and bold
+      font-size: var(--_title-size);
+      letter-spacing: 0.3px; // SPEC §4.2, no tracking token
+      line-height: 1.1;
+    }
+
+    .count {
+      font-size: var(--font-size-md);
+      color: var(--color-text-muted);
+    }
+
+    .plus {
+      color: var(--color-accent-active); // SPEC §4.1: the plus icon is orange, nothing else on the pill
+      font-weight: var(--font-weight-bold);
+    }
+
+    // Pill (SPEC §4.3): 36px, 0 12px, round, chip surface, hover one step darker.
+    .add {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      margin-inline-start: auto;
+      min-block-size: 2.25rem; // SPEC §4.3: 36px, no token
+      padding-inline: var(--space-3); // SPEC §4.3: 12px
+      font: inherit;
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-bold);
+      color: var(--_ink);
+      background: var(--color-surface-chip);
+      border: 0;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+
+      @include butler-mx.hover {
+        background: var(--color-surface-tint-warm);
+      }
+    }
+
+    // Gap hint (SPEC §4 "Lücken-Hinweis", mock luecke-*): dashed box on the chip surface, text left, button right;
+    // it stacks when the card is narrow.
+    .gap {
+      container: section-card-gap / inline-size;
+      margin: 0 var(--_inline) var(--_inline);
+    }
+
+    .gap-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-4);
+      padding: var(--space-4);
+      background: var(--color-surface-chip);
+      border: 1px dashed var(--color-border-inner);
+      border-radius: var(--radius-sm);
+
+      @container section-card-gap (inline-size >= 36rem) {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .text {
+      margin: 0;
+      line-height: 1.6;
+      color: var(--_ink);
+    }
+
+    // Outline button (SPEC §4.3): 44px, 0 16px, 4px radius, 1.5px orange-500 rim, chip surface on hover.
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      min-block-size: var(--size-tap-target);
+      padding-inline: var(--space-4);
+      font: inherit;
+      font-weight: var(--font-weight-bold);
+      color: var(--_ink);
+      background: transparent;
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §4.3: 1.5px rim, no border-width token
+      border: 1.5px solid var(--color-accent-active);
+      border-radius: var(--radius-sm);
+      flex: none;
+      cursor: pointer;
+
+      @include butler-mx.hover {
+        background: var(--color-surface-chip);
+      }
+    }
+  }
+
+  // Without JS the contribute buttons would do nothing: hidden until WordPage sets html[data-js].
+  html:not([data-js]) :scope [data-contribute] {
+    display: none;
+  }
+
+  @container word-main (inline-size >= 36rem) {
+    :scope[data-variant~="v18"] {
+      --_title-size: var(--font-size-2xl);
+    }
   }
 
   .header {

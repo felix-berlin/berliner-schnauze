@@ -1,0 +1,35 @@
+---
+import '@styles/components/_word-links.scss';
+import { randomElement, routeToWord } from '@utils/helpers.ts';
+import type { WordRef } from '@utils/wordHelper';
+import ArrowRight from '~icons/lucide/arrow-right';
+import Plus from '~icons/lucide/plus';
+import RotateCw from '~icons/lucide/rotate-cw';
+
+interface Props {
+  /** Source of the random word; without words that link is left out. */
+  words?: WordRef[];
+  /** The word of the page itself is never the random pick. */
+  excludeSlug?: string;
+}
+
+const { excludeSlug, words = [] } = Astro.props;
+const candidates = words.filter((w) => w.slug !== excludeSlug);
+// Picked once on the server, like RandomWordButton (which is a c-* component and so cannot take this component's styles).
+const random = candidates.length > 0 ? routeToWord(randomElement(candidates).slug) : undefined;
+---
+
+{/* Weiter-Links (SPEC §2 row 10): a quiet line of three links, rule above. */}
+<nav class='c-word-links' aria-label='Und nu?'>
+  <ul class='list'>
+    {random && (
+      <li>
+        <a class='link' href={random} data-track-content data-content-name='Random Word CTA' data-content-piece='Zufälliges Wort' data-content-target={random}>
+          <RotateCw aria-hidden='true' height='16' width='16' />Zufälliges Wort
+        </a>
+      </li>
+    )}
+    <li><a class='link' href='/wort'><ArrowRight aria-hidden='true' height='16' width='16' />Wort-Index</a></li>
+    <li><a class='link' href='/wort-vorschlagen'><Plus aria-hidden='true' height='16' width='16' />Wort vorschlagen</a></li>
+  </ul>
+</nav>

@@ -1,0 +1,109 @@
+@use "@styles/mixins" as mx;
+
+// „In Zahlen“ card body (SPEC §11, WordNumbers.astro). Parts: .inner (the two-column grid; the root is the container), .chart (.cols of .col: .dots of .dot, a letter; the
+// columns are decoration, aria-hidden), .legend and .figures (dl of .figure: the accessible version).
+// One dot is 2 % frequency; vowel columns (data-kind="vowel") are gold. Two columns from 40rem of the card.
+@include mx.component("word-zahlen") {
+  :scope {
+    --_small: 0.8125rem; // SPEC §4.2: 13px text minimum; the small size token is 12.8px
+    --_dot: 0.75rem; // SPEC §11 dot size 12px, no token
+    --_col: 1.25rem; // one letter column
+
+    container: word-zahlen / inline-size;
+  }
+
+  .inner {
+    display: grid;
+    gap: var(--space-6);
+
+    @container word-zahlen (inline-size >= 40rem) {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      align-items: end;
+      gap: var(--space-8);
+    }
+  }
+
+  .chart {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .cols {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--space-4) var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    inline-size: var(--_col);
+    color: var(--color-text-strong);
+
+    b {
+      font-size: var(--font-size-lg);
+      line-height: 1;
+    }
+  }
+
+  .dots {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .dot {
+    inline-size: var(--_dot);
+    block-size: var(--_dot);
+    border-radius: var(--radius-pill);
+    background: var(--color-text-muted);
+    opacity: 0.55;
+  }
+
+  .col[data-kind="vowel"] .dot {
+    background: var(--color-status-gold);
+    opacity: 1;
+  }
+
+  .legend {
+    margin: 0;
+    font-size: var(--_small);
+    color: var(--color-text-muted);
+  }
+
+  .figures {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+    margin: 0;
+  }
+
+  .figure {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    background: var(--color-surface-chip);
+    border-radius: var(--radius-sm);
+
+    dt {
+      font-size: var(--_small);
+      color: var(--color-text-muted);
+    }
+
+    dd {
+      margin: 0;
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-strong);
+    }
+  }
+}

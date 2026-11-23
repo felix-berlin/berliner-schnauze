@@ -25,19 +25,22 @@ type VoiceButtonsProps = {
   sources: { m?: string | undefined; w?: string | undefined };
   /** Undefined for drafts: no pulse. */
   wordId?: number;
+  /** "mw" (default): male first; "wm": female first (SPEC §6, v18 cards). */
+  order?: "mw" | "wm";
 };
 
-const { sources, wordId } = defineProps<VoiceButtonsProps>();
+const { order = "mw", sources, wordId } = defineProps<VoiceButtonsProps>();
 
 const uid = newVoiceKey();
 
 // A missing file renders no button.
-const voices = computed(() =>
-  [
-    { label: "Männlich", src: sources.m },
-    { label: "Weiblich", src: sources.w },
-  ].flatMap(({ label, src }) => (src ? [{ key: `${uid}-${label}`, label, src }] : [])),
-);
+const voices = computed(() => {
+  const male = { label: "Männlich", src: sources.m };
+  const female = { label: "Weiblich", src: sources.w };
+  return (order === "wm" ? [female, male] : [male, female]).flatMap(({ label, src }) =>
+    src ? [{ key: `${uid}-${label}`, label, src }] : [],
+  );
+});
 </script>
 
 <style lang="scss">

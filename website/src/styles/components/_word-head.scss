@@ -1,0 +1,265 @@
+@use "@styles/mixins" as mx;
+
+// Word head (SPEC §3/§5), head of the v18 word page. The root is the container; .inner is the grid:
+// below 35rem one column (mobile: the CSS `order` follows SPEC §5 "Mobil-Reihenfolge"), from 35rem two
+// columns 3fr 2fr (tablet), from 56rem 1.25fr 1fr (desktop); the image column bleeds to the card edge.
+// Parts: .lemma (.title, .headword, .article), .meta (.syllables, .dot, .ipa, .kind), .badges, .meaning
+// (.main, .list), .same, .themes, .oton, .actions, .images, .ipa-bg (decorative outline of the IPA).
+// DOM order = focus order; every item keeps its own top margin so a missing item leaves no gap.
+@include mx.component("word-head") {
+  :scope {
+    // SPEC §3: head padding per layout (24/24/72, 28/28/96, 32/32/104); no token steps
+    --_pad-x: var(--space-6);
+    --_pad-top: var(--space-6);
+    --_pad-bottom: 4.5rem;
+    // SPEC §4.2: h1 48px mobile, 56px tablet, 72px desktop
+    --_h1: 3rem;
+    --_main: var(--font-size-4xl); // SPEC §4.2: main meaning, 42px on desktop
+    --_ipa-bg: 5rem; // decorative outline, one-off size
+
+    position: relative;
+    container: word-head / inline-size;
+    overflow: hidden;
+    background: var(--color-surface-sheet);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-paper-lift);
+  }
+
+  .inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding: var(--_pad-top) var(--_pad-x) var(--_pad-bottom);
+
+    > * {
+      grid-column: 1;
+      min-inline-size: 0;
+    }
+
+    // Mobile order (SPEC §5): Wort, Meta, Badges, Bedeutung, Bilder, Aktionszeile, Gleiche Bedeutung, Chips, O-Ton.
+    @container word-head (inline-size < 35rem) {
+      .lemma {
+        order: 1;
+      }
+
+      .meta {
+        order: 2;
+      }
+
+      .badges {
+        order: 3;
+      }
+
+      .meaning {
+        order: 4;
+      }
+
+      .images {
+        order: 5;
+      }
+
+      .actions {
+        order: 6;
+      }
+
+      .same {
+        order: 7;
+      }
+
+      .themes {
+        order: 8;
+      }
+
+      .oton {
+        order: 9;
+      }
+    }
+    @container word-head (inline-size >= 35rem) {
+      --_pad-x: 1.75rem; // 28px
+      --_pad-top: 1.75rem;
+      --_pad-bottom: 6rem; // 96px
+      --_h1: 3.5rem;
+    }
+    @container word-head (inline-size >= 56rem) {
+      --_pad-x: var(--space-8);
+      --_pad-top: var(--space-8);
+      --_pad-bottom: 6.5rem; // 104px
+      --_h1: 4.5rem;
+      --_main: 2.625rem; // 42px
+    }
+  }
+
+  :scope[data-variant="images"] .inner {
+    @container word-head (inline-size >= 35rem) {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      column-gap: var(--_pad-x);
+      grid-template-rows: repeat(8, auto) 1fr;
+    }
+    @container word-head (inline-size >= 56rem) {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    }
+
+    .images {
+      @container word-head (inline-size >= 35rem) {
+        grid-column: 2;
+        grid-row: 1 / -1;
+        // bleeds over the head padding to the card edge (end, top, bottom)
+        margin: calc(-1 * var(--_pad-top)) calc(-1 * var(--_pad-x)) calc(-1 * var(--_pad-bottom)) 0;
+      }
+    }
+  }
+
+  .lemma {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+
+    @container word-head (inline-size >= 35rem) {
+      flex-wrap: nowrap; // SPEC §3: word, article and seal on one line
+    }
+  }
+
+  .title {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    margin: 0;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+    font-family: var(--font-family-body);
+    font-size: var(--_h1);
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    letter-spacing: -0.5px; // SPEC mock headword tracking, no token
+    color: var(--color-text-accent);
+  }
+
+  .headword {
+    font-style: normal;
+    text-decoration: underline dashed;
+    text-decoration-thickness: 3px; // SPEC §4.2: underline as in the mock, no token
+    text-underline-offset: 10px; // as above
+  }
+
+  .article {
+    font-size: var(--font-size-2xl);
+    font-weight: 400;
+    letter-spacing: normal;
+    color: var(--color-text-muted);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    margin: var(--space-3) 0 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-md);
+  }
+
+  .syllables {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-strong);
+  }
+
+  .dot {
+    color: var(--color-accent-active);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .badges {
+    margin-block-start: var(--space-3);
+  }
+
+  .meaning {
+    margin-block-start: var(--space-6);
+  }
+
+  .main {
+    margin: var(--space-1) 0 0;
+    font-size: var(--_main);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.15;
+    color: var(--color-text-strong);
+  }
+
+  .list {
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      gap: var(--space-3);
+      padding-block: var(--space-2);
+      border-block-start: 1px solid var(--color-border-card);
+      font-size: var(--font-size-lg);
+      color: var(--color-text-body);
+
+      &::before {
+        content: "+" / "";
+        font-weight: var(--font-weight-bold);
+        color: var(--color-accent-active);
+      }
+    }
+  }
+
+  .same {
+    margin: var(--space-4) 0 0;
+    color: var(--color-text-muted);
+
+    a {
+      color: var(--color-text-strong);
+      text-decoration: underline;
+      text-underline-offset: var(--space-1);
+    }
+  }
+
+  .themes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-5) 0 0;
+    padding: 0;
+    list-style: none;
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      // SPEC §4.3: theme chip 30px high (§17 exception, 8px apart)
+      min-block-size: 1.875rem;
+      padding-inline: var(--space-3);
+      border-radius: var(--radius-pill);
+      background: var(--color-surface-tint-warm);
+      font-size: var(--font-size-md);
+      color: var(--color-text-body);
+      text-decoration: none;
+    }
+  }
+
+  .oton {
+    margin-block-start: var(--space-6);
+  }
+
+  .actions {
+    margin-block-start: var(--space-6);
+    padding-block-start: var(--space-4);
+    border-block-start: 1px solid var(--color-border-card);
+  }
+
+  // Decorative outline of the IPA at the foot of the head; clipped by the head, hidden from assistive tech.
+  .ipa-bg {
+    position: absolute;
+    inset-inline-start: var(--_pad-x);
+    inset-block-end: calc(-1 * var(--space-4));
+    margin: 0;
+    font-size: var(--_ipa-bg);
+    line-height: 1;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--color-border-card);
+    pointer-events: none;
+    user-select: none;
+  }
+}

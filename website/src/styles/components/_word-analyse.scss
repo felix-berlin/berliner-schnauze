@@ -1,0 +1,75 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Grammatik / Klang card (SPEC §11, WordAnalysisCard.astro). Parts: .wide (the SectionCard; the page shows it from the "word" breakpoint through
+// --word-analyse-wide-display / --word-analyse-fold-display, a component has no viewport query), .fold (a closed <details> below that: .title, .chevron) and .fold-body (the rows are the word-rows component). The unused look is display: none so nothing is read twice.
+@include mx.component("word-analyse") {
+  :scope {
+    --_fold-inline: var(--space-5); // mock: 20px, between space-4 and space-6
+    --_title: 1.375rem; // SPEC §3: card heading 22px mobile, no token at that size
+
+    display: block;
+  }
+
+  .wide {
+    display: var(--word-analyse-wide-display, none);
+  }
+
+  .fold {
+    background: var(--color-surface-sheet);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-paper-lift);
+    display: var(--word-analyse-fold-display, block);
+
+    summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      min-block-size: 3.5rem; // SPEC §11: the summary is 56px
+      padding-inline: var(--_fold-inline);
+      border-radius: var(--radius-sm);
+      list-style: none;
+      cursor: pointer;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      @include butler-mx.hover {
+        background: var(--color-surface-chip);
+      }
+
+      // The global ring sits on the summary's edge: inset keeps it inside the rounded card.
+      &:focus-visible {
+        outline-offset: calc(-1 * var(--space-1));
+      }
+    }
+
+    .title {
+      font-family: var(--font-condensed);
+      font-weight: 600; // SPEC §4.2: Fira 600
+      font-size: var(--_title);
+      letter-spacing: 0.3px; // SPEC §4.2
+      line-height: 1.1;
+      color: var(--color-text-strong);
+    }
+
+    .chevron {
+      flex: none;
+      color: var(--color-accent-active); // SPEC §11: orange chevron
+
+      @include butler-mx.feature("motion") {
+        transition: rotate var(--duration-base);
+      }
+    }
+
+    &[open] .chevron {
+      rotate: 180deg;
+    }
+
+    .fold-body {
+      padding: 0 var(--_fold-inline) var(--space-4);
+    }
+  }
+}

@@ -1,0 +1,30 @@
+---
+import '@styles/components/_footer-callout-book.scss';
+import ArrowUpRight from '~icons/lucide/arrow-up-right';
+
+interface Props {
+  book: { title: string; url: string; cover?: string | undefined };
+}
+
+const { book } = Astro.props;
+const titleId = 'footer-callout-buch';
+---
+
+{/* Footer v21 callout "buch" (handoff FooterV21, slot buch): the word's book above the dark band. Only passed with a book. */}
+<section class='c-footer-callout-book' aria-labelledby={titleId}>
+  <div class='inner u-max-body-width' data-variant={book.cover ? undefined : 'plain'}>
+    {book.cover && <img class='cover' src={book.cover} alt='' width='132' height='198' loading='lazy' />}
+    <div class='text'>
+      <p class='label'>Buchtipp <span>· Affiliate-Link</span></p>
+      <h2 id={titleId} class='title'>Mehr Berlinerisch zum Blättern</h2>
+      <p class='lead'><b>{book.title}</b></p>
+      <div class='actions'>
+        <a class='c-button' data-variant='primary center-icon raised lg' href={book.url} rel='sponsored noopener' target='_blank'>
+          <span>Bei Amazon ansehen</span>
+          <ArrowUpRight aria-hidden='true' height='18' width='18' />
+        </a>
+        <small class='disclosure'>Als Amazon-Partner verdiene ich an qualifizierten Verkäufen.</small>
+      </div>
+    </div>
+  </div>
+</section>

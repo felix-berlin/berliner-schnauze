@@ -46,6 +46,25 @@ describe("initScrollSpy", () => {
     expect(intersectionObserverMock).not.toHaveBeenCalled();
   });
 
+  it("returns a cleanup that disconnects the observer", () => {
+    const disconnect = vi.fn();
+    intersectionObserverMock.mockImplementation(function () {
+      return { disconnect, observe: observeMock, takeRecords: vi.fn(), unobserve: vi.fn() };
+    });
+    document.body.innerHTML = `<nav class="nav"><a href="#a">A</a></nav><section id="a"></section>`;
+    const stop = initScrollSpy({
+      getSectionId: (link) => link.getAttribute("href")?.slice(1),
+      linkSelector: "a",
+      navSelector: ".nav",
+    });
+    expect(disconnect).not.toHaveBeenCalled();
+    stop();
+    expect(disconnect).toHaveBeenCalledTimes(1);
+    expect(
+      initScrollSpy({ getSectionId: () => undefined, linkSelector: "a", navSelector: ".gone" }),
+    ).toBeTypeOf("function");
+  });
+
   it("observes every section referenced by a link", () => {
     document.body.innerHTML = `
       <nav class="nav">
