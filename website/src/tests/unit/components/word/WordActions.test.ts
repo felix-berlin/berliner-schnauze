@@ -5,6 +5,8 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
+import { installPopover } from "../../helpers/popover.ts";
+
 const cite = vi.hoisted(() => vi.fn());
 vi.mock("@lib/wordCite.ts", async () => {
   const actual = await vi.importActual<typeof import("@lib/wordCite.ts")>("@lib/wordCite.ts");
@@ -78,8 +80,18 @@ const clipboard = (writeText: () => Promise<void>) =>
 const state = (like: number, mine: "like" | "dislike" | null = null, dislike = 3) =>
   ({ mine: { reaction: mine }, totals: { dislike, like } }) as never;
 
+// The popover content leaves the DOM 150 ms after the close (DropdownPopover keeps it for the fade).
+const menuClosed = async (w: Wrapper): Promise<boolean> => {
+  await flushPromises();
+  vi.advanceTimersByTime(200);
+  await flushPromises();
+  return !w.find('[role="menu"]').exists() && trigger(w).attributes("aria-expanded") === "false";
+};
+
 let wrapper: Wrapper | undefined;
+let uninstallPopover: (() => void) | undefined;
 beforeEach(() => {
+  uninstallPopover = installPopover();
   vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
   vi.clearAllMocks();
   $feedback.set(state(12));
@@ -91,6 +103,7 @@ beforeEach(() => {
   Reflect.deleteProperty(navigator, "share");
 });
 afterEach(() => {
+  uninstallPopover?.();
   wrapper?.unmount();
   wrapper = undefined;
   vi.useRealTimers();
@@ -102,7 +115,7 @@ describe("WordActions menu", () => {
     wrapper = await mountIt();
     const t = trigger(wrapper);
     expect(t.attributes("aria-expanded")).toBe("false");
-    expect(wrapper.find('[role="menu"]').exists()).toBe(false);
+    expect(await menuClosed(wrapper)).toBe(true);
     await openMenu(wrapper);
     expect(t.attributes("aria-expanded")).toBe("true");
     const menu = wrapper.get('[role="menu"]');
@@ -130,7 +143,7 @@ describe("WordActions menu", () => {
     wrapper = await mountIt();
     await openMenu(wrapper);
     await key(items(wrapper)[1]!.element, "Escape");
-    expect(wrapper.find('[role="menu"]').exists()).toBe(false);
+    expect(await menuClosed(wrapper)).toBe(true);
     expect(trigger(wrapper).attributes("aria-expanded")).toBe("false");
     expect(document.activeElement).toBe(trigger(wrapper).element);
   });
@@ -156,14 +169,14 @@ describe("WordActions menu", () => {
     expect(wrapper.find('[role="menu"]').exists()).toBe(true);
     document.body.click();
     await flushPromises();
-    expect(wrapper.find('[role="menu"]').exists()).toBe(false);
+    expect(await menuClosed(wrapper)).toBe(true);
   });
 
   it("Tab closes it", async () => {
     wrapper = await mountIt();
     await openMenu(wrapper);
     await key(items(wrapper)[0]!.element, "Tab");
-    expect(wrapper.find('[role="menu"]').exists()).toBe(false);
+    expect(await menuClosed(wrapper)).toBe(true);
     // Focus continues from the menu button (the browser then moves on to the next control).
     expect(document.activeElement).toBe(trigger(wrapper).element);
   });
@@ -173,7 +186,7 @@ describe("WordActions menu", () => {
     await trigger(wrapper).trigger("click", { detail: 1 });
     (document.activeElement as HTMLElement | null)?.blur();
     await key(document.body, "Escape");
-    expect(wrapper.find('[role="menu"]').exists()).toBe(false);
+    expect(await menuClosed(wrapper)).toBe(true);
   });
 
   it("an Esc aimed at another part of the page leaves the menu alone", async () => {
@@ -185,52 +198,6 @@ describe("WordActions menu", () => {
     expect(wrapper.find('[role="menu"]').exists()).toBe(true);
   });
 
-  it("keeps the menu inside the left edge of the head on a narrow screen", async () => {
-    const head = document.createElement("header");
-    document.body.append(head);
-    wrapper = mount(WordActions, { attachTo: head, props });
-    await flushPromises();
-    const rect = (left: number) =>
-      ({ bottom: 0, height: 0, left, right: left + 290, top: 0, width: 290 }) as DOMRect;
-    const spy = vi
-      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
-      .mockImplementation(function (this: HTMLElement) {
-        return this.getAttribute("role") === "menu" ? rect(-10) : rect(0);
-      });
-    await openMenu(wrapper);
-    await flushPromises();
-    const inset = (wrapper.get('[role="menu"]').element as HTMLElement).style.insetInlineEnd;
-    expect(Number.parseFloat(inset)).toBeLessThan(0);
-    spy.mockRestore();
-  });
-
-  it("recomputes the shift when the window is resized while open", async () => {
-    const head = document.createElement("header");
-    document.body.append(head);
-    wrapper = mount(WordActions, { attachTo: head, props });
-    await flushPromises();
-    let base = -10;
-    // The mocked left follows the applied shift like a real layout does.
-    const spy = vi
-      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
-      .mockImplementation(function (this: HTMLElement) {
-        const left =
-          this.getAttribute("role") === "menu"
-            ? base - (Number.parseFloat(this.style.insetInlineEnd) || 0)
-            : 0;
-        return { bottom: 0, height: 0, left, right: left + 290, top: 0, width: 290 } as DOMRect;
-      });
-    await openMenu(wrapper);
-    await flushPromises();
-    const menuEl = wrapper.get('[role="menu"]').element as HTMLElement;
-    expect(Number.parseFloat(menuEl.style.insetInlineEnd)).toBe(-26);
-    base = -40;
-    window.dispatchEvent(new Event("resize"));
-    await flushPromises();
-    expect(Number.parseFloat(menuEl.style.insetInlineEnd)).toBe(-56);
-    spy.mockRestore();
-  });
-
   it("a stray Esc does nothing and leaves nothing stuck", async () => {
     wrapper = await mountIt();
     (trigger(wrapper).element as HTMLElement).focus();
@@ -240,7 +207,7 @@ describe("WordActions menu", () => {
     await openMenu(wrapper);
     expect(wrapper.find('[role="menu"]').exists()).toBe(true);
     await key(items(wrapper)[0]!.element, "Escape");
-    expect(wrapper.find('[role="menu"]').exists()).toBe(false);
+    expect(await menuClosed(wrapper)).toBe(true);
   });
 
   it("copies the canonical link, says so, keeps the menu open and reverts after 2 s", async () => {
@@ -299,7 +266,7 @@ describe("WordActions menu", () => {
     await openMenu(wrapper);
     await items(wrapper)[3]!.trigger("click");
     await flushPromises();
-    expect(wrapper.find('[role="menu"]').exists()).toBe(false);
+    expect(await menuClosed(wrapper)).toBe(true);
     expect(anchor.scrollIntoView).toHaveBeenCalledWith(expect.objectContaining({ block: "start" }));
     expect(openForm.get()).toBe("error");
   });
@@ -317,7 +284,7 @@ describe("WordActions citing", () => {
   it("opens a region with the tabs Kurz, APA, Wikipedia, APA selected, and closes the menu", async () => {
     wrapper = await mountIt();
     await openCite(wrapper);
-    expect(wrapper.find('[role="menu"]').exists()).toBe(false);
+    expect(await menuClosed(wrapper)).toBe(true);
     const region = wrapper.get('[role="region"]');
     expect(region.attributes("aria-labelledby")).toBeTruthy();
     expect(tabs(wrapper).map((t) => t.text())).toEqual(["Kurz", "APA", "Wikipedia"]);
@@ -608,18 +575,28 @@ describe("WordActions lifecycle", () => {
     add.mock.calls.filter(([type]) => type === "keydown").length -
     remove.mock.calls.filter(([type]) => type === "keydown").length;
 
-  it("holds the Esc listener only while something is open, across cycles and unmount", async () => {
+  const openCite = async (w: Wrapper) => {
+    await openMenu(w);
+    await items(w)[2]!.trigger("click");
+    await flushPromises();
+  };
+
+  it("holds the Esc listener only while the citing panel is open, across cycles and unmount", async () => {
     const add = vi.spyOn(document, "addEventListener");
     const remove = vi.spyOn(document, "removeEventListener");
     wrapper = await mountIt();
     expect(liveKeydown(add, remove)).toBe(0);
+    // An open menu needs none: Esc is native there.
+    await openMenu(wrapper);
+    expect(liveKeydown(add, remove)).toBe(0);
     for (let i = 0; i < 3; i++) {
-      await openMenu(wrapper);
+      await openCite(wrapper);
       expect(liveKeydown(add, remove)).toBe(1);
-      await key(items(wrapper)[0]!.element, "Escape");
+      await key(wrapper.get('[role="tab"]').element, "Escape");
+      expect(wrapper.find('[role="region"]').exists()).toBe(false);
       expect(liveKeydown(add, remove)).toBe(0);
     }
-    await openMenu(wrapper);
+    await openCite(wrapper);
     expect(liveKeydown(add, remove)).toBe(1);
     wrapper.unmount();
     wrapper = undefined;
@@ -628,18 +605,12 @@ describe("WordActions lifecycle", () => {
     remove.mockRestore();
   });
 
-  it("removes its document listener on unmount", async () => {
+  it("registers no document listener of its own for the menu (light dismiss is native)", async () => {
     const add = vi.spyOn(document, "addEventListener");
-    const remove = vi.spyOn(document, "removeEventListener");
     wrapper = await mountIt();
-    const added = add.mock.calls.filter(([type]) => type === "click");
-    expect(added.length).toBeGreaterThan(0);
-    wrapper.unmount();
-    wrapper = undefined;
-    for (const [type, fn] of added)
-      expect(remove.mock.calls.some(([t, f]) => t === type && f === fn)).toBe(true);
+    await openMenu(wrapper);
+    expect(add.mock.calls.filter(([type]) => type === "click" || type === "keydown")).toEqual([]);
     add.mockRestore();
-    remove.mockRestore();
   });
 });
 

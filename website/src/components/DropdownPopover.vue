@@ -10,6 +10,7 @@
       popover="auto"
       class="panel"
       :style="panelStyle"
+      @beforetoggle="onBeforeToggle"
       @toggle="onToggle"
     >
       <template v-if="hasContent">
@@ -49,6 +50,8 @@ export type DropdownPopoverProps = {
 const { name, offset = 8, placement = "bottom-start", theme } = defineProps<DropdownPopoverProps>();
 
 const variant = computed(() => (theme ? `${placement} ${theme}` : placement));
+
+const emit = defineEmits<{ toggle: [open: boolean] }>();
 
 defineOptions({ inheritAttrs: false });
 
@@ -112,8 +115,14 @@ const focusTrigger = (): void => {
   (focusable ?? triggerEl.value)?.focus({ preventScroll: true });
 };
 
+// Synchronous, so the panel content exists right after showPopover() (the toggle event comes a task later).
+const onBeforeToggle = (event: ToggleEvent): void => {
+  if (event.newState === "open") hasContent.value = true;
+};
+
 const onToggle = (event: ToggleEvent): void => {
   isOpen.value = event.newState === "open";
+  emit("toggle", isOpen.value);
   if (isOpen.value) {
     hasContent.value = true;
     void nextTick(syncArrow);
@@ -128,10 +137,14 @@ const onToggle = (event: ToggleEvent): void => {
   if (panel.value?.contains(document.activeElement)) focusTrigger();
 };
 
+const open = (): void => panel.value?.showPopover();
+
 const close = (): void => {
   panel.value?.hidePopover();
   focusTrigger();
 };
+
+defineExpose({ close, open });
 </script>
 
 <style lang="scss">

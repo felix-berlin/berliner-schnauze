@@ -112,6 +112,15 @@
     position-area: block-start;
   }
 
+  // Opening upward: the gap to the trigger sits below the panel, and the fallbacks apply only when it does not fit
+  // (most-block-size would flip a menu that fits above to the side with more room).
+  :scope[data-variant~="top-start"] .panel,
+  :scope[data-variant~="top-end"] .panel,
+  :scope[data-variant~="top"] .panel {
+    margin-block: 0 var(--_offset);
+    position-try-order: normal;
+  }
+
   // Rotated square; top/left/bottom come inline from JS (syncArrow), so it follows a flipped panel.
   .arrow {
     --_arrow-size: 8px;
@@ -141,6 +150,29 @@
 
     .arrow {
       display: none;
+    }
+
+    // Word menu (SPEC §16): fade plus a short drop; the exit stays at duration-fast like the content unmount.
+    .panel {
+      --_drop: translateY(-6px);
+
+      @include butler-mx.feature("motion") {
+        transition:
+          opacity var(--_fade) ease,
+          transform var(--_fade) ease,
+          display var(--_fade) allow-discrete,
+          overlay var(--_fade) allow-discrete;
+
+        &:not(:popover-open) {
+          transform: var(--_drop);
+        }
+
+        @starting-style {
+          &:popover-open {
+            transform: var(--_drop);
+          }
+        }
+      }
     }
   }
 

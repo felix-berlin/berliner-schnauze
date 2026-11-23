@@ -13,16 +13,17 @@
           :aria-disabled="!online || pending"
           :aria-label="`${r.label}, ${count(r.value)}`"
           :aria-pressed="current === r.value"
-          class="pill"
+          class="c-reaction"
+          data-variant="pill"
           type="button"
           @click="react(r.value)"
         >
           <component :is="r.icon" aria-hidden="true" height="18" width="18" />
-          <b class="num">{{ count(r.value) }}</b>
+          <b class="count">{{ count(r.value) }}</b>
         </button>
       </div>
 
-      <button class="pill" type="button" @click="share">
+      <button class="c-reaction" data-variant="pill" type="button" @click="share">
         <component
           :is="copied === 'share' ? Check : Share2"
           aria-hidden="true"
@@ -32,80 +33,88 @@
         {{ copied === "share" ? "Link kopiert" : "Teilen" }}
       </button>
 
-      <div ref="more" class="more">
-        <button
-          ref="trigger"
-          :aria-expanded="menuOpen"
-          aria-haspopup="menu"
-          aria-label="Mehr"
-          class="pill icon"
-          type="button"
-          @click="toggleMenu"
-          @keydown="onTriggerKey"
-        >
-          <EllipsisVertical aria-hidden="true" height="18" width="18" />
-        </button>
-
-        <div
-          v-if="menuOpen"
-          ref="menu"
-          aria-label="Mehr"
-          class="menu"
-          role="menu"
-          :style="{ insetInlineEnd: shift ? `${-shift}px` : undefined }"
-          @keydown="onMenuKey"
-        >
-          <button class="item" role="menuitem" tabindex="-1" type="button" @click="copyLink">
-            <component
-              :is="copied === 'link' ? Check : LinkIcon"
-              aria-hidden="true"
-              class="ico"
-              height="18"
-              width="18"
-            />
-            <span class="text">
-              <b class="title">{{ copied === "link" ? "Link kopiert" : "Link kopieren" }}</b>
-              <span class="sub">
-                <template v-if="copied === 'link'">Jetzt einfügen, wo de willst</template>
-                <span v-else ref="linkText" class="pick">{{ displayUrl }}</span>
+      <DropdownPopover
+        ref="popover"
+        :name="`word-actions-${slug}`"
+        placement="top-end"
+        theme="bare"
+        @toggle="onPopoverToggle"
+      >
+        <template #default="{ triggerProps }">
+          <button
+            v-bind="triggerProps"
+            ref="trigger"
+            aria-haspopup="menu"
+            aria-label="Mehr"
+            class="c-reaction"
+            data-variant="pill"
+            type="button"
+            @click="onTriggerClick"
+            @keydown="onTriggerKey"
+          >
+            <EllipsisVertical aria-hidden="true" height="18" width="18" />
+          </button>
+        </template>
+        <template #panel>
+          <div
+            ref="menu"
+            aria-label="Mehr"
+            class="c-word-actions-menu"
+            role="menu"
+            @keydown="(e) => onMenuKeydown(e, menu, closeMenu)"
+          >
+            <button class="item" role="menuitem" tabindex="-1" type="button" @click="copyLink">
+              <component
+                :is="copied === 'link' ? Check : LinkIcon"
+                aria-hidden="true"
+                class="ico"
+                height="18"
+                width="18"
+              />
+              <span class="text">
+                <b class="title">{{ copied === "link" ? "Link kopiert" : "Link kopieren" }}</b>
+                <span class="sub">
+                  <template v-if="copied === 'link'">Jetzt einfügen, wo de willst</template>
+                  <span v-else ref="linkText" class="pick">{{ displayUrl }}</span>
+                </span>
               </span>
-            </span>
-          </button>
-          <button class="item" role="menuitem" tabindex="-1" type="button" @click="copyWord">
-            <component
-              :is="copied === 'word' ? Check : Copy"
-              aria-hidden="true"
-              class="ico"
-              height="18"
-              width="18"
-            />
-            <span class="text">
-              <b class="title">{{ copied === "word" ? "Wort kopiert" : "Wort kopieren" }}</b>
-              <span class="sub">
-                <template v-if="copied === 'word'">Jetzt einfügen, wo de willst</template>
-                <template v-else
-                  >„<span ref="wordText" class="pick">{{ wordCopy }}</span>“ als Text</template
-                >
+            </button>
+            <button class="item" role="menuitem" tabindex="-1" type="button" @click="copyWord">
+              <component
+                :is="copied === 'word' ? Check : Copy"
+                aria-hidden="true"
+                class="ico"
+                height="18"
+                width="18"
+              />
+              <span class="text">
+                <b class="title">{{ copied === "word" ? "Wort kopiert" : "Wort kopieren" }}</b>
+                <span class="sub">
+                  <template v-if="copied === 'word'">Jetzt einfügen, wo de willst</template>
+                  <template v-else
+                    >„<span ref="wordText" class="pick">{{ wordCopy }}</span>“ als Text</template
+                  >
+                </span>
               </span>
-            </span>
-          </button>
-          <button class="item" role="menuitem" tabindex="-1" type="button" @click="openCite">
-            <Quote aria-hidden="true" class="ico" height="18" width="18" />
-            <span class="text">
-              <b class="title">Zitieren</b>
-              <span class="sub">Quellenangabe für Schule, Uni oder Artikel</span>
-            </span>
-          </button>
-          <hr class="rule" />
-          <button class="item" role="menuitem" tabindex="-1" type="button" @click="report">
-            <Flag aria-hidden="true" class="ico" height="18" width="18" />
-            <span class="text">
-              <b class="title">Fehler melden</b>
-              <span class="sub">Zu diesem Wort, wird jeprüft</span>
-            </span>
-          </button>
-        </div>
-      </div>
+            </button>
+            <button class="item" role="menuitem" tabindex="-1" type="button" @click="openCite">
+              <Quote aria-hidden="true" class="ico" height="18" width="18" />
+              <span class="text">
+                <b class="title">Zitieren</b>
+                <span class="sub">Quellenangabe für Schule, Uni oder Artikel</span>
+              </span>
+            </button>
+            <hr class="rule" />
+            <button class="item" role="menuitem" tabindex="-1" type="button" @click="report">
+              <Flag aria-hidden="true" class="ico" height="18" width="18" />
+              <span class="text">
+                <b class="title">Fehler melden</b>
+                <span class="sub">Zu diesem Wort, wird jeprüft</span>
+              </span>
+            </button>
+          </div>
+        </template>
+      </DropdownPopover>
     </div>
 
     <p v-if="!online && wordId !== undefined" class="note">{{ OFFLINE_HINT }}</p>
@@ -141,7 +150,7 @@
       <div
         :id="`${uid}-panel`"
         :aria-labelledby="`${uid}-${format}`"
-        class="panel"
+        class="tabpanel"
         role="tabpanel"
         tabindex="0"
       >
@@ -159,6 +168,8 @@
 </template>
 
 <script setup lang="ts">
+import DropdownPopover from "@components/DropdownPopover.vue";
+import { menuItems, onMenuKeydown } from "@composables/useMenuKeys.ts";
 import { OFFLINE_HINT, useOnline } from "@composables/useOnline.ts";
 import { useWordReaction } from "@composables/useWordReaction.ts";
 import { formatCitation, type CitationFormat } from "@lib/wordCite.ts";
@@ -177,7 +188,7 @@ import Share2 from "virtual:icons/lucide/share-2";
 import ThumbsDown from "virtual:icons/lucide/thumbs-down";
 import ThumbsUp from "virtual:icons/lucide/thumbs-up";
 import X from "virtual:icons/lucide/x";
-import { computed, nextTick, onBeforeUnmount, ref, useId, useTemplateRef, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, ref, useId, useTemplateRef } from "vue";
 
 const props = defineProps<{
   /** Meaning shown after the word in "Wort kopieren"; empty = the word alone. */
@@ -213,7 +224,6 @@ const COPIED_MS = 2000;
 const uid = useId();
 const online = useOnline();
 const root = useTemplateRef<HTMLElement>("root");
-const more = useTemplateRef<HTMLElement>("more");
 const trigger = useTemplateRef<HTMLButtonElement>("trigger");
 const menu = useTemplateRef<HTMLElement>("menu");
 const tablist = useTemplateRef<HTMLElement>("tablist");
@@ -322,7 +332,7 @@ const share = async (): Promise<void> => {
     "share",
     "Link kopiert",
     async () => {
-      menuOpen.value = true;
+      popover.value?.open();
       await nextTick();
       return linkText.value;
     },
@@ -331,98 +341,46 @@ const share = async (): Promise<void> => {
 };
 
 // --- menu (APG menu button) --------------------------------------------------------------------------
-const menuOpen = ref(false);
+// DropdownPopover owns open state, light dismiss, Esc and the focus return; this part adds the menu keys.
+const popover = useTemplateRef<InstanceType<typeof DropdownPopover>>("popover");
 const citeOpen = ref(false);
+let enterAt: "first" | "last" | null = null;
 
-const entries = (): HTMLElement[] => [
-  ...(menu.value?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? []),
-];
+const closeMenu = (): void => popover.value?.close();
 
-const focusEntry = async (at: "first" | "last"): Promise<void> => {
+// The toggle event arrives after the open: only then do the items exist to take the focus.
+const onPopoverToggle = async (open: boolean): Promise<void> => {
+  const at = enterAt;
+  enterAt = null;
+  if (!open || !at) return;
   await nextTick();
-  const list = entries();
+  const list = menuItems(menu.value);
   (at === "first" ? list[0] : list.at(-1))?.focus();
 };
 
-const closeMenu = (restoreFocus = false): void => {
-  menuOpen.value = false;
-  if (restoreFocus) trigger.value?.focus();
-};
-
 // Enter and Space click with detail 0 and enter the menu; a pointer click leaves the focus on the button.
-const toggleMenu = async (event: MouseEvent): Promise<void> => {
-  if (menuOpen.value) return closeMenu();
-  menuOpen.value = true;
-  if (event.detail === 0) await focusEntry("first");
+// The popover opens itself (popovertarget) after this handler.
+const onTriggerClick = (event: MouseEvent): void => {
+  if (event.detail === 0) enterAt = "first";
 };
 
 const onTriggerKey = (event: KeyboardEvent): void => {
   if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
   event.preventDefault();
-  menuOpen.value = true;
-  void focusEntry(event.key === "ArrowDown" ? "first" : "last");
+  enterAt = event.key === "ArrowDown" ? "first" : "last";
+  popover.value?.open();
 };
 
-const onMenuKey = (event: KeyboardEvent): void => {
-  // Tab closes the menu; focus continues from the menu button (the browser then moves to the next control).
-  if (event.key === "Tab") return closeMenu(true);
-  const list = entries();
-  const at = list.indexOf(document.activeElement as HTMLElement);
-  const target = {
-    ArrowDown: (at + 1) % list.length,
-    ArrowUp: (at - 1 + list.length) % list.length,
-    End: list.length - 1,
-    Home: 0,
-  }[event.key];
-  if (target === undefined) return;
-  event.preventDefault();
-  list[target]?.focus();
-};
-
-// The menu is right aligned to its button; on a narrow screen that can push it past the left edge of the head,
-// which clips it. Measured after it opened, shifted right just enough (SPEC §5.1 keeps the right alignment otherwise).
-const EDGE = 16;
-const shift = ref(0);
-const place = (): void => {
-  const box = menu.value;
-  if (!menuOpen.value || !box) return void (shift.value = 0);
-  const head = more.value?.closest("header")?.getBoundingClientRect().left ?? 0;
-  // The measured left includes the current shift; take it out to get the natural position.
-  const natural = box.getBoundingClientRect().left - shift.value;
-  shift.value = Math.max(0, Math.max(EDGE, head + EDGE) - natural);
-};
-watch(
-  menuOpen,
-  () => {
-    shift.value = 0;
-    place();
-  },
-  { flush: "post" },
-);
-// A rotation or resize while open moves the button: measure again (the listener exists only while open).
+// Esc closes the citing panel (the menu closes itself natively). The listener exists only while the panel is open
+// (a stray Esc does nothing) and ignores Esc aimed at other parts of the page.
 useEventListener(
-  computed(() => (menuOpen.value ? globalThis.window : undefined)),
-  "resize",
-  place,
-);
-
-// Click outside closes (the listener is removed with the component by VueUse).
-useEventListener(globalThis.document, "click", (event: MouseEvent) => {
-  if (menuOpen.value && !more.value?.contains(event.target as Node)) closeMenu();
-});
-
-// Esc acts on what is open inside this island: the menu first, then the panel. The listener exists only while
-// something is open (a stray Esc does nothing) and ignores Esc aimed at other parts of the page.
-const anyOpen = computed(() => menuOpen.value || citeOpen.value);
-useEventListener(
-  computed(() => (anyOpen.value ? globalThis.document : undefined)),
+  computed(() => (citeOpen.value ? globalThis.document : undefined)),
   "keydown",
   (event: KeyboardEvent) => {
     if (event.key !== "Escape") return;
     const target = event.target as Node | null;
     if (target !== document.body && !root.value?.contains(target)) return;
-    if (menuOpen.value) closeMenu(true);
-    else closeCite(true);
+    closeCite(true);
   },
 );
 
@@ -473,7 +431,7 @@ const onTabKey = (event: KeyboardEvent): void => {
 
 // --- report -----------------------------------------------------------------------------------------
 const report = (): void => {
-  closeMenu(true);
+  closeMenu();
   const reduce = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
   document
     .getElementById("fehler")
@@ -490,4 +448,5 @@ onBeforeUnmount(() => clearTimeout(timer));
 
 <style lang="scss">
 @use "@styles/components/word-actions";
+@use "@styles/components/word-actions-menu";
 </style>

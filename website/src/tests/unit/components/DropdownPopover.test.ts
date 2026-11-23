@@ -377,4 +377,25 @@ describe("DropdownPopover.vue", () => {
     expect(focusSpy).toHaveBeenCalledOnce();
     wrapper.unmount();
   });
+
+  // --- programmatic open and the toggle emit ---
+
+  it("open() shows the popover; the panel content exists as soon as beforetoggle fires", async () => {
+    const wrapper = mountWithTrigger({ slots: { panel: "<p>content</p>" } });
+    (wrapper.vm as InstanceType<typeof DropdownPopover>).open();
+    expect(mockShowPopover).toHaveBeenCalledOnce();
+    expect(wrapper.find(".content").exists()).toBe(false);
+    wrapper
+      .find("[popover]")
+      .element.dispatchEvent(new ToggleEvent("beforetoggle", { newState: "open" }));
+    await nextTick();
+    expect(wrapper.find(".content").text()).toBe("content");
+  });
+
+  it("emits toggle with the new state", () => {
+    const wrapper = mountWithTrigger();
+    openToggle(wrapper);
+    closeToggle(wrapper);
+    expect(wrapper.emitted("toggle")).toEqual([[true], [false]]);
+  });
 });
