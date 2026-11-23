@@ -470,7 +470,10 @@ test.describe("images", () => {
       await expect(page.locator(`.c-word-images:not([data-variant="${variant}"])`)).toBeHidden();
       const first = images.locator("button.open").first();
       const box = await first.locator("img").boundingBox();
-      expect(Math.abs((box?.width ?? 0) / (box?.height ?? 1) - 4 / 3)).toBeLessThan(0.05);
+      // Narrow head: the image keeps 4:3 (SPEC §3). From 1000px it fills the column (object-fit cover, at least 300px tall).
+      if (width < 1000)
+        expect(Math.abs((box?.width ?? 0) / (box?.height ?? 1) - 4 / 3)).toBeLessThan(0.05);
+      else expect(box?.height ?? 0).toBeGreaterThanOrEqual(300);
       await first.focus();
       await page.keyboard.press("Enter");
       const dialog = page.getByRole("dialog");
