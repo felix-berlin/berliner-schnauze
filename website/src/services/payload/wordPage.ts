@@ -1,7 +1,7 @@
 import type { Story } from "@lib/story.ts";
 
 import { type PollResult, buildPollResult } from "@lib/pollResult.ts";
-import { pickBook } from "@lib/wordBook.ts";
+import { disclosureFor, pickBook } from "@lib/wordBook.ts";
 import { ttlBy } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { fetchAffiliateData, fetchWordPageGlobal } from "@services/payload/site.ts";
@@ -51,7 +51,7 @@ export type WordPageModel = {
   featured?: Story;
   featuredStoryId?: string;
   storyPrompt: string;
-  book?: { title: string; url: string; cover?: string };
+  book?: { title: string; url: string; cover?: string; disclosure?: string };
   poll: PollResult;
   updatedAt: string;
 };
@@ -103,6 +103,7 @@ export const fetchWordPage = async (
     fetchPoll(word.id),
   ]);
   const book = pickBook(affiliate.books, word.themen[0]?.id);
+  const disclosure = book?.href ? disclosureFor(book.href, affiliate.disclaimers) : undefined;
   const { day, month, year } = berlinParts(now);
 
   return {
@@ -110,7 +111,12 @@ export const fetchWordPage = async (
     ...(before[0] && { before: link(before[0]) }),
     ...(book?.title &&
       book.href && {
-        book: { title: book.title, url: book.href, ...(book.imageUrl && { cover: book.imageUrl }) },
+        book: {
+          title: book.title,
+          url: book.href,
+          ...(book.imageUrl && { cover: book.imageUrl }),
+          ...(disclosure && { disclosure }),
+        },
       }),
     facts: (word.facts ?? []).flatMap(({ contributorName, contributorSuggestion, kind, text }) => {
       const by = contributor(contributorName, contributorSuggestion);

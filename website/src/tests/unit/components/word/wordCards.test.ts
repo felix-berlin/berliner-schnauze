@@ -118,14 +118,26 @@ describe("v18 word cards", () => {
 
   it("shows the book block only with a book and escapes visitor text", async () => {
     const withBook = await facts({
-      book: { title: "Testbuch", url: "https://example.test/b" },
+      book: {
+        disclosure: "CMS-Hinweis zum Partnerlink.",
+        title: "Testbuch",
+        url: "https://example.test/b",
+      },
       facts: [{ kind: "herkunft", text: "<b>x</b> Text" }],
       word: "Testwort",
     });
     expect(withBook).toContain("Testbuch");
-    expect(withBook).toContain('rel="sponsored noopener"');
+    expect(withBook).toContain('rel="sponsored noopener noreferrer"');
+    expect(withBook).toContain("data-book-link");
+    expect(withBook).toContain("CMS-Hinweis zum Partnerlink.");
+    expect(withBook).not.toContain("Amazon-Partner");
     expect(withBook).toContain("&lt;b&gt;x&lt;/b&gt; Text");
     const without = await facts({ facts: [{ kind: "herkunft", text: "Text" }], word: "Testwort" });
     expect(without).not.toContain("Zum Weiterlesen");
+    const hostile = await facts({
+      book: { title: "Testbuch", url: "javascript:alert(1)" },
+      word: "Testwort",
+    });
+    expect(hostile).not.toContain("javascript:");
   });
 });

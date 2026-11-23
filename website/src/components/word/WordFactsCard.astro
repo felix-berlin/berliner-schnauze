@@ -2,6 +2,7 @@
 import '@styles/components/_word-wissen.scss';
 import SectionCard from '@components/word/SectionCard.astro';
 import { FACT_KIND_LABEL } from '@lib/contribute.ts';
+import { AFFILIATE_REL, isWebUrl } from '@lib/wordBook.ts';
 import type { WordPageModel } from '@services/payload/wordPage.ts';
 
 interface Props {
@@ -13,7 +14,9 @@ interface Props {
   book?: WordPageModel['book'];
 }
 
-const { book, facts = [], slug, word } = Astro.props;
+const { facts = [], slug, word } = Astro.props;
+// A book link must be http(s); anything else is dropped.
+const book = Astro.props.book && isWebUrl(Astro.props.book.url) ? Astro.props.book : undefined;
 const gap = {
   cta: 'Wissenswertes ergänzen',
   text: `Noch nüscht Wissenswertes zu „${word}“. Weeßte wat über Herkunft, Geschichte oder haste ’ne Anekdote?`,
@@ -40,11 +43,17 @@ const gap = {
           {book.cover && <img class='cover' src={book.cover} alt='' width='48' height='64' loading='lazy' />}
           <div class='info'>
             <p class='c-word-label'>Zum Weiterlesen · Affiliate-Link</p>
-            <a class='title' href={book.url} rel='sponsored noopener'>{book.title}</a>
-            <p class='note'>Passt zum Thema dieses Worts. Als Amazon-Partner verdiene ich an qualifizierten Verkäufen.</p>
+            <a class='title' href={book.url} rel={AFFILIATE_REL} data-book-link data-book-title={book.title}>{book.title}</a>
+            <p class='note'>Passt zum Thema dieses Worts.{book.disclosure && ` ${book.disclosure}`}</p>
           </div>
         </aside>
       )}
     </div>
   )}
 </SectionCard>
+
+<script>
+  import { trackBookClicks } from '@lib/bookClickTracking.ts';
+
+  trackBookClicks();
+</script>

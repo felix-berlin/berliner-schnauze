@@ -197,6 +197,23 @@ describe("fetchWordPage", () => {
     expect(await fetchWordPage("aaa")).not.toHaveProperty("book");
   });
 
+  it("skips a book with a javascript: link and carries the CMS disclaimer of the platform", async () => {
+    const themen = [{ id: 9, name: "Essen", slug: "essen" }];
+    m.fetchAllWords.mockResolvedValue(words({ themen }));
+    m.fetchAffiliateData.mockResolvedValue({
+      books: [
+        { href: "javascript:alert(1)", themen: [9], title: "Bad" },
+        { href: "https://www.amazon.de/dp/X", themen: [9], title: "Good" },
+      ],
+      disclaimers: [{ plattform: "Amazon", text: "CMS Amazon." }],
+    });
+    expect((await fetchWordPage("bbb"))!.book).toEqual({
+      disclosure: "CMS Amazon.",
+      title: "Good",
+      url: "https://www.amazon.de/dp/X",
+    });
+  });
+
   it("fills the story prompt (default or template) and carries the Jeschichten", async () => {
     m.fetchAllWords.mockResolvedValue(words());
     const story = {
