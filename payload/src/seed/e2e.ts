@@ -8,7 +8,7 @@ import type { Word } from "../payload-types";
 
 import { LOCAL_DB_HOSTS } from "../lib/localDb";
 import { berlinDay } from "../lib/wordStats";
-import { PNG, WAV } from "./fixtures";
+import { PNG_4X3, WAV } from "./fixtures";
 import { seedHome } from "./homeSeed";
 import { seedHomeStats } from "./homeStatsSeed";
 import { affiliate, company, navigation } from "./siteData";
@@ -85,6 +85,7 @@ type SeedWord = {
   /** How many of the four seed images (see above) the word shows. */
   images?: number;
   infoText?: string;
+  ipa?: string;
   learnMore?: string;
   related?: string[];
   slug: string;
@@ -126,6 +127,28 @@ const WORDS: SeedWord[] = [
     images: 2,
     slug: "bildzwei",
     translations: ["Testwort mit zwei Bildern"],
+  },
+  {
+    // Rich head for the visual checks: invented IPA, four images, related words, voices, and the word of the day on
+    // the pinned e2e day (the 5th slug of 34 sorted ones, see E2E_PINNED_DAY).
+    alternativeWords: ["abjehaun"],
+    berlinerisch: "Abjang",
+    berolinismus: true,
+    examples: [
+      {
+        example: "Der Abjang war janz leise.",
+        explanation: "Der Weggang war ganz leise.",
+        voices: ["male", "female"],
+      },
+      { example: "Kurz vor Abjang noch ma winken.", explanation: "Kurz vor dem Weggehen winken." },
+    ],
+    images: 4,
+    ipa: "ˈapjaŋ",
+    related: ["anmachen", "alex", "wa"],
+    slug: "abjang",
+    themen: ["bewegung-gehen", "alltag-wohnen"],
+    translations: ["Abgang", "leises Verschwinden"],
+    voices: ["male", "female"],
   },
   {
     berlinerisch: "Alex",
@@ -398,7 +421,12 @@ export async function seedE2e(payload: Payload): Promise<void> {
         : await payload.create({
             collection: "media",
             data: { ...data, wpPath },
-            file: { data: PNG, mimetype: "image/png", name: wpPath.slice(4), size: PNG.length },
+            file: {
+              data: PNG_4X3,
+              mimetype: "image/png",
+              name: wpPath.slice(4),
+              size: PNG_4X3.length,
+            },
             overwriteExistingFiles: true,
           }),
     );
@@ -453,6 +481,7 @@ export async function seedE2e(payload: Payload): Promise<void> {
         exampleExplanation: e.explanation,
       })),
       images: imageMedia.slice(0, w.images ?? 0).map((m) => m.id),
+      ipa: w.ipa ?? null,
       infoText: w.infoText ? lexical(paragraph(w.infoText)) : null,
       learnMore: w.learnMore ?? null,
       publishedAt: "2025-01-01T00:00:00.000Z",
@@ -521,7 +550,9 @@ export async function seedE2e(payload: Payload): Promise<void> {
   // Invented Jeschichten for "anmachen" (the v18 word page shows 2 on mobile and 3 from 808px, so it needs more than 3).
   // skipCommentHooks: a create would otherwise mail the editors (the comment-count hooks only react to votes and
   // reports, which the seed does not create, so there is nothing to recount).
-  for (const [i, bezirk] of ["neukoelln", "pankow", "mitte", "spandau", "lichtenberg"].entries()) {
+  for (const [i, bezirk] of (
+    ["neukoelln", "pankow", "mitte", "spandau", "lichtenberg"] as const
+  ).entries()) {
     const body = `Erfundene Jeschichte ${i + 1} zu anmachen.`;
     const { docs } = await payload.find({
       collection: "comments",
@@ -538,6 +569,31 @@ export async function seedE2e(payload: Payload): Promise<void> {
           status: "published",
           text: body,
           word: wordIds.get("anmachen")!,
+        },
+        context: { skipCommentHooks: true },
+        depth: 0,
+      });
+  }
+
+  // The O-Ton of "abjang": a featured Jeschichte (one per word), plus two more so the card has a list.
+  for (const [i, bezirk] of (["pankow", "mitte", "spandau"] as const).entries()) {
+    const body = `Erfundene Jeschichte ${i + 1} zu abjang.`;
+    const { docs } = await payload.find({
+      collection: "comments",
+      depth: 0,
+      limit: 1,
+      where: { text: { equals: body }, word: { equals: wordIds.get("abjang")! } },
+    });
+    if (!docs[0])
+      await payload.create({
+        collection: "comments",
+        data: {
+          authorName: `Tester ${i + 1}`,
+          bezirk,
+          featured: i === 0,
+          status: "published",
+          text: body,
+          word: wordIds.get("abjang")!,
         },
         context: { skipCommentHooks: true },
         depth: 0,
