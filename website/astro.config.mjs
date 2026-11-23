@@ -252,8 +252,9 @@ export default defineConfig({
       },
     },
   ],
-  // Off (ClientRouter would enable it): pages are sent with max-age=0, so the router's fetch() never reuses a
-  // prefetched page and every hovered link costs a second render. Revisit only with a browser-cacheable page.
+  // Off (ClientRouter would enable it): pages are sent with max-age=0 and no ETag, so a browser never reuses a
+  // prefetched page. A prefetch would only warm the server page cache (word pages, ~130 ms render vs ~2 ms hit),
+  // and every other page (not cached) would cost a second render. Revisit with a browser-cacheable page.
   prefetch: false,
   build: {
     format: "file",
