@@ -7,7 +7,7 @@ const { count, fetchAllPosts, fetchAllThemen, fetchAllWords, fetchHomeGlobal } =
   fetchAllWords: vi.fn(),
   fetchHomeGlobal: vi.fn(),
 }));
-vi.mock("astro:env/server", () => ({ PAYLOAD_SERVER_URL: "https://cms.example" }));
+vi.mock("astro:env/server", () => ({ E2E_SERVER: "0", PAYLOAD_SERVER_URL: "https://cms.example" }));
 vi.mock("astro:env/client", () => ({ SHOW_TEST_DATA: false }));
 vi.mock("payload-app", () => ({ config: Promise.resolve({}), getPayload: vi.fn() }));
 vi.mock("@services/payload.ts", () => ({
