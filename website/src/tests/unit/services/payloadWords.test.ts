@@ -128,18 +128,16 @@ describe("toWord", () => {
       berolinismus: true,
       contentModifiedAt: "2026-09-20T17:24:19.000Z",
       derived: { soundexCode: "A250", syllablesCount: 2, wordComponents: ["asen"] },
-      hasInfoText: true,
-      infoTextHtml: "<p>Adjektiv zu Aas</p>",
       learnMore: "https://example.org/mehr",
       meta: { description: "Meta", title: "aasen" },
       publishedAt: "2025-04-09T08:12:37.000Z",
       slug: "aasen",
-      sources: ["Meyer", "Schlobinski"],
       themen: [{ id: 2, name: "Essen", slug: "essen" }],
       wordTypes: [{ id: 1, name: "Adjektiv" }],
     });
-    // the raw rich text is not kept: the html above is what the pages render
+    // the deprecated origin text and sources are not kept: the site shows `facts` now
     expect(word).not.toHaveProperty("infoText");
+    expect(word).not.toHaveProperty("sources");
   });
 
   it("narrows audio rows to media with absolute urls", async () => {
@@ -249,9 +247,7 @@ describe("toWord", () => {
     expect(word).toMatchObject({
       berlinerischAudio: [],
       examples: [],
-      hasInfoText: false,
       images: [],
-      infoTextHtml: null,
       relatedWords: [],
       themen: [],
       wordTypes: [],

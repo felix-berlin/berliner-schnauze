@@ -82,7 +82,6 @@ type SeedWord = {
   examples?: { example: string; explanation?: string; voices?: ("female" | "male")[] }[];
   /** How many of the four seed images (see above) the word shows. */
   images?: number;
-  infoText?: string;
   ipa?: string;
   learnMore?: string;
   related?: string[];
@@ -109,7 +108,6 @@ type SeedWord = {
   /** Stressed syllable(s) as written in the Klang card. */
   stress?: string;
   slug: string;
-  sources?: string[];
   themen?: string[];
   translations: string[];
 };
@@ -118,7 +116,6 @@ const WORDS: SeedWord[] = [
   {
     berlinerisch: "aasen",
     voices: ["male"],
-    infoText: "Erfundener Infotext: das Verb ist im Beispieldatensatz nur für die Tests da.",
     slug: "aasen",
     themen: ["alltag-wohnen"],
     translations: ["verschwenden", "vergeuden"],
@@ -139,7 +136,7 @@ const WORDS: SeedWord[] = [
     // THE FULL WORD of the v18 word page: every card has data here, so one page shows every feature (head with IPA,
     // stress, voices, four images and the "Gleiche Bedeutung" line; word of the day on the pinned e2e day, trend badge
     // "Platz 4", O-Ton and four Jeschichten; examples with voices; Wissenswertes with credits; grammar with plural and
-    // diminutive; all four relation kinds, one without a word of its own; sources and "Mehr lesen"; a book; the poll
+    // diminutive; all four relation kinds, one without a word of its own; "Mehr lesen"; a book; the poll
     // with its 120 votes). It is the word of the day on E2E_PINNED_DAY (index 4 of the 28 sorted ones: day number 20472 mod
     // the word count, so the count must stay a divisor of 20468 (28 or 34)). Extend this word instead of adding one.
     alternativeWords: ["abjehaun"],
@@ -174,7 +171,6 @@ const WORDS: SeedWord[] = [
     ],
     grammar: { diminutive: "abbeisser", plural: "die Abjänge" },
     images: 4,
-    infoText: "Erfundener Infotext: ein Weggang, der so leise ist, dass ihn keiner bemerkt.",
     ipa: "ˈapjaŋ",
     learnMore: "https://example.org/abjang",
     related: ["anmachen", "alex", "wa"],
@@ -185,7 +181,6 @@ const WORDS: SeedWord[] = [
       { by: "Erfundene Person", relation: "verwandt", slug: "bolle" },
       { label: "Abjang machen", note: "erfundene Redewendung", relation: "redewendung" },
     ],
-    sources: ["Erfundene Quelle eins", "Erfundene Quelle zwei"],
     stress: "ˈAb",
     slug: "abjang",
     themen: ["bewegung-gehen", "alltag-wohnen"],
@@ -216,7 +211,6 @@ const WORDS: SeedWord[] = [
     learnMore: "https://example.org/anmachen",
     related: ["wa"],
     slug: "anmachen",
-    sources: ["Erfundene Testquelle"],
     themen: ["beziehungen-soziales", "alltag-wohnen"],
     translations: ["einschalten", "sich jemandem forsch nähern"],
   },
@@ -546,11 +540,9 @@ export async function seedE2e(payload: Payload): Promise<void> {
       })),
       images: imageMedia.slice(0, w.images ?? 0).map((m) => m.id),
       ipa: w.ipa ?? null,
-      infoText: w.infoText ? lexical(paragraph(w.infoText)) : null,
       learnMore: w.learnMore ?? null,
       publishedAt: "2025-01-01T00:00:00.000Z",
       slug: w.slug,
-      sources: w.sources ?? [],
       themen: (w.themen ?? []).map((t) => themaIds.get(t)!),
       translations: w.translations.map((translation) => ({ translation })),
     };

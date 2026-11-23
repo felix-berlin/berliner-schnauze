@@ -12,7 +12,6 @@ import { ttl } from "@services/cache.ts";
 import { getPayloadClient, mediaUrl, siteDocs, siteRead } from "@services/payload.ts";
 import { SHOW_TEST_DATA } from "astro:env/client";
 import { lexicalToHtml } from "payload-app/lexical-html";
-import { hasLexicalText } from "payload-app/routes";
 import { type DerivedWordFields, deriveWordFields } from "payload-app/word-derived";
 
 const PAGE_SIZE = 1000;
@@ -53,6 +52,7 @@ export type SiteWord = Omit<
   | "grammar"
   | "images"
   | "infoText"
+  | "sources"
   | "related"
   | "relatedWords"
   | "slug"
@@ -65,8 +65,6 @@ export type SiteWord = Omit<
   facts?: SiteFact[];
   grammar?: { diminutive?: RelatedWord; plural?: string | null };
   images: SiteMedia[];
-  hasInfoText: boolean;
-  infoTextHtml: string | null;
   related?: SiteRelated[];
   relatedWords: RelatedWord[];
   slug: string;
@@ -135,8 +133,9 @@ export const toWord = ({
   facts,
   grammar,
   images,
-  infoText,
+  infoText: _infoText,
   related,
+  sources: _sources,
   relatedWords,
   themen,
   wordTypes,
@@ -153,9 +152,7 @@ export const toWord = ({
     contributorSuggestion: suggestionId(contributorSuggestion),
   })),
   grammar: grammar && { diminutive: toRelatedWord(grammar.diminutive), plural: grammar.plural },
-  hasInfoText: hasLexicalText(infoText),
   images: (images ?? []).flatMap((m) => toSiteMedia(m) ?? []),
-  infoTextHtml: lexicalToHtml(infoText) || null,
   related: related?.map(({ contributorSuggestion, word, ...r }) => ({
     ...r,
     contributorSuggestion: suggestionId(contributorSuggestion),

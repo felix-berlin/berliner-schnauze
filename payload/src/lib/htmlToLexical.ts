@@ -5,7 +5,7 @@ import { JSDOM } from "jsdom";
 
 import type { Word } from "../payload-types";
 
-export type RichText = NonNullable<Word["infoText"]>;
+export type RichText = NonNullable<NonNullable<Word["facts"]>[number]["text"]>;
 
 const editorConfigs = new WeakMap<
   SanitizedConfig,
