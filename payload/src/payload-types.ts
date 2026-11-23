@@ -468,9 +468,15 @@ export interface Suggestion {
    */
   text?: string | null;
   highdeutsch?: string | null;
+  /**
+   * Nur bei „Neues Wort“: optionaler Beispielsatz. Für „Beispielsatz“ siehe Feld Text.
+   */
   example?: string | null;
   userName?: string | null;
   userMail?: string | null;
+  /**
+   * Beispielsatz, Wissenswertes und Verwandtes übernimmt das CMS nicht selbst: erst von Hand ins Wort eintragen (dort „Vorschlag“ verknüpfen), dann hier auf „Übernommen“ setzen.
+   */
   status?: ('new' | 'accepted' | 'rejected') | null;
   /**
    * Das Wort, das aus diesem Vorschlag entstanden ist. Beim Wechsel auf „Übernommen“ ohne Wort legt das CMS einen Entwurf an; ein hier gewähltes Wort wird stattdessen verknüpft.
@@ -598,7 +604,7 @@ export interface Comment {
       )
     | null;
   /**
-   * Als Jeschichte des Wortes hervorgehoben (max. eine pro Wort).
+   * Als Jeschichte des Wortes hervorgehoben (höchstens eine veröffentlichte pro Wort, keine Antworten).
    */
   featured?: boolean | null;
   editKeyHash?: string | null;
@@ -643,6 +649,9 @@ export interface Report {
   word: number | Word;
   kind?: ('meaning' | 'spelling' | 'example' | 'audio' | 'fact' | 'inappropriate' | 'other') | null;
   text: string;
+  /**
+   * Wird nach 90 Tagen oder beim Erledigen automatisch gelöscht.
+   */
   email?: string | null;
   status?: ('open' | 'closed') | null;
   updatedAt: string;
@@ -1938,7 +1947,7 @@ export interface Anki {
 export interface WordPage {
   id: number;
   /**
-   * Frage der Woche. {Wort} wird durch das Wort ersetzt. Leer = Standardtext.
+   * Fragetext unter dem Jeschichten-Formular; {Wort} wird durch das Wort ersetzt. Leer = Standardtext („Wo haste „{Wort}“ zuletzt jehört?“).
    */
   storyPrompt?: string | null;
   updatedAt?: string | null;

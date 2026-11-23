@@ -1,14 +1,8 @@
-import type {
-  CollectionAfterChangeHook,
-  CollectionConfig,
-  FieldAccess,
-  FieldHook,
-  Validate,
-} from "payload";
+import type { CollectionAfterChangeHook, CollectionConfig, FieldHook, Validate } from "payload";
 
 import { relationship, select, text, textarea } from "payload/shared";
 
-import { authenticatedOnly } from "../access";
+import { authenticatedOnly, notOverMcp } from "../access";
 import { adoptSuggestion } from "../hooks/adoptSuggestion";
 import { lockedByWordValue, refuseWhenLocked, updateUnlocked } from "../hooks/suggestionLock";
 import { notifyEditors } from "../lib/notifyEditors";
@@ -108,12 +102,6 @@ const titleValue: FieldHook = ({ siblingData }) => {
   return `${TYPE_LABEL[d.type ?? ""] ?? d.type}: ${body.length > 60 ? `${body.slice(0, 59)}…` : body}`;
 };
 
-/**
- * The sender's name and mail never reach an MCP client (and so the model): Payload drops the fields from every MCP
- * read, write result and query, whatever the plugin's output format or `select` (its tools run with overrideAccess: false).
- */
-const notOverMcp: FieldAccess = ({ req }) => req.payloadAPI !== "MCP";
-
 /** Payload's `Validate` generics differ per field type; the wrappers below only forward to the stock validator. */
 // oxlint-disable-next-line typescript/no-explicit-any
 type AnyValidate = Validate<any, any, any, any>;
@@ -201,10 +189,10 @@ export const Suggestions: CollectionConfig = {
       relationTo: "words",
       // Create only: the FK nulls it when the word is deleted, and the suggestion must stay saveable then.
       validate: ((value: unknown, options: Parameters<AnyValidate>[1]) =>
-        requiredFor(options.operation === "create" ? ["example"] : [], relationship as AnyValidate)(
-          value,
-          options,
-        )) as AnyValidate,
+        requiredFor(
+          options.operation === "create" ? ["example", "fact", "related"] : [],
+          relationship as AnyValidate,
+        )(value, options)) as AnyValidate,
       admin: {
         position: "sidebar",
         description:
@@ -250,7 +238,15 @@ export const Suggestions: CollectionConfig = {
       validate: limitFor({ example: 200 }, ["example", "fact"], textarea as AnyValidate),
     },
     { name: "highdeutsch", type: "text", maxLength: 200 },
-    { name: "example", type: "textarea", maxLength: 1000 },
+    {
+      name: "example",
+      type: "textarea",
+      maxLength: 1000,
+      admin: {
+        description:
+          "Nur bei „Neues Wort“: optionaler Beispielsatz. Für „Beispielsatz“ siehe Feld Text.",
+      },
+    },
     {
       name: "userName",
       type: "text",
@@ -267,7 +263,11 @@ export const Suggestions: CollectionConfig = {
         { label: "Übernommen", value: "accepted" },
         { label: "Abgelehnt", value: "rejected" },
       ],
-      admin: { position: "sidebar" },
+      admin: {
+        position: "sidebar",
+        description:
+          "Beispielsatz, Wissenswertes und Verwandtes übernimmt das CMS nicht selbst: erst von Hand ins Wort eintragen (dort „Vorschlag“ verknüpfen), dann hier auf „Übernommen“ setzen.",
+      },
     },
     {
       name: "word",

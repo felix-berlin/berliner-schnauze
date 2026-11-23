@@ -11,9 +11,11 @@ export const FEEDBACK_VISITOR_DAYS = 395; // 13 months
 
 /**
  * Daily clean-up of personal data: name and mail of finished suggestions after 90 days (never handled ones after a
- * year); removed, hidden, pending (never approved) and self-deleted comments after about 6 months.
+ * year); the mail of open reports after 90 days (closing a report clears it at once); the visitor hash of feedback
+ * rows after 13 months; removed, hidden, pending (never approved) and self-deleted comments after about 6 months.
  * `updatedAt` stands in for "when it was finished or removed" (no separate timestamp is kept).
- * A failing comment is logged and skipped so it cannot block the ones behind it; the run then throws at the end.
+ * A failing comment or report step is logged and skipped so it cannot block the ones behind it; the run then throws
+ * at the end. `reports.email` reuses SUGGESTION_PII_DAYS: keep the privacy policy in line.
  */
 export const runRetention = async (payload: Payload, now = new Date()) => {
   const ago = (days: number) => new Date(now.getTime() - days * DAY).toISOString();
@@ -46,20 +48,29 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
     data: { userName: null, userMail: null },
   });
 
-  // Open reports keep their text; the sender's mail goes after the same period as a suggestion's.
-  const reportsCleared =
-    (await payload.db.updateMany({
-      collection: "reports",
-      where: {
-        and: [
-          { status: { equals: "open" } },
-          { email: { exists: true } },
-          // Age of the report: an admin edit must not restart the clock.
-          { createdAt: { less_than: ago(SUGGESTION_PII_DAYS) } },
-        ],
-      },
-      data: { email: null },
-    })) ?? [];
+  // Open reports keep their text; the sender's mail goes after the same period as a suggestion's. A failure is logged
+  // and thrown at the end: it must not stop the comment and feedback clean-up below (for example while the table
+  // does not exist yet during a rolling release).
+  let reportsCleared: unknown[] = [];
+  let reportsFailed = false;
+  try {
+    reportsCleared =
+      (await payload.db.updateMany({
+        collection: "reports",
+        where: {
+          and: [
+            { status: { equals: "open" } },
+            { email: { exists: true } },
+            // Age of the report: an admin edit must not restart the clock.
+            { createdAt: { less_than: ago(SUGGESTION_PII_DAYS) } },
+          ],
+        },
+        data: { email: null },
+      })) ?? [];
+  } catch (error) {
+    payload.logger.error({ msg: "retention: report mails not cleared", err: error });
+    reportsFailed = true;
+  }
 
   // The answers stay (they are statistics); the per-word visitor hash goes, so the row no longer points at a browser.
   const unlinked =
@@ -139,6 +150,7 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
   return {
     feedbackUnlinked: unlinked.length,
     reportsCleared: reportsCleared.length,
+    reportsFailed,
     suggestionsCleared: cleared?.length ?? 0,
     commentsDeleted: deleted,
     commentsScrubbed: scrubbed,
@@ -155,6 +167,7 @@ export const retentionTask: TaskConfig = {
     // A promised deletion that did not happen must show up as a failed job, not a quiet success.
     if (result.commentsFailed)
       throw new Error(`retention: ${result.commentsFailed} comment(s) not purged`);
+    if (result.reportsFailed) throw new Error("retention: report mails not cleared");
     return { output: {} };
   },
 };
