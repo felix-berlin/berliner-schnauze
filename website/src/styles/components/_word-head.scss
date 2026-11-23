@@ -1,4 +1,5 @@
 @use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
 // Word head (SPEC §3/§5), head of the v18 word page. The root is the container; .inner is the grid:
 // below 35rem one column (mobile: the CSS `order` follows SPEC §5 "Mobil-Reihenfolge"), from 35rem two
@@ -243,10 +244,14 @@
       min-block-size: 1.875rem;
       padding-inline: var(--space-3);
       border-radius: var(--radius-pill);
-      background: var(--color-surface-tint-warm);
+      background: var(--color-surface-chip);
       font-size: var(--font-size-md);
       color: var(--color-text-body);
       text-decoration: none;
+
+      @include butler-mx.hover {
+        background: var(--color-surface-card3, var(--color-surface-chip));
+      }
     }
   }
 

@@ -130,7 +130,7 @@
       cursor: pointer;
 
       @include butler-mx.hover {
-        background: var(--color-surface-tint-warm);
+        background: var(--color-surface-card3, var(--color-surface-tint-warm));
       }
     }
 

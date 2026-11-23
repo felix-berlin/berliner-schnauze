@@ -89,7 +89,7 @@
     &[aria-pressed="true"] {
       color: var(--color-text-strong);
       font-weight: var(--font-weight-bold);
-      background: var(--color-surface-tint-warm);
+      background: var(--color-surface-card3, var(--color-surface-tint-warm));
       border-color: var(--color-text-strong);
     }
   }

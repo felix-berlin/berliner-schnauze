@@ -179,7 +179,7 @@
     gap: var(--space-3);
     margin-block-start: var(--space-4);
     padding: var(--space-5); // SPEC §5.2: 18px 20px, the 20px step
-    background: var(--color-surface-tint-warm);
+    background: var(--color-surface-chip);
     border-radius: var(--radius-sm);
 
     @include butler-mx.feature("motion") {
