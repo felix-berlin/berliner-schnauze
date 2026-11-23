@@ -142,7 +142,7 @@
           aria-label="Zitieren schließen"
           class="c-icon-button"
           type="button"
-          @click="closeCite(true)"
+          @click="closeCite"
         >
           <X aria-hidden="true" height="20" width="20" />
         </button>
@@ -407,7 +407,7 @@ useEventListener(
     if (event.key !== "Escape") return;
     const target = event.target as Node | null;
     if (target !== document.body && !root.value?.contains(target)) return;
-    closeCite(true);
+    closeCite();
   },
 );
 
@@ -433,9 +433,9 @@ const openCite = async (): Promise<void> => {
   tablist.value?.querySelector<HTMLElement>('[aria-selected="true"]')?.focus();
 };
 
-const closeCite = (restoreFocus = false): void => {
+const closeCite = (): void => {
   citeOpen.value = false;
-  if (restoreFocus) trigger.value?.focus();
+  trigger.value?.focus();
 };
 
 const copyCite = () => copy(citation.value, "cite", "Kopiert", () => citeText.value);

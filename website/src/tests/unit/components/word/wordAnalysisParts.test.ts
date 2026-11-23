@@ -182,4 +182,30 @@ describe("FooterCalloutBook", () => {
     const html = await render({ book: { title: "T", url: "javascript:alert(1)" } });
     expect(html).not.toContain("javascript:");
   });
+  it("lists further books with or without cover and note, and skips hostile ones", async () => {
+    const html = await render({
+      book: {
+        cover: "https://example.test/c.jpg",
+        more: [
+          {
+            cover: "https://example.test/m.jpg",
+            note: "Eine Notiz",
+            title: "Mehr eins",
+            url: "https://example.test/1",
+          },
+          { title: "Mehr zwei", url: "https://example.test/2" },
+          { title: "Böse", url: "javascript:alert(1)" },
+        ],
+        title: "T",
+        url: "https://example.test/b",
+      },
+    });
+    expect(html).toContain("Ooch jut");
+    expect(html).toContain("Mehr eins");
+    expect(html).toContain("Eine Notiz");
+    expect(html).toContain("https://example.test/m.jpg");
+    expect(html).toContain("Mehr zwei");
+    expect(html).not.toContain("Böse");
+    expect(html).toContain("https://example.test/c.jpg");
+  });
 });

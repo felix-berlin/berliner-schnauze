@@ -127,6 +127,44 @@ describe("WordHead.astro", () => {
     expect(html).not.toMatch(/&quot;wordId&quot;:\[0,\d/);
   });
 
+  it("lists further meanings, the IPA, the kind and the same-meaning words with joiners, links and notes", async () => {
+    const html = await render({
+      model: model({
+        related: [
+          { label: "Eins", note: "ugs.", relation: "gleich", url: "/wort/eins" },
+          { label: "Zwei", relation: "gleich" },
+          { label: "Drei", relation: "gleich", url: "/wort/drei" },
+          { label: "Anders", relation: "gegenteil" },
+        ],
+        word: {
+          ...model().word,
+          berolinismus: true,
+          ipa: "tɛstvɔʁt",
+          translations: [{ translation: "Prüfung" }, { translation: "Probe" }],
+        } as never,
+      }),
+    });
+    expect(html).toContain("<li>Probe</li>");
+    expect(html).toContain("[tɛstvɔʁt]");
+    expect(html).toContain("Substantiv · Berolinismus");
+    expect(html).toMatch(/Gleiche Bedeutung wie\s+<a href="\/wort\/eins">Eins<\/a>/);
+    expect(html).toContain("(ugs.)");
+    expect(html).toContain(", Zwei");
+    expect(html).toMatch(/ und\s*<a href="\/wort\/drei">Drei<\/a>/);
+    expect(html).not.toContain("Anders</a>");
+  });
+
+  it("leaves out meaning, meta and themes of a word without them", async () => {
+    const html = await render({
+      model: model({
+        word: { ...model().word, themen: [], translations: [], wordTypes: [] } as never,
+      }),
+    });
+    expect(html).not.toContain("Bedeutung");
+    expect(html).not.toContain("themes");
+    expect(html).not.toContain("ipa");
+  });
+
   it("shows the word as h1 with its article, the syllables and the meaning", async () => {
     const html = await render({ model: model({ stress: "erste Silbe" }) });
     expect(html).toMatch(/<h1[^>]*>[\s\S]*Testwort/);

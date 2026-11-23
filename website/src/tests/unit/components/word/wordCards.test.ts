@@ -117,6 +117,30 @@ describe("v18 word cards", () => {
     expect(html).not.toContain('href="undefined"');
   });
 
+  it("shows notes, contributors and similar spellings, with and without a link", async () => {
+    const html = await network({
+      model: model({
+        related: [
+          { label: "Eins", note: "Notiz", relation: "gleich", url: "/wort/eins" },
+          { contributor: { name: "Testkind" }, label: "Zwei", relation: "gleich" },
+          { contributor: {}, label: "Drei", note: "Nur so", relation: "gegenteil" },
+          { label: "Vier", relation: "verwandt" },
+          { label: "Fuenf", note: "Rest", relation: "redewendung", url: "/wort/fuenf" },
+          { label: "Sechs", relation: "redewendung" },
+        ],
+        written: [{ label: "Testwart" }, { label: "Testwurt" }],
+      }),
+    });
+    expect(html).toContain("Notiz");
+    expect(html).toContain("vorjeschlagen von Testkind");
+    expect(html).toContain("Nur so · vorjeschlagen von aus der Community");
+    expect(html).toContain("Gegenteil, Nur so");
+    expect(html).toMatch(/<g class="node"/);
+    expect(html).toContain("Ähnlich jeschrieben");
+    expect(html).toContain("Testwart, Testwurt");
+    expect(html).toContain("<small>Rest</small>");
+  });
+
   it("shows the book block only with a book and the source of a fact", async () => {
     const withBook = await facts({
       book: {

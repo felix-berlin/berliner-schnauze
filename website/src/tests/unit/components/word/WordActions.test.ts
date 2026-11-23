@@ -711,3 +711,100 @@ describe("WordActions telemetry (trending lists, Matomo)", () => {
     expect(live().textContent).toBe("");
   });
 });
+
+describe("WordActions coverage gaps", () => {
+  const teilen = (w: Wrapper) =>
+    w
+      .findAll("button")
+      .find((b) => b.text() === "Teilen")!
+      .trigger("click");
+  const setShare = (fn: unknown) =>
+    Object.defineProperty(navigator, "share", { configurable: true, value: fn });
+
+  it("marks the word text when the clipboard is denied for Wort kopieren, without a meaning too", async () => {
+    clipboard(() => Promise.reject(new DOMException("denied", "NotAllowedError")));
+    wrapper = await mountIt({ meaning: undefined });
+    await openMenu(wrapper);
+    await items(wrapper)[1]!.trigger("click");
+    await flushPromises();
+    expect(window.getSelection()!.toString()).toBe("Testwort");
+    expect(live().textContent).toBe("Markiert. Mit Strg+C kopieren.");
+  });
+
+  it("shows no host for a learn-more link that is not a URL", async () => {
+    wrapper = await mountIt({ learnMore: "kein link" });
+    await openMenu(wrapper);
+    expect(wrapper.get('a[role="menuitem"] .sub').text()).toBe("");
+  });
+
+  it("keeps the offline hint away from a draft and makes a repeated message differ for screen readers", async () => {
+    online.value = false;
+    wrapper = await mountIt({ wordId: undefined });
+    expect(wrapper.text()).not.toContain("offline");
+    online.value = true;
+    await openMenu(wrapper);
+    await items(wrapper)[0]!.trigger("click");
+    await flushPromises();
+    expect(live().textContent).toBe("Link kopiert");
+    await items(wrapper)[0]!.trigger("click");
+    await flushPromises();
+    expect(live().textContent).toBe("Link kopiert\u00a0");
+  });
+
+  it("falls back to copying when the share fails for another reason than a dismissal", async () => {
+    setShare(vi.fn().mockRejectedValue(new TypeError("not allowed")));
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    clipboard(writeText);
+    wrapper = await mountIt();
+    await teilen(wrapper);
+    await flushPromises();
+    expect(writeText).toHaveBeenCalledWith(URL_);
+    expect(live().textContent).toBe("Link kopiert");
+  });
+
+  it("falls back to copying when a DOMException other than AbortError ends the share", async () => {
+    setShare(vi.fn().mockRejectedValue(new DOMException("denied", "NotAllowedError")));
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    clipboard(writeText);
+    wrapper = await mountIt();
+    await teilen(wrapper);
+    await flushPromises();
+    expect(writeText).toHaveBeenCalledTimes(1);
+  });
+
+  it("opens with ArrowUp onto the last item and ignores other keys on the trigger", async () => {
+    wrapper = await mountIt();
+    (trigger(wrapper).element as HTMLElement).focus();
+    await key(trigger(wrapper).element, "a");
+    expect(wrapper.find('[role="menu"]').exists()).toBe(false);
+    await key(trigger(wrapper).element, "ArrowUp");
+    expect(document.activeElement).toBe(items(wrapper).at(-1)!.element);
+  });
+
+  it("leaves the citing panel open for an Esc aimed at another part of the page", async () => {
+    const other = document.createElement("input");
+    document.body.append(other);
+    wrapper = await mountIt();
+    await openMenu(wrapper);
+    await items(wrapper)[2]!.trigger("click");
+    await flushPromises();
+    await key(other, "Escape");
+    expect(wrapper.find('[role="region"]').exists()).toBe(true);
+    await key(other, "a");
+    expect(wrapper.find('[role="region"]').exists()).toBe(true);
+  });
+
+  it("scrolls to the report anchor without animation for reduced motion", async () => {
+    const anchor = document.createElement("div");
+    anchor.id = "fehler";
+    anchor.scrollIntoView = vi.fn();
+    document.body.append(anchor);
+    vi.stubGlobal("matchMedia", () => ({ matches: true }));
+    wrapper = await mountIt();
+    await openMenu(wrapper);
+    await items(wrapper)[3]!.trigger("click");
+    await flushPromises();
+    expect(anchor.scrollIntoView).toHaveBeenCalledWith({ behavior: "auto", block: "start" });
+    vi.unstubAllGlobals();
+  });
+});
