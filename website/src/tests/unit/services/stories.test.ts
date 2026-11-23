@@ -23,8 +23,19 @@ describe("fetchStories", () => {
     expect(find).toHaveBeenCalledTimes(2); // featured + page
     await fetchStories(2, 1);
     expect(find).toHaveBeenCalledTimes(4);
-    await fetchStories(1, 2);
-    expect(find).toHaveBeenCalledTimes(6);
+    await fetchStories(1, 2); // beyond the last page: answered empty, no read, no cache slot
+    expect(find).toHaveBeenCalledTimes(4);
+  });
+
+  it("reads a page within the range once, again only for a new page", async () => {
+    find.mockResolvedValue({ docs: [], hasNextPage: true, totalDocs: 45 });
+    const { fetchStories } = await load();
+    await fetchStories(1, 3);
+    await fetchStories(1, 3);
+    expect(find).toHaveBeenCalledTimes(4); // page 1 (featured + list), page 3 (featured + list)
+    const far = await fetchStories(1, 99_999);
+    expect(far).toEqual({ featured: null, hasMore: false, items: [], page: 99_999, total: 45 });
+    expect(find).toHaveBeenCalledTimes(4);
   });
 
   it("returns an empty page for a word without Jeschichten", async () => {
@@ -46,7 +57,8 @@ describe("fetchStories", () => {
     );
     const { fetchStories } = await load();
     const body = await fetchStories(1, 2);
-    const [featuredQuery, pageQuery] = comment("comments");
+    const [featuredQuery] = comment("comments");
+    const pageQuery = comment("comments").at(-1);
     expect(pageQuery).toMatchObject({ limit: 20, page: 2, sort: "-createdAt" });
     expect(pageQuery.where.id).toEqual({ not_equals: 7 });
     expect(body).toMatchObject({ hasMore: true, page: 2, total: 41 });

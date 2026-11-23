@@ -17,14 +17,16 @@ export type FeedbackRow = {
   age?: Age | null;
 };
 
-export type Group = { key: string; selbst: number; n: number };
+export type Region = "ost" | "west" | "umland";
+
+export type Group<K extends string = string> = { key: K; selbst: number; n: number };
 
 export type PollResult = {
   total: number;
   shares: { selbst: number; kenn: number; nie: number };
   matrix: Usage[];
-  byRegion: Group[];
-  byAge: Group[];
+  byRegion: Group<Region>[];
+  byAge: Group<Age>[];
   own?: Usage;
 };
 
@@ -44,14 +46,15 @@ function hundredParts(counts: number[], total: number): number[] {
   return parts;
 }
 
-function toGroup(key: string, group: FeedbackRow[]): Group | null {
+function toGroup<K extends string>(key: K, group: FeedbackRow[]): Group<K> | null {
   const voted = group.filter((r) => r.usage);
   if (voted.length < MIN_GROUP) return null;
   const say = voted.filter((r) => r.usage === "say").length;
   return { key, n: voted.length, selbst: Math.round((say * 100) / voted.length) };
 }
 
-const present = (groups: (Group | null)[]): Group[] => groups.filter((g): g is Group => !!g);
+const present = <K extends string>(groups: (Group<K> | null)[]): Group<K>[] =>
+  groups.filter((g): g is Group<K> => !!g);
 
 export function buildPollResult(rows: FeedbackRow[], ownUsage?: Usage): PollResult {
   const voted = rows.filter((r) => r.usage);

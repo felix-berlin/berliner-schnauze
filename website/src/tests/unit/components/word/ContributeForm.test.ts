@@ -115,7 +115,7 @@ describe("ContributeForm states", () => {
     expect(openForm.get()).toBeNull();
   });
 
-  it("shows the counter from 80 % of the limit, live and polite", async () => {
+  it("shows the counter from 80 % of the limit; the live text changes on state changes only", async () => {
     const w = make("example");
     await open("example");
     const area = byLabel(w, "Satz uff Berlinerisch");
@@ -123,7 +123,39 @@ describe("ContributeForm states", () => {
     expect(w.text()).not.toContain("159 / 200");
     await area.setValue("x".repeat(160));
     expect(w.text()).toContain("160 / 200");
-    expect(w.find("[aria-live=polite]").exists()).toBe(true);
+    const live = () => w.find("[aria-live=polite]");
+    expect(w.find(".counter").attributes("aria-live")).toBeUndefined();
+    expect(live().text()).toBe("Fast am Limit.");
+    await area.setValue("x".repeat(170));
+    expect(live().text()).toBe("Fast am Limit."); // another keystroke, same text: nothing new is announced
+    await area.setValue("x".repeat(201));
+    expect(live().text()).toBe("Ditt is zu lang.");
+    await area.setValue("x");
+    expect(live().text()).toBe("");
+  });
+
+  it("a TypeError is reported while online, an offline failure is not", async () => {
+    const send = async () => {
+      const w = make("example");
+      await open("example");
+      await byLabel(w, "Satz uff Berlinerisch").setValue("Satz");
+      await submit(w).trigger("click");
+      await flushPromises();
+    };
+    fetchMock.mockRejectedValue(new TypeError("boom"));
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    await send();
+    expect(spy.mock.calls.flat().some((a) => a instanceof TypeError)).toBe(true);
+    spy.mockClear();
+    fetchMock.mockImplementation(async () => {
+      // the connection drops while the request is in flight
+      vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
+      window.dispatchEvent(new Event("offline"));
+      throw new TypeError("offline");
+    });
+    await send();
+    expect(spy).not.toHaveBeenCalled();
+    spy.mockRestore();
   });
 
   it("over the limit keeps Absenden aria-disabled", async () => {
@@ -269,7 +301,7 @@ describe("ContributeForm thanks", () => {
     expect((byLabel(w, "Satz uff Berlinerisch").element as HTMLTextAreaElement).value).toBe("");
   });
 
-  it("remembers a sent suggestion for the chip, a sent story's edit key separately", async () => {
+  it("remembers a sent suggestion for the chip, a sent story leaves no edit key behind", async () => {
     const w = make("example");
     await open("example");
     await byLabel(w, "Satz uff Berlinerisch").setValue("Ein Satz");
@@ -279,15 +311,13 @@ describe("ContributeForm thanks", () => {
     expect(ownSubmissions("schrippe")).toMatchObject([{ preview: "Ein Satz", type: "example" }]);
     expect(localStorage.getItem("bs-own-submissions")).not.toContain("Kalle");
 
-    fetchMock.mockResolvedValue(okResponse({ editKey: "edit-1", id: 42, ok: true }));
+    fetchMock.mockResolvedValue(okResponse({ id: 42, ok: true }));
     const s = make("story");
     await open("story");
     await byLabel(s, "Deine Jeschichte").setValue("Eene Jeschichte");
     await submit(s).trigger("click");
     await flushPromises();
-    const keys = JSON.parse(localStorage.getItem("bs-comment-keys") ?? "{}");
-    expect(keys["42"]).toMatchObject({ key: "edit-1" });
-    expect(typeof keys["42"].createdAt).toBe("number");
+    expect(localStorage.getItem("bs-comment-keys")).toBeNull();
     expect(localStorage.getItem("bs-story-keys")).toBeNull();
   });
 });

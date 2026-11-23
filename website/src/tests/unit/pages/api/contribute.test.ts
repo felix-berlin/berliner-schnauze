@@ -130,4 +130,32 @@ describe("POST /api/contribute", () => {
     expect(res.status).toBe(502);
     expect(JSON.stringify(await res.json())).not.toContain("leaked");
   });
+
+  it.each([
+    ["fail", 403],
+    ["unavailable", 503],
+  ])("captcha %s answers %d and stores nothing", async (outcome, status) => {
+    verifyTurnstile.mockResolvedValue(outcome);
+    expect((await post(example)).status).toBe(status);
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it("400 for a Payload 4xx (validation / hook refusal), 502 stays for 5xx", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    create.mockRejectedValueOnce(Object.assign(new Error("hook"), { status: 400 }));
+    expect((await post(example)).status).toBe(400);
+    create.mockRejectedValueOnce(Object.assign(new Error("boom"), { status: 500 }));
+    expect((await post(example)).status).toBe(502);
+  });
+
+  it.each([
+    ["unknown relation", { ...related, relation: "nope" }, "relation"],
+    ["empty relatedText", { ...related, relatedText: "" }, "relatedText"],
+    ["blank relatedText", { ...related, relatedText: "   " }, "relatedText"],
+    ["highdeutsch of 201 characters", { ...example, highdeutsch: "h".repeat(201) }, "highdeutsch"],
+  ])("400 with the field for %s", async (_, body, field) => {
+    const res = await post(body);
+    expect(res.status).toBe(400);
+    expect((await res.json()).field).toBe(field);
+  });
 });

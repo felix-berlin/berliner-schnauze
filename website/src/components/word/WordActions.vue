@@ -97,6 +97,21 @@
                 </span>
               </span>
             </button>
+            <a
+              v-if="learnMore"
+              :href="learnMore"
+              class="item"
+              rel="noopener noreferrer"
+              role="menuitem"
+              tabindex="-1"
+              target="_blank"
+            >
+              <ExternalLink aria-hidden="true" class="ico" height="18" width="18" />
+              <span class="text">
+                <b class="title">Erfahre mehr über dieses Wort</b>
+                <span class="sub">{{ learnMoreHost }}</span>
+              </span>
+            </a>
             <button class="item" role="menuitem" tabindex="-1" type="button" @click="openCite">
               <Quote aria-hidden="true" class="ico" height="18" width="18" />
               <span class="text">
@@ -181,6 +196,7 @@ import { useEventListener } from "@vueuse/core";
 import Check from "virtual:icons/lucide/check";
 import Copy from "virtual:icons/lucide/copy";
 import EllipsisVertical from "virtual:icons/lucide/ellipsis-vertical";
+import ExternalLink from "virtual:icons/lucide/external-link";
 import Flag from "virtual:icons/lucide/flag";
 import LinkIcon from "virtual:icons/lucide/link";
 import Quote from "virtual:icons/lucide/quote";
@@ -191,6 +207,8 @@ import X from "virtual:icons/lucide/x";
 import { computed, nextTick, onBeforeUnmount, ref, useId, useTemplateRef } from "vue";
 
 const props = defineProps<{
+  /** External article about the word (Wikipedia and the like); an entry of the menu. */
+  learnMore?: string | undefined;
   /** Meaning shown after the word in "Wort kopieren"; empty = the word alone. */
   meaning?: string | undefined;
   slug: string;
@@ -238,6 +256,14 @@ const wordCopy = computed(() => (props.meaning ? `${props.word} – ${props.mean
 const live = ref("");
 let lastMessage = "";
 let timer: ReturnType<typeof setTimeout> | undefined;
+const learnMoreHost = computed(() => {
+  try {
+    return new URL(props.learnMore ?? "").hostname;
+  } catch {
+    return "";
+  }
+});
+
 const copied = ref<"cite" | "link" | "share" | "word" | null>(null);
 
 // A screen reader skips a message equal to the previous one: a no-break space makes the repeat differ.
@@ -430,14 +456,16 @@ const onTabKey = (event: KeyboardEvent): void => {
 };
 
 // --- report -----------------------------------------------------------------------------------------
-const report = (): void => {
+const report = async (): Promise<void> => {
   closeMenu();
+  // Open first and wait: the form focuses its first choice (an instant scroll) when it opens, which would cut off a
+  // smooth scroll that had started before.
+  openContributeForm("error");
+  await nextTick();
   const reduce = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
   document
     .getElementById("fehler")
     ?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
-  // The form focuses its first choice when it opens.
-  openContributeForm("error");
 };
 
 // --- reactions ---------------------------------------------------------------------------------------

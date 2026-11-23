@@ -46,7 +46,7 @@
     --textarea-min-block-size: calc(4lh + 1.2rem + 2px);
 
     display: grid;
-    gap: var(--space-1);
+    gap: var(--space-2); // mock .w18__f: 6px, the legend 8px; the 4px step sat the label on the field
   }
 
   .label {
@@ -62,6 +62,9 @@
   }
 
   .chips {
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w18__chips button: 15px, no token
+    --choice-font-size: 0.9375rem;
+
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);

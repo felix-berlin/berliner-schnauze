@@ -77,6 +77,31 @@
     stroke-width: 1.5px; // SPEC §10: hairline curves
   }
 
+  // A wide invisible stroke: the thin curve itself is too narrow to hover.
+  .hit {
+    stroke: transparent;
+    stroke-width: 14px; // one-off hit band, no token
+    pointer-events: stroke;
+  }
+
+  // Hover of a node or its strand (mock .w12__net a:hover): curve, ring and word turn orange. Hover devices only.
+  a.node {
+    @include butler-mx.hover {
+      .curve {
+        stroke: var(--color-accent-active);
+        stroke-width: 2.5px; // thicker than the hairline so the strand reads as picked, no token
+      }
+
+      .ring {
+        fill: var(--color-accent-active);
+      }
+
+      .word {
+        fill: var(--color-text-accent);
+      }
+    }
+  }
+
   .center {
     fill: var(--color-accent-solid); // SPEC §10: the word as the one orange pill
   }
@@ -90,7 +115,7 @@
   .ring {
     fill: var(--color-surface-sheet);
     stroke: var(--color-accent-active);
-    stroke-width: 2px;
+    stroke-width: 3px; // mock .w12__node circle
   }
 
   .word {

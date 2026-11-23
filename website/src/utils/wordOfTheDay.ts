@@ -28,7 +28,10 @@ const berlinNumbers = (date: Date) =>
     number
   >;
 
-/** Fixed day of the e2e server (noon, so the Berlin day is the same in every zone). */
+/**
+ * Fixed day of the e2e server (noon, so the Berlin day is the same in every zone). Coupled to the e2e seed:
+ * it has exactly 28 words and abjang must stay at sorted index 4 (see payload/src/seed/e2e.ts).
+ */
 export const E2E_PINNED_DAY = new Date("2026-01-19T12:00:00Z");
 
 const MS_PER_DAY = 86_400_000;

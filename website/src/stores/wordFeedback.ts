@@ -156,11 +156,15 @@ export const refreshFeedback = async (wordId: number): Promise<WordFeedbackState
   const startedAt = stateVersion;
   try {
     const res = await fetch(`${ENDPOINT}?word=${wordId}`, { cache: "no-store" });
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.error(`[word-feedback] refresh ${wordId} failed: ${res.status}`);
+      return null;
+    }
     const state = (await res.json()) as WordFeedbackState;
     if (loadedFor === wordId && stateVersion === startedAt) $feedback.set(state);
     return state;
-  } catch {
+  } catch (error) {
+    console.error(`[word-feedback] refresh ${wordId} failed:`, error);
     return null;
   }
 };
@@ -172,11 +176,18 @@ type SendOptions = {
   silent?: boolean;
 };
 
+/**
+ * `false`: not stored. `true`: stored and the state updated. `"unsynced"`: stored, but the server could not read the
+ * totals back (the own answer `mine` is applied, the numbers are stale); truthy like `true`, so `if (!result)` still
+ * means "failed".
+ */
+export type SendResult = boolean | "unsynced";
+
 export const sendFeedback = async (
   wordId: number,
   patch: Partial<MyFeedback>,
   { fallbackMessage = "Hat nich jeklappt, versuch's nochma.", silent = false }: SendOptions = {},
-): Promise<boolean> => {
+): Promise<SendResult> => {
   const seq = ++sent;
   $sendError.set(null);
   const fail = (message: string | null, status?: number) => {
@@ -204,17 +215,32 @@ export const sendFeedback = async (
     const state = (await res.json().catch((error) => {
       console.error(`[word-feedback] send ${wordId}: unreadable response body`, error);
       return null;
-    })) as WordFeedbackState | null;
+    })) as (Partial<WordFeedbackState> & { error?: string; stored?: boolean }) | null;
+    const unsynced = !!state?.stored && !state.totals;
     // The user may have navigated to another word while the PATCH was in flight; a failed GET left no word set.
     if (
       state &&
       (loadedFor === wordId || (loadedFor === null && failedFor === wordId)) &&
       seq > applied
     ) {
-      loadedFor = wordId;
-      applied = seq;
-      stateVersion++;
-      $feedback.set(state);
+      const current = $feedback.get();
+      if (!unsynced) {
+        loadedFor = wordId;
+        applied = seq;
+        stateVersion++;
+        $feedback.set(state as WordFeedbackState);
+      } else if (current && state.mine !== undefined) {
+        // Stored, but no totals came back: only the own answer is new, the numbers stay as they were.
+        applied = seq;
+        stateVersion++;
+        $feedback.set({ ...current, mine: state.mine });
+      }
+    }
+    if (unsynced) {
+      console.error(`[word-feedback] send ${wordId}: stored, totals not read back`);
+      if (!silent)
+        createToastNotify({ message: state?.error ?? fallbackMessage, status: "warning" });
+      return "unsynced";
     }
     return true;
   } catch (error) {
@@ -223,7 +249,7 @@ export const sendFeedback = async (
   }
 };
 
-export const answerUsage = (wordId: number, usage: Usage, silent = false): Promise<boolean> =>
+export const answerUsage = (wordId: number, usage: Usage, silent = false): Promise<SendResult> =>
   sendFeedback(wordId, { usage, ...parseProfile($profile.get()) }, { silent });
 
 /** Deletes this browser's answers to one word; the caller owns the failure message and the local profile. */
@@ -231,6 +257,15 @@ export const deleteFeedback = async (wordId: number): Promise<boolean> => {
   try {
     const res = await fetch(`${ENDPOINT}?word=${wordId}`, { method: "DELETE" });
     if (!res.ok) throw new Error(String(res.status));
+    // The own answer is gone: the card must not keep showing it (the totals follow with the next refresh).
+    const current = $feedback.get();
+    if (current && loadedFor === wordId) {
+      stateVersion++;
+      const { result, ...rest } = current;
+      const next = result && { ...result };
+      if (next) delete next.own;
+      $feedback.set({ ...rest, mine: null, ...(next && { result: next }) });
+    }
     return true;
   } catch (error) {
     console.error(`[word-feedback] delete ${wordId} failed:`, error);

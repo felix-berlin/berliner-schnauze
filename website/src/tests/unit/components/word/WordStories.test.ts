@@ -291,6 +291,7 @@ describe("WordStories reactions, edge cases", () => {
     expect(w.findAll("li.item")).toHaveLength(3);
     expect(react(w, 0, "Jenau!").attributes("aria-pressed")).toBe("false");
     expect(w.text()).not.toContain("Wird jeprüft");
+    expect(w.text()).toContain("Deine eijenen Jeschichten konnten nich jeladen werden.");
   });
 
   it("does not let a late /mine answer overwrite a reaction made meanwhile", async () => {
@@ -357,5 +358,45 @@ describe("WordStories own pending", () => {
     const w = await mountIt();
     expect(w.text()).toContain("Wird jeprüft");
     expect(w.text()).toContain("Meine <i>neue</i> Jeschichte");
+  });
+});
+
+describe("WordStories states", () => {
+  it("binds aria-expanded of „Alle … lesen“ to the expanded state", async () => {
+    route = (url) =>
+      url.startsWith("/api/stories/mine")
+        ? { body: { pending: [], reactions: {} } }
+        : { body: { hasMore: true, items: [story(50)], page: 2 } };
+    const w = await mountIt({ items: items(5), total: 9 });
+    expect(w.find("button.all").attributes("aria-expanded")).toBe("false");
+    await w.find("button.all").trigger("click");
+    await flushPromises();
+    expect(w.find("button.all").attributes("aria-expanded")).toBe("true");
+  });
+
+  it("leaves aria-expanded of the ask button to the trigger wiring (no Vue binding)", async () => {
+    const w = await mountIt();
+    const ask = w.find("button.ask");
+    expect(ask.attributes("data-contribute")).toBe("story");
+    ask.element.setAttribute("aria-expanded", "true"); // contributeTriggers.ts writes it
+    await w.vm.$forceUpdate();
+    expect(ask.attributes("aria-expanded")).toBe("true");
+  });
+
+  it("shows the relative age after mount", async () => {
+    const w = await mountIt();
+    expect(w.find(".by").text()).toMatch(/vor 3 Tagen$/);
+  });
+
+  it("shows the server text of a failed reaction, e.g. the rate limit", async () => {
+    route = (url) =>
+      url.startsWith("/api/stories/mine")
+        ? { body: { pending: [], reactions: {} } }
+        : { body: { error: "Ma langsam, Keule." }, ok: false };
+    const w = await mountIt();
+    await react(w, 0, "Jenau!").trigger("click");
+    await flushPromises();
+    expect(w.text()).toContain("Ma langsam, Keule.");
+    expect(react(w, 0, "Jenau!").text()).toContain("4");
   });
 });

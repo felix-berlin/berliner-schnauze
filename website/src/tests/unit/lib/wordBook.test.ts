@@ -1,4 +1,11 @@
-import { ctaFor, disclosureFor, isAmazonLink, isWebUrl, pickBook } from "@lib/wordBook.ts";
+import {
+  ctaFor,
+  disclosureFor,
+  isAmazonLink,
+  isWebUrl,
+  pickBook,
+  pickMoreBooks,
+} from "@lib/wordBook.ts";
 import { describe, expect, it } from "vitest";
 
 const books = [
@@ -7,6 +14,32 @@ const books = [
   { href: "https://shop.example/c", themen: [3, 2], title: "C" },
   { href: "https://shop.example/d", themen: null, title: "D" },
 ] as Parameters<typeof pickBook>[0];
+
+describe("pickMoreBooks", () => {
+  it("leaves out the picked book and books without a web link, and stops at two", () => {
+    const withBad = [...books, { href: "javascript:alert(1)", title: "X" }] as typeof books;
+    expect(pickMoreBooks(withBad, pickBook(withBad, 2)).map((b) => b.title)).toEqual(["B", "C"]);
+    expect(pickMoreBooks(books, undefined, 1).map((b) => b.title)).toEqual(["A"]);
+  });
+
+  it("maps to fully typed entries: url from href, cover and note only when set", () => {
+    const rich = [
+      {
+        description: "Note",
+        href: "https://shop.example/e",
+        imageUrl: "https://i.example/e",
+        title: "E",
+      },
+    ] as typeof books;
+    expect(pickMoreBooks(rich, undefined)).toEqual([
+      { cover: "https://i.example/e", note: "Note", title: "E", url: "https://shop.example/e" },
+    ]);
+    expect(pickMoreBooks(books, undefined, 1)[0]).toEqual({
+      title: "A",
+      url: "https://shop.example/a",
+    });
+  });
+});
 
 describe("pickBook", () => {
   it("returns the first book whose themen include the first Thema", () => {

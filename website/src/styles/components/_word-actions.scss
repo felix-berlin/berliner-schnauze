@@ -71,15 +71,24 @@
     border-radius: var(--radius-pill);
 
     [role="tab"] {
-      min-block-size: 2.5rem; // 40px inside the 44px segment; the segment is the target, no token step
+      position: relative;
+      min-block-size: 2.5rem; // 40px look; the hit band below reaches 48px, no token step
       padding-inline: var(--space-4);
       font: inherit;
-      font-size: var(--font-size-sm);
+      font-size: var(--_small);
       color: var(--color-text-body);
       background: transparent;
       border: 0;
       border-radius: var(--radius-pill);
       cursor: pointer;
+
+      // Looks 40px, hits 48px: the band fills the segment padding (as c-choice segment/chip).
+      &::before {
+        content: "";
+        position: absolute;
+        inset-block: calc(-1 * var(--space-1));
+        inset-inline: 0;
+      }
 
       &[aria-selected="true"] {
         color: var(--color-surface-sheet);
@@ -106,7 +115,7 @@
     padding: var(--space-3) var(--space-3);
     // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §5.2: the citation is monospace, no font token for it
     font-family: monospace;
-    font-size: var(--font-size-sm);
+    font-size: var(--_small);
     line-height: 1.55;
     color: var(--color-text-strong);
     background: var(--color-surface-sheet);

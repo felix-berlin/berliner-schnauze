@@ -391,7 +391,7 @@ test.describe("keyboard", () => {
 
   test("the Einsprechen tooltip opens by focus", async ({ page }) => {
     await open(page);
-    const record = page.locator(".c-word-beispiele .record-button").first();
+    const record = page.locator(".c-word-beispiele [data-record]").first();
     await record.focus();
     const tip = page.getByRole("tooltip").filter({ hasText: "Einsprechen" });
     await expect(tip).toBeVisible();
@@ -470,10 +470,8 @@ test.describe("images", () => {
       await expect(page.locator(`.c-word-images:not([data-variant="${variant}"])`)).toBeHidden();
       const first = images.locator("button.open").first();
       const box = await first.locator("img").boundingBox();
-      // Narrow head: the image keeps 4:3 (SPEC §3). From 1000px it fills the column (object-fit cover, at least 300px tall).
-      if (width < 1000)
-        expect(Math.abs((box?.width ?? 0) / (box?.height ?? 1) - 4 / 3)).toBeLessThan(0.05);
-      else expect(box?.height ?? 0).toBeGreaterThanOrEqual(300);
+      // Every width: the image keeps 4:3 and never stretches to the height of the head column (design feedback).
+      expect(Math.abs((box?.width ?? 0) / (box?.height ?? 1) - 4 / 3)).toBeLessThan(0.05);
       await first.focus();
       await page.keyboard.press("Enter");
       const dialog = page.getByRole("dialog");

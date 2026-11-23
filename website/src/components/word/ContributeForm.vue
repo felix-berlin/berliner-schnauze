@@ -125,13 +125,11 @@
 
           <div class="under">
             <span v-if="f.hint" :id="`${uid}-${f.key}-hint`" class="hint">{{ f.hint }}</span>
-            <!-- The live region stays in the DOM, so the count is announced when it appears (SPEC §13). -->
-            <span
-              class="counter"
-              aria-live="polite"
-              :data-state="tooLong(f) ? 'over' : undefined"
-              >{{ counter(f) }}</span
-            >
+            <span class="counter" :data-state="tooLong(f) ? 'over' : undefined">{{
+              counter(f)
+            }}</span>
+            <!-- Live region stays in the DOM; its text only changes on a state change (near, over), not per keystroke. -->
+            <span class="u-sr-only" aria-live="polite">{{ counterNote(f) }}</span>
           </div>
           <span v-if="refused?.field === f.key" :id="`${uid}-${f.key}-error`" class="error">{{
             refused.message
@@ -198,7 +196,7 @@ import {
   REPORT_KIND_LABEL,
   REPORT_KIND_ORDER,
 } from "@lib/contribute.ts";
-import { rememberEditKey, rememberSubmission } from "@lib/ownSubmissions.ts";
+import { rememberSubmission } from "@lib/ownSubmissions.ts";
 import { RELATION_LABEL, RELATION_ORDER } from "@lib/wordNetwork.ts";
 import { suggestWords, type WordSuggestion } from "@lib/wordSuggest.ts";
 import { useStore } from "@nanostores/vue";
@@ -447,6 +445,12 @@ const over = computed(() => fields.value.some(tooLong));
 const ready = computed(() => v[requiredKey].trim().length > 0 && !over.value);
 const counter = (f: Field): string =>
   f.max && v[f.key].length >= f.max * COUNTER_FROM ? `${v[f.key].length} / ${f.max}` : "";
+const counterNote = (f: Field): string =>
+  tooLong(f)
+    ? "Ditt is zu lang."
+    : f.max && v[f.key].length >= f.max * COUNTER_FROM
+      ? "Fast am Limit."
+      : "";
 const describedBy = (f: Field): string | undefined => {
   const ids = [
     f.hint && `${uid}-${f.key}-hint`,
@@ -664,10 +668,8 @@ const onSubmit = async (): Promise<void> => {
       method: "POST",
     });
     const data = (await res.json().catch(() => null)) as null | {
-      editKey?: string;
       error?: string;
       field?: string;
-      id?: number;
       message?: string;
     };
     if (!res.ok) {
@@ -677,11 +679,11 @@ const onSubmit = async (): Promise<void> => {
       const fallback = res.status === 429 ? "Ma langsam, Keule – versuch's gleich nochmal." : "";
       fail(data?.message ?? data?.error ?? fallback, data?.field);
     } else {
-      succeed(data?.editKey, data?.id);
+      succeed();
     }
   } catch (error) {
-    // fetch() rejects with a TypeError when offline; anything else is a bug worth reporting.
-    if (!(error instanceof TypeError)) reportError(error);
+    // Offline (per navigator.onLine) is expected; anything else, a TypeError from our own code included, is reported.
+    if (online.value) reportError(error);
     fail();
   } finally {
     sending.value = false;
@@ -691,10 +693,8 @@ const onSubmit = async (): Promise<void> => {
   }
 };
 
-const succeed = (editKey?: string, id?: number): void => {
-  if (props.type === "story") {
-    if (editKey && typeof id === "number") rememberEditKey(id, editKey);
-  } else if (props.type !== "error") {
+const succeed = (): void => {
+  if (props.type !== "story" && props.type !== "error") {
     rememberSubmission(props.word, props.type, props.type === "related" ? v.target : v.text);
   }
   Object.assign(v, blank());

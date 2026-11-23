@@ -111,6 +111,16 @@ afterEach(() => {
 });
 
 describe("WordActions menu", () => {
+  it("lists the learn-more link first after the copy entries only when the word has one", async () => {
+    wrapper = await mountIt({ learnMore: "https://de.wikipedia.org/wiki/Abjang" });
+    await openMenu(wrapper);
+    const link = wrapper.get('a[role="menuitem"]');
+    expect(link.attributes("href")).toBe("https://de.wikipedia.org/wiki/Abjang");
+    expect(link.attributes("rel")).toBe("noopener noreferrer");
+    expect(link.find("b").text()).toBe("Erfahre mehr über dieses Wort");
+    expect(link.find(".sub").text()).toBe("de.wikipedia.org");
+  });
+
   it("opens from the keyboard onto the first item and walks with the arrows, Home and End", async () => {
     wrapper = await mountIt();
     const t = trigger(wrapper);

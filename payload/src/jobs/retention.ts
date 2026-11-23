@@ -14,47 +14,63 @@ export const FEEDBACK_VISITOR_DAYS = 395; // 13 months
  * year); the mail of open reports after 90 days (closing a report clears it at once); the visitor hash of feedback
  * rows after 13 months; removed, hidden, pending (never approved) and self-deleted comments after about 6 months.
  * `updatedAt` stands in for "when it was finished or removed" (no separate timestamp is kept).
- * A failing comment or report step is logged and skipped so it cannot block the ones behind it; the run then throws
- * at the end. `reports.email` reuses SUGGESTION_PII_DAYS: keep the privacy policy in line.
+ * Every step is logged and skipped when it fails, so it cannot block the ones behind it (a promised deletion must
+ * not wait on an unrelated failure); the run then throws at the end. `reports.email` reuses SUGGESTION_PII_DAYS: keep the privacy policy in line.
  */
 export const runRetention = async (payload: Payload, now = new Date()) => {
   const ago = (days: number) => new Date(now.getTime() - days * DAY).toISOString();
 
+  const failedSteps: string[] = [];
+  /** Runs one deletion step; a failure is logged and remembered, the next step still runs. */
+  const step = async <T>(label: string, fn: () => Promise<T>, fallback: T): Promise<T> => {
+    try {
+      return await fn();
+    } catch (error) {
+      payload.logger.error({ msg: `retention: ${label} failed`, err: error });
+      failedSteps.push(label);
+      return fallback;
+    }
+  };
+
   // db.updateMany skips the hooks on purpose: a suggestion whose word is live is locked (refuseWhenLocked), but its
   // sender data must go all the same. The suggestion text stays.
-  const cleared = await payload.db.updateMany({
-    collection: "suggestions",
-    where: {
-      and: [
-        {
-          or: [
+  const cleared = await step(
+    "suggestions",
+    () =>
+      payload.db.updateMany({
+        collection: "suggestions",
+        where: {
+          and: [
             {
-              and: [
-                { status: { in: ["accepted", "rejected"] } },
-                { updatedAt: { less_than: ago(SUGGESTION_PII_DAYS) } },
+              or: [
+                {
+                  and: [
+                    { status: { in: ["accepted", "rejected"] } },
+                    { updatedAt: { less_than: ago(SUGGESTION_PII_DAYS) } },
+                  ],
+                },
+                {
+                  and: [
+                    { status: { equals: "new" } },
+                    { updatedAt: { less_than: ago(UNHANDLED_SUGGESTION_DAYS) } },
+                  ],
+                },
               ],
             },
-            {
-              and: [
-                { status: { equals: "new" } },
-                { updatedAt: { less_than: ago(UNHANDLED_SUGGESTION_DAYS) } },
-              ],
-            },
+            { or: [{ userName: { exists: true } }, { userMail: { exists: true } }] },
           ],
         },
-        { or: [{ userName: { exists: true } }, { userMail: { exists: true } }] },
-      ],
-    },
-    data: { userName: null, userMail: null },
-  });
+        data: { userName: null, userMail: null },
+      }),
+    [],
+  );
 
   // Open reports keep their text; the sender's mail goes after the same period as a suggestion's. A failure is logged
   // and thrown at the end: it must not stop the comment and feedback clean-up below (for example while the table
   // does not exist yet during a rolling release).
-  let reportsCleared: unknown[] = [];
-  let reportsFailed = false;
-  try {
-    reportsCleared =
+  const reportsCleared = await step(
+    "reports",
+    async () =>
       (await payload.db.updateMany({
         collection: "reports",
         where: {
@@ -66,38 +82,45 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
           ],
         },
         data: { email: null },
-      })) ?? [];
-  } catch (error) {
-    payload.logger.error({ msg: "retention: report mails not cleared", err: error });
-    reportsFailed = true;
-  }
+      })) ?? [],
+    [] as unknown[],
+  );
 
   // The answers stay (they are statistics); the per-word visitor hash goes, so the row no longer points at a browser.
-  const unlinked =
-    (await payload.db.updateMany({
-      collection: "word-feedback",
-      where: {
-        and: [
-          { visitor: { exists: true } },
-          { updatedAt: { less_than: ago(FEEDBACK_VISITOR_DAYS) } },
-        ],
-      },
-      data: { visitor: null },
-    })) ?? [];
+  const unlinked = await step(
+    "word-feedback",
+    async () =>
+      (await payload.db.updateMany({
+        collection: "word-feedback",
+        where: {
+          and: [
+            { visitor: { exists: true } },
+            { updatedAt: { less_than: ago(FEEDBACK_VISITOR_DAYS) } },
+          ],
+        },
+        data: { visitor: null },
+      })) ?? [],
+    [] as unknown[],
+  );
 
-  const stale = await payload.find({
-    collection: "comments",
-    where: {
-      and: [
-        { status: { in: ["removed", "hidden", "pending", "deleted"] } },
-        { updatedAt: { less_than: ago(REMOVED_COMMENT_DAYS) } },
-      ],
-    },
-    select: { status: true },
-    depth: 0,
-    limit: 0,
-    pagination: false,
-  });
+  const stale = await step(
+    "comments",
+    () =>
+      payload.find({
+        collection: "comments",
+        where: {
+          and: [
+            { status: { in: ["removed", "hidden", "pending", "deleted"] } },
+            { updatedAt: { less_than: ago(REMOVED_COMMENT_DAYS) } },
+          ],
+        },
+        select: { status: true },
+        depth: 0,
+        limit: 0,
+        pagination: false,
+      }),
+    null,
+  );
 
   const context = { skipCommentHooks: true };
   let deleted = 0;
@@ -138,7 +161,7 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
     });
     scrubbed++;
   };
-  for (const { id, status } of stale.docs) {
+  for (const { id, status } of stale?.docs ?? []) {
     try {
       // oxlint-disable-next-line no-await-in-loop -- a few comments per run, one at a time keeps the DB load flat
       await purge(id);
@@ -150,7 +173,8 @@ export const runRetention = async (payload: Payload, now = new Date()) => {
   return {
     feedbackUnlinked: unlinked.length,
     reportsCleared: reportsCleared.length,
-    reportsFailed,
+    failedSteps,
+    reportsFailed: failedSteps.includes("reports"),
     suggestionsCleared: cleared?.length ?? 0,
     commentsDeleted: deleted,
     commentsScrubbed: scrubbed,
@@ -167,7 +191,8 @@ export const retentionTask: TaskConfig = {
     // A promised deletion that did not happen must show up as a failed job, not a quiet success.
     if (result.commentsFailed)
       throw new Error(`retention: ${result.commentsFailed} comment(s) not purged`);
-    if (result.reportsFailed) throw new Error("retention: report mails not cleared");
+    if (result.failedSteps.length)
+      throw new Error(`retention: step(s) failed: ${result.failedSteps.join(", ")}`);
     return { output: {} };
   },
 };

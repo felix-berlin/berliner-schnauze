@@ -545,3 +545,45 @@ describe("WordPoll", () => {
     expect(store.loadFeedback).toHaveBeenCalledWith(7);
   });
 });
+
+describe("WordPoll refresh", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    document.body.innerHTML = "";
+    online.ref!.value = true;
+    $feedback.set(state(null));
+    $profile.set({});
+    $sendError.set(null);
+    store.loadFeedback.mockImplementation(async () => {});
+    store.sendFeedback.mockResolvedValue(true);
+    store.answerUsage.mockImplementation(async () => {
+      $feedback.set(state(mine({ usage: "say" })));
+      return true;
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    vi.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  it("says so when the numbers could not be refreshed", async () => {
+    route = () => ({ ok: false });
+    const w = await mountIt();
+    await button(w, "Sag ick selbst").trigger("click");
+    await flushPromises();
+    await button(w, "Ergebnis zeigen").trigger("click");
+    await flushPromises();
+    expect(w.text()).toContain("Zahlen konnten nich aktualisiert werden.");
+  });
+
+  it("fetches the state once after a stored-but-unsynced vote", async () => {
+    store.answerUsage.mockResolvedValue("unsynced");
+    route = () => ({ body: state(mine({ usage: "say" })) });
+    const w = await mountIt();
+    await button(w, "Sag ick selbst").trigger("click");
+    await flushPromises();
+    const gets = fetchMock.mock.calls.filter(([, init]) => !init?.method);
+    expect(gets).toHaveLength(1);
+    await button(w, "Ergebnis zeigen").trigger("click");
+    await flushPromises();
+    expect(w.text()).not.toContain("Is jespeichert"); // the refresh answered, the hint is gone
+  });
+});

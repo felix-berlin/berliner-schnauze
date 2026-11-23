@@ -12,10 +12,9 @@
   }
 
   // Word page ground (SPEC §4 `--page`): a flat beige/blue-black, no dot grid. Scoped to this page: the site-wide
-  // body keeps its tokens.
+  // body keeps its tokens. Value: `color.word.ground` in tokens/semantic.*.tokens.json.
   html:has(.o-word-v18) {
-    // stylelint-disable-next-line color-no-hex, function-disallowed-list -- SPEC §4 palette v13 `--page`, no semantic token (colour inventory: word page palette)
-    --color-surface-ground: light-dark(#efe6db, #1b2127);
+    --color-surface-ground: var(--color-word-ground);
   }
 
   html:has(.o-word-v18) body {
@@ -24,21 +23,15 @@
   }
 
   // Palette v13 of the word page (SPEC §4): the site-wide semantic tokens carry other values (in dark `sheet` equals
-  // `paper`, `chip` is darker than the card). Overridden for this subtree only: card, card2, card3, `--t3`.
-  // The one place for raw colours on this page; SPEC §17 contrast pairs are checked against these values.
+  // `paper`, `chip` is darker than the card). This subtree maps them to the `color.word.*` tokens (the values live in
+  // tokens/semantic.*.tokens.json; SPEC §17 contrast pairs are checked against them), so the partials keep the
+  // site names: card = sheet, card2 = chip, card3, `--t3` = muted. card3 has no site token: the partials use it with
+  // a fallback, so outside this page they keep the site look.
   .o-word-v18 {
-    // stylelint-disable color-no-hex, function-disallowed-list -- SPEC §4 palette v13, no semantic tokens for these values
-    --color-surface-sheet: light-dark(#fff, #2e363f); // --card
-    --color-surface-chip: light-dark(#fbf1e6, #38424c); // --card2
-    --color-surface-card3: light-dark(#f5dfca, #46525e); // --card3: hover/selected of card2, never --t3 text on it
-    --color-text-muted: light-dark(#5f6b77, #a8b2bc); // --t3
-    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w17__ipa: ink-strong at .2 / .13, no token
-    --color-word-ipa-outline: light-dark(rgb(60 67 75 / 20%), rgb(249 249 249 / 13%)); // mock .w17__ipa: ink-strong at .2 / .13
-    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w17__init: ink at .12 / .09, no token
-    --color-word-initial: light-dark(rgb(43 51 59 / 12%), rgb(255 255 255 / 9%)); // mock .w17__init
-    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w18__menu shadow, no token
-    --shadow-menu: 0 14px 32px rgb(0 0 0 / 28%), 0 0 0 1px var(--color-border-card); // mock .w18__menu
-    // stylelint-enable color-no-hex, function-disallowed-list
+    --color-surface-sheet: var(--color-word-sheet);
+    --color-surface-chip: var(--color-word-card2);
+    --color-surface-card3: var(--color-word-card3); // hover/selected of card2, never --t3 text on it
+    --color-text-muted: var(--color-word-muted);
 
     // SPEC §4.3 text link (überspringen, Zurück, Abbrechen ...): solid underline in body colour, not the site's dashed muted one.
     --link-color: var(--color-text-body);
