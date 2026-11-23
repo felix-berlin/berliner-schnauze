@@ -1,7 +1,7 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Auswahl (docs/design/wortseite/SPEC.md): one answer out of several. State via aria-pressed.
+// Auswahl (v18 handoff SPEC): one answer out of several. State via aria-pressed.
 // Variant tile (data-variant="tile"): poll answer (SPEC §7): borderless card2 tile, 72px, round dashed icon, parts .icon and .text.
 // Variant answer: poll answer, flat borderless card2 tile (bold, no icon).
 // Variant pill (data-variant="pill"): voice button (SPEC §6): 36px pill on card2 with a 26px play circle (.icon), a hit band
@@ -271,7 +271,7 @@
     }
   }
 
-  // Icon in a dashed square; on hover it tips and the colour softens (docs/design/wortseite/SPEC.md §10/§13).
+  // Icon in a dashed square; on hover it tips and the colour softens (v18 handoff SPEC §10/§13).
   .icon {
     display: flex;
     align-items: center;

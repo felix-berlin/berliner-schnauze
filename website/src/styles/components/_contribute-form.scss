@@ -1,7 +1,7 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Contribution form of the word page (docs/design/wortseite SPEC §13): one component for example, Jeschichte,
+// Contribution form of the word page (v18 handoff SPEC §13): one component for example, Jeschichte,
 // Wissenswertes, Verwandte and the error report. Parts: .title, .row, .label, .optional, .chips (c-choice chips), .combo,
 // .listbox, .option, .under, .hint, .counter (data-state="over"), .error, .foot (the status boxes are c-state), .actions, .thanks.
 // Root data-state: open | thanks. Without JS nothing renders (the island is client:visible).

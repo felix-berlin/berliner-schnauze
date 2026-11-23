@@ -1,6 +1,6 @@
 @use "@styles/mixins" as mx;
 
-// Word images (docs/design/wortseite/SPEC.md §3/§5; mock: Mobile2 strip, Desktop3 .bs-heroimg,
+// Word images (v18 handoff SPEC §3/§5; mock: Mobile2 strip, Desktop3 .bs-heroimg,
 // bundle.css "Image strip"). The page renders the section twice: data-variant="strip" below the
 // hero, data-variant="hero" inside it. Parts .strip (figures, .open buttons) and the textlink.
 // Public: --word-images-strip-display, --word-images-hero-display (which copy shows: the page

@@ -1,7 +1,7 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Word page menu (docs/design/wortseite/SPEC.md §5/§9): the list draws the sheet inside a bare
+// Word page menu (v18 handoff SPEC §5/§9): the list draws the sheet inside a bare
 // DropdownPopover. role="menu"; items are its .item buttons (done state: data-done / aria-checked).
 @include mx.component("word-menu") {
   :scope {

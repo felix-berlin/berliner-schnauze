@@ -1,7 +1,7 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Reaktion (docs/design/wortseite/SPEC.md §5/§9): thumbs up/down, "hilfreich". Borderless until hover.
+// Reaktion (v18 handoff SPEC §5/§9): thumbs up/down, "hilfreich". Borderless until hover.
 // Part .count (the number; fixed minimum width, so the count arriving does not shift the row).
 // Variants (space-separated): pill = SPEC §4.3 "Reaktion" (word page: thumbs, Teilen, the ⋮ button, story votes),
 // 36px look on the desktop (--word-control-block, set by the page shell) and 44px elsewhere, the hit band always

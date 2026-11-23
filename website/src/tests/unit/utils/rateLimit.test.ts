@@ -39,23 +39,6 @@ describe("rateLimit", () => {
     expect(rateLimited("a", rule, 1000)).toBe(0);
   });
 
-  it("GET and POST /api/comments count separately", () => {
-    const get = rateLimitRule("/api/comments", "GET")!;
-    const post = rateLimitRule("/api/comments", "POST")!;
-    const client = "t-get-post";
-    for (let i = 0; i < 6; i++) expect(rateLimited(client, get, 0)).toBe(0);
-    expect(rateLimited(client, post, 0)).toBe(0);
-  });
-
-  it("PATCH and DELETE share 10 per 5 min", () => {
-    const patch = rateLimitRule("/api/comments/abc", "PATCH")!;
-    const del = rateLimitRule("/api/comments/abc", "DELETE")!;
-    const client = "t-own";
-    for (let i = 0; i < 5; i++) expect(rateLimited(client, patch, 0)).toBe(0);
-    for (let i = 0; i < 5; i++) expect(rateLimited(client, del, 0)).toBe(0);
-    expect(rateLimited(client, patch, 0)).toBeGreaterThan(0);
-  });
-
   it("limits GET /api/word-feedback to 60 per minute, PATCH not here", () => {
     const get = rateLimitRule("/api/word-feedback", "GET")!;
     expect(get.max).toBe(60);

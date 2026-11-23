@@ -1,7 +1,7 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Link (docs/design/wortseite/SPEC.md): text action on a <button>. 44px hit area.
+// Link (v18 handoff SPEC): text action on a <button>. 44px hit area.
 // Public: --link-color, --link-decoration-line, --link-decoration-style (the word page draws it solid, SPEC §4.3).
 @include mx.component("link") {
   :scope {
