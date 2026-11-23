@@ -202,9 +202,9 @@
     }
   }
 
-  // Decorative first letter of the IPA behind the page (mock .w17__init): tablet and desktop only, fixed to the viewport
+  // Decorative first letter of the IPA behind the page (mock .w17__init; direct child only: the word seal has its own .initial): tablet and desktop only, fixed to the viewport
   // foot, tilted, faded out towards the bottom. Fixed boxes add no scrollable overflow; the page cards cover it.
-  .o-word-v18 .initial {
+  .o-word-v18 > .initial {
     display: none;
 
     @include mx.breakpoint("word") {
