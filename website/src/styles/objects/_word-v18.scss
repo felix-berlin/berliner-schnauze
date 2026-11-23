@@ -140,10 +140,13 @@
   // The sticky bar (below 808px) must not hide a focused element: keep it clear on scroll.
   html:has(.o-word-v18) {
     --_bar: calc(4.5rem + env(safe-area-inset-bottom, 0px)); // bar height 72px plus the safe area, no token
+    --scroll-to-top-lift: var(--_bar); // the scroll-to-top button stays above the sticky bar
 
     scroll-padding-block-end: var(--_bar);
 
     @include mx.breakpoint("word") {
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- zero length, no token step
+      --scroll-to-top-lift: 0rem;
       --word-mobile-bar-display: none;
       --word-analyse-wide-display: block;
       --word-analyse-fold-display: none;
