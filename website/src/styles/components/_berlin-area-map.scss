@@ -112,9 +112,10 @@
     --choice-justify: flex-start;
     --choice-padding-block: var(--space-1);
     --choice-text-align: start;
+    --_min: 180px; // one-off tile width: one column on a phone, four at 1280 (mock .w17 list: auto-fill minmax(min(180px, 100%), 1fr))
 
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(var(--_min), 100%), 1fr));
     gap: var(--space-2);
     overflow-wrap: anywhere;
   }
@@ -148,11 +149,6 @@
     .list {
       order: 1;
       inline-size: min(100%, 40rem);
-    }
-
-    .list-items {
-      display: flex;
-      flex-wrap: wrap;
     }
   }
 }
