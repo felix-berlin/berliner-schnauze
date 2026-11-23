@@ -12,7 +12,9 @@
     container: word-stories / inline-size;
     position: relative; // anchor of the empty status region
     display: grid;
+    grid-template-columns: minmax(0, 1fr); // the headword inside the texts can be 36 letters long
     gap: var(--space-4);
+    overflow-wrap: anywhere;
   }
 
   .prompt {
