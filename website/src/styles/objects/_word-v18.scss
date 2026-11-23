@@ -40,6 +40,10 @@
     --shadow-menu: 0 14px 32px rgb(0 0 0 / 28%), 0 0 0 1px var(--color-border-card); // mock .w18__menu
     // stylelint-enable color-no-hex, function-disallowed-list
 
+    // SPEC §4.3 text link (überspringen, Zurück, Abbrechen ...): solid underline in body colour, not the site's dashed muted one.
+    --link-color: var(--color-text-body);
+    --link-decoration-style: solid;
+
     // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: toc column is exactly 220px, no token
     --_toc-width: 220px;
     // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: wrap max width 1208px incl. padding

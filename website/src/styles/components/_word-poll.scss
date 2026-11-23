@@ -61,12 +61,6 @@
     }
   }
 
-  // SPEC §4.3 text link: solid underline in body colour (the trash link below is muted and has none).
-  :scope {
-    --link-color: var(--color-text-body);
-    --link-decoration-style: solid;
-  }
-
   .segments {
     display: flex;
     gap: var(--space-1);
@@ -276,7 +270,8 @@
   .pct {
     color: var(--color-text-strong);
     font-family: var(--font-condensed);
-    font-size: 1.25rem; // mock .w16 .w12__row em / .w12__legend b: Fira 800, 20px
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .w16 .w12__row em / .w12__legend b: Fira 800, 20px
+    font-size: 1.25rem;
     font-weight: 800;
     letter-spacing: 0.3px;
     font-variant-numeric: tabular-nums;
@@ -335,6 +330,7 @@
       align-items: center;
       gap: var(--space-1);
       color: var(--color-text-muted);
+
       --link-color: var(--color-text-muted);
       --link-decoration-line: none;
     }

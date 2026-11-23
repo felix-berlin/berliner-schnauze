@@ -57,6 +57,7 @@
     margin: 0;
     font-family: var(--font-family-body); // no Fraktur on this page
     font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
     color: var(--color-text-strong);
   }
 
@@ -66,15 +67,14 @@
     justify-self: start;
     max-inline-size: 100%;
     padding: var(--space-1);
-    background: var(--color-surface-wash);
+    background: var(--color-surface-sheet); // mock .w18__ctabs: the card ground
     border-radius: var(--radius-pill);
 
     [role="tab"] {
       min-block-size: 2.5rem; // 40px inside the 44px segment; the segment is the target, no token step
       padding-inline: var(--space-4);
       font: inherit;
-      font-size: var(--font-size-md);
-      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-sm);
       color: var(--color-text-body);
       background: transparent;
       border: 0;
@@ -82,8 +82,9 @@
       cursor: pointer;
 
       &[aria-selected="true"] {
-        color: var(--color-text-strong);
-        background: var(--color-surface-sheet);
+        color: var(--color-surface-sheet);
+        background: var(--color-text-strong);
+        font-weight: var(--font-weight-bold);
       }
     }
   }
@@ -105,7 +106,7 @@
     padding: var(--space-3) var(--space-3);
     // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §5.2: the citation is monospace, no font token for it
     font-family: monospace;
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-sm);
     line-height: 1.55;
     color: var(--color-text-strong);
     background: var(--color-surface-sheet);
@@ -119,6 +120,7 @@
   .send {
     --button-min-block-size: var(--size-tap-target);
     --button-padding: 0 var(--space-6);
+    --button-font-size: var(--font-size-base); // mock: the button inherits the 16px text size
 
     justify-self: start;
   }

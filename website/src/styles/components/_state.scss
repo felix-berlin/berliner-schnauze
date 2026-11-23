@@ -53,6 +53,7 @@
   }
 
   :scope[data-variant~="success"] {
+    // stylelint-disable-next-line function-disallowed-list -- mock .w18__thx: the success colour at 12%, no token
     background: color-mix(in srgb, var(--_stripe) 12%, transparent);
   }
 
