@@ -240,6 +240,12 @@
               </ul>
             </template>
             <p class="foot">1 Punkt = 5 % · nur Gruppen ab 10 Stimmen</p>
+            <p v-if="unsynced" class="foot" role="status">
+              Is jespeichert, Zahlen laden gleich nach.
+            </p>
+            <p v-else-if="stale" class="foot" role="status">
+              Zahlen konnten nich aktualisiert werden.
+            </p>
           </div>
         </div>
 
@@ -313,7 +319,7 @@ import type { Area, Usage } from "payload-app/word-feedback";
 import BerlinAreaMap from "@components/word-feedback/BerlinAreaMap.vue";
 import { USAGE_OPTIONS } from "@components/word-feedback/usageOptions";
 import { OFFLINE_HINT, useOnline } from "@composables/useOnline.ts";
-import { type PollResult, MIN_GROUP, dotsFor } from "@lib/pollResult.ts";
+import { type PollResult, type Region, MIN_GROUP, dotsFor } from "@lib/pollResult.ts";
 import { useStore } from "@nanostores/vue";
 import {
   $feedback,
@@ -377,6 +383,8 @@ const total = computed(() => result.value.total);
 
 const pending = ref(false);
 const refreshing = ref(false);
+const unsynced = ref(false); // stored, but the totals were not read back yet
+const stale = ref(false); // the last refresh failed: the shown numbers may be old
 const pendingUsage = ref<Usage | null>(null);
 const failedUsage = ref<Usage | null>(null);
 const voteFailed = computed(() => !!failedUsage.value);
@@ -458,10 +466,11 @@ const goTo = (to: ProfileStep, dir: "back" | "forward" = "forward") => {
 const refresh = async () => {
   refreshing.value = true;
   try {
+    // refreshFeedback logs its own failure and answers null; the shown numbers stay as they are.
     const state = await refreshFeedback(props.wordId);
+    stale.value = !state;
+    if (state) unsynced.value = false;
     if (state?.result) result.value = state.result;
-  } catch {
-    // The shown numbers stay as they are.
   } finally {
     refreshing.value = false;
   }
@@ -496,9 +505,15 @@ const vote = async (usage: Usage) => {
     }
     trackEvent("Word Feedback", "usage", usage);
     // silent: the strip is the one channel for a failed vote.
-    if (!(await answerUsage(props.wordId, usage, true))) {
+    const sent: boolean | "unsynced" = await answerUsage(props.wordId, usage, true);
+    if (!sent) {
       failedUsage.value = usage;
       return;
+    }
+    // Stored, but the server could not read the totals back: fetch the state once instead of showing the old one.
+    if (sent === "unsynced") {
+      unsynced.value = true;
+      await refresh();
     }
     failedUsage.value = null;
     deleted.value = false;
@@ -508,7 +523,7 @@ const vote = async (usage: Usage) => {
       view.value = "result";
       void focusQuestion();
     } else startQuestions();
-    void refresh();
+    if (sent !== "unsynced") void refresh();
   } finally {
     pending.value = false;
     pendingUsage.value = null;
@@ -533,9 +548,14 @@ const answer = async (key: ProfileStep, value: string | null) => {
       area: answers.value.area,
       hadLocality,
     }) as Parameters<typeof sendFeedback>[1];
-    if (!(await sendFeedback(props.wordId, patch, { silent: true }))) {
+    const sent = await sendFeedback(props.wordId, patch, { silent: true });
+    if (!sent) {
       answerFailed.value = true;
       return;
+    }
+    if (sent === "unsynced") {
+      unsynced.value = true;
+      void refresh();
     }
     const next: Answers = { ...answers.value };
     for (const [k, v] of Object.entries(patch)) {
@@ -587,7 +607,7 @@ const share = (u: Usage) =>
   result.value.shares[{ know: "kenn", never: "nie", say: "selbst" }[u] as "kenn"];
 const labelOf = (key: string, list: { label: string; value: string }[]) =>
   list.find((o) => o.value === key)?.label ?? key;
-const regionLabel = { ost: "Ost", umland: "Umland", west: "West" } as Record<string, string>;
+const regionLabel: Record<Region, string> = { ost: "Ost", umland: "Umland", west: "West" };
 // The server leaves small groups out already; hold the same line here.
 const regions = computed(() => result.value.byRegion.filter((g) => g.n >= MIN_GROUP));
 const ages = computed(() => result.value.byAge.filter((g) => g.n >= MIN_GROUP));
@@ -597,7 +617,7 @@ const groups = computed(() => [
     label: "„Sag ick selbst“ nach Wohnort",
     rows: regions.value.map((g) => ({
       key: g.key,
-      label: regionLabel[g.key] ?? g.key,
+      label: regionLabel[g.key],
       selbst: g.selbst,
     })),
   },

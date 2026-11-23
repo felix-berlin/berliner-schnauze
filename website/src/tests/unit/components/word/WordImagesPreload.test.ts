@@ -28,13 +28,15 @@ describe("WordImages.astro preload", () => {
     render = await createAstroRender(WordImages);
   }, 30_000);
 
-  it("preloads only the first image, scoped to the viewport where its copy is visible", async () => {
+  it("preloads only the first image, scoped to the viewports where its copy is certainly visible", async () => {
     getImage.mockResolvedValue({ srcSet: { attribute: "/a.webp 220w, /b.webp 330w" } });
     const hero = await render({ images: [image(1), image(2)], placement: "hero" });
     expect(hero.match(/rel="preload"/g)).toHaveLength(1);
     expect(hero).toContain('imagesrcset="/a.webp 220w, /b.webp 330w"');
-    expect(hero).toContain('media="(min-width: 808px)"');
-    expect(hero).toContain('imagesizes="(max-width: 999px) 70vw, 380px"');
+    expect(hero).toContain('media="(min-width: 608px)"');
+    expect(hero).toContain(
+      'imagesizes="(max-width: 999px) calc(40vw - 67px), (max-width: 1250px) calc(40vw - 190px), 360px"',
+    );
     expect(getImage).toHaveBeenLastCalledWith(
       expect.objectContaining({
         src: "https://cms.example.com/1.jpg",
@@ -43,7 +45,7 @@ describe("WordImages.astro preload", () => {
     );
 
     const strip = await render({ images: [image(1)], placement: "strip" });
-    expect(strip).toContain('media="(max-width: 807.98px)"');
+    expect(strip).toContain('media="(max-width: 591.98px)"');
     expect(strip).toContain('imagesizes="82vw"');
   });
 

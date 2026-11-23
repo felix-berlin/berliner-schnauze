@@ -171,7 +171,7 @@ const content = seoData({
       {!draft && <meta name='word-pulse' content={String(word.id)} />}
     </Fragment>
     <WordPage draft={!!draft} model={model} words={words} />
-    <FooterCalloutBook slot='footer-callout' book={model.book} more={model.moreBooks} />
+    <FooterCalloutBook slot='footer-callout' book={model.book} />
   </Layout>
 ) : (
   <Layout content={content} footerExcludeSlug={word.slug}>

@@ -456,14 +456,16 @@ const onTabKey = (event: KeyboardEvent): void => {
 };
 
 // --- report -----------------------------------------------------------------------------------------
-const report = (): void => {
+const report = async (): Promise<void> => {
   closeMenu();
+  // Open first and wait: the form focuses its first choice (an instant scroll) when it opens, which would cut off a
+  // smooth scroll that had started before.
+  openContributeForm("error");
+  await nextTick();
   const reduce = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
   document
     .getElementById("fehler")
     ?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
-  // The form focuses its first choice when it opens.
-  openContributeForm("error");
 };
 
 // --- reactions ---------------------------------------------------------------------------------------

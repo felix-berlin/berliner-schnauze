@@ -81,11 +81,12 @@ describe("v18 word cards", () => {
       examples: [{ example: "Satz.", exampleAudio: [] }],
       word: "Testwort",
     });
+    expect(html).toMatch(/<button[^>]* data-record[ >]/); // the hook recordTooltips selects, not a styling class
     expect(html).toMatch(
       /<button[^>]*aria-disabled="true"[^>]*data-tip-lead="Kommt bald\."[^>]*data-tip="Einsprechen is noch in Arbeit\."[^>]*aria-describedby="einsprechen-tip-0"/,
     );
     expect(html).toMatch(
-      /id="einsprechen-tip-0"[^>]*role="tooltip"[^>]*>Kommt bald\. Einsprechen is noch in Arbeit\./,
+      /id="einsprechen-tip-0"[^>]*>Kommt bald\. Einsprechen is noch in Arbeit\./,
     );
   });
 

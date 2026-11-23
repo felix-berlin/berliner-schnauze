@@ -59,4 +59,15 @@ const memo = ttlBy(60_000, MAX_KEYS, load);
  * the featured one, which comes apart on page 1 only. `total` counts the featured one. The same for every visitor
  * (own reactions come from GET /api/stories/mine), so it is cached for a minute per word and page.
  */
-export const fetchStories = (wordId: number, page: number) => memo(`${wordId}:${page}`);
+export const fetchStories = async (wordId: number, page: number) => {
+  const first = await memo(`${wordId}:1`);
+  if (page === 1) return first;
+  // Far-out pages would each fill a cache slot (MAX_KEYS) and push real words out: answer them empty, uncached.
+  const lastPage = Math.max(
+    1,
+    Math.ceil((first.total - (first.featured ? 1 : 0)) / STORIES_PAGE_SIZE),
+  );
+  return page > lastPage
+    ? { featured: null, hasMore: false, items: [], page, total: first.total }
+    : memo(`${wordId}:${page}`);
+};

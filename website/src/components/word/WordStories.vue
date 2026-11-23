@@ -13,7 +13,7 @@
         data-variant="outline"
         type="button"
         data-contribute="story"
-        :aria-expanded="formOpen"
+        aria-expanded="false"
         @click="openContributeForm('story')"
       >
         <MessageCircle aria-hidden="true" class="icon" height="18" width="18" />
@@ -69,6 +69,7 @@
     </ol>
 
     <p v-if="!online && items.length" class="note">{{ OFFLINE_HINT }}</p>
+    <p v-if="ownFailed" class="note">Deine eijenen Jeschichten konnten nich jeladen werden.</p>
     <p class="note u-sr-only-empty" role="status">{{ note }}</p>
 
     <button
@@ -77,7 +78,7 @@
       type="button"
       :aria-busy="loading"
       :aria-controls="`${uid}-list`"
-      :aria-expanded="false"
+      :aria-expanded="expanded"
       @click="expand"
     >
       {{ loading ? "Lade …" : `Alle ${total} Jeschichten lesen` }}
@@ -95,6 +96,7 @@ import { BEZIRK_NAMES } from "@lib/bezirkNames.ts";
 import { agoLabel, type Story } from "@lib/story.ts";
 import { useStore } from "@nanostores/vue";
 import { openContributeForm, openForm } from "@stores/contribute.ts";
+import { reportError } from "@utils/reportError.ts";
 import { useMediaQuery } from "@vueuse/core";
 import MessageCircle from "virtual:icons/lucide/message-circle";
 import { computed, nextTick, onMounted, reactive, ref, useId, useTemplateRef } from "vue";
@@ -134,6 +136,7 @@ const mine = reactive<Record<string, -1 | 0 | 1>>({});
 const pending = ref<{ id: number; text: string }[]>([]);
 const busy = reactive(new Set<string>());
 const note = ref("");
+const ownFailed = ref(false);
 
 // The query only counts once mounted: setup() already sees the client value, which would differ from the server markup (three). The "word" breakpoint (808px) of the page shell,
 // which also hides the third story before hydration (objects/_word-v18.scss): SPEC §3, mobile 2, from tablet 3.
@@ -155,7 +158,7 @@ onMounted(async () => {
     const res = await fetch(`/api/stories/mine?word=${encodeURIComponent(props.word)}`, {
       cache: "no-store",
     });
-    if (!res.ok) return;
+    if (!res.ok) throw new Error(`[stories] mine -> ${res.status}`);
     const data = (await res.json()) as {
       pending?: { id: number; text: string }[];
       reactions?: Record<string, -1 | 1>;
@@ -164,8 +167,10 @@ onMounted(async () => {
       if (!touched.has(id)) mine[id] = vote;
     }
     pending.value = data.pending ?? [];
-  } catch {
-    // Own state is a convenience: without it nothing is pressed and no chip shows.
+  } catch (error) {
+    // Own state is a convenience: without it nothing is pressed and no chip shows, but the visitor is told.
+    ownFailed.value = true;
+    reportError(error);
   }
 });
 
@@ -176,7 +181,8 @@ const meta = (s: Story): string =>
   [
     s.name || "aus der Community",
     s.bezirk && BEZIRK_NAMES[s.bezirk] ? `aus ${BEZIRK_NAMES[s.bezirk]}` : "",
-    agoLabel(s.createdAt),
+    // Relative to "now": only after mount, so the server markup and the hydrated one cannot differ at a day boundary.
+    mounted.value ? agoLabel(s.createdAt) : "",
   ]
     .filter(Boolean)
     .join(" · ");
@@ -200,22 +206,32 @@ const react = async (s: Story, value: -1 | 1): Promise<void> => {
   mine[s.id] = next;
   busy.add(s.id);
   note.value = "";
+  const rollback = (message: string): void => {
+    s.jenau = before.jenau;
+    s.anders = before.anders;
+    mine[s.id] = before.mine;
+    note.value = message;
+  };
   try {
     const res = await fetch("/api/comment-votes", {
       body: JSON.stringify({ commentId: Number(s.id), value: next }),
       headers: { "Content-Type": "application/json" },
       method: "POST",
     });
-    if (!res.ok) throw new Error(String(res.status));
-    const data = (await res.json()) as { downvotes: number; myVote: -1 | 0 | 1; upvotes: number };
-    s.jenau = data.upvotes;
-    s.anders = data.downvotes;
-    mine[s.id] = data.myVote;
-  } catch {
-    s.jenau = before.jenau;
-    s.anders = before.anders;
-    mine[s.id] = before.mine;
-    note.value = FAILED;
+    if (res.ok) {
+      const data = (await res.json()) as { downvotes: number; myVote: -1 | 0 | 1; upvotes: number };
+      s.jenau = data.upvotes;
+      s.anders = data.downvotes;
+      mine[s.id] = data.myVote;
+    } else {
+      // The server's German text (rate limit, gone story) when it sent one; only server faults go to the log.
+      const body = (await res.json().catch(() => null)) as null | { error?: string };
+      if (res.status >= 500) reportError(new Error(`[stories] react -> ${res.status}`));
+      rollback(body?.error ?? FAILED);
+    }
+  } catch (error) {
+    reportError(error);
+    rollback(FAILED);
   } finally {
     busy.delete(s.id);
   }
@@ -229,7 +245,7 @@ const loadPage = async (): Promise<boolean> => {
         cache: "no-store",
       },
     );
-    if (!res.ok) return false;
+    if (!res.ok) throw new Error(`[stories] page ${page + 1} -> ${res.status}`);
     const data = (await res.json()) as { hasMore: boolean; items: Story[] };
     const known = new Set(items.value.map((s) => s.id));
     // The featured story sits in the head; a story that arrived between two pages must not show twice.
@@ -237,7 +253,8 @@ const loadPage = async (): Promise<boolean> => {
     page += 1;
     hasMore.value = data.hasMore;
     return true;
-  } catch {
+  } catch (error) {
+    reportError(error);
     return false;
   }
 };

@@ -2,19 +2,17 @@ import type { APIRoute } from "astro";
 
 import { getPayloadClient } from "@services/payload.ts";
 import { wordIdBySlug } from "@services/payload/wordId.ts";
-import { captchaGate, reply } from "@utils/apiReply.ts";
+import { captchaGate, reply, submitFailure } from "@utils/apiReply.ts";
 import { logRouteError } from "@utils/logError.ts";
 import { requestIp } from "@utils/rateLimit.ts";
+import { REPORT_KINDS } from "payload-app/suggestion-enums";
 import { z } from "zod";
 
-// Values mirror the select options of the reports collection.
+// Values come from the shared tuple the reports collection builds its select options from.
 const reportSchema = z.object({
   // z.email rejects whitespace, so a CR/LF can never reach a mail header.
   email: z.union([z.literal(""), z.email("Irgendwas läuft hier nicht").max(200)]).optional(),
-  kind: z.enum(
-    ["meaning", "spelling", "example", "audio", "fact", "inappropriate", "other"],
-    "Was stimmt nich?",
-  ),
+  kind: z.enum(REPORT_KINDS, "Was stimmt nich?"),
   text: z
     .string()
     .trim()
@@ -54,6 +52,6 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
     return reply({ ok: true }, 201);
   } catch (error) {
     logRouteError("reports", error);
-    return reply({ error: "Deine Meldung konnte leider nicht gesendet werden." }, 502);
+    return submitFailure(error, "Deine Meldung konnte leider nicht gesendet werden.");
   }
 };

@@ -391,7 +391,7 @@ test.describe("keyboard", () => {
 
   test("the Einsprechen tooltip opens by focus", async ({ page }) => {
     await open(page);
-    const record = page.locator(".c-word-beispiele .record-button").first();
+    const record = page.locator(".c-word-beispiele [data-record]").first();
     await record.focus();
     const tip = page.getByRole("tooltip").filter({ hasText: "Einsprechen" });
     await expect(tip).toBeVisible();

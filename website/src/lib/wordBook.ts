@@ -46,15 +46,30 @@ export const disclosureFor = (
   return cms ?? (amazon ? AMAZON_FALLBACK : undefined);
 };
 
-/** The first book listed for the word's first Thema (`themen` hold ids or populated Themen); undefined without one. */
-/** The footer's "Ooch jut" column: up to two other books with a web link (the picked one is left out). */
+export type MoreBook = { title: string; url: string; cover?: string; note?: string };
+
+/** The footer's "Ooch jut" column: up to two other books with a title and a web link (the picked one is left out). */
 export const pickMoreBooks = (
   books: readonly AffiliateBook[],
   picked: AffiliateBook | undefined,
   limit = 2,
-): AffiliateBook[] =>
-  books.filter((b) => b !== picked && b.title && isWebUrl(b.href)).slice(0, limit);
+): MoreBook[] =>
+  books
+    .flatMap((b): MoreBook[] =>
+      b !== picked && b.title && isWebUrl(b.href)
+        ? [
+            {
+              title: b.title,
+              url: b.href,
+              ...(b.imageUrl && { cover: b.imageUrl }),
+              ...(b.description && { note: b.description }),
+            },
+          ]
+        : [],
+    )
+    .slice(0, limit);
 
+/** The first book listed for the word's first Thema (`themen` hold ids or populated Themen); undefined without one. */
 export const pickBook = (
   books: readonly AffiliateBook[],
   firstThemaId: number | undefined,

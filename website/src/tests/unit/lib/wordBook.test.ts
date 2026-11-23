@@ -21,6 +21,24 @@ describe("pickMoreBooks", () => {
     expect(pickMoreBooks(withBad, pickBook(withBad, 2)).map((b) => b.title)).toEqual(["B", "C"]);
     expect(pickMoreBooks(books, undefined, 1).map((b) => b.title)).toEqual(["A"]);
   });
+
+  it("maps to fully typed entries: url from href, cover and note only when set", () => {
+    const rich = [
+      {
+        description: "Note",
+        href: "https://shop.example/e",
+        imageUrl: "https://i.example/e",
+        title: "E",
+      },
+    ] as typeof books;
+    expect(pickMoreBooks(rich, undefined)).toEqual([
+      { cover: "https://i.example/e", note: "Note", title: "E", url: "https://shop.example/e" },
+    ]);
+    expect(pickMoreBooks(books, undefined, 1)[0]).toEqual({
+      title: "A",
+      url: "https://shop.example/a",
+    });
+  });
 });
 
 describe("pickBook", () => {

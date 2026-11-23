@@ -1,15 +1,13 @@
 import type { APIRoute } from "astro";
-import type { Comment } from "payload-app";
 
 import { getPayloadClient } from "@services/payload.ts";
-import { authorTagOf, hashEditKey, visitorId } from "@services/payload/comments.ts";
+import { authorTagOf, visitorId } from "@services/payload/comments.ts";
 import { fetchStories } from "@services/payload/stories.ts";
 import { wordIdBySlug } from "@services/payload/wordId.ts";
-import { captchaGate, positiveInt, reply } from "@utils/apiReply.ts";
+import { captchaGate, positiveInt, reply, submitFailure } from "@utils/apiReply.ts";
 import { logRouteError } from "@utils/logError.ts";
 import { requestIp } from "@utils/rateLimit.ts";
-import { visible } from "@utils/visibleText.ts";
-import { randomBytes } from "node:crypto";
+import { visible, visibleLine } from "@utils/visibleText.ts";
 import { COMMENT_MIN } from "payload-app/comments";
 import { STORY_BEZIRKE } from "payload-app/story-bezirk";
 import { z } from "zod";
@@ -18,8 +16,8 @@ const TEXT_MAX = 500;
 const NAME_MAX = 40;
 
 const storyCreateSchema = z.object({
-  bezirk: z.enum(STORY_BEZIRKE as [string, ...string[]], "Ungültiger Bezirk").optional(),
-  name: visible.pipe(z.string().max(NAME_MAX, "Ditt is ein bisken zu lang.")).default(""),
+  bezirk: z.enum(STORY_BEZIRKE, "Ungültiger Bezirk").optional(),
+  name: visibleLine.pipe(z.string().max(NAME_MAX, "Ditt is ein bisken zu lang.")).default(""),
   text: visible.pipe(
     z
       .string()
@@ -47,7 +45,7 @@ export const GET: APIRoute = async ({ url }) => {
   }
 };
 
-/** Stores a Jeschichte as a comment held for review (`context.review`); edit key like the comment POST. */
+/** Stores a Jeschichte as a comment held for review (`context.review`); no edit key, a story is not editable. */
 export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
   const body: unknown = await request.json().catch(() => undefined);
   if (typeof body !== "object" || body === null) return reply({ error: "Ungültige Anfrage" }, 400);
@@ -71,7 +69,6 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
 
     // Per-word handle, like the comment POST: one visitor, one tag per word, not linkable across words.
     const authorTag = authorTagOf(visitorId(cookies, true)!, wordId);
-    const editKey = randomBytes(32).toString("base64url");
     const created = await (
       await getPayloadClient()
     ).create({
@@ -80,16 +77,15 @@ export const POST: APIRoute = async ({ clientAddress, cookies, request }) => {
       data: {
         authorName: name,
         authorTag,
-        bezirk: bezirk as Comment["bezirk"],
-        editKeyHash: hashEditKey(editKey),
+        bezirk,
         text,
         word: wordId,
       },
       depth: 0,
     });
-    return reply({ editKey, id: created.id, ok: true }, 201);
+    return reply({ id: created.id, ok: true }, 201);
   } catch (error) {
     logRouteError("stories", error);
-    return reply({ error: "Deine Jeschichte konnte leider nicht gesendet werden." }, 502);
+    return submitFailure(error, "Deine Jeschichte konnte leider nicht gesendet werden.");
   }
 };

@@ -3,9 +3,10 @@
 // Word images (v18 handoff SPEC §3/§5; mock: Mobile2 strip, Desktop3 .bs-heroimg,
 // bundle.css "Image strip"). The page renders the section twice: data-variant="strip" below the
 // hero, data-variant="hero" inside it. Parts .strip (figures, .open buttons) and the textlink.
-// Public: --word-images-strip-display, --word-images-hero-display (which copy shows: the page
-// shell switches them at its breakpoint), --word-images-column, --word-images-row (placement in
-// the hero grid).
+// Every image is 4:3 on purpose (cropped, whatever the source ratio).
+// Public: --word-images-strip-display, --word-images-hero-display (which copy shows: set by the word-head
+// container query at inline-size >= 35rem, _word-head.scss), --word-images-column, --word-images-row
+// (placement in the hero grid).
 @include mx.component("word-images") {
   :scope {
     --_focus-room: 0.3125rem; // room for the 2px dashed focus ring (offset 2px) that overflow-x would clip

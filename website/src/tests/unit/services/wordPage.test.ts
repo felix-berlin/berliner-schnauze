@@ -136,6 +136,84 @@ describe("fetchWordPage", () => {
     ]);
   });
 
+  it("drops a related entry with neither a label nor a linked word", async () => {
+    m.fetchAllWords.mockResolvedValue(
+      words({
+        related: [
+          { label: "", relation: "verwandt" },
+          { relation: "gleich" },
+          { label: "only text" },
+        ],
+      }),
+    );
+    expect((await fetchWordPage("bbb"))!.related.map((r) => r.label)).toEqual(["only text"]);
+  });
+
+  it("nests the further books in `book`, and has none without a picked book", async () => {
+    const themen = [{ id: 9, name: "Essen", slug: "essen" }];
+    m.fetchAllWords.mockResolvedValue(words({ themen }));
+    m.fetchAffiliateData.mockResolvedValue({
+      books: [
+        { href: "https://shop.example/y", themen: [9], title: "Y" },
+        {
+          description: "Note",
+          href: "https://shop.example/z",
+          imageUrl: "https://i.example/z",
+          title: "Z",
+        },
+      ],
+      disclaimers: [],
+    });
+    expect((await fetchWordPage("bbb"))!.book?.more).toEqual([
+      { cover: "https://i.example/z", note: "Note", title: "Z", url: "https://shop.example/z" },
+    ]);
+    const model = (await fetchWordPage("aaa"))!;
+    expect(model).not.toHaveProperty("book");
+    expect(model).not.toHaveProperty("moreBooks");
+  });
+
+  describe("a failing optional source does not fail the page", () => {
+    beforeEach(() => {
+      vi.spyOn(console, "error").mockImplementation(() => {});
+      m.fetchAllWords.mockResolvedValue(words());
+    });
+
+    it("a failing poll query: empty poll, rest of the page intact", async () => {
+      // Its own id: the poll is cached per word for a minute.
+      m.fetchAllWords.mockResolvedValue([word(61, "ppp")]);
+      m.find.mockRejectedValue(new Error("db down"));
+      const model = (await fetchWordPage("ppp"))!;
+      expect(model.poll.total).toBe(0);
+      expect(model.word.id).toBe(61);
+      expect(console.error).toHaveBeenCalledWith("[word page poll] failed: Error");
+    });
+
+    it("failing stories: no stories, no featured", async () => {
+      m.fetchStories.mockRejectedValue(new Error("db down"));
+      const model = (await fetchWordPage("bbb"))!;
+      expect(model.stories).toEqual({ items: [], total: 0 });
+      expect(model).not.toHaveProperty("featured");
+    });
+
+    it("failing affiliate and global: no book, default story prompt", async () => {
+      m.fetchAffiliateData.mockRejectedValue(new Error("x"));
+      m.fetchWordPageGlobal.mockRejectedValue(new Error("x"));
+      const model = (await fetchWordPage("bbb"))!;
+      expect(model).not.toHaveProperty("book");
+      expect(model.storyPrompt).toBe("Wo haste „bbb“ zuletzt jehört?");
+    });
+
+    it("a failing trend only drops the trend", async () => {
+      m.getWordTrend.mockRejectedValue(new Error("x"));
+      expect(await fetchWordPage("bbb")).not.toHaveProperty("trend");
+    });
+
+    it("the word itself still throws", async () => {
+      m.fetchAllWords.mockRejectedValue(new Error("db down"));
+      await expect(fetchWordPage("bbb")).rejects.toThrow("db down");
+    });
+  });
+
   it("lists similarly written words, the most similar first", async () => {
     m.fetchAllWords.mockResolvedValue([
       word(1, "schnauzen"),
@@ -212,6 +290,7 @@ describe("fetchWordPage", () => {
     });
     expect((await fetchWordPage("bbb"))!.book).toEqual({
       cover: "https://img.example/y.jpg",
+      more: [{ title: "X", url: "https://shop.example/x" }],
       title: "Y",
       url: "https://shop.example/y",
     });
@@ -230,6 +309,7 @@ describe("fetchWordPage", () => {
     });
     expect((await fetchWordPage("bbb"))!.book).toEqual({
       disclosure: "CMS Amazon.",
+      more: [],
       title: "Good",
       url: "https://www.amazon.de/dp/X",
     });
@@ -254,7 +334,8 @@ describe("fetchWordPage", () => {
     const model = (await fetchWordPage("bbb"))!;
     expect(model.storyPrompt).toBe("Wo haste „bbb“ zuletzt jehört?");
     expect(model.stories).toEqual({ items: [{ ...story, id: "6" }], total: 4 });
-    expect(model.featuredStoryId).toBe("5");
+    expect(model).not.toHaveProperty("featuredStoryId");
+    expect(model.featured).toEqual(story);
     expect(m.fetchStories).toHaveBeenCalledWith(2, 1);
     m.fetchWordPageGlobal.mockResolvedValue({ storyPrompt: "Kennste {Wort}?" });
     expect((await fetchWordPage("bbb"))!.storyPrompt).toBe("Kennste bbb?");
