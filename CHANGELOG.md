@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.2](https://github.com/felix-berlin/berliner-schnauze/compare/v5.0.1...v5.0.2) (2026-11-23)
+
+### Bug Fixes
+
+* **pages:** tolerate a missing Astro.cache in container tests ([4e45d50](https://github.com/felix-berlin/berliner-schnauze/commit/4e45d508deec3a83efb9ee5155c72eed695b4e5f))
+
+### Performance Improvements
+
+* **pages:** cache more pages in memory ([3713ab1](https://github.com/felix-berlin/berliner-schnauze/commit/3713ab1443510fb21b45ce696f73cda6e0fac961))
+* **pages:** lower the page cache to 500 entries ([af1cc46](https://github.com/felix-berlin/berliner-schnauze/commit/af1cc46108e81b86898577d926b61a698086aac7))
+* **pwa:** prefetch pages on hover, word pages browser-cacheable for 30 s ([7b8434e](https://github.com/felix-berlin/berliner-schnauze/commit/7b8434ef4ba6cbc3a53d2ed427e1d3d12f79d6b0))
+* **word:** cache word pages in memory for a minute ([210ebb7](https://github.com/felix-berlin/berliner-schnauze/commit/210ebb7aa8ba8dfe9aacb57c498461b4a3375677))
+
 ## [5.0.1](https://github.com/felix-berlin/berliner-schnauze/compare/v5.0.0...v5.0.1) (2026-11-23)
 
 
