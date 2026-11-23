@@ -5,6 +5,10 @@
       "url": "${PAYLOAD_MCP_URL:-https://cms.berliner-schnauze.wtf/api/mcp}",
       "headers": { "Authorization": "Bearer ${PAYLOAD_MCP_KEY:-}" }
     },
+    "astro-docs": {
+      "type": "http",
+      "url": "https://mcp.docs.astro.build/mcp"
+    },
     "playwright-test": {
       "command": "pnpm",
       "args": ["--dir", "website", "exec", "playwright", "run-test-mcp-server"]

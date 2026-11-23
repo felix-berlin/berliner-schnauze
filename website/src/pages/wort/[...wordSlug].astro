@@ -17,6 +17,14 @@ const draft = await previewDraft(Astro, 'words', wordSlug, fetchDraftWord);
 const model = wordSlug ? await fetchWordPage(wordSlug, draft) : null;
 if (!model) return Astro.rewrite('/404');
 const { word } = model;
+// Shared page cache (spike, #1950): the model holds no visitor data. A request with a preview cookie never reaches
+// the cache (`lib/previewAwareCache.ts`); the draft check here is the second guard against a draft going public.
+if (!draft && Astro.cache.enabled) {
+  Astro.cache.set({ maxAge: 60, swr: 300, tags: ['words'] });
+  // Browsers may reuse the page for 30 s: that is what makes a hover prefetch (astro.config.mjs) pay off, a
+  // `max-age=0` page is fetched again on click. Per-visitor data comes from the islands, never from this HTML.
+  Astro.response.headers.set('Cache-Control', 'public, max-age=30, s-maxage=300, stale-while-revalidate=86400');
+}
 const words = await fetchWordRefs();
 
 const { berlinerisch } = word;

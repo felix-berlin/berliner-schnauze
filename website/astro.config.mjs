@@ -113,6 +113,17 @@ export default defineConfig({
   security: {
     allowedDomains: [{ hostname: "berliner-schnauze.wtf", protocol: "https" }],
   },
+  // Spike (#1950): in-process page cache, one web container only (a second one would keep its own copy).
+  // Pages opt in with `Astro.cache.set()`; nothing is cached by default. The query string is ignored in the key
+  // so `?x=1..n` cannot fill the cache with copies of one page. A word page is ~116 KB of HTML: 500 entries
+  // are roughly 60 MB of heap (the web container has mem_limit 512m and idles at ~270 MB, so 1000 would leave
+  // little room), the LRU keeps the visited words. Requests with a preview cookie skip the cache.
+  cache: {
+    provider: {
+      config: { max: 500, query: { include: [] } },
+      entrypoint: new URL("./src/lib/previewAwareCache.ts", import.meta.url),
+    },
+  },
   // No Astro.session usage anywhere in the codebase — opt out to tree-shake
   // the session runtime out of the server build.
   session: false,
@@ -242,9 +253,10 @@ export default defineConfig({
       },
     },
   ],
-  // Off (ClientRouter would enable it): pages are sent with max-age=0, so the router's fetch() never reuses a
-  // prefetched page and every hovered link costs a second render. Revisit only with a browser-cacheable page.
-  prefetch: false,
+  // ClientRouter enables this by default. A hover prefetch only pays off for a page the browser may reuse: word
+  // pages are sent with `max-age=30` (pages/wort/[...wordSlug].astro). Every other page still has `max-age=0`, so
+  // its prefetch is only a server-cache warm-up (cheap: those pages sit in the page cache above).
+  prefetch: { defaultStrategy: "hover", prefetchAll: true },
   build: {
     format: "file",
   },

@@ -14,6 +14,7 @@ const seo: Seo = {
   opengraphDescription: description,
   opengraphTitle: title,
 };
+Astro.cache?.set({ maxAge: 3600, swr: 86400 });
 ---
 
 <Layout content={{ title, seo }}>

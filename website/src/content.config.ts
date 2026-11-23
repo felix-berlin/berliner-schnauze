@@ -1,6 +1,6 @@
 import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 import { defineCollection } from "astro:content";
-import { z } from "zod";
 
 const changelogs = defineCollection({
   loader: glob({ base: "../docs/user-changelog", pattern: "*.md" }),
