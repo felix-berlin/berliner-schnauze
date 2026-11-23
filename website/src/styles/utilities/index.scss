@@ -3,7 +3,11 @@
 @forward "transitions";
 
 @layer utilities {
-  .u-sr-only {
+  // u-sr-only-empty: only while the element has no content (:empty ignores the comment nodes v-if leaves), so a live
+  // region that must exist before its text does takes no grid cell and no gap, and shows normally once it has text.
+  // Clipped, never display:none or visibility:hidden: it must stay in the accessibility tree.
+  .u-sr-only,
+  .u-sr-only-empty:empty {
     --_size: 1px; // the clipping technique's size, not a scale step
 
     position: absolute;

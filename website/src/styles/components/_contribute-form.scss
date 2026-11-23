@@ -139,16 +139,6 @@
     color: var(--color-text-muted);
   }
 
-  // The live regions around the strips stay rendered when empty (a region must exist before its text does) but take
-  // no grid cell and no gap: out of flow, clipped, still in the accessibility tree. Text puts them back in flow.
-  .live:empty {
-    position: absolute;
-    inline-size: 1px; // the clipping technique's size, not a scale step
-    block-size: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-  }
-
   .actions {
     --button-min-block-size: var(--size-tap-target);
     --button-padding: 0 var(--space-5);

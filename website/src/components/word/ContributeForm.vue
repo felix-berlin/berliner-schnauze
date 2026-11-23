@@ -149,7 +149,7 @@
       />
 
       <!-- The regions are always rendered: a live region is only announced when it exists before its text does. -->
-      <div class="live" role="alert">
+      <div class="u-sr-only-empty" role="alert">
         <div v-if="failed" class="c-state" data-variant="error">
           <CircleAlert aria-hidden="true" height="18" width="18" />
           <span class="body">
@@ -160,7 +160,7 @@
         </div>
       </div>
       <!-- Nothing was sent (captcha still running): a calm status, not the error strip. -->
-      <div class="live" role="status">
+      <div class="u-sr-only-empty" role="status">
         <div v-if="waiting" class="c-state">
           <Hourglass aria-hidden="true" height="18" width="18" />
           <span class="body">{{ waiting }}</span>

@@ -69,7 +69,7 @@
     </ol>
 
     <p v-if="!online && items.length" class="note">{{ OFFLINE_HINT }}</p>
-    <p class="note" role="status">{{ note }}</p>
+    <p class="note u-sr-only-empty" role="status">{{ note }}</p>
 
     <button
       v-if="(!expanded && items.length > limit) || hasMore"

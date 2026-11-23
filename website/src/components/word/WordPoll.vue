@@ -12,7 +12,7 @@
 
     <div class="body" role="group" aria-label="Sagste det noch?" :aria-busy="pending">
       <!-- Persistent live regions: their content comes and goes, the elements stay. -->
-      <div ref="notice" class="notice" role="status" tabindex="-1">
+      <div ref="notice" class="notice u-sr-only-empty" role="status" tabindex="-1">
         <div v-if="!online" id="word-poll-offline" class="c-state" data-variant="offline">
           <WifiOff aria-hidden="true" height="18" width="18" />
           <span class="body">{{ OFFLINE_HINT }}</span>
@@ -32,7 +32,7 @@
           </span>
         </div>
       </div>
-      <div class="notice" role="alert">
+      <div class="notice u-sr-only-empty" role="alert">
         <div v-if="voteFailed" class="c-state" data-variant="error">
           <CircleAlert aria-hidden="true" height="18" width="18" />
           <span class="body">
@@ -260,7 +260,7 @@
             </button>
           </span>
         </div>
-        <div class="notice" role="alert">
+        <div class="notice u-sr-only-empty" role="alert">
           <div v-if="deleteFailed" class="c-state" data-variant="error">
             <CircleAlert aria-hidden="true" height="18" width="18" />
             <span class="body">Löschen hat nich jeklappt. Versuch’s gleich nochmal.</span>

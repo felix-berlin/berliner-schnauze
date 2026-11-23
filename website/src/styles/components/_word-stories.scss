@@ -112,16 +112,6 @@
     }
   }
 
-  // The status stays rendered when empty (a live region must exist before its text does) but takes no grid cell and no
-  // gap: out of flow, clipped, still in the accessibility tree. Text puts it back in flow.
-  .note:empty {
-    position: absolute;
-    inline-size: 1px; // the clipping technique's size, not a scale step
-    block-size: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-  }
-
   .note,
   .foot {
     margin: 0;

@@ -2,8 +2,7 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 // Action row of the word head (SPEC §5, §5.1, §5.2): Daumen hoch/runter, Teilen, the ⋮ menu and the citing panel
-// below the row. Parts: .row, .reactions, .note,
-// .live, .cite (.head, .heading, .tabs, .tabpanel, .hint, .quote, .send, .foot).
+// below the row. Parts: .row, .reactions, .note, .cite (.head, .heading, .tabs, .tabpanel, .hint, .quote, .send, .foot).
 // Reactions, Teilen and the ⋮ button are c-reaction pills; the menu is c-word-actions-menu inside a DropdownPopover
 // (theme bare, placement top-end), both slot content the scope of this file does not reach.
 @include mx.component("word-actions") {
@@ -29,18 +28,6 @@
     margin: var(--space-2) 0 0;
     font-size: var(--_small);
     color: var(--color-text-muted);
-  }
-
-  // The status is always in the DOM (a live region must exist before its text does) and never shown: the menu item
-  // and the button show the same words. Out of flow and clipped, still in the accessibility tree.
-  .live {
-    position: absolute;
-    inline-size: 1px; // the clipping technique's size, not a scale step
-    block-size: 1px;
-    margin: 0;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
   }
 
   // Citing panel (SPEC §5.2): below the row, card2 ground, padding 18/20.

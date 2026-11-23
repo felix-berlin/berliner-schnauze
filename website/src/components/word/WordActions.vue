@@ -118,7 +118,7 @@
     </div>
 
     <p v-if="!online && wordId !== undefined" class="note">{{ OFFLINE_HINT }}</p>
-    <p aria-atomic="true" aria-live="polite" class="live" role="status">{{ live }}</p>
+    <p aria-atomic="true" aria-live="polite" class="u-sr-only" role="status">{{ live }}</p>
 
     <section v-if="citeOpen" :aria-labelledby="`${uid}-head`" class="cite" role="region">
       <div class="head">
