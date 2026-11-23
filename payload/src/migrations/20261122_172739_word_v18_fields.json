@@ -1226,6 +1226,12 @@
         },
         "text": {
           "name": "text",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source": {
+          "name": "source",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
@@ -2791,6 +2797,12 @@
         },
         "text": {
           "name": "text",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source": {
+          "name": "source",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
