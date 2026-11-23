@@ -76,7 +76,6 @@ const doc = {
     },
     5,
   ],
-  infoText: lexical("Adjektiv zu Aas"),
   learnMore: "https://example.org/mehr",
   meta: {
     canonical: null,
@@ -94,7 +93,6 @@ const doc = {
     14,
   ],
   slug: "aasen",
-  sources: ["Meyer", "Schlobinski"],
   themen: [{ id: 2, name: "Essen", slug: "essen" }],
   translations: [
     { translation: "sehr" },
@@ -135,9 +133,6 @@ describe("toWord", () => {
       themen: [{ id: 2, name: "Essen", slug: "essen" }],
       wordTypes: [{ id: 1, name: "Adjektiv" }],
     });
-    // the deprecated origin text and sources are not kept: the site shows `facts` now
-    expect(word).not.toHaveProperty("infoText");
-    expect(word).not.toHaveProperty("sources");
   });
 
   it("narrows audio rows to media with absolute urls", async () => {
