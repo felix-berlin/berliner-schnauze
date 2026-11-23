@@ -1,4 +1,4 @@
-import { MigrateDownArgs, MigrateUpArgs } from "@payloadcms/db-postgres";
+import { MigrateDownArgs, MigrateUpArgs, sql } from "@payloadcms/db-postgres";
 
 // Data only. Copies the old origin text (`infoText`) of every published word, with the word's `sources`, into the
 // v18 "Wissenswertes" (`facts`, kind herkunft): the word page no longer shows `infoText`. Same code as
@@ -20,5 +20,13 @@ export async function up({ payload }: MigrateUpArgs): Promise<void> {
   payload.logger.info(`[infoText] samples: ${samples.join(" || ")}`);
 }
 
-// The copied facts may have been edited since: nothing to undo.
-export async function down(_: MigrateDownArgs): Promise<void> {}
+// Removes the copies that are still identical to the word's `infoText` (a rolled-back deploy shows the old text
+// again). A fact an editor changed since is kept: the `words_facts` guard of 20261122_172739_word_v18_fields then
+// refuses its own rollback, so nothing edited is lost.
+export async function down({ db }: MigrateDownArgs): Promise<void> {
+  await db.execute(sql`
+  DELETE FROM "words_facts" f USING "words" w
+    WHERE f."_parent_id" = w."id" AND f."kind" = 'herkunft' AND f."text" = w."info_text";
+  DELETE FROM "_words_v_version_facts" f USING "_words_v" v
+    WHERE f."_parent_id" = v."id" AND f."kind" = 'herkunft' AND f."text" = v."version_info_text";`)
+}
