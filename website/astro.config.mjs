@@ -253,10 +253,10 @@ export default defineConfig({
       },
     },
   ],
-  // Off (ClientRouter would enable it): pages are sent with max-age=0 and no ETag, so a browser never reuses a
-  // prefetched page. A prefetch would only warm the server page cache (word pages, ~130 ms render vs ~2 ms hit),
-  // and every other page (not cached) would cost a second render. Revisit with a browser-cacheable page.
-  prefetch: false,
+  // ClientRouter enables this by default. A hover prefetch only pays off for a page the browser may reuse: word
+  // pages are sent with `max-age=30` (pages/wort/[...wordSlug].astro). Every other page still has `max-age=0`, so
+  // its prefetch is only a server-cache warm-up (cheap: those pages sit in the page cache above).
+  prefetch: { defaultStrategy: "hover", prefetchAll: true },
   build: {
     format: "file",
   },
