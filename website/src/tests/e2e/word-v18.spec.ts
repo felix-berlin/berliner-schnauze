@@ -501,6 +501,9 @@ test.describe("axe", () => {
         test(`${path} has no violations at ${width}px ${dark ? "dark" : "light"}`, async ({
           page,
         }) => {
+          // Axe measures colour, not motion: without the entry animations (footer sign, columns) a loaded runner
+          // cannot catch an element at half opacity.
+          await page.emulateMedia({ reducedMotion: "reduce" });
           await open(page, path, width);
           await setDark(page, dark);
           // The footer fades in with the scroll: at the top it is half transparent and its title fails the contrast check.
