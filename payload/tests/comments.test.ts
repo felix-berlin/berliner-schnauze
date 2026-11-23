@@ -315,6 +315,13 @@ describe("comments", () => {
 });
 
 describe("featured comments", () => {
+  it("does not feature a reply", async () => {
+    const parent = await make();
+    await expect(make({ featured: true, parent: parent.id })).rejects.toThrow(
+      /field is invalid: featured/,
+    );
+  });
+
   it("allows one published featured comment per word", async () => {
     const first = await make({ featured: true });
     await expect(make({ featured: true })).rejects.toThrow(/field is invalid: featured/);

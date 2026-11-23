@@ -114,4 +114,16 @@ describe("suggestion types", () => {
     expect(upd.status).toBe("rejected");
     await expect(create({ type: "example", text: "Ick bin da." })).rejects.toThrow();
   });
+
+  it("needs a target word for a fact and a related word, like an example", async () => {
+    await expect(create({ type: "fact", kind: "herkunft", text: "Alt." })).rejects.toThrow(
+      /field is invalid: Target ?Word/i,
+    );
+    await expect(
+      create({ type: "related", relation: "gleich", relatedText: "Bolle" }),
+    ).rejects.toThrow(/field is invalid: Target ?Word/i);
+    expect(
+      (await create({ type: "fact", kind: "herkunft", text: "Alt.", targetWord: wordId })).type,
+    ).toBe("fact");
+  });
 });

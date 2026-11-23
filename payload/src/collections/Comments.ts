@@ -60,13 +60,23 @@ const applyRules: CollectionBeforeChangeHook = ({ data, operation, originalDoc, 
   return data;
 };
 
-/** One featured Jeschichte per word; hidden or removed rows do not count, so they never block a new one. */
+/**
+ * At most one published featured Jeschichte per word; rows in any other status do not count, so they never block a new
+ * one. The database backs this with a partial unique index (migration `comments_one_featured`), the hook gives the
+ * readable message. A reply cannot be featured.
+ */
 const singleFeatured: CollectionBeforeChangeHook = async ({ data, originalDoc, req }) => {
   // Judge the resulting state: republishing an already featured row must be checked too.
   const featured = data.featured ?? originalDoc?.featured;
   const status = data.status ?? originalDoc?.status ?? "published";
   if (!featured || status !== "published") return data;
+  if (idOf(data.parent) ?? idOf(originalDoc?.parent)) {
+    throw new ValidationError({
+      errors: [{ path: "featured", message: "Eine Antwort kann nicht hervorgehoben werden." }],
+    });
+  }
   const word = idOf(data.word) ?? idOf(originalDoc?.word);
+  if (word == null) return data;
   const others = await req.payload.find({
     collection: "comments",
     where: {
@@ -241,9 +251,12 @@ export const Comments: CollectionConfig = {
       name: "featured",
       type: "checkbox",
       defaultValue: false,
+      // Editors only: no site request may pick the featured slot (the site creates with overrideAccess, which skips this).
+      access: { create: ({ req }) => Boolean(req.user), update: ({ req }) => Boolean(req.user) },
       admin: {
         position: "sidebar",
-        description: "Als Jeschichte des Wortes hervorgehoben (max. eine pro Wort).",
+        description:
+          "Als Jeschichte des Wortes hervorgehoben (höchstens eine veröffentlichte pro Wort, keine Antworten).",
       },
     },
     { name: "editKeyHash", type: "text", admin: { hidden: true } },

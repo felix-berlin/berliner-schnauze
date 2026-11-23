@@ -1,46 +1,67 @@
-import type { CollectionAfterChangeHook, CollectionConfig, FieldAccess, Validate } from "payload";
+import type { CollectionAfterChangeHook, CollectionConfig } from "payload";
 
 import { relationship, select, text, textarea } from "payload/shared";
 
-import { authenticatedOnly } from "../access";
+import type { AnyValidate } from "../lib/requiredField";
+
+import { authenticatedOnly, notOverMcp } from "../access";
 import { adoptSuggestion } from "../hooks/adoptSuggestion";
 import { lockedByWordValue, refuseWhenLocked, updateUnlocked } from "../hooks/suggestionLock";
 import { notifyEditors } from "../lib/notifyEditors";
 
+const TYPE_LABEL: Record<string, string> = {
+  example: "Beispielsatz",
+  fact: "Wissenswertes",
+  related: "Verwandtes Wort",
+  word: "Neues Wort",
+};
+
 /** Mails the editors about a new suggestion; a failed mail is logged, the suggestion stays in the admin. */
-const mailEditors: CollectionAfterChangeHook = ({ doc, operation, req }) => {
+const mailEditors: CollectionAfterChangeHook = async ({ doc, operation, req }) => {
   if (operation !== "create") return doc;
+  const type: string = doc.type ?? "word";
   const similar = (req.context.similarWords as string[] | undefined) ?? [];
-  const rows: [string, string | null | undefined][] = [
-    ["Berliner Wort", doc.berlinerWord],
-    ["Übersetzung", doc.translation],
-    ["Beispiel", doc.example],
-    ["Name", doc.userName],
-    ["E-Mail", doc.userMail],
-    ...(similar.length ? [["Ähnliche Wörter", similar.join(", ")] as [string, string]] : []),
-  ];
+  // The other types name the word they are for; show its headword, not an id.
+  const target = doc.targetWord
+    ? await req.payload
+        .findByID({
+          collection: "words",
+          depth: 0,
+          id: typeof doc.targetWord === "object" ? doc.targetWord.id : doc.targetWord,
+          req,
+        })
+        .then((w) => w.berlinerisch)
+        .catch(() => null)
+    : null;
+  const rows: [string, string | null | undefined][] =
+    type === "word"
+      ? [
+          ["Berliner Wort", doc.berlinerWord],
+          ["Übersetzung", doc.translation],
+          ["Beispiel", doc.example],
+        ]
+      : [
+          ["Zu Wort", target],
+          ["Text", doc.text],
+          ["Art", doc.kind],
+          ["Beziehung", doc.relation],
+          ["Verwandtes Wort", doc.relatedText],
+          ["Hochdeutsch", doc.highdeutsch],
+        ];
+  rows.push(["Name", doc.userName], ["E-Mail", doc.userMail]);
+  if (similar.length) rows.push(["Ähnliche Wörter", similar.join(", ")]);
   notifyEditors(
     req,
-    "Wortvorschlag - Berliner Schnauze",
+    `${TYPE_LABEL[type] ?? "Vorschlag"} - Berliner Schnauze`,
     [
-      "Ein neues Berliner Wort wurde eingereicht:",
+      `Ein neuer Vorschlag wurde eingereicht (${TYPE_LABEL[type] ?? type}):`,
       "",
-      ...rows.map(([label, value]) => `${label}: ${value ?? ""}`),
+      ...rows.filter(([, value]) => value).map(([label, value]) => `${label}: ${value}`),
     ],
     doc.userMail ?? undefined,
   );
   return doc;
 };
-
-/**
- * The sender's name and mail never reach an MCP client (and so the model): Payload drops the fields from every MCP
- * read, write result and query, whatever the plugin's output format or `select` (its tools run with overrideAccess: false).
- */
-const notOverMcp: FieldAccess = ({ req }) => req.payloadAPI !== "MCP";
-
-/** Payload's `Validate` generics differ per field type; the wrappers below only forward to the stock validator. */
-// oxlint-disable-next-line typescript/no-explicit-any
-type AnyValidate = Validate<any, any, any, any>;
 
 /** Required only for the given suggestion types: runs the stock validator with `required` switched per type. */
 const requiredFor =
@@ -69,7 +90,7 @@ export const Suggestions: CollectionConfig = {
   access: { ...authenticatedOnly, update: updateUnlocked },
   admin: {
     useAsTitle: "berlinerWord",
-    defaultColumns: ["berlinerWord", "translation", "status", "createdAt"],
+    defaultColumns: ["type", "berlinerWord", "text", "status", "createdAt"],
     group: "Community",
   },
   hooks: { beforeChange: [refuseWhenLocked, adoptSuggestion], afterChange: [mailEditors] },
@@ -114,10 +135,10 @@ export const Suggestions: CollectionConfig = {
       relationTo: "words",
       // Create only: the FK nulls it when the word is deleted, and the suggestion must stay saveable then.
       validate: ((value: unknown, options: Parameters<AnyValidate>[1]) =>
-        requiredFor(options.operation === "create" ? ["example"] : [], relationship as AnyValidate)(
-          value,
-          options,
-        )) as AnyValidate,
+        requiredFor(
+          options.operation === "create" ? ["example", "fact", "related"] : [],
+          relationship as AnyValidate,
+        )(value, options)) as AnyValidate,
       admin: {
         position: "sidebar",
         description:
@@ -163,7 +184,15 @@ export const Suggestions: CollectionConfig = {
       validate: limitFor({ example: 200 }, ["example", "fact"], textarea as AnyValidate),
     },
     { name: "highdeutsch", type: "text", maxLength: 200 },
-    { name: "example", type: "textarea", maxLength: 1000 },
+    {
+      name: "example",
+      type: "textarea",
+      maxLength: 1000,
+      admin: {
+        description:
+          "Nur bei „Neues Wort“: optionaler Beispielsatz. Für „Beispielsatz“ siehe Feld Text.",
+      },
+    },
     {
       name: "userName",
       type: "text",
@@ -180,7 +209,11 @@ export const Suggestions: CollectionConfig = {
         { label: "Übernommen", value: "accepted" },
         { label: "Abgelehnt", value: "rejected" },
       ],
-      admin: { position: "sidebar" },
+      admin: {
+        position: "sidebar",
+        description:
+          "Beispielsatz, Wissenswertes und Verwandtes übernimmt das CMS nicht selbst: erst von Hand ins Wort eintragen (dort „Vorschlag“ verknüpfen), dann hier auf „Übernommen“ setzen.",
+      },
     },
     {
       name: "word",

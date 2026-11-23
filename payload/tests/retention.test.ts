@@ -296,4 +296,26 @@ describe("runRetention edge cases", () => {
     expect(after).toMatchObject({ usage: "say", area: "pankow" });
     await payload.delete({ collection: "word-feedback", id: row.id });
   });
+
+  it("still purges comments when the report step fails, and reports the failure", async () => {
+    const stale = await make({});
+    await payload.update({ collection: "comments", id: stale.id, data: { status: "pending" } });
+    const original = payload.db.updateMany.bind(payload.db);
+    const spy = vi
+      .spyOn(payload.db, "updateMany")
+      .mockImplementation(async (args) =>
+        args.collection === "reports" ? Promise.reject(new Error("no table")) : original(args),
+      );
+    try {
+      const result = await runRetention(payload, later);
+      expect(result.reportsFailed).toBe(true);
+      expect(result.commentsDeleted + result.commentsScrubbed).toBeGreaterThan(0);
+      expect(
+        (await payload.find({ collection: "comments", where: { id: { equals: stale.id } } }))
+          .totalDocs,
+      ).toBe(0);
+    } finally {
+      spy.mockRestore();
+    }
+  });
 });
