@@ -5,6 +5,8 @@
  * Without `--delete` it only exports and counts. The export holds pseudonyms and author tags: write it OUTSIDE the
  * repository (the script refuses a path below the repository root, derived from this file's location) and treat it as personal data.
  *
+ * The same delete runs on deploy as migration `remove_comment_replies` (without an export); this script exports first and is for re-runs.
+ *
  * Usage: `pnpm --filter payload-app exec payload run src/scripts/removeCommentReplies.ts -- <export.json> [--delete]`
  * (run with the database of the target environment; `--delete` is not reversible without the export).
  */
