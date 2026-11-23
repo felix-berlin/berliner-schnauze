@@ -455,6 +455,21 @@ test.describe("loading skeleton (SPEC §15)", () => {
   });
 });
 
+test.describe("client navigation", () => {
+  test("the contribute buttons stay visible on the next word page", async ({ page }) => {
+    await open(page);
+    await page.evaluate(() => {
+      const a = document.createElement("a");
+      a.href = "/wort/ab";
+      document.body.append(a);
+      a.click();
+    });
+    await expect(page).toHaveURL(/\/wort\/ab$/);
+    await expect(page.locator("html")).toHaveAttribute("data-js", "");
+    await expect(page.locator("[data-contribute]").first()).toBeVisible();
+  });
+});
+
 test.describe("images", () => {
   const IMAGES = "/wort/akademiebusen";
 

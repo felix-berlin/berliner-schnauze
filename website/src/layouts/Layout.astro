@@ -66,4 +66,9 @@ const footerMode = resolveFooterMode(Astro.slots.has('footer-callout'), footerCa
   initHistoryNavigationFallback();
   // Same for the word page loading skeleton: one pair of listeners per tab session.
   initWordLoading();
+  // A client navigation replaces the <html> attributes and does not re-run the word page's inline script that sets
+  // `data-js` (the contribute buttons are hidden without it): set it again before the new page is painted.
+  document.addEventListener('astro:after-swap', () => {
+    if (document.querySelector('.o-word-v18')) document.documentElement.dataset.js = '';
+  });
 </script>
