@@ -101,17 +101,38 @@ describe("fetchWordPage", () => {
     expect(model.related[2]).not.toHaveProperty("url");
   });
 
-  it("keeps facts with a kind and a text, drops the others, and maps their contributor", async () => {
+  it("keeps facts with a kind and a text, drops the others, and maps source and contributor", async () => {
+    const rich = (text: string) => ({
+      root: {
+        children: [
+          { children: [{ text, type: "text", version: 1 }], type: "paragraph", version: 1 },
+        ],
+        type: "root",
+        version: 1,
+      },
+    });
     const facts = [
-      { contributorName: "Invented Name", contributorSuggestion: 5, kind: "herkunft", text: "A" },
-      { kind: "etymologie", text: "B" },
-      { kind: "herkunft", text: "" },
-      { text: "no kind" },
+      {
+        contributorName: "Invented Name",
+        contributorSuggestion: 5,
+        kind: "herkunft",
+        source: "Invented Book",
+        text: rich("A <b>"),
+      },
+      { kind: "etymologie", text: rich("B") },
+      { kind: "herkunft", text: rich("  ") },
+      { kind: "herkunft" },
+      { text: rich("no kind") },
     ];
     m.fetchAllWords.mockResolvedValue(words({ facts }));
     expect((await fetchWordPage("bbb"))!.facts).toEqual([
-      { contributor: { name: "Invented Name", suggestionId: "5" }, kind: "herkunft", text: "A" },
-      { kind: "etymologie", text: "B" },
+      {
+        contributor: { name: "Invented Name", suggestionId: "5" },
+        html: "<p>A &lt;b&gt;</p>",
+        kind: "herkunft",
+        source: "Invented Book",
+      },
+      { html: "<p>B</p>", kind: "etymologie" },
     ]);
   });
 

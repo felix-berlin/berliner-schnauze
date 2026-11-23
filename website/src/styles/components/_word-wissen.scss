@@ -1,6 +1,6 @@
 @use "@styles/mixins" as mx;
 
-// Wissenswertes card body (SPEC §9): .facts (a dl; each .fact has the label, .text and .by) and the .book block
+// Wissenswertes card body (SPEC §9): .facts (a dl; each .fact has the label, .text, .source and .by) and the .book block
 // ("Zum Weiterlesen", rule above, only with a book): .cover, .info, .title, .note.
 @include mx.component("word-wissen") {
   :scope {
@@ -27,8 +27,14 @@
 
   .text {
     line-height: 1.6;
+
+    // The rich text brings its own paragraphs; the grid gap spaces the fact.
+    :is(p, ul, ol) {
+      margin: 0;
+    }
   }
 
+  .source,
   .by {
     font-size: var(--_small);
     color: var(--color-text-muted);

@@ -21,6 +21,30 @@ describe("storyPrompt", () => {
   });
 });
 
+/** A one-paragraph Lexical state. */
+const rich = (text: string): never =>
+  ({
+    root: {
+      type: "root",
+      children: [
+        {
+          type: "paragraph",
+          children: [
+            { type: "text", detail: 0, format: 0, mode: "normal", style: "", text, version: 1 },
+          ],
+          direction: "ltr",
+          format: "",
+          indent: 0,
+          version: 1,
+        },
+      ],
+      direction: "ltr",
+      format: "",
+      indent: 0,
+      version: 1,
+    },
+  }) as never;
+
 describe("word-page global and v18 fields", () => {
   const wordIds: number[] = [];
   const themaIds: number[] = [];
@@ -56,7 +80,14 @@ describe("word-page global and v18 fields", () => {
         _status: "draft",
         stress: "ˈʃtʊlə",
         grammar: { plural: "Stullen", diminutive: other.id },
-        facts: [{ kind: "herkunft", text: "Aus dem Niederdeutschen", contributorName: "Anna" }],
+        facts: [
+          {
+            kind: "herkunft",
+            text: rich("Aus dem Niederdeutschen"),
+            source: "Meyer",
+            contributorName: "Anna",
+          },
+        ],
         related: [
           { word: other.id, relation: "verwandt", note: "n" },
           { label: "Brot", relation: "gleich" },
@@ -68,7 +99,11 @@ describe("word-page global and v18 fields", () => {
     wordIds.push(word.id);
     expect(word.stress).toBe("ˈʃtʊlə");
     expect(word.grammar).toMatchObject({ plural: "Stullen", diminutive: other.id });
-    expect(word.facts?.[0]).toMatchObject({ kind: "herkunft", contributorName: "Anna" });
+    expect(word.facts?.[0]).toMatchObject({
+      kind: "herkunft",
+      source: "Meyer",
+      contributorName: "Anna",
+    });
     expect(word.related?.[1]).toMatchObject({ label: "Brot", relation: "gleich" });
 
     const thema = await payload.create({
@@ -103,7 +138,9 @@ describe("word-page global and v18 fields", () => {
         data: { berlinerisch: "Zeilentest", slug, _status: "published", ...extra } as never,
       });
     await expect(make({ facts: [{ kind: "herkunft" }] })).rejects.toThrow();
-    await expect(make({ facts: [{ text: "ohne Art" }] })).rejects.toThrow();
+    await expect(make({ facts: [{ text: rich("ohne Art") }] })).rejects.toThrow();
+    // An empty editor (one empty paragraph) is not a text.
+    await expect(make({ facts: [{ kind: "herkunft", text: rich("  ") }] })).rejects.toThrow();
     await expect(make({ related: [{ relation: "gleich" }] })).rejects.toThrow();
     const ok = await make({ related: [{ label: "Bolle", relation: "gleich" }] });
     wordIds.push(ok.id);
