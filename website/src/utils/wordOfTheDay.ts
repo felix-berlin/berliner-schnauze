@@ -1,5 +1,7 @@
 import type { SiteWord } from "@services/payload/words.ts";
 
+import { isE2eServer } from "@utils/e2eServer.ts";
+
 const BERLIN = "Europe/Berlin";
 
 const berlinFormat = new Intl.DateTimeFormat("en-GB", {
@@ -26,6 +28,9 @@ const berlinNumbers = (date: Date) =>
     number
   >;
 
+/** Fixed day of the e2e server (noon, so the Berlin day is the same in every zone). */
+export const E2E_PINNED_DAY = new Date("2026-01-15T12:00:00Z");
+
 const MS_PER_DAY = 86_400_000;
 
 // The words array is memoized per cache window: sort each one once, not per request.
@@ -35,9 +40,11 @@ const bySlug = new WeakMap<object[], object[]>();
 export const pickWordOfTheDay = <T extends { slug: string }>(
   words: T[],
   date: Date,
+  pinned = isE2eServer(),
 ): T | undefined => {
   if (words.length === 0) return undefined;
-  const { day, month, year } = berlinNumbers(date);
+  // The e2e server pins the day, so screenshots do not depend on the daily word (never true in production).
+  const { day, month, year } = berlinNumbers(pinned ? E2E_PINNED_DAY : date);
   const dayNumber = Math.floor(Date.UTC(year, month - 1, day) / MS_PER_DAY);
   let sorted = bySlug.get(words) as T[] | undefined;
   if (!sorted) {
