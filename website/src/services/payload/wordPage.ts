@@ -150,7 +150,6 @@ export const fetchWordPage = async (
     stories: { items: stories.items, total: stories.total },
     storyPrompt: storyPrompt(wordPage.storyPrompt, word.berlinerisch),
     syllables: hypher.hyphenate(word.berlinerisch),
-    // TODO(wortseite): "Im Aufwind" needs a rising memo and a rule
     ...(trend && {
       trend: {
         change: trend.change,
