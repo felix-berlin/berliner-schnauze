@@ -4,12 +4,10 @@
 // "Sagste det noch?" of the v18 word page (SPEC §7). Sits on the same root as the section card (c-section-card
 // c-word-poll), so its part names avoid the card's (.header, .title, .count, .body).
 // Parts: .notice (live regions), .lead, .tiles, .teaser (A); .step (.segments, .progress, .question, .why,
-// .why-toggle, .options, .nav with .res) (B); .result (.columns, .all, .who, .matrix, .legend, .rows, .dot, .dots, .foot,
+// .why-toggle, .options, .nav with .res) (B); .result (.columns, .all, .who, UsageDots, .legend, .rows, .foot,
 // .mine-row, .confirm) (C). Data colours: --d-bl say, --d-ye know, --d-gr never (SPEC §4).
 @include mx.component("word-poll") {
   :scope {
-    --_stagger: 20ms; // SPEC §16: dots fill 20ms apart
-    --_dot-gap: 2px; // SPEC §11.2 gap between dots, no space token that small
     --_name-size: 4.5rem; // widest row label ("unter 20") with room, one-off
     --_pct-size: 3.5rem; // "100 %" in Fira 800, 20px
 
@@ -192,44 +190,6 @@
     font-weight: var(--font-weight-bold);
   }
 
-  .matrix {
-    display: grid;
-    grid-template-columns: repeat(20, 1fr);
-    gap: var(--_dot-gap);
-    padding: var(--_dot-gap);
-  }
-
-  .dot {
-    aspect-ratio: 1;
-    border-radius: var(--radius-pill);
-    background: var(--d-bl);
-
-    @include butler-mx.feature("motion") {
-      animation: word-poll-dot var(--duration-fast) ease-out backwards;
-      animation-delay: calc(var(--i) * var(--_stagger));
-    }
-  }
-
-  .matrix .dot {
-    @include butler-mx.feature("motion") {
-      // 100 dots: a fifth of the row offset keeps the fill under half a second
-      animation-delay: calc(var(--i) * var(--_stagger) / 5);
-    }
-
-    &[data-usage="know"] {
-      background: var(--d-ye);
-    }
-
-    &[data-usage="never"] {
-      background: var(--d-gr);
-    }
-
-    &[data-own="true"] {
-      outline: 2px solid var(--color-text-strong);
-      outline-offset: 1px;
-    }
-  }
-
   .legend {
     display: grid;
     gap: var(--space-2);
@@ -246,18 +206,11 @@
   }
 
   .swatch {
+    @include mx.usage-fill;
+
     inline-size: 0.75rem; // one-off: legend marker
     block-size: 0.75rem;
     border-radius: var(--radius-pill);
-    background: var(--d-bl);
-
-    &[data-usage="know"] {
-      background: var(--d-ye);
-    }
-
-    &[data-usage="never"] {
-      background: var(--d-gr);
-    }
   }
 
   .mine {
@@ -289,18 +242,6 @@
       grid-template-columns: var(--_name-size) 1fr var(--_pct-size);
       align-items: center;
       gap: var(--space-2);
-    }
-
-    .dots {
-      display: grid;
-      grid-template-columns: repeat(20, 1fr);
-      gap: var(--_dot-gap);
-    }
-
-    // Filled = share (all in the colour of "Sag ick selbst"), empty = ring.
-    .dot[data-filled="false"] {
-      background: none;
-      border: 1px solid var(--color-border-card);
     }
   }
 
@@ -373,11 +314,6 @@
     from {
       opacity: 0;
       translate: 0 -6px;
-    }
-  }
-  @keyframes word-poll-dot {
-    from {
-      opacity: 0;
     }
   }
 }

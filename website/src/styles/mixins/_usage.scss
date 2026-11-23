@@ -1,0 +1,13 @@
+// Data colours of the usage answers (SPEC §4): --d-bl say (default), --d-ye know, --d-gr never. For a dot, a swatch
+// or a legend marker that carries data-usage.
+@mixin usage-fill {
+  background: var(--d-bl);
+
+  &[data-usage="know"] {
+    background: var(--d-ye);
+  }
+
+  &[data-usage="never"] {
+    background: var(--d-gr);
+  }
+}

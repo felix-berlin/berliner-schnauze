@@ -272,10 +272,10 @@ describe("WordPoll", () => {
 
     it("draws 100 aria-hidden dots with one ringed own dot", async () => {
       const w = await startC();
-      const matrix = w.find("[data-matrix]");
+      const matrix = w.find('.c-usage-dots[data-variant="matrix"]');
       expect(matrix.attributes("aria-hidden")).toBe("true");
       expect(matrix.findAll("[data-usage]")).toHaveLength(100);
-      expect(matrix.findAll('[data-own="true"]')).toHaveLength(1);
+      expect(matrix.findAll('[data-state="mine"]')).toHaveLength(1);
     });
 
     it("hides a region row under 10 votes", async () => {
@@ -293,7 +293,7 @@ describe("WordPoll", () => {
       const ost = w.findAll("li").find((li) => li.text().startsWith("Ost"))!;
       expect(ost.findAll("[data-filled]")).toHaveLength(20);
       expect(ost.findAll('[data-filled="true"]')).toHaveLength(15);
-      expect(ost.find("[data-dots]").attributes("aria-hidden")).toBe("true");
+      expect(ost.find(".c-usage-dots").attributes("aria-hidden")).toBe("true");
       expect(ost.text()).toContain("74 %");
     });
 

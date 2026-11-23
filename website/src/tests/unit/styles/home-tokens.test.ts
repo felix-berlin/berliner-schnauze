@@ -15,7 +15,14 @@ describe("home palette tokens", () => {
   });
 
   it("defines the home tokens as light/dark pairs or band values", () => {
-    for (const name of ["page", "card", "card2", "card3", "t3", "ok"]) {
+    for (const name of [
+      "color-warm-ground",
+      "color-warm-sheet",
+      "color-warm-card2",
+      "color-warm-card3",
+      "color-warm-quiet",
+      "ok",
+    ]) {
       expect(css).toMatch(new RegExp(`^\\s*--${name}: light-dark\\(`, "m"));
     }
     for (const name of ["band-text", "band-card2", "band-line", "band-dark-bg"]) {
@@ -28,7 +35,7 @@ describe("home palette tokens", () => {
     for (const name of ["band-text", "band-card2", "band-line"]) {
       expect(scss).toContain(`var(--${name})`);
     }
-    expect(scss).not.toMatch(/colour inventory: "(#|--card2|rgb\()/);
+    expect(scss).not.toMatch(/colour inventory: "(#|--color-warm-card2|rgb\()/);
   });
 
   it("--line follows the card border", () => {

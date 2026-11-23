@@ -11,10 +11,10 @@
     position: static;
   }
 
-  // Word page ground (SPEC §4 `--page`): a flat beige/blue-black, no dot grid. Scoped to this page: the site-wide
+  // Word page ground (SPEC §4 `--color-warm-ground`): a flat beige/blue-black, no dot grid. Scoped to this page: the site-wide
   // body keeps its tokens. Value: `color.word.ground` in tokens/semantic.*.tokens.json.
   html:has(.o-word-v18) {
-    --color-surface-ground: var(--color-word-ground);
+    --color-surface-ground: var(--color-warm-ground);
   }
 
   html:has(.o-word-v18) body {
@@ -23,15 +23,15 @@
   }
 
   // Palette v13 of the word page (SPEC §4): the site-wide semantic tokens carry other values (in dark `sheet` equals
-  // `paper`, `chip` is darker than the card). This subtree maps them to the `color.word.*` tokens (the values live in
+  // `paper`, `chip` is darker than the card). This subtree maps them to the `color.warm.*` tokens (the values live in
   // tokens/semantic.*.tokens.json; SPEC §17 contrast pairs are checked against them), so the partials keep the
-  // site names: card = sheet, card2 = chip, card3, `--t3` = muted. card3 has no site token: the partials use it with
-  // a fallback, so outside this page they keep the site look.
+  // site names: sheet/chip/muted/card3 map to `color.warm.*`. The shared components (section-card, choice, button ...) are also used by
+  // BON/Anki/the site, so the remap stays until their look moves to the warm palette; card3 is read with a fallback.
   .o-word-v18 {
-    --color-surface-sheet: var(--color-word-sheet);
-    --color-surface-chip: var(--color-word-card2);
-    --color-surface-card3: var(--color-word-card3); // hover/selected of card2, never --t3 text on it
-    --color-text-muted: var(--color-word-muted);
+    --color-surface-sheet: var(--color-warm-sheet);
+    --color-surface-chip: var(--color-warm-card2);
+    --color-surface-card3: var(--color-warm-card3); // hover/selected of card2, never --t3 text on it
+    --color-text-muted: var(--color-warm-muted);
 
     // SPEC §4.3 text link (überspringen, Zurück, Abbrechen ...): solid underline in body colour, not the site's dashed muted one.
     --link-color: var(--color-text-body);
@@ -218,7 +218,7 @@
       font-size: 85rem;
       font-weight: var(--font-weight-black);
       line-height: 0.8;
-      color: var(--color-word-initial);
+      color: var(--color-ipa-initial);
       rotate: 8deg;
       transform-origin: 0 0;
       mask-image: linear-gradient(175deg, var(--color-text-strong) 35%, transparent 95%); // the colour only supplies alpha

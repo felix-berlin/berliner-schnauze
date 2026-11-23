@@ -1,6 +1,6 @@
 ---
 import '@styles/components/_section-card.scss';
-import ContributeForm from '@components/word/ContributeForm.vue';
+import ContributeLazy from '@components/word/ContributeLazy.vue';
 import type { ContributeType } from '@lib/contribute.ts';
 
 interface Props {
@@ -36,7 +36,7 @@ const headingId = `heading-${id}`;
   </div>
   {contribute && slug && (
     <div class='extra'>
-      <ContributeForm client:idle type={contribute} word={slug} />
+      <ContributeLazy client:idle type={contribute} word={slug} />
       <div data-own={contribute} data-word={slug}></div>
     </div>
   )}

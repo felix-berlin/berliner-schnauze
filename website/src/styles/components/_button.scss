@@ -118,7 +118,7 @@
     font-weight: var(--font-weight-bold);
 
     @include butler-mx.hover {
-      --_bg: var(--card2);
+      --_bg: var(--color-warm-card2);
       --_border-color: var(--color-accent-active);
       --_border-style: solid;
 

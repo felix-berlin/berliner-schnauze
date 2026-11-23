@@ -43,20 +43,24 @@ export const ttl = <T>(ms: number, load: () => Promise<T>): (() => Promise<T>) =
 
 /**
  * `ttl` per key, at most `max` keys (the oldest is dropped first), so a crawl over many keys cannot grow it
- * without limit. Only for data that is the same for every visitor.
+ * without limit. Only for data that is the same for every visitor. `forget(key)` drops one key (the next call
+ * waits for a fresh load); per process only.
  */
 export const ttlBy = <K, T>(
   ms: number,
   max: number,
   load: (key: K) => Promise<T>,
-): ((key: K) => Promise<T>) => {
+): ((key: K) => Promise<T>) & { forget: (key: K) => void } => {
   const memos = new Map<K, () => Promise<T>>();
-  return (key) => {
-    let memo = memos.get(key);
-    if (!memo) {
-      if (memos.size >= max) memos.delete(memos.keys().next().value as K);
-      memos.set(key, (memo = ttl(ms, () => load(key))));
-    }
-    return memo();
-  };
+  return Object.assign(
+    (key: K) => {
+      let memo = memos.get(key);
+      if (!memo) {
+        if (memos.size >= max) memos.delete(memos.keys().next().value as K);
+        memos.set(key, (memo = ttl(ms, () => load(key))));
+      }
+      return memo();
+    },
+    { forget: (key: K) => void memos.delete(key) },
+  );
 };

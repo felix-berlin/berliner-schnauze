@@ -71,7 +71,7 @@
       }
 
       .plus {
-        background: var(--card3);
+        background: var(--color-warm-card3);
       }
     }
   }
@@ -82,7 +82,7 @@
     inline-size: var(--_plus);
     block-size: var(--_plus);
     border-radius: var(--radius-pill);
-    background: var(--card2);
+    background: var(--color-warm-card2);
     transition: background-color var(--duration-fast) var(--ease-standard);
 
     &::before,
@@ -121,7 +121,7 @@
   .about {
     padding: var(--space-6);
     border-radius: var(--radius-sm);
-    background: var(--card2);
+    background: var(--color-warm-card2);
 
     h3 {
       margin: 0 0 var(--space-2);
@@ -149,7 +149,7 @@
       flex-direction: column;
       padding: var(--space-3) var(--space-4);
       border-radius: var(--radius-sm);
-      background: var(--card);
+      background: var(--color-warm-sheet);
     }
 
     b {
@@ -162,7 +162,7 @@
 
     span {
       font-size: var(--font-size-label);
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
   }
 

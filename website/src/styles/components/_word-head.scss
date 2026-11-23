@@ -302,7 +302,7 @@
     white-space: nowrap;
     color: transparent;
     // mock: ink outline at .2 (light) / .13 (dark); the page root supplies the colour with that alpha
-    -webkit-text-stroke: 2px var(--color-word-ipa-outline, var(--color-border-card));
+    -webkit-text-stroke: 2px var(--color-ipa-outline, var(--color-border-card));
     pointer-events: none;
     user-select: none;
 

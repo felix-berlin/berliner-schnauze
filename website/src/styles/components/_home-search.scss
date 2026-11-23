@@ -27,7 +27,7 @@
     align-items: center;
     padding: var(--space-2) var(--space-2) var(--space-2) var(--space-5);
     border-radius: var(--radius-sm);
-    background: var(--card);
+    background: var(--color-warm-sheet);
     box-shadow: var(--shadow-paper-lift);
     transition: box-shadow var(--duration-fast) var(--ease-standard);
     container: home-search / inline-size;
@@ -46,7 +46,7 @@
     flex: 0 0 auto;
     inline-size: var(--_icon);
     block-size: var(--_icon);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
   }
 
   input {
@@ -60,7 +60,7 @@
     color: var(--color-text-strong);
 
     &::placeholder {
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
 
     // The custom .clear button replaces the browser's cancel cross.
@@ -87,7 +87,7 @@
     border: 0;
     border-radius: var(--radius-pill);
     background: transparent;
-    color: var(--t3);
+    color: var(--color-warm-quiet);
     cursor: pointer;
     transition:
       background-color var(--duration-fast) var(--ease-standard),
@@ -107,7 +107,7 @@
     }
 
     @include butler-mx.hover {
-      background: var(--card2);
+      background: var(--color-warm-card2);
       color: var(--color-text-strong);
     }
   }
@@ -168,7 +168,7 @@
     margin-block-start: var(--_gap-popup);
     padding: var(--space-2);
     border-radius: var(--radius-sm);
-    background: var(--card);
+    background: var(--color-warm-sheet);
     box-shadow: var(--shadow-paper-lift);
   }
 
@@ -177,7 +177,7 @@
     font-size: var(--font-size-label);
     text-transform: uppercase;
     letter-spacing: var(--_label-track);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
   }
 
   a[role="option"] {
@@ -195,7 +195,7 @@
     }
 
     span {
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
 
     // Mobile: no Enter hint (mock).
@@ -204,12 +204,12 @@
     }
 
     &[aria-selected="true"] {
-      background: var(--card2);
+      background: var(--color-warm-card2);
       box-shadow: var(--_edge);
     }
 
     @include butler-mx.hover {
-      background: var(--card2);
+      background: var(--color-warm-card2);
     }
   }
 
@@ -222,7 +222,7 @@
   kbd {
     padding: 0 var(--space-1);
     border-radius: var(--radius-xs);
-    background: var(--card3);
+    background: var(--color-warm-card3);
     font: inherit;
     font-size: var(--font-size-label);
     color: var(--color-text-strong);
@@ -267,7 +267,7 @@
     margin: 0;
     padding: var(--space-1) var(--space-3) var(--space-2);
     font-size: var(--font-size-label);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
   }
 
   .none {
@@ -283,7 +283,7 @@
     }
 
     span {
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
 
     a {
@@ -297,7 +297,7 @@
     align-items: center;
     margin: var(--space-1);
     padding: var(--space-4);
-    border: 1.5px dashed var(--t3);
+    border: 1.5px dashed var(--color-warm-quiet);
     border-radius: var(--radius-sm);
     color: var(--color-text-accent);
     text-decoration: none;
@@ -316,7 +316,7 @@
 
     small {
       font-size: var(--font-size-md);
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
 
     @include butler-mx.hover {

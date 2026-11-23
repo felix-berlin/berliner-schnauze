@@ -71,24 +71,15 @@
             <h3 ref="resultHeading" class="done" tabindex="-1">
               <IconCheck aria-hidden="true" /> Stimme jezählt. <span>Danke, dit hilft!</span>
             </h3>
-            <div class="dots" role="img" :aria-label="result.label">
-              <i
-                v-for="(d, i) in result.dots"
-                :key="i"
-                :style="{ '--i': i }"
-                :data-usage="d.usage"
-                :data-state="d.mine ? 'mine' : undefined"
-              />
-            </div>
+            <UsageDots :dots="result.dots" :label="result.label" />
             <!-- role="list": Safari drops list semantics of an unstyled list. -->
             <ul class="legend" role="list">
               <li
                 v-for="l in result.legend"
                 :key="l.value"
-                :data-usage="l.value"
                 :data-state="l.mine ? 'mine' : undefined"
               >
-                <i aria-hidden="true" />
+                <i :data-usage="l.value" aria-hidden="true" />
                 <span>{{ l.label }}<small v-if="l.mine">deine Stimme</small></span>
                 <b>{{ l.percent }} %</b>
               </li>
@@ -103,6 +94,7 @@
 <script setup lang="ts">
 import type { Usage } from "payload-app/word-feedback";
 
+import UsageDots from "@components/UsageDots.vue";
 import { USAGE_OPTIONS } from "@components/word-feedback/usageOptions";
 import { dotsFromShares } from "@lib/largestRemainder.ts";
 import { useStore } from "@nanostores/vue";

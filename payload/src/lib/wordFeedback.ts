@@ -256,3 +256,78 @@ export async function feedbackCompare(
   ]);
   return { east, west, moved, area: areaShare, locality: localityShare };
 }
+
+/**
+ * The consistency rules of a profile (the optional answers besides usage/reaction), shared by the PATCH schema and
+ * the PATCH handler so they cannot drift apart. The client `profilePatch` mirrors the cascades.
+ */
+export const profileRules = {
+  /** Cascades for a partial update: a non-grewUp origin drops the half, a new area drops another area's locality. */
+  cascade<
+    T extends {
+      area?: string | null;
+      half?: string | null;
+      locality?: string | null;
+      origin?: string | null;
+    },
+  >(
+    sent: T,
+    stored?: { locality?: string | null } | null,
+  ): T | (T & { half?: null; locality?: null }) {
+    const data =
+      sent.origin !== undefined && sent.origin !== "grewUp" ? { ...sent, half: null } : sent;
+    return sent.area !== undefined &&
+      sent.locality === undefined &&
+      stored?.locality &&
+      LOCALITY_AREA[stored.locality as Locality] !== sent.area
+      ? { ...data, locality: null }
+      : data;
+  },
+  /** A half only counts for someone who grew up in Berlin. */
+  halfFitsOrigin: (v: { half?: string | null; origin?: string | null }) =>
+    v.half == null || v.origin === "grewUp",
+  /** A locality needs its own area. */
+  localityFitsArea: (v: { area?: string | null; locality?: string | null }) =>
+    v.locality == null || LOCALITY_AREA[v.locality as Locality] === v.area,
+};
+
+/** The columns of a `word-feedback` row that the in-memory counts below read. */
+export type FeedbackCountRow = {
+  area?: string | null;
+  half?: string | null;
+  locality?: string | null;
+  origin?: string | null;
+  reaction?: string | null;
+  usage?: string | null;
+};
+
+/** `feedbackTotals` over rows already loaded (the cacheable shared part of the word-feedback GET). */
+export const totalsFromRows = (rows: FeedbackCountRow[]): FeedbackTotals => ({
+  dislike: rows.filter((r) => r.reaction === "dislike").length,
+  know: rows.filter((r) => r.usage === "know").length,
+  like: rows.filter((r) => r.reaction === "like").length,
+  never: rows.filter((r) => r.usage === "never").length,
+  say: rows.filter((r) => r.usage === "say").length,
+});
+
+/** `feedbackCompare` over rows already loaded; same `MIN_GROUP` rule as `share`. */
+export const compareFromRows = (
+  rows: FeedbackCountRow[],
+  area: Area | null,
+  locality: Locality | null = null,
+): FeedbackCompare => {
+  const voted = rows.filter((r) => r.usage);
+  const of = (group: (r: FeedbackCountRow) => boolean): number | null => {
+    const g = voted.filter(group);
+    return g.length < MIN_GROUP
+      ? null
+      : Math.round((g.filter((r) => r.usage === "say").length / g.length) * 100);
+  };
+  return {
+    area: area ? of((r) => r.area === area) : null,
+    east: of((r) => r.half === "east"),
+    locality: locality ? of((r) => r.locality === locality) : null,
+    moved: of((r) => r.origin === "movedOver10" || r.origin === "movedUnder10"),
+    west: of((r) => r.half === "west"),
+  };
+};

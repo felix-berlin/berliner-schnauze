@@ -190,16 +190,10 @@
         <div class="columns">
           <div class="all">
             <h4 class="h" data-autofocus tabindex="-1">Wat sagen alle?</h4>
-            <div class="matrix" data-matrix aria-hidden="true">
-              <span
-                v-for="(u, i) in result.matrix"
-                :key="i"
-                class="dot"
-                :data-usage="u"
-                :data-own="i === ownIndex ? 'true' : undefined"
-                :style="{ '--i': i }"
-              />
-            </div>
+            <UsageDots
+              :dots="result.matrix.map((usage, i) => ({ mine: i === ownIndex, usage }))"
+              variant="matrix"
+            />
             <ul class="legend">
               <li v-for="o in USAGE_OPTIONS" :key="o.value">
                 <span class="swatch" aria-hidden="true" :data-usage="o.value" />
@@ -226,15 +220,7 @@
               >
                 <li v-for="r in g.rows" :key="r.key">
                   <span class="name">{{ r.label }}</span>
-                  <span class="dots" data-dots aria-hidden="true">
-                    <span
-                      v-for="n in DOTS"
-                      :key="n"
-                      class="dot"
-                      :data-filled="n <= dotsFor(r.selbst) ? 'true' : 'false'"
-                      :style="{ '--i': n }"
-                    />
-                  </span>
+                  <UsageDots :dots="rowDots(r.selbst)" variant="row" />
                   <span class="pct">{{ r.selbst }} %</span>
                 </li>
               </ul>
@@ -316,6 +302,7 @@
 <script setup lang="ts">
 import type { Area, Usage } from "payload-app/word-feedback";
 
+import UsageDots, { type UsageDot } from "@components/UsageDots.vue";
 import BerlinAreaMap from "@components/word-feedback/BerlinAreaMap.vue";
 import { USAGE_OPTIONS } from "@components/word-feedback/usageOptions";
 import { OFFLINE_HINT } from "@lib/offlineHint.ts";
@@ -355,8 +342,6 @@ import { BERLIN_AREAS } from "@/data/berlinAreas";
 // "Sagste det noch?": A vote, B questions, C result (SPEC 7). The own answers load after hydration from the
 // no-store GET (never from props: the page HTML is shared and cached); `initial` is the shared result.
 const props = defineProps<{ initial: PollResult; label: string; slug: string; wordId: number }>();
-
-const DOTS = 20;
 
 const online = useOnline();
 const feedback = useStore($feedback);
@@ -604,6 +589,9 @@ const change = () => {
 
 // ---- C: result
 const ownIndex = computed(() => (own.value ? result.value.matrix.indexOf(own.value) : -1));
+// A row: 20 dots, one per 5 %, the first dotsFor(share) filled.
+const rowDots = (selbst: number): UsageDot[] =>
+  Array.from({ length: 20 }, (_, i) => ({ filled: i < dotsFor(selbst) }));
 const share = (u: Usage) =>
   result.value.shares[{ know: "kenn", never: "nie", say: "selbst" }[u] as "kenn"];
 const labelOf = (key: string, list: { label: string; value: string }[]) =>

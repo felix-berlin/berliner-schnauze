@@ -200,7 +200,7 @@
   .card,
   .result {
     border-radius: var(--radius-sm);
-    background: var(--card2);
+    background: var(--color-warm-card2);
   }
 
   .back {
@@ -235,7 +235,7 @@
   .note {
     margin: 0;
     font-size: var(--font-size-label);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
   }
 
   .label {
@@ -300,7 +300,7 @@
     background: none;
     font: inherit;
     font-size: var(--font-size-label);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
     text-decoration: underline;
     cursor: pointer;
   }

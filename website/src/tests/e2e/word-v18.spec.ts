@@ -105,7 +105,9 @@ test.describe("poll", () => {
     // Result: matrix, legend with the own vote, the given answers.
     await expect(card.getByRole("heading", { name: "Wat sagen alle?" })).toBeVisible();
     await expect(card.locator(".legend .mine")).toHaveText("deine Stimme");
-    await expect(card.locator("[data-matrix] .dot")).toHaveCount(100);
+    await expect(card.locator('.c-usage-dots[data-variant="matrix"] [data-usage]')).toHaveCount(
+      100,
+    );
     await expect(card.locator(".given")).toContainText("Pankow");
 
     // The vote survives a reload (own state comes from the no-store GET).

@@ -84,7 +84,7 @@
     padding: var(--space-2) 0 var(--space-3);
     border: 0;
     background: none;
-    color: var(--t3);
+    color: var(--color-warm-quiet);
     cursor: pointer;
     transition: color var(--duration-fast) var(--ease-standard);
 
@@ -134,11 +134,11 @@
         color var(--duration-fast) var(--ease-standard);
 
       &:active {
-        background: var(--card3);
+        background: var(--color-warm-card3);
       }
 
       @include butler-mx.hover {
-        background: var(--card2);
+        background: var(--color-warm-card2);
 
         b {
           color: var(--color-text-accent);
@@ -164,14 +164,14 @@
 
     .meaning {
       grid-row: 2;
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
 
     time {
       grid-row: 1 / 3;
       grid-column: 2;
       font-size: var(--font-size-label);
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
   }
 
@@ -180,7 +180,7 @@
     font-size: var(--_rank);
     font-weight: var(--font-weight-black);
     font-variant-numeric: tabular-nums;
-    color: var(--t3);
+    color: var(--color-warm-quiet);
   }
 
   .list[data-variant="ranked"] a {
@@ -199,7 +199,7 @@
 
     small {
       font-size: var(--font-size-md); // 0.875rem in the mock, nearest step
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
   }
 
@@ -210,7 +210,7 @@
     i {
       inline-size: var(--_dot);
       block-size: var(--_dot);
-      border: 1.5px solid var(--card3);
+      border: 1.5px solid var(--color-warm-card3);
       border-radius: var(--radius-pill);
 
       &[data-state="on"] {

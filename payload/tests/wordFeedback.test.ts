@@ -10,6 +10,9 @@ import {
   feedbackTotals,
   LOCALITIES,
   LOCALITY_AREA,
+  compareFromRows,
+  profileRules,
+  totalsFromRows,
 } from "../src/lib/wordFeedback";
 import { getTestPayload } from "./helpers/payload";
 
@@ -154,5 +157,51 @@ describe("word sidebar counts", () => {
     expect((await versions()).totalDocs).toBe(before);
     const word = await payload.findByID({ collection: "words", id: wordId });
     expect(word).not.toHaveProperty("feedbackCounts");
+  });
+});
+
+describe("in-memory counts and profile rules", () => {
+  it("count like the queries do", async () => {
+    await rows(6, { area: "pankow", half: "east", reaction: "like", usage: "say" });
+    await rows(5, { origin: "movedOver10", usage: "know" });
+    await row({ reaction: "dislike" });
+    const { docs } = await payload.find({
+      collection: "word-feedback",
+      depth: 0,
+      limit: 0,
+      pagination: false,
+      where: { word: { equals: wordId } },
+    });
+    expect(totalsFromRows(docs)).toEqual(await feedbackTotals(payload, wordId));
+    expect(compareFromRows(docs, "pankow", null)).toEqual(
+      await feedbackCompare(payload, wordId, "pankow", null),
+    );
+  });
+
+  it("cascades: a non-grewUp origin drops the half, a new area drops another area's locality", () => {
+    expect(profileRules.cascade({ origin: "movedOver10" })).toEqual({
+      half: null,
+      origin: "movedOver10",
+    });
+    expect(profileRules.cascade({ origin: "grewUp" })).toEqual({ origin: "grewUp" });
+    expect(profileRules.cascade({ area: "pankow" }, { locality: "mitte" })).toEqual({
+      area: "pankow",
+      locality: null,
+    });
+    expect(profileRules.cascade({ area: "pankow" }, { locality: "karow" })).toEqual({
+      area: "pankow",
+    });
+    expect(
+      profileRules.cascade({ area: "pankow", locality: "karow" }, { locality: "mitte" }),
+    ).toEqual({ area: "pankow", locality: "karow" });
+  });
+
+  it("validates half and locality", () => {
+    expect(profileRules.halfFitsOrigin({ half: "east", origin: "grewUp" })).toBe(true);
+    expect(profileRules.halfFitsOrigin({ half: "east" })).toBe(false);
+    expect(profileRules.halfFitsOrigin({ origin: "movedOver10" })).toBe(true);
+    expect(profileRules.localityFitsArea({ area: "pankow", locality: "karow" })).toBe(true);
+    expect(profileRules.localityFitsArea({ area: "mitte", locality: "karow" })).toBe(false);
+    expect(profileRules.localityFitsArea({})).toBe(true);
   });
 });

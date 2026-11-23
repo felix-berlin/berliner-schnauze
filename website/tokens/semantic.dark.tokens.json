@@ -382,7 +382,7 @@
         }
       }
     },
-    "word": {
+    "warm": {
       "ground": {
         "$value": {
           "colorSpace": "srgb",
@@ -418,7 +418,17 @@
           "hex": "#a8b2bc"
         }
       },
-      "ipa-outline": {
+      "quiet": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.658824, 0.698039, 0.737255],
+          "hex": "#a8b2bc"
+        }
+      }
+    },
+    "ipa": {
+      "outline": {
         "$value": {
           "colorSpace": "srgb",
           "components": [0.976471, 0.976471, 0.976471],
@@ -557,46 +567,6 @@
           }
         }
       ]
-    }
-  },
-  "page": {
-    "$type": "color",
-    "$value": {
-      "colorSpace": "srgb",
-      "components": [0.105882, 0.129412, 0.152941],
-      "hex": "#1b2127"
-    }
-  },
-  "card": {
-    "$type": "color",
-    "$value": {
-      "colorSpace": "srgb",
-      "components": [0.180392, 0.211765, 0.247059],
-      "hex": "#2e363f"
-    }
-  },
-  "card2": {
-    "$type": "color",
-    "$value": {
-      "colorSpace": "srgb",
-      "components": [0.219608, 0.258824, 0.298039],
-      "hex": "#38424c"
-    }
-  },
-  "card3": {
-    "$type": "color",
-    "$value": {
-      "colorSpace": "srgb",
-      "components": [0.27451, 0.321569, 0.368627],
-      "hex": "#46525e"
-    }
-  },
-  "t3": {
-    "$type": "color",
-    "$value": {
-      "colorSpace": "srgb",
-      "components": [0.658824, 0.698039, 0.737255],
-      "hex": "#a8b2bc"
     }
   },
   "d-bl": {

@@ -47,7 +47,7 @@
   .eyebrow {
     margin: 0 0 var(--space-1);
     font-size: var(--font-size-lg);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
 
     s {
       text-decoration-color: var(--color-accent-active);
@@ -94,7 +94,7 @@
     padding: var(--space-2) 0 var(--space-3);
     border: 0;
     background: none;
-    color: var(--t3);
+    color: var(--color-warm-quiet);
     cursor: pointer;
     transition: color var(--duration-fast) var(--ease-standard);
 
@@ -135,7 +135,7 @@
     align-items: center;
     margin: 0 0 var(--space-6);
     font-size: var(--font-size-md);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
 
     // SPEC §11.1: dots 5-8px, opacity .3-1.
     i {
@@ -170,7 +170,7 @@
     font-size: var(--font-size-label);
     letter-spacing: var(--_track);
     text-transform: uppercase;
-    color: var(--t3);
+    color: var(--color-warm-quiet);
   }
 
   .legend + .label {
@@ -202,7 +202,7 @@
   .axis {
     margin: var(--space-4) 0 0;
     font-size: var(--font-size-label);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
   }
 
   // The map: the tooltip sits in .map's box, positioned from the district's centre (--x) and edge (--y).
@@ -253,7 +253,7 @@
     white-space: nowrap;
     // White card in the dark band: light scheme makes the tokens resolve to light.
     color-scheme: light;
-    background: var(--card);
+    background: var(--color-warm-sheet);
     color: var(--color-text-strong);
     pointer-events: none;
     // Shifted by its own share of --x, so it never leaves the map's box sideways.
@@ -264,7 +264,7 @@
     }
 
     span {
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
   }
 
@@ -301,7 +301,7 @@
 
       // --card3 resolves to #46525e under the band's dark scheme, the band's own value (mock).
       &:active {
-        background: var(--card3);
+        background: var(--color-warm-card3);
       }
 
       @include butler-mx.hover {
@@ -323,7 +323,7 @@
 
     small {
       font-size: var(--font-size-md); // 0.875rem in the mock, nearest step
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
   }
 

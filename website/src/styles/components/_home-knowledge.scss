@@ -102,7 +102,7 @@
     margin-block-start: var(--space-6);
     padding: var(--space-4) var(--space-5);
     border-radius: var(--radius-sm);
-    background: var(--card);
+    background: var(--color-warm-sheet);
     box-shadow: var(--shadow-paper-lift);
     font-weight: var(--font-weight-bold);
     color: var(--color-text-strong);
@@ -138,7 +138,7 @@
   .side {
     padding: var(--space-6);
     border-radius: var(--radius-sm);
-    background: var(--card);
+    background: var(--color-warm-sheet);
     box-shadow: var(--shadow-paper-lift);
 
     h3 {
@@ -155,7 +155,7 @@
     font-size: var(--font-size-label);
     text-transform: uppercase;
     letter-spacing: var(--_track);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
   }
 
   .rules + .label {
@@ -188,7 +188,7 @@
       position: relative;
       font-size: var(--font-size-md);
       text-decoration: none;
-      color: var(--t3);
+      color: var(--color-warm-quiet);
 
       &::after {
         content: "";
@@ -219,7 +219,7 @@
 
     small {
       font-size: var(--font-size-label);
-      color: var(--t3);
+      color: var(--color-warm-quiet);
     }
   }
 
@@ -235,13 +235,13 @@
       min-block-size: var(--_chip);
       padding-inline: var(--space-3);
       border-radius: var(--radius-pill);
-      background: var(--card2);
+      background: var(--color-warm-card2);
       font-size: var(--font-size-md);
       color: var(--color-text-strong);
       transition: background-color var(--duration-fast) var(--ease-standard);
 
       @include butler-mx.hover {
-        background: var(--card3);
+        background: var(--color-warm-card3);
       }
     }
   }

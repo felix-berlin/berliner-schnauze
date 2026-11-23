@@ -16,6 +16,7 @@ vi.mock("@services/payload.ts", async (importOriginal) => ({
 import type { APIContext } from "astro";
 
 import { siteRead } from "@services/payload.ts";
+import { sharedPollRows } from "@services/payload/pollRows.ts";
 
 import { DELETE, GET, PATCH } from "@/pages/api/word-feedback.ts";
 
@@ -44,6 +45,7 @@ const uniqueViolation = Object.assign(new Error("The following field is invalid"
 });
 
 beforeEach(() => {
+  [7, 8].forEach((w) => sharedPollRows.forget(w));
   set.mockReset();
   count.mockReset().mockResolvedValue({ totalDocs: 0 });
   create.mockReset().mockImplementation(async ({ data }) => ({ id: 1, ...data }));
@@ -253,13 +255,20 @@ describe("PATCH /api/word-feedback", () => {
 
 describe("GET /api/word-feedback", () => {
   it("without cookie: mine null, totals counted, no cookie set", async () => {
-    count.mockResolvedValue({ totalDocs: 2 });
+    find.mockResolvedValue({
+      docs: [
+        { reaction: "like", usage: "say" },
+        { reaction: "like", usage: "know" },
+        { reaction: "dislike", usage: "never" },
+      ],
+    });
     const res = await GET(
       ctx({ method: "GET", url: "https://berliner-schnauze.wtf/api/word-feedback?word=7" }),
     );
     const body = await res.json();
     expect(body.mine).toBeNull();
-    expect(body.totals).toEqual({ dislike: 2, know: 2, like: 2, never: 2, say: 2 });
+    expect(body.totals).toEqual({ dislike: 1, know: 1, like: 2, never: 1, say: 1 });
+    expect(count).not.toHaveBeenCalled();
     expect(set).not.toHaveBeenCalled();
   });
 
@@ -268,12 +277,42 @@ describe("GET /api/word-feedback", () => {
     find.mockResolvedValue({ docs: [{ id: 3, reaction: "like" }] });
     const noVote = await (await GET(ctx({ cookie: "v-1", method: "GET", url }))).json();
     expect(noVote.mine).toMatchObject({ reaction: "like", usage: null });
-    expect(count).toHaveBeenCalledTimes(5);
-    count.mockClear();
+    expect(noVote.compare.east).toBeNull();
     find.mockResolvedValue({ docs: [{ id: 3, usage: "say" }] });
     const voted = await (await GET(ctx({ cookie: "v-1", method: "GET", url }))).json();
     expect(voted.mine.usage).toBe("say");
-    expect(count.mock.calls.length).toBeGreaterThan(5);
+    expect(count).not.toHaveBeenCalled();
+  });
+
+  it("caches only the shared rows: a second visitor gets his own state, not the first one's", async () => {
+    const url = "https://berliner-schnauze.wtf/api/word-feedback?word=7";
+    const shared = [{ usage: "say" }, { usage: "know" }];
+    const mineFor = (id: number, usage: string) => ({ docs: [{ id, usage }] });
+    find.mockImplementation(async (a: { select?: unknown; where: { visitor?: unknown } }) =>
+      a.select ? { docs: shared } : a.where.visitor ? mineFor(3, "say") : { docs: [] },
+    );
+    const first = await (await GET(ctx({ cookie: "v-1", method: "GET", url }))).json();
+    find.mockImplementation(async (a: { select?: unknown }) =>
+      a.select ? { docs: shared } : { docs: [] },
+    );
+    const second = await (await GET(ctx({ cookie: "v-2", method: "GET", url }))).json();
+    expect(first.mine.usage).toBe("say");
+    expect(second.mine).toBeNull();
+    expect(second.result.own).toBeUndefined();
+    expect(find.mock.calls.filter(([a]) => a.select)).toHaveLength(1);
+  });
+
+  it("a vote forgets the cached rows, so the voter's next read counts it", async () => {
+    const url = "https://berliner-schnauze.wtf/api/word-feedback?word=7";
+    const table: { usage: string }[] = [];
+    find.mockImplementation(async (a: { select?: unknown }) =>
+      a.select ? { docs: [...table] } : { docs: [] },
+    );
+    expect((await (await GET(ctx({ method: "GET", url }))).json()).totals.say).toBe(0);
+    table.push({ usage: "say" });
+    expect((await (await GET(ctx({ method: "GET", url }))).json()).totals.say).toBe(0); // within the TTL
+    await patch({ usage: "say", word: 7 }, "v-1");
+    expect((await (await GET(ctx({ method: "GET", url }))).json()).totals.say).toBe(1);
   });
 
   it("502 with a read message on a failing read", async () => {
@@ -410,7 +449,7 @@ describe("GET result and DELETE ?word", () => {
     expect(rowFinds[0]![0]).toMatchObject({
       depth: 0,
       pagination: false,
-      select: { age: true, area: true, half: true, usage: true },
+      select: expect.objectContaining({ age: true, area: true, half: true, usage: true }),
       where: { word: { equals: 7 } },
     });
   });

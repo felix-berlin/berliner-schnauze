@@ -3,18 +3,14 @@
 
 // Start page poll "Forsch ma mit!" (docs/design/startseite-v20/SPEC.md §6, §15-17). Parts: .inner
 // (the split), .intro (.head with .eyebrow/h2/.sub, the .word card), .vote (.question, .tiles of
-// .tile, .hint; after the vote .done, .dots and .legend). Answers carry data-usage, the own vote
-// data-state="mine"; the dots get their index as inline --i for the stagger.
+// .tile, .hint; after the vote .done, UsageDots and .legend). The dots are UsageDots (c-usage-dots); legend
+// markers carry data-usage.
 @include mx.component("home-poll") {
   :scope {
     --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
     --_track: 2px; // eyebrow and card label letter spacing
     --_tile: 4.5rem; // 72px minimum tile height (SPEC §6)
     --_icon: 2.75rem; // 44px icon circle
-    --_dot-gap: 5px; // mock gap between the dots
-    --_pop: 320ms;
-    --_pop-step: 7ms;
-    --_pop-ease: cubic-bezier(0.3, 1.5, 0.6, 1);
     --focus-ring-color: var(--color-accent-active);
 
     container: home-poll / inline-size;
@@ -33,7 +29,7 @@
   .eyebrow {
     margin: 0 0 var(--space-1);
     font-size: var(--font-size-lg);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
 
     s {
       text-decoration-color: var(--color-accent-active);
@@ -65,8 +61,8 @@
     padding: var(--space-5) var(--space-5) var(--space-5) var(--space-6);
     border-inline-start: 4px solid var(--color-accent-active);
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    background: var(--card2);
-    color: var(--t3);
+    background: var(--color-warm-card2);
+    color: var(--color-warm-quiet);
     text-decoration: none;
     transition: background-color var(--duration-fast) var(--ease-standard);
 
@@ -105,7 +101,7 @@
     }
 
     @include butler-mx.hover {
-      background: var(--card3);
+      background: var(--color-warm-card3);
     }
   }
 
@@ -134,7 +130,7 @@
     padding: var(--space-3) var(--space-4);
     border: 0;
     border-radius: var(--radius-sm);
-    background: var(--card2);
+    background: var(--color-warm-card2);
     font: inherit;
     text-align: start;
     color: var(--color-text-strong);
@@ -175,12 +171,12 @@
 
       span {
         font-size: var(--font-size-label);
-        color: var(--t3);
+        color: var(--color-warm-quiet);
       }
     }
 
     @include butler-mx.hover {
-      background: var(--card3);
+      background: var(--color-warm-card3);
 
       .icon {
         border-color: var(--color-accent-active);
@@ -189,14 +185,14 @@
     }
 
     &:active {
-      background: var(--card3);
+      background: var(--color-warm-card3);
     }
   }
 
   .hint {
     margin: var(--space-3) 0 0;
     font-size: var(--font-size-md);
-    color: var(--t3);
+    color: var(--color-warm-quiet);
   }
 
   .done {
@@ -229,44 +225,10 @@
     }
   }
 
-  .dots {
-    display: grid;
-    grid-template-columns: repeat(20, 1fr);
-    gap: var(--_dot-gap);
-    margin-block-end: var(--space-4);
-
-    i {
-      display: block;
-      aspect-ratio: 1;
-      border-radius: var(--radius-pill);
-      background: var(--card2);
-    }
-
-    i[data-state="mine"] {
-      outline: 2px solid var(--color-text-strong);
-      outline-offset: 1px;
-    }
-  }
-
-  .dots i[data-usage="say"],
-  .legend [data-usage="say"] i {
-    background: var(--d-bl);
-  }
-
-  .dots i[data-usage="know"],
-  .legend [data-usage="know"] i {
-    background: var(--d-ye);
-  }
-
-  .dots i[data-usage="never"],
-  .legend [data-usage="never"] i {
-    background: var(--d-gr);
-  }
-
   .legend {
     display: grid;
     gap: var(--space-2);
-    margin: 0;
+    margin: var(--space-4) 0 0; // below the dots
     padding: 0;
     list-style: none;
 
@@ -279,6 +241,8 @@
     }
 
     i {
+      @include mx.usage-fill;
+
       inline-size: 12px;
       block-size: 12px;
       border-radius: var(--radius-pill);
@@ -345,11 +309,6 @@
           transform: rotate(-8deg) scale(1.08);
         }
       }
-    }
-
-    .dots i {
-      animation: home-pop var(--_pop) var(--_pop-ease) both;
-      animation-delay: calc(var(--i, 0) * var(--_pop-step));
     }
   }
 }

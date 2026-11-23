@@ -90,14 +90,14 @@
 
 <script setup lang="ts">
 import BerlinerBaer from "@components/kalle/BerlinerBaer.vue";
-import ContributeForm from "@components/word/ContributeForm.vue";
+import ContributeForm from "@components/word/ContributeLazy.vue";
+import { useGuardedAction } from "@composables/useGuardedAction.ts";
 import { BEZIRK_NAMES } from "@lib/bezirkNames.ts";
 import { OFFLINE_HINT } from "@lib/offlineHint.ts";
 import { agoLabel, type Story } from "@lib/story.ts";
 import { useStore } from "@nanostores/vue";
 import { openContributeForm, openForm } from "@stores/contribute.ts";
 import { reportError } from "@utils/reportError.ts";
-import { useOnline } from "@vueuse/core";
 import { useMediaQuery } from "@vueuse/core";
 import MessageCircle from "virtual:icons/lucide/message-circle";
 import { computed, nextTick, onMounted, reactive, ref, useId, useTemplateRef } from "vue";
@@ -121,7 +121,7 @@ const REACTIONS = [
 ] as const;
 
 const uid = useId();
-const online = useOnline();
+const { busy, online, run } = useGuardedAction();
 const $open = useStore(openForm);
 const formOpen = computed(() => $open.value === "story");
 const list = useTemplateRef<HTMLElement>("list");
@@ -135,7 +135,6 @@ let page = 1;
 
 const mine = reactive<Record<string, -1 | 0 | 1>>({});
 const pending = ref<{ id: number; text: string }[]>([]);
-const busy = reactive(new Set<string>());
 const note = ref("");
 const ownFailed = ref(false);
 
@@ -197,15 +196,16 @@ const shift = (s: Story, vote: number, by: 1 | -1): void => {
 };
 
 const react = async (s: Story, value: -1 | 1): Promise<void> => {
-  // aria-disabled, not disabled: the button keeps the focus while the call runs or the page is offline.
-  if (!online.value || busy.has(s.id)) return;
+  await run(s.id, () => toggleVote(s, value));
+};
+
+const toggleVote = async (s: Story, value: -1 | 1): Promise<void> => {
   const before = { anders: s.anders, jenau: s.jenau, mine: mine[s.id] ?? 0 };
   const next = before.mine === value ? 0 : value;
   touched.add(s.id);
   shift(s, before.mine, -1);
   shift(s, next, 1);
   mine[s.id] = next;
-  busy.add(s.id);
   note.value = "";
   const rollback = (message: string): void => {
     s.jenau = before.jenau;
@@ -233,8 +233,6 @@ const react = async (s: Story, value: -1 | 1): Promise<void> => {
   } catch (error) {
     reportError(error);
     rollback(FAILED);
-  } finally {
-    busy.delete(s.id);
   }
 };
 

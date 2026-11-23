@@ -3,9 +3,7 @@ import type { FactKind } from "payload-app/suggestion-enums";
 
 import { type PollResult, buildPollResult } from "@lib/pollResult.ts";
 import { disclosureFor, type MoreBook, pickBook, pickMoreBooks } from "@lib/wordBook.ts";
-import { ttlBy } from "@services/cache.ts";
-import { getPayloadClient } from "@services/payload.ts";
-import { fetchPollRows } from "@services/payload/pollRows.ts";
+import { sharedPollRows } from "@services/payload/pollRows.ts";
 import { fetchAffiliateData, fetchWordPageGlobal } from "@services/payload/site.ts";
 import { fetchStories } from "@services/payload/stories.ts";
 import { fetchWordRefs, toWordRef } from "@services/payload/wordRefs.ts";
@@ -70,9 +68,7 @@ const contributor = (name?: string | null, suggestion?: number): Contributor | u
     : { ...(name ? { name } : {}), suggestionId: String(suggestion) };
 
 /** No visitor data in it (own usage is never part of the model), so it is shared. */
-const fetchPoll = ttlBy(60_000, 500, async (wordId: number) =>
-  buildPollResult(await fetchPollRows(await getPayloadClient(), wordId)),
-);
+const fetchPoll = async (wordId: number) => buildPollResult(await sharedPollRows(wordId));
 
 /**
  * An optional part of the page: when its source fails the page still renders with `fallback` (the failure is logged
