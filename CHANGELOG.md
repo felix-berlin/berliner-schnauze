@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.3](https://github.com/felix-berlin/berliner-schnauze/compare/v5.0.2...v5.0.3) (2026-11-24)
+
+### Bug Fixes
+
+* keep the magazine outline from widening the start page on mobile ([0769db9](https://github.com/felix-berlin/berliner-schnauze/commit/0769db935a140c614e3ab632989fdc916048d3a9))
+
 ## [5.0.2](https://github.com/felix-berlin/berliner-schnauze/compare/v5.0.1...v5.0.2) (2026-11-23)
 
 ### Bug Fixes
