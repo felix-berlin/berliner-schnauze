@@ -1,7 +1,7 @@
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
-// Start page magazine teaser (docs/design/startseite-v20/SPEC.md §12.3, §15-17). Parts: .ipa (outline behind
+// Start page magazine teaser (docs/design/startseite-v20/SPEC.md §12.3, §15-17). Parts: .field > .ipa (outline behind
 // everything), .grid with .quote (.tag, blockquote > p, h3 > a, .meta) and .read (.excerpt with drop cap, .go,
 // .others of p + a). Reveal: the quote rises unless the root has data-reveal="wait" (the page's observer).
 @include mx.component("home-magazine") {
@@ -12,7 +12,7 @@
     --_drop: 5.2rem; // SPEC §12.3 drop cap like §12.1
     --_fade: 15.5rem; // SPEC §12.3 excerpt height before the fade
     --_track: 2px; // .others label letter spacing (mock)
-    --_ipa-start: calc(50% - 50vw - 0.05em); // cut off at the screen's left edge (mock), not the column's
+    --_ipa-start: -0.05em; // cut off at the screen's left edge (mock), not the column's
     --_ipa-mid: 50%; // vertically centred from the tablet width on
     --_under: 2px; // gap between .go and its underline (mock)
     --_rise: 600ms; // SPEC §16 quote
@@ -23,7 +23,19 @@
 
     container: home-magazine / inline-size;
     position: relative;
-    // The outline starts at the screen edge, outside this column: the page's clip-path and the viewport clip it.
+  }
+
+  // The outline spans the screen, not this column: the field runs from screen edge to screen edge and clips the
+  // outline there. Without it the nowrap outline widens the page, and Chrome on Android pans sideways despite the
+  // html overflow-x clip (like .field in home-stage).
+  .field {
+    --_edge: calc(50% - 50vw); // from the column's centre to the screen's edge: no token
+
+    position: absolute;
+    inset-block: 0;
+    inset-inline: var(--_edge);
+    overflow-x: clip;
+    pointer-events: none;
   }
 
   .ipa {
