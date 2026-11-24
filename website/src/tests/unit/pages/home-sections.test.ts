@@ -168,7 +168,9 @@ describe("MagazineQuote.astro", () => {
     expect(html).toMatch(/<h3[^>]*>\s*<a href="\/magazin\/testbeitrag">Warum Test<\/a>/);
     expect(html).toContain("6 Min. Lesezeit");
     expect(html).toContain("Erfundene Leseprobe");
-    expect(html).toMatch(/<span class="field" aria-hidden="true"><span class="ipa">\[tɛst\]<\/span><\/span>/);
+    expect(html).toMatch(
+      /<span class="field" aria-hidden="true"><span class="ipa">\[tɛst\]<\/span><\/span>/,
+    );
     expect(html).toContain('href="/magazin/beitrag-2"');
     expect(html).not.toContain('href="/magazin/beitrag-3"');
   });
