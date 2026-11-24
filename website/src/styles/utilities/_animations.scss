@@ -239,6 +239,19 @@
     }
   }
 
+  // Start page dot map (home-results): the wave front's progress, 0 to 1. Registered so it interpolates.
+  @property --home-wave {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 0;
+  }
+
+  @keyframes home-wave {
+    to {
+      --home-wave: 1;
+    }
+  }
+
   // Start page poll result (home-poll; mock w14-pop): each dot pops in.
   @keyframes home-pop {
     from {

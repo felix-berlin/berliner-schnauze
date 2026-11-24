@@ -490,7 +490,7 @@ Einblendungen laufen **beim ersten Sichtbarwerden** des Abschnitts (Intersection
 | Abschnitts-h2 | sichtbar | `h19-up`, Start 0,55s | 0,5s | ease |
 | Listen, Kacheln, Register-Zeilen, Lautregeln | sichtbar | `h19-up`, gestaffelt je 60ms | 0,4–0,45s | ease |
 | Beliebt-Punkte | sichtbar | `scale(0 → 1)`, je Punkt +40ms | 0,3s | `cubic-bezier(.3,1.5,.6,1)` |
-| Karten-Punkte | sichtbar | `scale(0 → 1)`, Verzögerung `delay` aus dem JSON (Welle) | 0,5s | `cubic-bezier(.3,1.5,.6,1)` |
+| Karten-Punkte | sichtbar | Welle als eine radiale Maske um `wave` aus dem JSON (4,19ms je Einheit), jeder Punkt blendet über 0,5s ein. Abweichung (Umsetzung): früher `scale(0 → 1)` je Punkt, 1091 Animationen ruckelten auf dem Handy | ≈1,4s | linear |
 | Spielstapel | sichtbar | Karten „ausgeteilt“ `translate(40px,30px) rotate(10–14deg) → Stapel` | 0,6s | ease |
 | Probekarte | dauerhaft | kurzes Wackeln alle 4s (Hinweis „schieb mich“) | 4s | ease-in-out |
 | Karte raus | Antwort | §9 | 0,45s | `cubic-bezier(.3,.7,.3,1)` |
