@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.4](https://github.com/felix-berlin/berliner-schnauze/compare/v5.0.3...v5.0.4) (2026-11-24)
+
+### Performance Improvements
+
+* **home:** draw the district dot map as 12 paths with one wave mask ([ed6080c](https://github.com/felix-berlin/berliner-schnauze/commit/ed6080cba8fec9b9c343759c39c1b8f59c1bf7c1))
+* **word:** load the district map only for the area step, shorten its paths ([0b4e068](https://github.com/felix-berlin/berliner-schnauze/commit/0b4e068ab4baaed9cf503e886ece033750494983))
+
 ## [5.0.3](https://github.com/felix-berlin/berliner-schnauze/compare/v5.0.2...v5.0.3) (2026-11-24)
 
 ### Bug Fixes
