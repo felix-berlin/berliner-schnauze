@@ -2,16 +2,21 @@ import { AREAS, type Area } from "payload-app/word-feedback";
 
 // Start page dot map and age profile (docs/design/startseite-v20/SPEC.md §11).
 
-/** The fixed dot grid of the 12 districts (`assets/berlin-bezirke-punkte.json`); a dot is [x, y, wave delay in ms]. */
-export type Dot = readonly [x: number, y: number, delayMs: number];
+/**
+ * The fixed dot grid of the 12 districts (`assets/berlin-bezirke-punkte.json`). Each district is one path of
+ * zero-length subpaths (`M x y h0`) that `stroke-linecap: round` draws as dots; `x` is the dots' mean, `top` and
+ * `bottom` the outer dot rows (tooltip). `wave` is the centre and reach of the fade-in wave, in viewBox units.
+ */
 export type Geometry = {
   viewBox: { width: number; height: number };
-  bezirke: { slug: Area; name: string; dots: readonly Dot[] }[];
+  wave: { x: number; y: number; reach: number };
+  bezirke: { slug: Area; name: string; path: string; x: number; top: number; bottom: number }[];
 };
 
 type GeometryJson = {
   viewBox: string;
-  bezirke: { slug: string; name: string; dots: number[][] }[];
+  wave: { x: number; y: number; reach: number };
+  bezirke: { slug: string; name: string; path: string; x: number; top: number; bottom: number }[];
 };
 
 /** Checks the geometry file once at load (a typo would otherwise show as a silently muted district) and types it. */
@@ -19,21 +24,15 @@ export function toGeometry(json: GeometryJson): Geometry {
   const [, , width, height] = json.viewBox.split(" ").map(Number);
   if (!width || !height) throw new Error(`Malformed geometry viewBox "${json.viewBox}"`);
   return {
-    bezirke: json.bezirke.map(({ dots, name, slug }) => {
+    bezirke: json.bezirke.map(({ bottom, name, path, slug, top, x }) => {
       const area = AREAS.find((a) => a === slug);
       if (!area) throw new Error(`Unknown district slug "${slug}" in the geometry`);
-      return {
-        dots: dots.map(([x, y, delay]) => {
-          if (x === undefined || y === undefined || delay === undefined) {
-            throw new Error(`Short dot in district "${slug}"`);
-          }
-          return [x, y, delay] as const;
-        }),
-        name,
-        slug: area,
-      };
+      if (!/^(M[\d.]+ [\d.]+h0)+$/.test(path))
+        throw new Error(`Malformed dot path in district "${slug}"`);
+      return { bottom, name, path, slug: area, top, x };
     }),
     viewBox: { height, width },
+    wave: json.wave,
   };
 }
 
@@ -54,22 +53,3 @@ export function dotStyle(v: number | null): { r: number; opacity: number; muted:
 /** Filled dots of an age column, one per 10 %; a group below MIN_GROUP has no value and stays empty. */
 export const filledDots = (percent: number | null): number =>
   percent === null ? 0 : Math.round(percent / 10);
-
-/** The dot grid spacing is about 8.4 units: a point further than this from every dot is outside the map. */
-const HIT_RANGE = 9;
-
-/** Slug of the district whose dot is nearest to a point in viewBox units (the whole area is the hit target, not just the dots). */
-export function nearestDistrict(geometry: Geometry, x: number, y: number): Area | null {
-  let best: Area | null = null;
-  let min = HIT_RANGE * HIT_RANGE;
-  for (const b of geometry.bezirke) {
-    for (const [dx, dy] of b.dots) {
-      const d = (dx - x) ** 2 + (dy - y) ** 2;
-      if (d < min) {
-        min = d;
-        best = b.slug;
-      }
-    }
-  }
-  return best;
-}

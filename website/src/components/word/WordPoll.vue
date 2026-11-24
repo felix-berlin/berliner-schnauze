@@ -303,7 +303,6 @@
 import type { Area, Usage } from "payload-app/word-feedback";
 
 import UsageDots, { type UsageDot } from "@components/UsageDots.vue";
-import BerlinAreaMap from "@components/word-feedback/BerlinAreaMap.vue";
 import { USAGE_OPTIONS } from "@components/word-feedback/usageOptions";
 import { OFFLINE_HINT } from "@lib/offlineHint.ts";
 import { type PollResult, type Region, MIN_GROUP, dotsFor } from "@lib/pollResult.ts";
@@ -331,13 +330,24 @@ import {
   type ProfileStep,
 } from "@utils/wordFeedbackView";
 import { useOnline } from "@vueuse/core";
-import { AREA_LOCALITIES, LOCALITY_NAMES } from "payload-app/word-feedback";
+import { AREA_LOCALITIES, AREA_NAMES, LOCALITY_NAMES } from "payload-app/word-feedback";
 import CircleAlert from "virtual:icons/lucide/circle-alert";
 import Trash2 from "virtual:icons/lucide/trash-2";
 import WifiOff from "virtual:icons/lucide/wifi-off";
-import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from "vue";
+import {
+  computed,
+  defineAsyncComponent,
+  nextTick,
+  onMounted,
+  ref,
+  useTemplateRef,
+  watch,
+} from "vue";
 
-import { BERLIN_AREAS } from "@/data/berlinAreas";
+// The district map (and its path data) is only needed at the "area" step: its own chunk, fetched as soon as a vote
+// starts (the area question follows it) or a step is opened, so it is there before the step shows.
+const loadMap = () => import("@components/word-feedback/BerlinAreaMap.vue");
+const BerlinAreaMap = defineAsyncComponent(loadMap);
 
 // "Sagste det noch?": A vote, B questions, C result (SPEC 7). The own answers load after hydration from the
 // no-store GET (never from props: the page HTML is shared and cached); `initial` is the shared result.
@@ -441,6 +451,7 @@ const focusQuestion = () =>
   focusSoon(() => root.value?.querySelector<HTMLElement>("[data-autofocus]"));
 
 const goTo = (to: ProfileStep, dir: "back" | "forward" = "forward") => {
+  if (to === "area") void loadMap();
   enter.value = dir;
   step.value = to;
   explainOpen.value = to === "area";
@@ -479,6 +490,7 @@ const startQuestions = () => {
 
 const vote = async (usage: Usage) => {
   if (pending.value || !online.value) return;
+  void loadMap();
   pending.value = true;
   pendingUsage.value = usage;
   try {
@@ -622,13 +634,7 @@ const groups = computed(() => [
 ]);
 const given = computed(() => {
   const a = answers.value;
-  const area = a.area
-    ? a.area === "brandenburg"
-      ? "Brandenburg"
-      : a.area === "elsewhere"
-        ? "Woanders"
-        : BERLIN_AREAS.find((x) => x.key === a.area)?.name
-    : null;
+  const area = a.area ? AREA_NAMES[a.area as Area] : null;
   const kiez = a.locality ? LOCALITY_NAMES[a.locality as keyof typeof LOCALITY_NAMES] : null;
   return [
     area ? (kiez ? `${area} (${kiez})` : area) : null,

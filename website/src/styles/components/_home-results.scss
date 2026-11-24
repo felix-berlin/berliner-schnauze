@@ -3,12 +3,12 @@
 
 // Start page results band "Wo wird noch berlinert?" (docs/design/startseite-v20/SPEC.md §11, §4.3, §15-17), dark
 // in both themes. Parts: .head (.eyebrow, h2, .sub), .tabs of [role=tab], two [role=tabpanel]: .districts
-// (.ranking with .legend, .label, .rank, .fine; the DotMap .map with svg > g[tabindex] > circle and the .tip)
+// (.ranking with .legend, .label, .rank, .fine; the DotMap .map with svg > g[tabindex] > .ring, path, .hit and the .tip)
 // and .ages (.sub, .cols of h3 + .list of li > a with b and the AgeDots .age of .col > i, then .axis).
-// DotMap and AgeDots are parts of this band, not components of their own. A district's dot opacity comes in as
-// inline --o, each dot's wave delay as --wave; states: g[data-state="active"], g[data-value="none"] (below
-// MIN_GROUP), .map[data-wave="ready|in"], .tip[data-side="below"], .age[data-variant="dying|growing"],
-// .age i[data-state="on"].
+// DotMap and AgeDots are parts of this band, not components of their own. A district's dot opacity and radius come
+// in as inline --o and --r, the wave's centre and reach (viewBox units) as --wave-x/-y/-reach on the svg, the viewBox
+// width as --map-w; states: g[data-state="active"], g[data-value="none"] (below MIN_GROUP),
+// .map[data-wave="ready|in|done"], .tip[data-side="below"], .age[data-variant="dying|growing"], .age i[data-state="on"].
 @include mx.component("home-results") {
   :scope {
     --_h2: 2.4rem; // SPEC §3 mobile h2, above the type scale
@@ -20,9 +20,9 @@
     --_age-gap: 7px; // SPEC §11.2 gap between the columns
     --_dot-gap: 2px; // SPEC §11.2 gap between the dots of a column
     --_map: 38.75rem; // 620px max map width on tablet (mock)
-    --_pop: 500ms; // SPEC §16 map dots
-    --_ms: 1ms; // unit for each dot's wave delay (--wave, ms from the geometry JSON)
-    --_pop-ease: cubic-bezier(0.3, 1.5, 0.6, 1);
+    --_pop: 500ms; // SPEC §16 map dots: how long one dot takes to appear (the wave's soft edge)
+    --_wave-step: 4.19ms; // SPEC §16: the wave front moves one viewBox unit per 4.19 ms (the former per-dot delays)
+    --_hit: 9; // the district's hover area: dot grid spacing is about 8.4 viewBox units, this closes the gaps
     --_dim: 0.12; // SPEC §11.1 the other districts on hover/focus
     --_line: var(--band-line); // the band's "Weiß 12 %" line (SPEC §4.3); --line is orange in dark
     // stylelint-disable-next-line function-disallowed-list -- colour inventory: "--d-gr 45 %" empty age dot ring (SPEC §11.2), no token holds it
@@ -208,6 +208,8 @@
   // The map: the tooltip sits in .map's box, positioned from the district's centre (--x) and edge (--y).
   .map {
     position: relative;
+    // The wave mask measures in viewBox units: 100cqi / --map-w (svg is the map's full width).
+    container-type: inline-size;
     // The ranking comes first in the DOM (focus order, SPEC §17); on mobile and tablet the map shows above it.
     order: -1;
     inline-size: 100%;
@@ -220,25 +222,41 @@
     overflow: visible;
     inline-size: 100%;
     block-size: auto;
-    fill: var(--d-ye);
+    // Each dot is a zero-length subpath: the round cap of its stroke draws it.
+    fill: none;
+    stroke: var(--d-ye);
+    stroke-linecap: round;
 
     &:has([data-state="active"], g:focus-visible) g:not([data-state="active"], :focus-visible) {
       opacity: var(--_dim);
     }
   }
 
+  // The path inherits its stroke width; the two <use> clones of it take their own (set on the <use>, not the path).
   g {
     opacity: var(--o, 1);
+    stroke-width: calc(var(--r) * 2);
     transition: opacity var(--duration-fast) var(--ease-standard);
 
     &[data-value="none"] {
-      fill: var(--d-gr);
+      stroke: var(--d-gr);
     }
+  }
 
-    &:focus-visible circle {
+  // Focus: a ring of half a unit around every dot of the district, drawn behind the dots.
+  .ring {
+    stroke: none;
+    stroke-width: calc(var(--r) * 2 + 1);
+
+    g:focus-visible > & {
       stroke: var(--_head);
-      stroke-width: 1;
     }
+  }
+
+  .hit {
+    stroke: transparent;
+    stroke-width: var(--_hit);
+    pointer-events: stroke;
   }
 
   // Never takes the pointer: hovering it would leave the district underneath.
@@ -415,19 +433,23 @@
       }
     }
 
-    // SPEC §16: the wave once the map is in view (DotMap sets data-wave); before that the dots wait hidden.
-    circle {
-      transform-box: fill-box;
-      transform-origin: center;
+    // SPEC §16: the wave once the map is in view (DotMap sets data-wave); before that the dots wait hidden. One
+    // radial mask instead of an animation per dot: its edge runs out from --wave-x/-y at one unit per --_wave-step,
+    // and is --_pop wide, so each dot fades in over --_pop as before. --home-wave runs 0 to 1; the mask goes at `done`.
+    .map:is([data-wave="ready"], [data-wave="in"]) svg {
+      --_unit: calc(100cqi / var(--map-w));
+      --_edge: 119; // --_pop / --_wave-step in viewBox units (a time over a time is not Baseline calc)
+      --_front: calc(var(--home-wave) * (var(--wave-reach) + var(--_edge)));
+
+      mask-image: radial-gradient(
+        circle at var(--wave-x) var(--wave-y),
+        currentcolor calc((var(--_front) - var(--_edge)) * var(--_unit)),
+        transparent calc(var(--_front) * var(--_unit))
+      );
     }
 
-    .map[data-wave="ready"] circle {
-      opacity: 0;
-    }
-
-    .map[data-wave="in"] circle {
-      animation: home-pop var(--_pop) var(--_pop-ease) both;
-      animation-delay: calc(var(--wave, 0) * var(--_ms));
+    .map[data-wave="in"] svg {
+      animation: home-wave calc(var(--wave-reach) * var(--_wave-step) + var(--_pop)) linear both;
     }
   }
 }

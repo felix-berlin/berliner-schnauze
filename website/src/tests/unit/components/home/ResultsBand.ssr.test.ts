@@ -24,6 +24,6 @@ describe("ResultsBand on the server", () => {
     expect(html.match(/role="tabpanel"/g)).toHaveLength(2);
     expect(html).toMatch(/role="tabpanel"[^>]*hidden/);
     expect(html).toContain("Testwort");
-    expect(html.match(/<circle/g)).toHaveLength(1091);
+    expect(html.match(/<path/g)).toHaveLength(12);
   });
 });

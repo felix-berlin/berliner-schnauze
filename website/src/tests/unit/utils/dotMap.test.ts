@@ -1,6 +1,4 @@
-import type { Geometry } from "@utils/dotMap.ts";
-
-import { dotStyle, filledDots, nearestDistrict, toGeometry } from "@utils/dotMap.ts";
+import { dotStyle, filledDots, toGeometry } from "@utils/dotMap.ts";
 import { describe, expect, it } from "vitest";
 
 describe("dotStyle", () => {
@@ -34,50 +32,37 @@ describe("filledDots", () => {
   });
 });
 
-describe("nearestDistrict", () => {
-  const geometry: Geometry = {
-    bezirke: [
-      { dots: [[10, 10, 0]], name: "A", slug: "mitte" },
-      { dots: [[40, 10, 0]], name: "B", slug: "pankow" },
-    ],
-    viewBox: { height: 20, width: 50 },
-  };
-
-  it("maps a point between dots to the nearest district", () => {
-    expect(nearestDistrict(geometry, 14, 12)).toBe("mitte");
-    expect(nearestDistrict(geometry, 36, 8)).toBe("pankow");
-  });
-
-  it("returns null outside the map", () => {
-    expect(nearestDistrict(geometry, 25, 10)).toBeNull();
-  });
-});
-
 describe("toGeometry", () => {
   const json = {
-    bezirke: [{ dots: [[1, 2, 3]], name: "Mitte", slug: "mitte" }],
+    bezirke: [{ bottom: 2, name: "Mitte", path: "M1 2h0M3.5 2h0", slug: "mitte", top: 2, x: 2.3 }],
     viewBox: "0 0 404 340",
+    wave: { reach: 220, x: 206, y: 170 },
   };
 
-  it("parses the viewBox into numbers and keeps the dots", () => {
+  it("parses the viewBox into numbers and keeps paths, positions and the wave", () => {
     expect(toGeometry(json)).toEqual({
-      bezirke: [{ dots: [[1, 2, 3]], name: "Mitte", slug: "mitte" }],
+      bezirke: [
+        { bottom: 2, name: "Mitte", path: "M1 2h0M3.5 2h0", slug: "mitte", top: 2, x: 2.3 },
+      ],
       viewBox: { height: 340, width: 404 },
+      wave: { reach: 220, x: 206, y: 170 },
     });
   });
 
-  it("throws on a malformed viewBox, an unknown slug and a short dot", () => {
+  it("throws on a malformed viewBox, an unknown slug and a path that is not dots", () => {
     expect(() => toGeometry({ ...json, viewBox: "bad" })).toThrow("viewBox");
     expect(() => toGeometry({ ...json, bezirke: [{ ...json.bezirke[0]!, slug: "mite" }] })).toThrow(
       "slug",
     );
     expect(() =>
-      toGeometry({ ...json, bezirke: [{ ...json.bezirke[0]!, dots: [[1, 2]] }] }),
-    ).toThrow("dot");
+      toGeometry({ ...json, bezirke: [{ ...json.bezirke[0]!, path: "M1 2L3 4" }] }),
+    ).toThrow("dot path");
   });
 
   it("accepts the real geometry file", async () => {
     const real = (await import("@assets/berlin-bezirke-punkte.json")).default;
-    expect(toGeometry(real).bezirke).toHaveLength(12);
+    const { bezirke } = toGeometry(real);
+    expect(bezirke).toHaveLength(12);
+    expect(bezirke.map((b) => b.path.split("h0").length - 1).reduce((a, n) => a + n)).toBe(1091);
   });
 });

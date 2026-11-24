@@ -73,6 +73,27 @@ def label_point(r):
     return min(cands, key=lambda p: (p[0] - cx) ** 2 + (p[1] - cy) ** 2)
 
 
+def num(t):
+    """A whole number of tenths as the shortest SVG number: 12, 1.5, .5, -.5."""
+    a = f"{abs(t) // 10}.{abs(t) % 10}".removesuffix(".0")
+    return ("-" if t < 0 else "") + (a[1:] if a.startswith("0.") else a)
+
+
+def join(ns):
+    """SVG numbers with a space only where the grammar needs one (not before "-", not before a second ".")."""
+    d = ns[0]
+    for prev, n in zip(ns, ns[1:]):
+        d += n if n[0] == "-" or (n[0] == "." and "." in prev) else " " + n
+    return d
+
+
+def ring(pts):
+    """A closed ring: absolute start, then relative steps. Rounded to tenths first, so the steps add up without drift."""
+    ts = [(round(x * 10), round(y * 10)) for x, y in pts]
+    steps = [v for (x0, y0), (x1, y1) in zip(ts, ts[1:]) for v in (x1 - x0, y1 - y0)]
+    return "M" + join([num(ts[0][0]), num(ts[0][1])]) + "l" + join([num(v) for v in steps]) + "z"
+
+
 bz = json.load(open(sys.argv[1]))
 c = math.cos(math.radians(52.5))
 
@@ -99,7 +120,7 @@ def build(rs):
         sp = dp(pts[: h + 1], 0.8)[:-1] + dp(pts[h:], 0.8)
         if len(sp) < 4:
             continue
-        d += "M" + "L".join(f"{x:.1f},{y:.1f}" for x, y in sp) + "Z"
+        d += ring(sp)
         if best is None or centroid(sp)[2] > centroid(best)[2]:
             best = sp
     lx, ly = label_point(best)
