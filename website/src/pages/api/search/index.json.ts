@@ -1,9 +1,15 @@
 import type { APIRoute } from "astro";
 
 import { fetchAllWords, type SiteWord, translationTexts } from "@services/payload/words.ts";
+import { searchStatsOrEmpty } from "@services/searchStats.ts";
 import { etagOf, jsonWithEtag } from "@utils/cacheHeaders.ts";
 
-export type OramaSearchIndex = ReturnType<typeof makeOramaSearchIndex>;
+import type { SearchEntry, Usage } from "@/lib/search/types";
+
+import { soundex } from "@/lib/search/query";
+
+/** The base fields only (what the BON game and the start page read); `SearchEntry` adds the search-page fields. */
+export type OramaSearchIndex = ReturnType<typeof makeBaseEntry>;
 
 /** Epoch ms of an ISO date, 0 when absent or invalid. */
 const timestamp = (iso: string | null | undefined): number => (iso && Date.parse(iso)) || 0;
@@ -12,7 +18,7 @@ const timestamp = (iso: string | null | undefined): number => (iso && Date.parse
  * Assembles the slim public entry from stored fields: nothing here may carry definitions, examples or sources.
  * Its shape is public (cached by the service worker on visitors' devices).
  */
-export function makeOramaSearchIndex(word: SiteWord) {
+function makeBaseEntry(word: SiteWord) {
   const { berlinerisch, derived } = word;
   // Editor-set types win over the automatic guess.
   const editorial = word.wordTypes.map((t) => t.name);
@@ -43,24 +49,57 @@ export function makeOramaSearchIndex(word: SiteWord) {
   };
 }
 
+export function makeOramaSearchIndex(
+  word: SiteWord,
+  stats?: { stories: number; usage?: Usage },
+): SearchEntry {
+  const base = makeBaseEntry(word);
+  const { derived } = word;
+  const examples = word.examples.length > 0;
+  const facts = (word.facts?.length ?? 0) > 0;
+  return {
+    ...base,
+    article: word.article ?? "",
+    form: {
+      length: derived.characterLength ?? word.berlinerisch.length,
+      soundex: derived.soundexCode || soundex(word.berlinerisch),
+      syllables: derived.syllablesCount ?? 0,
+    },
+    // Same conditions as the `gap` props of WordFactsCard / WordNetworkCard (plus examples and word audio).
+    has: {
+      examples,
+      examplesAudio: base.wordProperties.audioExamples,
+      facts,
+      gap:
+        !examples ||
+        !facts ||
+        !base.wordProperties.audioBerlinerisch ||
+        (word.related?.length ?? 0) === 0,
+      images: word.images.length > 0,
+      stories: (stats?.stories ?? 0) > 0,
+    },
+    ...(stats?.usage && { usage: stats.usage }),
+  };
+}
+
 // index.json and meta.json both need the entries: map (and serialize) each memoized words array once.
 const indexByWords = new WeakMap<
   SiteWord[],
-  { entries: OramaSearchIndex[]; etag: string; json: string }
+  { entries: SearchEntry[]; etag: string; json: string }
 >();
 
 const searchIndex = async () => {
-  const words = await fetchAllWords();
+  const [words, stats] = await Promise.all([fetchAllWords(), searchStatsOrEmpty()]);
   let index = indexByWords.get(words);
   if (!index) {
-    const entries = words.map(makeOramaSearchIndex);
+    const entries = words.map((w) => makeOramaSearchIndex(w, stats.get(w.id)));
     const json = JSON.stringify(entries);
     indexByWords.set(words, (index = { entries, etag: etagOf(json), json }));
   }
   return index;
 };
 
-export const getSearchIndexEntries = async (): Promise<OramaSearchIndex[]> =>
+export const getSearchIndexEntries = async (): Promise<SearchEntry[]> =>
   (await searchIndex()).entries;
 
 export const GET: APIRoute = async ({ request }) => {

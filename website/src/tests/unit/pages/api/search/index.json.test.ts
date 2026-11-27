@@ -2,6 +2,8 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("astro:env/client", () => ({ SHOW_TEST_DATA: false }));
 
+vi.mock("@services/searchStats.ts", () => ({ searchStatsOrEmpty: async () => new Map() }));
+
 const { fetchAllWords } = vi.hoisted(() => ({ fetchAllWords: vi.fn() }));
 vi.mock("@services/payload/words.ts", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@services/payload/words.ts")>()),
@@ -171,8 +173,11 @@ describe("makeOramaSearchIndex — stored derived fields", () => {
     );
     expect(Object.keys(result).sort()).toEqual(
       [
+        "article",
         "berlinerischWordTypes",
         "dateTs",
+        "form",
+        "has",
         "modifiedTs",
         "slug",
         "themen",
@@ -196,6 +201,63 @@ describe("makeOramaSearchIndex — stored derived fields", () => {
       ].sort(),
     );
     expect(JSON.stringify(result)).not.toContain("geheim");
+  });
+});
+
+describe("makeOramaSearchIndex — usage, content flags and form", () => {
+  const full = {
+    berlinerischAudio: [audio],
+    examples: [{ example: "e", exampleAudio: [audio] }],
+    facts: [{ html: "<p>x</p>" }],
+    images: [{ id: 1 }],
+    related: [{ label: "x" }],
+  };
+
+  it("sets has.gap when only related is empty", () => {
+    expect(makeOramaSearchIndex(makeWord(full)).has.gap).toBe(false);
+    expect(makeOramaSearchIndex(makeWord({ ...full, related: [] })).has.gap).toBe(true);
+  });
+
+  it("sets has.gap for no example, no fact or no word audio", () => {
+    for (const missing of [{ examples: [] }, { facts: [] }, { berlinerischAudio: [] }]) {
+      expect(makeOramaSearchIndex(makeWord({ ...full, ...missing })).has.gap).toBe(true);
+    }
+  });
+
+  it("derives the content flags and stories from the stats", () => {
+    const entry = makeOramaSearchIndex(makeWord(full), { stories: 2 });
+    expect(entry.has).toEqual({
+      examples: true,
+      examplesAudio: true,
+      facts: true,
+      gap: false,
+      images: true,
+      stories: true,
+    });
+    expect(makeOramaSearchIndex(makeWord(full), { stories: 0 }).has.stories).toBe(false);
+  });
+
+  it("omits usage without stats and carries it with stats", () => {
+    expect("usage" in makeOramaSearchIndex(makeWord())).toBe(false);
+    const usage = { say: 0.6, votes: 12 };
+    expect(makeOramaSearchIndex(makeWord(), { stories: 0, usage }).usage).toEqual(usage);
+  });
+
+  it("fills article and form, preferring the stored soundex", () => {
+    const stored = makeOramaSearchIndex(makeWord({ article: "die" }));
+    expect(stored.article).toBe("die");
+    expect(makeOramaSearchIndex(makeWord()).article).toBe("");
+    expect(stored.form).toEqual({ length: 3, soundex: "W300", syllables: 1 });
+    const noCode = makeWord();
+    noCode.derived = { ...noCode.derived, soundexCode: undefined } as typeof noCode.derived;
+    expect(makeOramaSearchIndex(noCode).form.soundex).toBe("W300");
+  });
+
+  it("serializes no feedback row fields", () => {
+    const json = JSON.stringify(
+      makeOramaSearchIndex(makeWord(full), { stories: 1, usage: { say: 1, votes: 10 } }),
+    );
+    for (const key of ["visitor", "locality", "origin"]) expect(json).not.toContain(key);
   });
 });
 

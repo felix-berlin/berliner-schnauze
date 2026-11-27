@@ -4,7 +4,9 @@ import { create, insertMultiple } from "@orama/orama";
 import { language, stemmer } from "@orama/stemmers/german";
 import { fetchSearchIndex } from "@services/searchIndex.ts";
 
-const wordSchema = {
+import type { OramaSearchIndex } from "@/pages/api/search/index.json";
+
+export const wordSchema = {
   berlinerischWordTypes: "enum[]",
   dateTs: "number",
   modifiedTs: "number",
@@ -40,6 +42,28 @@ export const FULL_TEXT = {
   tolerance: 1,
 } satisfies Partial<SearchParamsFullText<WordDb>>;
 
+/** Stemming tokenizer shared by the browser and the server DB. */
+export const tokenizerConfig = {
+  language,
+  stemmer,
+  stemmerSkipProperties: [
+    "wordGroup",
+    "modifiedTs",
+    "dateTs",
+    "wordProperties.berolinismus",
+    "berlinerischWordTypes",
+    "themen",
+  ],
+  stemming: true,
+};
+
+/** Builds the Orama DB from index entries (extra entry fields are ignored by the schema). */
+export async function buildWordDb(entries: OramaSearchIndex[]): Promise<WordDb> {
+  const db = create({ components: { tokenizer: tokenizerConfig }, schema: wordSchema });
+  await insertMultiple(db, entries);
+  return db;
+}
+
 let pending: null | Promise<{ db: WordDb; size: number }> = null;
 
 /**
@@ -50,28 +74,7 @@ let pending: null | Promise<{ db: WordDb; size: number }> = null;
  */
 export function getWordDb(): Promise<{ db: WordDb; size: number }> {
   pending ??= fetchSearchIndex()
-    .then(async (words) => {
-      const db = create({
-        components: {
-          tokenizer: {
-            language,
-            stemmer,
-            stemmerSkipProperties: [
-              "wordGroup",
-              "modifiedTs",
-              "dateTs",
-              "wordProperties.berolinismus",
-              "berlinerischWordTypes",
-              "themen",
-            ],
-            stemming: true,
-          },
-        },
-        schema: wordSchema,
-      });
-      await insertMultiple(db, words);
-      return { db, size: words.length };
-    })
+    .then(async (words) => ({ db: await buildWordDb(words), size: words.length }))
     .catch((err: unknown) => {
       pending = null; // allow retry after failure
       throw err;

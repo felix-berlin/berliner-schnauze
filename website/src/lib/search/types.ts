@@ -22,7 +22,6 @@ export type ContentKey =
 export type SortKey = "beste" | "az" | "beliebt" | "neu" | "jesagt";
 /** word-exact, word-prefix, word, meaning-exact, meaning-part, fuzzy */
 export type Tier = 0 | 1 | 2 | 3 | 4 | 5;
-// TODO(suche): the index must produce the extra fields (a later task).
 export type SearchEntry = OramaSearchIndex & {
   article: string;
   has: {
