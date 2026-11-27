@@ -77,13 +77,15 @@ describe("cache stamp", () => {
 describe("withCacheStamp", () => {
   const hooked = (collection: CollectionConfig) =>
     (withCacheStamp(collection).hooks?.afterChange?.length ?? 0) > 0;
+  const slugsWhere = (slugs: readonly string[], hasHook: boolean) =>
+    slugs.filter((slug) => hooked({ slug, fields: [] }) === hasHook);
 
   it("hooks the allowlisted collections", () => {
-    for (const slug of STAMPED_COLLECTIONS) expect(hooked({ slug, fields: [] }), slug).toBe(true);
+    expect(slugsWhere(STAMPED_COLLECTIONS, true)).toEqual([...STAMPED_COLLECTIONS]);
   });
 
   it("leaves high-frequency and invisible collections alone", () => {
-    for (const slug of [
+    const left = [
       "comment-votes",
       "word-stats",
       "word-feedback",
@@ -93,21 +95,20 @@ describe("withCacheStamp", () => {
       "suggestions",
       "reports",
       "comment-reports",
-    ])
-      expect(hooked({ slug, fields: [] }), slug).toBe(false);
+    ];
+    expect(slugsWhere(left, false)).toEqual(left);
   });
 
   it("hooks every global except the stamp itself", () => {
-    for (const slug of STAMPED_GLOBALS)
-      expect(
-        withCacheStampGlobal({ slug, fields: [] }).hooks?.afterChange?.length,
-        slug,
-      ).toBeGreaterThan(0);
+    const hookedGlobals = STAMPED_GLOBALS.filter(
+      (slug) => (withCacheStampGlobal({ slug, fields: [] }).hooks?.afterChange?.length ?? 0) > 0,
+    );
+    expect(hookedGlobals).toEqual([...STAMPED_GLOBALS]);
     expect(withCacheStampGlobal({ slug: "cache-stamp", fields: [] }).hooks).toBeUndefined();
   });
 
   it("keeps the hooks a collection already has", () => {
-    const own = vi.fn();
+    const own = vi.fn<() => void>();
     expect(
       withCacheStamp({ slug: "words", fields: [], hooks: { afterChange: [own] } }).hooks
         ?.afterChange?.[0],
@@ -117,7 +118,7 @@ describe("withCacheStamp", () => {
 
 describe("stampCacheChange", () => {
   it("writes once per request, however many docs change", async () => {
-    const updateGlobal = vi.fn(async () => ({}));
+    const updateGlobal = vi.fn<(args: unknown) => Promise<object>>(async () => ({}));
     const req = { context: {}, payload: { updateGlobal } } as unknown as PayloadRequest;
     await stampCacheChange(req);
     await stampCacheChange(req);

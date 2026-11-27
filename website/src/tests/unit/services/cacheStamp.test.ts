@@ -10,7 +10,7 @@ const setup = (reads: (string | null | Error)[]) => {
   });
   const onChange = vi.fn();
   const warn = vi.fn();
-  const poll = createStampPoller({ onChange, now: () => time, read, warn });
+  const poll = createStampPoller({ now: () => time, onChange, read, warn });
   const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
   return {
     onChange,
@@ -59,7 +59,7 @@ describe("createStampPoller", () => {
     let finish!: (value: string) => void;
     const read = vi.fn(() => new Promise<string>((resolve) => (finish = resolve)));
     let time = 0;
-    const poll = createStampPoller({ onChange: vi.fn(), now: () => time, read });
+    const poll = createStampPoller({ now: () => time, onChange: vi.fn(), read });
     poll();
     time += 5000;
     poll();
@@ -118,8 +118,8 @@ describe("createStampPoller", () => {
     const reads = ["a", "b"];
     const warn = vi.fn();
     const poll = createStampPoller({
-      onChange: () => Promise.reject(new Error("invalidate failed")),
       now: () => time,
+      onChange: () => Promise.reject(new Error("invalidate failed")),
       read: async () => reads.shift() ?? null,
       warn,
     });
@@ -136,11 +136,11 @@ describe("createStampPoller", () => {
     const order: string[] = [];
     const reads = ["a", "b"];
     const poll = createStampPoller({
+      now: () => time,
       onChange: async () => {
         await new Promise((resolve) => setTimeout(resolve, 5));
         order.push("cleared");
       },
-      now: () => time,
       read: async () => reads.shift() ?? null,
     });
     await poll();
@@ -153,7 +153,7 @@ describe("createStampPoller", () => {
   it("returns an already resolved promise when throttled or when a read is pending", async () => {
     let finish!: (value: string) => void;
     const read = vi.fn(() => new Promise<string>((resolve) => (finish = resolve)));
-    const poll = createStampPoller({ onChange: vi.fn(), now: () => 0, read });
+    const poll = createStampPoller({ now: () => 0, onChange: vi.fn(), read });
     void poll(); // starts the read, which stays pending
     await expect(poll()).resolves.toBeUndefined();
     finish("a");
