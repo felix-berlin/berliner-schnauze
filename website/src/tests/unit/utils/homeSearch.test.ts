@@ -64,9 +64,9 @@ describe("groupHits", () => {
 
 describe("urls", () => {
   it("builds the search page url from the trimmed, encoded query", () => {
-    expect(searchUrl("  dicke Luft ")).toBe("/suche?q=dicke%20Luft");
-    expect(searchUrl("Straße über")).toBe("/suche?q=Stra%C3%9Fe%20%C3%BCber");
-    expect(searchUrl("a&b=c")).toBe("/suche?q=a%26b%3Dc");
+    expect(searchUrl("  dicke Luft ")).toBe("/wort?q=dicke%20Luft");
+    expect(searchUrl("Straße über")).toBe("/wort?q=Stra%C3%9Fe%20%C3%BCber");
+    expect(searchUrl("a&b=c")).toBe("/wort?q=a%26b%3Dc");
   });
 
   it("builds the suggestion url with the term", () => {

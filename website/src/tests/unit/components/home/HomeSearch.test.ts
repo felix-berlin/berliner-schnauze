@@ -87,7 +87,7 @@ describe("HomeSearch", () => {
   it("renders a plain GET search form with a hidden label", async () => {
     const w = await mountSearch();
     const form = w.get("form");
-    expect(form.attributes()).toMatchObject({ action: "/suche", method: "get", role: "search" });
+    expect(form.attributes()).toMatchObject({ action: "/wort", method: "get", role: "search" });
     expect(input(w).attributes()).toMatchObject({
       name: "q",
       placeholder: "Wat suchste? Berlinerisch oder Hochdeutsch",
@@ -151,7 +151,7 @@ describe("HomeSearch", () => {
     const w = await mountSearch();
     await type(w, "zappel");
     expect(options(w)).toHaveLength(6);
-    const all = w.get('a[href="/suche?q=zappel"]');
+    const all = w.get('a[href="/wort?q=zappel"]');
     expect(all.text()).toContain("Alle 8 Treffer für „zappel“");
   });
 
@@ -180,7 +180,7 @@ describe("HomeSearch", () => {
     const w = await mountSearch();
     await input(w).setValue("  Straße über ");
     await input(w).trigger("keydown", { key: "Enter" });
-    expect(navigate).toHaveBeenCalledWith("/suche?q=Stra%C3%9Fe%20%C3%BCber");
+    expect(navigate).toHaveBeenCalledWith("/wort?q=Stra%C3%9Fe%20%C3%BCber");
   });
 
   it("does not navigate for an empty or blank query", async () => {

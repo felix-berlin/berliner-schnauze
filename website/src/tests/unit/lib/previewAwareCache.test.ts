@@ -57,8 +57,19 @@ describe("previewAwareCache", () => {
     );
     expect(inner).not.toHaveBeenCalled();
     await provider.onRequest!(context(undefined, "/"), next);
-    await provider.onRequest!(context(undefined, "/suche?q=foo"), next);
+    await provider.onRequest!(context(undefined, "/wort/aalen?q=foo"), next);
     expect(inner).toHaveBeenCalledTimes(2);
+  });
+
+  it("renders /wort with any query, caches /wort without one", async () => {
+    inner.mockClear();
+    expect(await (await provider.onRequest!(context(undefined, "/wort?q=foo"), next)).text()).toBe(
+      "rendered",
+    );
+    await provider.onRequest!(context(undefined, "/wort?buchstabe=b"), next);
+    expect(inner).not.toHaveBeenCalled();
+    await provider.onRequest!(context(undefined, "/wort"), next);
+    expect(inner).toHaveBeenCalledTimes(1);
   });
 
   it("polls the stamp for a request with a preview cookie", async () => {

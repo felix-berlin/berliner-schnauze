@@ -31,7 +31,7 @@ if (query && Astro.request.headers.get('sec-fetch-mode') === 'navigate') {
   return new Response(null, {
     headers: {
       'Cache-Control': 'private, no-store',
-      Location: `/suche?q=${encodeURIComponent(query)}`,
+      Location: `/wort?q=${encodeURIComponent(query)}`,
     },
     status: 302,
   });

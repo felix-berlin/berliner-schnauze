@@ -22,6 +22,11 @@ describe("search url", () => {
     expect(s.content).toEqual(["audio"]);
   });
 
+  it("trims the query", () => {
+    expect(parse("q=%20%20brötchen%20").q).toBe("brötchen");
+    expect(parse("q=%20%20").q).toBe("");
+  });
+
   it("empty state has no params", () => {
     expect(toParams(EMPTY_STATE).toString()).toBe("");
     expect(parse("")).toEqual(expect.objectContaining(EMPTY_STATE));

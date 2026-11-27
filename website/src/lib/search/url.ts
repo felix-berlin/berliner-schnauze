@@ -52,7 +52,7 @@ export function parseState(params: URLSearchParams, known: Known): SearchState {
     letter: letter && /^[A-ZÄÖÜ]$/.test(letter) ? letter : undefined,
     often: one(params.get("gebrauch"), OFTEN),
     pos: list(params.get("wortart"), known.pos),
-    q: params.get("q") ?? "",
+    q: params.get("q")?.trim() ?? "",
     rhyme: text(params.get("reim")),
     sort: one(params.get("sort"), SORTS),
     starts: text(params.get("beginnt")),

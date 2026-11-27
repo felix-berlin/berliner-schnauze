@@ -1,5 +1,5 @@
 <template>
-  <form class="c-home-search" role="search" method="get" action="/suche" @submit="onSubmit">
+  <form class="c-home-search" role="search" method="get" action="/wort" @submit="onSubmit">
     <label :for="inputId" class="u-sr-only">Wort suchen</label>
     <IconSearch class="lens" aria-hidden="true" />
     <input

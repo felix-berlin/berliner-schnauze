@@ -9,7 +9,7 @@ describe("HomeSearch on the server", () => {
     const html = await renderToString(createSSRApp(HomeSearch));
     expect(html).toContain('role="search"');
     expect(html).toContain('method="get"');
-    expect(html).toContain('action="/suche"');
+    expect(html).toContain('action="/wort"');
     expect(html).toContain('name="q"');
   });
 });

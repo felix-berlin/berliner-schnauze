@@ -53,7 +53,8 @@ const canonicalURL = seo?.canonical || canonicalUrl(Astro.url.pathname, Astro.si
 <link color='#303956' href='/favicons/safari-pinned-tab.svg' rel='mask-icon' />
 
 <link href='/sitemap-index.xml' rel='sitemap' />
-<link href={canonicalURL} rel='canonical' />
+{/* A noindex page without its own canonical gets none: pointing it at an indexable URL sends mixed signals. */}
+{(seo?.canonical || !seo?.robots?.includes('noindex')) && <link href={canonicalURL} rel='canonical' />}
 
 <meta content='#ffffff' name='msapplication-TileColor' />
 <meta content={Astro.generator} name='generator' />

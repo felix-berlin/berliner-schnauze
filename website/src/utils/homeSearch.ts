@@ -41,7 +41,7 @@ export function groupHits(docs: HitDoc[], query: string) {
   return { lemma, meaning };
 }
 
-export const searchUrl = (query: string) => `/suche?q=${encodeURIComponent(query.trim())}`;
+export const searchUrl = (query: string) => `/wort?q=${encodeURIComponent(query.trim())}`;
 
 // shortcut: /wort-vorschlagen does not read ?wort= yet, so the word is not prefilled; add the prefill there or drop the param.
 export const suggestUrl = (query: string) =>

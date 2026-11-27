@@ -21,7 +21,7 @@ export const homeJsonLd = ({ faq, word }: Pick<HomeData, "faq" | "word">): objec
     potentialAction: {
       "@type": "SearchAction",
       "query-input": "required name=search_term_string",
-      target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/suche?q={search_term_string}` },
+      target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/wort?q={search_term_string}` },
     },
     url: SITE_URL,
   },

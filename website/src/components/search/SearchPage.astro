@@ -1,0 +1,60 @@
+---
+import type { SearchContext, SearchResult } from "@lib/search/run";
+import type { SearchState } from "@lib/search/state";
+
+import SearchApp from "@components/search/SearchApp.vue";
+import Layout from "@layouts/Layout.astro";
+import { isFiltered } from "@lib/search/state";
+import { canonicalUrl, jsonLd, seoData } from "@utils/helpers.ts";
+
+export interface Props {
+  state: SearchState;
+  result: SearchResult;
+  ctx: SearchContext;
+  meta: {
+    themes: { name: string; slug: string }[];
+    pos: string[];
+    areas: { key: string; name: string }[];
+    letters: { letter: string; count: number }[];
+    totalWords: number;
+  };
+}
+
+/** Rows rendered into the first HTML (and passed to the island); Task 8 virtualizes the rest on the client. */
+const SSR_COUNT = 40;
+
+const { ctx, meta, result, state } = Astro.props;
+const indexable = !state.q && !isFiltered(state);
+
+const content = {
+  seo: {
+    opengraphDescription:
+      "Alle Berliner Wörter durchsuchen: Berlinerisch zu Hochdeutsch und zurück, mit Filtern nach Wortart, Thema und Gebrauch.",
+    robots: indexable ? "index, follow" : "noindex, follow",
+  },
+  title: "Wörter suchen - Berlinerisch zu Hochdeutsch",
+};
+
+const termSet = jsonLd({
+  "@context": "https://schema.org",
+  "@id": `${canonicalUrl("/wort", Astro.site)}#termset`,
+  "@type": "DefinedTermSet",
+  description: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch.",
+  name: "Berliner Schnauze Wörterbuch",
+  numberOfItems: meta.totalWords,
+  url: canonicalUrl("/wort", Astro.site),
+});
+---
+
+<Layout content={seoData(content)}>
+  <Fragment slot="head">
+    {indexable && <script set:html={termSet} type="application/ld+json" />}
+  </Fragment>
+  <SearchApp
+    client:load
+    {meta}
+    result={{ ...result, rows: result.rows.slice(0, SSR_COUNT) }}
+    {state}
+    wotd={ctx.wotd}
+  />
+</Layout>

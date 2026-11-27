@@ -499,7 +499,7 @@ export default defineConfig({
           {
             name: "Wort suchen",
             short_name: "Suchen",
-            url: "/",
+            url: "/wort",
             icons: [
               { src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
             ],

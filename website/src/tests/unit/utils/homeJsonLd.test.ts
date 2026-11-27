@@ -38,10 +38,10 @@ describe("homeJsonLd", () => {
     ]);
   });
 
-  it("points the SearchAction at /suche", () => {
+  it("points the SearchAction at /wort", () => {
     const site = byType(homeJsonLd(data), "WebSite");
     const action = site.potentialAction as { target: { urlTemplate: string } };
-    expect(action.target.urlTemplate).toMatch(/\/suche\?q=\{search_term_string\}$/);
+    expect(action.target.urlTemplate).toMatch(/\/wort\?q=\{search_term_string\}$/);
   });
 
   it("keeps the Organization", () => {

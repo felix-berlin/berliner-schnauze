@@ -30,7 +30,8 @@ const withSiteTag = (response: Response): Response => {
  * Astro's memory cache, skipped for two kinds of request. A cache hit is served before any page code runs, so a
  * page cannot opt out itself:
  * - a preview cookie: an editor must see the draft, not the cached public page;
- * - `/?q=…`: the start page redirects that old share link to /suche, and the cache key ignores the query.
+ * - `/?q=…`: the start page redirects that old share link to /wort, and the cache key ignores the query;
+ * - `/wort` with any query: the search page renders its hits server side, and the cache key ignores the query.
  *
  * It also watches the CMS change stamp (`services/cacheStamp.ts`): on a change it empties this cache and every
  * `ttl` memo (not the `external` ones), so an edit shows within seconds instead of after the cache windows. The
@@ -61,7 +62,8 @@ const factory: CacheProviderFactory = (config) => {
         clearTimeout(timer);
       }
       return context.request.headers.get("cookie")?.includes(`${PREVIEW_COOKIE}=`) ||
-        (context.url.pathname === "/" && context.url.searchParams.has("q"))
+        (context.url.pathname === "/" && context.url.searchParams.has("q")) ||
+        (context.url.pathname === "/wort" && context.url.search)
         ? next()
         : memory.onRequest!(context, async () => withSiteTag(await next()));
     },

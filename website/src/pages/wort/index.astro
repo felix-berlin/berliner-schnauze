@@ -1,88 +1,44 @@
 ---
-import { jsonLd } from '@utils/helpers';
-import "@styles/objects/_word-index.scss";
-import "@styles/components/_word-group.scss";
-import "@styles/plugins/astro-breadcrumbs.scss";
-import Layout from "@layouts/Layout.astro";
-import { fetchAllWords } from "@services/payload/words.ts";
-import type { SiteWord } from "@services/payload/words.ts";
-import { routeToWord, seoData, canonicalUrl } from "@utils/helpers.ts";
-import { Breadcrumbs } from "astro-breadcrumbs";
-import ChevronRight from "~icons/lucide/chevron-right";
+import SearchPage from "@components/search/SearchPage.astro";
+import { runSearch } from "@lib/search/run";
+import { parseState } from "@lib/search/url";
+import { BEZIRK_NAMES } from "@lib/bezirkNames";
+import { getServerWordDb } from "@services/serverWordDb.ts";
+import { fetchAllThemen } from "@services/payload/themen.ts";
+import { getTrendRanks } from "@services/payload/trending.ts";
+import { pickWordOfTheDay } from "@utils/wordOfTheDay.ts";
 
-async function getGroupedWords(): Promise<Record<string, SiteWord[]>> {
-  const allWords = await fetchAllWords();
+// Awaiting here holds back the shell; the data is memoized (60 s / 5 min), so only the first request per window pays.
+const [{ db, entries }, themen, trendRanks] = await Promise.all([
+  getServerWordDb(),
+  fetchAllThemen(),
+  getTrendRanks(),
+]);
 
-  const groupedWords: Record<string, SiteWord[]> = {};
+const pos = [...new Set(entries.flatMap((e) => e.berlinerischWordTypes))].sort((a, b) =>
+  a.localeCompare(b, "de"),
+);
+const areas = Object.entries(BEZIRK_NAMES).map(([key, name]) => ({ key, name }));
+const themes = themen.map(({ name, slug }) => ({ name, slug }));
 
-  allWords.forEach((word) => {
-    const group = word.derived.wordGroup;
-    if (!group) return;
+const state = parseState(Astro.url.searchParams, {
+  areas: areas.map((a) => a.key),
+  pos,
+  themes: themes.map((t) => t.slug),
+});
+const ctx = { trendRanks, wotd: pickWordOfTheDay(entries, new Date())?.slug };
+const result = await runSearch(db, entries, state, ctx);
 
-    if (!groupedWords[group]) {
-      groupedWords[group] = [];
-    }
-    groupedWords[group].push(word);
-  });
-
-  return groupedWords;
-}
-
-const groupedWords = await getGroupedWords();
-const sortedGroups = Object.keys(groupedWords).sort();
-
-const content = {
-  seo: {
-    opengraphDescription:
-      "Alle Berliner Worte in der Übersicht. Lerne mehr über: die Berliner Mundart, Berlinisch, den Berliner Jargon, Berlinerisch & Berolinismus.",
-  },
-  title: "Berlinerisch Wort-Index - Berlinerisch zu Hochdeutsch",
+const LETTERS = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ"];
+const meta = {
+  areas,
+  letters: LETTERS.map((letter) => ({ count: result.facets.letters[letter] ?? 0, letter })),
+  pos,
+  themes,
+  totalWords: entries.length,
 };
 
-const totalWordCount = Object.values(groupedWords).reduce((sum, words) => sum + words.length, 0);
-
-const schemaJson = () =>
-  jsonLd({
-    "@context": "https://schema.org",
-    "@id": `${canonicalUrl('/wort', Astro.site)}#termset`,
-    "@type": "DefinedTermSet",
-    description: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch.",
-    name: "Berliner Schnauze Wörterbuch",
-    numberOfItems: totalWordCount,
-    url: canonicalUrl('/wort', Astro.site),
-  });
 Astro.cache?.set({ maxAge: 60, swr: 300 });
 ---
 
-<Layout content={seoData(content)} contentClasses="o-word-index">
-  <Fragment slot="head">
-    <script set:html={schemaJson()} type="application/ld+json" />
-  </Fragment>
-  <Breadcrumbs indexText="Start">
-    <ChevronRight height="20" slot="separator" width="20" />
-  </Breadcrumbs>
-
-  <h1>Wort-Index</h1>
-  {
-    sortedGroups.map((group) => (
-      <section class="c-word-group">
-        <h2 class="group" title={group}>
-          {group}
-        </h2>
-        <ul class="list">
-          {groupedWords[group].map((word) => (
-            <li>
-              <a
-                class="link"
-                href={routeToWord(word.slug)}
-                title={`Zur ${word.berlinerisch} Seite`}
-              >
-                {word.berlinerisch}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    ))
-  }
-</Layout>
+<SearchPage {ctx} {meta} {result} {state} />

@@ -30,7 +30,6 @@ export default [
   "src/styles/components/modals/_search-modal.scss",
   "src/styles/objects/_error-page.scss",
   "src/styles/objects/_legal-pages.scss",
-  "src/styles/objects/_word-index.scss",
   "src/styles/pages/_changelog-detail.scss",
   "src/styles/pages/_changelog-overview.scss",
   "src/styles/pages/_technical-changelog.scss",

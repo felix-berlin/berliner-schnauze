@@ -25,6 +25,12 @@ const redirectFor404 = async (pathname: string): Promise<Response | undefined> =
  * A client over the limit of an expensive route (`@utils/rateLimit.ts`) gets a 429 before anything renders.
  */
 export const onRequest = defineMiddleware(async (context, next) => {
+  // The old search lives at /wort now. Astro's `redirects` option does not carry the query, so it is done here.
+  if (context.url.pathname === "/suche")
+    return setPageCache(
+      new Response(null, { headers: { Location: `/wort${context.url.search}` }, status: 301 }),
+    );
+
   // The e2e server is exempt inside `rateLimited` itself.
   const rule = rateLimitRule(context.url.pathname, context.request.method);
   const wait = rule
