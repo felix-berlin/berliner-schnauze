@@ -396,5 +396,72 @@ describe("SearchApp", () => {
       await input.trigger("keydown", { key: "Enter" });
       expect(mocks.navigate).toHaveBeenCalledWith("/wort/quarkwolke");
     });
+
+    const available = () => {
+      const clone = {
+        destroy: vi.fn(),
+        prompt: async () => JSON.stringify({ slugs: ["quarkwolke"] }),
+      };
+      vi.stubGlobal("LanguageModel", {
+        availability: async () => "available",
+        create: async () => ({ clone: async () => clone, destroy: vi.fn() }),
+      });
+    };
+    const waitForBlock = (w: ReturnType<typeof mountApp>) =>
+      vi.waitFor(async () => {
+        await flushPromises();
+        expect(w.find(".c-semantic-search").exists()).toBe(true);
+      });
+
+    it("Shift+Enter right after typing searches the typed query", async () => {
+      available();
+      ready();
+      mocks.runSearch.mockResolvedValue(result(["Aalwurm"]));
+      mocks.semanticCandidates.mockResolvedValue([entry("Quarkwolke")]);
+      const w = mountApp({ state: state({ q: "aal" }) });
+      await waitForBlock(w);
+      await field(w).setValue("wat Weichet zum Kaffee");
+      await field(w).trigger("keydown", { key: "Enter", shiftKey: true }); // before the 150 ms debounce
+      await vi.waitFor(async () => {
+        await flushPromises();
+        expect(w.text()).toContain("Passt vielleicht");
+      });
+      expect(mocks.semanticCandidates).toHaveBeenLastCalledWith(
+        expect.anything(),
+        expect.anything(),
+        expect.objectContaining({ q: "wat Weichet zum Kaffee" }),
+      );
+    });
+
+    it("index failed: the meaning search shows its error, not zu wenig", async () => {
+      available();
+      mocks.getWordDb.mockResolvedValue({ db: {}, size: 1 });
+      mocks.fetchSearchIndex.mockRejectedValue(new Error("offline"));
+      const w = mountApp({ state: state({ q: "wat Weichet zum Kaffee" }) });
+      await waitForBlock(w);
+      await field(w).trigger("keydown", { key: "Enter", shiftKey: true });
+      await vi.waitFor(async () => {
+        await flushPromises();
+        expect(w.text()).toContain("Hat nich jeklappt");
+      });
+      expect(w.text()).not.toContain("Nüscht Passendet");
+      expect(mocks.semanticCandidates).not.toHaveBeenCalled();
+    });
+
+    it("the KI list joins aria-controls while it is shown", async () => {
+      available();
+      ready();
+      mocks.runSearch.mockResolvedValue(result(["Aalwurm"]));
+      mocks.semanticCandidates.mockResolvedValue([entry("Quarkwolke")]);
+      const w = mountApp({ state: state({ q: "wat Weichet zum Kaffee" }) });
+      await waitForBlock(w);
+      expect(field(w).attributes("aria-controls")).toBe("treffer");
+      await field(w).trigger("keydown", { key: "Enter", shiftKey: true });
+      await vi.waitFor(async () => {
+        await flushPromises();
+        expect(field(w).attributes("aria-controls")).toBe("ki-treffer treffer");
+      });
+      expect(w.get("#ki-treffer").attributes("role")).toBe("listbox");
+    });
   });
 });

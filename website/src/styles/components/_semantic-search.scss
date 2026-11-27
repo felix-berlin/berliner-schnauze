@@ -33,6 +33,7 @@
       margin: 0;
       font-family: var(--font-condensed);
       font-size: var(--_title);
+      // TODO(suche): SPEC §8.3 says Fira 600; there is no 600 weight token, so 700 like the popover title.
       font-weight: var(--font-weight-bold);
       line-height: 1.15;
       color: var(--color-text-strong);

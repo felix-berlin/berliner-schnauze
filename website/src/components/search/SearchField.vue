@@ -10,7 +10,7 @@
         type="search"
         name="q"
         role="combobox"
-        aria-controls="treffer"
+        :aria-controls="aiList ? 'ki-treffer treffer' : 'treffer'"
         aria-autocomplete="list"
         :aria-expanded="expanded ? 'true' : 'false'"
         :aria-activedescendant="activeId"
@@ -47,7 +47,14 @@
 import { useMediaQuery, useMounted } from "@vueuse/core";
 import { computed, defineAsyncComponent, useTemplateRef } from "vue";
 
-defineProps<{ activeId?: string; expanded: boolean; ai?: boolean; aiPressed?: boolean }>();
+/** `aiList`: the KI result list is shown, ↑/↓ may point into it. */
+defineProps<{
+  activeId?: string;
+  expanded: boolean;
+  ai?: boolean;
+  aiPressed?: boolean;
+  aiList?: boolean;
+}>();
 /** `ai`: start the meaning search; `aiWarm`: focus or hover, the session may be prepared. */
 const emit = defineEmits<{ ai: []; aiWarm: [] }>();
 const model = defineModel<string>({ required: true });

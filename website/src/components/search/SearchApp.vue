@@ -16,6 +16,7 @@
         :expanded="!skeleton && rows.length > 0"
         :ai="!!ai"
         :ai-pressed="semantic?.pressed"
+        :ai-list="aiHits.length > 0"
         @keydown="onKeydown"
         @ai="startAi"
         @ai-warm="semantic?.warm()"
@@ -248,10 +249,13 @@ const ready = ref(false); // until the index is there the server rows stand, no 
 const loadError = ref(false);
 const online = useOnline();
 
+let loading: Promise<unknown> | undefined; // the meaning search waits on it
 async function load() {
   loadError.value = false;
   try {
-    const [entries, { db }] = await Promise.all([fetchSearchIndex(), getWordDb()]);
+    const pending = Promise.all([fetchSearchIndex(), getWordDb()]);
+    loading = pending;
+    const [entries, { db }] = await pending;
     index = { db, entries: entries as SearchEntry[] };
     ready.value = true;
     void run();
@@ -399,13 +403,21 @@ watch(aiHits, () => {
   if (aiActive.value >= 0) activeId.value = undefined;
   aiActive.value = -1;
 });
-onMounted(async () => {
+async function detectAi() {
   const { detectAvailability } = await import("@lib/search/semantic");
   const a = await detectAvailability();
-  if (a !== "unavailable") ai.value = a;
-});
-const findCandidates = (s: SearchState) =>
-  index ? semanticCandidates(index.db, index.entries, s) : Promise.resolve([]);
+  ai.value = a === "unavailable" ? undefined : a;
+}
+onMounted(detectAi);
+// Back from bfcache: the base was destroyed on pagehide and the model may be downloaded by now.
+useEventListener("pageshow", (e: PageTransitionEvent) => e.persisted && void detectAi());
+
+/** Waits for the index while it loads; without one (failed, offline) the block shows its error state. */
+async function findCandidates(s: SearchState) {
+  if (!index) await loading?.catch(() => {});
+  if (!index) throw new Error("search index unavailable for the meaning search");
+  return semanticCandidates(index.db, index.entries, s);
+}
 
 /** A trigger right after typing: the debounced query is set first, so the block searches what is typed. */
 async function startAi() {

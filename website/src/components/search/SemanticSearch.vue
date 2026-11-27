@@ -38,7 +38,7 @@
       </div>
 
       <template v-else-if="mode === 'fertig'">
-        <div class="list" role="listbox" aria-label="KI-Vorschläge">
+        <div id="ki-treffer" class="list" role="listbox" aria-label="KI-Vorschläge">
           <HitRow
             v-for="e in hits"
             :id="`ki-${e.slug}`"
@@ -176,6 +176,7 @@ const copy = computed((): [string, string] => {
       ];
     case "fertig":
       return [
+        // TODO(suche): SPEC §8.3 says „{n} Wörter“; singular „1 Wort“ is a deviation to confirm.
         `Passt vielleicht: ${n} ${n === 1 ? "Wort" : "Wörter"} nach Bedeutung`,
         "Sortiert nach Bedeutung, nicht nach Stichwort. Die Stichworttreffer stehen darunter.",
       ];
@@ -233,18 +234,15 @@ async function run() {
       ranking.value = true;
       slugs = await rankCandidates(session!, s.q, candidates, ctl.signal);
       if (id !== runId) return;
+      storage.set(CACHE + key, JSON.stringify(slugs)); // only real answers: no candidates may be a cold index
     }
-    storage.set(CACHE + key, JSON.stringify(slugs));
     const bySlug = new Map(candidates.map((e) => [e.slug, e]));
     hits.value = slugs.flatMap((slug) => bySlug.get(slug) ?? []);
     mode.value = hits.value.length ? "fertig" : "leer";
   } catch (error) {
-    if (id !== runId) return; // a newer run or a query change took over
-    if ((error as Error | undefined)?.name === "AbortError") {
-      mode.value = "aus"; // stopped, not failed
-      return;
-    }
-    reportError(error);
+    if (id !== runId) return; // own abort: a newer run or a query change took over
+    // An AbortError here came from Chrome (session torn down): no answer, but not a bug to report.
+    if ((error as Error | undefined)?.name !== "AbortError") reportError(error);
     mode.value = "fehler";
   }
 }
@@ -284,7 +282,7 @@ watch(
   },
   { immediate: true },
 );
-watch(mode, (m) => m === "angebot" && warm());
+watch(mode, (m) => m === "angebot" && warm(), { immediate: true });
 
 // A vanished button (Abbrechen, Modell laden und suchen) hands focus on instead of dropping it to <body>.
 const root = useTemplateRef("root");

@@ -145,14 +145,56 @@ describe("SemanticSearch", () => {
   });
 
   it("AbortError → no error state", async () => {
-    model(async () => {
-      throw new DOMException("stopped", "AbortError");
+    // Own abort (Abbrechen): silent, the block closes.
+    const reply = deferred<string>();
+    model((_, o) => {
+      o.signal.addEventListener("abort", () =>
+        reply.reject(new DOMException("stopped", "AbortError")),
+      );
+      return reply.promise;
     });
     const w = mountBlock();
     await start(w);
+    await button(w, "Abbrechen").trigger("click");
+    await flushPromises();
     expect(w.text()).not.toContain("Hat nich jeklappt");
     expect(w.find("progress").exists()).toBe(false);
     expect(mocks.reportError).not.toHaveBeenCalled();
+  });
+
+  it("an AbortError from Chrome itself shows the error state without a report", async () => {
+    model(async () => {
+      throw new DOMException("session destroyed", "AbortError");
+    });
+    const w = mountBlock();
+    await start(w);
+    expect(w.text()).toContain("Hat nich jeklappt");
+    expect(mocks.reportError).not.toHaveBeenCalled();
+  });
+
+  it("no candidates are not cached: the next run asks the model", async () => {
+    const { clone } = model(async () => answer("quarkwolke"));
+    const find = vi.fn().mockResolvedValueOnce([]).mockResolvedValue(words);
+    const w = mountBlock({ find });
+    await start(w);
+    expect(w.text()).toContain("Nüscht Passendet jefunden");
+    await start(w);
+    expect(clone.prompt).toHaveBeenCalledOnce();
+    expect(w.text()).toContain("Passt vielleicht");
+  });
+
+  it("failing candidates show the error state, not zu wenig", async () => {
+    model(async () => answer("quarkwolke"));
+    const w = mountBlock({ find: async () => Promise.reject(new Error("no index")) });
+    await start(w);
+    expect(w.text()).toContain("Hat nich jeklappt");
+    expect(w.text()).not.toContain("Nüscht Passendet");
+  });
+
+  it("the offer on load pre-warms an available model", () => {
+    const { create } = model(async () => answer("quarkwolke"));
+    mountBlock();
+    expect(create).toHaveBeenCalledOnce();
   });
 
   it("clones per request and reuses the base", async () => {
