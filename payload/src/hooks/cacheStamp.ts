@@ -44,12 +44,35 @@ export const stampCacheChange = async (req: PayloadRequest): Promise<void> => {
   });
 };
 
-const stampOnChange: CollectionAfterChangeHook = async ({ doc, req }) => {
+/**
+ * Comments change without changing a public page: held for review, or a vote or report moving the counters
+ * (`recountComment` updates the comment with `skipCommentHooks` on every one). Only a public comment appearing,
+ * changing, or leaving (hidden by reports) counts.
+ */
+const commentIsPublicChange = (
+  doc: { status?: string | null },
+  previousDoc: { status?: string | null } | undefined,
+  context: Record<string, unknown>,
+): boolean => {
+  if (doc.status !== "published" && previousDoc?.status !== "published") return false;
+  return !(context.skipCommentHooks && previousDoc?.status === doc.status);
+};
+
+const stampOnChange: CollectionAfterChangeHook = async ({
+  collection,
+  context,
+  doc,
+  previousDoc,
+  req,
+}) => {
+  if (collection.slug === "comments" && !commentIsPublicChange(doc, previousDoc, context))
+    return doc;
   await stampCacheChange(req);
   return doc;
 };
 
-const stampOnDelete: CollectionAfterDeleteHook = async ({ doc, req }) => {
+const stampOnDelete: CollectionAfterDeleteHook = async ({ collection, doc, req }) => {
+  if (collection.slug === "comments" && doc.status !== "published") return doc;
   await stampCacheChange(req);
   return doc;
 };

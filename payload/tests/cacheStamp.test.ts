@@ -128,3 +128,59 @@ describe("stampCacheChange", () => {
     );
   });
 });
+
+describe("cache stamp and comments", () => {
+  const setup = async () => {
+    const payload = await getTestPayload();
+    const word = await payload.create({
+      collection: "words",
+      data: { berlinerisch: "Stempel", slug: SLUG, _status: "published" },
+    });
+    const comment = (context: Record<string, unknown> = {}) =>
+      payload.create({
+        collection: "comments",
+        context,
+        data: { word: word.id, text: "kiek ma", authorName: "Icke" } as never,
+      });
+    return { comment, payload };
+  };
+
+  it("changes when a comment is published", async () => {
+    const { comment } = await setup();
+    await setStamp();
+    await comment();
+    expect(await stamp()).not.toBe(OLD);
+  });
+
+  it("does not change for a comment held for review", async () => {
+    const { comment } = await setup();
+    await setStamp();
+    const held = await comment({ review: true });
+    expect(held.status).toBe("pending");
+    expect(await stamp()).toBe(OLD);
+  });
+
+  it("does not change for a vote (the recount only moves counters)", async () => {
+    const { comment, payload } = await setup();
+    const published = await comment();
+    await setStamp();
+    await payload.create({
+      collection: "comment-votes",
+      data: { comment: published.id, visitor: "stamp-v1", value: 1 },
+    });
+    expect(await stamp()).toBe(OLD);
+  });
+
+  it("changes when a recount hides a published comment", async () => {
+    const { comment, payload } = await setup();
+    const published = await comment();
+    await setStamp();
+    await payload.update({
+      collection: "comments",
+      context: { skipCommentHooks: true },
+      data: { status: "hidden" },
+      id: published.id,
+    });
+    expect(await stamp()).not.toBe(OLD);
+  });
+});
