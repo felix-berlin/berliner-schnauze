@@ -25,7 +25,12 @@ export type SiteMedia = Pick<Media, "alt" | "caption" | "height" | "id" | "mimeT
 
 // Generated row types (`interfaceName` in payload/src/collections/Words.ts) with the upload narrowed to SiteMedia.
 export type AudioRow = Omit<NonNullable<AudioArray>[number], "audio"> & { audio: SiteMedia };
-export type WordExample = Omit<NonNullable<WordExamplesArray>[number], "exampleAudio"> & {
+export type WordExample = Omit<
+  NonNullable<WordExamplesArray>[number],
+  "contributorSuggestion" | "exampleAudio"
+> & {
+  /** The contributor's suggestion as its id (the suggestion doc holds personal data, never read). */
+  contributorSuggestion?: number;
   exampleAudio: AudioRow[];
 };
 export type RelatedWord = Pick<PayloadWord, "berlinerisch" | "id"> & { slug: string };
@@ -148,9 +153,10 @@ export const toWord = ({
   ...doc,
   berlinerischAudio: audioRows(berlinerischAudio),
   derived: storedDerived(derived, doc),
-  examples: (examples ?? []).map(({ exampleAudio, ...e }) =>
-    Object.assign(e, { exampleAudio: audioRows(exampleAudio) }),
-  ),
+  examples: (examples ?? []).map(({ contributorSuggestion, exampleAudio, ...e }) => (Object.assign(e, {
+	contributorSuggestion: suggestionId(contributorSuggestion),
+	exampleAudio: audioRows(exampleAudio)
+}))),
   facts: facts?.map(({ contributorSuggestion, text, ...f }) => ({
     ...f,
     contributorSuggestion: suggestionId(contributorSuggestion),

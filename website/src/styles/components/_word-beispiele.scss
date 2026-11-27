@@ -1,6 +1,6 @@
 @use "@styles/mixins" as mx;
 
-// Beispiele card body (SPEC §6): an ordered list; each .item has .quote (.sentence), .plain (label + translation)
+// Beispiele card body (SPEC §6): an ordered list; each .item has .quote (.sentence), .plain (label + translation), .by (credit),
 // and .actions (the audio pills island plus .record with the disabled "Einsprechen" button ; its tooltip is the shared v-tooltip, attached by the card script).
 @include mx.component("word-beispiele") {
   :scope {
@@ -40,6 +40,12 @@
   .plain {
     margin: 0;
     line-height: 1.6;
+  }
+
+  .by {
+    margin: 0;
+    font-size: var(--font-size-label);
+    color: var(--color-text-muted);
   }
 
   .actions {
