@@ -165,7 +165,12 @@ describe("suggestions: adopt and lock", () => {
 
     it("does not list the suggestion's own word", async () => {
       const payload = await getTestPayload();
-      const doc = await accepted();
+      const own = await payload.create({
+        collection: "words",
+        data: { berlinerisch: WORD, slug: SLUG },
+      });
+      // A different spelling first, so the change to the word's own spelling really runs the search.
+      const doc = await accepted({ word: own.id, berlinerWord: "Ganz Anders" }); // a hand-chosen draft word stays unlocked
       const again = await payload.update({
         collection: "suggestions",
         id: doc.id,
@@ -209,7 +214,7 @@ describe("suggestions: adopt and lock", () => {
   });
 
   describe("accepting", () => {
-    it("creates one draft word with the suggestion's content", async () => {
+    it("creates one published word with the suggestion's content", async () => {
       const payload = await getTestPayload();
       const doc = await payload.create({
         collection: "suggestions",
@@ -228,17 +233,14 @@ describe("suggestions: adopt and lock", () => {
         translations: { translation: string }[];
         examples: { example: string }[];
       };
-      expect(word).toMatchObject({ slug: SLUG, _status: "draft", berlinerisch: WORD });
+      expect(word).toMatchObject({ slug: SLUG, _status: "published", berlinerisch: WORD });
       expect(word.translations[0]!.translation).toBe("Testwort");
       expect(word.examples[0]!.example).toBe("Ein Satz.");
 
-      await payload.update({ collection: "suggestions", id: doc.id, data: { status: "new" } });
-      await payload.update({ collection: "suggestions", id: doc.id, data: { status: "accepted" } });
-      await payload.update({
-        collection: "suggestions",
-        id: doc.id,
-        data: { status: "accepted", example: "Neu" },
-      });
+      // The live word locks the suggestion, so no second word can follow from saving it again.
+      await expect(
+        payload.update({ collection: "suggestions", id: doc.id, data: { status: "new" } }),
+      ).rejects.toThrow(/gesperrt/);
       expect(await wordCount()).toBe(1);
     });
 
@@ -319,33 +321,28 @@ describe("suggestions: adopt and lock", () => {
       await payload.update({ collection: "words", id, data: { _status: status } });
     };
 
-    it("is derived from the word: open while a draft, locked while live, open again when withdrawn", async () => {
+    it("is derived from the word: locked while live, open again when withdrawn, locked on republish", async () => {
       const payload = await getTestPayload();
-      const doc = await accepted();
+      const doc = await accepted(); // accepting publishes the new word
       const wordId = doc.word as number;
+      const lockedByWord = async () =>
+        (await payload.findByID({ collection: "suggestions", id: doc.id })).lockedByWord;
 
-      expect((await edit(doc.id)).translation).toBe("geändert"); // positive control: a real user may edit
+      expect(await lockedByWord()).toBe(true);
+      await expect(edit(doc.id)).rejects.toThrow(/not allowed|Forbidden/i);
+
       await publish(wordId, "draft");
-      expect((await edit(doc.id, { data: { translation: "noch mal" } })).translation).toBe(
-        "noch mal",
-      );
+      expect(await lockedByWord()).toBe(false);
+      expect((await edit(doc.id, { data: { translation: "wieder offen" } })).translation).toBe(
+        "wieder offen",
+      ); // positive control: a real user may edit
 
       await publish(wordId);
+      expect(await lockedByWord()).toBe(true);
       await expect(edit(doc.id, { data: { translation: "gesperrt?" } })).rejects.toThrow(
         /not allowed|Forbidden/i,
       );
       expect((await payload.findByID({ collection: "suggestions", id: doc.id })).translation).toBe(
-        "noch mal",
-      );
-      expect((await payload.findByID({ collection: "suggestions", id: doc.id })).lockedByWord).toBe(
-        true,
-      );
-
-      await publish(wordId, "draft");
-      expect((await payload.findByID({ collection: "suggestions", id: doc.id })).lockedByWord).toBe(
-        false,
-      );
-      expect((await edit(doc.id, { data: { translation: "wieder offen" } })).translation).toBe(
         "wieder offen",
       );
     });

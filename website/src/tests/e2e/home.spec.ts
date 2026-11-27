@@ -202,7 +202,11 @@ test.describe("Startseite v20 (/)", () => {
     [390, "light"],
     [390, "dark"],
   ] as const) {
-    test(`axe ohne Verstöße ${width}px ${colorScheme}`, async ({ page }) => {
+    test(`axe ohne Verstöße ${width}px ${colorScheme}`, async ({ page }, testInfo) => {
+      test.skip(
+        testInfo.project.name.startsWith("Mobile"),
+        "axe sets its own viewport: the desktop project of the same engine covers it",
+      );
       await page.setViewportSize({ height: 900, width });
       await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
       // Reload under the scheme: WebKit keeps `light-dark()` colours of the FAQ container when it flips after load.

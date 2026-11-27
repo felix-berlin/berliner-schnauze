@@ -91,6 +91,14 @@ export const Words: CollectionConfig = {
         { name: "example", type: "text" },
         { name: "exampleExplanation", type: "textarea" },
         audioRows("exampleAudio"),
+        {
+          name: "contributorName",
+          type: "text",
+          maxLength: 40,
+          // Public credit under the example, copied from the suggestion; same rules as on `facts` and `related`.
+          access: { read: notOverMcp, update: notOverMcp },
+        },
+        { name: "contributorSuggestion", type: "relationship", relationTo: "suggestions" },
       ],
     },
     audioRows("berlinerischAudio"),

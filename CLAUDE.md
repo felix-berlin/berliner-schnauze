@@ -26,7 +26,7 @@ pnpm lint                    # Oxlint (website + payload/, root .oxlintrc.json h
 pnpm typechecking            # astro check + vue-tsc  (slow — run targeted, not after every edit; tsc can't resolve .vue imports)
 
 # Build
-pnpm build                   # Production build (./dist, server entry + assets) — needs no database; no infisical, env vars must already be set
+pnpm build                   # Production build (website/dist, server entry + assets) — needs no database; no infisical, env vars must already be set
 pnpm build:local             # Production build locally — wraps build with scripts/with-env.sh (Infisical dev + .env.worktree)
 # in website/: build:strict  # Strict build with full type checking
 
@@ -35,9 +35,9 @@ pnpm format                  # Format with oxfmt
 pnpm format:check            # Check formatting without writing
 
 # Docker (Node adapter; run after build)
-docker compose up --build    # Serve website/dist/ via server/index.mjs (www redirect + security headers; redirects in astro.config.mjs)
-website/scripts/docker-smoke.sh   # Build image from dist/, check routes/headers/redirects (runs on every PR; leaves a running postgres up)
-                             # Release CI builds + pushes ghcr.io/felix-berlin/berliner-schnauze and …/berliner-schnauze-cms (release.yml `docker` job)
+docker compose up --build    # Serve website/dist/ via server/index.mjs
+website/scripts/docker-smoke.sh   # Build image from dist/, check routes/headers/redirects (every PR; leaves a postgres up)
+                             # Release CI pushes ghcr.io/felix-berlin/berliner-schnauze (`docker` job) and …-cms (`docker-cms` job)
 
 # Cloudflare Workers cannot serve this stack (no wrangler config, a Workers Build fails).
 
@@ -58,9 +58,9 @@ Docker/compose reads the root `.env`; the `payload/` CLI and Next read a git-ign
 
 ## Worktree setup (Orca)
 
-Walkthrough for developers (also without Orca): `docs/worktree-setup.md`. `orca.yaml` runs `scripts/orca-setup.sh` in every new worktree and `scripts/orca-archive.sh` when it is archived (Orca: Settings → Repository → Advanced → Command Source „orca.yaml only“, or a local setup script wins over the YAML). Every worktree gets its own database `bsw_<workspace>` cloned from `bs_template` (on the dev-only container `bs-dev-postgres`, `127.0.0.1:5433`), a fixed dev admin and MCP key, and its own ports; `.env.worktree` (git-ignored) holds `DATABASE_URL`, `DATABASE_URL_TEST`, `WEBSITE_PORT`, `CMS_PORT`, `E2E_PORT`, `PAYLOAD_SERVER_URL`, `SITE_URL`.
+Walkthrough (also without Orca): `docs/worktree-setup.md`; `orca.yaml` runs `scripts/orca-setup.sh` / `orca-archive.sh` (Orca: Command Source „orca.yaml only“). Every worktree gets its own database `bsw_<workspace>` cloned from `bs_template` (`bs-dev-postgres`, `127.0.0.1:5433`), a dev admin and MCP key, and its own ports in the git-ignored `.env.worktree`.
 
-- **`scripts/with-env.sh <cmd>`** runs a command with Infisical **dev** plus `.env.worktree`; `pnpm dev`, `pnpm cms:dev` and `build:local` go through it. It always passes `--env=dev`, so prod is never selected. `.infisical.yaml` maps every branch to dev: a checkout on `main` used to resolve prod, so builds there baked the production Matomo ID into the client. Never use `--env=prod` locally: locally `MATOMO_SITE_ID` is unset or the dev/staging ID, never the production ID. Browser tools (Playwright, Chrome DevTools) against berliner-schnauze.wtf are fine; only a local server or build carrying the production ID must not be opened in a browser, its views would count in the production Matomo.
+- **`scripts/with-env.sh <cmd>`** runs a command with Infisical **dev** plus `.env.worktree` (`pnpm dev`, `pnpm cms:dev`, `build:local` use it). It always passes `--env=dev`; never use `--env=prod` locally, because a build carrying the production `MATOMO_SITE_ID` counts its views in the production Matomo. Browser tools against berliner-schnauze.wtf are fine; a local server or build with the production ID must not be opened in a browser.
 - `DEV_ADMIN_EMAIL`, `DEV_ADMIN_PASSWORD`, `DEV_MCP_KEY` live in Infisical dev, never in a file or the chat. The template is built from a production backup by `scripts/dev-template.sh` (login data stripped; it still holds personal data from suggestions/comments: never in the repo or the chat).
 - **The Payload MCP (`mcp__payload__*`) talks to production by default**, in every worktree (`.mcp.json`, key from `.claude/settings.local.json`). Writes are drafts only, but still prod. For the worktree database set `PAYLOAD_MCP_URL=http://localhost:$CMS_PORT/api/mcp` and `PAYLOAD_MCP_KEY` to `DEV_MCP_KEY` (from Infisical, never into a file or the chat), then restart Claude Code.
 - **Production reads behind the basic-auth gate**: `scripts/prod-curl.sh <url>` (GET/HEAD only; allowed options such as `--stats` and `-H` are listed at the top of the script). The credential `PROD_BASIC_AUTH` sits in Infisical dev, folder `/agent`, and is injected at run time; never type, print or paste it.

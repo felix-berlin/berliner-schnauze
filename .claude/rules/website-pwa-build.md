@@ -11,7 +11,7 @@ paths:
 
 **PWA** (`@vite-pwa/astro` + Workbox, config in `astro.config.mjs`): `registerType: "prompt"`, never `autoUpdate` (it reloads open tabs and loses form input). The service worker is registered in `src/services/pwa.ts`. A new worker waits: toast „Jetzt aktualisieren“, or the next ClientRouter navigation switches and loads the target in full; other tabs, bfcache restores and failed chunk/island loads (`vite:preloadError`, `astro:hydration-error`) get a „Neu laden“ toast and full-load navigations. Update checks run hourly and on visible (soft navigations never check). No `navigateFallback`: the precache holds no HTML and it would answer every page load with the homepage. Visited pages come from a NetworkFirst `pages` route (3 s timeout) for page loads and the ClientRouter's fetches; it skips `no-store`/`private` responses (draft previews) and is cleared when a new worker takes over. Precache excludes `og/**` and `screenshots/**` (`maximumFileSizeToCacheInBytes` 2 MB). Cache Storage access: `src/composable/useCacheStorage.ts`.
 
-**Fonts**: Astro Fonts API (`fonts` in `astro.config.mjs`, local woff2 in `src/assets/fonts/`) with `display: "fallback"`. Don't switch to `swap` (Berlin's size-adjust re-wraps text on swap → CLS 0.46) or `optional` (cold cache shows the fallback font → CLS 0.65).
+**Fonts**: Astro Fonts API (`fonts` in `astro.config.mjs`, local woff2 in `src/assets/fonts/`; Fira Sans Extra Condensed from `@fontsource`) with `display: "fallback"` for Berliner and Berlin (Fira Sans: `swap`, metric-adjusted Arial fallback). Don't switch Berliner/Berlin to `swap` (Berlin's size-adjust re-wraps text on swap → CLS 0.46) or `optional` (cold cache shows the fallback font → CLS 0.65).
 
 **Astro v7 / Vite 8**:
 

@@ -39,6 +39,9 @@ const gap = {
             {item.exampleExplanation && (
               <p class='plain'><span class='c-word-label'>Hochdeutsch</span> {item.exampleExplanation}</p>
             )}
+            {(item.contributorName || item.contributorSuggestion !== undefined) && (
+              <p class='by'>{item.contributorName ? `Beitrag von ${item.contributorName}` : 'Beitrag aus der Community'}</p>
+            )}
             <div class='actions'>
               {(sources.m || sources.w) && (
                 <VoiceButtons order='wm' aria-label={`Beispiel ${index + 1} anhören`} client:visible sources={sources} />

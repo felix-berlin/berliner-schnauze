@@ -515,7 +515,11 @@ test.describe("axe", () => {
       for (const dark of [false, true]) {
         test(`${path} has no violations at ${width}px ${dark ? "dark" : "light"}`, async ({
           page,
-        }) => {
+        }, testInfo) => {
+          test.skip(
+            testInfo.project.name.startsWith("Mobile"),
+            "axe sets its own viewport: the desktop project of the same engine covers it",
+          );
           // Axe measures colour, not motion: without the entry animations (footer sign, columns) a loaded runner
           // cannot catch an element at half opacity.
           await page.emulateMedia({ reducedMotion: "reduce" });

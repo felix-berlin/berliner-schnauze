@@ -37,6 +37,7 @@ import * as migration_20261123_191000_remove_comment_replies from './20261123_19
 import * as migration_20261123_192748_affiliate_alle_themen from './20261123_192748_affiliate_alle_themen';
 import * as migration_20261123_201659_drop_word_info_text from './20261123_201659_drop_word_info_text';
 import * as migration_20261127_113328_cache_stamp from './20261127_113328_cache_stamp';
+import * as migration_20261127_143259_example_contributor from './20261127_143259_example_contributor';
 
 export const migrations = [
   {
@@ -232,6 +233,11 @@ export const migrations = [
   {
     up: migration_20261127_113328_cache_stamp.up,
     down: migration_20261127_113328_cache_stamp.down,
-    name: '20261127_113328_cache_stamp'
+    name: '20261127_113328_cache_stamp',
+  },
+  {
+    up: migration_20261127_143259_example_contributor.up,
+    down: migration_20261127_143259_example_contributor.down,
+    name: '20261127_143259_example_contributor'
   },
 ];

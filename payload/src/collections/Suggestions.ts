@@ -3,7 +3,7 @@ import type { CollectionAfterChangeHook, CollectionConfig, FieldHook, Validate }
 import { relationship, select, text, textarea } from "payload/shared";
 
 import { authenticatedOnly, notOverMcp } from "../access";
-import { adoptSuggestion } from "../hooks/adoptSuggestion";
+import { adoptSuggestion, refuseBulkAccept } from "../hooks/adoptSuggestion";
 import { lockedByWordValue, refuseWhenLocked, updateUnlocked } from "../hooks/suggestionLock";
 import { notifyEditors } from "../lib/notifyEditors";
 import {
@@ -168,7 +168,11 @@ export const Suggestions: CollectionConfig = {
     defaultColumns: ["title", "type", "translation", "status", "createdAt"],
     group: "Community",
   },
-  hooks: { beforeChange: [refuseWhenLocked, adoptSuggestion], afterChange: [mailEditors] },
+  hooks: {
+    beforeOperation: [refuseBulkAccept],
+    beforeChange: [refuseWhenLocked, adoptSuggestion],
+    afterChange: [mailEditors],
+  },
   fields: [
     {
       name: "title",
@@ -279,7 +283,7 @@ export const Suggestions: CollectionConfig = {
       admin: {
         position: "sidebar",
         description:
-          "Beispielsatz, Wissenswertes und Verwandtes übernimmt das CMS nicht selbst: erst von Hand ins Wort eintragen (dort „Vorschlag“ verknüpfen), dann hier auf „Übernommen“ setzen.",
+          "„Übernommen“ wirkt sofort: Ein neues Wort wird angelegt und veröffentlicht (ein unter „Wort“ gewähltes Wort wird nur verknüpft). Beispielsatz, Wissenswertes und Verwandtes werden ins veröffentlichte Wort eingetragen und das Wort wird veröffentlicht; dafür muss das Wort veröffentlicht sein und darf keine unveröffentlichten Entwurfsänderungen haben, sonst bricht das Speichern mit einer Meldung ab. Vorschläge nur einzeln übernehmen, nicht gesammelt, und nicht über MCP.",
       },
     },
     {
@@ -289,7 +293,7 @@ export const Suggestions: CollectionConfig = {
       admin: {
         position: "sidebar",
         description:
-          "Das Wort, das aus diesem Vorschlag entstanden ist. Beim Wechsel auf „Übernommen“ ohne Wort legt das CMS einen Entwurf an; ein hier gewähltes Wort wird stattdessen verknüpft.",
+          "Das Wort, das aus diesem Vorschlag entstanden ist. Beim Wechsel auf „Übernommen“ ohne Wort legt das CMS das Wort an und veröffentlicht es sofort; ein hier gewähltes Wort wird nur verknüpft (nichts wird eingetragen oder veröffentlicht).",
       },
     },
     {

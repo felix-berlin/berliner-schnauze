@@ -15,6 +15,8 @@ export type WordExamplesArray =
       example?: string | null;
       exampleExplanation?: string | null;
       exampleAudio?: AudioArray;
+      contributorName?: string | null;
+      contributorSuggestion?: (number | null) | Suggestion;
       id?: string | null;
     }[]
   | null;
@@ -479,11 +481,11 @@ export interface Suggestion {
   userName?: string | null;
   userMail?: string | null;
   /**
-   * Beispielsatz, Wissenswertes und Verwandtes übernimmt das CMS nicht selbst: erst von Hand ins Wort eintragen (dort „Vorschlag“ verknüpfen), dann hier auf „Übernommen“ setzen.
+   * „Übernommen“ wirkt sofort: Ein neues Wort wird angelegt und veröffentlicht (ein unter „Wort“ gewähltes Wort wird nur verknüpft). Beispielsatz, Wissenswertes und Verwandtes werden ins veröffentlichte Wort eingetragen und das Wort wird veröffentlicht; dafür muss das Wort veröffentlicht sein und darf keine unveröffentlichten Entwurfsänderungen haben, sonst bricht das Speichern mit einer Meldung ab. Vorschläge nur einzeln übernehmen, nicht gesammelt, und nicht über MCP.
    */
   status?: ('new' | 'accepted' | 'rejected') | null;
   /**
-   * Das Wort, das aus diesem Vorschlag entstanden ist. Beim Wechsel auf „Übernommen“ ohne Wort legt das CMS einen Entwurf an; ein hier gewähltes Wort wird stattdessen verknüpft.
+   * Das Wort, das aus diesem Vorschlag entstanden ist. Beim Wechsel auf „Übernommen“ ohne Wort legt das CMS das Wort an und veröffentlicht es sofort; ein hier gewähltes Wort wird nur verknüpft (nichts wird eingetragen oder veröffentlicht).
    */
   word?: (number | null) | Word;
   /**
@@ -1385,6 +1387,8 @@ export interface WordExamplesArraySelect<T extends boolean = true> {
   example?: T;
   exampleExplanation?: T;
   exampleAudio?: T | AudioArraySelect<T>;
+  contributorName?: T;
+  contributorSuggestion?: T;
   id?: T;
 }
 /**

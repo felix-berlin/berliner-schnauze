@@ -175,6 +175,28 @@ describe("toWord", () => {
     expect(toWord(doc as never).relatedWords).toEqual([{ berlinerisch: "wa", id: 13, slug: "wa" }]);
   });
 
+  it("unwraps the contributor suggestion of an example to its id and keeps the name", async () => {
+    const { toWord } = await load();
+    const word = toWord({
+      ...doc,
+      examples: [
+        { contributorName: "Betty", contributorSuggestion: { id: 41 }, example: "Satz." },
+        { example: "Ohne." },
+      ],
+    } as never);
+    expect(word.examples[0]).toMatchObject({ contributorName: "Betty", contributorSuggestion: 41 });
+    expect(word.examples[1]!.contributorSuggestion).toBeUndefined();
+  });
+
+  it("treats an unset contributor suggestion on an example (null from the database) as none", async () => {
+    const { toWord } = await load();
+    const word = toWord({
+      ...doc,
+      examples: [{ contributorName: null, contributorSuggestion: null, example: "Satz." }],
+    } as never);
+    expect(word.examples[0]!.contributorSuggestion).toBeUndefined();
+  });
+
   it("unwraps the v18 relations: diminutive, related words and contributor suggestions as plain ids", async () => {
     const { toWord } = await load();
     const word = toWord({

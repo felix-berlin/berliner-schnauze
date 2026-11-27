@@ -76,6 +76,25 @@ describe("v18 word cards", () => {
     expect(html).toContain("Noch keen Wort mit");
   });
 
+  it("credits a contributed example like a fact and shows nothing for an uncredited one", async () => {
+    const html = await examples({
+      examples: [
+        {
+          contributorName: "Betty",
+          contributorSuggestion: 5,
+          example: "Satz A.",
+          exampleAudio: [],
+        },
+        { contributorSuggestion: 6, example: "Satz B.", exampleAudio: [] },
+        { example: "Satz C.", exampleAudio: [] },
+      ],
+      word: "Testwort",
+    });
+    expect(html).toContain("Beitrag von Betty");
+    expect(html).toContain("Beitrag aus der Community");
+    expect(html.match(/Beitrag (von|aus)/g)).toHaveLength(2);
+  });
+
   it("renders Einsprechen as aria-disabled with a hidden description until the tooltip attaches", async () => {
     const html = await examples({
       examples: [{ example: "Satz.", exampleAudio: [] }],
