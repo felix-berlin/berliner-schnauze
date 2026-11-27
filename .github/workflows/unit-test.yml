@@ -126,7 +126,7 @@ jobs:
           method: "oidc"
           identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
           project-slug: "berliner-schnauze"
-          env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
+          env-slug: "dev" # only CODECOV_TOKEN is read here; no reason to touch prod or staging
           domain: "https://infisical.kasimir.dev"
 
       - name: Codecov
