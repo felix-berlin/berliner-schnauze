@@ -253,6 +253,9 @@ jobs:
         env:
           DATABASE_URL: postgres://postgres:postgres@postgres:5432/bs_e2e
           PAYLOAD_SECRET: e2e-secret
+          # The seed creates a suggestion, whose hook mails the editors: blank both, whatever the Infisical env holds.
+          SMTP_URL: ""
+          SUGGEST_MAIL_TO: ""
         run: |
           NODE_ENV=production pnpm --filter payload-app migrate
           pnpm --filter payload-app seed:e2e
