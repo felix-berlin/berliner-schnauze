@@ -1,4 +1,5 @@
-export const normalize = (text: string): string => text.trim().toLocaleLowerCase("de");
+export const normalize = (text: string): string =>
+  text.normalize("NFC").trim().toLocaleLowerCase("de");
 
 /** Letter runs of the normalized text; punctuation-only input gives []. */
 export const terms = (text: string): string[] =>

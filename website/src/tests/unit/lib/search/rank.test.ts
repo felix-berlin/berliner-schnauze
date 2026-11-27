@@ -88,4 +88,8 @@ describe("search ranking", () => {
       expect(soundex(w)).toBe(soundexCode(w));
     }
   });
+
+  it("normalizes decomposed umlauts to NFC", () => {
+    expect(normalize("Bro\u0308tchen")).toBe("brötchen");
+  });
 });

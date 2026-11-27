@@ -12,7 +12,12 @@ const coversTerm = (text: string, qTerms: string[]) => {
 };
 
 /** `q` must be normalized. null = no match. */
-export function tierOf(entry: SearchEntry, q: string, qTerms = terms(q)): Tier | null {
+export function tierOf(
+  entry: SearchEntry,
+  q: string,
+  qTerms = terms(q),
+  qSoundex = soundex(q),
+): Tier | null {
   if (!q || !qTerms.length) return null;
   const word = normalize(entry.wordProperties.berlinerisch);
   if (word === q) return 0;
@@ -21,7 +26,7 @@ export function tierOf(entry: SearchEntry, q: string, qTerms = terms(q)): Tier |
   const { translations } = entry.wordProperties;
   if (translations.some((t) => normalize(t) === q)) return 3;
   if (translations.some((t) => coversTerm(t, qTerms))) return 4;
-  return entry.form.soundex && entry.form.soundex === soundex(q) ? 5 : null;
+  return entry.form.soundex && entry.form.soundex === qSoundex ? 5 : null;
 }
 
 /** Stable: tier, then Orama score (by slug) descending. */
@@ -32,9 +37,10 @@ export function rankHits(
 ): RankedHit[] {
   const nq = normalize(q);
   const qTerms = terms(nq);
+  const qSoundex = soundex(nq);
   const hits: RankedHit[] = [];
   for (const entry of entries) {
-    const tier = tierOf(entry, nq, qTerms);
+    const tier = tierOf(entry, nq, qTerms, qSoundex);
     if (tier !== null) hits.push({ entry, tier });
   }
   const score = (h: RankedHit) => scores.get(h.entry.slug) ?? 0;
