@@ -11,12 +11,17 @@ import type { Usage } from "@/lib/search/types";
 type _Compatible = NonNullable<SearchStat["usage"]> extends Usage ? true : never;
 export const usageTypesMatch: _Compatible = true;
 
-/** Survey shares and story counts per word id; an empty map when the load fails (the index still builds). */
-export const getSearchStats = ttl(24 * 3600_000, async (): Promise<Map<number, SearchStat>> => {
+// Throws on failure so `ttl` retries a failed first load and keeps stale data on a failed refresh.
+export const getSearchStats = ttl(24 * 3600_000, async () =>
+  loadSearchStats(await getPayloadClient()),
+);
+
+/** Survey shares and story counts per word id; an empty map (not cached) when the load fails, so the index still builds. */
+export const searchStatsOrEmpty = async (): Promise<Map<number, SearchStat>> => {
   try {
-    return await loadSearchStats(await getPayloadClient());
+    return await getSearchStats();
   } catch (error) {
-    reportError(error);
+    reportError(error, "searchStats");
     return new Map();
   }
-});
+};
