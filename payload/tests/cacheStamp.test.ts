@@ -79,8 +79,7 @@ describe("withCacheStamp", () => {
     (withCacheStamp(collection).hooks?.afterChange?.length ?? 0) > 0;
 
   it("hooks the allowlisted collections", () => {
-    for (const slug of STAMPED_COLLECTIONS)
-      expect(hooked({ slug, fields: [] }), slug).toBe(true);
+    for (const slug of STAMPED_COLLECTIONS) expect(hooked({ slug, fields: [] }), slug).toBe(true);
   });
 
   it("leaves high-frequency and invisible collections alone", () => {

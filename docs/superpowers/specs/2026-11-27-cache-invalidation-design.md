@@ -42,6 +42,7 @@ Gewählt B, auf Wunsch des Betreibers nach Abwägung von Sauberkeit und Robusthe
 **Schreiben (`payload/`).** Ein Wrapper `withCacheStamp`, gebaut wie `withIndexNow` (`hooks/indexNow.ts`): hängt `afterChange` und `afterDelete` an die Collections und Globals, die die öffentliche Seite verändern (Allowlist, nicht Denylist). Der Hook setzt `changedAt = now` **in der Transaktion der Änderung** (`req` durchreichen), damit der Stempel erst mit dem Commit sichtbar wird; sonst könnte die Website vor dem Commit leeren und alte Daten neu cachen. Je Request wird nur einmal gestempelt (`req.context`). Eine Zeit-Entprellung geht in einer Transaktion nicht. Der Stempel selbst löst keinen Hook aus (Schleife vermeiden).
 
 **Lesen und Leeren (`website/`).**
+
 - Ein kleiner Stempel-Checker liest `changedAt` (`depth: 0`, nur dieses Feld), höchstens alle 2 s. Die Anfrage, die den Check auslöst, wartet darauf, höchstens 250 ms (sonst bekäme der erste Besucher nach einer Änderung noch die alte Seite; im lokalen Test war das der Fall). Alle anderen Anfragen warten nicht. Ändert sich der Wert gegenüber dem zuletzt gesehenen, leert er.
 - Aufgerufen aus `previewAwareCache.ts` (`onRequest`), also auch bei Cache-Treffern, die vor jedem Seitencode bedient werden.
 - Leeren heißt: (a) Seiten-Cache: der Provider-Wrapper hängt jeder gerenderten Antwort das Tag `site` an (`Cache-Tag`-Header), ein `invalidate({ tags: "site" })` leert alles; die Seiten selbst bleiben unberührt; (b) `cache.ts` bekommt ein Register aller `ttl`/`ttlBy`-Instanzen mit einem `clearAll()`.

@@ -35,10 +35,12 @@
 ### Task 1: Clear all `ttl` memos
 
 **Files:**
+
 - Modify: `website/src/services/cache.ts`
 - Test: `website/src/tests/unit/services/cache.test.ts`
 
 **Interfaces:**
+
 - Produces: `clearAllMemos(): void` exported from `cache.ts`; every `ttl` and every `ttlBy` instance registers itself, so one call drops all stored values (next call loads fresh and waits for it, like a first load).
 
 - [ ] **Step 1: Write failing tests** in `cache.test.ts`:
@@ -53,10 +55,12 @@
 ### Task 2: Stamp poller (website)
 
 **Files:**
+
 - Create: `website/src/services/cacheStamp.ts`
 - Test: `website/src/tests/unit/services/cacheStamp.test.ts`
 
 **Interfaces:**
+
 - Produces:
   - `createStampPoller(options: { read: () => Promise<string | null>; onChange: () => Promise<void> | void; intervalMs?: number; now?: () => number; warn?: (message: string) => void }): () => void` — the returned `poll()` is synchronous and never throws; it starts at most one read per `intervalMs` (default `2000`) and at most one at a time. The first successful read stores the value without calling `onChange`; later reads that differ call `onChange` once.
   - `readStamp(): Promise<string | null>` — `(await getPayloadClient()).findGlobal({ slug: "cache-stamp", depth: 0, select: { changedAt: true } })`, returns `changedAt` as ISO string or `null`.
@@ -79,10 +83,12 @@
 ### Task 3: Wire poller, tag and clear into the page-cache provider
 
 **Files:**
+
 - Modify: `website/src/lib/previewAwareCache.ts`
 - Test: `website/src/tests/unit/lib/previewAwareCache.test.ts`
 
 **Interfaces:**
+
 - Consumes: `createStampPoller`, `readStamp` (Task 2); `clearAllMemos` (Task 1).
 - Produces: the provider factory in `previewAwareCache.ts` now (a) calls the poller's `poll()` at the start of every `onRequest`, before the preview/`?q=` skip branch, (b) passes `next` to the memory provider wrapped so every rendered response gets `site` appended to its `Cache-Tag` header (comma-separated, keeping existing tags such as `words`), (c) on change runs `clearAllMemos()` then `await memory.invalidate({ tags: "site" })`.
 
@@ -99,11 +105,13 @@
 ### Task 4: `cache-stamp` global and migration (payload)
 
 **Files:**
+
 - Create: `payload/src/globals/CacheStamp.ts`, a migration under `payload/src/migrations/` (generated), `payload/src/payload-types.ts` (generated)
 - Modify: `payload/src/payload.config.ts` (add to `globals`), `payload/src/migrations/index.ts` (generated)
 - Test: `payload/tests/access.test.ts`, `payload/tests/globals.test.ts`
 
 **Interfaces:**
+
 - Produces: `export const CacheStamp: GlobalConfig` with `slug: "cache-stamp"`, `access: authenticatedGlobal`, one field `{ name: "changedAt", type: "date" }` hidden from the admin sidebar (`admin: { hidden: true }`); `findGlobal`/`updateGlobal` accept slug `"cache-stamp"` after type generation.
 
 - [ ] **Step 1: Write failing tests**: in `access.test.ts` an anonymous `findGlobal`/`updateGlobal` on `cache-stamp` with `overrideAccess: false` is Forbidden (copy the pattern of the neighbouring global tests); in `globals.test.ts` `cache-stamp round-trip`: `updateGlobal` with a date, `findGlobal` returns it.
@@ -115,11 +123,13 @@
 ### Task 5: Stamp hooks (payload)
 
 **Files:**
+
 - Create: `payload/src/hooks/cacheStamp.ts`
 - Modify: `payload/src/payload.config.ts` (`.map(withCacheStamp)` after `.map(withIndexNow)`; wrap the globals array with `withCacheStampGlobal`)
 - Test: `payload/tests/cacheStamp.test.ts`
 
 **Interfaces:**
+
 - Produces:
   - `export const STAMPED_COLLECTIONS: readonly string[]` and `STAMPED_GLOBALS: readonly string[]` (the allowlists from Global Constraints).
   - `export const stampCacheChange: (req: PayloadRequest) => Promise<void>` — writes `changedAt = new Date().toISOString()` to `cache-stamp` with `req` (same transaction), at most once per `req.context` (key `cacheStamped`).
@@ -140,11 +150,13 @@
 ### Task 6: Word page browser header
 
 **Files:**
+
 - Create: `website/src/lib/pageCache.ts`
 - Modify: `website/src/pages/wort/[...wordSlug].astro:22-27`
 - Test: `website/src/tests/unit/lib/pageCache.test.ts`
 
 **Interfaces:**
+
 - Produces: `export const WORD_PAGE_CACHE_CONTROL = "public, max-age=30"`.
 
 - [ ] **Step 1: Write failing test** `pageCache.test.ts`: `the word page header has max-age=30 and no stale-while-revalidate or s-maxage` (`toBe("public, max-age=30")` plus `not.toMatch(/stale-while-revalidate|s-maxage/)`).
@@ -166,6 +178,7 @@
 ### Task 8: Docs and full verification
 
 **Files:**
+
 - Modify: `website/CLAUDE.md` (cache section: the stamp, `clearAllMemos`, the `site` tag, rule "a new in-process cache must be a `ttl`/`ttlBy` or call `clearAllMemos`"), `payload/CLAUDE.md` (stamp global, allowlist, "a new collection that changes a public page goes into `STAMPED_COLLECTIONS`")
 
 - [ ] **Step 1: Search for other in-process caches** that are not `ttl`/`ttlBy`: `git grep -n "new Map()" website/src/services website/src/lib | grep -v tests`; for each memo that holds CMS data either route it through `ttl` or call it from the provider's `onChange`; record the result in the docs paragraph (`bonRanking` keeps its own `invalidateRanking`; it holds game data, not CMS data, and stays out).
