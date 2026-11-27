@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.1.0](https://github.com/felix-berlin/berliner-schnauze/compare/v5.0.4...v5.1.0) (2026-11-27)
+
+### Bug Fixes
+
+* **dev:** every html page sends max-age=30 without stale-while-revalidate ([b6e2f65](https://github.com/felix-berlin/berliner-schnauze/commit/b6e2f65ab8ba4027f2e2cc0bcc49cbbc642e2044))
+* **dev:** harden the cache stamp after review ([452fa9a](https://github.com/felix-berlin/berliner-schnauze/commit/452fa9a98489617f22e1a9ab360217b055e82fdd))
+* **dev:** let the request that sees a CMS change wait for the cache clear ([814a037](https://github.com/felix-berlin/berliner-schnauze/commit/814a0375c622f33d788ce827b59fda73cd0d55b6))
+* **dev:** migrations that seed before cache_stamp exists skip the stamp ([637e255](https://github.com/felix-berlin/berliner-schnauze/commit/637e255c7c99fbf0863e1e185dbb6c14db72115d))
+* **dev:** stamp poller gives up on hung checks, names failures; external memos survive a clear ([a443fa6](https://github.com/felix-berlin/berliner-schnauze/commit/a443fa6012f34f1f3b92599d9a1bcd7110aee9e6))
+* **dev:** votes and held comments no longer clear the site cache ([d926e8b](https://github.com/felix-berlin/berliner-schnauze/commit/d926e8baa80e8a0039eb9c4b7290af3a3c524005))
+* **pwa:** word page no longer revalidates in the browser after 30 s ([a47cca8](https://github.com/felix-berlin/berliner-schnauze/commit/a47cca8d092cffc35e3d135858dfa0ea33de6d19))
+
+### Features
+
+* **dev:** add cache-stamp global ([56a739c](https://github.com/felix-berlin/berliner-schnauze/commit/56a739c4d07e7383cfac4c0caf1ca3b0b47d4359))
+* **dev:** clear all ttl memos with one call ([a8ca574](https://github.com/felix-berlin/berliner-schnauze/commit/a8ca57439ca9aef7788bdc660c89f413e8cf484e))
+* **dev:** clear page cache and memos when the CMS stamp changes ([393f25e](https://github.com/felix-berlin/berliner-schnauze/commit/393f25e6fa7e0acd9cf0fddb5797314f0b98a54b))
+* **dev:** poll a change stamp to detect CMS edits ([df0890c](https://github.com/felix-berlin/berliner-schnauze/commit/df0890c571ccda179adee26369520948f2dd1f13))
+* **dev:** stamp the cache on every public change ([bdfcde4](https://github.com/felix-berlin/berliner-schnauze/commit/bdfcde439a11a6254a517f6f7844c0ba5339667d))
+
 ## [5.0.4](https://github.com/felix-berlin/berliner-schnauze/compare/v5.0.3...v5.0.4) (2026-11-24)
 
 ### Performance Improvements
