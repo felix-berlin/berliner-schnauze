@@ -1,0 +1,85 @@
+import type {
+  CollectionAfterChangeHook,
+  CollectionAfterDeleteHook,
+  CollectionConfig,
+  GlobalAfterChangeHook,
+  GlobalConfig,
+  PayloadRequest,
+} from "payload";
+
+/** Collections whose changes show on the public site. Votes, reactions, stats and Bon games write all the time and are left out. */
+export const STAMPED_COLLECTIONS: readonly string[] = [
+  "words",
+  "posts",
+  "pages",
+  "themen",
+  "media",
+  "word-types",
+  "comments",
+];
+
+export const STAMPED_GLOBALS: readonly string[] = [
+  "navigation",
+  "affiliate",
+  "company",
+  "home",
+  "anki",
+  "word-page",
+];
+
+const STAMPED_KEY = "cacheStamped";
+
+/**
+ * Sets the `cache-stamp` global to now, in the transaction of the change (`req`), so the stamp only becomes visible
+ * with the commit: a web container that empties its caches on seeing it then loads the new data, and a rolled-back
+ * change leaves no stamp. Once per request, however many docs it touches.
+ */
+export const stampCacheChange = async (req: PayloadRequest): Promise<void> => {
+  if (req.context[STAMPED_KEY]) return;
+  req.context[STAMPED_KEY] = true;
+  await req.payload.updateGlobal({
+    data: { changedAt: new Date().toISOString() },
+    req,
+    slug: "cache-stamp",
+  });
+};
+
+const stampOnChange: CollectionAfterChangeHook = async ({ doc, req }) => {
+  await stampCacheChange(req);
+  return doc;
+};
+
+const stampOnDelete: CollectionAfterDeleteHook = async ({ doc, req }) => {
+  await stampCacheChange(req);
+  return doc;
+};
+
+const stampOnGlobalChange: GlobalAfterChangeHook = async ({ doc, req }) => {
+  await stampCacheChange(req);
+  return doc;
+};
+
+/** Stamps every change and delete of a collection that has a public face (`STAMPED_COLLECTIONS`). */
+export const withCacheStamp = (collection: CollectionConfig): CollectionConfig =>
+  STAMPED_COLLECTIONS.includes(collection.slug)
+    ? {
+        ...collection,
+        hooks: {
+          ...collection.hooks,
+          afterChange: [...(collection.hooks?.afterChange ?? []), stampOnChange],
+          afterDelete: [...(collection.hooks?.afterDelete ?? []), stampOnDelete],
+        },
+      }
+    : collection;
+
+/** Stamps every change of a global that has a public face (`STAMPED_GLOBALS`; not the stamp itself). */
+export const withCacheStampGlobal = (global: GlobalConfig): GlobalConfig =>
+  STAMPED_GLOBALS.includes(global.slug)
+    ? {
+        ...global,
+        hooks: {
+          ...global.hooks,
+          afterChange: [...(global.hooks?.afterChange ?? []), stampOnGlobalChange],
+        },
+      }
+    : global;
