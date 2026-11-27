@@ -123,13 +123,12 @@
     color: var(--color-text-body);
   }
 
+  // A border, not a background: forced colors keeps borders (CanvasText) but drops backgrounds.
   .dot {
     display: inline-block;
-    inline-size: var(--_dot);
-    block-size: var(--_dot);
-    margin-inline: var(--space-2);
+    border: calc(var(--_dot) / 2) solid var(--color-warm-quiet);
     border-radius: var(--radius-pill);
-    background: var(--color-warm-quiet);
+    margin-inline: var(--space-2);
     vertical-align: middle;
   }
 
@@ -169,7 +168,7 @@
   }
 
   button.play {
-    border: 1px solid var(--line);
+    border: 1px solid var(--color-warm-line);
     border-radius: var(--radius-pill);
     background: var(--color-warm-sheet);
     color: var(--color-text-strong);
@@ -210,7 +209,7 @@
 
     .pos {
       padding-inline-start: var(--space-3);
-      border-inline-start: 1px solid var(--line);
+      border-inline-start: 1px solid var(--color-warm-line);
     }
 
     .meanings {

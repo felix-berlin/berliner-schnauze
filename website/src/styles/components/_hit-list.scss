@@ -15,7 +15,7 @@
 
   // virtua's item wrappers: a 1px line between rows (SPEC §3).
   :scope > * + * {
-    border-block-start: 1px solid var(--line);
+    border-block-start: 1px solid var(--color-warm-line);
   }
 
   .letter {

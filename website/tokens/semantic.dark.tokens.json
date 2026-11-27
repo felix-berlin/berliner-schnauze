@@ -425,6 +425,15 @@
           "components": [0.658824, 0.698039, 0.737255],
           "hex": "#a8b2bc"
         }
+      },
+      "line": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [1, 1, 1],
+          "hex": "#ffffff",
+          "alpha": 0.12
+        }
       }
     },
     "ipa": {

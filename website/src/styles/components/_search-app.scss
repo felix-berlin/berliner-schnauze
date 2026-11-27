@@ -13,8 +13,14 @@
     --_section: 1.5rem; // SPEC §4 section title 24px
     --_kbd: 1.375rem; // SPEC mock .s1__kbd 22px key cap
 
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- SPEC §3: 1208px wrap minus 2 × 24px padding
+    --_max: 72.5rem;
+
     container: search-app / inline-size;
     display: grid;
+    inline-size: 100%;
+    max-inline-size: var(--_max);
+    margin-inline: auto;
     align-content: start;
     gap: var(--space-4);
     padding-block: var(--space-6) var(--space-16);
@@ -97,7 +103,7 @@
   }
 
   .offline {
-    border-inline-start-color: var(--line);
+    border-inline-start-color: var(--color-warm-line);
   }
 
   .error {

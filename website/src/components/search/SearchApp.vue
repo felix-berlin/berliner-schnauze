@@ -91,7 +91,13 @@ import { fetchSearchIndex } from "@services/searchIndex.ts";
 import { getWordDb } from "@services/wordSearchDb";
 import { isEditableTarget } from "@utils/helpers.ts";
 import { reportError } from "@utils/reportError.ts";
-import { onKeyStroke, refThrottled, useOnline, useTimeoutFn, watchDebounced } from "@vueuse/core";
+import {
+  refThrottled,
+  useEventListener,
+  useOnline,
+  useTimeoutFn,
+  watchDebounced,
+} from "@vueuse/core";
 import { computed, nextTick, onMounted, ref, shallowRef, useTemplateRef, watch } from "vue";
 
 import AlphabetRegister from "./AlphabetRegister.vue";
@@ -268,11 +274,18 @@ function onKeydown(e: KeyboardEvent) {
 // With the index the list is live; without it (failed load) Enter sends the form to the server.
 const onSubmit = (e: Event) => index && e.preventDefault();
 
-onKeyStroke("/", (e) => {
-  if (isEditableTarget(e.target)) return;
-  e.preventDefault();
-  field.value?.focus();
-});
+// "/" focuses the field unless a field has focus. Window capture runs before the header's listener;
+// stopping it there keeps the header's search modal closed (same as HomeSearch).
+useEventListener(
+  "keydown",
+  (e: KeyboardEvent) => {
+    if (e.key !== "/" || e.repeat || isEditableTarget(e.target)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    field.value?.focus();
+  },
+  { capture: true },
+);
 
 /* Register (SPEC §6.4): letters in German order, scroll-spy from the first visible row. */
 const letters = computed(() =>
