@@ -224,4 +224,46 @@ describe("accepting an example, fact or related suggestion", () => {
     expect(after._status).toBe("draft");
     expect(after.translations ?? []).toHaveLength(0);
   });
+
+  it("does not add the entry again when the status is toggled away and back to accepted", async () => {
+    const payload = await getTestPayload();
+    const word = await liveWord();
+    const s = await suggest(word.id);
+    await accept(s.id);
+    await payload.update({ collection: "suggestions", id: s.id, data: { status: "new" } });
+    await accept(s.id);
+    expect((await published(word.id)).examples).toHaveLength(1);
+  });
+
+  it("refuses to accept suggestions in bulk and changes nothing", async () => {
+    const payload = await getTestPayload();
+    const word = await liveWord();
+    const a = await suggest(word.id, { text: "adopt-test a" });
+    const b = await suggest(word.id, { text: "adopt-test b" });
+    await expect(
+      payload.update({
+        collection: "suggestions",
+        where: { id: { in: [a.id, b.id] } },
+        data: { status: "accepted" },
+      }),
+    ).rejects.toThrow(/einzeln/);
+    for (const { id } of [a, b])
+      expect((await payload.findByID({ collection: "suggestions", id, depth: 0 })).status).toBe(
+        "new",
+      );
+    expect((await published(word.id)).examples ?? []).toHaveLength(0);
+  });
+
+  it("still lets a bulk update change other fields or reject", async () => {
+    const payload = await getTestPayload();
+    const word = await liveWord();
+    const a = await suggest(word.id, { text: "adopt-test a" });
+    const res = await payload.update({
+      collection: "suggestions",
+      where: { id: { equals: a.id } },
+      data: { status: "rejected" },
+    });
+    expect(res.errors).toHaveLength(0);
+    expect(res.docs[0]?.status).toBe("rejected");
+  });
 });

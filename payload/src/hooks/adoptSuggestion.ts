@@ -1,4 +1,8 @@
-import type { CollectionBeforeChangeHook, PayloadRequest } from "payload";
+import type {
+  CollectionBeforeChangeHook,
+  CollectionBeforeOperationHook,
+  PayloadRequest,
+} from "payload";
 
 import { APIError } from "payload";
 
@@ -42,6 +46,8 @@ const adoptIntoWord = async (
   if (latest._status !== "published")
     throw new APIError(`Das Wort ${name} hat unveröffentlichte Entwurfsänderungen. ${retry}`, 400);
   const { field, row } = suggestionEntry(suggestion);
+  // Accepted, set back and accepted again: the entry is already there.
+  if (live[field]?.some((r) => r.contributorSuggestion === suggestion.id)) return;
   await req.payload.update({
     collection: "words",
     id,
@@ -49,6 +55,17 @@ const adoptIntoWord = async (
     draft: false,
     req,
   });
+};
+
+/**
+ * Accepting writes into words, which a bulk update (admin "edit many", REST `where`) cannot do safely: Payload runs
+ * the documents in parallel in one shared transaction, so two entries for the same word overwrite each other and one
+ * failure rolls back saves already reported as done. Refuse it; every other bulk change stays possible.
+ */
+export const refuseBulkAccept: CollectionBeforeOperationHook = ({ args, operation }) => {
+  if (operation === "update" && args.id == null && args.data?.status === "accepted")
+    throw new APIError("Vorschläge bitte einzeln übernehmen, nicht gesammelt.", 400);
+  return args;
 };
 
 /**

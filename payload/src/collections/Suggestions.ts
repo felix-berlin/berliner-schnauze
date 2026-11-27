@@ -3,7 +3,7 @@ import type { CollectionAfterChangeHook, CollectionConfig, FieldHook, Validate }
 import { relationship, select, text, textarea } from "payload/shared";
 
 import { authenticatedOnly, notOverMcp } from "../access";
-import { adoptSuggestion } from "../hooks/adoptSuggestion";
+import { adoptSuggestion, refuseBulkAccept } from "../hooks/adoptSuggestion";
 import { lockedByWordValue, refuseWhenLocked, updateUnlocked } from "../hooks/suggestionLock";
 import { notifyEditors } from "../lib/notifyEditors";
 import {
@@ -168,7 +168,11 @@ export const Suggestions: CollectionConfig = {
     defaultColumns: ["title", "type", "translation", "status", "createdAt"],
     group: "Community",
   },
-  hooks: { beforeChange: [refuseWhenLocked, adoptSuggestion], afterChange: [mailEditors] },
+  hooks: {
+    beforeOperation: [refuseBulkAccept],
+    beforeChange: [refuseWhenLocked, adoptSuggestion],
+    afterChange: [mailEditors],
+  },
   fields: [
     {
       name: "title",
