@@ -4,18 +4,23 @@ if (NO_CACHE && process.env.NODE_ENV === "production") {
   console.warn("[cache] NO_TTL_CACHE=1 in production: every request hits the CMS and the database");
 }
 
-/**
- * Memoizes `load` for `ms`. After that the stale value is served while a single background refresh runs, so
- * a request never waits for a reload; only the very first load blocks. A failed first load is not kept, a
- * failed refresh keeps the stale value and is retried by the next call.
- */
-export const ttl = <T>(ms: number, load: () => Promise<T>): (() => Promise<T>) => {
-  if (NO_CACHE) return load;
+// shortcut: instances created per day (services/payload/home.ts) stay registered until restart; upgrade only if that ever grows.
+const resets = new Set<() => void>();
+
+/** Drops every value held by `ttl`/`ttlBy` in this process; the next call of each loads fresh and waits for it. */
+export const clearAllMemos = (): void => {
+  for (const reset of resets) reset();
+};
+
+/** The memo behind `ttl`: the getter plus a `reset` that drops the stored value (and any refresh in flight). */
+const memo = <T>(ms: number, load: () => Promise<T>) => {
   let value: Promise<T> | undefined;
   let loadedAt = 0;
   let refreshing = false;
+  // Bumped by a reset so a refresh that started before it cannot write its old result back.
+  let generation = 0;
 
-  return () => {
+  const get = () => {
     if (!value) {
       const first = load();
       value = first;
@@ -25,8 +30,10 @@ export const ttl = <T>(ms: number, load: () => Promise<T>): (() => Promise<T>) =
       });
     } else if (!refreshing && Date.now() - loadedAt >= ms) {
       refreshing = true;
+      const started = generation;
       load()
         .then((fresh) => {
+          if (generation !== started) return;
           value = Promise.resolve(fresh);
           loadedAt = Date.now();
         })
@@ -34,11 +41,30 @@ export const ttl = <T>(ms: number, load: () => Promise<T>): (() => Promise<T>) =
           console.error("[cache] refresh failed, serving stale data:", error),
         )
         .finally(() => {
-          refreshing = false;
+          if (generation === started) refreshing = false;
         });
     }
     return value;
   };
+  const reset = () => {
+    generation++;
+    value = undefined;
+    loadedAt = 0;
+    refreshing = false;
+  };
+  return { get, reset };
+};
+
+/**
+ * Memoizes `load` for `ms`. After that the stale value is served while a single background refresh runs, so
+ * a request never waits for a reload; only the very first load blocks. A failed first load is not kept, a
+ * failed refresh keeps the stale value and is retried by the next call.
+ */
+export const ttl = <T>(ms: number, load: () => Promise<T>): (() => Promise<T>) => {
+  if (NO_CACHE) return load;
+  const { get, reset } = memo(ms, load);
+  resets.add(reset);
+  return get;
 };
 
 /**
@@ -52,14 +78,17 @@ export const ttlBy = <K, T>(
   load: (key: K) => Promise<T>,
 ): ((key: K) => Promise<T>) & { forget: (key: K) => void } => {
   const memos = new Map<K, () => Promise<T>>();
+  // One reset for the whole map: the per-key memos are not registered, so evicted keys cannot pile up in `resets`.
+  if (!NO_CACHE) resets.add(() => memos.clear());
+  const create = (key: K) => (NO_CACHE ? () => load(key) : memo(ms, () => load(key)).get);
   return Object.assign(
     (key: K) => {
-      let memo = memos.get(key);
-      if (!memo) {
+      let get = memos.get(key);
+      if (!get) {
         if (memos.size >= max) memos.delete(memos.keys().next().value as K);
-        memos.set(key, (memo = ttl(ms, () => load(key))));
+        memos.set(key, (get = create(key)));
       }
-      return memo();
+      return get();
     },
     { forget: (key: K) => void memos.delete(key) },
   );
