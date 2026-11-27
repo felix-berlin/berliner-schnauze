@@ -1,4 +1,4 @@
-import { ttl } from "@services/cache.ts";
+import { clearAllMemos, ttl, ttlBy } from "@services/cache.ts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 beforeEach(() => vi.useFakeTimers());
@@ -63,6 +63,54 @@ describe("ttl", () => {
     const get = ttl(1000, load);
     await expect(get()).rejects.toThrow("db down");
     expect(await get()).toBe("ok");
+  });
+});
+
+describe("clearAllMemos", () => {
+  it("makes the next ttl call reload", async () => {
+    const load = vi.fn().mockResolvedValueOnce("a").mockResolvedValueOnce("b");
+    const get = ttl(1000, load);
+    expect(await get()).toBe("a");
+    expect(await get()).toBe("a");
+    clearAllMemos();
+    expect(await get()).toBe("b");
+    expect(load).toHaveBeenCalledTimes(2);
+  });
+
+  it("drops every ttlBy key", async () => {
+    const load = vi.fn(async (key: string) => `${key}:${load.mock.calls.length}`);
+    const get = ttlBy(1000, 10, load);
+    await get("x");
+    await get("y");
+    clearAllMemos();
+    expect(await get("x")).toBe("x:3");
+    expect(await get("y")).toBe("y:4");
+  });
+
+  it("leaves a ttl marked external alone (it does not hold CMS data)", async () => {
+    const load = vi.fn().mockResolvedValueOnce("a").mockResolvedValueOnce("b");
+    const get = ttl(1000, load, { external: true });
+    expect(await get()).toBe("a");
+    clearAllMemos();
+    expect(await get()).toBe("a");
+    expect(load).toHaveBeenCalledOnce();
+  });
+
+  it("is not undone by a refresh that was already running", async () => {
+    let finishOld!: (value: string) => void;
+    const load = vi
+      .fn()
+      .mockResolvedValueOnce("a")
+      .mockReturnValueOnce(new Promise<string>((resolve) => (finishOld = resolve)))
+      .mockResolvedValueOnce("new");
+    const get = ttl(1000, load);
+    await get();
+    vi.advanceTimersByTime(1001);
+    await get(); // starts the background refresh
+    clearAllMemos();
+    finishOld("old");
+    await flush();
+    expect(await get()).toBe("new");
   });
 });
 

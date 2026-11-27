@@ -21,7 +21,7 @@ async function loadPriceCents(): Promise<number | undefined> {
 }
 
 // Pages render on demand: refresh the price hourly instead of once per process.
-const getCents = ttl(60 * 60 * 1000, loadPriceCents);
+const getCents = ttl(60 * 60 * 1000, loadPriceCents, { external: true });
 
 /** Display price, e.g. "5,99 €". */
 export const getPolarFullDeckPrice = async (): Promise<string | undefined> => {

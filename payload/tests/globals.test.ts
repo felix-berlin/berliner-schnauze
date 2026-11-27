@@ -3,6 +3,14 @@ import { describe, expect, it } from "vitest";
 import { getTestPayload } from "./helpers/payload";
 
 describe("globals round-trip", () => {
+  it("cache-stamp stores the change time", async () => {
+    const payload = await getTestPayload();
+    const changedAt = "2026-11-27T10:00:00.000Z";
+    await payload.updateGlobal({ slug: "cache-stamp", data: { changedAt } });
+    const doc = await payload.findGlobal({ slug: "cache-stamp" });
+    expect(doc.changedAt).toBe(changedAt);
+  });
+
   it("navigation", async () => {
     const payload = await getTestPayload();
     const main = [{ title: "Wörterbuch", link: "/", rel: "noopener", description: "Alle Wörter" }];

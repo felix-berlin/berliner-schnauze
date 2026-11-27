@@ -152,6 +152,7 @@ export interface Config {
     home: Home;
     anki: Anki;
     'word-page': WordPage;
+    'cache-stamp': CacheStamp;
     'payload-jobs-stats': PayloadJobsStat;
   };
   globalsSelect: {
@@ -161,6 +162,7 @@ export interface Config {
     home: HomeSelect<false> | HomeSelect<true>;
     anki: AnkiSelect<false> | AnkiSelect<true>;
     'word-page': WordPageSelect<false> | WordPageSelect<true>;
+    'cache-stamp': CacheStampSelect<false> | CacheStampSelect<true>;
     'payload-jobs-stats': PayloadJobsStatsSelect<false> | PayloadJobsStatsSelect<true>;
   };
   locale: null;
@@ -1960,6 +1962,16 @@ export interface WordPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cache-stamp".
+ */
+export interface CacheStamp {
+  id: number;
+  changedAt?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs-stats".
  */
 export interface PayloadJobsStat {
@@ -2159,6 +2171,16 @@ export interface AnkiSelect<T extends boolean = true> {
  */
 export interface WordPageSelect<T extends boolean = true> {
   storyPrompt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cache-stamp_select".
+ */
+export interface CacheStampSelect<T extends boolean = true> {
+  changedAt?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

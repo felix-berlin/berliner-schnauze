@@ -1,21 +1,28 @@
+import { PAGE_CACHE_CONTROL } from "@lib/pageCache.ts";
 import { createHash } from "node:crypto";
 
 type CacheableResponse = { headers: Headers; status?: number };
 
 /**
- * Cache policy for on-demand pages: the reverse proxy may serve a page for `sMaxAge` seconds (and stale
- * while it revalidates), browsers always revalidate. Errors are never cached; a header a page set itself wins.
+ * Cache policy for on-demand responses. An HTML page: a browser may reuse it for 30 s (`PAGE_CACHE_CONTROL`), never
+ * stale. A response declared as anything else (APIs, sitemap, text files): `max-age=0` and the `sMaxAge`/`stale-while-revalidate` form as
+ * before. Errors are never cached; a header a page set itself wins.
  */
 export const setPageCache = <R extends CacheableResponse>(
   response: R,
   { sMaxAge = 300 }: { sMaxAge?: number } = {},
 ): R => {
   if (response.headers.has("Cache-Control")) return response;
+  // Only a declared non-HTML type gets the old form: a page whose type is not set yet must never end up with swr.
+  const type = response.headers.get("Content-Type");
+  const isHtml = !type || type.startsWith("text/html");
   response.headers.set(
     "Cache-Control",
     (response.status ?? 200) >= 400
       ? "no-store"
-      : `public, max-age=0, s-maxage=${sMaxAge}, stale-while-revalidate=86400`,
+      : isHtml
+        ? PAGE_CACHE_CONTROL
+        : `public, max-age=0, s-maxage=${sMaxAge}, stale-while-revalidate=86400`,
   );
   return response;
 };

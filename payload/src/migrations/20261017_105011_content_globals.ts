@@ -71,6 +71,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   // Loaded lazily: the seed pulls in jsdom (../lib/htmlToLexical), and a static import would bundle it into the
   // site's server through payload.config, where jsdom's __dirname lookups crash every render.
   const { seedSiteContent } = await import('../seed/siteContent')
+  // The `cache_stamp` table does not exist yet (a later migration): the stamp hook must not write it.
+  req.context = { ...req.context, skipCacheStamp: true }
   await seedSiteContent(payload, req, db)
 }
 

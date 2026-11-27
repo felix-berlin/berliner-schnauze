@@ -18,10 +18,12 @@ test.describe("On-demand routes", () => {
     });
   }
 
-  test("a word page is cacheable by the proxy", async ({ request }) => {
+  test("a word page is reusable by a browser for 30 s and never served stale", async ({
+    request,
+  }) => {
     const response = await request.get("/wort/aasen");
     expect(response.status()).toBe(200);
-    expect(response.headers()["cache-control"]).toContain("s-maxage=300");
+    expect(response.headers()["cache-control"]).toBe("public, max-age=30");
   });
 
   test("the sitemap lists seeded words with a lastmod and the static routes", async ({

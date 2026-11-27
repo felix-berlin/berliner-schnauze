@@ -47,7 +47,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "company_social_media" DROP COLUMN "rel";`)
 
   if (funding.length) {
-    await payload.updateGlobal({ slug: 'company', data: splitFunding(funding as FundingRow[]), req })
+    // `skipCacheStamp`: the `cache_stamp` table does not exist yet (a later migration).
+    await payload.updateGlobal({
+      slug: 'company',
+      data: splitFunding(funding as FundingRow[]),
+      req,
+      context: { skipCacheStamp: true },
+    })
   }
 }
 

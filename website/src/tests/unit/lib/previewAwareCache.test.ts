@@ -1,9 +1,26 @@
 import { describe, expect, it, vi } from "vitest";
 
-const inner = vi.fn(async () => new Response("from cache"));
-vi.mock("astro/cache/memory", () => ({
-  default: () => ({ invalidate: async () => {}, name: "memory", onRequest: inner }),
+const mocks = vi.hoisted(() => ({
+  clearAllMemos: vi.fn(),
+  invalidate: vi.fn(async (_options: unknown) => {}),
+  poll: vi.fn(async () => {}),
+  pollerOptions: undefined as undefined | { onChange: () => Promise<void> | void },
 }));
+
+const inner = vi.fn(
+  async (_context?: unknown, _next?: () => Promise<Response>) => new Response("from cache"),
+);
+vi.mock("astro/cache/memory", () => ({
+  default: () => ({ invalidate: mocks.invalidate, name: "memory", onRequest: inner }),
+}));
+vi.mock("@services/cacheStamp.ts", () => ({
+  createStampPoller: (options: { onChange: () => Promise<void> | void }) => {
+    mocks.pollerOptions = options;
+    return mocks.poll;
+  },
+  readStamp: vi.fn(),
+}));
+vi.mock("@services/cache.ts", () => ({ clearAllMemos: mocks.clearAllMemos }));
 
 import factory from "@lib/previewAwareCache.ts";
 
@@ -42,5 +59,70 @@ describe("previewAwareCache", () => {
     await provider.onRequest!(context(undefined, "/"), next);
     await provider.onRequest!(context(undefined, "/suche?q=foo"), next);
     expect(inner).toHaveBeenCalledTimes(2);
+  });
+
+  it("polls the stamp for a request with a preview cookie", async () => {
+    mocks.poll.mockClear();
+    await provider.onRequest!(context("bs_preview=token"), next);
+    expect(mocks.poll).toHaveBeenCalledOnce();
+  });
+
+  it("polls the stamp for the /?q= path too", async () => {
+    mocks.poll.mockClear();
+    await provider.onRequest!(context(undefined, "/?q=foo"), next);
+    expect(mocks.poll).toHaveBeenCalledOnce();
+  });
+
+  it("clears the memos and invalidates the site tag when the stamp changes", async () => {
+    mocks.clearAllMemos.mockClear();
+    mocks.invalidate.mockClear();
+    await mocks.pollerOptions!.onChange();
+    expect(mocks.clearAllMemos).toHaveBeenCalledOnce();
+    expect(mocks.invalidate).toHaveBeenCalledWith({ tags: "site" });
+  });
+
+  it("hands the memory cache a render whose response carries the Cache-Tag site", async () => {
+    inner.mockImplementationOnce(async (_context, render) => render!());
+    const response = await provider.onRequest!(context(), async () => new Response("page"));
+    expect(response.headers.get("Cache-Tag")).toBe("site");
+  });
+
+  it("keeps the tags a page set and adds site", async () => {
+    inner.mockImplementationOnce(async (_context, render) => render!());
+    const response = await provider.onRequest!(
+      context(),
+      async () => new Response("page", { headers: { "Cache-Tag": "words" } }),
+    );
+    expect(response.headers.get("Cache-Tag")).toBe("words, site");
+  });
+
+  it("tags a response whose headers are immutable too", async () => {
+    inner.mockImplementationOnce(async (_context, render) => render!());
+    const response = await provider.onRequest!(context(), async () =>
+      Response.redirect("https://example.test/x", 302),
+    );
+    expect(response.status).toBe(302);
+    expect(response.headers.get("Cache-Tag")).toBe("site");
+  });
+
+  it("waits for the stamp check before serving, but not longer than 250 ms", async () => {
+    vi.useFakeTimers();
+    inner.mockClear();
+    mocks.poll.mockReturnValueOnce(new Promise<void>(() => {})); // a check that never ends
+    const served = provider.onRequest!(context(), next);
+    await vi.advanceTimersByTimeAsync(249);
+    expect(inner).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(2);
+    await served;
+    expect(inner).toHaveBeenCalledOnce();
+    vi.useRealTimers();
+  });
+
+  it("still serves the page when the stamp check rejects", async () => {
+    inner.mockClear();
+    mocks.poll.mockReturnValueOnce(Promise.reject(new Error("check broke")));
+    const response = await provider.onRequest!(context(), next);
+    expect(await response.text()).toBe("from cache");
+    expect(inner).toHaveBeenCalledOnce();
   });
 });
