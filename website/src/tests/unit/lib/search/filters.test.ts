@@ -152,5 +152,7 @@ describe("search filters", () => {
     expect(isFiltered(state({ q: "x", sort: "az" }))).toBe(false);
     expect(effectiveSort(state({ q: "x" }))).toBe("beste");
     expect(effectiveSort(EMPTY_STATE)).toBe("az");
+    expect(effectiveSort(state({ sort: "beste" }))).toBe("az");
+    expect(effectiveSort(state({ q: "x", sort: "neu" }))).toBe("neu");
   });
 });

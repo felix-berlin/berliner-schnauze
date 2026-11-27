@@ -27,7 +27,9 @@ export const EMPTY_STATE: SearchState = {
   themes: [],
 };
 
-export const effectiveSort = (s: SearchState): SortKey => s.sort ?? (s.q ? "beste" : "az");
+/** "beste" needs a query: without one it means A-Z. */
+export const effectiveSort = (s: SearchState): SortKey =>
+  s.sort === "beste" && !s.q ? "az" : (s.sort ?? (s.q ? "beste" : "az"));
 
 /** One per chip value: two selected word types count 2. */
 export const activeFilterCount = (s: SearchState): number =>

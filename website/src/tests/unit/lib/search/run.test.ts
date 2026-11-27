@@ -66,6 +66,18 @@ describe("runSearch", () => {
     expect(r.note).toBeNull();
   });
 
+  it("treats beste without q as a-z", async () => {
+    const r = await runSearch(db, entries, st({ sort: "beste" }), ctx);
+    expect(r.rows.filter((x) => x.kind === "letter")).toHaveLength(3);
+    expect(r.rows.flatMap((x) => (x.kind === "hit" ? [x.hit.entry.slug] : []))).toEqual([
+      "ahle",
+      "anke",
+      "kruke",
+      "zappel",
+      "zappelbude",
+    ]);
+  });
+
   it("uses dividers only in beste", async () => {
     const beste = await runSearch(db, entries, st({ q: "zappel" }), ctx);
     expect(beste.rows.some((x) => x.kind === "divider")).toBe(true);
