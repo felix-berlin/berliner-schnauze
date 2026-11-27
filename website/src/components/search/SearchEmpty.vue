@@ -23,8 +23,10 @@
               {{ s.wordProperties.berlinerisch }}
             </a>
           </p>
-          <!-- Task 11: „Nach Bedeutung suchen“ before this, only with the Chrome AI. -->
           <p class="actions">
+            <button v-if="ai" type="button" class="action" @click="emit('ai')">
+              <IconSparkles aria-hidden="true" />Nach Bedeutung suchen
+            </button>
             <a class="action" :href="`/wort-vorschlagen?wort=${encodeURIComponent(q)}`">
               Wort vorschlagen
             </a>
@@ -39,9 +41,13 @@
 import type { SearchEntry } from "@lib/search/types";
 
 import BerlinerBaer from "@components/kalle/BerlinerBaer.vue";
+import { defineAsyncComponent } from "vue";
 
-defineProps<{ q: string; byFilters: boolean; suggestions: SearchEntry[] }>();
-const emit = defineEmits<{ reset: [] }>();
+/** `ai`: the Chrome AI is there, show „Nach Bedeutung suchen“ (SPEC §8.2). */
+defineProps<{ q: string; byFilters: boolean; suggestions: SearchEntry[]; ai?: boolean }>();
+const emit = defineEmits<{ reset: []; ai: [] }>();
+
+const IconSparkles = defineAsyncComponent(() => import("virtual:icons/lucide/sparkles"));
 </script>
 
 <style lang="scss">

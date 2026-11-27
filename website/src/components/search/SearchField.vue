@@ -24,7 +24,21 @@
         <IconX aria-hidden="true" />
       </button>
       <kbd v-else class="slash" aria-hidden="true">/</kbd>
-      <!-- Task 11: the „Nach Bedeutung“ button sits here, only with the Chrome AI. -->
+      <!-- Only with the Chrome AI (SPEC §8.2); icon-only below 1000px. -->
+      <button
+        v-if="model && ai"
+        type="button"
+        ref="aiButton"
+        class="ai"
+        aria-label="Nach Bedeutung suchen mit Chrome-KI"
+        title="Nach Bedeutung suchen (Shift + Enter)"
+        :aria-pressed="aiPressed ? 'true' : 'false'"
+        @click="emit('ai')"
+        @focus="emit('aiWarm')"
+        @pointerenter="emit('aiWarm')"
+      >
+        <IconSparkles aria-hidden="true" /><span>Nach Bedeutung</span>
+      </button>
     </div>
   </div>
 </template>
@@ -33,13 +47,17 @@
 import { useMediaQuery, useMounted } from "@vueuse/core";
 import { computed, defineAsyncComponent, useTemplateRef } from "vue";
 
-defineProps<{ activeId?: string; expanded: boolean }>();
+defineProps<{ activeId?: string; expanded: boolean; ai?: boolean; aiPressed?: boolean }>();
+/** `ai`: start the meaning search; `aiWarm`: focus or hover, the session may be prepared. */
+const emit = defineEmits<{ ai: []; aiWarm: [] }>();
 const model = defineModel<string>({ required: true });
 
 const IconSearch = defineAsyncComponent(() => import("virtual:icons/lucide/search"));
 const IconX = defineAsyncComponent(() => import("virtual:icons/lucide/x"));
+const IconSparkles = defineAsyncComponent(() => import("virtual:icons/lucide/sparkles"));
 
 const input = useTemplateRef("input");
+const aiButton = useTemplateRef("aiButton");
 
 // SPEC §5 placeholders; the server renders the short one, the long one only after hydration (no mismatch).
 const mounted = useMounted();
@@ -56,7 +74,10 @@ const clear = () => {
   focus();
 };
 
-defineExpose({ focus });
+/** After the KI block lost the focused button: back to the KI button, else the field. */
+const focusAi = () => (aiButton.value ?? input.value)?.focus();
+
+defineExpose({ focus, focusAi });
 </script>
 
 <style lang="scss">

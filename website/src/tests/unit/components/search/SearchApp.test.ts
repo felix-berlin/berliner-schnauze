@@ -12,6 +12,7 @@ const mocks = vi.hoisted(() => ({
   navigate: vi.fn(),
   runSearch: vi.fn(),
   scrollToIndex: vi.fn(),
+  semanticCandidates: vi.fn(),
 }));
 
 vi.mock("virtua/vue", () => ({
@@ -24,7 +25,10 @@ vi.mock("virtua/vue", () => ({
 }));
 vi.mock("@services/wordSearchDb", () => ({ FULL_TEXT: {}, getWordDb: mocks.getWordDb }));
 vi.mock("@services/searchIndex.ts", () => ({ fetchSearchIndex: mocks.fetchSearchIndex }));
-vi.mock("@lib/search/run", () => ({ runSearch: mocks.runSearch }));
+vi.mock("@lib/search/run", () => ({
+  runSearch: mocks.runSearch,
+  semanticCandidates: mocks.semanticCandidates,
+}));
 vi.mock("astro:transitions/client", () => ({ navigate: mocks.navigate }));
 vi.mock("@utils/reportError.ts", () => ({ reportError: vi.fn() }));
 
@@ -313,5 +317,84 @@ describe("SearchApp", () => {
     const push = vi.spyOn(history, "pushState");
     await w.get(".c-search-empty button").trigger("click");
     expect(push).toHaveBeenCalledWith({ index: 4, scrollX: 0, scrollY: 0 }, "", "/wort?q=aal");
+  });
+
+  describe("meaning search", () => {
+    const KI = '[aria-label="Nach Bedeutung suchen mit Chrome-KI"]';
+    afterEach(() => vi.unstubAllGlobals());
+
+    it("API missing renders nothing", async () => {
+      const w = mountApp({ state: state({ q: "jemand ist lustig" }) });
+      await flushPromises();
+      expect(w.find(KI).exists()).toBe(false);
+      expect(w.find(".c-semantic-search").exists()).toBe(false);
+      expect(w.text()).not.toContain("nach Bedeutung");
+    });
+
+    it("unavailable renders nothing either", async () => {
+      vi.stubGlobal("LanguageModel", { availability: async () => "unavailable" });
+      const w = mountApp({ state: state({ q: "jemand ist lustig" }) });
+      await flushPromises();
+      expect(w.find(KI).exists()).toBe(false);
+      expect(w.find(".c-semantic-search").exists()).toBe(false);
+    });
+
+    it("available: KI button, offer and Shift+Enter starts the meaning search", async () => {
+      vi.stubGlobal("LanguageModel", {
+        availability: async () => "downloadable",
+        create: vi.fn(),
+      });
+      const w = mountApp({ state: state({ q: "jemand ist lustig" }) });
+      await vi.waitFor(async () => {
+        await flushPromises();
+        expect(w.find(".c-semantic-search").exists()).toBe(true);
+      });
+      expect(w.find(KI).exists()).toBe(true);
+      expect(w.text()).toContain("nach Bedeutung");
+      expect(w.text()).toContain("Dit klingt nach ’ner Beschreibung");
+
+      await field(w).trigger("keydown", { key: "Enter", shiftKey: true });
+      await flushPromises();
+      expect(w.text()).toContain("Einmal dit KI-Modell laden?");
+    });
+
+    it("arrow keys start in the KI result and run on into the keyword hits", async () => {
+      const clone = {
+        destroy: vi.fn(),
+        prompt: async () => JSON.stringify({ slugs: ["quarkwolke"] }),
+      };
+      vi.stubGlobal("LanguageModel", {
+        availability: async () => "available",
+        create: async () => ({ clone: async () => clone, destroy: vi.fn() }),
+      });
+      Element.prototype.scrollIntoView = vi.fn(); // jsdom has none
+      ready();
+      mocks.runSearch.mockResolvedValue(result(["Aalwurm"]));
+      mocks.semanticCandidates.mockResolvedValue([entry("Quarkwolke")]);
+      const w = mountApp({ state: state({ q: "wat Weichet zum Kaffee" }) });
+      const input = field(w);
+      await vi.waitFor(async () => {
+        await flushPromises();
+        expect(w.find(".c-semantic-search").exists()).toBe(true);
+      });
+      await input.trigger("keydown", { key: "Enter", shiftKey: true });
+      await vi.waitFor(async () => {
+        await flushPromises();
+        expect(w.text()).toContain("Passt vielleicht: 1 Wort nach Bedeutung");
+      });
+      expect(w.get(KI).attributes("aria-pressed")).toBe("true");
+
+      await input.trigger("keydown", { key: "ArrowDown" });
+      await flushPromises();
+      expect(input.attributes("aria-activedescendant")).toBe("ki-quarkwolke");
+      expect(w.get("#ki-quarkwolke").attributes("aria-selected")).toBe("true");
+      await input.trigger("keydown", { key: "ArrowDown" });
+      await flushPromises();
+      expect(input.attributes("aria-activedescendant")).toBe("treffer-aalwurm");
+      await input.trigger("keydown", { key: "ArrowDown" });
+      await flushPromises();
+      await input.trigger("keydown", { key: "Enter" });
+      expect(mocks.navigate).toHaveBeenCalledWith("/wort/quarkwolke");
+    });
   });
 });

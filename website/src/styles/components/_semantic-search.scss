@@ -1,0 +1,255 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// KI block (docs/design/suche-v1/SPEC.md §8.3): the root is the live region, .block the card with .head (icon
+// circle + h2 + text), .actions (outline .action, .textlink, .private lock note), .progress + .status while
+// running, .list (c-hit-row options) and .foot (lock note, „Hat’s jepasst?“, .feedback pills).
+@include mx.component("semantic-search") {
+  :scope {
+    --_title: 1.375rem; // SPEC §8.3 h2 22px
+    --_icon: 2.5rem; // SPEC §8.3 icon circle 40px
+    --_icon-m: 2.25rem; // mock mobile icon circle 36px
+    --_indent: 3.375rem; // SPEC §8.3 content indent 54px
+    --_bar: 0.375rem; // SPEC §8.3 progress 6px
+    --_pill: 2.25rem; // SPEC §8.3 feedback pills 36px
+    --_wander: 1.4s; // SPEC §8.3 indeterminate bar cycle, no duration token
+
+    container: semantic-search / inline-size;
+  }
+
+  .block {
+    padding: var(--space-4);
+    border: 1px solid var(--color-warm-line);
+    border-radius: var(--radius-sm);
+    background: var(--color-warm-card2);
+  }
+
+  .head {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+
+    h2 {
+      margin: 0;
+      font-family: var(--font-condensed);
+      font-size: var(--_title);
+      font-weight: var(--font-weight-bold);
+      line-height: 1.15;
+      color: var(--color-text-strong);
+    }
+
+    p {
+      margin: var(--space-1) 0 0;
+      line-height: 1.5;
+      color: var(--color-text-body);
+    }
+  }
+
+  .icon {
+    display: grid;
+    flex: 0 0 var(--_icon-m);
+    place-items: center;
+    block-size: var(--_icon-m);
+    border-radius: var(--radius-pill);
+    background: var(--color-warm-sheet);
+    color: var(--color-accent-active);
+
+    svg {
+      inline-size: var(--space-5);
+      block-size: var(--space-5);
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-5);
+    margin-block-start: var(--space-4);
+  }
+
+  .action {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-block-size: var(--size-tap-target);
+    padding-inline: var(--space-4);
+    border: 1.5px solid var(--color-accent-active);
+    border-radius: var(--radius-sm);
+    background: none;
+    font: inherit;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+    cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+
+    svg {
+      inline-size: var(--space-5);
+      block-size: var(--space-5);
+      color: var(--color-accent-active);
+    }
+
+    @include butler-mx.hover {
+      background: var(--color-warm-sheet);
+    }
+  }
+
+  .textlink {
+    min-block-size: var(--size-tap-target);
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: var(--color-warm-quiet);
+    cursor: pointer;
+  }
+
+  .private {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-label);
+    color: var(--color-warm-quiet);
+
+    svg {
+      flex: none;
+      inline-size: var(--space-4);
+      block-size: var(--space-4);
+    }
+  }
+
+  .progress {
+    display: block;
+    inline-size: 100%;
+    block-size: var(--_bar);
+    margin-block-start: var(--space-4);
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: var(--color-warm-card3);
+    overflow: hidden;
+    appearance: none;
+
+    &::-webkit-progress-bar {
+      background: var(--color-warm-card3);
+    }
+
+    &::-webkit-progress-value {
+      border-radius: var(--radius-pill);
+      background: var(--color-accent-active);
+    }
+
+    &::-moz-progress-bar {
+      border-radius: var(--radius-pill);
+      background: var(--color-accent-active);
+    }
+
+    // Unknown duration: a 38 % bar wanders (SPEC §8.3); without motion it stands still.
+    &:indeterminate {
+      background: linear-gradient(var(--color-accent-active) 0 0) no-repeat 0 0 / 38% 100%
+        var(--color-warm-card3);
+
+      @include butler-mx.feature("motion") {
+        animation: semantic-search-wander var(--_wander) ease-in-out infinite;
+      }
+    }
+
+    &:indeterminate::-webkit-progress-bar {
+      background: transparent;
+    }
+  }
+
+  .status {
+    margin: var(--space-2) 0 0;
+    font-size: var(--font-size-md);
+    color: var(--color-warm-quiet);
+
+    .textlink {
+      min-block-size: 0;
+      margin-inline-start: var(--space-2);
+    }
+  }
+
+  .list {
+    margin-block-start: var(--space-4);
+    border-radius: var(--radius-sm);
+    background: var(--color-warm-sheet);
+  }
+
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    margin-block-start: var(--space-3);
+    font-size: var(--font-size-label);
+    color: var(--color-warm-quiet);
+  }
+
+  .ask {
+    margin-inline-start: auto;
+  }
+
+  .feedback {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-block-size: var(--_pill);
+    padding-inline: var(--space-3);
+    border: 1px solid var(--color-warm-line);
+    border-radius: var(--radius-pill);
+    background: var(--color-warm-sheet);
+    font: inherit;
+    font-size: var(--font-size-md);
+    color: var(--color-text-strong);
+    cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+
+    svg {
+      inline-size: var(--space-4);
+      block-size: var(--space-4);
+    }
+
+    @include butler-mx.hover {
+      background: var(--color-warm-card3);
+    }
+
+    &[aria-pressed="true"] {
+      border-color: var(--color-text-strong);
+      font-weight: var(--font-weight-bold);
+    }
+  }
+
+  // Desktop (SPEC §8.3): 20px 24px padding, 40px icon, content indented under the title.
+  @container semantic-search (inline-size >= 47rem) {
+    .block {
+      padding: var(--space-5) var(--space-6);
+    }
+
+    .icon {
+      flex-basis: var(--_icon);
+      block-size: var(--_icon);
+    }
+
+    .actions,
+    .progress,
+    .status {
+      margin-inline-start: var(--_indent);
+    }
+
+    .progress {
+      inline-size: calc(100% - var(--_indent));
+    }
+  }
+
+  @keyframes semantic-search-wander {
+    from {
+      background-position: -40% 0;
+    }
+
+    to {
+      background-position: 140% 0;
+    }
+  }
+}

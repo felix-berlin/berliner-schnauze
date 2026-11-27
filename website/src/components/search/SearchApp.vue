@@ -14,7 +14,11 @@
         v-model="input"
         :active-id="activeId"
         :expanded="!skeleton && rows.length > 0"
+        :ai="!!ai"
+        :ai-pressed="semantic?.pressed"
         @keydown="onKeydown"
+        @ai="startAi"
+        @ai-warm="semantic?.warm()"
       />
       <input v-for="[key, value] in kept" :key="key" type="hidden" :name="key" :value="value" />
     </form>
@@ -31,10 +35,10 @@
         </template>
         <template v-else><b>{{ formatCount(result.total) }}</b> Wörter</template>
       </p>
-      <!-- Task 11 adds „Shift ↵ nach Bedeutung“ when the Chrome AI is available. -->
       <p class="keys" aria-hidden="true">
         <span><kbd>↑</kbd><kbd>↓</kbd> navigieren</span>
         <span><kbd>↵</kbd> öffnen</span>
+        <span v-if="ai"><kbd>Shift</kbd><kbd>↵</kbd> nach Bedeutung</span>
       </p>
     </div>
     <p class="u-sr-only" aria-live="polite">{{ announcement }}</p>
@@ -73,13 +77,27 @@
       Du bist offline. Ick such nur in den Wörtern, die schon uff deinem Gerät sind.
     </p>
 
+    <SemanticSearch
+      v-if="ai"
+      ref="semantic"
+      :availability="ai"
+      :state="state"
+      :find="findCandidates"
+      :trend-ranks="ctx.trendRanks"
+      :wotd="wotd"
+      :active-slug="aiActive >= 0 ? aiHits[aiActive]?.slug : undefined"
+      @refocus="field?.focusAi()"
+    />
+
     <HitSkeleton v-if="skeleton" />
     <SearchEmpty
       v-else-if="result.total === 0"
       :q="shown.q"
       :by-filters="byFilters"
       :suggestions="result.suggestions"
+      :ai="!!ai"
       @reset="resetFilters"
+      @ai="startAi"
     />
     <template v-else>
       <AlphabetRegister v-if="!shown.q" :letters="letters" :current="currentLetter" @jump="jump" />
@@ -104,11 +122,12 @@
 
 <script setup lang="ts">
 import type { SearchResult } from "@lib/search/run";
+import type { Availability } from "@lib/search/semantic";
 import type { SearchEntry } from "@lib/search/types";
 import type { WordDb } from "@services/wordSearchDb";
 
 import { searchUrl, useSearchState } from "@composables/useSearchState";
-import { runSearch } from "@lib/search/run";
+import { runSearch, semanticCandidates } from "@lib/search/run";
 import { isFiltered, type SearchState } from "@lib/search/state";
 import { toParams } from "@lib/search/url";
 import { fetchSearchIndex } from "@services/searchIndex.ts";
@@ -123,7 +142,18 @@ import {
   watchDebounced,
 } from "@vueuse/core";
 import { navigate } from "astro:transitions/client";
-import { computed, nextTick, onMounted, ref, shallowRef, useTemplateRef, watch } from "vue";
+import {
+  computed,
+  defineAsyncComponent,
+  nextTick,
+  onMounted,
+  ref,
+  shallowRef,
+  useTemplateRef,
+  watch,
+} from "vue";
+
+import type SemanticBlock from "./SemanticSearch.vue";
 
 import ActiveFilters from "./ActiveFilters.vue";
 import AlphabetRegister from "./AlphabetRegister.vue";
@@ -134,6 +164,9 @@ import HitSkeleton from "./HitSkeleton.vue";
 import SearchEmpty from "./SearchEmpty.vue";
 import SearchField from "./SearchField.vue";
 import SortSelect from "./SortSelect.vue";
+
+// Loaded only when the Chrome AI is there: the Prompt API code stays out of this chunk.
+const SemanticSearch = defineAsyncComponent(() => import("./SemanticSearch.vue"));
 
 const props = defineProps<{
   state: SearchState;
@@ -286,17 +319,29 @@ const list = useTemplateRef("list");
 const activeIndex = ref(-1);
 const activeId = ref<string>();
 watch(activeIndex, (i) => {
-  if (i < 0) activeId.value = undefined;
+  if (i < 0 && aiActive.value < 0) activeId.value = undefined;
 });
 const hitIndices = computed(() => rows.value.flatMap((row, i) => (row.kind === "hit" ? [i] : [])));
 
+// SPEC §8.3: with a KI result ↑/↓ start in the KI block and run on into the keyword hits.
 async function move(delta: 1 | -1) {
   const hits = hitIndices.value;
-  if (!hits.length) return;
-  const at = hits.indexOf(activeIndex.value);
-  const next =
-    at < 0 ? (delta > 0 ? 0 : hits.length - 1) : (at + delta + hits.length) % hits.length;
-  const i = hits[next]!;
+  const ais = aiHits.value.length;
+  const total = ais + hits.length;
+  if (!total) return;
+  const at = aiActive.value >= 0 ? aiActive.value : hits.indexOf(activeIndex.value);
+  const current = aiActive.value >= 0 || at < 0 ? at : ais + at;
+  const next = current < 0 ? (delta > 0 ? 0 : total - 1) : (current + delta + total) % total;
+  if (next < ais) {
+    aiActive.value = next;
+    activeIndex.value = -1;
+    activeId.value = `ki-${aiHits.value[next]!.slug}`;
+    await nextTick();
+    document.getElementById(activeId.value)?.scrollIntoView({ block: "nearest" });
+    return;
+  }
+  aiActive.value = -1;
+  const i = hits[next - ais]!;
   activeIndex.value = i;
   // The row may not be rendered yet: scroll first, point aria-activedescendant at it once it exists.
   list.value?.scrollToIndex(i);
@@ -315,7 +360,18 @@ function onKeydown(e: KeyboardEvent) {
       void move(e.key === "ArrowDown" ? 1 : -1);
       return;
     case "Enter": {
-      if (e.shiftKey) return; // Task 11: Shift+Enter starts the meaning search
+      if (e.shiftKey) {
+        if (!ai.value) return;
+        e.preventDefault();
+        void startAi();
+        return;
+      }
+      const picked = aiHits.value[aiActive.value];
+      if (picked) {
+        e.preventDefault();
+        void navigate(`/wort/${picked.slug}`);
+        return;
+      }
       const row = rows.value[activeIndex.value];
       if (row?.kind !== "hit") {
         el.blur(); // no option: the list is live already, Enter just closes the keyboard
@@ -332,6 +388,31 @@ function onKeydown(e: KeyboardEvent) {
       } else el.blur();
       return;
   }
+}
+
+/* Meaning search (SPEC §8): only where Chrome's on-device model exists; the module is loaded after mount. */
+const ai = ref<Exclude<Availability, "unavailable">>();
+const semantic = useTemplateRef<InstanceType<typeof SemanticBlock>>("semantic");
+const aiHits = computed(() => semantic.value?.hits ?? []);
+const aiActive = ref(-1);
+watch(aiHits, () => {
+  if (aiActive.value >= 0) activeId.value = undefined;
+  aiActive.value = -1;
+});
+onMounted(async () => {
+  const { detectAvailability } = await import("@lib/search/semantic");
+  const a = await detectAvailability();
+  if (a !== "unavailable") ai.value = a;
+});
+const findCandidates = (s: SearchState) =>
+  index ? semanticCandidates(index.db, index.entries, s) : Promise.resolve([]);
+
+/** A trigger right after typing: the debounced query is set first, so the block searches what is typed. */
+async function startAi() {
+  const q = input.value.trim();
+  if (q !== state.value.q) set({ q });
+  await nextTick();
+  semantic.value?.start();
 }
 
 // With the index the list is live; without it (failed load) Enter sends the form to the server.

@@ -88,6 +88,46 @@
     }
   }
 
+  // SPEC §8.2 KI button: orange outline; text only from 1000px viewport (the container query below).
+  .ai {
+    display: inline-grid;
+    grid-auto-flow: column;
+    place-items: center;
+    gap: var(--space-2);
+    min-inline-size: var(--size-tap-target);
+    block-size: var(--size-tap-target);
+    margin-inline-end: var(--space-2);
+    padding: 0;
+    border: 1.5px solid var(--color-accent-active);
+    border-radius: var(--radius-sm);
+    background: none;
+    font: inherit;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    white-space: nowrap;
+    color: var(--color-text-strong);
+    cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+
+    svg {
+      inline-size: var(--_icon);
+      block-size: var(--_icon);
+      color: var(--color-accent-active);
+    }
+
+    span {
+      display: none;
+    }
+
+    &[aria-pressed="true"] {
+      background: var(--color-warm-card2);
+    }
+
+    @include butler-mx.hover {
+      background: var(--color-warm-card2);
+    }
+  }
+
   .slash {
     display: none;
     margin-inline-end: var(--space-4);
@@ -120,6 +160,17 @@
 
     .slash {
       display: block;
+    }
+  }
+
+  // 1000px viewport minus 2 × 24px gutter and the 2 × 2px rim (design doc „Tablet 808–999px“).
+  @container search-field (inline-size >= 59.25rem) {
+    .ai {
+      padding-inline: var(--space-3);
+
+      span {
+        display: inline;
+      }
     }
   }
 }

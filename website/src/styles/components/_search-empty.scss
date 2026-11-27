@@ -103,6 +103,12 @@
     cursor: pointer;
     transition: background-color var(--duration-fast) var(--ease-standard);
 
+    svg {
+      inline-size: var(--space-5);
+      block-size: var(--space-5);
+      color: var(--color-accent-active);
+    }
+
     @include butler-mx.hover {
       background: var(--color-warm-card2);
     }
