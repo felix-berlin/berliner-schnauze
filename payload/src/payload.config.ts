@@ -25,6 +25,7 @@ import { WordStats } from "./collections/WordStats";
 import { WordTypes } from "./collections/WordTypes";
 import { Affiliate } from "./globals/Affiliate";
 import { Anki } from "./globals/Anki";
+import { CacheStamp } from "./globals/CacheStamp";
 import { Company } from "./globals/Company";
 import { Home } from "./globals/Home";
 import { Navigation } from "./globals/Navigation";
@@ -75,7 +76,7 @@ export default buildConfig({
   ]
     .map(withSlugRedirects)
     .map(withIndexNow),
-  globals: [Navigation, Affiliate, Company, Home, Anki, WordPage],
+  globals: [Navigation, Affiliate, Company, Home, Anki, WordPage, CacheStamp],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,

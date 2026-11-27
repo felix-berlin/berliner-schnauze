@@ -21,7 +21,15 @@ const lockedCollections = [
   "bon-games",
   "bon-players",
 ] as const;
-const lockedGlobals = ["navigation", "affiliate", "company", "home", "anki", "word-page"] as const;
+const lockedGlobals = [
+  "navigation",
+  "affiliate",
+  "company",
+  "home",
+  "anki",
+  "word-page",
+  "cache-stamp",
+] as const;
 
 const png = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
