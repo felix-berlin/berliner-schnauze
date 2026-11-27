@@ -5,7 +5,7 @@ type CacheableResponse = { headers: Headers; status?: number };
 
 /**
  * Cache policy for on-demand responses. An HTML page: a browser may reuse it for 30 s (`PAGE_CACHE_CONTROL`), never
- * stale. Anything else (APIs, sitemap, text files): `max-age=0` and the `sMaxAge`/`stale-while-revalidate` form as
+ * stale. A response declared as anything else (APIs, sitemap, text files): `max-age=0` and the `sMaxAge`/`stale-while-revalidate` form as
  * before. Errors are never cached; a header a page set itself wins.
  */
 export const setPageCache = <R extends CacheableResponse>(
@@ -13,7 +13,9 @@ export const setPageCache = <R extends CacheableResponse>(
   { sMaxAge = 300 }: { sMaxAge?: number } = {},
 ): R => {
   if (response.headers.has("Cache-Control")) return response;
-  const isHtml = response.headers.get("Content-Type")?.startsWith("text/html");
+  // Only a declared non-HTML type gets the old form: a page whose type is not set yet must never end up with swr.
+  const type = response.headers.get("Content-Type");
+  const isHtml = !type || type.startsWith("text/html");
   response.headers.set(
     "Cache-Control",
     (response.status ?? 200) >= 400

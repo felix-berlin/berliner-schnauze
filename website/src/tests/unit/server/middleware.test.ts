@@ -34,7 +34,7 @@ describe("middleware", () => {
     const res = await run(notFound, "/wort/alt/");
     expect(res.status).toBe(301);
     expect(res.headers.get("Location")).toBe("/wort/neu");
-    expect(res.headers.get("Cache-Control")).toContain("s-maxage");
+    expect(res.headers.get("Cache-Control")).toBe("public, max-age=30");
   });
 
   it("keeps the 404 instead of redirecting a path to itself (no loop)", async () => {

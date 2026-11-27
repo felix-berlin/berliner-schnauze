@@ -1,6 +1,6 @@
 import type { Home } from "payload-app";
 
-import { ttl } from "@services/cache.ts";
+import { ttlBy } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { fetchAllPosts, type SitePost } from "@services/payload/posts.ts";
 import { fetchHomeGlobal } from "@services/payload/site.ts";
@@ -309,11 +309,8 @@ const load = async (): Promise<HomeData> => {
   };
 };
 
-// The picks are day-keyed: a new Berlin day starts a fresh cache, so no request gets yesterday's word.
-let cached: { day: string; get: () => Promise<HomeData> } | undefined;
+// The picks are day-keyed: a new Berlin day loads afresh, so no request gets yesterday's word. At most two days are
+// kept, so old days do not pile up.
+const byDay = ttlBy(60_000, 2, (_day: string) => load());
 
-export const fetchHome = (): Promise<HomeData> => {
-  const day = berlinDayKey(new Date());
-  if (cached?.day !== day) cached = { day, get: ttl(60_000, load) };
-  return cached.get();
-};
+export const fetchHome = (): Promise<HomeData> => byDay(berlinDayKey(new Date()));
