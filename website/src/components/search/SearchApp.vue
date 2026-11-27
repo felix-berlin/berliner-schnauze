@@ -13,7 +13,7 @@
         ref="field"
         v-model="input"
         :active-id="activeId"
-        :expanded="rows.length > 0"
+        :expanded="!skeleton && rows.length > 0"
         @keydown="onKeydown"
       />
       <input v-for="[key, value] in kept" :key="key" type="hidden" :name="key" :value="value" />
@@ -98,6 +98,7 @@ import {
   useTimeoutFn,
   watchDebounced,
 } from "@vueuse/core";
+import { navigate } from "astro:transitions/client";
 import { computed, nextTick, onMounted, ref, shallowRef, useTemplateRef, watch } from "vue";
 
 import AlphabetRegister from "./AlphabetRegister.vue";
@@ -159,6 +160,7 @@ watch(
 
 /* Index: loaded once per page; until then the server rows stand. */
 let index: { db: WordDb; entries: SearchEntry[] } | undefined;
+const ready = ref(false); // until the index is there the server rows stand, no skeleton
 const loadError = ref(false);
 const online = useOnline();
 
@@ -167,6 +169,7 @@ async function load() {
   try {
     const [entries, { db }] = await Promise.all([fetchSearchIndex(), getWordDb()]);
     index = { db, entries: entries as SearchEntry[] };
+    ready.value = true;
     void run();
   } catch (error) {
     if (navigator.onLine) reportError(error); // offline is expected, not a bug
@@ -185,12 +188,18 @@ async function run() {
   if (!index) return;
   const id = ++runId;
   const s = state.value;
-  const next = await runSearch(index.db, index.entries, s, ctx);
-  if (id !== runId) return;
-  result.value = next;
-  shown.value = s;
+  try {
+    const next = await runSearch(index.db, index.entries, s, ctx);
+    if (id !== runId) return;
+    result.value = next;
+    shown.value = s;
+    activeIndex.value = -1;
+  } catch (error) {
+    if (id !== runId) return;
+    reportError(error);
+    loadError.value = true; // shows the error strip; its retry runs the search again
+  }
   pending.value = false;
-  activeIndex.value = -1;
 }
 
 watch(state, () => {
@@ -210,7 +219,7 @@ watch(pending, (p) => {
   if (p) startSlow();
   else stopSlow();
 });
-const skeleton = computed(() => slow.value && !loadError.value);
+const skeleton = computed(() => slow.value && ready.value && !loadError.value);
 
 const announcement = refThrottled(
   computed(() => {
@@ -257,9 +266,12 @@ function onKeydown(e: KeyboardEvent) {
     case "Enter": {
       if (e.shiftKey) return; // Task 11: Shift+Enter starts the meaning search
       const row = rows.value[activeIndex.value];
-      if (row?.kind !== "hit") return;
+      if (row?.kind !== "hit") {
+        el.blur(); // no option: the list is live already, Enter just closes the keyboard
+        return;
+      }
       e.preventDefault();
-      location.assign(`/wort/${row.hit.entry.slug}`);
+      void navigate(`/wort/${row.hit.entry.slug}`);
       return;
     }
     case "Escape":

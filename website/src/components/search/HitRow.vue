@@ -9,7 +9,8 @@
     <div class="inner">
       <p class="head">
         <span class="lemma">
-          <a class="word" :href="href"
+          <!-- No tab stop inside the option: keyboard opens via the active option + Enter (SPEC §12). -->
+          <a class="word" :href="href" tabindex="-1"
             ><template v-for="(p, i) in highlightParts(word, q)" :key="i"
               ><mark v-if="p.mark">{{ p.text }}</mark
               ><template v-else>{{ p.text }}</template></template
@@ -46,10 +47,14 @@
           <b>{{ percent }} %</b>
         </span>
         <span v-else class="few">zu wenig Stimmen</span>
+        <!-- Pointer shortcut only; the word page keeps the accessible player.
+             TODO(suche): APG combobox with grid popup would make play keyboard-reachable. -->
         <button
           v-if="entry.audio"
           type="button"
           class="play"
+          tabindex="-1"
+          aria-hidden="true"
           :aria-label="`${word} anhören`"
           :aria-pressed="playing ? 'true' : 'false'"
           @click.stop="toggleVoice(voiceKey, entry.audio)"
@@ -70,6 +75,7 @@ import type { RankedHit } from "@lib/search/types";
 import { isVoicePlaying, newVoiceKey, toggleVoice } from "@composables/useVoicePlayer.ts";
 import { highlightParts } from "@lib/search/highlight";
 import { usageFor } from "@lib/search/usage";
+import { navigate } from "astro:transitions/client";
 import { computed, defineAsyncComponent } from "vue";
 
 /** SPEC §6.1: the top 10 of the trend list get the badge. */
@@ -111,7 +117,7 @@ const playing = computed(() => isVoicePlaying(voiceKey));
 // The whole row opens the word (SPEC §6.1); the link and the play button handle their own clicks.
 const open = (e: MouseEvent) => {
   if (e.target instanceof Element && e.target.closest("a, button")) return;
-  location.assign(href.value);
+  void navigate(href.value);
 };
 </script>
 

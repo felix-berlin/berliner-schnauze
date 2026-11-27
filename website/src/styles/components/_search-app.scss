@@ -95,7 +95,7 @@
   .offline {
     margin: 0;
     padding: var(--space-3) var(--space-4);
-    border-inline-start: 3px solid var(--color-status-danger);
+    border: 1.5px solid var(--color-status-danger);
     border-radius: var(--radius-sm);
     background: var(--color-warm-sheet);
     box-shadow: var(--shadow-paper-lift);
@@ -103,7 +103,7 @@
   }
 
   .offline {
-    border-inline-start-color: var(--color-warm-line);
+    border-color: var(--color-warm-line);
   }
 
   .error {

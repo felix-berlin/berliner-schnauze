@@ -9,6 +9,7 @@ import { entry, meta, result, state } from "./fixtures";
 const mocks = vi.hoisted(() => ({
   fetchSearchIndex: vi.fn(),
   getWordDb: vi.fn(),
+  navigate: vi.fn(),
   runSearch: vi.fn(),
   scrollToIndex: vi.fn(),
 }));
@@ -24,6 +25,8 @@ vi.mock("virtua/vue", () => ({
 vi.mock("@services/wordSearchDb", () => ({ FULL_TEXT: {}, getWordDb: mocks.getWordDb }));
 vi.mock("@services/searchIndex.ts", () => ({ fetchSearchIndex: mocks.fetchSearchIndex }));
 vi.mock("@lib/search/run", () => ({ runSearch: mocks.runSearch }));
+vi.mock("astro:transitions/client", () => ({ navigate: mocks.navigate }));
+vi.mock("@utils/reportError.ts", () => ({ reportError: vi.fn() }));
 
 const deferred = <T>() => {
   let resolve!: (v: T) => void;
@@ -40,6 +43,10 @@ const mountApp = (props: Partial<Props> = {}) =>
   });
 
 const field = (w: ReturnType<typeof mountApp>) => w.get('input[role="combobox"]');
+const ready = () => {
+  mocks.getWordDb.mockResolvedValue({ db: {}, size: 1 });
+  mocks.fetchSearchIndex.mockResolvedValue([]);
+};
 const metaLine = (w: ReturnType<typeof mountApp>) =>
   w.get("[data-meta]").text().replace(/\s+/g, " ");
 
@@ -211,5 +218,52 @@ describe("SearchApp", () => {
       "Aalquappe",
       "Aalfang",
     ]);
+  });
+  it("no skeleton while the index is cold: the server rows stand", async () => {
+    vi.useFakeTimers();
+    const w = mountApp();
+    await field(w).setValue("quark");
+    await vi.advanceTimersByTimeAsync(400);
+    expect(w.text()).not.toContain("Suche läuft");
+    expect(w.text()).toContain("Aalwurm");
+  });
+
+  it("a failing search run ends the wait and shows the alert strip", async () => {
+    ready();
+    mocks.runSearch
+      .mockResolvedValueOnce(result(["Aalwurm"]))
+      .mockRejectedValueOnce(new Error("x"));
+    const w = mountApp();
+    await flushPromises();
+    await field(w).setValue("quark");
+    await new Promise((r) => setTimeout(r, 200));
+    await flushPromises();
+    expect(w.find('[role="alert"]').exists()).toBe(true);
+    expect(metaLine(w)).not.toContain("Suche läuft");
+  });
+
+  it("enter opens the active option through the router, without one it blurs", async () => {
+    const w = mountApp();
+    const input = field(w);
+    (input.element as HTMLInputElement).focus();
+    await input.trigger("keydown", { key: "Enter" });
+    expect(document.activeElement).not.toBe(input.element);
+    expect(mocks.navigate).not.toHaveBeenCalled();
+
+    await input.trigger("keydown", { key: "ArrowDown" });
+    await flushPromises();
+    await input.trigger("keydown", { key: "Enter" });
+    expect(mocks.navigate).toHaveBeenCalledWith("/wort/aalwurm");
+  });
+
+  it("a filter change pushes a router-shaped history entry (Back works after leaving)", async () => {
+    history.replaceState({ index: 3, scrollX: 0, scrollY: 120 }, "", "/wort?wortart=verb&q=aal");
+    const w = mountApp({
+      result: result([], { total: 0, unfiltered: 3 }),
+      state: state({ letter: "Z", pos: ["Verb"], q: "aal", syllables: 2 }),
+    });
+    const push = vi.spyOn(history, "pushState");
+    await w.get(".c-search-empty button").trigger("click");
+    expect(push).toHaveBeenCalledWith({ index: 4, scrollX: 0, scrollY: 0 }, "", "/wort?q=aal");
   });
 });

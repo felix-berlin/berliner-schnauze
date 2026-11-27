@@ -26,9 +26,12 @@ export function useSearchState(
   const write = (push: boolean) => {
     const url = searchUrl(state.value);
     if (url === location.pathname + location.search) return;
-    // Pushed entries carry no state, so Astro's router ignores popstate to them; replace keeps its state (scroll).
-    if (push) history.pushState(null, "", url);
-    else history.replaceState(history.state, "", url);
+    // Router-shaped state: Astro's ClientRouter ignores popstate to a null-state entry, so Back from a
+    // word page would change the url but keep the word on screen. Replace keeps its state (scroll).
+    if (push) {
+      const { index = 0, ...rest } = history.state ?? {};
+      history.pushState({ ...rest, index: index + 1, scrollX: 0, scrollY: 0 }, "", url);
+    } else history.replaceState(history.state, "", url);
   };
   const replaceSoon = useDebounceFn(() => write(false), 150);
 
@@ -39,7 +42,11 @@ export function useSearchState(
   };
 
   /** „Alle Filter zurücksetzen“: drops every filter, keeps the query and the sort. */
-  const reset = () => set({ ...EMPTY_STATE, q: state.value.q, sort: state.value.sort });
+  const reset = () => {
+    // Replace, not merge: optional filters (letter, area, syllables …) are absent from EMPTY_STATE.
+    state.value = { ...EMPTY_STATE, q: state.value.q, sort: state.value.sort };
+    write(true);
+  };
 
   useEventListener("popstate", () => {
     state.value = parseState(new URLSearchParams(location.search), known);
