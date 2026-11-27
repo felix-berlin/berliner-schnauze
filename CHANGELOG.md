@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.2.0](https://github.com/felix-berlin/berliner-schnauze/compare/v5.1.0...v5.2.0) (2026-11-27)
+
+### Bug Fixes
+
+* **word:** accepting suggestions in bulk is refused and a toggled status adds no duplicate ([01c44e5](https://github.com/felix-berlin/berliner-schnauze/commit/01c44e5dbd86b6d6ff778a0eb1d4883229cdbfda))
+* **word:** keep example credits when an MCP update rewrites the examples ([c3bea6f](https://github.com/felix-berlin/berliner-schnauze/commit/c3bea6fd5df8223f8c71970a448a039e5e6ef7d9))
+* **word:** own submission chip disappears once the text is public ([a2d4aa2](https://github.com/felix-berlin/berliner-schnauze/commit/a2d4aa2198eb1a747c8a351a98adc6b88c2ceaa5))
+* **word:** review fixes for suggestion adoption ([61e9f1d](https://github.com/felix-berlin/berliner-schnauze/commit/61e9f1d3f3154ac1af4809af08fba8d5e1658ce2))
+
+### Features
+
+* **word:** accepting a new word suggestion publishes the word ([924658e](https://github.com/felix-berlin/berliner-schnauze/commit/924658e2474ca866d954331793f446fcbd4aeeff))
+* **word:** accepting an example, fact or relation writes it into the word ([d90661f](https://github.com/felix-berlin/berliner-schnauze/commit/d90661faf5a01702b99ec64e7d740704ab7f23d4))
+* **word:** build word rows from suggestions ([634bfd4](https://github.com/felix-berlin/berliner-schnauze/commit/634bfd4427dbd31d8151667e126edb32fc9e054f))
+* **word:** credit fields on word examples ([230e086](https://github.com/felix-berlin/berliner-schnauze/commit/230e0860a740b34aa334ab34ae06e01eb18e1587))
+* **word:** show the contributor under an example ([a03b1e9](https://github.com/felix-berlin/berliner-schnauze/commit/a03b1e93dd0063098069a482521468b12abfccc8))
+
 # [5.1.0](https://github.com/felix-berlin/berliner-schnauze/compare/v5.0.4...v5.1.0) (2026-11-27)
 
 ### Bug Fixes
