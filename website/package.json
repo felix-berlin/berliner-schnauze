@@ -71,7 +71,7 @@
     "@axe-core/playwright": "^4.14.0",
     "@codecov/astro-plugin": "2.0.1",
     "@iconify-json/mdi": "1.2.3",
-    "@iconify-json/simple-icons": "1.2.103",
+    "@iconify-json/simple-icons": "1.2.104",
     "@infisical/cli": "0.45.12",
     "@nanostores/logger": "1.1.0",
     "@playwright/test": "1.65.1",
