@@ -1,4 +1,4 @@
-import type { SearchState } from "./state";
+import type { FilterGroup, SearchState } from "./state";
 import type { AgeGroup, ContentKey, SortKey } from "./types";
 
 type Options<T> = readonly (readonly [T, string])[];
@@ -46,6 +46,33 @@ export const SORTS: Options<SortKey> = [
   ["beliebt", "Gerade beliebt"],
   ["neu", "Neu dabei"],
   ["jesagt", "Am meisten jesagt"],
+];
+
+/** Filter groups in chip order (SPEC §7.1) with popover copy (§7.2); the bar and the mobile sheet share it. */
+export const FILTER_GROUPS: { group: FilterGroup; title: string; intro: string }[] = [
+  {
+    group: "buchstabe",
+    intro: "Springt zu allen Wörtern mit diesem Anfangsbuchstaben.",
+    title: "Buchstabe",
+  },
+  {
+    group: "wortart",
+    intro: "Mehrere möglich. Redewendungen haben eigene Wortart.",
+    title: "Wortart",
+  },
+  { group: "thema", intro: "Mehrere möglich.", title: "Thema" },
+  {
+    group: "gebrauch",
+    intro: "Aus der Umfrage „Sagste det noch?“. Zählt nur Wörter mit mindestens 10 Stimmen.",
+    title: "Gebrauch",
+  },
+  {
+    group: "inhalt",
+    intro:
+      "Zeigt nur Wörter, die dit schon haben. „Hier fehlt noch wat“ zeigt Wörter zum Mitmachen.",
+    title: "Inhalt",
+  },
+  { group: "wortform", intro: "Für Rätsel, Reime und Wortspiele.", title: "Wortform" },
 ];
 
 /** Label of a value; for an active pill without its explanation in brackets („Oft (ab 50 %)“ → „Oft“). */

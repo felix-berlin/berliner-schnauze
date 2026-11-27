@@ -292,6 +292,18 @@ describe("SearchApp", () => {
     expect(document.activeElement).toBe(w.get("button[popovertarget]").element);
   });
 
+  it("below 808px (bar hidden, no focus) reset focuses the mobile filter button", async () => {
+    history.replaceState(null, "", "/wort?q=aal&wortart=verb");
+    const w = mountApp({ state: state({ pos: ["Verb"], q: "aal" }) });
+    // Stands in for display: none: the first chip refuses focus.
+    (w.get("button[popovertarget]").element as HTMLButtonElement).disabled = true;
+    const reset = w.findAll("button").find((b) => b.text() === "Alles zurücksetzen")!;
+    (reset.element as HTMLElement).focus();
+    await reset.trigger("click");
+    await flushPromises();
+    expect(document.activeElement).toBe(w.get('button[aria-haspopup="dialog"]').element);
+  });
+
   it("a filter change pushes a router-shaped history entry (Back works after leaving)", async () => {
     history.replaceState({ index: 3, scrollX: 0, scrollY: 120 }, "", "/wort?wortart=verb&q=aal");
     const w = mountApp({

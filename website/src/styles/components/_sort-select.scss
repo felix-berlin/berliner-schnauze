@@ -1,6 +1,7 @@
 @use "@styles/mixins" as mx;
 
 // Sort pill (docs/design/suche-v1/SPEC.md §6.3): .icon, .text („Sortieren“) and a native select drawn as a pill.
+// Public: --sort-select-height (mobile row: 44px, SPEC §3).
 @include mx.component("sort-select") {
   :scope {
     --_height: 2.5rem; // SPEC §6.3 pill 40px
@@ -15,7 +16,7 @@
   }
 
   select {
-    min-block-size: var(--_height);
+    min-block-size: var(--sort-select-height, var(--_height));
     padding-inline: var(--space-4) var(--space-8);
     border: 1px solid var(--color-warm-line);
     border-radius: var(--radius-pill);

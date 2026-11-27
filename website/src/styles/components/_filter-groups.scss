@@ -20,6 +20,7 @@
   }
 
   fieldset {
+    min-inline-size: 0; // default min-content lets the Bezirk select overflow a narrow sheet
     margin: 0;
     padding: 0;
     border: 0;
@@ -171,6 +172,7 @@
   }
 
   .field {
+    box-sizing: border-box; // selects default to content-box: 100% plus padding would overflow
     inline-size: 100%;
     min-block-size: var(--size-tap-target);
     padding-inline: var(--space-3);

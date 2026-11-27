@@ -1,0 +1,272 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Mobile filter button + bottom sheet (docs/design/suche-v1/SPEC.md §7.5, §11; design doc „Filter-Sheet“): .open
+// (button with .count pill) opens a native modal <dialog> .sheet: .grip (drag handle), .head (.title + .close),
+// .body (accordion of c-filter-groups + .switch „Nur Berolinismen“), .foot (.reset text link + .show primary).
+@include mx.component("filter-sheet") {
+  :scope {
+    --_count: 1.25rem; // SPEC §7.5 count pill 20px
+    --_text: 0.9375rem; // mock .s1__fbtn 15px
+    --_title: 1.375rem; // mock sheet title 22px
+    --_row: 3.5rem; // SPEC §7.5 accordion row 56px
+    --_show: 3rem; // SPEC §7.5 primary 48px
+    --_box: 1.25rem; // SPEC §7.2 box 20px
+    --_grip: 2.5rem; // SPEC §7.5 grip 40 × 4px
+    --_grip-line: 2px; // half of the 4px grip: drawn as a border so forced colors keeps it
+    --_radius: 0.75rem; // SPEC §7.5 top radius 12px, no radius token above 4px
+    --_slide: 250ms; // SPEC §11 sheet 250ms
+    --_rise: 30%; // SPEC §11 translateY(30%) → 0
+
+    // stylelint-disable-next-line function-disallowed-list -- colour inventory: SPEC §7.5 scrim rgb(0 0 0/45%), one-off like c-modal's backdrop
+    --_scrim: rgb(0 0 0 / 45%);
+  }
+
+  .open {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-block-size: var(--size-tap-target);
+    padding-inline: var(--space-3); // mock 14px, nearer step
+    border: 1px solid var(--color-warm-line);
+    border-radius: var(--radius-sm);
+    background: var(--color-warm-sheet);
+    font: inherit;
+    font-size: var(--_text);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+    cursor: pointer;
+  }
+
+  .icon {
+    inline-size: var(--font-size-base);
+    block-size: var(--font-size-base);
+  }
+
+  .count {
+    display: inline-grid;
+    place-items: center;
+    min-inline-size: var(--_count);
+    block-size: var(--_count);
+    padding-inline: var(--space-1);
+    border-radius: var(--radius-pill);
+    background: var(--color-accent-solid);
+    font-size: var(--font-size-label);
+    color: var(--color-text-on-accent);
+  }
+
+  // The modal sheet. Top layer: page inert, Esc/back gesture close, focus returns to .open (all native).
+  .sheet {
+    inset: auto 0 0;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    max-block-size: 86dvb;
+    margin: 0;
+    padding: 0;
+    border: 1px solid transparent; // forced colors draws this edge
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+    border-start-start-radius: var(--_radius);
+    border-start-end-radius: var(--_radius);
+    background: var(--color-warm-sheet);
+    color: var(--color-text-body);
+    overflow: hidden;
+    opacity: 0;
+    transition-property: opacity, translate, display, overlay;
+    transition-duration: var(--_slide);
+    transition-timing-function: var(--ease-standard);
+    transition-behavior: allow-discrete;
+
+    @include butler-mx.feature("motion") {
+      translate: 0 var(--_rise);
+    }
+
+    &::backdrop {
+      background: var(--_scrim);
+      opacity: 0;
+      transition-property: opacity, display, overlay;
+      transition-duration: var(--_slide);
+      transition-behavior: allow-discrete;
+    }
+
+    &[closedby="any"]::backdrop {
+      cursor: pointer;
+    }
+
+    &[open] {
+      display: flex;
+      flex-direction: column;
+      opacity: 1;
+
+      @include butler-mx.feature("motion") {
+        translate: 0;
+      }
+
+      &::backdrop {
+        opacity: 1;
+      }
+
+      @starting-style {
+        opacity: 0;
+
+        &::backdrop {
+          opacity: 0;
+        }
+      }
+
+      @include butler-mx.feature("motion") {
+        @starting-style {
+          translate: 0 var(--_rise);
+        }
+      }
+    }
+  }
+
+  // Scroll lock without touching html/body (guide prevent-page-scroll-under-modal-dialog).
+  .sheet:modal {
+    overscroll-behavior: contain;
+
+    &::backdrop {
+      overflow: hidden;
+      overscroll-behavior: contain;
+    }
+  }
+
+  .grip {
+    flex: none;
+    display: grid;
+    place-items: center;
+    padding-block: var(--space-2) var(--space-1);
+    touch-action: none;
+    user-select: none;
+    cursor: grab;
+
+    &::before {
+      content: "";
+      inline-size: var(--_grip);
+      border-block: var(--_grip-line) solid var(--color-warm-card3);
+      border-radius: var(--radius-pill);
+    }
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  .head {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-2) var(--space-2) var(--space-2) var(--space-5);
+    border-block-end: 1px solid var(--color-warm-line);
+  }
+
+  .title {
+    margin: 0;
+    font-family: var(--font-condensed);
+    font-size: var(--_title);
+    // TODO(suche): mock says Fira 600; there is no 600 weight token, so 700 like the popover title.
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+
+    &:focus {
+      outline: none; // programmatic focus target only (tabindex="-1"), never reached by Tab
+    }
+  }
+
+  .close {
+    display: grid;
+    place-items: center;
+    inline-size: var(--size-tap-target);
+    block-size: var(--size-tap-target);
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: none;
+    color: var(--color-text-strong);
+    cursor: pointer;
+  }
+
+  .body {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    padding-inline: var(--space-5);
+    overflow: auto;
+    overscroll-behavior: contain;
+
+    // Accordion knobs (c-accordion public properties): 56px rows, bold group names.
+    --accordion-trigger-padding-block: var(--space-4);
+    --accordion-trigger-font-weight: var(--font-weight-bold);
+  }
+
+  .switch {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    inline-size: 100%;
+    min-block-size: var(--_row);
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-weight: var(--font-weight-bold);
+    text-align: start;
+    color: var(--color-text-strong);
+    cursor: pointer;
+  }
+
+  .box {
+    display: grid;
+    place-items: center;
+    inline-size: var(--_box);
+    block-size: var(--_box);
+    border: 1.5px solid var(--color-border-check);
+    border-radius: var(--radius-xs);
+    color: transparent;
+
+    svg {
+      inline-size: 80%;
+      block-size: 80%;
+    }
+  }
+
+  .switch[aria-checked="true"] .box {
+    border-color: var(--color-accent-solid);
+    background: var(--color-accent-solid);
+    color: var(--color-text-on-accent);
+  }
+
+  .foot {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-5) var(--space-5);
+    border-block-start: 1px solid var(--color-warm-line);
+  }
+
+  .reset {
+    min-block-size: var(--size-tap-target);
+    padding-inline: var(--space-1);
+    border: 0;
+    background: none;
+    font: inherit;
+    color: var(--color-text-strong);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+
+  .show {
+    flex: 1;
+    min-block-size: var(--_show);
+    padding-inline: var(--space-4);
+    border: 1px solid transparent; // visible in forced colors
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-solid);
+    font: inherit;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-on-accent);
+    cursor: pointer;
+  }
+}

@@ -51,6 +51,7 @@
 <script setup lang="ts">
 import type { facets as facetsOf } from "@lib/search/facets";
 
+import { FILTER_GROUPS } from "@lib/search/labels";
 import {
   groupFilterCount,
   showsLetterChip,
@@ -75,36 +76,9 @@ const emit = defineEmits<{ update: [patch: Partial<SearchState>] }>();
 const IconCheck = defineAsyncComponent(() => import("virtual:icons/lucide/check"));
 const IconChevron = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-down"));
 
-// SPEC §7.1 order and §7.2 copy.
-const GROUPS: { group: FilterGroup; title: string; intro: string }[] = [
-  {
-    group: "buchstabe",
-    intro: "Springt zu allen Wörtern mit diesem Anfangsbuchstaben.",
-    title: "Buchstabe",
-  },
-  {
-    group: "wortart",
-    intro: "Mehrere möglich. Redewendungen haben eigene Wortart.",
-    title: "Wortart",
-  },
-  { group: "thema", intro: "Mehrere möglich.", title: "Thema" },
-  {
-    group: "gebrauch",
-    intro: "Aus der Umfrage „Sagste det noch?“. Zählt nur Wörter mit mindestens 10 Stimmen.",
-    title: "Gebrauch",
-  },
-  {
-    group: "inhalt",
-    intro:
-      "Zeigt nur Wörter, die dit schon haben. „Hier fehlt noch wat“ zeigt Wörter zum Mitmachen.",
-    title: "Inhalt",
-  },
-  { group: "wortform", intro: "Für Rätsel, Reime und Wortspiele.", title: "Wortform" },
-];
-
 // SPEC §6.4: in the start state the register replaces the „Buchstabe“ chip.
 const chips = computed(() =>
-  GROUPS.filter((g) => g.group !== "buchstabe" || showsLetterChip(props.state)),
+  FILTER_GROUPS.filter((g) => g.group !== "buchstabe" || showsLetterChip(props.state)),
 );
 
 // From 4 active chips (count pills, bold labels) the „Sortieren“ text no longer fits beside them at 1160px.

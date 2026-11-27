@@ -39,7 +39,19 @@
     </div>
     <p class="u-sr-only" aria-live="polite">{{ announcement }}</p>
 
-    <!-- Task 10: filter button + sheet (mobile) next to the desktop bar. -->
+    <!-- Mobile (< 808px): filter button + sheet and the sort pill; desktop: the filter bar. -->
+    <div class="mobile">
+      <FilterSheet
+        ref="sheet"
+        :state="state"
+        :facets="result.facets"
+        :total="result.total"
+        :meta="meta"
+        @update="set"
+        @reset="reset"
+      />
+      <SortSelect :state="state" compact @update="set" />
+    </div>
     <div class="filters">
       <FilterBar
         ref="bar"
@@ -115,10 +127,12 @@ import { computed, nextTick, onMounted, ref, shallowRef, useTemplateRef, watch }
 import ActiveFilters from "./ActiveFilters.vue";
 import AlphabetRegister from "./AlphabetRegister.vue";
 import FilterBar from "./FilterBar.vue";
+import FilterSheet from "./FilterSheet.vue";
 import HitList from "./HitList.vue";
 import HitSkeleton from "./HitSkeleton.vue";
 import SearchEmpty from "./SearchEmpty.vue";
 import SearchField from "./SearchField.vue";
+import SortSelect from "./SortSelect.vue";
 
 const props = defineProps<{
   state: SearchState;
@@ -174,16 +188,23 @@ watch(
 /* Clearing the last filter removes the control that had focus (the active-filter group, later the empty state):
    focus goes to the first filter chip instead of falling to <body>. */
 const bar = useTemplateRef("bar");
+const sheet = useTemplateRef("sheet");
+function focusFilters() {
+  const before = document.activeElement;
+  bar.value?.focus();
+  // Below 808px the bar is display: none and takes no focus: the mobile filter button does.
+  if (document.activeElement === before) sheet.value?.focus();
+}
 function resetFilters() {
   reset();
-  bar.value?.focus();
+  focusFilters();
 }
 watch(
   () => isFiltered(state.value),
   async (now, before) => {
     if (!before || now) return;
     await nextTick();
-    if (document.activeElement === document.body) bar.value?.focus();
+    if (document.activeElement === document.body) focusFilters();
   },
 );
 
