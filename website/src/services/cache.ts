@@ -68,7 +68,7 @@ export const ttl = <T>(
 ): (() => Promise<T>) => {
   if (NO_CACHE) return load;
   const { get, reset } = memo(ms, load);
-  // `external`: not CMS data (visitor aggregates, GitHub, Polar, Wakapi), so a CMS edit must not reload it.
+  // `external`: visitor aggregates and third-party data (home stats, GitHub, Polar, Wakapi): a CMS edit must not reload them.
   if (!external) resets.add(reset);
   return get;
 };

@@ -50,13 +50,16 @@ const factory: CacheProviderFactory = (config) => {
   return {
     ...memory,
     onRequest: async (context, next) => {
-      let timer: ReturnType<typeof setTimeout> | undefined;
-      // poll() does not reject by contract; a broken check must still never take the page down.
-      await Promise.race([
-        poll().catch(() => {}),
-        new Promise((resolve) => (timer = setTimeout(resolve, CHECK_WAIT_MS))),
-      ]);
-      clearTimeout(timer);
+      const check = poll();
+      if (check) {
+        let timer: ReturnType<typeof setTimeout> | undefined;
+        // poll() does not reject by contract; a broken check must still never take the page down.
+        await Promise.race([
+          check.catch(() => {}),
+          new Promise((resolve) => (timer = setTimeout(resolve, CHECK_WAIT_MS))),
+        ]);
+        clearTimeout(timer);
+      }
       return context.request.headers.get("cookie")?.includes(`${PREVIEW_COOKIE}=`) ||
         (context.url.pathname === "/" && context.url.searchParams.has("q"))
         ? next()

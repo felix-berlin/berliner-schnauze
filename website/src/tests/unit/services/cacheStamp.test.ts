@@ -150,12 +150,12 @@ describe("createStampPoller", () => {
     expect(order).toEqual(["cleared", "served"]);
   });
 
-  it("returns an already resolved promise when throttled or when a read is pending", async () => {
+  it("returns undefined (nothing to wait for) when throttled or when a read is pending", async () => {
     let finish!: (value: string) => void;
     const read = vi.fn(() => new Promise<string>((resolve) => (finish = resolve)));
     const poll = createStampPoller({ now: () => 0, onChange: vi.fn(), read });
     void poll(); // starts the read, which stays pending
-    await expect(poll()).resolves.toBeUndefined();
+    expect(poll()).toBeUndefined();
     finish("a");
   });
 
