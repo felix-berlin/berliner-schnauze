@@ -75,4 +75,4 @@ async function loadStats(): Promise<WakapiStats> {
 
 // The footer renders on every page: refresh hourly instead of re-reading and re-parsing the cache file
 // per request. The file cache still spans restarts.
-export const getWakapiStats = ttl(60 * 60 * 1000, loadStats);
+export const getWakapiStats = ttl(60 * 60 * 1000, loadStats, { external: true });

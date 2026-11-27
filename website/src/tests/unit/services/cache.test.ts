@@ -87,6 +87,15 @@ describe("clearAllMemos", () => {
     expect(await get("y")).toBe("y:4");
   });
 
+  it("leaves a ttl marked external alone (it does not hold CMS data)", async () => {
+    const load = vi.fn().mockResolvedValueOnce("a").mockResolvedValueOnce("b");
+    const get = ttl(1000, load, { external: true });
+    expect(await get()).toBe("a");
+    clearAllMemos();
+    expect(await get()).toBe("a");
+    expect(load).toHaveBeenCalledOnce();
+  });
+
   it("is not undone by a refresh that was already running", async () => {
     let finishOld!: (value: string) => void;
     const load = vi

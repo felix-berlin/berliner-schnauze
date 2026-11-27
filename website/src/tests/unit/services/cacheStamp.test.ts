@@ -158,4 +158,73 @@ describe("createStampPoller", () => {
     await expect(poll()).resolves.toBeUndefined();
     finish("a");
   });
+
+  describe("a check that hangs or keeps failing", () => {
+    it("gives up on a read that never settles, warns, and checks again later", async () => {
+      vi.useFakeTimers();
+      let time = 0;
+      const read = vi.fn(() => new Promise<string>(() => {}));
+      const warn = vi.fn();
+      const poll = createStampPoller({ onChange: vi.fn(), now: () => time, read, warn });
+      const first = poll();
+      await vi.advanceTimersByTimeAsync(10_000);
+      await first;
+      expect(warn).toHaveBeenCalledOnce();
+      expect(warn.mock.calls[0]![0]).toContain("read failed");
+      expect(warn.mock.calls[0]![0]).toContain("timed out");
+      time += 2000;
+      void poll();
+      expect(read).toHaveBeenCalledTimes(2);
+      vi.useRealTimers();
+    });
+
+    it("names the step that failed", async () => {
+      const warn = vi.fn();
+      let time = 0;
+      const reads = ["a", "b"];
+      const poll = createStampPoller({
+        onChange: () => Promise.reject(new Error("invalidate broke")),
+        now: () => time,
+        read: async () => reads.shift() ?? null,
+        warn,
+      });
+      await poll();
+      time += 2000;
+      await poll();
+      expect(warn.mock.calls[0]![0]).toContain("clear failed");
+      expect(warn.mock.calls[0]![0]).toContain("invalidate broke");
+    });
+
+    it("escalates to error once five checks in a row failed, and resets after a success", async () => {
+      const warn = vi.fn();
+      const error = vi.fn();
+      let time = 0;
+      const reads: (string | Error)[] = Array.from({ length: 5 }, () => new Error("db down"));
+      reads.push("a", ...Array.from({ length: 5 }, () => new Error("db down again")));
+      const poll = createStampPoller({
+        error,
+        now: () => time,
+        onChange: vi.fn(),
+        read: async () => {
+          const next = reads.shift();
+          if (next instanceof Error) throw next;
+          return next ?? null;
+        },
+        warn,
+      });
+      for (let i = 0; i < 5; i++) {
+        await poll();
+        time += 2000;
+      }
+      expect(warn).toHaveBeenCalledOnce();
+      expect(error).toHaveBeenCalledOnce();
+      await poll(); // a success clears the count
+      time += 2000;
+      for (let i = 0; i < 5; i++) {
+        await poll();
+        time += 2000;
+      }
+      expect(error).toHaveBeenCalledTimes(2);
+    });
+  });
 });

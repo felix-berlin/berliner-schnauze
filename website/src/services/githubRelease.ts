@@ -31,4 +31,6 @@ async function loadLiteDeckDownloadUrl(): Promise<string | undefined> {
 }
 
 // Pages render on demand: look up the latest release hourly instead of once per process.
-export const getLiteDeckDownloadUrl = ttl(60 * 60 * 1000, loadLiteDeckDownloadUrl);
+export const getLiteDeckDownloadUrl = ttl(60 * 60 * 1000, loadLiteDeckDownloadUrl, {
+  external: true,
+});

@@ -1,52 +1,74 @@
 import { getPayloadClient } from "@services/payload.ts";
 
 const WARN_EVERY_MS = 60_000;
+const FAILURES_BEFORE_ERROR = 5;
 
 type StampPollerOptions = {
   /** Current stamp; `null` when nothing was ever stamped. */
   read: () => Promise<string | null>;
-  /** Called once per change of the stamp, never for the first value seen. */
+  /** Called for each change of the stamp (retried until it succeeds), never for the first value seen. */
   onChange: () => Promise<void> | void;
   intervalMs?: number;
+  /** A read or `onChange` that takes longer counts as failed, so one hung call cannot stop all later checks. */
+  timeoutMs?: number;
   now?: () => number;
   warn?: (message: string) => void;
+  error?: (message: string) => void;
 };
 
 /**
- * Returns `poll()`: starts at most one read per `intervalMs` and never two at once and never throws. Its promise ends
- * when that check (including `onChange`) is done, so a request can wait for it and serve the new data; it is already
- * resolved when no read was started. The first read only remembers the value. A failing read (or a failing `onChange`) is kept for the next
- * interval, so the cache stays as it is and the change is picked up later; it is reported at most once a minute.
+ * Returns `poll()`: starts at most one check per `intervalMs` and never two at once and never throws. Its promise
+ * ends when that check (including `onChange`) is done, so a request can wait for it and serve the new data; it is
+ * already resolved when no check was started. The first read only remembers the value. A failing read or `onChange`
+ * (or one that takes over `timeoutMs`) leaves the caches as they are and is retried at the next interval. It is
+ * reported at most once a minute, as an error once `FAILURES_BEFORE_ERROR` checks in a row failed.
  */
 export const createStampPoller = ({
   read,
   onChange,
   intervalMs = 2000,
+  timeoutMs = 10_000,
   now = Date.now,
   warn = console.warn,
+  error = console.error,
 }: StampPollerOptions): (() => Promise<void>) => {
   let seen: string | null | undefined;
   let lastStart = -Infinity;
-  let lastWarn = -Infinity;
+  let lastReport = -Infinity;
+  let failures = 0;
   let pending = false;
 
-  const report = (error: unknown) => {
-    if (now() - lastWarn < WARN_EVERY_MS) return;
-    lastWarn = now();
-    warn(`[cache-stamp] check failed: ${error instanceof Error ? error.message : String(error)}`);
+  const report = (step: string, cause: unknown) => {
+    failures++;
+    const escalate = failures === FAILURES_BEFORE_ERROR;
+    if (!escalate && now() - lastReport < WARN_EVERY_MS) return;
+    lastReport = now();
+    const detail = cause instanceof Error ? (cause.stack ?? cause.message) : String(cause);
+    (escalate ? error : warn)(`[cache-stamp] ${step} failed (${failures} in a row): ${detail}`);
   };
 
   return () => {
     if (pending || now() - lastStart < intervalMs) return Promise.resolve();
     pending = true;
     lastStart = now();
-    return read()
-      .then(async (value) => {
-        if (seen !== undefined && value !== seen) await onChange();
-        seen = value;
-      })
-      .catch(report)
+    let step = "read";
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const check = async () => {
+      const value = await read();
+      if (seen !== undefined && value !== seen) {
+        step = "clear";
+        await onChange();
+      }
+      seen = value;
+      failures = 0;
+    };
+    const timeout = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => reject(new Error(`timed out after ${timeoutMs} ms`)), timeoutMs);
+    });
+    return Promise.race([check(), timeout])
+      .catch((cause: unknown) => report(step, cause))
       .finally(() => {
+        clearTimeout(timer);
         pending = false;
       });
   };

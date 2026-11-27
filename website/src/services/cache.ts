@@ -12,7 +12,7 @@ export const clearAllMemos = (): void => {
   for (const reset of resets) reset();
 };
 
-/** The memo behind `ttl`: the getter plus a `reset` that drops the stored value (and any refresh in flight). */
+/** The memo behind `ttl`: the getter plus a `reset` that drops the stored value and orphans any refresh in flight (its result is discarded). */
 const memo = <T>(ms: number, load: () => Promise<T>) => {
   let value: Promise<T> | undefined;
   let loadedAt = 0;
@@ -58,12 +58,18 @@ const memo = <T>(ms: number, load: () => Promise<T>) => {
 /**
  * Memoizes `load` for `ms`. After that the stale value is served while a single background refresh runs, so
  * a request never waits for a reload; only the very first load blocks. A failed first load is not kept, a
- * failed refresh keeps the stale value and is retried by the next call.
+ * failed refresh keeps the stale value and is retried by the next call. `clearAllMemos()` drops it, unless it is
+ * `external`.
  */
-export const ttl = <T>(ms: number, load: () => Promise<T>): (() => Promise<T>) => {
+export const ttl = <T>(
+  ms: number,
+  load: () => Promise<T>,
+  { external = false }: { external?: boolean } = {},
+): (() => Promise<T>) => {
   if (NO_CACHE) return load;
   const { get, reset } = memo(ms, load);
-  resets.add(reset);
+  // `external`: not CMS data (visitor aggregates, GitHub, Polar, Wakapi), so a CMS edit must not reload it.
+  if (!external) resets.add(reset);
   return get;
 };
 
