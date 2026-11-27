@@ -36,7 +36,8 @@ const STAMPED_KEY = "cacheStamped";
  * change leaves no stamp. Once per request, however many docs it touches.
  */
 export const stampCacheChange = async (req: PayloadRequest): Promise<void> => {
-  if (req.context[STAMPED_KEY]) return;
+  // `skipCacheStamp`: migrations older than the `cache_stamp` table seed through the Local API and set it.
+  if (req.context[STAMPED_KEY] || req.context.skipCacheStamp) return;
   await req.payload.updateGlobal({
     data: { changedAt: new Date().toISOString() },
     req,

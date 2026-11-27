@@ -296,4 +296,14 @@ describe("cache stamp, more paths", () => {
     await stampCacheChange(req);
     expect(updateGlobal).toHaveBeenCalledTimes(2);
   });
+
+  it("does not stamp when the context says skipCacheStamp (migrations that seed before the table exists)", async () => {
+    const updateGlobal = vi.fn<(args: unknown) => Promise<object>>().mockResolvedValue({});
+    const req = {
+      context: { skipCacheStamp: true },
+      payload: { updateGlobal },
+    } as unknown as PayloadRequest;
+    await stampCacheChange(req);
+    expect(updateGlobal).not.toHaveBeenCalled();
+  });
 });
