@@ -279,7 +279,7 @@ export const Suggestions: CollectionConfig = {
       admin: {
         position: "sidebar",
         description:
-          "Beispielsatz, Wissenswertes und Verwandtes übernimmt das CMS nicht selbst: erst von Hand ins Wort eintragen (dort „Vorschlag“ verknüpfen), dann hier auf „Übernommen“ setzen.",
+          "„Übernommen“ trägt den Vorschlag ins Wort ein und veröffentlicht es sofort (neues Wort: anlegen und veröffentlichen). Bei Beispielsatz, Wissenswertem und Verwandtem muss das Wort veröffentlicht sein und darf keine ungespeicherten Entwurfsänderungen haben, sonst bricht das Speichern mit einer Meldung ab.",
       },
     },
     {

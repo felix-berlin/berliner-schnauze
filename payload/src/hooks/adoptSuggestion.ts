@@ -1,8 +1,9 @@
-import type { CollectionBeforeChangeHook } from "payload";
+import type { CollectionBeforeChangeHook, PayloadRequest } from "payload";
 
 import { APIError } from "payload";
 
 import { findSlugHolder } from "../lib/slugHolder";
+import { suggestionEntry } from "../lib/suggestionEntry";
 import { matchKey, wordSlug } from "../lib/wordMatch";
 
 const taken = (slug: string, inTrash = false) =>
@@ -13,9 +14,47 @@ const taken = (slug: string, inTrash = false) =>
     400,
   );
 
+const idOf = (ref: unknown): number | undefined =>
+  typeof ref === "object" && ref !== null
+    ? (ref as { id: number }).id
+    : (ref as number | undefined);
+
 /**
- * beforeChange of suggestions: fills `similarWords`, and creates a draft word when the status becomes "accepted" without a
- * `word` (a hand-chosen `word` is only linked).
+ * Writes the suggestion's entry into its live target word and publishes it, in the suggestion's transaction (`req`),
+ * so any error rolls the status change back too. Refuses a word that is trashed, was never published or has newer
+ * unpublished draft changes: publishing those would put unreviewed edits live.
+ */
+const adoptIntoWord = async (
+  req: PayloadRequest,
+  suggestion: Parameters<typeof suggestionEntry>[0],
+  wordRef: unknown,
+) => {
+  const id = idOf(wordRef);
+  if (id == null) throw new APIError("Zu diesem Vorschlag fehlt das Wort.", 400);
+  const base = { collection: "words", id, depth: 0, req, trash: true } as const;
+  const latest = await req.payload.findByID({ ...base, draft: true });
+  const name = `„${latest.berlinerisch}“`;
+  if (latest.deletedAt) throw new APIError(`Das Wort ${name} liegt im Papierkorb.`, 400);
+  const live = await req.payload.findByID({ ...base, draft: false });
+  const retry = "Erst das Wort veröffentlichen, dann übernehmen.";
+  if (live._status !== "published")
+    throw new APIError(`Das Wort ${name} ist nicht veröffentlicht. ${retry}`, 400);
+  if (latest._status !== "published")
+    throw new APIError(`Das Wort ${name} hat unveröffentlichte Entwurfsänderungen. ${retry}`, 400);
+  const { field, row } = suggestionEntry(suggestion);
+  await req.payload.update({
+    collection: "words",
+    id,
+    data: { [field]: [...(live[field] ?? []), row], _status: "published" } as never,
+    draft: false,
+    req,
+  });
+};
+
+/**
+ * beforeChange of suggestions: fills `similarWords`, and when the status becomes "accepted" writes the suggestion into
+ * the word and publishes it: a new word is created (a hand-chosen `word` is only linked), an example, fact or related
+ * entry is appended to the live `targetWord`.
  */
 export const adoptSuggestion: CollectionBeforeChangeHook = async ({
   data,
@@ -24,7 +63,11 @@ export const adoptSuggestion: CollectionBeforeChangeHook = async ({
   req,
 }) => {
   const d = { ...originalDoc, ...data };
-  if ((d.type ?? "word") !== "word") return data; // example/fact/related are moderated by hand, never adopted
+  if ((d.type ?? "word") !== "word") {
+    if (data.status === "accepted" && originalDoc?.status !== "accepted")
+      await adoptIntoWord(req, { ...d, id: originalDoc?.id ?? d.id }, d.targetWord);
+    return data;
+  }
   const berlinerWord: string = d.berlinerWord ?? "";
 
   // The admin form sends every field on each save: only a new suggestion or a changed spelling needs a new search.

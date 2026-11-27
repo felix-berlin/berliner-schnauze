@@ -311,6 +311,34 @@ describe("mcp endpoint", () => {
     }
   });
 
+  it("cannot accept an example suggestion: that would publish the word, and the save fails whole", async () => {
+    const payload = await getTestPayload();
+    const live = await payload.create({
+      collection: "words",
+      data: { berlinerisch: WORD, _status: "published" },
+      draft: false,
+    });
+    const suggestion = await payload.create({
+      collection: "suggestions",
+      data: { type: "example", targetWord: live.id, text: "Ein Satz." } as never,
+    });
+    try {
+      const body = await rpc("tools/call", `Bearer ${KEY}`, {
+        name: "updateSuggestions",
+        arguments: { id: suggestion.id, status: "accepted" },
+      });
+      expect(text(body)).toMatch(/nur als Entwurf/);
+      expect(
+        (await payload.findByID({ collection: "suggestions", id: suggestion.id })).status,
+      ).toBe("new");
+      const after = await payload.findByID({ collection: "words", id: live.id, draft: false });
+      expect(after.examples ?? []).toHaveLength(0);
+    } finally {
+      await payload.delete({ collection: "suggestions", id: suggestion.id });
+      await cleanWord();
+    }
+  });
+
   it("cannot move a published word to the trash", async () => {
     const payload = await getTestPayload();
     const live = await payload.create({
