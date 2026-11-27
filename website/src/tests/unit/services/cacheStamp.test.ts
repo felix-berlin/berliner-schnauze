@@ -1,5 +1,8 @@
-import { createStampPoller } from "@services/cacheStamp.ts";
+import { createStampPoller, readStamp } from "@services/cacheStamp.ts";
 import { describe, expect, it, vi } from "vitest";
+
+const findGlobal = vi.hoisted(() => vi.fn());
+vi.mock("@services/payload.ts", () => ({ getPayloadClient: async () => ({ findGlobal }) }));
 
 const setup = (reads: (string | null | Error)[]) => {
   let time = 0;
@@ -226,5 +229,43 @@ describe("createStampPoller", () => {
       }
       expect(error).toHaveBeenCalledTimes(2);
     });
+  });
+});
+
+describe("readStamp", () => {
+  it("reads only changedAt of the cache-stamp global", async () => {
+    findGlobal.mockResolvedValueOnce({ changedAt: "2026-11-27T12:00:00.000Z" });
+    expect(await readStamp()).toBe("2026-11-27T12:00:00.000Z");
+    expect(findGlobal).toHaveBeenCalledWith({
+      depth: 0,
+      select: { changedAt: true },
+      slug: "cache-stamp",
+    });
+  });
+
+  it("is null before anything was stamped", async () => {
+    findGlobal.mockResolvedValueOnce({});
+    expect(await readStamp()).toBeNull();
+  });
+});
+
+describe("failure reports", () => {
+  it("reports a rejection that is not an Error by its text", async () => {
+    const warn = vi.fn();
+    const poll = createStampPoller({
+      onChange: vi.fn(),
+      read: () => Promise.reject("plain text"),
+      warn,
+    });
+    await poll();
+    expect(warn.mock.calls[0]![0]).toContain("plain text");
+  });
+
+  it("falls back to the message when an Error has no stack", async () => {
+    const warn = vi.fn();
+    const error = Object.assign(new Error("no stack"), { stack: undefined });
+    const poll = createStampPoller({ onChange: vi.fn(), read: () => Promise.reject(error), warn });
+    await poll();
+    expect(warn.mock.calls[0]![0]).toContain("no stack");
   });
 });
