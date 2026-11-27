@@ -56,7 +56,7 @@
     "hypher": "^0.2.5",
     "nanostores": "^1.5.5",
     "natural": "^8.2.6",
-    "payload": "3.94.1",
+    "payload": "3.94.2",
     "payload-app": "workspace:*",
     "uqr": "^0.1.3",
     "virtua": "^0.55.0",
