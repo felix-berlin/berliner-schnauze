@@ -20,7 +20,7 @@ export interface Props {
   };
 }
 
-/** Rows rendered into the first HTML (and passed to the island); Task 8 virtualizes the rest on the client. */
+/** Rows rendered into the first HTML (and passed to the island as virtua's `ssrCount`); the client lists the rest. */
 const SSR_COUNT = 40;
 
 const { ctx, meta, result, state } = Astro.props;
@@ -56,5 +56,6 @@ const termSet = jsonLd({
     result={{ ...result, rows: result.rows.slice(0, SSR_COUNT) }}
     {state}
     wotd={ctx.wotd}
+    trend={[...ctx.trendRanks].sort((a, b) => a[1] - b[1]).map(([slug]) => slug)}
   />
 </Layout>

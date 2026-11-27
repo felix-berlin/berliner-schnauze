@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 // SPEC §22: the visitor copy of the v18 word page never says "wir", "uns", "unser", "wa" (the site has one
@@ -17,7 +17,9 @@ const collect = (entry: string, seen = new Set<string>()): Set<string> => {
   return seen;
 };
 
-const files = [...collect("word/WordPage.astro"), "word/WordMobileBar.astro"].map(
+// The search page (docs/design/suche-v1/SPEC.md §1 has the same rule) imports its parts relatively: scan the folder.
+const searchFiles = readdirSync(`${SRC}/components/search`).map((f) => `search/${f}`);
+const files = [...collect("word/WordPage.astro"), "word/WordMobileBar.astro", ...searchFiles].map(
   (f) => `components/${f}`,
 );
 const copyFiles = [

@@ -1,0 +1,266 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// One search hit (docs/design/suche-v1/SPEC.md §4, §6.1, §12): role="option" root, .inner grid with .head
+// (.lemma = .word link + .article, .pos label, .badge), .meanings (marks, .dot separators) and .side
+// (.usage bar or .few, .play). Mobile: two lines, "jesagt 63 %" as text over the play button.
+@include mx.component("hit-row") {
+  :scope {
+    --_word: 1.25rem; // SPEC §4 word 20px mobile
+    --_word-wide: 1.5rem; // SPEC §4 word 24px desktop
+    --_article: 1.125rem; // SPEC §4 article 18px
+    --_track: 1.5px; // SPEC §4 label tracking
+    --_bar: 4rem; // SPEC §6.1 bar 64px
+    --_bar-height: 6px; // SPEC §6.1
+    --_side: 9.25rem; // mock .s1__use min width 148px: the percent column stays flush
+    --_play: 2.25rem; // SPEC §6.1 play circle 36px
+    --_dot: 5px; // SPEC §4 meaning separator circle
+    --_edge: inset 3px 0 0 var(--color-accent-active); // SPEC §6.1 active row
+
+    container: hit-row / inline-size;
+    cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+
+    @include butler-mx.hover {
+      background: var(--color-warm-card2);
+    }
+  }
+
+  :scope[aria-selected="true"] {
+    background: var(--color-warm-card2);
+    box-shadow: var(--_edge);
+  }
+
+  .inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-1) var(--space-3);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-3);
+    min-inline-size: 0;
+    margin: 0;
+  }
+
+  .lemma {
+    white-space: nowrap;
+  }
+
+  .word {
+    font-size: var(--_word);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.15;
+    color: var(--color-text-strong);
+    text-decoration: none;
+
+    @include butler-mx.hover {
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
+    }
+  }
+
+  .article {
+    font-size: var(--_article);
+    color: var(--color-warm-quiet);
+  }
+
+  .pos {
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+    letter-spacing: var(--_track);
+    text-transform: uppercase;
+    color: var(--color-warm-quiet);
+  }
+
+  mark {
+    // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .s1__m mark: 1px side padding
+    padding-inline: 1px;
+    border-radius: var(--radius-xxs);
+    background: var(--color-surface-wash-strong); // SPEC §4: orange 22 %
+    color: var(--color-text-strong);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    align-self: center;
+    gap: var(--space-1);
+    min-block-size: var(--space-6);
+    padding-inline: var(--space-2);
+    border-radius: var(--radius-pill);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+
+    svg {
+      inline-size: 1em;
+      block-size: 1em;
+    }
+  }
+
+  .badge[data-variant="wotd"] {
+    background: var(--color-accent-solid);
+    color: var(--color-text-on-active);
+  }
+
+  .badge[data-variant="trend"] {
+    background: var(--color-surface-wash); // SPEC §6.1: orange 16 %
+    color: var(--color-text-accent);
+  }
+
+  .meanings {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+    color: var(--color-text-body);
+  }
+
+  .dot {
+    display: inline-block;
+    inline-size: var(--_dot);
+    block-size: var(--_dot);
+    margin-inline: var(--space-2);
+    border-radius: var(--radius-pill);
+    background: var(--color-warm-quiet);
+    vertical-align: middle;
+  }
+
+  // Mobile: top right, the share as text above the play button.
+  .side {
+    grid-row: 1;
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    align-self: start;
+    gap: var(--space-1);
+    font-size: var(--font-size-label);
+    color: var(--color-warm-quiet);
+  }
+
+  .usage {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+
+    b {
+      font-weight: var(--font-weight-regular);
+    }
+  }
+
+  .bar,
+  .few {
+    display: none;
+  }
+
+  .play {
+    position: relative;
+    display: grid;
+    place-items: center;
+    inline-size: var(--_play);
+    block-size: var(--_play);
+  }
+
+  button.play {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    background: var(--color-warm-sheet);
+    color: var(--color-text-strong);
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
+
+    // 44px tap area around the 36px circle (SPEC §6.1, §12).
+    &::before {
+      content: "";
+      position: absolute;
+      inset: calc((var(--size-tap-target) - var(--_play)) / -2);
+    }
+
+    svg {
+      inline-size: 0.875rem;
+      block-size: 0.875rem;
+    }
+
+    @include butler-mx.hover {
+      border-color: var(--color-accent-solid);
+      background: var(--color-accent-solid);
+      color: var(--color-text-on-active);
+    }
+  }
+
+  // Desktop: the meanings run under the word, the share bar and play button sit in their own column.
+  @container hit-row (inline-size >= 47rem) {
+    .inner {
+      gap: var(--space-1) var(--space-6);
+      padding: var(--space-3) var(--space-5) var(--space-3) var(--space-6);
+    }
+
+    .word {
+      font-size: var(--_word-wide);
+    }
+
+    .pos {
+      padding-inline-start: var(--space-3);
+      border-inline-start: 1px solid var(--line);
+    }
+
+    .meanings {
+      grid-column: 1;
+    }
+
+    .side {
+      grid-row: 1 / span 2;
+      flex-direction: row;
+      align-items: center;
+      align-self: center;
+      gap: var(--space-4);
+    }
+
+    .usage {
+      display: grid;
+      grid-template-columns: auto var(--_bar) auto;
+      align-items: center;
+      gap: var(--space-2);
+      min-inline-size: var(--_side);
+
+      b {
+        min-inline-size: 2.25rem;
+        font-weight: var(--font-weight-bold);
+        text-align: end;
+        color: var(--color-text-strong);
+      }
+    }
+
+    .bar {
+      position: relative;
+      display: block;
+      block-size: var(--_bar-height);
+      overflow: hidden;
+      border-radius: var(--radius-pill);
+      background: var(--color-warm-card3);
+
+      i {
+        position: absolute;
+        inset-block: 0;
+        inset-inline-start: 0;
+        border-radius: var(--radius-pill);
+        background: var(--d-bl);
+      }
+    }
+
+    .few {
+      display: block;
+      min-inline-size: var(--_side);
+      text-align: end;
+    }
+  }
+}

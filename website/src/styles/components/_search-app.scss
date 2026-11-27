@@ -1,121 +1,170 @@
 @use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
-// Search page (docs/design/suche-v1/SPEC.md §2-§6): header, GET form, register and plain hit list.
-// Task 8 replaces the plain list with the virtualized one and adds filters; this is the server-rendered first window.
+// Search page island (docs/design/suche-v1/SPEC.md §2, §3, §5, §6.2, §10): .head (h1 + intro), the GET form
+// around c-search-field, .meta (count + .keys), the .error / .offline strips, the .section head (h2 Treffer).
+// Children (c-search-field, c-alphabet-register, c-hit-list, c-search-empty, c-hit-skeleton) are placed by the grid.
 @include mx.component("search-app") {
   :scope {
+    --_h1: 1.75rem; // SPEC §3 mobile h1 28px
+    --_h1-wide: 2rem; // SPEC §3 desktop h1 32px
+    --_intro: 0.9375rem; // SPEC §3 mobile intro 15px
+    --_meta: 0.9375rem; // SPEC §3 meta line 15px
+    --_section: 1.5rem; // SPEC §4 section title 24px
+    --_kbd: 1.375rem; // SPEC mock .s1__kbd 22px key cap
+
+    container: search-app / inline-size;
     display: grid;
+    align-content: start;
     gap: var(--space-4);
     padding-block: var(--space-6) var(--space-16);
-    container: search-app / inline-size;
+    letter-spacing: 0.3px; // stylelint-disable-line declaration-property-value-disallowed-list -- mock .s1 tracking, no token
   }
 
-  .head h1 {
-    font-size: var(--font-size-3xl);
-    text-transform: uppercase;
-    color: var(--color-text-strong);
-  }
-
-  .head p,
-  .meta,
-  .hint,
-  small {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-  }
-
-  .field {
-    display: flex;
-    gap: var(--space-2);
-
-    input[type="search"] {
-      flex: 1;
-      min-block-size: var(--size-tap-target);
-      padding-inline: var(--space-4);
-      border: 1px solid var(--color-border-control);
-      border-radius: var(--radius-sm);
-      background: var(--color-surface-field);
-      font-size: var(--font-size-lg);
-    }
-
-    button {
-      min-block-size: var(--size-tap-target);
-      padding-inline: var(--space-4);
-    }
-  }
-
-  .register {
-    padding: var(--space-4);
-    border-radius: var(--radius-xs);
-    background: var(--color-surface-sheet);
-    box-shadow: var(--shadow-paper-lift);
-
-    .label {
-      font-weight: var(--font-weight-bold);
-    }
-
-    ul {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-      margin-block-start: var(--space-3);
-      padding: 0;
-      list-style: none;
-    }
-
-    a {
-      display: grid;
-      place-items: center;
-      min-inline-size: var(--size-tap-target);
-      min-block-size: var(--size-tap-target);
-      border-radius: var(--radius-xs);
-      color: var(--color-text-strong);
-      text-decoration: none;
-
-      &[aria-current="true"] {
-        background: var(--color-surface-inverse);
-        color: var(--color-text-on-active);
-      }
-    }
-  }
-
-  .list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    border-radius: var(--radius-xs);
-    background: var(--color-surface-sheet);
-    box-shadow: var(--shadow-paper-lift);
-  }
-
-  .hit {
+  .head {
     display: grid;
     gap: var(--space-1);
-    padding: var(--space-3) var(--space-4);
 
-    a {
+    h1 {
+      margin: 0;
+      font-family: var(--font-condensed);
+      font-size: var(--_h1);
+      font-weight: var(--font-weight-black);
+      line-height: 1;
+      text-transform: uppercase;
+      color: var(--color-text-strong);
+    }
+
+    p {
+      margin: 0;
+      font-size: var(--_intro);
+      color: var(--color-warm-quiet);
+    }
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-block-start: calc(var(--space-1) * -1); // 12px under the field (grid gap 16px)
+    font-size: var(--_meta);
+    color: var(--color-warm-quiet);
+
+    p {
+      margin: 0;
+    }
+
+    b {
+      color: var(--color-text-strong);
+    }
+  }
+
+  // SPEC §5: shortcuts only on desktop with a real pointer.
+  .keys {
+    display: none;
+    gap: var(--space-4);
+    font-size: var(--font-size-label);
+
+    span {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    kbd {
+      display: inline-grid;
+      place-items: center;
+      min-inline-size: var(--_kbd);
+      block-size: var(--_kbd);
+      padding-inline: var(--space-1);
+      border-radius: var(--radius-xs);
+      background: var(--color-warm-card2);
+      font: inherit;
+      color: var(--color-text-strong);
+    }
+  }
+
+  .error,
+  .offline {
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    border-inline-start: 3px solid var(--color-status-danger);
+    border-radius: var(--radius-sm);
+    background: var(--color-warm-sheet);
+    box-shadow: var(--shadow-paper-lift);
+    color: var(--color-text-body);
+  }
+
+  .offline {
+    border-inline-start-color: var(--line);
+  }
+
+  .error {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .retry {
+    min-block-size: var(--size-tap-target);
+    padding-inline: var(--space-4);
+    border: 1.5px solid var(--color-accent-active);
+    border-radius: var(--radius-sm);
+    background: none;
+    font: inherit;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+    cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+
+    @include butler-mx.hover {
+      background: var(--color-warm-card2);
+    }
+  }
+
+  .section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-3);
+    margin-block-start: var(--space-2);
+
+    h2 {
+      margin: 0;
+      font-family: var(--font-condensed);
+      font-size: var(--_section);
       font-weight: var(--font-weight-bold);
       color: var(--color-text-strong);
     }
 
-    span {
-      font-size: var(--font-size-sm);
-      color: var(--color-text-body);
+    small {
+      font-size: var(--font-size-md);
+      color: var(--color-warm-quiet);
     }
   }
 
-  .letter,
-  .divider {
-    display: flex;
-    justify-content: space-between;
-    padding: var(--space-3) var(--space-4) var(--space-2);
-    background: var(--color-surface-wash);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
+  // Desktop (SPEC §3, from 808px viewport; the list is ~760px wide there).
+  @container search-app (inline-size >= 47rem) {
+    .head h1 {
+      font-size: var(--_h1-wide);
+    }
 
-    h2 {
-      font-size: var(--font-size-xl);
-      color: var(--color-text-strong);
+    .head p {
+      font-size: var(--font-size-base);
+    }
+
+    .keys {
+      @include butler-mx.feature("hover") {
+        display: flex;
+      }
     }
   }
 }

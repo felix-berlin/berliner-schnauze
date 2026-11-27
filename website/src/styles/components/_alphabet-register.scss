@@ -1,0 +1,111 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Register „Springen zu“ (docs/design/suche-v1/SPEC.md §3, §6.4): .intro (.label + text) and the list of 29 letters,
+// each a link (letter + count) or a plain span without words. Mobile: one scrolling row; desktop: shares the width.
+@include mx.component("alphabet-register") {
+  :scope {
+    --_track: 1.5px; // SPEC §4 label tracking
+    --_cell: 2.5rem; // mock .s1__reg a min width 40px
+
+    padding: var(--space-3) var(--space-4) var(--space-2);
+    border-radius: var(--radius-sm);
+    background: var(--color-warm-sheet);
+    box-shadow: var(--shadow-paper-lift);
+    container: alphabet-register / inline-size;
+  }
+
+  .intro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-3);
+    margin: 0 0 var(--space-2);
+    font-size: var(--font-size-md);
+    color: var(--color-warm-quiet);
+  }
+
+  .label {
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--_track);
+    text-transform: uppercase;
+  }
+
+  // scroll alternative: none needed, the row scrolls with a visible scrollbar where the platform shows one.
+  ul {
+    display: flex;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    list-style: none;
+  }
+
+  li {
+    flex: 0 0 auto;
+  }
+
+  a,
+  span[role="img"] {
+    display: grid;
+    place-items: center;
+    min-inline-size: var(--_cell);
+    min-block-size: var(--size-tap-target);
+    padding: var(--space-1);
+    border-radius: var(--radius-sm);
+    line-height: 1;
+    text-decoration: none;
+    color: var(--color-text-strong);
+  }
+
+  span[role="img"] {
+    opacity: 0.5;
+  }
+
+  a {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+
+    @include butler-mx.hover {
+      background: var(--color-warm-card2);
+    }
+
+    &[aria-current="true"] {
+      background: var(--color-text-strong);
+      color: var(--color-warm-sheet);
+    }
+  }
+
+  b {
+    font-weight: var(--font-weight-bold);
+  }
+
+  small {
+    margin-block-start: var(--space-1);
+    font-size: var(--font-size-label);
+    color: var(--color-warm-quiet);
+  }
+
+  a[aria-current="true"] small {
+    color: inherit;
+  }
+
+  @container alphabet-register (inline-size >= 47rem) {
+    ul {
+      // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .s1--d .s1__reg: 2px gap, no space token
+      gap: 2px;
+      overflow: visible;
+    }
+
+    li {
+      flex: 1 1 0;
+      min-inline-size: 0;
+    }
+
+    a,
+    span[role="img"] {
+      min-inline-size: 0;
+      padding-inline: 0;
+    }
+  }
+}

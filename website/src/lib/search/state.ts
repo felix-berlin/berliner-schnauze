@@ -51,3 +51,6 @@ export const activeFilterCount = (s: SearchState): number =>
   ].filter(Boolean).length;
 
 export const isFiltered = (s: SearchState): boolean => activeFilterCount(s) > 0;
+
+/** SPEC §6.4: in the start state (no query, no letter) the register replaces the „Buchstabe“ chip. */
+export const showsLetterChip = (s: SearchState): boolean => !!s.q || !!s.letter;

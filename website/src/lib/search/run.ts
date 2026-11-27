@@ -17,6 +17,8 @@ export type SearchContext = { trendRanks: Map<string, number>; wotd?: string };
 export type SearchResult = {
   rows: ListRow[];
   total: number;
+  /** Hits before the filters: 0 with total 0 means the query itself found nothing. */
+  unfiltered: number;
   facets: ReturnType<typeof facets>;
   note:
     | "alle in der Bedeutung"
@@ -103,6 +105,7 @@ export async function runSearch(
       rows: sort === "az" ? withLetters(hits) : hits.map((hit) => ({ hit, kind: "hit" })),
       suggestions: [],
       total: hits.length,
+      unfiltered: entries.length,
     };
   }
 
@@ -126,6 +129,7 @@ export async function runSearch(
     rows: sort === "beste" ? withDividers(hits) : hits.map((hit) => ({ hit, kind: "hit" })),
     suggestions: hits.length ? [] : didYouMean(entries, q),
     total: hits.length,
+    unfiltered: ranked.length,
   };
 }
 

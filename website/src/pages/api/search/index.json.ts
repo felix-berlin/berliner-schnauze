@@ -60,6 +60,8 @@ export function makeOramaSearchIndex(
   return {
     ...base,
     article: word.article ?? "",
+    // The search list's play button; the url is public on the word page anyway.
+    ...(word.berlinerischAudio[0] && { audio: word.berlinerischAudio[0].audio.url }),
     form: {
       length: derived.characterLength ?? word.berlinerisch.length,
       soundex: derived.soundexCode || soundex(word.berlinerisch),

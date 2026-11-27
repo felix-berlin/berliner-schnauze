@@ -1,0 +1,55 @@
+@use "@styles/mixins" as mx;
+
+// Hit list (docs/design/suche-v1/SPEC.md §3, §6.2, §6.4): the virtua listbox card. Its rows are virtua's item
+// divs holding a c-hit-row, a .letter head (h2 + count, outside the card look) or a .divider label row.
+@include mx.component("hit-list") {
+  :scope {
+    --_letter: 1.5rem; // SPEC §6.4 letter head, like the section title 24px
+    --_track: 1.5px; // SPEC §4 label tracking
+
+    border-radius: var(--radius-sm);
+    background: var(--color-warm-sheet);
+    box-shadow: var(--shadow-paper-lift);
+    container: hit-list / inline-size;
+  }
+
+  // virtua's item wrappers: a 1px line between rows (SPEC §3).
+  :scope > * + * {
+    border-block-start: 1px solid var(--line);
+  }
+
+  .letter {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-4) var(--space-2);
+    background: var(--color-warm-card2);
+    font-size: var(--font-size-md);
+    color: var(--color-warm-quiet);
+
+    h2 {
+      margin: 0;
+      font-family: var(--font-condensed);
+      font-size: var(--_letter);
+      font-weight: var(--font-weight-black);
+      color: var(--color-text-strong);
+    }
+  }
+
+  .divider {
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-warm-card2);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--_track);
+    text-transform: uppercase;
+    color: var(--color-warm-quiet);
+  }
+
+  @container hit-list (inline-size >= 47rem) {
+    .letter,
+    .divider {
+      padding-inline: var(--space-6);
+    }
+  }
+}

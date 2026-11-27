@@ -24,6 +24,8 @@ export type SortKey = "beste" | "az" | "beliebt" | "neu" | "jesagt";
 export type Tier = 0 | 1 | 2 | 3 | 4 | 5;
 export type SearchEntry = OramaSearchIndex & {
   article: string;
+  /** Url of the first Berlinerisch recording, absent without audio. */
+  audio?: string;
   has: {
     examples: boolean;
     examplesAudio: boolean;

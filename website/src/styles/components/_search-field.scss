@@ -1,0 +1,125 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Search field (docs/design/suche-v1/SPEC.md §3, §5): the root is the 2px-rimmed box, parts .lens, input,
+// .clear (X, 44px) and .slash (the `/` hint while empty). Focus: rim in --color-accent-active.
+@include mx.component("search-field") {
+  :scope {
+    --_height: 3.5rem; // SPEC §3 mobile 56px
+    --_height-wide: 4rem; // SPEC §3 desktop 64px
+    --_text: 1.125rem; // SPEC §3 mobile 18px
+    --_text-wide: 1.375rem; // SPEC §3 desktop 22px
+    --_lens: var(--space-4); // icon 16px from the left (mobile)
+    --_lens-wide: var(--space-5); // 20px (desktop)
+    --_icon: 1.25rem;
+
+    container: search-field / inline-size;
+    border: 2px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--color-warm-sheet);
+    box-shadow: var(--shadow-paper-lift);
+    transition: border-color var(--duration-fast) var(--ease-standard);
+
+    &:focus-within {
+      border-color: var(--color-accent-active);
+    }
+  }
+
+  .inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    block-size: var(--_height);
+  }
+
+  .lens {
+    position: absolute;
+    inset-inline-start: var(--_lens);
+    inline-size: var(--_icon);
+    block-size: var(--_icon);
+    color: var(--color-warm-quiet);
+    pointer-events: none;
+  }
+
+  input {
+    flex: 1;
+    block-size: 100%;
+    min-inline-size: 0;
+    padding-block: 0;
+    padding-inline: calc(var(--_lens) + var(--_icon) + var(--space-3)) var(--space-2);
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: var(--_text);
+    color: var(--color-text-strong);
+    outline: none; // the root's rim is the focus indicator (SPEC §5)
+
+    &::placeholder {
+      color: var(--color-warm-quiet);
+      opacity: 1;
+    }
+
+    &::-webkit-search-cancel-button {
+      display: none; // own X button
+    }
+  }
+
+  .clear {
+    display: grid;
+    place-items: center;
+    inline-size: var(--size-tap-target);
+    block-size: var(--size-tap-target);
+    margin-inline-end: var(--space-1);
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: none;
+    color: var(--color-warm-quiet);
+    cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+
+    svg {
+      inline-size: var(--_icon);
+      block-size: var(--_icon);
+    }
+
+    @include butler-mx.hover {
+      background: var(--color-warm-card2);
+      color: var(--color-text-strong);
+    }
+  }
+
+  .slash {
+    display: none;
+    margin-inline-end: var(--space-4);
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xs);
+    font: inherit;
+    font-size: var(--font-size-label);
+    line-height: 1;
+    color: var(--color-warm-quiet);
+  }
+
+  @container search-field (inline-size >= 47rem) {
+    .inner {
+      block-size: var(--_height-wide);
+    }
+
+    .lens {
+      inset-inline-start: var(--_lens-wide);
+    }
+
+    input {
+      padding-inline-start: calc(var(--_lens-wide) + var(--_icon) + var(--space-4));
+      font-size: var(--_text-wide);
+    }
+
+    .clear {
+      margin-inline-end: var(--space-2);
+    }
+
+    .slash {
+      display: block;
+    }
+  }
+}

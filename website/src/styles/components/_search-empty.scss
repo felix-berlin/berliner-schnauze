@@ -1,0 +1,110 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Empty states (docs/design/suche-v1/SPEC.md §10): card with Kalle (c-berliner-baer, placed by the grid) and .body
+// (h2, text, .maybe = „Meinste“ label + pills, .actions with outline .action links/buttons).
+@include mx.component("search-empty") {
+  :scope {
+    --_title: 1.75rem; // SPEC mock .s1__empty h2 28px
+    --_track: 1.5px; // SPEC §4 label tracking
+
+    container: search-empty / inline-size;
+    border-radius: var(--radius-sm);
+    background: var(--color-warm-sheet);
+    box-shadow: var(--shadow-paper-lift);
+  }
+
+  // The root is the container; the grid lives one level down so it can respond.
+  .inner {
+    display: grid;
+    align-items: center;
+    gap: var(--space-4) var(--space-6);
+    padding: var(--space-5);
+  }
+
+  @container search-empty (inline-size >= 47rem) {
+    .inner {
+      grid-template-columns: auto minmax(0, 1fr);
+      padding: var(--space-6) calc(var(--space-6) + var(--space-1)); // SPEC §10: 28px
+    }
+  }
+
+  .body {
+    min-inline-size: 0;
+  }
+
+  h2 {
+    margin: 0;
+    font-family: var(--font-condensed);
+    font-size: var(--_title);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+  }
+
+  p {
+    margin: var(--space-2) 0 0;
+    line-height: 1.5;
+    color: var(--color-text-body);
+  }
+
+  .maybe {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-block-start: var(--space-4);
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      min-block-size: var(--size-tap-target);
+      padding-inline: var(--space-4);
+      border-radius: var(--radius-pill);
+      background: var(--color-warm-card2);
+      font-weight: var(--font-weight-bold);
+      text-decoration: none;
+      color: var(--color-text-strong);
+      transition: background-color var(--duration-fast) var(--ease-standard);
+
+      @include butler-mx.hover {
+        background: var(--color-warm-card3);
+      }
+    }
+  }
+
+  .label {
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--_track);
+    text-transform: uppercase;
+    color: var(--color-warm-quiet);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-block-start: var(--space-5);
+  }
+
+  .action {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-block-size: var(--size-tap-target);
+    padding-inline: var(--space-4);
+    border: 1.5px solid var(--color-accent-active);
+    border-radius: var(--radius-sm);
+    background: none;
+    font: inherit;
+    font-weight: var(--font-weight-bold);
+    text-decoration: none;
+    color: var(--color-text-strong);
+    cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+
+    @include butler-mx.hover {
+      background: var(--color-warm-card2);
+    }
+  }
+}
