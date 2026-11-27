@@ -15,6 +15,8 @@ export type WordExamplesArray =
       example?: string | null;
       exampleExplanation?: string | null;
       exampleAudio?: AudioArray;
+      contributorName?: string | null;
+      contributorSuggestion?: (number | null) | Suggestion;
       id?: string | null;
     }[]
   | null;
@@ -1385,6 +1387,8 @@ export interface WordExamplesArraySelect<T extends boolean = true> {
   example?: T;
   exampleExplanation?: T;
   exampleAudio?: T | AudioArraySelect<T>;
+  contributorName?: T;
+  contributorSuggestion?: T;
   id?: T;
 }
 /**
