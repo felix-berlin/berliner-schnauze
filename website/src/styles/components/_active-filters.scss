@@ -1,0 +1,94 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Active filters (docs/design/suche-v1/SPEC.md §3, §7.3): .label „Aktiv“ (desktop), one .pill per value with its
+// .x circle, then the .reset text link. Mobile: one horizontally scrolling row; desktop: wraps.
+@include mx.component("active-filters") {
+  :scope {
+    --_track: 1.5px; // SPEC §4 label tracking
+    --_pill: 2rem; // SPEC §7.3 pill 32px
+    --_x: 1.375rem; // SPEC §7.3 × circle 22px
+
+    container: active-filters / inline-size;
+  }
+
+  .inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    overflow-x: auto;
+  }
+
+  .label {
+    display: none;
+    margin-inline-end: var(--space-1);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--_track);
+    text-transform: uppercase;
+    color: var(--color-warm-quiet);
+  }
+
+  .pill {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: var(--space-1);
+    min-block-size: var(--_pill);
+    padding-inline: var(--space-3) var(--space-1);
+    border: 1px solid transparent; // forced colors draws it
+    border-radius: var(--radius-pill);
+    background: var(--color-warm-card2);
+    font: inherit;
+    font-size: var(--font-size-md);
+    white-space: nowrap;
+    color: var(--color-text-body);
+    cursor: pointer;
+
+    b {
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-strong);
+    }
+  }
+
+  .x {
+    display: grid;
+    place-items: center;
+    inline-size: var(--_x);
+    block-size: var(--_x);
+    border-radius: var(--radius-pill);
+    color: var(--color-warm-quiet);
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .pill:hover .x {
+    background: var(--color-warm-card3);
+    color: var(--color-text-strong);
+  }
+
+  .reset {
+    flex: 0 0 auto;
+    min-block-size: var(--_pill);
+    padding-inline: var(--space-1);
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: var(--font-size-md);
+    white-space: nowrap;
+    color: var(--color-warm-quiet);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+
+  @container active-filters (inline-size >= 47rem) {
+    .inner {
+      flex-wrap: wrap;
+      overflow-x: visible;
+    }
+
+    .label {
+      display: inline;
+    }
+  }
+}

@@ -256,6 +256,17 @@ describe("SearchApp", () => {
     expect(mocks.navigate).toHaveBeenCalledWith("/wort/aalwurm");
   });
 
+  it("Alles zurücksetzen keeps q", async () => {
+    history.replaceState(null, "", "/wort?q=aal&wortart=verb&silben=2");
+    const w = mountApp({ state: state({ pos: ["Verb"], q: "aal", syllables: 2 }) });
+    await w
+      .findAll("button")
+      .find((b) => b.text() === "Alles zurücksetzen")!
+      .trigger("click");
+    expect(location.search).toBe("?q=aal");
+    expect(w.find("button[aria-label^='Filter entfernen']").exists()).toBe(false);
+  });
+
   it("a filter change pushes a router-shaped history entry (Back works after leaving)", async () => {
     history.replaceState({ index: 3, scrollX: 0, scrollY: 120 }, "", "/wort?wortart=verb&q=aal");
     const w = mountApp({

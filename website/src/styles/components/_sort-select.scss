@@ -1,0 +1,36 @@
+@use "@styles/mixins" as mx;
+
+// Sort pill (docs/design/suche-v1/SPEC.md §6.3): .icon, .text („Sortieren“) and a native select drawn as a pill.
+@include mx.component("sort-select") {
+  :scope {
+    --_height: 2.5rem; // SPEC §6.3 pill 40px
+    --_text: 0.9375rem; // mock .s1__sort 15px
+    --_arrow: 5px; // mock select chevron
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--_text);
+    color: var(--color-warm-quiet);
+  }
+
+  select {
+    min-block-size: var(--_height);
+    padding-inline: var(--space-4) var(--space-8);
+    border: 1px solid var(--color-warm-line);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-warm-sheet);
+    background-image:
+      linear-gradient(45deg, transparent 50%, currentcolor 50%),
+      linear-gradient(135deg, currentcolor 50%, transparent 50%);
+    background-position:
+      calc(100% - 19px) 50%,
+      calc(100% - 14px) 50%;
+    background-size: var(--_arrow) var(--_arrow);
+    background-repeat: no-repeat;
+    font: inherit;
+    color: var(--color-text-strong);
+    appearance: none;
+    cursor: pointer;
+  }
+}

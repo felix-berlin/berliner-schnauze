@@ -1,0 +1,102 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Desktop filter bar (docs/design/suche-v1/SPEC.md §3, §7.1): chips that open a c-filter-popover (placed by
+// anchor positioning in the popover itself), the „Nur Berolinismen“ toggle chip and c-sort-select at the end.
+// Parts: .chip (state: aria-expanded, data-active, aria-pressed), .count pill, .chevron, .tick, .sort.
+@include mx.component("filter-bar") {
+  :scope {
+    --_chip: 2.5rem; // SPEC §3 chip 40px
+    --_count: 1.25rem; // SPEC §7.1 count pill 20px
+    --_chip-text: 0.9375rem; // SPEC §7.1 chip 15px
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    padding-block: var(--space-3);
+    border-block: 1px solid var(--color-warm-line);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-block-size: var(--_chip);
+    padding-inline: var(--space-4) var(--space-3);
+    border: 1px solid var(--color-warm-line);
+    border-radius: var(--radius-pill);
+    background: var(--color-warm-sheet);
+    font: inherit;
+    font-size: var(--_chip-text);
+    white-space: nowrap;
+    color: var(--color-text-strong);
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard);
+
+    @include butler-mx.hover {
+      background: var(--color-warm-card2);
+    }
+
+    &[aria-expanded="true"] {
+      border-color: var(--color-text-strong);
+      background: var(--color-warm-card2);
+    }
+
+    &[data-active] {
+      border-color: var(--color-text-strong);
+      font-weight: var(--font-weight-bold);
+    }
+
+    // „Nur Berolinismen“: no chevron, a tick when on.
+    &[aria-pressed] {
+      padding-inline: var(--space-4);
+    }
+
+    &[aria-pressed="true"] {
+      border-color: var(--color-text-strong);
+      background: var(--color-text-strong);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-warm-sheet);
+    }
+  }
+
+  .count {
+    display: inline-grid;
+    place-items: center;
+    min-inline-size: var(--_count);
+    block-size: var(--_count);
+    padding-inline: var(--space-1);
+    border-radius: var(--radius-pill);
+    background: var(--color-text-strong);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-warm-sheet);
+  }
+
+  .chevron {
+    color: var(--color-warm-quiet);
+
+    @include butler-mx.feature("motion") {
+      transition: rotate var(--duration-fast) var(--ease-standard);
+    }
+  }
+
+  .chip[aria-expanded="true"] .chevron {
+    rotate: 180deg;
+  }
+
+  .tick {
+    display: none;
+  }
+
+  .chip[aria-pressed="true"] .tick {
+    display: inline;
+  }
+
+  .sort {
+    margin-inline-start: auto;
+  }
+}

@@ -39,7 +39,17 @@
     </div>
     <p class="u-sr-only" aria-live="polite">{{ announcement }}</p>
 
-    <!-- Task 9/10: filter bar (desktop) / filter button + sheet (mobile), `showsLetterChip(state)` hides „Buchstabe“. -->
+    <!-- Task 10: filter button + sheet (mobile) next to the desktop bar. -->
+    <div class="filters">
+      <FilterBar
+        :state="state"
+        :facets="result.facets"
+        :total="result.total"
+        :meta="meta"
+        @update="set"
+      />
+    </div>
+    <ActiveFilters :state="state" :meta="meta" @update="set" @reset="reset" />
 
     <div v-if="loadError && online" class="error" role="alert">
       <p>Ditt hat nich jeklappt. Die Suche is jerade nich erreichbar. Versuch’s gleich nochmal.</p>
@@ -101,7 +111,9 @@ import {
 import { navigate } from "astro:transitions/client";
 import { computed, nextTick, onMounted, ref, shallowRef, useTemplateRef, watch } from "vue";
 
+import ActiveFilters from "./ActiveFilters.vue";
 import AlphabetRegister from "./AlphabetRegister.vue";
+import FilterBar from "./FilterBar.vue";
 import HitList from "./HitList.vue";
 import HitSkeleton from "./HitSkeleton.vue";
 import SearchEmpty from "./SearchEmpty.vue";

@@ -1,0 +1,185 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Bodies of the filter groups (docs/design/suche-v1/SPEC.md §7.2), shared by c-filter-popover and the mobile sheet:
+// .letters grid, .check rows (role="checkbox", .box), fieldsets with .label legends and .pills, .field inputs and
+// selects, .two (Beginnt mit / Endet auf side by side).
+@include mx.component("filter-groups") {
+  :scope {
+    --_track: 1.5px; // SPEC §4 label tracking
+    --_pill: 2.25rem; // SPEC §7.2 option pill 36px
+    --_check: 2.5rem; // SPEC §7.2 checkbox row 40px
+    --_box: 1.25rem; // SPEC §7.2 box 20px
+    --_letter: 3rem; // SPEC §7.2 letter cell 48px
+    --_text: 0.9375rem; // mock options 15px
+
+    display: grid;
+    gap: var(--space-4);
+    margin-block-end: var(--space-4);
+    font-size: var(--_text);
+  }
+
+  fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .label {
+    margin-block-end: var(--space-2);
+    padding: 0;
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.4;
+    letter-spacing: var(--_track);
+    text-transform: uppercase;
+    color: var(--color-warm-quiet);
+  }
+
+  button {
+    font: inherit;
+    color: var(--color-text-strong);
+    cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+
+    button {
+      min-block-size: var(--_pill);
+      padding-inline: var(--space-3);
+      border: 1px solid var(--color-warm-line);
+      border-radius: var(--radius-pill);
+      background: var(--color-warm-sheet);
+
+      @include butler-mx.hover {
+        background: var(--color-warm-card2);
+      }
+
+      &[aria-pressed="true"] {
+        border-color: var(--color-text-strong);
+        background: var(--color-warm-card3);
+        font-weight: var(--font-weight-bold);
+      }
+    }
+  }
+
+  .check {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    inline-size: 100%;
+    min-block-size: var(--_check);
+    padding-inline: var(--space-1);
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: none;
+    text-align: start;
+
+    @include butler-mx.hover {
+      background: var(--color-warm-card2);
+    }
+
+    small {
+      margin-inline-start: auto;
+      font-size: var(--font-size-label);
+      color: var(--color-warm-quiet);
+    }
+  }
+
+  .box {
+    display: grid;
+    flex: 0 0 var(--_box);
+    place-items: center;
+    block-size: var(--_box);
+    border: 1.5px solid var(--color-warm-quiet);
+    border-radius: var(--radius-xs);
+    color: transparent;
+
+    svg {
+      inline-size: var(--font-size-base);
+      block-size: var(--font-size-base);
+    }
+  }
+
+  .check[aria-checked="true"] .box {
+    border-color: var(--color-accent-solid);
+    background: var(--color-accent-solid);
+    color: var(--color-text-on-accent);
+  }
+
+  .letters {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--space-1);
+
+    button {
+      display: grid;
+      place-items: center;
+      min-block-size: var(--_letter);
+      padding-block: var(--space-1);
+      border: 1px solid var(--color-warm-line);
+      border-radius: var(--radius-sm);
+      background: var(--color-warm-sheet);
+      line-height: 1.1;
+
+      @include butler-mx.hover {
+        background: var(--color-warm-card2);
+      }
+
+      &[aria-pressed="true"] {
+        border-color: var(--color-text-strong);
+        background: var(--color-text-strong);
+        color: var(--color-warm-sheet);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+    }
+
+    b {
+      font-size: var(--font-size-base);
+    }
+
+    small {
+      font-size: var(--font-size-label);
+      color: var(--color-warm-quiet);
+    }
+
+    [aria-pressed="true"] small {
+      color: inherit;
+    }
+  }
+
+  label {
+    display: grid;
+    gap: var(--space-1);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+  }
+
+  .two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  .field {
+    inline-size: 100%;
+    min-block-size: var(--size-tap-target);
+    padding-inline: var(--space-3);
+    border: 1px solid var(--color-warm-line);
+    border-radius: var(--radius-sm);
+    background: var(--color-warm-sheet);
+    font: inherit;
+    font-size: var(--_text);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-strong);
+  }
+}

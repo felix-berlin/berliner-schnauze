@@ -2,7 +2,7 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 // Search page island (docs/design/suche-v1/SPEC.md §2, §3, §5, §6.2, §10): .head (h1 + intro), the GET form
-// around c-search-field, .meta (count + .keys), the .error / .offline strips, the .section head (h2 Treffer).
+// around c-search-field, .meta (count + .keys), .filters (desktop c-filter-bar), the .error / .offline strips, the .section head (h2 Treffer).
 // Children (c-search-field, c-alphabet-register, c-hit-list, c-search-empty, c-hit-skeleton) are placed by the grid.
 @include mx.component("search-app") {
   :scope {
@@ -157,8 +157,18 @@
     }
   }
 
+  // SPEC §3: the filter bar is desktop only (mobile: Task 10 sheet); 20px above it (grid gap 16px).
+  .filters {
+    display: none;
+    margin-block-start: var(--space-1);
+  }
+
   // Desktop (SPEC §3, from 808px viewport; the list is ~760px wide there).
   @container search-app (inline-size >= 47rem) {
+    .filters {
+      display: block;
+    }
+
     .head h1 {
       font-size: var(--_h1-wide);
     }

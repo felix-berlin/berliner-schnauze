@@ -1,0 +1,104 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Filter popover (docs/design/suche-v1/SPEC.md §7.2, §11; design doc „Oberfläche“): non-modal <dialog popover="auto">
+// under its chip via anchor positioning (implicit anchor from popovertarget); without position-area it keeps the
+// browser's centred placement. Parts: .title, .intro, the group slot, .foot (count + .done).
+@include mx.component("filter-popover") {
+  :scope {
+    --_width: 23.75rem; // SPEC §7.2 380px
+    --_gap: var(--space-2); // mock: 8px under the chip
+    --_title: 1.25rem; // SPEC §7.2 title 20px
+    --_done: 2.5rem; // mock .s1__ok 40px
+    --_fade: 180ms; // SPEC §11 popover 180ms
+    --_drop: translateY(-6px); // SPEC §11
+
+    inline-size: min(var(--_width), 100vi - 2 * var(--space-4));
+    max-block-size: calc(100dvb - 2 * var(--space-4));
+    padding: var(--space-5);
+    border: 1px solid transparent; // forced colors drops the shadow edge and draws this border
+    border-radius: var(--radius-sm);
+    background: var(--color-warm-sheet);
+    box-shadow: var(--shadow-menu);
+    color: var(--color-text-body);
+    opacity: 1;
+    transition-property: opacity, transform, display, overlay;
+    transition-duration: var(--_fade);
+    transition-timing-function: ease;
+    transition-behavior: allow-discrete;
+
+    @starting-style {
+      opacity: 0;
+    }
+
+    @include butler-mx.feature("motion") {
+      transform: none;
+
+      @starting-style {
+        transform: var(--_drop);
+      }
+    }
+  }
+
+  :scope:not(:popover-open) {
+    opacity: 0;
+    pointer-events: none;
+
+    @include butler-mx.feature("motion") {
+      transform: var(--_drop);
+    }
+  }
+
+  @supports (position-area: block-end) {
+    :scope {
+      inset: auto;
+      margin: var(--_gap) 0 0;
+      position-area: block-end span-inline-end;
+      position-try-fallbacks: flip-inline;
+      // The position-area cell is the containing block: a long list (Wortart, Thema) scrolls inside it.
+      max-block-size: calc(100% - var(--_gap) - var(--space-4));
+    }
+  }
+
+  .title {
+    margin: 0 0 var(--space-1);
+    font-family: var(--font-condensed);
+    font-size: var(--_title);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+  }
+
+  .intro {
+    margin: 0 0 var(--space-4);
+    font-size: var(--font-size-md);
+    line-height: 1.45;
+    color: var(--color-warm-quiet);
+  }
+
+  .foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin: var(--space-1) calc(var(--space-5) * -1) calc(var(--space-5) * -1);
+    padding: var(--space-3) var(--space-5);
+    border-block-start: 1px solid var(--color-warm-line);
+
+    small {
+      font-size: var(--font-size-label);
+      color: var(--color-warm-quiet);
+    }
+  }
+
+  .done {
+    min-block-size: var(--_done);
+    padding-inline: var(--space-4);
+    border: 1px solid transparent; // visible in forced colors
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-solid);
+    font: inherit;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-on-accent);
+    cursor: pointer;
+  }
+}
