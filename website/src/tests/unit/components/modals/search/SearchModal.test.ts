@@ -1,184 +1,170 @@
-import { mount } from "@vue/test-utils";
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import SearchModal from "@components/modals/search/SearchModal.vue";
+import { flushPromises, mount } from "@vue/test-utils";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
-const showFlyoutRef = ref(false);
-const searchCountRef = ref(0);
-const hasKeyboardRef = ref(true);
+import { hit, result } from "../../search/fixtures";
 
-vi.mock("@vueuse/core", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@vueuse/core")>();
-  return {
-    ...actual,
-    useMediaQuery: vi.fn(() => hasKeyboardRef),
-  };
-});
-
-let useStoreCallCount = 0;
-vi.mock("@nanostores/vue", () => ({
-  useStore: vi.fn(() => {
-    useStoreCallCount++;
-    if (useStoreCallCount === 1) return showFlyoutRef;
-    return searchCountRef;
-  }),
+const mocks = vi.hoisted(() => ({
+  close: vi.fn(),
+  fetchSearchIndex: vi.fn(),
+  getWordDb: vi.fn(),
+  navigate: vi.fn(),
+  runSearch: vi.fn(),
+  scrollToIndex: vi.fn(),
 }));
+const hasKeyboard = ref(true);
 
-vi.mock("@stores/wordList.ts", () => ({
-  $oramaSearchResults: {},
-  $searchQuery: {},
-  $searchResultCount: {},
-  $showWordListFilterFlyout: {},
+vi.mock("virtua/vue", () => ({
+  Virtualizer: {
+    methods: { scrollToIndex: mocks.scrollToIndex },
+    props: ["data", "scrollRef"],
+    template:
+      '<div><template v-for="(d, i) in (data || [])" :key="i"><slot :item="d" :index="i" /></template></div>',
+  },
 }));
-
-vi.mock("@components/SearchWords.vue", async () => {
-  const { createComponentStub } = await import("../../../helpers/stubs");
-  return createComponentStub("<div class='mock-search-words' />");
-});
-
-vi.mock("@components/word-search/WordFilter.vue", async () => {
-  const { createComponentStub } = await import("../../../helpers/stubs");
-  return createComponentStub("<div class='mock-word-filter' />");
-});
-
-vi.mock("@components/word-search/SearchResultCount.vue", () => ({
-  default: { template: "<div class='mock-search-result-count' />" },
-}));
-
-vi.mock("@components/word-search/NoSearchResults.vue", () => ({
-  default: { template: "<div class='mock-no-search-results' />" },
-}));
-
-vi.mock("@components/word-search/WordSearchFilterToggle.vue", () => ({
-  default: { template: "<div class='mock-filter-toggle' />" },
-}));
-
-vi.mock("@components/WordList.vue", () => {
-  const mod: Record<string | symbol, unknown> = {
-    [Symbol.toStringTag]: "Module",
-    default: { template: "<div class='mock-word-list' />" },
-  };
-  // vue-test-utils accesses Vue internal flags (__isTeleport, __isKeepAlive, name…) on the raw
-  // module proxy when an async component resolves. Use a permissive Proxy so those accesses
-  // return undefined/false instead of causing Vitest's strict proxy to throw.
-  return new Proxy(mod, {
-    get(target, key) {
-      return key in target ? target[key] : undefined;
-    },
-    has: () => true,
-  });
-});
-
+vi.mock("@services/wordSearchDb", () => ({ FULL_TEXT: {}, getWordDb: mocks.getWordDb }));
+vi.mock("@services/searchIndex.ts", () => ({ fetchSearchIndex: mocks.fetchSearchIndex }));
+vi.mock("@lib/search/run", () => ({ runSearch: mocks.runSearch }));
+vi.mock("astro:transitions/client", () => ({ navigate: mocks.navigate }));
+vi.mock("@utils/reportError.ts", () => ({ reportError: vi.fn() }));
+vi.mock("@stores/modal.ts", () => ({ close: mocks.close }));
 vi.mock("@components/ModalCloseButton.vue", () => ({
   default: { template: "<button class='mock-modal-close'><slot name='suffix' /></button>" },
 }));
-
-vi.mock("@components/word-search/shortcuts/ShortcutClose.vue", () => ({
-  default: { template: "<span class='mock-shortcut-close' />" },
+vi.mock("@vueuse/core", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@vueuse/core")>()),
+  useMediaQuery: vi.fn(() => hasKeyboard),
 }));
 
-vi.mock("@components/word-search/shortcuts/ShortcutNavigating.vue", () => ({
-  default: { template: "<span class='mock-shortcut-navigating' />" },
-}));
+const mountModal = () => mount(SearchModal, { attachTo: document.body });
+const field = (w: ReturnType<typeof mountModal>) => w.get('input[role="combobox"]');
+const type = async (w: ReturnType<typeof mountModal>, q: string) => {
+  await field(w).setValue(q);
+  await vi.advanceTimersByTimeAsync(200);
+  await flushPromises();
+};
 
-vi.mock("@components/word-search/shortcuts/ShortcutSelect.vue", () => ({
-  default: { template: "<span class='mock-shortcut-select' />" },
-}));
+beforeEach(() => {
+  vi.useFakeTimers();
+  hasKeyboard.value = true;
+  mocks.getWordDb.mockResolvedValue({ db: {}, size: 1 });
+  mocks.fetchSearchIndex.mockResolvedValue([]);
+});
+afterEach(() => {
+  vi.useRealTimers();
+  vi.clearAllMocks();
+  document.body.innerHTML = "";
+});
 
-describe("SearchModal.vue", () => {
-  beforeEach(() => {
-    vi.resetModules();
-    useStoreCallCount = 0;
-    showFlyoutRef.value = false;
-    searchCountRef.value = 0;
-    hasKeyboardRef.value = true;
+describe("SearchModal", () => {
+  it("lists ranked hits with divider", async () => {
+    mocks.runSearch.mockResolvedValue(
+      result([], {
+        rows: [
+          { hit: hit("Quarkwolke"), kind: "hit" },
+          { kind: "divider", label: "Ab hier: Treffer in der Bedeutung" },
+          { hit: hit("Zwiebelturm", 3), kind: "hit" },
+        ],
+        total: 2,
+      }),
+    );
+    const w = mountModal();
+    await type(w, "quark");
+
+    expect(mocks.runSearch).toHaveBeenLastCalledWith(
+      {},
+      [],
+      expect.objectContaining({ q: "quark" }),
+      expect.anything(),
+    );
+    const options = w.findAll('[role="option"]');
+    expect(options.map((o) => o.text())).toEqual([
+      expect.stringContaining("Quarkwolke"),
+      expect.stringContaining("Zwiebelturm"),
+    ]);
+    expect(w.text()).toContain("Ab hier: Treffer in der Bedeutung");
+    expect(w.find('[role="option"] mark').text()).toBe("Quark");
+    // Compact rows: no usage share, no play button.
+    expect(w.text()).not.toContain("jesagt");
+    expect(w.text()).not.toContain("zu wenig Stimmen");
   });
 
-  it("renders role='search' container", async () => {
-    const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
-    const wrapper = mount(SearchModal);
-    expect(wrapper.find("[role='search']").exists()).toBe(true);
+  it("opens the active hit with arrow keys and Enter", async () => {
+    mocks.runSearch.mockResolvedValue(result(["Quarkwolke", "Quarkspitze"]));
+    const w = mountModal();
+    await type(w, "quark");
+
+    await field(w).trigger("keydown", { key: "ArrowDown" });
+    await field(w).trigger("keydown", { key: "ArrowDown" });
+    await flushPromises();
+    expect(field(w).attributes("aria-activedescendant")).toBe("schnellsuche-quarkspitze");
+    await field(w).trigger("keydown", { key: "Enter" });
+    expect(mocks.navigate).toHaveBeenCalledWith("/wort/quarkspitze");
   });
 
-  it("has .c-search-container class", async () => {
-    const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
-    const wrapper = mount(SearchModal);
-    expect(wrapper.find(".c-search-container").exists()).toBe(true);
+  it("link carries the query", async () => {
+    mocks.runSearch.mockResolvedValue(result(["Quarkwolke"]));
+    const w = mountModal();
+    await type(w, "quark, brot");
+
+    const link = w.get("a[data-all]");
+    expect(link.text()).toBe("Alle Treffer und Filter");
+    expect(link.attributes("href")).toBe("/wort?q=quark,+brot");
   });
 
-  it("renders WordFilter", async () => {
-    const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
-    const wrapper = mount(SearchModal);
-    await vi.waitFor(() => expect(wrapper.find(".mock-word-filter").exists()).toBe(true));
+  it("no filter controls rendered", async () => {
+    mocks.runSearch.mockResolvedValue(result(["Quarkwolke"]));
+    const w = mountModal();
+    await type(w, "quark");
+
+    expect(w.findAll("select, input:not([type='search']), [role='group']")).toHaveLength(0);
+    expect(w.text().replace("Alle Treffer und Filter", "")).not.toMatch(
+      /Filter|Sortieren|Nach Bedeutung/,
+    );
+    expect(w.findAll("button").map((b) => b.attributes("aria-label") ?? b.text())).toEqual([
+      "Suche leeren",
+      "schließen",
+    ]);
   });
 
-  it("shows header when flyout is not visible", async () => {
-    showFlyoutRef.value = false;
-    const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
-    const wrapper = mount(SearchModal);
-    expect(wrapper.find(".c-modal__header").exists()).toBe(true);
+  it("does not show „Keene Treffer“ while the index loads", async () => {
+    mocks.getWordDb.mockReturnValue(new Promise(() => {}));
+    const w = mountModal();
+    await type(w, "quark");
+
+    expect(w.text()).toContain("Suche läuft");
+    expect(w.text()).not.toContain("Keene Treffer");
+    expect(mocks.runSearch).not.toHaveBeenCalled();
   });
 
-  it("hides header when flyout is visible", async () => {
-    showFlyoutRef.value = true;
-    const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
-    const wrapper = mount(SearchModal);
-    expect(wrapper.find(".c-modal__header").exists()).toBe(false);
+  it("drops a stale answer", async () => {
+    let first!: (r: unknown) => void;
+    mocks.runSearch
+      .mockReturnValueOnce(new Promise((res) => (first = res)))
+      .mockResolvedValueOnce(result(["Zwiebelturm"]));
+    const w = mountModal();
+    await type(w, "quark");
+    await type(w, "zwiebel");
+    first(result(["Quarkwolke"]));
+    await flushPromises();
+
+    expect(w.text()).toContain("Zwiebelturm");
+    expect(w.text()).not.toContain("Quarkwolke");
   });
 
-  it("renders footer shortcuts when flyout is not visible", async () => {
-    showFlyoutRef.value = false;
-    const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
-    const wrapper = mount(SearchModal);
-    expect(wrapper.find(".mock-shortcut-close").exists()).toBe(true);
-    expect(wrapper.find(".mock-shortcut-navigating").exists()).toBe(true);
-    expect(wrapper.find(".mock-shortcut-select").exists()).toBe(true);
+  it("closes the modal when a navigation swaps the page", () => {
+    mountModal();
+    document.dispatchEvent(new Event("astro:before-swap"));
+    expect(mocks.close).toHaveBeenCalled();
   });
 
-  it("hides footer when flyout is visible", async () => {
-    showFlyoutRef.value = true;
-    const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
-    const wrapper = mount(SearchModal);
-    expect(wrapper.find("footer").exists()).toBe(false);
-  });
-
-  it("hides shortcut hints but keeps the close button when no keyboard signal is present", async () => {
-    hasKeyboardRef.value = false;
-    const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
-    const wrapper = mount(SearchModal);
-    expect(wrapper.find(".mock-shortcut-close").exists()).toBe(false);
-    expect(wrapper.find(".mock-shortcut-navigating").exists()).toBe(false);
-    expect(wrapper.find(".mock-shortcut-select").exists()).toBe(false);
-    expect(wrapper.find(".mock-modal-close").exists()).toBe(true);
-  });
-
-  it("shows shortcut hints when a keyboard signal is present", async () => {
-    hasKeyboardRef.value = true;
-    const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
-    const wrapper = mount(SearchModal);
-    expect(wrapper.find(".mock-shortcut-close").exists()).toBe(true);
-    expect(wrapper.find(".mock-shortcut-navigating").exists()).toBe(true);
-    expect(wrapper.find(".mock-shortcut-select").exists()).toBe(true);
-  });
-
-  it("renders SearchResultCount when flyout is not visible", async () => {
-    showFlyoutRef.value = false;
-    const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
-    const wrapper = mount(SearchModal);
-    expect(wrapper.find(".mock-search-result-count").exists()).toBe(true);
-  });
-
-  it("renders NoSearchResults when flyout is not visible", async () => {
-    showFlyoutRef.value = false;
-    const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
-    const wrapper = mount(SearchModal);
-    expect(wrapper.find(".mock-no-search-results").exists()).toBe(true);
-  });
-
-  it("renders WordList when searchResultCount > 0 (covers line 17 v-if true branch)", async () => {
-    showFlyoutRef.value = false;
-    searchCountRef.value = 3;
-    const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
-    const wrapper = mount(SearchModal);
-    expect(wrapper.find("[role='search']").exists()).toBe(true);
+  it("keeps the keyboard hints only with a keyboard", async () => {
+    const w = mountModal();
+    expect(w.find("footer").text()).toContain("zum navigieren");
+    hasKeyboard.value = false;
+    await flushPromises();
+    expect(w.find("footer").text()).not.toContain("zum navigieren");
+    expect(w.find(".mock-modal-close").exists()).toBe(true);
   });
 });

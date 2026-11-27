@@ -1,34 +1,21 @@
 <template>
-  <!-- TODO: replace by <search></search>  -->
-  <div role="search" class="c-search-container">
-    <div v-if="!showWordListFilterFlyout" class="c-modal__header">
-      <WordSearchFilterToggle />
-      <SearchWords ref="searchWords" :auto-focus="true" />
-    </div>
+  <QuickSearch />
 
-    <WordFilter :close-on-click-outside="false" />
-
-    <template v-if="!showWordListFilterFlyout">
-      <SearchResultCount />
-
-      <NoSearchResults />
-
-      <WordList
-        v-if="searchResultCount > 0"
-        class="c-word-list--small"
-        single-word-gap=".5rem"
-        :show-dropdown="false"
-        :use-window-virtualizer="false"
-        :item-size="60"
-      />
-    </template>
-  </div>
-
-  <footer v-if="!showWordListFilterFlyout">
+  <footer>
     <template v-if="hasKeyboard">
-      <ShortcutSelect />
-      <ShortcutNavigating />
-      <ShortcutClose />
+      <span class="c-shortcut">
+        <kbd><CornerDownLeftIcon aria-label="Enter Taste" class="c-shortcut__key" /></kbd>
+        <span class="c-shortcut__text">zum auswählen</span>
+      </span>
+      <span class="c-shortcut">
+        <kbd><ArrowUpIcon aria-label="Pfeil oben Taste" class="c-shortcut__key" /></kbd>
+        <kbd><ArrowDownIcon aria-label="Pfeil unten Taste" class="c-shortcut__key" /></kbd>
+        <span class="c-shortcut__text">zum navigieren</span>
+      </span>
+      <span class="c-shortcut">
+        <kbd class="c-shortcut__key">ESC</kbd>
+        <span class="c-shortcut__text">zum schließen</span>
+      </span>
     </template>
     <ModalCloseButton>
       <template #suffix>schließen</template>
@@ -38,29 +25,20 @@
 
 <script setup lang="ts">
 import ModalCloseButton from "@components/ModalCloseButton.vue";
-import NoSearchResults from "@components/word-search/NoSearchResults.vue";
-import SearchResultCount from "@components/word-search/SearchResultCount.vue";
-import ShortcutClose from "@components/word-search/shortcuts/ShortcutClose.vue";
-import ShortcutNavigating from "@components/word-search/shortcuts/ShortcutNavigating.vue";
-import ShortcutSelect from "@components/word-search/shortcuts/ShortcutSelect.vue";
-import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
-import { useStore } from "@nanostores/vue";
-import { $searchResultCount, $showWordListFilterFlyout } from "@stores/wordList.ts";
-import { useMediaQuery } from "@vueuse/core";
-import { defineAsyncComponent } from "vue";
-
-// Async so it shares one chunk (and one CSS file) with the WordFilter island
-const WordFilter = defineAsyncComponent(() => import("@components/word-search/WordFilter.vue"));
-const SearchWords = defineAsyncComponent(() => import("@components/SearchWords.vue"));
-const WordList = defineAsyncComponent(() => import("@components/WordList.vue"));
-
-const showWordListFilterFlyout = useStore($showWordListFilterFlyout);
-const searchResultCount = useStore($searchResultCount);
+import QuickSearch from "@components/search/QuickSearch.vue";
+import { close } from "@stores/modal.ts";
+import { useEventListener, useMediaQuery } from "@vueuse/core";
+import ArrowDownIcon from "virtual:icons/lucide/arrow-down";
+import ArrowUpIcon from "virtual:icons/lucide/arrow-up";
+import CornerDownLeftIcon from "virtual:icons/lucide/corner-down-left";
 
 // Coarse pointer (touch) implies no keyboard is the primary input; the shortcut
 // hints below are meaningless without one. Reactive so a paired Bluetooth keyboard
 // can still bring the hints back mid-session.
 const hasKeyboard = useMediaQuery("(pointer: fine)");
+
+// The modal island is not persisted: a hit or the /wort link navigates, the open dialog must not survive the swap.
+useEventListener(document, "astro:before-swap", close);
 </script>
 
 <style lang="scss">

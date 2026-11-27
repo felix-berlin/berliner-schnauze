@@ -24,7 +24,7 @@ import { jsonLd, seoData } from '@utils/helpers';
 import { homeDescription, homeJsonLd } from '@utils/homeJsonLd';
 
 // Old share links (/?q=…) pointed at the search that used to live here. Redirect only real page loads:
-// ClientRouter fetches carry ?q= to every target (useSearchQuerySync) and must stay on the home page.
+// ClientRouter fetches to / with ?q= must stay on the home page.
 // 302, not 301: a browser would reuse a cached 301 for those fetches as well.
 const query = Astro.url.searchParams.get('q');
 if (query && Astro.request.headers.get('sec-fetch-mode') === 'navigate') {

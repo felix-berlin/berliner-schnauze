@@ -26,7 +26,6 @@ export default [
   "src/styles/components/_word-list.scss",
   "src/styles/components/_word-range-slider.scss",
   "src/styles/components/_word-search-filter-toggle.scss",
-  "src/styles/components/_word-search.scss",
   "src/styles/components/modals/_search-modal.scss",
   "src/styles/objects/_error-page.scss",
   "src/styles/objects/_legal-pages.scss",

@@ -4,6 +4,7 @@
     role="option"
     :aria-selected="active ? 'true' : 'false'"
     class="c-hit-row"
+    :data-variant="compact ? 'compact' : undefined"
     @click="open"
   >
     <div class="inner">
@@ -40,7 +41,7 @@
         </template>
       </p>
 
-      <div class="side">
+      <div v-if="!compact" class="side">
         <span v-if="share" class="usage" title="Anteil „Sag ick selbst“ in der Umfrage">
           jesagt
           <span class="bar" aria-hidden="true"><i :style="{ inlineSize: `${percent}%` }" /></span>
@@ -91,8 +92,10 @@ const props = withDefaults(
     id: string;
     /** Bezirk / Altersgruppe of the Gebrauch filter: the share shown is the one of that group. */
     scope?: Pick<SearchState, "area" | "age">;
+    /** Header quick search: smaller row without the usage share and play button. */
+    compact?: boolean;
   }>(),
-  { scope: () => ({}), trendRank: undefined },
+  { compact: false, scope: () => ({}), trendRank: undefined },
 );
 
 const IconCalendar = defineAsyncComponent(() => import("virtual:icons/lucide/calendar"));

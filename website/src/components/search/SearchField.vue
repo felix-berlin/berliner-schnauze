@@ -2,15 +2,15 @@
   <div class="c-search-field">
     <div class="inner">
       <IconSearch class="lens" aria-hidden="true" />
-      <label for="search-q" class="u-sr-only">Wort oder Bedeutung suchen</label>
+      <label :for="`${list}-feld`" class="u-sr-only">Wort oder Bedeutung suchen</label>
       <input
-        id="search-q"
+        :id="`${list}-feld`"
         ref="input"
         v-model="model"
         type="search"
         name="q"
         role="combobox"
-        :aria-controls="aiList ? 'ki-treffer treffer' : 'treffer'"
+        :aria-controls="aiList ? `ki-treffer ${list}` : list"
         aria-autocomplete="list"
         :aria-expanded="expanded ? 'true' : 'false'"
         :aria-activedescendant="activeId"
@@ -47,8 +47,9 @@
 import { useMediaQuery, useMounted } from "@vueuse/core";
 import { computed, defineAsyncComponent, useTemplateRef } from "vue";
 
-/** `aiList`: the KI result list is shown, ↑/↓ may point into it. */
-defineProps<{
+/** `aiList`: the KI result list is shown, ↑/↓ may point into it. `list`: id of the listbox (the header modal has its own). */
+const { list = "treffer" } = defineProps<{
+  list?: string;
   activeId?: string;
   expanded: boolean;
   ai?: boolean;
