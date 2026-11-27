@@ -41,6 +41,10 @@ describe("FilterSheet", () => {
     expect(summary("Wortart").get("[data-summary]").text()).toBe("2 gewählt");
     expect(summary("Thema").get("[data-summary]").text()).toBe("Alle");
     expect(summary("Gebrauch").get("[data-summary]").text()).toBe("Egal");
+    // One value from a single-choice field shows its label, without the bracket.
+    const one = mountSheet(state({ often: "oft", q: "aal" }));
+    const gebrauch = one.findAll("summary").find((s) => s.text().startsWith("Gebrauch"))!;
+    expect(gebrauch.get("[data-summary]").text()).toBe("Oft");
     // Only „Gebrauch“ starts open, and the items are not exclusive.
     const open = w.findAll("details").filter((d) => d.attributes("open") !== undefined);
     expect(open.map((d) => d.get("summary").text())).toEqual([expect.stringMatching(/^Gebrauch/)]);

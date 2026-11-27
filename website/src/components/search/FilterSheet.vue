@@ -75,11 +75,11 @@ import {
   AccordionTrigger,
   BaseAccordion,
 } from "@components/accordion";
-import { FILTER_GROUPS } from "@lib/search/labels";
+import { AGES, LENGTHS, OFTEN, SYLLABLES, WHERE, label } from "@lib/search/labels";
 import {
   activeFilterCount,
   groupFilterCount,
-  showsLetterChip,
+  visibleGroups,
   type FilterGroup,
   type SearchState,
 } from "@lib/search/state";
@@ -96,7 +96,12 @@ const props = defineProps<{
   total: number;
   meta: InstanceType<typeof FilterGroups>["$props"]["meta"];
 }>();
-const emit = defineEmits<{ update: [patch: Partial<SearchState>]; reset: [] }>();
+const emit = defineEmits<{
+  update: [patch: Partial<SearchState>];
+  reset: [];
+  /** Closed because the button went away (desktop width): focus needs a new home. */
+  hidden: [];
+}>();
 
 const IconCheck = defineAsyncComponent(() => import("virtual:icons/lucide/check"));
 const IconFilter = defineAsyncComponent(() => import("virtual:icons/lucide/sliders-horizontal"));
@@ -104,12 +109,25 @@ const IconX = defineAsyncComponent(() => import("virtual:icons/lucide/x"));
 
 const DRAG_CLOSE = 80; // px pulled down that close the sheet
 
-const groups = computed(() =>
-  FILTER_GROUPS.filter((g) => g.group !== "buchstabe" || showsLetterChip(props.state)),
-);
+const groups = computed(() => visibleGroups(props.state));
 const count = computed(() => activeFilterCount(props.state));
+/** With one value from a single-choice field the summary names it („Oft“), like the mock. */
+const single = (group: FilterGroup): string | undefined => {
+  const s = props.state;
+  if (group === "gebrauch") {
+    if (s.often) return label(OFTEN, s.often);
+    if (s.where) return label(WHERE, s.where);
+    if (s.area) return props.meta.areas.find((a) => a.key === s.area)?.name ?? s.area;
+    if (s.age) return label(AGES, s.age);
+  }
+  if (group === "wortform") {
+    if (s.syllables) return label(SYLLABLES, s.syllables);
+    if (s.length) return label(LENGTHS, s.length);
+  }
+};
 const summary = (group: FilterGroup) => {
   const n = groupFilterCount(props.state, group);
+  if (n === 1) return single(group) ?? "1 gewählt";
   if (n) return `${n} gewählt`;
   return group === "gebrauch" ? "Egal" : "Alle";
 };
@@ -123,7 +141,11 @@ const open = () => dialog.value?.showModal();
 const close = () => dialog.value?.close();
 
 // Turning a phone to landscape hides the button (desktop bar): a hidden modal would leave the page inert.
-useResizeObserver(opener, ([e]) => e && !e.contentRect.width && close());
+useResizeObserver(opener, ([e]) => {
+  if (!e || e.contentRect.width || !dialog.value?.open) return;
+  close();
+  emit("hidden");
+});
 
 // closedby="any" is missing in Safari: a click on the backdrop lands on the dialog outside its box.
 function onClick(e: MouseEvent) {

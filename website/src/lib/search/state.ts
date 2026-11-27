@@ -1,5 +1,7 @@
 import type { AgeGroup, ContentKey, SortKey } from "./types";
 
+import { FILTER_GROUPS } from "./labels";
+
 export type SearchState = {
   q: string;
   letter?: string;
@@ -33,14 +35,6 @@ export const effectiveSort = (s: SearchState): SortKey =>
 
 /** The filter chips (SPEC §7.1); „Nur Berolinismen“ is a toggle, not a group. */
 export type FilterGroup = "buchstabe" | "wortart" | "thema" | "gebrauch" | "inhalt" | "wortform";
-const FILTER_GROUPS: FilterGroup[] = [
-  "buchstabe",
-  "wortart",
-  "thema",
-  "gebrauch",
-  "inhalt",
-  "wortform",
-];
 
 /** Selected values in one group (the chip's count pill): two word types count 2. */
 export const groupFilterCount = (s: SearchState, group: FilterGroup): number => {
@@ -62,9 +56,13 @@ export const groupFilterCount = (s: SearchState, group: FilterGroup): number => 
 
 /** One per chip value: two selected word types count 2. */
 export const activeFilterCount = (s: SearchState): number =>
-  FILTER_GROUPS.reduce((n, g) => n + groupFilterCount(s, g), s.berolinismus ? 1 : 0);
+  FILTER_GROUPS.reduce((n, { group }) => n + groupFilterCount(s, group), s.berolinismus ? 1 : 0);
 
 export const isFiltered = (s: SearchState): boolean => activeFilterCount(s) > 0;
 
 /** SPEC §6.4: in the start state (no query, no letter) the register replaces the „Buchstabe“ chip. */
 export const showsLetterChip = (s: SearchState): boolean => !!s.q || !!s.letter;
+
+/** The groups the bar and the mobile sheet show, in chip order. */
+export const visibleGroups = (s: SearchState) =>
+  FILTER_GROUPS.filter((g) => g.group !== "buchstabe" || showsLetterChip(s));

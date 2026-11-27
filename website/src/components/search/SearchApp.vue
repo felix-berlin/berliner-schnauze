@@ -49,6 +49,7 @@
         :meta="meta"
         @update="set"
         @reset="reset"
+        @hidden="focusFilters"
       />
       <SortSelect :state="state" compact @update="set" />
     </div>

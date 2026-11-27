@@ -51,10 +51,9 @@
 <script setup lang="ts">
 import type { facets as facetsOf } from "@lib/search/facets";
 
-import { FILTER_GROUPS } from "@lib/search/labels";
 import {
   groupFilterCount,
-  showsLetterChip,
+  visibleGroups,
   type FilterGroup,
   type SearchState,
 } from "@lib/search/state";
@@ -77,9 +76,7 @@ const IconCheck = defineAsyncComponent(() => import("virtual:icons/lucide/check"
 const IconChevron = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-down"));
 
 // SPEC §6.4: in the start state the register replaces the „Buchstabe“ chip.
-const chips = computed(() =>
-  FILTER_GROUPS.filter((g) => g.group !== "buchstabe" || showsLetterChip(props.state)),
-);
+const chips = computed(() => visibleGroups(props.state));
 
 // From 4 active chips (count pills, bold labels) the „Sortieren“ text no longer fits beside them at 1160px.
 const crowded = computed(

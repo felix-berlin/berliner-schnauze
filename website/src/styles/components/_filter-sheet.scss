@@ -69,6 +69,7 @@
     border-start-start-radius: var(--_radius);
     border-start-end-radius: var(--_radius);
     background: var(--color-warm-sheet);
+    // TODO(suche): mock has an upward shadow 0 -8px 24px rgb(0 0 0/25%); no upward shadow token yet.
     color: var(--color-text-body);
     overflow: hidden;
     opacity: 0;
@@ -83,14 +84,11 @@
 
     &::backdrop {
       background: var(--_scrim);
+      cursor: pointer; // closedby="any" (and the Safari fallback) close on a click here
       opacity: 0;
       transition-property: opacity, display, overlay;
       transition-duration: var(--_slide);
       transition-behavior: allow-discrete;
-    }
-
-    &[closedby="any"]::backdrop {
-      cursor: pointer;
     }
 
     &[open] {
