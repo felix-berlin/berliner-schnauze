@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 
 import { getTestPayload } from "./helpers/payload";
 
@@ -6,7 +6,6 @@ const SLUG = "adopt-testwort";
 const SPELLING = "Adopt Testwort";
 
 afterEach(async () => {
-  vi.restoreAllMocks();
   const payload = await getTestPayload();
   await payload.delete({
     collection: "suggestions",
@@ -265,5 +264,94 @@ describe("accepting an example, fact or related suggestion", () => {
     });
     expect(res.errors).toHaveLength(0);
     expect(res.docs[0]?.status).toBe("rejected");
+  });
+
+  it("keeps both entries when two suggestions for the same word are accepted at the same time", async () => {
+    const word = await liveWord();
+    const a = await suggest(word.id, { text: "adopt-test a" });
+    const b = await suggest(word.id, { text: "adopt-test b" });
+    await Promise.all([accept(a.id), accept(b.id)]);
+    expect((await published(word.id)).examples?.map((e) => e.example).sort()).toEqual([
+      "adopt-test a",
+      "adopt-test b",
+    ]);
+  });
+
+  it("refuses to accept a suggestion that is created already accepted, for the word types that need its id", async () => {
+    const payload = await getTestPayload();
+    const word = await liveWord();
+    await expect(
+      payload.create({
+        collection: "suggestions",
+        data: {
+          type: "example",
+          targetWord: word.id,
+          text: "adopt-test x",
+          status: "accepted",
+        } as never,
+      }),
+    ).rejects.toThrow(/erst speichern/i);
+    expect((await published(word.id)).examples ?? []).toHaveLength(0);
+  });
+
+  it("cuts a suggester name to the 40 characters a credit allows", async () => {
+    const word = await liveWord();
+    const s = await suggest(word.id, { userName: "N".repeat(100) });
+    await accept(s.id);
+    expect((await published(word.id)).examples?.[0]?.contributorName).toBe("N".repeat(40));
+  });
+
+  it("refuses to accept again with changed text instead of reporting a success that wrote nothing", async () => {
+    const payload = await getTestPayload();
+    const word = await liveWord();
+    const s = await suggest(word.id);
+    await accept(s.id);
+    await payload.update({
+      collection: "suggestions",
+      id: s.id,
+      data: { status: "new", text: "adopt-test anders" },
+    });
+    await expect(accept(s.id)).rejects.toThrow(/steht schon im Wort/);
+    expect((await published(word.id)).examples?.[0]?.example).toBe("adopt-test Satz");
+  });
+
+  it("says so when the target word is gone", async () => {
+    const payload = await getTestPayload();
+    const word = await liveWord();
+    const s = await suggest(word.id);
+    await payload.delete({ collection: "words", id: word.id });
+    await expect(accept(s.id)).rejects.toThrow(/Wort/);
+    expect((await payload.findByID({ collection: "suggestions", id: s.id, depth: 0 })).status).toBe(
+      "new",
+    );
+  });
+
+  it("rolls the word write back when the suggestion save fails after it", async () => {
+    const payload = await getTestPayload();
+    const word = await liveWord();
+    const s = await suggest(word.id);
+    // The hook writes the word first; the over-long text then fails the suggestion's own validation.
+    await expect(
+      payload.update({
+        collection: "suggestions",
+        id: s.id,
+        data: { status: "accepted", text: "x".repeat(300) },
+      }),
+    ).rejects.toThrow();
+    expect((await published(word.id)).examples ?? []).toHaveLength(0);
+    expect((await payload.findByID({ collection: "suggestions", id: s.id, depth: 0 })).status).toBe(
+      "new",
+    );
+  });
+
+  it("moves the cache stamp for a new entry but not when the entry is already there", async () => {
+    const payload = await getTestPayload();
+    const word = await liveWord();
+    const s = await suggest(word.id);
+    await accept(s.id);
+    await payload.update({ collection: "suggestions", id: s.id, data: { status: "new" } });
+    await payload.updateGlobal({ slug: "cache-stamp", data: { changedAt: CHANGED } });
+    await accept(s.id); // same text: nothing to write
+    expect(await stamp()).toBe(CHANGED);
   });
 });

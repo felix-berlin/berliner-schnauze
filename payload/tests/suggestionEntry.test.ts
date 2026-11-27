@@ -1,17 +1,18 @@
 import { describe, expect, it } from "vitest";
 
+import { lexicalToHtml } from "../src/lib/lexicalHtml";
 import { suggestionEntry, textToLexical } from "../src/lib/suggestionEntry";
 
 const base = { id: 7, userName: "Betty" };
 
 describe("textToLexical", () => {
   it("makes one paragraph per blank-line block and keeps single line breaks inside", () => {
-    const { root } = textToLexical("Eins\nzwei\n\nDrei\n\n\n  \nVier") as {
+    const { root } = textToLexical("Eins\nzwei\n\nDrei\n\n\n  \nVier") as unknown as {
       root: { children: { type: string; children: { text?: string; type: string }[] }[] };
     };
     expect(root.children.map((p) => p.type)).toEqual(["paragraph", "paragraph", "paragraph"]);
     const texts = root.children.map((p) => p.children.map((c) => c.text ?? "\n").join(""));
-    expect(texts).toEqual(["Eins\nzwei", "Drei", "Vier"]);
+    expect(texts).toEqual(["Eins\nzwei", "Drei", "Vier"]); // a linebreak node reads back as "\n"
   });
 });
 
@@ -74,5 +75,50 @@ describe("suggestionEntry", () => {
     [{ type: "word" }, /Typ/],
   ])("refuses %j with a readable message", (s, message) => {
     expect(() => suggestionEntry({ id: 1, ...s })).toThrow(message);
+  });
+});
+
+describe("suggestionEntry edge cases", () => {
+  it("cuts the credit name to the 40 characters a word row allows", () => {
+    const { row } = suggestionEntry({
+      id: 1,
+      type: "example",
+      text: "Satz.",
+      userName: "N".repeat(100),
+    });
+    expect((row as { contributorName: string }).contributorName).toHaveLength(40);
+  });
+
+  it("refuses a fact without a kind and a kind or relation the word does not know", () => {
+    expect(() => suggestionEntry({ id: 1, type: "fact", text: "A" })).toThrow(/Art/);
+    expect(() => suggestionEntry({ id: 1, type: "fact", kind: "quatsch", text: "A" })).toThrow(
+      /Art/,
+    );
+    expect(() =>
+      suggestionEntry({ id: 1, type: "related", relatedText: "A", relation: "quatsch" }),
+    ).toThrow(/Beziehung/);
+  });
+
+  it("leaves the relation out when the suggestion has none", () => {
+    const { row } = suggestionEntry({ id: 1, type: "related", relatedText: "Pfote" });
+    expect(row).toEqual({ label: "Pfote", contributorSuggestion: 1 });
+  });
+});
+
+describe("textToLexical line breaks", () => {
+  it("turns a single line break into a linebreak node instead of a raw newline", () => {
+    const { root } = textToLexical("Eins\nzwei") as unknown as {
+      root: { children: { children: { text?: string; type: string }[] }[] };
+    };
+    expect(root.children[0]!.children.map((c) => c.type)).toEqual(["text", "linebreak", "text"]);
+    expect(root.children[0]!.children.map((c) => c.text)).toEqual(["Eins", undefined, "zwei"]);
+  });
+});
+
+describe("textToLexical rendering", () => {
+  it("renders paragraphs and line breaks as html the site shows", () => {
+    expect(lexicalToHtml(textToLexical("Eins\nzwei\n\nDrei"))).toMatch(
+      /<p>Eins<br\s*\/?>zwei<\/p>\s*<p>Drei<\/p>/,
+    );
   });
 });

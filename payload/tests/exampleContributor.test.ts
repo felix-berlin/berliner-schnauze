@@ -7,6 +7,7 @@ const WORD = "example-contributor-test";
 afterEach(async () => {
   const payload = await getTestPayload();
   await payload.delete({ collection: "words", where: { berlinerisch: { equals: WORD } } });
+  await payload.delete({ collection: "suggestions", where: { berlinerWord: { equals: WORD } } });
 });
 
 type FieldLike = { name?: string; fields?: FieldLike[]; access?: Record<string, Function> };
@@ -38,7 +39,6 @@ describe("word examples credit", () => {
       contributorName: "Betty",
       contributorSuggestion: suggestion.id,
     });
-    await payload.delete({ collection: "suggestions", id: suggestion.id });
   });
 
   it("hides contributorName from MCP reads and writes, like on facts", async () => {

@@ -140,3 +140,9 @@
 - [ ] **Step 2:** Run `pnpm format`, `pnpm lint`, `pnpm test:unit`, the whole payload suite via `scripts/with-env.sh`, `pnpm typecheck` (root `typechecking`), and `scripts/migration-upgrade-test.sh`. Also migrate an empty database from scratch (as in the last CI fix) to confirm the new migration works on a fresh DB.
 - [ ] **Step 3: Commit** `docs(word): document suggestion adoption`, push, and watch the pipeline.
 - [ ] **Step 4:** Tell the operator: the privacy policy must name the public credit under examples too (not code).
+
+## Abweichungen bei der Umsetzung
+
+- Aufgabe 2: Beispiele laufen über `toWord` (`contributorSuggestion` als Id) direkt in die Karte, kein `contributor`-Objekt über `wordPage.ts`.
+- Aufgabe 4: Das Zielwort wird mit zwei `findByID` (`draft: true` / `draft: false`, `trash: true`) geprüft. Später kamen dazu: Zeilensperre, `refuseBulkAccept`, MCP- und Create-Ablehnung, Namenskürzung, Duplikat-Prüfung mit Meldung (siehe Nachtrag im Design).
+- Aufgabe 1: `examples` steht auch in `mcpKeepCredits`, sonst löscht ein MCP-Update die versteckten Namen.

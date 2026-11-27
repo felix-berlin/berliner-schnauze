@@ -70,6 +70,47 @@ describe("initContributeTriggers", () => {
     expect(own?.match(/Wird jeprüft/g)).toHaveLength(1);
   });
 
+  describe("matching an own submission against the public card", () => {
+    const own = (): string => button("[data-own=example]").textContent ?? "";
+    const withCard = (html: string, ...previews: string[]) => {
+      cleanup();
+      for (const p of previews) rememberSubmission("schrippe", "example", p);
+      document.querySelector("[data-form=example]")!.insertAdjacentHTML("afterbegin", html);
+      cleanup = initContributeTriggers();
+    };
+
+    it("keeps a short text that only occurs inside other words of the card", () => {
+      withCard("<ul><li>Kiezkneipe</li></ul>", "Kiez");
+      expect(own()).toContain("Wird jeprüft");
+    });
+
+    it("hides a short text that is a whole entry of the card", () => {
+      withCard("<ul><li>Kiez</li><li>Kneipe</li></ul>", "Kiez");
+      expect(own()).not.toContain("Wird jeprüft");
+    });
+
+    it("hides a text that runs over paragraphs of one published entry", () => {
+      withCard(
+        "<div><p>Erster Absatz hier</p><p>Zweiter Absatz da</p></div>",
+        "Erster Absatz hier\n\nZweiter Absatz da",
+      );
+      expect(own()).not.toContain("Wird jeprüft");
+    });
+
+    it("hides a long text that is a published entry with markup inside", () => {
+      withCard(
+        "<ol><li><q>Zwee <b>Schrippen</b>, bitte, und ’n Kaffee</q></li></ol>",
+        "Zwee Schrippen, bitte, und ’n Kaffee",
+      );
+      expect(own()).not.toContain("Wird jeprüft");
+    });
+
+    it("never treats a blank preview as published", () => {
+      withCard("<ul><li>Kiez</li></ul>", "   ");
+      expect(own()).toContain("Wird jeprüft");
+    });
+  });
+
   it("cleans up: no listener, no chips update afterwards", () => {
     cleanup();
     button("[data-contribute=fact]").click();

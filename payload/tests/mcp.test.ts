@@ -327,7 +327,7 @@ describe("mcp endpoint", () => {
         name: "updateSuggestions",
         arguments: { id: suggestion.id, status: "accepted" },
       });
-      expect(text(body)).toMatch(/nur als Entwurf/);
+      expect(text(body)).toMatch(/nicht über MCP/);
       expect(
         (await payload.findByID({ collection: "suggestions", id: suggestion.id })).status,
       ).toBe("new");

@@ -10,10 +10,10 @@ Der Betreiber setzte den Beispielsatz-Vorschlag „Nimm deene Griffel weg!“ au
 
 - Status `accepted` an einem Vorschlag schreibt den Inhalt ins Wort und veröffentlicht ihn, in einer Transaktion mit dem Speichern des Vorschlags. Danach zeigt die Seite ihn (der Cache-Stempel leert den Cache).
   - `example` → neuer Eintrag in `examples` (`example` = Text, `exampleExplanation` = Highdeutsch, `contributorName` = User Name, `contributorSuggestion` = dieser Vorschlag).
-- `examples` bekommt dieselben Felder `contributorName` und `contributorSuggestion` wie `facts` und `related`, und die Wortseite zeigt „Beitrag von …“ unter dem Beispiel wie bei Wissenswertem (Betreiber-Entscheidung).
   - `fact` → neuer Eintrag in `facts` (`kind`, `text` als einfacher Rich-Text-Absatz, `contributorName` = User Name, `contributorSuggestion` = dieser Vorschlag).
   - `related` → neuer Eintrag in `related` (`label` = Related Text, `relation`, `contributorName`, `contributorSuggestion`).
   - `word` (Neues Wort) → das Wort wird angelegt (wie bisher) **und veröffentlicht**.
+- `examples` bekommt dieselben Felder `contributorName` und `contributorSuggestion` wie `facts` und `related`, und die Wortseite zeigt „Beitrag von …“ unter dem Beispiel wie bei Wissenswertem (Betreiber-Entscheidung).
 - Scheitert etwas (leerer Slug, belegter Slug, Pflichtfeld fehlt, Wort nicht veröffentlicht), wird das Speichern mit lesbarer Fehlermeldung abgebrochen; der Status bleibt, das Wort bleibt unverändert.
 
 ## Non-goals
@@ -24,7 +24,7 @@ Der Betreiber setzte den Beispielsatz-Vorschlag „Nimm deene Griffel weg!“ au
 
 ## Anti-Goals
 
-- Nichts darf unbeabsichtigt live gehen: hat das Zielwort einen **unveröffentlichten Entwurf mit anderen Änderungen** (Payload kennt nur einen Entwurf pro Wort), wird abgebrochen: „Wort hat ungespeicherte Entwurfsänderungen, erst veröffentlichen“. Entscheidung des Betreibers.
+- Nichts darf unbeabsichtigt live gehen: hat das Zielwort einen **unveröffentlichten Entwurf mit anderen Änderungen** (Payload kennt nur einen Entwurf pro Wort), wird abgebrochen: „Das Wort „X“ hat unveröffentlichte Entwurfsänderungen. Erst das Wort veröffentlichen, dann übernehmen.“. Entscheidung des Betreibers.
 - Ein bereits übernommener Vorschlag wird nicht ein zweites Mal eingetragen (nur der Wechsel nach `accepted` löst aus).
 
 ## Approaches
@@ -39,14 +39,14 @@ Der Betreiber setzte den Beispielsatz-Vorschlag „Nimm deene Griffel weg!“ au
 - „Entwurf mit anderen Änderungen“ heißt: die neueste Version des Worts ist neuer als die veröffentlichte. Wie genau das erkannt wird, bestimmt der Bauherr.
 - `fact`-Text (Textarea) wird ein einfacher Lexical-Absatz; kein HTML-Parser (jsdom darf nicht in den Bundle, siehe Migration `content_globals`).
 - Die neuen Felder an `examples` sind wie bei `facts` für MCP unsichtbar und nicht änderbar (`notOverMcp`); die Datenschutzerklärung nennt die öffentliche Namensnennung schon für `facts`/`related` und muss `examples` mit abdecken (Hinweis an den Betreiber, kein Code).
-- Ein Vorschlag mit gewähltem `word` oder `targetWord` auf ein Wort im Papierkorb bricht ab.
+- Ein Vorschlag mit `targetWord` auf ein Wort im Papierkorb bricht ab (ein von Hand gewähltes `word` wird nur verknüpft, ohne Prüfung).
 - Nach dem Veröffentlichen sperrt die bestehende Regel „Vorschlag ist gesperrt, solange sein Wort veröffentlicht ist“ nur Vorschläge mit `word`; `example`/`fact`/`related` nutzen `targetWord` und bleiben bearbeitbar.
 
 ## Constraints
 
 - Code, Kommentare, Tests, Commits auf Englisch; Fehlermeldungen im Admin Deutsch (wie `adoptSuggestion`).
 - Eine Migration nach expand/contract (`.claude/rules/payload-migrations.md`): nur zwei neue nullable Spalten an der Beispiel-Tabelle, alter Code ignoriert sie.
-- Der Hook darf bei `skipCacheStamp`-Kontexten (Migrationen) nichts ändern.
+- Der Cache-Stempel bleibt für `skipCacheStamp`-Kontexte (Migrationen) unberührt; das regelt `cacheStamp.ts`, nicht der Hook.
 
 ## Tests
 
@@ -60,3 +60,10 @@ Der Betreiber setzte den Beispielsatz-Vorschlag „Nimm deene Griffel weg!“ au
 ## Dem Builder überlassen
 
 - Erkennung „Entwurf neuer als veröffentlicht“ (Versionen vergleichen), Aufbau des Lexical-Absatzes, Reihenfolge der Prüfungen, Doku in `payload/CLAUDE.md` (Abschnitt „Suggestions → words“ und der Hilfetext am Status-Feld).
+
+## Nachtrag nach dem Review (PR #1969)
+
+- Zwei Annahmen am selben Wort zugleich: die Wortzeile wird gesperrt (`for no key update`), sonst ging eine Zeile verloren.
+- Annehmen über MCP wird für jeden Typ abgelehnt (403); ein Vorschlag, der schon beim Anlegen „Übernommen“ ist, ebenso (die Zeile braucht die Id); Sammelbearbeitung ebenfalls.
+- Der Name im Credit wird auf 40 Zeichen gekürzt; ein schon eingetragener Vorschlag mit anderem Text wird abgelehnt statt still übergangen.
+- Die „Wird jeprüft“-Liste im Browser vergleicht den Text mit den Einträgen der Karte (kurze Texte nur als ganzer Eintrag).

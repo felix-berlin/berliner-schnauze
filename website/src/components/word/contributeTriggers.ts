@@ -10,16 +10,37 @@ const typeOf = (el: HTMLElement): string | undefined =>
 
 const squash = (text: string): string => text.replace(/\s+/g, " ").trim();
 
+const BLOCKS = "p, li, q, dd, dt, div, blockquote, br, h1, h2, h3, h4, h5, h6";
+/** Shorter texts must be a whole entry of the card: "Kiez" must not match inside "Kiezkneipe". */
+const MIN_INSIDE = 12;
+
+/** The card's entries one by one, and its whole text with a space after every block (so paragraphs do not fuse). */
+const publicText = (section: Element | null): { all: string; blocks: string[] } => {
+  if (!section) return { all: "", blocks: [] };
+  const blocks = [...section.querySelectorAll("p, li, q, dd, dt, h1, h2, h3, h4, h5, h6")].map(
+    (e) => squash(e.textContent ?? ""),
+  );
+  const copy = section.cloneNode(true) as Element;
+  for (const e of copy.querySelectorAll(BLOCKS)) e.append(" ");
+  return { all: squash(copy.textContent ?? ""), blocks };
+};
+
 const renderOwn = (root: ParentNode): void => {
   for (const el of root.querySelectorAll<HTMLElement>("[data-own]")) {
     const { own, word } = el.dataset;
-    // Own submissions live only in this browser and know nothing of the review: once the text stands in the card
-    // (published, so reviewed) the chip would lie. Read the card without the old chip list.
+    // Own submissions live only in this browser and know nothing of the review. Once the preview text stands in the
+    // card it is public and the chip would lie. A heuristic on the truncated preview (an editor who reworded the text
+    // leaves the chip until it expires). The old chip list is cleared first so it does not count as card text.
     el.replaceChildren();
-    const published = squash(el.closest("section")?.textContent ?? "");
-    const list = ownSubmissions(word ?? "").filter(
-      (s) => s.type === own && !published.includes(squash(s.preview)),
-    );
+    const card = publicText(el.closest("section"));
+    const list = ownSubmissions(word ?? "").filter((s) => {
+      const preview = squash(s.preview);
+      const published =
+        preview !== "" &&
+        (card.blocks.includes(preview) ||
+          (preview.length >= MIN_INSIDE && card.all.includes(preview)));
+      return s.type === own && !published;
+    });
     const ul = document.createElement("ul");
     ul.className = "c-word-own";
     for (const s of list) {

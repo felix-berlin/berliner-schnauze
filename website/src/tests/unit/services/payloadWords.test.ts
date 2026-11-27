@@ -188,6 +188,15 @@ describe("toWord", () => {
     expect(word.examples[1]!.contributorSuggestion).toBeUndefined();
   });
 
+  it("treats an unset contributor suggestion on an example (null from the database) as none", async () => {
+    const { toWord } = await load();
+    const word = toWord({
+      ...doc,
+      examples: [{ contributorName: null, contributorSuggestion: null, example: "Satz." }],
+    } as never);
+    expect(word.examples[0]!.contributorSuggestion).toBeUndefined();
+  });
+
   it("unwraps the v18 relations: diminutive, related words and contributor suggestions as plain ids", async () => {
     const { toWord } = await load();
     const word = toWord({
