@@ -114,7 +114,7 @@ jobs:
           method: "oidc"
           identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
           project-slug: "berliner-schnauze"
-          env-slug: "staging" # never prod: e2e errors would land in the prod Sentry, suggestions could send real mail
+          env-slug: "dev" # never prod: e2e errors would land in the prod Sentry. Not staging: that is for a predeploy preview (real mail)
           domain: "https://infisical.kasimir.dev"
 
       # Built explicitly here (rather than inside webServer.command) so the build has the full job timeout.
@@ -239,7 +239,7 @@ jobs:
           method: "oidc"
           identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
           project-slug: "berliner-schnauze"
-          env-slug: "staging" # never prod: e2e errors would land in the prod Sentry, suggestions could send real mail
+          env-slug: "dev" # never prod: e2e errors would land in the prod Sentry. Not staging: that is for a predeploy preview (real mail)
           domain: "https://infisical.kasimir.dev"
 
       - name: Download build
@@ -266,6 +266,9 @@ jobs:
         env:
           DATABASE_URL: postgres://postgres:postgres@postgres:5432/bs_e2e
           E2E_SERVER: "1"
+          # Blanked so a suggestion in a test never mails the editors, whatever the Infisical env holds.
+          SMTP_URL: ""
+          SUGGEST_MAIL_TO: ""
           NODE_ENV: production
           PAYLOAD_SECRET: e2e-secret
           PAYLOAD_SERVER_URL: http://localhost:4321
