@@ -84,6 +84,10 @@ export const formattedDate = (date?: string, locale = "de-DE") => {
   });
 };
 
+/** A noindex page without its own canonical gets none: pointing it at an indexable URL sends mixed signals. */
+export const hasCanonicalLink = (seo?: { canonical?: string; robots?: string }): boolean =>
+  !!seo?.canonical || !seo?.robots?.includes("noindex");
+
 export const canonicalUrl = (pathname: string, site: URL | undefined): string =>
   new URL(pathname.replace(/\.html$/, ""), site).toString().replace(/\/$/, "");
 

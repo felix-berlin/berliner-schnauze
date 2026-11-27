@@ -68,15 +68,15 @@ describe("HomeIntro.astro and BrowseChips.astro", () => {
 
   it("renders the try and browse chips and drops an empty row", async () => {
     const html = await chips({
-      browseLinks: [{ href: "/suche", icon: "random", label: "Zufallswort" }],
+      browseLinks: [{ href: "/wort", icon: "random", label: "Zufallswort" }],
       tryWords: [{ lemma: "Stulle", slug: "stulle" }],
     });
     expect(html).toContain("Probier mal:");
     expect(html).toContain('<a href="/wort/stulle">Stulle</a>');
     expect(html).toContain("Oder stöber mal:");
-    expect(html).toMatch(/<a href="\/suche">.*Zufallswort\s*<\/a>/s);
+    expect(html).toMatch(/<a href="\/wort">.*Zufallswort\s*<\/a>/s);
     const onlyLinks = await chips({
-      browseLinks: [{ href: "/suche", icon: "random", label: "Zufallswort" }],
+      browseLinks: [{ href: "/wort", icon: "random", label: "Zufallswort" }],
       tryWords: [],
     });
     expect(onlyLinks).not.toContain("Probier mal:");

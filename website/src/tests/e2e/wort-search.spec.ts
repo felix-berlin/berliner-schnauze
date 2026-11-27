@@ -7,6 +7,13 @@ test.describe("/wort search page", () => {
     expect(res.headers().location).toBe("/wort?q=anmach&wortart=verb");
   });
 
+  test("redirects /suche/ with a trailing slash (Astro strips the slash first, then the middleware redirects)", async ({
+    page,
+  }) => {
+    await page.goto("/suche/?q=anmach");
+    expect(new URL(page.url()).pathname + new URL(page.url()).search).toBe("/wort?q=anmach");
+  });
+
   test("h1 is Wörter suchen", async ({ page }) => {
     await page.goto("/wort");
     await expect(page.getByRole("heading", { level: 1, name: "Wörter suchen" })).toBeVisible();

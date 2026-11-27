@@ -5,7 +5,7 @@ import { ClientRouter } from 'astro:transitions';
 import { IMAGOR_HOST } from 'astro:env/server';
 import { pwaInfo } from 'virtual:pwa-info';
 
-import { canonicalUrl } from '@utils/helpers';
+import { canonicalUrl, hasCanonicalLink } from '@utils/helpers';
 import type { Seo, SeoProps, Title } from '@/types/seo';
 
 export type { Seo, SeoProps, Title };
@@ -53,8 +53,7 @@ const canonicalURL = seo?.canonical || canonicalUrl(Astro.url.pathname, Astro.si
 <link color='#303956' href='/favicons/safari-pinned-tab.svg' rel='mask-icon' />
 
 <link href='/sitemap-index.xml' rel='sitemap' />
-{/* A noindex page without its own canonical gets none: pointing it at an indexable URL sends mixed signals. */}
-{(seo?.canonical || !seo?.robots?.includes('noindex')) && <link href={canonicalURL} rel='canonical' />}
+{hasCanonicalLink(seo) && <link href={canonicalURL} rel='canonical' />}
 
 <meta content='#ffffff' name='msapplication-TileColor' />
 <meta content={Astro.generator} name='generator' />

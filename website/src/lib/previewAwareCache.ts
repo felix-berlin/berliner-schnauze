@@ -63,7 +63,7 @@ const factory: CacheProviderFactory = (config) => {
       }
       return context.request.headers.get("cookie")?.includes(`${PREVIEW_COOKIE}=`) ||
         (context.url.pathname === "/" && context.url.searchParams.has("q")) ||
-        (context.url.pathname === "/wort" && context.url.search)
+        (context.url.pathname === "/wort" && context.url.search !== "")
         ? next()
         : memory.onRequest!(context, async () => withSiteTag(await next()));
     },
