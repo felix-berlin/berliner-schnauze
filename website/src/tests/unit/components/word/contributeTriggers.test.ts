@@ -56,6 +56,20 @@ describe("initContributeTriggers", () => {
     expect(button("[data-own=fact]").textContent).toBe("");
   });
 
+  it("drops an own submission as soon as its text is public in the same card", () => {
+    cleanup();
+    rememberSubmission("schrippe", "example", "  Zwee   Schrippen, bitte! ");
+    rememberSubmission("schrippe", "example", "Noch nich veröffentlicht");
+    document
+      .querySelector("[data-form=example]")!
+      .insertAdjacentHTML("afterbegin", "<ol><li><q>Zwee Schrippen,\n bitte!</q></li></ol>");
+    cleanup = initContributeTriggers();
+    const own = button("[data-own=example]").textContent;
+    expect(own).toContain("Noch nich veröffentlicht");
+    expect(own).not.toContain("Zwee");
+    expect(own?.match(/Wird jeprüft/g)).toHaveLength(1);
+  });
+
   it("cleans up: no listener, no chips update afterwards", () => {
     cleanup();
     button("[data-contribute=fact]").click();

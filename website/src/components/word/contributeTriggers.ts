@@ -8,10 +8,18 @@ const TRIGGER = "[data-contribute], [data-report]";
 const typeOf = (el: HTMLElement): string | undefined =>
   el.dataset["report"] === undefined ? el.dataset["contribute"] : "error";
 
+const squash = (text: string): string => text.replace(/\s+/g, " ").trim();
+
 const renderOwn = (root: ParentNode): void => {
   for (const el of root.querySelectorAll<HTMLElement>("[data-own]")) {
     const { own, word } = el.dataset;
-    const list = ownSubmissions(word ?? "").filter((s) => s.type === own);
+    // Own submissions live only in this browser and know nothing of the review: once the text stands in the card
+    // (published, so reviewed) the chip would lie. Read the card without the old chip list.
+    el.replaceChildren();
+    const published = squash(el.closest("section")?.textContent ?? "");
+    const list = ownSubmissions(word ?? "").filter(
+      (s) => s.type === own && !published.includes(squash(s.preview)),
+    );
     const ul = document.createElement("ul");
     ul.className = "c-word-own";
     for (const s of list) {
