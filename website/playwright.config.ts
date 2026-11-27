@@ -15,6 +15,9 @@ import { isAgent } from "std-env";
 const port = process.env.E2E_PORT ?? "4321";
 // The screenshot baseline is the chromium project only; other projects never load it.
 const VISUAL_BASELINE = "**/visual-baseline.spec.ts";
+// WebKit on the shared Linux runner takes 3-4x as long as Chromium per test (mean 4.5-6 s, single tests up to 35 s):
+// the default 30 s fails tests that are only slow. Locally it stays at the default.
+const SLOW_ENGINE_TIMEOUT = process.env.CI ? 60_000 : 30_000;
 
 export default defineConfig({
   testDir: "./src/tests/e2e",
@@ -60,6 +63,7 @@ export default defineConfig({
     {
       name: "webkit",
       testIgnore: VISUAL_BASELINE,
+      timeout: SLOW_ENGINE_TIMEOUT,
       use: { ...devices["Desktop Safari"] },
     },
 
@@ -72,6 +76,7 @@ export default defineConfig({
     {
       name: "Mobile Safari",
       testIgnore: VISUAL_BASELINE,
+      timeout: SLOW_ENGINE_TIMEOUT,
       use: { ...devices["iPhone 12"] },
     },
 

@@ -216,7 +216,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4]
+        shard: [1, 2, 3, 4, 5, 6]
     steps:
       - name: Checkout ✅
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -284,12 +284,12 @@ jobs:
           cat server.log
           exit 1
 
-      - name: Run Playwright tests (shard ${{ matrix.shard }}/4)
+      - name: Run Playwright tests (shard ${{ matrix.shard }}/6)
         timeout-minutes: 15
         # word-v3.spec.ts signs a draft preview token with the same secret as the server.
         env:
           PAYLOAD_SECRET: e2e-secret
-        run: pnpm exec playwright test --shard=${{ matrix.shard }}/4
+        run: pnpm exec playwright test --shard=${{ matrix.shard }}/6
 
       # Traces/screenshots/console logs can contain secrets — this repo is public,
       # so GitHub Actions artifacts are downloadable by anyone. Encrypt before
