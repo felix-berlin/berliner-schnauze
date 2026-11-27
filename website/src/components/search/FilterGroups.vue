@@ -14,6 +14,7 @@
       </button>
     </div>
 
+    <!-- TODO(suche): data has ~40 wordTypes, SPEC names six — ask owner whether to cut. -->
     <div v-else-if="group === 'wortart'">
       <button
         v-for="pos in meta.pos"
@@ -42,65 +43,6 @@
       </button>
     </div>
 
-    <template v-else-if="group === 'gebrauch'">
-      <fieldset>
-        <legend class="label">Wie oft jesagt?</legend>
-        <div class="pills">
-          <button
-            v-for="p in choice('often', OFTEN, 'Egal')"
-            :key="p.label"
-            type="button"
-            :aria-pressed="p.on ? 'true' : 'false'"
-            @click="pick(p)"
-          >
-            {{ p.label }}
-          </button>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend class="label">Eher wo?</legend>
-        <div class="pills">
-          <button
-            v-for="p in choice('where', WHERE, 'Egal')"
-            :key="p.label"
-            type="button"
-            :aria-pressed="p.on ? 'true' : 'false'"
-            @click="pick(p)"
-          >
-            {{ p.label }}
-          </button>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend class="label">Im Bezirk</legend>
-        <select
-          class="field"
-          aria-label="Bezirk"
-          :value="state.area ?? ''"
-          @change="
-            emit('update', { area: ($event.target as HTMLSelectElement).value || undefined })
-          "
-        >
-          <option value="">Alle Bezirke</option>
-          <option v-for="a in meta.areas" :key="a.key" :value="a.key">{{ a.name }}</option>
-        </select>
-      </fieldset>
-      <fieldset>
-        <legend class="label">Altersgruppe</legend>
-        <div class="pills">
-          <button
-            v-for="p in choice('age', AGES, 'Alle')"
-            :key="p.label"
-            type="button"
-            :aria-pressed="p.on ? 'true' : 'false'"
-            @click="pick(p)"
-          >
-            {{ p.label }}
-          </button>
-        </div>
-      </fieldset>
-    </template>
-
     <div v-else-if="group === 'inhalt'">
       <button
         v-for="[key, text] in CONTENT"
@@ -116,7 +58,7 @@
       </button>
     </div>
 
-    <template v-else-if="group === 'wortform'">
+    <template v-if="group === 'wortform'">
       <div class="two">
         <label>
           Beginnt mit
@@ -152,46 +94,41 @@
           @change="text('rhyme', $event)"
         />
       </label>
-      <fieldset>
-        <legend class="label">Silben</legend>
-        <div class="pills">
-          <button
-            v-for="p in choice('syllables', SYLLABLES, 'Alle')"
-            :key="p.label"
-            type="button"
-            :aria-pressed="p.on ? 'true' : 'false'"
-            @click="pick(p)"
-          >
-            {{ p.label }}
-          </button>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend class="label">Länge</legend>
-        <div class="pills">
-          <button
-            v-for="p in choice('length', LENGTHS, 'Alle')"
-            :key="p.label"
-            type="button"
-            :aria-pressed="p.on ? 'true' : 'false'"
-            @click="pick(p)"
-          >
-            {{ p.label }}
-          </button>
-        </div>
-      </fieldset>
     </template>
+
+    <fieldset v-for="f in FIELDSETS[group] ?? []" :key="f.key">
+      <legend class="label">{{ f.legend }}</legend>
+      <select
+        v-if="f.key === 'area'"
+        class="field"
+        aria-label="Bezirk"
+        :value="state.area ?? ''"
+        @change="emit('update', { area: ($event.target as HTMLSelectElement).value || undefined })"
+      >
+        <option value="">Alle Bezirke</option>
+        <option v-for="a in meta.areas" :key="a.key" :value="a.key">{{ a.name }}</option>
+      </select>
+      <div v-else class="pills">
+        <button
+          v-for="p in choice(f.key, f.options, f.all)"
+          :key="p.label"
+          type="button"
+          :aria-pressed="p.on ? 'true' : 'false'"
+          @click="pick(p)"
+        >
+          {{ p.label }}
+        </button>
+      </div>
+    </fieldset>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { facets as facetsOf } from "@lib/search/facets";
-import type { SearchState } from "@lib/search/state";
+import type { FilterGroup, SearchState } from "@lib/search/state";
 
 import { AGES, CONTENT, LENGTHS, OFTEN, SYLLABLES, WHERE } from "@lib/search/labels";
 import { computed, defineAsyncComponent } from "vue";
-
-export type FilterGroup = "buchstabe" | "wortart" | "thema" | "gebrauch" | "inhalt" | "wortform";
 
 const props = defineProps<{
   group: FilterGroup;
@@ -216,18 +153,32 @@ const toggle = <T>(list: T[], value: T): T[] =>
 
 type Pill = { label: string; on: boolean; patch: Partial<SearchState> };
 type Single = "often" | "where" | "age" | "syllables" | "length";
+type Options = readonly (readonly [string | number, string])[];
+type Fieldset = { legend: string } & (
+  | { key: Single; options: Options; all: string }
+  | { key: "area"; options?: never; all?: never }
+);
 
-/** Single choice: the first pill („Egal“/„Alle“) clears the group. */
-const choice = <K extends Single>(
-  key: K,
-  options: readonly (readonly [NonNullable<SearchState[K]>, string])[],
-  all: string,
-): Pill[] => [
+// Single-choice groups (SPEC §7.2); the first pill („Egal“/„Alle“) clears the value.
+const FIELDSETS: Partial<Record<FilterGroup, Fieldset[]>> = {
+  gebrauch: [
+    { all: "Egal", key: "often", legend: "Wie oft jesagt?", options: OFTEN },
+    { all: "Egal", key: "where", legend: "Eher wo?", options: WHERE },
+    { key: "area", legend: "Im Bezirk" },
+    { all: "Alle", key: "age", legend: "Altersgruppe", options: AGES },
+  ],
+  wortform: [
+    { all: "Alle", key: "syllables", legend: "Silben", options: SYLLABLES },
+    { all: "Alle", key: "length", legend: "Länge", options: LENGTHS },
+  ],
+};
+
+const choice = (key: Single, options: Options, all: string): Pill[] => [
   { label: all, on: props.state[key] === undefined, patch: { [key]: undefined } },
   ...options.map(([value, label]) => ({
     label,
     on: props.state[key] === value,
-    patch: { [key]: value },
+    patch: { [key]: value } as Partial<SearchState>,
   })),
 ];
 const pick = (p: Pill) => !p.on && emit("update", p.patch);
@@ -235,10 +186,9 @@ const pick = (p: Pill) => !p.on && emit("update", p.patch);
 const text = (key: "starts" | "ends" | "rhyme", e: Event) =>
   emit("update", { [key]: (e.target as HTMLInputElement).value.trim() || undefined });
 
+// meta.letters order (Ä Ö Ü last, like the register).
 const letters = computed(() =>
-  props.meta.letters
-    .map(({ letter }) => ({ count: props.facets.letters[letter] ?? 0, letter }))
-    .sort((a, b) => a.letter.localeCompare(b.letter, "de")),
+  props.meta.letters.map(({ letter }) => ({ count: props.facets.letters[letter] ?? 0, letter })),
 );
 </script>
 

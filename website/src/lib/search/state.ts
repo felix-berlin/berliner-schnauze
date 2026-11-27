@@ -31,24 +31,38 @@ export const EMPTY_STATE: SearchState = {
 export const effectiveSort = (s: SearchState): SortKey =>
   s.sort === "beste" && !s.q ? "az" : (s.sort ?? (s.q ? "beste" : "az"));
 
+/** The filter chips (SPEC §7.1); „Nur Berolinismen“ is a toggle, not a group. */
+export type FilterGroup = "buchstabe" | "wortart" | "thema" | "gebrauch" | "inhalt" | "wortform";
+const FILTER_GROUPS: FilterGroup[] = [
+  "buchstabe",
+  "wortart",
+  "thema",
+  "gebrauch",
+  "inhalt",
+  "wortform",
+];
+
+/** Selected values in one group (the chip's count pill): two word types count 2. */
+export const groupFilterCount = (s: SearchState, group: FilterGroup): number => {
+  switch (group) {
+    case "buchstabe":
+      return s.letter ? 1 : 0;
+    case "wortart":
+      return s.pos.length;
+    case "thema":
+      return s.themes.length;
+    case "gebrauch":
+      return [s.often, s.where, s.area, s.age].filter(Boolean).length;
+    case "inhalt":
+      return s.content.length;
+    case "wortform":
+      return [s.starts, s.ends, s.rhyme, s.syllables, s.length].filter(Boolean).length;
+  }
+};
+
 /** One per chip value: two selected word types count 2. */
 export const activeFilterCount = (s: SearchState): number =>
-  s.pos.length +
-  s.themes.length +
-  s.content.length +
-  [
-    s.letter,
-    s.often,
-    s.where,
-    s.area,
-    s.age,
-    s.starts,
-    s.ends,
-    s.rhyme,
-    s.syllables,
-    s.length,
-    s.berolinismus || undefined,
-  ].filter(Boolean).length;
+  FILTER_GROUPS.reduce((n, g) => n + groupFilterCount(s, g), s.berolinismus ? 1 : 0);
 
 export const isFiltered = (s: SearchState): boolean => activeFilterCount(s) > 0;
 

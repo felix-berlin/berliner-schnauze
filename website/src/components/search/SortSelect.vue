@@ -1,7 +1,7 @@
 <template>
   <label class="c-sort-select">
     <IconSort class="icon" aria-hidden="true" />
-    <span class="text">Sortieren</span>
+    <span class="text" :class="{ 'u-sr-only': compact }">Sortieren</span>
     <select
       aria-label="Sortieren"
       :value="effectiveSort(state)"
@@ -27,7 +27,10 @@ import { SORTS } from "@lib/search/labels";
 import { effectiveSort, type SearchState } from "@lib/search/state";
 import { defineAsyncComponent } from "vue";
 
-defineProps<{ state: SearchState }>();
+defineProps<{
+  state: SearchState;
+  /** Hide the „Sortieren“ text visually (a crowded bar). */ compact?: boolean;
+}>();
 const emit = defineEmits<{ update: [patch: Partial<SearchState>] }>();
 
 const IconSort = defineAsyncComponent(() => import("virtual:icons/lucide/arrow-up-down"));

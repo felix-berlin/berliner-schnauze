@@ -25,7 +25,7 @@ const chip = (w: ReturnType<typeof mountBar>, name: string) =>
 describe("FilterBar", () => {
   it("chip shows count pill when active", () => {
     const w = mountBar(state({ pos: ["Verb", "Substantiv"], q: "aal" }));
-    expect(chip(w, "Wortart").text()).toContain("2");
+    expect(chip(w, "Wortart").get("[data-count]").text()).toBe("2");
     expect(chip(w, "Thema").find("[data-count]").exists()).toBe(false);
   });
 
@@ -64,6 +64,17 @@ describe("FilterBar", () => {
     expect(toggle.attributes("title")).toBe("Nur Berliner Spitznamen für Orte, Straßen und Plätze");
     await toggle.trigger("click");
     expect(w.emitted("update")).toEqual([[{ berolinismus: false }]]);
+  });
+
+  it("a crowded bar hides the Sortieren text visually, the select keeps its name", () => {
+    const text = (w: ReturnType<typeof mountBar>) =>
+      w.findAll("span").find((s) => s.text() === "Sortieren")!;
+    expect(text(mountBar(state({ pos: ["Verb"], q: "aal" }))).classes()).not.toContain("u-sr-only");
+    const crowded = mountBar(
+      state({ berolinismus: true, content: ["audio"], letter: "A", pos: ["Verb"], q: "aal" }),
+    );
+    expect(text(crowded).classes()).toContain("u-sr-only");
+    expect(crowded.find('select[aria-label="Sortieren"]').exists()).toBe(true);
   });
 
   it("hides the Buchstabe chip in the start state", () => {

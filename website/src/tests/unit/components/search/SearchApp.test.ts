@@ -267,6 +267,31 @@ describe("SearchApp", () => {
     expect(w.find("button[aria-label^='Filter entfernen']").exists()).toBe(false);
   });
 
+  it("removing the last active filter moves focus to the first chip, not body", async () => {
+    history.replaceState(null, "", "/wort?q=aal&wortart=verb");
+    const w = mountApp({ state: state({ pos: ["Verb"], q: "aal" }) });
+    const pill = w.get('button[aria-label="Filter entfernen: Wortart Verb"]');
+    (pill.element as HTMLElement).focus();
+    await pill.trigger("click");
+    await flushPromises();
+    expect(document.activeElement).not.toBe(document.body);
+    expect(document.activeElement).toBe(w.get("button[popovertarget]").element);
+    expect(document.activeElement?.textContent).toContain("Buchstabe");
+  });
+
+  it("Alle Filter zurücksetzen in the empty state moves focus to the first chip", async () => {
+    history.replaceState(null, "", "/wort?q=aal&wortart=verb");
+    const w = mountApp({
+      result: result([], { total: 0, unfiltered: 3 }),
+      state: state({ pos: ["Verb"], q: "aal" }),
+    });
+    const button = w.get(".c-search-empty button");
+    (button.element as HTMLElement).focus();
+    await button.trigger("click");
+    await flushPromises();
+    expect(document.activeElement).toBe(w.get("button[popovertarget]").element);
+  });
+
   it("a filter change pushes a router-shaped history entry (Back works after leaving)", async () => {
     history.replaceState({ index: 3, scrollX: 0, scrollY: 120 }, "", "/wort?wortart=verb&q=aal");
     const w = mountApp({

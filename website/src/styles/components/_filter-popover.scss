@@ -64,6 +64,7 @@
     margin: 0 0 var(--space-1);
     font-family: var(--font-condensed);
     font-size: var(--_title);
+    // TODO(suche): SPEC §7.2 says Fira 600; there is no 600 weight token, so 700 for now.
     font-weight: var(--font-weight-bold);
     color: var(--color-text-strong);
   }
@@ -83,6 +84,10 @@
     margin: var(--space-1) calc(var(--space-5) * -1) calc(var(--space-5) * -1);
     padding: var(--space-3) var(--space-5);
     border-block-start: 1px solid var(--color-warm-line);
+    // Count and „Fertig“ stay in view while a long list (Wortart, Thema) scrolls; the bottom inset cancels the padding.
+    position: sticky;
+    inset-block-end: calc(var(--space-5) * -1);
+    background: var(--color-warm-sheet);
 
     small {
       font-size: var(--font-size-label);

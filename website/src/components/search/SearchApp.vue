@@ -42,6 +42,7 @@
     <!-- Task 10: filter button + sheet (mobile) next to the desktop bar. -->
     <div class="filters">
       <FilterBar
+        ref="bar"
         :state="state"
         :facets="result.facets"
         :total="result.total"
@@ -49,7 +50,7 @@
         @update="set"
       />
     </div>
-    <ActiveFilters :state="state" :meta="meta" @update="set" @reset="reset" />
+    <ActiveFilters :state="state" :meta="meta" @update="set" @reset="resetFilters" />
 
     <div v-if="loadError && online" class="error" role="alert">
       <p>Ditt hat nich jeklappt. Die Suche is jerade nich erreichbar. Versuch’s gleich nochmal.</p>
@@ -65,7 +66,7 @@
       :q="shown.q"
       :by-filters="byFilters"
       :suggestions="result.suggestions"
-      @reset="reset"
+      @reset="resetFilters"
     />
     <template v-else>
       <AlphabetRegister v-if="!shown.q" :letters="letters" :current="currentLetter" @jump="jump" />
@@ -168,6 +169,22 @@ watchDebounced(input, (q) => q.trim() !== state.value.q && set({ q: q.trim() }),
 watch(
   () => state.value.q,
   (q) => q !== input.value.trim() && (input.value = q),
+);
+
+/* Clearing the last filter removes the control that had focus (the active-filter group, later the empty state):
+   focus goes to the first filter chip instead of falling to <body>. */
+const bar = useTemplateRef("bar");
+function resetFilters() {
+  reset();
+  bar.value?.focus();
+}
+watch(
+  () => isFiltered(state.value),
+  async (now, before) => {
+    if (!before || now) return;
+    await nextTick();
+    if (document.activeElement === document.body) bar.value?.focus();
+  },
 );
 
 /* Index: loaded once per page; until then the server rows stand. */

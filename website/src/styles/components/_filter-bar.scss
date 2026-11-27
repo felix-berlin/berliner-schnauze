@@ -3,19 +3,28 @@
 
 // Desktop filter bar (docs/design/suche-v1/SPEC.md §3, §7.1): chips that open a c-filter-popover (placed by
 // anchor positioning in the popover itself), the „Nur Berolinismen“ toggle chip and c-sort-select at the end.
-// Parts: .chip (state: aria-expanded, data-active, aria-pressed), .count pill, .chevron, .tick, .sort.
+// Parts: .chips (wrapping row), .chip (state: aria-expanded, data-active, aria-pressed), .count pill, .chevron,
+// .tick, .sort (its own column: when every chip is active the chips wrap, the sort stays top right).
 @include mx.component("filter-bar") {
   :scope {
     --_chip: 2.5rem; // SPEC §3 chip 40px
     --_count: 1.25rem; // SPEC §7.1 count pill 20px
     --_chip-text: 0.9375rem; // SPEC §7.1 chip 15px
+    --_icon: 0.875rem; // mock chevron and tick 14px
 
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--space-2);
+    padding-block: var(--space-3);
+    border-block: 1px solid var(--color-warm-line);
+  }
+
+  .chips {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2);
-    padding-block: var(--space-3);
-    border-block: 1px solid var(--color-warm-line);
   }
 
   .chip {
@@ -23,7 +32,7 @@
     align-items: center;
     gap: var(--space-1);
     min-block-size: var(--_chip);
-    padding-inline: var(--space-4) var(--space-3);
+    padding-inline: var(--space-3); // mock 14px / 12px, nearer step
     border: 1px solid var(--color-warm-line);
     border-radius: var(--radius-pill);
     background: var(--color-warm-sheet);
@@ -51,10 +60,6 @@
     }
 
     // „Nur Berolinismen“: no chevron, a tick when on.
-    &[aria-pressed] {
-      padding-inline: var(--space-4);
-    }
-
     &[aria-pressed="true"] {
       border-color: var(--color-text-strong);
       background: var(--color-text-strong);
@@ -74,6 +79,12 @@
     font-size: var(--font-size-label);
     font-weight: var(--font-weight-bold);
     color: var(--color-warm-sheet);
+  }
+
+  .chevron,
+  .tick {
+    inline-size: var(--_icon);
+    block-size: var(--_icon);
   }
 
   .chevron {
@@ -97,6 +108,6 @@
   }
 
   .sort {
-    margin-inline-start: auto;
+    justify-self: end;
   }
 }
