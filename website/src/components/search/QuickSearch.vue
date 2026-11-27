@@ -12,19 +12,13 @@
       />
     </form>
 
-    <p v-if="q" class="meta" aria-live="polite">
+    <p v-if="q && !loadError" class="meta" aria-live="polite">
       <template v-if="answered === undefined">Suche läuft …</template>
       <template v-else-if="total === 0">Keene Treffer für „<b>{{ answered }}</b>“</template>
       <template v-else><b>{{ formatCount(total) }}</b> Treffer für „{{ answered }}“</template>
     </p>
 
-    <div v-if="loadError && online" class="error" role="alert">
-      <p>Ditt hat nich jeklappt. Die Suche is jerade nich erreichbar. Versuch’s gleich nochmal.</p>
-      <button type="button" class="retry" @click="load">Nochmal versuchen</button>
-    </div>
-    <p v-else-if="loadError" class="offline" role="status">
-      Du bist offline. Ick such nur in den Wörtern, die schon uff deinem Gerät sind.
-    </p>
+    <SearchLoadState v-if="loadError" :online="online" @retry="load" />
 
     <div ref="scroller" class="list">
       <Virtualizer
@@ -54,35 +48,35 @@
     </div>
 
     <!-- TODO(suche): Text bestätigen -->
-    <a class="all" data-all :href="searchUrl({ ...EMPTY_STATE, q })">Alle Treffer und Filter</a>
+    <a class="all" :href="searchUrl({ ...EMPTY_STATE, q })">Alle Treffer und Filter</a>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { ListRow, SearchEntry } from "@lib/search/types";
-import type { WordDb } from "@services/wordSearchDb";
+import type { ListRow } from "@lib/search/types";
 
+import { useSearchIndex } from "@composables/useSearchIndex";
 import { searchUrl } from "@composables/useSearchState";
+import { useSearchTracking } from "@composables/useSearchTracking";
 import { runSearch } from "@lib/search/run";
 import { EMPTY_STATE } from "@lib/search/state";
-import { fetchSearchIndex } from "@services/searchIndex.ts";
-import { getWordDb } from "@services/wordSearchDb";
 import { reportError } from "@utils/reportError.ts";
-import { refDebounced, useOnline } from "@vueuse/core";
+import { refDebounced } from "@vueuse/core";
 import { navigate } from "astro:transitions/client";
 import { Virtualizer } from "virtua/vue";
 import { computed, nextTick, onMounted, ref, shallowRef, useTemplateRef, watch } from "vue";
 
 import HitRow from "./HitRow.vue";
 import SearchField from "./SearchField.vue";
+import SearchLoadState from "./SearchLoadState.vue";
 
 const TYPE_DEBOUNCE = 150; // SPEC §5, same as the search page
 
 const formatCount = (n: number) => n.toLocaleString("de");
 
 const input = ref("");
-const q = computed(() => debounced.value.trim());
 const debounced = refDebounced(input, TYPE_DEBOUNCE);
+const q = computed(() => debounced.value.trim());
 
 // Same core as the search page, without filters, KI, trend or Wort des Tages.
 const ctx = { trendRanks: new Map<string, number>() };
@@ -91,22 +85,8 @@ const total = ref(0);
 const answered = ref<string>(); // the query of the rows on screen: they stay until a newer answer is there
 
 /* Index: single-flight with the search page; loading starts when the modal opens. */
-let index: { db: WordDb; entries: SearchEntry[] } | undefined;
-const loadError = ref(false);
-const online = useOnline();
-
-async function load() {
-  loadError.value = false;
-  try {
-    const [entries, { db }] = await Promise.all([fetchSearchIndex(), getWordDb()]);
-    index = { db, entries: entries as SearchEntry[] };
-    void run();
-  } catch (error) {
-    if (navigator.onLine) reportError(error); // offline is expected, not a bug
-    loadError.value = true;
-  }
-}
-watch(online, (now) => now && loadError.value && void load());
+const { index, load, loadError, online } = useSearchIndex(() => void run());
+const track = useSearchTracking();
 
 /* A newer run wins. */
 let runId = 0;
@@ -119,13 +99,15 @@ async function run() {
     answered.value = undefined;
     return;
   }
-  if (!index) return; // loading: load() runs again once the index is there
+  const idx = index.value;
+  if (!idx) return; // loading: the index runs the search once it is there
   try {
-    const next = await runSearch(index.db, index.entries, { ...EMPTY_STATE, q: query }, ctx);
+    const next = await runSearch(idx.db, idx.entries, { ...EMPTY_STATE, q: query }, ctx);
     if (id !== runId) return;
     rows.value = next.rows;
     total.value = next.total;
     answered.value = query;
+    track(query, next.total);
   } catch (error) {
     if (id !== runId) return;
     reportError(error);

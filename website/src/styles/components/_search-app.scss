@@ -2,7 +2,7 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 // Search page island (docs/design/suche-v1/SPEC.md §2, §3, §5, §6.2, §10): .head (h1 + intro), the GET form
-// around c-search-field, .meta (count + .keys), .filters (desktop c-filter-bar), the .error / .offline strips, the .section head (h2 Treffer).
+// around c-search-field, .meta (count + .keys), .filters (desktop c-filter-bar), the .section head (h2 Treffer).
 // Children (c-search-field, c-alphabet-register, c-hit-list, c-search-empty, c-hit-skeleton) are placed by the grid.
 @include mx.component("search-app") {
   :scope {
@@ -88,50 +88,6 @@
       background: var(--color-warm-card2);
       font: inherit;
       color: var(--color-text-strong);
-    }
-  }
-
-  .error,
-  .offline {
-    margin: 0;
-    padding: var(--space-3) var(--space-4);
-    border: 1.5px solid var(--color-status-danger);
-    border-radius: var(--radius-sm);
-    background: var(--color-warm-sheet);
-    box-shadow: var(--shadow-paper-lift);
-    color: var(--color-text-body);
-  }
-
-  .offline {
-    border-color: var(--color-warm-line);
-  }
-
-  .error {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-
-    p {
-      margin: 0;
-    }
-  }
-
-  .retry {
-    min-block-size: var(--size-tap-target);
-    padding-inline: var(--space-4);
-    border: 1.5px solid var(--color-accent-active);
-    border-radius: var(--radius-sm);
-    background: none;
-    font: inherit;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-strong);
-    cursor: pointer;
-    transition: background-color var(--duration-fast) var(--ease-standard);
-
-    @include butler-mx.hover {
-      background: var(--color-warm-card2);
     }
   }
 

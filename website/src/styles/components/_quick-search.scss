@@ -2,7 +2,7 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 // Header quick search (docs/superpowers/specs/2026-11-27-suche-v1-design.md, header modal): a column of
-// c-search-field, .meta (count line), the .error / .offline strips, .list (the scroll box around the
+// c-search-field, .meta (count line), c-search-load-state, .list (the scroll box around the
 // c-hit-list virtualizer) and .all (link to /wort). Fills the modal; only .list scrolls.
 @include mx.component("quick-search") {
   :scope {
@@ -21,44 +21,6 @@
     b {
       color: var(--color-text-strong);
     }
-  }
-
-  .error,
-  .offline {
-    margin: 0;
-    padding: var(--space-3) var(--space-4);
-    border: 1.5px solid var(--color-status-danger);
-    border-radius: var(--radius-sm);
-    background: var(--color-warm-sheet);
-    color: var(--color-text-body);
-  }
-
-  .offline {
-    border-color: var(--color-warm-line);
-  }
-
-  .error {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-
-    p {
-      margin: 0;
-    }
-  }
-
-  .retry {
-    min-block-size: var(--size-tap-target);
-    padding-inline: var(--space-4);
-    border: 1.5px solid var(--color-accent-active);
-    border-radius: var(--radius-sm);
-    background: none;
-    font: inherit;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-strong);
-    cursor: pointer;
   }
 
   .list {

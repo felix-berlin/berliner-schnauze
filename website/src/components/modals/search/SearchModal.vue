@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import ModalCloseButton from "@components/ModalCloseButton.vue";
 import QuickSearch from "@components/search/QuickSearch.vue";
-import { close } from "@stores/modal.ts";
+import { clearModal, close } from "@stores/modal.ts";
 import { useEventListener, useMediaQuery } from "@vueuse/core";
 import ArrowDownIcon from "virtual:icons/lucide/arrow-down";
 import ArrowUpIcon from "virtual:icons/lucide/arrow-up";
@@ -37,8 +37,12 @@ import CornerDownLeftIcon from "virtual:icons/lucide/corner-down-left";
 // can still bring the hints back mid-session.
 const hasKeyboard = useMediaQuery("(pointer: fine)");
 
-// The modal island is not persisted: a hit or the /wort link navigates, the open dialog must not survive the swap.
-useEventListener(document, "astro:before-swap", close);
+// The modal island is not persisted: a hit or the /wort link navigates, the open dialog must not survive the swap,
+// and the next page's modal must hydrate against the defaults, not this view.
+useEventListener(document, "astro:before-swap", () => {
+  close();
+  clearModal();
+});
 </script>
 
 <style lang="scss">

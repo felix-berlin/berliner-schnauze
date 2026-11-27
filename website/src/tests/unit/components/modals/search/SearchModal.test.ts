@@ -1,4 +1,5 @@
 import SearchModal from "@components/modals/search/SearchModal.vue";
+import { EMPTY_STATE } from "@lib/search/state";
 import { flushPromises, mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
@@ -6,6 +7,7 @@ import { ref } from "vue";
 import { hit, result } from "../../search/fixtures";
 
 const mocks = vi.hoisted(() => ({
+  clearModal: vi.fn(),
   close: vi.fn(),
   fetchSearchIndex: vi.fn(),
   getWordDb: vi.fn(),
@@ -28,7 +30,8 @@ vi.mock("@services/searchIndex.ts", () => ({ fetchSearchIndex: mocks.fetchSearch
 vi.mock("@lib/search/run", () => ({ runSearch: mocks.runSearch }));
 vi.mock("astro:transitions/client", () => ({ navigate: mocks.navigate }));
 vi.mock("@utils/reportError.ts", () => ({ reportError: vi.fn() }));
-vi.mock("@stores/modal.ts", () => ({ close: mocks.close }));
+vi.mock("@stores/modal.ts", () => ({ clearModal: mocks.clearModal, close: mocks.close }));
+vi.mock("@utils/analytics", () => ({ setMatomoSearch: vi.fn() }));
 vi.mock("@components/ModalCloseButton.vue", () => ({
   default: { template: "<button class='mock-modal-close'><slot name='suffix' /></button>" },
 }));
@@ -75,7 +78,7 @@ describe("SearchModal", () => {
     expect(mocks.runSearch).toHaveBeenLastCalledWith(
       {},
       [],
-      expect.objectContaining({ q: "quark" }),
+      { ...EMPTY_STATE, q: "quark" },
       expect.anything(),
     );
     const options = w.findAll('[role="option"]');
@@ -103,14 +106,38 @@ describe("SearchModal", () => {
     expect(mocks.navigate).toHaveBeenCalledWith("/wort/quarkspitze");
   });
 
+  it("Enter without an active option submits the form to /wort", async () => {
+    mocks.runSearch.mockResolvedValue(result(["Quarkwolke"]));
+    const w = mountModal();
+    await type(w, "quark");
+
+    const event = new KeyboardEvent("keydown", { bubbles: true, cancelable: true, key: "Enter" });
+    field(w).element.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(false);
+    expect(mocks.navigate).not.toHaveBeenCalled();
+    const form = w.get('form[role="search"]');
+    expect(form.attributes()).toMatchObject({ action: "/wort", method: "get" });
+    expect(field(w).attributes("name")).toBe("q");
+  });
+
+  it("the error strip retries the index load", async () => {
+    mocks.fetchSearchIndex.mockRejectedValueOnce(new Error("down"));
+    const w = mountModal();
+    await type(w, "quark");
+
+    const alert = w.get('[role="alert"]');
+    expect(w.text()).not.toContain("Suche läuft");
+    await alert.get("button").trigger("click");
+    expect(mocks.fetchSearchIndex).toHaveBeenCalledTimes(2);
+  });
+
   it("link carries the query", async () => {
     mocks.runSearch.mockResolvedValue(result(["Quarkwolke"]));
     const w = mountModal();
     await type(w, "quark, brot");
 
-    const link = w.get("a[data-all]");
-    expect(link.text()).toBe("Alle Treffer und Filter");
-    expect(link.attributes("href")).toBe("/wort?q=quark,+brot");
+    const link = w.findAll("a").find((a) => a.text() === "Alle Treffer und Filter");
+    expect(link?.attributes("href")).toBe("/wort?q=quark,+brot");
   });
 
   it("no filter controls rendered", async () => {
@@ -157,14 +184,15 @@ describe("SearchModal", () => {
     mountModal();
     document.dispatchEvent(new Event("astro:before-swap"));
     expect(mocks.close).toHaveBeenCalled();
+    expect(mocks.clearModal).toHaveBeenCalled();
   });
 
   it("keeps the keyboard hints only with a keyboard", async () => {
     const w = mountModal();
-    expect(w.find("footer").text()).toContain("zum navigieren");
+    expect(w.text()).toContain("zum navigieren");
     hasKeyboard.value = false;
     await flushPromises();
-    expect(w.find("footer").text()).not.toContain("zum navigieren");
+    expect(w.text()).not.toContain("zum navigieren");
     expect(w.find(".mock-modal-close").exists()).toBe(true);
   });
 });

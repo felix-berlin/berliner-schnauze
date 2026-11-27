@@ -70,13 +70,7 @@
     </div>
     <ActiveFilters :state="state" :meta="meta" @update="set" @reset="resetFilters" />
 
-    <div v-if="loadError && online" class="error" role="alert">
-      <p>Ditt hat nich jeklappt. Die Suche is jerade nich erreichbar. Versuch’s gleich nochmal.</p>
-      <button type="button" class="retry" @click="load">Nochmal versuchen</button>
-    </div>
-    <p v-else-if="loadError" class="offline" role="status">
-      Du bist offline. Ick such nur in den Wörtern, die schon uff deinem Gerät sind.
-    </p>
+    <SearchLoadState v-if="loadError" :online="online" @retry="load" />
 
     <SemanticSearch
       v-if="ai"
@@ -124,24 +118,16 @@
 <script setup lang="ts">
 import type { SearchResult } from "@lib/search/run";
 import type { Availability } from "@lib/search/semantic";
-import type { SearchEntry } from "@lib/search/types";
-import type { WordDb } from "@services/wordSearchDb";
 
+import { useSearchIndex } from "@composables/useSearchIndex";
 import { searchUrl, useSearchState } from "@composables/useSearchState";
+import { useSearchTracking } from "@composables/useSearchTracking";
 import { runSearch, semanticCandidates } from "@lib/search/run";
 import { isFiltered, type SearchState } from "@lib/search/state";
 import { toParams } from "@lib/search/url";
-import { fetchSearchIndex } from "@services/searchIndex.ts";
-import { getWordDb } from "@services/wordSearchDb";
 import { isEditableTarget } from "@utils/helpers.ts";
 import { reportError } from "@utils/reportError.ts";
-import {
-  refThrottled,
-  useEventListener,
-  useOnline,
-  useTimeoutFn,
-  watchDebounced,
-} from "@vueuse/core";
+import { refThrottled, useEventListener, useTimeoutFn, watchDebounced } from "@vueuse/core";
 import { navigate } from "astro:transitions/client";
 import {
   computed,
@@ -164,6 +150,7 @@ import HitList from "./HitList.vue";
 import HitSkeleton from "./HitSkeleton.vue";
 import SearchEmpty from "./SearchEmpty.vue";
 import SearchField from "./SearchField.vue";
+import SearchLoadState from "./SearchLoadState.vue";
 import SortSelect from "./SortSelect.vue";
 
 // Loaded only when the Chrome AI is there: the Prompt API code stays out of this chunk.
@@ -243,29 +230,10 @@ watch(
   },
 );
 
-/* Index: loaded once per page; until then the server rows stand. */
-let index: { db: WordDb; entries: SearchEntry[] } | undefined;
-const ready = ref(false); // until the index is there the server rows stand, no skeleton
-const loadError = ref(false);
-const online = useOnline();
-
-let loading: Promise<unknown> | undefined; // the meaning search waits on it
-async function load() {
-  loadError.value = false;
-  try {
-    const pending = Promise.all([fetchSearchIndex(), getWordDb()]);
-    loading = pending;
-    const [entries, { db }] = await pending;
-    index = { db, entries: entries as SearchEntry[] };
-    ready.value = true;
-    void run();
-  } catch (error) {
-    if (navigator.onLine) reportError(error); // offline is expected, not a bug
-    loadError.value = true;
-  }
-}
+/* Index: loaded once per page; until it is there the server rows stand, no skeleton. */
+const { index, load, loadError, online, ready, settled } = useSearchIndex(() => void run());
 onMounted(load);
-watch(online, (now) => now && loadError.value && void load());
+const track = useSearchTracking();
 
 /* Search runs; a newer run wins. */
 const pending = ref(false);
@@ -273,15 +241,17 @@ const touched = ref(false);
 let runId = 0;
 
 async function run() {
-  if (!index) return;
+  const idx = index.value;
+  if (!idx) return;
   const id = ++runId;
   const s = state.value;
   try {
-    const next = await runSearch(index.db, index.entries, s, ctx);
+    const next = await runSearch(idx.db, idx.entries, s, ctx);
     if (id !== runId) return;
     result.value = next;
     shown.value = s;
     activeIndex.value = -1;
+    track(s.q, next.total);
   } catch (error) {
     if (id !== runId) return;
     reportError(error);
@@ -414,9 +384,9 @@ useEventListener("pageshow", (e: PageTransitionEvent) => e.persisted && void det
 
 /** Waits for the index while it loads; without one (failed, offline) the block shows its error state. */
 async function findCandidates(s: SearchState) {
-  if (!index) await loading?.catch(() => {});
-  if (!index) throw new Error("search index unavailable for the meaning search");
-  return semanticCandidates(index.db, index.entries, s);
+  if (!index.value) await settled();
+  if (!index.value) throw new Error("search index unavailable for the meaning search");
+  return semanticCandidates(index.value.db, index.value.entries, s);
 }
 
 /** A trigger right after typing: the debounced query is set first, so the block searches what is typed. */
@@ -428,7 +398,7 @@ async function startAi() {
 }
 
 // With the index the list is live; without it (failed load) Enter sends the form to the server.
-const onSubmit = (e: Event) => index && e.preventDefault();
+const onSubmit = (e: Event) => index.value && e.preventDefault();
 
 // "/" focuses the field unless a field has focus. Window capture runs before the header's listener;
 // stopping it there keeps the header's search modal closed (same as HomeSearch).

@@ -79,14 +79,18 @@ export const close = () => {
   resetModal();
 };
 
+/** Drops view and props at once (a page swap: the next page's modal hydrates against the defaults). */
+export const clearModal = () => {
+  clearTimeout(resetTimer);
+  $view.set({});
+  $props.set({ ...propsDefault });
+};
+
 export const resetModal = () => {
   preventScroll(false);
   // Give the animation time to finish
   if (typeof window !== "undefined") {
     clearTimeout(resetTimer);
-    resetTimer = setTimeout(() => {
-      $view.set({});
-      $props.set({ ...propsDefault });
-    }, 500);
+    resetTimer = setTimeout(clearModal, 500);
   }
 };
