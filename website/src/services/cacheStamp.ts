@@ -13,8 +13,9 @@ type StampPollerOptions = {
 };
 
 /**
- * Returns `poll()`: starts at most one read per `intervalMs` and never two at once, does not wait for it and never
- * throws. The first read only remembers the value. A failing read (or a failing `onChange`) is kept for the next
+ * Returns `poll()`: starts at most one read per `intervalMs` and never two at once and never throws. Its promise ends
+ * when that check (including `onChange`) is done, so a request can wait for it and serve the new data; it is already
+ * resolved when no read was started. The first read only remembers the value. A failing read (or a failing `onChange`) is kept for the next
  * interval, so the cache stays as it is and the change is picked up later; it is reported at most once a minute.
  */
 export const createStampPoller = ({
@@ -23,7 +24,7 @@ export const createStampPoller = ({
   intervalMs = 2000,
   now = Date.now,
   warn = console.warn,
-}: StampPollerOptions): (() => void) => {
+}: StampPollerOptions): (() => Promise<void>) => {
   let seen: string | null | undefined;
   let lastStart = -Infinity;
   let lastWarn = -Infinity;
@@ -36,10 +37,10 @@ export const createStampPoller = ({
   };
 
   return () => {
-    if (pending || now() - lastStart < intervalMs) return;
+    if (pending || now() - lastStart < intervalMs) return Promise.resolve();
     pending = true;
     lastStart = now();
-    void read()
+    return read()
       .then(async (value) => {
         if (seen !== undefined && value !== seen) await onChange();
         seen = value;

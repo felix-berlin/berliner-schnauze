@@ -104,4 +104,17 @@ describe("previewAwareCache", () => {
     expect(response.status).toBe(302);
     expect(response.headers.get("Cache-Tag")).toBe("site");
   });
+
+  it("waits for the stamp check before serving, but not longer than 250 ms", async () => {
+    vi.useFakeTimers();
+    inner.mockClear();
+    mocks.poll.mockReturnValueOnce(new Promise<void>(() => {})); // a check that never ends
+    const served = provider.onRequest!(context(), next);
+    await vi.advanceTimersByTimeAsync(249);
+    expect(inner).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(2);
+    await served;
+    expect(inner).toHaveBeenCalledOnce();
+    vi.useRealTimers();
+  });
 });

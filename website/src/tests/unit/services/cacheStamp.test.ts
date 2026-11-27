@@ -130,4 +130,32 @@ describe("createStampPoller", () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
     expect(warn).toHaveBeenCalledTimes(1);
   });
+
+  it("returns a promise that resolves after onChange has finished, so a request can wait for it", async () => {
+    let time = 0;
+    const order: string[] = [];
+    const reads = ["a", "b"];
+    const poll = createStampPoller({
+      onChange: async () => {
+        await new Promise((resolve) => setTimeout(resolve, 5));
+        order.push("cleared");
+      },
+      now: () => time,
+      read: async () => reads.shift() ?? null,
+    });
+    await poll();
+    time += 2000;
+    await poll();
+    order.push("served");
+    expect(order).toEqual(["cleared", "served"]);
+  });
+
+  it("returns an already resolved promise when throttled or when a read is pending", async () => {
+    let finish!: (value: string) => void;
+    const read = vi.fn(() => new Promise<string>((resolve) => (finish = resolve)));
+    const poll = createStampPoller({ onChange: vi.fn(), now: () => 0, read });
+    void poll(); // starts the read, which stays pending
+    await expect(poll()).resolves.toBeUndefined();
+    finish("a");
+  });
 });
