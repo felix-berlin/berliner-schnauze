@@ -8,17 +8,18 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 const geometry: Geometry = {
   bezirke: [
     {
-      dots: [
-        [10, 10, 0],
-        [20, 10, 30],
-      ],
+      bottom: 10,
       name: "Mitte",
+      path: "M10 10h0M20 10h0",
       slug: "mitte",
+      top: 10,
+      x: 15,
     },
-    { dots: [[50, 50, 60]], name: "Pankow", slug: "pankow" },
-    { dots: [[80, 80, 90]], name: "Spandau", slug: "spandau" },
+    { bottom: 50, name: "Pankow", path: "M50 50h0", slug: "pankow", top: 50, x: 50 },
+    { bottom: 80, name: "Spandau", path: "M80 80h0", slug: "spandau", top: 80, x: 80 },
   ],
   viewBox: { height: 100, width: 100 },
+  wave: { reach: 70, x: 50, y: 40 },
 };
 const districts = [
   {
@@ -39,33 +40,6 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-// jsdom's PointerEvent is a plain MouseEvent: set the pointer type by hand.
-const move = async (w: ReturnType<typeof mountIt>, pointerType: string, x: number, y: number) => {
-  const e = new MouseEvent("pointermove", { bubbles: true, clientX: x, clientY: y });
-  Object.defineProperty(e, "pointerType", { value: pointerType });
-  w.get("svg").element.dispatchEvent(e);
-  await w.vm.$nextTick();
-};
-
-// jsdom has no screen matrix: the client position is taken as viewBox units (identity).
-const withScreenMatrix = (w: ReturnType<typeof mountIt>) => {
-  vi.stubGlobal(
-    "DOMPoint",
-    class {
-      constructor(
-        public x: number,
-        public y: number,
-      ) {}
-      matrixTransform() {
-        return { x: this.x, y: this.y };
-      }
-    },
-  );
-  Object.defineProperty(w.get("svg").element, "getScreenCTM", {
-    value: () => ({ inverse: () => ({}) }),
-  });
-};
-
 describe("DotMap", () => {
   it("exposes the map as a group of focusable districts in ranking order", () => {
     const w = mountIt();
@@ -75,13 +49,18 @@ describe("DotMap", () => {
       "Mitte, typisch: Testwort. 58 Prozent sagen Sag ick selbst",
       "Spandau · noch zu wenig Stimmen",
     ]);
-    expect(w.findAll("circle")).toHaveLength(4);
+    // One path per district; the focus ring and the hit area reuse it.
+    expect(w.findAll("path")).toHaveLength(3);
+    const mitte = district(w, "Mitte");
+    const id = mitte.get("path").attributes("id");
+    expect(mitte.get("path").attributes("d")).toBe("M10 10h0M20 10h0");
+    expect(mitte.findAll("use").map((u) => u.attributes("href"))).toEqual([`#${id}`, `#${id}`]);
   });
 
   it("sizes and fades each district from its value, mutes one without", () => {
     const w = mountIt();
-    expect(district(w, "Mitte").find("circle").attributes("r")).toBe("2.76");
     expect(district(w, "Mitte").attributes("style")).toContain("--o: 0.59");
+    expect(district(w, "Mitte").attributes("style")).toContain("--r: 2.76");
     expect(district(w, "Spandau").attributes("data-value")).toBe("none");
   });
 
@@ -111,35 +90,23 @@ describe("DotMap", () => {
     expect(w.find(".tip").exists()).toBe(false);
   });
 
-  it("maps the mouse position to the nearest district and falls back to the focused one", async () => {
-    const w = mountIt();
-    withScreenMatrix(w);
-    await move(w, "mouse", 50, 50);
-    expect(w.get(".tip").text()).toBe("Pankow · 78 %");
-    await move(w, "touch", 50, 50);
-    expect(w.get(".tip").text()).toBe("Pankow · 78 %");
-
-    await district(w, "Mitte").trigger("focus");
-    // far from every dot: the focused district stays
-    await move(w, "mouse", 95, 5);
-    expect(w.get(".tip").text()).toContain("Mitte");
-  });
-
-  it("selects the tapped district and keeps the selection for a tap beside the map", async () => {
-    const w = mountIt();
-    withScreenMatrix(w);
-    await w.get("svg").trigger("click", { clientX: 80, clientY: 80 });
-    expect(w.get(".tip").text()).toBe("Spandau · noch zu wenig Stimmen");
-    await w.get("svg").trigger("click", { clientX: 95, clientY: 5 });
-    expect(w.get(".tip").text()).toBe("Spandau · noch zu wenig Stimmen");
-  });
-
-  it("ignores hover from a touch and does nothing without a screen matrix", async () => {
+  it("ignores hover from a touch and falls back to the focused district", async () => {
     const w = mountIt();
     await district(w, "Pankow").trigger("pointerenter", { pointerType: "touch" });
     expect(w.find(".tip").exists()).toBe(false);
-    await move(w, "mouse", 50, 50);
-    expect(w.find(".tip").exists()).toBe(false);
+    await district(w, "Mitte").trigger("focus");
+    await district(w, "Pankow").trigger("pointerenter", { pointerType: "pen" });
+    expect(w.get(".tip").text()).toBe("Pankow · 78 %");
+    await district(w, "Pankow").trigger("pointerleave", { pointerType: "pen" });
+    expect(w.get(".tip").text()).toContain("Mitte");
+  });
+
+  it("hands the wave its centre and reach in viewBox units", () => {
+    const style = mountIt().get("svg").attributes("style");
+    expect(style).toContain("--map-w: 100");
+    expect(style).toContain("--wave-x: 50%");
+    expect(style).toContain("--wave-y: 40%");
+    expect(style).toContain("--wave-reach: 70");
   });
 
   it("puts the tooltip below a district in the top quarter and above the others", async () => {
@@ -177,5 +144,10 @@ describe("DotMap", () => {
     await w.vm.$nextTick();
     expect(w.get(".map").attributes("data-wave")).toBe("in");
     expect(disconnect).toHaveBeenCalled();
+    // The end of a district's own transition is not the wave's end: only the svg's animation drops the mask.
+    await district(w, "Mitte").trigger("animationend");
+    expect(w.get(".map").attributes("data-wave")).toBe("in");
+    await w.get("svg").trigger("animationend");
+    expect(w.get(".map").attributes("data-wave")).toBe("done");
   });
 });

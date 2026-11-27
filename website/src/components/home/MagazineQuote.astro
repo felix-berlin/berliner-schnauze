@@ -14,7 +14,7 @@ const { magazine } = Astro.props;
   magazine?.quote && (
     <article class="c-home-magazine" aria-labelledby="home-magazine-title" data-reveal="wait">
       {magazine.ipa && (
-        <span class="ipa" aria-hidden="true">{`[${magazine.ipa}]`}</span>
+        <span class="field" aria-hidden="true"><span class="ipa">{`[${magazine.ipa}]`}</span></span>
       )}
       <div class="o-home-in">
       <div class="grid">
