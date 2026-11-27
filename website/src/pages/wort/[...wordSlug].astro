@@ -2,7 +2,7 @@
 import FooterCalloutBook from '@components/footer/FooterCalloutBook.astro';
 import WordPage from '@components/word/WordPage.astro';
 import Layout from '@layouts/Layout.astro';
-import { WORD_PAGE_CACHE_CONTROL } from '@lib/pageCache.ts';
+import { PAGE_CACHE_CONTROL } from '@lib/pageCache.ts';
 import { fetchWordPage } from '@services/payload/wordPage.ts';
 import { fetchWordRefs } from '@services/payload/wordRefs.ts';
 import { metaToSeo } from '@services/payload/seo.ts';
@@ -23,7 +23,7 @@ const { word } = model;
 if (!draft && Astro.cache.enabled) {
   Astro.cache.set({ maxAge: 60, swr: 300, tags: ['words'] });
   // Per-visitor data comes from the islands, never from this HTML (see `lib/pageCache.ts` for the browser header).
-  Astro.response.headers.set('Cache-Control', WORD_PAGE_CACHE_CONTROL);
+  Astro.response.headers.set('Cache-Control', PAGE_CACHE_CONTROL);
 }
 const words = await fetchWordRefs();
 

@@ -49,7 +49,7 @@ Gewählt B, auf Wunsch des Betreibers nach Abwägung von Sauberkeit und Robusthe
 - Mein Entscheid: kein Sofort-Leeren im Container, in dem die Änderung passiert. Der Hook läuft im gemeinsamen Payload-Paket und kennt den Cache der Website nicht; für wenige Sekunden lohnt keine Brücke. Auch dort gilt der 2-s-Check.
 - Der erste Check nach dem Start merkt sich den Wert nur, er leert nicht.
 
-**Header (`website/`).** Die Wortseite sendet `Cache-Control: public, max-age=30`. `stale-while-revalidate` und `s-maxage` entfallen: kein gemeinsamer Cache sitzt davor (Traefik cached nicht), und der Server-Cache arbeitet über `Astro.cache.set`. `max-age=30` bleibt, weil Prefetch in Firefox und Safari Cache-Header braucht (Commit 7b8434ef).
+**Header (`website/`).** Jede HTML-Seite sendet `Cache-Control: public, max-age=30` (`PAGE_CACHE_CONTROL`, gesetzt von `setPageCache`; Fehlerseiten bleiben `no-store`; APIs, Sitemap und `llms.txt` behalten ihre `s-maxage`-Form). `stale-while-revalidate` und `s-maxage` entfallen: kein gemeinsamer Cache sitzt davor (Traefik cached nicht), und der Server-Cache arbeitet über `Astro.cache.set`. `max-age=30` bleibt, weil Prefetch in Firefox und Safari Cache-Header braucht (Commit 7b8434ef).
 
 ## Constraints
 
@@ -65,7 +65,7 @@ Gewählt B, auf Wunsch des Betreibers nach Abwägung von Sauberkeit und Robusthe
 - Provider: die Anfrage wird auch bei einer ablehnenden Prüfung bedient; ein End-to-End-Test mit echtem Poller prüft, dass nach einem Stempelwechsel der Seiten-Cache vor dem Ausliefern geleert ist.
 - Allowlist: jede Collection und jedes Global der echten Config ist entweder in `STAMPED_*` oder in einer ausdrücklichen Nicht-öffentlich-Liste; jede gelistete trägt die Hooks.
 - `withCacheStamp`: Allowlist greift; Votes, Reaktionen, WordStats, WordFeedback, Bon lösen nichts aus; mehrere Änderungen in einem Request stempeln einmal.
-- Header der Wortseite: die Konstante ist `public, max-age=30`, und die Seite sendet genau sie.
+- Header: `setPageCache` sendet für HTML `public, max-age=30`, für Fehler `no-store`, für Nicht-HTML die alte Form; die Wortseite nutzt dieselbe Konstante.
 - Migration läuft hoch und runter (`scripts/migration-upgrade-test.sh`).
 
 ## Dem Builder überlassen
@@ -77,4 +77,4 @@ Gewählt B, auf Wunsch des Betreibers nach Abwägung von Sauberkeit und Robusthe
 
 - Bis 2 s Verzögerung sind akzeptabel; `max-age=30` im Browser bleibt (wegen Prefetch).
 - Allowlist statt Denylist (neue Collections leeren nichts, bis sie eingetragen sind): ein Test zwingt zu einer Entscheidung für jede Collection und jedes Global.
-- Offen und bewusst nicht Teil dieser Änderung: `setPageCache` (`utils/cacheHeaders.ts`) sendet auf allen anderen Seiten weiter `stale-while-revalidate=86400`.
+- Entschieden (Option B): `setPageCache` sendet für alle HTML-Seiten `public, max-age=30` statt `max-age=0, s-maxage=300, stale-while-revalidate=86400`.

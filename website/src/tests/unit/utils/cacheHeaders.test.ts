@@ -1,10 +1,25 @@
 import { jsonWithEtag, setPageCache } from "@utils/cacheHeaders.ts";
 import { describe, expect, it } from "vitest";
 
-const response = (status = 200) => ({ headers: new Headers(), status });
+const response = (status = 200, contentType?: string) => ({
+  headers: new Headers(contentType ? { "Content-Type": contentType } : {}),
+  status,
+});
 
 describe("setPageCache", () => {
-  it("lets the proxy cache successful pages and the browser always revalidate", () => {
+  it("lets a browser reuse an HTML page for 30 s and never serve it stale", () => {
+    const res = response(200, "text/html; charset=utf-8");
+    setPageCache(res);
+    expect(res.headers.get("Cache-Control")).toBe("public, max-age=30");
+  });
+
+  it("never caches an HTML error page", () => {
+    const res = response(404, "text/html; charset=utf-8");
+    setPageCache(res);
+    expect(res.headers.get("Cache-Control")).toBe("no-store");
+  });
+
+  it("keeps the old policy for what is not HTML (APIs, sitemap, text files)", () => {
     const res = response();
     setPageCache(res);
     expect(res.headers.get("Cache-Control")).toBe(
