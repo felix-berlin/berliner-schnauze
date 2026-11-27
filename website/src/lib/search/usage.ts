@@ -17,6 +17,7 @@ export const usageFor = (
   if (!u) return undefined;
   const area = s.area ? enough(u.areas?.[s.area]) : undefined;
   const age = s.age ? enough(u.ages?.[s.age]) : undefined;
+  // TODO(suche): confirm which share wins when Bezirk and Altersgruppe are both set
   if (s.area && s.age) return area && age ? area : undefined;
   if (s.area) return area;
   if (s.age) return age;

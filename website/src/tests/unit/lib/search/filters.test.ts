@@ -14,11 +14,15 @@ const make = (
     images?: boolean;
     gap?: boolean;
     usage?: Usage;
+    form?: Partial<SearchEntry["form"]>;
+    theme?: string;
+    group?: string;
+    bero?: boolean;
   } = {},
 ) =>
   ({
     berlinerischWordTypes: [o.pos ?? "nomen"],
-    form: { length: 6, soundex: "", syllables: 2 },
+    form: { length: 6, soundex: "", syllables: 2, ...o.form },
     has: {
       examples: false,
       examplesAudio: false,
@@ -28,13 +32,13 @@ const make = (
       stories: false,
     },
     slug: o.name ?? "x",
-    themen: [],
+    themen: o.theme ? [o.theme] : [],
     usage: o.usage,
-    wordGroup: "A",
+    wordGroup: o.group ?? "A",
     wordProperties: {
       audioBerlinerisch: !!o.audio,
       berlinerisch: o.name ?? "x",
-      berolinismus: false,
+      berolinismus: !!o.bero,
       translations: [],
     },
   }) as unknown as SearchEntry;
@@ -94,6 +98,52 @@ describe("search filters", () => {
     const f = facets(entries, state({ content: ["audio"], pos: ["verb"] }));
     expect(f.content.bilder).toBe(2);
     expect(f.content.audio).toBe(1);
+    expect(f.total).toBe(1);
+  });
+
+  const both: Usage = {
+    ages: { "30-49": { say: 0.9, votes: 9 }, u30: { say: 0.9, votes: 10 } },
+    areas: { pankow: { say: 0.9, votes: 10 } },
+    east: 0.7,
+    say: 0.5,
+    votes: 20,
+    west: 0.4,
+  };
+  it.each([
+    ["age alone ok", make({ usage: both }), { age: "u30" }, true],
+    ["age alone thin", make({ usage: both }), { age: "30-49" }, false],
+    ["area+age both ok", make({ usage: both }), { age: "u30", area: "pankow" }, true],
+    ["area+age age thin", make({ usage: both }), { age: "30-49", area: "pankow" }, false],
+    ["where ost", make({ usage: both }), { where: "ost" }, true],
+    ["where west", make({ usage: both }), { where: "west" }, false],
+    ["where no usage", make(), { where: "ost" }, false],
+    ["kurz 5", make({ form: { length: 5 } }), { length: "kurz" }, true],
+    ["mittel 6", make({ form: { length: 6 } }), { length: "mittel" }, true],
+    ["kurz 6", make({ form: { length: 6 } }), { length: "kurz" }, false],
+    ["mittel 10", make({ form: { length: 10 } }), { length: "mittel" }, true],
+    ["lang 11", make({ form: { length: 11 } }), { length: "lang" }, true],
+    ["mittel 11", make({ form: { length: 11 } }), { length: "mittel" }, false],
+    ["silben 4 is 4+", make({ form: { syllables: 6 } }), { syllables: 4 }, true],
+    ["silben 3 exact", make({ form: { syllables: 4 } }), { syllables: 3 }, false],
+    ["letter", make({ group: "B" }), { letter: "b" }, true],
+    ["letter miss", make({ group: "B" }), { letter: "a" }, false],
+    ["starts", make({ name: "Brötchen" }), { starts: "brö" }, true],
+    ["ends", make({ name: "Brötchen" }), { ends: "chen" }, true],
+    ["ends miss", make({ name: "Brötchen" }), { ends: "brö" }, false],
+    ["rhyme", make({ name: "Brötchen" }), { rhyme: "Mädchen" }, true],
+    ["rhyme miss", make({ name: "Brötchen" }), { rhyme: "Hund" }, false],
+    ["themes", make({ theme: "essen" }), { themes: ["essen", "x"] }, true],
+    ["themes miss", make({ theme: "essen" }), { themes: ["x"] }, false],
+    ["berolinismus", make({ bero: true }), { berolinismus: true }, true],
+    ["berolinismus miss", make(), { berolinismus: true }, false],
+  ] as const)("%s", (_n, entry, o, expected) => {
+    expect(matches(entry, state(o as Partial<typeof EMPTY_STATE>))).toBe(expected);
+  });
+
+  it("facets letters count ignores the letter filter", () => {
+    const entries = [make({ group: "A" }), make({ group: "B" }), make({ group: "B" })];
+    const f = facets(entries, state({ letter: "a" }));
+    expect(f.letters).toEqual({ A: 1, B: 2 });
     expect(f.total).toBe(1);
   });
 
