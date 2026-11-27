@@ -7,13 +7,13 @@ Stand: 2026-11-27. Betrifft `website/` und `payload/`. Kurzes Design (kleine Än
 Nach dem Veröffentlichen einer Jeschichte fehlte sie auf `/wort/stinkadores`. Zwei Ursachen, beide gewollt zu beheben:
 
 1. **Server:** Seiten-Cache (`previewAwareCache.ts`, 60 s + 300 s swr) und viele 60-s-`ttl`-Zwischenspeicher in `services/` halten alte Daten. Nichts leert sie bei einer Änderung, auch das Tag `words` wird nirgends invalidiert.
-2. **Browser:** Die Wortseite sendet `Cache-Control: public, max-age=30, s-maxage=300, stale-while-revalidate=86400` (`pages/wort/[...wordSlug].astro:26`). Chrome darf bis zu einen Tag die alte Seite zeigen, der Service Worker (`NetworkFirst`, Cache `pages`) legt sie ab. Bestätigt nur indirekt: nach „Website-Daten löschen“ war alles da. Der genaue Ablauf ist nicht nachgestellt.
+2. **Browser:** Vor dieser Änderung sendete die Wortseite `Cache-Control: public, max-age=30, s-maxage=300, stale-while-revalidate=86400` (`pages/wort/[...wordSlug].astro`). Chrome darf damit bis zu einen Tag die alte Seite zeigen, der Service Worker (`NetworkFirst`, Cache `pages`) kann sie ablegen. Bestätigt nur indirekt: nach „Website-Daten löschen“ war alles da. Der genaue Ablauf ist nicht nachgestellt. Die Header-Änderung unten (kein `stale-while-revalidate`, kein `s-maxage`) ist genau dieser Fix.
 
 Ziel: Eine Änderung, die die öffentliche Seite verändert, ist nach wenigen Sekunden sichtbar, egal ob sie im CMS-Container oder im Web-Container passiert ist.
 
 ## Goals
 
-- Jede relevante Änderung (anlegen, ändern, veröffentlichen, zurückziehen, löschen) leert **alles**: Seiten-Cache und alle `ttl`/`ttlBy`-Zwischenspeicher, in jedem Web-Container.
+- Jede relevante Änderung (anlegen, ändern, veröffentlichen, zurückziehen, löschen) leert **alles**: Seiten-Cache und alle `ttl`/`ttlBy`-Zwischenspeicher mit CMS-Daten, in jedem Web-Container. Zwischenspeicher ohne CMS-Daten (Startseiten-Statistik, GitHub, Polar, Wakapi) bleiben stehen: `ttl(…, { external: true })`.
 - Der Browser hält die Wortseite höchstens 30 s und zeigt danach nie eine Stunden alte Version.
 
 ## Non-goals
@@ -25,7 +25,7 @@ Ziel: Eine Änderung, die die öffentliche Seite verändert, ist nach wenigen Se
 ## Anti-Goals
 
 - Hochfrequente Schreibzugriffe dürfen den Cache nicht dauernd leeren (er wäre nutzlos): Votes, Reaktionen, WordStats, WordFeedback, Bon-Spiele und -Spieler lösen nichts aus.
-- Ein Fehler beim Stempel-Check darf keine Seite kaputt machen oder verlangsamen: Cache bleibt, Fehler wird geloggt.
+- Ein Fehler beim Stempel-Check darf keine Seite kaputt machen oder verlangsamen: Cache bleibt, Fehler wird geloggt. Ein Check, der hängt, bricht nach 10 s ab (zählt als Fehler), damit er nicht alle späteren Checks blockiert.
 
 ## Approaches
 
@@ -39,13 +39,13 @@ Gewählt B, auf Wunsch des Betreibers nach Abwägung von Sauberkeit und Robusthe
 
 **Stempel.** Ein Payload-Global (Arbeitsname `cache-stamp`) mit einem Feld `changedAt` (date). Neue Tabelle, daher eine Migration nach expand/contract (nur hinzufügen; Regeln in `.claude/rules/payload-migrations.md`). Zugriff `authenticated` plus Forbidden-Test in `payload/tests/access.test.ts`.
 
-**Schreiben (`payload/`).** Ein Wrapper `withCacheStamp`, gebaut wie `withIndexNow` (`hooks/indexNow.ts`): hängt `afterChange` und `afterDelete` an die Collections und Globals, die die öffentliche Seite verändern (Allowlist, nicht Denylist). Der Hook setzt `changedAt = now` **in der Transaktion der Änderung** (`req` durchreichen), damit der Stempel erst mit dem Commit sichtbar wird; sonst könnte die Website vor dem Commit leeren und alte Daten neu cachen. Je Request wird nur einmal gestempelt (`req.context`). Eine Zeit-Entprellung geht in einer Transaktion nicht. Der Stempel selbst löst keinen Hook aus (Schleife vermeiden).
+**Schreiben (`payload/`).** Ein Wrapper `withCacheStamp`, gebaut wie `withIndexNow` (`hooks/indexNow.ts`): hängt `afterChange` und `afterDelete` an die Collections und Globals, die die öffentliche Seite verändern (Allowlist, nicht Denylist). Der Hook setzt `changedAt = now` **in der Transaktion der Änderung** (`req` durchreichen), damit der Stempel erst mit dem Commit sichtbar wird; sonst könnte die Website vor dem Commit leeren und alte Daten neu cachen. Je Request wird nur einmal gestempelt (`req.context`, gesetzt nach dem erfolgreichen Schreiben). Kommentare stempeln nur, wenn ein veröffentlichter Kommentar erscheint, sich ändert oder verschwindet (etwa durch Meldungen ausgeblendet): zurückgehaltene Kommentare und die Zähler-Updates von Votes und Meldungen (`skipCommentHooks`) nicht. `redirects` (Plugin-Collection) bekommt die Hooks über `overrides`. Eine Zeit-Entprellung geht in einer Transaktion nicht. Der Stempel selbst löst keinen Hook aus (Schleife vermeiden).
 
 **Lesen und Leeren (`website/`).**
 
-- Ein kleiner Stempel-Checker liest `changedAt` (`depth: 0`, nur dieses Feld), höchstens alle 2 s. Die Anfrage, die den Check auslöst, wartet darauf, höchstens 250 ms (sonst bekäme der erste Besucher nach einer Änderung noch die alte Seite; im lokalen Test war das der Fall). Alle anderen Anfragen warten nicht. Ändert sich der Wert gegenüber dem zuletzt gesehenen, leert er.
+- Ein kleiner Stempel-Checker liest `changedAt` (`depth: 0`, nur dieses Feld), höchstens alle 2 s. Die Anfrage, die den Check auslöst, wartet darauf, höchstens 250 ms (sonst bekäme der erste Besucher nach einer Änderung noch die alte Seite; im lokalen Test war das der Fall); nach den 250 ms läuft das Leeren eventuell noch, das Ausliefern der neuen Daten ist dann nur bestmöglich. Alle anderen Anfragen warten nicht. Ändert sich der Wert gegenüber dem zuletzt gesehenen, leert er; schlägt das Leeren fehl, wird es beim nächsten Intervall wiederholt. Ein Fehler wird höchstens einmal pro Minute geloggt (`read failed` oder `clear failed`), nach fünf Fehlern in Folge als Fehler.
 - Aufgerufen aus `previewAwareCache.ts` (`onRequest`), also auch bei Cache-Treffern, die vor jedem Seitencode bedient werden.
-- Leeren heißt: (a) Seiten-Cache: der Provider-Wrapper hängt jeder gerenderten Antwort das Tag `site` an (`Cache-Tag`-Header), ein `invalidate({ tags: "site" })` leert alles; die Seiten selbst bleiben unberührt; (b) `cache.ts` bekommt ein Register aller `ttl`/`ttlBy`-Instanzen mit einem `clearAll()`.
+- Leeren heißt: (a) Seiten-Cache: der Provider-Wrapper hängt jeder gerenderten Antwort das Tag `site` an (`Cache-Tag`-Header), ein `invalidate({ tags: "site" })` leert alles; die Seiten selbst bleiben unberührt; (b) `cache.ts` bekommt ein Register aller `ttl`/`ttlBy`-Instanzen (außer `external`) mit einem `clearAllMemos()`.
 - Mein Entscheid: kein Sofort-Leeren im Container, in dem die Änderung passiert. Der Hook läuft im gemeinsamen Payload-Paket und kennt den Cache der Website nicht; für wenige Sekunden lohnt keine Brücke. Auch dort gilt der 2-s-Check.
 - Der erste Check nach dem Start merkt sich den Wert nur, er leert nicht.
 
@@ -60,20 +60,21 @@ Gewählt B, auf Wunsch des Betreibers nach Abwägung von Sauberkeit und Robusthe
 
 ## Tests
 
-- `ttl`/`ttlBy`: `clearAll()` leert alle Instanzen, der nächste Aufruf lädt neu.
-- Stempel-Checker: Throttle (höchstens eine Abfrage pro 2 s), Wechsel leert genau einmal, erster Check leert nicht, ein fehlgeschlagener Read lässt den Cache stehen.
+- `ttl`/`ttlBy`: `clearAllMemos()` leert alle Instanzen außer `external`, der nächste Aufruf lädt neu; ein Refresh, der schon lief, schreibt nichts Altes zurück.
+- Stempel-Checker: Throttle (höchstens eine Abfrage pro 2 s), Wechsel leert genau einmal, erster Check leert nicht, ein fehlgeschlagener oder hängender Read lässt den Cache stehen, Fehler tragen den Namen des Schritts.
+- Provider: die Anfrage wird auch bei einer ablehnenden Prüfung bedient; ein End-to-End-Test mit echtem Poller prüft, dass nach einem Stempelwechsel der Seiten-Cache vor dem Ausliefern geleert ist.
+- Allowlist: jede Collection und jedes Global der echten Config ist entweder in `STAMPED_*` oder in einer ausdrücklichen Nicht-öffentlich-Liste; jede gelistete trägt die Hooks.
 - `withCacheStamp`: Allowlist greift; Votes, Reaktionen, WordStats, WordFeedback, Bon lösen nichts aus; mehrere Änderungen in einem Request stempeln einmal.
-- Header der Wortseite enthält kein `stale-while-revalidate`.
+- Header der Wortseite: die Konstante ist `public, max-age=30`, und die Seite sendet genau sie.
 - Migration läuft hoch und runter (`scripts/migration-upgrade-test.sh`).
 
 ## Dem Builder überlassen
 
-- Genaue Allowlist der Collections/Globals (Faustregel: was die öffentliche Seite zeigt; `comments` zählt, `suggestions`, `reports`, `comment-reports` nur, wenn sie öffentlich etwas ändern).
-- Name des Globals, genaue Entprellzeit, Dateinamen.
+- Dateinamen und Feinheiten, soweit sie nichts am Verhalten ändern.
 - Ob der Service Worker nach dem Header-Fix noch etwas braucht: im Browser mit Playwright gegen einen lokalen Build prüfen, nur bei Befund anfassen.
 
-## Annahmen, die ich getroffen habe (bitte prüfen)
+## Entscheidungen
 
-- Bis 2 s Verzögerung sind akzeptabel.
-- `max-age=30` im Browser bleibt (wegen Prefetch).
-- Allowlist statt Denylist (neue Collections leeren nichts, bis sie eingetragen sind).
+- Bis 2 s Verzögerung sind akzeptabel; `max-age=30` im Browser bleibt (wegen Prefetch).
+- Allowlist statt Denylist (neue Collections leeren nichts, bis sie eingetragen sind): ein Test zwingt zu einer Entscheidung für jede Collection und jedes Global.
+- Offen und bewusst nicht Teil dieser Änderung: `setPageCache` (`utils/cacheHeaders.ts`) sendet auf allen anderen Seiten weiter `stale-while-revalidate=86400`.

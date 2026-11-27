@@ -1,6 +1,7 @@
 import { redirectsPlugin } from "@payloadcms/plugin-redirects";
 
 import { contentAccess } from "./access";
+import { stampHooks } from "./hooks/cacheStamp";
 import { ROUTES } from "./lib/routes";
 
 /**
@@ -15,5 +16,7 @@ export const redirects = redirectsPlugin({
     // The plugin reads publicly by default; here only logged-in users and the site's Local API reads.
     access: contentAccess,
     admin: { description: "Alter Pfad, z. B. /wort/alter-slug → Dokument oder eigene URL." },
+    // A hand-made redirect changes what the site answers: stamp like the other public collections.
+    hooks: { afterChange: [stampHooks.afterChange], afterDelete: [stampHooks.afterDelete] },
   },
 });

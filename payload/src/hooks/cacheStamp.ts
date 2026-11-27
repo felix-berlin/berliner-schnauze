@@ -16,6 +16,7 @@ export const STAMPED_COLLECTIONS: readonly string[] = [
   "media",
   "word-types",
   "comments",
+  "redirects", // plugin collection: it gets the hooks through `overrides` in `redirects.ts`, not `withCacheStamp`
 ];
 
 export const STAMPED_GLOBALS: readonly string[] = [
@@ -36,12 +37,13 @@ const STAMPED_KEY = "cacheStamped";
  */
 export const stampCacheChange = async (req: PayloadRequest): Promise<void> => {
   if (req.context[STAMPED_KEY]) return;
-  req.context[STAMPED_KEY] = true;
   await req.payload.updateGlobal({
     data: { changedAt: new Date().toISOString() },
     req,
     slug: "cache-stamp",
   });
+  // After the write: a failed write that the caller survives must not suppress the stamp of later docs.
+  req.context[STAMPED_KEY] = true;
 };
 
 /**
@@ -80,6 +82,13 @@ const stampOnDelete: CollectionAfterDeleteHook = async ({ collection, doc, req }
 const stampOnGlobalChange: GlobalAfterChangeHook = async ({ doc, req }) => {
   await stampCacheChange(req);
   return doc;
+};
+
+/** The hooks themselves, for collections that cannot be wrapped (plugin collections take them through `overrides`). */
+export const stampHooks = {
+  afterChange: stampOnChange,
+  afterDelete: stampOnDelete,
+  global: stampOnGlobalChange,
 };
 
 /** Stamps every change and delete of a collection that has a public face (`STAMPED_COLLECTIONS`). */

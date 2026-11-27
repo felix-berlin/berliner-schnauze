@@ -165,7 +165,7 @@ describe("createStampPoller", () => {
       let time = 0;
       const read = vi.fn(() => new Promise<string>(() => {}));
       const warn = vi.fn();
-      const poll = createStampPoller({ onChange: vi.fn(), now: () => time, read, warn });
+      const poll = createStampPoller({ now: () => time, onChange: vi.fn(), read, warn });
       const first = poll();
       await vi.advanceTimersByTimeAsync(10_000);
       await first;
@@ -183,8 +183,8 @@ describe("createStampPoller", () => {
       let time = 0;
       const reads = ["a", "b"];
       const poll = createStampPoller({
-        onChange: () => Promise.reject(new Error("invalidate broke")),
         now: () => time,
+        onChange: () => Promise.reject(new Error("invalidate broke")),
         read: async () => reads.shift() ?? null,
         warn,
       });

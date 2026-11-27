@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   clearAllMemos: vi.fn(),
   invalidate: vi.fn(async (_options: unknown) => {}),
-  poll: vi.fn(),
+  poll: vi.fn(async () => {}),
   pollerOptions: undefined as undefined | { onChange: () => Promise<void> | void },
 }));
 
@@ -116,5 +116,13 @@ describe("previewAwareCache", () => {
     await served;
     expect(inner).toHaveBeenCalledOnce();
     vi.useRealTimers();
+  });
+
+  it("still serves the page when the stamp check rejects", async () => {
+    inner.mockClear();
+    mocks.poll.mockReturnValueOnce(Promise.reject(new Error("check broke")));
+    const response = await provider.onRequest!(context(), next);
+    expect(await response.text()).toBe("from cache");
+    expect(inner).toHaveBeenCalledOnce();
   });
 });

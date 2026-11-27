@@ -33,9 +33,10 @@ const withSiteTag = (response: Response): Response => {
  * - `/?q=…`: the start page redirects that old share link to /suche, and the cache key ignores the query.
  *
  * It also watches the CMS change stamp (`services/cacheStamp.ts`): on a change it empties this cache and every
- * `ttl` memo, so an edit shows within seconds instead of after the cache windows. The check runs on every request,
- * also the ones that skip the cache, at most once per interval; a request waits for it (at most `CHECK_WAIT_MS`),
- * otherwise the first visitor after an edit would still get the old page.
+ * `ttl` memo (not the `external` ones), so an edit shows within seconds instead of after the cache windows. The
+ * check runs on every request, also the ones that skip the cache, at most once per interval; the request that starts
+ * it waits for it (at most `CHECK_WAIT_MS`), otherwise the first visitor after an edit would still get the old page.
+ * After that wait the clear may still be running: serving the new data is best effort.
  */
 const factory: CacheProviderFactory = (config) => {
   const memory = memoryProvider(config);
@@ -50,8 +51,9 @@ const factory: CacheProviderFactory = (config) => {
     ...memory,
     onRequest: async (context, next) => {
       let timer: ReturnType<typeof setTimeout> | undefined;
+      // poll() does not reject by contract; a broken check must still never take the page down.
       await Promise.race([
-        poll(),
+        poll().catch(() => {}),
         new Promise((resolve) => (timer = setTimeout(resolve, CHECK_WAIT_MS))),
       ]);
       clearTimeout(timer);

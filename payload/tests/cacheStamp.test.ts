@@ -7,6 +7,7 @@ import {
   STAMPED_COLLECTIONS,
   STAMPED_GLOBALS,
   stampCacheChange,
+  stampHooks,
   withCacheStamp,
   withCacheStampGlobal,
 } from "../src/hooks/cacheStamp";
@@ -25,6 +26,7 @@ const stamp = async () =>
 afterEach(async () => {
   const payload = await getTestPayload();
   await payload.delete({ collection: "words", where: { slug: { equals: SLUG } } });
+  await payload.delete({ collection: "redirects", where: { from: { equals: "/stempel-test" } } });
 });
 
 describe("cache stamp", () => {
@@ -182,5 +184,116 @@ describe("cache stamp and comments", () => {
       id: published.id,
     });
     expect(await stamp()).not.toBe(OLD);
+  });
+});
+
+// Every collection and global must be decided on: stamps, or is listed here as not changing a public page.
+const NOT_PUBLIC_COLLECTIONS = [
+  "users", // no public page shows a user
+  "suggestions",
+  "reports",
+  "comment-reports",
+  "comment-votes",
+  "word-feedback",
+  "word-stats",
+  "bon-games",
+  "bon-players",
+  "payload-mcp-api-keys",
+  "payload-kv",
+  "payload-jobs",
+  "payload-locked-documents",
+  "payload-preferences",
+  "payload-migrations",
+];
+const NOT_PUBLIC_GLOBALS = ["cache-stamp", "payload-jobs-stats"];
+
+describe("the stamp allowlists in the real config", () => {
+  it("decide on every collection and global", async () => {
+    const { config } = await getTestPayload();
+    const decided = new Set([...STAMPED_COLLECTIONS, ...NOT_PUBLIC_COLLECTIONS]);
+    expect(config.collections.map((c) => c.slug).filter((slug) => !decided.has(slug))).toEqual([]);
+    const decidedGlobals = new Set([...STAMPED_GLOBALS, ...NOT_PUBLIC_GLOBALS]);
+    expect(config.globals.map((g) => g.slug).filter((slug) => !decidedGlobals.has(slug))).toEqual(
+      [],
+    );
+    expect(STAMPED_COLLECTIONS.filter((slug) => NOT_PUBLIC_COLLECTIONS.includes(slug))).toEqual([]);
+  });
+
+  it("carry the stamp hooks on every stamped collection and global", async () => {
+    const { config } = await getTestPayload();
+    const missingCollections = STAMPED_COLLECTIONS.filter((slug) => {
+      const hooks = config.collections.find((c) => c.slug === slug)?.hooks;
+      return !(
+        hooks?.afterChange?.includes(stampHooks.afterChange) &&
+        hooks.afterDelete?.includes(stampHooks.afterDelete)
+      );
+    });
+    expect(missingCollections).toEqual([]);
+    const missingGlobals = STAMPED_GLOBALS.filter(
+      (slug) =>
+        !config.globals
+          .find((g) => g.slug === slug)
+          ?.hooks?.afterChange?.includes(stampHooks.global),
+    );
+    expect(missingGlobals).toEqual([]);
+  });
+});
+
+describe("cache stamp, more paths", () => {
+  it("changes when a redirect is edited by hand", async () => {
+    const payload = await getTestPayload();
+    await setStamp();
+    await payload.create({
+      collection: "redirects",
+      data: { from: "/stempel-test", to: { type: "custom", url: "/wort" } } as never,
+    });
+    expect(await stamp()).not.toBe(OLD);
+  });
+
+  it("is rolled back with a global change too", async () => {
+    const payload = await getTestPayload();
+    await setStamp();
+    const req = { payload } as PayloadRequest;
+    await initTransaction(req);
+    await payload.updateGlobal({
+      data: { main: [], footer1: [], footer2: [] },
+      req,
+      slug: "navigation",
+    });
+    await killTransaction(req);
+    expect(await stamp()).toBe(OLD);
+  });
+
+  it("stamps for deleting a published comment, not for a held one", async () => {
+    const payload = await getTestPayload();
+    const word = await payload.create({
+      collection: "words",
+      data: { berlinerisch: "Stempel", slug: SLUG, _status: "published" },
+    });
+    const make = (context: Record<string, unknown> = {}) =>
+      payload.create({
+        collection: "comments",
+        context,
+        data: { word: word.id, text: "kiek ma", authorName: "Icke" } as never,
+      });
+    const held = await make({ review: true });
+    await setStamp();
+    await payload.delete({ collection: "comments", id: held.id });
+    expect(await stamp()).toBe(OLD);
+    const published = await make();
+    await setStamp();
+    await payload.delete({ collection: "comments", id: published.id });
+    expect(await stamp()).not.toBe(OLD);
+  });
+
+  it("stamps a later doc of the same request when the first write failed", async () => {
+    const updateGlobal = vi
+      .fn<(args: unknown) => Promise<object>>()
+      .mockRejectedValueOnce(new Error("write failed"))
+      .mockResolvedValue({});
+    const req = { context: {}, payload: { updateGlobal } } as unknown as PayloadRequest;
+    await expect(stampCacheChange(req)).rejects.toThrow("write failed");
+    await stampCacheChange(req);
+    expect(updateGlobal).toHaveBeenCalledTimes(2);
   });
 });
