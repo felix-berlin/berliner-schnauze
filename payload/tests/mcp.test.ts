@@ -218,12 +218,14 @@ describe("mcp endpoint", () => {
         berlinerisch: WORD,
         facts: [{ kind: "herkunft", text: rich("alt"), contributorName: "Anna Geheim" }],
         related: [{ label: "Brot", relation: "gleich", contributorName: "Bert Geheim" }],
+        examples: [{ example: "Ein Satz.", contributorName: "Cora Geheim" }],
       } as never,
     });
   const credits = async (id: number) =>
     (await (await getTestPayload()).findByID({ collection: "words", id, draft: true })) as {
       facts?: { text?: unknown; contributorName?: string | null }[];
       related?: { contributorName?: string | null }[];
+      examples?: { contributorName?: string | null }[];
     };
   const cleanWord = async () =>
     (await getTestPayload()).delete({
@@ -234,7 +236,7 @@ describe("mcp endpoint", () => {
   it("never shows contributorName of facts and related rows, with or without select", async () => {
     const made = await madeWithCredits();
     try {
-      for (const select of [undefined, { facts: true, related: true }]) {
+      for (const select of [undefined, { facts: true, related: true, examples: true }]) {
         const body = await rpc("tools/call", `Bearer ${KEY}`, {
           name: "findWords",
           arguments: {
@@ -285,6 +287,25 @@ describe("mcp endpoint", () => {
       expect(text(body)).toContain("updated successfully");
       const after = await credits(made.id);
       expect(after.related?.[0]?.contributorName).toBe("Bert Geheim");
+    } finally {
+      await cleanWord();
+    }
+  });
+
+  it("keeps an existing contributorName of examples when an MCP update rewrites them", async () => {
+    const made = await madeWithCredits();
+    try {
+      const body = await rpc("tools/call", `Bearer ${KEY}`, {
+        name: "updateWords",
+        arguments: {
+          id: made.id,
+          draft: true,
+          examples: [{ example: "Neuer Satz.", contributorName: "Hacker" }],
+        },
+      });
+      expect(text(body)).toContain("updated successfully");
+      const after = await credits(made.id);
+      expect(after.examples?.[0]?.contributorName).toBe("Cora Geheim");
     } finally {
       await cleanWord();
     }
