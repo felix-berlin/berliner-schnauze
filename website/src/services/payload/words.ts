@@ -153,10 +153,12 @@ export const toWord = ({
   ...doc,
   berlinerischAudio: audioRows(berlinerischAudio),
   derived: storedDerived(derived, doc),
-  examples: (examples ?? []).map(({ contributorSuggestion, exampleAudio, ...e }) => (Object.assign(e, {
-	contributorSuggestion: suggestionId(contributorSuggestion),
-	exampleAudio: audioRows(exampleAudio)
-}))),
+  examples: (examples ?? []).map(({ contributorSuggestion, exampleAudio, ...e }) =>
+    Object.assign(e, {
+      contributorSuggestion: suggestionId(contributorSuggestion),
+      exampleAudio: audioRows(exampleAudio),
+    }),
+  ),
   facts: facts?.map(({ contributorSuggestion, text, ...f }) => ({
     ...f,
     contributorSuggestion: suggestionId(contributorSuggestion),

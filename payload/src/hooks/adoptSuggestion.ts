@@ -110,12 +110,13 @@ export const adoptSuggestion: CollectionBeforeChangeHook = async ({
     const word = await req.payload
       .create({
         collection: "words",
-        draft: true,
+        draft: false,
         data: {
           berlinerisch: berlinerWord,
           slug,
           translations: [{ translation: d.translation }],
           examples: d.example ? [{ example: d.example }] : [],
+          _status: "published",
         },
         req,
       })

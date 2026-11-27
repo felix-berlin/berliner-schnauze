@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { getTestPayload } from "./helpers/payload";
 
-const SLUG = "adopt-test-wort";
+const SLUG = "adopt-testwort";
 const SPELLING = "Adopt Testwort";
 
 afterEach(async () => {
@@ -181,5 +181,47 @@ describe("accepting an example, fact or related suggestion", () => {
     expect((await payload.findByID({ collection: "suggestions", id: s.id, depth: 0 })).status).toBe(
       "new",
     );
+  });
+
+  it("publishes the word of a new-word suggestion and locks the suggestion", async () => {
+    const payload = await getTestPayload();
+    const s = await payload.create({
+      collection: "suggestions",
+      data: {
+        type: "word",
+        berlinerWord: SPELLING,
+        translation: "adopt-test x",
+        example: "adopt-test Satz",
+      },
+    });
+    const done = await accept(s.id);
+    const word = await published(done.word as number);
+    expect(word).toMatchObject({ _status: "published", slug: SLUG, berlinerisch: SPELLING });
+    expect(word.examples?.[0]?.example).toBe("adopt-test Satz");
+    expect((await payload.findByID({ collection: "suggestions", id: s.id })).lockedByWord).toBe(
+      true,
+    );
+  });
+
+  it("only links a word chosen by hand and leaves it a draft", async () => {
+    const payload = await getTestPayload();
+    const chosen = await payload.create({
+      collection: "words",
+      draft: true,
+      data: { berlinerisch: SPELLING, slug: SLUG },
+    });
+    const s = await payload.create({
+      collection: "suggestions",
+      data: { type: "word", berlinerWord: SPELLING, translation: "adopt-test x", word: chosen.id },
+    });
+    await accept(s.id);
+    const after = await payload.findByID({
+      collection: "words",
+      id: chosen.id,
+      depth: 0,
+      draft: true,
+    });
+    expect(after._status).toBe("draft");
+    expect(after.translations ?? []).toHaveLength(0);
   });
 });
