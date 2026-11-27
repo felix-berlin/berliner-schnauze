@@ -41,11 +41,11 @@ Heute gibt es zwei Seiten: `/suche` (Wortsuche, nur im Browser gerendert, `noind
 
 ## Approaches
 
-|                 | Beschreibung | Abwägung |
-| --------------- | ------------ | -------- |
+|                 | Beschreibung                                                                                                                                                                                                                 | Abwägung                                                                                                                                                                                      |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **A** (gewählt) | Eine Suchlogik (reines TS) für Server und Browser. Der Server baut aus den Index-Einträgen eine Orama-DB und rendert den ersten Listenausschnitt; die Vue-Insel lädt danach den Index wie heute und sucht lokal live weiter. | Kein Request pro Tastendruck, offline geht weiter, KI-Kandidaten lokal wie in #1955, Rangfolge an einer Stelle testbar. Server und Browser rechnen beide; kalter Cache braucht den DB-Aufbau. |
-| B | Server-API `/api/search?q=…` liefert Treffer und Facetten. | Kein Index im Browser, aber Request pro Tastendruck, offline kaputt, KI bräuchte trotzdem lokale Kandidaten. |
-| C | Wie heute nur im Browser, ohne SSR. | Billig, verletzt aber „erste Trefferseite per SSR, ohne JS benutzbar“. |
+| B               | Server-API `/api/search?q=…` liefert Treffer und Facetten.                                                                                                                                                                   | Kein Index im Browser, aber Request pro Tastendruck, offline kaputt, KI bräuchte trotzdem lokale Kandidaten.                                                                                  |
+| C               | Wie heute nur im Browser, ohne SSR.                                                                                                                                                                                          | Billig, verletzt aber „erste Trefferseite per SSR, ohne JS benutzbar“.                                                                                                                        |
 
 Gewählt wurde A, weil es auf der vorhandenen Orama-Suche und dem KI-Code aus #1955 aufbaut und offline erhält.
 
