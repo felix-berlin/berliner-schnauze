@@ -26,7 +26,7 @@ pnpm lint                    # Oxlint (website + payload/, root .oxlintrc.json h
 pnpm typechecking            # astro check + vue-tsc  (slow — run targeted, not after every edit; tsc can't resolve .vue imports)
 
 # Build
-pnpm build                   # Production build (./dist, server entry + assets) — needs no database; no infisical, env vars must already be set
+pnpm build                   # Production build (website/dist, server entry + assets) — needs no database; no infisical, env vars must already be set
 pnpm build:local             # Production build locally — wraps build with scripts/with-env.sh (Infisical dev + .env.worktree)
 # in website/: build:strict  # Strict build with full type checking
 
@@ -37,7 +37,7 @@ pnpm format:check            # Check formatting without writing
 # Docker (Node adapter; run after build)
 docker compose up --build    # Serve website/dist/ via server/index.mjs (www redirect + security headers; redirects in astro.config.mjs)
 website/scripts/docker-smoke.sh   # Build image from dist/, check routes/headers/redirects (runs on every PR; leaves a running postgres up)
-                             # Release CI builds + pushes ghcr.io/felix-berlin/berliner-schnauze and …/berliner-schnauze-cms (release.yml `docker` job)
+                             # Release CI builds + pushes ghcr.io/felix-berlin/berliner-schnauze (release.yml `docker` job) and …/berliner-schnauze-cms (`docker-cms` job)
 
 # Cloudflare Workers cannot serve this stack (no wrangler config, a Workers Build fails).
 

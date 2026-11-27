@@ -2,7 +2,7 @@ import { MigrateDownArgs, MigrateUpArgs, sql } from "@payloadcms/db-postgres";
 
 // Data only, done: on production this migration copied the old origin text (`infoText`) of every published word,
 // with the word's `sources`, into the v18 "Wissenswertes" (`facts`, kind herkunft). The columns and the copy code are
-// gone since the contract release (`drop_v18_legacy_columns`), so `up` has nothing left to do; a database that never ran
+// gone since the contract release (`20261123_201659_drop_word_info_text`), so `up` has nothing left to do; a database that never ran
 // it keeps no origin text (restore it from a backup taken before the contract).
 export async function up(_: MigrateUpArgs): Promise<void> {}
 

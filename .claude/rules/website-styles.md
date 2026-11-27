@@ -81,7 +81,7 @@ One component = one file `src/styles/components/_<name>.scss` = exactly one bloc
 - In components: the root is the container (`container: <name> / inline-size`), parts use `@container <name> (inline-size >= 30rem)`. A container query cannot style the container itself: a root whose own padding or grid must respond gets an inner wrapper part (`.inner`).
 - `@include mx.breakpoint("sm")` (`@use "@styles/mixins" as mx;`, never raw `@media`) only in `objects/` (page shell) and legacy files. Map: `src/styles/variables/_layout.scss`.
 
-## Commands (pnpm only; the style scripts exist in `website/` only, root has just `pnpm test:unit`)
+## Commands (pnpm only; the token and style-check scripts exist in `website/` only; the root has `pnpm lint`, `pnpm test:unit` and `pnpm typechecking`)
 
 - `pnpm tokens:build` regenerates the token file; `pnpm tokens:check` fails when it is stale (CI runs it).
 - `pnpm lint:style:check` = Stylelint without fixing. Never use `pnpm lint` to check: it auto-fixes and modifies files.
