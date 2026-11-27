@@ -21,6 +21,7 @@
     "./bon-ranking": "./src/lib/bonRanking.ts",
     "./home-stats": "./src/lib/homeStats.ts",
     "./home-stats-load": "./src/lib/homeStatsLoad.ts",
+    "./search-stats-load": "./src/lib/searchStatsLoad.ts",
     "./html-text": "./src/lib/htmlText.ts",
     "./word-stats": "./src/lib/wordStats.ts",
     "./lexical-html": "./src/lib/lexicalHtml.ts",
