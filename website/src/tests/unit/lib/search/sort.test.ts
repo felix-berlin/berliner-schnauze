@@ -4,7 +4,13 @@ import { sortHits } from "@lib/search/sort";
 import { describe, expect, it } from "vitest";
 
 const hit = (name: string, extra: Partial<SearchEntry> = {}): RankedHit => ({
-  entry: { dateTs: 0, slug: name, wordProperties: { berlinerisch: name }, ...extra } as SearchEntry,
+  entry: {
+    dateTs: 0,
+    slug: name,
+    wordGroup: name[0]!.toUpperCase(),
+    wordProperties: { berlinerisch: name },
+    ...extra,
+  } as SearchEntry,
   tier: 0,
 });
 const names = (hs: RankedHit[]) => hs.map((h) => h.entry.slug);
@@ -35,5 +41,10 @@ describe("sortHits", () => {
     const hs = [hit("b", { dateTs: 1 }), hit("Ä", { dateTs: 3 }), hit("a", { dateTs: 2 })];
     expect(names(sortHits(hs, "neu", ctx))).toEqual(["Ä", "a", "b"]);
     expect(names(sortHits(hs, "az", ctx))).toEqual(["a", "Ä", "b"]);
+  });
+
+  it("az keeps each letter group together in register order", () => {
+    const hs = [hit("Afrika"), hit("Äffchen"), hit("Bude"), hit("Affe")];
+    expect(names(sortHits(hs, "az", ctx))).toEqual(["Affe", "Afrika", "Äffchen", "Bude"]);
   });
 });

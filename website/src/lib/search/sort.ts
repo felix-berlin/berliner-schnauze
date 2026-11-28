@@ -18,7 +18,8 @@ export function sortHits(
   const rank = (h: RankedHit) => ctx.trendRanks.get(h.entry.slug) ?? Infinity;
   switch (sort) {
     case "az":
-      return out.sort(az);
+      // Letter group first (register order): de collation alone puts „Äffchen“ between „Affe“ and „Afrika“.
+      return out.sort((a, b) => a.entry.wordGroup.localeCompare(b.entry.wordGroup, "de") || az(a, b));
     case "neu":
       return out.sort((a, b) => b.entry.dateTs - a.entry.dateTs || az(a, b));
     case "jesagt":

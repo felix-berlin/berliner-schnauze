@@ -1,6 +1,7 @@
 import type { AgeGroup, ContentKey, SortKey } from "./types";
 
 import { FILTER_GROUPS } from "./labels";
+import { terms } from "./query";
 
 export type SearchState = {
   q: string;
@@ -29,9 +30,11 @@ export const EMPTY_STATE: SearchState = {
   themes: [],
 };
 
-/** "beste" needs a query: without one it means A-Z. */
-export const effectiveSort = (s: SearchState): SortKey =>
-  s.sort === "beste" && !s.q ? "az" : (s.sort ?? (s.q ? "beste" : "az"));
+/** "beste" needs a query with letters: without one ("", "-", "1860") it means A-Z. */
+export const effectiveSort = (s: SearchState): SortKey => {
+  const q = terms(s.q).length > 0;
+  return s.sort === "beste" && !q ? "az" : (s.sort ?? (q ? "beste" : "az"));
+};
 
 /** The filter chips (SPEC §7.1); „Nur Berolinismen“ is a toggle, not a group. */
 export type FilterGroup = "buchstabe" | "wortart" | "thema" | "gebrauch" | "inhalt" | "wortform";
