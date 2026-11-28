@@ -54,8 +54,13 @@
         display: none;
       }
 
+      // Dashed underline, not opacity: fading dropped quiet summary text (filter sheet) below 4.5:1.
       @include butler-mx.hover {
-        opacity: 0.8;
+        .c-accordion__trigger-label {
+          text-decoration-line: underline;
+          text-decoration-style: dashed;
+          text-underline-offset: 0.2em;
+        }
       }
     }
 
