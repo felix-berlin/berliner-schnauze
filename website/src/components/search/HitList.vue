@@ -5,6 +5,7 @@
     v-slot="{ item: row, index }"
     :data="rows"
     :ssr-count="ssrCount"
+    :style="mounted ? undefined : SERVER_FLOW"
     class="c-hit-list"
     role="listbox"
     aria-label="Treffer"
@@ -43,6 +44,7 @@
 import type { SearchState } from "@lib/search/state";
 import type { ListRow } from "@lib/search/types";
 
+import { useMounted } from "@vueuse/core";
 import { WindowVirtualizer } from "virtua/vue";
 import { useTemplateRef } from "vue";
 
@@ -61,6 +63,14 @@ defineProps<{
 const emit = defineEmits<{ top: [index: number] }>();
 
 const virtualizer = useTemplateRef("virtualizer");
+
+/**
+ * Until mount (server HTML, before hydration, without JS) virtua renders its rows in flow but sizes the root
+ * from its 40px estimate with `contain: size`, so the real rows spilled over the footer. A fallthrough style
+ * wins over the root's own: let the rows give the height until virtua measures them.
+ */
+const SERVER_FLOW = { contain: "none", height: "auto" };
+const mounted = useMounted();
 
 /** First row at the top of the viewport, for the register's scroll-spy. */
 const onScroll = () => {

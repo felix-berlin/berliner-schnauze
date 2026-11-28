@@ -53,6 +53,15 @@ const smallText = (page: Page) =>
       ),
   );
 
+/** Bottoms of the hit list and its last row, and the footer top, in page pixels. */
+const listAndFooter = (page: Page) =>
+  page.evaluate(() => {
+    const list = document.querySelector("#treffer")!.getBoundingClientRect();
+    const last = document.querySelector("#treffer")!.lastElementChild!.getBoundingClientRect();
+    const footer = document.querySelector("footer")!.getBoundingClientRect();
+    return { footer: footer.top, lastRow: last.bottom, list: list.bottom };
+  });
+
 const axe = async (page: Page) => {
   const all = await new AxeBuilder({ page })
     .include("main")
@@ -133,6 +142,16 @@ test.describe("/wort search page", () => {
         await expect(page.locator(`a[href^="/wort/${slug}"]`).first()).toBeVisible();
       });
 
+    // Same HTML and CSS as a reload before hydration: virtua's server list must not keep its estimated height.
+    test("the server list holds its rows above the footer", async ({ page }) => {
+      for (const path of ["/wort", "/wort?q=anmach"]) {
+        await page.goto(path);
+        const { lastRow, list, footer } = await listAndFooter(page);
+        expect(lastRow, path).toBeLessThanOrEqual(list + 1);
+        expect(list, path).toBeLessThanOrEqual(footer);
+      }
+    });
+
     test("special characters and HTML in ?q= stay inert", async ({ page }) => {
       for (const q of ['"<b>&', '<img src=x onerror="alert(1)">', "(.*)["]) {
         await page.goto(`/wort?q=${encodeURIComponent(q)}`);
@@ -160,6 +179,17 @@ test.describe("/wort search page", () => {
         "treffer-anmachn",
       ]);
       await expect(page.getByText("erst im Wort, dann in der Bedeutung")).toBeVisible();
+    });
+
+    test("after a reload the hydrated list still holds its rows above the footer", async ({
+      page,
+    }) => {
+      await openSearch(page, "/wort?q=anmach");
+      await page.reload();
+      await expect(page.locator("astro-island[ssr]:has(.c-search-app)")).toHaveCount(0);
+      const { lastRow, list, footer } = await listAndFooter(page);
+      expect(lastRow).toBeLessThanOrEqual(list + 1);
+      expect(list).toBeLessThanOrEqual(footer);
     });
 
     test("set, remove and reset filters", async ({ page }) => {
