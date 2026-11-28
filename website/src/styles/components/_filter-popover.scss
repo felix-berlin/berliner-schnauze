@@ -63,9 +63,11 @@
     }
   }
 
-  // SPEC §3.1 tablet (808–999px viewport, c-search-app): a narrower popover.
+  // SPEC §3.1 tablet (808–999px viewport, c-search-app): a narrower popover, a 44px „Fertig“.
   @container search-app (48rem <= inline-size < 60rem) {
     :scope {
+      --_done: var(--size-tap-target);
+
       inline-size: min(var(--_width-tablet), 100vi - 2 * var(--space-4));
     }
   }

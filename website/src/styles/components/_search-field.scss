@@ -162,7 +162,10 @@
     .slash {
       display: block;
     }
+  }
 
+  // KI text from 808px viewport, on the search page only (c-search-app; the header field has no KI button).
+  @container search-app (inline-size >= 48rem) {
     .ai {
       padding-inline: var(--space-3);
 

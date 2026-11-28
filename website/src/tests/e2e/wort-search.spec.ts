@@ -482,6 +482,16 @@ test.describe("/wort search page", () => {
       expect((await popover.boundingBox())!.width).toBe(360);
       for (const box of await popover.getByRole("checkbox").all())
         expect((await box.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+      expect(await smallTargets(page)).toEqual([]); // with „Fertig“
+
+      // Gebrauch: option pills and the Bezirk select.
+      await page.keyboard.press("Escape");
+      await page
+        .getByRole("group", { name: "Filter" })
+        .getByRole("button", { name: /^Gebrauch/ })
+        .click();
+      await expect(page.getByRole("dialog", { name: "Gebrauch" })).toBeVisible();
+      expect(await smallTargets(page)).toEqual([]);
     });
 
     test("axe has no violations: start, hits", async ({ page }) => {
