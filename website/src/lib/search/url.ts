@@ -1,4 +1,5 @@
 import type { SearchState } from "./state";
+
 import { EMPTY_STATE, effectiveSort } from "./state";
 import { AGE_GROUPS, CONTENT_KEYS, SORT_KEYS } from "./types";
 

@@ -1,7 +1,7 @@
 import type { SearchState } from "./state";
-import { CONTENT_KEYS, type ContentKey, type SearchEntry } from "./types";
 
 import { matches } from "./filters";
+import { CONTENT_KEYS, type ContentKey, type SearchEntry } from "./types";
 
 /** Each option's count ignores its own group, so it shows what selecting it would give. */
 export function facets(entries: SearchEntry[], s: SearchState) {

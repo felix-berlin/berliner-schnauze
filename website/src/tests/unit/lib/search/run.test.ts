@@ -67,16 +67,26 @@ describe("runSearch", () => {
   });
 
   it("one letter heading per group, umlaut after its base letter", async () => {
-    const words = [make("Afrika", ["Kontinent"]), make("Äffchen", ["kleiner Affe"]), make("Affe", ["Tier"])];
+    const words = [
+      make("Afrika", ["Kontinent"]),
+      make("Äffchen", ["kleiner Affe"]),
+      make("Affe", ["Tier"]),
+    ];
     const r = await runSearch(await buildWordDb(words), words, st(), ctx);
-    expect(r.rows.map((x) => (x.kind === "letter" ? x.letter : x.kind === "hit" ? x.hit.entry.slug : ""))).toEqual(["A", "affe", "afrika", "Ä", "äffchen"]);
+    expect(
+      r.rows.map((x) =>
+        x.kind === "letter" ? x.letter : x.kind === "hit" ? x.hit.entry.slug : "",
+      ),
+    ).toEqual(["A", "affe", "afrika", "Ä", "äffchen"]);
   });
 
   it("a query without letters lists like no query", async () => {
     for (const q of ["-", "1860"]) {
       const r = await runSearch(db, entries, st({ q }), ctx);
       expect(r.rows.filter((x) => x.kind === "letter")).toHaveLength(3);
-      expect(r.rows.find((x) => x.kind === "hit")).toMatchObject({ hit: { entry: { slug: "ahle" } } });
+      expect(r.rows.find((x) => x.kind === "hit")).toMatchObject({
+        hit: { entry: { slug: "ahle" } },
+      });
     }
   });
 

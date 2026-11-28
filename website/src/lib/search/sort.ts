@@ -19,7 +19,9 @@ export function sortHits(
   switch (sort) {
     case "az":
       // Letter group first (register order): de collation alone puts „Äffchen“ between „Affe“ and „Afrika“.
-      return out.sort((a, b) => a.entry.wordGroup.localeCompare(b.entry.wordGroup, "de") || az(a, b));
+      return out.sort(
+        (a, b) => a.entry.wordGroup.localeCompare(b.entry.wordGroup, "de") || az(a, b),
+      );
     case "neu":
       return out.sort((a, b) => b.entry.dateTs - a.entry.dateTs || az(a, b));
     case "jesagt":

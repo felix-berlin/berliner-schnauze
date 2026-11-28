@@ -1,5 +1,6 @@
 import type { FilterGroup, SearchState } from "./state";
-import { AGE_GROUPS, CONTENT_KEYS, SORT_KEYS, type AgeGroup, type ContentKey, type SortKey } from "./types";
+
+import { AGE_GROUPS, CONTENT_KEYS, SORT_KEYS } from "./types";
 
 type Options<T> = readonly (readonly [T, string])[];
 

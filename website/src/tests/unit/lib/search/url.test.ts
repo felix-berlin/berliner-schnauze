@@ -23,7 +23,9 @@ describe("search url", () => {
   });
 
   it("caps the query at MAX_QUERY", () => {
-    expect(parseState(new URLSearchParams({ q: "a".repeat(6000) }), known).q).toHaveLength(MAX_QUERY);
+    expect(parseState(new URLSearchParams({ q: "a".repeat(6000) }), known).q).toHaveLength(
+      MAX_QUERY,
+    );
   });
 
   it("trims the query", () => {

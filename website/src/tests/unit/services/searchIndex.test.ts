@@ -28,7 +28,9 @@ describe("fetchSearchIndex", () => {
     const { SEARCH_INDEX_URL, fetchSearchIndex } = await import("@services/searchIndex.ts");
     expect(await fetchSearchIndex()).toEqual(current);
     const [url, init] = fetchMock.mock.calls[1]!;
-    expect(String(url)).toMatch(new RegExp(`^${SEARCH_INDEX_URL.replace("?", "\\?")}&fresh=\\d+$`));
+    expect(url as string).toMatch(
+      new RegExp(`^${SEARCH_INDEX_URL.replace("?", "\\?")}&fresh=\\d+$`),
+    );
     expect(init).toEqual({ cache: "no-store" });
   });
 

@@ -207,7 +207,10 @@ test.describe("/wort search page", () => {
     test("Thema popover: the last theme is reachable on a short viewport", async ({ page }) => {
       await page.setViewportSize({ height: 720, width: 1280 });
       await openSearch(page, "/wort?q=anmach");
-      await page.getByRole("group", { name: "Filter" }).getByRole("button", { name: /^Thema/ }).click();
+      await page
+        .getByRole("group", { name: "Filter" })
+        .getByRole("button", { name: /^Thema/ })
+        .click();
       const popover = page.getByRole("dialog", { name: "Thema" });
       const last = popover.getByRole("checkbox").last();
       // Keyboard: focus scrolls each option into view above the sticky „Fertig“ row, not under it
@@ -235,7 +238,10 @@ test.describe("/wort search page", () => {
       await page.getByRole("button", { name: "Nur Berolinismen" }).click();
       await expect(page).toHaveURL(/berolinismus=1/);
       await page.getByRole("button", { name: "Filter entfernen: Nur Berolinismen" }).click();
-      await page.getByRole("group", { name: "Filter" }).getByRole("button", { name: /^Thema/ }).click();
+      await page
+        .getByRole("group", { name: "Filter" })
+        .getByRole("button", { name: /^Thema/ })
+        .click();
       await page
         .getByRole("dialog", { name: "Thema" })
         .getByRole("checkbox", { name: "Alltag & Wohnen" })
@@ -249,7 +255,9 @@ test.describe("/wort search page", () => {
       await expect(page).toHaveURL(/\/wort\?q=anmach&thema=alltag-wohnen$/);
       await expect(field(page)).toHaveValue("anmach");
       await expect(
-        page.getByRole("group", { name: "Aktive Filter" }).getByRole("button", { name: /Alltag & Wohnen/ }),
+        page
+          .getByRole("group", { name: "Aktive Filter" })
+          .getByRole("button", { name: /Alltag & Wohnen/ }),
       ).toBeVisible();
 
       // One more Back: the filter pushed its own entry, so the state before it comes back.
