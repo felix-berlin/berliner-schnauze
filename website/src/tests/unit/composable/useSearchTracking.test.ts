@@ -21,4 +21,19 @@ describe("useSearchTracking", () => {
     expect(setMatomoSearch).toHaveBeenCalledTimes(1);
     expect(setMatomoSearch).toHaveBeenCalledWith("quark", "Word Search", 2);
   });
+
+  it("does not count a filter change on the same query, counts it again after clearing", async () => {
+    vi.useFakeTimers();
+    const track = useSearchTracking();
+    track("quark", 2);
+    await vi.advanceTimersByTimeAsync(1000);
+    track("quark", 1); // filter changed, same query
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(setMatomoSearch).toHaveBeenCalledTimes(1);
+
+    track("", 0);
+    track("quark", 2);
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(setMatomoSearch).toHaveBeenCalledTimes(2);
+  });
 });
