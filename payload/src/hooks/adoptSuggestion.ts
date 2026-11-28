@@ -200,6 +200,7 @@ export const adoptSuggestion: CollectionBeforeChangeHook = async ({
         data: {
           berlinerisch: berlinerWord,
           slug,
+          publishedAt: new Date().toISOString(),
           translations: [{ translation: d.translation }],
           examples: d.example ? [{ example: d.example }] : [],
           _status: "published",

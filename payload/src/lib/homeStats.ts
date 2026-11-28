@@ -1,5 +1,9 @@
 import { MIN_GROUP, type AGES, type Usage } from "./wordFeedback";
 
+/** Popular-word dots can show a cautious trend before the 10-vote threshold for percentages. */
+export const MIN_TREND_VOTES = 3;
+const TREND_PRIOR_VOTES = 3;
+
 // Pure helpers for the start page (`payload-app/home-stats`): Morse ring, age groups and the word-vote threshold.
 
 /** Votes (with an age) a word needs before it enters the age lists. TODO(startseite): interim value, to be decided. */
@@ -122,6 +126,13 @@ export type UsageCounts = Record<Usage, number>;
 export function districtValue(counts: UsageCounts): number | null {
   const total = Object.values(counts).reduce((sum, n) => sum + n, 0);
   return total < MIN_GROUP ? null : Math.round((counts.say / total) * 100);
+}
+
+/** A smoothed "say" share for early feedback, pulled toward 50% by three neutral prior votes. */
+export function estimatedSayShare(counts: UsageCounts): number | null {
+  const total = counts.say + counts.know + counts.never;
+  if (total < MIN_TREND_VOTES) return null;
+  return Math.round(((counts.say + TREND_PRIOR_VOTES / 2) / (total + TREND_PRIOR_VOTES)) * 100);
 }
 
 export const agePercents = (

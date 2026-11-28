@@ -4,6 +4,7 @@ import {
   ageGroup,
   agePercents,
   districtValue,
+  estimatedSayShare,
   morseRing,
   typicalWord,
   type AgeGroup,
@@ -90,6 +91,15 @@ describe("districtValue", () => {
     expect(districtValue({ say: 0, know: 0, never: 0 })).toBeNull();
     expect(districtValue({ say: 1, know: 2, never: 7 })).toBe(10);
     expect(districtValue({ say: 2, know: 0, never: 9 })).toBe(18);
+  });
+});
+
+describe("estimatedSayShare", () => {
+  it("hides fewer than three votes and smooths early shares toward 50%", () => {
+    expect(estimatedSayShare({ say: 2, know: 0, never: 0 })).toBeNull();
+    expect(estimatedSayShare({ say: 3, know: 0, never: 0 })).toBe(75);
+    expect(estimatedSayShare({ say: 0, know: 0, never: 3 })).toBe(25);
+    expect(estimatedSayShare({ say: 9, know: 0, never: 0 })).toBe(88);
   });
 });
 
