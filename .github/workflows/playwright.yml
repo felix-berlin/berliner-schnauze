@@ -204,7 +204,7 @@ jobs:
     # The server renders from this database; it is migrated and seeded with invented words below.
     services:
       postgres:
-        image: postgres:18
+        image: postgres:19@sha256:4ea94de574c17f0372722806c949757050fbb1cd7648410fe45d6bba275cc00e
         env:
           POSTGRES_DB: bs_e2e
           POSTGRES_PASSWORD: postgres
