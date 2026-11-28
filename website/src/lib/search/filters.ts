@@ -33,14 +33,17 @@ const lengthBucket = (n: number) => (n <= 5 ? "kurz" : n <= 10 ? "mittel" : "lan
 
 /** AND across groups, OR within a group. q is not checked here. */
 export function matches(e: SearchEntry, s: SearchState): boolean {
-  const word = normalize(e.wordProperties.berlinerisch);
   if (s.letter && normalize(e.wordGroup) !== normalize(s.letter)) return false;
   if (s.pos.length && !s.pos.some((p) => e.berlinerischWordTypes.includes(p))) return false;
   if (s.themes.length && !s.themes.some((t) => e.themen.includes(t))) return false;
   if (s.content.length && !s.content.some((k) => hasContent(e, k))) return false;
-  if (s.starts && !word.startsWith(normalize(s.starts))) return false;
-  if (s.ends && !word.endsWith(normalize(s.ends))) return false;
-  if (s.rhyme && rhymeKey(word) !== rhymeKey(s.rhyme)) return false;
+  // Normalised only for a word-form filter: facets call matches up to 10× per word per keystroke.
+  if (s.starts || s.ends || s.rhyme) {
+    const word = normalize(e.wordProperties.berlinerisch);
+    if (s.starts && !word.startsWith(normalize(s.starts))) return false;
+    if (s.ends && !word.endsWith(normalize(s.ends))) return false;
+    if (s.rhyme && rhymeKey(word) !== rhymeKey(s.rhyme)) return false;
+  }
   if (s.syllables && (s.syllables === 4 ? e.form.syllables < 4 : e.form.syllables !== s.syllables))
     return false;
   if (s.length && lengthBucket(e.form.length) !== s.length) return false;
