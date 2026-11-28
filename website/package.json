@@ -68,7 +68,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
-    "@axe-core/playwright": "^4.14.0",
+    "@axe-core/playwright": "4.14.0",
     "@codecov/astro-plugin": "2.0.1",
     "@iconify-json/mdi": "1.2.3",
     "@iconify-json/simple-icons": "1.2.104",
