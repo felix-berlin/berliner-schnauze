@@ -167,3 +167,50 @@ for (const size of SIZES) {
     });
   }
 }
+
+// Quick search dialog (docs/design/suche-v1/SPEC.md §18–§25): empty state with a fixed history and the hits for
+// „anmach“, over /wort-vorschlagen (a page without daily content behind the scrim). Compare with
+// assets/schnellsuche/boards. „Heute“ and „Gerade beliebt“ follow the day and the trend counts: masked.
+const QUICK_SIZES = [
+  { height: 900, themes: ["light", "dark"], width: 1280 },
+  { height: 844, themes: ["light"], width: 390 },
+] as const;
+
+for (const size of QUICK_SIZES) {
+  for (const theme of size.themes) {
+    test.describe(`quick search ${size.width}px ${theme}`, () => {
+      test.use({ viewport: { height: size.height, width: size.width } });
+
+      for (const state of ["idle", "hits"] as const) {
+        test(state, async ({ page, baseURL }) => {
+          await page.addInitScript(() =>
+            localStorage.setItem(
+              "schnellsuche-verlauf",
+              JSON.stringify(["anmachen", "wa", "kiez"]),
+            ),
+          );
+          await open(page, baseURL!, "/wort-vorschlagen", theme);
+          await page.getByRole("button", { name: "Suche aktivieren" }).click();
+          const dialog = page.getByRole("dialog", { name: "Schnellsuche" });
+          const field = dialog.getByRole("combobox", { name: "Wort oder Bedeutung suchen" });
+          await expect(dialog.getByRole("group", { name: "Gerade beliebt" })).toBeVisible();
+          if (state === "hits") {
+            await field.fill("anmach");
+            await expect(dialog.getByRole("option").last()).toContainText("Treffer");
+          }
+          await page.mouse.move(0, 0); // no hover state in the shot
+          await expect(page).toHaveScreenshot(`quick-search-${state}-${size.width}-${theme}.png`, {
+            // The page behind shows only beside the desktop dialog (masks paint over the full-screen one).
+            mask: [
+              ...(size.width < DESKTOP_MIN ? [] : timeDependent(page)),
+              dialog.getByRole("group", { name: "Heute" }),
+              dialog.getByRole("group", { name: "Gerade beliebt" }),
+            ],
+            maxDiffPixelRatio: 0.002,
+            threshold: 0.05,
+          });
+        });
+      }
+    });
+  }
+}
