@@ -176,6 +176,21 @@ describe("loadHomeStats", () => {
     expect(rising[0]).not.toHaveProperty("meaning");
   });
 
+  it("shows a smoothed popularity trend from three votes and a percent from ten", async () => {
+    const id = await word(`hs-pop-${Date.now()}`);
+    await votes(id, 3, { usage: "say" });
+    trending.mockImplementation(async (_p, { type }) =>
+      type === "viewed" ? [{ word: id, value: 1, views: 12, previous: 0 }] : [],
+    );
+    const first = await loadHourlyStats(payload);
+    expect(first.popular[0]).toMatchObject({ sayShare: 75, sayVotes: 3 });
+
+    await votes(id, 7, { usage: "say" });
+    const enough = await loadHourlyStats(payload);
+    trending.mockReset().mockResolvedValue([]);
+    expect(enough.popular[0]).toMatchObject({ sayShare: 88, sayVotes: 10 });
+  });
+
   it("adds the published word's meaning to a rising word", async () => {
     await payload.update({
       collection: "words",

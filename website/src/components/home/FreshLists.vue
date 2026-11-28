@@ -59,7 +59,7 @@
                       :data-state="n <= Math.round(r.sayShare / 10) ? 'on' : undefined"
                     />
                   </span>
-                  <em class="share">{{ r.sayShare }} %</em>
+                  <em v-if="r.sayVotes >= MIN_GROUP" class="share">≈ {{ r.sayShare }} %</em>
                 </template>
               </a>
             </li>
@@ -96,6 +96,7 @@ import type { HomeStats } from "payload-app/home-stats-load";
 
 import { routeToWord } from "@utils/helpers.ts";
 import { relativeTime } from "@utils/relativeTime";
+import { MIN_GROUP } from "payload-app/word-feedback";
 import { computed, defineAsyncComponent, ref, useId, useTemplateRef } from "vue";
 
 const IconTrendingUp = defineAsyncComponent(() => import("virtual:icons/lucide/trending-up"));

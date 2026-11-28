@@ -11,7 +11,7 @@ describe("FreshLists on the server", () => {
     const html = await renderToString(
       createSSRApp(FreshLists, {
         newest: [],
-        popular: [1, 2, 3].map((n) => ({ sayShare: 50, views: n, word: ref(n) })),
+        popular: [1, 2, 3].map((n) => ({ sayShare: 50, sayVotes: 10, views: n, word: ref(n) })),
         rising: [4, 5, 6].map((n) => ({ delta: n, word: ref(n) })),
       }),
     );

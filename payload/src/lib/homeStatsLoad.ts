@@ -10,6 +10,7 @@ import {
   ageGroup,
   agePercents,
   districtValue,
+  estimatedSayShare,
   MIN_WORD_VOTES,
   typicalWord,
   type AgeGroup,
@@ -38,7 +39,7 @@ export type BonCard =
 export type HomeStats = {
   districts: District[];
   ageLists: { dying: AgeWord[]; growing: AgeWord[] };
-  popular: { word: WordRef; views: number; sayShare: number | null }[];
+  popular: { word: WordRef; views: number; sayShare: number | null; sayVotes: number }[];
   /** meaning: the published word's translations, only when it has any. */
   rising: { word: WordRef; delta: number; meaning?: string }[];
   bon: {
@@ -317,9 +318,16 @@ const loadTrending = async (
   return {
     popular: viewed.flatMap((r) => {
       const word = byId.get(r.word);
-      return word
-        ? [{ word, views: r.views, sayShare: districtValue(counts.get(r.word) ?? emptyCounts()) }]
-        : [];
+      if (!word) return [];
+      const usageCounts = counts.get(r.word) ?? emptyCounts();
+      return [
+        {
+          word,
+          views: r.views,
+          sayShare: estimatedSayShare(usageCounts),
+          sayVotes: usageCounts.say + usageCounts.know + usageCounts.never,
+        },
+      ];
     }),
     // "Im Aufwind" shows growth only.
     rising: rising.flatMap((r) => {

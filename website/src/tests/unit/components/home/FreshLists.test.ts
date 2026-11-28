@@ -11,7 +11,11 @@ const newest = [1, 2, 3].map((n) => ({
   publishedAt: new Date(Date.now() - n * 7 * day).toISOString(),
   slug: `neu-${n}`,
 }));
-const popular = [92, 63, null].map((sayShare, i) => ({ sayShare, views: 100 - i, word: ref(i) }));
+const popular = [
+  { sayShare: 92, sayVotes: 20 },
+  { sayShare: 63, sayVotes: 5 },
+  { sayShare: null, sayVotes: 2 },
+].map((stats, i) => ({ ...stats, views: 100 - i, word: ref(i) }));
 // The second rising word has no meaning.
 const rising = [
   { delta: 10, meaning: "Aufwind 1", word: ref(11) },
@@ -76,9 +80,11 @@ describe("FreshLists", () => {
     expect(dots(0)).toHaveLength(10);
     expect(dots(0).filter((d) => d.attributes("data-state") === "on")).toHaveLength(9);
     expect(dots(1).filter((d) => d.attributes("data-state") === "on")).toHaveLength(6);
-    expect(rows[0]!.text()).toContain("92 %");
+    expect(rows[0]!.text()).toContain("≈ 92 %");
     expect(dots(2)).toHaveLength(0);
     expect(rows[2]!.text()).not.toContain("%");
+    expect(dots(1)).toHaveLength(10);
+    expect(rows[1]!.text()).not.toContain("%");
   });
 
   it("drops a list with fewer than three entries and hides its tab", () => {

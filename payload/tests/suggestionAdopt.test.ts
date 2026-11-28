@@ -195,7 +195,12 @@ describe("accepting an example, fact or related suggestion", () => {
     });
     const done = await accept(s.id);
     const word = await published(done.word as number);
-    expect(word).toMatchObject({ _status: "published", slug: SLUG, berlinerisch: SPELLING });
+    expect(word).toMatchObject({
+      _status: "published",
+      berlinerisch: SPELLING,
+      slug: SLUG,
+    });
+    expect(word.publishedAt).toBeTruthy();
     expect(word.examples?.[0]?.example).toBe("adopt-test Satz");
     expect((await payload.findByID({ collection: "suggestions", id: s.id })).lockedByWord).toBe(
       true,
