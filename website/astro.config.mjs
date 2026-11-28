@@ -611,7 +611,8 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: new RegExp(`^${SITE_ORIGIN}/api/search/index\\.json$`),
+            // Versioned like SEARCH_INDEX_URL (services/searchIndex.ts): bump both when the entry shape changes.
+            urlPattern: new RegExp(`^${SITE_ORIGIN}/api/search/index\\.json\\?v=2$`),
             handler: "StaleWhileRevalidate",
             options: {
               cacheName: "api-search-index",
