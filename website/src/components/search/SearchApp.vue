@@ -120,7 +120,7 @@ import type { SearchResult } from "@lib/search/run";
 import type { Availability } from "@lib/search/semantic";
 
 import { useSearchIndex } from "@composables/useSearchIndex";
-import { searchUrl, useSearchState } from "@composables/useSearchState";
+import { useSearchState } from "@composables/useSearchState";
 import { useSearchTracking } from "@composables/useSearchTracking";
 import { runSearch, semanticCandidates } from "@lib/search/run";
 import { isFiltered, type SearchState } from "@lib/search/state";
@@ -431,7 +431,7 @@ const currentLetter = computed(() => {
 function jump(letter: string) {
   const i = rows.value.findIndex((row) => row.kind === "letter" && row.letter === letter);
   if (i >= 0) list.value?.scrollToIndex(i, { align: "start" });
-  else location.assign(searchUrl({ ...state.value, letter }));
+  else set({ letter }); // a letter filter (?buchstabe=) hides the other letters' rows
 }
 </script>
 

@@ -175,6 +175,22 @@ describe("SearchApp", () => {
     expect(showsLetterChip(state({ letter: "A" }))).toBe(true);
   });
 
+  it("register jump without that letter's rows sets the letter filter in place", async () => {
+    const w = mountApp({ state: state({ letter: "A" }) });
+    await w.get('a[href="/wort?buchstabe=%C3%A4"]').trigger("click");
+    // jsdom cannot navigate: only pushState (not location.assign) changes the url here.
+    expect(decodeURIComponent(location.search)).toBe("?buchstabe=Ä");
+  });
+
+  it("letter heading counts one Wort, several Wörter", () => {
+    const one = result(["Aalwurm"]);
+    one.rows.unshift({ count: 1, kind: "letter", letter: "A" });
+    expect(mountApp({ result: one }).get(".letter").text()).toBe("A1 Wort");
+    const two = result(["Aalwurm", "Abendbrot"]);
+    two.rows.unshift({ count: 2, kind: "letter", letter: "A" });
+    expect(mountApp({ result: two }).get(".letter").text()).toBe("A2 Wörter");
+  });
+
   it("index fetch fails → alert strip, retry refetches, ssr rows stay", async () => {
     mocks.fetchSearchIndex.mockRejectedValueOnce(new Error("offline"));
     mocks.getWordDb.mockRejectedValueOnce(new Error("offline"));

@@ -15,7 +15,7 @@
          listbox (aria-required-children): the letter keeps the h2 look, not the role. -->
     <div v-if="row.kind === 'letter'" :key="`l-${row.letter}`" role="presentation" class="letter">
       <h2 role="none">{{ row.letter }}</h2>
-      <span>{{ row.count.toLocaleString("de") }} Wörter</span>
+      <span>{{ row.count.toLocaleString("de") }} {{ row.count === 1 ? "Wort" : "Wörter" }}</span>
     </div>
     <div
       v-else-if="row.kind === 'divider'"
