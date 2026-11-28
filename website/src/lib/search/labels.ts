@@ -1,7 +1,11 @@
 import type { FilterGroup, SearchState } from "./state";
-import type { AgeGroup, ContentKey, SortKey } from "./types";
+import { AGE_GROUPS, CONTENT_KEYS, SORT_KEYS, type AgeGroup, type ContentKey, type SortKey } from "./types";
 
 type Options<T> = readonly (readonly [T, string])[];
+
+/** Options in the order of `keys`; the Record makes a missing label a type error. */
+const inOrder = <T extends string>(keys: readonly T[], labels: Record<T, string>): Options<T> =>
+  keys.map((k) => [k, labels[k]] as const);
 
 /** UI copy of the filter options in display order (docs/design/suche-v1/SPEC.md §6.3, §7.2); popover, sheet and active pills share it. */
 export const OFTEN: Options<NonNullable<SearchState["often"]>> = [
@@ -14,21 +18,21 @@ export const WHERE: Options<NonNullable<SearchState["where"]>> = [
   ["west", "Eher West"],
   ["beides", "Beides"],
 ];
-export const AGES: Options<AgeGroup> = [
-  ["u30", "unter 30"],
-  ["30-49", "30 bis 49"],
-  ["50-69", "50 bis 69"],
-  ["70plus", "ab 70"],
-];
-export const CONTENT: Options<ContentKey> = [
-  ["audio", "Anhören"],
-  ["beispiele", "Beispiele"],
-  ["beispiele-audio", "Beispiele mit Hörprobe"],
-  ["bilder", "Bilder"],
-  ["jeschichten", "Jeschichten"],
-  ["wissenswertes", "Wissenswertes"],
-  ["luecke", "Hier fehlt noch wat"],
-];
+export const AGES = inOrder(AGE_GROUPS, {
+  "30-49": "30 bis 49",
+  "50-69": "50 bis 69",
+  "70plus": "ab 70",
+  u30: "unter 30",
+});
+export const CONTENT = inOrder(CONTENT_KEYS, {
+  audio: "Anhören",
+  beispiele: "Beispiele",
+  "beispiele-audio": "Beispiele mit Hörprobe",
+  bilder: "Bilder",
+  jeschichten: "Jeschichten",
+  luecke: "Hier fehlt noch wat",
+  wissenswertes: "Wissenswertes",
+});
 export const SYLLABLES: Options<NonNullable<SearchState["syllables"]>> = [
   [1, "1"],
   [2, "2"],
@@ -40,13 +44,13 @@ export const LENGTHS: Options<NonNullable<SearchState["length"]>> = [
   ["mittel", "mittel (6–10)"],
   ["lang", "lang (ab 11)"],
 ];
-export const SORTS: Options<SortKey> = [
-  ["beste", "Beste Treffer"],
-  ["az", "A–Z"],
-  ["beliebt", "Gerade beliebt"],
-  ["neu", "Neu dabei"],
-  ["jesagt", "Am meisten jesagt"],
-];
+export const SORTS = inOrder(SORT_KEYS, {
+  az: "A–Z",
+  beliebt: "Gerade beliebt",
+  beste: "Beste Treffer",
+  jesagt: "Am meisten jesagt",
+  neu: "Neu dabei",
+});
 
 /** Filter groups in chip order (SPEC §7.1) with popover copy (§7.2); the bar and the mobile sheet share it. */
 export const FILTER_GROUPS: { group: FilterGroup; title: string; intro: string }[] = [

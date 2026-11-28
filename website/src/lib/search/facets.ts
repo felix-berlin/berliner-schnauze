@@ -1,17 +1,7 @@
 import type { SearchState } from "./state";
-import type { ContentKey, SearchEntry } from "./types";
+import { CONTENT_KEYS, type ContentKey, type SearchEntry } from "./types";
 
 import { matches } from "./filters";
-
-const CONTENT_KEYS: ContentKey[] = [
-  "audio",
-  "beispiele",
-  "beispiele-audio",
-  "bilder",
-  "jeschichten",
-  "wissenswertes",
-  "luecke",
-];
 
 /** Each option's count ignores its own group, so it shows what selecting it would give. */
 export function facets(entries: SearchEntry[], s: SearchState) {
