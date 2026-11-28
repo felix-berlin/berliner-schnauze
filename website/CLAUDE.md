@@ -60,7 +60,7 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 ## Key Conventions
 
-**Nanostores**: All store exports use `$` prefix (`$isDarkMode`, `$wordList`). Use `useStore()` from `@nanostores/vue` in Vue components; use `.get()/.set()` for direct access in Astro/TS. For an async derived value, add `@nanostores/async` and use `computedAsync`; avoid the deprecated `computed() + task()` pattern.
+**Nanostores**: All store exports use `$` prefix (`$isDarkMode`, `$toastNotify`). Use `useStore()` from `@nanostores/vue` in Vue components; use `.get()/.set()` for direct access in Astro/TS. For an async derived value, add `@nanostores/async` and use `computedAsync`; avoid the deprecated `computed() + task()` pattern.
 
 **Vue components**: Composition API only — `<script setup lang="ts">`. Block order: `<template>`, `<script>`, `<style>`. Styles, BEMIT and SCSS: see `.claude/rules/website-styles.md`.
 
