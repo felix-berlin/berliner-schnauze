@@ -1,5 +1,5 @@
 import { EMPTY_STATE } from "@lib/search/state";
-import { parseState, toParams } from "@lib/search/url";
+import { MAX_QUERY, parseState, toParams } from "@lib/search/url";
 import { describe, expect, it } from "vitest";
 
 const known = { areas: ["mitte", "pankow"], pos: ["Verb", "Adjektiv"], themes: ["essen"] };
@@ -20,6 +20,10 @@ describe("search url", () => {
     expect(s.age).toBeUndefined();
     expect(s.often).toBeUndefined();
     expect(s.content).toEqual(["audio"]);
+  });
+
+  it("caps the query at MAX_QUERY", () => {
+    expect(parseState(new URLSearchParams({ q: "a".repeat(6000) }), known).q).toHaveLength(MAX_QUERY);
   });
 
   it("trims the query", () => {

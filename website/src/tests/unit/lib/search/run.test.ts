@@ -66,6 +66,29 @@ describe("runSearch", () => {
     expect(r.note).toBeNull();
   });
 
+  it("one letter heading per group, umlaut after its base letter", async () => {
+    const words = [make("Afrika", ["Kontinent"]), make("Äffchen", ["kleiner Affe"]), make("Affe", ["Tier"])];
+    const r = await runSearch(await buildWordDb(words), words, st(), ctx);
+    expect(r.rows.map((x) => (x.kind === "letter" ? x.letter : x.kind === "hit" ? x.hit.entry.slug : ""))).toEqual(["A", "affe", "afrika", "Ä", "äffchen"]);
+  });
+
+  it("a query without letters lists like no query", async () => {
+    for (const q of ["-", "1860"]) {
+      const r = await runSearch(db, entries, st({ q }), ctx);
+      expect(r.rows.filter((x) => x.kind === "letter")).toHaveLength(3);
+      expect(r.rows.find((x) => x.kind === "hit")).toMatchObject({ hit: { entry: { slug: "ahle" } } });
+    }
+  });
+
+  it("suggests within two edits only, also for a long query", async () => {
+    const r = await runSearch(db, entries, st({ q: "Zappelbud", themes: ["zzz"] }), ctx);
+    expect(r.suggestions.map((e) => e.slug)).toEqual(["zappelbude"]);
+    const t = performance.now();
+    const long = await runSearch(db, entries, st({ q: "x".repeat(6000), themes: ["zzz"] }), ctx);
+    expect(long.suggestions).toEqual([]);
+    expect(performance.now() - t).toBeLessThan(500);
+  });
+
   it("treats beste without q as a-z", async () => {
     const r = await runSearch(db, entries, st({ sort: "beste" }), ctx);
     expect(r.rows.filter((x) => x.kind === "letter")).toHaveLength(3);

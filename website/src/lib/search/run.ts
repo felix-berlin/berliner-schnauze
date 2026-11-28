@@ -52,8 +52,14 @@ function didYouMean(entries: SearchEntry[], q: string): SearchEntry[] {
   const nq = normalize(q);
   const sx = soundex(nq);
   return entries
-    .map((entry) => ({ d: distance(nq, normalize(entry.wordProperties.berlinerisch)), entry }))
-    .filter(({ d, entry }) => d <= 2 || (!!sx && entry.form.soundex === sx))
+    .flatMap((entry) => {
+      const word = normalize(entry.wordProperties.berlinerisch);
+      const sound = !!sx && entry.form.soundex === sx;
+      // More than 2 letters longer or shorter is never within two edits: skip the O(n·m) distance.
+      if (Math.abs(word.length - nq.length) > 2) return sound ? [{ d: Infinity, entry }] : [];
+      const d = distance(nq, word);
+      return d <= 2 || sound ? [{ d, entry }] : [];
+    })
     .sort((a, b) => a.d - b.d)
     .slice(0, SUGGESTIONS)
     .map(({ entry }) => entry);

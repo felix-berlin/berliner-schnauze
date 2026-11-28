@@ -9,6 +9,7 @@
         v-model="model"
         type="search"
         name="q"
+        :maxlength="MAX_QUERY"
         role="combobox"
         :aria-controls="aiList ? `ki-treffer ${list}` : list"
         aria-autocomplete="list"
@@ -44,6 +45,7 @@
 </template>
 
 <script setup lang="ts">
+import { MAX_QUERY } from "@lib/search/url";
 import { useMediaQuery, useMounted } from "@vueuse/core";
 import { computed, defineAsyncComponent, useTemplateRef } from "vue";
 

@@ -1,26 +1,16 @@
 import type { SearchState } from "./state";
-import type { AgeGroup, ContentKey, SortKey } from "./types";
-
 import { EMPTY_STATE, effectiveSort } from "./state";
+import { AGE_GROUPS, CONTENT_KEYS, SORT_KEYS } from "./types";
 
 type Known = { pos: string[]; themes: string[]; areas: string[] };
 
-const AGES: AgeGroup[] = ["u30", "30-49", "50-69", "70plus"];
 const OFTEN = ["oft", "manchmal", "kaum"] as const;
 const WHERE = ["ost", "west", "beides"] as const;
-const CONTENT: ContentKey[] = [
-  "audio",
-  "beispiele",
-  "beispiele-audio",
-  "bilder",
-  "jeschichten",
-  "wissenswertes",
-  "luecke",
-];
 const SYLLABLES = [1, 2, 3, 4] as const;
 const LENGTHS = ["kurz", "mittel", "lang"] as const;
-const SORTS: SortKey[] = ["beste", "az", "beliebt", "neu", "jesagt"];
 const MAX_TEXT = 30;
+/** Same as the search fields' maxlength: a longer query only costs CPU (didYouMean is O(n·m) per word). */
+export const MAX_QUERY = 100;
 
 const one = <T extends string>(value: string | null, allowed: readonly T[]): T | undefined =>
   allowed.find((a) => a === value);
@@ -43,18 +33,18 @@ export function parseState(params: URLSearchParams, known: Known): SearchState {
   const syllables = Number(params.get("silben"));
   return {
     ...EMPTY_STATE,
-    age: one(params.get("alter"), AGES),
+    age: one(params.get("alter"), AGE_GROUPS),
     area: list(params.get("bezirk"), known.areas)[0],
     berolinismus: params.get("berolinismus") === "1",
-    content: list(params.get("inhalt"), CONTENT),
+    content: list(params.get("inhalt"), CONTENT_KEYS),
     ends: text(params.get("endet")),
     length: one(params.get("laenge"), LENGTHS),
     letter: letter && /^[A-ZÄÖÜ]$/.test(letter) ? letter : undefined,
     often: one(params.get("gebrauch"), OFTEN),
     pos: list(params.get("wortart"), known.pos),
-    q: params.get("q")?.trim() ?? "",
+    q: params.get("q")?.trim().slice(0, MAX_QUERY).trim() ?? "",
     rhyme: text(params.get("reim")),
-    sort: one(params.get("sort"), SORTS),
+    sort: one(params.get("sort"), SORT_KEYS),
     starts: text(params.get("beginnt")),
     syllables: SYLLABLES.find((n) => n === syllables),
     themes: list(params.get("thema"), known.themes),
