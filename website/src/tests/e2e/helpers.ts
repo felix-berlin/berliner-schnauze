@@ -16,6 +16,3 @@ export const dismissToasts = async (page: Page): Promise<void> => {
     { noWaitAfter: true, times: 20 },
   );
 };
-
-/** The "N Ergebnisse" (or "1 Ergebnis") line above the word list; visible once the list replaced its skeleton. */
-export const resultCount = (page: Page) => page.getByText(/\d+ Ergebnis(se)?/);

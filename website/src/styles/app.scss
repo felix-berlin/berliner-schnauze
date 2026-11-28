@@ -1,4 +1,3 @@
-@use "sass:meta";
 @use "tokens/tokens.generated";
 @use "tokens/legacy-aliases";
 @use "base";
@@ -10,15 +9,5 @@
 @use "components/word-label";
 // Header buttons (menu, search, install) sit in the persisted header on every page.
 @use "components/header-control";
-
-// Word filter (homepage island + search modal on every page) — loaded globally so
-// both entry points share one stylesheet instead of emitting two identical chunks.
-@use "components/custom-multiselect";
+// Badge (BON result, BadgeTag): small and shared, so it stays in the global sheet.
 @use "components/badge";
-@use "components/letter-filter";
-@use "components/word-range-slider";
-@use "components/word-filter";
-
-@layer vendor {
-  @include meta.load-css("@vueform/multiselect/themes/default.css");
-}

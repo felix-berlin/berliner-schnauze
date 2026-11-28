@@ -48,5 +48,26 @@ test.describe("/wort search page", () => {
       await page.goto("/wort");
       await expect(page.locator('a[href="/wort?buchstabe=a"]')).toHaveCount(1);
     });
+
+    // Ported from the old /suche specs: the server renders hits with the same core as the island.
+    for (const [query, slug] of [
+      ["aasn", "aasen"], // one typo
+      ["anmachte", "anmachen"], // stemming
+      ["nähern", "anmachen"], // standard German translation finds the dialect word
+      ["abbeißen", "abbeissen"],
+      ["abbeissen", "abbeissen"], // ß in ASCII spelling
+    ])
+      test(`?q=${query} lists ${slug}`, async ({ page }) => {
+        await page.goto(`/wort?q=${encodeURIComponent(query)}`);
+        await expect(page.locator(`a[href^="/wort/${slug}"]`).first()).toBeVisible();
+      });
+
+    test("special characters and HTML in ?q= stay inert", async ({ page }) => {
+      for (const q of ['"<b>&', '<img src=x onerror="alert(1)">', "(.*)["]) {
+        await page.goto(`/wort?q=${encodeURIComponent(q)}`);
+        await expect(page.getByRole("heading", { level: 1, name: "Wörter suchen" })).toBeVisible();
+        await expect(page.locator("img[src='x']")).toHaveCount(0);
+      }
+    });
   });
 });

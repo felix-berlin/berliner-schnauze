@@ -75,10 +75,10 @@ test.describe("Startseite v20 (/)", () => {
     await expect(searchField(page)).toBeFocused();
   });
 
-  test("Suche ohne JS: GET auf /suche", async ({ page }) => {
+  test("Suche ohne JS: GET auf /wort", async ({ page }) => {
     const form = page.getByRole("search");
     await expect(form).toHaveAttribute("method", /get/i);
-    await expect(form).toHaveAttribute("action", "/suche");
+    await expect(form).toHaveAttribute("action", "/wort");
   });
 
   test("Reiter „Wörter-Ranking“ per Tastatur", async ({ page }) => {

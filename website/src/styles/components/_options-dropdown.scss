@@ -1,9 +1,0 @@
-@use "@styles/mixins" as mx;
-
-// Word options (WordOptionDropdown.vue): sits on the DropdownPopover root and keeps it at the top
-// of its row.
-@include mx.component("options-dropdown") {
-  :scope {
-    align-self: flex-start;
-  }
-}

@@ -2,7 +2,7 @@
 
 ## Engine
 
-[Orama](https://docs.orama.com) — in-browser full-text search. Index built at Astro build time (`src/pages/api/search/index.json.ts`), fetched once at runtime and inserted into Orama (`src/stores/wordList.ts`).
+[Orama](https://docs.orama.com) — in-browser full-text search. Index built at Astro build time (`src/pages/api/search/index.json.ts`), fetched once at runtime and inserted into Orama (`src/services/wordSearchDb.ts`); queries run through `runSearch` in `src/lib/search/run.ts`.
 
 ## Indexed fields
 

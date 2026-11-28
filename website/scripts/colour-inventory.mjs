@@ -34,7 +34,6 @@ const TASK8 = [
     "toast-notify",
     "dropdown-popover",
     "dropdown-popover-themes",
-    "options-dropdown",
     "main-menu",
     "menu-nav",
     "scroll-to-top",

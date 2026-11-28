@@ -84,7 +84,7 @@ export function makeOramaSearchIndex(
   };
 }
 
-// index.json and meta.json both need the entries: map (and serialize) each memoized words array once.
+// index.json and the server word db both need the entries: map (and serialize) each memoized words array once.
 const indexByWords = new WeakMap<
   SiteWord[],
   { entries: SearchEntry[]; etag: string; json: string }

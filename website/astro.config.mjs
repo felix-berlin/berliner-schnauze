@@ -625,20 +625,6 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: new RegExp(`^${SITE_ORIGIN}/api/search/meta\\.json$`),
-            handler: "StaleWhileRevalidate",
-            options: {
-              cacheName: "api-search-meta",
-              expiration: {
-                maxEntries: 1,
-                maxAgeSeconds: 10_800, // 3 hours
-              },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-            },
-          },
-          {
             urlPattern: ({ url }) => url.pathname === "/api/word-of-the-day",
             handler: "NetworkFirst",
             options: {
@@ -766,12 +752,8 @@ export default defineConfig({
       rolldownOptions: {
         output: {
           manualChunks: (id) => {
-            if (
-              id.includes("/stores/wordList") ||
-              id.includes("@orama/") ||
-              id.includes("@nanostores/async")
-            ) {
-              return "wordList";
+            if (id.includes("@orama/")) {
+              return "orama";
             }
             if (id.includes("@sentry/")) {
               return "sentry";

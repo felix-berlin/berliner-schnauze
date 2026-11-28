@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 // SPEC §22: the visitor copy of the v18 word page never says "wir", "uns", "unser", "wa" (the site has one
 // operator: "ich/ick/mir/mein") and never "Quellen belegt". Scope: every component reachable from WordPage
 // (found through the imports, so a new card cannot slip past) plus the lib and store files that hold visitor copy.
-// Not scanned: pages/api responses (error codes, not page copy) and the old components nothing imports any more.
+// Not scanned: pages/api responses (error codes, not page copy).
 const SRC = "src";
 const IMPORT = /['"]@components\/((?:word|footer|comments|word-feedback)\/\w+\.(?:astro|vue))['"]/g;
 

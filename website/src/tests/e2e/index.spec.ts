@@ -20,23 +20,19 @@ test.describe("Startseite (/)", () => {
     );
   });
 
-  test("Startseite hat keine Wortliste, ihr Suchfeld schickt per GET an /suche", async ({
-    page,
-  }) => {
+  test("Suchfeld der Startseite schickt per GET an /wort", async ({ page }) => {
     await page.goto("/");
 
-    await expect(page.locator("#wordListing")).toHaveCount(0);
-    await expect(page.locator(".c-word-list")).toHaveCount(0);
-    await expect(page.getByRole("search")).toHaveAttribute("action", "/suche");
+    await expect(page.getByRole("search")).toHaveAttribute("action", "/wort");
   });
 
-  test("alter ?q=-Link auf der Startseite leitet auf /suche?q= weiter", async ({ page }) => {
+  test("alter ?q=-Link auf der Startseite leitet auf /wort?q= weiter", async ({ page }) => {
     await page.goto("/?q=aasen");
 
-    await expect(page).toHaveURL(/\/suche\?q=aasen$/);
-    await expect(
-      page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" }),
-    ).toHaveValue("aasen");
+    await expect(page).toHaveURL(/\/wort\?q=aasen$/);
+    await expect(page.getByRole("combobox", { name: "Wort oder Bedeutung suchen" })).toHaveValue(
+      "aasen",
+    );
   });
 
   test("?q= bleibt auf der Startseite, wenn es kein echter Seitenaufruf ist (ClientRouter-Fetch)", async ({
@@ -50,11 +46,11 @@ test.describe("Startseite (/)", () => {
     expect(res.status()).toBe(200);
   });
 
-  test("Logo-Klick von /suche führt zur Startseite, nicht zurück", async ({ page }) => {
-    await page.goto("/suche?q=aasen");
-    await expect(
-      page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" }),
-    ).toHaveValue("aasen");
+  test("Logo-Klick von /wort führt zur Startseite, nicht zurück", async ({ page }) => {
+    await page.goto("/wort?q=aasen");
+    await expect(page.getByRole("combobox", { name: "Wort oder Bedeutung suchen" })).toHaveValue(
+      "aasen",
+    );
 
     await page.getByRole("banner").getByRole("link", { name: "Berliner Schnauze" }).click();
 
@@ -64,13 +60,13 @@ test.describe("Startseite (/)", () => {
     expect(new URL(page.url()).pathname).toBe("/");
   });
 
-  test("JSON-LD SearchAction zeigt auf /suche", async ({ page }) => {
+  test("JSON-LD SearchAction zeigt auf /wort", async ({ page }) => {
     await page.goto("/");
 
     const jsonLd = await page.locator('script[type="application/ld+json"]').allTextContents();
     const website = jsonLd.find((text) => text.includes('"WebSite"')) ?? "";
-    expect(website).toContain("/suche?q={search_term_string}");
-    expect(website).not.toContain("/wort?q=");
+    expect(website).toContain("/wort?q={search_term_string}");
+    expect(website).not.toContain("/suche");
   });
 
   test("Wort des Tages ist verlinkt", async ({ page }) => {

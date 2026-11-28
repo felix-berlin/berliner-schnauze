@@ -16,12 +16,6 @@ export default (app: App) => {
           "Modal - $props": store.$props,
           "Modal - $view": store.$view,
           "Toast - $toastNotify": store.$toastNotify,
-          "Word List - $activeFilterCount": store.$activeFilterCount,
-          "Word List - $oramaSearchResults": store.$oramaSearchResults,
-          "Word List - $searchResultCount": store.$searchResultCount,
-          "Word List - $showWordListFilterFlyout": store.$showWordListFilterFlyout,
-          "Word List - $wordSearch": store.$wordSearch,
-          "Word of the Day - $wordOfTheDay": store.$wordOfTheDay,
         });
       },
     );
