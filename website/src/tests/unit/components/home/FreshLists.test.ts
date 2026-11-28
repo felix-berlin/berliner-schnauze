@@ -15,7 +15,7 @@ const popular = [
   { sayShare: 92, sayVotes: 20 },
   { sayShare: 63, sayVotes: 5 },
   { sayShare: null, sayVotes: 2 },
-].map((stats, i) => ({ ...stats, views: 100 - i, word: ref(i) }));
+].map((stats, i) => Object.assign({ views: 100 - i, word: ref(i) }, stats));
 // The second rising word has no meaning.
 const rising = [
   { delta: 10, meaning: "Aufwind 1", word: ref(11) },
