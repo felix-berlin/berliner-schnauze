@@ -320,6 +320,35 @@ CSS=FONTS+r'''
 .s1__mroot{position:relative}
 .s1--sheet{min-height:844px}
 
+.s1__tsort{display:none}
+/* Tablet (808-999, Mock 834): Desktop-Basis, Touch */
+.s1--t .s1__in{padding:32px 24px 72px}
+.s1--t .s1__keys,.s1--t .s1__slash{display:none}
+.s1--t .s1__tsort{display:block}
+.s1--t .s1__meta{margin-top:12px}
+.s1--t .s1__tsort .s1__sort span{display:none}
+.s1--t .s1__tsort select{min-height:44px}
+.s1--t .s1__bar>.s1__sp,.s1--t .s1__bar>.s1__sort{display:none}
+.s1--t .s1__bar{gap:8px;flex-wrap:wrap}
+.s1--t .s1__chip{min-height:44px;padding:0 10px 0 13px;font-size:.9375rem}
+.s1--t .s1__tog{padding:0 13px}
+.s1--t .s1__opt{min-height:44px}
+.s1--t .s1__chk{min-height:44px}
+.s1--t .s1__pill{min-height:36px}
+.s1--t .s1__reset{min-height:44px}
+.s1--t .s1__regw{padding:12px 0 8px}
+.s1--t .s1__regh{padding:0 16px}
+.s1--t .s1__reg{flex-wrap:nowrap;overflow-x:auto;padding:0 16px;gap:2px;scrollbar-width:none}
+.s1--t .s1__reg a{flex:0 0 auto;min-width:44px;padding:0 4px}
+.s1--t .s1__r{gap:4px 16px;padding:14px 16px 14px 20px}
+.s1--t .s1__use{grid-template-columns:auto 48px auto;min-width:124px}
+.s1--t .s1__nouse{min-width:124px}
+.s1--t .s1__play{position:relative;width:40px;height:40px}
+.s1--t .s1__play::before{content:"";position:absolute;inset:-2px}
+.s1--t .s1__noplay{width:40px}
+.s1--t .s1__side{gap:12px}
+.s1--t .s1__kia{margin-left:54px}
+.s1--t .s1__pop{width:360px}
 @keyframes s1in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 @keyframes s1up{from{transform:translateY(30%)}to{transform:none}}
 @keyframes s1prog{0%{transform:translateX(-100%)}100%{transform:translateX(270%)}}
@@ -415,7 +444,7 @@ BODY=('<div class="{{rootCls}}" data-theme="{{theme}}"><div class="s1__in">'
  '<div role="search"><label for="sq" class="s1__lbl" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);">Wort oder Bedeutung suchen</label>'
  '<div class="s1__field">'+IC['search']+'<input id="sq" type="search" role="combobox" aria-expanded="true" aria-controls="treffer" aria-activedescendant="{{actId}}" autocomplete="off" value="{{q}}" onInput="{{typed}}" onKeyDown="{{keyd}}" placeholder="{{ph}}">'
  '<sc-if value="{{hasQ}}" hint-placeholder-val="{{false}}"><button class="s1__clr" onClick="{{clearQ}}" aria-label="Suche leeren">'+IC['x']+'</button></sc-if><sc-if value="{{hasQ}}" hint-placeholder-val="{{false}}"><button class="s1__kibtn" onClick="{{kiStart}}" aria-pressed="{{kiPressed}}" aria-label="Nach Bedeutung suchen mit Chrome-KI" title="Nach Bedeutung suchen (Shift + Enter)">'+IC['spark']+'<span>Nach Bedeutung</span></button></sc-if><sc-if value="{{showSlash}}" hint-placeholder-val="{{true}}"><kbd class="s1__slash" aria-hidden="true">/</kbd></sc-if></div>'
- '<div class="s1__meta"><span aria-live="polite">{{metaA}}<b>{{metaB}}</b>{{metaC}}</span><span class="s1__keys"><span><span class="s1__kbd">'+IC['up']+'</span><span class="s1__kbd">'+IC['down']+'</span> navigieren</span><span><span class="s1__kbd">'+IC['enter']+'</span> öffnen</span><span><span class="s1__kbd" style="padding: 0 6px;">Shift</span><span class="s1__kbd">'+IC['enter']+'</span> nach Bedeutung</span></span></div></div>'
+ '<div class="s1__meta"><span aria-live="polite">{{metaA}}<b>{{metaB}}</b>{{metaC}}</span><sc-if value="{{isTab}}" hint-placeholder-val="{{false}}"><span class="s1__tsort"><label class="s1__sort">'+IC['sort']+'<span>Sortieren</span><select aria-label="Sortieren"><option>Beste Treffer</option><option>A–Z</option><option>Gerade beliebt</option><option>Neu dabei</option><option>Am meisten jesagt</option></select></label></span></sc-if><span class="s1__keys"><span><span class="s1__kbd">'+IC['up']+'</span><span class="s1__kbd">'+IC['down']+'</span> navigieren</span><span><span class="s1__kbd">'+IC['enter']+'</span> öffnen</span><span><span class="s1__kbd" style="padding: 0 6px;">Shift</span><span class="s1__kbd">'+IC['enter']+'</span> nach Bedeutung</span></span></div></div>'
  '<sc-if value="{{isDesk}}" hint-placeholder-val="{{true}}">'+BAR+'</sc-if><sc-if value="{{isMob}}" hint-placeholder-val="{{false}}">'+MBAR+'</sc-if>'
  +ACT+KI+EMPTY+'<sc-if value="{{isFEmpty}}" hint-placeholder-val="{{false}}"><section class="s1__empty" aria-live="polite">'+kalle('kratzen',110,'s1f')+'<div><h2>Mit diesen Filtern: nüscht</h2><p>Keen Wort passt zu allen Filtern uff eenmal. Nimm een paar raus.</p><div class="s1__eact"><button class="s1__obtn" onClick="{{resetAll}}">Alle Filter zurücksetzen</button></div></div></section></sc-if>'+LIST+
  '</div>'+SHEET+'</div>')
@@ -471,7 +500,7 @@ class Component extends DCLogic {
   }
   renderVals() {
     const st = this.state, p = this.props || {};
-    const size = p.size || 'desktop', mob = size === 'mobile';
+    const size = p.size || 'desktop', mob = size === 'mobile', tab = size === 'tablet';
     const q = st.q || '', qt = q.trim(), ql = qt.toLowerCase();
     const words = qt.split(/\s+/).filter(Boolean);
     const describe = words.length >= 3;
@@ -596,8 +625,8 @@ class Component extends DCLogic {
 
     return {
       theme: p.theme || 'dark',
-      rootCls: 's1 ' + (mob ? 's1--m' : 's1--d') + ' s1__mroot' + (mob && st.sheet ? ' s1--sheet' : ''),
-      isDesk: !mob, isMob: mob,
+      rootCls: 's1 ' + (mob ? 's1--m' : 's1--d') + (tab ? ' s1--t' : '') + ' s1__mroot' + (mob && st.sheet ? ' s1--sheet' : ''),
+      isDesk: !mob, isMob: mob, isTab: tab,
       q, hasQ: !!q, showSlash: !q && !mob,
       ph: mob ? 'Wort oder Bedeutung' : 'Such ’n Wort oder wat et bedeutet, z. B. Schrippe oder Brötchen',
       typed: (e) => this.setState({ q: e && e.target ? e.target.value : '', z: 'live', act: 0, ki: 'angebot', fb: '' }),
@@ -641,7 +670,7 @@ class Component extends DCLogic {
 }'''.replace('@@DATA@@',DATA).replace('@@LET@@',_j.dumps(LETTERS,ensure_ascii=False))
 
 PROPS2={"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},
- "size":{"editor":"enum","options":["mobile","desktop"],"default":"desktop"},
+ "size":{"editor":"enum","options":["mobile","tablet","desktop"],"default":"desktop"},
  "zustand":{"editor":"enum","options":["start","suche","ki","leer","laden"],"default":"suche"},
  "ki":{"editor":"enum","options":["angebot","laden","laeuft","fertig"],"default":"angebot"},
  "popover":{"editor":"enum","options":["zu","buch","art","thema","gebrauch","inhalt","form"],"default":"zu"},

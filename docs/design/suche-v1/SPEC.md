@@ -1,7 +1,9 @@
-# Handoff Spec: Suche v1 „Nachschlagen, rückwärts und nach Bedeutung“ (`/suche`)
+# Handoff Spec: Suche v1 (`/suche`) und Schnellsuche v1 (Modal)
 
-Stand: 27. November 2026 · Design System „Berliner Schnauze“ v3.1 + Palette v13 (wie Startseite v20, Wortseite v18, Footer v21)
+Stand: 28. November 2026 (Update: Tablet und Schnellsuche) · Design System „Berliner Schnauze“ v3.1 + Palette v13 (wie Startseite v20, Wortseite v18, Footer v21)
 
+> **Teil A** (§1–§17) beschreibt die Suchseite, **Teil B** (§18–§27) die Schnellsuche, die über jeder Seite aufgeht. Beide nutzen dieselbe Such-API und dieselbe KI-Komponente.
+>
 > Suche v1 ersetzt die heutige Wortsuche, also die Fraktur-Überschrift, die lange Filterspalte links mit Toggles und Schiebereglern und die großen Ergebniskarten. Neu sind:
 > - die **Rückwärtssuche** (Hochdeutsch → Berlinerisch) im selben Feld
 > - **neue Filter**: Gebrauch aus der Umfrage, Inhalt, Wortform
@@ -19,6 +21,9 @@ Stand: 27. November 2026 · Design System „Berliner Schnauze“ v3.1 + Palette
 | `SucheV1DesktopLightKiLaden` | 1280 | KI-Modell muss erst geladen werden |
 | `SucheV1DesktopDarkKiFertig` | 1280 | KI-Ergebnis über den Stichworttreffern |
 | `SucheV1DesktopLightLeer` | 1280 | keine Treffer, „Meinste …“ |
+| `SucheV1TabletDark` | 834 | Suche „brötchen“ |
+| `SucheV1TabletLightKi` | 834 | KI-Ergebnis |
+| `SucheV1TabletLightFilter` | 834 | ohne Suchbegriff, Popover „Inhalt“ offen |
 | `SucheV1MobileDark` | 390 | Suche „brötchen“ |
 | `SucheV1MobileLightKi` | 390 | KI-Ergebnis (nur Desktop-Chrome, siehe §8.1) |
 | `SucheV1MobileDarkFilter` | 390 | Filter-Sheet offen |
@@ -29,9 +34,11 @@ Stand: 27. November 2026 · Design System „Berliner Schnauze“ v3.1 + Palette
 | Datei | Inhalt |
 |---|---|
 | `design/SucheV1.dc.html` | **Referenz**: Markup, CSS, Logik, Mock-Daten, Filterlogik. Props siehe §15 |
-| `design/SucheV1*.dc.html` | die 12 Boards (Header + SucheV1 + Footer v21) |
+| `design/SucheV1*.dc.html` | die 15 Boards (Header + SucheV1 + Footer v21) |
+| `design/SchnellsucheV1.dc.html`, `design/SchnellsucheV1*.dc.html`, `design/generator-schnellsuchev1.py` | Schnellsuche: Referenz, 8 Boards, Quelle (Teil B) |
+| `assets/schnellsuche/boards/*.jpg`, `assets/schnellsuche/zustaende/*.jpg` | Schnellsuche: Boards und der Dialog je Zustand |
 | `design/generator-suchev1.py` | Quelle, aus der `SucheV1.dc.html` erzeugt wird. CSS und Texte sind dort lesbarer |
-| `assets/boards/*.jpg` | Screenshot je Board (nur Suchteil), 1:1 |
+| `assets/boards/*.jpg` | Suchseite: Screenshot je Board (nur Suchteil), 1:1 |
 | `assets/zustaende/*.jpg` | alle 6 Popover, KI-Zustände, Laden, Leer, Filter-Leer, Mobil-Sheet |
 | `assets/fonts/`, `ds/` | Fira Sans Extra Condensed 600/800; Tokens und DS-CSS |
 | `PROMPT.md` | Startauftrag für Claude Code |
@@ -95,7 +102,24 @@ Dazu kommen ein paar Stöbernde. Daraus folgt:
 | Liste | `--card`, Radius 4, `--paper-lift`; Zeile Padding `14px 16px` | Zeile Padding `14px 20px 14px 24px`, Spalten `1fr auto`, `gap: 4px 24px` |
 | Register | über die volle Breite gezogen, horizontal scrollbar | eine Zeile, alle 29 Buchstaben teilen sich die Breite |
 
-**808–999px (Tablet):** im Mock nicht gezeichnet, siehe Offene Punkte §16.1. Bis dahin Desktop-Layout mit umbrechender Filterleiste. Ab dieser Breite fällt der Text „Nach Bedeutung“ im Suchfeld weg, dann ist der Knopf nur das Icon (`TODO(suche):`).
+### 3.1 Tablet (808–999px, Mock 834)
+
+Desktop-Layout als Basis, angepasst für Touch (Klasse `.s1--t` im Mock):
+
+| Element | Tablet |
+|---|---|
+| Container | Padding `32px 24px 72px`, Inhaltsbreite 786px |
+| Suchfeld | wie Desktop, 64px, mit Text „Nach Bedeutung“ am KI-Knopf; **ohne** `/`-Kürzel |
+| Tastenkürzel in der Meta-Zeile | entfallen |
+| **Sortierung** | wandert in die Meta-Zeile rechts neben die Trefferzahl (Pille 44px, ohne Text „Sortieren“). Grund: Filter-Chips und Sortierung passen bei 786px nicht in eine Zeile |
+| Filter-Chips | **44px** hoch, Padding `0 10px 0 13px`, alle 7 in einer Zeile |
+| Popover | 360px breit; Optionen und Checkbox-Zeilen 44px |
+| Aktive Filter | Pillen 36px, „Alles zurücksetzen“ 44px Tippfläche |
+| Register „Springen zu“ | horizontal scrollbar, Felder mindestens 44px breit (29 × 26px wären zu klein zum Tippen) |
+| Trefferzeile | wie Desktop; Padding `14px 16px 14px 20px`, Spaltenabstand 16px, jesagt-Balken 48px, Play 40px |
+| KI | wie Desktop. Läuft nur auf Tablets mit Desktop-Chrome (z. B. Chromebook, Windows-Tablet), nicht auf iPad oder Android |
+| Header / Footer | Header kompakt (wie Startseite v20 Tablet), Footer v21 `size="tablet"` |
+
 
 ---
 
@@ -252,7 +276,7 @@ Der Tooltip an „Nur Berolinismen“ lautet: `Nur Berliner Spitznamen für Orte
 ### 7.4 Logik und URL
 
 - Innerhalb einer Gruppe gilt **ODER** (Wortart Verb oder Adjektiv), zwischen Gruppen **UND**.
-- **Gebrauch** berücksichtigt nur Wörter mit ≥ 10 Stimmen. „Eher Ost/West“ = Anteil „Sag ick selbst“ in der Gruppe Ost bzw. West mindestens 10 Prozentpunkte höher als in der anderen (siehe Offene Punkte §16.2).
+- **Gebrauch** berücksichtigt nur Wörter mit ≥ 10 Stimmen. „Eher Ost/West“ = Anteil „Sag ick selbst“ in der Gruppe Ost bzw. West mindestens 10 Prozentpunkte höher als in der anderen (siehe Offene Punkte §16.1).
 - **Hier fehlt noch wat:** Wörter, bei denen mindestens eins fehlt: Beispiel, Wissenswertes, Audio, verwandtes Wort (dieselbe Lücken-Logik wie auf der Wortseite v18).
 - **URL:** `/suche?q=brötchen&wortart=verb,adjektiv&gebrauch=oft&inhalt=audio&sort=beliebt&seite=2`. Die URL ist teilbar und funktioniert mit „Zurück“.
 
@@ -427,7 +451,7 @@ interface SearchHit {
 | Prop | Werte | Zeigt |
 |---|---|---|
 | `theme` | dark / light | |
-| `size` | desktop / mobile | |
+| `size` | desktop / tablet / mobile | tablet = Desktop + `.s1--t` |
 | `zustand` | start / suche / ki / leer / laden | Startwert des Suchbegriffs: leer, „brötchen“, „jemand ist lustig“, „schrippö“, Laden |
 | `ki` | angebot / laden / laeuft / fertig | KI-Block |
 | `popover` | zu / buch / art / thema / gebrauch / inhalt / form | offenes Popover |
@@ -440,13 +464,12 @@ Im Mock filtern alle Optionen die wenigen Beispielwörter wirklich. Die Zahlen (
 
 ## 16. Offene Punkte (nicht selbst entscheiden, `TODO(suche):`)
 
-1. **Tablet 808–999px:** Desktop mit umbrechender Leiste oder eigene Variante?
-2. **Schwellen beim Gebrauch:** „Oft“ ab 50 %, „Kaum noch“ unter 20 %, „Eher Ost/West“ ab 10 Prozentpunkten Unterschied. Sind diese Werte so gewünscht?
-3. **Altersgruppen** im Filter (unter 30 / 30–59 / ab 60) gleich wie Wortseite v18? Siehe dort §21.6.
-4. **KI-Rückgabe:** nur Reihenfolge oder auch die „Warum“-Zeile? Die „Warum“-Zeile kostet Rechenzeit und kann danebenliegen.
-5. **Rückmeldung Ja/Nee** speichern oder nur lokal anzeigen?
-6. **Kandidatensuche für die KI:** Volltext + Synonyme reicht? Oder später Embeddings auf dem Server?
-7. **Offline-Suche:** Wie viele Wörter speichert die PWA vor?
+1. **Schwellen beim Gebrauch:** „Oft“ ab 50 %, „Kaum noch“ unter 20 %, „Eher Ost/West“ ab 10 Prozentpunkten Unterschied. Sind diese Werte so gewünscht?
+2. **Altersgruppen** im Filter (unter 30 / 30–59 / ab 60) gleich wie Wortseite v18? Siehe dort §21.6.
+3. **KI-Rückgabe:** nur Reihenfolge oder auch die „Warum“-Zeile? Die „Warum“-Zeile kostet Rechenzeit und kann danebenliegen.
+4. **Rückmeldung Ja/Nee** speichern oder nur lokal anzeigen?
+5. **Kandidatensuche für die KI:** Volltext + Synonyme reicht? Oder später Embeddings auf dem Server?
+6. **Offline-Suche:** Wie viele Wörter speichert die PWA vor?
 
 ---
 
@@ -470,10 +493,201 @@ Im Mock filtern alle Optionen die wenigen Beispielwörter wirklich. Die Zahlen (
 - Mobil 390px: Sheet, Fokusfalle, „{n} Wörter zeigen“.
 - KI mit gemocktem `LanguageModel`: Angebot ab 3 Wörtern, „Nee, danke“ merkt sich das für die Sitzung, Knopf startet trotzdem.
 
-**Visuell:** gegen `assets/boards/*.jpg`, beide Themes, 390 und 1280.
+**Visuell:** gegen `assets/boards/*.jpg`, beide Themes, 390, 834 und 1280.
+- Tablet 834px: Sortierung in der Meta-Zeile, Chips in einer Zeile, Register scrollt, alle Tippflächen ≥ 44px.
 
 **A11y:** axe ohne Verstöße. Kein Text unter 13px.
 
 ---
+
+---
+---
+
+# Teil B: Schnellsuche v1
+
+## 18. Überblick
+
+Die Schnellsuche ist ein Dialog über **jeder** Seite. Sie öffnet über die Header-Suche, die Taste `/` oder `Strg`/`⌘` + `K`. Sie ist für den schnellen Sprung zu einem Wort da, nicht zum Stöbern; dafür gibt es die Suchseite. Daher:
+
+- **Eine Liste für alles.** Treffer, Bedeutungssuche und Aktionen stehen in einer Liste und sind mit denselben Pfeiltasten erreichbar.
+- **Keine Filter.** Wer filtern will, kommt mit „Alle {n} Treffer anzeigen“ oder `Strg`/`⌘` + `Enter` zur Suchseite. Der Suchbegriff wird übernommen.
+- **Gleiche Suche wie die Suchseite.** Dieselbe API und dieselbe Rangfolge (§6.2), nur weniger Treffer.
+
+**Boards:** Canvas, Seite **„Schnellsuche v1 · Modal über jeder Seite“**
+
+| Board | Breite | Zeigt |
+|---|---|---|
+| `SchnellsucheV1DesktopDark` | 1280 | geöffnet, noch nichts getippt |
+| `SchnellsucheV1DesktopDarkTreffer` | 1280 | „brötchen“: Im Wort, In der Bedeutung, Aktionen |
+| `SchnellsucheV1DesktopLightKiLaeuft` | 1280 | Beschreibung, KI-Suche läuft (oben) |
+| `SchnellsucheV1DesktopLightKi` | 1280 | KI-Ergebnis „Nach Bedeutung“ |
+| `SchnellsucheV1DesktopLightNichts` | 1280 | nichts gefunden |
+| `SchnellsucheV1DesktopDarkLaden` | 1280 | Laden |
+| `SchnellsucheV1MobileDark` | 390 | „schrip“, Vollbild |
+| `SchnellsucheV1MobileLight` | 390 | geöffnet, Vollbild |
+
+Die Zustände einzeln liegen unter `assets/schnellsuche/zustaende/*.jpg`. Die Seite im Hintergrund der Boards ist nur angedeutet.
+
+## 19. Öffnen und Schließen
+
+| Auslöser | Verhalten |
+|---|---|
+| Klick auf die Suche im Header | öffnet den Dialog, Fokus ins Feld |
+| `/` (außer in Eingabefeldern) und `Strg`/`⌘` + `K` | wie oben |
+| Auf der Suchseite selbst | `/` fokussiert das große Suchfeld der Seite, **kein** Dialog |
+| `Esc`, Klick auf den Hintergrund, Button `esc`, mobil „Abbrechen“ | schließt; Fokus zurück auf den Auslöser |
+| Treffer gewählt | Navigation zur Wortseite, Dialog schließt, Suchbegriff landet im Verlauf |
+
+- Der Dialog hat `role="dialog"`, `aria-modal="true"`, `aria-label="Schnellsuche"` und eine Fokusfalle. Die Seite dahinter ist `inert`, der Body scrollt nicht.
+- Beim erneuten Öffnen ist das Feld leer, ohne den alten Suchbegriff.
+
+## 20. Layout
+
+| | Desktop und Tablet | Mobil (< 808px) |
+|---|---|---|
+| Form | Dialog `width: min(720px, 100% − 48px)`, oben 72px Abstand, max. Höhe `100vh − 128px`, Radius 6, `--card`, Schatten `0 24px 64px rgb(0 0 0/40%)` + 1px `--line` | **Vollbild**, kein Radius, kein Schatten |
+| Hintergrund | Scrim: Dark `rgb(16 20 24/55%)` + `blur(2px)`, Light `rgb(27 33 39/28%)` + `blur(4px)` | – |
+| Kopf | 64px: Lupe `--t3` · Feld 20px · X (40px, nur mit Text) · Taste `esc` (24px, Rand `--line`) | 60px: Lupe · Feld 18px · X (44px) · Textbutton **Abbrechen** (16px 700) |
+| Liste | scrollt innen, `overscroll-behavior: contain`, Padding `6px 0 10px` | ebenso |
+| Fuß | 1px Linie oben, Padding `10px 16px 10px 20px`, 13px `--t3` | Links ohne Icons, 13px, `nowrap`, `env(safe-area-inset-bottom)` |
+
+**Platzhalter:** Desktop `Such ’n Wort oder wat et bedeutet`, mobil `Wort oder Bedeutung`.
+
+**Tablet:** Der Dialog sieht aus wie auf Desktop. Die Tastenkürzel im Fuß gibt es nur bei `hover: hover`.
+
+## 21. Inhalte je Zustand
+
+### 21.1 Geöffnet, nichts getippt
+
+| Gruppe | Inhalt | Regeln |
+|---|---|---|
+| **Zuletzt jesucht** | bis zu **3** Suchbegriffe, Uhr-Icon; rechts im Kopf Textlink `Verlauf löschen` | nur lokal (`localStorage`), siehe Offene Punkte §26.1. Klick setzt den Begriff ins Feld |
+| **Heute** | Wort des Tages als Wortzeile | immer |
+| **Gerade beliebt** | 3 Wortzeilen aus der Trend-Liste | immer |
+| Fuß | links die Links `Zufälliges Wort` · `Wort vorschlagen` (Icon 16px), rechts `Alle Wörter A–Z →` (zur Suchseite) | Desktop und mobil |
+
+**Keine Zeile ist vorausgewählt**, damit ein versehentliches Enter nichts auslöst. Erst ↓ wählt die erste Zeile.
+
+### 21.2 Beim Tippen
+
+Die Suche läuft live, debounce 120ms, ab 1 Zeichen. Gruppen in dieser Reihenfolge:
+
+1. **Klingt nach ’ner Beschreibung:** nur ab **3 Wörtern** und wenn Chrome-KI verfügbar ist.
+   - Eine Aktionszeile `Nach Bedeutung suchen: „{q}“` mit der Unterzeile `Findet passende Wörter, ooch ohne Stichwort. Chrome-KI, lokal in deinem Browser.`
+   - Diese Zeile ist **vorausgewählt**; Enter startet die Bedeutungssuche.
+2. **Nach Bedeutung:** erscheint nach fertiger KI-Suche. Bis 3 Wortzeilen mit Begründung (13px `--t3`). Rechts im Gruppenkopf steht `Chrome-KI, lokal in deinem Browser`.
+3. **Im Wort:** bis **5** Treffer, Präfix vor enthält.
+4. **In der Bedeutung:** bis **4** Treffer.
+5. Trennlinie, dann die Aktionen:
+   - `Nach Bedeutung suchen: „{q}“`, nur unter 3 Wörtern und mit Chrome-KI
+   - `Alle {n} Treffer anzeigen`, bei 1 Treffer `Treffer auf der Suchseite ansehen`; Unterzeile `Mit Filtern und Sortierung`; Ziel `/suche?q={q}`
+
+Gruppen ohne Treffer entfallen. Die erste Zeile der ersten Gruppe ist vorausgewählt.
+
+### 21.3 Nichts gefunden
+
+- Kalle `stimmung="nuescht"` (84px), h2 `Nüscht jefunden für „{q}“` (Fira 600, 22px), darunter `Weder im Wort noch in den Bedeutungen.`
+- Label `Meinste` + bis zu 3 Pillen (Soundex).
+- Aktionen:
+  - `Nach Bedeutung suchen: „{q}“`, Unterzeile `Vielleicht passt een Wort, ooch ohne Stichwort. Chrome-KI, lokal in deinem Browser.` (nur mit Chrome-KI)
+  - `Wort vorschlagen: „{q}“`, Unterzeile `Wenn’s dit Wort jibt, prüf ick’s und nehm’s uff.`
+
+### 21.4 KI-Suche im Dialog
+
+Es ist dieselbe Komponente wie auf der Suchseite (§8), nur als Zeile:
+- **läuft:** Die KI-Zeile heißt `Ick such nach Bedeutung …`, Unterzeile `Chrome-KI vergleicht „{q}“ mit den Bedeutungen`, rechts ein Fortschrittsbalken 120 × 4px.
+- **Modell-Download nötig:** dieselbe Rückfrage wie §8.3 „laden“, als Unterzeile `Chrome lädt einmalig sein KI-Modell … {p} %`.
+- **fertig:** Die Gruppe „Nach Bedeutung“ steht oben, die KI-Zeile verschwindet.
+- **Fehler** (nicht im Mock): Zeile `Hat nich jeklappt. Nochmal versuchen`.
+- Ohne Chrome-KI gibt es weder Zeile noch Gruppe.
+- `Shift` + `Enter` im Feld startet die Bedeutungssuche jederzeit.
+
+### 21.5 Laden
+
+4 Skeleton-Zeilen (Wort 110px, Bedeutung bis 320px). Sie erscheinen erst nach 300ms. Beim Weitertippen bleiben die alten Treffer stehen.
+
+## 22. Zeilen
+
+| Typ | Aufbau |
+|---|---|
+| **Wortzeile** | Kachel 32px links · **Wort** (Berlin 700, 18px, Treffer markiert) + `, {Artikel}` (15px `--t3`) + Status-Icons · Bedeutungen in **einer** Zeile (15px `--t3`, Treffer markiert, mit „…“ abgeschnitten) |
+| Kachel links | Wort mit Audio: **Play-Knopf** (32px, `--card2`, Hover `--orange-600` mit weißem Icon, `aria-label="{Wort} anhören"`, `tabindex="-1"`). Ohne Audio: leere Fläche gleicher Breite, damit alles bündig bleibt |
+| Status-Icons | Wort des Tages: Kreis 22px `--orange-600` mit weißem Kalender. Gerade beliebt: Kreis 22px orange 16 % mit Pfeil. Je mit `title` und `aria-label` |
+| **Aktionszeile** | Icon-Kachel 32px (`--card2`, Icon `--t3`; KI-Funke orange) · Titel 16px 700 · Unterzeile 13px `--t3` |
+| **Verlaufszeile** | Uhr-Kachel · Begriff 16px 700 · rechts × (32px, mobil 44px) **nur für die Maus** (`tabindex="-1"`, `aria-hidden`). Mobil immer sichtbar, Desktop nur bei Hover oder aktiver Zeile |
+| Höhe | Desktop mind. 48px, Rand 8px, Radius 4. Mobil mind. 52px, volle Breite, Wort und Bedeutung untereinander |
+| Gruppenkopf | Label-Stil (13px, 700, Versalien, 1.5px, `--t3`), Padding `12px 20px 6px` |
+| Hover | `--card2` |
+| **Aktiv** (Tastatur) | `--card2` + `inset 3px 0 0 var(--orange-500)` + rechts eine `↵`-Taste (22px). Mobil ohne Aktiv-Markierung |
+
+## 23. Tastatur
+
+| Taste | Wirkung |
+|---|---|
+| ↓ / ↑ | nächste / vorige Zeile über **alle** Gruppen und Aktionen, am Ende zurück zum Anfang |
+| Enter | öffnet das Wort bzw. führt die Aktion aus |
+| `Strg`/`⌘` + Enter | alle Treffer auf der Suchseite (`/suche?q=`) |
+| `Shift` + Enter | Bedeutungssuche |
+| `Entf` | entfernt den aktiven Verlaufseintrag; der Hinweis `Entf aus Verlauf entfernen` erscheint dann im Fuß |
+| `Esc` | leert erst das Feld, beim zweiten Mal schließt der Dialog |
+| Tab | bleibt im Dialog (Feld → X → esc → Fuß-Links) |
+
+**Fuß mit Suchbegriff** (nur `hover: hover`):
+- Links: `↑ ↓ navigieren` · `↵ öffnen` · `{Strg|⌘} ↵ alle Treffer`
+- Rechts: `Zur Suchseite →`
+- Die Taste wird nach System gezeigt, `⌘` auf macOS und iOS. Tasten sind 22px hoch, Schrift 13px.
+
+## 24. Barrierefreiheit
+
+- **Combobox:** Das Feld hat `role="combobox"`, `aria-expanded="true"`, `aria-controls` auf die Liste und `aria-activedescendant` auf die aktive Zeile. Ist keine Zeile aktiv, bleibt `aria-activedescendant` leer.
+- **Liste:**
+  - Die Liste ist `role="listbox"`.
+  - Gruppen sind `role="group"` mit dem Gruppentitel als `aria-label`.
+  - Zeilen sind `role="option"` mit `aria-selected`.
+  - **Keine fokussierbaren Elemente in Optionen:** × und Play haben `tabindex="-1"`. Ihre Funktion gibt es per Taste (`Entf`) bzw. auf der Wortseite.
+- **Ansagen** (`aria-live="polite"`, 500ms gedrosselt): `{n} Treffer`, `Keene Treffer`, `Ick such nach Bedeutung`, `{n} Wörter nach Bedeutung jefunden`.
+- **Kontrast** (gemessen):
+  - Bedeutungen und Artikel: Light 5,93 : 1, Dark 4,76 : 1
+  - Gruppenköpfe und Fuß: Light 6,62 : 1, Dark 5,69 : 1
+  - Kein Text unter 13px.
+- **Touch** mobil: Zeilen ≥ 52px; ×, X und „Abbrechen“ 44px; Fuß-Links 44px hoch.
+- `prefers-reduced-motion`: kein Einblenden, kein Shimmer, der unbestimmte Balken steht.
+
+## 25. Bewegung
+
+| Element | Auslöser | Animation | Dauer |
+|---|---|---|---|
+| Dialog | öffnen | Opacity 0→1, `translateY(-8px) scale(.99)` → 0 | 180ms ease |
+| Scrim | öffnen | Opacity 0→1 | 150ms |
+| Mobil | öffnen | von unten, `translateY(16px)` → 0 | 200ms ease |
+| KI-Balken | läuft | wandert | 1400ms endlos |
+| Skeleton | Laden | Shimmer | 1400ms linear |
+
+## 26. Offene Punkte Schnellsuche (`TODO(schnellsuche):`)
+
+1. **Verlauf:**
+   - Nur lokal im Browser? Das ist der Vorschlag: kein Server, keine Personendaten.
+   - Wie viele Einträge werden gespeichert? Gezeigt werden 3.
+   - Werden auch Suchen gespeichert, bei denen niemand auf einen Treffer klickt?
+2. **Mobil:** Öffnet die Header-Suche auf dem Handy die Vollbild-Schnellsuche (wie im Mock) oder direkt die Suchseite?
+3. **„Gerade beliebt“ im leeren Zustand:** nur 3 Wörter aus „Gerade beliebt“ oder gemischt mit „Im Aufwind“?
+
+## 27. Komponenten und Tests (Schnellsuche)
+
+| Komponente | Inhalt |
+|---|---|
+| `QuickSearch.vue` | Dialog, Fokusfalle, Tasten, Öffnen über Header, `/` und `Strg`/`⌘`+`K` (einmal global, `client:idle`) |
+| `QuickSearchList.vue` | Gruppen und Zeilen (§22), Tastaturnavigation |
+| `useSearch()` | gemeinsam mit der Suchseite: API, Debounce, Abbruch alter Anfragen |
+| `SemanticSearch` | aus Teil A §14, als Zeilen-Variante |
+| `useSearchHistory()` | `localStorage`, Höchstzahl laut §26.1, mit try/catch für den privaten Modus |
+
+**Tests:**
+- Öffnen über `/` und `Strg`/`⌘`+`K`; nicht in Eingabefeldern; auf `/suche` kein Dialog.
+- Leerer Zustand: keine Zeile aktiv, ↓ wählt die erste; `Entf` entfernt einen Verlaufseintrag.
+- „brötchen“: 1 Treffer „Im Wort“, dazu Bedeutungs-Treffer; „Alle 7 Treffer anzeigen“ führt zu `/suche?q=brötchen`.
+- „jemand ist lustig“ mit gemockter Chrome-KI: KI-Zeile oben und aktiv, Enter startet die Suche. Ohne KI fehlt die Zeile.
+- Nach Esc kehrt der Fokus auf den Auslöser zurück; die Seite ist währenddessen `inert`.
+- axe ohne Verstöße; Screenshots gegen `assets/schnellsuche/boards/*.jpg`.
 
 Quellen zur Chrome-KI: Chrome for Developers, „The Prompt API“ (https://developer.chrome.com/docs/ai/prompt-api) und MDN „Prompt API“ (https://developer.mozilla.org/docs/Web/API/Prompt_API).
