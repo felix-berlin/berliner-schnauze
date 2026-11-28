@@ -4,6 +4,7 @@ import { terms } from "./query";
 
 const MIN_TERM = 3;
 
+// TODO(suche): fold ß/ss like tierOf in rank.ts: "abbeissen" finds „abbeißen“ but marks nothing.
 /** Marks every query term of at least 3 letters, case-insensitively; longer terms win on overlap. */
 export function highlightParts(text: string, q: string): TextPart[] {
   const found = [...new Set(terms(q).filter((t) => t.length >= MIN_TERM))].sort(

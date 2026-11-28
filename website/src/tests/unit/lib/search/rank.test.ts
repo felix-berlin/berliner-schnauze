@@ -83,6 +83,10 @@ describe("search ranking", () => {
     expect(tierOf(e, "abbeissen")).toBe(0);
     expect(tierOf(makeEntry({ berlinerisch: "Abbeisser" }), "abbeißer")).toBe(0);
     expect(tierOf(e, "strasse")).toBe(3);
+    // Capital ẞ lowercases to ß first: "STRAẞENBAHN" covers "strassen".
+    expect(
+      tierOf(makeEntry({ berlinerisch: "Tram", translations: ["Die STRAẞENBAHN"] }), "strassen"),
+    ).toBe(4);
   });
 
   it("handles a blank query", () => {

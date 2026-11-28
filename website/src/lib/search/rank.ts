@@ -30,7 +30,7 @@ export function tierOf(
   if (word.includes(q) || coversTerm(word, qTerms)) return 2; // includes: "Splitterbrötchen" for "brötchen"
   const { translations } = entry.wordProperties;
   if (translations.some((t) => fold(normalize(t)) === q)) return 3;
-  if (translations.some((t) => coversTerm(fold(t), qTerms))) return 4;
+  if (translations.some((t) => coversTerm(fold(normalize(t)), qTerms))) return 4;
   return entry.form.soundex && entry.form.soundex === qSoundex ? 5 : null;
 }
 

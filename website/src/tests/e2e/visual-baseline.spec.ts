@@ -106,6 +106,9 @@ const shoot = (page: Page, name: string, fullPage = true) =>
 
 // Suche v1 (docs/design/suche-v1/SPEC.md §17): start, hits (word hits, divider, meaning hit), empty with „Meinste“,
 // filters open (desktop: Gebrauch popover with an active filter, mobile: the sheet). Compare with the boards.
+// Mirrors the search page's mobile/desktop breakpoint (SPEC: mobile < 808px): below it the sheet, else the bar.
+const DESKTOP_MIN = 808;
+
 const SEARCH = [
   { name: "start", path: "/wort" },
   { name: "hits", path: "/wort?q=anmachen" },
@@ -141,7 +144,7 @@ for (const size of SIZES) {
             content: ".c-hit-row .badge { visibility: hidden !important; }",
           });
           if (name === "filter") {
-            if (size.width < 808) {
+            if (size.width < DESKTOP_MIN) {
               await page
                 .getByRole("main")
                 .getByRole("button", { name: /^Filter \d+$/ }) // with the count pill

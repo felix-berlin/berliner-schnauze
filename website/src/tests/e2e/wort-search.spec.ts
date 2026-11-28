@@ -54,13 +54,18 @@ const smallText = (page: Page) =>
   );
 
 const axe = async (page: Page) => {
-  // nested-interactive: SPEC §6.1 puts the word link and the play button inside the option row; both are out of the
-  // tab order (tabindex -1, the play button aria-hidden), axe still flags them. TODO(suche): owner decision.
-  const { violations } = await new AxeBuilder({ page })
+  const all = await new AxeBuilder({ page })
     .include("main")
     .disableRules(["nested-interactive"])
     .analyze();
-  return violations.map(
+  // nested-interactive runs on its own pass that skips only the hit rows: SPEC §6.1 puts the word link and the play
+  // button inside each option (both tabindex -1, play aria-hidden); axe flags that. TODO(suche): APG grid combobox.
+  const nested = await new AxeBuilder({ page })
+    .include("main")
+    .exclude('#treffer [role="option"]')
+    .withRules(["nested-interactive"])
+    .analyze();
+  return [...all.violations, ...nested.violations].map(
     (v) =>
       `${v.id}: ${v.nodes.map((n) => `${n.target.join(" ")} (${n.failureSummary})`).join(" | ")}`,
   );
@@ -298,6 +303,12 @@ test.describe("/wort search page", () => {
         .click();
       await expect(page.getByRole("dialog", { name: "Inhalt" })).toBeVisible();
       expect(await smallText(page)).toEqual([]);
+      await page.keyboard.press("Escape");
+      await search(page, "qqqxx");
+      await expect(
+        page.getByRole("heading", { name: "Nüscht jefunden für „qqqxx“" }),
+      ).toBeVisible();
+      expect(await smallText(page)).toEqual([]);
     });
   });
 
@@ -317,10 +328,14 @@ test.describe("/wort search page", () => {
         await page.keyboard.press("Tab");
         const inside = await page.evaluate(() => {
           const a = document.activeElement;
-          return !a || a === document.body || !!a.closest("dialog[open]");
+          // A native modal hands focus to the browser UI after its last control (the document loses focus, Chrome
+          // then cycles back in); while the document has focus, it must be inside the sheet, never <body>.
+          return !document.hasFocus() || !!a?.closest("dialog[open]");
         });
         expect(inside, `Tab ${i + 1} left the sheet`).toBe(true);
       }
+
+      expect(await smallText(page)).toEqual([]);
 
       const show = sheet.getByRole("button", { name: /^\d+ Wörter? zeigen$/ });
       await expect(show).toHaveText(/^[2-9] Wörter zeigen$/);
