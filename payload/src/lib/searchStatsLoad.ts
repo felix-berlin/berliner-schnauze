@@ -8,6 +8,9 @@ import type { Age } from "./wordFeedback";
 import { ageGroup, type AgeGroup } from "./homeStats";
 import { PUBLISHED_WORD } from "./statsQueries";
 
+// Shares ship in the public search index; 3 decimals keep it small (thresholds are 0.1 apart).
+const round3 = (n: number) => Math.round(n * 1000) / 1000;
+
 // Search index aggregates (`payload-app/search-stats-load`). Only aggregates leave this module. Raw SQL bypasses
 // Payload access and hooks; table and column names (word_feedback, comments, words, word_id, parent_id, usage,
 // half, area, age, status) must follow any rename.
@@ -66,7 +69,7 @@ export const loadSearchStats = async (payload: BasePayload): Promise<Map<number,
   for (const r of rows.sort((x, y) => Number(y.kind === "all") - Number(x.kind === "all"))) {
     const say = Number(r.say);
     const total = Number(r.total);
-    const share = { say: say / total, votes: total };
+    const share = { say: round3(say / total), votes: total };
     const s = at(r.word_id);
     if (r.kind === "all") s.usage = share;
     else if (!s.usage) continue; // a word under 10 answers has no breakdown either
@@ -83,7 +86,7 @@ export const loadSearchStats = async (payload: BasePayload): Promise<Map<number,
   for (const [id, groups] of ages) {
     for (const [g, c] of groups) {
       if (c.total >= MIN_VOTES)
-        (out.get(id)!.usage!.ages ??= {})[g] = { say: c.say / c.total, votes: c.total };
+        (out.get(id)!.usage!.ages ??= {})[g] = { say: round3(c.say / c.total), votes: c.total };
     }
   }
   return out;

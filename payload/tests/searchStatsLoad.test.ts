@@ -88,9 +88,9 @@ describe("loadSearchStats", () => {
     const u = (await loadSearchStats(payload)).get(c)?.usage;
     expect(u).toMatchObject({ say: 15 / 25, votes: 25, east: 1 });
     expect(u?.west).toBeUndefined();
-    expect(u?.areas?.mitte).toEqual({ say: 10 / 15, votes: 15 });
+    expect(u?.areas?.mitte).toEqual({ say: 0.667, votes: 15 });
     expect(u?.areas?.pankow).toEqual({ say: 0.5, votes: 10 });
-    expect(u?.ages).toEqual({ u30: { say: 10 / 15, votes: 15 } });
+    expect(u?.ages).toEqual({ u30: { say: 0.667, votes: 15 } });
   });
 
   it("counts published top-level stories only", async () => {
