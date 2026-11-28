@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.1](https://github.com/felix-berlin/berliner-schnauze/compare/v5.2.0...v5.2.1) (2026-11-28)
+
+### Bug Fixes
+
+* **home:** show trends and timestamp adopted words ([1f4898a](https://github.com/felix-berlin/berliner-schnauze/commit/1f4898ad149a38043c72d2f670c2456d43474538))
+* **tests:** satisfy map spread lint ([cd52fcb](https://github.com/felix-berlin/berliner-schnauze/commit/cd52fcbf620904de1fe60190226216843fc2d96b))
+
 # [5.2.0](https://github.com/felix-berlin/berliner-schnauze/compare/v5.1.0...v5.2.0) (2026-11-27)
 
 ### Bug Fixes
