@@ -103,6 +103,7 @@
     --color-surface-placeholder: light-dark(var(--color-orange-200), var(--color-ink-200m));
     --color-surface-range-track: var(--color-ink-600m);
     --color-surface-range-track-alt: var(--color-grey-200);
+    --color-surface-scrim: light-dark(rgb(27 33 39 / 28%), rgb(16 20 24 / 55%));
     --color-surface-selection: light-dark(var(--color-red-200), var(--color-ink-200));
     --color-surface-sheet: light-dark(var(--color-white-pure), var(--color-ink-400m));
     --color-surface-skeleton: light-dark(var(--color-white-100), var(--color-ink-300m));
@@ -160,6 +161,7 @@
     --radius-sm: 4px;
     --radius-xs: 3px;
     --radius-xxs: 2px;
+    --shadow-dialog: 0 24px 64px 0 rgb(0 0 0 / 40%), 0 0 0 1px var(--color-warm-line);
     --shadow-hover-glow: 0 0 12px 0 light-dark(color(srgb 0.887059 0.604706 0.527059), var(--color-orange-500));
     --shadow-menu: 0 14px 32px 0 rgb(0 0 0 / 28%), 0 0 0 1px var(--color-border-card);
     --shadow-paper-lift: 0 0.5px 0.6px 0 rgb(0 0 0 / 8%), 0 4px 5px 0 rgb(0 0 0 / 16%);

@@ -68,7 +68,7 @@ describe("quickModel: typing", () => {
     const m = await model("zappel");
     const words = m.groups[0]!.options.map((o) => (o.kind === "word" ? o.hit.tier : -1));
     expect(words).toHaveLength(5);
-    expect(words).toEqual([...words].sort());
+    expect(words).toEqual([...words].sort((a, b) => a - b));
     expect(words[0]).toBe(1);
     expect(words.at(-1)).toBe(2);
     expect(m.total).toBe(6);

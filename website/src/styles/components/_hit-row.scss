@@ -35,19 +35,12 @@
     box-shadow: var(--_edge);
   }
 
-  :scope[data-variant="compact"] {
-    --_word: var(--font-size-lg);
-    --_word-wide: var(--font-size-lg);
-    --_article: var(--font-size-base);
-    --_pad-block: var(--space-2);
-  }
-
   .inner {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     gap: var(--space-1) var(--space-3);
-    padding: var(--_pad-block, var(--space-3)) var(--space-4);
+    padding: var(--space-3) var(--space-4);
   }
 
   .head {
@@ -211,8 +204,7 @@
   @container hit-row (inline-size >= 48rem) {
     .inner {
       gap: var(--space-1) var(--space-6);
-      padding: var(--_pad-block, var(--space-3)) var(--space-5) var(--_pad-block, var(--space-3))
-        var(--space-6);
+      padding: var(--space-3) var(--space-5) var(--space-3) var(--space-6);
     }
 
     .word {
@@ -286,8 +278,7 @@
 
     .inner {
       gap: var(--space-1) var(--space-4);
-      padding: var(--_pad-block, var(--_pad-tablet)) var(--space-4)
-        var(--_pad-block, var(--_pad-tablet)) var(--space-5);
+      padding: var(--_pad-tablet) var(--space-4) var(--_pad-tablet) var(--space-5);
     }
 
     .side {

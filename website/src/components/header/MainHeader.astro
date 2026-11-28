@@ -1,7 +1,7 @@
 ---
 import '@styles/components/_menu-nav.scss';
 import MainMenu from '@components/header/MainMenu.vue';
-import SearchModalTrigger from '@components/modals/search/SearchModalTrigger.vue';
+import QuickSearch from '@components/search/QuickSearch.vue';
 import { fetchMenu } from '@services/payload/site.ts';
 
 const isIndex = /^\/(index(\.html)?)?$/.test(Astro.url.pathname);
@@ -28,7 +28,7 @@ const headerLinks = mainMenuItems.filter((item) => ['/wort', '/magazin'].include
       </nav>
       <span class='divider' aria-hidden='true'></span>
 
-      {!isIndex && <SearchModalTrigger client:idle />}
+      {!isIndex && <QuickSearch client:idle />}
 
       <MainMenu client:load menuItems={mainMenuItems} />
     </div>

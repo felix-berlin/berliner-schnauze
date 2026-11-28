@@ -1,0 +1,283 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Rows of the quick search (docs/design/suche-v1/SPEC.md §22): listbox root with groups (.head: label + „Verlauf
+// löschen“) and .row options. Word row: .tile (play button or empty), .text (.word with article and .badge icons,
+// .meanings on one line). Action and history rows: .tile icon, .label (b + small), .remove (history). .ret is the
+// ↵ key of the active row. data-variant="mobile": full-width rows, word over meaning, no active marking.
+@include mx.component("quick-search-list") {
+  :scope {
+    --_tile: 2rem; // SPEC §22: 32px tile
+    --_badge: 1.375rem; // SPEC §22: 22px status circle
+    --_row: 3rem; // SPEC §22: desktop min 48px
+    --_word: 1.125rem; // SPEC §22: word 18px
+    --_meta: 0.9375rem; // SPEC §22: article and meanings 15px
+    --_track: 1.5px; // SPEC §22 label tracking
+    --_edge: inset 3px 0 0 var(--color-accent-active); // SPEC §22 active row
+
+    display: block;
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-5) var(--space-2);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--_track);
+    text-transform: uppercase;
+    color: var(--color-warm-quiet);
+  }
+
+  .clear {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-weight: var(--font-weight-regular);
+    letter-spacing: normal;
+    text-transform: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: var(--color-warm-quiet);
+    cursor: pointer;
+  }
+
+  .row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-block-size: var(--_row);
+    margin: 0 var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+
+    @include butler-mx.hover {
+      background: var(--color-warm-card2);
+    }
+  }
+
+  .row[aria-selected="true"] {
+    background: var(--color-warm-card2);
+    box-shadow: var(--_edge);
+  }
+
+  .tile {
+    display: grid;
+    flex: none;
+    place-items: center;
+    inline-size: var(--_tile);
+    block-size: var(--_tile);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: var(--color-warm-card2);
+    color: var(--color-warm-quiet);
+
+    svg {
+      inline-size: var(--space-4);
+      block-size: var(--space-4);
+    }
+  }
+
+  .row:is(:hover, [aria-selected="true"]) .tile {
+    background: var(--color-warm-card3);
+    color: var(--color-text-strong);
+  }
+
+  .tile[data-variant="empty"],
+  .row:is(:hover, [aria-selected="true"]) .tile[data-variant="empty"] {
+    background: none;
+  }
+
+  .tile[data-variant="ki"],
+  .row:is(:hover, [aria-selected="true"]) .tile[data-variant="ki"] {
+    color: var(--color-accent-active);
+  }
+
+  .tile[data-variant="play"] {
+    color: var(--color-text-strong);
+    cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+
+    @include butler-mx.hover {
+      background: var(--color-accent-solid);
+      color: var(--color-text-on-active);
+    }
+  }
+
+  .text {
+    display: flex;
+    flex: 1;
+    align-items: baseline;
+    gap: var(--space-3);
+    min-inline-size: 0;
+  }
+
+  .word {
+    flex: none;
+    font-size: var(--_word);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-strong);
+    white-space: nowrap;
+
+    small {
+      font-size: var(--_meta);
+      font-weight: var(--font-weight-regular);
+      color: var(--color-warm-quiet);
+    }
+  }
+
+  .badge {
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--_badge);
+    block-size: var(--_badge);
+    margin-inline-start: var(--space-2);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-wash); // SPEC §22: orange 16 %
+    color: var(--color-text-accent);
+    vertical-align: -3px; // mock .q1__bi: sits on the word's baseline
+
+    svg {
+      inline-size: var(--space-3);
+      block-size: var(--space-3);
+    }
+  }
+
+  .badge[data-variant="wotd"] {
+    background: var(--color-accent-solid);
+    color: var(--color-text-on-active);
+  }
+
+  .meanings {
+    flex: 1;
+    min-inline-size: 0;
+    font-size: var(--_meta);
+    color: var(--color-warm-quiet);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  mark {
+    border-radius: var(--radius-xxs);
+    background: var(--color-surface-wash-strong); // SPEC §4: orange 22 %
+    color: var(--color-text-strong);
+  }
+
+  .label {
+    flex: 1;
+    min-inline-size: 0;
+
+    b {
+      display: block;
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-strong);
+    }
+
+    small {
+      display: block;
+      font-size: var(--font-size-label);
+      color: var(--color-warm-quiet);
+    }
+  }
+
+  .remove {
+    display: grid;
+    flex: none;
+    place-items: center;
+    inline-size: var(--_tile);
+    block-size: var(--_tile);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: none;
+    color: var(--color-warm-quiet);
+    opacity: 0;
+    cursor: pointer;
+
+    @include butler-mx.hover {
+      background: var(--color-warm-card3);
+      color: var(--color-text-strong);
+    }
+
+    svg {
+      inline-size: var(--space-4);
+      block-size: var(--space-4);
+    }
+  }
+
+  .row:is(:hover, [aria-selected="true"]) .remove {
+    opacity: 1;
+  }
+
+  .ret {
+    display: none;
+    flex: none;
+    place-items: center;
+    inline-size: var(--_badge);
+    block-size: var(--_badge);
+    border-radius: var(--radius-xs);
+    background: var(--color-warm-card3);
+    color: var(--color-text-strong);
+
+    svg {
+      inline-size: var(--space-3);
+      block-size: var(--space-3);
+    }
+  }
+
+  .row[aria-selected="true"] .ret {
+    display: inline-grid;
+  }
+
+  .sep {
+    block-size: 1px;
+    margin: var(--space-2) var(--space-5);
+    background: var(--color-warm-line);
+  }
+
+  :scope[data-variant="mobile"] {
+    --_row: 3.25rem; // SPEC §22: mobile min 52px
+
+    .head {
+      padding: var(--space-3) var(--space-4) var(--space-2);
+    }
+
+    .row {
+      margin: 0;
+      padding: var(--space-1) var(--space-4);
+      border-radius: 0;
+    }
+
+    .row[aria-selected="true"] {
+      background: none;
+      box-shadow: none;
+    }
+
+    .row[aria-selected="true"] .ret {
+      display: none;
+    }
+
+    .text {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .meanings {
+      inline-size: 100%;
+    }
+
+    .remove {
+      inline-size: var(--size-tap-target);
+      block-size: var(--size-tap-target);
+      opacity: 1;
+    }
+  }
+}

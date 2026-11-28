@@ -149,6 +149,14 @@
           "components": [0.317647, 0.27451, 0.282353],
           "hex": "#514648"
         }
+      },
+      "scrim": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.062745, 0.078431, 0.094118],
+          "hex": "#101418",
+          "alpha": 0.55
+        }
       }
     },
     "accent": {
@@ -558,6 +566,53 @@
         },
         {
           "color": "{color.border.card}",
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 1,
+            "unit": "px"
+          }
+        }
+      ]
+    },
+    "dialog": {
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [0, 0, 0],
+            "hex": "#000000",
+            "alpha": 0.4
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 24,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 64,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        },
+        {
+          "color": "{color.warm.line}",
           "offsetX": {
             "value": 0,
             "unit": "px"

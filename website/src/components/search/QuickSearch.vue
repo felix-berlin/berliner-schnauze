@@ -1,166 +1,104 @@
 <template>
-  <div class="c-quick-search">
-    <!-- Enter without an active option sends the form: the full search page for the query. -->
-    <form role="search" method="get" action="/wort">
-      <SearchField
-        ref="field"
-        v-model="input"
-        list="schnellsuche"
-        :active-id="activeId"
-        :expanded="rows.length > 0"
-        @keydown="onKeydown"
-      />
-    </form>
+  <!-- TODO(schnellsuche): SPEC §26.2 open: on phones the header button opens the full-screen dialog (as in the mock), not the search page. -->
+  <button
+    ref="trigger"
+    class="c-searchbar c-button c-header-control"
+    type="button"
+    aria-label="Suche aktivieren"
+    aria-haspopup="dialog"
+    @click="open"
+  >
+    <IconSearch aria-hidden="true" />
+    <span class="c-searchbar__label">Suche</span>
+    <kbd class="c-searchbar__slash-icon">/</kbd>
+  </button>
 
-    <p v-if="q && !loadError" class="meta" aria-live="polite">
-      <template v-if="answered === undefined">Suche läuft …</template>
-      <template v-else-if="total === 0">Keene Treffer für „<b>{{ answered }}</b>“</template>
-      <template v-else><b>{{ formatCount(total) }}</b> Treffer für „{{ answered }}“</template>
-    </p>
-
-    <SearchLoadState v-if="loadError" :online="online" @retry="load" />
-
-    <div ref="scroller" class="list">
-      <Virtualizer
-        v-if="scroller && rows.length"
-        id="schnellsuche"
-        ref="virtualizer"
-        v-slot="{ item: row, index }"
-        :data="rows"
-        :scroll-ref="scroller"
-        class="c-hit-list"
-        role="listbox"
-        aria-label="Treffer"
-      >
-        <div v-if="row.kind === 'divider'" role="presentation" class="divider">
-          {{ row.label }}
-        </div>
-        <HitRow
-          v-else-if="row.kind === 'hit'"
-          :id="`schnellsuche-${row.hit.entry.slug}`"
-          :hit="row.hit"
-          :q="answered ?? ''"
-          :active="index === activeIndex"
-          :wotd="false"
-          compact
-        />
-      </Virtualizer>
-    </div>
-
-    <!-- TODO(suche): Text bestätigen -->
-    <a class="all" :href="searchUrl({ ...EMPTY_STATE, q })">Alle Treffer und Filter</a>
-  </div>
+  <!-- Native modal (SPEC §19): the page behind is inert, Esc closes. The dialog covers the viewport and paints
+       the scrim itself, so a press outside the box lands on it; .box is the visible dialog. -->
+  <dialog
+    ref="dialog"
+    class="c-quick-search"
+    aria-label="Schnellsuche"
+    :data-variant="wide ? undefined : 'mobile'"
+    @close="onClose"
+    @keydown="trapTab"
+    @pointerdown="pressedOutside = $event.target === dialog"
+    @click="pressedOutside && $event.target === dialog && close()"
+  >
+    <QuickSearchPanel v-if="loaded" :open="isOpen" :wide @close="close" />
+  </dialog>
 </template>
 
 <script setup lang="ts">
-import type { ListRow } from "@lib/search/types";
+import { trackEvent } from "@utils/analytics";
+import { isEditableTarget } from "@utils/helpers.ts";
+import { defaultDocument, useEventListener, useMediaQuery } from "@vueuse/core";
+import { defineAsyncComponent, ref, useTemplateRef } from "vue";
 
-import { useSearchIndex } from "@composables/useSearchIndex";
-import { searchUrl } from "@composables/useSearchState";
-import { useSearchTracking } from "@composables/useSearchTracking";
-import { runSearch } from "@lib/search/run";
-import { EMPTY_STATE } from "@lib/search/state";
-import { reportError } from "@utils/reportError.ts";
-import { refDebounced } from "@vueuse/core";
-import { navigate } from "astro:transitions/client";
-import { Virtualizer } from "virtua/vue";
-import { computed, nextTick, onMounted, ref, shallowRef, useTemplateRef, watch } from "vue";
+/** Header quick search: trigger, the global keys and the dialog shell (SPEC §19, §20, §27). */
+const QuickSearchPanel = defineAsyncComponent(
+  () => import("@components/search/QuickSearchPanel.vue"),
+);
+const IconSearch = defineAsyncComponent(() => import("virtual:icons/lucide/search"));
 
-import HitRow from "./HitRow.vue";
-import SearchField from "./SearchField.vue";
-import SearchLoadState from "./SearchLoadState.vue";
+const dialog = useTemplateRef<HTMLDialogElement>("dialog");
+const trigger = useTemplateRef<HTMLButtonElement>("trigger");
+const wide = useMediaQuery("(min-width: 808px)"); // SPEC §20: full screen below 808px
+const loaded = ref(false); // the panel (index, search core) loads on the first open only
+const isOpen = ref(false);
+const pressedOutside = ref(false);
+let opener: HTMLElement | null = null;
 
-const TYPE_DEBOUNCE = 150; // SPEC §5, same as the search page
-
-const formatCount = (n: number) => n.toLocaleString("de");
-
-const input = ref("");
-const debounced = refDebounced(input, TYPE_DEBOUNCE);
-const q = computed(() => debounced.value.trim());
-
-// Same core as the search page, without filters, KI, trend or Wort des Tages.
-const ctx = { trendRanks: new Map<string, number>() };
-const rows = shallowRef<ListRow[]>([]);
-const total = ref(0);
-const answered = ref<string>(); // the query of the rows on screen: they stay until a newer answer is there
-
-/* Index: single-flight with the search page; loading starts when the modal opens. */
-const { index, load, loadError, online } = useSearchIndex(() => void run());
-const track = useSearchTracking();
-
-/* A newer run wins. */
-let runId = 0;
-async function run() {
-  const id = ++runId;
-  const query = q.value;
-  activeIndex.value = -1;
-  if (!query) {
-    rows.value = [];
-    answered.value = undefined;
-    return;
-  }
-  const idx = index.value;
-  if (!idx) return; // loading: the index runs the search once it is there
-  try {
-    const next = await runSearch(idx.db, idx.entries, { ...EMPTY_STATE, q: query }, ctx);
-    if (id !== runId) return;
-    rows.value = next.rows;
-    total.value = next.total;
-    answered.value = query;
-    track(query, next.total);
-  } catch (error) {
-    if (id !== runId) return;
-    reportError(error);
-    loadError.value = true;
-  }
+function open() {
+  const d = dialog.value;
+  if (!d || d.open) return;
+  const at = document.activeElement;
+  opener = at instanceof HTMLElement && at !== document.body ? at : trigger.value;
+  loaded.value = true;
+  isOpen.value = true;
+  d.showModal();
 }
-watch(q, run);
 
-/* Combobox (SPEC §12): focus stays in the field, ↑/↓ move the active option, Enter opens it. */
-const field = useTemplateRef("field");
-const scroller = useTemplateRef<HTMLElement>("scroller");
-const virtualizer = useTemplateRef("virtualizer");
-const activeIndex = ref(-1);
-const activeId = ref<string>();
-const hitIndices = computed(() => rows.value.flatMap((row, i) => (row.kind === "hit" ? [i] : [])));
+const close = () => dialog.value?.close();
 
-async function move(delta: 1 | -1) {
-  const hits = hitIndices.value;
-  if (!hits.length) return;
-  const at = hits.indexOf(activeIndex.value);
-  const next =
-    at < 0 ? (delta > 0 ? 0 : hits.length - 1) : (at + delta + hits.length) % hits.length;
-  const i = hits[next]!;
-  activeIndex.value = i;
-  // The row may not be rendered yet: scroll first, point aria-activedescendant at it once it exists.
-  virtualizer.value?.scrollToIndex(i, { align: "nearest" });
-  await nextTick();
-  const row = rows.value[i];
-  if (row?.kind === "hit" && activeIndex.value === i)
-    activeId.value = `schnellsuche-${row.hit.entry.slug}`;
+function onClose() {
+  isOpen.value = false;
+  opener?.focus();
+  opener = null;
 }
-watch(activeIndex, (i) => i < 0 && (activeId.value = undefined));
 
-function onKeydown(e: KeyboardEvent) {
-  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+/* Chrome lets Tab leave a modal dialog for the browser UI: wrap it at both ends (SPEC §23 Tab cycle). */
+function trapTab(e: KeyboardEvent) {
+  if (e.key !== "Tab" || !dialog.value) return;
+  const items = [...dialog.value.querySelectorAll<HTMLElement>("input, button, a[href]")].filter(
+    (el) => el.tabIndex >= 0 && !el.closest("[hidden]"),
+  );
+  const first = items[0];
+  const last = items.at(-1);
+  if (!first || !last) return;
+  const at = document.activeElement;
+  if (e.shiftKey ? at === first : at === last) {
     e.preventDefault();
-    void move(e.key === "ArrowDown" ? 1 : -1);
-    return;
-  }
-  const row = rows.value[activeIndex.value];
-  if (e.key === "Enter" && row?.kind === "hit") {
-    e.preventDefault();
-    void navigate(`/wort/${row.hit.entry.slug}`);
+    (e.shiftKey ? last : first).focus();
   }
 }
 
-onMounted(() => {
-  field.value?.focus();
-  void load();
+// One global listener on window (SSR-safe default target; the header is persisted). Pages with their own big field (/wort, start page) take "/"
+// in a window capture listener and stop it, so it never reaches this one.
+useEventListener("keydown", (e: KeyboardEvent) => {
+  if (e.repeat || dialog.value?.open) return;
+  const ctrlK = (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k";
+  if (!ctrlK && (e.key !== "/" || isEditableTarget(e.target))) return;
+  e.preventDefault();
+  open();
+  trackEvent("Search", "Open Search Modal via Keyboard", "Search Modal Opened via Keyboard");
 });
+
+// A link in the dialog (Meinste, footer) swaps the page under the persisted header: close first.
+useEventListener(defaultDocument, "astro:before-swap", close);
 </script>
 
 <style lang="scss">
-@use "@styles/components/hit-list";
+@use "@styles/components/searchbar";
 @use "@styles/components/quick-search";
 </style>
