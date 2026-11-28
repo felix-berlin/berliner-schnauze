@@ -277,6 +277,17 @@ describe("SearchApp", () => {
     expect(mocks.navigate).toHaveBeenCalledWith("/wort/aalwurm");
   });
 
+  it("the meta row's sort (tablet, SPEC §3.1) sets the sort like the bar's", async () => {
+    history.replaceState(null, "", "/wort?q=aal");
+    const w = mountApp({ state: state({ q: "aal" }) });
+    const row = w.get("[data-meta]").element.parentElement!;
+    const select = row.querySelector<HTMLSelectElement>('select[aria-label="Sortieren"]')!;
+    select.value = "neu";
+    select.dispatchEvent(new Event("change"));
+    await flushPromises();
+    expect(location.search).toBe("?q=aal&sort=neu");
+  });
+
   it("Alles zurücksetzen keeps q", async () => {
     history.replaceState(null, "", "/wort?q=aal&wortart=verb&silben=2");
     const w = mountApp({ state: state({ pos: ["Verb"], q: "aal", syllables: 2 }) });

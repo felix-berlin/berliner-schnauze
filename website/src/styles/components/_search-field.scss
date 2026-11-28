@@ -88,7 +88,7 @@
     }
   }
 
-  // SPEC §8.2 KI button: orange outline; text only from 1000px viewport (the container query below).
+  // SPEC §8.2 KI button: orange outline; text from 808px viewport (SPEC §3.1 keeps it on tablets).
   .ai {
     display: inline-grid;
     grid-auto-flow: column;
@@ -140,7 +140,8 @@
     color: var(--color-warm-quiet);
   }
 
-  @container search-field (inline-size >= 47rem) {
+  // 808px viewport minus the 2 × 20px page gutter and the 2 × 2px rim.
+  @container search-field (inline-size >= 47.75rem) {
     .inner {
       block-size: var(--_height-wide);
     }
@@ -161,16 +162,20 @@
     .slash {
       display: block;
     }
-  }
 
-  // 1000px viewport minus 2 × 24px gutter and the 2 × 2px rim (design doc „Tablet 808–999px“).
-  @container search-field (inline-size >= 59.25rem) {
     .ai {
       padding-inline: var(--space-3);
 
       span {
         display: inline;
       }
+    }
+  }
+
+  // SPEC §3.1: no `/` hint on the search page's tablet layout (808–999px viewport, c-search-app).
+  @container search-app (48rem <= inline-size < 60rem) {
+    .slash {
+      display: none;
     }
   }
 }

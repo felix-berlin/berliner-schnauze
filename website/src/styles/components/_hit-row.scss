@@ -14,6 +14,10 @@
     --_bar-height: 6px; // SPEC §6.1
     --_side: 9.25rem; // mock .s1__use min width 148px: the percent column stays flush
     --_play: 2.25rem; // SPEC §6.1 play circle 36px
+    --_pad-tablet: 0.875rem; // SPEC §3.1 tablet row padding 14px, no token step within 0.1rem
+    --_bar-tablet: 3rem; // SPEC §3.1 tablet bar 48px
+    --_side-tablet: 7.75rem; // mock .s1--t .s1__use min width 124px
+    --_play-tablet: 2.5rem; // SPEC §3.1 tablet play 40px
     --_dot: 5px; // SPEC §4 meaning separator circle
     --_edge: inset 3px 0 0 var(--color-accent-active); // SPEC §6.1 active row
 
@@ -204,7 +208,7 @@
   }
 
   // Desktop: the meanings run under the word, the share bar and play button sit in their own column.
-  @container hit-row (inline-size >= 47rem) {
+  @container hit-row (inline-size >= 48rem) {
     .inner {
       gap: var(--space-1) var(--space-6);
       padding: var(--_pad-block, var(--space-3)) var(--space-5) var(--_pad-block, var(--space-3))
@@ -268,6 +272,26 @@
       display: block;
       min-inline-size: var(--_side);
       text-align: end;
+    }
+  }
+
+  // SPEC §3.1 tablet (808–999px viewport, search page only via c-search-app): tighter row, 48px bar, 40px play
+  // (the 44px tap area above follows --_play).
+  @container search-app (48rem <= inline-size < 60rem) {
+    :scope {
+      --_bar: var(--_bar-tablet);
+      --_side: var(--_side-tablet);
+      --_play: var(--_play-tablet);
+    }
+
+    .inner {
+      gap: var(--space-1) var(--space-4);
+      padding: var(--_pad-block, var(--_pad-tablet)) var(--space-4)
+        var(--_pad-block, var(--_pad-tablet)) var(--space-5);
+    }
+
+    .side {
+      gap: var(--space-3);
     }
   }
 }

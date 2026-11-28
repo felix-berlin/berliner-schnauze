@@ -22,7 +22,9 @@ const PAGES = [
 const SIZES = [
   { height: 844, width: 390 },
   { height: 900, width: 1280 },
+  { height: 1112, width: 834 }, // search tablet only (SPEC §3.1, 808–999px)
 ] as const;
+const TABLET = 834;
 
 /** Scrolls through the page once so every client:visible island hydrates, then back to the top. */
 const settle = async (page: Page) => {
@@ -121,7 +123,7 @@ for (const size of SIZES) {
     test.describe(`${size.width}px ${theme}`, () => {
       test.use({ viewport: size });
 
-      for (const path of PAGES) {
+      for (const path of size.width === TABLET ? [] : PAGES) {
         test(path, async ({ page, baseURL }) => {
           await open(page, baseURL!, path, theme);
           if (path === "/")

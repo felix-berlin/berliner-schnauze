@@ -129,8 +129,15 @@
     margin-block-start: var(--space-1);
   }
 
-  // Desktop (SPEC §3, from 808px viewport; the list is ~760px wide there).
-  @container search-app (inline-size >= 47rem) {
+  // SPEC §3.1 tablet: the sort sits in the meta row (the bar's own sort is hidden there, c-filter-bar).
+  .tsort {
+    --sort-select-height: var(--size-tap-target);
+
+    display: none;
+  }
+
+  // Desktop and tablet (SPEC §3, from 808px viewport: 808 minus the 2 × 20px page gutter = 48rem).
+  @container search-app (inline-size >= 48rem) {
     .filters {
       display: block;
     }
@@ -146,7 +153,17 @@
     .head p {
       font-size: var(--font-size-base);
     }
+  }
 
+  // Tablet (SPEC §3.1, 808–999px viewport; 1000px minus the gutter = 60rem): no key hints, the sort moves up.
+  @container search-app (48rem <= inline-size < 60rem) {
+    .tsort {
+      display: block;
+    }
+  }
+
+  // Desktop (SPEC §3, from 1000px viewport): shortcuts only with a real pointer.
+  @container search-app (inline-size >= 60rem) {
     .keys {
       @include butler-mx.feature("hover") {
         display: flex;

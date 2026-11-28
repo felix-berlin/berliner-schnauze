@@ -92,7 +92,7 @@
     color: inherit;
   }
 
-  @container alphabet-register (inline-size >= 47rem) {
+  @container alphabet-register (inline-size >= 48rem) {
     ul {
       // stylelint-disable-next-line declaration-property-value-disallowed-list -- mock .s1--d .s1__reg: 2px gap, no space token
       gap: 2px;
@@ -108,6 +108,34 @@
     span[role="img"] {
       min-inline-size: 0;
       padding-inline: 0;
+    }
+  }
+
+  // SPEC §3.1 tablet (808–999px viewport, c-search-app): 29 shared cells would be 26px wide, too small to tap,
+  // so the row scrolls edge to edge inside the card with 44px cells.
+  @container search-app (48rem <= inline-size < 60rem) {
+    :scope {
+      padding-inline: 0;
+    }
+
+    .intro {
+      padding-inline: var(--space-4);
+    }
+
+    // scroll alternative: none needed, the row scrolls with a visible scrollbar where the platform shows one.
+    ul {
+      padding-inline: var(--space-4);
+      overflow-x: auto;
+    }
+
+    li {
+      flex: 0 0 auto;
+    }
+
+    a,
+    span[role="img"] {
+      min-inline-size: var(--size-tap-target);
+      padding-inline: var(--space-1);
     }
   }
 }

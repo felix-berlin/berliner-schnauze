@@ -8,6 +8,7 @@
     --_track: 1.5px; // SPEC §4 label tracking
     --_pill: 2rem; // SPEC §7.3 pill 32px
     --_x: 1.375rem; // SPEC §7.3 × circle 22px
+    --_pill-tablet: 2.25rem; // SPEC §3.1 tablet pill 36px
 
     container: active-filters / inline-size;
   }
@@ -81,7 +82,7 @@
     cursor: pointer;
   }
 
-  @container active-filters (inline-size >= 47rem) {
+  @container active-filters (inline-size >= 48rem) {
     .inner {
       flex-wrap: wrap;
       overflow-x: visible;
@@ -89,6 +90,24 @@
 
     .label {
       display: inline;
+    }
+  }
+
+  // SPEC §3.1 tablet (808–999px viewport, c-search-app): 36px pills with a 44px tap area, a 44px reset.
+  @container search-app (48rem <= inline-size < 60rem) {
+    .pill {
+      position: relative;
+      min-block-size: var(--_pill-tablet);
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: calc((var(--size-tap-target) - var(--_pill-tablet)) / -2) 0;
+      }
+    }
+
+    .reset {
+      min-block-size: var(--size-tap-target);
     }
   }
 }

@@ -41,10 +41,12 @@
         <span><kbd>↵</kbd> öffnen</span>
         <span v-if="ai"><kbd>Shift</kbd><kbd>↵</kbd> nach Bedeutung</span>
       </p>
+      <!-- Tablet (808–999px, SPEC §3.1) only: the chips and the sort no longer fit in one row. -->
+      <div class="tsort"><SortSelect :state="state" compact @update="set" /></div>
     </div>
     <p class="u-sr-only" aria-live="polite">{{ announcement }}</p>
 
-    <!-- Mobile (< 808px): filter button + sheet and the sort pill; desktop: the filter bar. -->
+    <!-- Mobile (< 808px): filter button + sheet and the sort pill; tablet and desktop: the filter bar. -->
     <div class="mobile">
       <FilterSheet
         ref="sheet"

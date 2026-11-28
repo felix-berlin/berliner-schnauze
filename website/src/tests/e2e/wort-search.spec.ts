@@ -374,6 +374,125 @@ test.describe("/wort search page", () => {
     });
   });
 
+  test.describe("tablet 834", () => {
+    test.use({ viewport: { height: 1112, width: 834 } });
+    test.skip(({ isMobile }) => isMobile, "tablet layout (SPEC §3.1), viewport-only");
+
+    /** Every visible control in the search island (rows count as one target each) with a box under 44px. A
+     * `::before` hit area (play, active-filter pills) counts as part of the target. */
+    const smallTargets = (page: Page) =>
+      page.locator(".c-search-app").evaluate((app) =>
+        [
+          ...app.querySelectorAll<HTMLElement>(
+            'button, a[href], select, input:not([type="hidden"]), [role="option"]',
+          ),
+        ]
+          .filter(
+            (el) =>
+              !el.parentElement!.closest('[role="option"]') &&
+              el.checkVisibility({ visibilityProperty: true }),
+          )
+          .map((el) => {
+            const r = el.getBoundingClientRect();
+            const b = getComputedStyle(el, "::before");
+            const grow = (side: string) =>
+              b.content !== "none" && b.position === "absolute" ? -parseFloat(side) || 0 : 0;
+            const w = r.width + Math.max(grow(b.left), 0) + Math.max(grow(b.right), 0);
+            const h = r.height + Math.max(grow(b.top), 0) + Math.max(grow(b.bottom), 0);
+            return {
+              h,
+              name: `${el.tagName.toLowerCase()} "${el.textContent!.trim().slice(0, 20)}"`,
+              w,
+            };
+          })
+          .filter(({ h, w }) => h < 43.5 || w < 43.5)
+          .map(({ h, name, w }) => `${name}: ${w}x${h}`),
+      );
+
+    test("chips in one row, sort in the meta row, no shortcut hints, KI button with text", async ({
+      page,
+    }) => {
+      await page.addInitScript(mockLanguageModel);
+      await openSearch(page, "/wort?q=anmach");
+      const bar = page.getByRole("group", { name: "Filter" });
+      const chips = bar.getByRole("button");
+      await expect(chips).toHaveCount(7); // Buchstabe … Nur Berolinismen (with a query)
+      const tops = await chips.evaluateAll((els) =>
+        els.map((el) => Math.round(el.getBoundingClientRect().top)),
+      );
+      expect(new Set(tops).size).toBe(1);
+
+      // One sort select, on the line of the hit count, above the filter bar; the bar has none of its own.
+      const sort = page.getByRole("main").getByRole("combobox", { name: "Sortieren" });
+      await expect(sort).toHaveCount(1);
+      await expect(bar.getByRole("combobox", { name: "Sortieren" })).toHaveCount(0);
+      const [s, m, b] = await Promise.all([sort, meta(page), bar].map((l) => l.boundingBox()));
+      expect(Math.abs(s!.y + s!.height / 2 - (m!.y + m!.height / 2))).toBeLessThan(4);
+      expect(s!.y + s!.height).toBeLessThanOrEqual(b!.y);
+      expect(s!.height).toBe(44);
+      // No „Sortieren“ text beside it: only the 1px screen-reader copy.
+      const text = page
+        .getByRole("main")
+        .getByText("Sortieren", { exact: true })
+        .filter({ visible: true });
+      expect((await text.boundingBox())!.width).toBeLessThanOrEqual(1);
+
+      // Neither the meta row's key hints nor the field's `/` (empty field, below).
+      await expect(page.getByRole("main").locator("kbd:visible")).toHaveCount(0);
+      await expect(
+        page.getByRole("button", { name: "Nach Bedeutung suchen mit Chrome-KI" }),
+      ).toHaveText("Nach Bedeutung");
+      await expect(
+        page.getByRole("main").getByText("Nach Bedeutung", { exact: true }),
+      ).toBeVisible();
+
+      await field(page).fill("");
+      await expect(page.getByRole("button", { name: "Suche leeren" })).toHaveCount(0);
+      await expect(page.getByRole("main").locator("kbd")).not.toHaveCount(0);
+      await expect(page.getByRole("main").locator("kbd:visible")).toHaveCount(0);
+    });
+
+    test("every tap target is at least 44px, the register scrolls, the page does not", async ({
+      page,
+    }) => {
+      await openSearch(page);
+      expect(await smallTargets(page)).toEqual([]);
+      const letters = page
+        .getByRole("navigation", { name: "Springen zu Buchstabe" })
+        .getByRole("list");
+      expect(
+        await letters.evaluate((el) => {
+          el.scrollLeft = 200;
+          return el.scrollLeft;
+        }),
+      ).toBeGreaterThan(0);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(834);
+
+      await openSearch(page, "/wort?q=anmach&inhalt=audio"); // hit rows and an active-filter pill
+      await expect(page.getByRole("group", { name: "Aktive Filter" })).toBeVisible();
+      expect(await smallTargets(page)).toEqual([]);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(834);
+
+      await page
+        .getByRole("group", { name: "Filter" })
+        .getByRole("button", { name: /^Inhalt/ })
+        .click();
+      const popover = page.getByRole("dialog", { name: "Inhalt" });
+      await expect(popover).toBeVisible();
+      expect((await popover.boundingBox())!.width).toBe(360);
+      for (const box of await popover.getByRole("checkbox").all())
+        expect((await box.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    });
+
+    test("axe has no violations: start, hits", async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await openSearch(page);
+      expect(await axe(page)).toEqual([]);
+      await search(page, "anmachen");
+      expect(await axe(page)).toEqual([]);
+    });
+  });
+
   test.describe("mobile 390", () => {
     test.use({ viewport: { height: 844, width: 390 } });
 

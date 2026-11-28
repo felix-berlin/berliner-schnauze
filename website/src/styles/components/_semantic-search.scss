@@ -223,7 +223,7 @@
   }
 
   // Desktop (SPEC §8.3): 20px 24px padding, 40px icon, content indented under the title.
-  @container semantic-search (inline-size >= 47rem) {
+  @container semantic-search (inline-size >= 48rem) {
     .block {
       padding: var(--space-5) var(--space-6);
     }

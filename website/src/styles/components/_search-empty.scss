@@ -22,7 +22,7 @@
     padding: var(--space-5);
   }
 
-  @container search-empty (inline-size >= 47rem) {
+  @container search-empty (inline-size >= 48rem) {
     .inner {
       grid-template-columns: auto minmax(0, 1fr);
       padding: var(--space-6) calc(var(--space-6) + var(--space-1)); // SPEC §10: 28px

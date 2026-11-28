@@ -157,6 +157,14 @@
     }
   }
 
+  // SPEC §3.1 tablet (808–999px viewport, c-search-app popovers): option pills and checkbox rows 44px.
+  @container search-app (48rem <= inline-size < 60rem) {
+    .pills button,
+    .check {
+      min-block-size: var(--size-tap-target);
+    }
+  }
+
   label {
     display: grid;
     gap: var(--space-1);

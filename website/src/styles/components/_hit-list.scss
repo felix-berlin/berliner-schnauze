@@ -46,7 +46,7 @@
     color: var(--color-warm-quiet);
   }
 
-  @container hit-list (inline-size >= 47rem) {
+  @container hit-list (inline-size >= 48rem) {
     .letter,
     .divider {
       padding-inline: var(--space-6);

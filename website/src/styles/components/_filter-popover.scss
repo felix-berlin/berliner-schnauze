@@ -7,6 +7,7 @@
 @include mx.component("filter-popover") {
   :scope {
     --_width: 23.75rem; // SPEC §7.2 380px
+    --_width-tablet: 22.5rem; // SPEC §3.1 360px
     --_gap: var(--space-2); // mock: 8px under the chip
     --_title: 1.25rem; // SPEC §7.2 title 20px
     --_done: 2.5rem; // mock .s1__ok 40px
@@ -59,6 +60,13 @@
       position-try-fallbacks: flip-inline;
       // The position-area cell is the containing block: a long list (Wortart, Thema) scrolls inside it.
       max-block-size: calc(100% - var(--_gap) - var(--space-4));
+    }
+  }
+
+  // SPEC §3.1 tablet (808–999px viewport, c-search-app): a narrower popover.
+  @container search-app (48rem <= inline-size < 60rem) {
+    :scope {
+      inline-size: min(var(--_width-tablet), 100vi - 2 * var(--space-4));
     }
   }
 

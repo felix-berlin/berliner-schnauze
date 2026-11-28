@@ -11,6 +11,7 @@
     --_count: 1.25rem; // SPEC §7.1 count pill 20px
     --_chip-text: 0.9375rem; // SPEC §7.1 chip 15px
     --_icon: 0.875rem; // mock chevron and tick 14px
+    --_chip-end: 0.625rem; // SPEC §3.1 tablet chip padding end 10px, no token step within 0.1rem
 
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -109,5 +110,26 @@
 
   .sort {
     justify-self: end;
+  }
+
+  // SPEC §3.1 tablet (808–999px viewport, c-search-app): touch-sized chips in one row, the sort moves into the
+  // search page's meta row. Mock 13px start padding: space-3 is within 0.1rem.
+  @container search-app (48rem <= inline-size < 60rem) {
+    .chips {
+      grid-column: 1 / -1;
+    }
+
+    .chip {
+      min-block-size: var(--size-tap-target);
+      padding-inline: var(--space-3) var(--_chip-end);
+    }
+
+    .chip[aria-pressed] {
+      padding-inline: var(--space-3);
+    }
+
+    .sort {
+      display: none;
+    }
   }
 }
