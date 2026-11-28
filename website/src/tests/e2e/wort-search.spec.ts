@@ -204,6 +204,60 @@ test.describe("/wort search page", () => {
       await expect(page.getByRole("group", { name: "Aktive Filter" })).toHaveCount(0);
     });
 
+    test("Thema popover: the last theme is reachable on a short viewport", async ({ page }) => {
+      await page.setViewportSize({ height: 720, width: 1280 });
+      await openSearch(page, "/wort?q=anmach");
+      await page.getByRole("group", { name: "Filter" }).getByRole("button", { name: /^Thema/ }).click();
+      const popover = page.getByRole("dialog", { name: "Thema" });
+      const last = popover.getByRole("checkbox").last();
+      // Keyboard: focus scrolls each option into view above the sticky „Fertig“ row, not under it
+      // (Firefox did without scroll-padding).
+      await popover.getByRole("checkbox").first().focus();
+      const count = await popover.getByRole("checkbox").count();
+      for (let i = 1; i < count; i++) {
+        await page.keyboard.press("Tab");
+        const covered = await page.evaluate(() => {
+          const option = document.activeElement!.getBoundingClientRect();
+          const foot = document.activeElement!.closest("dialog")!.lastElementChild!;
+          return option.bottom > foot.getBoundingClientRect().top + 1;
+        });
+        expect(covered, `option ${i + 1} under the Fertig row`).toBe(false);
+      }
+      await expect(last).toBeFocused();
+      // Pointer: a plain click (no force) reaches it.
+      await last.click();
+      await expect(last).toHaveAttribute("aria-checked", "true");
+      await expect(page).toHaveURL(/thema=/);
+    });
+
+    test("Back from a word restores the filter set before it", async ({ page }) => {
+      await openSearch(page, "/wort?q=anmach");
+      await page.getByRole("button", { name: "Nur Berolinismen" }).click();
+      await expect(page).toHaveURL(/berolinismus=1/);
+      await page.getByRole("button", { name: "Filter entfernen: Nur Berolinismen" }).click();
+      await page.getByRole("group", { name: "Filter" }).getByRole("button", { name: /^Thema/ }).click();
+      await page
+        .getByRole("dialog", { name: "Thema" })
+        .getByRole("checkbox", { name: "Alltag & Wohnen" })
+        .click();
+      await expect(page).toHaveURL(/\/wort\?q=anmach&thema=alltag-wohnen$/);
+      await page.keyboard.press("Escape");
+
+      await page.locator("#treffer [role=option] a").first().click();
+      await expect(page).toHaveURL(/\/wort\/[^?]+$/);
+      await page.goBack();
+      await expect(page).toHaveURL(/\/wort\?q=anmach&thema=alltag-wohnen$/);
+      await expect(field(page)).toHaveValue("anmach");
+      await expect(
+        page.getByRole("group", { name: "Aktive Filter" }).getByRole("button", { name: /Alltag & Wohnen/ }),
+      ).toBeVisible();
+
+      // One more Back: the filter pushed its own entry, so the state before it comes back.
+      await page.goBack();
+      await expect(page).toHaveURL(/\/wort\?q=anmach$/);
+      await expect(page.getByRole("group", { name: "Aktive Filter" })).toHaveCount(0);
+    });
+
     test("keyboard: / ↑ ↓ Enter Esc", async ({ page }) => {
       await openSearch(page);
       await page.locator("body").press("/");
