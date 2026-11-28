@@ -182,7 +182,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:18
+        image: postgres:19@sha256:4ea94de574c17f0372722806c949757050fbb1cd7648410fe45d6bba275cc00e
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: cms_test
@@ -238,7 +238,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:18
+        image: postgres:19@sha256:4ea94de574c17f0372722806c949757050fbb1cd7648410fe45d6bba275cc00e
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: bs_upgrade_e2e
