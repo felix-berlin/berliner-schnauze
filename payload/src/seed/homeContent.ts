@@ -77,14 +77,14 @@ export const HOME_FAQ = [
 export const HOME_ABOUT_TEXT =
   "Berliner Schnauze ist ein unabhängiges Wörterbuch für Berlinerisch. Jeder Eintrag wird vor der Veröffentlichung geprüft, Quellen stehen auf der Wortseite. Vorschläge aus der Community sind gekennzeichnet.";
 
-// TODO(startseite): no real targets exist yet: /suche only reads `q` (no audio, idiom, length or rhyme filter) and
-// there is no random-word route, so every chip links to /suche until those filters/route land.
+// Filter urls of the /wort search (params from website/src/lib/search/url.ts). „Redewendungen“ uses the topic:
+// no word type of that name exists yet. TODO(startseite): no random-word route yet, so „Zufallswort“ opens /wort.
 export const HOME_BROWSE_LINKS = [
-  { label: "Mit Hörprobe", href: "/suche", icon: "audio" },
-  { label: "Redewendungen", href: "/suche", icon: "idiom" },
-  { label: "Kurz und knackig", href: "/suche", icon: "short" },
-  { label: "Wat reimt sich?", href: "/suche", icon: "rhyme" },
-  { label: "Zufallswort", href: "/suche", icon: "random" },
+  { label: "Mit Hörprobe", href: "/wort?inhalt=audio", icon: "audio" },
+  { label: "Redewendungen", href: "/wort?thema=redewendungen-sprueche", icon: "idiom" },
+  { label: "Kurz und knackig", href: "/wort?laenge=kurz", icon: "short" },
+  { label: "Wat reimt sich?", href: "/wort?reim=molle", icon: "rhyme" },
+  { label: "Zufallswort", href: "/wort", icon: "random" },
 ] as const;
 
 /** Speech bubble of a topic row (Themen.typischerSatz), by slug; the sentences are the mock's, matched to the nearest topic. */
