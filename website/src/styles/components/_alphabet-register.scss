@@ -48,6 +48,8 @@
 
   a,
   span[role="img"] {
+    // Holds the link's sr-only name parts: absolute without it, they escape the scrolling list and widen the page.
+    position: relative;
     display: grid;
     place-items: center;
     min-inline-size: var(--_cell);

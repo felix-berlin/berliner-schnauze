@@ -45,6 +45,74 @@ const PIXEL = Buffer.from(
   "base64",
 );
 
+/** Same masks for every page: everything that changes with the day, the seed or other specs' page views. */
+const timeDependent = (page: Page) => [
+  // Word of the day: the word changes daily and the countdown ("Neues Wort in: …") ticks every second.
+  page.locator(".c-home-stage"),
+  // Trend badge and numbers: rank and counts come from the last 7 days (the seed writes them relative to its
+  // own day, and other specs' page views add to them). Footer dates: the seed stamps them.
+  // Word page: trend badges, number tiles, poll result, reaction counts and the Jeschichten (relative dates).
+  page.locator(".c-word-badges"),
+  page.locator(".c-word-zahlen"),
+  page.locator(".c-word-poll"),
+  page.locator(".c-word-reactions"),
+  page.locator(".c-word-stories"),
+  // Footer word sign: a random word per request.
+  page.locator(".c-footer-word-sign"),
+  // Anki: the demo card shows a random word.
+  page.locator(".c-anki-flashcard"),
+];
+
+/** Opens `path` isolated from the network and other runs, in the theme, hydrated and settled. */
+const open = async (page: Page, baseURL: string, path: string, theme: "light" | "dark") => {
+  // Nothing leaves the app origin: images get a fixed pixel, scripts (Matomo, Turnstile, Sentry) and the rest abort.
+  // CMS media (/api/media/) is served by the app but the seed has no files (404), so it gets the pixel too.
+  const origin = new URL(baseURL).origin;
+  await page.route(
+    (url) => url.origin !== origin || url.pathname.startsWith("/api/media/"),
+    (route) =>
+      route.request().resourceType() === "image"
+        ? route.fulfill({ body: PIXEL, contentType: "image/png" })
+        : route.abort(),
+  );
+  // Pulse counts feed the trend box and badge: a baseline run must not change them.
+  await page.route("**/api/word-pulse", (route) => route.abort());
+  // SetColorMode reads this key before first paint; storing the same value keeps it from fighting the toggle.
+  await page.addInitScript(
+    (dark) => localStorage.setItem("darkMode", String(dark)),
+    theme === "dark",
+  );
+  await page.goto(path);
+  await page.evaluate(
+    (dark) => document.documentElement.classList.toggle("dark", dark),
+    theme === "dark",
+  );
+  await settle(page);
+  // The fixed scroll-to-top button follows an IntersectionObserver whose report can lag the settle
+  // scroll (seen at 1280px on the leaderboard, about 1 in 6 runs): its state is not what this baseline guards.
+  await page.addStyleTag({
+    content: ".o-scroll-to-top { visibility: hidden !important; }",
+  });
+};
+
+/** `fullPage: false` for an open popover or sheet: the overlay is fixed to the viewport, the page below it is noise. */
+const shoot = (page: Page, name: string, fullPage = true) =>
+  expect(page).toHaveScreenshot(name, {
+    fullPage,
+    mask: timeDependent(page),
+    maxDiffPixelRatio: 0.002,
+    threshold: 0.05,
+  });
+
+// Suche v1 (docs/design/suche-v1/SPEC.md §17): start, hits (word hits, divider, meaning hit), empty with „Meinste“,
+// filters open (desktop: Gebrauch popover with an active filter, mobile: the sheet). Compare with the boards.
+const SEARCH = [
+  { name: "start", path: "/wort" },
+  { name: "hits", path: "/wort?q=anmachen" },
+  { name: "empty", path: "/wort?q=zchrippe" }, // one letter off and another sound: „Meinste Schrippe“
+  { name: "filter", path: "/wort?q=anmach&inhalt=audio" },
+] as const;
+
 for (const size of SIZES) {
   for (const theme of ["light", "dark"] as const) {
     test.describe(`${size.width}px ${theme}`, () => {
@@ -52,59 +120,43 @@ for (const size of SIZES) {
 
       for (const path of PAGES) {
         test(path, async ({ page, baseURL }) => {
-          // Nothing leaves the app origin: images get a fixed pixel, scripts (Matomo, Turnstile, Sentry) and the rest abort.
-          // CMS media (/api/media/) is served by the app but the seed has no files (404), so it gets the pixel too.
-          const origin = new URL(baseURL!).origin;
-          await page.route(
-            (url) => url.origin !== origin || url.pathname.startsWith("/api/media/"),
-            (route) =>
-              route.request().resourceType() === "image"
-                ? route.fulfill({ body: PIXEL, contentType: "image/png" })
-                : route.abort(),
+          await open(page, baseURL!, path, theme);
+          if (path === "/")
+            await expect(
+              page.locator(".c-home-stage").getByRole("heading", { level: 2 }),
+            ).toBeVisible();
+          await shoot(
+            page,
+            `${path === "/" ? "home" : path.slice(1).replaceAll("/", "-")}-${size.width}-${theme}.png`,
           );
-          // Pulse counts feed the trend box and badge: a baseline run must not change them.
-          await page.route("**/api/word-pulse", (route) => route.abort());
-          // SetColorMode reads this key before first paint; storing the same value keeps it from fighting the toggle.
-          await page.addInitScript(
-            (dark) => localStorage.setItem("darkMode", String(dark)),
-            theme === "dark",
-          );
-          await page.goto(path);
-          await page.evaluate(
-            (dark) => document.documentElement.classList.toggle("dark", dark),
-            theme === "dark",
-          );
-          await settle(page);
-          // The fixed scroll-to-top button follows an IntersectionObserver whose report can lag the settle
-          // scroll (seen at 1280px on the leaderboard, about 1 in 6 runs): its state is not what this baseline guards.
+        });
+      }
+
+      for (const { name, path } of SEARCH) {
+        test(`search ${name}`, async ({ page, baseURL }) => {
+          await open(page, baseURL!, path, theme);
+          // "Wort des Tages" and "Gerade beliebt" follow the day and the trend counts. Hidden, not masked: a mask
+          // paints over the open sheet too.
           await page.addStyleTag({
-            content: ".o-scroll-to-top { visibility: hidden !important; }",
+            content: ".c-hit-row .badge { visibility: hidden !important; }",
           });
-          // Word of the day: the word changes daily and the countdown ("Neues Wort in: …") ticks every second.
-          const wotd = page.locator(".c-home-stage");
-          // Trend badge and numbers: rank and counts come from the last 7 days (the seed writes them relative to its
-          // own day, and other specs' page views add to them). Footer dates: the seed stamps them.
-          const timeDependent = [
-            wotd,
-            // Word page: trend badges, number tiles, poll result, reaction counts and the Jeschichten (relative dates).
-            page.locator(".c-word-badges"),
-            page.locator(".c-word-zahlen"),
-            page.locator(".c-word-poll"),
-            page.locator(".c-word-reactions"),
-            page.locator(".c-word-stories"),
-            // Footer word sign: a random word per request.
-            page.locator(".c-footer-word-sign"),
-            // Anki: the demo card shows a random word.
-            page.locator(".c-anki-flashcard"),
-          ];
-          if (path === "/") await expect(wotd.getByRole("heading", { level: 2 })).toBeVisible();
-          const name = `${path === "/" ? "home" : path.slice(1).replaceAll("/", "-")}-${size.width}-${theme}.png`;
-          await expect(page).toHaveScreenshot(name, {
-            fullPage: true,
-            mask: timeDependent,
-            maxDiffPixelRatio: 0.002,
-            threshold: 0.05,
-          });
+          if (name === "filter") {
+            if (size.width < 808) {
+              await page
+                .getByRole("main")
+                .getByRole("button", { name: /^Filter \d+$/ }) // with the count pill
+                .click();
+              await expect(page.getByRole("dialog", { name: "Filter" })).toBeVisible();
+            } else {
+              await page
+                .getByRole("group", { name: "Filter" })
+                .getByRole("button", { name: /^Gebrauch/ })
+                .click();
+              await expect(page.getByRole("dialog", { name: "Gebrauch" })).toBeVisible();
+            }
+            await page.mouse.move(0, 0); // no hover state in the shot
+          }
+          await shoot(page, `search-${name}-${size.width}-${theme}.png`, name !== "filter");
         });
       }
     });

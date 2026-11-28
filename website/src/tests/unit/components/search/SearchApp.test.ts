@@ -165,7 +165,8 @@ describe("SearchApp", () => {
   it("register hides the Buchstabe chip only in the start state", () => {
     const start = mountApp();
     expect(start.find('nav[aria-label="Springen zu Buchstabe"]').exists()).toBe(true);
-    expect(start.get('a[aria-label="A, 2 Wörter"]').attributes("href")).toBe("/wort?buchstabe=a");
+    const a = start.get('a[href="/wort?buchstabe=a"]');
+    expect(a.text()).toBe("A, 2 Wörter"); // accessible name from the content (sr-only parts)
     expect(showsLetterChip(state())).toBe(false);
 
     const query = mountApp({ state: state({ q: "aal" }) });

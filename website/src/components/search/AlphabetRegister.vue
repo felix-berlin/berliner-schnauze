@@ -9,11 +9,12 @@
         <a
           v-if="l.count"
           :href="`/wort?buchstabe=${encodeURIComponent(l.letter.toLocaleLowerCase('de'))}`"
-          :aria-label="`${l.letter}, ${l.count.toLocaleString('de')} Wörter`"
           :aria-current="current === l.letter ? 'true' : undefined"
           @click.prevent="emit('jump', l.letter)"
         >
-          <b>{{ l.letter }}</b><small>{{ l.count.toLocaleString("de") }}</small>
+          <!-- Name „B, 498 Wörter“ (SPEC §6.4) from the content: an aria-label would not contain the visible „B498“. -->
+          <b>{{ l.letter }}</b><span class="u-sr-only">, </span
+          ><small>{{ l.count.toLocaleString("de") }}</small><span class="u-sr-only"> Wörter</span>
         </a>
         <span v-else :aria-label="`${l.letter}, 0 Wörter`" role="img">
           <b>{{ l.letter }}</b><small>0</small>

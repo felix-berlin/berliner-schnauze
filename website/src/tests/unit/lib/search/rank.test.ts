@@ -78,6 +78,13 @@ describe("search ranking", () => {
     expect(tierOf(e, "gehen")).toBeNull();
   });
 
+  it("treats ß and ss alike", () => {
+    const e = makeEntry({ berlinerisch: "abbeißen", translations: ["Straße"] });
+    expect(tierOf(e, "abbeissen")).toBe(0);
+    expect(tierOf(makeEntry({ berlinerisch: "Abbeisser" }), "abbeißer")).toBe(0);
+    expect(tierOf(e, "strasse")).toBe(3);
+  });
+
   it("handles a blank query", () => {
     expect(rankHits(base, "  ")).toEqual([]);
     expect(terms("-")).toEqual([]);

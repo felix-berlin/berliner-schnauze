@@ -11,6 +11,9 @@ const coversTerm = (text: string, qTerms: string[]) => {
   return qTerms.every((t) => parts.some((part) => part.startsWith(t)));
 };
 
+/** ß and ss match each other: "abbeissen" finds "abbeißen" (SPEC §13). Soundex keeps the unfolded text. */
+const fold = (text: string) => text.replaceAll("ß", "ss");
+
 /** `q` must be normalized. null = no match. */
 export function tierOf(
   entry: SearchEntry,
@@ -19,13 +22,15 @@ export function tierOf(
   qSoundex = soundex(q),
 ): Tier | null {
   if (!q || !qTerms.length) return null;
-  const word = normalize(entry.wordProperties.berlinerisch);
+  q = fold(q);
+  qTerms = qTerms.map(fold);
+  const word = fold(normalize(entry.wordProperties.berlinerisch));
   if (word === q) return 0;
   if (word.startsWith(q)) return 1;
   if (word.includes(q) || coversTerm(word, qTerms)) return 2; // includes: "Splitterbrötchen" for "brötchen"
   const { translations } = entry.wordProperties;
-  if (translations.some((t) => normalize(t) === q)) return 3;
-  if (translations.some((t) => coversTerm(t, qTerms))) return 4;
+  if (translations.some((t) => fold(normalize(t)) === q)) return 3;
+  if (translations.some((t) => coversTerm(fold(t), qTerms))) return 4;
   return entry.form.soundex && entry.form.soundex === qSoundex ? 5 : null;
 }
 

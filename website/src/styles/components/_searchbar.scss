@@ -21,7 +21,7 @@
       margin-inline-start: auto;
       padding: 3px 6px;
       font: inherit;
-      font-size: 0.8rem;
+      font-size: var(--font-size-label); // 13px floor (SPEC suche v1 global constraint)
       line-height: 1;
       border: 1px dashed var(--control-border);
       border-radius: 2px;

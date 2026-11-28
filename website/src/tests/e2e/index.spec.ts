@@ -30,9 +30,9 @@ test.describe("Startseite (/)", () => {
     await page.goto("/?q=aasen");
 
     await expect(page).toHaveURL(/\/wort\?q=aasen$/);
-    await expect(page.getByRole("combobox", { name: "Wort oder Bedeutung suchen" })).toHaveValue(
-      "aasen",
-    );
+    await expect(
+      page.getByRole("main").getByRole("combobox", { name: "Wort oder Bedeutung suchen" }),
+    ).toHaveValue("aasen");
   });
 
   test("?q= bleibt auf der Startseite, wenn es kein echter Seitenaufruf ist (ClientRouter-Fetch)", async ({
@@ -48,9 +48,9 @@ test.describe("Startseite (/)", () => {
 
   test("Logo-Klick von /wort führt zur Startseite, nicht zurück", async ({ page }) => {
     await page.goto("/wort?q=aasen");
-    await expect(page.getByRole("combobox", { name: "Wort oder Bedeutung suchen" })).toHaveValue(
-      "aasen",
-    );
+    await expect(
+      page.getByRole("main").getByRole("combobox", { name: "Wort oder Bedeutung suchen" }),
+    ).toHaveValue("aasen");
 
     await page.getByRole("banner").getByRole("link", { name: "Berliner Schnauze" }).click();
 

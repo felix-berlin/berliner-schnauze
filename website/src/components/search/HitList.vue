@@ -10,16 +10,25 @@
     aria-label="Treffer"
     @scroll="onScroll"
   >
-    <div v-if="row.kind === 'letter'" role="presentation" class="letter">
-      <h2>{{ row.letter }}</h2>
+    <!-- Keyed roots: virtua keys its items by them, so a new result set remounts rows instead of patching
+         hydrated server rows by index (that left a duplicate row behind). A heading is not allowed inside a
+         listbox (aria-required-children): the letter keeps the h2 look, not the role. -->
+    <div v-if="row.kind === 'letter'" :key="`l-${row.letter}`" role="presentation" class="letter">
+      <h2 role="none">{{ row.letter }}</h2>
       <span>{{ row.count.toLocaleString("de") }} Wörter</span>
     </div>
-    <div v-else-if="row.kind === 'divider'" role="presentation" class="divider">
+    <div
+      v-else-if="row.kind === 'divider'"
+      :key="`d-${row.label}`"
+      role="presentation"
+      class="divider"
+    >
       {{ row.label }}
     </div>
     <HitRow
       v-else
       :id="`treffer-${row.hit.entry.slug}`"
+      :key="row.hit.entry.slug"
       :hit="row.hit"
       :q="q"
       :active="index === activeIndex"

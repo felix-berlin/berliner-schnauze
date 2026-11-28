@@ -33,5 +33,7 @@ test.describe("Magazin (/magazin)", () => {
       await page.getByRole("button", { name: /Link kopieren/ }).click();
       await expect(toast).toBeVisible({ timeout: 1500 });
     }).toPass({ timeout: 15_000 });
+    // The toast closes itself (coverage of the removed global-toast spec).
+    await expect(toast).toBeHidden({ timeout: 15_000 });
   });
 });
